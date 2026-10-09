@@ -120,7 +120,7 @@ export default function ProductUpdatesManager({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               maxLength={150}
-              placeholder="Nouveautés de benevol.app — septembre, ou toute autre communication"
+              placeholder="Nouveautés de septembre, ou toute autre communication"
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>

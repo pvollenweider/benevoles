@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { loadHealth } from "@/lib/health-data"
 import { healthHeadline, LEVEL_LABELS, worstLevel, type HealthItem, type HealthLevel } from "@/lib/health-view"
+import { APP_TIME_ZONE } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Santé du service" }
@@ -41,7 +42,7 @@ export default async function HealthPage() {
           {healthHeadline(items)}
         </p>
         <p className="text-sm text-gray-600 mt-1">
-          Version {version}{gitSha ? ` (${gitSha.slice(0, 7)})` : ""}, vérifiée le <time dateTime={checkedAt.toISOString()}>{checkedAt.toLocaleString("fr-FR", { timeZone: "Europe/Zurich", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</time>. Recharger la page relance les contrôles.
+          Version {version}{gitSha ? ` (${gitSha.slice(0, 7)})` : ""}, vérifiée le <time dateTime={checkedAt.toISOString()}>{checkedAt.toLocaleString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</time>. Recharger la page relance les contrôles.
         </p>
       </div>
 

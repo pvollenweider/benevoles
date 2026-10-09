@@ -5,6 +5,7 @@ import { createHash } from "node:crypto"
 import { memoryStore, postgresStore, type RateLimitStore } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
 import type { NotificationKind } from "./types"
+import { siteName } from "@/lib/site"
 
 /**
  * Sending limits (#810, phase 1): every email, whatever its recipient (a member of the
@@ -177,7 +178,7 @@ async function alertOperator(limit: string, organizationId: string | null, store
     const m = await import("@/lib/operator-alerts")
     await m.notifyOperator({
       key,
-      title: "benevol.app : plafond d'envoi atteint",
+      title: `${siteName()} : plafond d'envoi atteint`,
       message: limit === "recipient_per_hour"
         ? `Emails abandonnés : ${LIMIT_SENTENCES[limit]}${organizationId ? ` (organisation ${organizationId})` : ""}. Pendant l'heure, les demandes suivantes pour une même adresse sont ignorées.`
         : `Emails retenus : ${LIMIT_SENTENCES[limit] ?? limit}${organizationId ? ` (organisation ${organizationId})` : ""}. Ils partiront à la fin de la fenêtre.`,

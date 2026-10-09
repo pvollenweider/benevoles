@@ -25,7 +25,7 @@ export function isReservedOrgSlug(slug: string): boolean {
 }
 
 /** The refusal shown when an organization slug is one of the reserved subdomains. */
-export const RESERVED_SLUG_ERROR = "Cette adresse est réservée par benevol.app. Choisissez-en une autre."
+export const RESERVED_SLUG_ERROR = "Cette adresse est réservée par le service. Choisissez-en une autre."
 
 // Extracts an org slug from a `[orgSlug].benevol.app` host, or null when the host doesn't
 // carry one (apex domain, a system subdomain, or a bare hostname like localhost).

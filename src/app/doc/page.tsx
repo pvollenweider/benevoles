@@ -9,6 +9,7 @@ import { publicPageJsonLd } from "@/lib/structured-data"
 import JsonLd from "@/components/public/JsonLd"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
 import DocFrame from "@/components/public/DocFrame"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/doc", apexBaseUrl())
@@ -24,7 +25,7 @@ export default function DocIndexPage() {
     <DocFrame>
       <JsonLd data={publicPageJsonLd("/doc", apexBaseUrl())} />
       <h1>Documentation</h1>
-      <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur benevol.app&nbsp;:</p>
+      <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur {SITE_NAME}&nbsp;:</p>
       <ul>
         {DOC_GUIDES.map((g) => (
           <li key={g.path}>
@@ -39,7 +40,7 @@ export default function DocIndexPage() {
         </p>
       )}
       <p>
-        Vous découvrez benevol.app ? La page <Link href="/fonctionnalites">Fonctionnalités</Link> présente ce que
+        Vous découvrez {SITE_NAME} ? La page <Link href="/fonctionnalites">Fonctionnalités</Link> présente ce que
         fait l&apos;outil, besoin par besoin. Pour voir chaque étape à l&apos;écran, les{" "}
         <Link href="/videos">tutoriels vidéo</Link> la montrent en quelques minutes, avec leur transcription.
         Ce qui a changé récemment est dans les <Link href="/nouveautes">nouveautés</Link>, version par version.

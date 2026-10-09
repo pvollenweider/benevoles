@@ -9,6 +9,7 @@ import type { NotificationPayload } from "../types"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
 import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, type RenderedEmail } from "./shared"
+import { siteName } from "@/lib/site"
 
 // ── Notif admin (interne) ────────────────────────────────────────────────────
 
@@ -173,14 +174,14 @@ export function renderProductUpdate(p: NotificationPayload): RenderedEmail {
   const text = [
     content,
     ``,
-    `Vous recevez cet email en tant qu'administrateur benevol.app.`,
+    `Vous recevez cet email en tant qu'administrateur ${siteName()}.`,
     `Se désabonner de ces communications : ${unsubscribeUrl}`,
   ].join("\n")
 
   const html = wrap(`
     <div style="line-height:1.6">${renderMarkdown(content)}</div>
     <p style="color:#666;font-size:0.8em;margin-top:2em;padding-top:1em;border-top:1px solid #f0f0f0">
-      Vous recevez cet email en tant qu'administrateur benevol.app.
+      Vous recevez cet email en tant qu'administrateur ${escapeHtml(siteName())}.
       <a href="${unsubscribeUrl}" style="color:#666">Se désabonner</a> de ces communications.
     </p>
   `, subject)
@@ -270,11 +271,11 @@ export function renderOperatorAlert(p: NotificationPayload): RenderedEmail {
  */
 export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail {
   const d = p.data as { confirmUrl: string; hours: number }
-  const subject = "Confirmez votre adresse pour créer votre espace benevol.app"
+  const subject = `Confirmez votre adresse pour créer votre espace ${siteName()}`
   const text = [
     `Bonjour,`,
     ``,
-    `Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien (valable ${d.hours} heures) :`,
+    `Une demande d'espace ${siteName()} a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien (valable ${d.hours} heures) :`,
     d.confirmUrl,
     ``,
     `Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.`,
@@ -282,10 +283,10 @@ export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Confirmez votre adresse</h2>
     <p>Bonjour,</p>
-    <p>Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien, valable ${d.hours} heures :</p>
+    <p>Une demande d'espace ${siteName()} a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien, valable ${d.hours} heures :</p>
     <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer mon adresse")}</p>
     <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.</p>
-  `, "Confirmez votre adresse pour créer votre espace benevol.app.")
+  `, `Confirmez votre adresse pour créer votre espace ${siteName()}.`)
   return { subject, html, text }
 }
 
@@ -297,11 +298,11 @@ export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail 
  */
 export function renderSignupAccountLink(p: NotificationPayload): RenderedEmail {
   const d = p.data as { inviteUrl: string; days: number }
-  const subject = "Choisissez votre mot de passe benevol.app"
+  const subject = `Choisissez votre mot de passe ${siteName()}`
   const text = [
     `Bonjour,`,
     ``,
-    `Votre espace benevol.app est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien (valable ${d.days} jours) :`,
+    `Votre espace ${siteName()} est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien (valable ${d.days} jours) :`,
     d.inviteUrl,
     ``,
     `Si vous l'avez déjà choisi, ignorez cet email.`,
@@ -309,17 +310,17 @@ export function renderSignupAccountLink(p: NotificationPayload): RenderedEmail {
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Choisissez votre mot de passe</h2>
     <p>Bonjour,</p>
-    <p>Votre espace benevol.app est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien, valable ${d.days} jours :</p>
+    <p>Votre espace ${siteName()} est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien, valable ${d.days} jours :</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Choisir mon mot de passe")}</p>
     <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous l'avez déjà choisi, ignorez cet email.</p>
-  `, "Votre espace benevol.app est créé : choisissez votre mot de passe.")
+  `, `Votre espace ${siteName()} est créé : choisissez votre mot de passe.`)
   return { subject, html, text }
 }
 
 /** The operator validated a space created by self-service sign-up (#810): it can publish and email. */
 export function renderSpaceApproved(p: NotificationPayload): RenderedEmail {
   const d = p.data as { adminName: string; organizationName: string; adminUrl: string }
-  const subject = "Votre espace benevol.app est activé"
+  const subject = `Votre espace ${siteName()} est activé`
   const text = [
     `Bonjour ${d.adminName},`,
     ``,

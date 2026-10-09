@@ -9,7 +9,7 @@ vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
 const setting = vi.hoisted(() => ({ value: null as null | { closed: boolean } }))
 vi.mock("@/lib/prisma", () => ({ prisma: { platformSetting: { findUnique: vi.fn(async () => (setting.value ? { value: setting.value } : null)) } } }))
 
-import { DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE, SIGNUP_MIN_FILL_MS } from "@/lib/signup"
+import { DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, signupClosedMessage, SIGNUP_MIN_FILL_MS } from "@/lib/signup"
 
 const post = (url: string, body: unknown) => new Request(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
 const form = (over: object = {}) => ({ organizationName: "Fête du village", contactName: "Camille", email: "camille@example.org", description: "Fête de village, une centaine de bénévoles sur deux jours.", website: "", startedAt: Date.now() - SIGNUP_MIN_FILL_MS - 1000, ...over })
@@ -74,6 +74,7 @@ describe("POST /api/public/signup (#810, part 4b)", () => {
     setting.value = { closed: true }
     expect((await POST(post("http://localhost/api/public/signup", form()))).status).toBe(403)
     expect(server.createSignupRequest).not.toHaveBeenCalled()
+    expect((await closed.json()).error).toBe(signupClosedMessage("contact@benevol.app"))
   })
 })
 

@@ -3,6 +3,7 @@
 
 import { ImageResponse } from "next/og"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 // The video library's social card (/videos link previews, src/lib/video-seo.ts). A route handler,
 // like /og-image.png, not the opengraph-image file convention: that one would also apply to every
@@ -21,7 +22,7 @@ export function GET() {
             <div style={{ height: 8, width: 28, borderRadius: 4, background: "#3b82f6", margin: "5px 0 5px 8px" }} />
             <div style={{ height: 8, width: 20, borderRadius: 4, background: "#1e3a8a", marginLeft: 3 }} />
           </div>
-          benevol.app
+          {SITE_NAME}
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           {/* A play button, drawn: no icon font in ImageResponse. */}
@@ -31,7 +32,7 @@ export function GET() {
             </svg>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>Tutoriels vidéo benevol.app</div>
+            <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>Tutoriels vidéo {SITE_NAME}</div>
             <div style={{ fontSize: 32, color: "#bfdbfe", marginTop: 24, lineHeight: 1.35 }}>
               {`${count} vidéos pour organiser vos bénévoles, pas à pas.`}
             </div>

@@ -9,6 +9,7 @@ import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
+import { siteDomain } from "@/lib/site"
 
 /**
  * Notification outbox (#293).
@@ -112,7 +113,7 @@ export async function enqueueNotifications(
 /** Stable Message-ID per outbox row: a re-send after a crash is recognizable as the same email. */
 export function outboxMessageId(rowId: string): string {
   const host = (() => {
-    try { return new URL(process.env.NEXT_PUBLIC_APP_URL ?? "").hostname || "benevol.app" } catch { return "benevol.app" }
+    try { return new URL(process.env.NEXT_PUBLIC_APP_URL ?? "").hostname || siteDomain() } catch { return siteDomain() }
   })()
   return `<outbox-${rowId}@${host}>`
 }

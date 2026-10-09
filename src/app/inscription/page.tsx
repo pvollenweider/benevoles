@@ -7,13 +7,16 @@ import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import SignupForm from "@/components/public/signup/SignupForm"
 import { isSignupOpen } from "@/lib/signup-switch"
+import { signupClosedMessage, signupOpen } from "@/lib/signup"
+import { contactEmail } from "@/lib/site"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 export const dynamic = "force-dynamic"
 
 // The target of every « Demander un espace » (#810, part 4d).
 export const metadata: Metadata = {
   title: "Demander un espace",
-  description: "Créez l'espace de votre association sur benevol.app : préparez votre événement tout de suite, la publication suit une courte vérification.",
+  description: `Créez l'espace de votre association sur ${SITE_NAME} : préparez votre événement tout de suite, la publication suit une courte vérification.`,
 }
 
 export default async function SignupPage() {
@@ -28,6 +31,7 @@ export default async function SignupPage() {
             </p>
           </div>
           <SignupForm open={await isSignupOpen()} />
+          <SignupForm open={signupOpen()} closedMessage={signupClosedMessage(contactEmail())} />
         </div>
       </main>
     </ContentShell>

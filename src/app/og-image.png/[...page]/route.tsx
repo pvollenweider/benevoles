@@ -5,6 +5,7 @@ import { ImageResponse } from "next/og"
 import { loadDocUnits } from "@/lib/doc-units"
 import { SOCIAL_IMAGE } from "@/lib/seo-metadata"
 import { socialCardFor, socialCardPaths, socialCardTitleSize } from "@/lib/social-card"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 // The social card of each public page of the apex site (src/lib/seo-metadata.ts `socialImagePath`):
 // /og-image.png/doc/admin for /doc/admin, /og-image.png/doc/<unit> for a documentation unit. Under
@@ -37,7 +38,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ pag
             <div style={{ height: 8, width: 28, borderRadius: 4, background: "#3b82f6", margin: "5px 0 5px 8px" }} />
             <div style={{ height: 8, width: 20, borderRadius: 4, background: NAVY, marginLeft: 3 }} />
           </div>
-          benevol.app
+          {SITE_NAME}
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 30, color: SOFT, marginBottom: 20 }}>{card.eyebrow}</div>

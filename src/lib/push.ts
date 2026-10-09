@@ -6,6 +6,7 @@ import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"
 import { reportError } from "./report-error"
+import { siteDomain } from "@/lib/site"
 
 let configured = false
 
@@ -13,12 +14,12 @@ function ensureConfigured() {
   if (configured) return
   const publicKey = env.VAPID_PUBLIC_KEY
   const privateKey = env.VAPID_PRIVATE_KEY
-  const email = env.VAPID_EMAIL ?? env.EMAIL_FROM ?? "mailto:admin@benevol.app"
+  const email = env.VAPID_EMAIL ?? env.EMAIL_FROM ?? `mailto:admin@${siteDomain()}`
 
   if (!publicKey || !privateKey) return
 
   const mailtoEmail = email.includes("<")
-    ? `mailto:${email.match(/<(.+)>/)?.[1] ?? "admin@benevol.app"}`
+    ? `mailto:${email.match(/<(.+)>/)?.[1] ?? `admin@${siteDomain()}`}`
     : email.startsWith("mailto:")
     ? email
     : `mailto:${email}`

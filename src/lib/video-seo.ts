@@ -4,6 +4,7 @@
 import type { Metadata, MetadataRoute } from "next"
 import { videoMediaUrls, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
 import { META_TITLE_MAX } from "@/lib/meta-length"
+import { siteName } from "@/lib/site"
 
 /**
  * Search engines, AI crawlers and link previews for the video library (/videos, /videos/<ID>):
@@ -17,12 +18,12 @@ import { META_TITLE_MAX } from "@/lib/meta-length"
  * full transcript, duration, the video itself.
  */
 
-export const VIDEO_SITE_NAME = "benevol.app"
+export const VIDEO_SITE_NAME = siteName()
 export const VIDEO_LIBRARY_PATH = "/videos"
 export const VIDEO_LIBRARY_NAME = "Bibliothèque vidéo"
-export const VIDEO_LIBRARY_TITLE = "Tutoriels vidéo | benevol.app"
+export const VIDEO_LIBRARY_TITLE = `Tutoriels vidéo | ${VIDEO_SITE_NAME}`
 export const VIDEO_LIBRARY_OG_IMAGE_PATH = "/videos/og-image.png"
-export const VIDEO_LIBRARY_OG_IMAGE_ALT = "Tutoriels vidéo benevol.app"
+export const VIDEO_LIBRARY_OG_IMAGE_ALT = `Tutoriels vidéo ${VIDEO_SITE_NAME}`
 /** The site's default social card (src/app/og-image.png/route.tsx), when a video has no poster yet. */
 export const DEFAULT_OG_IMAGE_PATH = "/og-image.png"
 export const VIDEO_SITEMAP_PATH = "/video-sitemap.xml"
@@ -97,7 +98,7 @@ export function videoPageTitle(video: Pick<Video, "title"> & Partial<Pick<Video,
   // A title that alone exceeds the limit is spoken in the narration, so it stays on the page; the
   // <title> uses the catalogue's short feature name instead (« Heures de bénévolat et attestation »).
   const base = video.title.length > META_TITLE_MAX && video.feature ? video.feature : video.title
-  const suffixes = [" | Tutoriel vidéo benevol.app", " | Vidéo benevol.app", ` | ${VIDEO_SITE_NAME}`]
+  const suffixes = [` | Tutoriel vidéo ${VIDEO_SITE_NAME}`, ` | Vidéo ${VIDEO_SITE_NAME}`, ` | ${VIDEO_SITE_NAME}`]
   const fitting = suffixes.find((suffix) => base.length + suffix.length <= META_TITLE_MAX)
   return fitting ? `${base}${fitting}` : base
 }
@@ -164,7 +165,7 @@ export function videoJsonLd(video: Video, ctx: VideoSeoContext): Record<string, 
 
 export function videoLibraryDescription(count: number): string {
   const n = count > 1 ? `${count} tutoriels vidéo` : count === 1 ? "Un tutoriel vidéo" : "Des tutoriels vidéo"
-  return `${n} pour prendre en main benevol.app : créer un événement, bâtir le planning, inscrire les bénévoles, communiquer, préparer le jour J.`
+  return `${n} pour prendre en main ${VIDEO_SITE_NAME} : créer un événement, bâtir le planning, inscrire les bénévoles, communiquer, préparer le jour J.`
 }
 
 /** CollectionPage of the gallery, its ItemList holding the indexed videos only, in gallery order. */

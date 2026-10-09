@@ -20,6 +20,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import MissionBriefCard from "@/components/public/MissionBriefCard"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
+import { APP_TIME_ZONE } from "@/lib/time-zone"
 
 type ShiftRef = {
   label: string
@@ -214,7 +215,7 @@ export default function MyRegistrationPage() {
   }
 
   // « Avant ta mission » (#560): the next confirmed shift not over yet, read on the visitor's clock.
-  const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? "Europe/Zurich")
+  const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? APP_TIME_ZONE)
 
   // The status region is the fragment's first child in both views below, so React keeps the same
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
@@ -295,7 +296,7 @@ export default function MyRegistrationPage() {
                     <p className="text-xs text-gray-500 mt-0.5">{date} · {fmtRange(reg.shift.startTime, reg.shift.endTime)}</p>
                     {reg.status === "offered" && (
                       <p className="text-xs text-amber-900 mt-1">
-                        {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? "Europe/Zurich")}{" "}
+                        {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? APP_TIME_ZONE)}{" "}
                         <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
                       </p>
                     )}
@@ -386,7 +387,7 @@ export default function MyRegistrationPage() {
         <PersonalLinkPanel
           token={token}
           linkEmailedAt={data.linkEmailedAt ?? null}
-          timeZone={data.timeZone ?? "Europe/Zurich"}
+          timeZone={data.timeZone ?? APP_TIME_ZONE}
           contactEmail={data.contactEmail ?? null}
           eventTitle={data.event.title}
         />

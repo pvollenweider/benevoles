@@ -71,8 +71,12 @@ export function signupOpen(env: Record<string, string | undefined> = process.env
 export const SIGNUP_ACCEPTED_MESSAGE =
   "Merci ! Si cette adresse peut recevoir un espace, un email de confirmation vient de partir : ouvrez-le pour confirmer votre adresse. Le lien est valable 24 heures."
 
-export const SIGNUP_CLOSED_MESSAGE =
-  "Les inscriptions sont fermées pour le moment. Écrivez-nous à contact@benevol.app pour demander un espace."
+/** The answer when sign-up is closed (#760: the instance's contact address, if it has one). */
+export function signupClosedMessage(contact: string | null): string {
+  return contact
+    ? `Les inscriptions sont fermées pour le moment. Écrivez-nous à ${contact} pour demander un espace.`
+    : "Les inscriptions sont fermées pour le moment."
+}
 
 /** A request can be confirmed once, before it expires. */
 export function confirmable(req: { expiresAt: Date; confirmedAt: Date | null } | null, now: Date): "ok" | "unknown" | "expired" | "used" {

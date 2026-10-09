@@ -3,6 +3,8 @@
 
 import type { Metadata, Viewport } from "next"
 
+import { siteName } from "@/lib/site"
+
 /**
  * The metadata of a public page of the apex site (features, documentation, legal pages): one
  * builder, so every page gives search engines and link previews (WhatsApp, X, Facebook, LinkedIn,
@@ -12,7 +14,8 @@ import type { Metadata, Viewport } from "next"
  * page (src/lib/urls.ts), never at build time.
  */
 
-export const SITE_NAME = "benevol.app"
+/** The instance's name (#760): `SITE_NAME`, else its domain (src/lib/site.ts). */
+export const SITE_NAME = siteName()
 
 /** The site's locale for Open Graph: French, as written in Switzerland (the publisher's). */
 export const OG_LOCALE = "fr_CH"

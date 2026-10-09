@@ -37,7 +37,7 @@ describe("review of a space awaiting validation (#810, part 4c)", () => {
   })
 
   it("says what each decision does", () => {
-    expect(approveOrgRecap("Fête").lines[2]).toBe("Ses administrateurs reçoivent un email « Votre espace benevol.app est activé ».")
+    expect(approveOrgRecap("Fête").lines[2]).toBe("Ses administrateurs reçoivent un email « Votre espace est activé ».")
     expect(refuseOrgRecap("Fête").lines).toContain("Aucun email n'est envoyé.")
   })
 })
