@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import EventForm from "@/components/admin/EventForm"
 import { getOrgContext } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { orgTimeZone } from "@/lib/time-zone"
 import EventTemplatePicker from "@/components/admin/EventTemplatePicker"
 import WizardSteps from "@/components/admin/WizardSteps"
@@ -15,7 +14,7 @@ export default async function NewEventPage() {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   // The registration window is typed in the organisation's time zone, as on the edit page.
-  const org = await prisma.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } })
+  const org = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } })
   return (
     <div className="max-w-2xl space-y-6">
       <WizardSteps current={1} eventId={null} />

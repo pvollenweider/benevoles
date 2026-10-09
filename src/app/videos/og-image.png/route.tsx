@@ -32,7 +32,7 @@ export function GET() {
             </svg>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>Tutoriels vidéo {SITE_NAME}</div>
+            <div style={{ fontSize: 72, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>{`Tutoriels vidéo ${SITE_NAME}`}</div>
             <div style={{ fontSize: 32, color: "#bfdbfe", marginTop: 24, lineHeight: 1.35 }}>
               {`${count} vidéos pour organiser vos bénévoles, pas à pas.`}
             </div>

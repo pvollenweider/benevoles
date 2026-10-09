@@ -3,8 +3,7 @@ import type { ReactElement, ReactNode } from "react"
 
 // Regression (#760): the new event form assumed Europe/Zurich for the registration window instead
 // of the organisation's own time zone, which the edit form already used.
-vi.mock("@/lib/auth-guard", () => ({ getOrgContext: async () => ({ organizationId: "org-a", db: {}, session: {} }) }))
-vi.mock("@/lib/prisma", () => ({ prisma: { organization: { findUnique: async () => ({ timeZone: "America/Montreal" }) } } }))
+vi.mock("@/lib/auth-guard", () => ({ getOrgContext: async () => ({ organizationId: "org-a", db: { organization: { findUnique: async () => ({ timeZone: "America/Montreal" }) } }, session: {} }) }))
 vi.mock("@/components/admin/EventForm", () => ({ default: function EventForm() { return null } }))
 vi.mock("@/components/admin/EventTemplatePicker", () => ({ default: ({ children }: { children: ReactNode }) => children }))
 vi.mock("@/components/admin/WizardSteps", () => ({ default: () => null }))
