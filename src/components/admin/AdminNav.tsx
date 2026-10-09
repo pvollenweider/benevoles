@@ -6,7 +6,7 @@
 import { useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import SuperAdminMenu, { SUPER_ADMIN_ITEMS } from "./SuperAdminMenu"
+import SuperAdminMenu, { SUPER_ADMIN_ITEMS, superAdminItemLabel } from "./SuperAdminMenu"
 import UserMenu from "./UserMenu"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 
@@ -20,7 +20,7 @@ const LINKS = [
 // Below `md` the links don't fit on one row next to the user menu (#361): they move behind a
 // "Menu" button that shows them as a list under the bar. A disclosure (aria-expanded + a plain
 // list of links), not role="menu": these are navigation links, read and tabbed through as such.
-export default function AdminNav({ userName, role, orgName }: { userName: string; role?: string; orgName?: string }) {
+export default function AdminNav({ userName, role, orgName, pendingSpaces = 0 }: { userName: string; role?: string; orgName?: string; pendingSpaces?: number }) {
   const pathname = usePathname()
   const isSuperAdmin = role === "super_admin"
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -207,7 +207,7 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
                 </button>
               </form>
             )}
-            {isSuperAdmin && <SuperAdminMenu />}
+            {isSuperAdmin && <SuperAdminMenu pendingSpaces={pendingSpaces} />}
             <Link href="/doc/admin" target="_blank" className="text-xs whitespace-nowrap text-gray-500 hover:text-gray-800 underline underline-offset-2">
               Aide
               <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
@@ -263,7 +263,7 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
             return (
               <li key={item.href}>
                 <Link href={item.href} aria-current={active ? "page" : undefined} onClick={onPanelLink(active)} className={mobileLinkClass(active)}>
-                  {item.label} <span className="ml-1.5 text-xs text-purple-700">Super admin</span>
+                  {superAdminItemLabel(item, pendingSpaces)} <span className="ml-1.5 text-xs text-purple-700">Super admin</span>
                 </Link>
               </li>
             )

@@ -4,11 +4,12 @@
 import { readdirSync } from "node:fs"
 import { join } from "node:path"
 import { prisma } from "./prisma"
+import { PENDING_ORG_WHERE } from "./org-review"
 import { env, releaseCheckEnabled } from "./env"
 import { outboxHealth } from "./notifications/outbox"
 import { JOBS, loadJobRuns, type JobName } from "./job-runs"
 import {
-  assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
+  assessConfig, assessDatabase, assessPendingSpaces, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
 } from "./health-view"
 import { isNewerVersion } from "./release-check"
 import pkg from "../../package.json"
@@ -20,13 +21,14 @@ import pkg from "../../package.json"
 export async function loadHealth(now: Date = new Date()) {
   const database = await probeDatabase()
   const none: Awaited<ReturnType<typeof loadJobRuns>> = {}
-  const [outbox, runs, migrations, releaseState] = database === null
-    ? [null, none, null, null]
+  const [outbox, runs, migrations, releaseState, pending] = database === null
+    ? [null, none, null, null, null]
     : await Promise.all([
         outboxHealth(now).catch(() => null),
         loadJobRuns().catch(() => none),
         probeMigrations().catch(() => null),
         prisma.releaseCheckState.findUnique({ where: { id: "singleton" } }).catch(() => null),
+        prisma.organization.findMany({ where: PENDING_ORG_WHERE, select: { createdAt: true } }).catch(() => null),
       ])
 
   const jobs: HealthItem[] = (Object.keys(JOBS) as JobName[])
@@ -48,6 +50,7 @@ export async function loadHealth(now: Date = new Date()) {
       version,
       now,
     ),
+    pending ? assessPendingSpaces(pending.map((o) => o.createdAt), now) : { id: "pending-spaces", label: "Espaces en attente de validation", level: "unknown", detail: "Non lus." },
     ...jobs,
     migrations ? assessMigrations(migrations) : { id: "migrations", label: "Migrations de la base", level: "unknown", detail: "Non lues." },
     ...assessConfig({

@@ -42,7 +42,7 @@ export default async function SuperAdminLayout({ children }: { children: React.R
   return (
     <div className="min-h-screen bg-gray-50">
       <SkipLink />
-      <AdminNav userName={session.user?.name ?? "Super Admin"} role={session.user?.role} orgName={orgName} />
+      <AdminNav userName={session.user?.name ?? "Super Admin"} role={session.user?.role} orgName={orgName} pendingSpaces={pendingCount} />
       {pendingCount > 0 && (
         <section aria-label="Espaces en attente de validation" className="bg-amber-50 border-b border-amber-200 px-4 py-3">
           <p className="max-w-5xl mx-auto text-sm text-amber-950">

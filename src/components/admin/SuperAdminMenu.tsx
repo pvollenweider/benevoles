@@ -24,7 +24,13 @@ export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/video-feedback", label: "Avis sur les vidéos" },
 ]
 
-export default function SuperAdminMenu() {
+/** An item's label: « Organisations » says how many spaces wait for a validation (#810). */
+export function superAdminItemLabel(item: { href: string; label: string }, pendingSpaces: number): string {
+  if (item.href !== "/super-admin/organizations" || pendingSpaces <= 0) return item.label
+  return `${item.label} (${pendingSpaces} en attente)`
+}
+
+export default function SuperAdminMenu({ pendingSpaces = 0 }: { pendingSpaces?: number }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -96,6 +102,14 @@ export default function SuperAdminMenu() {
         }`}
       >
         Super Admin
+        {/* A space keeps the badge apart from « Super Admin » in the button's name. */}
+        {pendingSpaces > 0 && " "}
+        {pendingSpaces > 0 && (
+          <span className="rounded-full bg-amber-200 text-amber-950 px-1.5 tabular-nums">
+            <span aria-hidden="true">{pendingSpaces}</span>
+            <span className="sr-only">{`${pendingSpaces} espace${pendingSpaces > 1 ? "s" : ""} en attente`}</span>
+          </span>
+        )}
         <span aria-hidden="true" className={`motion-safe:transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
       </button>
 
@@ -120,7 +134,7 @@ export default function SuperAdminMenu() {
                   current ? "text-purple-700 font-medium bg-purple-50" : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                {item.label}
+                {superAdminItemLabel(item, pendingSpaces)}
               </Link>
             )
           })}
