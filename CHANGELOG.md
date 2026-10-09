@@ -26,6 +26,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Créer son espace en ligne** (#810) : « Demander un espace » mène désormais à la page `/inscription` au lieu d'un email. L'association indique son nom, le vôtre et votre adresse, confirme cette adresse par le lien reçu, puis choisit son mot de passe : l'espace est prêt tout de suite pour préparer l'événement. La publication et les emails aux bénévoles sont possibles après une courte vérification par l'opérateur, et un email prévient dès que l'espace est activé.
 - **Statistiques de la plateforme pour le super admin** (#805) : la page **Statistiques** de l'espace super admin donne, « depuis le début », le nombre d'organisations, d'événements, de créneaux, d'inscriptions, de membres, de comptes administrateurs, de responsables de secteur et d'invitations créés. Ces chiffres ne baissent jamais, même quand un événement ou une organisation entière est supprimé ; ils partent de ce que contenait la base à leur mise en place. À côté, « en ce moment » : organisations actives, événements par statut, membres, propriétaires, organisateurs et responsables de secteur. La fiche d'une organisation montre aussi ce qu'elle a créé depuis le début. Des nombres seulement, aucune donnée personnelle.
 
 ### Modifié

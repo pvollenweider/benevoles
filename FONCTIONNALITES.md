@@ -424,6 +424,8 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 
 ### Gestion des organisations
 
+- **Inscription en libre-service** (#810, `/inscription`) : une association crée son espace elle-même ; l'adresse est confirmée par un lien (24 h, page avec bouton « Confirmer », jamais d'action par le seul lien), puis le mot de passe est choisi sur la page d'activation habituelle. L'espace est prêt tout de suite mais **en attente de validation** : pas de publication ni de page publique, emails seulement vers ses administrateurs actifs. Champ piège, durée minimale de remplissage, limites par adresse IP, par adresse email et pour toute la plateforme ; `SIGNUP=off` ferme l'inscription
+- **Validation d'un espace** : « Valider l'espace » (publication et emails ouverts, administrateurs prévenus par email) ou « Refuser et supprimer », depuis la fiche de l'organisation ; bandeau « N espaces attendent une validation », alerte ntfy et email à chaque demande, récapitulatif quotidien
 - Liste de toutes les organisations avec compteurs (événements, admins, membres)
 - Création d'une organisation : nom, slug auto-généré, email + nom du premier admin
   - Génère un **lien d'invitation** à durée limitée (7 jours) pour le premier admin

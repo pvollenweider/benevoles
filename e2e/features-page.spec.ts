@@ -13,13 +13,14 @@ import { test, expect } from "@playwright/test"
  */
 const withMedia = Boolean(process.env.VIDEO_MEDIA_BASE_URL)
 
-test("opens with the promise and asks for a space by email, at the top and at the bottom", async ({ page }) => {
+test("opens with the promise and leads to the sign-up page, at the top and at the bottom", async ({ page }) => {
   await page.goto("/fonctionnalites")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Le planning de vos bénévoles, simplement")
-  const requests = page.getByRole("link", { name: /^Demander un espace par email \(contact@benevol\.app\)/ })
+  const requests = page.getByRole("link", { name: /^Demander un espace/ })
   await expect(requests).toHaveCount(2)
   for (const href of await requests.evaluateAll((links) => links.map((a) => a.getAttribute("href")))) {
-    expect(href).toMatch(/^mailto:contact@benevol\.app\?subject=.+&body=.+/)
+    // #810: the self-service sign-up page, no longer an email.
+    expect(href).toBe("/inscription")
   }
   await expect(page.getByText(/Gratuit, open source et hébergé en France/)).toBeVisible()
 })

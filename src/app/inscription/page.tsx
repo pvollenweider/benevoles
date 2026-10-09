@@ -10,12 +10,10 @@ import { signupOpen } from "@/lib/signup"
 
 export const dynamic = "force-dynamic"
 
-// Not indexed yet (#810, part 4b): the page is opened and linked from « Demander un espace » once
-// the operator side (validation page, part 4c) is in place.
+// The target of every « Demander un espace » (#810, part 4d).
 export const metadata: Metadata = {
   title: "Demander un espace",
   description: "Créez l'espace de votre association sur benevol.app : préparez votre événement tout de suite, la publication suit une courte vérification.",
-  robots: { index: false, follow: false },
 }
 
 export default function SignupPage() {

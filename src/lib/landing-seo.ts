@@ -42,7 +42,7 @@ export const LANDING_FAQ: readonly FaqEntry[] = [
   },
   {
     question: "Comment commencer ?",
-    answer: `Écrivez à ${CONTACT_EMAIL} : on vous crée un espace à l'adresse de votre association, du type votre-association.benevol.app. Une liste de premiers pas vous guide ensuite, jusqu'à une inscription de test.`,
+    answer: `Créez votre espace en ligne depuis la page « Demander un espace » : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. Une liste de premiers pas vous guide jusqu'à une inscription de test.`,
   },
   {
     question: "Ça marche sur téléphone ?",

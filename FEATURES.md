@@ -5,7 +5,7 @@ Vous créez les postes et les créneaux, vous partagez un lien, et chaque béné
 Gratuit, open source et hébergé en France, pour une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive.
 
 <!-- actions -->
-- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Demander un espace](/inscription)
 - [Voir comment ça marche](#comment-ca-marche)
 
 <!-- image: VOLUNTEER_CHOOSE_SHIFTS | La page d'inscription d'un événement : les créneaux de chaque poste sur une frise par jour, et à droite le récapitulatif des créneaux choisis. -->
@@ -135,7 +135,7 @@ Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec
 benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : on vous crée un espace, puis la page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](guide/premiers-pas.md) suit le même chemin.
 
 <!-- actions -->
-- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Demander un espace](/inscription)
 - [Créer son premier événement](guide/creer-son-premier-evenement.md)
 
 ## Ce que benevol.app ne fait pas, volontairement
