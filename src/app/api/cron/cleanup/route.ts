@@ -152,6 +152,9 @@ async function run(req: Request) {
     where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.signupRequest) } },
   })
 
+  // --- 6d bis. Expired entries of the sign-up block list (#810, part 5): IP entries always expire.
+  const deletedSignupBlocks = await prisma.signupBlock.deleteMany({ where: { expiresAt: { lt: now } } })
+
   // --- 6e. Daily summary of the spaces awaiting validation (#810): one operator alert a day, not one
   // per request; the alert's key carries the date, so a second run the same day sends nothing.
   const pending = await prisma.organization.findMany({ where: PENDING_ORG_WHERE, select: { createdAt: true } })
@@ -210,6 +213,7 @@ async function run(req: Request) {
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       videoFeedback: deletedVideoFeedback.count,
       signupRequests: deletedSignupRequests.count,
+      signupBlocks: deletedSignupBlocks.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       mergedMemberTombstones: deletedMergedTombstones.count,

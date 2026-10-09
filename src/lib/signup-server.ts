@@ -10,6 +10,7 @@ import { isReservedOrgSlug } from "@/lib/org-subdomain"
 import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { confirmable, plainLabel, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
+import { blockApplies, signupKeys } from "@/lib/signup-blocklist"
 
 /**
  * Database side of the self-service sign-up (#810, part 4b); the rules are in src/lib/signup.ts.
@@ -32,6 +33,17 @@ export async function uniqueOrgSlug(name: string, db: Pick<typeof prisma, "organ
     slug = `${base}-${suffix++}`
   }
   return slug
+}
+
+/**
+ * Whether the block list (#810, part 5) stops this sign-up: its address, its domain or its IP.
+ * The caller answers as if nothing happened. An unknown IP (« unknown ») is not checked.
+ */
+export async function signupBlocked(email: string, ip: string | null, now: Date = new Date()): Promise<boolean> {
+  const secret = process.env.AUTH_SECRET ?? ""
+  const keys = signupKeys(email, ip && ip !== "unknown" ? ip : null, secret)
+  const hits = await prisma.signupBlock.findMany({ where: { OR: keys }, select: { expiresAt: true } })
+  return hits.some((b) => blockApplies(b, now))
 }
 
 /**
@@ -80,11 +92,13 @@ export async function signupRequestState(token: string, now: Date = new Date()):
  * its owner account, inactive until the password is chosen on the account activation page (the
  * returned link). Once only: the request is claimed by a conditional update first.
  */
-export async function confirmSignupRequest(token: string, now: Date = new Date()): Promise<ConfirmResult> {
+export async function confirmSignupRequest(token: string, now: Date = new Date(), ip: string | null = null): Promise<ConfirmResult> {
   const tokenHash = hashToken(token)
   const req = await prisma.signupRequest.findUnique({ where: { tokenHash } })
   const state = confirmable(req, now)
   if (state !== "ok" || !req) return { ok: false, reason: state === "ok" ? "unknown" : state }
+  // Blocked since the request was made: answered like an unknown link, nothing created.
+  if (await signupBlocked(req.email, ip, now)) return { ok: false, reason: "unknown" }
 
   const setupToken = randomBytes(32).toString("hex")
   const placeholderHash = await bcrypt.hash(randomBytes(32).toString("hex"), 4)

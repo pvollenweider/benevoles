@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation"
 export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
   { href: "/super-admin/stats", label: "Statistiques" },
+  { href: "/super-admin/blocklist", label: "Liste de blocage" },
   { href: "/super-admin/health", label: "Santé du service" },
   { href: "/super-admin/product-updates", label: "Communications admin" },
   { href: "/super-admin/video-feedback", label: "Avis sur les vidéos" },

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
-const server = vi.hoisted(() => ({ createSignupRequest: vi.fn(), confirmSignupRequest: vi.fn(), signupRequestState: vi.fn() }))
+const server = vi.hoisted(() => ({ createSignupRequest: vi.fn(), confirmSignupRequest: vi.fn(), signupRequestState: vi.fn(), signupBlocked: vi.fn() }))
 const limiter = vi.hoisted(() => ({ ok: true }))
 vi.mock("@/lib/signup-server", () => server)
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: vi.fn(async () => ({ ok: limiter.ok, remaining: 1, retryAfter: 0 })), getClientIp: () => "203.0.113.1" }))
@@ -14,7 +14,19 @@ const form = (over: object = {}) => ({ organizationName: "Fête du village", con
 describe("POST /api/public/signup (#810, part 4b)", () => {
   beforeEach(() => {
     server.createSignupRequest.mockReset().mockResolvedValue({ queued: true })
+    server.signupBlocked.mockReset().mockResolvedValue(false)
     limiter.ok = true
+  })
+
+  // #810, part 5: a blocked sign-up gets the same answer, nothing stored.
+  it("answers the same and stores nothing when the block list stops the sign-up", async () => {
+    server.signupBlocked.mockResolvedValueOnce(true)
+    const { POST } = await import("@/app/api/public/signup/route")
+    const res = await POST(post("http://localhost/api/public/signup", form()))
+    expect(res.status).toBe(202)
+    expect((await res.json()).message).toBe(SIGNUP_ACCEPTED_MESSAGE)
+    expect(server.signupBlocked).toHaveBeenCalledWith("camille@example.org", "203.0.113.1")
+    expect(server.createSignupRequest).not.toHaveBeenCalled()
   })
   afterEach(() => { delete process.env.SIGNUP })
 
