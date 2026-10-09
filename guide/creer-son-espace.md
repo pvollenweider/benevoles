@@ -1,7 +1,7 @@
 ---
 roles: [admin]
 group: demarrer
-order: 3
+order: 7
 summary: Demander un espace en ligne, confirmer son adresse, puis tout préparer pendant la courte vérification.
 related: [creer-son-premier-evenement, se-connecter, premiers-pas]
 legacy: []
