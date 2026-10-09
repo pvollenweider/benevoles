@@ -9,6 +9,7 @@
  */
 import { toMin, toMinEnd } from "./gantt-utils"
 import { localDateTimeToUtc } from "./time-zone"
+import { siteDomain, siteName } from "@/lib/site"
 
 export type IcsShift = {
   /** Registration id: the stable identifier of the entry. */
@@ -74,11 +75,11 @@ const clip = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1
 
 export function buildIcs(shifts: IcsShift[], opts: { timeZone: string; now?: Date; host?: string }): string {
   const now = opts.now ?? new Date()
-  const host = opts.host ?? "benevol.app"
+  const host = opts.host ?? siteDomain()
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//benevol.app//Planning bénévoles//FR",
+    `PRODID:-//${siteName()}//Planning bénévoles//FR`,
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
   ]

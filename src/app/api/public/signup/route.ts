@@ -5,7 +5,8 @@ import { NextResponse } from "next/server"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
-import { looksAutomated, signupSchema, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE } from "@/lib/signup"
+import { looksAutomated, signupSchema, SIGNUP_ACCEPTED_MESSAGE, signupClosedMessage } from "@/lib/signup"
+import { contactEmail } from "@/lib/site"
 import { createSignupRequest, signupBlocked } from "@/lib/signup-server"
 
 /**
@@ -14,7 +15,7 @@ import { createSignupRequest, signupBlocked } from "@/lib/signup-server"
  * the form tells nothing about who has an account. Only a malformed field gets its own message.
  */
 export async function POST(req: Request) {
-  if (!(await isSignupOpen())) return NextResponse.json({ error: SIGNUP_CLOSED_MESSAGE, code: "signup_closed" }, { status: 403 })
+  if (!(await isSignupOpen())) return NextResponse.json({ error: signupClosedMessage(contactEmail()), code: "signup_closed" }, { status: 403 })
 
   const body = await req.json().catch(() => null)
   const parsed = signupSchema.safeParse(body)

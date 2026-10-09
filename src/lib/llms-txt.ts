@@ -99,7 +99,7 @@ export function llmsTxt(s: LlmsSources): string {
 
   out.push("## Optional", "")
   out.push(link("Texte complet de la documentation", url("/llms-full.txt"), "les fonctionnalités, les guides et toutes les fiches en un seul fichier."))
-  out.push(link("Code source", s.repositoryUrl, "licence AGPL-3.0, guide de déploiement pour installer benevol.app soi-même."))
+  out.push(link("Code source", s.repositoryUrl, "licence AGPL-3.0, guide de déploiement pour installer le logiciel soi-même."))
   return `${out.join("\n").trim()}\n`
 }
 

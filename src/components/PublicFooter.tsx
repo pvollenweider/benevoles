@@ -4,6 +4,7 @@
 import Link from "next/link"
 import { APP_VERSION } from "@/lib/app-version"
 import GitHubMark from "./GitHubMark"
+import { siteName, supportUrl } from "@/lib/site"
 
 /**
  * Footer links: underlined (grey links must not rely on colour alone), the underline quiet at
@@ -28,28 +29,33 @@ const LEGAL: FooterColumn = {
   ],
 }
 
-/** benevol.app's own pages: help, the project (sign-in, code, support), legal. */
-export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
-  {
-    id: "help",
-    title: "Aide",
-    links: [
-      { href: "/doc", label: "Documentation" },
-      { href: "/videos", label: "Tutoriels vidéo" },
-      { href: "/nouveautes", label: "Nouveautés" },
-    ],
-  },
-  {
-    id: "project",
-    title: "benevol.app",
-    links: [
-      { href: "/admin/login", label: "Espace organisateur" },
-      { href: REPOSITORY_URL, label: `Code source v${APP_VERSION}`, external: true, github: true },
-      { href: "https://buymeacoffee.com/benevol.app", label: "Soutenir le projet", external: true },
-    ],
-  },
-  LEGAL,
-]
+/**
+ * The instance's own pages: help, the project (sign-in, code, support), legal. The project column
+ * carries the instance's name, and the support link only when the instance has one (#760).
+ */
+export function footerSiteColumns(name: string = siteName(), support: string | null = supportUrl()): readonly FooterColumn[] {
+  return [
+    {
+      id: "help",
+      title: "Aide",
+      links: [
+        { href: "/doc", label: "Documentation" },
+        { href: "/videos", label: "Tutoriels vidéo" },
+        { href: "/nouveautes", label: "Nouveautés" },
+      ],
+    },
+    {
+      id: "project",
+      title: name,
+      links: [
+        { href: "/admin/login", label: "Espace organisateur" },
+        { href: REPOSITORY_URL, label: `Code source v${APP_VERSION}`, external: true, github: true },
+        ...(support ? [{ href: support, label: "Soutenir le projet", external: true }] : []),
+      ],
+    },
+    LEGAL,
+  ]
+}
 
 /** An organisation's pages: what its volunteers (and its organisers) need, then legal. */
 export const FOOTER_EVENT_COLUMNS: readonly FooterColumn[] = [
@@ -93,7 +99,7 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  * header and the content; `event` at `max-w-xl`, with `px-4` when the page has no container.
  */
 export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
-  const columns = variant === "site" ? FOOTER_SITE_COLUMNS : FOOTER_EVENT_COLUMNS
+  const columns = variant === "site" ? footerSiteColumns() : FOOTER_EVENT_COLUMNS
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>

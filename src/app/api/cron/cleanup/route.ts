@@ -16,6 +16,7 @@ import { SUMMARY_WINDOW_HOURS, summaryDayKey } from "@/lib/delivery-summary"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { siteName } from "@/lib/site"
 
 export const dynamic = "force-dynamic"
 
@@ -174,7 +175,7 @@ async function run(req: Request) {
   const summary = pendingSummary(pending.map((o) => o.createdAt), now)
   if (summary) {
     const base = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/+$/, "")
-    await notifyOperator({ key: `pending-summary:${now.toISOString().slice(0, 10)}`, title: "benevol.app : espaces en attente", message: summary, priority: 3, url: base ? `${base}/super-admin/organizations` : undefined })
+    await notifyOperator({ key: `pending-summary:${now.toISOString().slice(0, 10)}`, title: `${siteName()} : espaces en attente`, message: summary, priority: 3, url: base ? `${base}/super-admin/organizations` : undefined })
       .catch(reportError("cleanup.pending_summary"))
   }
 

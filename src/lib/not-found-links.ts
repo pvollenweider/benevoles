@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { orgSlugFromHost } from "./org-subdomain"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 /** The <title> of the 404 page (src/app/not-found.tsx, NotFoundTitle). */
-export const NOT_FOUND_TITLE = "Page introuvable | benevol.app"
+export const NOT_FOUND_TITLE = `Page introuvable | ${SITE_NAME}`
 
 /** One way out of the 404 page (src/app/not-found.tsx). */
 export type NotFoundLink = { href: string; label: string; description: string }
@@ -45,7 +46,7 @@ export function notFoundLinks(org: NotFoundOrg | null, host: string, apexUrl: st
       primary: { href: `${base}/`, label: "Retour à l'accueil" },
       note: null,
       links: [
-        { href: "/fonctionnalites", label: "Fonctionnalités", description: "Ce que fait benevol.app, besoin par besoin." },
+        { href: "/fonctionnalites", label: "Fonctionnalités", description: `Ce que fait ${SITE_NAME}, besoin par besoin.` },
         DOCUMENTATION,
         GUIDE_BENEVOLE,
         { href: "/doc/admin", label: "Guide des organisateurs", description: "Préparer un événement et ses créneaux." },

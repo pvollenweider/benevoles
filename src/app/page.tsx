@@ -452,10 +452,12 @@ function LandingPage() {
             >
               Demander un espace<span aria-hidden="true"> →</span>
             </Link>
-            <p className="mt-4 text-base text-blue-100">
-              Une question avant ?{" "}
-              <a href={`mailto:${CONTACT_EMAIL}`} className={`text-white font-semibold underline underline-offset-4 decoration-blue-300 hover:decoration-white rounded ${focusRing} focus-visible:outline-white`}>{CONTACT_EMAIL}</a>
-            </p>
+            {CONTACT_EMAIL && (
+              <p className="mt-4 text-base text-blue-100">
+                Une question avant ?{" "}
+                <a href={`mailto:${CONTACT_EMAIL}`} className={`text-white font-semibold underline underline-offset-4 decoration-blue-300 hover:decoration-white rounded ${focusRing} focus-visible:outline-white`}>{CONTACT_EMAIL}</a>
+              </p>
+            )}
           </div>
         </div>
       </section>

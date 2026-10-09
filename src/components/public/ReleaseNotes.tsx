@@ -3,6 +3,7 @@
 
 import Link from "next/link"
 import type { RenderedRelease } from "@/lib/public-content"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 /**
  * The body of /nouveautes (#757), inside ContentShell's article and its prose recipe: the page's
@@ -17,10 +18,10 @@ export default function ReleaseNotes({ releases, fullChangelogUrl }: { releases:
     <>
       <h1>Nouveautés</h1>
       <p>
-        Ce qui a changé dans benevol.app, version par version, la plus récente en premier. Pour découvrir l&apos;outil,
+        Ce qui a changé dans {SITE_NAME}, version par version, la plus récente en premier. Pour découvrir l&apos;outil,
         voir les <Link href="/fonctionnalites">fonctionnalités</Link> ; pour s&apos;en servir, la{" "}
         <Link href="/doc">documentation</Link>. Les changements techniques, pour qui installe ou développe
-        benevol.app, sont dans le <a href={fullChangelogUrl}>journal complet des versions sur GitHub</a>.
+        {SITE_NAME}, sont dans le <a href={fullChangelogUrl}>journal complet des versions sur GitHub</a>.
       </p>
 
       {releases.length === 0 ? (

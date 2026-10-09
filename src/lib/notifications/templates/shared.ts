@@ -9,6 +9,7 @@
 import { orgBaseUrl } from "@/lib/urls"
 import { onSiteContact, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
+import { siteDomain, siteName } from "@/lib/site"
 
 export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
@@ -102,7 +103,7 @@ ${ph}
 ${EMAIL_CARD_OPEN}
 ${inner}
 <div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">
-  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>
+  <a href="https://${siteDomain()}" style="color:#666;text-decoration:none;">${escapeHtml(siteName())}</a>
 </div>
 </div>
 </td></tr>

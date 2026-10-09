@@ -13,6 +13,7 @@ import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import { hasLevel } from "@/lib/permissions"
 import HelpLink from "@/components/admin/HelpLink"
+import { siteDomain } from "@/lib/site"
 
 export const dynamic = "force-dynamic"
 
@@ -23,7 +24,7 @@ export default async function AdminsSettingsPage() {
 
   // Domain the org slug is a subdomain of (e.g. "benevol.app" for "cdp.benevol.app").
   // Computed here so the server and the client render the same address.
-  const host = (await headers()).get("host") ?? "benevol.app"
+  const host = (await headers()).get("host") ?? siteDomain()
   const hostParts = host.split(".")
   const baseDomain = hostParts.length >= 3 ? hostParts.slice(1).join(".") : host
 

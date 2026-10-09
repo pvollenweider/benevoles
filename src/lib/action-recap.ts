@@ -246,7 +246,7 @@ export function approveOrgRecap(name: string): ActionRecap {
     lines: [
       "Il peut publier ses événements : ses pages publiques répondent.",
       "Il peut écrire à ses bénévoles et à ses membres.",
-      "Ses administrateurs reçoivent un email « Votre espace benevol.app est activé ».",
+      "Ses administrateurs reçoivent un email « Votre espace est activé ».",
     ],
     confirmLabel: "Valider l'espace",
     danger: false,

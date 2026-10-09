@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { ImageResponse } from "next/og"
+import { SITE_NAME } from "@/lib/seo-metadata"
 
 // The platform's social card (Open Graph and Twitter): the apex home's (src/lib/landing-seo.ts),
 // and the default of a published event's link preview (src/lib/event-share.ts, #564), always by
@@ -28,7 +29,7 @@ export function GET() {
               <div style={{ height: 8, width: 28, borderRadius: 4, background: "#3b82f6", margin: "5px 0 5px 8px" }} />
               <div style={{ height: 8, width: 20, borderRadius: 4, background: "#1e3a8a", marginLeft: 3 }} />
             </div>
-            benevol.app
+            {SITE_NAME}
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 68, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.02em" }}>

@@ -4,6 +4,7 @@
 import { DOC_ROLE_INFO, docGroup, docGroupHref, type DocUnit } from "@/lib/doc-units"
 import { publicPage } from "@/lib/doc-pages"
 import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
+import { contactEmail } from "@/lib/site"
 
 /**
  * The structured data (schema.org JSON-LD) of the public pages of the apex site. Every node is a
@@ -15,7 +16,8 @@ import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
  */
 
 export const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
-export const CONTACT_EMAIL = "contact@benevol.app"
+/** The public contact address (#760): null when the instance has none (src/lib/site.ts). */
+export const CONTACT_EMAIL = contactEmail()
 export const LICENSE_URL = "https://www.gnu.org/licenses/agpl-3.0.html"
 
 export type JsonLdNode = Record<string, unknown>
@@ -23,7 +25,7 @@ export type JsonLdNode = Record<string, unknown>
 const homeUrl = (base: string) => absoluteUrl(base, "/")
 const idOf = (base: string, name: string) => ({ "@id": `${homeUrl(base)}#${name}` })
 
-/** The publisher: benevol.app, its logo, its contact and its code. */
+/** The publisher: the instance, its logo, its contact and its code. */
 export function organizationNode(base: string): JsonLdNode {
   return {
     "@type": "Organization",
@@ -31,7 +33,7 @@ export function organizationNode(base: string): JsonLdNode {
     name: SITE_NAME,
     url: homeUrl(base),
     logo: absoluteUrl(base, "/apple-icon.png"),
-    email: CONTACT_EMAIL,
+    ...(CONTACT_EMAIL ? { email: CONTACT_EMAIL } : {}),
     sameAs: [REPOSITORY_URL],
   }
 }
