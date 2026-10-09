@@ -119,7 +119,7 @@ Oui, c'est l'usage prévu : des modèles existent pour un festival, une buvette,
 
 ### Comment commencer ?
 
-Créez votre espace en ligne depuis la page [Demander un espace](/inscription) : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. La page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
+Créez votre espace en ligne depuis la [page d'inscription](/inscription) : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. La page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
 
 ## Démarrer
 
