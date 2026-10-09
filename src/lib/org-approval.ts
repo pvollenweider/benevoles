@@ -27,6 +27,10 @@ export function canEmailThirdParties(org: Pick<OrgApprovals, "outboundEmailAppro
 /** Prisma filter of an organisation whose public pages may answer: active and allowed to publish. */
 export const PUBLIC_ORG_WHERE = { active: true, publicationApprovedAt: { not: null } } as const
 
+/** Shown when a space awaiting validation asks for the publication (#810), with no promised delay. */
+export const PUBLICATION_REQUESTED_MESSAGE =
+  "Votre espace est prêt ! Vous pouvez immédiatement préparer votre événement. Sa publication et l'envoi d'invitations seront possibles après une courte vérification de votre inscription. Vous recevrez un email dès que votre espace sera activé."
+
 export const PUBLICATION_PENDING_ERROR =
   "Votre espace est en attente de validation : la publication sera possible dès qu'il sera activé. Vous recevrez un email."
 

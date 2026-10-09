@@ -17,7 +17,7 @@ Une association crée son espace elle-même depuis `/inscription` (#810). Cette 
 Tant qu'il n'est pas validé (`src/lib/org-approval.ts`) :
 
 - tout se prépare : événements, postes, créneaux, membres, pages, logo (visible de ses administrateurs et du super admin seulement), aperçu ;
-- **pas de publication** : la publication est refusée et les pages publiques de l'espace ne répondent pas (`PUBLIC_ORG_WHERE`) ;
+- **pas de publication** : la publication est refusée et les pages publiques de l'espace ne répondent pas (`PUBLIC_ORG_WHERE`). Le bouton **Publier** devient **Demander la publication** (`POST /api/admin/events/[id]/publication-request`) : il alerte l'opérateur (« Demande de publication », ntfy et email, au plus une fois par espace et par jour) et affiche le message d'attente, sans délai promis ;
 - **pas d'email à des tiers** : seuls ses administrateurs **actifs** reçoivent des emails ; une invitation ou un message à un bénévole ne part pas ;
 - un bandeau le dit en haut de l'administration de l'espace.
 

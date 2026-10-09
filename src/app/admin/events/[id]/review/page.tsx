@@ -14,6 +14,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { eventPublicUrl } from "@/lib/urls"
 import WizardSteps from "@/components/admin/WizardSteps"
 import PublishToggle from "@/components/admin/PublishToggle"
+import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import EventShareLink from "@/components/admin/EventShareLink"
 import HelpLink from "@/components/admin/HelpLink"
 
@@ -39,7 +40,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     select: {
       id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
       latitude: true, longitude: true, dayContactName: true, dayContactPhone: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
-      organization: { select: { slug: true, timeZone: true, notificationSettings: true } },
+      organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         select: {
@@ -152,7 +153,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
                 : "Complétez les points marqués d'un ! (« À faire ») avant de publier."}
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {ready ? <PublishToggle eventId={event.id} currentStatus={event.publicStatus} /> : null}
+              {ready ? <PublishToggle eventId={event.id} currentStatus={event.publicStatus} awaitingValidation={!orgCanPublish(event.organization)} /> : null}
               <Link href={`/admin/events/${event.id}`} className={linkClass}>Rester en brouillon pour l&apos;instant</Link>
             </div>
           </>
