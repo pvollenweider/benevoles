@@ -869,3 +869,12 @@ model OperatorLog {
 
   @@index([createdAt])
 }
+
+// A platform-wide setting changed from the super admin space, one row per key (#810): the
+// « Inscriptions fermées » switch (key "signup", value { closed }).
+model PlatformSetting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}

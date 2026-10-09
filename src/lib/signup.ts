@@ -59,8 +59,9 @@ export function looksAutomated(input: Pick<SignupInput, "website" | "startedAt">
 }
 
 /**
- * The sign-up switch: `SIGNUP=off` closes it (operator's last resort, #810; a switch in the super
- * admin space comes with part 4c). Open by default.
+ * The server configuration's part of the sign-up switch: `SIGNUP=off` closes it. Open by default.
+ * The operator's switch in the super admin space is added by src/lib/signup-switch.ts
+ * (`isSignupOpen`), which every caller uses.
  */
 export function signupOpen(env: Record<string, string | undefined> = process.env): boolean {
   return (env.SIGNUP ?? "").trim().toLowerCase() !== "off"

@@ -48,7 +48,9 @@ Pas de CAPTCHA (accessibilité, vie privée). À la place :
 
 ## Fermer l'inscription
 
-`SIGNUP=off` ferme l'inscription : la page affiche « Les inscriptions sont fermées pour le moment » avec l'adresse contact@benevol.app, et l'API répond 403. En production, c'est le secret GitHub `SIGNUP`, recopié à chaque déploiement : il prend effet au déploiement suivant (voir [deploiement.md](deploiement.md#changer-un-secret-en-production)). Pour fermer tout de suite, sans attendre de déploiement :
+**Depuis l'espace super admin**, sans déploiement : « Inscriptions et blocage » (`/super-admin/blocklist`), bouton **Fermer les inscriptions** (puis **Rouvrir les inscriptions**). Effet immédiat sur le formulaire et sur les liens de confirmation déjà envoyés ; la décision est inscrite au journal de l'opérateur. Stocké dans `PlatformSetting` (clé `signup`), lu à chaque demande par `isSignupOpen` (`src/lib/signup-switch.ts`).
+
+**Par la configuration** : `SIGNUP=off` ferme aussi l'inscription, et l'emporte sur le bouton (qui ne peut pas rouvrir ce que la configuration a fermé) : la page affiche « Les inscriptions sont fermées pour le moment » avec l'adresse contact@benevol.app, et l'API répond 403. En production, c'est le secret GitHub `SIGNUP`, recopié à chaque déploiement : il prend effet au déploiement suivant (voir [deploiement.md](deploiement.md#changer-un-secret-en-production)). Pour fermer tout de suite, sans attendre de déploiement :
 
 ```bash
 kubectl -n benevoles set env deployment/benevoles-app SIGNUP=off

@@ -5,6 +5,9 @@ const limiter = vi.hoisted(() => ({ ok: true }))
 vi.mock("@/lib/signup-server", () => server)
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: vi.fn(async () => ({ ok: limiter.ok, remaining: 1, retryAfter: 0 })), getClientIp: () => "203.0.113.1" }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
+// The operator's switch (#810), stored as a platform setting: open unless a test closes it.
+const setting = vi.hoisted(() => ({ value: null as null | { closed: boolean } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { platformSetting: { findUnique: vi.fn(async () => (setting.value ? { value: setting.value } : null)) } } }))
 
 import { DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE, SIGNUP_MIN_FILL_MS } from "@/lib/signup"
 
@@ -28,7 +31,7 @@ describe("POST /api/public/signup (#810, part 4b)", () => {
     expect(server.signupBlocked).toHaveBeenCalledWith("camille@example.org", "203.0.113.1")
     expect(server.createSignupRequest).not.toHaveBeenCalled()
   })
-  afterEach(() => { delete process.env.SIGNUP })
+  afterEach(() => { delete process.env.SIGNUP; setting.value = null })
 
   it("stores the request and gives the one answer", async () => {
     const { POST } = await import("@/app/api/public/signup/route")
@@ -66,6 +69,11 @@ describe("POST /api/public/signup (#810, part 4b)", () => {
     const closed = await POST(post("http://localhost/api/public/signup", form()))
     expect(closed.status).toBe(403)
     expect((await closed.json()).error).toBe(SIGNUP_CLOSED_MESSAGE)
+    // The super admin's switch closes it too, without a deploy.
+    delete process.env.SIGNUP
+    setting.value = { closed: true }
+    expect((await POST(post("http://localhost/api/public/signup", form()))).status).toBe(403)
+    expect(server.createSignupRequest).not.toHaveBeenCalled()
   })
 })
 
@@ -74,7 +82,7 @@ describe("POST /api/public/signup/confirm (#810, part 4b)", () => {
     server.confirmSignupRequest.mockReset()
     limiter.ok = true
   })
-  afterEach(() => { delete process.env.SIGNUP })
+  afterEach(() => { delete process.env.SIGNUP; setting.value = null })
 
   it("confirms with the button and hands back the account activation link", async () => {
     server.confirmSignupRequest.mockResolvedValue({ ok: true, inviteUrl: "http://localhost/admin/accept-invite?token=x", organizationSlug: "fete" })
