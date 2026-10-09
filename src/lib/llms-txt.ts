@@ -5,6 +5,7 @@ import { DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitl
 import { DOC_GROUPS, docUnitAudience, sortDocUnits, type DocUnit } from "@/lib/doc-units"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { SITE_NAME, absoluteUrl } from "@/lib/seo-metadata"
+import { localizeInstanceText } from "@/lib/site"
 
 /**
  * /llms.txt and /llms-full.txt (llmstxt.org): the apex site summed up for AI assistants, in plain
@@ -49,7 +50,7 @@ function introduction(markdown: string): string {
  */
 export function portableMarkdown(markdown: string, base: string): string {
   const root = base.replace(/\/+$/, "")
-  return linkSourcesToRoutes(markdown.replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*\n?/gm, ""))
+  return linkSourcesToRoutes(localizeInstanceText(markdown).replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*\n?/gm, ""))
     .replace(/\]\(\/(?!\/)/g, `](${root}/`)
     .replace(/\n{3,}/g, "\n\n")
     .trim()

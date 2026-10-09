@@ -12,7 +12,7 @@ type State = { open: boolean; closedBy: "config" | "operator" | null }
 
 const STATE_TEXT: Record<"open" | "operator" | "config", string> = {
   open: "Les inscriptions sont ouvertes : une association peut demander un espace depuis la page d'inscription.",
-  operator: "Les inscriptions sont fermées : la page d'inscription l'annonce avec l'adresse contact@benevol.app, et les liens de confirmation déjà envoyés ne créent plus d'espace.",
+  operator: "Les inscriptions sont fermées : la page d'inscription l'annonce avec l'adresse de contact de l'instance, et les liens de confirmation déjà envoyés ne créent plus d'espace.",
   config: "Les inscriptions sont fermées par la configuration du serveur (SIGNUP=off) : elles ne peuvent pas être rouvertes depuis cette page.",
 }
 
