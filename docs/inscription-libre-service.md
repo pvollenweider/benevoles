@@ -31,6 +31,16 @@ Les deux autorisations sont séparées pour pouvoir, plus tard, les accorder une
 - **Refuser et supprimer** : l'espace est supprimé avec ses comptes, sans email.
 - **Journal de l'opérateur** (`/super-admin/journal`) : chaque décision (valider, refuser, suspendre, désactiver, supprimer, bloquer, débloquer) y reste, avec son auteur et sa raison, même quand l'espace a été supprimé depuis.
 
+## Indicateurs
+
+« Statistiques » (`/super-admin/stats`), section « Inscription en libre-service » (`src/lib/signup-indicators.ts`, requêtes dans `loadSignupFacts`, `src/lib/usage-stats.ts`) : ce qui dit si la validation à la main reste nécessaire.
+
+- depuis le début (compteurs qu'une suppression ne baisse jamais, déclencheurs de la base) : demandes d'espace, espaces créés par l'inscription, envois reportés par un plafond (compté à chaque report), envois abandonnés pour trop d'emails à la même adresse ;
+- sur 12 mois (le journal de l'opérateur garde un an) : espaces validés, refusés, délai médian entre la création et la validation ;
+- en ce moment : espaces en attente, espaces jamais utilisés (aucun événement, créés il y a plus de 7 jours), organisations suspendues.
+
+Un espace créé par l'inscription porte `Organization.signupAt`. Pour les espaces créés avant cette colonne, la migration l'a déduit : description d'inscription, autorisation manquante, ou validation plus d'une minute après la création.
+
 ## Lien d'activation perdu
 
 Si la personne ferme la page avant de choisir son mot de passe, l'email « Choisissez votre mot de passe benevol.app » lui donne le lien (7 jours) ; la page « Demande déjà confirmée » le lui rappelle. « Mot de passe oublié » ne sert pas à un compte inactif. Si le lien a expiré ou si l'email manque, la personne écrit à contact@benevol.app ; sur la fiche de l'espace, **Renvoyer l'invitation** crée un nouveau lien (l'ancien cesse de fonctionner) et l'affiche sous le tableau des administrateurs. L'email d'invitation peut ne pas partir, puisque l'espace en attente n'écrit qu'à ses administrateurs actifs : transmettre alors le lien affiché.

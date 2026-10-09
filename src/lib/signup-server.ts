@@ -118,6 +118,7 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
         publicationApprovedAt: null,
         outboundEmailApprovedAt: null,
         signupDescription: req.description,
+        signupAt: now,
         admins: {
           create: {
             email: req.email,

@@ -5,7 +5,8 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
-import { loadPlatformUsage } from "@/lib/usage-stats"
+import { loadPlatformUsage, loadSignupFacts } from "@/lib/usage-stats"
+import { signupIndicatorRows } from "@/lib/signup-indicators"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Statistiques" }
@@ -21,7 +22,8 @@ export default async function StatsPage() {
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
-  const { cumulative, current } = await loadPlatformUsage()
+  const [{ cumulative, current }, signupFacts] = await Promise.all([loadPlatformUsage(), loadSignupFacts()])
+  const signup = signupIndicatorRows(signupFacts)
 
   return (
     <div className="space-y-8">
@@ -33,28 +35,35 @@ export default async function StatsPage() {
       </div>
       <UsageTable id="stats-cumulative" title="Depuis le début" rows={cumulative} />
       <UsageTable id="stats-current" title="En ce moment" rows={current} />
+      <UsageTable
+        id="stats-signup"
+        title="Inscription en libre-service"
+        intro="Ce qui dit si la validation à la main reste nécessaire. Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
+        rows={signup}
+      />
     </div>
   )
 }
 
-function UsageTable({ id, title, rows }: { id: string; title: string; rows: UsageRow[] }) {
+function UsageTable({ id, title, intro, rows }: { id: string; title: string; intro?: string; rows: (UsageRow | { key: string; label: string; value: string })[] }) {
   return (
     <section className="space-y-2">
       <h2 id={id} className="text-lg font-semibold text-gray-900">{title}</h2>
+      {intro && <p className="text-sm text-gray-700">{intro}</p>}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
         <table className="w-full text-sm">
           <caption className="sr-only">{title}</caption>
           <thead className="bg-gray-50 text-left text-gray-700">
             <tr>
               <th scope="col" className="px-4 py-2 font-medium">Indicateur</th>
-              <th scope="col" className="px-4 py-2 font-medium text-right">Nombre</th>
+              <th scope="col" className="px-4 py-2 font-medium text-right">Valeur</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {rows.map((r) => (
               <tr key={r.key}>
                 <th scope="row" className="px-4 py-2 text-left font-normal text-gray-900">{r.label}</th>
-                <td className="px-4 py-2 text-right tabular-nums font-medium text-gray-900">{formatCount(r.value)}</td>
+                <td className="px-4 py-2 text-right tabular-nums font-medium text-gray-900">{typeof r.value === "number" ? formatCount(r.value) : r.value}</td>
               </tr>
             ))}
           </tbody>
