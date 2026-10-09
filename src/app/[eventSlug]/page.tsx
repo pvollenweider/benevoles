@@ -8,6 +8,7 @@ import { eventPageMetadata } from "@/lib/event-share"
 import { publicEventInclude, publicEventPayload } from "@/lib/public-event"
 import { apexBaseUrl, eventPublicUrl } from "@/lib/urls"
 import EventPageClient, { type EventData } from "./EventPageClient"
+import { consentPrivacyHref } from "@/lib/public-signup"
 
 // Only a published event gives its title and its link preview (#564); unlisted (#414), draft and
 // archived events are noindex. The canonical URL is the event's public one on the organization's
@@ -55,6 +56,7 @@ export default async function EventPage({ params }: { params: Promise<{ eventSlu
 
   return (
     <EventPageClient
+      privacyHref={consentPrivacyHref()}
       orgSlug={resolved.org.slug}
       eventSlug={eventSlug}
       initialEvent={publicEventPayload(event) as EventData}

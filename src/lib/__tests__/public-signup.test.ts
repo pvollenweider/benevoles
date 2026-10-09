@@ -132,6 +132,7 @@ describe("sign-up consent (#706)", () => {
     const [path, anchor] = CONSENT_PRIVACY_HREF.split("#")
     expect(path).toBe("/legal/privacy")
     expect(read("src/app/legal/privacy/page.tsx")).toContain(`id="${anchor}"`)
-    expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("href={CONSENT_PRIVACY_HREF}")
+    expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("privacyHref = CONSENT_PRIVACY_HREF")
+    expect(read("src/app/[eventSlug]/page.tsx")).toContain("privacyHref={consentPrivacyHref()}")
   })
 })

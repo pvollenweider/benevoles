@@ -20,7 +20,7 @@ type Field = "organizationName" | "description" | "contactName" | "email"
  * the form and takes the focus. A hidden field catches naive scripts; the time the form was shown
  * is sent so a submission faster than a person is ignored (src/lib/signup.ts).
  */
-export default function SignupForm({ open, closedMessage = "Les inscriptions sont fermées pour le moment." }: { open: boolean; closedMessage?: string }) {
+export default function SignupForm({ open, closedMessage = "Les inscriptions sont fermées pour le moment.", privacyHref = "/legal/privacy" }: { open: boolean; closedMessage?: string; privacyHref?: string }) {
   const id = useId()
   const orgRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLTextAreaElement>(null)
@@ -115,7 +115,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
         {busy ? "Envoi…" : "Créer mon espace"}
       </button>
       <p className="text-sm text-gray-700 dark:text-gray-300">
-        Vos données servent uniquement à créer et gérer votre espace ; voir la <Link href="/legal/privacy" className="underline underline-offset-2 text-blue-700 dark:text-blue-300">politique de confidentialité</Link>.
+        Vos données servent uniquement à créer et gérer votre espace ; voir la <Link href={privacyHref} className="underline underline-offset-2 text-blue-700 dark:text-blue-300">politique de confidentialité</Link>.
       </p>
     </form>
   )
