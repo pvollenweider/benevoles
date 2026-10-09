@@ -69,6 +69,19 @@ export function assessOutbox(o: OutboxFacts): HealthItem {
   return { id, label, level: o.failedLastDay > 0 || o.staleClaims > 0 ? "error" : "warn", detail: `${parts.join(", ")}.` }
 }
 
+/** Spaces awaiting the operator's validation (#810): fine while young, to look at after 24 hours. */
+export function assessPendingSpaces(createdAts: readonly Date[], now: Date): HealthItem {
+  const id = "pending-spaces"
+  const label = "Espaces en attente de validation"
+  const n = createdAts.length
+  if (n === 0) return { id, label, level: "ok", detail: "Aucun." }
+  const late = createdAts.filter((d) => now.getTime() - d.getTime() > 24 * 60 * 60 * 1000).length
+  const head = `${n} en attente`
+  return late > 0
+    ? { id, label, level: "warn", detail: `${head}, dont ${late} depuis plus de 24 heures.` }
+    : { id, label, level: "ok", detail: `${head}.` }
+}
+
 export function assessDatabase(latencyMs: number | null): HealthItem {
   const id = "database"
   const label = "Base de données"

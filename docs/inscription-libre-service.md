@@ -25,7 +25,7 @@ Les deux autorisations sont séparées pour pouvoir, plus tard, les accorder une
 
 ## Ce que fait l'opérateur
 
-- **Voir les demandes** : un bandeau de l'espace super admin donne le nombre d'espaces en attente ; dans `/super-admin/organizations`, ils portent la mention « en attente de validation ». Un récapitulatif quotidien (« espaces en attente ») arrive tant qu'il en reste, en précisant ceux qui attendent depuis plus de 24 heures.
+- **Voir les demandes** : un bandeau de l'espace super admin donne le nombre d'espaces en attente, le bouton « Super Admin » du menu le porte en pastille (et « Organisations (N en attente) » dans le menu), et « Santé du service » a une ligne « Espaces en attente de validation », à surveiller quand une demande attend depuis plus de 24 heures ; dans `/super-admin/organizations`, ils portent la mention « en attente de validation ». Un récapitulatif quotidien (« espaces en attente ») arrive tant qu'il en reste, en précisant ceux qui attendent depuis plus de 24 heures.
 - **Juger** : la fiche de l'espace (`/super-admin/organizations/<identifiant>`) montre le bloc « Demande d'inscription » (la description saisie, en texte brut, liens non cliquables), ses administrateurs et ses chiffres.
 - **Valider l'espace** : accorde la publication et les emails ; chaque administrateur de l'espace reçoit « Votre espace benevol.app est activé ».
 - **Refuser et supprimer** : l'espace est supprimé avec ses comptes, sans email.

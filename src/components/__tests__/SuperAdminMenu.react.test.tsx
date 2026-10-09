@@ -7,7 +7,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/super-admin/health" }))
 
-import SuperAdminMenu from "../admin/SuperAdminMenu"
+import SuperAdminMenu, { superAdminItemLabel } from "../admin/SuperAdminMenu"
 
 // The « Super Admin » menu in the admin top bar, aligned with UserMenu (#589, #590): it closes on
 // a tap outside (pointerdown, not mousedown, which a tablet does not fire on non-clickable
@@ -124,5 +124,22 @@ describe("SuperAdminMenu", () => {
     fireEvent.click(updates)
     expect(clicked).toBe(true)
     expect(screen.queryByRole("menu")).toBeNull()
+  })
+
+  // #810: the spaces awaiting validation, on the trigger and on « Organisations ».
+  it("shows how many spaces wait for a validation", () => {
+    render(<SuperAdminMenu pendingSpaces={2} />)
+    const button = screen.getByRole("button", { name: "Super Admin 2 espaces en attente" })
+    fireEvent.click(button)
+    expect(screen.getByRole("menuitem", { name: "Organisations (2 en attente)" })).toBeInTheDocument()
+    cleanup()
+    render(<SuperAdminMenu pendingSpaces={1} />)
+    expect(screen.getByRole("button", { name: "Super Admin 1 espace en attente" })).toBeInTheDocument()
+    cleanup()
+    render(<SuperAdminMenu pendingSpaces={0} />)
+    fireEvent.click(screen.getByRole("button", { name: "Super Admin" }))
+    expect(screen.getByRole("menuitem", { name: "Organisations" })).toBeInTheDocument()
+    expect(superAdminItemLabel({ href: "/super-admin/stats", label: "Statistiques" }, 2)).toBe("Statistiques")
+    expect(superAdminItemLabel({ href: "/super-admin/organizations", label: "Organisations" }, 0)).toBe("Organisations")
   })
 })

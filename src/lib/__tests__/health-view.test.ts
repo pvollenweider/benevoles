@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { ago, assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, healthHeadline, worstLevel } from "../health-view"
+import { ago, assessConfig, assessDatabase, assessJob, assessPendingSpaces, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, healthHeadline, worstLevel } from "../health-view"
 
 const now = new Date("2026-07-10T12:00:00Z")
 const at = (iso: string) => new Date(iso)
@@ -60,5 +60,16 @@ describe("health view", () => {
     expect(healthHeadline(items)).toBe("Rien de bloquant ; 1 point à surveiller.")
     expect(healthHeadline([...items, { id: "c", label: "c", level: "error", detail: "" }])).toBe("1 problème à traiter, 1 point à surveiller.")
     expect(healthHeadline([items[0]])).toBe("Tout est en ordre.")
+  })
+})
+
+describe("assessPendingSpaces (#810)", () => {
+  const now = new Date("2026-10-09T12:00:00Z")
+  const hoursAgo = (h: number) => new Date(now.getTime() - h * 3600_000)
+
+  it("is fine with none or only young requests, and asks to look after 24 hours", () => {
+    expect(assessPendingSpaces([], now)).toMatchObject({ level: "ok", detail: "Aucun." })
+    expect(assessPendingSpaces([hoursAgo(2), hoursAgo(5)], now)).toMatchObject({ level: "ok", detail: "2 en attente." })
+    expect(assessPendingSpaces([hoursAgo(2), hoursAgo(30)], now)).toMatchObject({ level: "warn", detail: "2 en attente, dont 1 depuis plus de 24 heures." })
   })
 })
