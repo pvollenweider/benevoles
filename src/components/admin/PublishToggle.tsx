@@ -20,7 +20,8 @@ export default function PublishToggle({ eventId, currentStatus, awaitingValidati
   const isPublished = currentStatus === "published"
 
   async function requestPublication() {
-    if (loading) return
+    // Once sent, the button says so and does nothing more: the operator already has it.
+    if (loading || requested) return
     setLoading(true)
     setError(null)
     const res = await fetch(`/api/admin/events/${eventId}/publication-request`, { method: "POST" }).catch(() => null)
@@ -35,18 +36,18 @@ export default function PublishToggle({ eventId, currentStatus, awaitingValidati
 
   if (awaitingValidation && !isPublished) {
     return (
-      <div className="flex flex-col items-end gap-1 max-w-md">
+      <div className={`flex flex-col items-end gap-1 max-w-md ${requested ? "basis-full" : ""}`}>
         <button
           type="button"
           onClick={() => void requestPublication()}
-          aria-disabled={loading || undefined}
+          aria-disabled={loading || !!requested || undefined}
           aria-describedby={requested ? `publish-request-${eventId}` : undefined}
-          className={`text-sm px-3 py-1.5 rounded-full font-medium bg-green-700 text-white hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${loading ? "cursor-wait" : ""}`}
+          className={`text-sm px-3 py-1.5 rounded-full font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${requested ? "bg-gray-100 text-gray-800 cursor-default" : "bg-green-700 text-white hover:bg-green-800"} ${loading ? "cursor-wait" : ""}`}
         >
-          Demander la publication{loading && <span className="sr-only"> (en cours)</span>}
+          {requested ? "Demande envoyée" : "Demander la publication"}{loading && <span className="sr-only"> (en cours)</span>}
         </button>
-        <p id={`publish-request-${eventId}`} role="status" className={requested ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 text-right" : "sr-only"}>{requested ?? ""}</p>
-        {error && <p role="alert" className="text-xs text-red-700">{error}</p>}
+        <p id={`publish-request-${eventId}`} role="status" className={requested ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{requested ?? ""}</p>
+        {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
       </div>
     )
   }

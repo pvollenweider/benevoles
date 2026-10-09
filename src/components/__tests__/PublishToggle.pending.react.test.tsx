@@ -24,7 +24,12 @@ describe("PublishToggle in a space awaiting validation (#810)", () => {
     expect(await screen.findByText(PUBLICATION_REQUESTED_MESSAGE)).toHaveAttribute("role", "status")
     expect(fetch).toHaveBeenCalledWith("/api/admin/events/evt-a/publication-request", { method: "POST" })
     expect(button).toHaveFocus()
+    expect(button).toHaveAccessibleName("Demande envoyée")
+    expect(button).toHaveAttribute("aria-disabled", "true")
     expect(button).toHaveAccessibleDescription(PUBLICATION_REQUESTED_MESSAGE)
+    // Already sent: a second click asks nothing more.
+    fireEvent.click(button)
+    expect(fetch).toHaveBeenCalledTimes(1)
   })
 
   it("keeps « Publier » in a validated space", () => {
