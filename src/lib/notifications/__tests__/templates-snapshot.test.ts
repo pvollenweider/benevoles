@@ -406,6 +406,19 @@ const cases: [string, NotificationPayload][] = [
       editToken: "edit-tok",
     },
   }],
+  ["registration_restored (new link)", {
+    kind: "registration_restored",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      status: "active",
+      shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+      editToken: "new-tok",
+      newLink: true,
+    },
+  }],
   ["registration_restored (request)", {
     kind: "registration_restored",
     recipient,

@@ -8,7 +8,7 @@
 import type { NotificationPayload } from "../types"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
-import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, BASE_URL, type RenderedEmail } from "./shared"
+import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, adminRecentCancellationsUrl, BASE_URL, type RenderedEmail } from "./shared"
 import { docUnitHref } from "@/lib/doc-href"
 import { WELCOME_HELP_SLUG, welcomeDocLinks } from "@/lib/signup-welcome"
 import { siteName } from "@/lib/site"
@@ -75,6 +75,9 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
   const subject = `Désistement — ${d.eventTitle}`
   const shiftUrl = adminShiftUrl(d.eventId, d.shiftId)
   const staffingUrl = adminStaffingUrl(d.eventId)
+  // A mistake, or a link used by someone else (#809): the place can be put back while it's free.
+  const restoreUrl = d.waitlistTookSpot ? null : adminRecentCancellationsUrl(d.eventId)
+  const restoreLine = "Une erreur, ou un désistement que la personne n'a pas fait ? Tant que la place est libre et que le créneau n'a pas commencé, vous pouvez rétablir l'inscription :"
 
   const spotLine = d.waitlistTookSpot
     ? "La place a été reprise automatiquement par la personne suivante sur la liste d'attente."
@@ -93,6 +96,7 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     ``,
     `Suivi des effectifs :`,
     staffingUrl,
+    ...(restoreUrl ? [``, restoreLine, restoreUrl] : []),
   ].join("\n")
 
   const html = wrap(`
@@ -101,6 +105,7 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     ${d.message ? `<p style="color:#444;background:#f3f4f6;border-radius:8px;padding:10px 14px;white-space:pre-wrap">${escapeHtml(d.message)}</p>` : ""}
     <p style="margin-top:1.25em">${btn(shiftUrl, "Voir l'inscription")}</p>
     <p style="margin-top:0.75em"><a href="${staffingUrl}" style="color:#2563eb">Suivi des effectifs</a></p>
+    ${restoreUrl ? `<p style="color:#555;margin-top:1.5em">${escapeHtml(restoreLine)} <a href="${restoreUrl}" style="color:#1d4ed8;text-decoration:underline">Rétablir l'inscription</a></p>` : ""}
   `, `${d.volunteerName} se désiste de ${shiftName}.`)
 
   return { subject, html, text }

@@ -11,6 +11,8 @@ import { registrationsSummary, charterAcceptanceLabel } from "@/lib/registration
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import HelpLink from "@/components/admin/HelpLink"
+import RecentCancellations from "@/components/admin/registrations/RecentCancellations"
+import { loadRecentCancellations } from "@/lib/recent-cancellations-data"
 
 export const dynamic = "force-dynamic"
 
@@ -51,6 +53,8 @@ export default async function RegistrationsPage({
   if (!event) notFound()
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter))
+
+  const cancellations = await loadRecentCancellations(db, id, orgTimeZone(event.organization))
 
   // Count active registrations per shift from the already-loaded list
   const regCountByShift = event.registrations.reduce<Record<string, number>>((acc, r) => {
@@ -128,6 +132,8 @@ export default async function RegistrationsPage({
           registrationCount: regCountByShift[s.id] ?? 0,
         }))}
       />
+
+      <RecentCancellations rows={cancellations} />
     </div>
   )
 }

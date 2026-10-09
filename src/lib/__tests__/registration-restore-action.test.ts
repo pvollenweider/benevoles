@@ -12,7 +12,8 @@ vi.mock("../notifications/outbox", () => ({
   enqueueNotifications,
   deliverAfterResponse,
 }))
-vi.mock("../token-vault", () => ({ registrationToken: { reveal: () => "tok-1" } }))
+vi.mock("../token-vault", () => ({ registrationToken: { reveal: () => "tok-1", data: (t: string) => ({ editTokenHash: `h:${t}` }) } }))
+vi.mock("../utils", () => { let n = 0; return { generateToken: () => `new-${++n}` } })
 
 import { ALREADY_LIVE, restoreRegistration } from "../registration-restore-action"
 
@@ -28,6 +29,8 @@ function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?
     $queryRaw: vi.fn().mockResolvedValue([]),
     registration: {
       findFirst: vi.fn().mockResolvedValue({ status: over.status ?? "cancelled" }),
+      findMany: vi.fn().mockResolvedValue([{ id: "r1" }, { id: "r2" }]),
+      update: vi.fn().mockResolvedValue({}),
       count: vi.fn().mockResolvedValue(over.occupied ?? 1),
       updateMany: over.updateError ? vi.fn().mockRejectedValue(over.updateError) : vi.fn().mockResolvedValue({ count: 1 }),
     },
@@ -121,5 +124,26 @@ describe("restoreRegistration (#809)", () => {
     const { db } = makeDb({ reg: { ...reg, volunteer: { ...reg.volunteer, email: null } } })
     expect(await restoreRegistration(db, actor, "r1", before)).toMatchObject({ ok: true })
     expect(enqueueNotifications.mock.calls[0][0]).toEqual([])
+  })
+
+  it("keeps the links by default", async () => {
+    const { db, tx } = makeDb()
+    await restoreRegistration(db, actor, "r1", before)
+    expect(tx.registration.update).not.toHaveBeenCalled()
+    expect(enqueueNotifications.mock.calls[0][0][0].data).toMatchObject({ editToken: "tok-1", newLink: false })
+  })
+
+  it("with a new link: replaces every live link of the person on the event, emails the new one, logs it", async () => {
+    const { db, tx } = makeDb()
+    await restoreRegistration(db, actor, "r1", before, { newLink: true })
+    expect(tx.registration.findMany).toHaveBeenCalledWith({ where: { volunteerId: "v1", eventId: "e1", status: { in: ["active", "waiting", "offered", "requested"] } }, select: { id: true } })
+    expect(tx.registration.update).toHaveBeenCalledTimes(2)
+    const tokens = tx.registration.update.mock.calls.map(([a]) => a.data.editTokenHash)
+    expect(new Set(tokens).size).toBe(2)
+    const data = enqueueNotifications.mock.calls[0][0][0].data
+    expect(data.newLink).toBe(true)
+    expect(tokens).toContain(`h:${data.editToken}`)
+    expect(data.editToken).not.toBe("tok-1")
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ changes: expect.objectContaining({ personalLink: { from: "(ancien)", to: "(renouvelé)" } }) }))
   })
 })

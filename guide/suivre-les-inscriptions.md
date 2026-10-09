@@ -36,6 +36,14 @@ Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà 
 
 **Charge élevée** : une ligne l'indique, en toutes lettres, quand ce bénévole cumule plus de 8 h de créneaux dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes (une pause plus courte compte comme du temps continu). Un créneau qui passe minuit compte pour le jour où il commence ; le temps d'affilée se suit d'un jour à l'autre. Seules les inscriptions confirmées comptent, pas la liste d'attente. C'est une information, rien n'est bloqué. En ajoutant quelqu'un à la main, le formulaire prévient avant l'ajout si ce créneau le ferait dépasser ces seuils, quand la personne est déjà inscrite (même email).
 
+## Rétablir une inscription annulée
+
+Sous la liste, **Annulations récentes** montre les places et les demandes annulées sur des créneaux qui n'ont pas encore commencé : qui a annulé (la personne ou l'organisation) et quand. **Rétablir** remet l'inscription comme elle était, une place confirmée ou une demande en attente de votre réponse, tant que le créneau n'a pas commencé et que la place est libre. Si quelqu'un a pris la place entre-temps, ou si la personne s'est réinscrite sur ce créneau, la ligne le dit à la place du bouton. La personne reçoit un email avec son lien personnel, et l'action est inscrite au journal de l'événement.
+
+Une liste d'attente quittée ou une place proposée refusée ne se rétablissent pas : ajoutez la personne à la main.
+
+Quand une personne vous répond « ce n'était pas moi » après l'email qui lui confirme une annulation, son lien personnel est entre d'autres mains. Cochez alors **Le lien a été utilisé par quelqu'un d'autre : envoyer un nouveau lien** dans la confirmation : tous ses liens pour l'événement sont remplacés, l'ancien n'ouvre plus rien, et le nouveau part avec l'email. L'email de désistement envoyé à l'organisation contient aussi un lien vers cette liste.
+
 ## Ajouter quelqu'un à la main
 
 **+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle** : prénom et nom (obligatoires), email, téléphone, créneau (obligatoire) et une note (par exemple « Inscrit par téléphone »). Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.

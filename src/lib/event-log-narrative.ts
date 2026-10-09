@@ -49,6 +49,7 @@ const FIELD_LABELS: Record<string, string> = {
   recipients: "nombre de destinataires",
   subject: "objet",
   resent: "envois relancés",
+  personalLink: "lien personnel",
 }
 
 /**

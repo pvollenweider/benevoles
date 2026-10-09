@@ -267,9 +267,11 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     status: "active" | "requested"
     shift: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
     editToken: string
+    newLink?: boolean
   }
   const firstName = d.volunteerName.split(" ")[0]
   const line = spokenShift(d.shift)
+  const renewed = "Ton lien personnel a été renouvelé : l'ancien ne fonctionne plus. Garde celui de cet email pour toi."
   const what = d.status === "requested"
     ? `L'organisation de ${d.eventTitle} a rétabli ta demande d'inscription, qui attend sa réponse :`
     : `L'organisation de ${d.eventTitle} a rétabli ton inscription :`
@@ -283,6 +285,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     what,
     `- ${line}`,
     ``,
+    ...(d.newLink ? [renewed, ``] : []),
     `Ton lien personnel pour voir ou gérer tes créneaux :`,
     linkUrl,
     ``,
@@ -293,6 +296,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>${escapeHtml(line)}</li></ul>
+    ${d.newLink ? `<p style="color:#555"><strong>${escapeHtml(renewed)}</strong></p>` : ""}
     <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${line}.`)
