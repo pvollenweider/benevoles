@@ -17,7 +17,7 @@ import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualRemin
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
-import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary } from "./administration"
+import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderOperatorAlert } from "./administration"
 
 export type { RenderedEmail } from "./shared"
 
@@ -70,6 +70,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderSectorLeaderWithdrawal(payload)
     case "product_update":
       return renderProductUpdate(payload)
+    case "operator_alert":
+      return renderOperatorAlert(payload)
     case "registration_link_resend":
       return renderRegistrationLinkResend(payload)
     case "targeted_message":

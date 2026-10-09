@@ -103,3 +103,21 @@ describe("email sending limits (#810)", () => {
     expect(await takeSendAllowance("org-1", "reminder_j1", { store: empty, limits: tight, alert: vi.fn() })).toEqual({ ok: true })
   })
 })
+
+// Security review of #819: the per-recipient cap has a window per address; a flood over many
+// addresses must still give a single alert per limit, organisation and hour.
+describe("operator alert gate (#810)", () => {
+  it("lets one alert through per key and hour, whatever the number of addresses", async () => {
+    const { alertKey, firstAlertOfKey } = await import("../send-limits")
+    const store = memoryStore()
+    const key = alertKey("recipient_per_hour", "org-1", new Date("2026-10-09T10:15:00Z"))
+    expect(key).toBe("email-limit:recipient_per_hour:org-1:2026-10-09T10")
+    expect(await firstAlertOfKey(key, store)).toBe(true)
+    for (let i = 0; i < 50; i++) expect(await firstAlertOfKey(key, store)).toBe(false)
+    // Another organisation or hour has its own alert.
+    expect(await firstAlertOfKey(alertKey("recipient_per_hour", "org-2", new Date("2026-10-09T10:15:00Z")), store)).toBe(true)
+    expect(await firstAlertOfKey(alertKey("recipient_per_hour", "org-1", new Date("2026-10-09T11:00:00Z")), store)).toBe(true)
+    // A broken store gives no alert rather than a flood.
+    expect(await firstAlertOfKey(key, { hit: vi.fn().mockRejectedValue(new Error("db down")), peek: vi.fn() })).toBe(false)
+  })
+})

@@ -246,3 +246,18 @@ export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
 
   return { subject, html, text }
 }
+
+
+/** Alert to the operator (#810): a title, a sentence, a link to the super admin space. No personal data. */
+export function renderOperatorAlert(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { title: string; message: string; url: string | null }
+  const subject = d.title
+  const text = [d.message, ...(d.url ? ["", d.url] : [])].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">${escapeHtml(d.title)}</h2>
+    <p>${escapeHtml(d.message)}</p>
+    ${d.url ? `<p style="margin-top:1.5em">${btn(d.url, "Ouvrir l'espace super admin")}</p>` : ""}
+  `, d.message)
+  return { subject, html, text }
+}
+

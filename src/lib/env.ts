@@ -21,6 +21,9 @@ const schema = z.object({
   EMAIL_FROM: z.string().optional(),
   EMAIL_REPLY_TO: z.string().optional(),
   ADMIN_NOTIFICATION_EMAIL: z.string().optional(),
+  // Operator alerts by ntfy (#810, src/lib/operator-alerts.ts): topic URL (https) and optional access value.
+  NTFY_URL: z.string().optional(),
+  NTFY_TOKEN: z.string().optional(),
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_EMAIL: z.string().optional(),
