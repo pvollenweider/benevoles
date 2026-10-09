@@ -38,6 +38,9 @@ import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
+import ShiftDayList from "@/components/ShiftDayList"
+import { useHydrated } from "@/lib/use-hydrated"
+import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
@@ -160,6 +163,15 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // Result of an action outside the sign-up steps (a withdrawal), voiced once.
   const [actionNotice, setActionNotice] = useState("")
   const [step, setStep] = useState<"select" | "form">("select")
+  // « Frise » or « Liste » (#808): the timeline by default (and in the server HTML), the visitor's
+  // choice kept on the device and read once hydrated. The admin preview never reads storage.
+  const hydrated = useHydrated()
+  const [chosenShiftView, setChosenShiftView] = useState<ShiftView | null>(null)
+  const shiftView: ShiftView = chosenShiftView ?? (hydrated && !preview ? readShiftView() : null) ?? "frise"
+  const chooseShiftView = (view: ShiftView) => {
+    setChosenShiftView(view)
+    if (!preview) saveShiftView(view)
+  }
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   // A structured failure of the sign-up itself (#375): kind, what to do, whether to retry.
@@ -692,6 +704,21 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </div>
             )}
 
+            {/* Frise or Liste (#808), once above every day; the pressed state says which is shown. */}
+            <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
+              {(["frise", "liste"] as const).map((view) => (
+                <button
+                  key={view}
+                  type="button"
+                  aria-pressed={shiftView === view}
+                  onClick={() => chooseShiftView(view)}
+                  className={`min-h-11 px-4 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${shiftView === view ? "bg-gray-900 text-white" : "text-gray-700 hover:bg-gray-50"}`}
+                >
+                  {view === "frise" ? "Frise" : "Liste"}
+                </button>
+              ))}
+            </div>
+
             {/* minmax(0,1fr): the timelines column may shrink below the chart width and scroll */}
             <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
               {/* Left: timelines */}
@@ -703,9 +730,26 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       <h2 className="text-sm font-semibold text-gray-600 mb-3">
                         {formatCalendarDay(day)}
                       </h2>
-                      <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
-                        <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
-                      </p>
+                      {shiftView === "frise" && (
+                        <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
+                          <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
+                        </p>
+                      )}
+                      {shiftView === "liste" ? (
+                        <ShiftDayList
+                          shifts={dayShifts}
+                          shows={dayShows}
+                          selected={selectedShifts}
+                          held={heldByShift}
+                          conflicts={conflictingShiftIds}
+                          onToggle={toggleShift}
+                          locked={!accepting}
+                          describedBy={[!accepting && "registration-window-msg", reservedShiftIds.size > 0 && "reserved-roles-msg"].filter(Boolean).join(" ") || undefined}
+                          limitReachedRoles={limitReachedRoles}
+                          reservedShiftIds={reservedShiftIds}
+                          dayLabel={formatCalendarDay(day)}
+                        />
+                      ) : (
                       <DayTimeline
                         shifts={dayShifts}
                         shows={dayShows}
@@ -719,6 +763,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         reservedShiftIds={reservedShiftIds}
                         dayLabel={formatCalendarDay(day)}
                       />
+                      )}
                       {limitNotice && limitNoticeDay === day && (
                         <p className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-950">{limitNotice}</p>
                       )}

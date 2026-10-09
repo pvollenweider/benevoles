@@ -123,3 +123,72 @@ export function barText({ shift, held, selected, reserved, locked, limitReached 
 
   return { ariaLabel, tag: null, subLabel: details || null }
 }
+
+/** What the visitor can do with one shift (#808): the same answer for the timeline and the list. */
+export type ShiftViewState = {
+  /** Held by the visitor: wins over every other state. */
+  held: HeldKind | undefined
+  selected: boolean
+  conflict: boolean
+  reserved: boolean
+  full: boolean
+  closed: boolean
+  waitlistable: boolean
+  /** Full without a waitlist, or closed. */
+  unavailable: boolean
+  /** The visual state of the bar (src/lib/roles.ts). */
+  look: "selected" | "unavailable" | "default"
+  /** Selecting or deselecting it does something. */
+  clickable: boolean
+}
+
+export function shiftViewState({ shift, held, selected, conflict, reserved, locked }: {
+  shift: Pick<TimelineShift, "status" | "waitlistEnabled">
+  held?: HeldKind
+  selected: boolean
+  conflict: boolean
+  reserved: boolean
+  locked: boolean
+}): ShiftViewState {
+  const isHeld = !!held
+  const isConflict = !isHeld && conflict
+  const full = shift.status === "full"
+  const closed = shift.status === "closed"
+  const waitlistable = full && (shift.waitlistEnabled ?? false)
+  const unavailable = !isHeld && ((full && !waitlistable) || closed)
+  const isSelected = !isHeld && selected
+  const isReserved = !isSelected && !isHeld && reserved
+  const look = isSelected ? "selected" : (isConflict || unavailable || isReserved) ? "unavailable" : "default"
+  const clickable = !isHeld && !isConflict && !unavailable && !isReserved && (!locked || isSelected)
+  return { held, selected: isSelected, conflict: isConflict, reserved: isReserved, full, closed, waitlistable, unavailable, look, clickable }
+}
+
+/** The lines of one item of the list view (#808): its visible text is its accessible name. */
+export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: { locked: boolean; limitReached?: number }): { title: string; status: string; details: string | null } {
+  const roleLabel = shift.label !== shift.roleName ? `${shift.roleName} (${shift.label})` : shift.roleName
+  const range = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
+  const time = crossesMidnight(shift.startTime, shift.endTime) ? `${range} (jusqu'au lendemain)` : range
+  const places = `${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity}`
+  const status = view.held
+    ? HELD_TAG[view.held]
+    : view.selected
+      ? (view.waitlistable ? "En attente, sélectionné pour la file d'attente" : "Sélectionné")
+      : view.conflict
+        ? "Chevauche un créneau choisi"
+        : view.reserved
+          ? RESERVED_LABEL
+          : view.closed
+            ? "Fermé"
+            : view.full
+              ? (view.waitlistable ? "Complet · file d'attente" : "Complet")
+              : opts.locked
+                ? `Inscriptions fermées · ${places}`
+                : opts.limitReached !== undefined
+                  ? `Limite de ${opts.limitReached} par personne atteinte · ${places}`
+                  : places
+  const details = [
+    shift.minAge != null ? `${shift.minAge} ans minimum` : null,
+    shift.requiresApproval ? "Sur validation" : null,
+  ].filter(Boolean).join(" · ")
+  return { title: `${time} · ${roleLabel}`, status, details: details || null }
+}
