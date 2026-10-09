@@ -20,7 +20,7 @@ import LandingStartGuides from "@/components/public/LandingStartGuides"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import { isHostedService } from "@/lib/site"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
-import { signupOpen } from "@/lib/signup"
+import { isSignupOpen } from "@/lib/signup-switch"
 
 export const dynamic = "force-dynamic"
 
@@ -73,7 +73,7 @@ export default async function HomePage() {
   }
 
   // No org context → the hosted service's marketing landing page, or this instance's own home (#760).
-  if (!orgSlug) return isHostedService() ? <LandingPage /> : <InstanceHome />
+  if (!orgSlug) return isHostedService() ? <LandingPage /> : await InstanceHome()
 
   // Hide events that are already over: they would show "N places à pourvoir".
   const startOfToday = new Date()
@@ -222,10 +222,11 @@ function instanceHomeMetadata(base: string): Metadata {
   })
 }
 
-function InstanceHome() {
+async function InstanceHome() {
   const links = [
     { href: "/admin/login", label: "Espace organisateur" },
-    ...(signupOpen() ? [{ href: "/inscription", label: "Demander un espace" }] : []),
+    // The configuration and the operator's switch (#810), as on the sign-up page.
+    ...((await isSignupOpen()) ? [{ href: "/inscription", label: "Demander un espace" }] : []),
     { href: "/fonctionnalites", label: "Fonctionnalités" },
     { href: "/doc", label: "Documentation" },
   ]

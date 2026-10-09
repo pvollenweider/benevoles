@@ -8,7 +8,7 @@ import { render, screen, cleanup } from "@testing-library/react"
 // #760: an instance that is not the hosted service has its own short home, not the marketing one
 // (which describes the hosted service: its hosting, its price, its support appeal).
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
-vi.mock("@/lib/prisma", () => ({ prisma: {} }))
+vi.mock("@/lib/prisma", () => ({ prisma: { platformSetting: { findUnique: async () => null } } }))
 
 describe("home of another instance (#760)", () => {
   afterEach(() => { cleanup(); vi.unstubAllEnvs(); vi.resetModules() })
