@@ -27,6 +27,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Fermer les inscriptions en un clic** (#810) : la page « Inscriptions et blocage » de l'espace super admin (anciennement « Liste de blocage ») a un bouton **Fermer les inscriptions** qui coupe l'inscription en libre-service tout de suite, sans déploiement, liens de confirmation déjà envoyés compris, et **Rouvrir les inscriptions**. Chaque changement est inscrit au journal de l'opérateur.
 - **Journal de l'opérateur** (#810) : une page de l'espace super admin garde chaque décision de l'opérateur (espace validé, refusé, suspendu, désactivé ou supprimé, ajout et retrait de la liste de blocage), avec son auteur et sa raison, même quand l'espace a été supprimé depuis. Un refus ne laissait jusqu'ici aucune trace, puisque le journal de l'organisation part avec elle.
 - **Demander la publication** (#810) : dans un espace en attente de validation, le bouton « Publier » d'un événement devient « Demander la publication ». Il prévient l'opérateur que l'événement est prêt et explique que la publication suivra une courte vérification ; il refusait jusqu'ici la publication avec un simple message d'erreur.
 - **Espaces en attente bien visibles pour l'opérateur** (#810) : le bouton « Super Admin » du menu porte le nombre d'espaces qui attendent une validation, « Organisations » le rappelle dans le menu, et la page « Santé du service » a une ligne « Espaces en attente de validation », à surveiller dès qu'une demande attend depuis plus de 24 heures.

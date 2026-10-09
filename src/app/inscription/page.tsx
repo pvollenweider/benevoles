@@ -6,7 +6,7 @@ import ContentShell from "@/components/public/ContentShell"
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import SignupForm from "@/components/public/signup/SignupForm"
-import { signupOpen } from "@/lib/signup"
+import { isSignupOpen } from "@/lib/signup-switch"
 
 export const dynamic = "force-dynamic"
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: "Créez l'espace de votre association sur benevol.app : préparez votre événement tout de suite, la publication suit une courte vérification.",
 }
 
-export default function SignupPage() {
+export default async function SignupPage() {
   return (
     <ContentShell layout="doc">
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-12 focus:outline-none`}>
@@ -27,7 +27,7 @@ export default function SignupPage() {
               Votre espace est prêt dès que vous avez confirmé votre adresse : vous pouvez préparer votre événement tout de suite. Sa publication et l&apos;envoi d&apos;invitations seront possibles après une courte vérification de votre inscription ; vous recevrez un email dès que votre espace sera activé.
             </p>
           </div>
-          <SignupForm open={signupOpen()} />
+          <SignupForm open={await isSignupOpen()} />
         </div>
       </main>
     </ContentShell>

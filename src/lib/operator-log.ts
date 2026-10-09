@@ -19,6 +19,8 @@ export const OPERATOR_ACTIONS = [
   "organization.deleted",
   "blocklist.added",
   "blocklist.removed",
+  "signup.closed",
+  "signup.opened",
 ] as const
 
 export type OperatorAction = (typeof OPERATOR_ACTIONS)[number]
@@ -33,6 +35,8 @@ export const OPERATOR_ACTION_LABELS: Record<OperatorAction, string> = {
   "organization.deleted": "Organisation supprimée",
   "blocklist.added": "Ajout à la liste de blocage",
   "blocklist.removed": "Retrait de la liste de blocage",
+  "signup.closed": "Inscriptions fermées",
+  "signup.opened": "Inscriptions rouvertes",
 }
 
 /** The label of an action, or the raw action for an unknown one (an entry older than this list). */
@@ -43,7 +47,7 @@ export function operatorActionLabel(action: string): string {
 export type OperatorLogInput = {
   action: OperatorAction
   actor: { id?: string | null; name?: string | null; email?: string | null } | null | undefined
-  entityType: "Organization" | "SignupBlock"
+  entityType: "Organization" | "SignupBlock" | "Platform"
   entityId: string
   /** What the decision was about, readable on its own: « Fête du village (fete-du-village) », « spam@example.org ». */
   target: string
