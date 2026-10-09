@@ -27,7 +27,7 @@ Puis cliquez sur **Créer mon espace**. Le message « Vérifiez votre boîte ema
 
 Vous recevez l'email « Confirmez votre adresse pour créer votre espace benevol.app ». Ouvrez son lien, **valable 24 heures** : il mène à une page avec le bouton **Confirmer et créer mon espace**. Ouvrir le lien ne crée rien ; seul le bouton crée l'espace.
 
-Vous arrivez ensuite directement sur la page où choisir votre mot de passe. **Choisissez-le tout de suite**, sans fermer la page : ce lien n'est pas envoyé par email. Les règles du mot de passe sont celles de [Se connecter](se-connecter.md).
+Vous arrivez ensuite directement sur la page où choisir votre mot de passe. Le même lien vous parvient aussi par email, « Choisissez votre mot de passe benevol.app », valable 7 jours, si vous fermez la page avant. Les règles du mot de passe sont celles de [Se connecter](se-connecter.md).
 
 ## Pendant la vérification
 
@@ -46,6 +46,6 @@ Si la demande ne correspond pas à une association ou à un événement bénévo
 
 **Le lien dit « Lien expiré ».** Il était valable 24 heures : refaites une demande depuis la page d'inscription.
 
-**J'ai fermé la page avant de choisir mon mot de passe.** Le lien de cette page n'est pas envoyé par email, et « Mot de passe oublié » ne fonctionne pas tant que le compte n'est pas activé. Écrivez à contact@benevol.app : un nouveau lien vous sera envoyé.
+**J'ai fermé la page avant de choisir mon mot de passe.** Ouvrez l'email « Choisissez votre mot de passe benevol.app » : son lien est valable 7 jours. « Mot de passe oublié » ne fonctionne qu'une fois le mot de passe choisi. Lien expiré ou email introuvable : écrivez à contact@benevol.app, un nouveau lien vous sera envoyé.
 
 **Les inscriptions sont fermées.** La page le dit et donne l'adresse contact@benevol.app pour demander un espace.

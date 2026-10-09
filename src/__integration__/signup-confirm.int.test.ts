@@ -12,9 +12,17 @@ vi.mock("next/server", () => ({ after: vi.fn() }))
 import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/token-hash"
 import { confirmSignupRequest, signupRequestState } from "@/lib/signup-server"
+import { openPayload } from "@/lib/notifications/outbox"
 
 const url = process.env.DATABASE_URL
 const tag = `int-signup-${Date.now()}`
+const startedAt = new Date()
+
+/** This test's platform emails (no organisation), payloads opened: stored encrypted with TOKEN_ENCRYPTION_KEY. */
+async function ownEmails() {
+  const rows = await prisma.notificationOutbox.findMany({ where: { organizationId: null, createdAt: { gte: startedAt } } })
+  return rows.map((row) => ({ row, payload: openPayload(row.payload) })).filter(({ payload }) => payload.recipient.email?.startsWith(tag))
+}
 
 async function request(code: string, over: { email?: string; expiresAt?: Date } = {}) {
   return prisma.signupRequest.create({
@@ -33,6 +41,7 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
   const orgIds: string[] = []
 
   afterAll(async () => {
+    await prisma.notificationOutbox.deleteMany({ where: { id: { in: (await ownEmails()).map(({ row }) => row.id) } } })
     await prisma.signupRequest.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.adminUser.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
@@ -58,6 +67,13 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(org.admins[0]).toMatchObject({ email: `${tag}-a@example.org`, role: "admin", isActive: false })
     expect(org.admins[0].setupTokenHash).toBeTruthy()
     expect(notify).toHaveBeenCalledWith(expect.objectContaining({ key: `signup:${org.id}`, priority: 4, message: expect.stringContaining("« Fête de village, une centaine de bénévoles. »") }))
+
+    // The link to choose a password also leaves by email, as a platform email (no organisation:
+    // the space awaits validation and the account is inactive), to the confirmed address only.
+    const links = (await ownEmails()).filter(({ payload }) => payload.kind === "signup_account_link" && payload.recipient.email === `${tag}-a@example.org`)
+    expect(links).toHaveLength(1)
+    expect(links[0].row.organizationId).toBeNull()
+    expect((links[0].payload.data as { inviteUrl: string }).inviteUrl).toBe(result.inviteUrl)
 
     // A second click: refused, nothing more created.
     expect(await confirmSignupRequest(`${tag}-a`)).toEqual({ ok: false, reason: "used" })

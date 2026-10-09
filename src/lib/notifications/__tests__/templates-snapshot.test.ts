@@ -420,6 +420,11 @@ const cases: [string, NotificationPayload][] = [
     recipient: { email: "camille@example.org" },
     data: { confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
   }],
+  ["signup_account_link", {
+    kind: "signup_account_link",
+    recipient: { email: "camille@example.org" },
+    data: { inviteUrl: "https://www.benevol.app/admin/accept-invite?token=tok-2", days: 7 },
+  }],
   ["operator_alert", {
     kind: "operator_alert",
     recipient: { email: "ops@example.org" },
@@ -501,6 +506,7 @@ describe("render — snapshot of every notification kind", () => {
       release_available: true,
       operator_alert: true,
       signup_confirmation: true,
+      signup_account_link: true,
       space_approved: true,
       addresses_to_verify_summary: true,
       open_shifts: true,
