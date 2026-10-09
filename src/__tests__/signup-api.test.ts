@@ -6,10 +6,10 @@ vi.mock("@/lib/signup-server", () => server)
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: vi.fn(async () => ({ ok: limiter.ok, remaining: 1, retryAfter: 0 })), getClientIp: () => "203.0.113.1" }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
 
-import { SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE, SIGNUP_MIN_FILL_MS } from "@/lib/signup"
+import { DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE, SIGNUP_MIN_FILL_MS } from "@/lib/signup"
 
 const post = (url: string, body: unknown) => new Request(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-const form = (over: object = {}) => ({ organizationName: "Fête du village", contactName: "Camille", email: "camille@example.org", website: "", startedAt: Date.now() - SIGNUP_MIN_FILL_MS - 1000, ...over })
+const form = (over: object = {}) => ({ organizationName: "Fête du village", contactName: "Camille", email: "camille@example.org", description: "Fête de village, une centaine de bénévoles sur deux jours.", website: "", startedAt: Date.now() - SIGNUP_MIN_FILL_MS - 1000, ...over })
 
 describe("POST /api/public/signup (#810, part 4b)", () => {
   beforeEach(() => {
@@ -59,6 +59,9 @@ describe("POST /api/public/signup (#810, part 4b)", () => {
     const bad = await POST(post("http://localhost/api/public/signup", form({ email: "camille" })))
     expect(bad.status).toBe(400)
     expect(await bad.json()).toEqual({ error: "Indiquez une adresse email valide, par exemple nom@exemple.org.", field: "email" })
+    const short = await POST(post("http://localhost/api/public/signup", form({ description: "Une fête." })))
+    expect(await short.json()).toEqual({ error: DESCRIPTION_SHORT_MESSAGE, field: "description" })
+    expect(server.createSignupRequest).not.toHaveBeenCalled()
     process.env.SIGNUP = "off"
     const closed = await POST(post("http://localhost/api/public/signup", form()))
     expect(closed.status).toBe(403)

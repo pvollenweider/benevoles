@@ -78,9 +78,9 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Demande d'espace faite sur le site : nom de l'association, nom et adresse email de la personne",
+    data: "Demande d'espace faite sur le site : nom de l'association, sa description et son besoin, nom et adresse email de la personne",
     purpose: "Confirmer l'adresse puis créer l'espace et son compte propriétaire",
-    duration: `${d.signupRequest} jours après la demande, confirmée ou non (l'espace et le compte créés suivent ensuite les règles de l'organisation)`,
+    duration: `${d.signupRequest} jours après la demande, confirmée ou non (l'espace et le compte créés, et la description gardée sur la fiche de l'espace pour l'opérateur, suivent ensuite les règles de l'organisation)`,
     trigger: "demande sur la page d'inscription",
     mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
