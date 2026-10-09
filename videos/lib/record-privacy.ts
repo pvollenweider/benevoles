@@ -111,7 +111,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
     })
     await scene("signup", async at => {
       const before = await ids()
-      await at(0.05); await tap(page, page.getByRole("button", { name: /Sélectionner — .*Accueil.*10h.*12h/ }))
+      await at(0.05); await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
       await write(page.getByLabel("Prénom *", { exact: true }), "Jules")
       await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
@@ -175,7 +175,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       checks.invitationMail = mail.mailId
       await at(0.36); await session(null)
       await go(`${mail.localPath}&org=formation-confidentialite-a`)
-      await tap(page, page.getByRole("button", { name: /Sélectionner — .*Accueil.*10h.*12h/ }))
+      await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
       if (await page.getByLabel("Prénom *", { exact: true }).inputValue() !== "Zoé" || await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.privacy.a.member.3@example.org") throw new Error("Actual invitation did not prefill its recipient")
       checks.invitationPrefill = true

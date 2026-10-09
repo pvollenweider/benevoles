@@ -85,7 +85,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   })
   await scene("public", async at => {
     await go(publicPath)
-    const slot = page.getByRole("button", { name: /^Sélectionner — Accueil/ }).first()
+    const slot = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
     await at(0.12); await activate(page, slot)
     await at(0.28); await activate(page, page.getByRole("button", { name: /^Continuer/ }))
     await page.getByLabel("Prénom *", { exact: true }).waitFor()

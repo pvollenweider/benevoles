@@ -52,7 +52,7 @@ async function main() {
       if (token) route.searchParams.set("token", token)
       await page.goto(route.toString())
       await page.getByRole("heading", { name: event.title, exact: true }).waitFor()
-      await page.getByRole("button", { name: new RegExp(`^Sélectionner — ${role}`) }).click()
+      await page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }).click()
       await page.getByRole("button", { name: /^Continuer/ }).click()
     }
     const agree = async () => {

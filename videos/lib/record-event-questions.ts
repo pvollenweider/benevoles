@@ -174,7 +174,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     const quit = page.getByRole("button", { name: "Quitter la session", exact: true })
     if (await quit.count()) { await tap(page, quit); await quit.waitFor({ state: "hidden" }) }
     if (url !== publicUrl) await go(url)
-    const slot = page.getByRole("button", { name: /^Sélectionner —/ }).nth(shiftIndex)
+    const slot = page.getByRole("button", { name: /: sélectionner/ }).nth(shiftIndex)
     await tap(page, slot); await tap(page, page.getByRole("button", { name: /^Continuer/ }))
     if (fillIdentity) {
       await completeVolunteerForm(page)

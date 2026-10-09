@@ -84,7 +84,7 @@ describe("EventPageClient — preview mode", () => {
     await screen.findByRole("heading", { level: 1 })
     const slot = () => screen.getByRole("contentinfo").parentElement!
     expect(slot()).not.toHaveClass("pb-28")
-    fireEvent.click(screen.getByRole("button", { name: /^Sélectionner — Bar/ }))
+    fireEvent.click(screen.getByRole("button", { name: /, Bar : sélectionner/ }))
     await screen.findAllByRole("button", { name: /^Continuer/ })
     expect(slot()).toHaveClass("pb-28", "lg:pb-0")
   })

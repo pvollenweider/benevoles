@@ -60,6 +60,8 @@ export type BarTextInput = {
   selected: boolean
   reserved: boolean
   locked: boolean
+  /** Overlaps a shift already chosen or held: shown, not offered (its name must not offer it). */
+  conflict?: boolean
   /** The role's limit per person, when it is reached (#466). */
   limitReached?: number
 }
@@ -73,17 +75,24 @@ export type BarText = {
   subLabel: string | null
 }
 
-/** Name and visible texts of one bar of the public timeline. */
-export function barText({ shift, held, selected, reserved, locked, limitReached }: BarTextInput): BarText {
+/**
+ * Name and visible texts of one bar of the public timeline. The name begins with what the bar
+ * shows (WCAG 2.5.3, #808): its hours (« +1 » past midnight), its « inscrits/places » count, or its
+ * state word (« Complet », « Fermé », « Réservé », « En attente »), then the role and what a press
+ * does. A narrow bar shows only the start time, which the name contains too.
+ */
+export function barText({ shift, held, selected, reserved, locked, conflict = false, limitReached }: BarTextInput): BarText {
   const hasLabel = shift.label !== shift.roleName
   const roleLabel = hasLabel ? `${shift.roleName} (${shift.label})` : shift.roleName
   const timeRange = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
-  // The +1 mark is visual; the accessible name spells it out.
-  const timeSpoken = crossesMidnight(shift.startTime, shift.endTime) ? `${timeRange}, jusqu'au lendemain` : timeRange
+  const overnight = crossesMidnight(shift.startTime, shift.endTime)
+  // The +1 mark is shown; the name also spells it out.
+  const timeShown = overnight ? `${timeRange} +1 (jusqu'au lendemain)` : timeRange
+  const timeSpoken = overnight ? `${timeRange}, jusqu'au lendemain` : timeRange
 
   if (held) {
     return {
-      ariaLabel: `${roleLabel} ${timeSpoken} : ${HELD_NAME[held]}`,
+      ariaLabel: `${timeShown}, ${roleLabel} : ${HELD_NAME[held]}`,
       tag: HELD_TAG[held],
       subLabel: hasLabel ? shift.label : null,
     }
@@ -102,18 +111,22 @@ export function barText({ shift, held, selected, reserved, locked, limitReached 
   // Skipped once full: the « Complet » / waitlist wording already says all that matters.
   const spotsSuffix = unavail ? "" : ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})`
   const limitSuffix = !selected && limitReached !== undefined ? ` (limite de ${limitReached} par personne atteinte)` : ""
+  // The « inscrits/places » count the bar shows while it can still be taken.
+  const count = `${shift.registered}/${shift.capacity}`
 
-  const ariaLabel = reserved
-    ? `${roleLabel} ${timeSpoken}, ${RESERVED_LABEL}`
-    : locked && !selected
-      ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}`
-      : (isWaitlistable
-        ? (selected
-          ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
-          : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
-        : (selected
-          ? `Désélectionner — ${roleLabel} ${timeSpoken}`
-          : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix + limitSuffix
+  let ariaLabel: string
+  if (reserved) ariaLabel = `Réservé, ${roleLabel} ${timeSpoken} : ${RESERVED_LABEL}`
+  else if (unavail && !selected) ariaLabel = `${isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
+  // A disabled bar must not offer an action: it says why it can't be chosen.
+  else if (conflict && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : chevauche un créneau déjà choisi`
+  else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix}`
+  else if (isWaitlistable) {
+    ariaLabel = selected
+      ? `En attente ${count}, ${roleLabel} ${timeSpoken} : retirer de la file d'attente${minAgeSuffix}`
+      : `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : rejoindre la file d'attente${limitSuffix}`
+  } else {
+    ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : ${selected ? "désélectionner" : "sélectionner"}${spotsSuffix}${limitSuffix}`
+  }
 
   const details = [
     isWaitlistable && !selected ? "Complet · file d'attente" : hasLabel ? shift.label : null,

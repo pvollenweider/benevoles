@@ -200,6 +200,7 @@ export default function DayTimeline({
                   const spotsText       = unavail || isRegistered ? null : `${shift.registered}/${shift.capacity}`
                   const { ariaLabel, tag, subLabel } = barText({
                     shift,
+                    conflict: isConflict,
                     held: heldKind,
                     selected: isSelected,
                     reserved: isReserved,

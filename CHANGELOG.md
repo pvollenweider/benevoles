@@ -48,6 +48,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Créneaux de la frise nommés comme ils s'affichent** (#808) : le nom lu par un lecteur d'écran ou visé par la commande vocale commence désormais par le texte de la barre (heures, nombre d'inscrits, « Complet », « Fermé », « Réservé », « En attente »), puis le poste et l'action. Un créneau qui chevauche un créneau déjà choisi ne propose plus « sélectionner » : il dit pourquoi il ne peut pas être choisi.
 - **Fuseau horaire d'un nouvel événement** (#760) : le formulaire de création supposait le fuseau de Zurich pour l'ouverture et la fermeture des inscriptions, au lieu de celui de l'organisation (déjà utilisé à la modification). Les autres replis sur Zurich suivent désormais `APP_TIME_ZONE`.
 - **Espaces jamais activés effacés** (#810) : un espace créé par l'inscription en libre-service dont le mot de passe n'était jamais choisi perdait son compte au bout de 30 jours, mais restait en attente de validation, sans administrateur, dans le compte des espaces en attente. Il est désormais effacé avec son compte.
 - **Lien pour choisir son mot de passe aussi envoyé par email** (#810) : après « Confirmer et créer mon espace », le lien pour choisir le mot de passe ne s'affichait que dans le navigateur ; une personne qui fermait la page restait bloquée. Il part désormais aussi par email, « Choisissez votre mot de passe benevol.app », valable 7 jours.

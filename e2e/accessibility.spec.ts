@@ -33,7 +33,7 @@ test.describe("public pages", () => {
     await page.goto("/spectacle-cirque-2026?org=default")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     expect.soft(await seriousViolations(page)).toEqual([])
-    await page.getByRole("button", { name: /Sélectionner.*Billetterie/ }).first().click()
+    await page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first().click()
     await page.getByRole("button", { name: /^Continuer/ }).click()
     await expect(page.getByLabel("Prénom *", { exact: true })).toBeVisible()
     expect.soft(await seriousViolations(page)).toEqual([])
