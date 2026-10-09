@@ -12,6 +12,8 @@ const logOrgEvent = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/org-log", () => ({ logOrgEvent, adminActor: () => ({ type: "admin", id: "adm-a" }) }))
 
 const findFirst = vi.hoisted(() => vi.fn())
+const authMock = vi.hoisted(() => vi.fn())
+vi.mock("@/auth", () => ({ auth: authMock }))
 vi.mock("@/lib/prisma", () => ({ prisma: { organizationLogo: { findFirst } } }))
 
 const HASH = "c".repeat(64)
@@ -121,11 +123,12 @@ describe("GET /api/public/organizations/[id]/logo", () => {
   const get = (url: string, headers: Record<string, string> = {}) => new Request(`http://localhost${url}`, { headers })
 
   it("serves the logo of that organization only, while it is active", async () => {
-    findFirst.mockResolvedValue({ data: new Uint8Array([0x89, 0x50, 0x4e, 0x47]), mimeType: "image/png", hash: HASH })
+    findFirst.mockResolvedValue({ data: new Uint8Array([0x89, 0x50, 0x4e, 0x47]), mimeType: "image/png", hash: HASH, organization: { publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } })
     const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
     const res = await GET(get(`/api/public/organizations/org-a/logo?v=${logoVersion(HASH)}`), params("org-a"))
     expect(res.status).toBe(200)
-    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-a", organization: { active: true, publicationApprovedAt: { not: null } } } }))
+    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-a", organization: { active: true } } }))
+    expect(authMock).not.toHaveBeenCalled()
     expect(res.headers.get("Content-Type")).toBe("image/png")
     expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff")
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable")
@@ -134,7 +137,7 @@ describe("GET /api/public/organizations/[id]/logo", () => {
   })
 
   it("gives an old or missing version the current image, revalidated", async () => {
-    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/jpeg", hash: HASH })
+    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/jpeg", hash: HASH, organization: { publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } })
     const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
     const res = await GET(get("/api/public/organizations/org-a/logo?v=0123456789abcdef"), params("org-a"))
     expect(res.status).toBe(200)
@@ -142,11 +145,27 @@ describe("GET /api/public/organizations/[id]/logo", () => {
   })
 
   it("answers 304 to a matching If-None-Match", async () => {
-    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/png", hash: HASH })
+    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/png", hash: HASH, organization: { publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } })
     const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
     const res = await GET(get("/api/public/organizations/org-a/logo", { "If-None-Match": `"${HASH}"` }), params("org-a"))
     expect(res.status).toBe(304)
     expect(await res.text()).toBe("")
+  })
+
+  // #810: a space awaiting validation has no public page; its logo is only for its own admins.
+  it("serves a pending space's logo to its admins and the super admin only, never cached", async () => {
+    findFirst.mockResolvedValue({ data: new Uint8Array([1]), mimeType: "image/png", hash: HASH, organization: { publicationApprovedAt: null } })
+    const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
+    authMock.mockResolvedValueOnce(null)
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(404)
+    authMock.mockResolvedValueOnce({ user: { role: "admin", organizationId: "org-b" } })
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(404)
+    authMock.mockResolvedValueOnce({ user: { role: "admin", organizationId: "org-a" } })
+    const own = await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))
+    expect(own.status).toBe(200)
+    expect(own.headers.get("Cache-Control")).toBe("private, no-store")
+    authMock.mockResolvedValueOnce({ user: { role: "super_admin", organizationId: null } })
+    expect((await GET(get("/api/public/organizations/org-a/logo"), params("org-a"))).status).toBe(200)
   })
 
   it("is a 404 for an organization without a logo, deactivated, deleted or unknown", async () => {

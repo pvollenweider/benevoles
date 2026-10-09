@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest"
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
 
 /**
  * Organization logo (#300) against a real Postgres: the bytes round-trip through the bytea column,
@@ -6,6 +6,10 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest"
  * an active organization's logo and nothing else, and the logo is purged with its organization
  * (the cleanup cron deletes deactivated organizations with `organization.deleteMany`, cascading).
  */
+
+// The session that asks for a pending space's logo (#810); next-auth itself does not load here.
+const session = vi.hoisted(() => ({ current: null as null | { user: { role: string; organizationId: string | null } } }))
+vi.mock("@/auth", () => ({ auth: async () => session.current }))
 
 import sharp from "sharp"
 import { prisma } from "@/lib/prisma"
@@ -74,6 +78,19 @@ describe.skipIf(!url)("OrganizationLogo (#300)", () => {
     expect(await prisma.organizationLogo.count({ where: { organizationId: orgA } })).toBe(1)
     // Org B has no logo of its own.
     expect((await get(orgB)).status).toBe(404)
+  })
+
+  it("serves a pending space's logo only to its own admins, uncached (#810)", async () => {
+    await prisma.organization.update({ where: { id: orgA }, data: { publicationApprovedAt: null } })
+    session.current = null
+    expect((await get(orgA)).status).toBe(404)
+    session.current = { user: { role: "admin", organizationId: orgB } }
+    expect((await get(orgA)).status).toBe(404)
+    session.current = { user: { role: "admin", organizationId: orgA } }
+    const own = await get(orgA)
+    expect(own.status).toBe(200)
+    expect(own.headers.get("Cache-Control")).toBe("private, no-store")
+    session.current = null
   })
 
   it("is no longer served once the organization is deactivated, and is purged with it", async () => {
