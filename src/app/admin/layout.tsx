@@ -14,6 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   let orgName: string | undefined
+  let pending = false
   let organizationId = session.user?.organizationId
   if (!organizationId && session.user?.role === "super_admin") {
     organizationId = await resolveSuperAdminOrg()
@@ -21,15 +22,24 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (organizationId) {
     const org = await prisma.organization.findUnique({
       where: { id: organizationId },
-      select: { name: true },
+      select: { name: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
     })
     orgName = org?.name
+    // #810: a space created by self-service sign-up, awaiting the operator's validation.
+    pending = !!org && (org.publicationApprovedAt === null || org.outboundEmailApprovedAt === null)
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <SkipLink />
       <AdminNav userName={session.user?.name ?? "Admin"} role={session.user?.role} orgName={orgName} />
+      {pending && (
+        <section aria-label="Espace en attente de validation" className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+          <p className="max-w-5xl mx-auto text-sm text-amber-950">
+            Votre espace est en attente de validation. Vous pouvez tout préparer dès maintenant ; la publication de vos événements et les emails à vos bénévoles seront possibles dès qu&apos;il sera activé. Vous recevrez un email.
+          </p>
+        </section>
+      )}
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none">{children}</main>
     </div>
   )

@@ -23,6 +23,8 @@ type Org = {
   slug: string
   active: boolean
   suspendedAt: string | null
+  publicationApprovedAt?: string | null
+  outboundEmailApprovedAt?: string | null
   createdAt: string
   _count: OrgCount
 }
@@ -116,6 +118,9 @@ export default function OrgsManager({ initialOrgs }: Props) {
                     </Link>
                     {!org.active && (
                       <span className="ml-2 text-xs text-red-700 font-normal">{org.suspendedAt ? "suspendue" : "désactivée"}</span>
+                    )}
+                    {org.active && (org.publicationApprovedAt === null || org.outboundEmailApprovedAt === null) && (
+                      <span className="ml-2 text-xs text-amber-800 font-normal">en attente de validation</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>

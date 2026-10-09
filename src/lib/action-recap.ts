@@ -239,6 +239,33 @@ export function liftSuspensionRecap(name: string): ActionRecap {
   }
 }
 
+/** Validation of a space awaiting it (#810): both grants at once. */
+export function approveOrgRecap(name: string): ActionRecap {
+  return {
+    title: `Valider l'espace « ${name} » ?`,
+    lines: [
+      "Il peut publier ses événements : ses pages publiques répondent.",
+      "Il peut écrire à ses bénévoles et à ses membres.",
+      "Ses administrateurs reçoivent un email « Votre espace benevol.app est activé ».",
+    ],
+    confirmLabel: "Valider l'espace",
+    danger: false,
+  }
+}
+
+/** Refusal of a space awaiting validation (#810): deleted with its accounts, nothing sent. */
+export function refuseOrgRecap(name: string): ActionRecap {
+  return {
+    title: `Refuser et supprimer l'espace « ${name} » ?`,
+    lines: [
+      "L'espace est supprimé définitivement, avec ses événements, ses membres et ses comptes administrateurs.",
+      "Aucun email n'est envoyé.",
+    ],
+    confirmLabel: "Refuser et supprimer",
+    danger: true,
+  }
+}
+
 export function deleteOrgRecap(i: { name: string; events: number; volunteers: number; admins: number }): ActionRecap {
   return {
     title: `Supprimer définitivement « ${i.name} » ?`,

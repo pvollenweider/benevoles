@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PENDING_ORG_WHERE, pendingSummary } from "@/lib/org-review"
+import { notifyOperator } from "@/lib/operator-alerts"
 import { countsToFreeze } from "@/lib/message-history"
 import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { NextResponse } from "next/server"
@@ -149,6 +151,16 @@ async function run(req: Request) {
   const deletedSignupRequests = await prisma.signupRequest.deleteMany({
     where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.signupRequest) } },
   })
+
+  // --- 6e. Daily summary of the spaces awaiting validation (#810): one operator alert a day, not one
+  // per request; the alert's key carries the date, so a second run the same day sends nothing.
+  const pending = await prisma.organization.findMany({ where: PENDING_ORG_WHERE, select: { createdAt: true } })
+  const summary = pendingSummary(pending.map((o) => o.createdAt), now)
+  if (summary) {
+    const base = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/+$/, "")
+    await notifyOperator({ key: `pending-summary:${now.toISOString().slice(0, 10)}`, title: "benevol.app : espaces en attente", message: summary, priority: 3, url: base ? `${base}/super-admin/organizations` : undefined })
+      .catch(reportError("cleanup.pending_summary"))
+  }
 
   // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.

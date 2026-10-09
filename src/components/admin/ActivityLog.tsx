@@ -34,6 +34,7 @@ export const ACTION_LABEL: Record<string, string> = {
   "member.erased": "a effacé les données personnelles d'un membre",
   "organization.suspended": "a suspendu l'organisation pour abus",
   "organization.suspension_lifted": "a levé la suspension de l'organisation",
+  "organization.approved": "a validé l'espace",
   "adminuser.invited": "a invité un admin",
   "notification.retried": "a renvoyé un email",
   "organization.notifications_updated": "a modifié les réglages de notification",

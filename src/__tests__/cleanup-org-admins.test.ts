@@ -30,6 +30,7 @@ vi.mock("@/lib/prisma", () => {
   }
 })
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s", AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
+vi.mock("@/lib/operator-alerts", () => ({ notifyOperator: vi.fn().mockResolvedValue(undefined) }))
 vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn() }))
 vi.mock("@/lib/token-encryption-job", () => ({ encryptLegacyTokens: vi.fn().mockResolvedValue(null) }))
 
@@ -47,7 +48,8 @@ beforeEach(() => {
 
 describe("nightly cleanup of deactivated organizations", () => {
   it("deletes the organization's admins, active ones included, with it", async () => {
-    m.orgFindMany.mockResolvedValue([{ id: "org-old" }])
+    // The deactivated organisations to delete; the pending-spaces summary (#810) finds none.
+    m.orgFindMany.mockImplementation(async ({ where }: { where: { OR?: unknown } }) => (where.OR ? [] : [{ id: "org-old" }]))
     m.adminFindMany.mockResolvedValue([{ id: "owner-1" }, { id: "organizer-1" }])
     m.orgDeleteMany.mockResolvedValue({ count: 1 })
     m.adminDeleteMany.mockResolvedValueOnce({ count: 2 }).mockResolvedValueOnce({ count: 0 })

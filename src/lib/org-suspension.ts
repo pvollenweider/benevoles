@@ -19,17 +19,25 @@
 export const SUSPENSION_REASON_MIN = 3
 export const SUSPENSION_REASON_MAX = 500
 
-export type OrgState = { active: boolean; suspendedAt: Date | string | null }
+export type OrgState = {
+  active: boolean
+  suspendedAt: Date | string | null
+  /** #810: an active organisation missing a grant is awaiting validation. Absent = granted. */
+  publicationApprovedAt?: Date | string | null
+  outboundEmailApprovedAt?: Date | string | null
+}
 
-export type OrgStatus = "active" | "inactive" | "suspended"
+export type OrgStatus = "active" | "pending" | "inactive" | "suspended"
 
 export function orgStatus(org: OrgState): OrgStatus {
   if (org.suspendedAt) return "suspended"
-  return org.active ? "active" : "inactive"
+  if (!org.active) return "inactive"
+  return org.publicationApprovedAt === null || org.outboundEmailApprovedAt === null ? "pending" : "active"
 }
 
 export const ORG_STATUS_LABELS: Record<OrgStatus, string> = {
   active: "Active",
+  pending: "En attente de validation",
   inactive: "Désactivée",
   suspended: "Suspendue",
 }
