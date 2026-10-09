@@ -13,7 +13,7 @@ type State = { open: boolean; closedBy: "config" | "operator" | null }
 const STATE_TEXT: Record<"open" | "operator" | "config", string> = {
   open: "Les inscriptions sont ouvertes : une association peut demander un espace depuis la page d'inscription.",
   operator: "Les inscriptions sont fermées : la page d'inscription l'annonce avec l'adresse contact@benevol.app, et les liens de confirmation déjà envoyés ne créent plus d'espace.",
-  config: "Les inscriptions sont fermées par la configuration du serveur (SIGNUP=off) : ce bouton ne peut pas les rouvrir.",
+  config: "Les inscriptions sont fermées par la configuration du serveur (SIGNUP=off) : elles ne peuvent pas être rouvertes depuis cette page.",
 }
 
 /**
@@ -55,15 +55,14 @@ export default function SignupSwitch({ initial }: { initial: State }) {
     <section aria-labelledby={`${id}-title`} className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3">
       <h2 id={`${id}-title`} className="text-base font-semibold text-gray-900">Ouverture des inscriptions</h2>
       <p className="text-sm text-gray-800">{text}</p>
-      <p role="status" className="sr-only">{outcome}</p>
-      <FormStatus error={error} errorId={`${id}-error`} />
+      <FormStatus status={outcome} error={error} errorId={`${id}-error`} />
       {state.closedBy !== "config" && (
         <button
           type="button"
           onClick={() => void toggle()}
           aria-disabled={busy || undefined}
           aria-describedby={error ? `${id}-error` : undefined}
-          className={`text-sm px-4 py-2 rounded-xl font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${state.open ? "border border-red-300 text-red-700 hover:bg-red-50" : "bg-green-700 text-white hover:bg-green-800"} ${busy ? "cursor-wait opacity-80" : ""}`}
+          className={`text-sm px-4 py-2 rounded-xl font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${state.open ? "border border-red-300 text-red-700 hover:bg-red-50" : "bg-green-700 text-white hover:bg-green-800"} ${busy ? "cursor-wait" : ""}`}
         >
           {state.open ? "Fermer les inscriptions" : "Rouvrir les inscriptions"}
         </button>
