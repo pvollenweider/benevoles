@@ -445,6 +445,8 @@ Depuis le 2026-10-07, la bibliothèque est publique et référencée (`src/lib/v
   sur le domaine principal seulement ;
 - liens « Tutoriels vidéo » dans le pied de page public, sur `/doc` et sur `/fonctionnalites`
   (`FEATURES.md`).
+- le téléphone de l'accueil de benevol.app joue `VOLUNTEER_REGISTER` sur place (#765,
+  `src/lib/home-signup-video.ts`) : la dépublier ou la renommer rend au téléphone son image fixe.
 
 Champs du catalogue ajoutés par #644, en plus de `id`, `manifest`, `category`, `tags`, `published`
 et `seedScenario` (#637, #638) :
