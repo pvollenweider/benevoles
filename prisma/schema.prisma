@@ -49,6 +49,10 @@ model Organization {
   // nor page views), and the latest « Conserver mon organisation », kept apart on purpose.
   lastMeaningfulActivityAt DateTime?
   lastRetentionConfirmedAt DateTime?
+  // The operator's hand on that check (#811): nothing happens before `inactivityPostponedUntil`,
+  // and an exempt organisation is never deactivated automatically (« Ne jamais désactiver »).
+  inactivityPostponedUntil DateTime?
+  inactivityExempt         Boolean   @default(false)
   // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
   pastEventNoticeAt DateTime?
   pastEventBatchAt  DateTime?

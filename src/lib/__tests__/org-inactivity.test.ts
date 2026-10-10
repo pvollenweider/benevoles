@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest"
-import { assessInactivity, inactivityMode, inactivitySince, isMeaningfulWrite, type InactivityFacts } from "../org-inactivity"
+import { assessInactivity, inactivityMode, inactivitySince, inactivityStatusText, isMeaningfulWrite, isPostponeMonths, postponedUntil, type InactivityFacts } from "../org-inactivity"
 
 const facts = (over: Partial<InactivityFacts> = {}): InactivityFacts => ({
-  lastActivityAt: new Date("2025-01-15T10:00:00Z"), lastRetentionConfirmedAt: null, hasUpcomingEvent: false, everUsed: true, suspended: false, active: true, ...over,
+  lastActivityAt: new Date("2025-01-15T10:00:00Z"), lastRetentionConfirmedAt: null, hasUpcomingEvent: false, everUsed: true, suspended: false, active: true, postponedUntil: null, exempt: false, ...over,
 })
 
 describe("periodic check of inactive organisations (#811)", () => {
@@ -39,5 +39,36 @@ describe("periodic check of inactive organisations (#811)", () => {
     expect(isMeaningfulWrite("eventLog", "create")).toBe(false)
     expect(isMeaningfulWrite("orgLog", "create")).toBe(false)
     expect(isMeaningfulWrite("event", "findMany")).toBe(false)
+  })
+
+  it("waits for the operator's postponement, and never runs for an exempt organisation (#811)", () => {
+    const late = new Date("2026-08-20T00:00:00Z")
+    const until = new Date("2027-02-20T00:00:00Z")
+    expect(assessInactivity(facts({ postponedUntil: until }), late)).toMatchObject({ state: "active", firstEmailAt: until })
+    // An old postponement, earlier than the schedule, changes nothing.
+    expect(assessInactivity(facts({ postponedUntil: new Date("2025-03-01T00:00:00Z") }), late)).toMatchObject({ state: "due", step: "second" })
+    expect(assessInactivity(facts({ exempt: true }), late)).toEqual({ state: "excluded", reason: "exempt" })
+    // A suspension still comes first: the operator's exclusion does not hide it.
+    expect(assessInactivity(facts({ exempt: true, suspended: true }), late)).toEqual({ state: "excluded", reason: "suspended" })
+  })
+
+  it("postpones by 3, 6 or 12 months from today only", () => {
+    expect(postponedUntil(new Date("2026-10-10T08:00:00Z"), 6)).toEqual(new Date("2027-04-10T08:00:00Z"))
+    expect([3, 6, 12].every(isPostponeMonths)).toBe(true)
+    expect([0, 1, 24, "6", null].some(isPostponeMonths)).toBe(false)
+  })
+
+  it("says where an organisation stands, in words", () => {
+    const now = new Date("2026-08-20T00:00:00Z")
+    const day = (d: Date) => d.toISOString().slice(0, 10)
+    const text = (over: Partial<InactivityFacts>, mode: "off" | "report" = "report") => {
+      const f = facts(over)
+      return inactivityStatusText({ lastActivityAt: f.lastActivityAt, postponedUntil: f.postponedUntil, assessment: assessInactivity(f, now) }, mode, now, day)
+    }
+    expect(text({})).toBe("Dernière activité : le 2025-01-15. Premier email dû le 2026-07-15 ; étape atteinte : 2e rappel. Mode observation : rien n'est envoyé.")
+    expect(text({ postponedUntil: new Date("2027-02-20T00:00:00Z") })).toBe("Dernière activité : le 2025-01-15. Reporté jusqu'au 2027-02-20. Premier email « Souhaitez-vous conserver votre espace ? » prévu le 2027-02-20.")
+    expect(text({ exempt: true })).toBe("Dernière activité : le 2025-01-15. Elle ne sera jamais désactivée automatiquement.")
+    expect(text({ hasUpcomingEvent: true })).toContain("Un événement est à venir ou en cours")
+    expect(text({ lastActivityAt: null }, "off")).toBe("Dernière activité : jamais mesurée. La vérification est désactivée (ORG_INACTIVITY=off).")
   })
 })
