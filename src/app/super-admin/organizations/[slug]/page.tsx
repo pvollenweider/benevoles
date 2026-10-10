@@ -3,6 +3,11 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import OrgDetail from "@/components/super-admin/OrgDetail"
 import { loadOrganizationCumulative } from "@/lib/usage-stats"
+import { loadOrganizationInactivity } from "@/lib/org-inactivity-data"
+import { inactivityMode, inactivityStatusText } from "@/lib/org-inactivity"
+import { APP_TIME_ZONE } from "@/lib/time-zone"
+
+const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
 export const dynamic = "force-dynamic"
 
@@ -49,7 +54,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
   })
 
   if (!org) notFound()
-  const cumulative = await loadOrganizationCumulative(org.id)
+  const now = new Date()
+  const [cumulative, inactivity] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now)])
 
   return (
     <OrgDetail
@@ -63,6 +69,13 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}
       cumulative={cumulative}
+      inactivity={inactivity ? {
+        orgId: org.id,
+        status: inactivityStatusText(inactivity, inactivityMode(), now, day),
+        postponed: inactivity.postponedUntil !== null && inactivity.postponedUntil.getTime() > now.getTime(),
+        exempt: inactivity.exempt,
+        applies: org.active && org.suspendedAt === null,
+      } : undefined}
     />
   )
 }

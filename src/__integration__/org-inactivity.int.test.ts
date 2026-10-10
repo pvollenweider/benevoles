@@ -9,7 +9,7 @@ import { describe, it, expect, afterAll } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { touchOrgActivity } from "@/lib/org-activity"
-import { loadInactivityReport } from "@/lib/org-inactivity-data"
+import { loadExemptOrganizations, loadInactivityReport, loadOrganizationInactivity } from "@/lib/org-inactivity-data"
 
 const url = process.env.DATABASE_URL
 const tag = `int-inact-${Date.now()}`
@@ -52,5 +52,19 @@ describe.skipIf(!url)("periodic check of inactive organisations on Postgres (#81
     expect(rows.find((r) => r.id === idle.id)?.assessment).toMatchObject({ state: "due", step: "second" })
     expect(rows.find((r) => r.id === planned.id)).toBeUndefined()
     expect((await prisma.organization.findUniqueOrThrow({ where: { id: idle.id } })).active).toBe(true)
+  })
+
+  it("leaves out a postponed or exempt organisation, and says why on its page", async () => {
+    const postponed = await prisma.organization.create({ data: { name: `Reportée ${tag}`, slug: `${tag}-r`, lastMeaningfulActivityAt: new Date("2025-03-01T00:00:00Z"), inactivityPostponedUntil: new Date("2027-04-09T00:00:00Z") } })
+    const exempt = await prisma.organization.create({ data: { name: `Exclue ${tag}`, slug: `${tag}-e`, lastMeaningfulActivityAt: new Date("2025-03-01T00:00:00Z"), inactivityExempt: true } })
+    ids.push(postponed.id, exempt.id)
+
+    const now = new Date("2026-10-09T12:00:00Z")
+    const rows = await loadInactivityReport(now)
+    expect(rows.find((r) => r.id === postponed.id)).toBeUndefined()
+    expect(rows.find((r) => r.id === exempt.id)).toBeUndefined()
+    expect((await loadExemptOrganizations()).map((o) => o.id)).toContain(exempt.id)
+    expect((await loadOrganizationInactivity(postponed.id, now))?.assessment).toEqual({ state: "active", firstEmailAt: new Date("2027-04-09T00:00:00Z") })
+    expect((await loadOrganizationInactivity(exempt.id, now))?.assessment).toEqual({ state: "excluded", reason: "exempt" })
   })
 })

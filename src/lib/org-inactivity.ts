@@ -43,10 +43,14 @@ export type InactivityFacts = {
   everUsed: boolean
   suspended: boolean
   active: boolean
+  /** The operator postponed the procedure: nothing happens before this date. */
+  postponedUntil: Date | null
+  /** The operator excluded the organisation for good: « Ne jamais désactiver automatiquement ». */
+  exempt: boolean
 }
 
 export type InactivityAssessment =
-  | { state: "excluded"; reason: "suspended" | "deactivated" | "upcoming-event" }
+  | { state: "excluded"; reason: "suspended" | "deactivated" | "exempt" | "upcoming-event" }
   | { state: "active"; firstEmailAt: Date }
   | { state: "due"; step: InactivityStepKey; stepLabel: string; firstEmailAt: Date; nextStep: { key: InactivityStepKey; label: string; at: Date } | null }
 
@@ -68,8 +72,10 @@ export function inactivitySince(f: Pick<InactivityFacts, "lastActivityAt" | "las
 export function assessInactivity(f: InactivityFacts, now: Date, fallback: Date = now): InactivityAssessment {
   if (f.suspended) return { state: "excluded", reason: "suspended" }
   if (!f.active) return { state: "excluded", reason: "deactivated" }
+  if (f.exempt) return { state: "excluded", reason: "exempt" }
   if (f.hasUpcomingEvent) return { state: "excluded", reason: "upcoming-event" }
-  const firstEmailAt = addMonths(inactivitySince(f, fallback), INACTIVITY_MONTHS)
+  const scheduled = addMonths(inactivitySince(f, fallback), INACTIVITY_MONTHS)
+  const firstEmailAt = f.postponedUntil && f.postponedUntil.getTime() > scheduled.getTime() ? f.postponedUntil : scheduled
   if (now.getTime() < firstEmailAt.getTime()) return { state: "active", firstEmailAt }
   const elapsedDays = Math.floor((now.getTime() - firstEmailAt.getTime()) / DAY_MS)
   let index = 0
@@ -85,6 +91,22 @@ export function assessInactivity(f: InactivityFacts, now: Date, fallback: Date =
   }
 }
 
+/** What the operator can postpone the procedure by, in months (« Reporter »). */
+export const POSTPONE_MONTHS = [3, 6, 12] as const
+export type PostponeMonths = (typeof POSTPONE_MONTHS)[number]
+
+export function isPostponeMonths(value: unknown): value is PostponeMonths {
+  return (POSTPONE_MONTHS as readonly unknown[]).includes(value)
+}
+
+/**
+ * The date a postponement of `months` from `now` holds the procedure until. Counted from today,
+ * not from the scheduled date: « reporter de 6 mois » means six months of quiet from now on.
+ */
+export function postponedUntil(now: Date, months: PostponeMonths): Date {
+  return addMonths(now, months)
+}
+
 /** A write that counts as meaningful activity: throttle the update of the organisation's date. */
 export const ACTIVITY_THROTTLE_MS = 60 * 60 * 1000
 
@@ -98,4 +120,33 @@ export const WRITE_OPERATIONS: readonly string[] = ["create", "createMany", "cre
 
 export function isMeaningfulWrite(model: string, operation: string): boolean {
   return MEANINGFUL_MODELS.includes(model) && WRITE_OPERATIONS.includes(operation)
+}
+
+/**
+ * One organisation's place in the check, in words, for its page in the super admin space.
+ * `day` formats a date (the page's time zone); `now` tells a running postponement from an old one.
+ */
+export function inactivityStatusText(
+  info: { lastActivityAt: Date | null; postponedUntil: Date | null; assessment: InactivityAssessment },
+  mode: InactivityMode,
+  now: Date,
+  day: (d: Date) => string,
+): string {
+  const last = `Dernière activité : ${info.lastActivityAt ? `le ${day(info.lastActivityAt)}` : "jamais mesurée"}.`
+  if (mode === "off") return `${last} La vérification est désactivée (ORG_INACTIVITY=off).`
+  const a = info.assessment
+  if (a.state === "excluded") {
+    const why = {
+      suspended: "Organisation suspendue : la vérification ne la concerne pas.",
+      deactivated: "Organisation désactivée : la vérification ne la concerne pas.",
+      exempt: "Elle ne sera jamais désactivée automatiquement.",
+      "upcoming-event": "Un événement est à venir ou en cours : rien ne se passe avant qu'il soit terminé.",
+    }[a.reason]
+    return `${last} ${why}`
+  }
+  const postponed = info.postponedUntil && info.postponedUntil.getTime() > now.getTime() ? info.postponedUntil : null
+  const hold = postponed ? ` Reporté jusqu'au ${day(postponed)}.` : ""
+  if (a.state === "active") return `${last}${hold} Premier email « Souhaitez-vous conserver votre espace ? » prévu le ${day(a.firstEmailAt)}.`
+  const observe = mode === "report" ? " Mode observation : rien n'est envoyé." : ""
+  return `${last}${hold} Premier email dû le ${day(a.firstEmailAt)} ; étape atteinte : ${a.stepLabel.charAt(0).toLowerCase()}${a.stepLabel.slice(1)}.${observe}`
 }

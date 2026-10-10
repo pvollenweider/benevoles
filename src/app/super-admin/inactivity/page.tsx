@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
-import { loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
+import { loadExemptOrganizations, loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
 import { inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 
@@ -24,7 +24,8 @@ export default async function InactivityPage() {
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
   const mode = inactivityMode()
-  const rows = mode === "off" ? [] : await loadInactivityReport()
+  const now = new Date()
+  const [rows, exempt] = mode === "off" ? [[], []] : await Promise.all([loadInactivityReport(now), loadExemptOrganizations()])
 
   return (
     <div className="space-y-6">
@@ -35,7 +36,7 @@ export default async function InactivityPage() {
           {" "}
           {mode === "off"
             ? "La vérification est désactivée (ORG_INACTIVITY=off)."
-            : `Mode observation : rien n'est envoyé, désactivé ni supprimé. La liste montre les organisations concernées dans les ${SOON_DAYS} prochains jours ou déjà concernées.`}
+            : `Mode observation : rien n'est envoyé, désactivé ni supprimé. La liste montre les organisations concernées dans les ${SOON_DAYS} prochains jours ou déjà concernées. La page de chaque organisation permet de reporter la vérification ou de l'en exclure.`}
         </p>
       </div>
 
@@ -66,6 +67,7 @@ export default async function InactivityPage() {
                   <td className="px-4 py-2 text-gray-800">{r.everUsed ? "Oui" : "Jamais utilisée"}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">{r.activeAdmins}</td>
                   <td className="px-4 py-2 text-gray-800">
+                    {r.postponedUntil && r.postponedUntil.getTime() > now.getTime() && `Reporté jusqu'au ${day(r.postponedUntil)}. `}
                     {r.assessment.state === "active"
                       ? `1er email le ${day(r.assessment.firstEmailAt)}`
                       : `${r.assessment.stepLabel} (depuis le ${day(r.assessment.firstEmailAt)})${r.assessment.nextStep ? ` ; ensuite : ${r.assessment.nextStep.label.toLowerCase()} le ${day(r.assessment.nextStep.at)}` : ""}`}
@@ -76,6 +78,20 @@ export default async function InactivityPage() {
           </table>
         </div>
       ))}
+
+      {mode !== "off" && exempt.length > 0 && (
+        <section aria-labelledby="inactivity-exempt" className="space-y-2">
+          <h2 id="inactivity-exempt" className="text-base font-semibold text-gray-900">Jamais désactivées automatiquement</h2>
+          <p className="text-sm text-gray-700">Exclues de la vérification par l&apos;opérateur. Pour les y remettre, ouvrez la page de l&apos;organisation.</p>
+          <ul className="list-disc pl-5 text-sm">
+            {exempt.map((o) => (
+              <li key={o.id}>
+                <Link href={`/super-admin/organizations/${o.slug}`} className="text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{o.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }

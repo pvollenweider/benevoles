@@ -20,6 +20,7 @@ export type InactivityReportRow = {
   lastEventEnd: Date | null
   everUsed: boolean
   activeAdmins: number
+  postponedUntil: Date | null
   assessment: Extract<InactivityAssessment, { state: "active" | "due" }>
 }
 
@@ -29,7 +30,7 @@ export async function loadInactivityReport(now: Date = new Date()): Promise<Inac
     where: { active: true, suspendedAt: null },
     select: {
       id: true, name: true, slug: true, active: true, suspendedAt: true, createdAt: true,
-      lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true,
+      lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true, inactivityPostponedUntil: true, inactivityExempt: true,
       events: { select: { endDate: true, publicStatus: true }, orderBy: { endDate: "desc" }, take: 1 },
       _count: { select: { admins: { where: { isActive: true } } } },
     },
@@ -55,6 +56,8 @@ export async function loadInactivityReport(now: Date = new Date()): Promise<Inac
       everUsed: used.has(o.id),
       suspended: o.suspendedAt !== null,
       active: o.active,
+      postponedUntil: o.inactivityPostponedUntil,
+      exempt: o.inactivityExempt,
     }, now, o.createdAt)
     if (assessment.state === "excluded") continue
     if (assessment.state === "active" && assessment.firstEmailAt.getTime() > soon) continue
@@ -64,8 +67,51 @@ export async function loadInactivityReport(now: Date = new Date()): Promise<Inac
       lastEventEnd: o.events[0]?.endDate ?? null,
       everUsed: used.has(o.id),
       activeAdmins: o._count.admins,
+      postponedUntil: o.inactivityPostponedUntil,
       assessment,
     })
   }
   return rows.sort((a, b) => a.assessment.firstEmailAt.getTime() - b.assessment.firstEmailAt.getTime())
+}
+
+/** The organisations the operator excluded for good (« Ne jamais désactiver automatiquement »). */
+export async function loadExemptOrganizations(): Promise<{ id: string; name: string; slug: string }[]> {
+  return prisma.organization.findMany({
+    where: { inactivityExempt: true },
+    select: { id: true, name: true, slug: true },
+    orderBy: { name: "asc" },
+  })
+}
+
+/** Where one organisation stands in the check, for its page in the super admin space. */
+export async function loadOrganizationInactivity(orgId: string, now: Date = new Date()) {
+  const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+  const o = await prisma.organization.findUnique({
+    where: { id: orgId },
+    select: {
+      active: true, suspendedAt: true, createdAt: true,
+      lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true, inactivityPostponedUntil: true, inactivityExempt: true,
+    },
+  })
+  if (!o) return null
+  const [upcoming, used] = await Promise.all([
+    prisma.event.count({ where: { organizationId: orgId, endDate: { gte: startOfToday } } }),
+    prisma.event.count({ where: { organizationId: orgId, OR: [{ publicStatus: { in: ["published", "archived"] } }, { registrations: { some: {} } }] } }),
+  ])
+  const assessment = assessInactivity({
+    lastActivityAt: o.lastMeaningfulActivityAt,
+    lastRetentionConfirmedAt: o.lastRetentionConfirmedAt,
+    hasUpcomingEvent: upcoming > 0,
+    everUsed: used > 0,
+    suspended: o.suspendedAt !== null,
+    active: o.active,
+    postponedUntil: o.inactivityPostponedUntil,
+    exempt: o.inactivityExempt,
+  }, now, o.createdAt)
+  return {
+    lastActivityAt: o.lastMeaningfulActivityAt,
+    postponedUntil: o.inactivityPostponedUntil,
+    exempt: o.inactivityExempt,
+    assessment,
+  }
 }

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useRef, useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition, type ComponentProps } from "react"
 import { flushSync } from "react-dom"
 import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
@@ -12,6 +12,7 @@ import { approveOrgRecap, deleteOrgRecap, liftSuspensionRecap, refuseOrgRecap, s
 import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_MIN } from "@/lib/org-suspension"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import InactivityPanel from "@/components/super-admin/InactivityPanel"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -46,7 +47,7 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: UsageRow[] }) {
+export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel> }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
@@ -407,6 +408,9 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
           ))}
         </dl>
       </section>
+
+      {/* Periodic check of inactive organisations (#811): postpone or exclude. */}
+      {inactivity && <InactivityPanel {...inactivity} />}
 
       {/* Edit name + slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
