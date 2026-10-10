@@ -3,13 +3,16 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useTransition } from "react"
+import { useId, useState, useTransition } from "react"
 import { requestJson } from "@/lib/use-submit"
 import { announce } from "@/lib/announce"
 import { toggleOrgRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import SortTh from "@/components/admin/members/SortTh"
+import { ORG_SORT_LABELS, ORG_STATE_LABELS, orgSortKey, orgState, type OrgSortCol } from "@/lib/super-admin-tables"
+import { nextSort, sortAnnouncement, sortRows, urlWithSort, type SortState } from "@/lib/table-sort"
 
 type OrgCount = {
   events: number
@@ -26,16 +29,38 @@ type Org = {
   publicationApprovedAt?: string | null
   outboundEmailApprovedAt?: string | null
   createdAt: string
+  /** « 9 oct. 2026 », formatted by the page. */
+  createdLabel: string
   _count: OrgCount
 }
 
 type Props = {
   initialOrgs: Org[]
+  /** From `?tri=`: the sort chosen before a reload (#820). */
+  initialSort?: SortState<OrgSortCol>
 }
 
-export default function OrgsManager({ initialOrgs }: Props) {
+const STATE_TONE: Record<ReturnType<typeof orgState>, string> = {
+  active: "text-gray-700",
+  pending: "text-amber-800",
+  deactivated: "text-red-700",
+  suspended: "text-red-700",
+}
+
+export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" } }: Props) {
   const router = useRouter()
-  const orgs = initialOrgs
+  const [sort, setSort] = useState(initialSort)
+  const [sortStatus, setSortStatus] = useState("")
+  const captionId = useId()
+  const orgs = sortRows(initialOrgs, sort, orgSortKey)
+
+  function toggleSort(col: OrgSortCol) {
+    const next = nextSort(sort, col)
+    setSort(next)
+    // In the URL, so the order survives a reload; replaceState, not a new history entry per click.
+    window.history.replaceState(null, "", urlWithSort(window.location.href, next))
+    announce(setSortStatus, sortAnnouncement(next, ORG_SORT_LABELS))
+  }
   const [, startTransition] = useTransition()
 
   function refresh() {
@@ -74,6 +99,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
         <ConfirmActionModal recap={toggleOrgRecap(pending.name, pending.active)} busy={busy} error={pendingError} onConfirm={() => void runToggle(pending)} onCancel={() => setPending(null)} />
       )}
       <p role="status" className={outcome ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{outcome}</p>
+      <p role="status" className="sr-only">{sortStatus}</p>
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Organisations</h1>
@@ -94,16 +120,20 @@ export default function OrgsManager({ initialOrgs }: Props) {
           Aucune organisation. Créez-en une pour commencer.
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        // Focusable region so a keyboard user can scroll the table sideways on a narrow screen.
+        <div tabIndex={0} role="region" aria-labelledby={captionId} className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm">
+            <caption id={captionId} className="sr-only">Organisations, triables par colonne</caption>
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
-                <th scope="col" className="text-left px-4 py-2 font-medium">Nom</th>
-                <th scope="col" className="text-left px-4 py-2 font-medium">Slug</th>
-                <th scope="col" className="text-right px-4 py-2 font-medium">Événements</th>
-                <th scope="col" className="text-right px-4 py-2 font-medium">Admins</th>
-                <th scope="col" className="text-right px-4 py-2 font-medium">Membres</th>
-                <th scope="col" className="text-right px-4 py-2 font-medium"></th>
+                <SortTh col="nom" label="Nom" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="slug" label="Slug" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="etat" label="État" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="creation" label="Création" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="evenements" label="Événements" align="right" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="admins" label="Admins" align="right" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="membres" label="Membres" align="right" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <th scope="col" className="text-right px-4 py-2 font-medium"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody>
@@ -116,14 +146,10 @@ export default function OrgsManager({ initialOrgs }: Props) {
                     >
                       {org.name}
                     </Link>
-                    {!org.active && (
-                      <span className="ml-2 text-xs text-red-700 font-normal">{org.suspendedAt ? "suspendue" : "désactivée"}</span>
-                    )}
-                    {org.active && (org.publicationApprovedAt === null || org.outboundEmailApprovedAt === null) && (
-                      <span className="ml-2 text-xs text-amber-800 font-normal">en attente de validation</span>
-                    )}
                   </td>
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>
+                  <td className={`px-4 py-3 text-xs ${STATE_TONE[orgState(org)]}`}>{ORG_STATE_LABELS[orgState(org)]}</td>
+                  <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{org.createdLabel}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.events}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.admins}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.volunteers}</td>
