@@ -25,6 +25,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Accessibilité
 
+- **Permanences récurrentes plus accessibles** (#866) : « Créer » annonce ce qui empêche la création et place le curseur sur le champ à corriger ; le format des heures est indiqué en permanence ; le nombre de personnes est vérifié ; l'aperçu annonce aussi les dates exclues, après une courte pause de saisie ; l'ajout et le retrait d'une fermeture sont annoncés ; avant d'annuler des dates qui ont des inscrits, le lecteur d'écran lit d'abord la liste de ces dates ; chaque bouton « Modifier » et « Arrêter » nomme sa permanence ; les horaires se lisent « de 14:00 à 18:00 » ; sur la page publique d'une saison, le choix du mois annonce le nombre de dates affichées.
 - **Documents à imprimer vérifiés automatiquement** : le planning par jour, par poste et individuel, la feuille de présence, la liste avec téléphones, la synthèse des réponses, l'export complet et les badges sont analysés à chaque changement par les mêmes tests d'accessibilité que le reste du site. Ces pages, ouvertes dans le navigateur, sont la version accessible des documents ; un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait.
 
 ### Ajouté

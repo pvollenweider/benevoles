@@ -82,7 +82,7 @@ describe("EventTemplatePicker", () => {
   it("describes a recurring template by its rhythm and counts its shifts from the start date", () => {
     setup()
     fireEvent.click(screen.getByRole("radio", { name: /^Permanence d'accueil/ }))
-    expect(screen.getByText("Accueil : chaque lundi, mercredi et vendredi, 14:00–17:00, 2 personnes")).toBeInTheDocument()
+    expect(screen.getByText("Accueil : chaque lundi, mercredi et vendredi, de 14:00 à 17:00, 2 personnes")).toBeInTheDocument()
     expect(screen.getByText(/13 semaines à partir de cette date/)).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Créer le brouillon" })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText(/Premier jour/), { target: { value: "2026-09-07" } })
