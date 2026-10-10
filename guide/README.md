@@ -70,6 +70,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Dupliquer un événement](dupliquer-un-evenement.md) : Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et réglages décalés à la nouvelle date. Pour : organisateurs.
 - [Configurer les créneaux](configurer-les-creneaux.md) : Poser les créneaux d'un événement sur le planning : poste, horaires, places, infos pratiques et notes internes. Pour : organisateurs.
 - [Créer une série de créneaux](creer-une-serie-de-creneaux.md) : Couvrir une plage horaire avec des créneaux qui se suivent, de même durée, en une seule saisie avec un aperçu. Pour : organisateurs.
+- [Permanences récurrentes](permanences-recurrentes.md) : Une permanence qui revient chaque semaine se décrit une fois ; toutes ses dates sont créées, jours fériés et fermetures exclus. Pour : organisateurs.
 - [Horaires et créneaux de nuit](horaires-et-nuit.md) : Saisir les horaires d'un créneau de 00:00 à 23:59, et poser un créneau qui passe minuit ou commence après minuit. Pour : organisateurs.
 - [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md) : Changer les places, les horaires ou l'état d'un créneau, le dupliquer ou le supprimer sans quitter le planning. Pour : organisateurs.
 - [Gérer les postes](gerer-les-postes.md) : Réordonner, renommer, supprimer ou colorer les postes, limiter les créneaux par personne et réserver un poste à certains membres. Pour : organisateurs.

@@ -15,6 +15,8 @@ import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-r
 import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import ShiftSeriesForm from "./ShiftSeriesForm"
+import ShiftRecurrenceForm from "./ShiftRecurrenceForm"
+import type { HolidayCalendar } from "@/lib/shift-recurrence"
 import ShiftEditor, { type ShiftFormValues } from "./shifts/ShiftEditor"
 import RoleManagerPanel from "./shifts/RoleManagerPanel"
 import type { RawShift } from "./shifts/types"
@@ -33,13 +35,15 @@ const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est rep
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
-  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [],
+  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none",
 }: {
   eventId:        string
   eventStartDate: string
   eventEndDate:   string
   initialShifts:  RawShift[]
   showSchedule?:  Show[]
+  /** Public holidays suggested for a recurring permanence (#866), from the organisation's zone. */
+  defaultHolidays?: HolidayCalendar
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -50,6 +54,9 @@ export default function ShiftsManager({
   const [showSeries, setShowSeries] = useState(false)
   const seriesButtonRef = useRef<HTMLButtonElement>(null)
   const seriesPanelId = useId()
+  const [showRecurrence, setShowRecurrence] = useState(false)
+  const recurrenceButtonRef = useRef<HTMLButtonElement>(null)
+  const recurrencePanelId = useId()
   const [editingId, setEditingId] = useState<string | null>(null)
   // What the shift form opens with; a new key remounts ShiftEditor, which resets its values.
   const [formInitial, setFormInitial] = useState<Partial<ShiftFormValues>>({})
@@ -78,6 +85,7 @@ export default function ShiftsManager({
     formOpenerRef.current = editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
     flushSync(() => {
       setShowSeries(false)
+      setShowRecurrence(false)
       setFormInitial(patch)
       setFormKey(k => k + 1)
       setEditingId(editId)
@@ -113,7 +121,27 @@ export default function ShiftsManager({
   function openSeries() {
     setShowForm(false)
     setEditingId(null)
+    setShowRecurrence(false)
     setShowSeries(true)
+  }
+
+  // ── Recurring permanence (#866) ───────────────────────────────────────────
+  function openRecurrence() {
+    setShowForm(false)
+    setEditingId(null)
+    setShowSeries(false)
+    setShowRecurrence(true)
+  }
+
+  function closeRecurrence() {
+    setShowRecurrence(false)
+    recurrenceButtonRef.current?.focus()
+  }
+
+  function handleRecurrenceCreated(created: AdminShift[]) {
+    setShifts(prev => [...prev, ...created.map(s => ({ ...s, description: s.description ?? null, internalNotes: s.internalNotes ?? null }))])
+    announce(setRoleAnnouncement, `${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""} pour la permanence récurrente.`)
+    closeRecurrence()
   }
 
   function closeSeries() {
@@ -265,6 +293,16 @@ export default function ShiftsManager({
             Créer une série
           </button>
           <button
+            ref={recurrenceButtonRef}
+            type="button"
+            onClick={openRecurrence}
+            aria-expanded={showRecurrence}
+            aria-controls={showRecurrence ? recurrencePanelId : undefined}
+            className="border border-blue-600 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Répéter chaque semaine
+          </button>
+          <button
             ref={addBtnRef}
             type="button"
             onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
@@ -279,6 +317,19 @@ export default function ShiftsManager({
       )}
       {/* Announces shift saves, role actions and series creation, whether or not the roles panel is open. */}
       <div ref={outcomeRef} tabIndex={-1} role="status" className={roleAnnouncement.includes(UNPUBLISHED_NOTICE) ? "text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2 focus:outline-none" : "sr-only"}>{roleAnnouncement}</div>
+
+      {showRecurrence && (
+        <ShiftRecurrenceForm
+          panelId={recurrencePanelId}
+          eventId={eventId}
+          eventStart={eventStartDate}
+          eventEnd={eventEndDate}
+          defaultHolidays={defaultHolidays}
+          existingShifts={shifts}
+          onCreated={handleRecurrenceCreated}
+          onClose={closeRecurrence}
+        />
+      )}
 
       {showSeries && (
         <ShiftSeriesForm

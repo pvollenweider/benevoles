@@ -4,6 +4,8 @@ import { getOrgContext } from "@/lib/auth-guard"
 import ShiftsManager from "@/components/admin/ShiftsManager"
 import WizardSteps from "@/components/admin/WizardSteps"
 import HelpLink from "@/components/admin/HelpLink"
+import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 
@@ -18,6 +20,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
   const event = await db.event.findFirst({
     where: { id },
     include: {
+      organization: { select: { timeZone: true } },
       shifts: {
         include: { registrations: { where: { status: "active" } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
@@ -58,6 +61,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         eventStartDate={event.startDate.toISOString().split("T")[0]}
         eventEndDate={event.endDate.toISOString().split("T")[0]}
         showSchedule={showSchedule}
+        defaultHolidays={defaultHolidayCalendar(orgTimeZone(event.organization))}
         initialShifts={event.shifts.map(s => ({
           ...s,
           date: s.date.toISOString().split("T")[0],

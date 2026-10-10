@@ -750,6 +750,22 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/shifts/recurrence returns 404 for an org-B event, creating nothing (#866)", async () => {
+    const { POST } = await import("@/app/api/admin/shifts/recurrence/route")
+    const db = setupGuard() // event.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await POST(
+      makeRequest("/api/admin/shifts/recurrence", "POST", {
+        eventId: "evt-b", roleName: "Accueil", from: "2026-09-01", until: "2026-09-30", weekdays: [3], everyWeeks: 1,
+        startTime: "14:00", endTime: "17:00", slotMinutes: 180, capacity: 2, holidays: "none", closures: [],
+      }),
+    )
+    expect(res.status).toBe(404)
+    expect($transaction).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/settings/notifications/[id]/retry returns 404 for an org-B outbox row (#382)", async () => {
     const { POST } = await import("@/app/api/admin/settings/notifications/[id]/retry/route")
     setupGuard()
