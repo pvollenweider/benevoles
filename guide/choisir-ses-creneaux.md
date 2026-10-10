@@ -53,6 +53,10 @@ Un créneau marqué « Sur validation » se choisit comme les autres, mais ton i
 
 L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent.
 
+## Un événement sur toute une saison
+
+Certaines associations publient toute une saison de permanences (l'accueil du mercredi, la distribution du samedi, de septembre à juin). Sur un événement de quatre semaines ou plus, les jours passés ne s'affichent plus et on ne peut plus s'y inscrire. À partir de huit dates, le planning se lit mois par mois : sous **Choisir le mois**, un bouton par mois indique son nombre de dates, et le premier mois avec des dates à venir s'affiche d'abord.
+
 ## Questions fréquentes
 
 ### Je veux m'inscrire à plusieurs créneaux différents (par exemple accueil le vendredi, bar le samedi)

@@ -36,7 +36,7 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 
 Un créneau est créé ouvert ; son état (inscriptions ouvertes, fermées, complet, créneau annulé) se change ensuite depuis le planning (voir [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md)).
 
-Pour couvrir une plage horaire avec des créneaux qui se suivent, voir [Créer une série de créneaux](creer-une-serie-de-creneaux.md). Pour renommer, réordonner ou colorer les postes, voir [Gérer les postes](gerer-les-postes.md).
+Pour couvrir une plage horaire avec des créneaux qui se suivent, voir [Créer une série de créneaux](creer-une-serie-de-creneaux.md) ; pour une permanence qui revient chaque semaine, voir [Permanences récurrentes](permanences-recurrentes.md). Pour renommer, réordonner ou colorer les postes, voir [Gérer les postes](gerer-les-postes.md).
 
 ## Questions fréquentes
 
