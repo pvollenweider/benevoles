@@ -10,6 +10,7 @@ import JsonLd from "@/components/public/JsonLd"
 import { env } from "@/lib/env"
 import DocFrame from "@/components/public/DocFrame"
 import DocSideMenu from "../DocSideMenu"
+import FreshnessNote from "@/components/public/FreshnessNote"
 import DocVideoInline from "@/components/videos/DocVideoInline"
 import { docUnitHref } from "@/lib/doc-href"
 
@@ -52,9 +53,10 @@ export default async function DocUnitPage({ params }: Props) {
   const jumps = docJumpLinks(headingIdsOf(parts.map((part) => (part.kind === "html" ? part.html : "")).join("")))
   const { previous, next } = docUnitNeighbours(unit, units)
   const siblings = docGroupSiblings(unit, units)
+  const now = new Date()
 
   return (
-    <DocFrame menu={<DocSideMenu sections={docMenuSections(units, unit.slug)} currentSlug={unit.slug} />}>
+    <DocFrame menu={<DocSideMenu sections={docMenuSections(units, unit.slug)} currentSlug={unit.slug} now={now} />}>
       <JsonLd data={docUnitJsonLd(unit, apexBaseUrl())} />
       <nav aria-label="Fil d'Ariane" className="not-prose mb-6 text-sm text-gray-600 dark:text-gray-400">
         <ol className="flex flex-wrap items-center gap-x-2">
@@ -73,6 +75,7 @@ export default async function DocUnitPage({ params }: Props) {
       </nav>
 
       <h1>{unit.title}</h1>
+      <FreshnessNote dates={unit.freshness} subject="Fiche" now={now} className="not-prose" />
 
       <p>
         Pour&nbsp;:{" "}

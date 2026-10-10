@@ -3,6 +3,7 @@
 
 import { z } from "zod"
 import { AUDIENCES, LEVELS, THEMES, type ThemeId } from "@/lib/video-catalog"
+import { parseCalendarDate } from "@/lib/freshness"
 
 const THEME_IDS = THEMES.map((t) => t.id) as [ThemeId, ...ThemeId[]]
 
@@ -31,6 +32,11 @@ export const catalogEntrySchema = z.object({
   // Prepared for #646 (feedback tied to a precise revision): bumped when a video is fully
   // regenerated, so older feedback never applies to the new render. Not used by any UI yet.
   revision: z.number().int().min(1),
+  // « Nouveau » / « Mis à jour » on the video (#763, src/lib/freshness.ts). Explicit, never
+  // `updatedAt`, which moves with every render: set when the change is worth pointing out.
+  added: z.string().refine((v) => parseCalendarDate(v) !== null, "added : date réelle attendue (AAAA-MM-JJ)").optional(),
+  updated: z.string().refine((v) => parseCalendarDate(v) !== null, "updated : date réelle attendue (AAAA-MM-JJ)").optional(),
+  new: z.literal(false).optional(),
 })
 export type VideoCatalogEntry = z.infer<typeof catalogEntrySchema>
 

@@ -1,6 +1,8 @@
 import Link from "next/link"
 import type { DocMenuSection } from "@/lib/doc-navigation"
 import { docUnitHref } from "@/lib/doc-href"
+import { freshness } from "@/lib/freshness"
+import FreshnessBadge from "@/components/public/FreshnessBadge"
 
 const focusRing = "rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
@@ -18,7 +20,7 @@ const focusRing = "rounded-lg focus-visible:outline focus-visible:outline-2 focu
  * never over it, and scrolls on its own when taller than the window. Rendered outside <main>:
  * « Aller au contenu » skips it.
  */
-export default function DocSideMenu({ sections, currentSlug }: { sections: readonly DocMenuSection[]; currentSlug: string }) {
+export default function DocSideMenu({ sections, currentSlug, now = new Date() }: { sections: readonly DocMenuSection[]; currentSlug: string; now?: Date }) {
   return (
     <nav aria-label="Documentation" className="hidden lg:block lg:sticky lg:top-0 lg:self-start lg:max-h-screen lg:overflow-y-auto py-12 px-2 text-sm">
       {sections.map(({ audience, title, groups }, i) => (
@@ -35,7 +37,9 @@ export default function DocSideMenu({ sections, currentSlug }: { sections: reado
                     {group.title}
                   </summary>
                   <ul className="mt-1 mb-2 ml-4 space-y-0.5 border-l border-gray-200 dark:border-gray-700 pl-2">
-                    {units.map((unit) => (
+                    {units.map((unit) => {
+                      const label = freshness(unit.freshness ?? {}, now)
+                      return (
                       <li key={unit.slug}>
                         <Link
                           href={docUnitHref(unit.slug)}
@@ -43,9 +47,11 @@ export default function DocSideMenu({ sections, currentSlug }: { sections: reado
                           className={`block px-2 py-1.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 aria-[current=page]:bg-blue-50 aria-[current=page]:font-semibold aria-[current=page]:text-blue-800 dark:aria-[current=page]:bg-gray-800 dark:aria-[current=page]:text-white ${focusRing}`}
                         >
                           {unit.title}
+                          {label && <FreshnessBadge kind={label} separated className="ml-1.5 align-text-bottom" />}
                         </Link>
                       </li>
-                    ))}
+                      )
+                    })}
                   </ul>
                 </details>
               </li>

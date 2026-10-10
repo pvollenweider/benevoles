@@ -35,4 +35,12 @@ describe("DocSideMenu", () => {
     expect(current[0].closest("details")).toHaveAttribute("open")
     expect(nav.querySelectorAll("details[open]")).toHaveLength(1)
   })
+
+  it("labels a recent unit in its link, as text, and drops the label once it expires (#763)", () => {
+    const fresh = [unit("a", { freshness: { added: "2026-10-01" } }), unit("b", { freshness: { updated: "2026-10-05" } }), unit("c", { freshness: { added: "2026-01-01" } })]
+    render(<DocSideMenu sections={docMenuSections(fresh, "a")} currentSlug="a" now={new Date("2026-10-10T12:00:00Z")} />)
+    expect(screen.getByRole("link", { name: /^Titre a,\s?Nouveau$/ })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: /^Titre b,\s?Mis à jour$/ })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Titre c" })).toBeInTheDocument()
+  })
 })

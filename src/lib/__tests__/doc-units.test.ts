@@ -109,6 +109,15 @@ describe("parseDocUnit", () => {
     expect(() => parseDocUnit("p.md", front("order", "premier"))).toThrow(/whole number/)
   })
 
+  it("reads the optional « Nouveau » / « Mis à jour » dates and override, and rejects an invalid date (#763)", () => {
+    const u = parseDocUnit("p.md", source(`${validFront}\nadded: 2026-10-07\nupdated: 2026-10-09\nnew: false`))
+    expect(u.freshness).toEqual({ added: "2026-10-07", updated: "2026-10-09", hidden: true })
+    expect(parseDocUnit("p.md", source(validFront)).freshness).toBeUndefined()
+    expect(() => parseDocUnit("p.md", source(`${validFront}\nadded: 2026-02-30`))).toThrow(/added: a real date/)
+    expect(() => parseDocUnit("p.md", source(`${validFront}\nupdated: 7 octobre`))).toThrow(/updated: a real date/)
+    expect(() => parseDocUnit("p.md", source(`${validFront}\nnew: true`))).toThrow(/new: only/)
+  })
+
   it("keeps the summary between 70 and 160 characters, as audited too, without « · » or em dash", () => {
     expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "Trop court.")))).toThrow(/at least 70/)
     expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "x".repeat(161))))).toThrow(/at most 160/)
