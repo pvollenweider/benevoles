@@ -105,3 +105,39 @@ describe("duplicateSummary", () => {
     expect(duplicatePlan(withQ, { copy: { settings: false } }).questions).toEqual([])
   })
 })
+
+// Recurring permanences (#866): regenerated from their rule, never moved by the day offset.
+describe("duplicatePlan with recurring permanences", () => {
+  const season: DuplicableEvent = {
+    ...source,
+    startDate: new Date("2026-09-01T00:00:00Z"), endDate: new Date("2026-12-31T00:00:00Z"),
+    shifts: [
+      { ...shift, roleName: "Accueil", label: "Accueil", date: new Date("2026-09-02T00:00:00Z"), startTime: "14:00", endTime: "17:00", capacity: 2, recurrenceId: "r1" },
+      { ...shift, roleName: "Accueil", label: "Accueil", date: new Date("2026-09-09T00:00:00Z"), startTime: "14:00", endTime: "17:00", capacity: 2, recurrenceId: "r1" },
+      { ...shift, date: new Date("2026-12-12T00:00:00Z") },
+    ],
+    recurrences: [{
+      id: "r1", roleName: "Accueil", label: "Accueil", weekdays: [3], everyWeeks: 1, startTime: "14:00", endTime: "17:00", slotMinutes: 180, breakMinutes: 0, capacity: 2,
+      fromDate: new Date("2026-09-02T00:00:00Z"), untilDate: new Date("2026-09-30T00:00:00Z"), holidays: "FR",
+    }],
+  }
+
+  it("keeps the weekdays when the copy starts a year later, on another weekday", () => {
+    // 1 September 2026 is a Tuesday, 1 September 2027 a Wednesday: 365 days later.
+    const plan = duplicatePlan(season, { startDate: "2027-09-01" })
+    expect(plan.offsetDays).toBe(365)
+    expect(plan.shifts).toHaveLength(1)
+    expect(plan.shifts[0].date.toISOString().slice(0, 10)).toBe("2027-12-12")
+    expect(plan.recurrences).toHaveLength(1)
+    const [{ rule, shifts }] = plan.recurrences
+    expect(rule).toMatchObject({ weekdays: [3], holidays: "FR", closures: [] })
+    expect(rule).not.toHaveProperty("id")
+    expect(rule.fromDate.toISOString().slice(0, 10)).toBe("2027-09-02")
+    expect(shifts.map((s) => s.date.toISOString().slice(0, 10))).toEqual(["2027-09-08", "2027-09-15", "2027-09-22", "2027-09-29"])
+    expect(shifts[0]).toMatchObject({ roleName: "Accueil", locationDetails: "Cantine", status: "open", capacity: 2 })
+  })
+
+  it("copies no permanence when the shifts are not copied", () => {
+    expect(duplicatePlan(season, { copy: { shifts: false } }).recurrences).toEqual([])
+  })
+})

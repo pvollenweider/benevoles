@@ -13,6 +13,7 @@ import { normalizeEmail } from "./email-address"
 import { acceptsRegistrations, refusalMessage, registrationState, type RegistrationWindow } from "./registration-window"
 import { memberMayTake, reservationRefusal } from "./role-reservation"
 import { orgTimeZone } from "./time-zone"
+import { pastShiftLabel } from "./long-event"
 import { shiftsOverlap, shiftsTooYoungFor } from "./utils"
 
 /** The HTTP answer to a refused sign-up: its status and JSON body. */
@@ -149,4 +150,17 @@ export function minimumAgeRefusal(
     return { status: 403, body: { error: `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.` } }
   }
   return null
+}
+
+/**
+ * A long-running event (#866): a day that is over can't be taken any more, even from a page left
+ * open since. `today` is the organisation's local day, "YYYY-MM-DD".
+ */
+export function pastShiftRefusal(
+  event: { startDate?: Date | null; endDate?: Date | null },
+  shifts: { date: Date; label: string }[],
+  today: string,
+): SignupRefusal | null {
+  const label = pastShiftLabel(event, shifts, today)
+  return label ? { status: 409, body: { error: `Le créneau "${label}" est passé. Recharge la page.` } } : null
 }

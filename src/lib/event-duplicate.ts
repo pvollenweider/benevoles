@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { z } from "zod"
+import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type RecurrenceInput, type Weekday } from "./shift-recurrence"
 import { civilDateSchema } from "./civil-date"
 
 /**
@@ -50,6 +51,25 @@ export type DuplicableShift = {
   colorKey: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[]
+  /** Recurring permanence (#866) the shift came from: such shifts are regenerated, not copied. */
+  recurrenceId?: string | null
+}
+
+/** A recurring permanence (#866) of the source event. */
+export type DuplicableRecurrence = {
+  id: string
+  roleName: string
+  label: string
+  weekdays: number[]
+  everyWeeks: number
+  startTime: string
+  endTime: string
+  slotMinutes: number
+  breakMinutes: number
+  capacity: number
+  fromDate: Date
+  untilDate: Date
+  holidays: string
 }
 
 export type DuplicableEvent = {
@@ -75,6 +95,7 @@ export type DuplicableEvent = {
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
   questions?: { label: string; type: string; options: string[]; required: boolean; position: number }[]
   leaders: { roleName: string; name: string; email: string }[]
+  recurrences?: DuplicableRecurrence[]
 }
 
 /** What a duplicated event copies from each shift (#356): every setting, never the identity, the status or the sign-ups. */
@@ -160,7 +181,10 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
     },
-    shifts: copy.shifts ? source.shifts.map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],
+    // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
+    // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
+    shifts: copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],
+    recurrences: copy.shifts ? duplicatedRecurrences(source, offsetDays) : [],
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
     questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position })) : [],
     leaders: copy.leaders ? source.leaders : [],
@@ -183,4 +207,42 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
   lines.push(copy.settings ? "Messages et réglages d'inscription copiés." : "Messages et réglages d'inscription remis à zéro.")
   lines.push("Les inscriptions et les jalons ne sont jamais copiés. La copie est un brouillon.")
   return lines
+}
+
+const isRecurring = (s: DuplicableShift, source: DuplicableEvent) =>
+  Boolean(s.recurrenceId && (source.recurrences ?? []).some((r) => r.id === s.recurrenceId))
+
+/**
+ * The permanences of a duplicated event (#866): each rule moved by the offset, inside the new
+ * event, its shifts regenerated on the same weekdays with the holidays of the new period. Closures
+ * belong to one year and are not copied. A rule left with no date is dropped. Settings of the
+ * shifts (place, instructions, rules) come from the rule's first shift.
+ */
+export function duplicatedRecurrences(source: DuplicableEvent, offsetDays: number) {
+  const eventStart = shiftIsoDate(source.startDate.toISOString().slice(0, 10), offsetDays)
+  const eventEnd = shiftIsoDate(source.endDate.toISOString().slice(0, 10), offsetDays)
+  const out: { rule: Omit<DuplicableRecurrence, "id"> & { closures: string[] }; shifts: (ReturnType<typeof copiedShift> & { date: Date })[] }[] = []
+  for (const rule of source.recurrences ?? []) {
+    const template = source.shifts.find((s) => s.recurrenceId === rule.id)
+    if (!template) continue
+    const from = [shiftIsoDate(rule.fromDate.toISOString().slice(0, 10), offsetDays), eventStart].sort()[1]
+    const until = [shiftIsoDate(rule.untilDate.toISOString().slice(0, 10), offsetDays), eventEnd].sort()[0]
+    const input: RecurrenceInput = {
+      from, until, weekdays: rule.weekdays as Weekday[], everyWeeks: rule.everyWeeks === 2 ? 2 : 1,
+      startTime: rule.startTime, endTime: rule.endTime, slotMinutes: rule.slotMinutes, breakMinutes: rule.breakMinutes,
+      holidays: (["none", "FR", "CH"].includes(rule.holidays) ? rule.holidays : "none") as HolidayCalendar, closures: [],
+    }
+    if (recurrenceProblem(input, { start: eventStart, end: eventEnd })) continue
+    out.push({
+      rule: {
+        roleName: rule.roleName, label: rule.label, weekdays: rule.weekdays, everyWeeks: rule.everyWeeks, startTime: rule.startTime, endTime: rule.endTime,
+        slotMinutes: rule.slotMinutes, breakMinutes: rule.breakMinutes, capacity: rule.capacity, holidays: rule.holidays,
+        fromDate: new Date(from), untilDate: new Date(until), closures: [],
+      },
+      shifts: generateRecurrence(input).shifts.map((slot) => ({
+        ...copiedShift(template), date: new Date(slot.date), startTime: slot.startTime, endTime: slot.endTime, capacity: rule.capacity,
+      })),
+    })
+  }
+  return out
 }

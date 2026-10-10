@@ -36,13 +36,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       pages: { orderBy: { displayOrder: "asc" } },
       questions: { where: { archivedAt: null }, orderBy: { position: "asc" } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
+      shiftRecurrences: true,
       organization: { select: { slug: true } },
     },
   })
 
   if (!source) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders }, parsed.data)
+  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, recurrences: source.shiftRecurrences }, parsed.data)
 
   let slug = slugify(plan.event.title)
   const existing = await db.event.findFirst({ where: { slug } })
@@ -61,6 +62,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       questions: { create: plan.questions },
     },
   })
+
+  // Recurring permanences (#866): the rule, then its regenerated shifts linked to it.
+  for (const { rule, shifts } of plan.recurrences) {
+    await db.$transaction(async (tx) => {
+      const created = await tx.shiftRecurrence.create({ data: { ...rule, eventId: newEvent.id } })
+      await tx.shift.createMany({ data: shifts.map((s) => ({ ...s, eventId: newEvent.id, recurrenceId: created.id })) })
+    })
+  }
 
   // Each leader gets a fresh link and their invite email, exactly as when added by hand.
   for (const leader of plan.leaders) {
