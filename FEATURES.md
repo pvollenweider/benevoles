@@ -139,11 +139,23 @@ benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : o
 - [Demander un espace](/inscription)
 - [Créer son premier événement](guide/creer-son-premier-evenement.md)
 
-## Ce que benevol.app ne fait pas, volontairement
+## Ce que benevol.app ne fait pas
 
-Pour rester simple, benevol.app s'en tient au planning des bénévoles. Il ne cherche pas à être :
+Pour rester simple, benevol.app s'en tient au planning des bénévoles.
 
-- un outil d'accréditation ou de zones d'accès, ni de gestion des repas et de l'hébergement ;
-- un outil qui attribue les bénévoles à leur place : chacun choisit ses créneaux, vous gardez la main ;
-- un CRM, un outil de campagnes SMS ou un constructeur de formulaires et de workflows ;
-- une application à installer : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.
+### Par choix
+
+- Pas de paiement, de billetterie ni de cotisations.
+- Pas d'accréditation ni de zones d'accès, pas de gestion des repas ni de l'hébergement.
+- Pas d'attribution automatique : chaque bénévole choisit ses créneaux, vous gardez la main.
+- Pas de CRM, de campagnes SMS ni de constructeur de formulaires et de workflows.
+- Pas de compte à créer pour les bénévoles : un lien personnel suffit.
+- Pas d'application à installer depuis un store : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.
+
+### Pas encore
+
+- S'inscrire en groupe, chacun avec sa propre inscription ([#563](https://github.com/pvollenweider/benevoles/issues/563)).
+- Pointer soi-même son arrivée avec un QR code : aujourd'hui, la présence est cochée par l'équipe ([#562](https://github.com/pvollenweider/benevoles/issues/562)).
+- Des contreparties liées aux heures données, comme un repas offert ([#749](https://github.com/pvollenweider/benevoles/issues/749)).
+- Une interface dans d'autres langues que le français ([#648](https://github.com/pvollenweider/benevoles/issues/648)).
+- Installer la page personnelle du bénévole sur l'écran d'accueil, avec des notifications sur iPhone ([#593](https://github.com/pvollenweider/benevoles/issues/593)).
