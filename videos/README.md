@@ -468,8 +468,8 @@ et `seedScenario` (#637, #638) :
   sur la page de la vidéo pendant 30 jours. Jamais déduits de `updatedAt` ou de `revision`, qui
   bougent à chaque rendu : à renseigner quand le changement mérite d'être signalé.
 
-`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 55 des
-58 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les
+`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 56 des
+59 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les
 guides publics renvoient aux vidéos publiées par leur
 identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`

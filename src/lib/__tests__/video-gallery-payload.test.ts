@@ -15,7 +15,8 @@ describe("toGalleryVideo", () => {
 
   it("keeps only what the cards, the filters and the search read", () => {
     for (const v of gallery) {
-      expect(Object.keys(v).sort()).toEqual(["audience", "description", "durationMs", "feature", "id", "level", "manifest", "published", "tags", "themes", "title"])
+      // freshnessLabel only while a video is « Nouveau » or « Mis à jour » (#763).
+      expect(Object.keys(v).filter((k) => k !== "freshnessLabel").sort()).toEqual(["audience", "description", "durationMs", "feature", "id", "level", "manifest", "published", "tags", "themes", "title"])
       expect(Object.keys(v.manifest)).toEqual(["viewer"])
       expect(Object.keys(v.manifest.viewer).sort()).toEqual(["steps", "summary"])
     }

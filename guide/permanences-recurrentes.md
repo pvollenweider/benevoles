@@ -11,6 +11,8 @@ aliases: []
 
 # Permanences récurrentes
 
+<!-- video: SHIFT_RECURRENCE -->
+
 Pour une activité qui revient toute l'année (l'accueil du mercredi après-midi, la distribution du samedi matin, la caisse d'une épicerie participative), cliquez sur **Répéter chaque semaine** dans la page des créneaux : vous décrivez la permanence une fois, et toutes ses dates sont créées.
 
 L'événement porte la période : pour une saison de septembre à juin, donnez à l'événement ces dates de début et de fin, puis ajoutez-y vos permanences.

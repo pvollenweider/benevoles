@@ -61,6 +61,10 @@ async function main() {
     return seedVideoExports(prisma)
   }
   if (scenario === "fresh-organization") return freshOrganization()
+  if (scenario === "shift-recurrence") {
+    const { seedVideoRecurrence } = await import("./seed-video-recurrence")
+    return seedVideoRecurrence(prisma)
+  }
   if (scenario === "event-activity-log") {
     const { seedVideoEventLog } = await import("./seed-video-event-log")
     return seedVideoEventLog(prisma)

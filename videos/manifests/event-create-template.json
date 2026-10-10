@@ -6,7 +6,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous créez un événement à partir d'un modèle prérempli pour gagner du temps.",
     "steps": [
-      "Comparez les cinq modèles proposés : festival, buvette, manifestation sportive, fête de village, montage/exploitation/démontage.",
+      "Comparez les modèles proposés : festival, buvette, manifestation sportive, fête de village, montage/exploitation/démontage, et pour une activité qui revient chaque semaine, épicerie participative, distribution alimentaire, permanence d'accueil ou repair café.",
       "Choisissez le modèle le plus proche de votre événement, par exemple « Fête de village ».",
       "Vérifiez l'aperçu des postes, des créneaux et des places qui seront créés.",
       "Donnez un titre et une date de début, puis cliquez sur « Créer le brouillon ».",
@@ -36,8 +36,8 @@
     },
     {
       "id": "compare",
-      "transcript": "Cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. La page blanche reste préférable pour un format très particulier.",
-      "fallbackDurationMs": 30000
+      "transcript": "Pour un événement daté, cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. Pour une activité qui revient chaque semaine, quatre autres modèles préparent une saison de permanences : épicerie participative, distribution alimentaire, permanence d’accueil et repair café. Une vidéo dédiée les présente. La page blanche reste préférable pour un format très particulier.",
+      "fallbackDurationMs": 42000
     },
     {
       "id": "preview",
