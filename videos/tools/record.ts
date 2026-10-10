@@ -1304,7 +1304,7 @@ async function main() {
         await tap(page, form.getByRole("button", { name: "Ajouter la date", exact: true }))
         await form.getByRole("list", { name: "Fermetures" }).waitFor()
         await at(0.46)
-        await form.getByText(/^Aperçu :/).scrollIntoViewIfNeeded()
+        await form.getByText(/^Aperçu :/).first().scrollIntoViewIfNeeded()
         await at(0.66)
         const skipped = form.getByRole("list", { name: "Dates exclues" })
         await skipped.scrollIntoViewIfNeeded()
