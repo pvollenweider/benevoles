@@ -141,9 +141,11 @@ benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : o
 
 ## Ce que benevol.app ne fait pas, volontairement
 
-Pour rester simple, benevol.app s'en tient au planning des bénévoles. Il ne cherche pas à être :
+Pour rester simple, benevol.app s'en tient au planning des bénévoles. Il ne fait pas :
 
-- un outil d'accréditation ou de zones d'accès, ni de gestion des repas et de l'hébergement ;
-- un outil qui attribue les bénévoles à leur place : chacun choisit ses créneaux, vous gardez la main ;
-- un CRM, un outil de campagnes SMS ou un constructeur de formulaires et de workflows ;
-- une application à installer : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.
+- de paiement, de billetterie ni de cotisations ;
+- d'accréditation ni de zones d'accès, ni de gestion des repas et de l'hébergement ;
+- d'attribution automatique : chaque bénévole choisit ses créneaux, vous gardez la main ;
+- de CRM, de campagnes SMS ni de constructeur de formulaires et de workflows ;
+- de compte à créer pour les bénévoles : un lien personnel suffit ;
+- d'application à installer depuis un store : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.
