@@ -93,6 +93,7 @@ export function loadVideoCatalog(root: string = videosRoot): Video[] {
       feature: entry.feature,
       updatedAt: entry.updatedAt,
       revision: entry.revision,
+      freshness: { ...(entry.added ? { added: entry.added } : {}), ...(entry.updated ? { updated: entry.updated } : {}), ...(entry.new === false ? { hidden: true } : {}) },
       durationMs,
       manifest,
       script,

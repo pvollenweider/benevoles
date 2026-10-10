@@ -10,6 +10,7 @@ import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { findVideoReferences } from "@/lib/doc-video-references"
 import { DOC_SLUG_RE } from "@/lib/doc-href"
 import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib/meta-length"
+import { parseCalendarDate, type FreshnessDates } from "@/lib/freshness"
 
 /**
  * The documentation split into units (#649): one Markdown file per task in the root folder
@@ -139,6 +140,9 @@ export function parseFrontMatter(source: string): { data: Record<string, FrontMa
   return { data, body: text.slice(end + "\n---\n".length) }
 }
 
+const calendarDate = (key: string) =>
+  z.string().refine((v) => parseCalendarDate(v) !== null, `${key}: a real date, YYYY-MM-DD`)
+
 const slugList = z.array(z.string().regex(SLUG_RE, "slug: lower case letters, digits and hyphens")).default([])
 
 /** The front matter's schema: unknown keys are rejected (a misspelt key would be ignored otherwise). */
@@ -159,6 +163,11 @@ export const docUnitFrontMatterSchema = z.strictObject({
   related: slugList,
   legacy: z.array(z.string().regex(LEGACY_RE, "legacy: role#anchor, e.g. benevole#confirmation")).default([]),
   aliases: slugList,
+  // « Nouveau » / « Mis à jour » (#763, src/lib/freshness.ts): explicit dates, set when the change
+  // is worth pointing out; `new: false` hides the label before it expires.
+  added: calendarDate("added").optional(),
+  updated: calendarDate("updated").optional(),
+  new: z.literal("false", "new: only « false », to hide « Nouveau » or « Mis à jour »").optional(),
 })
 
 export type DocUnit = {
@@ -174,6 +183,8 @@ export type DocUnit = {
   legacy: string[]
   /** Former slugs of this unit, permanently redirected to it. */
   aliases: string[]
+  /** « Nouveau » / « Mis à jour » (#763): `added`, `updated` (YYYY-MM-DD) and `new: false` (hidden). */
+  freshness?: FreshnessDates
   /** The Markdown after the title. */
   body: string
   /** Path of the source from the repo root, e.g. `guide/confirmation.md`. */
@@ -198,8 +209,9 @@ export function parseDocUnit(fileName: string, source: string): DocUnit {
   const { title, body } = splitTitle(parsed.body.replace(/^\n+/, ""))
   if (!title) fail("the first line after the front matter must be the « # » title")
   if (/^# /m.test(body)) fail("one « # » title only (the page's single <h1>)")
-  const data = result.data!
-  return { slug, title: title!, ...data, body, source: `${DOC_UNITS_DIR}/${fileName}` }
+  const { added, updated, new: newFlag, ...data } = result.data!
+  const freshness: FreshnessDates = { ...(added ? { added } : {}), ...(updated ? { updated } : {}), ...(newFlag === "false" ? { hidden: true } : {}) }
+  return { slug, title: title!, ...data, ...(Object.keys(freshness).length > 0 ? { freshness } : {}), body, source: `${DOC_UNITS_DIR}/${fileName}` }
 }
 
 /**

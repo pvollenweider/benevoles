@@ -6,6 +6,7 @@
 import AutoplayLink from "@/components/videos/AutoplayLink"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { announce } from "@/lib/announce"
+import FreshnessBadge from "@/components/public/FreshnessBadge"
 import {
   applyVideoFilters,
   audiencesInUse,
@@ -153,6 +154,9 @@ export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
                     >
                       {video.title}
                     </AutoplayLink>
+                    {/* In the heading, after the link: read with the title when moving by heading,
+                        without changing the link's name (#763 accessibility review). */}
+                    {video.freshnessLabel && <FreshnessBadge kind={video.freshnessLabel} separated className="ml-1.5 align-text-bottom" />}
                   </h2>
                   <span className="shrink-0 text-xs font-medium text-gray-500">{formatDuration(video.durationMs)}</span>
                 </div>

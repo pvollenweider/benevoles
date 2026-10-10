@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { VideoManifest, VideoRender, ViewerContent } from "@/lib/video-catalog-schema"
+import { freshness, type Freshness, type FreshnessDates } from "@/lib/freshness"
 
 export type { VideoCatalogEntry, VideoManifest, VideoRender, ViewerContent } from "@/lib/video-catalog-schema"
 
@@ -133,6 +134,8 @@ export type Video = {
   feature: string
   updatedAt: string
   revision: number
+  /** « Nouveau » / « Mis à jour » (#763): the catalogue entry's `added`, `updated` and `new: false`. */
+  freshness?: FreshnessDates
   /** Sum of the manifest segments' `fallbackDurationMs` — no render exists yet to measure the real audio (videos/lib/manifest.ts `AudioMetadata`, read instead when present, see `loadVideoCatalog`). */
   durationMs: number
   manifest: VideoManifest
@@ -151,12 +154,16 @@ export type Video = {
  */
 export type GalleryVideo = Pick<Video, "id" | "title" | "description" | "feature" | "tags" | "themes" | "audience" | "level" | "published" | "durationMs"> & {
   manifest: { viewer: Pick<ViewerContent, "summary" | "steps"> }
+  /** Computed on the server with the request time (#763); absent when no label applies. */
+  freshnessLabel?: Freshness
 }
 
+/** Unary on purpose (`videos.map(toGalleryVideo)`); the label is computed at the call, per request (#763). */
 export function toGalleryVideo(video: Video): GalleryVideo {
   const { id, title, description, feature, tags, themes, audience, level, published, durationMs } = video
   const { summary, steps } = video.manifest.viewer
-  return { id, title, description, feature, tags, themes, audience, level, published, durationMs, manifest: { viewer: { summary, steps } } }
+  const label = freshness(video.freshness ?? {}, new Date())
+  return { id, title, description, feature, tags, themes, audience, level, published, durationMs, manifest: { viewer: { summary, steps } }, ...(label ? { freshnessLabel: label } : {}) }
 }
 
 /**

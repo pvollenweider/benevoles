@@ -24,6 +24,7 @@ import VideoPlayer from "@/components/videos/VideoPlayer"
 import AutoplayLink from "@/components/videos/AutoplayLink"
 import VideoFeedback from "@/components/videos/VideoFeedback"
 import { feedbackContextFrom, FROM_DOC_PARAM, FROM_DOC_VALUE } from "@/lib/video-feedback"
+import FreshnessNote from "@/components/public/FreshnessNote"
 
 type Params = { id: string }
 type SearchParams = Record<string, string | string[] | undefined>
@@ -87,6 +88,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
 
       <div>
         <h1 className="text-xl font-bold text-gray-900">{video.title}</h1>
+        <FreshnessNote dates={video.freshness} subject="Vidéo" className="mt-2" />
         <p className="mt-2 max-w-[70ch] text-sm text-gray-600 leading-relaxed">{video.description}</p>
       </div>
 

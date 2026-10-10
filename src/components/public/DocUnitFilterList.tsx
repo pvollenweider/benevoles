@@ -9,9 +9,11 @@ import { docFilterNextSteps, docFilterStatus, haystackMatches, matchingDocQuesti
 import type { DocRole } from "@/lib/doc-units"
 import { useHydrated } from "@/lib/use-hydrated"
 import { docUnitHref } from "@/lib/doc-href"
+import type { Freshness } from "@/lib/freshness"
+import FreshnessBadge from "./FreshnessBadge"
 
 /** A unit of the index; `questionIds[i]` is the heading id of `questions[i]` on the unit's page. */
-export type DocIndexItem = DocSearchEntry & { slug: string; questionIds: readonly string[]; audience?: string }
+export type DocIndexItem = DocSearchEntry & { slug: string; questionIds: readonly string[]; audience?: string; freshness?: Freshness }
 export type DocIndexGroup = { id: string; title: string; anchor?: string; items: DocIndexItem[] }
 
 /** How long the live region waits after the last keystroke before it speaks. */
@@ -115,7 +117,10 @@ export default function DocUnitFilterList({ groups, role }: { groups: readonly D
                 const questions = shownItem ? matchingDocQuestionLinks(item, query) : []
                 return (
                   <li key={item.slug} hidden={!shownItem}>
-                    <Link href={docUnitHref(item.slug)} className="font-medium">{item.title}</Link>
+                    <Link href={docUnitHref(item.slug)} className="font-medium">
+                      {item.title}
+                      {item.freshness && <FreshnessBadge kind={item.freshness} separated className="ml-2 align-text-bottom" />}
+                    </Link>
                     <span className="mt-0.5 block text-sm text-gray-600 dark:text-gray-400">
                       {item.summary}
                       {item.audience && <> Pour&nbsp;: {item.audience}.</>}

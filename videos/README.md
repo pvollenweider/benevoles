@@ -461,6 +461,10 @@ et `seedScenario` (#637, #638) :
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : `revision` identifie le rendu sur
   lequel portent les réponses « utile ? » (#646, voir plus bas). L'augmenter quand une vidéo est
   entièrement régénérée : ses réponses repartent de zéro.
+- `added`, `updated` (facultatifs, `AAAA-MM-JJ`) et `new` (facultatif, seulement `false`) : comme
+  dans l'en-tête d'une fiche (#763), « Nouveau » ou « Mis à jour » sur la carte de la galerie et
+  sur la page de la vidéo pendant 30 jours. Jamais déduits de `updatedAt` ou de `revision`, qui
+  bougent à chaque rendu : à renseigner quand le changement mérite d'être signalé.
 
 `published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 55 des
 58 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les

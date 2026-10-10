@@ -1,6 +1,7 @@
 import { docUnitAudience, docUnitsByGroup, type DocRole, type DocUnit } from "@/lib/doc-units"
 import { docUnitQuestionAnchors } from "@/lib/doc-search"
 import DocUnitFilterList, { type DocIndexGroup } from "./DocUnitFilterList"
+import { freshness } from "@/lib/freshness"
 
 /** The id of « Toutes les fiches », which names its region (prefixed: never a Markdown heading's slug). */
 const INDEX_HEADING_ID = "doc-toutes-les-fiches"
@@ -16,14 +17,16 @@ const INDEX_HEADING_ID = "doc-toutes-les-fiches"
  * « ### » headings), passed as plain strings with the ids their page gives them: a unit found by
  * one of them links to it under the result.
  */
-export default function DocUnitIndex({ units, role }: { units: readonly DocUnit[]; role?: DocRole }) {
+export default function DocUnitIndex({ units, role, now = new Date() }: { units: readonly DocUnit[]; role?: DocRole; now?: Date }) {
   const groups: DocIndexGroup[] = docUnitsByGroup(units, role).map(({ group, units: inGroup }) => ({
     id: group.id,
     title: group.title,
     anchor: role ? undefined : group.id,
     items: inGroup.map((unit) => {
       const questions = docUnitQuestionAnchors(unit.body)
+      const label = freshness(unit.freshness ?? {}, now)
       return {
+        ...(label ? { freshness: label } : {}),
         slug: unit.slug,
         title: unit.title,
         summary: unit.summary,

@@ -57,6 +57,18 @@ describe("DocUnitIndex", () => {
     expect(new Set(names).size).toBe(names.length)
   })
 
+  it("labels a recent unit « Nouveau » or « Mis à jour » in its link, and the filter still finds it by title (#763)", () => {
+    const now = new Date("2026-10-10T12:00:00Z")
+    render(<DocUnitIndex units={[unit("a", { freshness: { added: "2026-10-01" } }), unit("b", { freshness: { updated: "2026-10-09" } }), unit("c", { freshness: { added: "2026-10-01", hidden: true } })]} now={now} />)
+    expect(screen.getByRole("link", { name: /^Titre a,\s?Nouveau$/ })).toHaveAttribute("href", "/doc/a")
+    expect(screen.getByRole("link", { name: /^Titre b,\s?Mis à jour$/ })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Titre c" })).toBeInTheDocument()
+    // The label is no part of what the filter searches: typing the title still finds the unit.
+    fireEvent.change(screen.getByLabelText("Filtrer les fiches"), { target: { value: "Titre a" } })
+    expect(screen.getByRole("link", { name: /^Titre a,\s?Nouveau$/ }).closest("li")).not.toHaveAttribute("hidden")
+    expect(screen.getByRole("link", { name: /^Titre b,\s?Mis à jour$/, hidden: true }).closest("li")).toHaveAttribute("hidden")
+  })
+
   it("on a guide's page: that role's units only, no ids (the guide's own anchors stay as they were)", () => {
     const { container } = render(<DocUnitIndex units={units} role="admin" />)
     expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["/doc/a", "/doc/c"])
