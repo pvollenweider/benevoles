@@ -38,3 +38,11 @@ Les permanences de l'événement sont listées sous **Permanences récurrentes**
 
 Pour changer une seule date, modifiez ou supprimez son créneau comme n'importe quel autre.
 
+## Ce que voient les bénévoles
+
+Un événement qui dure quatre semaines ou plus (une saison) n'affiche plus les jours passés, et personne ne peut s'inscrire à une date déjà passée. À partir de huit dates, la page les présente mois par mois : un bouton par mois indique le nombre de dates, et le premier mois avec des dates à venir s'affiche d'abord.
+
+## Dupliquer une saison
+
+En dupliquant l'événement avec ses créneaux, chaque permanence est recréée pour la nouvelle période sur les mêmes jours de la semaine, avec les jours fériés de la nouvelle année. Les fermetures, propres à une année, ne sont pas reprises : ajoutez celles de la nouvelle saison.
+

@@ -52,6 +52,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Saisons sur la page publique** (#866) : un événement de quatre semaines ou plus n'affiche plus les jours passés et refuse l'inscription à une date passée ; à partir de huit dates, la page les présente mois par mois. Dupliquer une saison recrée ses permanences récurrentes sur les mêmes jours de la semaine, jours fériés de la nouvelle année compris.
 - **Logo dans l'en-tête des pages publiques** : le logo de benevol.app précède désormais son nom en haut des pages Fonctionnalités, Documentation, Vidéos, Nouveautés, Accessibilité et des documents légaux.
 - **Tableaux triables dans l'espace super admin** (#820) : la liste des organisations se trie par nom, slug, état, date de création, nombre d'événements, d'administrateurs ou de membres, et « Avis sur les vidéos » par vidéo, révision, Oui, Non, total ou part de réponses utiles, comme la liste des membres. Le tri choisi reste après un rechargement. <!-- interne -->
 - **Politique de confidentialité** (#810) : elle décrit désormais les demandes d'espace (ce qui est collecté, pourquoi, combien de temps), la liste de blocage des inscriptions et l'adresse IP utilisée pour limiter les demandes.

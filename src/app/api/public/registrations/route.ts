@@ -38,6 +38,7 @@ import {
   requiredPhoneRefusal,
   reservedRoleRefusal,
   selectionOverlapRefusal,
+  pastShiftRefusal,
   type SignupRefusal,
 } from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
@@ -45,6 +46,8 @@ import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 import { touchOrgActivity } from "@/lib/org-activity"
+import { localDay } from "@/lib/day-of"
+import { orgTimeZone } from "@/lib/time-zone"
 
 const schema = z.object({
   eventId: z.string(),
@@ -116,6 +119,9 @@ export async function POST(req: Request) {
 
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
   // A full shift with a waitlist goes on: its registration is created with status "waiting".
+  const pastRefusal = pastShiftRefusal(event, shifts, localDay(new Date(), orgTimeZone(event.organization)))
+  if (pastRefusal) return refuse(pastRefusal)
+
   const fullRefusal = fullShiftRefusal(shifts)
   if (fullRefusal) return refuse(fullRefusal)
 

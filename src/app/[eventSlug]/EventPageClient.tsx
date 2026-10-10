@@ -40,6 +40,7 @@ import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
+import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
 import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
@@ -172,6 +173,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     setChosenShiftView(view)
     if (!preview) saveShiftView(view)
   }
+  // Long events (#866): one month at a time, chosen by the visitor; null = the first month shown.
+  const [chosenMonth, setChosenMonth] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   // A structured failure of the sign-up itself (#375): kind, what to do, whether to retry.
@@ -309,6 +312,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const windowClosedText = closedMessage(windowState, event.timeZone)
   const windowUntilText = openUntilMessage(windowState, event.timeZone)
   const shiftsByDay = groupShiftsByDay(event.shifts)
+  // A season of permanences (#866): past days left out, one month at a time from 8 dates on.
+  // « Today » in the organisation's zone; the server answers the same for the days it renders.
+  const longEvent = isLongEvent(event.startDate, event.endDate)
+  const today = new Date().toLocaleDateString("sv-SE", { timeZone: event.timeZone })
+  const shownDays = visibleDays(Object.keys(shiftsByDay), today, longEvent)
+  const months = usesMonthView(shownDays) ? groupDaysByMonth(shownDays) : null
+  const month = months ? (months.find((m) => m.key === chosenMonth) ?? months[0]) : null
+  const daysOnPage = month ? month.days : shownDays
   const hasAvailableShift = anyShiftAvailable(event.shifts)
 
   function toggleShift(id: string) {
@@ -723,7 +734,27 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
               {/* Left: timelines */}
               <div className="space-y-6">
-                {Object.entries(shiftsByDay).map(([day, dayShifts]) => {
+                {months && month && (
+                  <nav aria-label="Mois" className="flex flex-wrap gap-2">
+                    {months.map((m) => (
+                      <button
+                        key={m.key}
+                        type="button"
+                        aria-pressed={m.key === month.key}
+                        onClick={() => setChosenMonth(m.key)}
+                        className={`min-h-11 px-4 rounded-xl border text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${m.key === month.key ? "bg-gray-900 text-white border-gray-900" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`}
+                      >
+                        <span className="first-letter:uppercase inline-block">{m.label}</span>
+                        <span className="sr-only">, </span>
+                        <span className={`ml-1 ${m.key === month.key ? "text-gray-200" : "text-gray-600"}`}>({m.days.length} date{m.days.length > 1 ? "s" : ""})</span>
+                      </button>
+                    ))}
+                  </nav>
+                )}
+                {longEvent && shownDays.length === 0 && (
+                  <p className="text-center py-8 text-gray-700">Plus aucune date à venir.</p>
+                )}
+                {daysOnPage.map((day) => [day, shiftsByDay[day]] as const).map(([day, dayShifts]) => {
                   const dayShows = (event.showSchedule ?? []).filter((s) => s.date === day)
                   return (
                     <div key={day}>
