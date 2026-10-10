@@ -10,6 +10,9 @@ import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { touchOrgActivity } from "@/lib/org-activity"
 import { loadExemptOrganizations, loadInactivityReport, loadOrganizationInactivity } from "@/lib/org-inactivity-data"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
+import { env } from "@/lib/env"
+import { noReachableAdmin } from "@/lib/admin-reachability"
 
 const url = process.env.DATABASE_URL
 const tag = `int-inact-${Date.now()}`
@@ -18,6 +21,8 @@ describe.skipIf(!url)("periodic check of inactive organisations on Postgres (#81
   const ids: string[] = []
 
   afterAll(async () => {
+    await prisma.deliveryOutcome.deleteMany({ where: { kind: tag } })
+    await prisma.adminUser.deleteMany({ where: { organizationId: { in: ids } } })
     await prisma.organization.deleteMany({ where: { id: { in: ids } } })
     await prisma.$disconnect()
   })
@@ -66,5 +71,27 @@ describe.skipIf(!url)("periodic check of inactive organisations on Postgres (#81
     expect((await loadExemptOrganizations()).map((o) => o.id)).toContain(exempt.id)
     expect((await loadOrganizationInactivity(postponed.id, now))?.assessment).toEqual({ state: "active", firstEmailAt: new Date("2027-04-09T00:00:00Z") })
     expect((await loadOrganizationInactivity(exempt.id, now))?.assessment).toEqual({ state: "excluded", reason: "exempt" })
+  })
+
+  it("flags a listed organisation whose administrators' addresses were all refused", async () => {
+    const refused = await prisma.organization.create({ data: { name: `Injoignable ${tag}`, slug: `${tag}-u`, lastMeaningfulActivityAt: new Date("2025-03-01T00:00:00Z") } })
+    const fine = await prisma.organization.create({ data: { name: `Joignable ${tag}`, slug: `${tag}-f`, lastMeaningfulActivityAt: new Date("2025-03-01T00:00:00Z") } })
+    const empty = await prisma.organization.create({ data: { name: `Sans admin ${tag}`, slug: `${tag}-n`, lastMeaningfulActivityAt: new Date("2025-03-01T00:00:00Z") } })
+    ids.push(refused.id, fine.id, empty.id)
+    const refusedEmail = `${tag}-refused@example.org`
+    const fineEmail = `${tag}-fine@example.org`
+    await prisma.adminUser.create({ data: { email: refusedEmail, name: "Julie", passwordHash: "x", role: "admin", isActive: true, organizationId: refused.id } })
+    await prisma.adminUser.create({ data: { email: fineEmail, name: "Marc", passwordHash: "x", role: "admin", isActive: true, organizationId: fine.id } })
+    // The refusal was recorded by another organisation's send: it is a fact about the address.
+    await prisma.deliveryOutcome.create({ data: { organizationId: null, kind: tag, outcome: "rejected_permanent", addressHash: addressHash(refusedEmail, env.AUTH_SECRET), createdAt: new Date("2026-10-05T00:00:00Z") } })
+    await prisma.deliveryOutcome.create({ data: { organizationId: null, kind: tag, outcome: "accepted_by_relay", addressHash: addressHash(fineEmail, env.AUTH_SECRET), createdAt: new Date("2026-10-05T00:00:00Z") } })
+
+    const rows = await loadInactivityReport(new Date("2026-10-09T12:00:00Z"))
+    const row = (id: string) => rows.find((r) => r.id === id)!
+    expect(row(refused.id).reachability).toEqual({ active: 1, toVerify: 1 })
+    expect(noReachableAdmin(row(refused.id).reachability)).toBe(true)
+    expect(noReachableAdmin(row(fine.id).reachability)).toBe(false)
+    expect(row(empty.id).reachability).toEqual({ active: 0, toVerify: 0 })
+    expect(noReachableAdmin(row(empty.id).reachability)).toBe(true)
   })
 })

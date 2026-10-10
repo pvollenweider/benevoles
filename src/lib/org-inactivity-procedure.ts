@@ -8,6 +8,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { siteName } from "@/lib/site"
 import { reportError } from "@/lib/report-error"
 import { notifyOperator } from "@/lib/operator-alerts"
+import { unreachableNote } from "@/lib/admin-reachability"
 import { cancelPendingOutboxForOrganization } from "@/lib/notifications/org-send-guard"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { assessActiveOrganizations, type InactivityReportRow } from "@/lib/org-inactivity-data"
@@ -120,7 +121,7 @@ async function sendInactivityEmail(row: InactivityReportRow, step: InactivityEma
     await notifyOperator({
       key: `inactivity-last:${row.id}:${noticeAt.toISOString()}`,
       title: `${siteName()} : espace bientôt désactivé`,
-      message: `${row.name} sera désactivé le ${day(deactivationOn, timeZone, true)} sans réponse (dernier rappel envoyé à ${admins.length} administrateur${admins.length > 1 ? "s" : ""}).`,
+      message: `${row.name} sera désactivé le ${day(deactivationOn, timeZone, true)} sans réponse (dernier rappel envoyé à ${admins.length} administrateur${admins.length > 1 ? "s" : ""}).${unreachableNote(row.reachability)}`,
       priority: 3,
       url: `${APP_URL()}/super-admin/organizations/${row.slug}`,
     }).catch(reportError("cleanup.inactivity_operator_alert"))
