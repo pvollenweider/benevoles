@@ -68,11 +68,12 @@ describe("ShiftRecurrenceForm", () => {
   it("posts the rule and hands the created shifts back", async () => {
     const { onCreated } = setup()
     fill()
-    fetchMock.mockResolvedValue(new Response(JSON.stringify({ recurrenceId: "r1", shifts: [{ id: "s1", date: "2026-12-11T00:00:00.000Z", startTime: "14:00", endTime: "17:00", roleName: "Accueil", label: "Accueil", capacity: 2, displayOrder: 0, status: "open" }] }), { status: 201 }))
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ recurrenceId: "r1", rule: { id: "r1" }, shifts: [{ id: "s1", date: "2026-12-11T00:00:00.000Z", startTime: "14:00", endTime: "17:00", roleName: "Accueil", label: "Accueil", capacity: 2, displayOrder: 0, status: "open" }] }), { status: 201 }))
     fireEvent.click(screen.getByRole("button", { name: "Créer 3 créneaux" }))
     await waitFor(() => expect(onCreated).toHaveBeenCalled())
     const body = JSON.parse(fetchMock.mock.calls[0][1].body)
     expect(body).toMatchObject({ eventId: "evt-1", roleName: "Accueil", from: "2026-12-01", until: "2026-12-31", weekdays: [5], everyWeeks: 1, slotMinutes: 180, holidays: "CH", closures: [] })
     expect(onCreated.mock.calls[0][0][0]).toMatchObject({ id: "s1", date: "2026-12-11", registrationCount: 0 })
+    expect(onCreated.mock.calls[0][1]).toEqual({ id: "r1" })
   })
 })

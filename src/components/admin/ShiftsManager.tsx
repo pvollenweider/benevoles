@@ -16,10 +16,11 @@ import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import ShiftSeriesForm from "./ShiftSeriesForm"
 import ShiftRecurrenceForm from "./ShiftRecurrenceForm"
+import RecurrenceList from "./RecurrenceList"
 import type { HolidayCalendar } from "@/lib/shift-recurrence"
 import ShiftEditor, { type ShiftFormValues } from "./shifts/ShiftEditor"
 import RoleManagerPanel from "./shifts/RoleManagerPanel"
-import type { RawShift } from "./shifts/types"
+import type { AdminRecurrence, RawShift } from "./shifts/types"
 import {
   activeShiftsByDay,
   deleteShiftRecapFor,
@@ -35,7 +36,7 @@ const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est rep
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
-  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none",
+  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
 }: {
   eventId:        string
   eventStartDate: string
@@ -44,6 +45,10 @@ export default function ShiftsManager({
   showSchedule?:  Show[]
   /** Public holidays suggested for a recurring permanence (#866), from the organisation's zone. */
   defaultHolidays?: HolidayCalendar
+  /** The event's recurring permanences (#866). */
+  initialRecurrences?: AdminRecurrence[]
+  /** "YYYY-MM-DD" today in the organisation's zone. */
+  today?: string
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -55,6 +60,7 @@ export default function ShiftsManager({
   const seriesButtonRef = useRef<HTMLButtonElement>(null)
   const seriesPanelId = useId()
   const [showRecurrence, setShowRecurrence] = useState(false)
+  const [recurrences, setRecurrences] = useState<AdminRecurrence[]>(initialRecurrences)
   const recurrenceButtonRef = useRef<HTMLButtonElement>(null)
   const recurrencePanelId = useId()
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -138,8 +144,9 @@ export default function ShiftsManager({
     recurrenceButtonRef.current?.focus()
   }
 
-  function handleRecurrenceCreated(created: AdminShift[]) {
+  function handleRecurrenceCreated(created: AdminShift[], rule: AdminRecurrence) {
     setShifts(prev => [...prev, ...created.map(s => ({ ...s, description: s.description ?? null, internalNotes: s.internalNotes ?? null }))])
+    setRecurrences(prev => [...prev, rule])
     announce(setRoleAnnouncement, `${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""} pour la permanence récurrente.`)
     closeRecurrence()
   }
@@ -153,6 +160,23 @@ export default function ShiftsManager({
     setShifts(prev => [...prev, ...created.map(s => ({ ...s, description: s.description ?? null, internalNotes: s.internalNotes ?? null }))])
     announce(setRoleAnnouncement, `${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""}.`)
     closeSeries()
+  }
+
+  function handleRecurrenceShiftsChanged(updated: RawShift[]) {
+    const byId = new Map(updated.map(s => [s.id, s]))
+    setShifts(prev => prev.map(s => byId.has(s.id) ? { ...s, ...byId.get(s.id)!, registrationCount: s.registrationCount } : s))
+  }
+
+  function handleRecurrenceShiftsStopped(removedIds: string[], cancelledIds: string[]) {
+    const removed = new Set(removedIds)
+    const cancelled = new Set(cancelledIds)
+    setShifts(prev => prev.filter(s => !removed.has(s.id)).map(s => cancelled.has(s.id) ? { ...s, status: "cancelled" } : s))
+  }
+
+  function handleRecurrenceRuleChanged(rule: AdminRecurrence | null, id: string) {
+    setRecurrences(prev => rule ? prev.map(r => r.id === id ? rule : r) : prev.filter(r => r.id !== id))
+    // A stopped permanence leaves the list with the button that had focus: back to the opener.
+    if (!rule) requestAnimationFrame(() => recurrenceButtonRef.current?.focus())
   }
 
   // ── Callbacks for AdminDayTimeline ────────────────────────────────────────
@@ -330,6 +354,16 @@ export default function ShiftsManager({
           onClose={closeRecurrence}
         />
       )}
+
+      <RecurrenceList
+        recurrences={recurrences}
+        shifts={shifts}
+        today={today}
+        onShiftsChanged={handleRecurrenceShiftsChanged}
+        onShiftsStopped={handleRecurrenceShiftsStopped}
+        onRuleChanged={handleRecurrenceRuleChanged}
+        onAnnounce={(text) => announce(setRoleAnnouncement, text)}
+      />
 
       {showSeries && (
         <ShiftSeriesForm

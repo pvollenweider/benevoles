@@ -6,6 +6,7 @@ import WizardSteps from "@/components/admin/WizardSteps"
 import HelpLink from "@/components/admin/HelpLink"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
+import { localDay } from "@/lib/day-of"
 
 export const dynamic = "force-dynamic"
 
@@ -21,6 +22,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
     where: { id },
     include: {
       organization: { select: { timeZone: true } },
+      shiftRecurrences: { orderBy: { createdAt: "asc" } },
       shifts: {
         include: { registrations: { where: { status: "active" } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
@@ -62,6 +64,8 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         eventEndDate={event.endDate.toISOString().split("T")[0]}
         showSchedule={showSchedule}
         defaultHolidays={defaultHolidayCalendar(orgTimeZone(event.organization))}
+        today={localDay(new Date(), orgTimeZone(event.organization))}
+        initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
         initialShifts={event.shifts.map(s => ({
           ...s,
           date: s.date.toISOString().split("T")[0],

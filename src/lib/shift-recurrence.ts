@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { addDays, generateShiftSeries, seriesProblem, type SeriesSlot } from "./shift-series"
+import { toMin, toMinEnd } from "./gantt-utils"
 
 /**
  * Recurring permanences (#866): « every Wednesday 14:00–17:00 until June » described once gives
@@ -190,4 +191,66 @@ export function defaultHolidayCalendar(timeZone: string): HolidayCalendar {
   if (timeZone === "Europe/Paris") return "FR"
   if (timeZone === "Europe/Zurich") return "CH"
   return "none"
+}
+
+/** A shift of a rule as the change and stop plans see it. */
+export type RuleShift = {
+  id: string
+  /** "YYYY-MM-DD". */
+  date: string
+  startTime: string
+  status: string
+  /** Committed registrations (confirmed, requested, offered…): people counting on this shift. */
+  committed: number
+  /** Any registration at all, cancelled ones included: the shift has a history to keep. */
+  hasHistory: boolean
+}
+
+const live = (s: RuleShift, from: string) => s.date >= from && s.status !== "cancelled"
+
+/**
+ * Stopping a permanence from a date (#866): shifts that never had anyone are removed, shifts that
+ * only have cancelled registrations are cancelled quietly, and shifts with people are listed: they
+ * are cancelled (and their volunteers told) only once the organizer confirmed it.
+ */
+export function planStop(shifts: RuleShift[], from: string): { remove: string[]; cancelQuiet: string[]; withPeople: RuleShift[] } {
+  const affected = shifts.filter((s) => live(s, from))
+  return {
+    remove: affected.filter((s) => !s.hasHistory).map((s) => s.id),
+    cancelQuiet: affected.filter((s) => s.hasHistory && s.committed === 0).map((s) => s.id),
+    withPeople: affected.filter((s) => s.committed > 0).sort((a, b) => (a.date + a.startTime).localeCompare(b.date + b.startTime)),
+  }
+}
+
+export type RuleChange = { startTime?: string; endTime?: string; capacity?: number }
+
+/**
+ * Changing a permanence from a date (#866): the shifts concerned, or why not. Hours change only
+ * when each day has a single shift (a split day has no single « start » to move); a capacity below
+ * the people already registered on a date is refused, with those dates.
+ */
+export function planChange(
+  rule: { startTime: string; endTime: string; slotMinutes: number },
+  shifts: RuleShift[],
+  from: string,
+  change: RuleChange,
+): { update: string[]; problem: string | null; tooSmall: RuleShift[] } {
+  const affected = shifts.filter((s) => live(s, from))
+  const changesTime = change.startTime !== undefined || change.endTime !== undefined
+  const none = { update: [] as string[], tooSmall: [] as RuleShift[] }
+  if (!changesTime && change.capacity === undefined) return { ...none, problem: "Rien à modifier." }
+  if (affected.length === 0) return { ...none, problem: "Aucune date de cette permanence à partir de ce jour." }
+  if (changesTime) {
+    const range = toMinEnd(rule.endTime, rule.startTime) - toMin(rule.startTime)
+    if (rule.slotMinutes !== range) return { ...none, problem: "Les horaires ne se modifient d'un coup que pour une permanence d'un seul créneau par jour : modifiez chaque créneau séparément." }
+    const start = change.startTime ?? rule.startTime
+    const end = change.endTime ?? rule.endTime
+    if (start === end) return { ...none, problem: "L'heure de fin doit être différente de l'heure de début." }
+  }
+  if (change.capacity !== undefined) {
+    if (!Number.isInteger(change.capacity) || change.capacity < 1) return { ...none, problem: "Indiquez au moins une personne par créneau." }
+    const tooSmall = affected.filter((s) => s.committed > change.capacity!)
+    if (tooSmall.length > 0) return { update: [], tooSmall, problem: `Plus de ${change.capacity} personne${change.capacity > 1 ? "s sont" : " est"} déjà inscrite${change.capacity > 1 ? "s" : ""} sur ${tooSmall.length} date${tooSmall.length > 1 ? "s" : ""}.` }
+  }
+  return { update: affected.map((s) => s.id), problem: null, tooSmall: [] }
 }

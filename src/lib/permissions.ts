@@ -118,6 +118,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "shifts/[id]/duplicate": { POST: "organizer" },
   "shifts/series": { POST: "organizer" },
   "shifts/recurrence": { POST: "organizer" },
+  "shifts/recurrence/[id]/change": { POST: "organizer" },
+  "shifts/recurrence/[id]/stop": { POST: "organizer" },
 }
 
 /** Routes that don't require an org session at all (the invitation acceptance). */

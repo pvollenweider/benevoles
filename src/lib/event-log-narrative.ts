@@ -100,6 +100,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "shift.updated": (a) => `${a} a modifié ce créneau`,
   "shift.cancelled": (a) => `${a} a annulé ce créneau`,
   "recurrence.created": (a) => `${a} a créé une permanence récurrente`,
+  "recurrence.updated": (a) => `${a} a modifié une permanence récurrente à partir d'une date`,
+  "recurrence.stopped": (a) => `${a} a arrêté une permanence récurrente à partir d'une date`,
   "registration.created": (a) => `${a} a enregistré une inscription`,
   "registration.updated": (a) => `${a} a modifié l'inscription`,
   "registration.cancelled": (a) => `${a} a annulé une inscription`,
