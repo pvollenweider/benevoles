@@ -146,6 +146,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   signup_account_link: "Lien pour choisir son mot de passe après une demande d'espace",
   space_approved: "Espace activé",
   addresses_to_verify_summary: "Résumé quotidien des adresses à vérifier",
+  past_event_notice: "Préavis d'anonymisation des événements de plus de 3 ans",
   open_shifts: "Créneaux à compléter proposés à des membres",
 }
 

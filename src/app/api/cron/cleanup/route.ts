@@ -17,8 +17,9 @@ import { parseNotificationSettings } from "@/lib/notification-settings"
 import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { siteName } from "@/lib/site"
-import { pastEventSummary, pastEventTotals } from "@/lib/past-event-retention"
+import { pastEventRetentionMode, pastEventStep, pastEventSummary, pastEventTotals, type PastEventBatchCounts } from "@/lib/past-event-retention"
 import { observePastEvents } from "@/lib/past-event-retention-data"
+import { loadPastEventOrganizations, runPastEventBatch, sendPastEventNotice } from "@/lib/past-event-anonymisation"
 import { inactivityMode } from "@/lib/org-inactivity"
 import { loadInactivityReport } from "@/lib/org-inactivity-data"
 
@@ -233,17 +234,40 @@ async function run(req: Request) {
     }
   }
 
-  // --- 9. Past events (#813), observation mode: what the 3-year rule would anonymise, nothing changed.
+  // --- 9. Past events (#813): what the 3-year rule would anonymise; with PAST_EVENT_RETENTION=enforce,
+  // one notice per organisation 30 days ahead, then a batch each month.
   let pastEvents: ReturnType<typeof pastEventTotals> | null = null
+  const pastEventsDone = { notices: 0, batches: 0, events: 0, registrations: 0 }
   try {
-    pastEvents = pastEventTotals(await observePastEvents(now))
+    const observed = await observePastEvents(now)
+    pastEvents = pastEventTotals(observed)
+    if (pastEventRetentionMode() === "enforce") {
+      for (const org of await loadPastEventOrganizations(now)) {
+        const step = pastEventStep({ concernedEvents: org.concernedEvents, noticeAt: org.pastEventNoticeAt, batchAt: org.pastEventBatchAt }, now)
+        try {
+          if (step.kind === "notice") {
+            await sendPastEventNotice(org.id, observed.find((o) => o.organizationId === org.id) ?? null, step.firstBatchOn, now)
+            pastEventsDone.notices++
+          } else if (step.kind === "batch") {
+            const c: PastEventBatchCounts = await runPastEventBatch(org.id, now)
+            pastEventsDone.batches++
+            pastEventsDone.events += c.events
+            pastEventsDone.registrations += c.registrations
+          }
+        } catch (e) {
+          // One organisation's failure never stops the others; the next night tries again.
+          reportError("cleanup.past_events_enforce")(e)
+        }
+      }
+    }
   } catch (e) {
     reportError("cleanup.past_events_observation")(e)
   }
 
   return NextResponse.json({
     runAt: now.toISOString(),
-    observed: { inactivity, pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents) : null },
+    observed: { inactivity, pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents, pastEventRetentionMode()) : null },
+    pastEventRetention: { mode: pastEventRetentionMode(), ...pastEventsDone },
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,

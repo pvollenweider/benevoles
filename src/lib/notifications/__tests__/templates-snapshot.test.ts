@@ -499,6 +499,17 @@ const cases: [string, NotificationPayload][] = [
       membersUrl: "https://rhone.benevol.app/admin/members?verify=1",
     },
   }],
+  ["past_event_notice", {
+    kind: "past_event_notice",
+    recipient,
+    data: {
+      organizationName: tricky,
+      firstBatchOn: "lundi 9 novembre 2026",
+      events: [{ title: "Fête <du> village", ended: "1er juin 2023" }, { title: "Marché de Noël", ended: "20 décembre 2022" }],
+      registrations: 214,
+      membersOnlyOld: 12,
+    },
+  }],
   ["open_shifts", {
     kind: "open_shifts",
     recipient,
@@ -561,6 +572,7 @@ describe("render — snapshot of every notification kind", () => {
       signup_account_link: true,
       space_approved: true,
       addresses_to_verify_summary: true,
+      past_event_notice: true,
       open_shifts: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))

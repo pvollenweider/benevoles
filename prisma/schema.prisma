@@ -49,6 +49,9 @@ model Organization {
   // nor page views), and the latest « Conserver mon organisation », kept apart on purpose.
   lastMeaningfulActivityAt DateTime?
   lastRetentionConfirmedAt DateTime?
+  // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
+  pastEventNoticeAt DateTime?
+  pastEventBatchAt  DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -129,6 +132,8 @@ model Event {
   // individual printed sheet), never on the public page, the public API or metadata.
   dayContactName      String?
   dayContactPhone     String?
+  // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
+  personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 

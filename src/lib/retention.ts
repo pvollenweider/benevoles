@@ -10,6 +10,8 @@
  * See src/lib/__tests__/retention.test.ts.
  */
 
+import { PAST_EVENT_NOTICE_DAYS } from "./past-event-retention"
+
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
   deactivatedOrganization: 30,
@@ -64,7 +66,7 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation",
     purpose: "Organiser les événements de l'organisation",
-    duration: `tant que l'organisation est active, événements passés compris ; effacés ${d.deactivatedOrganization} jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée)`,
+    duration: `tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés ${d.deactivatedOrganization} jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée)`,
     trigger: "désactivation de l'organisation",
     mechanism: "nettoyage quotidien (cron cleanup), suppression en cascade",
     backups: inBackups,
@@ -134,9 +136,18 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions, invitations et responsables de secteur",
+    purpose: "Ne pas garder sans fin les données personnelles d'événements anciens",
+    duration: `anonymisées 3 ans après la fin de l'événement : ses inscriptions passent à une fiche « Bénévole effacé » par personne, sans lien avec sa fiche de membre (effectifs, heures et présences gardés, sans nom), le reste est effacé ; l'événement lui-même (titre, dates, créneaux, totaux) et les fiches des membres restent. L'organisation est prévenue ${PAST_EVENT_NOTICE_DAYS} jours avant la première anonymisation, puis les événements qui atteignent 3 ans sont anonymisés chaque mois. Règle appliquée lorsque l'opérateur du service l'active`,
+    trigger: "3 ans après la fin de l'événement",
+    mechanism: "nettoyage quotidien (cron cleanup) avec PAST_EVENT_RETENTION=enforce : un préavis unique par organisation, puis un lot par mois ; sans cette variable, observation seulement (« Statistiques » du super admin et réponse du nettoyage). Une sauvegarde restaurée est anonymisée de nouveau au lot suivant (marque `personalDataAnonymizedAt` de l'événement)",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Membres retirés, inscriptions annulées ou refusées, questions archivées",
     purpose: "Historique de l'organisation",
-    duration: "tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions), sauf effacement des données personnelles d'un membre à sa demande (ligne suivante)",
+    duration: "tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions), sauf anonymisation 3 ans après la fin de l'événement (ligne précédente) et effacement des données personnelles d'un membre à sa demande (ligne suivante)",
     trigger: "—",
     mechanism: "effacés avec l'organisation ou l'événement",
     backups: inBackups,

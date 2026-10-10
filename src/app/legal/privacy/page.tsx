@@ -6,6 +6,7 @@ import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 import { IP_MAX_DAYS } from "@/lib/signup-blocklist"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
+import { PAST_EVENT_NOTICE_DAYS, PAST_EVENT_RETENTION_YEARS } from "@/lib/past-event-retention"
 import { notFound } from "next/navigation"
 
 export const dynamic = "force-dynamic"
@@ -21,7 +22,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 9 octobre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 10 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -259,6 +260,14 @@ export default function PrivacyPage() {
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
         sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du
         compte de l&apos;Organisation.
+      </p>
+      <p>
+        Pour un événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans, les données des bénévoles peuvent être
+        anonymisées : leur nom, leur adresse email et leur téléphone sont retirés des inscriptions, et
+        leurs commentaires et réponses aux questions sont effacés. Cette règle s&apos;applique lorsque
+        l&apos;opérateur du service l&apos;active. L&apos;Organisation est alors prévenue {PAST_EVENT_NOTICE_DAYS} jours
+        avant la première anonymisation. Le détail figure dans la liste ci-dessous, à la ligne
+        « Événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans ».
       </p>
       <p>
         Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des

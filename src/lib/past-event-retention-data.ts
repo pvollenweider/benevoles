@@ -5,15 +5,15 @@ import { prisma } from "@/lib/prisma"
 import { pastEventCutoff, type PastEventObservation } from "@/lib/past-event-retention"
 
 /**
- * What the 3-year rule of #813 would anonymise today, per organisation: read only (observation
- * mode). Server only: Prisma and raw SQL; the rule itself is in src/lib/past-event-retention.ts.
+ * What the 3-year rule of #813 would anonymise today, per organisation (events already
+ * anonymised left out): read only, for observation mode and for the notice. Server only: Prisma and raw SQL; the rule itself is in src/lib/past-event-retention.ts.
  */
 export async function observePastEvents(now: Date = new Date()): Promise<PastEventObservation[]> {
   const cutoff = pastEventCutoff(now)
   type Row = { organizationId: string; organizationName: string; events: bigint; registrations: bigint; members: bigint; membersOnlyOld: bigint; answers: bigint; invites: bigint; sectorLeaders: bigint }
   const rows = await prisma.$queryRaw<Row[]>`
     WITH old AS (
-      SELECT e."id", e."organizationId" FROM "Event" e WHERE e."endDate" < ${cutoff}
+      SELECT e."id", e."organizationId" FROM "Event" e WHERE e."endDate" < ${cutoff} AND e."personalDataAnonymizedAt" IS NULL
     ),
     regs AS (
       SELECT old."organizationId", r."id", r."volunteerId"

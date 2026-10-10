@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { formatCount } from "@/lib/usage-counters"
-import { pastEventSummary, pastEventTotals, PAST_EVENT_RETENTION_YEARS, type PastEventObservation } from "@/lib/past-event-retention"
+import { pastEventSummary, pastEventTotals, PAST_EVENT_RETENTION_YEARS, type PastEventObservation, type PastEventRetentionMode } from "@/lib/past-event-retention"
 
 const COLUMNS: { key: keyof Omit<PastEventObservation, "organizationId" | "organizationName">; label: string }[] = [
   { key: "events", label: "Événements" },
@@ -15,22 +15,27 @@ const COLUMNS: { key: keyof Omit<PastEventObservation, "organizationId" | "organ
 ]
 
 /**
- * #813 in observation mode: per organisation, what the rule « anonymiser les inscriptions
- * 3 ans après la fin d'un événement » would touch today. Nothing is changed: the operator reads
- * this before the rule is switched on.
+ * #813: per organisation, what the rule « anonymiser les inscriptions 3 ans après la fin d'un
+ * événement » would touch today (observation: nothing is changed, the operator reads this before
+ * switching the rule on), or still has to anonymise (`PAST_EVENT_RETENTION=enforce`).
  */
-export default function PastEventRetentionTable({ rows }: { rows: PastEventObservation[] }) {
+export default function PastEventRetentionTable({ rows, mode = "observe" }: { rows: PastEventObservation[]; mode?: PastEventRetentionMode }) {
   const totals = pastEventTotals(rows)
   return (
     <section className="space-y-2">
       <h2 id="stats-past-events" className="text-lg font-semibold text-gray-900">Événements terminés depuis plus de {PAST_EVENT_RETENTION_YEARS} ans</h2>
       <p id="stats-past-events-intro" className="text-sm text-gray-700">
-        Observation, rien n&apos;est modifié : ce que la règle de conservation anonymiserait aujourd&apos;hui, par organisation. {pastEventSummary(totals)}
+        {/* The summary says the schedule (or that nothing is changed): not repeated here. */}
+        {mode === "enforce"
+          ? "La règle de conservation est active : ce qui reste à anonymiser, par organisation."
+          : "Observation : ce que la règle de conservation anonymiserait aujourd'hui, par organisation."}
+        {" "}
+        {pastEventSummary(totals, mode)}
       </p>
       {rows.length > 0 && (
         <div tabIndex={0} role="region" aria-labelledby="stats-past-events" className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm" aria-describedby="stats-past-events-intro">
-            <caption className="sr-only">Ce que la règle anonymiserait, par organisation</caption>
+            <caption className="sr-only">{mode === "enforce" ? "Ce qui reste à anonymiser, par organisation" : "Ce que la règle anonymiserait aujourd'hui, par organisation"}</caption>
             <thead className="bg-gray-50 text-left text-gray-700">
               <tr>
                 <th scope="col" className="px-4 py-2 font-medium">Organisation</th>
