@@ -17,7 +17,7 @@ export default function InvalidReactivationLink({ focus = false }: { focus?: boo
   useEffect(() => { if (focus) ref.current?.focus() }, [focus])
   return (
     <div className="text-center space-y-3">
-      <h2 ref={ref} tabIndex={focus ? -1 : undefined} className="font-semibold text-gray-900 focus:outline-none">Lien expiré ou déjà utilisé</h2>
+      <h2 ref={ref} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">Lien expiré ou déjà utilisé</h2>
       <p className="text-sm text-gray-700">{INVALID_REACTIVATION_LINK}</p>
       <Link href="/admin/reactivate" className="text-sm text-blue-700 underline underline-offset-2">
         Demander un nouveau lien
