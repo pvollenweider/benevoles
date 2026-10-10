@@ -8,6 +8,8 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { slugify } from "@/lib/utils"
 import { findTemplate, templateToEvent } from "@/lib/event-templates"
+import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
+import { orgTimeZone } from "@/lib/time-zone"
 
 const schema = z.object({
   templateId: z.string().min(1),
@@ -47,8 +49,22 @@ export async function POST(req: Request) {
         create: draft.shifts.map((s) => ({ ...s, date: new Date(s.date), status: "open" })),
       },
     },
-    select: { id: true },
+    select: { id: true, organization: { select: { timeZone: true } } },
   })
 
-  return NextResponse.json({ id: event.id, shiftCount: draft.shifts.length }, { status: 201 })
+  // Recurring permanences (#866): each rule, then its shifts linked to it, leaving out the public
+  // holidays suggested by the organisation's zone.
+  const holidays = defaultHolidayCalendar(orgTimeZone(event.organization))
+  let recurringCount = 0
+  for (const { rule, shifts } of templateToEvent(template, parsed.data, holidays).recurrences) {
+    await db.$transaction(async (tx) => {
+      const created = await tx.shiftRecurrence.create({
+        data: { ...rule, eventId: event.id, fromDate: new Date(rule.fromDate), untilDate: new Date(rule.untilDate) },
+      })
+      await tx.shift.createMany({ data: shifts.map((s) => ({ ...s, eventId: event.id, date: new Date(s.date), status: "open", recurrenceId: created.id })) })
+    })
+    recurringCount += shifts.length
+  }
+
+  return NextResponse.json({ id: event.id, shiftCount: draft.shifts.length + recurringCount }, { status: 201 })
 }

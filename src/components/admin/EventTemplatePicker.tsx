@@ -5,7 +5,7 @@
 
 import { useId, useState } from "react"
 import { useRouter } from "next/navigation"
-import { EVENT_TEMPLATES, findTemplate, templateSummary } from "@/lib/event-templates"
+import { EVENT_TEMPLATES, findTemplate, templateRhythm, templateShiftCount, templateSummary } from "@/lib/event-templates"
 
 /**
  * « Partir d'un modèle » on the new-event page (#395): a blank form (children) or one of the
@@ -25,8 +25,10 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
 
   const template = templateId ? findTemplate(templateId) : undefined
   const title = typedTitle ?? template?.defaultTitle ?? ""
-  const shiftCount = template?.shifts.length ?? 0
   const dateMissing = !/^\d{4}-\d{2}-\d{2}$/.test(startDate)
+  // Recurring templates (#866): the count depends on the start date (public holidays not counted).
+  const recurring = Boolean(template?.recurrences?.length)
+  const shiftCount = template ? templateShiftCount(template, dateMissing ? undefined : startDate) : 0
 
   async function create() {
     if (saving) return
@@ -94,7 +96,9 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
                 className={`input ${attempted && dateMissing ? "!border-red-600" : ""}`}
               />
               <p id={`${id}-date-hint`} className="text-xs text-gray-600 mt-1">
-                {template.days > 1 ? `${template.days} jours à partir de cette date.` : "Un seul jour."}
+                {recurring
+                  ? `${Math.round(template.days / 7)} semaines à partir de cette date ; la période se prolonge ensuite en modifiant l'événement.`
+                  : template.days > 1 ? `${template.days} jours à partir de cette date.` : "Un seul jour."}
               </p>
             </div>
           </div>
@@ -102,12 +106,15 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
           <div>
             <h3 className="text-sm font-medium text-gray-800">Ce qui sera créé</h3>
             <ul className="mt-1 text-sm text-gray-700 space-y-0.5">
-              {templateSummary(template).map((r) => (
-                <li key={r.roleName}>
-                  <span className="font-medium">{r.roleName}</span> : {r.shiftCount} créneau{r.shiftCount > 1 ? "x" : ""}, {r.capacity} place{r.capacity > 1 ? "s" : ""}
-                </li>
-              ))}
+              {recurring
+                ? templateRhythm(template).map((line) => <li key={line}>{line}</li>)
+                : templateSummary(template).map((r) => (
+                  <li key={r.roleName}>
+                    <span className="font-medium">{r.roleName}</span> : {r.shiftCount} créneau{r.shiftCount > 1 ? "x" : ""}, {r.capacity} place{r.capacity > 1 ? "s" : ""}
+                  </li>
+                ))}
             </ul>
+            {recurring && <p className="text-xs text-gray-600 mt-2">Des permanences récurrentes : chaque date est créée, jours fériés exclus selon le pays de l&apos;organisation. Vous pouvez les modifier ou les arrêter à partir d&apos;une date.</p>}
             <p className="text-xs text-gray-600 mt-2">Brouillon, non publié. Chaque créneau se modifie ou se supprime ensuite ; les horaires et effectifs sont des points de départ.</p>
           </div>
 
@@ -120,7 +127,7 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
             aria-disabled={saving}
             className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${saving ? "opacity-50" : ""}`}
           >
-            {saving ? "Création…" : `Créer le brouillon (${shiftCount} créneaux)`}
+            {saving ? "Création…" : shiftCount > 0 ? `Créer le brouillon (${shiftCount} créneau${shiftCount > 1 ? "x" : ""})` : "Créer le brouillon"}
           </button>
         </section>
       ) : (
