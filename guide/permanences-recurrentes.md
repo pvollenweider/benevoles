@@ -14,6 +14,19 @@ Pour une activité qui revient toute l'année (l'accueil du mercredi après-midi
 
 L'événement porte la période : pour une saison de septembre à juin, donnez à l'événement ces dates de début et de fin, puis ajoutez-y vos permanences.
 
+## Partir d'un exemple
+
+Quatre modèles d'activité régulière créent un événement de 13 semaines déjà rempli de permanences, à ajuster ensuite (choisissez-les dans **Comment commencer ?** en créant un événement) :
+
+| Modèle | Permanences |
+|--------|-------------|
+| Épicerie participative | Caisse et accueil le mardi et le jeudi de 17 h à 19 h 30 et le samedi de 9 h à 12 h ; mise en rayon le samedi de 8 h à 9 h ; réception des livraisons le mercredi de 18 h à 19 h 30 |
+| Distribution alimentaire | Tri des denrées le vendredi de 14 h à 17 h ; transport le samedi de 8 h à 9 h ; distribution le samedi de 9 h à 12 h |
+| Permanence d'accueil | Accueil le lundi, le mercredi et le vendredi de 14 h à 17 h |
+| Repair café | Accueil et réparation un samedi sur deux, l'après-midi |
+
+Les jours fériés suivent le pays de l'organisation (France ou Suisse, selon son fuseau horaire). Pour une saison plus longue, prolongez l'événement, puis ajoutez une permanence avec **Répéter chaque semaine** à partir de la date suivante.
+
 | Champ | Description |
 |-------|-------------|
 | Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)) |

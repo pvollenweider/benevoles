@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { addDays } from "./shift-series"
+import { describeWeekdays, generateRecurrence, recurrenceProblem, type HolidayCalendar, type Weekday } from "./shift-recurrence"
+import { toMin, toMinEnd } from "./gantt-utils"
 
 /**
  * Event templates (#395): a pre-filled draft (days, roles, shifts) the organizer then edits.
@@ -19,6 +21,19 @@ export type TemplateShift = {
   waitlistEnabled?: boolean
 }
 
+/** A recurring permanence of a template (#866): repeated over the whole event. */
+export type TemplateRecurrence = {
+  roleName: string
+  label?: string
+  weekdays: Weekday[]
+  everyWeeks?: 1 | 2
+  startTime: string
+  endTime: string
+  /** Shift length; the whole range (one shift a day) when absent. */
+  slotMinutes?: number
+  capacity: number
+}
+
 export type EventTemplate = {
   id: string
   name: string
@@ -27,7 +42,12 @@ export type EventTemplate = {
   /** Number of days, start date included. */
   days: number
   shifts: TemplateShift[]
+  /** Recurring permanences (#866): a season-like template has these and no fixed shifts. */
+  recurrences?: TemplateRecurrence[]
 }
+
+/** A recurring template runs this long by default; the organizer extends the event afterwards. */
+export const RECURRING_TEMPLATE_DAYS = 91
 
 const span = (roleName: string, day: number, slots: [string, string][], capacity: number, label?: string): TemplateShift[] =>
   slots.map(([startTime, endTime]) => ({ roleName, label, day, startTime, endTime, capacity }))
@@ -105,25 +125,104 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
   },
 ]
 
+/** Regular activities (#866): a quarter of weekly permanences the organizer adjusts. */
+EVENT_TEMPLATES.push(
+  {
+    id: "epicerie",
+    name: "Épicerie participative",
+    description: "Une épicerie tenue par ses membres : caisse et accueil le mardi et le jeudi soir et le samedi matin, mise en rayon le samedi, réception des livraisons le mercredi.",
+    defaultTitle: "Épicerie participative",
+    days: RECURRING_TEMPLATE_DAYS,
+    shifts: [],
+    recurrences: [
+      { roleName: "Caisse et accueil", weekdays: [2, 4], startTime: "17:00", endTime: "19:30", capacity: 2 },
+      { roleName: "Caisse et accueil", weekdays: [6], startTime: "09:00", endTime: "12:00", capacity: 2 },
+      { roleName: "Mise en rayon", weekdays: [6], startTime: "08:00", endTime: "09:00", capacity: 2 },
+      { roleName: "Réception des livraisons", weekdays: [3], startTime: "18:00", endTime: "19:30", capacity: 2 },
+    ],
+  },
+  {
+    id: "distribution",
+    name: "Distribution alimentaire",
+    description: "Chaque semaine : le tri des denrées le vendredi après-midi, le transport et la distribution le samedi matin.",
+    defaultTitle: "Distribution alimentaire",
+    days: RECURRING_TEMPLATE_DAYS,
+    shifts: [],
+    recurrences: [
+      { roleName: "Tri des denrées", weekdays: [5], startTime: "14:00", endTime: "17:00", capacity: 4 },
+      { roleName: "Transport", label: "Chauffeur", weekdays: [6], startTime: "08:00", endTime: "09:00", capacity: 1 },
+      { roleName: "Distribution", weekdays: [6], startTime: "09:00", endTime: "12:00", capacity: 6 },
+    ],
+  },
+  {
+    id: "permanence",
+    name: "Permanence d'accueil",
+    description: "Un accueil ouvert le lundi, le mercredi et le vendredi après-midi, deux personnes à chaque fois.",
+    defaultTitle: "Permanence d'accueil",
+    days: RECURRING_TEMPLATE_DAYS,
+    shifts: [],
+    recurrences: [{ roleName: "Accueil", weekdays: [1, 3, 5], startTime: "14:00", endTime: "17:00", capacity: 2 }],
+  },
+  {
+    id: "repair",
+    name: "Repair café",
+    description: "Un samedi sur deux : l'accueil des visiteurs et les réparateurs, de 14 h à 17 h.",
+    defaultTitle: "Repair café",
+    days: RECURRING_TEMPLATE_DAYS,
+    shifts: [],
+    recurrences: [
+      { roleName: "Accueil", weekdays: [6], everyWeeks: 2, startTime: "13:30", endTime: "17:30", capacity: 1 },
+      { roleName: "Réparation", weekdays: [6], everyWeeks: 2, startTime: "14:00", endTime: "17:00", capacity: 4 },
+    ],
+  },
+)
+
 export function findTemplate(id: string): EventTemplate | undefined {
   return EVENT_TEMPLATES.find((t) => t.id === id)
 }
+
+type TemplateShiftRow = { roleName: string; label: string; date: string; startTime: string; endTime: string; capacity: number; displayOrder: number; waitlistEnabled: boolean }
 
 export type TemplateEvent = {
   title: string
   startDate: string
   endDate: string
-  shifts: { roleName: string; label: string; date: string; startTime: string; endTime: string; capacity: number; displayOrder: number; waitlistEnabled: boolean }[]
+  shifts: TemplateShiftRow[]
+  /** Recurring permanences (#866): each rule with the shifts it gives. */
+  recurrences: { rule: TemplateRuleRow; shifts: TemplateShiftRow[] }[]
 }
 
+type TemplateRuleRow = {
+  roleName: string; label: string; weekdays: number[]; everyWeeks: number; startTime: string; endTime: string
+  slotMinutes: number; capacity: number; fromDate: string; untilDate: string; holidays: HolidayCalendar
+}
+
+const wholeRange = (r: TemplateRecurrence) => toMinEnd(r.endTime, r.startTime) - toMin(r.startTime)
+
 /** The draft to create from a template: dates from the start date, roles ordered as listed. */
-export function templateToEvent(template: EventTemplate, input: { title: string; startDate: string }): TemplateEvent {
+export function templateToEvent(template: EventTemplate, input: { title: string; startDate: string }, holidays: HolidayCalendar = "none"): TemplateEvent {
   const roleOrder: string[] = []
-  for (const s of template.shifts) if (!roleOrder.includes(s.roleName)) roleOrder.push(s.roleName)
+  for (const s of [...template.shifts, ...(template.recurrences ?? [])]) if (!roleOrder.includes(s.roleName)) roleOrder.push(s.roleName)
+  const endDate = addDays(input.startDate, template.days - 1)
   return {
     title: input.title.trim() || template.defaultTitle,
     startDate: input.startDate,
-    endDate: addDays(input.startDate, template.days - 1),
+    endDate,
+    recurrences: (template.recurrences ?? []).flatMap((r) => {
+      const input2 = {
+        from: input.startDate, until: endDate, weekdays: r.weekdays, everyWeeks: r.everyWeeks ?? 1, startTime: r.startTime, endTime: r.endTime,
+        slotMinutes: r.slotMinutes ?? wholeRange(r), holidays, closures: [] as string[],
+      }
+      if (recurrenceProblem(input2)) return []
+      const label = r.label ?? r.roleName
+      return [{
+        rule: { roleName: r.roleName, label, weekdays: r.weekdays, everyWeeks: input2.everyWeeks, startTime: r.startTime, endTime: r.endTime, slotMinutes: input2.slotMinutes, capacity: r.capacity, fromDate: input.startDate, untilDate: endDate, holidays },
+        shifts: generateRecurrence(input2).shifts.map((slot) => ({
+          roleName: r.roleName, label, date: slot.date, startTime: slot.startTime, endTime: slot.endTime, capacity: r.capacity,
+          displayOrder: roleOrder.indexOf(r.roleName) * 100, waitlistEnabled: false,
+        })),
+      }]
+    }),
     shifts: template.shifts.map((s) => ({
       roleName: s.roleName,
       label: s.label ?? s.roleName,
@@ -135,6 +234,18 @@ export function templateToEvent(template: EventTemplate, input: { title: string;
       waitlistEnabled: s.waitlistEnabled ?? false,
     })),
   }
+}
+
+/** « Caisse et accueil : chaque mardi et jeudi, 17:00–19:30, 2 personnes » for a recurring template (#866). */
+export function templateRhythm(template: EventTemplate): string[] {
+  return (template.recurrences ?? []).map((r) => `${r.label ?? r.roleName} : ${describeWeekdays(r.weekdays, r.everyWeeks ?? 1)}, ${r.startTime}–${r.endTime}, ${r.capacity} personne${r.capacity > 1 ? "s" : ""}`)
+}
+
+/** Shifts a template creates; for a recurring one, from its start date (holidays not counted). */
+export function templateShiftCount(template: EventTemplate, startDate?: string): number {
+  if (!template.recurrences?.length) return template.shifts.length
+  if (!startDate) return 0
+  return templateToEvent(template, { title: "", startDate }).recurrences.reduce((n, r) => n + r.shifts.length, 0)
 }
 
 /** « Buvette : 4 créneaux, 3 personnes » lines for the preview, roles in order. */
