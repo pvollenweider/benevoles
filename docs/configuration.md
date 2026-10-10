@@ -138,7 +138,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 
 ## Secrets Kubernetes
 
-`k8s/secret.yaml` est un modèle incomplet : il n'a pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` ni `SENTRY_DSN`. Le secret réel `benevoles-secret` est régénéré à chaque déploiement par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` :
+`k8s/secret.yaml` est un modèle incomplet : il n'a pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*`, `SENTRY_DSN`, `NTFY_*`, `OPERATOR_ALERT_EMAIL`, `SIGNUP`, `HOSTED_SERVICE`, `ORG_INACTIVITY` ni `PAST_EVENT_RETENTION`. Le secret réel `benevoles-secret` est régénéré à chaque déploiement par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` :
 
 | Clé | Origine |
 |-----|---------|
@@ -147,14 +147,17 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `AUTH_SECRET`, `CRON_SECRET`, `TOKEN_ENCRYPTION_KEY`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` | secrets GitHub du même nom |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ADMIN_NOTIFICATION_EMAIL` | secrets GitHub du même nom |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | secrets GitHub du même nom |
+| `NTFY_URL`, `NTFY_TOKEN`, `OPERATOR_ALERT_EMAIL` | secrets GitHub du même nom (#810) ; vides : pas d'alerte ntfy, alertes email aux super admins actifs |
+| `SIGNUP` | secret GitHub du même nom (#810) ; vide : inscription en libre-service ouverte, `off` la ferme |
+| `ORG_INACTIVITY`, `PAST_EVENT_RETENTION` | secrets GitHub du même nom (#811, #813) ; vides : `report` et observation |
 | `SENTRY_DSN` | secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN` |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | secrets GitHub du même nom ; lus seulement par le seed |
 | `NEXT_PUBLIC_APP_URL`, `AUTH_URL` | écrits en dur : `https://www.benevol.app` |
-| `AUTH_TRUST_HOST` | écrit en dur : `true` |
+| `AUTH_TRUST_HOST`, `HOSTED_SERVICE` | écrits en dur : `true` |
 | `VIDEO_MEDIA_BASE_URL` | écrit en dur : `https://medias.benevol.app` (#644) |
 | `BACKUP_PASSPHRASE` | non géré par le workflow : ajouté à la main dans le cluster, voir [deploiement.md](deploiement.md#backup_passphrase-est-un-point-unique-de-défaillance) |
 | `OFFSITE_BUCKET` | secret GitHub du même nom (#524) : container Swiss Backup des copies hors site, obligatoire pour le CronJob `backup-offsite` ; voir [deploiement.md](deploiement.md#copie-hors-site) |
 
-`APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS` et `VAPID_EMAIL` ne sont pas transmis : leurs valeurs par défaut s'appliquent. Le workflow lit aussi `KUBECONFIG_BASE64` (accès au cluster), `GHCR_PULL_TOKEN` (secret de tirage `ghcr-secret`), `NEXT_PUBLIC_SENTRY_DSN` (argument de build) et `SENTRY_AUTH_TOKEN` (secret de build).
+Seules ces clés arrivent dans l'application : un secret GitHub absent de l'étape « Sync k8s secret » n'a aucun effet en production, même s'il porte le nom d'une variable de cette page. C'est le cas de `AUTH_URL` et `AUTH_TRUST_HOST`, que le workflow écrit en dur, et de `WARMUP`. Régler une autre variable en production demande donc une ligne de plus dans cette étape. `SITE_NAME`, `CONTACT_EMAIL`, `SUPPORT_URL`, `RELEASE_CHECK`, les `EMAIL_LIMIT_*`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `VAPID_EMAIL` et `WARMUP` ne sont pas transmis : leurs valeurs par défaut s'appliquent. Un secret GitHub est lu au lancement de l'exécution du workflow : posé pendant un déploiement, il n'arrive qu'au déploiement suivant, ou après une relance de l'exécution suivie de `kubectl -n benevoles rollout restart deployment/benevoles-app`. Le workflow lit aussi `KUBECONFIG_BASE64` (accès au cluster), `GHCR_PULL_TOKEN` (secret de tirage `ghcr-secret`), `NEXT_PUBLIC_SENTRY_DSN` (argument de build) et `SENTRY_AUTH_TOKEN` (secret de build).
 
 Le workflow applique le secret avec `kubectl apply` : une clé qu'il gère, modifiée à la main dans le cluster, est écrasée au déploiement suivant.
