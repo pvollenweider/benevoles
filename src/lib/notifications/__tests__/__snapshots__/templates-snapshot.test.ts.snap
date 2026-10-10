@@ -545,6 +545,61 @@ exports[`render — snapshot of every notification kind > operator_alert 1`] = `
 }
 `;
 
+exports[`render — snapshot of every notification kind > org_reactivation 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Lien valable 24 heures, une seule fois.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.5em">Réactiver votre espace</h2>",
+    "    <p>Bonjour Julie &lt;Martin&gt;,</p>",
+    "    <p>Vous avez demandé à réactiver l'espace de Fête &lt;Rhône&gt; &amp; &quot;Lac&quot; sur benevol.app, désactivé faute d'activité. Ses événements, ses membres et ses réglages sont toujours là.</p>",
+    "    <p>Ouvrez le lien ci-dessous, puis appuyez sur « Réactiver l'espace ». Le lien fonctionne une seule fois, pendant 24 heures.</p>",
+    "    <p style="margin-top:1.5em"><a href="https://www.benevol.app/admin/reactivate/confirm?lien=abc" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Réactiver mon espace</a></p>",
+    "    <p style="font-size:0.9em;word-break:break-all">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur : https://www.benevol.app/admin/reactivate/confirm?lien=abc</p>",
+    "    <p>Une fois l'espace réactivé, connectez-vous comme d'habitude.</p>",
+    "    <p style="color:#555;font-size:0.9em;margin-top:2em">Si vous n'avez pas fait cette demande, ignorez cet email : l'espace reste désactivé.</p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Réactiver l'espace Fête <Rhône> & "Lac"",
+  "text": [
+    "Réactiver votre espace",
+    "",
+    "Bonjour Julie <Martin>,",
+    "",
+    "Vous avez demandé à réactiver l'espace de Fête <Rhône> & "Lac" sur benevol.app, désactivé faute d'activité. Ses événements, ses membres et ses réglages sont toujours là.",
+    "",
+    "Ouvrez le lien ci-dessous, puis appuyez sur « Réactiver l'espace ». Le lien fonctionne une seule fois, pendant 24 heures.",
+    "https://www.benevol.app/admin/reactivate/confirm?lien=abc",
+    "",
+    "Une fois l'espace réactivé, connectez-vous comme d'habitude.",
+    "",
+    "Si vous n'avez pas fait cette demande, ignorez cet email : l'espace reste désactivé.",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > password_reset 1`] = `
 {
   "html": [

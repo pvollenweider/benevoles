@@ -107,6 +107,11 @@ export default function LoginPage() {
               Mot de passe oublié ?
             </Link>
           </div>
+          <div className="text-center">
+            <Link href="/admin/reactivate" className="text-sm text-gray-700 underline underline-offset-2 hover:text-gray-900">
+              Espace désactivé faute d&apos;activité ? Le réactiver
+            </Link>
+          </div>
         </form>
       </div>
     </main>

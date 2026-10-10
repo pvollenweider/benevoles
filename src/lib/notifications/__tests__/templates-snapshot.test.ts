@@ -510,6 +510,16 @@ const cases: [string, NotificationPayload][] = [
       membersOnlyOld: 12,
     },
   }],
+  ["org_reactivation", {
+    kind: "org_reactivation",
+    recipient,
+    data: {
+      adminName: "Julie <Martin>",
+      organizationName: tricky,
+      reactivateUrl: "https://www.benevol.app/admin/reactivate/confirm?lien=abc",
+      hours: 24,
+    },
+  }],
   ["open_shifts", {
     kind: "open_shifts",
     recipient,
@@ -573,6 +583,7 @@ describe("render — snapshot of every notification kind", () => {
       space_approved: true,
       addresses_to_verify_summary: true,
       past_event_notice: true,
+      org_reactivation: true,
       open_shifts: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))

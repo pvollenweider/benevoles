@@ -147,6 +147,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   space_approved: "Espace activé",
   addresses_to_verify_summary: "Résumé quotidien des adresses à vérifier",
   past_event_notice: "Préavis d'anonymisation des événements de plus de 3 ans",
+  org_reactivation: "Lien pour réactiver un espace désactivé faute d'activité",
   open_shifts: "Créneaux à compléter proposés à des membres",
 }
 

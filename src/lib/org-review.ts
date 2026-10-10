@@ -49,6 +49,16 @@ export function abandonedSignupSpaceWhere(cutoff: Date) {
   } as const
 }
 
+/**
+ * A deactivated space the nightly cleanup erases, `cutoff` after its last change. Never a suspended
+ * one (#810: kept for the investigation, deleted by the super admin only), nor one deactivated for
+ * inactivity (#811): its administrators can reactivate it, and its erasure is the periodic check's
+ * own last step.
+ */
+export function expiredDeactivatedOrgWhere(cutoff: Date) {
+  return { active: false, suspendedAt: null, inactivityDeactivatedAt: null, updatedAt: { lt: cutoff } } as const
+}
+
 /** The daily summary sentence, or null when nothing waits (#810: one summary a day, not one per request). */
 export function pendingSummary(createdAts: readonly Date[], now: Date): string | null {
   if (createdAts.length === 0) return null

@@ -38,6 +38,7 @@ export type NotificationKind =
   | "release_available"
   | "addresses_to_verify_summary"
   | "past_event_notice"
+  | "org_reactivation"
   | "open_shifts"
   | "operator_alert"
   | "signup_confirmation"
