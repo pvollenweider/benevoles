@@ -83,3 +83,33 @@ test("the super admin sees Oui, Non and total per video and revision", async ({ 
   const after = await cells()
   expect(after).toEqual({ ...before, yes: before.yes + 1, total: before.total + 1 })
 })
+
+test("the super admin sorts the organisations and video feedback tables, and the sort survives a reload (#820)", async ({ page }) => {
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+
+  await page.goto("/super-admin/organizations")
+  const members = page.getByRole("columnheader", { name: "Membres" })
+  await expect(members).toHaveAttribute("aria-sort", "none")
+  await members.getByRole("button").click()
+  await members.getByRole("button").click()
+  await expect(members).toHaveAttribute("aria-sort", "descending")
+  await expect(page).toHaveURL(/\?tri=membres-desc$/)
+  await expect(page.getByRole("status").filter({ hasText: "Trié par membres, décroissant" })).toBeAttached()
+  await page.reload()
+  await expect(page.getByRole("columnheader", { name: "Membres" })).toHaveAttribute("aria-sort", "descending")
+  // Nom, Slug, État, Création, Événements, Admins, Membres, actions: « Membres » is the 7th cell.
+  const counts = await page.getByRole("table").locator("tbody tr").evaluateAll((trs) => trs.map((tr) => Number(tr.querySelectorAll("td")[6]?.textContent)))
+  expect(counts).toEqual([...counts].sort((a, b) => b - a))
+
+  await page.goto("/super-admin/video-feedback")
+  const total = page.getByRole("columnheader", { name: "Total" })
+  await total.getByRole("button").click()
+  await expect(total).toHaveAttribute("aria-sort", "ascending")
+  await expect(page).toHaveURL(/\?tri=total-asc$/)
+  await page.reload()
+  await expect(page.getByRole("columnheader", { name: "Total" })).toHaveAttribute("aria-sort", "ascending")
+})
