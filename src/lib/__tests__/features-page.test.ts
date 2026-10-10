@@ -175,7 +175,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
       "un-outil-sur-lequel-compter",
       "se-former",
       "demarrer",
-      "ce-que-benevol-app-ne-fait-pas",
+      "ce-que-benevol-app-ne-fait-pas-volontairement",
     ])
     expect(page.sections[0].steps).toHaveLength(3)
   })

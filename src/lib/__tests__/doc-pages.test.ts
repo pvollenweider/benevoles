@@ -86,25 +86,11 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
     expect(site).not.toContain("](GUIDE_ADMIN.md)")
   })
 
-  // « Pas encore » (#768) names what isn't built, on purpose: each line links its open ticket.
-  const notYetStart = md.indexOf("### Pas encore")
-  const notYetEnd = md.indexOf("\n## ", notYetStart)
-  const notYet = md.slice(notYetStart, notYetEnd === -1 ? undefined : notYetEnd)
-  const announced = md.replace(notYet, "")
-
   it("announces nothing that isn't built yet (audit of the open tickets)", () => {
     // The organization logo shipped with #300 and left this list.
     for (const future of [/recherche d'adresse/i, /QR/i, /photo/i, /ouverture programm/i, /aperçu avant import/i, /rôle organisateur/i]) {
-      expect(announced, String(future)).not.toMatch(future)
+      expect(md, String(future)).not.toMatch(future)
     }
-  })
-
-  it("says what it doesn't do, by choice or not yet, each gap linked to its ticket (#768)", () => {
-    const choices = md.slice(md.indexOf("### Par choix"), notYetStart).split("\n").filter((l) => l.startsWith("- "))
-    const gaps = notYet.split("\n").filter((l) => l.startsWith("- "))
-    expect(notYetStart).toBeGreaterThan(-1)
-    expect(choices.length + gaps.length).toBeGreaterThanOrEqual(8)
-    for (const gap of gaps) expect(gap).toMatch(/\(\[#\d+\]\(https:\/\/github\.com\/pvollenweider\/benevoles\/issues\/\d+\)\)\.$/)
   })
 
   it("announces the organization logo now that it is built (#300)", () => {
