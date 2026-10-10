@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
 import ContentNav from "@/components/public/ContentNav"
+import SiteBrandLink from "@/components/public/SiteBrandLink"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
-import { SITE_NAME } from "@/lib/seo-metadata"
 
 /**
  * The video library (#644): public and indexed since 2026-10-07 (src/lib/video-seo.ts), linked
@@ -21,9 +20,7 @@ export default function VideosLayout({ children }: { children: React.ReactNode }
       <SkipLink />
       <header className="border-b border-gray-200 bg-white">
         <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
-          <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 hover:text-gray-600 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            {SITE_NAME}
-          </Link>
+          <SiteBrandLink className="text-gray-900 hover:text-gray-600 focus-visible:outline-blue-600" />
           <ContentNav />
         </div>
       </header>
