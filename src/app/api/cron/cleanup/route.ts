@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, pendingSummary } from "@/lib/org-review"
+import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, expiredDeactivatedOrgWhere, pendingSummary } from "@/lib/org-review"
 import { notifyOperator } from "@/lib/operator-alerts"
 import { countsToFreeze } from "@/lib/message-history"
 import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
@@ -61,8 +61,8 @@ async function run(req: Request) {
   // only removes inactive ones), with its email and password hash kept indefinitely.
   const { deletedOrgs, deletedOrgAdmins } = await prisma.$transaction(async (tx) => {
     const orgs = await tx.organization.findMany({
-      // A suspended organisation (#810) is kept for the investigation: only the super admin deletes it.
-      where: { active: false, suspendedAt: null, updatedAt: { lt: orgCutoff } },
+      // Never a suspended one, nor one deactivated for inactivity (src/lib/org-review.ts).
+      where: expiredDeactivatedOrgWhere(orgCutoff),
       select: { id: true },
     })
     const orgIds = orgs.map((o) => o.id)

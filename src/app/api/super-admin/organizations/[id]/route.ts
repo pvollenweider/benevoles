@@ -120,7 +120,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const decision = decideSuspension(existing, parsed.data)
   if (!decision.ok) return NextResponse.json({ error: decision.error }, { status: decision.status })
 
-  const updates: { active?: boolean; name?: string; slug?: string; suspendedAt?: Date | null; suspensionReason?: string | null } = { ...decision.update }
+  const updates: { active?: boolean; name?: string; slug?: string; suspendedAt?: Date | null; suspensionReason?: string | null; inactivityDeactivatedAt?: null } = { ...decision.update }
+  // Reactivated by the operator: no longer a space deactivated for inactivity (#811).
+  const reactivating = decision.update.active === true && !existing.active
+  if (reactivating) updates.inactivityDeactivatedAt = null
   let oldSlug: string | null = null
 
   if (parsed.data.name !== undefined) updates.name = parsed.data.name.trim()
@@ -178,6 +181,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         detail: operatorAction === "organization.suspended" ? updates.suspensionReason : null,
       })
     }
+    // Pending « Réactiver mon espace » links have nothing left to do (#811).
+    if (reactivating) await tx.adminUser.updateMany({ where: { organizationId: id, orgReactivationTokenHash: { not: null } }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
     if (oldSlug && updates.slug) {
       await tx.orgSlugHistory.deleteMany({ where: { slug: updates.slug, organizationId: id } })
       await tx.orgSlugHistory.create({ data: { slug: oldSlug, organizationId: id } })

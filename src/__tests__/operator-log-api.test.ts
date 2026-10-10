@@ -22,7 +22,7 @@ vi.mock("@/lib/prisma", () => {
     organization: { update: m.orgUpdate, delete: m.orgDelete },
     orgSlugHistory: { deleteMany: vi.fn(), create: vi.fn() },
     volunteer: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn() },
-    adminUser: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn() },
+    adminUser: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn() },
     signupBlock: { upsert: m.blockUpsert, findUnique: m.blockFindUnique, delete: m.blockDelete },
   }
   return { prisma: { ...tx, organization: { ...tx.organization, findUnique: m.orgFindUnique }, $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx) } }
@@ -62,6 +62,9 @@ describe("operator log: organisations", () => {
     m.orgFindUnique.mockResolvedValueOnce(org)
     await PATCH(json("PATCH", { name: "Fête du village" }), params("org-1"))
     expect(logged().map((d) => d.action)).toEqual(["organization.deactivated", "organization.reactivated"])
+    // #811: reactivated by the operator, no longer a space deactivated for inactivity, links spent.
+    expect(m.orgUpdate.mock.calls[0][0].data).not.toHaveProperty("inactivityDeactivatedAt")
+    expect(m.orgUpdate.mock.calls[1][0].data).toMatchObject({ active: true, inactivityDeactivatedAt: null })
   })
 
   it("logs a deletion, with the name the organisation had", async () => {

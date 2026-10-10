@@ -438,3 +438,43 @@ export function renderPastEventNotice(p: NotificationPayload): RenderedEmail {
 
   return { subject, html, text }
 }
+
+// ── Lien « Réactiver mon espace » (#811) ─────────────────────────────────────
+
+export function renderOrgReactivation(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { adminName: string; organizationName: string; reactivateUrl: string; hours: number }
+  const subject = `Réactiver l'espace ${d.organizationName}`
+  const title = "Réactiver votre espace"
+  const intro = `Vous avez demandé à réactiver l'espace de ${d.organizationName} sur ${siteName()}, désactivé faute d'activité. Ses événements, ses membres et ses réglages sont toujours là.`
+  const how = `Ouvrez le lien ci-dessous, puis appuyez sur « Réactiver l'espace ». Le lien fonctionne une seule fois, pendant ${d.hours} heures.`
+  const after = "Une fois l'espace réactivé, connectez-vous comme d'habitude."
+  const notYou = "Si vous n'avez pas fait cette demande, ignorez cet email : l'espace reste désactivé."
+
+  const text = [
+    title,
+    ``,
+    `Bonjour ${d.adminName},`,
+    ``,
+    intro,
+    ``,
+    how,
+    d.reactivateUrl,
+    ``,
+    after,
+    ``,
+    notYou,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">${escapeHtml(title)}</h2>
+    <p>Bonjour ${escapeHtml(d.adminName)},</p>
+    <p>${escapeHtml(intro)}</p>
+    <p>${escapeHtml(how)}</p>
+    <p style="margin-top:1.5em">${btn(d.reactivateUrl, "Réactiver mon espace")}</p>
+    <p style="font-size:0.9em;word-break:break-all">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur : ${escapeHtml(d.reactivateUrl)}</p>
+    <p>${escapeHtml(after)}</p>
+    <p style="color:#555;font-size:0.9em;margin-top:2em">${escapeHtml(notYou)}</p>
+  `, `Lien valable ${d.hours} heures, une seule fois.`)
+
+  return { subject, html, text }
+}

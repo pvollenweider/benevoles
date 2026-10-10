@@ -53,6 +53,10 @@ model Organization {
   // and an exempt organisation is never deactivated automatically (« Ne jamais désactiver »).
   inactivityPostponedUntil DateTime?
   inactivityExempt         Boolean   @default(false)
+  // Set when the check deactivated the space for lack of activity (#811). Only such a space can be
+  // reactivated by its own administrators (« Réactiver mon espace »), and the nightly cleanup does
+  // not erase it after 30 days like a space deactivated by the operator.
+  inactivityDeactivatedAt  DateTime?
   // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
   pastEventNoticeAt DateTime?
   pastEventBatchAt  DateTime?
@@ -753,6 +757,10 @@ model AdminUser {
   setupTokenExpiresAt    DateTime?
   passwordResetTokenHash String?   @unique
   passwordResetExpiresAt DateTime?
+  // Single-use link « Réactiver mon espace » (#811): hash only, 24 hours, for an organisation
+  // deactivated for inactivity. Cleared when used, and when the organisation is active again.
+  orgReactivationTokenHash String?   @unique
+  orgReactivationExpiresAt DateTime?
   // Product-update emails (#200) — distinct from having an account at all. Defaults to opted
   // in (this is how the super admin reaches the beta-tester pool); an admin can unsubscribe via
   // a signed link in the email itself, no login required.
