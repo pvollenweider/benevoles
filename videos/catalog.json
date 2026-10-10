@@ -181,7 +181,8 @@
         "festival",
         "buvette",
         "sport",
-        "brouillon"
+        "brouillon",
+        "permanences"
       ],
       "published": true,
       "seedScenario": "demo",
@@ -192,8 +193,8 @@
         "organisateur"
       ],
       "feature": "Modèles d'événement",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-10",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -440,6 +441,32 @@
       "updatedAt": "2026-10-07",
       "revision": 3,
       "level": "essentiel"
+    },
+    {
+      "id": "SHIFT_RECURRENCE",
+      "manifest": "shift-recurrence",
+      "category": "planning",
+      "tags": [
+        "permanences",
+        "récurrence",
+        "chaque semaine",
+        "saison",
+        "jours fériés",
+        "fermetures"
+      ],
+      "published": false,
+      "seedScenario": "shift-recurrence",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Permanences récurrentes",
+      "updatedAt": "2026-10-10",
+      "revision": 1,
+      "level": "essentiel",
+      "added": "2026-10-10"
     },
     {
       "id": "SHIFT_TIMELINE_QUICK_ACTIONS",

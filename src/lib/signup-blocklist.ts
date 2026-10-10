@@ -16,12 +16,9 @@ import { createHmac } from "node:crypto"
  * Pure (crypto only): validation, normalisation, matching.
  */
 
-export type BlockKind = "email" | "domain" | "ip"
+import { IP_DEFAULT_DAYS, IP_MAX_DAYS, REASON_MAX, REASON_MIN, type BlockKind } from "./signup-blocklist-limits"
 
-export const REASON_MIN = 3
-export const REASON_MAX = 300
-export const IP_DEFAULT_DAYS = 7
-export const IP_MAX_DAYS = 90
+export { IP_DEFAULT_DAYS, IP_MAX_DAYS, REASON_MAX, REASON_MIN, type BlockKind }
 
 /** Domains shared by many people: blocking one needs an explicit confirmation. */
 export const COMMON_PROVIDERS: readonly string[] = [

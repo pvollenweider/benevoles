@@ -1,0 +1,75 @@
+{
+  "id": "SHIFT_RECURRENCE",
+  "slug": "shift-recurrence",
+  "title": "Créer des permanences récurrentes",
+  "description": "Décrire une permanence hebdomadaire une fois, contrôler les dates exclues, puis la modifier ou l’arrêter à partir d’une date.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous créez une permanence qui revient chaque semaine sur toute une saison, puis vous la modifiez et en arrêtez une autre à partir d’une date.",
+    "steps": [
+      "Dans la page des créneaux, cliquez sur « Répéter chaque semaine ».",
+      "Indiquez le poste, les jours, le rythme, la plage horaire et le nombre de personnes par créneau.",
+      "Vérifiez les jours fériés exclus, ajoutez vos fermetures, puis lisez l’aperçu : nombre de dates et de créneaux, premières dates, dates exclues avec leur raison.",
+      "Créez les créneaux : la permanence apparaît sous « Permanences récurrentes ».",
+      "« Modifier à partir d’une date » change le nombre de personnes, ou l’horaire d’une permanence d’un seul créneau par jour, sur les dates suivantes.",
+      "« Arrêter à partir d’une date » supprime les dates sans inscrit ; les dates avec inscrits sont listées et annulées seulement si vous confirmez.",
+      "Côté bénévoles, une saison se lit mois par mois sous « Choisir le mois »."
+    ],
+    "remember": [
+      "L’événement porte la période : pour une saison, donnez-lui d’abord ses dates de début et de fin.",
+      "Chaque date est un créneau ordinaire, modifiable ou supprimable seule.",
+      "Les dates passées ne changent jamais ; les inscrits sont prévenus par email d’un changement d’horaire ou d’une annulation."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful association coordinator. Natural conversational French, calm medium pace and clear articulation. Read every provided sentence verbatim, without omission, addition, paraphrase or summary. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Une épicerie, un accueil ou une distribution reviennent chaque semaine, toute la saison. Plutôt que de créer chaque date, décrivez la permanence une fois : toutes ses dates sont créées, jours fériés et fermetures exclus. L’événement porte la saison : ici, treize semaines. Ouvrons Répéter chaque semaine.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "describe",
+      "transcript": "Le poste est Caisse et accueil. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "exclusions",
+      "transcript": "Les jours fériés suisses sont proposés d’après le fuseau horaire de l’organisation. Ajoutons une fermeture : un mardi où le local reste fermé. L’aperçu donne le nombre de dates et de créneaux, les premières dates, puis chaque date exclue avec sa raison : jour férié ou fermeture.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "create",
+      "transcript": "Créons les créneaux. La permanence rejoint la liste Permanences récurrentes, avec son rythme, sa période et le nombre de dates à venir. Chaque date est un créneau ordinaire : les bénévoles s’y inscrivent et reçoivent leurs rappels comme d’habitude.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "change",
+      "transcript": "Finalement, la caisse a besoin de trois personnes. Modifier à partir d’une date change le nombre de personnes sur toutes les dates suivantes, sans toucher aux dates passées. Si l’horaire change, les bénévoles inscrits sont prévenus par email.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "stop",
+      "transcript": "La réception des livraisons s’arrête à partir de la cinquième semaine. Les dates sans inscrit sont supprimées. Ici, deux dates ont déjà des inscrits : elles sont d’abord listées, et rien ne change tant que vous ne confirmez pas. Confirmons : ces deux créneaux sont annulés et chaque personne est prévenue par email.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "volunteer",
+      "transcript": "Côté bénévoles, une saison de quatre semaines ou plus n’affiche plus les jours passés. À partir de huit dates, le planning se lit mois par mois : sous Choisir le mois, chaque bouton indique son nombre de dates.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Une permanence se décrit une fois, se modifie ou s’arrête d’un seul geste, et chaque date reste modifiable seule. Pour la saison suivante, dupliquez l’événement : les permanences sont recréées sur les mêmes jours de la semaine.",
+      "fallbackDurationMs": 20000
+    }
+  ]
+}

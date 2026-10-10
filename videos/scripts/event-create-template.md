@@ -8,7 +8,7 @@ Obtenir rapidement un brouillon réaliste lorsque l’événement correspond à 
 
 ## Démonstration
 
-1. Comparer les cinq modèles et la page blanche.
+1. Comparer les cinq modèles d’événement, les quatre modèles d’activité régulière (renvoi à `SHIFT_RECURRENCE`) et la page blanche.
 2. Choisir « Fête de village » et lire le récapitulatif précis.
 3. Saisir le titre et le premier jour.
 4. Créer le brouillon et vérifier ses dix créneaux.

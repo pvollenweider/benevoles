@@ -16,7 +16,7 @@ async function run(command: string, args: string[]) {
 
 async function seed(scenario?: string) {
   if (!scenario) return
-  if (scenario === "attendance-check-in" || scenario === "volunteer-badges" || scenario === "event-reports" || scenario === "reminders-changes" || scenario === "targeted-messages" || scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management" || scenario === "members-invitations" || scenario === "members-reminders" || scenario === "registrations-management" || scenario === "staffing-gaps") {
+  if (scenario === "attendance-check-in" || scenario === "volunteer-badges" || scenario === "event-reports" || scenario === "reminders-changes" || scenario === "targeted-messages" || scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management" || scenario === "members-invitations" || scenario === "members-reminders" || scenario === "registrations-management" || scenario === "staffing-gaps" || scenario === "shift-recurrence") {
     await seed("demo")
     await run("node", ["--env-file=.env.video.e2e", "node_modules/.bin/tsx", "scripts/seed-video-scenario.ts", scenario])
     return

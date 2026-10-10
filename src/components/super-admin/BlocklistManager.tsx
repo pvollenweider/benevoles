@@ -9,7 +9,7 @@ import { NETWORK_ERROR, useSubmit } from "@/lib/use-submit"
 import { announce } from "@/lib/announce"
 import FormStatus from "@/components/FormStatus"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
-import { IP_DEFAULT_DAYS, IP_MAX_DAYS, REASON_MAX, type BlockKind } from "@/lib/signup-blocklist"
+import { IP_DEFAULT_DAYS, IP_MAX_DAYS, REASON_MAX, type BlockKind } from "@/lib/signup-blocklist-limits"
 
 type Block = { id: string; kind: string; label: string; reason: string; expiresAt: string | null; createdAt: string }
 

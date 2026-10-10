@@ -364,6 +364,19 @@ async function main() {
       }
     }
 
+    if (slug === "shift-recurrence") {
+      const href = await page.getByRole("link", { name: "Épicerie de la Gare — permanences", exact: true }).first().getAttribute("href")
+      if (!href) throw new Error("Recurrence fixture missing; run scripts/seed-video-scenario.ts shift-recurrence")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      for (const route of [`/admin/events/${featureEventId}/shifts`, `/epicerie-permanences?org=${encodeURIComponent(org)}`]) {
+        await page.goto(`${baseUrl}${route}`); await settle(page)
+      }
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+      // A previous take leaves « Caisse et accueil » and a shortened delivery rule behind.
+      const listed = page.getByRole("region", { name: "Permanences récurrentes" }).getByRole("listitem")
+      if (await listed.count() !== 1 || !(await listed.first().innerText()).startsWith("Réception des livraisons")) throw new Error("Recurrence fixture already used; re-seed shift-recurrence before the take")
+    }
+
     if (slug === "members-management" || slug === "members-import") {
       await page.goto(`${baseUrl}/admin/members`); await settle(page)
       await page.getByRole("heading", { name: "Membres", exact: true }).waitFor()
@@ -1245,6 +1258,104 @@ async function main() {
         await first.scrollIntoViewIfNeeded()
         await at(0.55)
         await rows.last().scrollIntoViewIfNeeded()
+      })
+    } else if (slug === "shift-recurrence") {
+      // Dates follow the fixture's season (scripts/seed-video-recurrence.ts): never a fixed day.
+      const event = await page.evaluate(async (id) => (await (await fetch(`/api/admin/events/${id}`)).json()) as { startDate: string }, featureEventId)
+      const start = event.startDate.slice(0, 10)
+      const plusDays = (iso: string, days: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10)
+      const closure = plusDays(start, 2 * 7 + 1)
+      const stopFrom = plusDays(start, 4 * 7 + 2)
+      const form = page.getByRole("region", { name: "Répéter un créneau chaque semaine" })
+      const rules = page.getByRole("region", { name: "Permanences récurrentes" })
+      await scene("welcome", async (at) => {
+        await page.screencast.showChapter(manifest.title, { description: "Une permanence décrite une fois pour toute la saison", duration: 2_300 })
+        await page.getByRole("heading", { name: "Créneaux" }).waitFor()
+        await rules.scrollIntoViewIfNeeded()
+        await at(0.72)
+        const open = page.getByRole("button", { name: "Répéter chaque semaine", exact: true })
+        await open.scrollIntoViewIfNeeded()
+        await tap(page, open)
+        await page.getByRole("heading", { name: "Répéter un créneau chaque semaine" }).waitFor()
+      })
+      await scene("describe", async (at) => {
+        await typeNaturally(page, form.getByLabel(/^Poste/), "Caisse et accueil")
+        await at(0.20)
+        await tap(page, form.getByRole("checkbox", { name: "mardi", exact: true }))
+        await tap(page, form.getByRole("checkbox", { name: "jeudi", exact: true }))
+        await at(0.36)
+        const weekly = form.getByRole("radio", { name: "Chaque semaine", exact: true })
+        await weekly.scrollIntoViewIfNeeded()
+        if (!(await weekly.isChecked())) throw new Error("« Chaque semaine » must be the default rhythm")
+        await at(0.58)
+        await typeNaturally(page, form.getByLabel(/^Début/), "17:00")
+        await typeNaturally(page, form.getByLabel(/^Fin/), "19:30")
+        await at(0.86)
+        const capacity = form.getByLabel(/^Personnes par créneau/)
+        await capacity.scrollIntoViewIfNeeded()
+        if (await capacity.inputValue() !== "2") await fillVisibly(page, capacity, "2", 400)
+      })
+      await scene("exclusions", async (at) => {
+        const holidays = form.getByLabel("Jours fériés exclus", { exact: true })
+        await holidays.scrollIntoViewIfNeeded()
+        if (await holidays.inputValue() !== "CH") throw new Error("Swiss holidays must be proposed from the organization's time zone")
+        await at(0.24)
+        await fillVisibly(page, form.getByLabel("Fermetures (vacances, jours sans permanence)", { exact: true }), closure, 600)
+        await tap(page, form.getByRole("button", { name: "Ajouter la date", exact: true }))
+        await form.getByRole("list", { name: "Fermetures" }).waitFor()
+        await at(0.46)
+        await form.getByText(/^Aperçu :/).scrollIntoViewIfNeeded()
+        await at(0.66)
+        const skipped = form.getByRole("list", { name: "Dates exclues" })
+        await skipped.scrollIntoViewIfNeeded()
+        await skipped.getByText(/ : fermeture$/).waitFor()
+      })
+      await scene("create", async (at) => {
+        const create = form.getByRole("button", { name: /^Créer \d+ créneaux$/ })
+        await create.scrollIntoViewIfNeeded()
+        await at(0.06)
+        await tap(page, create)
+        await form.waitFor({ state: "hidden" })
+        await rules.getByText("Caisse et accueil", { exact: true }).waitFor()
+        await rules.scrollIntoViewIfNeeded()
+        await at(0.62)
+      })
+      await scene("change", async (at) => {
+        await tap(page, rules.getByRole("button", { name: /^Modifier à partir d'une date\W+Caisse et accueil$/ }))
+        const panel = rules.getByRole("group", { name: "Modifier Caisse et accueil à partir d'une date" })
+        await panel.waitFor()
+        await at(0.28)
+        await fillVisibly(page, panel.getByLabel("Personnes par créneau", { exact: true }), "3", 600)
+        await at(0.52)
+        await tap(page, panel.getByRole("button", { name: "Modifier ces dates", exact: true }))
+        await panel.waitFor({ state: "hidden" })
+        await page.getByRole("status").filter({ hasText: /Permanence Caisse et accueil modifiée/ }).waitFor()
+      })
+      await scene("stop", async (at) => {
+        await tap(page, rules.getByRole("button", { name: /^Arrêter à partir d'une date\W+Réception des livraisons$/ }))
+        const panel = rules.getByRole("group", { name: "Arrêter Réception des livraisons à partir d'une date" })
+        await panel.waitFor()
+        await fillVisibly(page, panel.getByLabel("À partir du", { exact: true }), stopFrom, 600)
+        await at(0.16)
+        await tap(page, panel.getByRole("button", { name: "Arrêter la permanence", exact: true }))
+        await panel.getByRole("group", { name: /^2 dates ont déjà des inscrits/ }).waitFor()
+        await at(0.66)
+        await tap(page, panel.getByRole("button", { name: "Annuler aussi ces 2 dates et prévenir les inscrits", exact: true }))
+        await page.getByRole("status").filter({ hasText: /Permanence Réception des livraisons arrêtée/ }).waitFor()
+      })
+      await scene("volunteer", async (at) => {
+        await page.goto(`${baseUrl}/epicerie-permanences?org=${encodeURIComponent(org)}`); await settle(page)
+        const months = page.getByRole("group", { name: "Choisir le mois" })
+        await months.waitFor()
+        await at(0.50)
+        await tap(page, months.getByRole("button").nth(1))
+        await months.getByRole("button").nth(1).and(page.locator("[aria-pressed=true]")).waitFor()
+      })
+      await scene("result", async (at) => {
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+        await rules.scrollIntoViewIfNeeded()
+        if (await rules.getByRole("listitem").count() !== 2) throw new Error("Both permanences must stay listed after a stop from a later date")
+        await at(0.60)
       })
     } else if (slug === "shift-create-edit-detail") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
@@ -4016,18 +4127,26 @@ async function main() {
         await page.getByRole("heading", { name: "Nouvel événement" }).waitFor()
       })
 
-      await page.screencast.showChapter("Choisir le bon point de départ", { description: "Cinq structures courantes ou une page blanche", duration: 1_400 })
+      await page.screencast.showChapter("Choisir le bon point de départ", { description: "Neuf structures courantes ou une page blanche", duration: 1_400 })
       await scene("compare", async (at) => {
         await tap(page, page.getByRole("radio", { name: /Festival sur plusieurs jours/ }))
-        await at(0.24)
+        await at(0.13)
         await tap(page, page.getByRole("radio", { name: /^Buvette/ }))
-        await at(0.42)
+        await at(0.25)
         await tap(page, page.getByRole("radio", { name: /Manifestation sportive/ }))
-        await at(0.60)
+        await at(0.37)
         await tap(page, page.getByRole("radio", { name: /Fête de village/ }))
-        await at(0.78)
+        await at(0.48)
         await tap(page, page.getByRole("radio", { name: /Montage, exploitation, démontage/ }))
-        await at(0.94)
+        await at(0.57)
+        // The four regular activities (#866): weekly permanences, presented in SHIFT_RECURRENCE.
+        for (const [name, mark] of [[/Épicerie participative/, 0.66], [/Distribution alimentaire/, 0.72], [/Permanence d'accueil/, 0.78], [/Repair café/, 0.84]] as const) {
+          await page.getByRole("radio", { name }).scrollIntoViewIfNeeded()
+          await tap(page, page.getByRole("radio", { name }))
+          await at(mark)
+        }
+        await page.getByRole("radio", { name: /Page blanche/ }).scrollIntoViewIfNeeded()
+        await at(0.93)
         await tap(page, page.getByRole("radio", { name: /Page blanche/ }))
       })
 
