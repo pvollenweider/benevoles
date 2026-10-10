@@ -1,13 +1,12 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocThemeToggle from "@/app/doc/DocThemeToggle"
 import ContentNav from "@/components/public/ContentNav"
+import SiteBrandLink from "@/components/public/SiteBrandLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
-import { SITE_NAME } from "@/lib/seo-metadata"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
@@ -72,9 +71,7 @@ export default function ContentShell({ children, layout = "article" }: { childre
 
       <header className="border-b border-gray-100 dark:border-gray-800">
         <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
-          <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
-            {SITE_NAME}
-          </Link>
+          <SiteBrandLink className="text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400" />
           <div className="flex items-center gap-3">
             <ContentNav />
             <DocThemeToggle />

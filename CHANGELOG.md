@@ -51,6 +51,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Logo dans l'en-tête des pages publiques** : le logo de benevol.app précède désormais son nom en haut des pages Fonctionnalités, Documentation, Vidéos, Nouveautés, Accessibilité et des documents légaux.
 - **Tableaux triables dans l'espace super admin** (#820) : la liste des organisations se trie par nom, slug, état, date de création, nombre d'événements, d'administrateurs ou de membres, et « Avis sur les vidéos » par vidéo, révision, Oui, Non, total ou part de réponses utiles, comme la liste des membres. Le tri choisi reste après un rechargement. <!-- interne -->
 - **Politique de confidentialité** (#810) : elle décrit désormais les demandes d'espace (ce qui est collecté, pourquoi, combien de temps), la liste de blocage des inscriptions et l'adresse IP utilisée pour limiter les demandes.
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
