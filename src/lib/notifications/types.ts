@@ -37,6 +37,7 @@ export type NotificationKind =
   | "registration_restored"
   | "release_available"
   | "addresses_to_verify_summary"
+  | "past_event_notice"
   | "open_shifts"
   | "operator_alert"
   | "signup_confirmation"

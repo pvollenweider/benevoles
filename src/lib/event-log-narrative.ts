@@ -25,6 +25,11 @@ function fmtValue(v: unknown): string {
 
 /** One line per changed field, e.g. "capacité : 3 → 4". Field names get a French label when known. */
 const FIELD_LABELS: Record<string, string> = {
+  // Anonymisation of a past event (#813): counts only, never a name.
+  registrations: "inscriptions anonymisées",
+  answers: "réponses aux questions",
+  invites: "invitations",
+  sectorLeaders: "responsables de secteur",
   capacity: "capacité",
   status: "statut",
   date: "date",
@@ -111,6 +116,7 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
   "event.links_regenerated": (a) => `${a} a régénéré les liens personnels de l'événement`,
+  "event.personal_data_anonymized": () => "les données personnelles des bénévoles ont été anonymisées, 3 ans après la fin de l'événement",
   "message.sent": (a) => `${a} a envoyé un message`,
   "message.resent": (a) => `${a} a relancé les emails non distribués d'un message`,
   "question.created": (a) => `${a} a ajouté une question`,

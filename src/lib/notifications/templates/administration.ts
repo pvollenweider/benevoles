@@ -361,3 +361,80 @@ export function renderSpaceApproved(p: NotificationPayload): RenderedEmail {
   return { subject, html, text }
 }
 
+
+// ── Anonymisation des événements passés (#813) : préavis unique, 30 jours avant le premier lot ──
+
+export function renderPastEventNotice(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    organizationName: string
+    /** « lundi 9 novembre 2026 », in the organisation's zone. */
+    firstBatchOn: string
+    /** Every concerned event: the organisation must know which ones to export. */
+    events: { title: string; ended: string }[]
+    registrations: number
+    membersOnlyOld: number
+  }
+  const n = d.events.length
+  const subject = `Le ${d.firstBatchOn}, les noms des bénévoles de vos anciens événements seront effacés`
+  const title = "Effacement des noms dans vos événements de plus de 3 ans"
+  const guideUrl = `${BASE_URL}${docUnitHref("exporter-et-conserver-ses-donnees")}`
+  const membersUrl = `${BASE_URL}/admin/members`
+  const intro = `Pour ne pas garder sans fin les données personnelles des bénévoles, ${siteName()} anonymise les événements terminés depuis plus de 3 ans. Pour ${d.organizationName}, le premier effacement aura lieu le ${d.firstBatchOn}. Il concerne ${n > 1 ? `${n} événements` : "1 événement"} et ${d.registrations} inscription${d.registrations > 1 ? "s" : ""} :`
+  const before = `Si vous avez besoin de ces données (attestations, rapports pour un financeur), téléchargez-les avant le ${d.firstBatchOn} : ouvrez chaque événement, puis « Rapports », puis « Archive de l'événement ».`
+  const gone = [
+    "le nom, l'email et le téléphone des bénévoles inscrits",
+    "leurs commentaires et leurs réponses aux questions",
+    "les invitations et les responsables de secteur de ces événements",
+  ]
+  const kept = [
+    "les événements, leurs créneaux, les effectifs et les heures, sans nom",
+    "les fiches des membres ; ces événements disparaîtront de leur historique et de leur attestation de bénévolat",
+  ]
+  const plural = d.membersOnlyOld > 1
+  const onlyOld = d.membersOnlyOld > 0
+    ? `${d.membersOnlyOld} membre${plural ? "s n'ont" : " n'a"} participé à aucun événement depuis 3 ans. ${plural ? "Leurs fiches restent" : "Sa fiche reste"} : vous pouvez ${plural ? "les" : "la"} désactiver ou effacer ${plural ? "leurs" : "ses"} données. Dans la liste des membres, triez par « Dernière participation » pour ${plural ? "les" : "la"} retrouver.`
+    : null
+  const after = "Ensuite, chaque mois, les événements qui atteignent 3 ans sont anonymisés de la même façon, sans nouveau message."
+  const eventLine = (e: { title: string; ended: string }) => `${e.title}, terminé le ${e.ended}`
+  const h3 = (t: string) => `<h3 style="margin:1.5em 0 0.5em;font-size:1em">${escapeHtml(t)}</h3>`
+  const ul = (items: string[]) => `<ul style="margin:0 0 1em 1.25em;padding-left:0">${items.map((t) => `<li style="margin:0.25em 0">${escapeHtml(t)}</li>`).join("")}</ul>`
+
+  const text = [
+    title,
+    ``,
+    `Bonjour,`,
+    ``,
+    intro,
+    ...d.events.map((e) => `- ${eventLine(e)}`),
+    ``,
+    before,
+    ``,
+    `Ce qui sera effacé :`,
+    ...gone.map((t) => `- ${t}`),
+    ``,
+    `Ce qui reste :`,
+    ...kept.map((t) => `- ${t}`),
+    ...(onlyOld ? [``, onlyOld, `Liste des membres : ${membersUrl}`] : []),
+    ``,
+    after,
+    ``,
+    `Voir comment exporter mes données : ${guideUrl}`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">${escapeHtml(title)}</h2>
+    <p>Bonjour,</p>
+    <p>${escapeHtml(intro)}</p>
+    ${ul(d.events.map(eventLine))}
+    <p><strong>${escapeHtml(before)}</strong></p>
+    ${h3("Ce qui sera effacé")}
+    ${ul(gone)}
+    ${h3("Ce qui reste")}
+    ${ul(kept)}
+    ${onlyOld ? `<p>${escapeHtml(onlyOld)}</p><p><a href="${escapeHtml(membersUrl)}" style="color:#1d4ed8;text-decoration:underline">Ouvrir la liste des membres</a></p>` : ""}
+    <p>${escapeHtml(after)}</p>
+    <p style="margin-top:1.25em">${btn(guideUrl, "Voir comment exporter mes données")}</p>
+  `, `Si vous avez besoin des noms ou des heures de ces bénévoles, téléchargez-les avant le ${d.firstBatchOn}.`)
+
+  return { subject, html, text }
+}

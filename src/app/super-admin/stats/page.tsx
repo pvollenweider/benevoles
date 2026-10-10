@@ -8,6 +8,7 @@ import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import { loadPlatformUsage, loadSignupFacts } from "@/lib/usage-stats"
 import { signupIndicatorRows } from "@/lib/signup-indicators"
 import { observePastEvents } from "@/lib/past-event-retention-data"
+import { pastEventRetentionMode } from "@/lib/past-event-retention"
 import PastEventRetentionTable from "@/components/super-admin/PastEventRetentionTable"
 
 export const dynamic = "force-dynamic"
@@ -43,7 +44,7 @@ export default async function StatsPage() {
         intro="Ce qui dit si la validation à la main reste nécessaire. Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
         rows={signup}
       />
-      <PastEventRetentionTable rows={pastEvents} />
+      <PastEventRetentionTable rows={pastEvents} mode={pastEventRetentionMode()} />
     </div>
   )
 }
