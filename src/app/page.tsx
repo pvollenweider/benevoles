@@ -21,6 +21,9 @@ import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import { isHostedService } from "@/lib/site"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { isSignupOpen } from "@/lib/signup-switch"
+import { env } from "@/lib/env"
+import { loadHomeSignupVideo } from "@/lib/public-content"
+import HomeSignupVideo from "@/components/public/HomeSignupVideo"
 
 export const dynamic = "force-dynamic"
 
@@ -259,6 +262,22 @@ function LandingPage() {
   // The documentation's entry points (#764): titles and summaries read from guide/.
   const units = loadDocUnits()
   const quickstart = landingQuickstartLink(units)
+  // The phone plays the volunteer sign-up video in place (#765) when it can play here.
+  const signupVideo = loadHomeSignupVideo(env.VIDEO_MEDIA_BASE_URL)
+  const phoneStill = (
+    <Image
+      src="/doc-img/public-timeline-mobile.png"
+      width={780}
+      height={1688}
+      alt="La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets."
+      // The frame's inner width (300 or 340 px less its 10 px borders). The 512 px width
+      // of next.config.ts `images.imageSizes` serves it to 1.75x screens (#773).
+      sizes="(min-width: 1024px) 320px, 280px"
+      loading="eager"
+      fetchPriority="high"
+      className="absolute inset-x-0 top-0 w-full h-auto"
+    />
+  )
   return (
     <>
     <main className="min-h-screen bg-white text-gray-900">
@@ -314,23 +333,15 @@ function LandingPage() {
             </p>
           </div>
 
-          {/* The volunteer's side, on a phone: the real sign-up page of the demo event. */}
+          {/* The volunteer's side, on a phone: the real sign-up page of the demo event, which plays
+              the sign-up video in place when it can (#765). */}
           <div className="mx-auto w-full max-w-[300px] lg:max-w-[340px]">
             <div className="rounded-t-[2.25rem] border-[10px] border-b-0 border-gray-950 bg-gray-950 shadow-2xl">
-              <div className="relative aspect-[390/700] overflow-hidden rounded-t-[1.6rem] bg-white">
-                <Image
-                  src="/doc-img/public-timeline-mobile.png"
-                  width={780}
-                  height={1688}
-                  alt="La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets."
-                  // The frame's inner width (300 or 340 px less its 10 px borders). The 512 px width
-                  // of next.config.ts `images.imageSizes` serves it to 1.75x screens (#773).
-                  sizes="(min-width: 1024px) 320px, 280px"
-                  loading="eager"
-                  fetchPriority="high"
-                  className="absolute inset-x-0 top-0 w-full h-auto"
-                />
-              </div>
+              {signupVideo ? (
+                <HomeSignupVideo video={signupVideo}>{phoneStill}</HomeSignupVideo>
+              ) : (
+                <div className="relative aspect-[390/700] overflow-hidden rounded-t-[1.6rem] bg-white">{phoneStill}</div>
+              )}
             </div>
           </div>
         </div>

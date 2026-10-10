@@ -10,6 +10,7 @@ import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, 
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
 import { parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
+import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
 import { REPOSITORY_URL } from "@/lib/structured-data"
@@ -23,6 +24,11 @@ function videoCatalog(): Video[] {
   if (process.env.NODE_ENV !== "production") return loadVideoCatalog()
   cachedCatalog ??= loadVideoCatalog()
   return cachedCatalog
+}
+
+/** The homepage phone's video (#765), or null when it can't play here. */
+export function loadHomeSignupVideo(mediaBaseUrl?: string | null): HomeSignupVideo | null {
+  return homeSignupVideo(videoCatalog(), mediaBaseUrl)
 }
 
 // A screenshot's size and fingerprint (src/lib/doc-images.ts), read from public/doc-img once per

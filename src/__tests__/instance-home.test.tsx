@@ -9,6 +9,8 @@ import { render, screen, cleanup } from "@testing-library/react"
 // (which describes the hosted service: its hosting, its price, its support appeal).
 vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
 vi.mock("@/lib/prisma", () => ({ prisma: { platformSetting: { findUnique: async () => null } } }))
+// The page reads the video media base for the landing's phone (#765): no validated env here.
+vi.mock("@/lib/env", () => ({ env: {} }))
 
 describe("home of another instance (#760)", () => {
   afterEach(() => { cleanup(); vi.unstubAllEnvs(); vi.resetModules() })
