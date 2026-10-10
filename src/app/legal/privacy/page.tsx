@@ -6,6 +6,7 @@ import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 import { IP_MAX_DAYS } from "@/lib/signup-blocklist"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
+import { DEACTIVATION_DAYS, INACTIVITY_MONTHS, LAST_REMINDER_DAYS } from "@/lib/org-inactivity"
 import { PAST_EVENT_NOTICE_DAYS, PAST_EVENT_RETENTION_YEARS } from "@/lib/past-event-retention"
 import { notFound } from "next/navigation"
 
@@ -259,7 +260,7 @@ export default function PrivacyPage() {
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
         sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du
-        compte de l&apos;Organisation.
+        compte de l&apos;Organisation par l&apos;opérateur du service.
       </p>
       <p>
         Pour un événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans, les données des bénévoles peuvent être
@@ -270,9 +271,18 @@ export default function PrivacyPage() {
         « Événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans ».
       </p>
       <p>
+        Un espace qui n&apos;est plus utilisé depuis {INACTIVITY_MONTHS} mois et qui n&apos;a aucun événement
+        prévu peut être désactivé. Cette règle s&apos;applique lorsque l&apos;opérateur du service
+        l&apos;active. Avant toute désactivation, les administrateurs de l&apos;Organisation reçoivent
+        trois messages en {LAST_REMINDER_DAYS} jours ; un clic sur « Conserver mon organisation »
+        suffit pour garder l&apos;espace. Sans réponse, l&apos;espace est désactivé {DEACTIVATION_DAYS} jours après le
+        premier message. Ses données sont gardées, et ses administrateurs peuvent le réactiver
+        eux-mêmes depuis la page de connexion.
+      </p>
+      <p>
         Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
         administrateurs d&apos;une Organisation sont supprimés avec elle, {RETENTION_DAYS.deactivatedOrganization} jours
-        après sa désactivation. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        après sa désactivation par l&apos;opérateur du service. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
         {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>

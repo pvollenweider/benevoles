@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { assessInactivity, inactivityMode, inactivitySince, inactivityStatusText, isMeaningfulWrite, isPostponeMonths, postponedUntil, type InactivityFacts } from "../org-inactivity"
+import { assessInactivity, deactivationDate, inactivityMode, procedureAction, inactivitySince, inactivityStatusText, isMeaningfulWrite, isPostponeMonths, postponedUntil, type InactivityFacts } from "../org-inactivity"
 
 const facts = (over: Partial<InactivityFacts> = {}): InactivityFacts => ({
   lastActivityAt: new Date("2025-01-15T10:00:00Z"), lastRetentionConfirmedAt: null, hasUpcomingEvent: false, everUsed: true, suspended: false, active: true, postponedUntil: null, exempt: false, ...over,
@@ -8,7 +8,8 @@ const facts = (over: Partial<InactivityFacts> = {}): InactivityFacts => ({
 describe("periodic check of inactive organisations (#811)", () => {
   it("runs in report mode unless switched off", () => {
     expect(inactivityMode({})).toBe("report")
-    expect(inactivityMode({ ORG_INACTIVITY: "on" })).toBe("report")
+    expect(inactivityMode({ ORG_INACTIVITY: "on" })).toBe("on")
+    expect(inactivityMode({ ORG_INACTIVITY: "yes" })).toBe("report")
     expect(inactivityMode({ ORG_INACTIVITY: " OFF " })).toBe("off")
   })
 
@@ -70,5 +71,45 @@ describe("periodic check of inactive organisations (#811)", () => {
     expect(text({ exempt: true })).toBe("Dernière activité : le 2025-01-15. Elle ne sera jamais désactivée automatiquement.")
     expect(text({ hasUpcomingEvent: true })).toContain("Un événement est à venir ou en cours")
     expect(text({ lastActivityAt: null }, "off")).toBe("Dernière activité : jamais mesurée. La vérification est désactivée (ORG_INACTIVITY=off).")
+  })
+
+  it("runs the procedure from the first email actually sent, one email at a time (ORG_INACTIVITY=on)", () => {
+    const due = assessInactivity(facts(), new Date("2027-06-01T00:00:00Z"))
+    const notice = new Date("2027-06-01T03:00:00Z")
+    const at = (days: number, emailsSent: number, assessment = due) =>
+      procedureAction({ assessment, noticeAt: notice, emailsSent }, new Date(notice.getTime() + days * 86_400_000))
+    // Idle for years: still the first email, never straight to the deactivation.
+    expect(procedureAction({ assessment: due, noticeAt: null, emailsSent: 0 }, new Date("2027-06-01T03:00:00Z"))).toEqual({ action: "email", step: "first" })
+    expect(at(29, 1)).toEqual({ action: "none" })
+    expect(at(30, 1)).toEqual({ action: "email", step: "second" })
+    expect(at(31, 2)).toEqual({ action: "none" })
+    expect(at(60, 2)).toEqual({ action: "email", step: "last" })
+    // A missed night only delays a step: the second reminder, never sent, gives way to the last one.
+    expect(at(61, 1)).toEqual({ action: "email", step: "last" })
+    expect(at(74, 3)).toEqual({ action: "none" })
+    expect(at(75, 3)).toEqual({ action: "deactivate" })
+    expect(deactivationDate(notice)).toEqual(new Date("2027-08-15T03:00:00Z"))
+  })
+
+  it("stops the procedure as soon as the space is not due any more, and starts nothing for one that isn't", () => {
+    const notice = new Date("2027-06-01T03:00:00Z")
+    const later = new Date("2027-07-01T03:00:00Z")
+    const answered = assessInactivity(facts({ lastRetentionConfirmedAt: new Date("2027-06-10T00:00:00Z") }), later)
+    expect(procedureAction({ assessment: answered, noticeAt: notice, emailsSent: 1 }, later)).toEqual({ action: "reset" })
+    const planned = assessInactivity(facts({ hasUpcomingEvent: true }), later)
+    expect(procedureAction({ assessment: planned, noticeAt: notice, emailsSent: 2 }, later)).toEqual({ action: "reset" })
+    const exempt = assessInactivity(facts({ exempt: true }), later)
+    expect(procedureAction({ assessment: exempt, noticeAt: notice, emailsSent: 2 }, later)).toEqual({ action: "reset" })
+    expect(procedureAction({ assessment: planned, noticeAt: null, emailsSent: 0 }, later)).toEqual({ action: "none" })
+  })
+
+  it("says how far the procedure went, and when a space was deactivated", () => {
+    const now = new Date("2027-07-01T00:00:00Z")
+    const day = (d: Date) => d.toISOString().slice(0, 10)
+    const assessment = assessInactivity(facts(), now)
+    expect(inactivityStatusText({ lastActivityAt: facts().lastActivityAt, postponedUntil: null, assessment, noticeAt: new Date("2027-06-01T03:00:00Z"), emailsSent: 2 }, "on", now, day))
+      .toBe("Dernière activité : le 2025-01-15. Premier email « Souhaitez-vous conserver votre espace ? » envoyé le 2027-06-01 (2 emails sur 3) ; sans réponse, désactivation le 2027-08-15.")
+    expect(inactivityStatusText({ lastActivityAt: null, postponedUntil: null, assessment: { state: "excluded", reason: "deactivated" }, deactivatedAt: new Date("2027-08-15T03:00:00Z") }, "on", now, day))
+      .toBe("Dernière activité : jamais mesurée. Désactivée faute de réponse le 2027-08-15 ; ses administrateurs peuvent la réactiver depuis la page de connexion.")
   })
 })

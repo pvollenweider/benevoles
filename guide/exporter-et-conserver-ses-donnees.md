@@ -29,8 +29,9 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 <!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
 | Données | Conservation |
 |---|---|
-| Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation | tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
+| Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation | tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés 30 jours après sa désactivation par l'opérateur (délai compté depuis la dernière modification de l'organisation désactivée) ; une organisation sans activité depuis 18 mois suit la ligne « Organisation désactivée faute d'activité » |
 | Les mêmes données, pour une organisation suspendue pour abus (envoi de spam, contenu abusif) ; la raison de la suspension, notée par l'opérateur | conservées pendant la suspension, jusqu'à la décision de l'opérateur : levée de la suspension (la règle ordinaire s'applique alors) ou suppression définitive |
+| Les mêmes données, pour une organisation désactivée faute d'activité : 18 mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels) restés sans réponse 75 jours | conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation |
 | Demande d'espace faite sur le site : nom de l'association, sa description et son besoin, nom et adresse email de la personne | 7 jours après la demande, confirmée ou non (l'espace et le compte créés, et la description gardée sur la fiche de l'espace pour l'opérateur, suivent ensuite les règles de l'organisation ; un espace dont le mot de passe n'a jamais été choisi est effacé avec son compte 30 jours après sa création) |
 | Liste de blocage des inscriptions : adresse email ou domaine bloqué, empreinte d'une adresse IP (jamais l'adresse elle-même), raison | jusqu'au retrait par l'opérateur ou jusqu'à l'échéance choisie ; une adresse IP est toujours bloquée pour une durée limitée, 90 jours au plus |
 | Journal des décisions de l'opérateur : espace validé, refusé, suspendu, désactivé ou supprimé (nom et identifiant de l'espace), ajout ou retrait de la liste de blocage (adresse ou domaine bloqué, jamais une adresse IP en clair), raison donnée, auteur et date | 365 jours après la décision |
@@ -61,6 +62,19 @@ Pour ne pas garder sans fin les données personnelles des bénévoles, les inscr
 Vous êtes prévenu par email 30 jours avant la première anonymisation, avec la liste des événements concernés : exportez avant cette date ce dont vous avez besoin (**Rapports** → **Archive de l'événement (JSON)**, attestations des membres). Ensuite, chaque mois, les événements qui atteignent 3 ans sont anonymisés de la même façon, sans nouveau message.
 
 Un membre qui n'a participé à aucun événement depuis 3 ans garde sa fiche : vous pouvez le désactiver, ou effacer ses données, depuis **Membres** (voir [Effacer ou supprimer un membre](effacer-ou-supprimer-un-membre.md)).
+
+## Un espace qui n'est plus utilisé
+
+Pour ne pas garder sans fin des espaces dont personne n'a plus besoin, l'opérateur du service peut activer une vérification périodique. Elle ne concerne qu'un espace sans activité depuis 18 mois et sans événement prévu : un événement à venir ou en cours l'arrête toujours.
+
+- **Trois messages d'abord** : chaque administrateur reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels 30 et 60 jours plus tard. Chaque message donne la date de désactivation.
+- **Un clic pour le garder** : le bouton « Conserver mon organisation » du message suffit. Créer ou modifier un événement, un créneau, un membre ou un réglage compte aussi comme une réponse. La vérification recommence alors à zéro.
+- **Sans réponse** : l'espace est désactivé 75 jours après le premier message. Plus personne ne peut s'y connecter ni s'inscrire à ses événements, mais ses données sont gardées.
+- **Le réactiver** : sur la page de connexion, choisissez « Espace désactivé faute d'activité ? Le réactiver » et entrez l'adresse de votre compte. Le lien reçu réactive l'espace, tel que vous l'avez laissé.
+
+### Mon espace va-t-il être désactivé si je ne l'utilise qu'une fois par an ?
+
+Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même ensuite, vous êtes prévenu trois fois, et un clic garde l'espace.
 
 ## Supprimer une organisation
 

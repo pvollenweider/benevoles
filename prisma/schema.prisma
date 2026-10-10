@@ -57,6 +57,12 @@ model Organization {
   // reactivated by its own administrators (« Réactiver mon espace »), and the nightly cleanup does
   // not erase it after 30 days like a space deactivated by the operator.
   inactivityDeactivatedAt  DateTime?
+  // The procedure under way (#811, ORG_INACTIVITY=on): when the first « Souhaitez-vous conserver
+  // votre espace ? » was sent (the reminders and the deactivation count from it), and how many of
+  // its three emails went out. Both cleared when the procedure stops (activity, confirmation,
+  // upcoming event, postponement, exclusion).
+  inactivityNoticeAt       DateTime?
+  inactivityEmailsSent     Int       @default(0)
   // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
   pastEventNoticeAt DateTime?
   pastEventBatchAt  DateTime?
@@ -66,6 +72,7 @@ model Organization {
   events      Event[]
   volunteers  Volunteer[]
   admins      AdminUser[]
+  keepLinks   OrgKeepLink[]
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
@@ -271,6 +278,21 @@ model EventLog {
 // data), minimal PII in `changes`, no stored actor display name (resolved at read time, generic
 // fallback if the actor record is gone). Simpler than EventLog on purpose — no causality chain,
 // no narrative/replay modes: this log is smaller and read far less often.
+// « Conserver mon organisation » links of the periodic check (#811): one per email and administrator,
+// hash only, so the link of an earlier reminder still works. Gives access to no data; using one
+// deletes all the organisation's links.
+model OrgKeepLink {
+  id             String       @id @default(cuid())
+  tokenHash      String       @unique
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  adminUserId    String
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
 model OrgLog {
   id             String   @id @default(cuid())
   organizationId String

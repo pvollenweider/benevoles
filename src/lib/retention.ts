@@ -11,6 +11,7 @@
  */
 
 import { PAST_EVENT_NOTICE_DAYS } from "./past-event-retention"
+import { DEACTIVATION_DAYS, INACTIVITY_MONTHS } from "./org-inactivity"
 
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
@@ -66,7 +67,7 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation",
     purpose: "Organiser les événements de l'organisation",
-    duration: `tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés ${d.deactivatedOrganization} jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée)`,
+    duration: `tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés ${d.deactivatedOrganization} jours après sa désactivation par l'opérateur (délai compté depuis la dernière modification de l'organisation désactivée) ; une organisation sans activité depuis ${INACTIVITY_MONTHS} mois suit la ligne « Organisation désactivée faute d'activité »`,
     trigger: "désactivation de l'organisation",
     mechanism: "nettoyage quotidien (cron cleanup), suppression en cascade",
     backups: inBackups,
@@ -78,6 +79,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: "conservées pendant la suspension, jusqu'à la décision de l'opérateur : levée de la suspension (la règle ordinaire s'applique alors) ou suppression définitive",
     trigger: "suspension de l'organisation par l'opérateur",
     mechanism: "aucune suppression automatique pendant la suspension ; suppression définitive par l'opérateur",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels) restés sans réponse ${DEACTIVATION_DAYS} jours`,
+    purpose: "Permettre à ses administrateurs de la réactiver eux-mêmes",
+    duration: "conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation",
+    trigger: "désactivation après trois messages sans réponse",
+    mechanism: "aucune suppression automatique ; réactivation par un administrateur depuis la page de connexion, ou suppression définitive par l'opérateur",
     backups: inBackups,
     public: true,
   },

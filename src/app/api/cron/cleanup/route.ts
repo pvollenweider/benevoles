@@ -22,6 +22,7 @@ import { observePastEvents } from "@/lib/past-event-retention-data"
 import { loadPastEventOrganizations, runPastEventBatch, sendPastEventNotice } from "@/lib/past-event-anonymisation"
 import { inactivityMode } from "@/lib/org-inactivity"
 import { loadInactivityReport } from "@/lib/org-inactivity-data"
+import { runInactivityProcedure, type ProcedureCounts } from "@/lib/org-inactivity-procedure"
 
 export const dynamic = "force-dynamic"
 
@@ -222,15 +223,25 @@ async function run(req: Request) {
     deliverAfterResponse(ids)
   }
 
-  // --- 8 bis. Periodic check of inactive organisations (#811), report mode: who it would write to.
+  // --- 8 bis. Periodic check of inactive organisations (#811). `report`: who it would write to;
+  // `on`: the three emails, then the deactivation of a space nobody answered for (no erasure).
   let inactivity: Record<string, number> | null = null
-  if (inactivityMode() !== "off") {
+  let inactivityDone: ProcedureCounts | null = null
+  const inactivityRun = inactivityMode()
+  if (inactivityRun !== "off") {
     try {
       const rows = await loadInactivityReport(now)
       inactivity = { soon: rows.filter((r) => r.assessment.state === "active").length }
       for (const r of rows) if (r.assessment.state === "due") inactivity[r.assessment.step] = (inactivity[r.assessment.step] ?? 0) + 1
     } catch (e) {
       reportError("cleanup.inactivity_report")(e)
+    }
+    if (inactivityRun === "on") {
+      try {
+        inactivityDone = await runInactivityProcedure(now)
+      } catch (e) {
+        reportError("cleanup.inactivity_procedure")(e)
+      }
     }
   }
 
@@ -268,6 +279,7 @@ async function run(req: Request) {
     runAt: now.toISOString(),
     observed: { inactivity, pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents, pastEventRetentionMode()) : null },
     pastEventRetention: { mode: pastEventRetentionMode(), ...pastEventsDone },
+    inactivityCheck: { mode: inactivityRun, ...(inactivityDone ?? {}) },
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,

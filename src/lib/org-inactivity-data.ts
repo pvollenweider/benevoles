@@ -21,16 +21,24 @@ export type InactivityReportRow = {
   everUsed: boolean
   activeAdmins: number
   postponedUntil: Date | null
-  assessment: Extract<InactivityAssessment, { state: "active" | "due" }>
+  /** The procedure under way with `ORG_INACTIVITY=on`: first email sent on, emails sent so far. */
+  noticeAt: Date | null
+  emailsSent: number
+  assessment: InactivityAssessment
 }
 
-export async function loadInactivityReport(now: Date = new Date()): Promise<InactivityReportRow[]> {
+/**
+ * Every active, non-suspended organisation with where it stands in the check: what the report
+ * lists, and what the nightly procedure acts on.
+ */
+export async function assessActiveOrganizations(now: Date = new Date(), only?: string[]): Promise<InactivityReportRow[]> {
   const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
   const orgs = await prisma.organization.findMany({
-    where: { active: true, suspendedAt: null },
+    where: { active: true, suspendedAt: null, ...(only ? { id: { in: only } } : {}) },
     select: {
       id: true, name: true, slug: true, active: true, suspendedAt: true, createdAt: true,
       lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true, inactivityPostponedUntil: true, inactivityExempt: true,
+      inactivityNoticeAt: true, inactivityEmailsSent: true,
       events: { select: { endDate: true, publicStatus: true }, orderBy: { endDate: "desc" }, take: 1 },
       _count: { select: { admins: { where: { isActive: true } } } },
     },
@@ -45,11 +53,17 @@ export async function loadInactivityReport(now: Date = new Date()): Promise<Inac
   const has = (groups: { organizationId: string }[]) => new Set(groups.map((g) => g.organizationId))
   const withUpcoming = has(upcoming)
   const used = new Set([...has(published), ...has(registered)])
-  const soon = now.getTime() + SOON_DAYS * 24 * 60 * 60 * 1000
 
-  const rows: InactivityReportRow[] = []
-  for (const o of orgs) {
-    const assessment = assessInactivity({
+  return orgs.map((o) => ({
+    id: o.id, name: o.name, slug: o.slug,
+    lastActivityAt: o.lastMeaningfulActivityAt,
+    lastEventEnd: o.events[0]?.endDate ?? null,
+    everUsed: used.has(o.id),
+    activeAdmins: o._count.admins,
+    postponedUntil: o.inactivityPostponedUntil,
+    noticeAt: o.inactivityNoticeAt,
+    emailsSent: o.inactivityEmailsSent,
+    assessment: assessInactivity({
       lastActivityAt: o.lastMeaningfulActivityAt,
       lastRetentionConfirmedAt: o.lastRetentionConfirmedAt,
       hasUpcomingEvent: withUpcoming.has(o.id),
@@ -58,20 +72,18 @@ export async function loadInactivityReport(now: Date = new Date()): Promise<Inac
       active: o.active,
       postponedUntil: o.inactivityPostponedUntil,
       exempt: o.inactivityExempt,
-    }, now, o.createdAt)
-    if (assessment.state === "excluded") continue
-    if (assessment.state === "active" && assessment.firstEmailAt.getTime() > soon) continue
-    rows.push({
-      id: o.id, name: o.name, slug: o.slug,
-      lastActivityAt: o.lastMeaningfulActivityAt,
-      lastEventEnd: o.events[0]?.endDate ?? null,
-      everUsed: used.has(o.id),
-      activeAdmins: o._count.admins,
-      postponedUntil: o.inactivityPostponedUntil,
-      assessment,
-    })
-  }
-  return rows.sort((a, b) => a.assessment.firstEmailAt.getTime() - b.assessment.firstEmailAt.getTime())
+    }, now, o.createdAt),
+  }))
+}
+
+export type ListedInactivityRow = InactivityReportRow & { assessment: Extract<InactivityAssessment, { state: "active" | "due" }> }
+
+/** The report: organisations due within SOON_DAYS or already due, the nearest first. */
+export async function loadInactivityReport(now: Date = new Date()): Promise<ListedInactivityRow[]> {
+  const soon = now.getTime() + SOON_DAYS * 24 * 60 * 60 * 1000
+  return (await assessActiveOrganizations(now))
+    .filter((r): r is ListedInactivityRow => r.assessment.state === "due" || (r.assessment.state === "active" && r.assessment.firstEmailAt.getTime() <= soon))
+    .sort((a, b) => a.assessment.firstEmailAt.getTime() - b.assessment.firstEmailAt.getTime())
 }
 
 /** The organisations the operator excluded for good (« Ne jamais désactiver automatiquement »). */
@@ -91,6 +103,7 @@ export async function loadOrganizationInactivity(orgId: string, now: Date = new 
     select: {
       active: true, suspendedAt: true, createdAt: true,
       lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true, inactivityPostponedUntil: true, inactivityExempt: true,
+      inactivityNoticeAt: true, inactivityEmailsSent: true, inactivityDeactivatedAt: true,
     },
   })
   if (!o) return null
@@ -112,6 +125,18 @@ export async function loadOrganizationInactivity(orgId: string, now: Date = new 
     lastActivityAt: o.lastMeaningfulActivityAt,
     postponedUntil: o.inactivityPostponedUntil,
     exempt: o.inactivityExempt,
+    noticeAt: o.inactivityNoticeAt,
+    emailsSent: o.inactivityEmailsSent,
+    deactivatedAt: o.inactivityDeactivatedAt,
     assessment,
   }
+}
+
+/** The spaces the check deactivated (no answer), the latest first. */
+export async function loadDeactivatedForInactivity(): Promise<{ id: string; name: string; slug: string; inactivityDeactivatedAt: Date | null }[]> {
+  return prisma.organization.findMany({
+    where: { active: false, suspendedAt: null, inactivityDeactivatedAt: { not: null } },
+    select: { id: true, name: true, slug: true, inactivityDeactivatedAt: true },
+    orderBy: { inactivityDeactivatedAt: "desc" },
+  })
 }

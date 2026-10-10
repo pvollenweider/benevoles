@@ -5,8 +5,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
-import { loadExemptOrganizations, loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
-import { inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
+import { loadDeactivatedForInactivity, loadExemptOrganizations, loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
+import { deactivationDate, inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
@@ -25,18 +25,18 @@ export default async function InactivityPage() {
 
   const mode = inactivityMode()
   const now = new Date()
-  const [rows, exempt] = mode === "off" ? [[], []] : await Promise.all([loadInactivityReport(now), loadExemptOrganizations()])
+  const [rows, exempt, deactivated] = mode === "off" ? [[], [], []] : await Promise.all([loadInactivityReport(now), loadExemptOrganizations(), loadDeactivatedForInactivity()])
 
   return (
     <div className="space-y-6">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Organisations bientôt inactives</h1>
         <p className="text-sm text-gray-700 mt-1">
-          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation recevrait « Souhaitez-vous conserver votre espace ? », puis deux rappels, avant toute désactivation.
+          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels 30 et 60 jours plus tard ; sans réponse, elle est désactivée 75 jours après le premier email, et ses administrateurs peuvent la réactiver eux-mêmes.
           {" "}
           {mode === "off"
             ? "La vérification est désactivée (ORG_INACTIVITY=off)."
-            : `Mode observation : rien n'est envoyé, désactivé ni supprimé. La liste montre les organisations concernées dans les ${SOON_DAYS} prochains jours ou déjà concernées. La page de chaque organisation permet de reporter la vérification ou de l'en exclure.`}
+            : `${mode === "on" ? "Mode actif : les emails partent et les désactivations ont lieu ; aucun espace n'est supprimé." : "Mode observation : rien n'est envoyé, désactivé ni supprimé."} La liste montre les organisations concernées dans les ${SOON_DAYS} prochains jours ou déjà concernées. La page de chaque organisation permet de reporter la vérification ou de l'en exclure.`}
         </p>
       </div>
 
@@ -68,7 +68,9 @@ export default async function InactivityPage() {
                   <td className="px-4 py-2 text-right tabular-nums text-gray-900">{r.activeAdmins}</td>
                   <td className="px-4 py-2 text-gray-800">
                     {r.postponedUntil && r.postponedUntil.getTime() > now.getTime() && `Reporté jusqu'au ${day(r.postponedUntil)}. `}
-                    {r.assessment.state === "active"
+                    {r.noticeAt && r.assessment.state === "due"
+                      ? `${r.emailsSent} email${r.emailsSent > 1 ? "s" : ""} sur 3, le premier le ${day(r.noticeAt)} ; désactivation le ${day(deactivationDate(r.noticeAt))} sans réponse`
+                      : r.assessment.state === "active"
                       ? `1er email le ${day(r.assessment.firstEmailAt)}`
                       : `${r.assessment.stepLabel} (depuis le ${day(r.assessment.firstEmailAt)})${r.assessment.nextStep ? ` ; ensuite : ${r.assessment.nextStep.label.toLowerCase()} le ${day(r.assessment.nextStep.at)}` : ""}`}
                   </td>
@@ -78,6 +80,21 @@ export default async function InactivityPage() {
           </table>
         </div>
       ))}
+
+      {mode !== "off" && deactivated.length > 0 && (
+        <section aria-labelledby="inactivity-deactivated" className="space-y-2">
+          <h2 id="inactivity-deactivated" className="text-base font-semibold text-gray-900">Désactivées faute d&apos;activité</h2>
+          <p className="text-sm text-gray-700">Elles n&apos;ont répondu à aucun des trois messages. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées.</p>
+          <ul className="list-disc pl-5 text-sm">
+            {deactivated.map((o) => (
+              <li key={o.id}>
+                <Link href={`/super-admin/organizations/${o.slug}`} className="text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{o.name}</Link>
+                {o.inactivityDeactivatedAt && ` : désactivée le ${day(o.inactivityDeactivatedAt)}`}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {mode !== "off" && exempt.length > 0 && (
         <section aria-labelledby="inactivity-exempt" className="space-y-2">
