@@ -33,7 +33,7 @@ describe("EventPageClient — long events (#866)", () => {
 
   it("leaves past days out and shows one month at a time", () => {
     render(<EventPageClient orgSlug="org" eventSlug="saison" initialEvent={event} />)
-    const nav = screen.getByRole("navigation", { name: "Mois" })
+    const nav = screen.getByRole("group", { name: "Choisir le mois" })
     const september = within(nav).getByRole("button", { name: /septembre 2030,\s*\(2 dates\)/i })
     expect(september).toHaveAttribute("aria-pressed", "true")
     // 4 and 11 September are over (today is the 12th): 18 and 25 remain.
@@ -47,7 +47,7 @@ describe("EventPageClient — long events (#866)", () => {
   it("shows every day of a short event, without months", () => {
     const short = { ...event, endDate: "2030-09-05T00:00:00.000Z", shifts: [shift("a", "2030-09-04"), shift("b", "2030-09-05")] }
     render(<EventPageClient orgSlug="org" eventSlug="fete" initialEvent={short} />)
-    expect(screen.queryByRole("navigation", { name: "Mois" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("group", { name: "Choisir le mois" })).not.toBeInTheDocument()
     expect(dayHeadings()).toHaveLength(2)
   })
 })

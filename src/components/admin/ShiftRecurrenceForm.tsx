@@ -12,7 +12,7 @@ import { normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
 import { fmtDuration } from "@/lib/shift-series"
 import {
-  describeWeekdays, generateRecurrence, HOLIDAY_CALENDARS, recurrenceProblem, WEEKDAYS,
+  describeWeekdays, generateRecurrence, HOLIDAY_CALENDARS, recurrenceIssue, WEEKDAYS,
   type HolidayCalendar, type RecurrenceInput, type Weekday,
 } from "@/lib/shift-recurrence"
 import type { AdminShift } from "./AdminDayTimeline"
@@ -23,19 +23,22 @@ const WHOLE_RANGE = 0
 const SLOT_OPTIONS = [WHOLE_RANGE, 60, 90, 120, 180, 240]
 /** Dates listed in the preview before « … et N autres ». */
 const PREVIEW_DATES = 8
+/** The live summary waits this long after the last change, so it isn't re-read at each keystroke. */
+const LIVE_SUMMARY_DELAY_MS = 500
 
-type Field = "roleName" | "from" | "until" | "weekdays" | "startTime" | "endTime"
-const REQUIRED: readonly Field[] = ["roleName", "from", "until", "weekdays", "startTime", "endTime"]
+type Field = "roleName" | "from" | "until" | "weekdays" | "startTime" | "endTime" | "capacity"
+const REQUIRED: readonly Field[] = ["roleName", "from", "until", "weekdays", "startTime", "endTime", "capacity"]
 const FIELD_ERRORS: Record<Field, string> = {
   roleName: "Indiquez le poste.",
   from: "Choisissez la date de début.",
   until: "Choisissez la date de fin.",
   weekdays: "Choisissez au moins un jour de la semaine.",
-  startTime: "Indiquez l'heure de début.",
-  endTime: "Indiquez l'heure de fin.",
+  startTime: "Indiquez l'heure de début au format HH:MM (par exemple 14:00).",
+  endTime: "Indiquez l'heure de fin au format HH:MM (par exemple 18:00).",
+  capacity: "Indiquez au moins une personne par créneau.",
 }
 const FIELD_NOUNS: Record<Field, string> = {
-  roleName: "le poste", from: "la date de début", until: "la date de fin", weekdays: "les jours", startTime: "l'heure de début", endTime: "l'heure de fin",
+  roleName: "le poste", from: "la date de début", until: "la date de fin", weekdays: "les jours", startTime: "l'heure de début", endTime: "l'heure de fin", capacity: "le nombre de personnes",
 }
 
 /** Long weekday, never « ven. »: an abbreviation is read letter by letter by screen readers. */
@@ -71,7 +74,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const [startTime, setStartTime] = useState("")
   const [endTime, setEndTime] = useState("")
   const [slotChoice, setSlotChoice] = useState(WHOLE_RANGE)
-  const [capacity, setCapacity] = useState(2)
+  const [capacity, setCapacity] = useState<number | "">(2)
   const [holidays, setHolidays] = useState<HolidayCalendar>(defaultHolidays)
   const [closures, setClosures] = useState<string[]>([])
   const [closureDraft, setClosureDraft] = useState("")
@@ -80,6 +83,8 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const [attempted, setAttempted] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [closureNote, setClosureNote] = useState("")
+  const [liveSummary, setLiveSummary] = useState("")
   const closureInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { headingRef.current?.focus() }, [])
@@ -91,13 +96,15 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
     weekdays: weekdays.length === 0,
     startTime: !isValidClock(startTime),
     endTime: !isValidClock(endTime),
+    capacity: !(Number(capacity) >= 1),
   }
   const missingFields = REQUIRED.filter((f) => missing[f])
   const complete = missingFields.length === 0
   const rangeMinutes = complete && startTime !== endTime ? toMinEnd(endTime, startTime) - toMin(startTime) : 0
   const slotMinutes = slotChoice === WHOLE_RANGE ? rangeMinutes : slotChoice
   const input: RecurrenceInput = { from, until, weekdays, everyWeeks, startTime, endTime, slotMinutes, breakMinutes: 0, holidays, closures }
-  const problem = complete ? recurrenceProblem(input, { start: eventStart, end: eventEnd }) : null
+  const issue = complete ? recurrenceIssue(input, { start: eventStart, end: eventEnd }) : null
+  const problem = issue?.message ?? null
   const preview = complete && !problem ? generateRecurrence(input) : null
   const days = preview ? [...new Set(preview.shifts.map((s) => s.day))] : []
 
@@ -106,14 +113,20 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   }
 
   function addClosure() {
-    if (!closureDraft || closures.includes(closureDraft)) { setClosureDraft(""); return }
-    setClosures((prev) => [...prev, closureDraft].sort())
+    if (!closureDraft) return
+    if (closures.includes(closureDraft)) {
+      setClosureNote(`La fermeture du ${fmtDay(closureDraft)} est déjà dans la liste.`)
+    } else {
+      setClosures((prev) => [...prev, closureDraft].sort())
+      setClosureNote(`Fermeture du ${fmtDay(closureDraft)} ajoutée.`)
+    }
     setClosureDraft("")
     closureInputRef.current?.focus()
   }
 
   function removeClosure(date: string) {
     setClosures((prev) => prev.filter((d) => d !== date))
+    setClosureNote(`Fermeture du ${fmtDay(date)} retirée.`)
     closureInputRef.current?.focus()
   }
 
@@ -125,8 +138,17 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       document.getElementById(first === "weekdays" ? `${id}-wd-1` : fieldId(first))?.focus()
       return
     }
+    if (issue || !preview) {
+      // Not silent (#866 review): the message is an alert, and focus goes to the field to fix.
+      flushSync(() => setAttempted(true))
+      const target = issue?.field === "weekdays" ? `${id}-wd-1`
+        : issue?.field === "closures" ? `${id}-closure`
+        : issue?.field ? fieldId(issue.field)
+        : summaryId
+      document.getElementById(target)?.focus()
+      return
+    }
     setAttempted(true)
-    if (problem || !preview) return
     setSaving(true)
     setError(null)
     const outcome = await requestJson<{ rule: AdminRecurrence; shifts: (AdminShift & { date: string })[] }>(() => fetch("/api/admin/shifts/recurrence", {
@@ -144,6 +166,8 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   }
 
   const fieldId = (f: Field) => `${id}-${f}`
+  /** Missing, or the field the rule's problem is about (once « Créer » was pressed). */
+  const flagged = (f: Field) => attempted && (missing[f] || issue?.field === f)
   const invalid = (f: Field) => attempted && missing[f]
   const errorIdOf = (f: Field) => `${fieldId(f)}-error`
   const fieldMessage = (f: Field) => invalid(f) ? <p id={errorIdOf(f)} className="text-xs text-red-700 mt-1">{FIELD_ERRORS[f]}</p> : null
@@ -151,11 +175,21 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const fieldClass = (f: Field) => `input ${invalid(f) ? "!border-red-600" : ""}`
   const labelClass = (f: Field) => `block text-xs font-medium mb-1 ${invalid(f) ? "text-red-700" : "text-gray-600"}`
   const summaryId = `${id}-summary`
+  const problemId = `${id}-problem`
+  const timeHintId = `${id}-time-hint`
   const shiftCount = preview?.shifts.length ?? 0
+  const skippedCount = preview?.skipped.length ?? 0
+  const people = Number(capacity) || 0
 
   const summary = !complete
     ? "Renseignez le poste, la période, les jours et les heures pour voir les dates."
-    : problem ?? `Aperçu : ${describeWeekdays(weekdays, everyWeeks)} de ${startTime} à ${endTime}, ${days.length} date${days.length > 1 ? "s" : ""}, ${shiftCount} créneau${shiftCount > 1 ? "x" : ""}${slotChoice !== WHOLE_RANGE ? ` de ${fmtDuration(slotChoice)}` : ""}, ${capacity} personne${capacity > 1 ? "s" : ""} par créneau.`
+    : problem ?? `Aperçu : ${describeWeekdays(weekdays, everyWeeks)} de ${startTime} à ${endTime}, ${days.length} date${days.length > 1 ? "s" : ""}, ${shiftCount} créneau${shiftCount > 1 ? "x" : ""}${slotChoice !== WHOLE_RANGE ? ` de ${fmtDuration(slotChoice)}` : ""}, ${people} personne${people > 1 ? "s" : ""} par créneau${skippedCount > 0 ? `, ${skippedCount} date${skippedCount > 1 ? "s" : ""} exclue${skippedCount > 1 ? "s" : ""}` : ""}.`
+
+  // The visible summary follows each keystroke; the announced one waits for a pause.
+  useEffect(() => {
+    const timer = setTimeout(() => setLiveSummary(summary), LIVE_SUMMARY_DELAY_MS)
+    return () => clearTimeout(timer)
+  }, [summary])
 
   return (
     <section id={panelId} aria-labelledby={`${id}-title`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
@@ -185,23 +219,23 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor={fieldId("from")} className={labelClass("from")}>Du <span aria-hidden="true">*</span></label>
-          <input id={fieldId("from")} type="date" min={eventStart} max={eventEnd} value={from} required aria-invalid={invalid("from") || undefined} aria-describedby={describedBy("from")} onChange={(e) => setFrom(e.target.value)} className={fieldClass("from")} />
+          <input id={fieldId("from")} type="date" min={eventStart} max={eventEnd} value={from} required aria-invalid={flagged("from") || undefined} aria-describedby={describedBy("from", ...(flagged("from") && issue?.field === "from" ? [problemId] : []))} onChange={(e) => setFrom(e.target.value)} className={fieldClass("from")} />
           {fieldMessage("from")}
         </div>
         <div>
           <label htmlFor={fieldId("until")} className={labelClass("until")}>Au <span aria-hidden="true">*</span></label>
-          <input id={fieldId("until")} type="date" min={eventStart} max={eventEnd} value={until} required aria-invalid={invalid("until") || undefined} aria-describedby={describedBy("until", `${id}-period-hint`)} onChange={(e) => setUntil(e.target.value)} className={fieldClass("until")} />
+          <input id={fieldId("until")} type="date" min={eventStart} max={eventEnd} value={until} required aria-invalid={flagged("until") || undefined} aria-describedby={describedBy("until", `${id}-period-hint`, ...(flagged("until") && issue?.field === "until" ? [problemId] : []))} onChange={(e) => setUntil(e.target.value)} className={fieldClass("until")} />
           {fieldMessage("until")}
           <p id={`${id}-period-hint`} className="text-[11px] text-gray-600 mt-1">Dans la période de l&apos;événement : pour une saison, allongez d&apos;abord les dates de l&apos;événement.</p>
         </div>
       </div>
 
       <fieldset aria-describedby={invalid("weekdays") ? errorIdOf("weekdays") : undefined}>
-        <legend className={labelClass("weekdays")}>Jours <span aria-hidden="true">*</span></legend>
+        <legend className={labelClass("weekdays")}>Jours <span aria-hidden="true">*</span><span className="sr-only"> (obligatoire)</span></legend>
         <div className="flex flex-wrap gap-2">
           {WEEKDAYS.map((w) => (
             <label key={w.value} htmlFor={`${id}-wd-${w.value}`} className="inline-flex items-center gap-2 min-h-11 px-3 rounded-xl border border-gray-300 text-sm text-gray-800 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 cursor-pointer">
-              <input id={`${id}-wd-${w.value}`} type="checkbox" checked={weekdays.includes(w.value)} onChange={() => toggleWeekday(w.value)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+              <input id={`${id}-wd-${w.value}`} type="checkbox" checked={weekdays.includes(w.value)} aria-invalid={invalid("weekdays") || undefined} aria-describedby={invalid("weekdays") ? errorIdOf("weekdays") : undefined} onChange={() => toggleWeekday(w.value)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
               {w.label}
             </label>
           ))}
@@ -224,14 +258,15 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label htmlFor={fieldId("startTime")} className={labelClass("startTime")}>Début <span aria-hidden="true">*</span></label>
-          <input id={fieldId("startTime")} type="text" inputMode="numeric" placeholder="HH:MM" value={startTime} required aria-invalid={invalid("startTime") || undefined} aria-describedby={describedBy("startTime")} onChange={(e) => setStartTime(e.target.value)} onBlur={(e) => setStartTime(normalizeTime(e.target.value))} className={fieldClass("startTime")} />
+          <input id={fieldId("startTime")} type="text" inputMode="numeric" placeholder="HH:MM" value={startTime} required aria-invalid={flagged("startTime") || undefined} aria-describedby={describedBy("startTime", timeHintId, ...(issue?.field === "startTime" && attempted ? [problemId] : []))} onChange={(e) => setStartTime(e.target.value)} onBlur={(e) => setStartTime(normalizeTime(e.target.value))} className={fieldClass("startTime")} />
           {fieldMessage("startTime")}
         </div>
         <div>
           <label htmlFor={fieldId("endTime")} className={labelClass("endTime")}>Fin <span aria-hidden="true">*</span></label>
-          <input id={fieldId("endTime")} type="text" inputMode="numeric" placeholder="HH:MM" value={endTime} required aria-invalid={invalid("endTime") || undefined} aria-describedby={describedBy("endTime")} onChange={(e) => setEndTime(e.target.value)} onBlur={(e) => setEndTime(normalizeTime(e.target.value))} className={fieldClass("endTime")} />
+          <input id={fieldId("endTime")} type="text" inputMode="numeric" placeholder="HH:MM" value={endTime} required aria-invalid={invalid("endTime") || undefined} aria-describedby={describedBy("endTime", timeHintId)} onChange={(e) => setEndTime(e.target.value)} onBlur={(e) => setEndTime(normalizeTime(e.target.value))} className={fieldClass("endTime")} />
           {fieldMessage("endTime")}
         </div>
+        <p id={timeHintId} className="sm:col-span-3 -mt-2 text-[11px] text-gray-600 sm:order-last">Format HH:MM, par exemple 14:00.</p>
         <div>
           <label htmlFor={`${id}-slot`} className="block text-xs font-medium text-gray-600 mb-1">Découpage</label>
           <select id={`${id}-slot`} value={slotChoice} onChange={(e) => setSlotChoice(Number(e.target.value))} className="input">
@@ -242,8 +277,9 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-600 mb-1">Personnes par créneau <span aria-hidden="true">*</span></label>
-          <input id={`${id}-capacity`} type="number" min={1} required value={capacity} aria-invalid={capacity < 1 ? true : undefined} onChange={(e) => setCapacity(Number(e.target.value))} className="input" />
+          <label htmlFor={fieldId("capacity")} className={labelClass("capacity")}>Personnes par créneau <span aria-hidden="true">*</span></label>
+          <input id={fieldId("capacity")} type="number" min={1} required value={capacity} aria-invalid={invalid("capacity") || undefined} aria-describedby={describedBy("capacity")} onChange={(e) => setCapacity(e.target.value === "" ? "" : Number(e.target.value))} className={fieldClass("capacity")} />
+          {fieldMessage("capacity")}
         </div>
         <div>
           <label htmlFor={`${id}-holidays`} className="block text-xs font-medium text-gray-600 mb-1">Jours fériés exclus</label>
@@ -257,11 +293,12 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       <div>
         <label htmlFor={`${id}-closure`} className="block text-xs font-medium text-gray-600 mb-1">Fermetures (vacances, jours sans permanence)</label>
         <div className="flex flex-wrap gap-2 items-center">
-          <input ref={closureInputRef} id={`${id}-closure`} type="date" min={from || eventStart} max={until || eventEnd} value={closureDraft} onChange={(e) => setClosureDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addClosure() } }} className="input max-w-[12rem]" />
+          <input ref={closureInputRef} id={`${id}-closure`} aria-invalid={(attempted && issue?.field === "closures") || undefined} aria-describedby={attempted && issue?.field === "closures" ? problemId : undefined} type="date" min={from || eventStart} max={until || eventEnd} value={closureDraft} onChange={(e) => setClosureDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addClosure() } }} className="input max-w-[12rem]" />
           <button type="button" onClick={addClosure} className="min-h-11 px-3 rounded-xl border border-gray-400 text-sm text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Ajouter la date
           </button>
         </div>
+        <p aria-live="polite" className="sr-only">{closureNote}</p>
         {closures.length > 0 && (
           <ul aria-label="Fermetures" className="mt-2 flex flex-wrap gap-2">
             {closures.map((d) => (
@@ -289,11 +326,12 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
 
       {/* Preview: only the one-line summary is live; the lists would be re-read at each keystroke. */}
       <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 text-sm space-y-2">
-        <p id={summaryId} aria-live="polite" aria-atomic="true" className={!complete ? "text-gray-600" : problem ? "text-red-700" : "font-medium text-gray-800"}>{summary}</p>
+        <p id={summaryId} tabIndex={-1} className={`focus:outline-none ${!complete ? "text-gray-600" : problem ? "text-red-700" : "font-medium text-gray-800"}`}>{summary}</p>
+        <p aria-live="polite" aria-atomic="true" className="sr-only">{liveSummary}</p>
         {days.length > 0 && (
           <div>
-            <p className="text-xs font-medium text-gray-700">Dates créées</p>
-            <ul className="mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5 text-gray-700">
+            <p id={`${id}-created`} className="text-xs font-medium text-gray-700">Dates créées</p>
+            <ul aria-labelledby={`${id}-created`} className="mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5 text-gray-700">
               {days.slice(0, PREVIEW_DATES).map((d) => <li key={d}>{fmtDay(d)}</li>)}
             </ul>
             {days.length > PREVIEW_DATES && <p className="text-xs text-gray-700 mt-1">… et {days.length - PREVIEW_DATES} autre{days.length - PREVIEW_DATES > 1 ? "s" : ""}, jusqu&apos;au {fmtDay(days[days.length - 1])}.</p>}
@@ -301,8 +339,8 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         )}
         {preview && preview.skipped.length > 0 && (
           <div>
-            <p className="text-xs font-medium text-gray-700">Dates exclues</p>
-            <ul className="mt-1 space-y-0.5 text-gray-700">
+            <p id={`${id}-skipped`} className="text-xs font-medium text-gray-700">Dates exclues</p>
+            <ul aria-labelledby={`${id}-skipped`} className="mt-1 space-y-0.5 text-gray-700">
               {preview.skipped.map((s) => <li key={s.date}>{fmtDay(s.date)} : {s.reason}</li>)}
             </ul>
           </div>
@@ -310,15 +348,18 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       </div>
 
       {error && <p role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</p>}
+      {attempted && complete && problem && (
+        <p id={problemId} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{problem}</p>
+      )}
       {attempted && !complete && (
         <p className="text-xs text-red-700">À compléter : {missingFields.map((f) => FIELD_NOUNS[f]).join(", ")}.</p>
       )}
 
       <div className="flex gap-3 flex-wrap">
-        <button type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={summaryId} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <button type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={summaryId} className="min-h-11 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           {saving ? "Création…" : shiftCount > 0 ? `Créer ${shiftCount} créneau${shiftCount > 1 ? "x" : ""}` : "Créer les créneaux"}
         </button>
-        <button type="button" onClick={onClose} className="text-gray-600 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <button type="button" onClick={onClose} className="min-h-11 text-gray-600 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           Annuler
         </button>
       </div>

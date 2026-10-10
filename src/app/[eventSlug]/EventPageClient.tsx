@@ -175,6 +175,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   }
   // Long events (#866): one month at a time, chosen by the visitor; null = the first month shown.
   const [chosenMonth, setChosenMonth] = useState<string | null>(null)
+  // Said once the month is changed: the dates below the buttons are swapped silently otherwise.
+  const [monthNote, setMonthNote] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   // A structured failure of the sign-up itself (#375): kind, what to do, whether to retry.
@@ -735,13 +737,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               {/* Left: timelines */}
               <div className="space-y-6">
                 {months && month && (
-                  <nav aria-label="Mois" className="flex flex-wrap gap-2">
+                  // A view filter of this page, not navigation: a group, like « Affichage des créneaux ».
+                  <div role="group" aria-label="Choisir le mois" className="flex flex-wrap gap-2">
                     {months.map((m) => (
                       <button
                         key={m.key}
                         type="button"
                         aria-pressed={m.key === month.key}
-                        onClick={() => setChosenMonth(m.key)}
+                        onClick={() => { setChosenMonth(m.key); setMonthNote(`${m.label} : ${m.days.length} date${m.days.length > 1 ? "s" : ""} affichée${m.days.length > 1 ? "s" : ""}.`) }}
                         className={`min-h-11 px-4 rounded-xl border text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${m.key === month.key ? "bg-gray-900 text-white border-gray-900" : "border-gray-300 text-gray-700 hover:bg-gray-50"}`}
                       >
                         <span className="first-letter:uppercase inline-block">{m.label}</span>
@@ -749,8 +752,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         <span className={`ml-1 ${m.key === month.key ? "text-gray-200" : "text-gray-600"}`}>({m.days.length} date{m.days.length > 1 ? "s" : ""})</span>
                       </button>
                     ))}
-                  </nav>
+                  </div>
                 )}
+                {months && <p aria-live="polite" className="sr-only">{monthNote}</p>}
                 {longEvent && shownDays.length === 0 && (
                   <p className="text-center py-8 text-gray-700">Plus aucune date à venir.</p>
                 )}

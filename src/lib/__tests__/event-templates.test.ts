@@ -69,6 +69,6 @@ describe("templateSummary", () => {
     expect(draft.recurrences[3].shifts.map((s) => s.date)).not.toContain("2026-11-11")
     expect(templateShiftCount(epicerie)).toBe(0)
     expect(templateShiftCount(epicerie, "2026-09-01")).toBe(26 + 13 + 13 + 13)
-    expect(templateRhythm(findTemplate("repair")!)[0]).toBe("Accueil : un samedi sur deux, 13:30–17:30, 1 personne")
+    expect(templateRhythm(findTemplate("repair")!)[0]).toBe("Accueil : un samedi sur deux, de 13:30 à 17:30, 1 personne")
   })
 })

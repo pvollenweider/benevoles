@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { addDays } from "./shift-series"
-import { describeWeekdays, generateRecurrence, recurrenceProblem, type HolidayCalendar, type Weekday } from "./shift-recurrence"
+import { describeWeekdays, generateRecurrence, recurrenceProblem, timeRange, type HolidayCalendar, type Weekday } from "./shift-recurrence"
 import { toMin, toMinEnd } from "./gantt-utils"
 
 /**
@@ -236,9 +236,9 @@ export function templateToEvent(template: EventTemplate, input: { title: string;
   }
 }
 
-/** « Caisse et accueil : chaque mardi et jeudi, 17:00–19:30, 2 personnes » for a recurring template (#866). */
+/** « Caisse et accueil : chaque mardi et jeudi, de 17:00 à 19:30, 2 personnes » for a recurring template (#866). */
 export function templateRhythm(template: EventTemplate): string[] {
-  return (template.recurrences ?? []).map((r) => `${r.label ?? r.roleName} : ${describeWeekdays(r.weekdays, r.everyWeeks ?? 1)}, ${r.startTime}–${r.endTime}, ${r.capacity} personne${r.capacity > 1 ? "s" : ""}`)
+  return (template.recurrences ?? []).map((r) => `${r.label ?? r.roleName} : ${describeWeekdays(r.weekdays, r.everyWeeks ?? 1)}, ${timeRange(r.startTime, r.endTime)}, ${r.capacity} personne${r.capacity > 1 ? "s" : ""}`)
 }
 
 /** Shifts a template creates; for a recurring one, from its start date (holidays not counted). */

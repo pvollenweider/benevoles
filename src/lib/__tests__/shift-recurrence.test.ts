@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   defaultHolidayCalendar, describeWeekdays, easterSunday, generateRecurrence, planChange, planStop, publicHolidays, recurrenceDays,
-  recurrenceProblem, RECURRENCE_MAX_SHIFTS, weekdayOf, type RecurrenceInput, type RuleShift,
+  recurrenceIssue, recurrenceProblem, RECURRENCE_MAX_SHIFTS, timeRange, weekdayOf, type RecurrenceInput, type RuleShift,
 } from "../shift-recurrence"
 
 const base: RecurrenceInput = {
@@ -69,6 +69,21 @@ describe("shift recurrence (#866)", () => {
     expect(recurrenceProblem({ ...base, from: "2026-09-03", until: "2026-09-08" })).toMatch(/Aucune date/)
     expect(recurrenceProblem({ ...base, closures: ["demain"] })).toMatch(/fermeture/)
     expect(recurrenceProblem(base)).toBeNull()
+  })
+
+  it("names the field to fix, so the form can focus it", () => {
+    expect(recurrenceIssue({ ...base, until: "2026-08-01" })?.field).toBe("until")
+    expect(recurrenceIssue(base, { start: "2026-09-10", end: "2026-12-31" })?.field).toBe("from")
+    expect(recurrenceIssue(base, { start: "2026-08-01", end: "2026-09-20" })?.field).toBe("until")
+    expect(recurrenceIssue({ ...base, weekdays: [] })?.field).toBe("weekdays")
+    expect(recurrenceIssue({ ...base, closures: ["demain"] })?.field).toBe("closures")
+    expect(recurrenceIssue({ ...base, startTime: "17:00", endTime: "17:00" })?.field).toBe("startTime")
+    expect(recurrenceIssue({ ...base, from: "2026-09-03", until: "2026-09-08" })).toMatchObject({ field: null, message: expect.stringMatching(/Aucune date/) })
+    expect(recurrenceIssue(base)).toBeNull()
+  })
+
+  it("writes a time range in words, never with an en dash", () => {
+    expect(timeRange("14:00", "18:00")).toBe("de 14:00 à 18:00")
   })
 
   it("refuses more than the bound", () => {

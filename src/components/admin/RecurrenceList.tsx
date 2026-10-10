@@ -7,7 +7,7 @@ import { useId, useRef, useState } from "react"
 import { toMin, toMinEnd } from "@/lib/gantt-utils"
 import { normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
-import { describeWeekdays, type Weekday } from "@/lib/shift-recurrence"
+import { describeWeekdays, timeRange, type Weekday } from "@/lib/shift-recurrence"
 import type { AdminRecurrence, RawShift } from "./shifts/types"
 
 const fmtDay = (iso: string) =>
@@ -67,15 +67,15 @@ function RecurrenceItem({ rule, shifts, today, onShiftsChanged, onShiftsStopped,
     <li className="py-3 space-y-2">
       <p className="text-sm text-gray-900">
         <span className="font-medium">{rule.label}</span>
-        {" : "}{describeWeekdays(rule.weekdays as Weekday[], rule.everyWeeks === 2 ? 2 : 1)}, {rule.startTime}–{rule.endTime}, du {fmtDay(rule.fromDate)} au {fmtDay(rule.untilDate)}.
+        {" : "}{describeWeekdays(rule.weekdays as Weekday[], rule.everyWeeks === 2 ? 2 : 1)}, {timeRange(rule.startTime, rule.endTime)}, du {fmtDay(rule.fromDate)} au {fmtDay(rule.untilDate)}.
         {" "}<span className="text-gray-700">{days === 0 ? "Plus aucune date à venir." : `${days} date${days > 1 ? "s" : ""} à venir.`}</span>
       </p>
       <div className="flex flex-wrap gap-2">
         <button ref={changeBtn} type="button" aria-expanded={mode === "change"} aria-controls={mode === "change" ? `${id}-change` : undefined} onClick={() => setMode(mode === "change" ? "none" : "change")} className="min-h-11 px-3 rounded-xl border border-gray-400 text-sm text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          Modifier à partir d&apos;une date
+          Modifier à partir d&apos;une date<span className="sr-only"> : {rule.label}</span>
         </button>
         <button ref={stopBtn} type="button" aria-expanded={mode === "stop"} aria-controls={mode === "stop" ? `${id}-stop` : undefined} onClick={() => setMode(mode === "stop" ? "none" : "stop")} className="min-h-11 px-3 rounded-xl border border-gray-400 text-sm text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          Arrêter à partir d&apos;une date
+          Arrêter à partir d&apos;une date<span className="sr-only"> : {rule.label}</span>
         </button>
       </div>
       {mode === "change" && (
@@ -96,22 +96,45 @@ function ChangeForm({ panelId, rule, defaultFrom, oneShiftPerDay, onCancel, onDo
   const [from, setFrom] = useState(defaultFrom)
   const [startTime, setStartTime] = useState(rule.startTime)
   const [endTime, setEndTime] = useState(rule.endTime)
-  const [capacity, setCapacity] = useState(rule.capacity)
+  const [capacity, setCapacity] = useState<number | "">(rule.capacity)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tooSmall, setTooSmall] = useState<Listed[]>([])
+  const [badTime, setBadTime] = useState<"start" | "end" | null>(null)
+  const [badCapacity, setBadCapacity] = useState(false)
 
   async function submit() {
     if (saving) return
     setError(null)
     setTooSmall([])
-    if (oneShiftPerDay && (!isValidClock(startTime) || !isValidClock(endTime))) { setError("Indiquez des heures au format HH:MM."); return }
+    const wrongTime = !oneShiftPerDay ? null : !isValidClock(startTime) ? "start" : !isValidClock(endTime) ? "end" : null
+    const wrongCapacity = !(Number(capacity) >= 1)
+    setBadTime(wrongTime)
+    setBadCapacity(wrongCapacity)
+    if (wrongTime) {
+      // The message goes with the field (aria-describedby), focus on the field to fix.
+      setError(`Indiquez l'heure de ${wrongTime === "start" ? "début" : "fin"} au format HH:MM (par exemple 14:00).`)
+      requestAnimationFrame(() => document.getElementById(`${id}-${wrongTime}`)?.focus())
+      return
+    }
+    if (wrongCapacity) {
+      setError("Indiquez au moins une personne par créneau.")
+      requestAnimationFrame(() => document.getElementById(`${id}-capacity`)?.focus())
+      return
+    }
     const body: Record<string, unknown> = { from }
     if (oneShiftPerDay && startTime !== rule.startTime) body.startTime = startTime
     if (oneShiftPerDay && endTime !== rule.endTime) body.endTime = endTime
     if (capacity !== rule.capacity) body.capacity = Number(capacity)
     setSaving(true)
-    const res = await fetch(`/api/admin/shifts/recurrence/${rule.id}/change`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    let res: Response
+    try {
+      res = await fetch(`/api/admin/shifts/recurrence/${rule.id}/change`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    } catch {
+      setSaving(false)
+      setError("Connexion impossible. Vérifiez votre réseau et réessayez.")
+      return
+    }
     setSaving(false)
     const data = await res.json().catch(() => ({}))
     if (!res.ok) {
@@ -139,32 +162,33 @@ function ChangeForm({ panelId, rule, defaultFrom, oneShiftPerDay, onCancel, onDo
           <>
             <div>
               <label htmlFor={`${id}-start`} className="block text-xs font-medium text-gray-700 mb-1">Début</label>
-              <input id={`${id}-start`} type="text" inputMode="numeric" placeholder="HH:MM" value={startTime} onChange={(e) => setStartTime(e.target.value)} onBlur={(e) => setStartTime(normalizeTime(e.target.value))} className="input" />
+              <input id={`${id}-start`} type="text" inputMode="numeric" placeholder="HH:MM" value={startTime} aria-invalid={badTime === "start" || undefined} aria-describedby={[`${id}-time-hint`, ...(badTime === "start" ? [`${id}-error`] : [])].join(" ")} onChange={(e) => setStartTime(e.target.value)} onBlur={(e) => setStartTime(normalizeTime(e.target.value))} className="input" />
             </div>
             <div>
               <label htmlFor={`${id}-end`} className="block text-xs font-medium text-gray-700 mb-1">Fin</label>
-              <input id={`${id}-end`} type="text" inputMode="numeric" placeholder="HH:MM" value={endTime} onChange={(e) => setEndTime(e.target.value)} onBlur={(e) => setEndTime(normalizeTime(e.target.value))} className="input" />
+              <input id={`${id}-end`} type="text" inputMode="numeric" placeholder="HH:MM" value={endTime} aria-invalid={badTime === "end" || undefined} aria-describedby={[`${id}-time-hint`, ...(badTime === "end" ? [`${id}-error`] : [])].join(" ")} onChange={(e) => setEndTime(e.target.value)} onBlur={(e) => setEndTime(normalizeTime(e.target.value))} className="input" />
             </div>
           </>
         )}
         <div>
           <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Personnes par créneau</label>
-          <input id={`${id}-capacity`} type="number" min={1} value={capacity} onChange={(e) => setCapacity(Number(e.target.value))} className="input" />
+          <input id={`${id}-capacity`} type="number" min={1} value={capacity} aria-invalid={badCapacity || undefined} aria-describedby={badCapacity ? `${id}-error` : undefined} onChange={(e) => setCapacity(e.target.value === "" ? "" : Number(e.target.value))} className="input" />
         </div>
       </div>
+      {oneShiftPerDay && <p id={`${id}-time-hint`} className="text-xs text-gray-700">Heures au format HH:MM, par exemple 14:00.</p>}
       {!oneShiftPerDay && <p className="text-xs text-gray-700">Cette permanence compte plusieurs créneaux par jour : ses horaires se modifient créneau par créneau.</p>}
       <p className="text-xs text-gray-700">Les dates précédentes et les créneaux annulés ne changent pas. Les bénévoles inscrits sont prévenus d&apos;un changement d&apos;horaire.</p>
       {error && (
         <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
-          <p>{error}</p>
+          <p id={`${id}-error`}>{error}</p>
           {tooSmall.length > 0 && <ul className="mt-1 list-disc pl-5">{tooSmall.map((s) => <li key={s.date + s.startTime}>{fmtDay(s.date)}, {s.startTime} : {s.committed} inscrit{s.committed > 1 ? "s" : ""}</li>)}</ul>}
         </div>
       )}
       <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={submit} aria-disabled={saving || undefined} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <button type="button" onClick={submit} aria-disabled={saving || undefined} className="min-h-11 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           {saving ? "Modification…" : "Modifier ces dates"}
         </button>
-        <button type="button" onClick={onCancel} className="text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
+        <button type="button" onClick={onCancel} className="min-h-11 text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
       </div>
     </div>
   )
@@ -179,7 +203,7 @@ function StopForm({ panelId, rule, defaultFrom, onCancel, onDone }: {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [withPeople, setWithPeople] = useState<Listed[]>([])
-  const confirmRef = useRef<HTMLButtonElement>(null)
+  const peopleRef = useRef<HTMLDivElement>(null)
 
   async function submit(confirm: boolean) {
     if (saving) return
@@ -199,7 +223,9 @@ function StopForm({ panelId, rule, defaultFrom, onCancel, onDone }: {
       // 409: dates with people, listed for a second, explicit confirmation.
       if (res.status === 409 && Array.isArray(data.withPeople)) {
         setWithPeople(data.withPeople)
-        requestAnimationFrame(() => confirmRef.current?.focus())
+        // Focus the explanation and its list of dates, never the destructive button: a repeated
+        // Enter must not cancel dates and email volunteers before anyone heard the list.
+        requestAnimationFrame(() => peopleRef.current?.focus())
         return
       }
       setError(typeof data.error === "string" ? data.error : "Erreur lors de l'arrêt.")
@@ -222,25 +248,27 @@ function StopForm({ panelId, rule, defaultFrom, onCancel, onDone }: {
       {error && <p role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</p>}
       {withPeople.length > 0 ? (
         <div className="space-y-2">
+          <div ref={peopleRef} tabIndex={-1} aria-labelledby={`${id}-people`} role="group" className="space-y-2 rounded focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
           <p id={`${id}-people`} className="text-sm text-gray-900">
             {withPeople.length} date{withPeople.length > 1 ? "s ont" : " a"} déjà des inscrits. Les arrêter annule ces créneaux et prévient chaque personne par email :
           </p>
           <ul className="list-disc pl-5 text-sm text-gray-900">
             {withPeople.map((s) => <li key={s.date + s.startTime}>{fmtDay(s.date)}, {s.startTime} : {s.committed} inscrit{s.committed > 1 ? "s" : ""}</li>)}
           </ul>
+          </div>
           <div className="flex flex-wrap gap-2">
-            <button ref={confirmRef} type="button" onClick={() => submit(true)} aria-disabled={saving || undefined} aria-describedby={`${id}-people`} className="bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-800 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+            <button type="button" onClick={() => submit(true)} aria-disabled={saving || undefined} aria-describedby={`${id}-people`} className="min-h-11 bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-800 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
               {saving ? "Arrêt…" : `Annuler aussi ${withPeople.length > 1 ? `ces ${withPeople.length} dates` : "cette date"} et prévenir les inscrits`}
             </button>
-            <button type="button" onClick={onCancel} className="text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Ne rien arrêter</button>
+            <button type="button" onClick={onCancel} className="min-h-11 text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Ne rien arrêter</button>
           </div>
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => submit(false)} aria-disabled={saving || undefined} className="bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          <button type="button" onClick={() => submit(false)} aria-disabled={saving || undefined} className="min-h-11 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             {saving ? "Arrêt…" : "Arrêter la permanence"}
           </button>
-          <button type="button" onClick={onCancel} className="text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
+          <button type="button" onClick={onCancel} className="min-h-11 text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
         </div>
       )}
     </div>

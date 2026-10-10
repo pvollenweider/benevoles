@@ -163,19 +163,35 @@ export function generateRecurrence(input: RecurrenceInput): { shifts: Recurrence
 }
 
 /** Why the rule can't be generated, or null. Mirrors the API's validation for the form. */
-export function recurrenceProblem(input: RecurrenceInput, eventPeriod?: { start: string; end: string }): string | null {
-  if (!DATE_RE.test(input.from) || !DATE_RE.test(input.until)) return "Indiquez la date de début et la date de fin."
-  if (input.until < input.from) return "La date de fin est avant la date de début."
+/** The field a problem is about, so the form can focus it; null: the rule as a whole (the summary). */
+export type RecurrenceField = "from" | "until" | "weekdays" | "startTime" | "closures"
+
+export type RecurrenceIssue = { message: string; field: RecurrenceField | null }
+
+/** Why a rule can't be created, and which field to fix (the form focuses it); null when it can. */
+export function recurrenceIssue(input: RecurrenceInput, eventPeriod?: { start: string; end: string }): RecurrenceIssue | null {
+  if (!DATE_RE.test(input.from)) return { message: "Indiquez la date de début et la date de fin.", field: "from" }
+  if (!DATE_RE.test(input.until)) return { message: "Indiquez la date de début et la date de fin.", field: "until" }
+  if (input.until < input.from) return { message: "La date de fin est avant la date de début.", field: "until" }
   if (eventPeriod && (input.from < eventPeriod.start || input.until > eventPeriod.end))
-    return "Les dates doivent rester dans la période de l'événement."
-  if (input.weekdays.length === 0) return "Choisissez au moins un jour de la semaine."
-  if (input.closures.some((d) => !DATE_RE.test(d))) return "Une date de fermeture n'est pas valide."
+    return { message: "Les dates doivent rester dans la période de l'événement.", field: input.from < eventPeriod.start ? "from" : "until" }
+  if (input.weekdays.length === 0) return { message: "Choisissez au moins un jour de la semaine.", field: "weekdays" }
+  if (input.closures.some((d) => !DATE_RE.test(d))) return { message: "Une date de fermeture n'est pas valide.", field: "closures" }
   const series = seriesProblem({ date: input.from, startTime: input.startTime, endTime: input.endTime, slotMinutes: input.slotMinutes, breakMinutes: input.breakMinutes })
-  if (series) return series
+  if (series) return { message: series, field: "startTime" }
   const { shifts } = generateRecurrence(input)
-  if (shifts.length === 0) return "Aucune date ne correspond : vérifiez les jours et la période."
-  if (shifts.length > RECURRENCE_MAX_SHIFTS) return `Cette répétition créerait ${shifts.length} créneaux ; le maximum est de ${RECURRENCE_MAX_SHIFTS}. Raccourcissez la période ou espacez les créneaux.`
+  if (shifts.length === 0) return { message: "Aucune date ne correspond : vérifiez les jours et la période.", field: null }
+  if (shifts.length > RECURRENCE_MAX_SHIFTS) return { message: `Cette répétition créerait ${shifts.length} créneaux ; le maximum est de ${RECURRENCE_MAX_SHIFTS}. Raccourcissez la période ou espacez les créneaux.`, field: null }
   return null
+}
+
+export function recurrenceProblem(input: RecurrenceInput, eventPeriod?: { start: string; end: string }): string | null {
+  return recurrenceIssue(input, eventPeriod)?.message ?? null
+}
+
+/** « de 14:00 à 18:00 »: an en dash range is often read « 14 heures 18 heures ». */
+export function timeRange(startTime: string, endTime: string): string {
+  return `de ${startTime} à ${endTime}`
 }
 
 /** « chaque mercredi », « un samedi sur deux », « chaque mardi et jeudi » for the preview. */
