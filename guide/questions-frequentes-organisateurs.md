@@ -15,6 +15,7 @@ Chaque question renvoie à sa réponse, dans la page de la documentation qui en 
 ## Préparer l'événement
 
 - [J'organise un événement sur plusieurs jours avec des postes différents chaque jour : comment je structure ça ?](configurer-les-creneaux.md#j-organise-un-evenement-sur-plusieurs-jours-avec-des-postes-differents-chaque-jour-comment-je-structure-ca)
+- [Mon activité revient chaque semaine toute l'année : je dois créer chaque date ?](permanences-recurrentes.md)
 - [J'ai un poste qui demande d'être majeur, ou d'avoir un âge minimum précis : je fais comment ?](age-minimum.md#cote-organisation)
 - [Je veux donner des infos pratiques (accès, parking, ce qu'il faut apporter) sans surcharger le message principal.](pages-personnalisees.md#je-veux-donner-des-infos-pratiques-acces-parking-ce-qu-il-faut-apporter-sans-surcharger-le-message-principal)
 - [Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.](responsables-de-secteur.md#je-veux-qu-une-personne-suive-son-poste-sans-lui-donner-acces-a-tout-l-admin)

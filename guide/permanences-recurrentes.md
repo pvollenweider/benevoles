@@ -3,7 +3,8 @@ roles: [admin]
 group: preparer
 order: 45
 summary: Une permanence qui revient chaque semaine se décrit une fois ; toutes ses dates sont créées, jours fériés et fermetures exclus.
-related: [creer-une-serie-de-creneaux, configurer-les-creneaux]
+related: [creer-une-serie-de-creneaux, configurer-les-creneaux, dupliquer-un-evenement]
+added: 2026-10-10
 legacy: []
 aliases: []
 ---
