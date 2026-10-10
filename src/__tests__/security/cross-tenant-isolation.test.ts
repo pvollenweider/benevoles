@@ -766,6 +766,20 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/shifts/recurrence/[id]/change and /stop return 404 for an org-B permanence, touching nothing (#866)", async () => {
+    const change = await import("@/app/api/admin/shifts/recurrence/[id]/change/route")
+    const stop = await import("@/app/api/admin/shifts/recurrence/[id]/stop/route")
+    for (const [POST, body] of [[change.POST, { from: "2026-09-09", capacity: 3 }], [stop.POST, { from: "2026-09-09", confirm: true }]] as const) {
+      const db = setupGuard()
+      const $transaction = vi.fn()
+      // The scoped client finds no org-B rule: findFirst through the organisation filter → null.
+      Object.assign(db, { $transaction, shiftRecurrence: { findFirst: vi.fn().mockResolvedValue(null) } })
+      const res = await POST(makeRequest("/api/admin/shifts/recurrence/rule-b/x", "POST", body), params("rule-b"))
+      expect(res.status).toBe(404)
+      expect($transaction).not.toHaveBeenCalled()
+    }
+  })
+
   it("POST /api/admin/settings/notifications/[id]/retry returns 404 for an org-B outbox row (#382)", async () => {
     const { POST } = await import("@/app/api/admin/settings/notifications/[id]/retry/route")
     setupGuard()

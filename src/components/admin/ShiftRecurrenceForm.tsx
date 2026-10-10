@@ -16,6 +16,7 @@ import {
   type HolidayCalendar, type RecurrenceInput, type Weekday,
 } from "@/lib/shift-recurrence"
 import type { AdminShift } from "./AdminDayTimeline"
+import type { AdminRecurrence } from "./shifts/types"
 
 /** « Toute la plage » = one shift per day covering the whole time range. */
 const WHOLE_RANGE = 0
@@ -49,7 +50,7 @@ type Props = {
   eventEnd: string
   defaultHolidays: HolidayCalendar
   existingShifts: { roleName: string; displayOrder: number }[]
-  onCreated: (shifts: AdminShift[]) => void
+  onCreated: (shifts: AdminShift[], rule: AdminRecurrence) => void
   onClose: () => void
 }
 
@@ -128,7 +129,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
     if (problem || !preview) return
     setSaving(true)
     setError(null)
-    const outcome = await requestJson<{ shifts: (AdminShift & { date: string })[] }>(() => fetch("/api/admin/shifts/recurrence", {
+    const outcome = await requestJson<{ rule: AdminRecurrence; shifts: (AdminShift & { date: string })[] }>(() => fetch("/api/admin/shifts/recurrence", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -139,7 +140,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
     }), "Erreur lors de la création.")
     setSaving(false)
     if (!outcome.ok) { setError(outcome.error); return }
-    onCreated(outcome.data.shifts.map((s) => ({ ...s, date: s.date.split("T")[0], registrationCount: 0 })))
+    onCreated(outcome.data.shifts.map((s) => ({ ...s, date: s.date.split("T")[0], registrationCount: 0 })), outcome.data.rule)
   }
 
   const fieldId = (f: Field) => `${id}-${f}`

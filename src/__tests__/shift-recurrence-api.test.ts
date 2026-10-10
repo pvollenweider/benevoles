@@ -23,7 +23,7 @@ const post = (body: unknown) =>
 describe("POST /api/admin/shifts/recurrence (#866)", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    ruleCreate.mockResolvedValue({ id: "rule-1" })
+    ruleCreate.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({ id: "rule-1", ...data }))
     createMany.mockImplementation(async ({ data }: { data: unknown[] }) => ({ count: data.length }))
     findMany.mockResolvedValue([{ id: "s1" }, { id: "s2" }])
     transaction.mockImplementation(async (fn: (tx: unknown) => unknown) => fn({ shiftRecurrence: { create: ruleCreate }, shift: { createMany } }))
@@ -39,7 +39,9 @@ describe("POST /api/admin/shifts/recurrence (#866)", () => {
     const { POST } = await import("@/app/api/admin/shifts/recurrence/route")
     const res = await POST(post(valid))
     expect(res.status).toBe(201)
-    expect(await res.json()).toEqual({ recurrenceId: "rule-1", shifts: [{ id: "s1" }, { id: "s2" }] })
+    const body = await res.json()
+    expect(body).toMatchObject({ recurrenceId: "rule-1", shifts: [{ id: "s1" }, { id: "s2" }] })
+    expect(body.rule).toMatchObject({ id: "rule-1", fromDate: "2026-12-01", untilDate: "2026-12-31", label: "Accueil" })
     expect(ruleCreate.mock.calls[0][0].data).toMatchObject({ eventId: "evt-a", roleName: "Accueil", label: "Accueil", weekdays: [5], holidays: "CH", closures: ["2026-12-04"] })
     const rows = createMany.mock.calls[0][0].data as { date: Date; recurrenceId: string; status: string }[]
     // Fridays of December 2026: the 4th is closed, the 25th is Christmas.

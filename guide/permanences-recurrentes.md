@@ -28,3 +28,13 @@ L'événement porte la période : pour une saison de septembre à juin, donnez �
 L'aperçu donne le nombre de dates et de créneaux, les premières dates, et chaque date exclue avec sa raison (jour férié ou fermeture). Une permanence compte au plus 500 créneaux : pour plus, raccourcissez la période ou espacez les créneaux.
 
 Une fois créés, ce sont des créneaux ordinaires : les bénévoles s'y inscrivent comme aux autres, les rappels partent avant chacun, et chaque date se modifie ou se supprime séparément.
+
+## Modifier ou arrêter une permanence
+
+Les permanences de l'événement sont listées sous **Permanences récurrentes**, avec leur rythme, leur période et le nombre de dates à venir.
+
+- **Modifier à partir d'une date** : le nombre de personnes par créneau, et les horaires pour une permanence d'un seul créneau par jour, changent sur toutes les dates à partir du jour choisi. Les dates précédentes et les créneaux annulés ne bougent pas. Les bénévoles inscrits reçoivent un email si l'horaire change. Un nombre de personnes plus petit que les inscrits d'une date est refusé, et ces dates sont listées.
+- **Arrêter à partir d'une date** : les dates sans inscrit sont supprimées. Si des dates ont déjà des inscrits, elles sont d'abord listées avec leur nombre d'inscrits, et rien ne change ; elles ne sont annulées, avec un email à chaque personne, que si vous confirmez. Arrêter à partir de la première date retire la permanence de la liste.
+
+Pour changer une seule date, modifiez ou supprimez son créneau comme n'importe quel autre.
+

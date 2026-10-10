@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
-  defaultHolidayCalendar, describeWeekdays, easterSunday, generateRecurrence, publicHolidays, recurrenceDays,
-  recurrenceProblem, RECURRENCE_MAX_SHIFTS, weekdayOf, type RecurrenceInput,
+  defaultHolidayCalendar, describeWeekdays, easterSunday, generateRecurrence, planChange, planStop, publicHolidays, recurrenceDays,
+  recurrenceProblem, RECURRENCE_MAX_SHIFTS, weekdayOf, type RecurrenceInput, type RuleShift,
 } from "../shift-recurrence"
 
 const base: RecurrenceInput = {
@@ -83,5 +83,45 @@ describe("shift recurrence (#866)", () => {
     expect(defaultHolidayCalendar("Europe/Paris")).toBe("FR")
     expect(defaultHolidayCalendar("Europe/Zurich")).toBe("CH")
     expect(defaultHolidayCalendar("America/Montreal")).toBe("none")
+  })
+})
+
+const shift = (id: string, date: string, committed = 0, hasHistory = committed > 0, status = "open"): RuleShift => ({ id, date, startTime: "14:00", status, committed, hasHistory })
+
+describe("stopping and changing a permanence from a date (#866)", () => {
+  const shifts = [
+    shift("a", "2026-09-02", 2),
+    shift("b", "2026-09-09"),
+    shift("c", "2026-09-16", 0, true),
+    shift("d", "2026-09-23", 1),
+    shift("e", "2026-09-30", 0, false, "cancelled"),
+  ]
+
+  it("removes empty dates, cancels quietly those with only a history, lists those with people", () => {
+    const plan = planStop(shifts, "2026-09-09")
+    expect(plan.remove).toEqual(["b"])
+    expect(plan.cancelQuiet).toEqual(["c"])
+    expect(plan.withPeople.map((s) => s.id)).toEqual(["d"])
+  })
+
+  it("changes the capacity from a date, refusing a value below the people registered", () => {
+    const rule = { startTime: "14:00", endTime: "17:00", slotMinutes: 180 }
+    expect(planChange(rule, shifts, "2026-09-09", { capacity: 3 })).toEqual({ update: ["b", "c", "d"], problem: null, tooSmall: [] })
+    const refused = planChange(rule, shifts, "2026-09-01", { capacity: 1 })
+    expect(refused.update).toEqual([])
+    expect(refused.tooSmall.map((s) => s.id)).toEqual(["a"])
+    expect(refused.problem).toMatch(/1 date/)
+  })
+
+  it("moves the hours only for one shift per day", () => {
+    expect(planChange({ startTime: "14:00", endTime: "17:00", slotMinutes: 180 }, shifts, "2026-09-09", { startTime: "13:30" }).problem).toBeNull()
+    expect(planChange({ startTime: "14:00", endTime: "18:00", slotMinutes: 120 }, shifts, "2026-09-09", { startTime: "13:30" }).problem).toMatch(/un seul créneau par jour/)
+    expect(planChange({ startTime: "14:00", endTime: "17:00", slotMinutes: 180 }, shifts, "2026-09-09", { startTime: "17:00" }).problem).toMatch(/différente/)
+  })
+
+  it("says when there is nothing to do", () => {
+    const rule = { startTime: "14:00", endTime: "17:00", slotMinutes: 180 }
+    expect(planChange(rule, shifts, "2026-09-09", {}).problem).toBe("Rien à modifier.")
+    expect(planChange(rule, shifts, "2026-10-01", { capacity: 2 }).problem).toMatch(/Aucune date/)
   })
 })

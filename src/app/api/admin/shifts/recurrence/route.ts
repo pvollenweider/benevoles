@@ -104,5 +104,9 @@ export async function POST(req: Request) {
   })
 
   const shifts = await db.shift.findMany({ where: { recurrenceId: rule.id }, orderBy: [{ date: "asc" }, { startTime: "asc" }] })
-  return NextResponse.json({ recurrenceId: rule.id, shifts }, { status: 201 })
+  return NextResponse.json({
+    recurrenceId: rule.id,
+    rule: { ...rule, fromDate: day(rule.fromDate), untilDate: day(rule.untilDate) },
+    shifts,
+  }, { status: 201 })
 }
