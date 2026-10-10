@@ -3,6 +3,10 @@
 
 import { prisma } from "@/lib/prisma"
 import { assessInactivity, type InactivityAssessment } from "@/lib/org-inactivity"
+import { adminReachability, type AdminReachability } from "@/lib/admin-reachability"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
+import { env } from "@/lib/env"
+import { RETENTION_DAYS } from "@/lib/retention"
 
 /**
  * The organisations the periodic check of #811 would deal with soon, read only: what
@@ -20,6 +24,8 @@ export type InactivityReportRow = {
   lastEventEnd: Date | null
   everUsed: boolean
   activeAdmins: number
+  /** Active administrators and how many of their addresses are « à vérifier » (#598, #599). */
+  reachability: AdminReachability
   postponedUntil: Date | null
   /** The procedure under way with `ORG_INACTIVITY=on`: first email sent on, emails sent so far. */
   noticeAt: Date | null
@@ -40,15 +46,23 @@ export async function assessActiveOrganizations(now: Date = new Date(), only?: s
       lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true, inactivityPostponedUntil: true, inactivityExempt: true,
       inactivityNoticeAt: true, inactivityEmailsSent: true,
       events: { select: { endDate: true, publicStatus: true }, orderBy: { endDate: "desc" }, take: 1 },
-      _count: { select: { admins: { where: { isActive: true } } } },
+      admins: { where: { isActive: true }, select: { email: true } },
     },
   })
   if (orgs.length === 0) return []
   const ids = orgs.map((o) => o.id)
-  const [upcoming, published, registered] = await Promise.all([
+  const adminHashes = new Map(orgs.map((o) => [o.id, o.admins.map((a) => addressHash(a.email, env.AUTH_SECRET))]))
+  const allHashes = [...new Set([...adminHashes.values()].flat())]
+  const outcomeCutoff = new Date(now.getTime() - RETENTION_DAYS.deliveryOutcome * 24 * 60 * 60 * 1000)
+  const [upcoming, published, registered, outcomes] = await Promise.all([
     prisma.event.groupBy({ by: ["organizationId"], where: { organizationId: { in: ids }, endDate: { gte: startOfToday } }, _count: { _all: true } }),
     prisma.event.groupBy({ by: ["organizationId"], where: { organizationId: { in: ids }, publicStatus: { in: ["published", "archived"] } }, _count: { _all: true } }),
     prisma.event.groupBy({ by: ["organizationId"], where: { organizationId: { in: ids }, registrations: { some: {} } }, _count: { _all: true } }),
+    // Any organisation's outcomes for these addresses: a refused mailbox is a fact about the address.
+    allHashes.length === 0 ? [] : prisma.deliveryOutcome.findMany({
+      where: { addressHash: { in: allHashes }, createdAt: { gte: outcomeCutoff } },
+      select: { addressHash: true, outcome: true, createdAt: true },
+    }),
   ])
   const has = (groups: { organizationId: string }[]) => new Set(groups.map((g) => g.organizationId))
   const withUpcoming = has(upcoming)
@@ -59,7 +73,8 @@ export async function assessActiveOrganizations(now: Date = new Date(), only?: s
     lastActivityAt: o.lastMeaningfulActivityAt,
     lastEventEnd: o.events[0]?.endDate ?? null,
     everUsed: used.has(o.id),
-    activeAdmins: o._count.admins,
+    activeAdmins: o.admins.length,
+    reachability: adminReachability(adminHashes.get(o.id) ?? [], outcomes, now),
     postponedUntil: o.inactivityPostponedUntil,
     noticeAt: o.inactivityNoticeAt,
     emailsSent: o.inactivityEmailsSent,

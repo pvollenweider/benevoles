@@ -8,6 +8,7 @@ import { auth } from "@/auth"
 import { loadDeactivatedForInactivity, loadExemptOrganizations, loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
 import { deactivationDate, inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { noReachableAdmin, reachabilityNote } from "@/lib/admin-reachability"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Organisations bientôt inactives" }
@@ -26,6 +27,8 @@ export default async function InactivityPage() {
   const mode = inactivityMode()
   const now = new Date()
   const [rows, exempt, deactivated] = mode === "off" ? [[], [], []] : await Promise.all([loadInactivityReport(now), loadExemptOrganizations(), loadDeactivatedForInactivity()])
+  const unreachable = rows.filter((r) => noReachableAdmin(r.reachability))
+  const note = (r: (typeof rows)[number]) => reachabilityNote(r.reachability)
 
   return (
     <div className="space-y-6">
@@ -40,6 +43,18 @@ export default async function InactivityPage() {
         </p>
       </div>
 
+      {mode !== "off" && unreachable.length > 0 && (
+        <p className="text-sm text-gray-900 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
+          {unreachable.length === 1
+            ? "1 organisation n'a aucun administrateur joignable"
+            : `${unreachable.length} organisations n'ont aucun administrateur joignable`}
+          {unreachable.length <= 5 && ` (${unreachable.map((r) => r.name).join(", ")})`}
+          {mode === "on"
+            ? " : aucun administrateur actif, ou adresses refusées. Les messages de la vérification ne leur parviennent pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seront désactivées comme les autres."
+            : " : aucun administrateur actif, ou adresses refusées. Les messages de la vérification ne leur parviendraient pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seraient désactivées comme les autres."}
+        </p>
+      )}
+
       {mode !== "off" && (rows.length === 0 ? (
         <p className="text-sm text-gray-700">Aucune organisation concernée.</p>
       ) : (
@@ -52,7 +67,7 @@ export default async function InactivityPage() {
                 <th scope="col" className="px-4 py-2 font-medium">Dernière activité</th>
                 <th scope="col" className="px-4 py-2 font-medium">Dernier événement</th>
                 <th scope="col" className="px-4 py-2 font-medium">Utilisée</th>
-                <th scope="col" className="px-4 py-2 font-medium text-right">Administrateurs actifs</th>
+                <th scope="col" className="px-4 py-2 font-medium">Administrateurs actifs</th>
                 <th scope="col" className="px-4 py-2 font-medium">Où elle en serait</th>
               </tr>
             </thead>
@@ -65,7 +80,15 @@ export default async function InactivityPage() {
                   <td className="px-4 py-2 text-gray-800 whitespace-nowrap">{day(r.lastActivityAt)}</td>
                   <td className="px-4 py-2 text-gray-800 whitespace-nowrap">{day(r.lastEventEnd)}</td>
                   <td className="px-4 py-2 text-gray-800">{r.everUsed ? "Oui" : "Jamais utilisée"}</td>
-                  <td className="px-4 py-2 text-right tabular-nums text-gray-900">{r.activeAdmins}</td>
+                  <td className="px-4 py-2 text-gray-900">
+                    <span className="tabular-nums">{r.activeAdmins}</span>
+                    {note(r) && (
+                      <>
+                        <span className="sr-only">, </span>
+                        <span className={`block text-xs ${noReachableAdmin(r.reachability) ? "font-semibold text-red-800" : "text-gray-700"}`}>{note(r)}</span>
+                      </>
+                    )}
+                  </td>
                   <td className="px-4 py-2 text-gray-800">
                     {r.postponedUntil && r.postponedUntil.getTime() > now.getTime() && `Reporté jusqu'au ${day(r.postponedUntil)}. `}
                     {r.noticeAt && r.assessment.state === "due"
