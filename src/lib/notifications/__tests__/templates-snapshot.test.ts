@@ -520,6 +520,22 @@ const cases: [string, NotificationPayload][] = [
       hours: 24,
     },
   }],
+  ["org_inactivity_notice", {
+    kind: "org_inactivity_notice",
+    recipient,
+    data: {
+      step: "last",
+      organizationName: tricky,
+      lastActivity: "12 mars 2025",
+      deactivationOn: "mardi 23 décembre 2026",
+      keepUrl: "https://www.benevol.app/admin/keep?lien=abc",
+    },
+  }],
+  ["org_inactivity_deactivated", {
+    kind: "org_inactivity_deactivated",
+    recipient,
+    data: { organizationName: tricky, deactivatedOn: "15 août 2027" },
+  }],
   ["open_shifts", {
     kind: "open_shifts",
     recipient,
@@ -584,6 +600,8 @@ describe("render — snapshot of every notification kind", () => {
       addresses_to_verify_summary: true,
       past_event_notice: true,
       org_reactivation: true,
+      org_inactivity_notice: true,
+      org_inactivity_deactivated: true,
       open_shifts: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))

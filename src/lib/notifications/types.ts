@@ -39,6 +39,8 @@ export type NotificationKind =
   | "addresses_to_verify_summary"
   | "past_event_notice"
   | "org_reactivation"
+  | "org_inactivity_notice"
+  | "org_inactivity_deactivated"
   | "open_shifts"
   | "operator_alert"
   | "signup_confirmation"

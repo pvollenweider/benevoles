@@ -25,7 +25,7 @@ export default auth((req) => {
   const isAdminPath = pathname.startsWith("/admin")
   const isLoginPage = pathname === "/admin/login"
   const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
-    || pathname === "/admin/reactivate" || pathname === "/admin/reactivate/confirm"
+    || pathname === "/admin/reactivate" || pathname === "/admin/reactivate/confirm" || pathname === "/admin/keep"
 
   if (isSuperAdminPath) {
     if (!req.auth) {

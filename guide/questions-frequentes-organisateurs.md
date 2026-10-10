@@ -32,4 +32,8 @@ Chaque question renvoie à sa réponse, dans la page de la documentation qui en 
 - [Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.](doublons-et-fusion.md#une-personne-s-est-inscrite-avec-une-adresse-email-mal-saisie-et-a-maintenant-deux-fiches)
 - [Un bénévole inscrit sur plusieurs créneaux le même jour reçoit-il beaucoup de rappels ?](rappels.md#un-benevole-inscrit-sur-plusieurs-creneaux-le-meme-jour-recoit-il-beaucoup-de-rappels)
 
+## Votre espace
+
+- [Mon espace va-t-il être désactivé si je ne l'utilise qu'une fois par an ?](exporter-et-conserver-ses-donnees.md#mon-espace-va-t-il-etre-desactive-si-je-ne-l-utilise-qu-une-fois-par-an)
+
 Une question sans réponse ici ? Voir [Signaler un problème ou proposer une amélioration](aide-et-retours.md#signaler-un-probleme-ou-proposer-une-amelioration).
