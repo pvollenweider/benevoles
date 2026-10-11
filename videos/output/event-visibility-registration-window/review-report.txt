@@ -1,0 +1,24 @@
+STATUS: READY
+ID: EVENT_VISIBILITY_REGISTRATION_WINDOW
+Pass: 3
+Commit: 9828f2a1850fd6556acbfde8658c5c85f4f3d196
+BUILD_ID: Yfc3tNvF9O0lnxrTyUwwy
+Duration: 143.960 seconds
+Music smallest/largest gap: 13.8 / 19.9 LU; 124 voiced windows, 6 music-only windows, quietest music-only -30.7 LUFS; passed.
+
+Pass-2 artifacts moved to pass-2/ before work; pass-1 preserved. Same audited continuous narration reused; source audio/text SHA checks passed. Fresh product snapshot verifies all 1454 product inputs against the requested commit. Remote main moved during preparation, so build was explicitly pinned to checkout HEAD and local origin/main; product files still verified individually. Generated Prisma client supplied to disposable snapshot. No product source changes.
+Organizer rename checked once. Guarded synthetic reseed before rehearsal and again before narrated take. Rehearsal, capture, assembly, posters --metadata-output review/renders-generated.json, video:validate and independent final-MP4 narration audit all passed (0–2.6% word differences). renders.json unchanged.
+
+Final-MP4 review: all seven review/*-seconds.png sheets inspected, plus full-size anchor frames. review/inspection.json binds the MP4 SHA, build proof, measured sentence boundaries, input markers, synthesized-effects comparison and music measurements.
+- welcome: current event editor/title and fictional organizer; matching introduction.
+- statuses: Brouillon sentence 18.99–21.82 s, cue 18.987; before frame 18.867 Published, after 19.787 Draft. Published sentence 22.20–24.37, cue 22.207; before 22.087 Draft, after 23.007 Published. Publication prerequisite anchor 31.159 falls at sentence start 31.158; actual prerequisite text visible. Native select changes use selectOption and create no physical pointerdown; no missing recorded click effect.
+- unlisted: Décochée sentence 44.01–53.64 s; actual checkbox click 45.293; unchecked state and current orange direct-link warning visible thereafter. No password-protection claim.
+- window: Indiquons sentence 66.53–69.93 s; field clicks 67.042/68.875, both within sentence. Anchor frame 67.329 shows opening-field interaction; chapter sheet shows saved 13.10.2026 09:00 and 16.10.2026 09:00, Europe/Zurich.
+- public-result: opening Tuesday 13 October at 09:00, event details and Frise consultable throughout; speech begins 82.41 s. Future automatic opening is explained, not represented as a filmed clock advance.
+- archive: sentence 99.05–107.72 s; cue 99.817 after actual page navigation. Frame 100.617 shows Archivé, chapter sheet shows retained event in administration. No early or late semantic action found.
+- result: retained archived event, French event date and summary throughout.
+
+Labels and dates: current Frise/Brouillon/Publié/Archivé and Élodie Rochat; date fields day.month.year, public dates in French; no mm/dd. One program chip uses product ISO 2026-10-17, not an American date. No localhost, org-admin@localhost or dev overlay observed; known Settings-address exception not encountered.
+Effects: input-effects.wav exact byte match to synthesis from recorded markers; audio-mix.json and audio-levels.json are bound to final MP4. VTT/TXT match manifest exactly (29 cues, numeric display normalization); final mixed-audio recognition passes every chapter. Caption intervals follow matching chapter audio, with proportional phrase timing rather than word alignment. All requested objective checks pass.
+
+Local source changes: shared build tool adds explicit --commit FULL_SHA with HEAD/local-origin-main equality and unchanged product blob checks. No cue correction needed for this video; no re-filming. No publish, push, commit or PR.

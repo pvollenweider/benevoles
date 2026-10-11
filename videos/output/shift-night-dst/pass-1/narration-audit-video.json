@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T09:35:51.378Z",
+  "revalidatedAt": "2026-10-11T09:35:51.379Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c3b9d50f684f4ca8473714a5f47eaa1df8bd9a246010bb88019a0523e9370c78",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "2f7490b3140f1d8819d6aff397b9f5dfccde0925810c370bfea53f7b2a8f54ce",
+      "recognized": "Les événements du soir posent deux questions différentes. Comment afficher une fin après minuit ? Et combien d'heures se sont réellement écoulées quand leur heure change ? Bénévo conserve l'horaire local de l'événement et calcule les instants dans le fuseau de l'organisation.",
+      "expected": "Les événements du soir posent deux questions différentes : comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change. Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.",
+      "wordErrorRate": 0.06818181818181818,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ordinary",
+      "audioSha256": "b1608328b1ad3c5e62b6dbfc5a01283477213e60246d91b52c7e333ad9d38430",
+      "recognized": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La frise continue après minuit, mais les heures affichées repartent bien de zéro. Minuit, une heure, deux heures. Ouvrons maintenant le créneau. Son récapitulatif précise que la fin se situe le lendemain. Vérifions bien cet horaire.",
+      "expected": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Ouvrons maintenant le créneau. Son récapitulatif précise que la fin se situe le lendemain : vérifions bien cet horaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "spring",
+      "audioSha256": "08aa1320809c4c23827efcc11d249fc53b6c3e81951ccbe9299c83b7b48e9194",
+      "recognized": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les e-mails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.",
+      "expected": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.",
+      "wordErrorRate": 0.041666666666666664,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "autumn",
+      "audioSha256": "c640127473816a28c6e60c97123d69e9dc50f2e8164fcc66607e4d3c5dd3cb6d",
+      "recognized": "Le dernier dimanche d'octobre, l'heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l'engagement d'une personne présente toute la nuit.",
+      "expected": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l’engagement d’une personne présente toute la nuit.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timezone",
+      "audioSha256": "67df301a179b4f70c313357a6f9c6bf1003d7cc7b0c239953d1721fd50e834b1",
+      "recognized": "Ces calculs dépendent du fuseau horaire de l'organisation. Ici, Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels. Une heure saisie reste l'heure locale comprise par l'organisateur et le bénévole.",
+      "expected": "Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels : une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "calendar",
+      "audioSha256": "87bd61259531ed3a5b6b057796afb311c27aeff459d3a84ae18bfce5d35e126e",
+      "recognized": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d'été ou d'hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.",
+      "expected": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "9ad6c84eb8ad20f7b34b16c74f601e43f54166fa8e25adc96403aa2a4c933f24",
+      "recognized": "Pour une permanence de nuit, indique clairement le jour de départ, l'heure du lendemain et les consignes d'arrivée. L'affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d'heure.",
+      "expected": "Pour une permanence de nuit, indique clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

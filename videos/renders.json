@@ -90,7 +90,7 @@
     "poster": true
   },
   "event-visibility-registration-window": {
-    "durationMs": 125240,
+    "durationMs": 143960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -240,7 +240,7 @@
     "poster": true
   },
   "shift-night-dst": {
-    "durationMs": 94920,
+    "durationMs": 111320,
     "width": 1280,
     "height": 800,
     "poster": true

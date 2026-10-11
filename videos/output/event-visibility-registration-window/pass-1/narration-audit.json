@@ -1,0 +1,90 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T09:27:14.448Z",
+  "revalidatedAt": "2026-10-11T09:27:14.451Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "cb26d58aa9d7d21b4ae1ea122faa23585e23f10988439a9d6f7c46c83358d1fd",
+      "recognized": "La visibilité de l'événement et l'ouverture des inscriptions sont deux réglages différents. Les séparer permet de montrer une page d'information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.",
+      "expected": "La visibilité de l’événement et l’ouverture des inscriptions sont deux réglages différents. Les séparer permet de montrer une page d’information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "statuses",
+      "audioSha256": "2a2174921966fbadca8644deea6d9b563c9e71b8b6a8f910b81279aba8d9caf0",
+      "recognized": "Brouillon signifie invisible au public. Publié rend la page accessible. Archivé conserve les données et les rapports dans l'administration, mais ferme le cycle de vie. Un événement ne peut passer à Publié que s'il possède au moins un créneau actif.",
+      "expected": "Brouillon signifie invisible au public. Publié rend la page accessible. Archivé conserve les données et les rapports dans l’administration mais ferme le cycle de vie. Un événement ne peut passer à Publié que s’il possède au moins un créneau actif.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "unlisted",
+      "audioSha256": "ddf35e37e9c4c3abfad6313b47dd7c13dc59d040b7a92481de3eacfd298b05a7",
+      "recognized": "L'option afficher cet événement sur la page publique de l'organisation agit à part. Décochée sur un événement publié, elle le retire de cette page et du référencement tout en gardant son lien direct et son QR code fonctionnel. Ce n'est donc pas une protection par mot de passe, toute personne qui possède le lien peut l'ouvrir.",
+      "expected": "L’option Afficher cet événement sur la page publique de l’organisation agit à part. Décochée sur un événement publié, elle le retire de cette page et du référencement, tout en gardant son lien direct et son QR code fonctionnels. Ce n’est donc pas une protection par mot de passe : toute personne qui possède le lien peut l’ouvrir.",
+      "wordErrorRate": 0.016666666666666666,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "window",
+      "audioSha256": "0793f345b4b8cd6bb2988fe892990828559faf897b12c1b8b056ffafb1ded1e5",
+      "recognized": "Les inscriptions peuvent être fermées immédiatement ou programmées, indiquant une ouverture et une fermeture dans le fuseau de l'organisation. La page reste visible pendant toute la période, mais le formulaire n'accepte des choix que lorsque la case inscription ouverte est cochée, et que la fenêtre est active. Côté bénévole, la page explique clairement que les inscriptions ne sont pas encore ouvertes et affiche la date prévue.",
+      "expected": "Les inscriptions peuvent être fermées immédiatement ou programmées. Indiquons une ouverture et une fermeture dans le fuseau de l’organisation. La page reste visible pendant toute la période, mais le formulaire n’accepte des choix que lorsque la case Inscriptions ouvertes est cochée et que la fenêtre est active.",
+      "wordErrorRate": 0.4489795918367347,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "public-result",
+      "audioSha256": "1a356bfccb17ff41d3d28977c2c2469a968d15d3c1e97c814cec28f4e45f1ec0",
+      "recognized": "les informations de l'événement restent consultables. Une fois la fenêtre ouverte, le même lien présente automatiquement le planning sans nouvelle publication. Après l'événement,",
+      "expected": "Côté bénévole, la page explique clairement que les inscriptions ne sont pas encore ouvertes et affiche la date prévue. Les informations de l’événement restent consultables. Une fois la fenêtre ouverte, le même lien présente automatiquement le planning sans nouvelle publication.",
+      "wordErrorRate": 0.5365853658536586,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "archive",
+      "audioSha256": "238175cfafd34b6bb0df2cb166346e95a98e614dcee9a13e8a904602589c14f6",
+      "recognized": "Archiver retire la page du parcours courant et garde l'historique, les inscriptions et les exports disponibles dans l'administration. Fermer les inscriptions suffit pour une pause temporaire. Archiver signifie que l'événement est terminé. Choisis donc chaque état selon l'intention.",
+      "expected": "Après l’événement, Archivé retire la page du parcours courant et garde l’historique, les inscriptions et les exports disponibles dans l’administration. Fermer les inscriptions suffit pour une pause temporaire ; archiver signifie que l’événement est terminé.",
+      "wordErrorRate": 0.2894736842105263,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "result",
+      "audioSha256": "024997aab80ddc375768acd16f3521dceaae2422353f5cd49832a4888b1fae09",
+      "recognized": "Brouillon pendant la préparation, Publié répertorié pour recruter largement, Publié non répertorié pour un partage par lien, Fenêtre programmée pour maîtriser le calendrier, puis Archive pour conserver sans encombrer.",
+      "expected": "Choisis donc chaque état selon l’intention : brouillon pendant la préparation, publié répertorié pour recruter largement, publié non répertorié pour un partage par lien, fenêtre programmée pour maîtriser le calendrier, puis archive pour conserver sans encombrer.",
+      "wordErrorRate": 0.19444444444444445,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing"
+      ]
+    }
+  ]
+}

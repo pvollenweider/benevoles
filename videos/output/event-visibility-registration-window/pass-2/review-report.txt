@@ -1,0 +1,24 @@
+STATUS: NOT READY
+ID: EVENT_VISIBILITY_REGISTRATION_WINDOW
+Commit: 50109e997d01413760453ed446600b2f6ba55b1e
+BUILD_ID: J9FLk7d2muTPYQm0aZ-LE
+Duration: 139.960 seconds
+Music smallest/largest gap: 13.3 / 19.9 LU; rule passed.
+
+First-pass evidence preserved in pass-1/. Same continuous Puck take recovered and re-split, no new TTS needed: independent short-window recognition located window, public-result, archive and result openings next to real silences. Applied cuts 56.039520, 74.563084, 90.665042 and 106.033375 s. Initial heuristic boundaries put Côté bénévole in window, Après l’événement in public-result, and Choisis donc in archive. Corrected excerpts independently audited: all pass (0–2.6% differences), no displaced opening or ending. Boundary proposals and narration-cuts.json retained.
+
+Fresh verified product build; organizer rename checked once; guarded common fixture reset before successful rehearsal and before narrated take. Capture, assembly, posters metadata-output, video:validate and final-MP4 independent speech audit passed. No re-filming after review failure. renders.json unchanged.
+
+Evidence: review/*-seconds.png directly inspected for all seven chapters; review/inspection.json binds MP4 SHA, build, sentence timing and input markers; review-frames/index.json stores frame timestamps.
+- welcome: real event edit screen and title, current event and organizer.
+- statuses: FAIL. Draft selection remains on Published for roughly first four seconds of chapter; Brouillon sentence starts 18.99 s, Published starts 22.21 s while draft is just being selected. Published selection at roughly chapter second 9 is late relative to 22.21 s sentence. Native select changes have no pointerdown marker. Converted draft, published and publication-prerequisite waits to sentence anchors.
+- unlisted: checkbox click 45.31 follows Décochée sentence 44.02; orange direct-link warning appears; no password-protection claim contradicted.
+- window: FAIL. Opening field interaction 65.79 precedes Indiquons sentence 66.53 by 0.74 s; closing field 67.61 follows it. Converted opening wait to Indiquons sentence anchor. Both actual successful PATCH saves awaited. Fields show 13.10.2026 and 16.10.2026 09:00, Europe/Zurich.
+- public-result: current volunteer page shows opening Tuesday 13 October at 09:00 and planning already consultable; location retained. No actual post-opening time advance claimed as filmed.
+- archive: FAIL. Archiving happens around chapter second 5, after sentence start 99.04; converted wait to Après l’événement. Archived event retained in administration as described.
+- result: preserved archived event, French date, summary narration.
+
+Current UI: Frise, French date fields and public dates, Élodie Rochat, no dev overlay or localhost/org-admin@localhost observed. A program chip in initial edit screen uses ISO 2026-10-17 (current product text); no mm/dd displayed. Settings-address exception not encountered.
+Effects: exact synthesized bytes match all recorded markers; counts in inspection.json/audio-mix.json. Native select changes are not represented as clicks; this is a tooling coverage limitation. Final speech audit passes 0–6.1%; VTT/TXT exactly match manifest. Fine word-level captions and full real-time subjective audio playback not certified.
+
+Local source changes: videos/tools/record.ts five fractional cues converted to unique sentence anchors in statuses, window and archive. Product unchanged. No publish, push, commit or PR.

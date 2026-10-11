@@ -1,0 +1,12 @@
+{
+  "anchor": "Les inscriptions peuvent être fermées immédiatement ou programmées. Indiquons une ouverture",
+  "windowStart": 41.040000000000006,
+  "result": {
+    "found": true,
+    "startSeconds": 15.1,
+    "wordsHeard": "Les inscriptions peuvent être fermées immédiatement ou programmées. Indiquons une ouverture"
+  },
+  "onset": 56.14000000000001,
+  "proposedCut": 56.039520499999995,
+  "note": "Proposal only; recut then independently audit before capture"
+}

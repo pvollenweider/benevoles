@@ -1,0 +1,1078 @@
+{
+  "duration": 111.32,
+  "videoSha256": "4cb8041a4eeae56611825b7ba64d9bc10c62a88e0c520d3d1f22b33789088163",
+  "build": {
+    "commit": "9828f2a1850fd6556acbfde8658c5c85f4f3d196",
+    "sourceTree": "4297a2c70d1ab85a23c2a859a7cefb1443c11288",
+    "productSourceSha256": "b29fcee9a9e02af5b6875d1fbe441d20f6cd72693cd82a8e53a313585c0dc898",
+    "buildId": "Yfc3tNvF9O0lnxrTyUwwy",
+    "snapshot": "/tmp/benevoles-video-production.zV68HxSX",
+    "builtAt": "2026-10-11T10:55:51.902Z"
+  },
+  "effects": {
+    "exactBytes": true,
+    "actualSha256": "d2a088b5dc52004c0f3aeb8236f0c244c71ca69c60df8e1b4bae5274327a9638",
+    "expectedSha256": "d2a088b5dc52004c0f3aeb8236f0c244c71ca69c60df8e1b4bae5274327a9638",
+    "clicks": 9,
+    "keys": 0
+  },
+  "levels": {
+    "rule": {
+      "minGapLu": 12,
+      "maxGapLu": 20,
+      "musicOnlyFloorLufs": -36,
+      "speechThresholdLufs": -35,
+      "windowS": 3,
+      "stepS": 1,
+      "frameS": 0.1,
+      "voicedShare": 0.5
+    },
+    "loop": {
+      "startS": 0.5,
+      "endS": 95,
+      "crossfadeS": 2
+    },
+    "mix": {
+      "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+      "volume": 0.31
+    },
+    "videoSha256": "4cb8041a4eeae56611825b7ba64d9bc10c62a88e0c520d3d1f22b33789088163",
+    "summary": {
+      "voicedWindows": 105,
+      "musicOnlyWindows": 0,
+      "smallestGapLu": 13.9,
+      "largestGapLu": 19.8,
+      "quietestMusicOnlyLufs": null
+    },
+    "issues": [],
+    "windows": [
+      {
+        "startS": 1.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.6,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 2.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 3.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -33.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 4.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 5.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 6.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 7.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.6,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 8.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 9.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.5,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 10.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33.6,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 11.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -33.7,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 12.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -33.2,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 13.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -33,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 14.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 15.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 16.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33.4,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 17.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.7,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 18.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33.7,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 19.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 20.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33.3,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 21.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 22.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.8,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 23.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -33.2,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 24.5,
+        "kind": "voiced",
+        "voiceLufs": -18.5,
+        "musicLufs": -33.2,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 25.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.9,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 26.5,
+        "kind": "voiced",
+        "voiceLufs": -18,
+        "musicLufs": -32.7,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 27.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 28.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 29.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 30.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.3,
+        "gapLu": 15
+      },
+      {
+        "startS": 31.5,
+        "kind": "voiced",
+        "voiceLufs": -18.6,
+        "musicLufs": -32.5,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 32.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -33,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 33.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -33.2,
+        "gapLu": 15
+      },
+      {
+        "startS": 34.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -33.8,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 35.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.2,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 36.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 37.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 38.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.7,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 39.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.6,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 40.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.4,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 41.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 42.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.4,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 43.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.7,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 44.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.6,
+        "gapLu": 16
+      },
+      {
+        "startS": 45.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.1,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 46.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.6,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 47.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.7,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 48.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33.2,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 49.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.8,
+        "gapLu": 16
+      },
+      {
+        "startS": 50.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 51.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.6,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 52.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.8,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 53.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.6,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 54.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.3,
+        "gapLu": 17
+      },
+      {
+        "startS": 55.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.2,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 56.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33.6,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 57.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.1,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 58.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.7,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 59.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.9,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 60.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.7,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 61.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.1,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 62.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.3,
+        "gapLu": 17
+      },
+      {
+        "startS": 63.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 64.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 65.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -33,
+        "gapLu": 18.5
+      },
+      {
+        "startS": 66.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.3,
+        "gapLu": 18
+      },
+      {
+        "startS": 67.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.9,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 68.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.9,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 69.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 70.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.8,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 71.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -33,
+        "gapLu": 18.4
+      },
+      {
+        "startS": 72.5,
+        "kind": "voiced",
+        "voiceLufs": -14.6,
+        "musicLufs": -33.1,
+        "gapLu": 18.5
+      },
+      {
+        "startS": 73.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.7,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 74.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 75.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.6,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 76.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16
+      },
+      {
+        "startS": 77.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.3,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 78.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.1,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 79.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.4,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 80.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.5,
+        "gapLu": 17
+      },
+      {
+        "startS": 81.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 82.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.8,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 83.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 84.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 85.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.8,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 86.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.5,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 87.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.2,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 88.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.8,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 89.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.1,
+        "gapLu": 17
+      },
+      {
+        "startS": 90.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.7,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 91.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 92.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.2,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 93.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 94.5,
+        "kind": "voiced",
+        "voiceLufs": -18.6,
+        "musicLufs": -33.2,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 95.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -33.8,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 96.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -33.2,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 97.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -33.1,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 98.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -32.5,
+        "gapLu": 14.3
+      },
+      {
+        "startS": 99.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.8,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 100.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.6,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 101.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -33.5,
+        "gapLu": 18.8
+      },
+      {
+        "startS": 102.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -33.1,
+        "gapLu": 18.3
+      },
+      {
+        "startS": 103.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -33.9,
+        "gapLu": 19.5
+      },
+      {
+        "startS": 104.5,
+        "kind": "voiced",
+        "voiceLufs": -13.8,
+        "musicLufs": -33.1,
+        "gapLu": 19.3
+      },
+      {
+        "startS": 105.5,
+        "kind": "voiced",
+        "voiceLufs": -13.3,
+        "musicLufs": -33.1,
+        "gapLu": 19.8
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "welcome",
+      "startMs": 1156,
+      "endMs": 15315,
+      "sentences": [
+        {
+          "text": "Les événements du soir posent deux questions différentes :",
+          "startMs": 313,
+          "endMs": 2553,
+          "method": "silence",
+          "absoluteStartS": 1.469,
+          "absoluteEndS": 3.709
+        },
+        {
+          "text": "comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change.",
+          "startMs": 3190,
+          "endMs": 7923,
+          "method": "silence",
+          "absoluteStartS": 4.346,
+          "absoluteEndS": 9.079
+        },
+        {
+          "text": "Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.",
+          "startMs": 8873,
+          "endMs": 13625,
+          "method": "silence",
+          "absoluteStartS": 10.029,
+          "absoluteEndS": 14.781
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "ordinary",
+      "startMs": 15768,
+      "endMs": 36145,
+      "sentences": [
+        {
+          "text": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence.",
+          "startMs": 536,
+          "endMs": 6136,
+          "method": "silence",
+          "absoluteStartS": 16.304,
+          "absoluteEndS": 21.904
+        },
+        {
+          "text": "La Frise continue après minuit, mais les heures affichées repartent bien de zéro :",
+          "startMs": 6266,
+          "endMs": 10185,
+          "method": "silence",
+          "absoluteStartS": 22.034,
+          "absoluteEndS": 25.953
+        },
+        {
+          "text": "minuit, une heure, deux heures.",
+          "startMs": 10539,
+          "endMs": 11321,
+          "method": "silence",
+          "absoluteStartS": 26.307,
+          "absoluteEndS": 27.089
+        },
+        {
+          "text": "Ouvrons maintenant le créneau.",
+          "startMs": 11974,
+          "endMs": 12854,
+          "method": "silence",
+          "absoluteStartS": 27.742,
+          "absoluteEndS": 28.622
+        },
+        {
+          "text": "Les heures affichées vont de vingt-deux heures à deux heures :",
+          "startMs": 13578,
+          "endMs": 16037,
+          "method": "silence",
+          "absoluteStartS": 29.346,
+          "absoluteEndS": 31.805
+        },
+        {
+          "text": "la fin se situe donc le lendemain.",
+          "startMs": 16606,
+          "endMs": 17864,
+          "method": "silence",
+          "absoluteStartS": 32.374,
+          "absoluteEndS": 33.632
+        },
+        {
+          "text": "Vérifions bien cet horaire.",
+          "startMs": 18631,
+          "endMs": 19727,
+          "method": "silence",
+          "absoluteStartS": 34.399,
+          "absoluteEndS": 35.495
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 28231
+        }
+      ]
+    },
+    {
+      "id": "spring",
+      "startMs": 36599,
+      "endMs": 51201,
+      "sentences": [
+        {
+          "text": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures.",
+          "startMs": 656,
+          "endMs": 4604,
+          "method": "silence",
+          "absoluteStartS": 37.255,
+          "absoluteEndS": 41.203
+        },
+        {
+          "text": "Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles.",
+          "startMs": 5305,
+          "endMs": 8322,
+          "method": "silence",
+          "absoluteStartS": 41.904,
+          "absoluteEndS": 44.921
+        },
+        {
+          "text": "Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.",
+          "startMs": 9182,
+          "endMs": 13964,
+          "method": "silence",
+          "absoluteStartS": 45.781,
+          "absoluteEndS": 50.563
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 37063
+        },
+        {
+          "kind": "click",
+          "atMs": 42394
+        }
+      ]
+    },
+    {
+      "id": "autumn",
+      "startMs": 51654,
+      "endMs": 65711,
+      "sentences": [
+        {
+          "text": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète.",
+          "startMs": 639,
+          "endMs": 4100,
+          "method": "silence",
+          "absoluteStartS": 52.293,
+          "absoluteEndS": 55.754
+        },
+        {
+          "text": "Le même créneau de une heure à cinq heures dure alors cinq heures réelles.",
+          "startMs": 4767,
+          "endMs": 7469,
+          "method": "silence",
+          "absoluteStartS": 56.421,
+          "absoluteEndS": 59.123
+        },
+        {
+          "text": "Cette différence compte pour les heures planifiées et évite de sous-estimer l’engagement d’une personne présente toute la nuit.",
+          "startMs": 8272,
+          "endMs": 13441,
+          "method": "silence",
+          "absoluteStartS": 59.926,
+          "absoluteEndS": 65.095
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 52145
+        },
+        {
+          "kind": "click",
+          "atMs": 56910
+        }
+      ]
+    },
+    {
+      "id": "timezone",
+      "startMs": 66166,
+      "endMs": 79171,
+      "sentences": [
+        {
+          "text": "Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich.",
+          "startMs": 626,
+          "endMs": 4734,
+          "method": "silence",
+          "absoluteStartS": 66.792,
+          "absoluteEndS": 70.9
+        },
+        {
+          "text": "Le serveur peut fonctionner en UTC sans décaler les rappels :",
+          "startMs": 5349,
+          "endMs": 8130,
+          "method": "silence",
+          "absoluteStartS": 71.515,
+          "absoluteEndS": 74.296
+        },
+        {
+          "text": "une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.",
+          "startMs": 8828,
+          "endMs": 12466,
+          "method": "silence",
+          "absoluteStartS": 74.994,
+          "absoluteEndS": 78.632
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 67866
+        }
+      ]
+    },
+    {
+      "id": "calendar",
+      "startMs": 79625,
+      "endMs": 95412,
+      "sentences": [
+        {
+          "text": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier.",
+          "startMs": 542,
+          "endMs": 5065,
+          "method": "silence",
+          "absoluteStartS": 80.167,
+          "absoluteEndS": 84.69
+        },
+        {
+          "text": "Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver.",
+          "startMs": 5917,
+          "endMs": 9343,
+          "method": "silence",
+          "absoluteStartS": 85.542,
+          "absoluteEndS": 88.968
+        },
+        {
+          "text": "Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.",
+          "startMs": 10282,
+          "endMs": 15312,
+          "method": "silence",
+          "absoluteStartS": 89.907,
+          "absoluteEndS": 94.937
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 83576
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "startMs": 95865,
+      "endMs": 109572,
+      "sentences": [
+        {
+          "text": "Pour une permanence de nuit, indique clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée.",
+          "startMs": 503,
+          "endMs": 5377,
+          "method": "silence",
+          "absoluteStartS": 96.368,
+          "absoluteEndS": 101.242
+        },
+        {
+          "text": "L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.",
+          "startMs": 6016,
+          "endMs": 13427,
+          "method": "silence",
+          "absoluteStartS": 101.881,
+          "absoluteEndS": 109.292
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 97492
+        },
+        {
+          "kind": "click",
+          "atMs": 98307
+        }
+      ]
+    }
+  ]
+}

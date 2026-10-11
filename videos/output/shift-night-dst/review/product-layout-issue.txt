@@ -1,0 +1,7 @@
+Existing product layout issue: Frise shift popover near viewport bottom.
+Reproduced on verified commit 9828f2a1850fd6556acbfde8658c5c85f4f3d196, BUILD_ID Yfc3tNvF9O0lnxrTyUwwy, both rehearsal and narrated capture.
+Full viewport 1280x800, autumn shift anchor near bottom: dialog top=722 bottom=882 height=160, outside by 82px. Header and hours remain visible.
+Evidence: ../popover-checks.json, ../rehearsal/popover-checks.json, autumn-anchor-0-after.png (57.224 seconds in final MP4), autumn-seconds.png; final SHA in inspection.json.
+Cause: src/components/admin/day-timeline/ShiftPopover.tsx, top=anchor.y+ROW_H+6 and maxHeight=Math.max(window.innerHeight-top-8,160). No placement above trigger or top clamp.
+Suggested product fix for separate review: choose above-trigger placement when lower space is insufficient, constrain the panel to available viewport height, and verify focus/scroll at bottom-row and small-height viewports. Product fix not made in this video pass.
+Ordinary and spring are scroll-constrained panels entirely within viewport, not off-screen clipping or capture cropping.

@@ -1,0 +1,77 @@
+{
+  "slug": "event-visibility-registration-window",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T10:02:08.063Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "50109e997d01413760453ed446600b2f6ba55b1e",
+    "sourceTree": "363172874e5c6efafeadc746ea190fefda2714f1",
+    "productSourceSha256": "2fa7868a8ea6adb0fa0c9af26edb2c48365e3914d204eb4d1847347188354e91",
+    "buildId": "J9FLk7d2muTPYQm0aZ-LE",
+    "snapshot": "/tmp/benevoles-video-production.batch1pass2",
+    "builtAt": "2026-10-11T09:57:50.976Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 8599
+    },
+    {
+      "kind": "click",
+      "atMs": 12167
+    },
+    {
+      "kind": "click",
+      "atMs": 13999
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1103,
+      "endMs": 3728
+    },
+    {
+      "id": "statuses",
+      "startMs": 4181,
+      "endMs": 5917
+    },
+    {
+      "id": "unlisted",
+      "startMs": 8079,
+      "endMs": 9465
+    },
+    {
+      "id": "window",
+      "startMs": 11628,
+      "endMs": 15330
+    },
+    {
+      "id": "public-result",
+      "startMs": 16905,
+      "endMs": 16966
+    },
+    {
+      "id": "archive",
+      "startMs": 17420,
+      "endMs": 20532
+    },
+    {
+      "id": "result",
+      "startMs": 20986,
+      "endMs": 21013
+    }
+  ]
+}
