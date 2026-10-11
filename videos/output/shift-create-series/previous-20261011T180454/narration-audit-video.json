@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:41:34.974Z",
+  "revalidatedAt": "2026-10-11T16:41:34.981Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e316f5538e5869fbacd2620fee9a67f85b29e22f9937aed486d63a3c5bb9124c",
+      "recognized": "Créer une série est idéal lorsqu'un même poste doit être couvert toute la journée, par équipe successive. Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l'aperçu, puis on crée tous les créneaux en une fois.",
+      "expected": "Créer une série est idéal lorsqu’un même poste doit être couvert toute la journée par équipes successives. Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l’aperçu, puis on crée tous les créneaux en une fois.",
+      "wordErrorRate": 0.046511627906976744,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "range",
+      "audioSha256": "acaacdbb12fbb7f2e4e7a133140da34a0dd519fcb8ba2b75ad6657a08c6782dd",
+      "recognized": "Choisissez le poste, la date et la plage globale à couvrir. Ici, la buvette fonctionne de dix heures à vingt-deux heures. Cette plage décrit le besoin complet, elle ne signifie pas qu'une même personne doit rester douze heures.",
+      "expected": "Choisissez le poste, la date et la plage globale à couvrir. Ici, la buvette fonctionne de dix heures à vingt-deux heures. Cette plage décrit le besoin complet ; elle ne signifie pas qu’une même personne doit rester douze heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "duration",
+      "audioSha256": "6ad87b659c9daa45b03ca1fb0539a8167c368bbeeff6476f82ff5c23ae428d37",
+      "recognized": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s'applique à chaque créneau, avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute. Les créneaux se suivent sans interruption pour garder la buvette couverte.",
+      "expected": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s’applique à chaque créneau : avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute : les créneaux se suivent sans interruption, pour garder la buvette couverte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "01b487efe4b6e28ad280eac80a71ea31d62e7f7820f572521397c8d8baae630e",
+      "recognized": "L'aperçu est la vérification essentielle. Dix heures midi, midi quatorze heures, puis les relèves suivantes jusqu'à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+      "expected": "L’aperçu est la vérification essentielle : dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "eb3e8baac1a7d8097211f642a188f105c9d9fc820c7027f294891dad2ca98a79",
+      "recognized": "Créons la série. Les nouvelles barres apparaissent dans la frise avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes. Chacune possède son propre effectif et peut recevoir ses inscriptions.",
+      "expected": "Créons la série. Les nouvelles barres apparaissent dans la Frise avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "adjust",
+      "audioSha256": "1225c8342ef316b3b01c0b9d0666e4f0e5cc4719385001b614f7b96ddbfd75a1",
+      "recognized": "Après la création, passons en liste et ouvrons un seul créneau. La première relève a besoin de renfort. Faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines. La série accélère le départ sans enfermer le planning dans une règle rigide.",
+      "expected": "Après la création, passons en Liste et ouvrons un seul créneau. La première relève a besoin de renfort : faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines : la série accélère le départ, sans enfermer le planning dans une règle rigide.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "dc1de98f3f6ec870f8e523199cc4e8bf23eabf3bd5f15bde0a11a921c254a612",
+      "recognized": "Le résultat est bien enregistré. Quatre places pour la première relève et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+      "expected": "Le résultat est bien enregistré : quatre places pour la première relève, et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:13:21.716Z",
+  "revalidatedAt": "2026-10-11T18:13:21.717Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "964e14896688360fb334b6897e940e08c39296a47e3e1a85d0d6f8e9b1ee2d87",
+      "recognized": "Bienvenue dans l'administration. Vous allez retrouver les principaux points d'entrée, distinguer les réglages de l'association du suivi d'un événement et chercher une information sans parcourir tous les écrans.",
+      "expected": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

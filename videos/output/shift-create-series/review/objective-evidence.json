@@ -1,0 +1,441 @@
+{
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 12,
+  "keys": 0,
+  "product": {
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 1104,
+      "endMs": 14003,
+      "sentences": [
+        {
+          "text": "Créer une série est idéal lorsqu’un même poste doit être couvert toute la journée par équipes successives.",
+          "startMs": 255,
+          "endMs": 5435,
+          "method": "silence",
+          "globalStartMs": 1359,
+          "globalEndMs": 6539
+        },
+        {
+          "text": "Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l’aperçu, puis on crée tous les créneaux en une fois.",
+          "startMs": 6176,
+          "endMs": 12488,
+          "method": "silence",
+          "globalStartMs": 7280,
+          "globalEndMs": 13592
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Au lieu de saisir chaque",
+          "startMs": 6176,
+          "endMs": 12488,
+          "cueMs": 7282
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 7755
+        }
+      ]
+    },
+    {
+      "scene": "range",
+      "startMs": 14456,
+      "endMs": 25904,
+      "sentences": [
+        {
+          "text": "Choisissez le poste, la date et la plage globale à couvrir.",
+          "startMs": 378,
+          "endMs": 2228,
+          "method": "silence",
+          "globalStartMs": 14834,
+          "globalEndMs": 16684
+        },
+        {
+          "text": "Ici, la buvette fonctionne de dix heures à vingt-deux heures.",
+          "startMs": 2406,
+          "endMs": 3673,
+          "method": "silence",
+          "globalStartMs": 16862,
+          "globalEndMs": 18129
+        },
+        {
+          "text": "Cette plage décrit le besoin complet ;",
+          "startMs": 4304,
+          "endMs": 6589,
+          "method": "silence",
+          "globalStartMs": 18760,
+          "globalEndMs": 21045
+        },
+        {
+          "text": "elle ne signifie pas qu’une même personne doit rester douze heures.",
+          "startMs": 7219,
+          "endMs": 11082,
+          "method": "silence",
+          "globalStartMs": 21675,
+          "globalEndMs": 25538
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "range",
+          "phrase": "Ici, la buvette fonctionne de",
+          "startMs": 2406,
+          "endMs": 3673,
+          "cueMs": 16863
+        },
+        {
+          "segmentId": "range",
+          "phrase": "Cette plage décrit le besoin",
+          "startMs": 4304,
+          "endMs": 6589,
+          "cueMs": 19011
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 15620
+        },
+        {
+          "kind": "click",
+          "atMs": 18702
+        },
+        {
+          "kind": "click",
+          "atMs": 19486
+        }
+      ]
+    },
+    {
+      "scene": "duration",
+      "startMs": 26357,
+      "endMs": 43139,
+      "sentences": [
+        {
+          "text": "La durée découpe la plage en équipes de deux heures.",
+          "startMs": 364,
+          "endMs": 3055,
+          "method": "silence",
+          "globalStartMs": 26721,
+          "globalEndMs": 29412
+        },
+        {
+          "text": "Le nombre de personnes s’applique à chaque créneau :",
+          "startMs": 3806,
+          "endMs": 5895,
+          "method": "silence",
+          "globalStartMs": 30163,
+          "globalEndMs": 32252
+        },
+        {
+          "text": "avec trois places, chaque relève accueille trois bénévoles.",
+          "startMs": 6022,
+          "endMs": 8422,
+          "method": "silence",
+          "globalStartMs": 32379,
+          "globalEndMs": 34779
+        },
+        {
+          "text": "La pause ajoute un intervalle entre deux relèves.",
+          "startMs": 9175,
+          "endMs": 11337,
+          "method": "silence",
+          "globalStartMs": 35532,
+          "globalEndMs": 37694
+        },
+        {
+          "text": "Ici, choisissons zéro minute :",
+          "startMs": 11782,
+          "endMs": 13337,
+          "method": "silence",
+          "globalStartMs": 38139,
+          "globalEndMs": 39694
+        },
+        {
+          "text": "les créneaux se suivent sans interruption, pour garder la buvette couverte.",
+          "startMs": 13723,
+          "endMs": 16386,
+          "method": "silence",
+          "globalStartMs": 40080,
+          "globalEndMs": 42743
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "duration",
+          "phrase": "La pause ajoute un intervalle",
+          "startMs": 9175,
+          "endMs": 11337,
+          "cueMs": 35535
+        },
+        {
+          "segmentId": "duration",
+          "phrase": "Ici, choisissons zéro minute ",
+          "startMs": 11782,
+          "endMs": 13337,
+          "cueMs": 38140
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 26820
+        },
+        {
+          "kind": "click",
+          "atMs": 30354
+        },
+        {
+          "kind": "click",
+          "atMs": 36053
+        }
+      ]
+    },
+    {
+      "scene": "preview",
+      "startMs": 43593,
+      "endMs": 56126,
+      "sentences": [
+        {
+          "text": "L’aperçu est la vérification essentielle :",
+          "startMs": 382,
+          "endMs": 2839,
+          "method": "silence",
+          "globalStartMs": 43975,
+          "globalEndMs": 46432
+        },
+        {
+          "text": "dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures.",
+          "startMs": 3349,
+          "endMs": 7716,
+          "method": "silence",
+          "globalStartMs": 46942,
+          "globalEndMs": 51309
+        },
+        {
+          "text": "Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+          "startMs": 8427,
+          "endMs": 12122,
+          "method": "silence",
+          "globalStartMs": 52020,
+          "globalEndMs": 55715
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "create",
+      "startMs": 56580,
+      "endMs": 69183,
+      "sentences": [
+        {
+          "text": "Créons la série.",
+          "startMs": 414,
+          "endMs": 1147,
+          "method": "silence",
+          "globalStartMs": 56994,
+          "globalEndMs": 57727
+        },
+        {
+          "text": "Les nouvelles barres apparaissent dans la Frise avec le même poste, la même capacité et des horaires consécutifs.",
+          "startMs": 1855,
+          "endMs": 5660,
+          "method": "silence",
+          "globalStartMs": 58435,
+          "globalEndMs": 62240
+        },
+        {
+          "text": "Elles restent pourtant indépendantes :",
+          "startMs": 5843,
+          "endMs": 6941,
+          "method": "silence",
+          "globalStartMs": 62423,
+          "globalEndMs": 63521
+        },
+        {
+          "text": "chacune possède son propre effectif et peut recevoir ses inscriptions.",
+          "startMs": 7737,
+          "endMs": 12173,
+          "method": "silence",
+          "globalStartMs": 64317,
+          "globalEndMs": 68753
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "create",
+          "phrase": "Créons la série",
+          "startMs": 414,
+          "endMs": 1147,
+          "cueMs": 56996
+        },
+        {
+          "segmentId": "create",
+          "phrase": "chacune possède son propre effectif",
+          "startMs": 7737,
+          "endMs": 12173,
+          "cueMs": 64319
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 57484
+        }
+      ]
+    },
+    {
+      "scene": "adjust",
+      "startMs": 69636,
+      "endMs": 88914,
+      "sentences": [
+        {
+          "text": "Après la création, passons en Liste et ouvrons un seul créneau.",
+          "startMs": 432,
+          "endMs": 4007,
+          "method": "silence",
+          "globalStartMs": 70068,
+          "globalEndMs": 73643
+        },
+        {
+          "text": "La première relève a besoin de renfort :",
+          "startMs": 4730,
+          "endMs": 6543,
+          "method": "silence",
+          "globalStartMs": 74366,
+          "globalEndMs": 76179
+        },
+        {
+          "text": "faisons passer sa capacité de trois à quatre personnes.",
+          "startMs": 6804,
+          "endMs": 9463,
+          "method": "silence",
+          "globalStartMs": 76440,
+          "globalEndMs": 79099
+        },
+        {
+          "text": "Enregistrons.",
+          "startMs": 10378,
+          "endMs": 10863,
+          "method": "silence",
+          "globalStartMs": 80014,
+          "globalEndMs": 80499
+        },
+        {
+          "text": "Cette modification concerne seulement cette plage, pas ses voisines :",
+          "startMs": 11605,
+          "endMs": 14778,
+          "method": "silence",
+          "globalStartMs": 81241,
+          "globalEndMs": 84414
+        },
+        {
+          "text": "la série accélère le départ, sans enfermer le planning dans une règle rigide.",
+          "startMs": 15432,
+          "endMs": 18907,
+          "method": "silence",
+          "globalStartMs": 85068,
+          "globalEndMs": 88543
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "adjust",
+          "phrase": "Enregistrons",
+          "startMs": 10378,
+          "endMs": 10863,
+          "cueMs": 80016
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 70118
+        },
+        {
+          "kind": "click",
+          "atMs": 71483
+        },
+        {
+          "kind": "click",
+          "atMs": 77450
+        },
+        {
+          "kind": "click",
+          "atMs": 80483
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 89366,
+      "endMs": 104717,
+      "sentences": [
+        {
+          "text": "Le résultat est bien enregistré :",
+          "startMs": 420,
+          "endMs": 1934,
+          "method": "silence",
+          "globalStartMs": 89786,
+          "globalEndMs": 91300
+        },
+        {
+          "text": "quatre places pour la première relève, et toujours trois pour les suivantes.",
+          "startMs": 2372,
+          "endMs": 5389,
+          "method": "silence",
+          "globalStartMs": 91738,
+          "globalEndMs": 94755
+        },
+        {
+          "text": "Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture.",
+          "startMs": 6245,
+          "endMs": 9949,
+          "method": "silence",
+          "globalStartMs": 95611,
+          "globalEndMs": 99315
+        },
+        {
+          "text": "Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+          "startMs": 10626,
+          "endMs": 15072,
+          "method": "silence",
+          "globalStartMs": 99992,
+          "globalEndMs": 104438
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "result",
+          "phrase": "quatre places pour la première relève",
+          "startMs": 2372,
+          "endMs": 5389,
+          "cueMs": 91740
+        },
+        {
+          "segmentId": "result",
+          "phrase": "Une série bien découpée facilite",
+          "startMs": 10626,
+          "endMs": 15072,
+          "cueMs": 99993
+        }
+      ],
+      "inputs": []
+    }
+  ]
+}

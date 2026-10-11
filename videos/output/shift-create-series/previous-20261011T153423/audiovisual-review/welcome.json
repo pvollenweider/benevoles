@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:07:12.324Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "90531cff2367d4fba6cfa7f69a42a84b9f3e05a0f713374746942dd19cc1cb84",
+  "clipSha256": "dc12ee93da1f56608684b540139a489e65bcd9b65a1cb933078e8dbc3921ab0c",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Créer une série est idéal",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créer une série est idéal",
+        "visibleSeconds": 0.5,
+        "visible": "Titre 'Créer une série de créneaux' affiché au centre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Au lieu de saisir chaque plage séparément",
+        "visibleSeconds": 5.6,
+        "visible": "Clic sur le bouton 'Créer une série'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "on définit une règle commune",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage de la modale de configuration 'Créer une série de créneaux'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et dynamique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

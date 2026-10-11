@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:41:34.508Z",
+  "revalidatedAt": "2026-10-11T15:41:43.164Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "2d2cce5215b36be635ad8c76e1adf06f5d9873969d4c4999309a0c0aab53d547",
+      "recognized": "Bienvenue dans l'administration. Vous allez retrouver les principaux points d'entrée, distinguer les réglages de l'association du suivi d'un événement et chercher une information sans parcourir tous les écrans.",
+      "expected": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "organization-navigation",
+      "audioSha256": "1bf31837e7877617d1e64bc0f887e8d85622672f5480052f3ef4d0a33e72d10a",
+      "recognized": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre la liste de vos événements et membres les personnes connues de l'association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire. Votre rôle détermine les actions disponibles.",
+      "expected": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "event-navigation",
+      "audioSha256": "7d3797c3daf95066d8996a7a5aa6853df29be5b40fa49524e9541a27d3cfeb3f",
+      "recognized": "Ouvrez un événement. Sa page propose gérer les créneaux, voir les inscriptions et inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien événement vous ramène à la liste de l'association.",
+      "expected": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.",
+      "wordErrorRate": 0.016666666666666666,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "search",
+      "audioSha256": "28177dc08920db3283ffcecba2f5133a1d15151295ffc3c47d08b15a601b1e7f",
+      "recognized": "La loupe cherche dans toute l'organisation. Utilisez contrôle K ou commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+      "expected": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "account-help",
+      "audioSha256": "19070c375e026c644249425085af2b498665ff24c68db470b444dce8382ddfd3",
+      "recognized": "Le menu de votre compte propose Mon compte et Se déconnecter. L'aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+      "expected": "Le menu de votre compte propose Mon compte et Se déconnecter. L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "mobile-keyboard",
+      "audioSha256": "5aeaa7139a68a8aaf4116ef0cb635495a84948f11199861392ee17fb697cccf1",
+      "recognized": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle aller au contenu. Ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
+      "expected": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle Aller au contenu : ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "55dad3645d7649d3b3ae1775592d6c9f75b7b3125db4a13c47d8aaa883520767",
+      "recognized": "Vous avez les bons repères. Tableau de bord pour les priorités, membres et paramètres au niveau de l'association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro.",
+      "expected": "Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

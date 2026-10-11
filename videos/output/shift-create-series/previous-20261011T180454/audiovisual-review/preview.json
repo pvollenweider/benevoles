@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:42:07.753Z",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "promptSha256": "af8527373307c1f1000be6146b38ae1a72241bd82a250e2ee29bfdb456f602da",
+  "clipSha256": "b1170862f1fd1ea10dc89a6c45eac61f87f8454919f67bdc1121d57b1ca815a9",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "L'aperçu est la vérification essentielle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'aperçu est la vérification essentielle",
+        "visibleSeconds": 0.5,
+        "visible": "Section d'aperçu affichant 'Aperçu : 6 créneaux de 2 h, 3 personnes par créneau'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures",
+        "visibleSeconds": 3,
+        "visible": "Créneaux 10:00–12:00, 12:00–14:00, 14:00–16:00, 16:00–18:00, 18:00–20:00 et 20:00–22:00 listés sous l'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "contrôlez le dernier créneau avant de confirmer",
+        "visibleSeconds": 9.5,
+        "visible": "Dernier créneau 20:00–22:00 visible au-dessus du bouton bleu 'Créer 6 créneaux'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

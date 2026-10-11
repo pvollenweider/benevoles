@@ -21,8 +21,8 @@
         "organisateur"
       ],
       "feature": "Navigation de l'administration",
-      "updatedAt": "2026-10-07",
-      "revision": 3,
+      "updatedAt": "2026-10-11",
+      "revision": 4,
       "level": "decouverte"
     },
     {
@@ -438,8 +438,8 @@
         "organisateur"
       ],
       "feature": "Séries de créneaux",
-      "updatedAt": "2026-10-07",
-      "revision": 3,
+      "updatedAt": "2026-10-11",
+      "revision": 4,
       "level": "essentiel"
     },
     {

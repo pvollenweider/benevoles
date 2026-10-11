@@ -1,0 +1,1290 @@
+{
+  "duration": 128,
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "build": {
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
+  },
+  "effects": {
+    "exactBytes": true,
+    "actualSha256": "77367701d279a38f302bf69c83323181a4240b1dca7159d77d80012f86472597",
+    "expectedSha256": "77367701d279a38f302bf69c83323181a4240b1dca7159d77d80012f86472597",
+    "clicks": 14,
+    "keys": 31
+  },
+  "levels": {
+    "rule": {
+      "minGapLu": 12,
+      "maxGapLu": 20,
+      "musicOnlyFloorLufs": -36,
+      "musicOnlyUnderVoiceLu": 12,
+      "speechThresholdLufs": -35,
+      "windowS": 3,
+      "stepS": 1,
+      "frameS": 0.1,
+      "voicedShare": 0.5
+    },
+    "loop": {
+      "startS": 0.5,
+      "endS": 95,
+      "crossfadeS": 2
+    },
+    "mix": {
+      "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+      "volume": 0.33
+    },
+    "narration": {
+      "segmentTargetLufs": -18,
+      "maxSegmentGainDb": 12,
+      "compressor": "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+      "segmentGainsDb": {
+        "welcome": -0.2,
+        "organization-navigation": -0.2,
+        "event-navigation": -0.2,
+        "search": -0.6,
+        "account-help": -0.7,
+        "mobile-keyboard": -1,
+        "result": -0.6
+      }
+    },
+    "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+    "summary": {
+      "voicedWindows": 109,
+      "musicOnlyWindows": 0,
+      "smallestGapLu": 14.2,
+      "largestGapLu": 17.7,
+      "quietestMusicOnlyLufs": null,
+      "loudestMusicOnlyLufs": null,
+      "medianVoiceLufs": -16.3
+    },
+    "issues": [],
+    "windows": [
+      {
+        "startS": 1.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.1,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 2.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.8,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 3.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.2,
+        "gapLu": 17
+      },
+      {
+        "startS": 4.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.4,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 5.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 6.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 7.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.3,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 8.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.4,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 9.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 13.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.7,
+        "gapLu": 16
+      },
+      {
+        "startS": 14.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 15.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.2,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 16.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.9,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 17.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.1,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 18.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.1,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 19.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 20.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.7,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 21.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.4,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 22.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.2,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 23.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -32.4,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 24.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.8,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 25.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.7,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 26.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 27.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.8,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 28.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.5,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 29.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 33.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.3,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 34.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16
+      },
+      {
+        "startS": 35.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 36.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.5,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 37.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.9,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 38.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.3,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 39.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.3,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 40.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 41.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 42.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -33,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 43.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.5,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 44.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.4,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 45.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -31.7,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 46.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.1,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 47.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 48.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.8,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 49.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 50.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.8,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 51.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 52.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.2,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 53.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -31.9,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 54.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.2,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 58.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 59.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.5,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 60.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.3,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 61.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -31.5,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 62.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.8,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 63.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 64.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 65.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.4,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 66.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 67.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 68.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.3,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 69.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 70.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.3,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 71.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.6,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 72.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.7,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 73.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.3,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 74.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 77.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 78.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.2,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 79.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 80.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.7,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 81.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.4,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 82.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 83.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -31.9,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 84.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 85.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.6,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 86.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.1,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 87.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.7,
+        "gapLu": 17
+      },
+      {
+        "startS": 88.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.2,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 89.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 90.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.2,
+        "gapLu": 16
+      },
+      {
+        "startS": 91.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.2,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 94.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.4,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 95.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.4,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 96.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 97.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 98.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -31.9,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 99.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.4,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 100.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.2,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 101.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 102.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 103.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.4,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 104.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 105.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.6,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 106.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -31.8,
+        "gapLu": 14.2
+      },
+      {
+        "startS": 107.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -31.6,
+        "gapLu": 14.3
+      },
+      {
+        "startS": 108.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -31.8,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 109.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 110.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.4,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 111.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.2,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 112.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.5,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 113.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.7,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 114.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.1,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 115.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.6,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 116.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.5,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 117.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 118.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.6,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 119.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.2,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 120.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -32.4,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 121.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 122.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -31.5,
+        "gapLu": 15.7
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 11475,
+      "sentences": [
+        {
+          "text": "Bienvenue dans l’administration.",
+          "startMs": 267,
+          "endMs": 1712,
+          "method": "silence",
+          "absoluteStartS": 0.267,
+          "absoluteEndS": 1.712
+        },
+        {
+          "text": "Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+          "startMs": 2003,
+          "endMs": 10964,
+          "method": "silence",
+          "absoluteStartS": 2.003,
+          "absoluteEndS": 10.964
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "organization-navigation",
+      "startMs": 13639,
+      "endMs": 31128,
+      "sentences": [
+        {
+          "text": "Le Tableau de bord rassemble les priorités de l’association.",
+          "startMs": 512,
+          "endMs": 3554,
+          "method": "silence",
+          "absoluteStartS": 14.151,
+          "absoluteEndS": 17.193
+        },
+        {
+          "text": "Événements ouvre la liste de vos événements.",
+          "startMs": 3759,
+          "endMs": 5794,
+          "method": "silence",
+          "absoluteStartS": 17.398,
+          "absoluteEndS": 19.433
+        },
+        {
+          "text": "Membres réunit les personnes connues de l’association.",
+          "startMs": 6228,
+          "endMs": 8965,
+          "method": "silence",
+          "absoluteStartS": 19.867,
+          "absoluteEndS": 22.604
+        },
+        {
+          "text": "Paramètres concerne les réglages communs.",
+          "startMs": 9603,
+          "endMs": 11568,
+          "method": "silence",
+          "absoluteStartS": 23.242,
+          "absoluteEndS": 25.207
+        },
+        {
+          "text": "Certaines modifications sont réservées au propriétaire :",
+          "startMs": 11953,
+          "endMs": 15089,
+          "method": "silence",
+          "absoluteStartS": 25.592,
+          "absoluteEndS": 28.728
+        },
+        {
+          "text": "votre rôle détermine les actions disponibles.",
+          "startMs": 15252,
+          "endMs": 17161,
+          "method": "silence",
+          "absoluteStartS": 28.891,
+          "absoluteEndS": 30.8
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 14657
+        },
+        {
+          "kind": "click",
+          "atMs": 17866
+        },
+        {
+          "kind": "click",
+          "atMs": 20333
+        },
+        {
+          "kind": "click",
+          "atMs": 23734
+        },
+        {
+          "kind": "click",
+          "atMs": 30034
+        }
+      ]
+    },
+    {
+      "id": "event-navigation",
+      "startMs": 33288,
+      "endMs": 56203,
+      "sentences": [
+        {
+          "text": "Ouvrez un événement.",
+          "startMs": 333,
+          "endMs": 1556,
+          "method": "silence",
+          "absoluteStartS": 33.621,
+          "absoluteEndS": 34.844
+        },
+        {
+          "text": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+          "startMs": 2156,
+          "endMs": 6666,
+          "method": "silence",
+          "absoluteStartS": 35.444,
+          "absoluteEndS": 39.954
+        },
+        {
+          "text": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+          "startMs": 7078,
+          "endMs": 13246,
+          "method": "silence",
+          "absoluteStartS": 40.366,
+          "absoluteEndS": 46.534
+        },
+        {
+          "text": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+          "startMs": 13991,
+          "endMs": 18896,
+          "method": "silence",
+          "absoluteStartS": 47.279,
+          "absoluteEndS": 52.184
+        },
+        {
+          "text": "Le lien Événements vous ramène à la liste de l’association.",
+          "startMs": 19359,
+          "endMs": 22552,
+          "method": "silence",
+          "absoluteStartS": 52.647,
+          "absoluteEndS": 55.84
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 33767
+        },
+        {
+          "kind": "click",
+          "atMs": 55303
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "startMs": 58363,
+      "endMs": 76295,
+      "sentences": [
+        {
+          "text": "La loupe cherche dans toute l’organisation.",
+          "startMs": 340,
+          "endMs": 2902,
+          "method": "silence",
+          "absoluteStartS": 58.703,
+          "absoluteEndS": 61.265
+        },
+        {
+          "text": "Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste.",
+          "startMs": 3398,
+          "endMs": 6582,
+          "method": "silence",
+          "absoluteStartS": 61.761,
+          "absoluteEndS": 64.945
+        },
+        {
+          "text": "Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante.",
+          "startMs": 6883,
+          "endMs": 12970,
+          "method": "silence",
+          "absoluteStartS": 65.246,
+          "absoluteEndS": 71.333
+        },
+        {
+          "text": "Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+          "startMs": 13327,
+          "endMs": 17583,
+          "method": "silence",
+          "absoluteStartS": 71.69,
+          "absoluteEndS": 75.946
+        }
+      ],
+      "markers": [
+        {
+          "kind": "key",
+          "atMs": 58365
+        },
+        {
+          "kind": "key",
+          "atMs": 58369
+        },
+        {
+          "kind": "click",
+          "atMs": 58898
+        },
+        {
+          "kind": "key",
+          "atMs": 59214
+        },
+        {
+          "kind": "key",
+          "atMs": 59313
+        },
+        {
+          "kind": "key",
+          "atMs": 59411
+        },
+        {
+          "kind": "key",
+          "atMs": 59510
+        },
+        {
+          "kind": "key",
+          "atMs": 59608
+        },
+        {
+          "kind": "key",
+          "atMs": 59708
+        },
+        {
+          "kind": "key",
+          "atMs": 59810
+        },
+        {
+          "kind": "key",
+          "atMs": 65256
+        },
+        {
+          "kind": "click",
+          "atMs": 68172
+        },
+        {
+          "kind": "key",
+          "atMs": 73133
+        },
+        {
+          "kind": "click",
+          "atMs": 73664
+        },
+        {
+          "kind": "key",
+          "atMs": 73971
+        },
+        {
+          "kind": "key",
+          "atMs": 74068
+        },
+        {
+          "kind": "key",
+          "atMs": 74165
+        },
+        {
+          "kind": "key",
+          "atMs": 74263
+        },
+        {
+          "kind": "key",
+          "atMs": 74362
+        },
+        {
+          "kind": "key",
+          "atMs": 74465
+        },
+        {
+          "kind": "key",
+          "atMs": 74577
+        },
+        {
+          "kind": "key",
+          "atMs": 74679
+        },
+        {
+          "kind": "key",
+          "atMs": 74780
+        },
+        {
+          "kind": "key",
+          "atMs": 74884
+        },
+        {
+          "kind": "key",
+          "atMs": 74987
+        },
+        {
+          "kind": "key",
+          "atMs": 75088
+        },
+        {
+          "kind": "key",
+          "atMs": 75191
+        },
+        {
+          "kind": "key",
+          "atMs": 75295
+        },
+        {
+          "kind": "key",
+          "atMs": 75394
+        },
+        {
+          "kind": "key",
+          "atMs": 75684
+        }
+      ]
+    },
+    {
+      "id": "account-help",
+      "startMs": 77892,
+      "endMs": 93148,
+      "sentences": [
+        {
+          "text": "Le menu de votre compte propose Mon compte et Se déconnecter.",
+          "startMs": 349,
+          "endMs": 4050,
+          "method": "silence",
+          "absoluteStartS": 78.241,
+          "absoluteEndS": 81.942
+        },
+        {
+          "text": "L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet.",
+          "startMs": 4649,
+          "endMs": 9021,
+          "method": "silence",
+          "absoluteStartS": 82.541,
+          "absoluteEndS": 86.913
+        },
+        {
+          "text": "Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+          "startMs": 9577,
+          "endMs": 14908,
+          "method": "silence",
+          "absoluteStartS": 87.469,
+          "absoluteEndS": 92.8
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 78381
+        },
+        {
+          "kind": "key",
+          "atMs": 84659
+        },
+        {
+          "kind": "click",
+          "atMs": 85149
+        }
+      ]
+    },
+    {
+      "id": "mobile-keyboard",
+      "startMs": 95311,
+      "endMs": 109301,
+      "sentences": [
+        {
+          "text": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations.",
+          "startMs": 348,
+          "endMs": 3935,
+          "method": "silence",
+          "absoluteStartS": 95.659,
+          "absoluteEndS": 99.246
+        },
+        {
+          "text": "Sur ordinateur, la première tabulation révèle Aller au contenu :",
+          "startMs": 4718,
+          "endMs": 7334,
+          "method": "silence",
+          "absoluteStartS": 100.029,
+          "absoluteEndS": 102.645
+        },
+        {
+          "text": "ce lien évite de traverser toute la barre de navigation.",
+          "startMs": 7518,
+          "endMs": 11372,
+          "method": "silence",
+          "absoluteStartS": 102.829,
+          "absoluteEndS": 106.683
+        },
+        {
+          "text": "Vous arrivez directement dans le contenu de la page.",
+          "startMs": 11665,
+          "endMs": 13698,
+          "method": "silence",
+          "absoluteStartS": 106.976,
+          "absoluteEndS": 109.009
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 97196
+        },
+        {
+          "kind": "click",
+          "atMs": 101246
+        },
+        {
+          "kind": "key",
+          "atMs": 101248
+        },
+        {
+          "kind": "key",
+          "atMs": 106980
+        },
+        {
+          "kind": "key",
+          "atMs": 106987
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "startMs": 109755,
+      "endMs": 124953,
+      "sentences": [
+        {
+          "text": "Vous avez les bons repères :",
+          "startMs": 290,
+          "endMs": 1587,
+          "method": "silence",
+          "absoluteStartS": 110.045,
+          "absoluteEndS": 111.342
+        },
+        {
+          "text": "Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi.",
+          "startMs": 1850,
+          "endMs": 10035,
+          "method": "silence",
+          "absoluteStartS": 111.605,
+          "absoluteEndS": 119.79
+        },
+        {
+          "text": "Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
+          "startMs": 10592,
+          "endMs": 14859,
+          "method": "silence",
+          "absoluteStartS": 120.347,
+          "absoluteEndS": 124.614
+        }
+      ],
+      "markers": []
+    }
+  ]
+}

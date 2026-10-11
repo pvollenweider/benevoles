@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:07:41.713Z",
+  "revalidatedAt": "2026-10-11T18:07:41.713Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "adjust",
+      "audioSha256": "51216ffb17e29c2ee47102c94b8b7aa018a6091f9bcf17bb0325199bbd56d473",
+      "recognized": "Après la création, passons en liste et ouvrons un seul créneau. La première relève a besoin de renforts, faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines. La série accélère le départ sans enfermer le planning dans une règle rigide.",
+      "expected": "Après la création, passons en Liste et ouvrons un seul créneau. La première relève a besoin de renfort : faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines : la série accélère le départ, sans enfermer le planning dans une règle rigide.",
+      "wordErrorRate": 0.02,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

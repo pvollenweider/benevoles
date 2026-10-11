@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:01.563Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "cdef186b328872a23a05ca6305ff4a3a752dc2fed5a4b25c74b1b5b73db76b5d",
+  "clipSha256": "52544f5cc806ccd4b67f63eaa5cd162c0d6d5b392c38010db23ae57743521fa8",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Bienvenue dans l’administration",
+        "visibleSeconds": 0,
+        "visible": "Carte de titre 'Se repérer dans l'administration' superposée sur l'interface",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "retrouver les principaux points d’entrée",
+        "visibleSeconds": 2.6,
+        "visible": "Disparition du bandeau d'introduction, découvrant le menu de navigation principal",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "chercher une information sans parcourir tous les écrans",
+        "visibleSeconds": 7.5,
+        "visible": "Écran d'accueil de la liste des événements affiché de façon stable pour l'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, fluide, naturelle et chaleureuse avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

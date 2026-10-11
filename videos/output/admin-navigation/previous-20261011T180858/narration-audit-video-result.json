@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:46:36.626Z",
+  "revalidatedAt": "2026-10-11T16:46:36.627Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "0d465216d144cb1099b63d5471de740ec61f0c8ae932aa06a5d66a50ad91ec3f",
+      "recognized": "Vous avez les bons repères : tableau de bord pour les priorités, membres et paramètres au niveau de l'association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro.",
+      "expected": "Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,54 +1,64 @@
 {
   "id": "ADMIN_NAVIGATION",
   "slug": "admin-navigation",
-  "validatedAt": "2026-10-06T18:37:45.810Z",
+  "validatedAt": "2026-10-11T18:13:14.604Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 123760,
+  "captureMs": 128000,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 11582,
-      "audioMs": 11581,
-      "driftMs": 1
-    },
-    {
-      "id": "organization-navigation",
-      "visualMs": 17926,
-      "audioMs": 17925,
-      "driftMs": 1
-    },
-    {
-      "id": "event-navigation",
-      "visualMs": 21842,
-      "audioMs": 21841,
-      "driftMs": 1
-    },
-    {
-      "id": "search",
-      "visualMs": 16373,
-      "audioMs": 16374,
-      "driftMs": -1
-    },
-    {
-      "id": "account-help",
-      "visualMs": 14594,
-      "audioMs": 14592,
+      "visualMs": 11475,
+      "audioMs": 11473,
       "driftMs": 2
     },
     {
-      "id": "mobile-keyboard",
-      "visualMs": 13454,
-      "audioMs": 13453,
+      "id": "organization-navigation",
+      "visualMs": 17489,
+      "audioMs": 17486,
+      "driftMs": 3
+    },
+    {
+      "id": "event-navigation",
+      "visualMs": 22915,
+      "audioMs": 22913,
+      "driftMs": 2
+    },
+    {
+      "id": "search",
+      "visualMs": 17932,
+      "audioMs": 17931,
       "driftMs": 1
     },
     {
-      "id": "result",
-      "visualMs": 13637,
-      "audioMs": 13634,
+      "id": "account-help",
+      "visualMs": 15256,
+      "audioMs": 15253,
       "driftMs": 3
+    },
+    {
+      "id": "mobile-keyboard",
+      "visualMs": 13990,
+      "audioMs": 13988,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 15198,
+      "audioMs": 15196,
+      "driftMs": 2
     }
   ],
+  "anchorsChecked": 9,
+  "music": {
+    "voicedWindows": 109,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 17.7,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
   "issues": []
 }

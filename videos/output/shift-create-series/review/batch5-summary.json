@@ -1,0 +1,17 @@
+{
+  "id": "SHIFT_CREATE_SERIES",
+  "status": "READY",
+  "duration": 115.88,
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {
+    "voicedWindows": 101,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 12.8,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": -33.2,
+    "loudestMusicOnlyLufs": -31.8,
+    "medianVoiceLufs": -16.9
+  },
+  "problems": "None; all objective checks and seven final audiovisual chapter reviews pass.",
+  "sourceChanges": "None."
+}

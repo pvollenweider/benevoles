@@ -1,0 +1,17 @@
+{
+  "id": "SHIFT_CREATE_SERIES",
+  "status": "NOT READY",
+  "duration": 110.24,
+  "buildId": "vU8UL5zPG_yurF8zdluCe",
+  "music": {
+    "voicedWindows": 101,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.8,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "problems": "Result chapter describes 4 places then 3 in following shifts at 2.372–5.389 s, but following rows only visible on later scroll (~10.626 s). Frame evidence: result-sheet.png, result-seconds.png. Other six chapters pass; empty ASR response retried successfully.",
+  "sourceChanges": "videos/tools/record.ts series result: remove reload that resets scroll; anchor capacity evidence to quatre places pour la première relève and center first row so following rows are visible. No refilm."
+}

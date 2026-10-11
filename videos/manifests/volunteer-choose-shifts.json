@@ -58,7 +58,7 @@
     },
     {
       "id": "conflict",
-      "transcript": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, Accueil de neuf à midi empêche la Navette de huit à midi. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
+      "transcript": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, Accueil de quinze à dix-huit heures empêche la Navette de quatorze à dix-huit heures. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
       "fallbackDurationMs": 28000
     },
     {

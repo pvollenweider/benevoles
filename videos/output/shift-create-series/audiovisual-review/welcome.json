@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:07:12.324Z",
-  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
-  "promptSha256": "90531cff2367d4fba6cfa7f69a42a84b9f3e05a0f713374746942dd19cc1cb84",
-  "clipSha256": "dc12ee93da1f56608684b540139a489e65bcd9b65a1cb933078e8dbc3921ab0c",
+  "reviewedAt": "2026-10-11T18:08:00.457Z",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "promptSha256": "3ff136ca3271e24db6827f2982d3f12cd3b4e882c4591b3f7ce4c37cb6240769",
+  "clipSha256": "5408325210c8442793fc8bf4d4b1660a8c85eba982ac9518a1d385b8d0b317b4",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Créer une série est idéal",
+    "heardOpening": "Créer une série est idéal lorsqu'un même poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Créer une série est idéal",
-        "visibleSeconds": 0.5,
-        "visible": "Titre 'Créer une série de créneaux' affiché au centre",
+        "spokenSeconds": 0,
+        "spoken": "Créer une série est idéal lorsqu'un même poste doit être couvert toute la journée",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction « Créer une série de créneaux - Découper une longue journée en relèves » sur la vue frise des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 6,
         "spoken": "Au lieu de saisir chaque plage séparément",
-        "visibleSeconds": 5.6,
-        "visible": "Clic sur le bouton 'Créer une série'",
+        "visibleSeconds": 6.2,
+        "visible": "Le curseur clique sur le bouton « Créer une série »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.2,
+        "spokenSeconds": 7.8,
         "spoken": "on définit une règle commune",
-        "visibleSeconds": 6.2,
-        "visible": "Affichage de la modale de configuration 'Créer une série de créneaux'",
+        "visibleSeconds": 7.2,
+        "visible": "Ouverture du formulaire modal « Créer une série de créneaux » affichant les champs de paramétrage",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et dynamique."
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

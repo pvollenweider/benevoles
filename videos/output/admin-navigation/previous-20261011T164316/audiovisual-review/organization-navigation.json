@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:15.792Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "ab68293320317769cb6d050104f624875575e4365540c3ffd5aebb15fa4e254d",
+  "clipSha256": "d2ea0c91367c9f467e0b8f606f4059c335d802abcb983cf45f7c32551013c897",
+  "scene": "organization-navigation",
+  "review": {
+    "heardOpening": "Le Tableau de bord rassemble les priorités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le Tableau de bord rassemble les priorités de l’association.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Événements ouvre la liste de vos événements",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de l'onglet et de la liste des événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "et Membres les personnes connues de l’association.",
+        "visibleSeconds": 10.4,
+        "visible": "Affichage tardif de la liste des membres après la fin de la phrase",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Paramètres concerne les réglages communs.",
+        "visibleSeconds": 12.6,
+        "visible": "Affichage tardif de la page Paramètres",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:06.8, l'onglet Membres est évoqué mais la navigation vers la page Membres n'apparaît qu'à 00:10.4, créant un décalage important avec la narration."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

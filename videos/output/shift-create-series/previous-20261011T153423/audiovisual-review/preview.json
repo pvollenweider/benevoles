@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:07:50.936Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "09ef97ec78dceca987cf1b0c3e2b86cf2c1fb47dc8b0f8739f3914b0af436dbb",
+  "clipSha256": "5e0c6b0933cd1a732703726e7bb864f474ff3fe94f75eae516e7a89478679bcb",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "L'aperçu est la vérification essentielle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'aperçu est la vérification essentielle",
+        "visibleSeconds": 0,
+        "visible": "Section Aperçu listant les créneaux affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "dix heures-midi, midi-quatorze heures",
+        "visibleSeconds": 0,
+        "visible": "Plages horaires 10:00-12:00 et 12:00-14:00 affichées dans l'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "puis les relèves suivantes jusqu'à vingt-deux heures",
+        "visibleSeconds": 0,
+        "visible": "Dernier créneau 20:00-22:00 visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "contrôle le dernier créneau avant de confirmer",
+        "visibleSeconds": 0,
+        "visible": "Bouton Créer 6 créneaux visible à côté de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction nette et intonation posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:39:24.704Z",
+  "revalidatedAt": "2026-10-11T16:39:24.704Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e316f5538e5869fbacd2620fee9a67f85b29e22f9937aed486d63a3c5bb9124c",
+      "recognized": "Créer une série est idéal lorsqu'un même poste doit être couvert toute la journée, par équipe successive. Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l'aperçu, puis on crée tous les créneaux en une fois.",
+      "expected": "Créer une série est idéal lorsqu’un même poste doit être couvert toute la journée par équipes successives. Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l’aperçu, puis on crée tous les créneaux en une fois.",
+      "wordErrorRate": 0.046511627906976744,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

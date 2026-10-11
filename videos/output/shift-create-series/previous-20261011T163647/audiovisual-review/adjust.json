@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:37:34.153Z",
+  "videoSha256": "f57d85c02e0ff8d7447ffcdbdd32a0b4956d85acf60a1d0bc47d4a15c775377c",
+  "promptSha256": "d580408d3fcb87a264de9002c85115b8c5ba03b5ee695e2512aec45a76c30800",
+  "clipSha256": "3540d442f518c99b0ad9e73acf66a5e337a0ff06afe216ec693ba1be061785ba",
+  "scene": "adjust",
+  "review": {
+    "heardOpening": "Après la création, passons en Liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "passons en Liste et ouvrons un seul créneau",
+        "visibleSeconds": 1.5,
+        "visible": "Bascule vers la vue Liste et clic sur Modifier pour ouvrir le créneau Buvette série",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "faisons passer sa capacité de trois à quatre personnes",
+        "visibleSeconds": 7.8,
+        "visible": "Le champ Capacité est modifié de 3 à 4",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 11.2,
+        "visible": "Validation et retour à la liste où le créneau affiche 0/4 libre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

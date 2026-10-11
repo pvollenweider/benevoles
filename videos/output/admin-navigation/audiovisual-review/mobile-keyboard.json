@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:22:27.206Z",
-  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
-  "promptSha256": "b8a9cf2ccd47837137a7d3efe5fcc9ca724c2fcee0c33a287f247bd2edc4c511",
-  "clipSha256": "08bd690931a0c6896694daf34ec0319618ae92854bd2442116846afbd9837f26",
+  "reviewedAt": "2026-10-11T18:14:00.233Z",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "promptSha256": "2f8f0dbaa22f0256ec3e27f5c31e859c38660689b02bb4bc15b776f2172c69a8",
+  "clipSha256": "7fb03ef14550cb8623e8ccebb95546e8d6501856b970b18f6f1edcd5c8c2f4f0",
   "scene": "mobile-keyboard",
   "review": {
     "heardOpening": "Sur téléphone, ouvrez le menu",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 1.2,
         "spoken": "ouvrez le menu pour retrouver les principales destinations",
-        "visibleSeconds": 1.5,
-        "visible": "Ouverture du menu mobile dévoilant les rubriques principales",
+        "visibleSeconds": 1.8,
+        "visible": "Déploiement du menu mobile affichant Tableau de bord, Événements, Membres, Paramètres et Aide",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 5.4,
         "spoken": "la première tabulation révèle Aller au contenu",
-        "visibleSeconds": 7,
-        "visible": "Affichage bureau avec focus sur le lien Aller au contenu",
+        "visibleSeconds": 5.2,
+        "visible": "Basculement sur la vue ordinateur avec le lien d'évitement « Aller au contenu » mis en surbrillance en haut à gauche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
+        "spokenSeconds": 11.2,
         "spoken": "Vous arrivez directement dans le contenu de la page",
-        "visibleSeconds": 8,
-        "visible": "Page Événements affichée directement sous la navigation",
+        "visibleSeconds": 11.2,
+        "visible": "Vue stable de la liste des événements sous la barre de navigation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et élocution claire, bien synchronisée avec les actions affichées."
+      "observation": "Voix claire, posée et parfaitement intelligible, débit régulier et synchronisé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

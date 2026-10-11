@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:39:32.721Z",
+  "revalidatedAt": "2026-10-11T16:39:32.722Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "duration",
+      "audioSha256": "6ad87b659c9daa45b03ca1fb0539a8167c368bbeeff6476f82ff5c23ae428d37",
+      "recognized": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s'applique à chaque créneau, avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute. Les créneaux se suivent sans interruption pour garder la buvette couverte.",
+      "expected": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s’applique à chaque créneau : avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute : les créneaux se suivent sans interruption, pour garder la buvette couverte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

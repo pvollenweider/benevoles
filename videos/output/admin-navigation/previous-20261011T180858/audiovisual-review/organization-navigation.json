@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:46:58.206Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "ab68293320317769cb6d050104f624875575e4365540c3ffd5aebb15fa4e254d",
+  "clipSha256": "f4cdc93f335f21deaea10e7af59848f2d9125cb9fc57bf22bbfbc0908aba6b34",
+  "scene": "organization-navigation",
+  "review": {
+    "heardOpening": "Le Tableau de bord rassemble les priorités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le Tableau de bord rassemble les priorités de l’association",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Événements ouvre la liste de vos événements",
+        "visibleSeconds": 4,
+        "visible": "Page Événements affichée très brièvement, puis bascule prématurée sur Membres dès 00:05",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "et Membres les personnes connues de l'association",
+        "visibleSeconds": 5,
+        "visible": "Page Membres affichée à l'écran",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Paramètres concerne les réglages communs",
+        "visibleSeconds": 10.5,
+        "visible": "Page Paramètres affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:05, l'affichage bascule sur l'onglet Membres alors que la voix commente encore l'onglet Événements.",
+      "À 00:11, le champ de téléversement du logo dans les Paramètres présente des textes natifs en anglais ('Choose File', 'No file chosen')."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans artefact."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

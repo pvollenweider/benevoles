@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:39:25.977Z",
+  "revalidatedAt": "2026-10-11T16:39:25.978Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "range",
+      "audioSha256": "acaacdbb12fbb7f2e4e7a133140da34a0dd519fcb8ba2b75ad6657a08c6782dd",
+      "recognized": "Choisissez le poste, la date et la plage globale à couvrir. Ici, la buvette fonctionne de dix heures à vingt-deux heures. Cette plage décrit le besoin complet, elle ne signifie pas qu'une même personne doit rester douze heures.",
+      "expected": "Choisissez le poste, la date et la plage globale à couvrir. Ici, la buvette fonctionne de dix heures à vingt-deux heures. Cette plage décrit le besoin complet ; elle ne signifie pas qu’une même personne doit rester douze heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

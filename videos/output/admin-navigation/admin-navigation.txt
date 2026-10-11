@@ -2,7 +2,7 @@ Se repérer dans l’administration
 
 Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.
 
-Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.
+Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements. Membres réunit les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.
 
 Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.
 

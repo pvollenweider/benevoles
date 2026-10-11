@@ -12,7 +12,7 @@ Composer un planning réaliste avant de transmettre ses informations, en compren
 2. Comparer une place disponible et un créneau complet sans attente.
 3. Rejoindre puis quitter visuellement une file d’attente avant l’envoi du formulaire.
 4. Distinguer une mission sur validation d’un poste réservé par invitation.
-5. Créer un chevauchement et montrer le créneau rendu indisponible.
+5. Choisir Accueil de 15h à 18h et montrer la Navette de 14h à 18h rendue indisponible par ce chevauchement (elle dispose d'une place avant ce choix).
 6. Revenir depuis le lien personnel d’une bénévole déjà inscrite.
 7. Montrer la limite de deux créneaux de Buvette déjà atteinte.
 

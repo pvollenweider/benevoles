@@ -1,0 +1,318 @@
+{
+  "slug": "admin-navigation",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T18:10:51.930Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-navigation",
+    "scenario": "ADMIN_NAVIGATION",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 5294
+    },
+    {
+      "kind": "click",
+      "atMs": 6571
+    },
+    {
+      "kind": "click",
+      "atMs": 7370
+    },
+    {
+      "kind": "click",
+      "atMs": 8155
+    },
+    {
+      "kind": "click",
+      "atMs": 8937
+    },
+    {
+      "kind": "click",
+      "atMs": 11889
+    },
+    {
+      "kind": "click",
+      "atMs": 12855
+    },
+    {
+      "kind": "key",
+      "atMs": 15324
+    },
+    {
+      "kind": "key",
+      "atMs": 15326
+    },
+    {
+      "kind": "click",
+      "atMs": 15852
+    },
+    {
+      "kind": "key",
+      "atMs": 16160
+    },
+    {
+      "kind": "key",
+      "atMs": 16259
+    },
+    {
+      "kind": "key",
+      "atMs": 16357
+    },
+    {
+      "kind": "key",
+      "atMs": 16454
+    },
+    {
+      "kind": "key",
+      "atMs": 16552
+    },
+    {
+      "kind": "key",
+      "atMs": 16654
+    },
+    {
+      "kind": "key",
+      "atMs": 16755
+    },
+    {
+      "kind": "key",
+      "atMs": 17043
+    },
+    {
+      "kind": "click",
+      "atMs": 17640
+    },
+    {
+      "kind": "key",
+      "atMs": 19870
+    },
+    {
+      "kind": "click",
+      "atMs": 20402
+    },
+    {
+      "kind": "key",
+      "atMs": 20710
+    },
+    {
+      "kind": "key",
+      "atMs": 20808
+    },
+    {
+      "kind": "key",
+      "atMs": 20907
+    },
+    {
+      "kind": "key",
+      "atMs": 21006
+    },
+    {
+      "kind": "key",
+      "atMs": 21105
+    },
+    {
+      "kind": "key",
+      "atMs": 21209
+    },
+    {
+      "kind": "key",
+      "atMs": 21310
+    },
+    {
+      "kind": "key",
+      "atMs": 21411
+    },
+    {
+      "kind": "key",
+      "atMs": 21515
+    },
+    {
+      "kind": "key",
+      "atMs": 21623
+    },
+    {
+      "kind": "key",
+      "atMs": 21725
+    },
+    {
+      "kind": "key",
+      "atMs": 21827
+    },
+    {
+      "kind": "key",
+      "atMs": 21928
+    },
+    {
+      "kind": "key",
+      "atMs": 22031
+    },
+    {
+      "kind": "key",
+      "atMs": 22135
+    },
+    {
+      "kind": "key",
+      "atMs": 22420
+    },
+    {
+      "kind": "click",
+      "atMs": 24569
+    },
+    {
+      "kind": "key",
+      "atMs": 24921
+    },
+    {
+      "kind": "click",
+      "atMs": 25403
+    },
+    {
+      "kind": "click",
+      "atMs": 30686
+    },
+    {
+      "kind": "click",
+      "atMs": 32168
+    },
+    {
+      "kind": "key",
+      "atMs": 32170
+    },
+    {
+      "kind": "key",
+      "atMs": 32177
+    },
+    {
+      "kind": "key",
+      "atMs": 32184
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 2628
+    },
+    {
+      "id": "organization-navigation",
+      "startMs": 4784,
+      "endMs": 9242
+    },
+    {
+      "id": "event-navigation",
+      "startMs": 11404,
+      "endMs": 13158
+    },
+    {
+      "id": "search",
+      "startMs": 15319,
+      "endMs": 22474
+    },
+    {
+      "id": "account-help",
+      "startMs": 24065,
+      "endMs": 27999
+    },
+    {
+      "id": "mobile-keyboard",
+      "startMs": 30164,
+      "endMs": 32188
+    },
+    {
+      "id": "result",
+      "startMs": 32639,
+      "endMs": 33787
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Le Tableau de bord rassemble",
+      "startMs": 0,
+      "endMs": 4475,
+      "cueMs": 4785
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Événements ouvre la liste",
+      "startMs": 4475,
+      "endMs": 7786,
+      "cueMs": 6107
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Membres réunit les personnes connues",
+      "startMs": 7786,
+      "endMs": 11903,
+      "cueMs": 6876
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Paramètres concerne les réglages communs.",
+      "startMs": 11903,
+      "endMs": 15125,
+      "cueMs": 7678
+    },
+    {
+      "segmentId": "event-navigation",
+      "phrase": "Le lien Événements vous ramène",
+      "startMs": 23397,
+      "endMs": 28000,
+      "cueMs": 12334
+    },
+    {
+      "segmentId": "search",
+      "phrase": "Ouvrez un résultat pour accéder",
+      "startMs": 10301,
+      "endMs": 16566,
+      "cueMs": 17038
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Sur ordinateur, la première tabulation",
+      "startMs": 5839,
+      "endMs": 10751,
+      "cueMs": 30993
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Vous arrivez directement dans le",
+      "startMs": 15015,
+      "endMs": 19000,
+      "cueMs": 32177
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Vous arrivez directement dans le",
+      "startMs": 15015,
+      "endMs": 19000,
+      "cueMs": 32182
+    }
+  ],
+  "portraitFrames": [
+    {
+      "startMs": 30180,
+      "endMs": 30993,
+      "width": 390,
+      "height": 800
+    }
+  ]
+}

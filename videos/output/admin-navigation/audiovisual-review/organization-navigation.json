@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:21:37.079Z",
-  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
-  "promptSha256": "8793a02346d71b1a8413bd1f667ff3fdce56c6c1a03b152d8732ba4df92b1220",
-  "clipSha256": "3aeb757a85cb97197c6f8bae3fef73aeb3a2ddad47af3d93b7f56f339046c045",
+  "reviewedAt": "2026-10-11T18:13:47.411Z",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "promptSha256": "c40cc1bb59190a318399977cb94d2640ae0ff224b7ecd409f4edcb6ffc3c64fd",
+  "clipSha256": "ce64ae7bdcd48988308b1ccd8b181a34618317b2288f14db1729af8c0e8dcea4",
   "scene": "organization-navigation",
   "review": {
-    "heardOpening": "Le Tableau de bord",
+    "heardOpening": "Le Tableau de bord rassemble les priorités",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le Tableau de bord rassemble les priorités de l'association",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur l'onglet Tableau de bord et affichage de la page",
+        "spokenSeconds": 0,
+        "spoken": "Le Tableau de bord rassemble les priorités de l'association.",
+        "visibleSeconds": 0.9,
+        "visible": "Affichage de la page Tableau de bord avec les priorités et indicateurs clés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
-        "spoken": "Événements ouvre la liste de vos événements",
-        "visibleSeconds": 4.8,
-        "visible": "Clic sur l'onglet Événements et affichage de la liste",
+        "spokenSeconds": 3.4,
+        "spoken": "Événements ouvre la liste de vos événements.",
+        "visibleSeconds": 3.9,
+        "visible": "Clic sur l'onglet Événements et affichage de la liste des événements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.7,
-        "spoken": "et Membres les personnes connues de l'association",
-        "visibleSeconds": 7.4,
-        "visible": "Clic sur l'onglet Membres et affichage du répertoire",
+        "spokenSeconds": 5.9,
+        "spoken": "Membres réunit les personnes connues de l'association.",
+        "visibleSeconds": 6.7,
+        "visible": "Clic sur l'onglet Membres et affichage du tableau des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.6,
-        "spoken": "Paramètres concerne les réglages communs",
-        "visibleSeconds": 11.2,
-        "visible": "Navigation vers la page Paramètres",
+        "spokenSeconds": 9.2,
+        "spoken": "Paramètres concerne les réglages communs.",
+        "visibleSeconds": 9.9,
+        "visible": "Clic sur l'onglet Paramètres et affichage des options de configuration",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec la navigation."
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les clics de navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

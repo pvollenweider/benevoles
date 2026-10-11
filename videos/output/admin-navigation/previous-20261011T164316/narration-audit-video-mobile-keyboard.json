@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:41:40.225Z",
+  "revalidatedAt": "2026-10-11T15:41:40.225Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "mobile-keyboard",
+      "audioSha256": "5aeaa7139a68a8aaf4116ef0cb635495a84948f11199861392ee17fb697cccf1",
+      "recognized": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle aller au contenu. Ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
+      "expected": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle Aller au contenu : ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

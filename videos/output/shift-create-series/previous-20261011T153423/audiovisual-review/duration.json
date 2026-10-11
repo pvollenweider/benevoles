@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:07:37.763Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "1ff52abca8555294ae2f338775f329dbac3f6e5e0b3c0ff27740146812365386",
+  "clipSha256": "0d4f424be4a1ee84e74a9c561a76d2f676232d8a421a41797818a54f98da34bc",
+  "scene": "duration",
+  "review": {
+    "heardOpening": "La durée découpe la plage",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "équipes de deux heures",
+        "visibleSeconds": 0.5,
+        "visible": "Champ Durée du créneau configuré sur 2 h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "avec trois places",
+        "visibleSeconds": 3.8,
+        "visible": "Saisie de la valeur 3 dans Personnes par créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "choisissons zéro minute",
+        "visibleSeconds": 8.6,
+        "visible": "Valeur 0 sélectionnée dans Pause entre deux créneaux",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique adaptée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

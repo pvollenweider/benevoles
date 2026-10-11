@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:46:57.073Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "4be504c1c4e22980ddecf952a559f5b8ed578f402670432527d45c89cfcb8f89",
+  "clipSha256": "f9ab8c1e8c393b725d28f70d3cc0f88025b3d675eacb464140356cf2cc7a136a",
+  "scene": "event-navigation",
+  "review": {
+    "heardOpening": "Ouvrez un événement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez un événement.",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur l'événement « Fête du village de Montvert » et ouverture de sa page détaillée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage des boutons Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+        "visibleSeconds": 1.2,
+        "visible": "Présence des boutons QR code, Rapports, Journal, Pages et Questions sous les compteurs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+        "visibleSeconds": 14.5,
+        "visible": "Défilement vers le bas dévoilant les sections Jalons, Communications et les besoins bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Le lien Événements vous ramène à la liste de l’association.",
+        "visibleSeconds": 19.6,
+        "visible": "Clic sur le lien de retour « Événements » et réaffichage de la liste des événements.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

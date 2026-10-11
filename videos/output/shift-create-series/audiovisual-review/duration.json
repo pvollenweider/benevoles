@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:07:37.763Z",
-  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
-  "promptSha256": "1ff52abca8555294ae2f338775f329dbac3f6e5e0b3c0ff27740146812365386",
-  "clipSha256": "0d4f424be4a1ee84e74a9c561a76d2f676232d8a421a41797818a54f98da34bc",
+  "reviewedAt": "2026-10-11T18:08:03.635Z",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "promptSha256": "df75b9e8e36b4d468e926911f6948c72f8d5fbc75c45f8cda6451eb700fb4b67",
+  "clipSha256": "5ab5411de0ef690da83c63e66db90dfe7d5ed90b9ea6e1810b88f42dedd4888f",
   "scene": "duration",
   "review": {
     "heardOpening": "La durée découpe la plage",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "équipes de deux heures",
-        "visibleSeconds": 0.5,
-        "visible": "Champ Durée du créneau configuré sur 2 h",
+        "spokenSeconds": 0.5,
+        "spoken": "La durée découpe la plage en équipes de deux heures.",
+        "visibleSeconds": 1,
+        "visible": "Le champ Durée du créneau est défini sur 2 h (120 minutes).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "avec trois places",
-        "visibleSeconds": 3.8,
-        "visible": "Saisie de la valeur 3 dans Personnes par créneau",
+        "spokenSeconds": 5.5,
+        "spoken": "avec trois places, chaque relève accueille trois bénévoles.",
+        "visibleSeconds": 4,
+        "visible": "Le champ Personnes par créneau passe à 3 et l'aperçu indique 3 personnes par créneau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.4,
-        "spoken": "choisissons zéro minute",
-        "visibleSeconds": 8.6,
-        "visible": "Valeur 0 sélectionnée dans Pause entre deux créneaux",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 11.5,
+        "spoken": "Ici, choisissons zéro minute",
+        "visibleSeconds": 10,
+        "visible": "Le champ Pause entre deux créneaux (min) est sélectionné avec la valeur 0.",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation pédagogique adaptée."
+      "observation": "Voix claire, fluide et naturelle, bien synchronisée avec les réglages du formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

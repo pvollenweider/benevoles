@@ -1,0 +1,17 @@
+{
+  "id": "ADMIN_NAVIGATION",
+  "status": "READY",
+  "duration": 128,
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {
+    "voicedWindows": 109,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 17.7,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "None; new Members sentence audited and transition confirmed in one-second frames; all final checks pass.",
+  "sourceChanges": "No source changes; full narration regenerated because segment-only force is unavailable."
+}

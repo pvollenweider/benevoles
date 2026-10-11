@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:37:27.989Z",
+  "videoSha256": "f57d85c02e0ff8d7447ffcdbdd32a0b4956d85acf60a1d0bc47d4a15c775377c",
+  "promptSha256": "af8527373307c1f1000be6146b38ae1a72241bd82a250e2ee29bfdb456f602da",
+  "clipSha256": "0b34803686827049edbd9e1be7fea70e3df15a6027e6640f4434f7affc9b294e",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "L'aperçu est la vérification essentielle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'aperçu est la vérification essentielle",
+        "visibleSeconds": 0,
+        "visible": "Section Aperçu affichant '6 créneaux de 2 h, 3 personnes par créneau'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "dix heures-midi, midi-quatorze heures, puis les relèves suivantes jusqu'à vingt-deux heures",
+        "visibleSeconds": 0,
+        "visible": "Liste des créneaux générés de 10:00-12:00 jusqu'à 20:00-22:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "contrôlez le dernier créneau avant de confirmer",
+        "visibleSeconds": 0,
+        "visible": "Dernier créneau 20:00-22:00 affiché au-dessus du bouton Créer 6 créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran statique d'explication."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:39:30.500Z",
+  "revalidatedAt": "2026-10-11T16:39:30.501Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "create",
+      "audioSha256": "eb3e8baac1a7d8097211f642a188f105c9d9fc820c7027f294891dad2ca98a79",
+      "recognized": "Créons la série. Les nouvelles barres apparaissent dans la frise avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes, chacune possède son propre effectif et peut recevoir ses inscriptions.",
+      "expected": "Créons la série. Les nouvelles barres apparaissent dans la Frise avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

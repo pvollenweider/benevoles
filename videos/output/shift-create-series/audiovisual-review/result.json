@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:08:23.521Z",
-  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
-  "promptSha256": "4357c0b18435d61b52b8971818e734858e5ace0a2cbc4b11243737fbdffc047a",
-  "clipSha256": "89cccd5592d7dc282be7db970a4f6102e0b7a1b9b4bced81c6627f4c0d6609ea",
+  "reviewedAt": "2026-10-11T18:08:22.816Z",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "promptSha256": "3601e080f80e425456115dc99d206b0975cf09f13ec5e27cd19c7ce08a64c35d",
+  "clipSha256": "473359c3a0384283437323724b92ee1dbfb90d6c860bbe0a968cfe272d28d9f5",
   "scene": "result",
   "review": {
     "heardOpening": "Le résultat est bien enregistré",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Le résultat est bien enregistré",
-        "visibleSeconds": 1.5,
-        "visible": "Basculement de l'onglet Frise vers l'onglet Liste",
+        "visibleSeconds": 0.5,
+        "visible": "La liste affiche les créneaux créés sous le libellé « Buvette série »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 2.5,
         "spoken": "quatre places pour la première relève, et toujours trois pour les suivantes",
-        "visibleSeconds": 3,
-        "visible": "Affichage des lignes Buvette série avec 4 places puis 3 places",
+        "visibleSeconds": 2.5,
+        "visible": "Le créneau 10:00–12:00 affiche 0/4 places libres et les suivants indiquent 0/3",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "vérifie les horaires, les éventuelles pauses et la fermeture",
-        "visibleSeconds": 7.5,
-        "visible": "Défilement vers le bas du tableau récapitulatif des créneaux",
+        "spokenSeconds": 6.5,
+        "spoken": "Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture",
+        "visibleSeconds": 6.5,
+        "visible": "Vue d'ensemble statique des créneaux avec leurs plages horaires respectives",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et bien articulée, synchronisée avec les éléments à l'écran."
+      "observation": "Enregistrement vocal clair, fluide et posé, en parfaite adéquation avec le script."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

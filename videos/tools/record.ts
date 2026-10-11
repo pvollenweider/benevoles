@@ -235,10 +235,9 @@ async function main() {
     console.log(`Scene ${id}: ${rehearsal ? "rehearsal" : "narration-timed"}`)
     const audioDuration = durations.get(id)
     if (!audioDuration) throw new Error(`Missing duration for ${id}`)
-    // The TTS take contains a short tail, the recorder adds a chapter gap, and the next take has
-    // a short lead-in. Overlap the silent tails at this transition so the next sentence follows
-    // naturally without clipping or overlapping spoken words.
-    const expected = audioDuration - (id === "lifecycle" ? 1_300 : 0)
+    // Keep the complete measured WAV. A fixed tail reduction can clip a new
+    // narration take even when an earlier take ended with a longer silence.
+    const expected = audioDuration
     // Chapter cards separate subjects; they must not cover the first narrated
     // action or consume its timing budget.
     const title = manifest.chapterTitles?.[id]
@@ -1927,7 +1926,7 @@ async function main() {
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        const hint = page.getByText(/Faites défiler pour voir toutes les plages/).first()
+        const hint = page.getByText(/Fais défiler pour voir toutes les plages/).first()
         await hint.scrollIntoViewIfNeeded()
         await at("le message avec les flèches")
         const timeline = page.getByRole("region", { name: /Planning du/ }).first()
@@ -2019,15 +2018,15 @@ async function main() {
       await scene("conflict", async (at) => {
         const current = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : désélectionner/ })
         if (await current.count()) await tap(page, current)
-        const morning = page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : sélectionner/ })
-        await morning.scrollIntoViewIfNeeded()
-        await tap(page, morning)
+        const afternoon = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : sélectionner/ })
+        await afternoon.scrollIntoViewIfNeeded()
+        await tap(page, afternoon)
         await at(0.40) /* mid-sentence */
-        const overlapping = page.getByRole("button", { name: /08h–12h.*Navette/ }).first()
+        const overlapping = page.getByRole("button", { name: /^14h–18h.*Navette.*chevauche un créneau déjà choisi/ }).first()
         await overlapping.scrollIntoViewIfNeeded()
         await overlapping.focus()
         await at("Le serveur vérifiera encore ce")
-        await tap(page, page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : désélectionner/ }))
+        await tap(page, page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : désélectionner/ }))
       })
 
       await scene("known", async (at) => {
@@ -2098,6 +2097,7 @@ async function main() {
         await typeNaturally(page, page.getByLabel(/Commentaire/), "Je prévois une pause avant la nuit.")
       })
       await scene("agreement", async (at) => {
+        await at("Ouvre la Convention des Bénévoles")
         await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
         await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
         await at(0.44) /* mid-sentence */
@@ -2115,9 +2115,8 @@ async function main() {
       })
       await scene("workload", async (at) => {
         await recap.getByText("Journée chargée").scrollIntoViewIfNeeded()
-        await at(0.50) /* mid-sentence */
-        await tap(page, page.getByRole("button", { name: "Retour", exact: true }))
         await at("Pour alléger, reviens au planning")
+        await tap(page, page.getByRole("button", { name: "Retour", exact: true }))
         await tap(page, page.getByRole("button", { name: /, Logistique[^:]* : désélectionner/ }))
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       })
@@ -2133,9 +2132,11 @@ async function main() {
       for (const status of ["active", "waiting", "offered", "requested"]) {
         if (!initial.registrations.some((r: { status: string }) => r.status === status)) throw new Error(`Personal demo missing ${status}`)
       }
-      await scene("welcome", async () => {
+      await scene("welcome", async (at) => {
         await page.screencast.showChapter(manifest.title, { description: "Ton planning et tes choix, depuis ton lien personnel", duration: 2_300 })
         await page.getByRole("heading", { name: "Mes inscriptions" }).waitFor()
+        await at("Ici, Camille a une place")
+        await page.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
       })
       await scene("practical", async (at) => {
         await page.getByText("Arrive 15 minutes avant, au stand bleu.", { exact: true }).scrollIntoViewIfNeeded()
@@ -2163,14 +2164,17 @@ async function main() {
         await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Oui, annuler", exact: true }))
         await button.waitFor({ state: "hidden" })
       })
-      const withdraw = async (at: Cue, buttonName: string, confirmName: string) => {
+      const withdraw = async (at: Cue, buttonName: string, confirmName: string, beforeConfirm?: () => Promise<void>) => {
         const button = page.getByRole("button", { name: buttonName, exact: true })
         await tap(page, button)
-        await at(0.50) /* shared helper: scene-independent */
+        if (beforeConfirm) await beforeConfirm()
+        else await at(0.50) /* shared helper: scene-independent */
         await tap(page, page.getByRole("alertdialog").getByRole("button", { name: confirmName, exact: true }))
         await button.waitFor({ state: "hidden" })
       }
-      await scene("waiting", async at => withdraw(at, "Quitter la liste d'attente du créneau Buvette", "Oui, quitter"))
+      await scene("waiting", async at => withdraw(at, "Quitter la liste d'attente du créneau Buvette", "Oui, quitter", async () => {
+        await at("Confirme uniquement si c'est ce")
+      }))
       await scene("offer", async at => withdraw(at, "Refuser la place proposée sur le créneau Buvette", "Oui, refuser"))
       await scene("request", async at => {
         await withdraw(at, "Retirer ma demande pour le créneau Navette du dimanche", "Oui, retirer")
@@ -2205,6 +2209,11 @@ async function main() {
       })
     } else if (slug === "volunteer-calendar") {
       const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
+      const initialCalendar = await page.evaluate(async () => (await fetch("/api/public/registrations/demo-volunteer-camille-0001")).json())
+      const nightDate = initialCalendar.registrations.find((r: { shift: { label: string } }) => r.shift.label === "Rangement de nuit — calendrier")?.shift.date.slice(0, 10)
+      if (!nightDate) throw new Error("Calendar fixture is missing its overnight shift")
+      const nextDate = new Date(Date.parse(`${nightDate}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10)
+      const utcDay = (date: string) => date.replaceAll("-", "")
       const folder = path.join(dir, "downloads")
       await mkdir(folder, { recursive: true })
       const download = async (link: Locator, filename: string) => {
@@ -2249,14 +2258,14 @@ async function main() {
         }
         await page.getByText("Arrive 15 minutes avant, au stand bleu.", { exact: true }).scrollIntoViewIfNeeded()
         await at("le lieu, les consignes et")
-        await page.getByText(/Manon Aebi/).scrollIntoViewIfNeeded()
+        await page.locator("#avant-ta-mission").getByText(/Manon Aebi,/).scrollIntoViewIfNeeded()
         await at("Garde ce fichier pour toi")
         await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
       })
       await scene("night", async () => {
         await page.getByText("Rangement de nuit — calendrier", { exact: true }).scrollIntoViewIfNeeded()
         const night = events(oldPlanning).find(event => event.includes("Rangement de nuit"))
-        if (!night?.includes("DTSTART:20261010T200000Z") || !night.includes("DTEND:20261011T000000Z")) throw new Error("Overnight calendar dates or Zurich conversion incorrect")
+        if (!night?.includes(`DTSTART:${utcDay(nightDate)}T200000Z`) || !night.includes(`DTEND:${utcDay(nextDate)}T000000Z`)) throw new Error("Overnight calendar dates or Zurich conversion incorrect")
       })
       await scene("change", async at => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
@@ -2277,7 +2286,7 @@ async function main() {
         const uids = (ics: string) => [...ics.matchAll(/^UID:(.+)$/gm)].map(match => match[1].trim()).sort()
         if (JSON.stringify(uids(oldPlanning)) !== JSON.stringify(uids(newPlanning))) throw new Error("Calendar registration identifiers changed")
         const night = events(newPlanning).find(event => event.includes("Rangement de nuit"))
-        if (!night?.includes("DTSTART:20261010T210000Z")) throw new Error("Updated calendar does not contain 23:00 Zurich start")
+        if (!night?.includes(`DTSTART:${utcDay(nightDate)}T210000Z`)) throw new Error("Updated calendar does not contain 23:00 Zurich start")
         await at(0.52) /* mid-sentence */
         await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
       })
@@ -3523,7 +3532,8 @@ async function main() {
         }
         await page.getByText(/Un email avec ton lien est déjà parti il y a peu/).waitFor()
         await at(0.70) /* mid-sentence */
-        await page.getByRole("link", { name: "Écrire à l'organisation" }).scrollIntoViewIfNeeded()
+        const personalPanel = page.getByRole("heading", { name: "Ton lien personnel", exact: true }).locator("..")
+        await personalPanel.getByRole("link", { name: "Écrire à l'organisation", exact: true }).scrollIntoViewIfNeeded()
       })
       await scene("availability", async at => {
         await startSeparateReadJourney()
@@ -4602,12 +4612,12 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "+ Ajouter un créneau" }))
         const editor = page.getByRole("group", { name: "Nouveau créneau" })
         await typeNaturally(page, editor.getByLabel("Poste *"), "Livraison")
-        await fillVisibly(page, editor.getByLabel("Libellé"), "Livraison — permis B requis")
-        await fillVisibly(page, editor.getByLabel("Début *"), "09:00", 1_000)
-        await fillVisibly(page, editor.getByLabel("Fin *"), "12:00", 1_000)
-        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 1_000)
-        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire")
-        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 1_200)
+        await fillVisibly(page, editor.getByLabel("Libellé"), "Livraison — permis B requis", 400)
+        await fillVisibly(page, editor.getByLabel("Début *"), "09:00", 400)
+        await fillVisibly(page, editor.getByLabel("Fin *"), "12:00", 400)
+        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 400)
+        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire", 400)
+        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 400)
         await tap(page, editor.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByRole("status").filter({ hasText: /Créneau ajouté : Livraison/ }).waitFor()
       })
@@ -5087,11 +5097,11 @@ async function main() {
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("identity", async (at) => {
         const titleField = page.getByLabel("Titre affiché en haut de la page de vos événements")
+        await at("Dans les paramètres, donnez à")
         await fillVisibly(page, titleField, "Les bénévoles du Parc")
         const titleForm = titleField.locator("xpath=ancestor::form")
         await tap(page, titleForm.getByRole("button", { name: "Enregistrer" }))
         await titleForm.getByText("Titre enregistré.").waitFor()
-        await at("Gardons toutes ses clauses ")
         const charterHeading = page.getByRole("heading", { name: "Convention des Bénévoles" })
         await charterHeading.scrollIntoViewIfNeeded()
         const charterBox = charterHeading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
@@ -5099,9 +5109,10 @@ async function main() {
         const completeCharter = await charter.inputValue()
         if (completeCharter.trim().length < 400) throw new Error("First-steps fixture must contain the complete legal convention, not a one-sentence substitute")
         // Demonstrate the real complete text without rewriting its legal clauses.
+        await at("Gardons toutes ses clauses")
         await tap(page, charter)
         await charter.press("ControlOrMeta+End")
-        await at(0.72) /* mid-sentence */
+        await at("Enregistrons le texte entier")
         await tap(page, charterBox.getByRole("button", { name: "Enregistrer" }))
         await charterBox.getByText("Enregistré ✓").waitFor()
         if (await charter.inputValue() !== completeCharter) throw new Error("First-steps demonstration altered the full convention")
@@ -5156,6 +5167,7 @@ async function main() {
         await tap(page, continueButton)
         await page.waitForURL(/\/review$/)
         await page.getByRole("heading", { name: "Fête du parc" }).waitFor()
+        await page.getByRole("button", { name: "Publier" }).scrollIntoViewIfNeeded()
         await at("Ici, le minimum est prêt")
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
@@ -5166,14 +5178,14 @@ async function main() {
       await page.goto(onboardingPublicUrl); await settle(page)
       await scene("test", async (at) => {
         await page.getByRole("heading", { name: "Fête du parc" }).waitFor()
+        await at("Sélectionnez Accueil")
         await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await at(0.28) /* mid-sentence */
         await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
         await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.masterclass@example.org")
-        await at(0.62) /* mid-sentence */
+        await fillVisibly(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.masterclass@example.org", 180)
+        await at("Sélectionnez Accueil")
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
@@ -5193,9 +5205,6 @@ async function main() {
         }
         await at(0.42) /* mid-sentence */
         await page.getByRole("link", { name: "Fête du parc", exact: true }).scrollIntoViewIfNeeded()
-        await at(0.72) /* mid-sentence */
-        await page.goto(`${baseUrl}/admin/events/${onboardingEventId}/registrations`); await settle(page)
-        await page.getByText("Alex Martin").first().waitFor()
       })
     }
   } catch (error) {

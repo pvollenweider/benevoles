@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:41:38.535Z",
+  "revalidatedAt": "2026-10-11T15:41:38.535Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "account-help",
+      "audioSha256": "19070c375e026c644249425085af2b498665ff24c68db470b444dce8382ddfd3",
+      "recognized": "Le menu de votre compte propose Mon compte et Se déconnecter. L'aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+      "expected": "Le menu de votre compte propose Mon compte et Se déconnecter. L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

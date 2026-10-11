@@ -1,0 +1,1 @@
+Error: ENOENT: no such file or directory, open 'videos/output/shift-create-series/narration-audit-video-adjust.json'
