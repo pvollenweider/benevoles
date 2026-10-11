@@ -1344,7 +1344,9 @@ async function main() {
         await at(0.16)
         await tap(page, panel.getByRole("button", { name: "Arrêter la permanence", exact: true }))
         await panel.getByRole("group", { name: /^2 dates ont déjà des inscrits/ }).waitFor()
-        await at(0.66)
+        // The second take confirmed in the pause before « Confirmons ».
+        // Keep the registered dates visible until the confirmation instruction.
+        await at(0.71)
         await tap(page, panel.getByRole("button", { name: "Annuler aussi ces 2 dates et prévenir les inscrits", exact: true }))
         await page.getByRole("status").filter({ hasText: /Permanence Réception des livraisons arrêtée/ }).waitFor()
       })

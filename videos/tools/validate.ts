@@ -9,6 +9,7 @@ import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { mismatchedNarrationEdges, unexpectedPauseInstructions } from "../lib/narration-fidelity"
 import { assertNarrationGeneration } from "../lib/narration-generation"
+import { musicLevelIssues, musicLevelSummary, type MusicWindow } from "../lib/music-levels"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((argument) => !argument.startsWith("-") && argument !== process.argv[0] && argument !== process.argv[1])
@@ -74,6 +75,21 @@ async function main() {
     return { id: segment.id, visualMs, audioMs, driftMs }
   })
 
+  // Background music: low but audible, never over the narration (measured by the assembler).
+  let music: ReturnType<typeof musicLevelSummary> | null = null
+  try {
+    const levels = await readJson<{ videoSha256: string; windows: MusicWindow[] }>(path.join(dir, "audio-levels.json"))
+    const videoSha256 = createHash("sha256").update(await readFile(path.join(dir, `${manifest.slug}.mp4`))).digest("hex")
+    if (levels.videoSha256 !== videoSha256) issues.push("music levels were measured on another render; assemble again")
+    else {
+      music = musicLevelSummary(levels.windows)
+      issues.push(...musicLevelIssues(levels.windows).map(issue => `music ${issue}`))
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+    issues.push("music levels not measured (audio-levels.json missing); assemble with the current assembler")
+  }
+
   const captureMs = await durationMs(path.join(dir, timeline.video))
   const lastEnd = timeline.cues.at(-1)?.endMs ?? 0
   if (captureMs < lastEnd) issues.push(`capture ends ${lastEnd - captureMs} ms before the timeline`)
@@ -86,11 +102,12 @@ async function main() {
     voice: manifest.voice,
     captureMs,
     scenes,
+    music,
     issues,
   }
   await writeFile(path.join(dir, "validation.json"), `${JSON.stringify(report, null, 2)}\n`)
   if (issues.length > 0) throw new Error(`${manifest.id} synchronization failed:\n- ${issues.join("\n- ")}`)
-  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, one continuous ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}`)
+  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, one continuous ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}; music ${music?.smallestGapLu}–${music?.largestGapLu} LU under the voice`)
 }
 
 main().catch((error) => {
