@@ -2,7 +2,7 @@ Démarrer un événement avec un modèle
 
 Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.
 
-Cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. La page blanche reste préférable pour un format très particulier.
+Pour un événement daté, cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. Pour une activité qui revient chaque semaine, quatre autres modèles préparent une saison de permanences : épicerie participative, distribution alimentaire, permanence d’accueil et repair café. Une vidéo dédiée les présente. La page blanche reste préférable pour un format très particulier.
 
 Choisissons Fête de village. L’aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour ; prenons le samedi vingt-et-un novembre. Le deuxième jour est calculé automatiquement par le modèle.
 

@@ -1,0 +1,62 @@
+{
+  "id": "SHIFT_APPROVAL",
+  "slug": "shift-approval",
+  "validatedAt": "2026-10-11T09:39:45.441Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 119600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15802,
+      "audioMs": 15801,
+      "driftMs": 1
+    },
+    {
+      "id": "setup",
+      "visualMs": 15442,
+      "audioMs": 15442,
+      "driftMs": 0
+    },
+    {
+      "id": "request",
+      "visualMs": 13647,
+      "audioMs": 13645,
+      "driftMs": 2
+    },
+    {
+      "id": "admin",
+      "visualMs": 13502,
+      "audioMs": 13499,
+      "driftMs": 3
+    },
+    {
+      "id": "decision",
+      "visualMs": 15000,
+      "audioMs": 14998,
+      "driftMs": 2
+    },
+    {
+      "id": "volunteer",
+      "visualMs": 13557,
+      "audioMs": 13555,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 13461,
+      "audioMs": 13460,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": {
+    "voicedWindows": 102,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 20,
+    "quietestMusicOnlyLufs": -29.9
+  },
+  "issues": []
+}

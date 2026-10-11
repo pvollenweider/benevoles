@@ -1,0 +1,140 @@
+{
+  "slug": "event-create-template",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T09:23:53.767Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e0f32ad7d6ad8d60f98346662eb9328ec2205483",
+    "sourceTree": "39f91d937caaad032e8c663dda02ba4f5182e3af",
+    "productSourceSha256": "eb6aa8940dd6a40bbb9dfcc677cc344db82fe5332dc6311396aefd22a7c7d5c4",
+    "buildId": "1xyUm1Sg6zIWjELSDJ9vx",
+    "snapshot": "/tmp/benevoles-video-production.hfyypNfq",
+    "builtAt": "2026-10-11T09:20:42.919Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-template",
+    "scenario": "EVENT_CREATE_TEMPLATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 3115
+    },
+    {
+      "kind": "click",
+      "atMs": 14763
+    },
+    {
+      "kind": "click",
+      "atMs": 19523
+    },
+    {
+      "kind": "click",
+      "atMs": 23913
+    },
+    {
+      "kind": "click",
+      "atMs": 28262
+    },
+    {
+      "kind": "click",
+      "atMs": 32279
+    },
+    {
+      "kind": "click",
+      "atMs": 35629
+    },
+    {
+      "kind": "click",
+      "atMs": 38916
+    },
+    {
+      "kind": "click",
+      "atMs": 41111
+    },
+    {
+      "kind": "click",
+      "atMs": 43295
+    },
+    {
+      "kind": "click",
+      "atMs": 48762
+    },
+    {
+      "kind": "click",
+      "atMs": 51778
+    },
+    {
+      "kind": "click",
+      "atMs": 59227
+    },
+    {
+      "kind": "click",
+      "atMs": 61061
+    },
+    {
+      "kind": "click",
+      "atMs": 70947
+    },
+    {
+      "kind": "click",
+      "atMs": 84234
+    },
+    {
+      "kind": "click",
+      "atMs": 89866
+    },
+    {
+      "kind": "click",
+      "atMs": 97115
+    },
+    {
+      "kind": "click",
+      "atMs": 100248
+    },
+    {
+      "kind": "click",
+      "atMs": 115175
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1,
+      "endMs": 12100
+    },
+    {
+      "id": "compare",
+      "startMs": 14260,
+      "endMs": 50833
+    },
+    {
+      "id": "preview",
+      "startMs": 51286,
+      "endMs": 68142
+    },
+    {
+      "id": "create",
+      "startMs": 68593,
+      "endMs": 82025
+    },
+    {
+      "id": "adapt",
+      "startMs": 84201,
+      "endMs": 102748
+    },
+    {
+      "id": "result",
+      "startMs": 105807,
+      "endMs": 122275
+    }
+  ]
+}

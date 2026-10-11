@@ -1,97 +1,112 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:04.982
+00:00:00.001 --> 00:00:04.579
 Un modèle fait gagner du temps quand
 l’événement ressemble à un cas courant. Il
 
-00:00:04.982 --> 00:00:09.608
+00:00:04.579 --> 00:00:08.831
 crée un brouillon avec des postes, des
 créneaux, des horaires et des capacités
 
-00:00:09.608 --> 00:00:13.166
+00:00:08.831 --> 00:00:12.101
 déjà cohérents. Rien n’est publié
 automatiquement, et tout reste modifiable.
 
-00:00:15.326 --> 00:00:19.680
-Cinq points de départ sont proposés.
-Festival couvre plusieurs soirées ;
+00:00:14.270 --> 00:00:19.146
+Pour un événement daté, cinq points de
+départ sont proposés. Festival couvre
 
-00:00:19.680 --> 00:00:24.827
-Buvette organise le bar et la caisse sur
-une journée ; Manifestation sportive
+00:00:19.146 --> 00:00:24.835
+plusieurs soirées ; Buvette organise le
+bar et la caisse sur une journée ;
 
-00:00:24.827 --> 00:00:28.785
-prépare dossards, parcours et
-ravitaillement ; Fête de village s’étale
+00:00:24.835 --> 00:00:28.898
+Manifestation sportive prépare dossards,
+parcours et ravitaillement ; Fête de
 
-00:00:28.785 --> 00:00:33.140
-sur deux jours ; Montage, exploitation,
-démontage sépare clairement les trois
+00:00:28.898 --> 00:00:33.368
+village s’étale sur deux jours ; Montage,
+exploitation, démontage sépare clairement
 
-00:00:33.140 --> 00:00:37.494
-phases. La page blanche reste préférable
-pour un format très particulier.
+00:00:33.368 --> 00:00:38.244
+les trois phases. Pour une activité qui
+revient chaque semaine, quatre autres
 
-00:00:37.948 --> 00:00:42.189
+00:00:38.244 --> 00:00:41.901
+modèles préparent une saison de
+permanences : épicerie participative,
+
+00:00:41.901 --> 00:00:45.965
+distribution alimentaire, permanence
+d’accueil et repair café. Une vidéo dédiée
+
+00:00:45.965 --> 00:00:50.435
+les présente. La page blanche reste
+préférable pour un format très
+
+00:00:50.435 --> 00:00:50.841
+particulier.
+
+00:00:51.294 --> 00:00:55.597
 Choisissons Fête de village. L’aperçu
 résume les postes, le nombre de créneaux
 
-00:00:42.189 --> 00:00:47.490
+00:00:55.597 --> 00:01:00.977
 et les places qui seront créées. Avant de
 continuer, donnez un titre à cette édition
 
-00:00:47.490 --> 00:00:52.085
+00:01:00.977 --> 00:01:05.639
 et indiquez son premier jour ; prenons le
 samedi vingt-et-un novembre. Le deuxième
 
-00:00:52.085 --> 00:00:54.559
+00:01:05.639 --> 00:01:08.149
 jour est calculé automatiquement par le
 modèle.
 
-00:00:55.013 --> 00:00:59.816
+00:01:08.602 --> 00:01:13.300
 Créer le brouillon génère ici dix créneaux
 et ouvre l’étape du planning. Le statut
 
-00:00:59.816 --> 00:01:04.276
+00:01:13.300 --> 00:01:17.662
 reste Brouillon. Le modèle n’envoie aucun
 email et n’ouvre aucune inscription : il
 
-00:01:04.276 --> 00:01:08.736
+00:01:17.662 --> 00:01:22.024
 fournit seulement une base de travail plus
 rapide à corriger qu’une page vide.
 
-00:01:10.910 --> 00:01:15.468
+00:01:24.199 --> 00:01:28.664
 Dans le planning obtenu, chaque ligne est
 ordinaire. On peut renommer un poste,
 
-00:01:15.468 --> 00:01:20.025
+00:01:28.664 --> 00:01:33.128
 modifier son libellé, ses horaires, sa
 capacité, ses conditions ou sa couleur ;
 
-00:01:20.025 --> 00:01:24.583
+00:01:33.128 --> 00:01:37.593
 on peut aussi supprimer un créneau inutile
 et en ajouter d’autres. Ajustons par
 
-00:01:24.583 --> 00:01:29.491
+00:01:37.593 --> 00:01:42.401
 exemple la capacité de la première Buvette
 pour coller à la taille réelle de
 
-00:01:29.491 --> 00:01:29.842
+00:01:42.401 --> 00:01:42.744
 l’équipe.
 
-00:01:32.904 --> 00:01:37.542
+00:01:45.808 --> 00:01:50.558
 Vous avez un brouillon de dix créneaux et
 la capacité de la première Buvette est
 
-00:01:37.542 --> 00:01:41.562
+00:01:50.558 --> 00:01:54.675
 maintenant de cinq places. Choisissez le
 modèle le plus proche de votre besoin,
 
-00:01:41.562 --> 00:01:45.582
+00:01:54.675 --> 00:01:58.792
 vérifiez les postes et les horaires, puis
 testez l’aperçu bénévole avant de publier.
 
-00:01:45.582 --> 00:01:48.984
+00:01:58.792 --> 00:02:02.275
 Le modèle propose une base ; vous adaptez
 le planning réel.
 

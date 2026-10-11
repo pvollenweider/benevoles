@@ -1,0 +1,25 @@
+STATUS: NOT READY
+ID: EVENT_CREATE_TEMPLATE
+Commit: e0f32ad7d6ad8d60f98346662eb9328ec2205483
+BUILD_ID: 1xyUm1Sg6zIWjELSDJ9vx
+Final MP4 duration: 122.720 seconds
+Music: smallest gap 12.2 LU; largest 19.9 LU; 114 voiced windows, 2 music-only windows; quietest music-only -14.3 LUFS. audio-levels.json bound to final MP4; rule passed.
+
+Production: fresh shared verified standalone build. Template-owned fixture prepared (navigation-owner dependency created first), reset before rehearsal and before narrated capture. Quick rehearsal completed successfully. A prior overlapping rehearsal from the initially failed fixture preparation left a login error in the shared log; it exited 1, while the prepared rehearsal exited 0. No failed rehearsal was assembled. New forced continuous Puck TTS. Initial compare/preview split displaced the last comparison sentence; located opening independently and recut at real silence 48.671396 s. Re-audit passed every chapter. Final MP4 audit passed (0–2.3% orthographic word difference). Posters generated; metadata only in review/renders-generated.json. video:validate passed before cue fixes.
+
+Evidence: review/inspection.json contains MP4 hash, chapter sentence boundaries (silence-based estimates, not forced word alignment), exact interaction markers and effects verification. review-frames/index.json binds sampled frames to this MP4. review/*-seconds.png contains a frame each second through every chapter; directly inspected comparison, preview and adaptation sheets plus full chapter contact sheet. Trailing black cells are unused sheet slots.
+
+Chapter review:
+- welcome: title visible; opens real new-event form. Opening has no explicit action sentence to anchor, no specific early-action failure assigned.
+- compare: FAIL. Festival selected at 14.763 s, but its clause begins 18.170 s; Buvette selected 19.523 s before clause 20.290 s. Weekly examples begin changing 35.629 s while the general weekly introduction is still spoken; named examples clause starts 39.440 s. Frame grid confirms the early selections. Manifestation (23.913 vs 23.450), village (28.262 vs 27.850), montage (32.279 vs 30.050) also vary in delay. Page blanche 48.762 vs 47.730. Converted sentence-start cues to anchors, retained fractional sub-cues within the four-example sentence with adjusted waits. Not re-filmed.
+- preview: village choice 51.778 vs 51.750 is aligned. Title entry 59.227 falls within its instruction 58.650–62.670; date entry 61.061 precedes the specific date clause 63.040. Date is visibly 21.11.2026 (French order). Added date-clause anchor, and anchored title instruction. Not re-filmed.
+- create: actual creation click 70.947 is late relative to 69.120 opening; real ten-slot draft and Brouillon shown. Anchored creation and draft-status navigation to their sentences.
+- adapt: editor opens while general editable-fields sentence is spoken. Capacity click 97.115 precedes specific instruction 97.950 by 835 ms; frame grid shows edit before the instruction. Anchored capacity adjustment. Save succeeds; first Buvette 0/5 visible.
+- result: ten-slot result and preview shown; preview click 115.175 occurs within instruction 111.100–118.550. No publication performed.
+
+UI: Frise visible, no Timeline wording found; French dates, fictional identities and benevol.app preview/share links. No localhost/org-admin@localhost or dev overlay seen in inspected frames. Template fixture uses Camille Martin, not the default organizer. No settings-address exception encountered.
+Effects: exact generated input-effects.wav bytes match all 20 recorded clicks, no key events (fill operations are clicks, not native typing). See inspection.json. Final assembly hashes and mix in audio-mix.json.
+Subtitles: generated from current manifest; final-MP4 independent transcription agrees with every chapter. Fine word-level subtitle alignment and subjective timbre/full real-time listening not certified in this session; evidence is direct frame inspection, independent speech recognition and signal checks, as in pilot. This report does not waive that limitation.
+Local source changes: videos/tools/record.ts template sentence anchors and intra-sentence example waits. Shared infrastructure: posters.ts --metadata-output avoids any write to videos/renders.json; operator-local.ts records actual server PID/build proof. No refilm after source fixes. No publish, push, commit or PR.
+
+Final artifact check: review/caption-check.json verifies all 28 VTT cues and TXT exactly match the rendered manifest. Final tool type check (185 sources), unique anchor resolution and git diff --check passed. videos/renders.json byte-identical to HEAD. Only owned video server PIDs 95738, 519 and 2856 were stopped; no other service stopped.
