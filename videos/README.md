@@ -332,7 +332,13 @@ Toutes les vidéos produites ou régénérées doivent inclure une musique discr
 VIDEO_MUSIC_PATH=/chemin/vers/musique.mp3
 ```
 
-Elle est bouclée si nécessaire, placée à 7,5 % sous la voix, puis fondue au début et à la fin. Vérifier les droits de diffusion avant toute publication.
+La musique doit rester faible mais audible, sans jamais gêner la narration. L'assemblage (`videos/lib/music-levels.ts`) :
+
+- ne boucle que la partie stable du morceau, de 0,5 s à 95 s, avec un fondu enchaîné de 2 s à chaque raccord : le morceau entier (102,4 s) finit par son propre fondu, ce qui laissait un trou de musique (jusqu'à -77 LUFS) dans toute vidéo de plus de 100 s ;
+- compresse le morceau puis le joue à un niveau constant, fondu au début (1,5 s) et à la fin (2 s). Pas d'atténuation sous la voix (ducking) : mesurée sur SHIFT_RECURRENCE, elle élargissait l'écart entre voix et musique au lieu de le tenir, en baissant davantage la musique sous les phrases fortes ;
+- mesure le résultat et refuse de terminer si la règle n'est pas tenue : par fenêtres de 3 s, là où la voix parle, la musique reste entre 12 et 20 LU sous la voix (comparées sur les instants où la voix parle) ; là où personne ne parle, le mix ne descend pas sous -36 LUFS. Les chiffres, fenêtre par fenêtre, vont dans `audio-levels.json`, lié au MP4 par son empreinte.
+
+`npm run video:validate` refait la même vérification à partir de `audio-levels.json` et échoue s'il manque ou s'il a été mesuré sur un autre rendu. Une vidéo assemblée avant cette règle doit donc être assemblée à nouveau. Vérifier les droits de diffusion avant toute publication.
 
 Le morceau retenu est `mixkit-tech-house-vibes-130.mp3`. Chaque clic et chaque touche réellement enfoncée doivent également recevoir un son doux, calé sur l'interaction enregistrée, sans masquer la narration. Cette exigence fait partie du contrôle final ; elle ne signifie pas que les anciennes vidéos disposent déjà de ces effets. Sans repères d'interaction fiables, refaire la capture plutôt qu'estimer les timings.
 

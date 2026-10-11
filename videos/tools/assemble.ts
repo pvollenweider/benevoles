@@ -3,12 +3,14 @@
 
 import { execFile } from "node:child_process"
 import { createHash } from "node:crypto"
-import { access, readFile, writeFile } from "node:fs/promises"
+import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
+import os from "node:os"
 import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { readableCaptions } from "../lib/captions"
 import { inputAudio } from "../lib/input-audio"
+import { MUSIC_LOOP, MUSIC_MIX, MUSIC_RULE, musicLevelIssues, musicLevelSummary, musicLoopCopies, musicWindows, parseEbur128Momentary } from "../lib/music-levels"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
@@ -147,18 +149,27 @@ async function main() {
     transcript.push(segment.transcript, "")
   })
   filters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000[narration]`)
-  if (music) {
-    const musicInput = manifest.segments.length + 1
-    const fadeOut = Math.max(0, captureDuration - 2)
-    inputs.push("-stream_loop", "-1", "-i", music)
-    filters.push(`[${musicInput}:a]atrim=duration=${captureDuration.toFixed(3)},volume=0.075,afade=t=in:st=0:d=1.5,afade=t=out:st=${fadeOut.toFixed(3)}:d=2,aresample=48000[music]`)
-    inputs.push("-i", effects)
-    filters.push(`[${musicInput + 1}:a]aresample=48000[effects]`)
-    filters.push("[narration][music][effects]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000,apad[final]")
-  } else {
-    filters.push("[narration]apad[final]")
+  const musicInput = manifest.segments.length + 1
+  const fadeOut = Math.max(0, captureDuration - 2)
+  const copies = musicLoopCopies(captureDuration)
+  // Loop only the steady part of the track, crossfaded at each seam, never its own fade-out.
+  inputs.push("-i", music)
+  filters.push(`[${musicInput}:a]atrim=start=${MUSIC_LOOP.startS}:end=${MUSIC_LOOP.endS},asetpts=PTS-STARTPTS,aresample=48000${copies > 1 ? `,asplit=${copies}${Array.from({ length: copies }, (_, index) => `[loop${index}]`).join("")}` : "[loop0]"}`)
+  let bed = "loop0"
+  for (let index = 1; index < copies; index++) {
+    filters.push(`[${bed}][loop${index}]acrossfade=d=${MUSIC_LOOP.crossfadeS}:c1=tri:c2=tri[bed${index}]`)
+    bed = `bed${index}`
   }
+  // A compressed bed at a steady level: the narration is already normalized, so a steady
+  // music keeps the same distance under it. Ducking was measured to widen that distance
+  // (deeper under loud sentences, shallower under quiet ones), so there is none.
+  filters.push(`[${bed}]acompressor=${MUSIC_MIX.compressor},atrim=duration=${captureDuration.toFixed(3)},volume=${MUSIC_MIX.volume},afade=t=in:st=0:d=1.5,afade=t=out:st=${fadeOut.toFixed(3)}:d=2,asplit=2[music][musicStem]`)
+  filters.push("[narration]asplit=2[narrationMix][narrationStem]")
+  inputs.push("-i", effects)
+  filters.push(`[${musicInput + 1}:a]aresample=48000[effects]`)
+  filters.push("[narrationMix][music][effects]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000,apad[final]")
 
+  const stems = await mkdtemp(path.join(os.tmpdir(), "benevol-music-stems-"))
   await exec("ffmpeg", [
     "-y",
     ...inputs,
@@ -174,11 +185,23 @@ async function main() {
     "-movflags", "+faststart",
     "-shortest",
     output,
+    "-map", "[narrationStem]", "-c:a", "pcm_s16le", path.join(stems, "voice.wav"),
+    "-map", "[musicStem]", "-c:a", "pcm_s16le", path.join(stems, "music.wav"),
   ], { maxBuffer: 10 * 1024 * 1024 })
+  const momentary = async (file: string) => {
+    const { stderr } = await exec("ffmpeg", ["-hide_banner", "-nostats", "-loglevel", "verbose", "-i", file, "-af", "ebur128=framelog=verbose", "-f", "null", "-"], { maxBuffer: 64 * 1024 * 1024 })
+    return parseEbur128Momentary(stderr).map(frame => frame.m)
+  }
+  const windows = musicWindows(await momentary(path.join(stems, "voice.wav")), await momentary(path.join(stems, "music.wav")), await momentary(output), { durationS: captureDuration, fadeInS: 1.5, fadeOutS: 2 })
+  await rm(stems, { recursive: true, force: true })
+  const levelIssues = musicLevelIssues(windows)
+  const videoSha256 = createHash("sha256").update(await readFile(output)).digest("hex")
+  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: MUSIC_MIX, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
 
   await writeFile(path.join(dir, `${manifest.slug}.vtt`), `${vtt.join("\n")}\n`)
   await writeFile(path.join(dir, `${manifest.slug}.txt`), `${transcript.join("\n").trim()}\n`)
-  await writeFile(path.join(dir, "audio-mix.json"), JSON.stringify({ effectsPreset: "soft-input-v2", music: path.basename(music), clicks: timeline.inputEvents!.filter(event => event.kind === "click").length, keys: timeline.inputEvents!.filter(event => event.kind === "key").length, effectsSha256: createHash("sha256").update(await readFile(effects)).digest("hex"), timelineSha256: createHash("sha256").update(await readFile(path.join(dir, "timeline.json"))).digest("hex"), videoSha256: createHash("sha256").update(await readFile(output)).digest("hex") }, null, 2))
+  await writeFile(path.join(dir, "audio-mix.json"), JSON.stringify({ effectsPreset: "soft-input-v2", music: path.basename(music), clicks: timeline.inputEvents!.filter(event => event.kind === "click").length, keys: timeline.inputEvents!.filter(event => event.kind === "key").length, effectsSha256: createHash("sha256").update(await readFile(effects)).digest("hex"), timelineSha256: createHash("sha256").update(await readFile(path.join(dir, "timeline.json"))).digest("hex"), videoSha256 }, null, 2))
+  if (levelIssues.length) throw new Error(`Music level outside the rule (low but audible, never over the narration):\n- ${levelIssues.join("\n- ")}`)
   console.log(`Video ready: ${output}`)
 }
 
