@@ -63,6 +63,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
 ### Corrigé
+- Dans l'assistant de création d'événement, la page Créneaux n'affiche plus « Aucun créneau pour l'instant : la publication attendra » une fois le premier créneau ajouté.
 - La liste des spectacles du formulaire d'événement affiche leur date au format jour.mois.année au lieu de l'année en premier.
 - Le formulaire « Nouvelle organisation » de l'administration de la plateforme annonçait un mot de passe temporaire affiché une seule fois ; il indique maintenant que le premier administrateur reçoit un lien d'invitation pour choisir son mot de passe.
 - Le rejeu du journal d'un événement écrit « Historique d'inscription » ou « Historique d'événement » au lieu de « Historique de inscription ».

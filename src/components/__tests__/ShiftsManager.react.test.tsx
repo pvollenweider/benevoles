@@ -11,6 +11,9 @@ import type { RawShift } from "../admin/shifts/types"
 // The timeline is a heavy drag-and-drop component that the view toggle does not depend on.
 vi.mock("../admin/AdminDayTimeline", () => ({ default: () => null }))
 
+const refresh = vi.fn()
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh, push: vi.fn() }) }))
+
 // « Frise / Liste » view toggle (#554): two toggle buttons in a named group.
 
 const shift: RawShift = {
@@ -344,5 +347,39 @@ describe("ShiftsManager timeline hint", () => {
     expect(hint).toHaveTextContent("Au clavier, utilisez « + Ajouter un créneau » ou ouvrez un créneau pour le modifier.")
     expect(hint).toHaveClass("text-xs", "text-gray-600")
     expect(hint.textContent).not.toContain("·")
+  })
+})
+
+// The wizard header's « Aucun créneau pour l'instant » comes from the server: refreshed when the
+// first shift is added, not on every change.
+describe("ShiftsManager refreshes the page header when shifts appear", () => {
+  const addButton = () => screen.getByRole("button", { name: "+ Ajouter un créneau" })
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+    Element.prototype.scrollIntoView = vi.fn()
+  })
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); refresh.mockClear() })
+
+  it("refreshes once when the first shift is added", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ...shift, date: "2026-07-04T00:00:00.000Z" }) })
+    render(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={[]} />)
+    expect(refresh).not.toHaveBeenCalled()
+    fireEvent.click(addButton())
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Bar" } })
+    fireEvent.change(screen.getByLabelText("Début *"), { target: { value: "10:00" } })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(refresh).toHaveBeenCalledTimes(1))
+  })
+
+  it("does not refresh when shifts already existed", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ...shift, id: "s2", date: "2026-07-04T00:00:00.000Z" }) })
+    renderManager()
+    fireEvent.click(addButton())
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Bar" } })
+    fireEvent.change(screen.getByLabelText("Début *"), { target: { value: "10:00" } })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(addButton()).toHaveFocus())
+    expect(refresh).not.toHaveBeenCalled()
   })
 })
