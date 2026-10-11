@@ -16,7 +16,7 @@ aliases: []
 
 Un créneau correspond à un poste de bénévolat sur une plage horaire précise.
 
-![Frise des créneaux d'un événement, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
+![Page des créneaux d'un événement : choix Frise ou Liste, boutons « Créer une série », « Répéter chaque semaine » et « + Ajouter un créneau », puis la frise, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
 
 ## Ajouter un créneau
 
