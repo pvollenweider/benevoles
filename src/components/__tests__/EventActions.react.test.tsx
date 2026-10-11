@@ -38,8 +38,26 @@ describe("EventActions", () => {
     }
   })
 
-  it("gives the primary links the same 44 px minimum height", () => {
+  it("groups the primary links, each a 44 px box with a 1 px border (transparent on blue, kept in forced colors)", () => {
+    render(<EventActions eventId="evt-1" />)
+    const group = screen.getByRole("group", { name: "Actions principales" })
+    const links = within(group).getAllByRole("link")
+    expect(links).toHaveLength(PRIMARY_ACTIONS.length)
+    for (const [i, link] of links.entries()) {
+      expect(link).toHaveClass("min-h-11", "border")
+      if (PRIMARY_ACTIONS[i].primary) expect(link).toHaveClass("border-transparent")
+    }
+  })
+
+  it("separates the two labels by a space, so they never run together without CSS", () => {
     const { container } = render(<EventActions eventId="evt-1" />)
-    for (const a of PRIMARY_ACTIONS) expect(container.querySelector(`a[href$="/${a.path}"]`)).toHaveClass("min-h-11")
+    const link = container.querySelector('a[href$="/shifts"]') as HTMLElement
+    expect(link.textContent).toBe("Créneaux Gérer les créneaux")
+  })
+
+  it("outlines each phone tool cell in forced colors, where the hairline gaps disappear", () => {
+    render(<EventActions eventId="evt-1" />)
+    for (const li of within(screen.getByRole("navigation", { name: "Outils de l'événement" })).getAllByRole("listitem"))
+      expect(li).toHaveClass("forced-colors:outline", "forced-colors:outline-1", "sm:forced-colors:outline-0")
   })
 })
