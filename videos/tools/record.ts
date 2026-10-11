@@ -1272,7 +1272,9 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Une permanence décrite une fois pour toute la saison", duration: 2_300 })
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
         await rules.scrollIntoViewIfNeeded()
-        await at(0.72)
+        // The opening sentence follows the season explanation. The final-MP4
+        // review found the former 72% cue opened the form during that explanation.
+        await at(0.865)
         const open = page.getByRole("button", { name: "Répéter chaque semaine", exact: true })
         await open.scrollIntoViewIfNeeded()
         await tap(page, open)
@@ -1321,6 +1323,9 @@ async function main() {
         await at(0.62)
       })
       await scene("change", async (at) => {
+        // Keep the list visible through « Finalement, la caisse a besoin de trois
+        // personnes », then open on « Modifier à partir d'une date ».
+        await at(0.27)
         await tap(page, rules.getByRole("button", { name: /^Modifier à partir d'une date\W+Caisse et accueil$/ }))
         const panel = rules.getByRole("group", { name: "Modifier Caisse et accueil à partir d'une date" })
         await panel.waitFor()

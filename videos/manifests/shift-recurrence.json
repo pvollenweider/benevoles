@@ -12,7 +12,7 @@
       "Créez les créneaux : la permanence apparaît sous « Permanences récurrentes ».",
       "« Modifier à partir d’une date » change le nombre de personnes, ou l’horaire d’une permanence d’un seul créneau par jour, sur les dates suivantes.",
       "« Arrêter à partir d’une date » supprime les dates sans inscrit ; les dates avec inscrits sont listées et annulées seulement si vous confirmez.",
-      "Côté bénévoles, une saison se lit mois par mois sous « Choisir le mois »."
+      "Côté bénévoles, une saison se lit mois par mois ; chaque bouton de mois indique son nombre de dates."
     ],
     "remember": [
       "L’événement porte la période : pour une saison, donnez-lui d’abord ses dates de début et de fin.",
@@ -63,7 +63,7 @@
     },
     {
       "id": "volunteer",
-      "transcript": "Côté bénévoles, une saison de quatre semaines ou plus n’affiche plus les jours passés. À partir de huit dates, le planning se lit mois par mois : sous Choisir le mois, chaque bouton indique son nombre de dates.",
+      "transcript": "Côté bénévoles, une saison de quatre semaines ou plus n’affiche plus les jours passés. À partir de huit dates, le planning se lit mois par mois : chaque bouton de mois indique son nombre de dates.",
       "fallbackDurationMs": 22000
     },
     {
