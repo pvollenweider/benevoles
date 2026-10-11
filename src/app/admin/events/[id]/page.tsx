@@ -15,6 +15,7 @@ import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import EventShareLink from "@/components/admin/EventShareLink"
+import EventActions from "@/components/admin/EventActions"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { isEventDay } from "@/lib/day-of"
@@ -208,51 +209,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <StatCard label="Restants" value={totalLeft} highlight={totalLeft === 0 || (totalCapacity > 0 && totalLeft / totalCapacity <= 0.15)} />
       </div>
 
-      {/* Primary actions */}
-      <div className="flex gap-3 flex-wrap">
-        <Link
-          href={`/admin/events/${event.id}/shifts`}
-          className="bg-blue-600 text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-blue-700 transition-colors flex-1 text-center"
-        >
-          Gérer les créneaux
-        </Link>
-        <Link
-          href={`/admin/events/${event.id}/registrations`}
-          className="bg-blue-600 text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-blue-700 transition-colors flex-1 text-center"
-        >
-          Voir les inscriptions
-        </Link>
-        <Link
-          href={`/admin/events/${event.id}/invitations`}
-          className="border border-gray-300 text-gray-700 rounded-full px-5 py-2.5 text-sm font-medium hover:bg-gray-50 transition-colors flex-1 text-center"
-        >
-          Inviter des membres
-        </Link>
-      </div>
-      {/* Utility actions */}
-      <div className="flex gap-4 flex-wrap">
-        <Link href={`/admin/events/${event.id}/qr`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          QR code
-        </Link>
-        <Link href={`/admin/events/${event.id}/print`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Rapports
-        </Link>
-        <Link href={`/admin/events/${event.id}/log`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Journal
-        </Link>
-        <Link href={`/admin/events/${event.id}/pages`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Pages
-        </Link>
-        <Link href={`/admin/events/${event.id}/questions`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Questions
-        </Link>
-        <Link href={`/admin/events/${event.id}/sector-leaders`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Responsables de secteur
-        </Link>
-        <Link href={`/admin/events/${event.id}/duplicate`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Dupliquer
-        </Link>
-      </div>
+      <EventActions eventId={event.id} />
 
       <div className="border-t border-gray-200 pt-4">
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Jalons</h2>
