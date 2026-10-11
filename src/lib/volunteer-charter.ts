@@ -43,3 +43,8 @@ export const DEFAULT_VOLUNTEER_CHARTER = buildVolunteerCharter()
 export function resolveCharterText(organizationCharter: string | null | undefined): string {
   return organizationCharter ?? DEFAULT_VOLUNTEER_CHARTER
 }
+
+/** Read-only settings summary: a null charter is not missing, volunteers see the default text. */
+export function charterStatusLabel(organizationCharter: string | null | undefined): "personnalisée" | "par défaut" {
+  return organizationCharter == null ? "par défaut" : "personnalisée"
+}

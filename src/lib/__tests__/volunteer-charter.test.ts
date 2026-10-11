@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { buildVolunteerCharter, DEFAULT_VOLUNTEER_CHARTER, resolveCharterText } from "@/lib/volunteer-charter"
+import { buildVolunteerCharter, charterStatusLabel, DEFAULT_VOLUNTEER_CHARTER, resolveCharterText } from "@/lib/volunteer-charter"
 
 // The product lets a volunteer withdraw at any time and notifies organizers (#559), so the
 // charter's "48 hours' notice" clause no longer matches the product (#569, owner decision
@@ -29,5 +29,18 @@ describe("resolveCharterText", () => {
 
   it("is the organization's own text otherwise", () => {
     expect(resolveCharterText("Notre convention à nous")).toBe("Notre convention à nous")
+  })
+})
+
+// An organization without its own text still shows the default charter to volunteers, so the
+// read-only settings summary must not say « aucune ».
+describe("charterStatusLabel", () => {
+  it("reports the default charter when none was customized", () => {
+    expect(charterStatusLabel(null)).toBe("par défaut")
+    expect(charterStatusLabel(undefined)).toBe("par défaut")
+  })
+
+  it("reports a custom charter", () => {
+    expect(charterStatusLabel("Notre charte")).toBe("personnalisée")
   })
 })

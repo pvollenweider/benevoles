@@ -11,6 +11,7 @@ import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
 import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
+import { charterStatusLabel } from "@/lib/volunteer-charter"
 import { hasLevel } from "@/lib/permissions"
 import HelpLink from "@/components/admin/HelpLink"
 import { siteDomain } from "@/lib/site"
@@ -89,7 +90,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Titre public</dt><dd className="text-gray-900">{org.publicTitle || "aucun"}</dd>
             <dt className="text-gray-600">Adresse</dt><dd className="text-gray-900 break-all">{org.slug}.{baseDomain}</dd>
             <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
-            <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{org.volunteerCharter ? "définie" : "aucune"}</dd>
+            <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
           </dl>
         </section>
       )}
