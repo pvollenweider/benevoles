@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:15.445Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "afdf74e7f76550fd4e89b037048cbdf782c04dc158756b4adbef1911e28504f7",
+  "clipSha256": "353adfeb3f4cce5072939746c3ac92db99d977853940d31b8f4ab4e45ec7abf8",
+  "scene": "search",
+  "review": {
+    "heardOpening": "La loupe cherche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La loupe cherche dans toute l’organisation",
+        "visibleSeconds": 0.5,
+        "visible": "Champ de recherche global avec icône loupe en haut à droite dans lequel un terme est saisi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "saisissez un nom ou un poste",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la page de recherche avec les résultats pour le créneau buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur Buvette Midi - village ouvrant la page des inscriptions associée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "précisez votre recherche avec un second mot",
+        "visibleSeconds": 14,
+        "visible": "Ajout du terme vil à la suite de buvette dans la barre de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off naturelle, claire et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

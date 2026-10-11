@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:46:27.971Z",
+  "revalidatedAt": "2026-10-11T16:46:27.972Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "search",
+      "audioSha256": "d65ef2f21816b34361c34d95efe6bf069e19d1cb067b57be244b1e222f750a52",
+      "recognized": "La loupe cherche dans toute l'organisation. Utilisez Contrôle K ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+      "expected": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

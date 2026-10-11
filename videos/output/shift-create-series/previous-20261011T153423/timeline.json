@@ -1,0 +1,117 @@
+{
+  "slug": "shift-create-series",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T19:01:01.969Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_CREATE_SERIES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7824
+    },
+    {
+      "kind": "click",
+      "atMs": 15657
+    },
+    {
+      "kind": "click",
+      "atMs": 18739
+    },
+    {
+      "kind": "click",
+      "atMs": 19888
+    },
+    {
+      "kind": "click",
+      "atMs": 26856
+    },
+    {
+      "kind": "click",
+      "atMs": 30389
+    },
+    {
+      "kind": "click",
+      "atMs": 34939
+    },
+    {
+      "kind": "click",
+      "atMs": 57337
+    },
+    {
+      "kind": "click",
+      "atMs": 70138
+    },
+    {
+      "kind": "click",
+      "atMs": 71505
+    },
+    {
+      "kind": "click",
+      "atMs": 77453
+    },
+    {
+      "kind": "click",
+      "atMs": 80754
+    },
+    {
+      "kind": "click",
+      "atMs": 91015
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1143,
+      "endMs": 14039
+    },
+    {
+      "id": "range",
+      "startMs": 14492,
+      "endMs": 25939
+    },
+    {
+      "id": "duration",
+      "startMs": 26391,
+      "endMs": 43172
+    },
+    {
+      "id": "preview",
+      "startMs": 43622,
+      "endMs": 56154
+    },
+    {
+      "id": "create",
+      "startMs": 56608,
+      "endMs": 69212
+    },
+    {
+      "id": "adjust",
+      "startMs": 69662,
+      "endMs": 88939
+    },
+    {
+      "id": "result",
+      "startMs": 89391,
+      "endMs": 104740
+    }
+  ]
+}

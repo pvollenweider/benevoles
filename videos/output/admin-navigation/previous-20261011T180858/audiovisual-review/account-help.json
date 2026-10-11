@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:47:06.653Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "3bddf3650260ad298b36f596ffa743b9cbfaa2fe37dc6fdd0b662ee708f57bff",
+  "clipSha256": "542345c4d992ae47bfbba2b826cfd7d4a237f3839cd63149799efbdf1e77b6e2",
+  "scene": "account-help",
+  "review": {
+    "heardOpening": "Le menu de votre compte propose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le menu de votre compte propose Mon compte et Se déconnecter.",
+        "visibleSeconds": 0.5,
+        "visible": "Le menu du profil utilisateur est ouvert et affiche les options Mon compte et Se déconnecter.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet.",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la page Guide administrateur du centre d'aide.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la vue Créneaux avec le lien Aide : Configurer les créneaux situé sous le titre.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

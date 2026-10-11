@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:22.490Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "2f8f0dbaa22f0256ec3e27f5c31e859c38660689b02bb4bc15b776f2172c69a8",
+  "clipSha256": "826feab4e0bc70ad9d55e93a5d3cb70d8183e0d6264f8e67c436f78d882441ef",
+  "scene": "mobile-keyboard",
+  "review": {
+    "heardOpening": "Sur téléphone, ouvrez le menu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrez le menu pour retrouver les principales destinations",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture du menu déroulant affichant les rubriques de navigation sur l'écran mobile",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "la première tabulation révèle Aller au contenu",
+        "visibleSeconds": 6.5,
+        "visible": "Basculement vers la vue ordinateur, mais aucun lien d'évitement « Aller au contenu » n'apparaît à l'écran",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Vous arrivez directement dans le contenu de la page",
+        "visibleSeconds": 7,
+        "visible": "Affichage direct de la page Événements en affichage bureau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, l'appui sur tabulation et l'apparition du lien d'évitement « Aller au contenu » ne sont pas montrés."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

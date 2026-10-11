@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:37:37.429Z",
+  "videoSha256": "f57d85c02e0ff8d7447ffcdbdd32a0b4956d85acf60a1d0bc47d4a15c775377c",
+  "promptSha256": "3601e080f80e425456115dc99d206b0975cf09f13ec5e27cd19c7ce08a64c35d",
+  "clipSha256": "4357cd45fce2d57d2b33dda807a611a5938d7a4c524463985a010e42456fe395",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est bien enregistré",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est bien enregistré",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la vue Frise montrant la série de créneaux ajoutée sur la ligne Buvette série",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "quatre places pour la première relève, et toujours trois pour les suivantes",
+        "visibleSeconds": 2.2,
+        "visible": "Bascule vers l'onglet Liste où apparaît le créneau Buvette série 10:00-12:00 à 4 places libres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture",
+        "visibleSeconds": 6,
+        "visible": "Vue tabulaire Liste affichant les différents horaires et statuts des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Une série bien découpée facilite le choix des bénévoles",
+        "visibleSeconds": 10.5,
+        "visible": "Défilement de la liste montrant les créneaux successifs de Buvette série calibrés à 3 places",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

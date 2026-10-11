@@ -1,0 +1,16 @@
+STATUS: NOT READY
+ID: ADMIN_NAVIGATION
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 125.840000 seconds
+MUSIC: {'voicedWindows': 105, 'musicOnlyWindows': 1, 'smallestGapLu': 14.5, 'largestGapLu': 18, 'quietestMusicOnlyLufs': -32.4, 'loudestMusicOnlyLufs': -32.4, 'medianVoiceLufs': -16.4}
+PROBLEMS: Membres shown during Paramètres narration (frame 24.9 s); Params click +12.70 vs phrase +10.24. Desktop Tab narration +4.42 begins while mobile still visible at global 98.2 s; Tab only +8.44. Independent audiovisual flags corroborate.
+SOURCE CHANGES: record.ts: organization navigation and desktop transition sentence anchors corrected; audit-audiovisual.ts: allow precisely validated original four navigation members created by prepare-navigation; no refilm.
+SOURCE AUDIO: existing cached WAVs reused, generation accepted and independent source audit revalidated; no TTS regeneration.
+FINAL AUDIO: independent final-MP4 ASR for every chapter; flagged chapters: []. VTT matches narration with intended date/hour typography, meaning preserved.
+EFFECTS: 14 clicks and 31 keys; counts match every interaction marker.
+VALIDATE: []; 8 sentence anchors remeasured.
+VISUAL REVIEW: final MP4 chapter sheets inspected for current labels, French dates, benevol.app addresses, Frise, no localhost/old admin/development overlay. Sentence/action sync checked per chapter against review/objective-evidence.json, actual MP4 frames and independent audiovisual checkpoints.
+REVIEW NOTES: All seven final chapter sheets, exact frames, sentence timings, input markers and AV checkpoints reviewed. Skip link does appear later and keyboard focus enters main correctly. No product layout bug identified; member action columns use horizontal table scrolling. Old audiovisual-error.txt records first guard failure only; all seven audiovisual reviews subsequently completed.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; narration-audit.json; validation.json; audio-levels.json; audio-mix.json; review/renders-generated.json.
+LIMIT: no real-time subjective listening available; this is not a failure criterion. No subjective voice certification claimed.

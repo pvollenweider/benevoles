@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:02.382Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "4be504c1c4e22980ddecf952a559f5b8ed578f402670432527d45c89cfcb8f89",
+  "clipSha256": "fe67a93484840fe750f4ca62e825e845e02213a8869188af6a7517ee9a308d47",
+  "scene": "event-navigation",
+  "review": {
+    "heardOpening": "Ouvrez un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez un événement.",
+        "visibleSeconds": 0.9,
+        "visible": "Clic sur « Fête du village de Montvert » et ouverture de la page de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage des boutons « Gérer les créneaux », « Voir les inscriptions » et « Inviter des membres ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+        "visibleSeconds": 7.3,
+        "visible": "Liens sous les boutons : « QR code », « Rapports », « Journal », « Pages », « Questions ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+        "visibleSeconds": 14.2,
+        "visible": "Défilement vers le bas dévoilant les sections « Jalons », « Communications » et le début des besoins.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.7,
+        "spoken": "Le lien Événements vous ramène à la liste de l’association.",
+        "visibleSeconds": 20.3,
+        "visible": "Clic sur « Événements » dans le fil d'Ariane et affichage de la liste des événements.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien calée sur la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

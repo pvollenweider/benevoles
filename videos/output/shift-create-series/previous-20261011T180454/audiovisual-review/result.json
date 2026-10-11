@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:42:22.099Z",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "promptSha256": "3601e080f80e425456115dc99d206b0975cf09f13ec5e27cd19c7ce08a64c35d",
+  "clipSha256": "364b98e7339954ddfd4a9cf5ed9cfce61554751d050d763d8b27b86e65584821",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est bien enregistré",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Le résultat est bien enregistré",
+        "visibleSeconds": 2,
+        "visible": "Basculement automatique de la vue Frise vers l'onglet Liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "quatre places pour la première relève, et toujours trois pour les suivantes",
+        "visibleSeconds": 10.5,
+        "visible": "Défilement vers le bas révélant les créneaux « Buvette série » (4 places de 10h à 12h, puis 3 places sur les tranches suivantes)",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture",
+        "visibleSeconds": 6.5,
+        "visible": "Vue du tableau des créneaux avant le défilement vers les créneaux créés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir",
+        "visibleSeconds": 11,
+        "visible": "Vue d'ensemble des créneaux successifs de deux heures pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02 - 00:05, la voix commente le nombre de places de la série (4 pour la première relève, 3 pour les suivantes), mais ces lignes ne deviennent visibles qu'à 00:10 lors du défilement vers le bas du tableau."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

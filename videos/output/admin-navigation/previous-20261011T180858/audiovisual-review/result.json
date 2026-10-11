@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:47:15.761Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "2c2ad2b74af0d2d9f205db40762eee8f279e184e697e38e38ac9c73cb9294d2f",
+  "clipSha256": "328df1016dbbe50003335bc1e122b608971e64ac3731d707b2e7d5b0dc22c818",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Vous avez les bons repères : Tableau de bord pour les priorités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "Tableau de bord pour les priorités",
+        "visibleSeconds": 1.7,
+        "visible": "L'onglet « Tableau de bord » est bien présent dans la barre de navigation en haut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Membres et Paramètres au niveau de l’association",
+        "visibleSeconds": 3.4,
+        "visible": "Les onglets « Membres » et « Paramètres » sont visibles dans le menu supérieur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "puis la page de chaque événement pour son planning et son suivi",
+        "visibleSeconds": 6.1,
+        "visible": "La liste des événements est affichée avec les options de gestion pour chacun",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "la recherche et l’aide vous évitent de repartir de zéro",
+        "visibleSeconds": 10.5,
+        "visible": "Le lien « Aide » avec l'icône de loupe/recherche est visible en haut à droite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec la vue récapitulative des repères de l'application."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:41:35.033Z",
+  "revalidatedAt": "2026-10-11T15:41:35.034Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "organization-navigation",
+      "audioSha256": "1bf31837e7877617d1e64bc0f887e8d85622672f5480052f3ef4d0a33e72d10a",
+      "recognized": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre la liste de vos événements et membres les personnes connues de l'association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire. Votre rôle détermine les actions disponibles.",
+      "expected": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

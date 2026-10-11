@@ -1,34 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:21:25.891Z",
-  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
-  "promptSha256": "29d2e9d2504bf6b66d3740f643af3f849ae54eb8951c73244e9329edb1feb3d1",
-  "clipSha256": "71bc0f3846854706afe20b2c7801a9bb99e553d6baefecdb57e702d00b5428ba",
+  "reviewedAt": "2026-10-11T18:13:42.808Z",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "promptSha256": "cdef186b328872a23a05ca6305ff4a3a752dc2fed5a4b25c74b1b5b73db76b5d",
+  "clipSha256": "c9fd0f171fae0d78a4c2504d070f113eea8c45f9e8e18c66dc33d2485dfa729e",
   "scene": "welcome",
   "review": {
     "heardOpening": "Bienvenue dans l'administration",
     "checkpoints": [
       {
-        "spokenSeconds": 0.2,
-        "spoken": "Bienvenue dans l’administration",
-        "visibleSeconds": 0,
-        "visible": "Titre 'Se repérer dans l'administration' affiché au centre",
+        "spokenSeconds": 0.5,
+        "spoken": "Bienvenue dans l’administration.",
+        "visibleSeconds": 0.5,
+        "visible": "Titre superposé 'Se repérer dans l'administration' sur l'écran des Événements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "retrouver les principaux points d’entrée",
-        "visibleSeconds": 2.7,
-        "visible": "Disparition de l'encart et affichage de la page Événements",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 4.6,
-        "spoken": "distinguer les réglages de l’association du suivi d’un événement",
-        "visibleSeconds": 4.6,
-        "visible": "Menu principal affichant Événements et Paramètres",
+        "spokenSeconds": 2.5,
+        "spoken": "Vous allez retrouver les principaux points d’entrée",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Événements avec le menu principal (Tableau de bord, Événements, Membres, Paramètres)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +29,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide et ton posé."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage de l'introduction."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

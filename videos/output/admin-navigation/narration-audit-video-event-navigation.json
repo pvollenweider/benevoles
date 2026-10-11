@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:13:21.174Z",
+  "revalidatedAt": "2026-10-11T18:13:21.174Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "event-navigation",
+      "audioSha256": "f41abe9500cfe948a2bb0c12aa8a15325290ef3e45cda4d96be3edcc41f3b77b",
+      "recognized": "Ouvrez un événement. Sa page propose gérer les créneaux, voir les inscriptions et inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien événement vous ramène à la liste de l'association.",
+      "expected": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.",
+      "wordErrorRate": 0.016666666666666666,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

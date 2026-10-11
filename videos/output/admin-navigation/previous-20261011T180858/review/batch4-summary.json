@@ -1,0 +1,17 @@
+{
+  "id": "ADMIN_NAVIGATION",
+  "status": "NOT READY",
+  "duration": 125.8,
+  "buildId": "vU8UL5zPG_yurF8zdluCe",
+  "music": {
+    "voicedWindows": 105,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": -32.4,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Membres switches at scene 5.065 s during Événements clause; both anchors resolve to same sentence (3.789 s). Native logo file-input texts Choose File / No file chosen in English. Other six chapters pass.",
+  "sourceChanges": "admin-navigation manifest: comma becomes semicolon to split sentence anchors without changing spoken words; editorial script notes it. record.ts enables existing scoped French macOS launcher for this slug; launcher comment updated. Next generation fingerprint must be revalidated by tooling; no refilm."
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:43:11.405Z",
+  "videoSha256": "97f43438a30ccf104cfe8b241558b441b54220cf74fa6e870aff82a02ff9f077",
+  "promptSha256": "3bddf3650260ad298b36f596ffa743b9cbfaa2fe37dc6fdd0b662ee708f57bff",
+  "clipSha256": "afe5d74c57d297221819e8d18a157b3c68b3ce240851c193fd6125212d9e6f85",
+  "scene": "account-help",
+  "review": {
+    "heardOpening": "Le menu de votre compte propose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le menu de votre compte propose Mon compte et Se déconnecter",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du menu déroulant affichant les options Mon compte et Se déconnecter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "ouvre le guide dans un nouvel onglet",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la page Guide administrateur sur benevol.app",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Les liens Aide placés sous les titres de certaines pages",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la page Créneaux avec le lien « Aide : Configurer les créneaux » sous le titre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

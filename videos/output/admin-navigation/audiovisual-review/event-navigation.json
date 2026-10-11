@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:21:48.871Z",
-  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
-  "promptSha256": "d750a3c3f00175451494aaca94ca424ddc9593f6ea2de0ab59cd4caa55a38803",
-  "clipSha256": "544f7ac73431ce979898b6fe3fecc339ba0ca578aaa89764f49bfc337ee6997a",
+  "reviewedAt": "2026-10-11T18:13:47.224Z",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "promptSha256": "4be504c1c4e22980ddecf952a559f5b8ed578f402670432527d45c89cfcb8f89",
+  "clipSha256": "3c6736dde0c3304ef6e8f1c3eacc89a7da02b46bf99e37d42902609847261be7",
   "scene": "event-navigation",
   "review": {
     "heardOpening": "Ouvrez un événement",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Ouvrez un événement",
-        "visibleSeconds": 0.5,
-        "visible": "Clic sur un événement et ouverture de sa page détaillée",
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrez un événement.",
+        "visibleSeconds": 1,
+        "visible": "Clic sur « Fête du village de Montvert » et ouverture de la page détaillée de l'événement.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres",
+        "spokenSeconds": 2.5,
+        "spoken": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
         "visibleSeconds": 2.5,
-        "visible": "Boutons d'action Gérer les créneaux, Voir les inscriptions et Inviter des membres affichés",
+        "visible": "Affichage bien visible des boutons « Gérer les créneaux », « Voir les inscriptions » et « Inviter des membres ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal",
-        "visibleSeconds": 7.5,
-        "visible": "Liens QR code, Rapports, Journal, Pages et Questions visibles sous les boutons",
+        "spokenSeconds": 7.2,
+        "spoken": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+        "visibleSeconds": 7.2,
+        "visible": "Liens « QR code », « Rapports », « Journal », « Pages » et « Questions » affichés sous les boutons d'action.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.2,
-        "spoken": "Plus bas, les sections présentent les jalons, les communications",
-        "visibleSeconds": 15,
-        "visible": "Défilement vers le bas affichant Jalons, Communications et besoins",
+        "spokenSeconds": 14,
+        "spoken": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+        "visibleSeconds": 15.5,
+        "visible": "Défilement de la page découvrant les sections « Jalons », « Communications » et « Où manque-t-il du monde ? ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.8,
-        "spoken": "Le lien Événements vous ramène à la liste de l’association",
-        "visibleSeconds": 20,
-        "visible": "Retour à la vue liste des événements de l'association",
+        "spokenSeconds": 19.3,
+        "spoken": "Le lien Événements vous ramène à la liste de l’association.",
+        "visibleSeconds": 20.8,
+        "visible": "Clic sur le lien de retour « Événements » et réaffichage de la liste des événements.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+      "observation": "Voix féminine naturelle, calme et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

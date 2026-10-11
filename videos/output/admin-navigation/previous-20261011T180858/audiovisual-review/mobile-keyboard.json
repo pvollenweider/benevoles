@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:47:07.990Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "2f8f0dbaa22f0256ec3e27f5c31e859c38660689b02bb4bc15b776f2172c69a8",
+  "clipSha256": "58d872c2b80e6f42543368194ce8e4bdf5607005780339fa678150b5b27aced7",
+  "scene": "mobile-keyboard",
+  "review": {
+    "heardOpening": "Sur téléphone, ouvrez le menu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrez le menu pour retrouver les principales destinations.",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le bouton Menu qui déplie les destinations de navigation en vue mobile.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur ordinateur, la première tabulation révèle Aller au contenu",
+        "visibleSeconds": 5.4,
+        "visible": "Affichage bureau et apparition du lien d'évitement « Aller au contenu » en haut à gauche.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "Vous arrivez directement dans le contenu de la page.",
+        "visibleSeconds": 11,
+        "visible": "Vue d'ensemble sur la liste des événements dans le contenu principal.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

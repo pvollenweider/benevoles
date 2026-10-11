@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:47:05.943Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "afdf74e7f76550fd4e89b037048cbdf782c04dc158756b4adbef1911e28504f7",
+  "clipSha256": "0bcfb0f6c660313e43efff053e3c7e19e1f9b6b218f36df67ec84dbe79e9ab5f",
+  "scene": "search",
+  "review": {
+    "heardOpening": "La loupe cherche dans toute l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "puis saisissez un nom ou un poste",
+        "visibleSeconds": 1,
+        "visible": "Saisie du terme « buvette » dans le champ de recherche de l'en-tête, menant à la page de résultats",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur le résultat « Buvette Midi - village » et affichage de la liste des inscriptions correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "précisez votre recherche avec un second mot",
+        "visibleSeconds": 14,
+        "visible": "Retour à la recherche et ajout du terme « vil » pour affiner",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

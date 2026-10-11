@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:42:01.057Z",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "promptSha256": "df75b9e8e36b4d468e926911f6948c72f8d5fbc75c45f8cda6451eb700fb4b67",
+  "clipSha256": "bc585b48984b6a08c3628f72e6fde3a1c2ce169fcb98d674c4d3799ff70e5667",
+  "scene": "duration",
+  "review": {
+    "heardOpening": "La durée découpe la plage",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La durée découpe la plage en équipes de deux heures",
+        "visibleSeconds": 0,
+        "visible": "Le champ 'Durée du créneau' affiche 2 h (120 minutes) pour la plage de 10:00 à 22:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "avec trois places, chaque relève accueille trois bénévoles",
+        "visibleSeconds": 4,
+        "visible": "Le champ 'Personnes par créneau' est modifié et passe à 3",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Ici, choisissons zéro minute",
+        "visibleSeconds": 10,
+        "visible": "Le champ 'Pause entre deux créneaux (min)' est renseigné avec la valeur 0",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

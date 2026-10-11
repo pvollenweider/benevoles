@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:37:08.450Z",
+  "revalidatedAt": "2026-10-11T15:37:08.451Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "f57d85c02e0ff8d7447ffcdbdd32a0b4956d85acf60a1d0bc47d4a15c775377c",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "6086e424819ae72839e653136d7300ea6fdfbc2ee8ebfcc329f1e0b556722f5e",
+      "recognized": "Le résultat est bien enregistré, quatre places pour la première relève et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+      "expected": "Le résultat est bien enregistré : quatre places pour la première relève, et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

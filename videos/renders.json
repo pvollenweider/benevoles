@@ -6,7 +6,7 @@
     "poster": true
   },
   "admin-navigation": {
-    "durationMs": 123760,
+    "durationMs": 128000,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -228,7 +228,7 @@
     "poster": true
   },
   "shift-create-series": {
-    "durationMs": 111520,
+    "durationMs": 115880,
     "width": 1280,
     "height": 800,
     "poster": true

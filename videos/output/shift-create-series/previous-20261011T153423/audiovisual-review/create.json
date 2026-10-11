@@ -1,0 +1,41 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:07:59.680Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "89611ed559ac3353c475139bb2fdb19eacd88ebcee034cf7e8e14c9f8334c73f",
+  "clipSha256": "ed41fe3a9f5039b8c3c4414c481bbfbf3238c10bddf2167a5af5814e0859becf",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Créons la série",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Créons la série",
+        "visibleSeconds": 0,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "Les nouvelles barres apparaissent dans la Frise",
+        "visibleSeconds": 1,
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "et des horaires consécutifs",
+        "visibleSeconds": 1.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage de la frise."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: ADMIN_NAVIGATION
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe
+DURATION: 125.8 seconds
+MUSIC: smallest 14.7 / largest 18 LU
+PROBLEMS: Membres switches at scene 5.065 s during Événements clause; both anchors resolve to same sentence (3.789 s). Native logo file-input texts Choose File / No file chosen in English. Other six chapters pass.
+SOURCE CHANGES: admin-navigation manifest: comma becomes semicolon to split sentence anchors without changing spoken words; editorial script notes it. record.ts enables existing scoped French macOS launcher for this slug; launcher comment updated. Next generation fingerprint must be revalidated by tooling; no refilm.
+VALIDATION: []; sentence anchors checked: 9
+FINAL AUDIO: [('welcome', 0, False), ('organization-navigation', 0.047619047619047616, False), ('event-navigation', 0.016666666666666666, False), ('search', 0, False), ('account-help', 0, False), ('mobile-keyboard', 0, False), ('result', 0, False)]
+CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 14, keys 31.
+REVIEW: final MP4 chapter sheets inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

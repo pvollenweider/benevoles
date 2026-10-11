@@ -1,0 +1,540 @@
+{
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 14,
+  "keys": 31,
+  "product": {
+    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
+    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
+    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
+    "buildId": "vU8UL5zPG_yurF8zdluCe",
+    "snapshot": "/tmp/benevoles-video-production.batch4",
+    "builtAt": "2026-10-11T16:01:24.202Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 0,
+      "endMs": 11583,
+      "sentences": [
+        {
+          "text": "Bienvenue dans l’administration.",
+          "startMs": 232,
+          "endMs": 1653,
+          "method": "silence",
+          "globalStartMs": 232,
+          "globalEndMs": 1653
+        },
+        {
+          "text": "Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+          "startMs": 2364,
+          "endMs": 11037,
+          "method": "silence",
+          "globalStartMs": 2364,
+          "globalEndMs": 11037
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "organization-navigation",
+      "startMs": 13745,
+      "endMs": 31673,
+      "sentences": [
+        {
+          "text": "Le Tableau de bord rassemble les priorités de l’association.",
+          "startMs": 544,
+          "endMs": 3163,
+          "method": "silence",
+          "globalStartMs": 14289,
+          "globalEndMs": 16908
+        },
+        {
+          "text": "Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association.",
+          "startMs": 3789,
+          "endMs": 9259,
+          "method": "silence",
+          "globalStartMs": 17534,
+          "globalEndMs": 23004
+        },
+        {
+          "text": "Paramètres concerne les réglages communs.",
+          "startMs": 10243,
+          "endMs": 11873,
+          "method": "silence",
+          "globalStartMs": 23988,
+          "globalEndMs": 25618
+        },
+        {
+          "text": "Certaines modifications sont réservées au propriétaire :",
+          "startMs": 12212,
+          "endMs": 14892,
+          "method": "silence",
+          "globalStartMs": 25957,
+          "globalEndMs": 28637
+        },
+        {
+          "text": "votre rôle détermine les actions disponibles.",
+          "startMs": 15377,
+          "endMs": 17537,
+          "method": "silence",
+          "globalStartMs": 29122,
+          "globalEndMs": 31282
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "organization-navigation",
+          "phrase": "Le Tableau de bord rassemble",
+          "startMs": 544,
+          "endMs": 3163,
+          "cueMs": 14292
+        },
+        {
+          "segmentId": "organization-navigation",
+          "phrase": "Événements ouvre la liste",
+          "startMs": 3789,
+          "endMs": 9259,
+          "cueMs": 17537
+        },
+        {
+          "segmentId": "organization-navigation",
+          "phrase": "et Membres les personnes connues",
+          "startMs": 3789,
+          "endMs": 9259,
+          "cueMs": 18331
+        },
+        {
+          "segmentId": "organization-navigation",
+          "phrase": "Paramètres concerne les réglages communs.",
+          "startMs": 10243,
+          "endMs": 11873,
+          "cueMs": 23988
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 14778
+        },
+        {
+          "kind": "click",
+          "atMs": 18028
+        },
+        {
+          "kind": "click",
+          "atMs": 18810
+        },
+        {
+          "kind": "click",
+          "atMs": 24460
+        },
+        {
+          "kind": "click",
+          "atMs": 30527
+        }
+      ]
+    },
+    {
+      "scene": "event-navigation",
+      "startMs": 33834,
+      "endMs": 55676,
+      "sentences": [
+        {
+          "text": "Ouvrez un événement.",
+          "startMs": 394,
+          "endMs": 1198,
+          "method": "silence",
+          "globalStartMs": 34228,
+          "globalEndMs": 35032
+        },
+        {
+          "text": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+          "startMs": 2043,
+          "endMs": 6764,
+          "method": "silence",
+          "globalStartMs": 35877,
+          "globalEndMs": 40598
+        },
+        {
+          "text": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+          "startMs": 7496,
+          "endMs": 12640,
+          "method": "silence",
+          "globalStartMs": 41330,
+          "globalEndMs": 46474
+        },
+        {
+          "text": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+          "startMs": 13311,
+          "endMs": 17948,
+          "method": "silence",
+          "globalStartMs": 47145,
+          "globalEndMs": 51782
+        },
+        {
+          "text": "Le lien Événements vous ramène à la liste de l’association.",
+          "startMs": 18927,
+          "endMs": 21362,
+          "method": "silence",
+          "globalStartMs": 52761,
+          "globalEndMs": 55196
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "event-navigation",
+          "phrase": "Le lien Événements vous ramène",
+          "startMs": 18927,
+          "endMs": 21362,
+          "cueMs": 52762
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 34310
+        },
+        {
+          "kind": "click",
+          "atMs": 54842
+        }
+      ]
+    },
+    {
+      "scene": "search",
+      "startMs": 57835,
+      "endMs": 74210,
+      "sentences": [
+        {
+          "text": "La loupe cherche dans toute l’organisation.",
+          "startMs": 479,
+          "endMs": 2854,
+          "method": "silence",
+          "globalStartMs": 58314,
+          "globalEndMs": 60689
+        },
+        {
+          "text": "Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste.",
+          "startMs": 2978,
+          "endMs": 7033,
+          "method": "silence",
+          "globalStartMs": 60813,
+          "globalEndMs": 64868
+        },
+        {
+          "text": "Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante.",
+          "startMs": 7191,
+          "endMs": 11510,
+          "method": "silence",
+          "globalStartMs": 65026,
+          "globalEndMs": 69345
+        },
+        {
+          "text": "Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+          "startMs": 11957,
+          "endMs": 15957,
+          "method": "silence",
+          "globalStartMs": 69792,
+          "globalEndMs": 73792
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "search",
+          "phrase": "Ouvrez un résultat pour accéder",
+          "startMs": 7191,
+          "endMs": 11510,
+          "cueMs": 65029
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "key",
+          "atMs": 57836
+        },
+        {
+          "kind": "key",
+          "atMs": 57837
+        },
+        {
+          "kind": "click",
+          "atMs": 58342
+        },
+        {
+          "kind": "key",
+          "atMs": 58649
+        },
+        {
+          "kind": "key",
+          "atMs": 58746
+        },
+        {
+          "kind": "key",
+          "atMs": 58844
+        },
+        {
+          "kind": "key",
+          "atMs": 58943
+        },
+        {
+          "kind": "key",
+          "atMs": 59045
+        },
+        {
+          "kind": "key",
+          "atMs": 59143
+        },
+        {
+          "kind": "key",
+          "atMs": 59241
+        },
+        {
+          "kind": "key",
+          "atMs": 65035
+        },
+        {
+          "kind": "click",
+          "atMs": 66848
+        },
+        {
+          "kind": "key",
+          "atMs": 71438
+        },
+        {
+          "kind": "click",
+          "atMs": 71964
+        },
+        {
+          "kind": "key",
+          "atMs": 72271
+        },
+        {
+          "kind": "key",
+          "atMs": 72367
+        },
+        {
+          "kind": "key",
+          "atMs": 72466
+        },
+        {
+          "kind": "key",
+          "atMs": 72564
+        },
+        {
+          "kind": "key",
+          "atMs": 72661
+        },
+        {
+          "kind": "key",
+          "atMs": 72759
+        },
+        {
+          "kind": "key",
+          "atMs": 72859
+        },
+        {
+          "kind": "key",
+          "atMs": 72964
+        },
+        {
+          "kind": "key",
+          "atMs": 73063
+        },
+        {
+          "kind": "key",
+          "atMs": 73167
+        },
+        {
+          "kind": "key",
+          "atMs": 73267
+        },
+        {
+          "kind": "key",
+          "atMs": 73368
+        },
+        {
+          "kind": "key",
+          "atMs": 73473
+        },
+        {
+          "kind": "key",
+          "atMs": 73574
+        },
+        {
+          "kind": "key",
+          "atMs": 73675
+        },
+        {
+          "kind": "key",
+          "atMs": 73961
+        }
+      ]
+    },
+    {
+      "scene": "account-help",
+      "startMs": 75829,
+      "endMs": 90422,
+      "sentences": [
+        {
+          "text": "Le menu de votre compte propose Mon compte et Se déconnecter.",
+          "startMs": 429,
+          "endMs": 3371,
+          "method": "silence",
+          "globalStartMs": 76258,
+          "globalEndMs": 79200
+        },
+        {
+          "text": "L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet.",
+          "startMs": 4081,
+          "endMs": 8422,
+          "method": "silence",
+          "globalStartMs": 79910,
+          "globalEndMs": 84251
+        },
+        {
+          "text": "Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+          "startMs": 9072,
+          "endMs": 14199,
+          "method": "silence",
+          "globalStartMs": 84901,
+          "globalEndMs": 90028
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 76301
+        },
+        {
+          "kind": "key",
+          "atMs": 82287
+        },
+        {
+          "kind": "click",
+          "atMs": 82767
+        }
+      ]
+    },
+    {
+      "scene": "mobile-keyboard",
+      "startMs": 92585,
+      "endMs": 106041,
+      "sentences": [
+        {
+          "text": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations.",
+          "startMs": 397,
+          "endMs": 3778,
+          "method": "silence",
+          "globalStartMs": 92982,
+          "globalEndMs": 96363
+        },
+        {
+          "text": "Sur ordinateur, la première tabulation révèle Aller au contenu :",
+          "startMs": 4422,
+          "endMs": 6995,
+          "method": "silence",
+          "globalStartMs": 97007,
+          "globalEndMs": 99580
+        },
+        {
+          "text": "ce lien évite de traverser toute la barre de navigation.",
+          "startMs": 7243,
+          "endMs": 7948,
+          "method": "silence",
+          "globalStartMs": 99828,
+          "globalEndMs": 100533
+        },
+        {
+          "text": "Vous arrivez directement dans le contenu de la page.",
+          "startMs": 8437,
+          "endMs": 13067,
+          "method": "silence",
+          "globalStartMs": 101022,
+          "globalEndMs": 105652
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "mobile-keyboard",
+          "phrase": "Sur ordinateur, la première tabulation",
+          "startMs": 4422,
+          "endMs": 6995,
+          "cueMs": 97008
+        },
+        {
+          "segmentId": "mobile-keyboard",
+          "phrase": "Vous arrivez directement dans le",
+          "startMs": 8437,
+          "endMs": 13067,
+          "cueMs": 101024
+        },
+        {
+          "segmentId": "mobile-keyboard",
+          "phrase": "Vous arrivez directement dans le",
+          "startMs": 8437,
+          "endMs": 13067,
+          "cueMs": 101031
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 94395
+        },
+        {
+          "kind": "click",
+          "atMs": 98207
+        },
+        {
+          "kind": "key",
+          "atMs": 98209
+        },
+        {
+          "kind": "key",
+          "atMs": 101029
+        },
+        {
+          "kind": "key",
+          "atMs": 101032
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 106494,
+      "endMs": 120130,
+      "sentences": [
+        {
+          "text": "Vous avez les bons repères :",
+          "startMs": 390,
+          "endMs": 1385,
+          "method": "silence",
+          "globalStartMs": 106884,
+          "globalEndMs": 107879
+        },
+        {
+          "text": "Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi.",
+          "startMs": 1693,
+          "endMs": 8726,
+          "method": "silence",
+          "globalStartMs": 108187,
+          "globalEndMs": 115220
+        },
+        {
+          "text": "Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
+          "startMs": 9393,
+          "endMs": 13319,
+          "method": "silence",
+          "globalStartMs": 115887,
+          "globalEndMs": 119813
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    }
+  ]
+}

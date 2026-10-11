@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:42:11.387Z",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "promptSha256": "70ecf8c052193a66b3f5c01ae70f1a1f85ad0071bb23e0cad914977d923c9475",
+  "clipSha256": "bb2c922a8b9f82fb67b11ded30df8b92eaf53b034cbc83433ac040979f5f08c1",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Créons la série.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Créons la série.",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton de validation du formulaire et fermeture de la modale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Les nouvelles barres apparaissent dans la Frise",
+        "visibleSeconds": 1.5,
+        "visible": "Les créneaux consécutifs créés apparaissent sur la ligne du poste Montage dans la frise.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Elles restent pourtant indépendantes : chacune possède son propre effectif",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage stable de la frise montrant les différents blocs de créneaux distincts.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,16 @@
+STATUS: NOT READY
+ID: SHIFT_CREATE_SERIES
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 110.240000 seconds
+MUSIC: {'voicedWindows': 101, 'musicOnlyWindows': 0, 'smallestGapLu': 12.8, 'largestGapLu': 18, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.9}
+PROBLEMS: Late create click at 58.916 s vs Créons la série 56.984–57.717 s; late save click at 81.698 s vs Enregistrons 80.004–80.489 s. Frames create-cue.png/save-cue.png confirm forms still waiting.
+SOURCE CHANGES: record.ts: create anchor changed to Créons la série; save anchor to Enregistrons; no refilm.
+SOURCE AUDIO: existing cached WAVs reused, generation accepted and independent source audit revalidated; no TTS regeneration.
+FINAL AUDIO: independent final-MP4 ASR for every chapter; flagged chapters: []. VTT matches narration with intended date/hour typography, meaning preserved.
+EFFECTS: 13 clicks and 0 keys; counts match every interaction marker.
+VALIDATE: []; 9 sentence anchors remeasured.
+VISUAL REVIEW: final MP4 chapter sheets inspected for current labels, French dates, benevol.app addresses, Frise, no localhost/old admin/development overlay. Sentence/action sync checked per chapter against review/objective-evidence.json, actual MP4 frames and independent audiovisual checkpoints.
+REVIEW NOTES: All seven chapter sheets and exact cue frames inspected. Six actual shifts persist, first capacity four, remaining five capacity three. No product layout bug. Independent audiovisual audit missed these timing issues; manual frame/marker comparison prevails.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; narration-audit.json; validation.json; audio-levels.json; audio-mix.json; review/renders-generated.json.
+LIMIT: no real-time subjective listening available; this is not a failure criterion. No subjective voice certification claimed.

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:07:22.537Z",
-  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
-  "promptSha256": "5e3d357d49b2a06b6dcd1bbdeffbdd7aaf8391013dcffb4d24db0134876ceebc",
-  "clipSha256": "ac5ef49af7d3b15f95dc4018a0bb69e491b3d804ec8b3df0fbdea88289c62a06",
+  "reviewedAt": "2026-10-11T18:07:58.932Z",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "promptSha256": "5255fc436dc264aa672206852f82a5f728f2fc5519f8dc4a8a5ec69e2023a02d",
+  "clipSha256": "ca78d775e854d8321b9eee2f30a02b7ac1c5901002d99373e100b69e7938d370",
   "scene": "range",
   "review": {
-    "heardOpening": "Choisis le poste, la date",
+    "heardOpening": "Choisissez le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Choisis le poste",
-        "visibleSeconds": 0.5,
-        "visible": "Le poste 'Buvette série' est sélectionné dans le formulaire.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 1.4,
-        "spoken": "la date",
+        "spokenSeconds": 0,
+        "spoken": "Choisissez le poste, la date et la plage globale à couvrir.",
         "visibleSeconds": 1.5,
-        "visible": "La date 'samedi 10 octobre' est renseignée.",
+        "visible": "Le poste « Buvette série » et la date « samedi 17 octobre » sont renseignés dans le formulaire.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "de dix heures à vingt-deux heures",
-        "visibleSeconds": 4.5,
-        "visible": "Les champs Début (10:00) et Fin (22:00) sont remplis.",
+        "spokenSeconds": 4,
+        "spoken": "Ici, la buvette fonctionne de dix heures à vingt-deux heures.",
+        "visibleSeconds": 5.5,
+        "visible": "L'heure de début « 10:00 » et l'heure de fin « 22:00 » sont saisies dans les champs correspondants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Cette plage décrit le besoin complet ; elle ne signifie pas qu’une même personne doit rester douze heures.",
+        "visibleSeconds": 7,
+        "visible": "Le formulaire reste affiché avec la plage horaire globale de 10:00 à 22:00 et une durée de créneau de 2 h.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, parfaitement synchronisée avec la saisie."
+      "observation": "Voix claire, posée et bien synchronisée avec les saisies à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,15 +1,15 @@
 {
   "slug": "admin-navigation",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T18:37:37.943Z",
+  "recordedAt": "2026-10-11T18:13:07.036Z",
   "video": "capture.webm",
   "product": {
-    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
-    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
-    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
-    "buildId": "uqE7YLJo_7r8CbyaqRify",
-    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
-    "builtAt": "2026-10-06T18:15:27.264Z"
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,226 +26,291 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 14936
+      "atMs": 14657
     },
     {
       "kind": "click",
-      "atMs": 19254
+      "atMs": 17866
     },
     {
       "kind": "click",
-      "atMs": 21919
+      "atMs": 20333
     },
     {
       "kind": "click",
-      "atMs": 25518
+      "atMs": 23734
     },
     {
       "kind": "click",
-      "atMs": 30518
+      "atMs": 30034
     },
     {
       "kind": "click",
-      "atMs": 34301
+      "atMs": 33767
     },
     {
       "kind": "click",
-      "atMs": 54867
+      "atMs": 55303
     },
     {
       "kind": "key",
-      "atMs": 57837
+      "atMs": 58365
     },
     {
       "kind": "key",
-      "atMs": 57838
+      "atMs": 58369
     },
     {
       "kind": "click",
-      "atMs": 58349
+      "atMs": 58898
     },
     {
       "kind": "key",
-      "atMs": 58656
+      "atMs": 59214
     },
     {
       "kind": "key",
-      "atMs": 58755
+      "atMs": 59313
     },
     {
       "kind": "key",
-      "atMs": 58853
+      "atMs": 59411
     },
     {
       "kind": "key",
-      "atMs": 58951
+      "atMs": 59510
     },
     {
       "kind": "key",
-      "atMs": 59049
+      "atMs": 59608
     },
     {
       "kind": "key",
-      "atMs": 59148
+      "atMs": 59708
     },
     {
       "kind": "key",
-      "atMs": 59246
+      "atMs": 59810
     },
     {
       "kind": "key",
-      "atMs": 64389
+      "atMs": 65256
     },
     {
       "kind": "click",
-      "atMs": 66842
+      "atMs": 68172
     },
     {
       "kind": "key",
-      "atMs": 71436
+      "atMs": 73133
     },
     {
       "kind": "click",
-      "atMs": 71944
+      "atMs": 73664
     },
     {
       "kind": "key",
-      "atMs": 72252
+      "atMs": 73971
     },
     {
       "kind": "key",
-      "atMs": 72350
+      "atMs": 74068
     },
     {
       "kind": "key",
-      "atMs": 72448
+      "atMs": 74165
     },
     {
       "kind": "key",
-      "atMs": 72547
+      "atMs": 74263
     },
     {
       "kind": "key",
-      "atMs": 72645
+      "atMs": 74362
     },
     {
       "kind": "key",
-      "atMs": 72743
+      "atMs": 74465
     },
     {
       "kind": "key",
-      "atMs": 72841
+      "atMs": 74577
     },
     {
       "kind": "key",
-      "atMs": 72939
+      "atMs": 74679
     },
     {
       "kind": "key",
-      "atMs": 73036
+      "atMs": 74780
     },
     {
       "kind": "key",
-      "atMs": 73134
+      "atMs": 74884
     },
     {
       "kind": "key",
-      "atMs": 73233
+      "atMs": 74987
     },
     {
       "kind": "key",
-      "atMs": 73329
+      "atMs": 75088
     },
     {
       "kind": "key",
-      "atMs": 73427
+      "atMs": 75191
     },
     {
       "kind": "key",
-      "atMs": 73526
+      "atMs": 75295
     },
     {
       "kind": "key",
-      "atMs": 73624
+      "atMs": 75394
     },
     {
       "kind": "key",
-      "atMs": 73908
+      "atMs": 75684
     },
     {
       "kind": "click",
-      "atMs": 76265
+      "atMs": 78381
     },
     {
       "kind": "key",
-      "atMs": 82234
+      "atMs": 84659
     },
     {
       "kind": "click",
-      "atMs": 82714
+      "atMs": 85149
     },
     {
       "kind": "click",
-      "atMs": 94355
+      "atMs": 97196
     },
     {
       "kind": "click",
-      "atMs": 100171
+      "atMs": 101246
     },
     {
       "kind": "key",
-      "atMs": 100173
+      "atMs": 101248
     },
     {
       "kind": "key",
-      "atMs": 101957
+      "atMs": 106980
     },
     {
       "kind": "key",
-      "atMs": 103032
+      "atMs": 106987
     }
   ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 11582
+      "endMs": 11475
     },
     {
       "id": "organization-navigation",
-      "startMs": 13742,
-      "endMs": 31668
+      "startMs": 13639,
+      "endMs": 31128
     },
     {
       "id": "event-navigation",
-      "startMs": 33835,
-      "endMs": 55677
+      "startMs": 33288,
+      "endMs": 56203
     },
     {
       "id": "search",
-      "startMs": 57836,
-      "endMs": 74209
+      "startMs": 58363,
+      "endMs": 76295
     },
     {
       "id": "account-help",
-      "startMs": 75783,
-      "endMs": 90377
+      "startMs": 77892,
+      "endMs": 93148
     },
     {
       "id": "mobile-keyboard",
-      "startMs": 92537,
-      "endMs": 105991
+      "startMs": 95311,
+      "endMs": 109301
     },
     {
       "id": "result",
-      "startMs": 106444,
-      "endMs": 120081
+      "startMs": 109755,
+      "endMs": 124953
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Le Tableau de bord rassemble",
+      "startMs": 512,
+      "endMs": 3554,
+      "cueMs": 14154
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Événements ouvre la liste",
+      "startMs": 3759,
+      "endMs": 5794,
+      "cueMs": 17400
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Membres réunit les personnes connues",
+      "startMs": 6228,
+      "endMs": 8965,
+      "cueMs": 19869
+    },
+    {
+      "segmentId": "organization-navigation",
+      "phrase": "Paramètres concerne les réglages communs.",
+      "startMs": 9603,
+      "endMs": 11568,
+      "cueMs": 23244
+    },
+    {
+      "segmentId": "event-navigation",
+      "phrase": "Le lien Événements vous ramène",
+      "startMs": 19359,
+      "endMs": 22552,
+      "cueMs": 52649
+    },
+    {
+      "segmentId": "search",
+      "phrase": "Ouvrez un résultat pour accéder",
+      "startMs": 6883,
+      "endMs": 12970,
+      "cueMs": 65250
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Sur ordinateur, la première tabulation",
+      "startMs": 4718,
+      "endMs": 7334,
+      "cueMs": 100031
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Vous arrivez directement dans le",
+      "startMs": 11665,
+      "endMs": 13698,
+      "cueMs": 106977
+    },
+    {
+      "segmentId": "mobile-keyboard",
+      "phrase": "Vous arrivez directement dans le",
+      "startMs": 11665,
+      "endMs": 13698,
+      "cueMs": 106986
     }
   ],
   "portraitFrames": [
     {
-      "startMs": 92544,
-      "endMs": 98997,
+      "startMs": 95334,
+      "endMs": 100031,
       "width": 390,
       "height": 800
     }

@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: SHIFT_CREATE_SERIES
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe
+DURATION: 110.24 seconds
+MUSIC: smallest 12.8 / largest 18 LU
+PROBLEMS: Result chapter describes 4 places then 3 in following shifts at 2.372–5.389 s, but following rows only visible on later scroll (~10.626 s). Frame evidence: result-sheet.png, result-seconds.png. Other six chapters pass; empty ASR response retried successfully.
+SOURCE CHANGES: videos/tools/record.ts series result: remove reload that resets scroll; anchor capacity evidence to quatre places pour la première relève and center first row so following rows are visible. No refilm.
+VALIDATION: []; sentence anchors checked: 9
+FINAL AUDIO: [('welcome', 0.046511627906976744, False), ('range', 0, False), ('duration', 0, False), ('preview', 0, False), ('create', 0, False), ('adjust', 0, False), ('result', 0, False)]
+CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 13, keys 0.
+REVIEW: final MP4 chapter sheets inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

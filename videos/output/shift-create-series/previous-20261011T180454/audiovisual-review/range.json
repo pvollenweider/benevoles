@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:42:01.738Z",
+  "videoSha256": "bfa43829129c9c86dc4730e26c269ea87fef4d623eb77931a9bd095922448053",
+  "promptSha256": "5255fc436dc264aa672206852f82a5f728f2fc5519f8dc4a8a5ec69e2023a02d",
+  "clipSha256": "1940add2fb43792d4c0df275b950dc433bcbb90acf79dbdaca545885ff8554c3",
+  "scene": "range",
+  "review": {
+    "heardOpening": "Choisissez le poste, la date et la plage globale",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Choisissez le poste, la date",
+        "visibleSeconds": 1.7,
+        "visible": "Le poste « Buvette série » et la date « samedi 17 octobre » sont renseignés dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "la buvette fonctionne de dix heures à vingt-deux heures",
+        "visibleSeconds": 4.6,
+        "visible": "Les heures de début « 10:00 » et de fin « 22:00 » sont saisies dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Cette plage décrit le besoin complet",
+        "visibleSeconds": 6.8,
+        "visible": "La configuration de la plage globale reste affichée avec l'aperçu de 6 créneaux de 2 h",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine fluide, claire et bien calée sur les saisies à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

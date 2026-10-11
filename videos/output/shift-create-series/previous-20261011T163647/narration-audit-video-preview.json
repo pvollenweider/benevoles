@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:37:05.118Z",
+  "revalidatedAt": "2026-10-11T15:37:05.118Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "f57d85c02e0ff8d7447ffcdbdd32a0b4956d85acf60a1d0bc47d4a15c775377c",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "preview",
+      "audioSha256": "0a1b6f0f694e99daf851bcd4bfa7e9cd944132b0a2d02287f3821f7c4fed9c9a",
+      "recognized": "L'aperçu est la vérification essentielle. Dix heures midi, midi quatorze heures, puis les relèves suivantes jusqu'à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+      "expected": "L’aperçu est la vérification essentielle : dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

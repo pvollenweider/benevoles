@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:07:50.936Z",
-  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
-  "promptSha256": "09ef97ec78dceca987cf1b0c3e2b86cf2c1fb47dc8b0f8739f3914b0af436dbb",
-  "clipSha256": "5e0c6b0933cd1a732703726e7bb864f474ff3fe94f75eae516e7a89478679bcb",
+  "reviewedAt": "2026-10-11T18:08:10.937Z",
+  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
+  "promptSha256": "af8527373307c1f1000be6146b38ae1a72241bd82a250e2ee29bfdb456f602da",
+  "clipSha256": "4b6df0c4a8c16312da49697b304dc1fdd2625984377ed00acc4bf3985332b8a7",
   "scene": "preview",
   "review": {
     "heardOpening": "L'aperçu est la vérification essentielle",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "L'aperçu est la vérification essentielle",
-        "visibleSeconds": 0,
-        "visible": "Section Aperçu listant les créneaux affichée à l'écran",
+        "visibleSeconds": 0.8,
+        "visible": "Bloc Aperçu affichant le découpage en 6 créneaux de 2 h",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.2,
-        "spoken": "dix heures-midi, midi-quatorze heures",
-        "visibleSeconds": 0,
-        "visible": "Plages horaires 10:00-12:00 et 12:00-14:00 affichées dans l'aperçu",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 5.2,
-        "spoken": "puis les relèves suivantes jusqu'à vingt-deux heures",
-        "visibleSeconds": 0,
-        "visible": "Dernier créneau 20:00-22:00 visible dans la liste",
+        "spoken": "dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures",
+        "visibleSeconds": 3.2,
+        "visible": "Liste des créneaux détaillée de 10:00–12:00 jusqu'à 20:00–22:00",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.5,
-        "spoken": "contrôle le dernier créneau avant de confirmer",
-        "visibleSeconds": 0,
-        "visible": "Bouton Créer 6 créneaux visible à côté de la liste",
+        "spoken": "contrôlez le dernier créneau avant de confirmer",
+        "visibleSeconds": 8.5,
+        "visible": "Dernier créneau 20:00–22:00 visible au-dessus du bouton Créer 6 créneaux",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, diction nette et intonation posée."
+      "observation": "Voix masculine claire, naturelle et bien articulée, débit posé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

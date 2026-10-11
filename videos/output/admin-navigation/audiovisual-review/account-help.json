@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:22:14.812Z",
-  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
-  "promptSha256": "626348501805f9c7407b2f67bdc952150f44286b648a89ebdfd386b773aeb2df",
-  "clipSha256": "387a36a607045c27e484ab523c466b5710fb93e823750f1494897000b71259a8",
+  "reviewedAt": "2026-10-11T18:13:56.264Z",
+  "videoSha256": "db599c9b5221e2f8cae5116e37a1118e8bfa4620ad19af1a5632e505aa88a37d",
+  "promptSha256": "3bddf3650260ad298b36f596ffa743b9cbfaa2fe37dc6fdd0b662ee708f57bff",
+  "clipSha256": "7ac9d7c296984266914b417f8f8fc54904e9bccdcbe6059335f66ac53d2f513c",
   "scene": "account-help",
   "review": {
-    "heardOpening": "Le menu de votre compte propose",
+    "heardOpening": "Le menu de votre compte propose Mon compte",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.5,
         "spoken": "Le menu de votre compte propose Mon compte et Se déconnecter",
-        "visibleSeconds": 0.9,
-        "visible": "Menu déroulant affiché avec Mon compte et Se déconnecter",
+        "visibleSeconds": 1,
+        "visible": "Le menu déroulant sous le profil s'affiche avec les options Mon compte et Se déconnecter",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "ouvre le guide dans un nouvel onglet",
-        "visibleSeconds": 6.8,
+        "spokenSeconds": 4.5,
+        "spoken": "L'aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet",
+        "visibleSeconds": 7.5,
         "visible": "Affichage de la page Guide administrateur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.9,
-        "spoken": "Les liens Aide placés sous les titres de certaines pages",
-        "visibleSeconds": 10.9,
-        "visible": "Page Créneaux avec lien Aide sous le titre",
+        "spokenSeconds": 9.5,
+        "spoken": "Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la page Créneaux avec le lien Aide : Configurer les créneaux sous le titre",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide et bien articulée, synchronisation adéquate."
+      "observation": "Voix claire, posée et parfaitement intelligible, débit fluide."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

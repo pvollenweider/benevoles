@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:46:52.415Z",
+  "videoSha256": "86b3c20b367b947aa3feb70f794b7f5021e13b8e9c7591841c0cffa2ebf8ed0f",
+  "promptSha256": "cdef186b328872a23a05ca6305ff4a3a752dc2fed5a4b25c74b1b5b73db76b5d",
+  "clipSha256": "dc8cfff1c9c12a52eea243b4a4b407831347adfdd04931fc293cd4d29caa78e2",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Bienvenue dans l’administration.",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre « Se repérer dans l'administration » affiché au centre de la page Événements.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Vous allez retrouver les principaux points d’entrée,",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau d'introduction, affichage complet de la barre de navigation (Tableau de bord, Événements, Membres, Paramètres).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+        "visibleSeconds": 5,
+        "visible": "Écran stable de l'administration présentant la vue générale des événements pour illustrer l'introduction du module.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
