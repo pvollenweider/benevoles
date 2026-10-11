@@ -3,7 +3,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useId, useState, useRef } from "react"
+import { useEffect, useId, useState, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
 import type { ActionRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
@@ -55,6 +56,16 @@ export default function ShiftsManager({
   const singleDay = dates.length === 1
 
   const [shifts, setShifts] = useState<RawShift[]>(initialShifts)
+  // The page header (wizard) says « Aucun créneau pour l'instant » from the server's count: refresh
+  // it when the first shift appears or the last one goes. Client state survives a refresh.
+  const router = useRouter()
+  const hasShifts = shifts.some((s) => s.status !== "cancelled")
+  const hadShifts = useRef(hasShifts)
+  useEffect(() => {
+    if (hadShifts.current === hasShifts) return
+    hadShifts.current = hasShifts
+    router.refresh()
+  }, [hasShifts, router])
   const [showForm, setShowForm] = useState(false)
   const [showSeries, setShowSeries] = useState(false)
   const seriesButtonRef = useRef<HTMLButtonElement>(null)
