@@ -43,7 +43,7 @@ Certains postes affichent un petit repère (par exemple « 18+ ») : ils demande
 
 Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection, visible dans la liste en bas de page. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.
 
-![Planning public avec deux créneaux sélectionnés (Accueil de 9 h à 12 h et Chauffeur navette de 14 h à 18 h) ; la colonne de droite les liste, le second marqué « Sur validation · demande à accepter par l'organisation », et le bouton « Continuer (2 nouveaux créneaux) »](/doc-img/public-selection.png)
+![Planning public avec deux créneaux sélectionnés (Accueil de 9 h à 12 h et Chauffeur navette de 14 h à 18 h) ; la colonne de droite les liste, le second marqué « 21 ans minimum » et « Sur validation · demande à accepter par l'organisation »](/doc-img/public-selection.png)
 
 Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
 

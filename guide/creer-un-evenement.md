@@ -47,6 +47,6 @@ Le formulaire de modification propose aussi la case **Rappels automatiques** (co
 
 Une fois créé, chaque événement a sa propre page de pilotage : statistiques en un coup d'œil, raccourcis vers les créneaux et les inscriptions, jalons, journal. C'est votre poste de commande pour toute la durée de l'événement.
 
-![Page de pilotage d'un événement publié : barre d'étapes, statistiques, raccourcis vers les créneaux, les inscriptions et les autres pages de l'événement, puis la liste des jalons dont un en retard](/doc-img/admin-event-overview.png)
+![Page de pilotage d'un événement publié : barre d'étapes, bloc « Partager l'événement » avec le lien à copier, statistiques (dont 2 demandes à traiter), boutons « Gérer les créneaux », « Voir les inscriptions » et « Inviter des membres », puis les outils de l'événement (QR code, Rapports, Journal, Pages, Questions, Responsables de secteur, Dupliquer)](/doc-img/admin-event-overview.png)
 
 Pour repartir d'un événement existant (édition suivante d'un festival), voir [Dupliquer un événement](dupliquer-un-evenement.md).

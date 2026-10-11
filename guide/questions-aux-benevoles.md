@@ -14,7 +14,7 @@ aliases: []
 
 **Événements**, puis l'événement, puis **Questions**.
 
-![Page des questions d'un événement : « Taille de t-shirt » (choix unique S à XL, obligatoire) et « Régime alimentaire » (texte court), avec les actions pour les modifier, les réordonner ou les retirer](/doc-img/admin-questions.png)
+![Page des questions d'un événement : « Taille de t-shirt » (choix unique S à XL, obligatoire), « Régime alimentaire » et « Permis de conduire » (texte court), chacune avec son nombre de réponses et les actions Monter, Descendre, Modifier et Retirer, puis le début de la synthèse des réponses](/doc-img/admin-questions.png)
 
 Jusqu'à 5 questions ajoutées au formulaire d'inscription, quand l'événement demande une information de plus : taille de t-shirt, permis, régime, expérience, transport. Types : **texte court**, **oui / non**, **choix unique** ou **choix multiple** (un choix par ligne, au moins deux), obligatoire ou facultative. L'ordre se change avec **Monter** et **Descendre**.
 

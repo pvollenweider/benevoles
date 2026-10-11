@@ -85,7 +85,8 @@ async function adminSession(browser) {
 }
 
 async function run() {
-  const browser = await chromium.launch()
+  // French browser process too: native date fields show day before month (AGENTS.md).
+  const browser = await chromium.launch({ args: ["--lang=fr-CH"], env: { ...process.env, LANG: "fr_CH.UTF-8", LC_ALL: "fr_CH.UTF-8" } })
 
   // ── What volunteers see ──────────────────────────────────────────────────
   console.log("Public pages…")
@@ -101,8 +102,8 @@ async function run() {
   await shot("public-selection", async () => {
     await p.goto(withOrg(`/${EVENT_SLUG}`))
     await settle(p)
-    await p.getByRole("button", { name: /^Sélectionner — Accueil 09/ }).first().click()
-    await p.getByRole("button", { name: /^Sélectionner — Navette \(Chauffeur navette\) 14/ }).first().click()
+    await p.getByRole("button", { name: /^09h–12h .*Accueil : sélectionner/ }).first().click()
+    await p.getByRole("button", { name: /^14h–18h .*Navette \(Chauffeur navette\).*: sélectionner/ }).first().click()
     await save(p, "public-selection")
   })
 
@@ -111,7 +112,8 @@ async function run() {
     await p.getByRole("button", { name: /^Continuer/ }).first().click()
     await settle(p)
     const field = p.getByLabel(/naissance/i).first()
-    await field.scrollIntoViewIfNeeded()
+    // The form heading and the field both in view, the field in the lower half.
+    await field.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 520))
     await save(p, "public-registration-birthdate")
   })
 
@@ -183,6 +185,7 @@ async function run() {
     await a.getByRole("link", { name: "Activité de Camille Rochat" }).click()
     await a.waitForURL(/\/admin\/members\/[^/]+$/)
     await settle(a)
+    await a.evaluate(() => window.scrollTo(0, 0))
     await save(a, "admin-member-activity")
   })
 

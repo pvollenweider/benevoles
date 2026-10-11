@@ -18,7 +18,7 @@ Ta page personnelle s'ouvre avec ton **lien personnel**, reçu par email (voir [
 https://[organisation].benevol.app/my/[token]
 ```
 
-![Page personnelle « Mes inscriptions » : ajout du planning au calendrier, chaque créneau avec sa date et son bouton (Annuler, ou Quitter la liste d'attente pour celui en liste d'attente, position 1), puis le bloc « Ton lien personnel »](/doc-img/public-my-page.png)
+![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), l'ajout de tout le planning au calendrier, puis « Tous mes créneaux », chacun avec sa date et son bouton Annuler](/doc-img/public-my-page.png)
 
 ## Avant ta mission
 
