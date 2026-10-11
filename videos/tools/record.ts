@@ -1289,7 +1289,9 @@ async function main() {
         const weekly = form.getByRole("radio", { name: "Chaque semaine", exact: true })
         await weekly.scrollIntoViewIfNeeded()
         if (!(await weekly.isChecked())) throw new Error("« Chaque semaine » must be the default rhythm")
-        await at(0.58)
+        // The third take entered 17:00 in the pause before « La plage va… ».
+        // Start pointing and typing only once that time-range sentence begins.
+        await at(0.67)
         await typeNaturally(page, form.getByLabel(/^Début/), "17:00")
         await typeNaturally(page, form.getByLabel(/^Fin/), "19:30")
         await at(0.86)
