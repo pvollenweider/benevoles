@@ -257,6 +257,30 @@ Variables facultatives :
 - `VIDEO_ORG`, par défaut `default` ;
 - `VIDEO_EVENT_SLUG`, par défaut `fete-du-village`.
 
+### Caler une action sur sa phrase
+
+Dans une scène, `at(0.42)` attend 42 % de la durée de sa narration ; `at("Créons les créneaux")`
+attend le début de la phrase qui contient ces mots, mesuré sur le WAV de la prise
+(`videos/lib/sentence-timing.ts`). Le rythme de la voix varie d'une génération à l'autre : un
+pourcentage juste sur une prise tombe une demi-seconde trop tôt sur la suivante, ce qui a coûté
+trois des quatre prises du pilote `SHIFT_RECURRENCE`.
+
+- Une phrase s'arrête à « . », « ! », « ? », « … », « ; » ou « : » ; ses limites sont les pauses
+  de la voix (FFmpeg `silencedetect`, au moins 120 ms sous -38 dB) les plus proches de ce que la
+  longueur du texte prévoit. Sans pause à moins d'un quart du segment, la limite reste estimée.
+- Le texte se compare sans majuscules, accents ni ponctuation, et doit désigner une seule phrase
+  du segment, sinon la capture s'arrête.
+- En répétition sans narration, les phrases sont réparties selon leur longueur.
+- Les deux formes cohabitent : une action au milieu d'une phrase, sans pause pour la repérer,
+  garde son pourcentage.
+- Chaque attente sur une phrase est notée dans `timeline.json` (`anchors`). `video:validate`
+  remesure ces phrases sur l'audio du rendu et refuse un clic ou une frappe placés après l'attente
+  mais avant le début de sa phrase (120 ms de marge).
+
+Pour migrer une scène : remplacer chaque `at(x)` placé juste avant l'action que décrit une phrase
+par `at("<premiers mots de cette phrase>")`. Les scénarios de `videos/lib/record-*.ts` qui typent
+`at: (fraction: number) => …` passent au type `Cue` de `sentence-timing.ts` pour en profiter.
+
 ### Adresses affichées : benevol.app, jamais localhost
 
 Les liens à partager, QR codes, emails et adresses d'événement que montrent les vidéos sont ceux

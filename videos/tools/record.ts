@@ -7,6 +7,8 @@ import { chromium, type Locator, type Page } from "playwright"
 import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail } from "../lib/public-hosts"
 import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { pinProductBuildForCapture } from "../lib/product-build"
+import { estimateSentences, sentenceFor, type Cue, type SentenceAnchor, type TimedSentence } from "../lib/sentence-timing"
+import { sentenceTimingsFromAudio } from "../lib/sentence-audio"
 
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
@@ -212,7 +214,24 @@ async function main() {
     }, true);
   `)
 
-  const scene = async (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => {
+  // Sentence cues (`at("Créons les créneaux")`) wait for the moment the voice says that sentence,
+  // measured on this take's own audio; a rehearsal without audio spreads the sentences by length.
+  const anchors: SentenceAnchor[] = []
+  const sentenceCache = new Map<string, TimedSentence[]>()
+  const sentencesOf = async (id: string): Promise<TimedSentence[]> => {
+    const cached = sentenceCache.get(id)
+    if (cached) return cached
+    const segment = manifest.segments.find(candidate => candidate.id === id)
+    if (!segment) throw new Error(`Unknown narration segment ${id}`)
+    const generated = rehearsal ? undefined : audio?.segments[id]
+    const sentences = generated
+      ? await sentenceTimingsFromAudio(path.join(dir, generated.file), segment.transcript, generated.durationMs)
+      : estimateSentences(segment.transcript, durations.get(id) ?? segment.fallbackDurationMs)
+    sentenceCache.set(id, sentences)
+    return sentences
+  }
+
+  const scene = async (id: string, action: (at: Cue) => Promise<void>) => {
     console.log(`Scene ${id}: ${rehearsal ? "rehearsal" : "narration-timed"}`)
     const audioDuration = durations.get(id)
     if (!audioDuration) throw new Error(`Missing duration for ${id}`)
@@ -226,9 +245,18 @@ async function main() {
     if (title) await page.screencast.showChapter(title, { duration: 1500 })
     const start = performance.now()
     cues.push({ id, startMs: Math.round(start - startedAt), endMs: 0 })
-    const at = async (fraction: number) => {
+    const at: Cue = async (cue) => {
+      if (typeof cue === "string") {
+        const sentence = sentenceFor(await sentencesOf(id), cue)
+        if (!quickRehearsal) {
+          const remaining = start + sentence.startMs - performance.now()
+          if (remaining > 0) await page.waitForTimeout(remaining)
+        }
+        anchors.push({ segmentId: id, phrase: cue, startMs: sentence.startMs, endMs: sentence.endMs, cueMs: Math.round(performance.now() - startedAt) })
+        return
+      }
       if (quickRehearsal) return
-      const remaining = start + expected * fraction - performance.now()
+      const remaining = start + expected * cue - performance.now()
       if (remaining > 0) await page.waitForTimeout(remaining)
     }
     try {
@@ -1276,9 +1304,7 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Une permanence décrite une fois pour toute la saison", duration: 2_300 })
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
         await rules.scrollIntoViewIfNeeded()
-        // The opening sentence follows the season explanation. The final-MP4
-        // review found the former 72% cue opened the form during that explanation.
-        await at(0.865)
+        await at("Ouvrons Répéter chaque semaine")
         const open = page.getByRole("button", { name: "Répéter chaque semaine", exact: true })
         await open.scrollIntoViewIfNeeded()
         await tap(page, open)
@@ -1286,16 +1312,14 @@ async function main() {
       })
       await scene("describe", async (at) => {
         await typeNaturally(page, form.getByLabel(/^Poste/), "Caisse et accueil")
-        await at(0.20)
+        await at("Cochez les jours")
         await tap(page, form.getByRole("checkbox", { name: "mardi", exact: true }))
         await tap(page, form.getByRole("checkbox", { name: "jeudi", exact: true }))
         await at(0.36)
         const weekly = form.getByRole("radio", { name: "Chaque semaine", exact: true })
         await weekly.scrollIntoViewIfNeeded()
         if (!(await weekly.isChecked())) throw new Error("« Chaque semaine » must be the default rhythm")
-        // The third take entered 17:00 in the pause before « La plage va… ».
-        // Start pointing and typing only once that time-range sentence begins.
-        await at(0.67)
+        await at("La plage va")
         await typeNaturally(page, form.getByLabel(/^Début/), "17:00")
         await typeNaturally(page, form.getByLabel(/^Fin/), "19:30")
         await at(0.86)
@@ -1307,12 +1331,13 @@ async function main() {
         const holidays = form.getByLabel("Jours fériés exclus", { exact: true })
         await holidays.scrollIntoViewIfNeeded()
         if (await holidays.inputValue() !== "CH") throw new Error("Swiss holidays must be proposed from the organization's time zone")
-        await at(0.24)
+        await at("Ajoutons une fermeture")
         await fillVisibly(page, form.getByLabel("Fermetures (vacances, jours sans permanence)", { exact: true }), closure, 600)
         await tap(page, form.getByRole("button", { name: "Ajouter la date", exact: true }))
         await form.getByRole("list", { name: "Fermetures" }).waitFor()
-        await at(0.46)
+        await at("L’aperçu donne")
         await form.getByText(/^Aperçu :/).first().scrollIntoViewIfNeeded()
+        // Inside « L’aperçu donne … puis chaque date exclue avec sa raison » : no pause to cue on.
         await at(0.66)
         const skipped = form.getByRole("list", { name: "Dates exclues" })
         await skipped.scrollIntoViewIfNeeded()
@@ -1321,17 +1346,15 @@ async function main() {
       await scene("create", async (at) => {
         const create = form.getByRole("button", { name: /^Créer \d+ créneaux$/ })
         await create.scrollIntoViewIfNeeded()
-        await at(0.06)
+        await at("Créons les créneaux")
         await tap(page, create)
         await form.waitFor({ state: "hidden" })
         await rules.getByText("Caisse et accueil", { exact: true }).waitFor()
         await rules.scrollIntoViewIfNeeded()
-        await at(0.62)
+        await at("Chaque date est un créneau ordinaire")
       })
       await scene("change", async (at) => {
-        // Keep the list visible through « Finalement, la caisse a besoin de trois
-        // personnes », then open on « Modifier à partir d'une date ».
-        await at(0.27)
+        await at("Modifier à partir d’une date")
         await tap(page, rules.getByRole("button", { name: /^Modifier à partir d'une date\W+Caisse et accueil$/ }))
         const panel = rules.getByRole("group", { name: "Modifier Caisse et accueil à partir d'une date" })
         await panel.waitFor()
@@ -1347,12 +1370,10 @@ async function main() {
         const panel = rules.getByRole("group", { name: "Arrêter Réception des livraisons à partir d'une date" })
         await panel.waitFor()
         await fillVisibly(page, panel.getByLabel("À partir du", { exact: true }), stopFrom, 600)
-        await at(0.16)
+        await at("Les dates sans inscrit")
         await tap(page, panel.getByRole("button", { name: "Arrêter la permanence", exact: true }))
         await panel.getByRole("group", { name: /^2 dates ont déjà des inscrits/ }).waitFor()
-        // The second take confirmed in the pause before « Confirmons ».
-        // Keep the registered dates visible until the confirmation instruction.
-        await at(0.71)
+        await at("Confirmons")
         await tap(page, panel.getByRole("button", { name: "Annuler aussi ces 2 dates et prévenir les inscrits", exact: true }))
         await page.getByRole("status").filter({ hasText: /Permanence Réception des livraisons arrêtée/ }).waitFor()
       })
@@ -1360,7 +1381,7 @@ async function main() {
         await page.goto(`${baseUrl}/epicerie-permanences?org=${encodeURIComponent(org)}`); await settle(page)
         const months = page.getByRole("group", { name: "Choisir le mois" })
         await months.waitFor()
-        await at(0.50)
+        await at("À partir de huit dates")
         await tap(page, months.getByRole("button").nth(1))
         await months.getByRole("button").nth(1).and(page.locator("[aria-pressed=true]")).waitFor()
       })
@@ -1368,7 +1389,7 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
         await rules.scrollIntoViewIfNeeded()
         if (await rules.getByRole("listitem").count() !== 2) throw new Error("Both permanences must stay listed after a stop from a later date")
-        await at(0.60)
+        await at("Pour la saison suivante")
       })
     } else if (slug === "shift-create-edit-detail") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
@@ -5178,6 +5199,7 @@ async function main() {
     inputAudioVersion: 1,
     inputEvents,
     cues,
+    ...(anchors.length ? { anchors } : {}),
     ...(portraitFrames.length ? { portraitFrames } : {}),
     ...(detailFrames.length ? { detailFrames } : {}),
   }

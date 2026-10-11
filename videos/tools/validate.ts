@@ -10,6 +10,8 @@ import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../li
 import { mismatchedNarrationEdges, unexpectedPauseInstructions } from "../lib/narration-fidelity"
 import { assertNarrationGeneration } from "../lib/narration-generation"
 import { musicLevelIssues, musicLevelSummary, type MusicWindow } from "../lib/music-levels"
+import { sentenceTimingsFromAudio } from "../lib/sentence-audio"
+import { earlyMarkers, sentenceFor } from "../lib/sentence-timing"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((argument) => !argument.startsWith("-") && argument !== process.argv[0] && argument !== process.argv[1])
@@ -75,6 +77,24 @@ async function main() {
     return { id: segment.id, visualMs, audioMs, driftMs }
   })
 
+  // Sentence cues: each interaction after a cue starts on its sentence, measured again on the
+  // audio of this render (a narration regenerated after the capture moves the sentences).
+  let anchorsChecked = 0
+  if (timeline.anchors?.length) {
+    const measured = []
+    for (const anchor of timeline.anchors) {
+      const segment = manifest.segments.find(candidate => candidate.id === anchor.segmentId)
+      const generated = audio.segments[anchor.segmentId]
+      if (!segment || !generated) { issues.push(`${anchor.segmentId}: sentence cue « ${anchor.phrase} » on a missing segment`); continue }
+      const sentence = sentenceFor(await sentenceTimingsFromAudio(path.join(dir, generated.file), segment.transcript, generated.durationMs), anchor.phrase)
+      measured.push({ ...anchor, startMs: sentence.startMs, endMs: sentence.endMs })
+    }
+    for (const { anchor, marker } of earlyMarkers(measured, timeline.cues, timeline.inputEvents ?? [])) {
+      issues.push(`${anchor.segmentId}: ${marker.kind} at ${marker.atMs} ms comes before « ${anchor.phrase} » (${timeline.cues.find(cue => cue.id === anchor.segmentId)!.startMs + anchor.startMs} ms)`)
+    }
+    anchorsChecked = measured.length
+  }
+
   // Background music: low but audible, never over the narration (measured by the assembler).
   let music: ReturnType<typeof musicLevelSummary> | null = null
   try {
@@ -102,6 +122,7 @@ async function main() {
     voice: manifest.voice,
     captureMs,
     scenes,
+    anchorsChecked,
     music,
     issues,
   }

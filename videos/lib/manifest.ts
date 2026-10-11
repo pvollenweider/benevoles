@@ -74,6 +74,8 @@ export type Timeline = {
   inputAudioVersion?: 1
   inputEvents?: { kind: "click" | "key"; atMs: number }[]
   cues: { id: string; startMs: number; endMs: number }[]
+  /** Sentence cues of the scenario: where each waited, and the sentence it waited for (sentence-timing.ts). */
+  anchors?: { segmentId: string; phrase: string; startMs: number; endMs: number; cueMs: number }[]
   portraitFrames?: { startMs: number; endMs: number; width: number; height: number }[]
   detailFrames?: { startMs: number; endMs: number; x: number; y: number; width: number; height: number }[]
 }
