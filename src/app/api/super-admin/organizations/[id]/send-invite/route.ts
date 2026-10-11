@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { generateToken } from "@/lib/utils"
 import { hashToken } from "@/lib/token-hash"
+import { configuredAppUrl } from "@/lib/urls"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
@@ -43,7 +44,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
   })
 
-  const inviteUrl = inviteLink(process.env.NEXT_PUBLIC_APP_URL, setupToken)
+  // Read at request time: Next inlines direct NEXT_PUBLIC_* accesses at build time.
+  const inviteUrl = inviteLink(configuredAppUrl(), setupToken)
 
   const result = await sendNotification({
     kind: "admin_invite",

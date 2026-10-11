@@ -4,10 +4,11 @@
 import type { Locator, Page } from "playwright"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import type { Cue } from "./sentence-timing"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
 export async function recordEventLog(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
@@ -78,7 +79,7 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
       await at(0.43); await tap(page, page.getByRole("button", { name: "Étape suivante", exact: true }))
       await at(0.54); await tap(page, page.getByRole("button", { name: "Étape précédente", exact: true }))
       await at(0.64); await tap(page, page.getByRole("slider", { name: "Étape dans l'historique", exact: true })); await page.getByRole("slider").press("End")
-      await at(0.78); await tap(page, page.getByRole("button", { name: "Changer d'élément", exact: true }))
+      await at("Changer d'élément permet ensuite"); await tap(page, page.getByRole("button", { name: "Changer d'élément", exact: true }))
       await at(0.86); await tap(page, page.locator("#panel-replay").getByRole("button", { name: /^Inscription —/ }).first())
       const shiftAfter = await db.shift.findUniqueOrThrow({ where: { id: prepared.shiftId } })
       if (JSON.stringify(shiftBefore) !== JSON.stringify(shiftAfter)) throw new Error("Reading replay mutated the shift")
@@ -89,7 +90,7 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
       const choices = await page.request.get(`${base}/api/admin/events/${eventId}/log/candidates?kind=story`)
       const candidate = (await choices.json()).candidates.find((choice: { logId: string }) => choice.logId === prepared.rootLogId) as { label: string } | undefined
       if (!choices.ok() || !candidate) throw new Error("Actual causal root is not offered by the story picker")
-      await at(0.30); await tap(page, page.locator("#panel-story").getByRole("button", { name: candidate.label, exact: true }))
+      await at("Ouvrons cet enchaînement"); await tap(page, page.locator("#panel-story").getByRole("button", { name: candidate.label, exact: true }))
       await page.locator("#panel-story").getByRole("button", { name: "Changer d'entrée", exact: true }).waitFor()
       const response = await page.request.get(`${base}/api/admin/events/${eventId}/log?chainOf=${encodeURIComponent(prepared.rootLogId)}`)
       const chain = await response.json()
@@ -117,12 +118,12 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
       await at(0.15); await filter("Type d'élément", "EventPage")
       const entries = await db.eventLog.findMany({ where: { eventId, entityId: prepared.pageId } })
       if (entries.length !== 2 || JSON.stringify(entries).includes("TEXTE_FICTIF_NON_RECOPIE")) throw new Error("Page content copied into journal")
-      await at(0.65); await go(`${url}/registrations`)
+      await at("Pour joindre une personne"); await go(`${url}/registrations`)
       await page.getByRole("row").filter({ hasText: "Nicolas" }).waitFor()
       checks.pageContentNotCopied = true
     })
     await scene("result", async at => {
-      await at(0.30); await go(`${url}/shifts`)
+      await at("Pour agir, revenez ensuite"); await go(`${url}/shifts`)
       await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
       await page.getByRole("row").filter({ hasText: "Accueil — chaîne de remplacement" }).waitFor()
     })
