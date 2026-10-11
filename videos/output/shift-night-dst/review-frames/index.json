@@ -1,262 +1,262 @@
 {
   "video": "shift-night-dst",
-  "source": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/shift-night-dst.mp4",
-  "sourceSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "source": "/private/tmp/codex-video/videos/output/shift-night-dst/shift-night-dst.mp4",
+  "sourceSha256": "da98cdc9443c85c274a4ba3f37934686e7cc52e86efc9a1dd62ca37b527d13cd",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-06T16:10:43.111Z",
+  "extractedAt": "2026-10-11T11:37:35.135Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.04645760743321719,
-      "seconds": 1.866,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-5.png"
+      "fraction": 0.04237886707162029,
+      "seconds": 1.793,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-4.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 4.49475,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-25.png"
+      "seconds": 4.7325,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.45,
-      "seconds": 7.07775,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-45.png"
+      "seconds": 7.564100000000001,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-45.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 9.015,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-60.png"
+      "seconds": 9.6878,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 12.24375,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-85.png"
+      "seconds": 13.2273,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-85.png"
     },
     {
       "scene": "welcome",
-      "fraction": 0.9767711962833914,
-      "seconds": 13.881,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/welcome-end.png"
+      "fraction": 0.9788105664641898,
+      "seconds": 15.051,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-end.png"
     },
     {
       "scene": "ordinary",
-      "fraction": 0.03736455349358575,
-      "seconds": 15.233,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-4.png"
+      "fraction": 0.029444962457672866,
+      "seconds": 16.403,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-3.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.25,
-      "seconds": 18.6475,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-25.png"
+      "seconds": 20.89725,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-25.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.45,
-      "seconds": 21.859099999999998,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-45.png"
+      "seconds": 24.97265,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-45.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.6,
-      "seconds": 24.267799999999998,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-60.png"
+      "seconds": 28.029199999999996,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-60.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.85,
-      "seconds": 28.2823,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-85.png"
+      "seconds": 33.12345,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-85.png"
     },
     {
       "scene": "ordinary",
-      "fraction": 0.9813177232532071,
-      "seconds": 30.391,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/ordinary-end.png"
+      "fraction": 0.9852775187711635,
+      "seconds": 35.88,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-end.png"
     },
     {
       "scene": "spring",
-      "fraction": 0.04430333013364838,
-      "seconds": 31.743,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-4.png"
+      "fraction": 0.04109870539078019,
+      "seconds": 37.233,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-4.png"
     },
     {
       "scene": "spring",
       "fraction": 0.25,
-      "seconds": 34.52875,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-25.png"
+      "seconds": 40.28275,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-25.png"
     },
     {
       "scene": "spring",
       "fraction": 0.45,
-      "seconds": 37.23735,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-45.png"
+      "seconds": 43.20255,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-45.png"
     },
     {
       "scene": "spring",
       "fraction": 0.6,
-      "seconds": 39.268800000000006,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-60.png"
+      "seconds": 45.3924,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-60.png"
     },
     {
       "scene": "spring",
       "fraction": 0.85,
-      "seconds": 42.65455,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-85.png"
+      "seconds": 49.04215,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-85.png"
     },
     {
       "scene": "spring",
-      "fraction": 0.9778483349331758,
-      "seconds": 44.386,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/spring-end.png"
+      "fraction": 0.97945064730461,
+      "seconds": 50.932,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-end.png"
     },
     {
       "scene": "autumn",
-      "fraction": 0.04764551735090924,
-      "seconds": 45.74,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-5.png"
+      "fraction": 0.04265301770100235,
+      "seconds": 52.284,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-4.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.25,
-      "seconds": 48.28825,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-25.png"
+      "seconds": 55.20075,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-25.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.45,
-      "seconds": 50.80685,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-45.png"
+      "seconds": 58.01415,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-45.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.6,
-      "seconds": 52.695800000000006,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-60.png"
+      "seconds": 60.124199999999995,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-60.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.85,
-      "seconds": 55.84405,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-85.png"
+      "seconds": 63.64095,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-85.png"
     },
     {
       "scene": "autumn",
-      "fraction": 0.9761772413245454,
-      "seconds": 57.433,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/autumn-end.png"
+      "fraction": 0.9786734911494989,
+      "seconds": 65.451,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-end.png"
     },
     {
       "scene": "timezone",
-      "fraction": 0.05187618882932734,
-      "seconds": 58.785,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-5.png"
+      "fraction": 0.046143197723602244,
+      "seconds": 66.807,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-5.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.25,
-      "seconds": 61.0765,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-25.png"
+      "seconds": 69.45775,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-25.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.45,
-      "seconds": 63.3897,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-45.png"
+      "seconds": 72.05835,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-45.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.6,
-      "seconds": 65.1246,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-60.png"
+      "seconds": 74.00880000000001,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-60.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.85,
-      "seconds": 68.01610000000001,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-85.png"
+      "seconds": 77.25955,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-85.png"
     },
     {
       "scene": "timezone",
-      "fraction": 0.9740619055853363,
-      "seconds": 69.451,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/timezone-end.png"
+      "fraction": 0.9769284011381989,
+      "seconds": 78.91,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-end.png"
     },
     {
       "scene": "calendar",
-      "fraction": 0.05054334091483447,
-      "seconds": 70.802,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-5.png"
+      "fraction": 0.03800836183960471,
+      "seconds": 80.262,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-4.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.25,
-      "seconds": 73.16975,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-25.png"
+      "seconds": 83.6085,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-25.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.45,
-      "seconds": 75.54395,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-45.png"
+      "seconds": 86.7657,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-45.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.6,
-      "seconds": 77.3246,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-60.png"
+      "seconds": 89.1336,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-60.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.85,
-      "seconds": 80.29235,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-85.png"
+      "seconds": 93.0801,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-85.png"
     },
     {
       "scene": "calendar",
-      "fraction": 0.9747283295425828,
-      "seconds": 81.773,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/calendar-end.png"
+      "fraction": 0.9809958190801976,
+      "seconds": 95.148,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-end.png"
     },
     {
       "scene": "result",
-      "fraction": 0.05023022185014651,
-      "seconds": 83.124,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-5.png"
+      "fraction": 0.04371584699453552,
+      "seconds": 96.5,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-4.png"
     },
     {
       "scene": "result",
       "fraction": 0.25,
-      "seconds": 85.51025,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-25.png"
+      "seconds": 99.33125,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-25.png"
     },
     {
       "scene": "result",
       "fraction": 0.45,
-      "seconds": 87.89925,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-45.png"
+      "seconds": 102.07625,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-45.png"
     },
     {
       "scene": "result",
       "fraction": 0.6,
-      "seconds": 89.691,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-60.png"
+      "seconds": 104.135,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-60.png"
     },
     {
       "scene": "result",
       "fraction": 0.85,
-      "seconds": 92.67725,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-85.png"
+      "seconds": 107.56625,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-85.png"
     },
     {
       "scene": "result",
-      "fraction": 0.9748848890749268,
-      "seconds": 94.169,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/shift-night-dst/review-frames/result-end.png"
+      "fraction": 0.9781420765027322,
+      "seconds": 109.325,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-end.png"
     }
   ]
 }

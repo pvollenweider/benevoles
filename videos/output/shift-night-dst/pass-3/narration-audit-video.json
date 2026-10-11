@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T16:11:18.461Z",
+  "revalidatedAt": "2026-10-06T16:11:18.462Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "33bf35b6eaf9c0ca12f8bb52c6a727fd002abfea8dde077b20fd17446072b379",
+      "recognized": "Les événements du soir posent deux questions différentes : comment afficher une fin après minuit ? Et combien d'heures se sont réellement écoulées quand l'horloge change ? Benevo conserve l'horaire local de l'événement et calcule les instants dans le fuseau de l'organisation.",
+      "expected": "Les événements du soir posent deux questions différentes : comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change. Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.",
+      "wordErrorRate": 0.022727272727272728,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "ordinary",
+      "audioSha256": "942c425279c943ee28bc6cf91dfe25a9930f7b7d324613ef707ef4d84cbed812",
+      "recognized": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La frise continue après minuit, mais les heures affichées repartent bien de zéro. Minuit, une heure, deux heures. Le récapitulatif précise que la fin se situe le lendemain. Ouvrons le créneau pour vérifier son horaire.",
+      "expected": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Le récapitulatif précise que la fin se situe le lendemain. Ouvrons le créneau pour vérifier son horaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "spring",
+      "audioSha256": "12bd720316c31774fdc1ea91420898edeed37f9dd23b3b39809002879f6e3ce8",
+      "recognized": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les e-mails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.",
+      "expected": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.",
+      "wordErrorRate": 0.041666666666666664,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "autumn",
+      "audioSha256": "08ac4539665686e9de7b6ee37e506fe98a594ef8a7a4e34249dffcb076b131c6",
+      "recognized": "Le dernier dimanche d'octobre, l'heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l'engagement d'une personne présente toute la nuit.",
+      "expected": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l’engagement d’une personne présente toute la nuit.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timezone",
+      "audioSha256": "8e5f65782371a0ad4d8fdbe6d20204529e8ca1bbda2191d051469d74b4a2e467",
+      "recognized": "Ces calculs dépendent du fuseau horaire de l'organisation. Ici, Europe, Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels. Une heure saisie reste l'heure locale comprise par l'organisateur et le bénévole.",
+      "expected": "Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels : une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "calendar",
+      "audioSha256": "91cb8a4a6d7d837f8d9b4c22e12a5c3b4a9a66f62257f512ea93e7ecaa80754c",
+      "recognized": "Dans un export calendrier, chaque créneau contient un instant précis avec le bon décalage d'été ou d'hiver. Après une modification, retélécharge le fichier pour que les informations du téléphone ou de l'agenda correspondent au planning actuel.",
+      "expected": "Dans un export calendrier, chaque créneau contient un instant précis avec le bon décalage d’été ou d’hiver. Après une modification, retélécharge le fichier pour que les informations du téléphone ou de l’agenda correspondent au planning actuel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "9c8232b57385b1a7e263dc7cf3c11a32364af128af0f7f4e3e8dec76cd5644ee",
+      "recognized": "Pour une permanence de nuit, indique clairement le jour de départ, l'heure du lendemain et les consignes d'arrivée. L'affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d'heure.",
+      "expected": "Pour une permanence de nuit, indique clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

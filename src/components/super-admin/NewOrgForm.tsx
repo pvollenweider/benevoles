@@ -152,7 +152,7 @@ export default function NewOrgForm() {
       <div>
         <h1 className="text-xl font-bold text-gray-900">Nouvelle organisation</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Créez une organisation et son premier administrateur. Le mot de passe temporaire sera affiché une seule fois.
+          Créez une organisation et son premier administrateur. Un lien d’invitation lui permettra de choisir son mot de passe.
         </p>
       </div>
 
