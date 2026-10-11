@@ -48,7 +48,7 @@
     "poster": true
   },
   "event-create-template": {
-    "durationMs": 109440,
+    "durationMs": 122720,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -216,7 +216,7 @@
     "poster": true
   },
   "shift-approval": {
-    "durationMs": 110760,
+    "durationMs": 119560,
     "width": 1280,
     "height": 800,
     "poster": true

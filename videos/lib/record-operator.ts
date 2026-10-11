@@ -6,10 +6,11 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { createHash } from "node:crypto"
 import { loadManifest } from "./manifest"
+import type { Cue } from "./sentence-timing"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 const subject = "Formation — préparer votre prochain événement"
 const content = "# Bienvenue !\n- Vérifiez votre planning.\n- Partagez votre lien public.\n[Lire le guide](https://www.benevol.app/doc/admin)"
 const ownerEmail = "video.operator.disposable.owner@example.org"
@@ -117,10 +118,10 @@ export async function recordOperator(options: { page: Page; base: string; direct
     })
     await scene("create", async at => {
       await at(.04); await go("/super-admin/organizations/new")
-      await write(page.getByLabel(/^Nom de l'organisation/), "Formation Opérateur Jetable")
+      await at("Renseignons son nom"); await write(page.getByLabel(/^Nom de l'organisation/), "Formation Opérateur Jetable")
       await write(page.getByLabel(/^Nom complet/), "Lou Exemple")
       await write(page.getByLabel(/^Adresse email/), ownerEmail)
-      await at(.47)
+      await at("Créons l’espace")
       const response = page.waitForResponse(res => res.url().endsWith("/api/super-admin/organizations") && res.request().method() === "POST")
       await tap(page, page.getByRole("button", { name: "Créer l'organisation", exact: true }))
       const created = await response; assert.equal(created.status(), 201)
@@ -134,7 +135,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.04); await tap(page, page.getByRole("button", { name: "Envoyer l'invitation par email", exact: true }))
       await page.getByRole("button", { name: "Invitation envoyée", exact: true }).waitFor()
       await at(.17); const first = await openMail(firstBefore, ownerEmail, "invite"); oldInvite = first.localPath
-      await at(.36); await go(`/super-admin/organizations/${initialSlug}`)
+      await at("Avant de l’utiliser"); await go(`/super-admin/organizations/${initialSlug}`)
       const secondBefore = await ids()
       await tap(page, page.getByRole("button", { name: /^Renvoyer l'invitation/ }))
       await page.getByText("Nouveau lien d'activation", { exact: false }).first().waitFor()
@@ -146,29 +147,29 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("activate", async at => {
       await at(.03); await go(newInvite)
       await page.getByLabel("Nouveau mot de passe", { exact: true }).waitFor()
-      await write(page.getByLabel("Nouveau mot de passe", { exact: true }), password)
+      await at("Elle choisit son mot de passe"); await write(page.getByLabel("Nouveau mot de passe", { exact: true }), password)
       await write(page.getByLabel("Confirmer le mot de passe", { exact: true }), password)
       await at(.27); await tap(page, page.getByRole("button", { name: "Créer mon mot de passe", exact: true }))
       await page.getByRole("heading", { name: "Mot de passe créé", exact: true }).waitFor()
-      await at(.30); await tap(page, page.getByRole("link", { name: "Se connecter", exact: true }))
+      await at("Connectons-nous ensuite"); await tap(page, page.getByRole("link", { name: "Se connecter", exact: true }))
       await write(page.getByLabel("Email", { exact: true }), ownerEmail, 45)
       await write(page.getByLabel("Mot de passe", { exact: true }), password, 45)
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
       await page.waitForURL(/\/admin\/events/); ownerCookies = await page.context().cookies()
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 200)
-      await at(.62); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
+      await at("Revenons au détail côté opérateur"); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
       await page.getByRole("row").filter({ hasText: ownerEmail }).getByText("Actif", { exact: true }).waitFor()
       checks.actualActivationAndLogin = true
     })
     await scene("identity", async at => {
-      await at(.04); await write(page.getByLabel("Nom", { exact: true }), "Formation Opérateur Jetable renommée")
+      await at("Modifions d’abord le nom"); await write(page.getByLabel("Nom", { exact: true }), "Formation Opérateur Jetable renommée")
       await tap(page, page.locator("form").filter({ has: page.getByLabel("Nom", { exact: true }) }).getByRole("button", { name: "OK", exact: true }))
       await page.getByRole("heading", { name: "Formation Opérateur Jetable renommée", exact: true }).waitFor()
-      await at(.25); await write(page.getByLabel("Slug", { exact: true }), "formation-operateur-a")
+      await at("Pour l’identifiant, essayons"); await write(page.getByLabel("Slug", { exact: true }), "formation-operateur-a")
       const slugForm = page.locator("form").filter({ has: page.getByLabel("Slug", { exact: true }) })
       await tap(page, slugForm.getByRole("button", { name: "OK", exact: true }))
       await page.getByRole("alert").filter({ hasText: "Ce slug est déjà utilisé." }).waitFor()
-      await at(.41); await write(page.getByLabel("Slug", { exact: true }), finalSlug)
+      await at("Choisissons alors un identifiant libre"); await write(page.getByLabel("Slug", { exact: true }), finalSlug)
       await tap(page, slugForm.getByRole("button", { name: "OK", exact: true }))
       await page.waitForURL(new RegExp(`/super-admin/organizations/${finalSlug}$`))
       assert.equal(await db.orgSlugHistory.count({ where: { organizationId: orgId, slug: initialSlug } }), 1)
@@ -180,16 +181,16 @@ export async function recordOperator(options: { page: Page; base: string; direct
       checks.publicAliasRedirect = { status: redirected.status(), targetHost: `${finalSlug}.benevol.app` }
     })
     await scene("availability", async at => {
-      await at(.04); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
+      await at("Ouvrons la confirmation"); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
       await at(.18); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: /^Désactiver/ }))
       await page.getByRole("button", { name: "Réactiver", exact: true }).waitFor()
       await at(.32); await session(ownerCookies); await go("/admin/events")
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 401)
-      await at(.51); await session(setup.platformCookies); await go(`/super-admin/organizations/${finalSlug}`)
+      await at("Revenons côté opérateur"); await session(setup.platformCookies); await go(`/super-admin/organizations/${finalSlug}`)
       await tap(page, page.getByRole("button", { name: "Réactiver", exact: true }))
       await tap(page, page.getByRole("dialog").getByRole("button", { name: "Réactiver", exact: true }))
       await page.getByRole("button", { name: "Désactiver", exact: true }).waitFor()
-      await at(.69); await session(ownerCookies); await go("/admin/events")
+      await at("La session organisateur peut à nouveau"); await session(ownerCookies); await go("/admin/events")
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 200)
       checks.sessionRejectedWhileInactive = true; checks.sessionRestoredAfterReactivation = true
     })
@@ -198,7 +199,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.04); await go("/admin/events")
       await page.waitForURL(/\/super-admin\/organizations/)
       await at(.28); await go("/super-admin/organizations/formation-operateur-a")
-      await at(.42); await tap(page, page.getByRole("link", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
+      await at("Depuis son détail"); await tap(page, page.getByRole("link", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
       await page.waitForURL(/\/admin\/events/)
       await page.getByRole("link", { name: "Parc — Fête de formation", exact: true }).waitFor()
       assert(!(await page.locator("body").innerText()).includes("Quartier — Fête de formation"))
@@ -217,8 +218,8 @@ export async function recordOperator(options: { page: Page; base: string; direct
     })
     await scene("preview", async at => {
       await at(.03); await go("/super-admin/product-updates")
-      await write(page.getByLabel("Objet *", { exact: true }), subject)
-      await write(page.getByLabel(/^Contenu \(Markdown/), content)
+      await at("Donnons-lui un objet clair"); await write(page.getByLabel("Objet *", { exact: true }), subject)
+      await at("Le contenu commence"); await write(page.getByLabel(/^Contenu \(Markdown/), content)
       await at(.51); await page.getByRole("heading", { name: "Aperçu", exact: true }).scrollIntoViewIfNeeded()
       testBefore = await ids()
       await at(.66); await tap(page, page.getByRole("button", { name: "Envoyer un test", exact: true }))
@@ -229,7 +230,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("broadcast", async at => {
       // Navigation really clears this form: show re-entry, never invent a saved draft.
       await at(.03); await go("/super-admin/product-updates")
-      await write(page.getByLabel("Objet *", { exact: true }), subject)
+      await at("Reprenons notre objet"); await write(page.getByLabel("Objet *", { exact: true }), subject)
       await write(page.getByLabel(/^Contenu \(Markdown/), content)
       assert.equal(await page.getByLabel("Objet *", { exact: true }).inputValue(), subject)
       const recipients = await db.adminUser.findMany({ where: { isActive: true, receiveProductUpdates: true }, select: { email: true } })
@@ -253,12 +254,12 @@ export async function recordOperator(options: { page: Page; base: string; direct
     })
     await scene("delete", async at => {
       await session(setup.platformCookies); await go(`/super-admin/organizations/${finalSlug}`)
-      await at(.25); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
+      await at("Désactivons-le d’abord"); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
       await tap(page, page.getByRole("alertdialog").getByRole("button", { name: /^Désactiver/ }))
-      await at(.27); await tap(page, page.getByRole("button", { name: "Supprimer définitivement", exact: true }))
+      await at("Le bouton de suppression apparaît alors"); await tap(page, page.getByRole("button", { name: "Supprimer définitivement", exact: true }))
       const dialog = page.getByRole("alertdialog")
-      await at(.56); await write(dialog.getByRole("textbox"), finalSlug)
-      await at(.71); await tap(page, dialog.getByRole("button", { name: /^Supprimer/ }))
+      await at("La confirmation demande"); await write(dialog.getByRole("textbox"), finalSlug)
+      await at("Vérifions-le, puis validons"); await tap(page, dialog.getByRole("button", { name: /^Supprimer/ }))
       await page.waitForURL(/\/super-admin\/organizations$/)
       assert.equal(await db.organization.count(), 3)
       assert.equal(await db.adminUser.count({ where: { email: ownerEmail } }), 0)

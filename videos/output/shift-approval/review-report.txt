@@ -1,0 +1,21 @@
+STATUS: NOT READY
+ID: SHIFT_APPROVAL
+Commit: 50109e997d01413760453ed446600b2f6ba55b1e
+BUILD_ID: J9FLk7d2muTPYQm0aZ-LE
+Duration: 119.560 seconds
+Music smallest/largest gap: 14.7 / 19.8 LU; rule passed; quietest music-only -30.5 LUFS.
+
+First-pass artifacts preserved in pass-1/. Accepted cached continuous Puck audio copied from /tmp/video-audio-cache; generation fingerprint and existing independent recognition revalidated. Fresh shared verified build, guarded common fixture reset before successful quick rehearsal and narrated capture. Assembly, posters with --metadata-output review/renders-generated.json, video:validate and final-MP4 speech audit passed. renders.json unchanged.
+
+Direct final-MP4 evidence: all seven review/*-seconds.png chapter sheets inspected; review/inspection.json binds MP4 fingerprint, build, sentence timings and actual markers. review-frames/index.json provides timestamped frames.
+- welcome: current Frise with title and real demo shifts.
+- setup: list click 17.90 immediately before sentence 17.91; editor click 18.88 follows Dans le créneau. Existing Sur validation checkbox is genuinely checked, age 21 and practical Permis B depuis 3 ans visible; not fabricated toggling. Previous age-clause cue now anchored to 22.81.
+- request: actual Lucas personal card has Demande envoyée · en attente de réponse, reserved position and Retirer ma demande. No confirmed state before decision.
+- admin: current Demandes à traiter filter, real Lucas row, licence/phone details and accept/refuse actions; no unrelated volunteer request used.
+- decision: refusal dialog 66.82 follows Refuser sentence 66.35; message appears after optional-message sentence 69.82. Cancel 74.88 and acceptance-dialog click 75.67 follow Après avoir vérifié sentence 74.40. Final confirm 76.45 remains inside that instruction. Successful actual acceptance status visible; no refusal delivered from cancelled preview.
+- volunteer: actual confirmed Lucas card, calendar link and Permis B brief. Earlier ability to withdraw and hypothetical refusal are narration, not falsely shown as actions performed after acceptance.
+- result: one confirmed Lucas row, no Demande à traiter; preserved actual registration.
+
+UI: current Frise, French dates (samedi 17 octobre), Élodie Rochat and fictional example.org identities. No Timeline, mm/dd, localhost/org-admin@localhost or development overlay observed. Settings-address exception not encountered. Final-MP4 independent speech audit passes every chapter (0–4.9% differences). VTT/TXT exactly match current manifest, 28 cues; proportional timing rather than forced word alignment. Effects exact bytes match six recorded clicks, zero native key events; fill() is not native typing. Music measurements bound to final MP4.
+
+No new local source changes or semantic cue failure found. Remaining readiness limitation: requested full real-time playback with subjective listening and fine subtitle timing was not performed in this tool session. Frame inspection, independent final-MP4 speech recognition, sentence timing and signal checks cannot replace that check, so status stays NOT READY. No publish, push, commit or PR.

@@ -1,0 +1,226 @@
+{
+  "slug": "event-create-template",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T09:58:39.668Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "50109e997d01413760453ed446600b2f6ba55b1e",
+    "sourceTree": "363172874e5c6efafeadc746ea190fefda2714f1",
+    "productSourceSha256": "2fa7868a8ea6adb0fa0c9af26edb2c48365e3914d204eb4d1847347188354e91",
+    "buildId": "J9FLk7d2muTPYQm0aZ-LE",
+    "snapshot": "/tmp/benevoles-video-production.batch1pass2",
+    "builtAt": "2026-10-11T09:57:50.976Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-template",
+    "scenario": "EVENT_CREATE_TEMPLATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 3133
+    },
+    {
+      "kind": "click",
+      "atMs": 6080
+    },
+    {
+      "kind": "click",
+      "atMs": 6865
+    },
+    {
+      "kind": "click",
+      "atMs": 7648
+    },
+    {
+      "kind": "click",
+      "atMs": 8432
+    },
+    {
+      "kind": "click",
+      "atMs": 9215
+    },
+    {
+      "kind": "click",
+      "atMs": 10030
+    },
+    {
+      "kind": "click",
+      "atMs": 10865
+    },
+    {
+      "kind": "click",
+      "atMs": 11681
+    },
+    {
+      "kind": "click",
+      "atMs": 12497
+    },
+    {
+      "kind": "click",
+      "atMs": 13315
+    },
+    {
+      "kind": "click",
+      "atMs": 14548
+    },
+    {
+      "kind": "click",
+      "atMs": 15430
+    },
+    {
+      "kind": "click",
+      "atMs": 17266
+    },
+    {
+      "kind": "click",
+      "atMs": 19614
+    },
+    {
+      "kind": "click",
+      "atMs": 24500
+    },
+    {
+      "kind": "click",
+      "atMs": 25050
+    },
+    {
+      "kind": "click",
+      "atMs": 25850
+    },
+    {
+      "kind": "click",
+      "atMs": 26650
+    },
+    {
+      "kind": "click",
+      "atMs": 31672
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1,
+      "endMs": 3439
+    },
+    {
+      "id": "compare",
+      "startMs": 5602,
+      "endMs": 13623
+    },
+    {
+      "id": "preview",
+      "startMs": 14077,
+      "endMs": 18697
+    },
+    {
+      "id": "create",
+      "startMs": 19150,
+      "endMs": 22299
+    },
+    {
+      "id": "adapt",
+      "startMs": 24469,
+      "endMs": 26962
+    },
+    {
+      "id": "result",
+      "startMs": 30025,
+      "endMs": 31979
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "compare",
+      "phrase": "Festival couvre plusieurs soirées",
+      "startMs": 4012,
+      "endMs": 6468,
+      "cueMs": 5603
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Buvette organise",
+      "startMs": 6468,
+      "endMs": 9988,
+      "cueMs": 6388
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Manifestation sportive prépare",
+      "startMs": 9988,
+      "endMs": 14901,
+      "cueMs": 7170
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Fête de village s’étale",
+      "startMs": 14901,
+      "endMs": 17439,
+      "cueMs": 7955
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Montage, exploitation, démontage sépare",
+      "startMs": 17439,
+      "endMs": 22187,
+      "cueMs": 8737
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "épicerie participative",
+      "startMs": 29392,
+      "endMs": 35450,
+      "cueMs": 9520
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "La page blanche reste préférable",
+      "startMs": 37497,
+      "endMs": 42000,
+      "cueMs": 12829
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Avant de continuer",
+      "startMs": 9454,
+      "endMs": 16387,
+      "cueMs": 14913
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "prenons le samedi",
+      "startMs": 16387,
+      "endMs": 19748,
+      "cueMs": 16744
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Créer le brouillon génère",
+      "startMs": 0,
+      "endMs": 6589,
+      "cueMs": 19150
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Le statut reste Brouillon",
+      "startMs": 6589,
+      "endMs": 9046,
+      "cueMs": 19922
+    },
+    {
+      "segmentId": "adapt",
+      "phrase": "Ajustons par exemple",
+      "startMs": 18653,
+      "endMs": 27000,
+      "cueMs": 25363
+    }
+  ]
+}

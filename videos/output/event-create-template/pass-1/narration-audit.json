@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T09:21:22.012Z",
+  "revalidatedAt": "2026-10-11T09:21:22.013Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "4d151dd842e0b4ac6c4f65d0b31c8ea47e34b6477f23389e258570042c6520d2",
+      "recognized": "Un modèle fait gagner du temps quand l'événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n'est publié automatiquement et tout reste modifiable.",
+      "expected": "Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "compare",
+      "audioSha256": "f9624b3e3abd64325bc70e7102d6b3b93e2fefd5f53908d7d74254cc3f790f35",
+      "recognized": "Pour un événement daté, cinq points de départ sont proposés. Festival couvre plusieurs soirées, Buvette organise le bar et la caisse sur une journée, Manifestation sportive prépare dossards, parcours et ravitaillement, Fête de village s'étale sur deux jours, Montage, Exploitation, Démontage sépare clairement les trois phases. Pour une activité qui revient chaque semaine, quatre autres modèles préparent une saison de permanence : Épicerie participative, Distribution alimentaire, Permanence d'accueil et Repair Café. Une vidéo dédiée les présente. La page blanche reste préférable pour un format très particulier.",
+      "expected": "Pour un événement daté, cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. Pour une activité qui revient chaque semaine, quatre autres modèles préparent une saison de permanences : épicerie participative, distribution alimentaire, permanence d’accueil et repair café. Une vidéo dédiée les présente. La page blanche reste préférable pour un format très particulier.",
+      "wordErrorRate": 0.011494252873563218,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "781c1b5b22f886afa3264b358349773d8a278869e79bad0e0f05d10474f5c8f5",
+      "recognized": "Choisissons Fête de village. L'aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour. Prenons le samedi vingt-et-un novembre. Le deuxième jour est calculé automatiquement par le modèle.",
+      "expected": "Choisissons Fête de village. L’aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour ; prenons le samedi vingt-et-un novembre. Le deuxième jour est calculé automatiquement par le modèle.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "2d4f775d769e802d1709bebcc22850289e6fa3fd64ffb123287ba5b213d8d37c",
+      "recognized": "Créer le brouillon génère ici dix créneaux et ouvre l'étape du planning. Le statut reste brouillon, le modèle n'envoie aucun e-mail et n'ouvre aucune inscription. Il fournit seulement une base de travail, plus rapide à corriger qu'une page vide.",
+      "expected": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning. Le statut reste Brouillon. Le modèle n’envoie aucun email et n’ouvre aucune inscription : il fournit seulement une base de travail plus rapide à corriger qu’une page vide.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "adapt",
+      "audioSha256": "bfe03911543238760ca5c575b42e7f9a6e1202d7c289b037695b72b17a358fc5",
+      "recognized": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur. On peut aussi supprimer un créneau inutile et en ajouter d'autres. Ajustons par exemple la capacité de la première buvette pour coller à la taille réelle de l'équipe.",
+      "expected": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur ; on peut aussi supprimer un créneau inutile et en ajouter d’autres. Ajustons par exemple la capacité de la première Buvette pour coller à la taille réelle de l’équipe.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "88503a54479b60786dbe30761e75a08cacb62175375d7a490c10d0dedf3e1920",
+      "recognized": "Vous avez un brouillon de dix créneaux et la capacité de la première buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l'aperçu bénévole avant de publier. Le modèle propose une base, vous adaptez le planning réel.",
+      "expected": "Vous avez un brouillon de dix créneaux et la capacité de la première Buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l’aperçu bénévole avant de publier. Le modèle propose une base ; vous adaptez le planning réel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

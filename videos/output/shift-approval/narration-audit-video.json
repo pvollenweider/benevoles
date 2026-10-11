@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T10:26:55.598Z",
+  "revalidatedAt": "2026-10-11T10:26:55.598Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d5dfc3178a34086841786cbb1fa588720987a637e601be029a5fed40d6748113",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "3061ad5eefddf8fd05e80e23428c1457b44dbc23b68a764c896b6c50cb90d8ed",
+      "recognized": "Pour une mission sensible comme conduire une navette, tenir une caisse ou gérer un accès, l'inscription immédiate n'est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
+      "expected": "Pour une mission sensible, comme conduire une navette, tenir une caisse ou gérer un accès, l’inscription immédiate n’est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "setup",
+      "audioSha256": "a75571a6a778470cfa54c5b850aa53feb541ca0ad819ca4fe5efedb48ffdfcee",
+      "recognized": "Dans le créneau, active survalidation. Ajoute aussi les critères utiles. Ici, vingt-et-un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l'organisation l'examine.",
+      "expected": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
+      "wordErrorRate": 0.046511627906976744,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "request",
+      "audioSha256": "2b2cf8700315ac461c22185bd689f7e4ef97b56da4c447cb37531147234c54ac",
+      "recognized": "Côté bénévoles, le créneau annonce clairement qu'il est soumis à validation avant même l'inscription. Une fois le formulaire envoyé, la page personnelle affiche demande envoyée, en attente de réponse. Ce n'est pas présenté comme une confirmation définitive.",
+      "expected": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page personnelle affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.",
+      "wordErrorRate": 0.025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin",
+      "audioSha256": "cb745686728a2cbd6cc334d9161016f1d966f768e87da01e88ef95114407aa25",
+      "recognized": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L'organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.",
+      "expected": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L’organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "decision",
+      "audioSha256": "9d68b3922d1319ce555080109e679afb920946cc3480416b8dbfc756e8eabb7d",
+      "recognized": "Accepter confirme le créneau et envoie un e-mail. Refuser libère la place et prévient aussi la personne. Ce parcours permet d'ajouter un message facultatif, sans exposer de note interne. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.",
+      "expected": "Accepter confirme le créneau et envoie un email. Refuser libère la place et prévient aussi la personne ; ce parcours permet d’ajouter un message facultatif, sans exposer de notes internes. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.",
+      "wordErrorRate": 0.04878048780487805,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "volunteer",
+      "audioSha256": "9bc708926ee47d42a9d08818b229ae737b886161b39667234adf0f6f95beaa0d",
+      "recognized": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
+      "expected": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "c5b5ec1cbd8be50d7faf7e0222d277e5c86dd0cca16a42ea0423ba3cd6d278af",
+      "recognized": "Le mode survalidation évite donc une affectation risquée, sans transformer l'inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l'examen, la décision est traçable, et la personne reçoit une réponse claire.",
+      "expected": "Le mode sur validation évite donc une affectation risquée sans transformer l’inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l’examen, la décision est traçable et la personne reçoit une réponse claire.",
+      "wordErrorRate": 0.04878048780487805,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

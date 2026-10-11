@@ -1,53 +1,62 @@
 {
   "id": "SHIFT_APPROVAL",
   "slug": "shift-approval",
-  "validatedAt": "2026-10-04T17:43:26.328Z",
+  "validatedAt": "2026-10-11T10:26:30.989Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 110760,
+  "captureMs": 119560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 16216,
-      "audioMs": 16214,
-      "driftMs": 2
+      "visualMs": 15802,
+      "audioMs": 15801,
+      "driftMs": 1
     },
     {
       "id": "setup",
-      "visualMs": 15433,
-      "audioMs": 15430,
-      "driftMs": 3
+      "visualMs": 15448,
+      "audioMs": 15442,
+      "driftMs": 6
     },
     {
       "id": "request",
-      "visualMs": 14308,
-      "audioMs": 14307,
+      "visualMs": 13646,
+      "audioMs": 13645,
       "driftMs": 1
     },
     {
       "id": "admin",
-      "visualMs": 14088,
-      "audioMs": 14085,
-      "driftMs": 3
+      "visualMs": 13500,
+      "audioMs": 13499,
+      "driftMs": 1
     },
     {
       "id": "decision",
-      "visualMs": 15912,
-      "audioMs": 15910,
-      "driftMs": 2
+      "visualMs": 14999,
+      "audioMs": 14998,
+      "driftMs": 1
     },
     {
       "id": "volunteer",
-      "visualMs": 14181,
-      "audioMs": 14179,
-      "driftMs": 2
+      "visualMs": 13558,
+      "audioMs": 13555,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 14158,
-      "audioMs": 14155,
-      "driftMs": 3
+      "visualMs": 13461,
+      "audioMs": 13460,
+      "driftMs": 1
     }
   ],
+  "anchorsChecked": 6,
+  "music": {
+    "voicedWindows": 101,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -30.5
+  },
   "issues": []
 }

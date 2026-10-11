@@ -1,0 +1,133 @@
+{
+  "slug": "shift-approval",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T10:24:03.123Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "50109e997d01413760453ed446600b2f6ba55b1e",
+    "sourceTree": "363172874e5c6efafeadc746ea190fefda2714f1",
+    "productSourceSha256": "2fa7868a8ea6adb0fa0c9af26edb2c48365e3914d204eb4d1847347188354e91",
+    "buildId": "J9FLk7d2muTPYQm0aZ-LE",
+    "snapshot": "/tmp/benevoles-video-production.batch1pass2",
+    "builtAt": "2026-10-11T09:57:50.976Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_APPROVAL",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4725
+    },
+    {
+      "kind": "click",
+      "atMs": 5559
+    },
+    {
+      "kind": "click",
+      "atMs": 11948
+    },
+    {
+      "kind": "click",
+      "atMs": 12764
+    },
+    {
+      "kind": "click",
+      "atMs": 13565
+    },
+    {
+      "kind": "click",
+      "atMs": 14347
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1152,
+      "endMs": 3781
+    },
+    {
+      "id": "setup",
+      "startMs": 4234,
+      "endMs": 5973
+    },
+    {
+      "id": "request",
+      "startMs": 6426,
+      "endMs": 7620
+    },
+    {
+      "id": "admin",
+      "startMs": 9786,
+      "endMs": 11033
+    },
+    {
+      "id": "decision",
+      "startMs": 11484,
+      "endMs": 14656
+    },
+    {
+      "id": "volunteer",
+      "startMs": 15107,
+      "endMs": 16321
+    },
+    {
+      "id": "result",
+      "startMs": 16772,
+      "endMs": 18104
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "setup",
+      "phrase": "Dans le créneau",
+      "startMs": 0,
+      "endMs": 4139,
+      "cueMs": 5073
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Dans le créneau",
+      "startMs": 0,
+      "endMs": 4139,
+      "cueMs": 5875
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "ici, vingt et un ans",
+      "startMs": 7761,
+      "endMs": 15652,
+      "cueMs": 5906
+    },
+    {
+      "segmentId": "decision",
+      "phrase": "Refuser libère la place",
+      "startMs": 4815,
+      "endMs": 10231,
+      "cueMs": 11484
+    },
+    {
+      "segmentId": "decision",
+      "phrase": "ce parcours permet d’ajouter",
+      "startMs": 10231,
+      "endMs": 18537,
+      "cueMs": 12258
+    },
+    {
+      "segmentId": "decision",
+      "phrase": "Après avoir vérifié cette possibilité",
+      "startMs": 18537,
+      "endMs": 26000,
+      "cueMs": 12266
+    }
+  ]
+}

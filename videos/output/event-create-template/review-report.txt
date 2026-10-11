@@ -1,0 +1,20 @@
+STATUS: NOT READY
+ID: EVENT_CREATE_TEMPLATE
+Commit: 50109e997d01413760453ed446600b2f6ba55b1e
+BUILD_ID: J9FLk7d2muTPYQm0aZ-LE
+Duration: 122.720 seconds
+Music smallest/largest gap: 12.0 / 20.0 LU; rule passed; quietest music-only -14.3 LUFS.
+
+All first-pass artifacts preserved in pass-1/. First-pass continuous Puck WAVs reused; independent audit revalidated identical text/audio. Fresh verified product build; exact owned template reset before successful quick rehearsal and narrated capture. Assembly, posters with --metadata-output review/renders-generated.json, video:validate, final-MP4 narration audit all passed. videos/renders.json unchanged.
+
+Final-MP4 frame evidence: review/*-seconds.png (one frame per second through every chapter), review-frames/index.json and review/inspection.json (MP4 SHA, actual build, sentences, input markers).
+- welcome: title then new event wizard, no specific action instruction violated.
+- compare: named model selections at 18.67, 20.77, 23.96, 28.34, 30.52 s follow sentence starts 18.18, 20.30, 23.46, 27.86, 30.06 s. Weekly selections 39.97–44.77 s stay within named examples sentence 39.45–44.59 s (last click close to its end). Page blanche 48.20 s follows 47.74 s start. Prior premature selections fixed by merged anchors.
+- preview: village choice 51.75 s matches 51.76 s start; title 59.19 follows 58.66; date 63.55 follows 63.05. Actual field 21.11.2026, no mm/dd.
+- create: creation 69.60 follows 69.13; ten-slot draft and Brouillon shown, no publication. Status navigation after 73.51 sentence.
+- adapt: opens editor during general editable-fields description; capacity 98.42 follows 97.94 instruction, saves five places. Frame sequence confirms correct Buvette.
+- result: ten slots and first Buvette 0/5; preview clicked 115.19 within instruction 111.10–118.49. Benevol preview shown.
+
+UI review: current Frise label, no Timeline; French dates; fictional Camille Martin; no localhost/org-admin@localhost or development overlay observed. Settings-address exception not encountered. Final-MP4 independent speech audit passes all chapters. VTT/TXT exactly match current manifest (28 cues); proportional caption timings are not forced word alignment. Input effects exact bytes match recorded interactions (20 clicks, zero native key markers), with music measured and bound to this MP4.
+
+No new local source changes. Remaining readiness limitation: full real-time playback with subjective sound/timbre and fine subtitle timing was not performed in this tool session. Direct frame review, independent final-MP4 speech recognition, sentence timing and signal/effect checks do not replace that requested check; therefore NOT READY rather than an unsupported READY certification. No additional semantic cue failure found. No publish, push, commit or PR.

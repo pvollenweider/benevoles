@@ -973,14 +973,14 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
         const shift = page.getByRole("button", { name: /Passage à l'heure d'été/ })
         await shift.scrollIntoViewIfNeeded()
-        await at(0.46)
+        await at("Un créneau affiché")
         await tap(page, shift)
       })
       await scene("autumn", async (at) => {
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
         const shift = page.getByRole("button", { name: /Passage à l'heure d'hiver/ })
         await shift.scrollIntoViewIfNeeded()
-        await at(0.19)
+        await at("Le même créneau")
         await tap(page, shift)
         await page.getByRole("dialog").waitFor()
       })
@@ -988,7 +988,7 @@ async function main() {
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
         const timeZone = page.getByLabel("Fuseau horaire de vos événements")
         await timeZone.scrollIntoViewIfNeeded()
-        await at(0.56)
+        await at("Ces calculs dépendent du fuseau horaire")
         await tap(page, timeZone)
       })
       await scene("calendar", async (at) => {
@@ -4017,11 +4017,11 @@ async function main() {
       await scene("statuses", async (at) => {
         const status = page.getByLabel("Statut")
         await status.scrollIntoViewIfNeeded()
-        await at(0.22)
+        await at("Brouillon signifie invisible au public")
         await saveVisibility(() => status.selectOption("draft"))
-        await at(0.52)
+        await at("Publié rend la page accessible")
         await saveVisibility(() => status.selectOption("published"))
-        await at(0.76)
+        await at("Un événement ne peut passer à Publié")
         await page.getByText(/Un événement ne peut être publié qu'avec au moins un créneau/).scrollIntoViewIfNeeded()
       })
 
@@ -4045,7 +4045,7 @@ async function main() {
           const pad = (n: number) => String(n).padStart(2, "0")
           return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T09:00`
         }
-        await at(0.18)
+        await at("Indiquons une ouverture et une fermeture")
         await saveVisibility(() => fillVisibly(page, open, local(2), 1_000))
         await saveVisibility(() => fillVisibly(page, page.getByLabel("Fermeture programmée (facultatif)"), local(5), 1_000))
         await at(0.72)
@@ -4065,7 +4065,7 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
         const status = page.getByLabel("Statut")
         await status.scrollIntoViewIfNeeded()
-        await at(0.34)
+        await at("Après l’événement")
         await saveVisibility(() => status.selectOption("archived"))
         await at(0.70)
         await page.goto(`${baseUrl}/admin/events`); await settle(page)
