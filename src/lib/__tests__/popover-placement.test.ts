@@ -41,6 +41,11 @@ describe("popoverPlacement", () => {
     expect(inViewport(p, 300)).toBe(true)
   })
 
+  it("goes inside, not above, when neither side has the minimum height, even with a little more room above", () => {
+    const p = popoverPlacement({ anchorTop: 150, anchorBottom: 198, viewportHeight: 256, contentHeight: 420 })
+    expect(p).toEqual({ top: 8, maxHeight: 240, side: "inside" })
+  })
+
   it("never returns a negative height", () => {
     const p = popoverPlacement({ anchorTop: 0, anchorBottom: 48, viewportHeight: 10, contentHeight: 420 })
     expect(p.maxHeight).toBeGreaterThanOrEqual(0)

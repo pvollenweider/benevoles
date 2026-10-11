@@ -6,8 +6,8 @@ export type PopoverPlacement = { top: number; maxHeight: number; side: "below" |
 /**
  * Vertical placement of a popover opened from a bar (the timeline quick editor): below the bar
  * when its content fits there, or when there is at least as much room below as above; otherwise
- * above it; and when neither side has `minHeight`, clamped inside the viewport (it then covers
- * the bar). The popover never leaves the viewport: `maxHeight` is the room it has, the rest
+ * above it when that side has `minHeight`; and when neither side has it, clamped inside the
+ * viewport (it then covers the bar). The popover never leaves the viewport: `maxHeight` is the room it has, the rest
  * scrolls inside it. `contentHeight` is unknown before the first measure: the room available
  * is then taken as is.
  */
@@ -28,7 +28,7 @@ export function popoverPlacement({
   if (wanted <= below || (below >= above && below >= minHeight)) {
     return { top: anchorBottom + gap, maxHeight: below, side: "below" }
   }
-  if (above >= minHeight || (above > below && above > 0)) {
+  if (above >= minHeight) {
     const height = Math.min(wanted, above)
     return { top: anchorTop - gap - height, maxHeight: height, side: "above" }
   }
