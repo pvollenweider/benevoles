@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:33:47.134Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "c797aa8dcbf15e944bb96bc6e1db7a50188bfad746f6946f3e4b442afc5bd1fb",
+  "clipSha256": "c83689abdba602fb52bdf67b819623aa28139d795c027bd85544b01704485942",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Envoyons maintenant l'invitation et ouvrons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Envoyons maintenant l'invitation",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur « Envoyer l'invitation par email » et confirmation d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons le vrai message reçu dans la boîte de formation",
+        "visibleSeconds": 3.4,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail d'invitation ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "revenons au détail de l'organisation et renvoyons l'invitation",
+        "visibleSeconds": 9.4,
+        "visible": "Page de détail de l'organisation affichée et clic sur « Renvoyer l'invitation »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.7,
+        "spoken": "Vérifions l'ancien : il est refusé.",
+        "visibleSeconds": 16.1,
+        "visible": "Page « Bienvenue - Lien invalide / Lien invalide ou déjà utilisé »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "Ouvrons le second message reçu pour poursuivre.",
+        "visibleSeconds": 27.6,
+        "visible": "Retour à la boîte de messagerie Mailpit avec le second message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

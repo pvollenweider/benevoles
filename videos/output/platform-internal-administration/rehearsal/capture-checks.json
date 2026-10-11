@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-11T13:35:16.260Z",
+  "audiovisualValidated": false,
+  "localDatabaseOnly": true,
+  "isolatedSmtpOnly": true,
+  "createdPendingOrganization": true,
+  "actualInviteMails": [
+    "36SupHk7OooNnPQXCh2Pos",
+    "2pkTrMoCyi1Dx0QlcSaDIQ"
+  ],
+  "oldInviteRefused": true,
+  "actualActivationAndLogin": true,
+  "publicAliasRedirect": {
+    "status": 307,
+    "targetHost": "formation-operateur-jetable-renommee.benevol.app"
+  },
+  "sessionRejectedWhileInactive": true,
+  "sessionRestoredAfterReactivation": true,
+  "explicitContextSelection": true,
+  "realHealthWithoutInventedJobs": true,
+  "actualTestEmail": "6GeejMXZFJEiybQ42InE0D",
+  "actualBroadcastEmails": [
+    "1qb367HUZjYZiU8zzFhwed",
+    "6tnsQAnzWFZ9JPZXHUBLCu"
+  ],
+  "actualUnsubscribe": true,
+  "exactDisposableDeletion": true,
+  "ordinaryOwnerPlatformAccessRefused": true
+}

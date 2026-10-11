@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:03:11.598Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "3a8ddaf589bc9dbc299eb969210571603eb2923bb86257881e383786a13fabcc",
+  "clipSha256": "292ed92e914c2b2e6e73d07ece675ec7e816d08037c918a6ead6923f991f4346",
+  "scene": "program",
+  "review": {
+    "heardOpening": "Dans les réglages de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "ajoutons un spectacle au programme",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le bouton « + Ajouter » sous la rubrique Spectacles, ouvrant le formulaire de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Saisissons Concert du village, le quatorze novembre deux mille vingt-six",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie de « Concert du village » dans le champ « Nom du spectacle » avec la date du 14.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "de onze heures à douze heures trente, puis cliquez sur Ajouter",
+        "visibleSeconds": 10.4,
+        "visible": "Saisie des horaires 11:00 et 12:30 puis clic sur le bouton « Ajouter »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Son horaire sert de repère dans le planning",
+        "visibleSeconds": 11.2,
+        "visible": "Le spectacle « Concert du village » apparaît dans la liste des spectacles configurés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, fluide et bien calée sur les manipulations de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

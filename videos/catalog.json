@@ -291,8 +291,8 @@
         "organisateur"
       ],
       "feature": "Pages d'information et QR code",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-11",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1394,8 +1394,8 @@
         "super-admin"
       ],
       "feature": "Administration de la plateforme",
-      "updatedAt": "2026-10-06",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "avance"
     },
     {

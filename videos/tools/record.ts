@@ -3742,7 +3742,9 @@ async function main() {
       })
     } else if (slug === "event-milestones") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
-      await page.getByRole("heading", { name: "Jalons", exact: true }).scrollIntoViewIfNeeded()
+      // The heading can be barely visible at the bottom while all milestones
+      // remain below the viewport. Show the list during its introduction too.
+      await page.getByRole("heading", { name: "Jalons", exact: true }).evaluate(element => element.scrollIntoView({ block: "start" }))
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Les échéances essentielles, au même endroit", duration: 2_300 })
         await page.getByRole("heading", { name: "Jalons" }).waitFor()
@@ -3750,14 +3752,14 @@ async function main() {
 
       await scene("create", async (at) => {
         await page.getByRole("heading", { name: "Jalons" }).scrollIntoViewIfNeeded()
-        await at(0.03)
+        await at("Ajoutons Fermer les inscriptions")
         await tap(page, page.getByRole("button", { name: "+ Ajouter un jalon" }))
-        await at(0.08)
+        await at("Ajoutons Fermer les inscriptions")
         await page.getByLabel("Titre *").fill("Fermer les inscriptions")
-        await at(0.17)
+        await at("Ajoutons Fermer les inscriptions")
         const due = new Date(); due.setDate(due.getDate() + 8)
         await page.getByLabel("Échéance *").fill(due.toISOString().slice(0, 10))
-        await at(0.84)
+        await at("Ajoutons Fermer les inscriptions")
         await tap(page, page.getByRole("button", { name: "Ajouter" }))
         await page.getByText("Fermer les inscriptions", { exact: true }).first().waitFor()
       })
@@ -3795,7 +3797,7 @@ async function main() {
         await page.getByText(/1 jalon est en retard/).scrollIntoViewIfNeeded()
         const returnToMilestones = page.getByRole("link", { name: /Voir les jalons.*Fête du village de Montvert/ })
         await returnToMilestones.waitFor()
-        await at(0.47)
+        await at("Les jalons à venir restent visibles")
         await tap(page, returnToMilestones); await settle(page)
         await page.getByRole("checkbox", { name: "Envoyer les consignes", exact: true }).scrollIntoViewIfNeeded()
       })
@@ -4483,7 +4485,7 @@ async function main() {
       await scene("withdrawal", async (at) => {
         const checkbox = page.getByRole("checkbox", { name: "Prévenir en cas de désistement", exact: true })
         await checkbox.scrollIntoViewIfNeeded()
-        await at(0.39)
+        await at("Décocher cette option coupe aussi")
         if (await checkbox.isChecked()) await tap(page, checkbox)
         await at(0.74)
         if (!await checkbox.isChecked()) await tap(page, checkbox)

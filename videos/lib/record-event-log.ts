@@ -49,7 +49,7 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
     })
     await scene("filters", async at => {
       await at(0.12); await filter("Type d'élément", "Registration")
-      await at(0.32); await filter("Qui", "volunteer")
+      await at("Le filtre Qui distingue"); await filter("Qui", "volunteer")
       if (await page.locator("#panel-explore > div > div").count() !== 1) throw new Error("Volunteer filter should show the actual withdrawal only")
       await at(0.51); await filter("Action", "registration")
       await at(0.75); await reset()
@@ -72,8 +72,8 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
     })
     await scene("replay", async at => {
       await page.getByRole("tab", { name: "Rejouer", exact: true }).scrollIntoViewIfNeeded()
-      await at(0.10); await tap(page, page.getByRole("tab", { name: "Rejouer", exact: true }))
-      await at(0.20); await tap(page, page.locator("#panel-replay").getByRole("button", { name: /^Accueil · Accueil — chaîne de remplacement/ }))
+      await at("Pour comprendre l'évolution d'un même créneau"); await tap(page, page.getByRole("tab", { name: "Rejouer", exact: true }))
+      await at("Choisissons un élément qui possède plusieurs entrées"); await tap(page, page.locator("#panel-replay").getByRole("button", { name: /^Accueil · Accueil — chaîne de remplacement/ }))
       await page.getByRole("slider", { name: "Étape dans l'historique", exact: true }).waitFor()
       await at(0.32); await tap(page, page.getByRole("button", { name: "Étape suivante", exact: true }))
       await at(0.43); await tap(page, page.getByRole("button", { name: "Étape suivante", exact: true }))
@@ -86,7 +86,7 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
       checks.replayReadOnlyVerified = true
     })
     await scene("story", async at => {
-      await at(0.12); await tap(page, page.getByRole("tab", { name: "Récit", exact: true }))
+      await at("Le mode Récit répond à une autre question"); await tap(page, page.getByRole("tab", { name: "Récit", exact: true }))
       const choices = await page.request.get(`${base}/api/admin/events/${eventId}/log/candidates?kind=story`)
       const candidate = (await choices.json()).candidates.find((choice: { logId: string }) => choice.logId === prepared.rootLogId) as { label: string } | undefined
       if (!choices.ok() || !candidate) throw new Error("Actual causal root is not offered by the story picker")

@@ -1,0 +1,48 @@
+{
+  "slug": "event-program-pages-qr",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:57:39.338Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1107,
+      "endMs": 13796
+    },
+    {
+      "id": "program",
+      "startMs": 14250,
+      "endMs": 33182
+    },
+    {
+      "id": "program-edit",
+      "startMs": 33635,
+      "endMs": 51302
+    },
+    {
+      "id": "pages",
+      "startMs": 51755,
+      "endMs": 74235
+    },
+    {
+      "id": "page-order",
+      "startMs": 74689,
+      "endMs": 93876
+    },
+    {
+      "id": "public",
+      "startMs": 94328,
+      "endMs": 112960
+    },
+    {
+      "id": "qr",
+      "startMs": 113413,
+      "endMs": 132537
+    },
+    {
+      "id": "result",
+      "startMs": 132990,
+      "endMs": 155617
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:03:27.041Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "d76b6155e0690f473fb073678ebecc7fa143c1bac389659057abe55ce3baa31e",
+  "clipSha256": "e6e5c8bd6cc2756d9a6965d16044fac9229b686c0b319ca6be6ba5eb549a3412",
+  "scene": "program-edit",
+  "review": {
+    "heardOpening": "Vous pouvez corriger le programme sans le recréer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "Ouvrons le concert avec Modifier",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur l'icône crayon Modifier et ouverture des champs modifiables du spectacle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis avançons sa fin à treize heures",
+        "visibleSeconds": 6.4,
+        "visible": "Modification de l'heure de fin saisie à 13:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "et confirmons",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur le bouton Confirmer et mise à jour de la ligne du concert à 11:00-13:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Le concert garde son nom et sa date",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage confirmé de la date 2026-11-14 et de l'intitulé Concert du Village",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

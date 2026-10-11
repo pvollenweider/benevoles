@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:59:43.312Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "9d8fa4417c65441300fd2ac7f8438412c30b6034a0297f98c9a46988b788a435",
+  "clipSha256": "be5bcb027e1c2c42e0356d88255a2970056c76ee8148cd1a74e5622717e7b237",
+  "scene": "program",
+  "review": {
+    "heardOpening": "Dans les réglages de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "ajoutons un spectacle au programme",
+        "visibleSeconds": 2,
+        "visible": "Clic sur + Ajouter dans la section Spectacles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Saisissons Concert du village",
+        "visibleSeconds": 4,
+        "visible": "Saisie de Concert du village dans le champ nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "de onze heures à douze heures trente",
+        "visibleSeconds": 9.5,
+        "visible": "Renseignement des heures de début et fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "puis cliquez sur Ajouter",
+        "visibleSeconds": 11.5,
+        "visible": "Clic sur le bouton Ajouter et affichage du spectacle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide et bien synchronisée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

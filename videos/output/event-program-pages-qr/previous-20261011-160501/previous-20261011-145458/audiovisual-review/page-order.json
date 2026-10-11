@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:00:17.483Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "5470b56e079b5328baad2bdad7c1e064ef5f9f721c126ee37eb267af27f550f8",
+  "clipSha256": "a4949732e03700a0867501ab20562d99ef5ed3c7482e6926f024723ca370c875",
+  "scene": "page-order",
+  "review": {
+    "heardOpening": "Les flèches Monter et Descendre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Faisons monter Ce qu’il faut apporter",
+        "visibleSeconds": 5,
+        "visible": "Clic sur la flèche pour faire monter l'élément",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Ouvrons ensuite Modifier pour ajouter une gourde à sa liste",
+        "visibleSeconds": 8.5,
+        "visible": "Fenêtre de modification ouverte et ajout du texte gourde",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 11.5,
+        "visible": "Clic sur Enregistrer et fermeture de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "vérifions-la sans perdre notre contenu",
+        "visibleSeconds": 17,
+        "visible": "Ouverture de la confirmation puis clic sur Annuler",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et dynamique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

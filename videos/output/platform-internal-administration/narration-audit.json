@@ -1,16 +1,17 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-06T05:53:01.568Z",
-  "revalidatedAt": "2026-10-06T05:53:01.569Z",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T09:28:55.192Z",
+  "revalidatedAt": "2026-10-11T13:31:59.122Z",
   "source": "generated narration WAV",
-  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
       "audioSha256": "a9363a45e14aa125223ea1e595d1824aad2bdb2c9354942b4c84dd1165345dbe",
-      "recognized": "Bienvenue dans l'administration de la plateforme. Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles. Notre liste contient trois organisations de formation. Elles montrent leur nom, leur identifiant, leur état et les nombres d'évènements, d'administrateurs et de membres. Ouvrons un détail pour retrouver ces informations et les comptes associés. Toutes les personnes utilisées ici sont fictives, hein. Nous travaillons dans une base locale séparée. Aucun message ne part vers une vraie association.",
+      "recognized": "Bienvenue dans l'administration de la plate-forme. Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles. Notre liste contient trois organisations de formation. Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres. Ouvrons un détail pour retrouver ces informations et les comptes associés. Toutes les personnes utilisées ici sont fictives, nous travaillons dans une base locale séparée, aucun message ne part vers une vraie association.",
       "expected": "Bienvenue dans l'administration de la plateforme. Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles. Notre liste contient trois organisations de formation. Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres. Ouvrons un détail pour retrouver ces informations et les comptes associés. Toutes les personnes utilisées ici sont fictives. Nous travaillons dans une base locale séparée : aucun message ne part vers une vraie association.",
-      "wordErrorRate": 0.037037037037037035,
+      "wordErrorRate": 0.024691358024691357,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
@@ -18,7 +19,7 @@
     {
       "id": "create",
       "audioSha256": "9f48e8812cc3db9a12fb5355782bfd390f2356e66629497dc5b570228dfec481",
-      "recognized": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons son nom, puis le nom et l'adresse email de son premier administrateur. Prenons le temps de vérifier cette adresse, c'est elle qui recevra son accès. Créons l'espace. Le résultat affiche un lien d'activation valable sept jours. Le compte attend encore son activation. La création ne suffit donc pas à dire que la personne s'est connectée et nous ne lui remettons pas un mot de passe temporaire. Le lien permettra de choisir son propre mot de passe.",
+      "recognized": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons son nom, puis le nom et l'adresse e-mail de son premier administrateur. Prenons le temps de vérifier cette adresse, c'est elle qui recevra son accès. Créons l'espace. Le résultat affiche un lien d'activation valable sept jours. Le compte attend encore son activation. La création ne suffit donc pas à dire que la personne s'est connectée et nous ne lui remettons pas un mot de passe temporaire. Le lien permettra de choisir son propre mot de passe.",
       "expected": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons son nom, puis le nom et l'adresse email de son premier administrateur. Prenons le temps de vérifier cette adresse : c'est elle qui recevra son accès. Créons l'espace. Le résultat affiche un lien d'activation valable sept jours. Le compte attend encore son activation. La création ne suffit donc pas à dire que la personne s'est connectée, et nous ne lui remettons pas un mot de passe temporaire. Le lien permettra de choisir son propre mot de passe.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -38,7 +39,7 @@
     {
       "id": "activate",
       "audioSha256": "3e6223f95636097ccd39f58271c9abc1b3bc4367b41ab72c8de1f1f064747d59",
-      "recognized": "La personne invitée ouvre son nouveau lien dans sa propre session. Elle choisit son mot de passe et termine l'activation. Le mot de passe n'a pas besoin d'être partagé avec l'opérateur. Connectons-nous ensuite avec ce nouveau compte. Nous arrivons dans son organisation encore sans événement. Revenons aux détails côté opérateur pour vérifier que le compte apparaît actif. Le lien d'activation a été utilisé. Il n'est pas un lien permanent de connexion. Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
+      "recognized": "La personne invitée ouvre son nouveau lien dans sa propre session. Elle choisit son mot de passe et termine l'activation. Le mot de passe n'a pas besoin d'être partagé avec l'opérateur. Connectons-nous ensuite avec ce nouveau compte, nous arrivons dans son organisation encore sans événement. Revenons aux détails côté opérateur pour vérifier que le compte apparaît actif. Le lien d'activation a été utilisé. Il n'est pas un lien permanent de connexion. Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
       "expected": "La personne invitée ouvre son nouveau lien dans sa propre session. Elle choisit son mot de passe et termine l'activation. Le mot de passe n'a pas besoin d'être partagé avec l'opérateur. Connectons-nous ensuite avec ce nouveau compte : nous arrivons dans son organisation, encore sans événement. Revenons au détail côté opérateur pour vérifier que le compte apparaît actif. Le lien d'activation a été utilisé ; il n'est pas un lien permanent de connexion. Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
       "wordErrorRate": 0.022727272727272728,
       "needsReview": false,
@@ -48,7 +49,7 @@
     {
       "id": "identity",
       "audioSha256": "bc5acfa5fb24cc181f739536ce701a592a8bfbb940d612a42bc7526ed44606e4",
-      "recognized": "Le nom affiché et l'identifiant public sont deux informations différentes.\nModifions d'abord le nom et enregistrons-le.\nPour l'identifiant, essayons une valeur déjà utilisée.\nL'application la refuse.\nChoisissons alors un identifiant libre et enregistrons.\nLe détail s'ouvre sous ce nouvel identifiant.\nCe changement concerne les adresses publiques. Il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant.\nNe changeons pas une adresse simplement pour corriger le nom affiché. Vérifions le résultat avant de communiquer la nouvelle adresse.",
+      "recognized": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions d'abord le nom et enregistrons-le. Pour l'identifiant, essayons une valeur déjà utilisée. L'application la refuse. Choisissons alors un identifiant libre et enregistrons. Le détail s'ouvre sous ce nouvel identifiant. Ce changement concerne les adresses publiques. Il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant. Ne changeons pas une adresse simplement pour corriger le nom affiché. Vérifions le résultat avant de communiquer la nouvelle adresse.",
       "expected": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions d'abord le nom et enregistrons-le. Pour l'identifiant, essayons une valeur déjà utilisée : l'application la refuse. Choisissons alors un identifiant libre et enregistrons. Le détail s'ouvre sous ce nouvel identifiant. Ce changement concerne les adresses publiques ; il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant. Ne changeons pas une adresse simplement pour corriger le nom affiché. Vérifions le résultat avant de communiquer la nouvelle adresse.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -68,7 +69,7 @@
     {
       "id": "context",
       "audioSha256": "15f07b642b91ac44415001e05182272760a35f52bf512b97c499190867d15250",
-      "recognized": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans ce choix, l'application demande de sélectionner un espace. Depuis son détail, utilisons \"Gérer\" et vérifions le nom du contexte avant d'ouvrir les événements. Nous retrouvons ici ceux du parc, pas ceux du quartier. Un super administrateur peut agir dans l'organisation sélectionnée. Ce n'est pas une vue sans accès aux données. Avant une modification ou un envoi, prenons donc ce petit réflexe : regarder dans quel espace nous sommes.",
+      "recognized": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans ce choix, l'application demande de sélectionner un espace. Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements. Nous retrouvons ici ceux du parc, pas ceux du quartier. Un super administrateur peut agir dans l'organisation sélectionnée. Ce n'est pas une vue sans accès aux données. Avant une modification ou un envoi, prenons donc ce petit réflexe : regarder dans quel espace nous sommes.",
       "expected": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans ce choix, l'application demande de sélectionner un espace. Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements. Nous retrouvons ici ceux du Parc, pas ceux du Quartier. Un super-administrateur peut agir dans l'organisation sélectionnée : ce n'est pas une vue sans accès aux données. Avant une modification ou un envoi, prenons donc ce petit réflexe : regarder dans quel espace nous sommes.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -78,7 +79,7 @@
     {
       "id": "health",
       "audioSha256": "ef2fc2fac5f0276c944fcabf9df59b6eb458a74588060b95289932723a7643d9",
-      "recognized": "La page Santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné. Leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème. Ils ne remplacent pas son analyse.",
+      "recognized": "La page santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné. Leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème, ils ne remplacent pas son analyse.",
       "expected": "La page Santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème ; ils ne remplacent pas son analyse.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -88,9 +89,9 @@
     {
       "id": "preview",
       "audioSha256": "be8670935d807d148a6adae23fdb68d6f20158859566e5051f323bbdd3b57c98",
-      "recognized": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : « Formation : préparez votre prochain événement ». Le contenu commence par un titre : « Bienvenue ». Ajoutons deux conseils simples : vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes. Elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons « Envoyer un test » uniquement vers notre adresse de formation. Ouvrons le vrai e-mail pour contrôler l'objet et le contenu reçus. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
+      "recognized": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : formation, préparer votre prochain événement. Le contenu commence par un titre : bienvenue. Ajoutons deux conseils simples : vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes. Elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons envoyer un test, uniquement vers notre adresse de formation. Ouvrons le vrai e-mail pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
       "expected": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : Formation, préparer votre prochain événement. Le contenu commence par un titre, Bienvenue. Ajoutons deux conseils simples : vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes : elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons Envoyer un test, uniquement vers notre adresse de formation. Ouvrons le vrai email pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
-      "wordErrorRate": 0.015384615384615385,
+      "wordErrorRate": 0,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
@@ -108,7 +109,7 @@
     {
       "id": "delete",
       "audioSha256": "fef9b57cce12269485d9efa96fa0b68a078f068eb51193d2ec0192f9813e7046",
-      "recognized": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel espace de formation que nous avons créé pour cette démonstration. Désactivons-le d'abord, le bouton de suppression apparaît alors. Lisons le récapitulatif. Cette action retire l'organisation et les données associées. Ce n'est pas une pause. La confirmation demande de saisir exactement son identifiant. Vérifions-le, puis validons la suppression de cet espace jetable. Il disparaît de la liste. Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
+      "recognized": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel espace de formation que nous avons créé pour cette démonstration. Désactivons-le d'abord. Le bouton de suppression apparaît alors. Lisons le récapitulatif. Cette action retire l'organisation et les données associées, ce n'est pas une pause. La confirmation demande de saisir exactement son identifiant. Vérifions-le, puis validons la suppression de cet espace jetable. Il disparaît de la liste. Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
       "expected": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel espace de formation, que nous avons créé pour cette démonstration. Désactivons-le d'abord. Le bouton de suppression apparaît alors. Lisons le récapitulatif : cette action retire l'organisation et les données associées, ce n'est pas une pause. La confirmation demande de saisir exactement son identifiant. Vérifions-le, puis validons la suppression de cet espace jetable. Il disparaît de la liste. Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
       "wordErrorRate": 0,
       "needsReview": false,

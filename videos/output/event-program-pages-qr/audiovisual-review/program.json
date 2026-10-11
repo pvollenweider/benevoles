@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:59:43.312Z",
-  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
-  "promptSha256": "9d8fa4417c65441300fd2ac7f8438412c30b6034a0297f98c9a46988b788a435",
-  "clipSha256": "be5bcb027e1c2c42e0356d88255a2970056c76ee8148cd1a74e5622717e7b237",
+  "reviewedAt": "2026-10-11T14:09:37.744Z",
+  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
+  "promptSha256": "3a8ddaf589bc9dbc299eb969210571603eb2923bb86257881e383786a13fabcc",
+  "clipSha256": "0512a610e1f6435365546cc06d25ad9bf1aed4acb7cf6825ccb8c49761b1ffee",
   "scene": "program",
   "review": {
     "heardOpening": "Dans les réglages de l'événement",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
+        "spokenSeconds": 1.8,
         "spoken": "ajoutons un spectacle au programme",
-        "visibleSeconds": 2,
-        "visible": "Clic sur + Ajouter dans la section Spectacles",
+        "visibleSeconds": 1.6,
+        "visible": "Clic sur le bouton « + Ajouter » dans la section Spectacles pour afficher le formulaire de saisie",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4,
+        "spokenSeconds": 4.1,
         "spoken": "Saisissons Concert du village",
-        "visibleSeconds": 4,
-        "visible": "Saisie de Concert du village dans le champ nom",
+        "visibleSeconds": 4.9,
+        "visible": "Saisie de « Concert du village » dans le champ « Nom du spectacle »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "de onze heures à douze heures trente",
-        "visibleSeconds": 9.5,
-        "visible": "Renseignement des heures de début et fin",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 11,
-        "spoken": "puis cliquez sur Ajouter",
-        "visibleSeconds": 11.5,
-        "visible": "Clic sur le bouton Ajouter et affichage du spectacle",
+        "spokenSeconds": 8,
+        "spoken": "de onze heures à douze heures trente, puis cliquez sur Ajouter",
+        "visibleSeconds": 10.9,
+        "visible": "Saisie des horaires 11:00 et 12:30 puis clic sur « Ajouter », enregistrant le spectacle dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide et bien synchronisée."
+      "observation": "Voix off fluide, naturelle et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

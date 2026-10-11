@@ -148,7 +148,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     await scene("changed", async at => {
       const prior = new Set((await inbox()).map(m => m.ID))
       const newStart = addMinutes(changed.startTime, 30), newEnd = addMinutes(changed.endTime, 30)
-      await tap(page, page.getByRole("row").filter({ hasText: changed.label }).getByRole("button", { name: "Modifier", exact: true }))
+      await tap(page, page.getByRole("row").filter({ hasText: changed.label }).getByRole("button", { name: /^Modifier le créneau / }))
       await write(page.getByLabel("Début *", { exact: true }), newStart)
       await at(0.25); await write(page.getByLabel("Fin *", { exact: true }), newEnd)
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${changed.id}`) && r.request().method() === "PATCH")
@@ -168,7 +168,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     await scene("cancelled", async at => {
       await go(`${eventUrl}/shifts`); await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
       const prior = new Set((await inbox()).map(m => m.ID))
-      await tap(page, page.getByRole("row").filter({ hasText: cancelled.label }).getByRole("button", { name: "Supprimer", exact: true }))
+      await tap(page, page.getByRole("row").filter({ hasText: cancelled.label }).getByRole("button", { name: /^Supprimer le créneau / }))
       const dialog = page.getByRole("alertdialog")
       await dialog.waitFor(); await at(0.23)
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${cancelled.id}`) && r.request().method() === "DELETE")

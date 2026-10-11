@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:35:54.828Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "0090acdc90d6ffa3eba4affb0fe87f97421501a10bc3e2ea52de3a527ace3bc7",
+  "clipSha256": "b74f040233723a8e67f53e8ce7a8e04508e1c839be8575fb4aded8f925f05765",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons en revenant au périmètre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page de connexion organisateur puis accès à l'espace événementiel sans accès admin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler",
+        "visibleSeconds": 8.5,
+        "visible": "Retour à la console d'administration avec la liste des organisations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes",
+        "visibleSeconds": 13.8,
+        "visible": "Tableau des organisations affichant le bouton d'ajout et les statuts et actions de gestion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

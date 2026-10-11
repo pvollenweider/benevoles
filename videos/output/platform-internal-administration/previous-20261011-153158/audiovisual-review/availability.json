@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:34:31.313Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "3632344d91cd5a8862e33d5071060d7d4392f68f3932f1c51e91be11189d0e17",
+  "clipSha256": "59ef110e651aef6616b63eba5a65895a830da7d8ceed96cad1949a48dbd0d5ed",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Désactiver une organisation n'est pas la supprimer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ouvrons la confirmation et lisons les conséquences avant de valider.",
+        "visibleSeconds": 3.8,
+        "visible": "Ouverture de la fenêtre modale de confirmation de désactivation, puis validation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Dans la session organisateur déjà ouverte, une nouvelle requête est maintenant refusée.",
+        "visibleSeconds": 9.2,
+        "visible": "Affichage de la page d'administration organisateur déconnectée suite au refus d'accès.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Revenons côté opérateur et réactivons-le.",
+        "visibleSeconds": 15.6,
+        "visible": "Retour sur l'écran opérateur et confirmation de la réactivation dans la fenêtre modale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "La session organisateur peut à nouveau accéder à ses événements.",
+        "visibleSeconds": 17.2,
+        "visible": "Affichage de la page Événements dans l'espace organisateur à nouveau accessible.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

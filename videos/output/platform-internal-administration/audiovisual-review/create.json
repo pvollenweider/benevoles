@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T06:26:36.884Z",
-  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
-  "promptSha256": "126026d87167ce2e45392912ac93c2b51481fa622dff658f776187ba3551b30c",
-  "clipSha256": "db06a3d2b27b21a382c46577d44f3a774b54a693dc15da685e78e9bfb10a75a7",
+  "reviewedAt": "2026-10-11T13:44:40.341Z",
+  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "promptSha256": "a406161e9777f25fa57984276d0986d8e1bfbe349027f557876cf7d4aa9a6a90",
+  "clipSha256": "a873daab74994fa231d69216f32f2a2ae1d2667f54794f49c415b8a15324df45",
   "scene": "create",
   "review": {
     "heardOpening": "Pour accueillir une nouvelle organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 2.5,
         "spoken": "ouvrons le formulaire de création",
-        "visibleSeconds": 1.2,
+        "visibleSeconds": 1,
         "visible": "Affichage de la page Nouvelle organisation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Renseignons son nom, puis le nom et l'adresse email",
+        "spokenSeconds": 4.6,
+        "spoken": "Renseignons son nom, puis le nom et l'adresse email de son premier administrateur",
         "visibleSeconds": 5,
-        "visible": "Saisie successive des champs nom d'organisation, nom complet et email",
+        "visible": "Saisie successive du nom de l'organisation, du nom complet et de l'adresse email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.2,
+        "spokenSeconds": 13,
         "spoken": "Créons l'espace",
-        "visibleSeconds": 14.1,
+        "visibleSeconds": 13.3,
         "visible": "Clic sur le bouton Créer l'organisation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
+        "spokenSeconds": 15.3,
         "spoken": "Le résultat affiche un lien d'activation valable sept jours",
-        "visibleSeconds": 15.3,
-        "visible": "Écran Organisation créée avec encadré du lien et mention 7 jours",
+        "visibleSeconds": 14.2,
+        "visible": "Écran Organisation créée avec le lien d'invitation et la mention de validité de 7 jours",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bonne synchronisation globale avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

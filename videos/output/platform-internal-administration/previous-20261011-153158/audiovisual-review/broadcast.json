@@ -1,0 +1,63 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:35:30.995Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "16ee6760e7b06b93bcd008128cd03d6ced61c25e6686952f068f44bfab8bd863",
+  "clipSha256": "1c4a10b5959de59d4728c17578d5dc3a7cbc8d17c4e78ba13a07f2153de8fe04",
+  "scene": "broadcast",
+  "review": {
+    "heardOpening": "Le test est bon ? Revenons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Revenons au formulaire pour préparer la diffusion.",
+        "visibleSeconds": 2.1,
+        "visible": "Retour sur la page du formulaire Communications admin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Reprenons notre objet, puis le contenu que nous venons de vérifier.",
+        "visibleSeconds": 5,
+        "visible": "Saisie de l'objet et du texte markdown avec aperçu généré en temps réel.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "vérifions le nombre de destinataires et lisons la confirmation.",
+        "visibleSeconds": 26.6,
+        "visible": "Clic sur Envoyer (2) et affichage de la modale de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 35.8,
+        "spoken": "Validons, puis regardons le nombre d'envois réussis et l'historique.",
+        "visibleSeconds": 37,
+        "visible": "Clic sur Envoyer et affichage du bandeau de confirmation d'envoi à 2 destinataires, mais l'historique reste masqué hors champ.",
+        "sync": "uncertain",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 43.1,
+        "spoken": "Ouvrons un message livré et utilisons son lien de désabonnement.",
+        "visibleSeconds": 44.2,
+        "visible": "Ouverture du courriel dans Mailpit puis clic sur le lien ouvrant la page de désabonnement confirmé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:36, l'historique des envois mentionné à l'oral n'est pas consulté à l'écran avant la transition vers la messagerie.",
+      "À 00:40, l'affirmation 'Un compte non abonné n'a rien reçu' n'est illustrée par aucune vérification à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, dynamique et bien articulée, sans parasite audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

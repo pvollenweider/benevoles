@@ -1,0 +1,7053 @@
+{
+  "duration": 479.28,
+  "videoSha256": "c09c2c658aba4156b4799c99807c1fdbc1b6f4ae89cc9fed01fe66073b4be18d",
+  "build": {
+    "commit": "538a7f9494012c8ab9f86d71d3b2a09fb57fdc50",
+    "sourceTree": "83b7764a488e9c7ee887407aefd967a00b3e48b1",
+    "productSourceSha256": "2edf691a7eec77bd67fbe630a0b1db9836fc5551c1f7f086ce448e71c9096342",
+    "buildId": "ivxjXmRYPnZg3PpogRvW3",
+    "snapshot": "/tmp/benevoles-video-production.C3fhyfsN",
+    "builtAt": "2026-10-11T11:32:08.394Z"
+  },
+  "effects": {
+    "exactBytes": true,
+    "actualSha256": "59a248b87cdbf3a111b368d0c3733e6e2638dc14f2e0f57c88db5c91188bc8bc",
+    "expectedSha256": "59a248b87cdbf3a111b368d0c3733e6e2638dc14f2e0f57c88db5c91188bc8bc",
+    "clicks": 38,
+    "keys": 674
+  },
+  "levels": {
+    "rule": {
+      "minGapLu": 12,
+      "maxGapLu": 20,
+      "musicOnlyFloorLufs": -36,
+      "musicOnlyUnderVoiceLu": 12,
+      "speechThresholdLufs": -35,
+      "windowS": 3,
+      "stepS": 1,
+      "frameS": 0.1,
+      "voicedShare": 0.5
+    },
+    "loop": {
+      "startS": 0.5,
+      "endS": 95,
+      "crossfadeS": 2
+    },
+    "mix": {
+      "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+      "volume": 0.33
+    },
+    "narration": {
+      "segmentTargetLufs": -18,
+      "maxSegmentGainDb": 12,
+      "compressor": "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+      "segmentGainsDb": {
+        "welcome": -0.9,
+        "create": -0.6,
+        "renew": -0.6,
+        "activate": -0.3,
+        "identity": 0,
+        "availability": 0.1,
+        "context": 0.5,
+        "health": 0.2,
+        "preview": 0.1,
+        "broadcast": -1.9,
+        "delete": -1.9,
+        "result": -1.2
+      }
+    },
+    "videoSha256": "c09c2c658aba4156b4799c99807c1fdbc1b6f4ae89cc9fed01fe66073b4be18d",
+    "summary": {
+      "voicedWindows": 437,
+      "musicOnlyWindows": 4,
+      "smallestGapLu": 12.7,
+      "largestGapLu": 19.7,
+      "quietestMusicOnlyLufs": -33.5,
+      "loudestMusicOnlyLufs": -31.8,
+      "medianVoiceLufs": -16.3
+    },
+    "issues": [],
+    "windows": [
+      {
+        "startS": 1.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 2.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.1,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 3.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 4.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.6,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 5.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -32.6,
+        "gapLu": 14.5
+      },
+      {
+        "startS": 6.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -32.3,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 7.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.5,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 8.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 9.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 10.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.1,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 11.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.1,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 12.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 13.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 14.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.8,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 15.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.2,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 16.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 17.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 18.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 19.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -33.2,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 20.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.9,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 21.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.6,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 22.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.4,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 23.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.6,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 24.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.9,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 25.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.8,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 26.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.9,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 27.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.6,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 29.5,
+        "kind": "music-only",
+        "levelLufs": -31.8
+      },
+      {
+        "startS": 31.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -32.5,
+        "gapLu": 18
+      },
+      {
+        "startS": 32.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.6,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 33.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.5,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 34.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.9,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 35.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.6,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 36.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.5,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 37.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -31.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 38.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -31.9,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 39.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.9,
+        "gapLu": 16
+      },
+      {
+        "startS": 40.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.8,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 41.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 42.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.8,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 43.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.2,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 44.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -32.1,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 45.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -31.6,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 46.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.1,
+        "gapLu": 16
+      },
+      {
+        "startS": 47.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.1,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 48.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 49.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.4,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 50.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.7,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 51.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 52.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.2,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 53.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 54.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.6,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 55.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 56.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.1,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 57.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -32.5,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 58.5,
+        "kind": "voiced",
+        "voiceLufs": -18.3,
+        "musicLufs": -32.9,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 59.5,
+        "kind": "voiced",
+        "voiceLufs": -19.7,
+        "musicLufs": -32.7,
+        "gapLu": 12.9
+      },
+      {
+        "startS": 63.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 64.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.6,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 65.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 66.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 67.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 68.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.1,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 69.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -31.9,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 70.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.2,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 71.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 72.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.7,
+        "gapLu": 17
+      },
+      {
+        "startS": 73.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 74.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 75.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 76.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 77.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -31.8,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 78.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.2,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 79.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.6,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 80.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -32.9,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 81.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 82.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.2,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 83.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -31.9,
+        "gapLu": 16
+      },
+      {
+        "startS": 84.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.8,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 85.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 86.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -31.9,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 87.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.5,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 88.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 89.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 90.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 91.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 95.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -33,
+        "gapLu": 18
+      },
+      {
+        "startS": 96.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.5,
+        "gapLu": 17
+      },
+      {
+        "startS": 97.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 98.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -31.9,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 99.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.4,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 100.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.2,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 101.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.4,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 102.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.8,
+        "gapLu": 16
+      },
+      {
+        "startS": 103.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -33.4,
+        "gapLu": 16
+      },
+      {
+        "startS": 104.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.2,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 105.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.1,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 106.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -31.8,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 107.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.2,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 108.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.4,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 109.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33,
+        "gapLu": 16
+      },
+      {
+        "startS": 110.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.5,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 111.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.3,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 112.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.6,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 113.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.8,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 114.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.3,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 115.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 116.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.8,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 117.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -33,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 118.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.4,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 119.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.1,
+        "gapLu": 17
+      },
+      {
+        "startS": 120.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.4,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 121.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.3,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 122.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -31.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 123.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -31.6,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 127.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -33,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 128.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.5,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 129.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -32.3,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 130.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.8,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 131.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.1,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 132.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 133.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 134.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.8,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 135.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.6,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 136.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 137.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.1,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 138.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -31.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 139.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.3,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 140.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.6,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 141.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.9,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 142.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 143.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.4,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 144.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.1,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 145.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.2,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 146.5,
+        "kind": "voiced",
+        "voiceLufs": -14.6,
+        "musicLufs": -32.5,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 147.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.6,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 148.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -33,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 149.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 150.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.9,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 151.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.7,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 152.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 153.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -31.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 154.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -31.6,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 155.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.8,
+        "gapLu": 16
+      },
+      {
+        "startS": 156.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 157.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 158.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.8,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 159.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 160.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 161.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -31.8,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 162.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.8,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 166.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -32.3,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 167.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.1,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 168.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.2,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 169.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -31.7,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 170.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.1,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 171.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 172.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.9,
+        "gapLu": 17
+      },
+      {
+        "startS": 173.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.4,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 174.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.4,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 175.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -31.9,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 176.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 177.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 178.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 179.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.4,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 180.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.4,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 181.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.2,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 182.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.2,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 183.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.2,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 184.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.6,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 185.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.8,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 186.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -33,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 187.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.8,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 188.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.2,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 189.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.4,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 190.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 191.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32,
+        "gapLu": 16
+      },
+      {
+        "startS": 192.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.3,
+        "gapLu": 17
+      },
+      {
+        "startS": 193.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.6,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 194.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 195.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.1,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 196.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.2,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 197.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.1,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 200.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 201.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.1,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 202.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 203.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.9,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 204.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 205.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.5,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 206.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.4,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 207.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 208.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 17
+      },
+      {
+        "startS": 209.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.9,
+        "gapLu": 17
+      },
+      {
+        "startS": 210.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.8,
+        "gapLu": 17
+      },
+      {
+        "startS": 211.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 212.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.8,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 213.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.7,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 214.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.9,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 215.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -31.8,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 216.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -31.9,
+        "gapLu": 14.2
+      },
+      {
+        "startS": 217.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.6,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 218.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 219.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.9,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 220.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.6,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 221.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 222.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -31.9,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 223.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 224.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.3,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 225.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.9,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 226.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 227.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.9,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 228.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.7,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 232.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -32.3,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 233.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -32.8,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 234.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.5,
+        "gapLu": 17
+      },
+      {
+        "startS": 235.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.8,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 236.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -31.8,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 237.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 238.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -31.9,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 239.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.6,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 240.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -32.4,
+        "gapLu": 14.5
+      },
+      {
+        "startS": 241.5,
+        "kind": "voiced",
+        "voiceLufs": -19.2,
+        "musicLufs": -32.9,
+        "gapLu": 13.8
+      },
+      {
+        "startS": 242.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.4,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 243.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.9,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 244.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.3,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 245.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -32.2,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 246.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -31.6,
+        "gapLu": 13.7
+      },
+      {
+        "startS": 247.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 248.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.2,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 249.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.4,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 250.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.1,
+        "gapLu": 14.4
+      },
+      {
+        "startS": 251.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.6,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 252.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.4,
+        "gapLu": 16
+      },
+      {
+        "startS": 253.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.4,
+        "gapLu": 16
+      },
+      {
+        "startS": 254.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -31.9,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 255.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.1,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 256.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.2,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 257.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 258.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.3,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 259.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.6,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 260.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -32.3,
+        "gapLu": 14.5
+      },
+      {
+        "startS": 261.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.2,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 262.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 263.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.2,
+        "gapLu": 17
+      },
+      {
+        "startS": 264.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.7,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 265.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.9,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 266.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 267.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.1,
+        "gapLu": 15
+      },
+      {
+        "startS": 268.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -31.9,
+        "gapLu": 15
+      },
+      {
+        "startS": 269.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -31.8,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 270.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -31.8,
+        "gapLu": 13.5
+      },
+      {
+        "startS": 274.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.9,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 275.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.1,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 276.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.5,
+        "gapLu": 17
+      },
+      {
+        "startS": 277.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 278.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.1,
+        "gapLu": 17
+      },
+      {
+        "startS": 279.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.9,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 280.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 281.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.6,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 282.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.5,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 283.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -31.9,
+        "gapLu": 14.1
+      },
+      {
+        "startS": 284.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.5,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 285.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.2,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 286.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.1,
+        "gapLu": 16
+      },
+      {
+        "startS": 287.5,
+        "kind": "voiced",
+        "voiceLufs": -18.6,
+        "musicLufs": -32.6,
+        "gapLu": 14
+      },
+      {
+        "startS": 288.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.6,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 289.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.6,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 290.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.5,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 291.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -31.7,
+        "gapLu": 14
+      },
+      {
+        "startS": 292.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -32.1,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 293.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -32.2,
+        "gapLu": 13.7
+      },
+      {
+        "startS": 294.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -33.6,
+        "gapLu": 16
+      },
+      {
+        "startS": 295.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.8,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 296.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.2,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 297.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.2,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 298.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 299.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 300.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.5,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 301.5,
+        "kind": "voiced",
+        "voiceLufs": -18.2,
+        "musicLufs": -32.3,
+        "gapLu": 14.2
+      },
+      {
+        "startS": 302.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -33.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 303.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -32.7,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 304.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -33.2,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 305.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 306.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -31.9,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 307.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.6,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 308.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -31.7,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 309.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -31.9,
+        "gapLu": 14
+      },
+      {
+        "startS": 310.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.8,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 311.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 312.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33.1,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 313.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.5,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 314.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.3,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 315.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.7,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 316.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.3,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 317.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 318.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.9,
+        "gapLu": 16
+      },
+      {
+        "startS": 319.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.4,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 320.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.9,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 321.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.2,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 322.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.1,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 323.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.5,
+        "gapLu": 14.5
+      },
+      {
+        "startS": 324.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 325.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.3,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 326.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 327.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.5,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 328.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -32.6,
+        "gapLu": 14.2
+      },
+      {
+        "startS": 330.5,
+        "kind": "music-only",
+        "levelLufs": -31.9
+      },
+      {
+        "startS": 332.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.9,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 333.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.9,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 334.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.9,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 335.5,
+        "kind": "voiced",
+        "voiceLufs": -18.5,
+        "musicLufs": -33.2,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 336.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -33,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 337.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.6,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 338.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -31.9,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 339.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.5,
+        "gapLu": 14.4
+      },
+      {
+        "startS": 340.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -31.6,
+        "gapLu": 13.5
+      },
+      {
+        "startS": 341.5,
+        "kind": "voiced",
+        "voiceLufs": -19.7,
+        "musicLufs": -32.4,
+        "gapLu": 12.7
+      },
+      {
+        "startS": 342.5,
+        "kind": "voiced",
+        "voiceLufs": -19.2,
+        "musicLufs": -32.5,
+        "gapLu": 13.4
+      },
+      {
+        "startS": 343.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.9,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 344.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.5,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 345.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.5,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 346.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -31.7,
+        "gapLu": 13.9
+      },
+      {
+        "startS": 347.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -31.5,
+        "gapLu": 13.1
+      },
+      {
+        "startS": 348.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -31.5,
+        "gapLu": 14.3
+      },
+      {
+        "startS": 349.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.6,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 350.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.4,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 351.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.8,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 352.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.2,
+        "gapLu": 15
+      },
+      {
+        "startS": 353.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.4,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 354.5,
+        "kind": "voiced",
+        "voiceLufs": -18.6,
+        "musicLufs": -31.7,
+        "gapLu": 13.1
+      },
+      {
+        "startS": 355.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.3,
+        "gapLu": 14.8
+      },
+      {
+        "startS": 356.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.3,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 357.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 358.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32.9,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 359.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.9,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 360.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.1,
+        "gapLu": 14.4
+      },
+      {
+        "startS": 361.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -32,
+        "gapLu": 14.6
+      },
+      {
+        "startS": 362.5,
+        "kind": "voiced",
+        "voiceLufs": -18.3,
+        "musicLufs": -32.1,
+        "gapLu": 13.8
+      },
+      {
+        "startS": 363.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.4,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 364.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 365.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.5,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 366.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 367.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.5,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 368.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 369.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -32.5,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 370.5,
+        "kind": "voiced",
+        "voiceLufs": -14.6,
+        "musicLufs": -32.7,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 371.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.8,
+        "gapLu": 17
+      },
+      {
+        "startS": 372.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.6,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 373.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 374.5,
+        "kind": "voiced",
+        "voiceLufs": -14.6,
+        "musicLufs": -32.7,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 375.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 376.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.2,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 377.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -32.3,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 378.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.3,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 379.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.8,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 380.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.9,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 381.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.2,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 382.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.5,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 383.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.1,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 384.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -31.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 385.5,
+        "kind": "voiced",
+        "voiceLufs": -13.8,
+        "musicLufs": -32.5,
+        "gapLu": 18.7
+      },
+      {
+        "startS": 386.5,
+        "kind": "voiced",
+        "voiceLufs": -13.4,
+        "musicLufs": -33,
+        "gapLu": 19.7
+      },
+      {
+        "startS": 387.5,
+        "kind": "voiced",
+        "voiceLufs": -13.6,
+        "musicLufs": -33,
+        "gapLu": 19.4
+      },
+      {
+        "startS": 388.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -33,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 389.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.1,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 390.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 394.5,
+        "kind": "voiced",
+        "voiceLufs": -14.7,
+        "musicLufs": -32.9,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 395.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.7,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 396.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 397.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.5,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 398.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 399.5,
+        "kind": "voiced",
+        "voiceLufs": -14.5,
+        "musicLufs": -31.6,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 400.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -31.7,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 401.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -31.9,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 402.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -32.4,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 403.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.5,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 404.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.8,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 405.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.5,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 406.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.4,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 407.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 408.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 409.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.4,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 410.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 411.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.6,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 412.5,
+        "kind": "voiced",
+        "voiceLufs": -15,
+        "musicLufs": -32.9,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 413.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.4,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 414.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.4,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 415.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -31.7,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 416.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.1,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 417.5,
+        "kind": "voiced",
+        "voiceLufs": -14.8,
+        "musicLufs": -32.1,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 418.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 419.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.5,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 420.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.7,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 421.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.1,
+        "gapLu": 16
+      },
+      {
+        "startS": 422.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.3,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 423.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -31.9,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 424.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 425.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 426.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 427.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.5,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 428.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 429.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16
+      },
+      {
+        "startS": 433.5,
+        "kind": "voiced",
+        "voiceLufs": -14.4,
+        "musicLufs": -32.3,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 434.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.7,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 435.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.7,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 436.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.2,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 437.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 438.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.4,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 439.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.8,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 440.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 441.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.2,
+        "gapLu": 16
+      },
+      {
+        "startS": 442.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.8,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 443.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 444.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.7,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 445.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.6,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 446.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.5,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 447.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 448.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.2,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 449.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.7,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 450.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.9,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 451.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.7,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 452.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.2,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 453.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -31.8,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 454.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -31.8,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 455.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.2,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 456.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -31.8,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 457.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 458.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.3,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 459.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 460.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 461.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.5,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 462.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 463.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.3,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 464.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.1,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 465.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 466.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.6,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 467.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.5,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 468.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 469.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 472.5,
+        "kind": "music-only",
+        "levelLufs": -32.7
+      },
+      {
+        "startS": 473.5,
+        "kind": "music-only",
+        "levelLufs": -33.5
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "welcome",
+      "startMs": 4,
+      "endMs": 29811,
+      "sentences": [
+        {
+          "text": "Bienvenue dans l'administration de la plateforme.",
+          "startMs": 276,
+          "endMs": 2431,
+          "method": "silence",
+          "absoluteStartS": 0.28,
+          "absoluteEndS": 2.435
+        },
+        {
+          "text": "Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles.",
+          "startMs": 3144,
+          "endMs": 7791,
+          "method": "silence",
+          "absoluteStartS": 3.148,
+          "absoluteEndS": 7.795
+        },
+        {
+          "text": "Notre liste contient trois organisations de formation.",
+          "startMs": 8928,
+          "endMs": 11158,
+          "method": "silence",
+          "absoluteStartS": 8.932,
+          "absoluteEndS": 11.162
+        },
+        {
+          "text": "Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres.",
+          "startMs": 11303,
+          "endMs": 17518,
+          "method": "silence",
+          "absoluteStartS": 11.307,
+          "absoluteEndS": 17.522
+        },
+        {
+          "text": "Ouvrons un détail pour retrouver ces informations et les comptes associés.",
+          "startMs": 18114,
+          "endMs": 21683,
+          "method": "silence",
+          "absoluteStartS": 18.118,
+          "absoluteEndS": 21.687
+        },
+        {
+          "text": "Toutes les personnes utilisées ici sont fictives.",
+          "startMs": 22590,
+          "endMs": 22592,
+          "method": "silence",
+          "absoluteStartS": 22.594,
+          "absoluteEndS": 22.596
+        },
+        {
+          "text": "Nous travaillons dans une base locale séparée :",
+          "startMs": 22722,
+          "endMs": 26836,
+          "method": "silence",
+          "absoluteStartS": 22.726,
+          "absoluteEndS": 26.84
+        },
+        {
+          "text": "aucun message ne part vers une vraie association.",
+          "startMs": 27105,
+          "endMs": 29158,
+          "method": "silence",
+          "absoluteStartS": 27.109,
+          "absoluteEndS": 29.162
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 18680
+        }
+      ]
+    },
+    {
+      "id": "create",
+      "startMs": 32069,
+      "endMs": 61441,
+      "sentences": [
+        {
+          "text": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création.",
+          "startMs": 646,
+          "endMs": 4149,
+          "method": "silence",
+          "absoluteStartS": 32.715,
+          "absoluteEndS": 36.218
+        },
+        {
+          "text": "Renseignons son nom, puis le nom et l'adresse email de son premier administrateur.",
+          "startMs": 4801,
+          "endMs": 5978,
+          "method": "silence",
+          "absoluteStartS": 36.87,
+          "absoluteEndS": 38.047
+        },
+        {
+          "text": "Prenons le temps de vérifier cette adresse :",
+          "startMs": 6161,
+          "endMs": 8708,
+          "method": "silence",
+          "absoluteStartS": 38.23,
+          "absoluteEndS": 40.777
+        },
+        {
+          "text": "c'est elle qui recevra son accès.",
+          "startMs": 9422,
+          "endMs": 12700,
+          "method": "silence",
+          "absoluteStartS": 41.491,
+          "absoluteEndS": 44.769
+        },
+        {
+          "text": "Créons l'espace.",
+          "startMs": 13430,
+          "endMs": 14251,
+          "method": "silence",
+          "absoluteStartS": 45.499,
+          "absoluteEndS": 46.32
+        },
+        {
+          "text": "Le résultat affiche un lien d'activation valable sept jours.",
+          "startMs": 15391,
+          "endMs": 18106,
+          "method": "silence",
+          "absoluteStartS": 47.46,
+          "absoluteEndS": 50.175
+        },
+        {
+          "text": "Le compte attend encore son activation.",
+          "startMs": 18713,
+          "endMs": 23500,
+          "method": "silence",
+          "absoluteStartS": 50.782,
+          "absoluteEndS": 55.569
+        },
+        {
+          "text": "La création ne suffit donc pas à dire que la personne s'est connectée, et nous ne lui remettons pas un mot de passe temporaire.",
+          "startMs": 23791,
+          "endMs": 26127,
+          "method": "silence",
+          "absoluteStartS": 55.86,
+          "absoluteEndS": 58.196
+        },
+        {
+          "text": "Le lien permettra de choisir son propre mot de passe.",
+          "startMs": 26675,
+          "endMs": 28924,
+          "method": "silence",
+          "absoluteStartS": 58.744,
+          "absoluteEndS": 60.993
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 37354
+        },
+        {
+          "kind": "key",
+          "atMs": 37661
+        },
+        {
+          "kind": "key",
+          "atMs": 37662
+        },
+        {
+          "kind": "key",
+          "atMs": 37665
+        },
+        {
+          "kind": "key",
+          "atMs": 37778
+        },
+        {
+          "kind": "key",
+          "atMs": 37892
+        },
+        {
+          "kind": "key",
+          "atMs": 38003
+        },
+        {
+          "kind": "key",
+          "atMs": 38117
+        },
+        {
+          "kind": "key",
+          "atMs": 38229
+        },
+        {
+          "kind": "key",
+          "atMs": 38341
+        },
+        {
+          "kind": "key",
+          "atMs": 38454
+        },
+        {
+          "kind": "key",
+          "atMs": 38567
+        },
+        {
+          "kind": "key",
+          "atMs": 38680
+        },
+        {
+          "kind": "key",
+          "atMs": 38792
+        },
+        {
+          "kind": "key",
+          "atMs": 38905
+        },
+        {
+          "kind": "key",
+          "atMs": 39132
+        },
+        {
+          "kind": "key",
+          "atMs": 39245
+        },
+        {
+          "kind": "key",
+          "atMs": 39357
+        },
+        {
+          "kind": "key",
+          "atMs": 39471
+        },
+        {
+          "kind": "key",
+          "atMs": 39584
+        },
+        {
+          "kind": "key",
+          "atMs": 39696
+        },
+        {
+          "kind": "key",
+          "atMs": 39809
+        },
+        {
+          "kind": "key",
+          "atMs": 39921
+        },
+        {
+          "kind": "key",
+          "atMs": 40034
+        },
+        {
+          "kind": "key",
+          "atMs": 40147
+        },
+        {
+          "kind": "key",
+          "atMs": 40259
+        },
+        {
+          "kind": "key",
+          "atMs": 40372
+        },
+        {
+          "kind": "key",
+          "atMs": 40484
+        },
+        {
+          "kind": "key",
+          "atMs": 40598
+        },
+        {
+          "kind": "click",
+          "atMs": 41170
+        },
+        {
+          "kind": "key",
+          "atMs": 41477
+        },
+        {
+          "kind": "key",
+          "atMs": 41477
+        },
+        {
+          "kind": "key",
+          "atMs": 41480
+        },
+        {
+          "kind": "key",
+          "atMs": 41592
+        },
+        {
+          "kind": "key",
+          "atMs": 41705
+        },
+        {
+          "kind": "key",
+          "atMs": 41818
+        },
+        {
+          "kind": "key",
+          "atMs": 41930
+        },
+        {
+          "kind": "key",
+          "atMs": 42044
+        },
+        {
+          "kind": "key",
+          "atMs": 42156
+        },
+        {
+          "kind": "key",
+          "atMs": 42268
+        },
+        {
+          "kind": "key",
+          "atMs": 42385
+        },
+        {
+          "kind": "key",
+          "atMs": 42502
+        },
+        {
+          "kind": "key",
+          "atMs": 42618
+        },
+        {
+          "kind": "click",
+          "atMs": 43203
+        },
+        {
+          "kind": "key",
+          "atMs": 43508
+        },
+        {
+          "kind": "key",
+          "atMs": 43509
+        },
+        {
+          "kind": "key",
+          "atMs": 43511
+        },
+        {
+          "kind": "key",
+          "atMs": 43624
+        },
+        {
+          "kind": "key",
+          "atMs": 43737
+        },
+        {
+          "kind": "key",
+          "atMs": 43849
+        },
+        {
+          "kind": "key",
+          "atMs": 43961
+        },
+        {
+          "kind": "key",
+          "atMs": 44073
+        },
+        {
+          "kind": "key",
+          "atMs": 44185
+        },
+        {
+          "kind": "key",
+          "atMs": 44298
+        },
+        {
+          "kind": "key",
+          "atMs": 44415
+        },
+        {
+          "kind": "key",
+          "atMs": 44531
+        },
+        {
+          "kind": "key",
+          "atMs": 44644
+        },
+        {
+          "kind": "key",
+          "atMs": 44761
+        },
+        {
+          "kind": "key",
+          "atMs": 44876
+        },
+        {
+          "kind": "key",
+          "atMs": 44995
+        },
+        {
+          "kind": "key",
+          "atMs": 45111
+        },
+        {
+          "kind": "key",
+          "atMs": 45239
+        },
+        {
+          "kind": "key",
+          "atMs": 45355
+        },
+        {
+          "kind": "key",
+          "atMs": 45472
+        },
+        {
+          "kind": "key",
+          "atMs": 45586
+        },
+        {
+          "kind": "key",
+          "atMs": 45699
+        },
+        {
+          "kind": "key",
+          "atMs": 45813
+        },
+        {
+          "kind": "key",
+          "atMs": 45931
+        },
+        {
+          "kind": "key",
+          "atMs": 46046
+        },
+        {
+          "kind": "key",
+          "atMs": 46161
+        },
+        {
+          "kind": "key",
+          "atMs": 46274
+        },
+        {
+          "kind": "key",
+          "atMs": 46392
+        },
+        {
+          "kind": "key",
+          "atMs": 46507
+        },
+        {
+          "kind": "key",
+          "atMs": 46620
+        },
+        {
+          "kind": "key",
+          "atMs": 46737
+        },
+        {
+          "kind": "key",
+          "atMs": 46852
+        },
+        {
+          "kind": "key",
+          "atMs": 46968
+        },
+        {
+          "kind": "key",
+          "atMs": 47082
+        },
+        {
+          "kind": "key",
+          "atMs": 47196
+        },
+        {
+          "kind": "key",
+          "atMs": 47318
+        },
+        {
+          "kind": "key",
+          "atMs": 47430
+        },
+        {
+          "kind": "key",
+          "atMs": 47546
+        },
+        {
+          "kind": "key",
+          "atMs": 47663
+        },
+        {
+          "kind": "key",
+          "atMs": 47780
+        },
+        {
+          "kind": "key",
+          "atMs": 47893
+        },
+        {
+          "kind": "key",
+          "atMs": 48005
+        },
+        {
+          "kind": "key",
+          "atMs": 48119
+        },
+        {
+          "kind": "key",
+          "atMs": 48231
+        },
+        {
+          "kind": "key",
+          "atMs": 48344
+        },
+        {
+          "kind": "click",
+          "atMs": 48920
+        }
+      ]
+    },
+    {
+      "id": "renew",
+      "startMs": 63698,
+      "endMs": 93969,
+      "sentences": [
+        {
+          "text": "Envoyons maintenant l'invitation et ouvrons le vrai message reçu dans la boîte de formation.",
+          "startMs": 447,
+          "endMs": 4465,
+          "method": "silence",
+          "absoluteStartS": 64.145,
+          "absoluteEndS": 68.163
+        },
+        {
+          "text": "Son lien donne accès à l'activation.",
+          "startMs": 5449,
+          "endMs": 6946,
+          "method": "silence",
+          "absoluteStartS": 69.147,
+          "absoluteEndS": 70.644
+        },
+        {
+          "text": "Avant de l'utiliser, revenons au détail de l'organisation et renvoyons l'invitation au compte encore en attente.",
+          "startMs": 7991,
+          "endMs": 13125,
+          "method": "silence",
+          "absoluteStartS": 71.689,
+          "absoluteEndS": 76.823
+        },
+        {
+          "text": "Un nouveau lien est affiché, avec une nouvelle durée de validité.",
+          "startMs": 14030,
+          "endMs": 16795,
+          "method": "silence",
+          "absoluteStartS": 77.728,
+          "absoluteEndS": 80.493
+        },
+        {
+          "text": "Vérifions l'ancien :",
+          "startMs": 17456,
+          "endMs": 18180,
+          "method": "silence",
+          "absoluteStartS": 81.154,
+          "absoluteEndS": 81.878
+        },
+        {
+          "text": "il est refusé.",
+          "startMs": 18741,
+          "endMs": 19353,
+          "method": "silence",
+          "absoluteStartS": 82.439,
+          "absoluteEndS": 83.051
+        },
+        {
+          "text": "Le renvoi n'est donc pas une simple copie du premier message.",
+          "startMs": 19698,
+          "endMs": 21156,
+          "method": "silence",
+          "absoluteStartS": 83.396,
+          "absoluteEndS": 84.854
+        },
+        {
+          "text": "Si l'envoi échoue, il faut tout de même utiliser le nouveau lien indiqué, pas continuer à transmettre l'ancien.",
+          "startMs": 21284,
+          "endMs": 27326,
+          "method": "silence",
+          "absoluteStartS": 84.982,
+          "absoluteEndS": 91.024
+        },
+        {
+          "text": "Ouvrons le second message reçu pour poursuivre.",
+          "startMs": 28112,
+          "endMs": 29865,
+          "method": "silence",
+          "absoluteStartS": 91.81,
+          "absoluteEndS": 93.563
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 65402
+        },
+        {
+          "kind": "click",
+          "atMs": 73323
+        }
+      ]
+    },
+    {
+      "id": "activate",
+      "startMs": 96231,
+      "endMs": 125990,
+      "sentences": [
+        {
+          "text": "La personne invitée ouvre son nouveau lien dans sa propre session.",
+          "startMs": 414,
+          "endMs": 3200,
+          "method": "silence",
+          "absoluteStartS": 96.645,
+          "absoluteEndS": 99.431
+        },
+        {
+          "text": "Elle choisit son mot de passe et termine l'activation.",
+          "startMs": 3560,
+          "endMs": 6071,
+          "method": "silence",
+          "absoluteStartS": 99.791,
+          "absoluteEndS": 102.302
+        },
+        {
+          "text": "Le mot de passe n'a pas besoin d'être partagé avec l'opérateur.",
+          "startMs": 6910,
+          "endMs": 9283,
+          "method": "silence",
+          "absoluteStartS": 103.141,
+          "absoluteEndS": 105.514
+        },
+        {
+          "text": "Connectons-nous ensuite avec ce nouveau compte :",
+          "startMs": 10230,
+          "endMs": 12066,
+          "method": "silence",
+          "absoluteStartS": 106.461,
+          "absoluteEndS": 108.297
+        },
+        {
+          "text": "nous arrivons dans son organisation, encore sans événement.",
+          "startMs": 12380,
+          "endMs": 16891,
+          "method": "silence",
+          "absoluteStartS": 108.611,
+          "absoluteEndS": 113.122
+        },
+        {
+          "text": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif.",
+          "startMs": 17101,
+          "endMs": 20107,
+          "method": "silence",
+          "absoluteStartS": 113.332,
+          "absoluteEndS": 116.338
+        },
+        {
+          "text": "Le lien d'activation a été utilisé ;",
+          "startMs": 20862,
+          "endMs": 22996,
+          "method": "silence",
+          "absoluteStartS": 117.093,
+          "absoluteEndS": 119.227
+        },
+        {
+          "text": "il n'est pas un lien permanent de connexion.",
+          "startMs": 23531,
+          "endMs": 25869,
+          "method": "silence",
+          "absoluteStartS": 119.762,
+          "absoluteEndS": 122.1
+        },
+        {
+          "text": "Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
+          "startMs": 26068,
+          "endMs": 29257,
+          "method": "silence",
+          "absoluteStartS": 122.299,
+          "absoluteEndS": 125.488
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 100264
+        },
+        {
+          "kind": "key",
+          "atMs": 100570
+        },
+        {
+          "kind": "key",
+          "atMs": 100571
+        },
+        {
+          "kind": "key",
+          "atMs": 100573
+        },
+        {
+          "kind": "key",
+          "atMs": 100687
+        },
+        {
+          "kind": "key",
+          "atMs": 100800
+        },
+        {
+          "kind": "key",
+          "atMs": 100913
+        },
+        {
+          "kind": "key",
+          "atMs": 101025
+        },
+        {
+          "kind": "key",
+          "atMs": 101137
+        },
+        {
+          "kind": "key",
+          "atMs": 101249
+        },
+        {
+          "kind": "key",
+          "atMs": 101362
+        },
+        {
+          "kind": "key",
+          "atMs": 101475
+        },
+        {
+          "kind": "key",
+          "atMs": 101591
+        },
+        {
+          "kind": "key",
+          "atMs": 101708
+        },
+        {
+          "kind": "key",
+          "atMs": 101825
+        },
+        {
+          "kind": "key",
+          "atMs": 101938
+        },
+        {
+          "kind": "key",
+          "atMs": 102052
+        },
+        {
+          "kind": "key",
+          "atMs": 102165
+        },
+        {
+          "kind": "key",
+          "atMs": 102277
+        },
+        {
+          "kind": "key",
+          "atMs": 102391
+        },
+        {
+          "kind": "key",
+          "atMs": 102504
+        },
+        {
+          "kind": "key",
+          "atMs": 102617
+        },
+        {
+          "kind": "key",
+          "atMs": 102730
+        },
+        {
+          "kind": "key",
+          "atMs": 102845
+        },
+        {
+          "kind": "key",
+          "atMs": 102960
+        },
+        {
+          "kind": "key",
+          "atMs": 103073
+        },
+        {
+          "kind": "key",
+          "atMs": 103189
+        },
+        {
+          "kind": "click",
+          "atMs": 103764
+        },
+        {
+          "kind": "key",
+          "atMs": 104070
+        },
+        {
+          "kind": "key",
+          "atMs": 104070
+        },
+        {
+          "kind": "key",
+          "atMs": 104073
+        },
+        {
+          "kind": "key",
+          "atMs": 104184
+        },
+        {
+          "kind": "key",
+          "atMs": 104296
+        },
+        {
+          "kind": "key",
+          "atMs": 104409
+        },
+        {
+          "kind": "key",
+          "atMs": 104522
+        },
+        {
+          "kind": "key",
+          "atMs": 104634
+        },
+        {
+          "kind": "key",
+          "atMs": 104746
+        },
+        {
+          "kind": "key",
+          "atMs": 104861
+        },
+        {
+          "kind": "key",
+          "atMs": 104975
+        },
+        {
+          "kind": "key",
+          "atMs": 105088
+        },
+        {
+          "kind": "key",
+          "atMs": 105201
+        },
+        {
+          "kind": "key",
+          "atMs": 105313
+        },
+        {
+          "kind": "key",
+          "atMs": 105425
+        },
+        {
+          "kind": "key",
+          "atMs": 105537
+        },
+        {
+          "kind": "key",
+          "atMs": 105650
+        },
+        {
+          "kind": "key",
+          "atMs": 105766
+        },
+        {
+          "kind": "key",
+          "atMs": 105882
+        },
+        {
+          "kind": "key",
+          "atMs": 105993
+        },
+        {
+          "kind": "key",
+          "atMs": 106105
+        },
+        {
+          "kind": "key",
+          "atMs": 106218
+        },
+        {
+          "kind": "key",
+          "atMs": 106330
+        },
+        {
+          "kind": "key",
+          "atMs": 106443
+        },
+        {
+          "kind": "key",
+          "atMs": 106555
+        },
+        {
+          "kind": "key",
+          "atMs": 106668
+        },
+        {
+          "kind": "click",
+          "atMs": 107247
+        },
+        {
+          "kind": "click",
+          "atMs": 108114
+        },
+        {
+          "kind": "click",
+          "atMs": 108898
+        },
+        {
+          "kind": "key",
+          "atMs": 109203
+        },
+        {
+          "kind": "key",
+          "atMs": 109204
+        },
+        {
+          "kind": "key",
+          "atMs": 109206
+        },
+        {
+          "kind": "key",
+          "atMs": 109253
+        },
+        {
+          "kind": "key",
+          "atMs": 109300
+        },
+        {
+          "kind": "key",
+          "atMs": 109349
+        },
+        {
+          "kind": "key",
+          "atMs": 109396
+        },
+        {
+          "kind": "key",
+          "atMs": 109443
+        },
+        {
+          "kind": "key",
+          "atMs": 109491
+        },
+        {
+          "kind": "key",
+          "atMs": 109540
+        },
+        {
+          "kind": "key",
+          "atMs": 109589
+        },
+        {
+          "kind": "key",
+          "atMs": 109638
+        },
+        {
+          "kind": "key",
+          "atMs": 109685
+        },
+        {
+          "kind": "key",
+          "atMs": 109733
+        },
+        {
+          "kind": "key",
+          "atMs": 109780
+        },
+        {
+          "kind": "key",
+          "atMs": 109828
+        },
+        {
+          "kind": "key",
+          "atMs": 109876
+        },
+        {
+          "kind": "key",
+          "atMs": 109924
+        },
+        {
+          "kind": "key",
+          "atMs": 109971
+        },
+        {
+          "kind": "key",
+          "atMs": 110019
+        },
+        {
+          "kind": "key",
+          "atMs": 110066
+        },
+        {
+          "kind": "key",
+          "atMs": 110113
+        },
+        {
+          "kind": "key",
+          "atMs": 110161
+        },
+        {
+          "kind": "key",
+          "atMs": 110208
+        },
+        {
+          "kind": "key",
+          "atMs": 110255
+        },
+        {
+          "kind": "key",
+          "atMs": 110302
+        },
+        {
+          "kind": "key",
+          "atMs": 110349
+        },
+        {
+          "kind": "key",
+          "atMs": 110396
+        },
+        {
+          "kind": "key",
+          "atMs": 110444
+        },
+        {
+          "kind": "key",
+          "atMs": 110492
+        },
+        {
+          "kind": "key",
+          "atMs": 110539
+        },
+        {
+          "kind": "key",
+          "atMs": 110586
+        },
+        {
+          "kind": "key",
+          "atMs": 110634
+        },
+        {
+          "kind": "key",
+          "atMs": 110681
+        },
+        {
+          "kind": "key",
+          "atMs": 110728
+        },
+        {
+          "kind": "key",
+          "atMs": 110776
+        },
+        {
+          "kind": "key",
+          "atMs": 110823
+        },
+        {
+          "kind": "key",
+          "atMs": 110871
+        },
+        {
+          "kind": "key",
+          "atMs": 110919
+        },
+        {
+          "kind": "key",
+          "atMs": 110966
+        },
+        {
+          "kind": "key",
+          "atMs": 111013
+        },
+        {
+          "kind": "key",
+          "atMs": 111061
+        },
+        {
+          "kind": "key",
+          "atMs": 111108
+        },
+        {
+          "kind": "key",
+          "atMs": 111155
+        },
+        {
+          "kind": "key",
+          "atMs": 111202
+        },
+        {
+          "kind": "click",
+          "atMs": 111730
+        },
+        {
+          "kind": "key",
+          "atMs": 112035
+        },
+        {
+          "kind": "key",
+          "atMs": 112036
+        },
+        {
+          "kind": "key",
+          "atMs": 112038
+        },
+        {
+          "kind": "key",
+          "atMs": 112084
+        },
+        {
+          "kind": "key",
+          "atMs": 112131
+        },
+        {
+          "kind": "key",
+          "atMs": 112179
+        },
+        {
+          "kind": "key",
+          "atMs": 112226
+        },
+        {
+          "kind": "key",
+          "atMs": 112273
+        },
+        {
+          "kind": "key",
+          "atMs": 112321
+        },
+        {
+          "kind": "key",
+          "atMs": 112369
+        },
+        {
+          "kind": "key",
+          "atMs": 112416
+        },
+        {
+          "kind": "key",
+          "atMs": 112463
+        },
+        {
+          "kind": "key",
+          "atMs": 112510
+        },
+        {
+          "kind": "key",
+          "atMs": 112557
+        },
+        {
+          "kind": "key",
+          "atMs": 112605
+        },
+        {
+          "kind": "key",
+          "atMs": 112652
+        },
+        {
+          "kind": "key",
+          "atMs": 112699
+        },
+        {
+          "kind": "key",
+          "atMs": 112747
+        },
+        {
+          "kind": "key",
+          "atMs": 112794
+        },
+        {
+          "kind": "key",
+          "atMs": 112841
+        },
+        {
+          "kind": "key",
+          "atMs": 112889
+        },
+        {
+          "kind": "key",
+          "atMs": 112936
+        },
+        {
+          "kind": "key",
+          "atMs": 112983
+        },
+        {
+          "kind": "key",
+          "atMs": 113031
+        },
+        {
+          "kind": "key",
+          "atMs": 113078
+        },
+        {
+          "kind": "key",
+          "atMs": 113126
+        },
+        {
+          "kind": "click",
+          "atMs": 113646
+        }
+      ]
+    },
+    {
+      "id": "identity",
+      "startMs": 128249,
+      "endMs": 165106,
+      "sentences": [
+        {
+          "text": "Le nom affiché et l'identifiant public sont deux informations différentes.",
+          "startMs": 504,
+          "endMs": 4867,
+          "method": "silence",
+          "absoluteStartS": 128.753,
+          "absoluteEndS": 133.116
+        },
+        {
+          "text": "Modifions d'abord le nom et enregistrons-le.",
+          "startMs": 5557,
+          "endMs": 7769,
+          "method": "silence",
+          "absoluteStartS": 133.806,
+          "absoluteEndS": 136.018
+        },
+        {
+          "text": "Pour l'identifiant, essayons une valeur déjà utilisée :",
+          "startMs": 9259,
+          "endMs": 10248,
+          "method": "silence",
+          "absoluteStartS": 137.508,
+          "absoluteEndS": 138.497
+        },
+        {
+          "text": "l'application la refuse.",
+          "startMs": 10432,
+          "endMs": 12058,
+          "method": "silence",
+          "absoluteStartS": 138.681,
+          "absoluteEndS": 140.307
+        },
+        {
+          "text": "Choisissons alors un identifiant libre et enregistrons.",
+          "startMs": 12914,
+          "endMs": 16945,
+          "method": "silence",
+          "absoluteStartS": 141.163,
+          "absoluteEndS": 145.194
+        },
+        {
+          "text": "Le détail s'ouvre sous ce nouvel identifiant.",
+          "startMs": 17215,
+          "endMs": 17926,
+          "method": "silence",
+          "absoluteStartS": 145.464,
+          "absoluteEndS": 146.175
+        },
+        {
+          "text": "Ce changement concerne les adresses publiques ;",
+          "startMs": 19276,
+          "endMs": 21403,
+          "method": "silence",
+          "absoluteStartS": 147.525,
+          "absoluteEndS": 149.652
+        },
+        {
+          "text": "il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant.",
+          "startMs": 22358,
+          "endMs": 29405,
+          "method": "silence",
+          "absoluteStartS": 150.607,
+          "absoluteEndS": 157.654
+        },
+        {
+          "text": "Ne changeons pas une adresse simplement pour corriger le nom affiché.",
+          "startMs": 30199,
+          "endMs": 33326,
+          "method": "silence",
+          "absoluteStartS": 158.448,
+          "absoluteEndS": 161.575
+        },
+        {
+          "text": "Vérifions le résultat avant de communiquer la nouvelle adresse.",
+          "startMs": 33501,
+          "endMs": 36372,
+          "method": "silence",
+          "absoluteStartS": 161.75,
+          "absoluteEndS": 164.621
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 134270
+        },
+        {
+          "kind": "key",
+          "atMs": 134577
+        },
+        {
+          "kind": "key",
+          "atMs": 134578
+        },
+        {
+          "kind": "key",
+          "atMs": 134581
+        },
+        {
+          "kind": "key",
+          "atMs": 134694
+        },
+        {
+          "kind": "key",
+          "atMs": 134807
+        },
+        {
+          "kind": "key",
+          "atMs": 134921
+        },
+        {
+          "kind": "key",
+          "atMs": 135033
+        },
+        {
+          "kind": "key",
+          "atMs": 135146
+        },
+        {
+          "kind": "key",
+          "atMs": 135259
+        },
+        {
+          "kind": "key",
+          "atMs": 135372
+        },
+        {
+          "kind": "key",
+          "atMs": 135483
+        },
+        {
+          "kind": "key",
+          "atMs": 135596
+        },
+        {
+          "kind": "key",
+          "atMs": 135709
+        },
+        {
+          "kind": "key",
+          "atMs": 135822
+        },
+        {
+          "kind": "key",
+          "atMs": 136048
+        },
+        {
+          "kind": "key",
+          "atMs": 136161
+        },
+        {
+          "kind": "key",
+          "atMs": 136275
+        },
+        {
+          "kind": "key",
+          "atMs": 136387
+        },
+        {
+          "kind": "key",
+          "atMs": 136501
+        },
+        {
+          "kind": "key",
+          "atMs": 136614
+        },
+        {
+          "kind": "key",
+          "atMs": 136725
+        },
+        {
+          "kind": "key",
+          "atMs": 136839
+        },
+        {
+          "kind": "key",
+          "atMs": 136955
+        },
+        {
+          "kind": "key",
+          "atMs": 137073
+        },
+        {
+          "kind": "key",
+          "atMs": 137190
+        },
+        {
+          "kind": "key",
+          "atMs": 137302
+        },
+        {
+          "kind": "key",
+          "atMs": 137418
+        },
+        {
+          "kind": "key",
+          "atMs": 137533
+        },
+        {
+          "kind": "key",
+          "atMs": 137651
+        },
+        {
+          "kind": "key",
+          "atMs": 137765
+        },
+        {
+          "kind": "key",
+          "atMs": 137881
+        },
+        {
+          "kind": "key",
+          "atMs": 137998
+        },
+        {
+          "kind": "key",
+          "atMs": 138111
+        },
+        {
+          "kind": "key",
+          "atMs": 138223
+        },
+        {
+          "kind": "key",
+          "atMs": 138336
+        },
+        {
+          "kind": "key",
+          "atMs": 138563
+        },
+        {
+          "kind": "click",
+          "atMs": 139137
+        },
+        {
+          "kind": "click",
+          "atMs": 139920
+        },
+        {
+          "kind": "key",
+          "atMs": 140226
+        },
+        {
+          "kind": "key",
+          "atMs": 140227
+        },
+        {
+          "kind": "key",
+          "atMs": 140229
+        },
+        {
+          "kind": "key",
+          "atMs": 140343
+        },
+        {
+          "kind": "key",
+          "atMs": 140455
+        },
+        {
+          "kind": "key",
+          "atMs": 140568
+        },
+        {
+          "kind": "key",
+          "atMs": 140682
+        },
+        {
+          "kind": "key",
+          "atMs": 140795
+        },
+        {
+          "kind": "key",
+          "atMs": 140908
+        },
+        {
+          "kind": "key",
+          "atMs": 141020
+        },
+        {
+          "kind": "key",
+          "atMs": 141133
+        },
+        {
+          "kind": "key",
+          "atMs": 141245
+        },
+        {
+          "kind": "key",
+          "atMs": 141358
+        },
+        {
+          "kind": "key",
+          "atMs": 141472
+        },
+        {
+          "kind": "key",
+          "atMs": 141585
+        },
+        {
+          "kind": "key",
+          "atMs": 141697
+        },
+        {
+          "kind": "key",
+          "atMs": 141810
+        },
+        {
+          "kind": "key",
+          "atMs": 141922
+        },
+        {
+          "kind": "key",
+          "atMs": 142038
+        },
+        {
+          "kind": "key",
+          "atMs": 142150
+        },
+        {
+          "kind": "key",
+          "atMs": 142263
+        },
+        {
+          "kind": "key",
+          "atMs": 142376
+        },
+        {
+          "kind": "key",
+          "atMs": 142489
+        },
+        {
+          "kind": "click",
+          "atMs": 143070
+        },
+        {
+          "kind": "click",
+          "atMs": 143854
+        },
+        {
+          "kind": "key",
+          "atMs": 144161
+        },
+        {
+          "kind": "key",
+          "atMs": 144161
+        },
+        {
+          "kind": "key",
+          "atMs": 144164
+        },
+        {
+          "kind": "key",
+          "atMs": 144276
+        },
+        {
+          "kind": "key",
+          "atMs": 144389
+        },
+        {
+          "kind": "key",
+          "atMs": 144501
+        },
+        {
+          "kind": "key",
+          "atMs": 144614
+        },
+        {
+          "kind": "key",
+          "atMs": 144727
+        },
+        {
+          "kind": "key",
+          "atMs": 144844
+        },
+        {
+          "kind": "key",
+          "atMs": 144960
+        },
+        {
+          "kind": "key",
+          "atMs": 145073
+        },
+        {
+          "kind": "key",
+          "atMs": 145186
+        },
+        {
+          "kind": "key",
+          "atMs": 145298
+        },
+        {
+          "kind": "key",
+          "atMs": 145412
+        },
+        {
+          "kind": "key",
+          "atMs": 145525
+        },
+        {
+          "kind": "key",
+          "atMs": 145638
+        },
+        {
+          "kind": "key",
+          "atMs": 145751
+        },
+        {
+          "kind": "key",
+          "atMs": 145863
+        },
+        {
+          "kind": "key",
+          "atMs": 145976
+        },
+        {
+          "kind": "key",
+          "atMs": 146089
+        },
+        {
+          "kind": "key",
+          "atMs": 146202
+        },
+        {
+          "kind": "key",
+          "atMs": 146315
+        },
+        {
+          "kind": "key",
+          "atMs": 146428
+        },
+        {
+          "kind": "key",
+          "atMs": 146541
+        },
+        {
+          "kind": "key",
+          "atMs": 146654
+        },
+        {
+          "kind": "key",
+          "atMs": 146766
+        },
+        {
+          "kind": "key",
+          "atMs": 146878
+        },
+        {
+          "kind": "key",
+          "atMs": 146990
+        },
+        {
+          "kind": "key",
+          "atMs": 147103
+        },
+        {
+          "kind": "key",
+          "atMs": 147217
+        },
+        {
+          "kind": "key",
+          "atMs": 147329
+        },
+        {
+          "kind": "key",
+          "atMs": 147441
+        },
+        {
+          "kind": "key",
+          "atMs": 147555
+        },
+        {
+          "kind": "key",
+          "atMs": 147667
+        },
+        {
+          "kind": "key",
+          "atMs": 147780
+        },
+        {
+          "kind": "key",
+          "atMs": 147893
+        },
+        {
+          "kind": "key",
+          "atMs": 148005
+        },
+        {
+          "kind": "key",
+          "atMs": 148119
+        },
+        {
+          "kind": "click",
+          "atMs": 148703
+        }
+      ]
+    },
+    {
+      "id": "availability",
+      "startMs": 167374,
+      "endMs": 199327,
+      "sentences": [
+        {
+          "text": "Désactiver une organisation n'est pas la supprimer.",
+          "startMs": 491,
+          "endMs": 3087,
+          "method": "silence",
+          "absoluteStartS": 167.865,
+          "absoluteEndS": 170.461
+        },
+        {
+          "text": "Ouvrons la confirmation et lisons les conséquences avant de valider.",
+          "startMs": 3873,
+          "endMs": 6919,
+          "method": "silence",
+          "absoluteStartS": 171.247,
+          "absoluteEndS": 174.293
+        },
+        {
+          "text": "Dans la session organisateur déjà ouverte, une nouvelle requête est maintenant refusée.",
+          "startMs": 7690,
+          "endMs": 11913,
+          "method": "silence",
+          "absoluteStartS": 175.064,
+          "absoluteEndS": 179.287
+        },
+        {
+          "text": "L'espace existe toujours, avec ses données.",
+          "startMs": 12719,
+          "endMs": 14078,
+          "method": "silence",
+          "absoluteStartS": 180.093,
+          "absoluteEndS": 181.452
+        },
+        {
+          "text": "Revenons côté opérateur et réactivons-le.",
+          "startMs": 14218,
+          "endMs": 15114,
+          "method": "silence",
+          "absoluteStartS": 181.592,
+          "absoluteEndS": 182.488
+        },
+        {
+          "text": "La session organisateur peut à nouveau accéder à ses événements.",
+          "startMs": 15918,
+          "endMs": 18104,
+          "method": "silence",
+          "absoluteStartS": 183.292,
+          "absoluteEndS": 185.478
+        },
+        {
+          "text": "Cette vérification est importante :",
+          "startMs": 18900,
+          "endMs": 21738,
+          "method": "silence",
+          "absoluteStartS": 186.274,
+          "absoluteEndS": 189.112
+        },
+        {
+          "text": "un écran déjà affiché n'est pas la preuve que les nouvelles actions restent autorisées.",
+          "startMs": 22421,
+          "endMs": 28167,
+          "method": "silence",
+          "absoluteStartS": 189.795,
+          "absoluteEndS": 195.541
+        },
+        {
+          "text": "Contrôlons le résultat de la requête après chaque changement d'état.",
+          "startMs": 28458,
+          "endMs": 31519,
+          "method": "silence",
+          "absoluteStartS": 195.832,
+          "absoluteEndS": 198.893
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 171715
+        },
+        {
+          "kind": "click",
+          "atMs": 173614
+        },
+        {
+          "kind": "click",
+          "atMs": 183205
+        },
+        {
+          "kind": "click",
+          "atMs": 183988
+        }
+      ]
+    },
+    {
+      "id": "context",
+      "startMs": 201595,
+      "endMs": 230639,
+      "sentences": [
+        {
+          "text": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement.",
+          "startMs": 431,
+          "endMs": 4302,
+          "method": "silence",
+          "absoluteStartS": 202.026,
+          "absoluteEndS": 205.897
+        },
+        {
+          "text": "Sans ce choix, l'application demande de sélectionner un espace.",
+          "startMs": 4946,
+          "endMs": 7927,
+          "method": "silence",
+          "absoluteStartS": 206.541,
+          "absoluteEndS": 209.522
+        },
+        {
+          "text": "Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements.",
+          "startMs": 8439,
+          "endMs": 13592,
+          "method": "silence",
+          "absoluteStartS": 210.034,
+          "absoluteEndS": 215.187
+        },
+        {
+          "text": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier.",
+          "startMs": 14132,
+          "endMs": 15617,
+          "method": "silence",
+          "absoluteStartS": 215.727,
+          "absoluteEndS": 217.212
+        },
+        {
+          "text": "Un super-administrateur peut agir dans l'organisation sélectionnée :",
+          "startMs": 16006,
+          "endMs": 16759,
+          "method": "silence",
+          "absoluteStartS": 217.601,
+          "absoluteEndS": 218.354
+        },
+        {
+          "text": "ce n'est pas une vue sans accès aux données.",
+          "startMs": 17517,
+          "endMs": 22703,
+          "method": "silence",
+          "absoluteStartS": 219.112,
+          "absoluteEndS": 224.298
+        },
+        {
+          "text": "Avant une modification ou un envoi, prenons donc ce petit réflexe :",
+          "startMs": 23451,
+          "endMs": 26731,
+          "method": "silence",
+          "absoluteStartS": 225.046,
+          "absoluteEndS": 228.326
+        },
+        {
+          "text": "regarder dans quel espace nous sommes.",
+          "startMs": 27008,
+          "endMs": 28813,
+          "method": "silence",
+          "absoluteStartS": 228.603,
+          "absoluteEndS": 230.408
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 211420
+        }
+      ]
+    },
+    {
+      "id": "health",
+      "startMs": 232901,
+      "endMs": 273130,
+      "sentences": [
+        {
+          "text": "La page Santé du service regroupe trois ensembles d'informations :",
+          "startMs": 201,
+          "endMs": 4302,
+          "method": "silence",
+          "absoluteStartS": 233.102,
+          "absoluteEndS": 237.203
+        },
+        {
+          "text": "le service, les tâches planifiées et les sauvegardes, puis la configuration.",
+          "startMs": 5203,
+          "endMs": 10262,
+          "method": "silence",
+          "absoluteStartS": 238.104,
+          "absoluteEndS": 243.163
+        },
+        {
+          "text": "Regardons les états visibles, la date de contrôle et la version.",
+          "startMs": 10872,
+          "endMs": 14121,
+          "method": "silence",
+          "absoluteStartS": 243.773,
+          "absoluteEndS": 247.022
+        },
+        {
+          "text": "Recharger relance la vérification.",
+          "startMs": 14400,
+          "endMs": 15927,
+          "method": "silence",
+          "absoluteStartS": 247.301,
+          "absoluteEndS": 248.828
+        },
+        {
+          "text": "Dans notre environnement local, certaines tâches n'ont jamais tourné :",
+          "startMs": 16232,
+          "endMs": 22820,
+          "method": "silence",
+          "absoluteStartS": 249.133,
+          "absoluteEndS": 255.721
+        },
+        {
+          "text": "leur état reste inconnu ou en avertissement.",
+          "startMs": 23277,
+          "endMs": 24537,
+          "method": "silence",
+          "absoluteStartS": 256.178,
+          "absoluteEndS": 257.438
+        },
+        {
+          "text": "Nous ne le transformons pas en succès pour la démonstration.",
+          "startMs": 24782,
+          "endMs": 28948,
+          "method": "silence",
+          "absoluteStartS": 257.683,
+          "absoluteEndS": 261.849
+        },
+        {
+          "text": "Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée.",
+          "startMs": 29709,
+          "endMs": 34636,
+          "method": "silence",
+          "absoluteStartS": 262.61,
+          "absoluteEndS": 267.537
+        },
+        {
+          "text": "Ces indicateurs aident à repérer un problème ;",
+          "startMs": 35301,
+          "endMs": 37768,
+          "method": "silence",
+          "absoluteStartS": 268.202,
+          "absoluteEndS": 270.669
+        },
+        {
+          "text": "ils ne remplacent pas son analyse.",
+          "startMs": 38304,
+          "endMs": 39724,
+          "method": "silence",
+          "absoluteStartS": 271.205,
+          "absoluteEndS": 272.625
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "preview",
+      "startMs": 275390,
+      "endMs": 331273,
+      "sentences": [
+        {
+          "text": "Préparons une communication destinée aux administrateurs abonnés.",
+          "startMs": 505,
+          "endMs": 4887,
+          "method": "silence",
+          "absoluteStartS": 275.895,
+          "absoluteEndS": 280.277
+        },
+        {
+          "text": "Donnons-lui un objet clair :",
+          "startMs": 5042,
+          "endMs": 6754,
+          "method": "silence",
+          "absoluteStartS": 280.432,
+          "absoluteEndS": 282.144
+        },
+        {
+          "text": "Formation, préparer votre prochain événement.",
+          "startMs": 6948,
+          "endMs": 9667,
+          "method": "silence",
+          "absoluteStartS": 282.338,
+          "absoluteEndS": 285.057
+        },
+        {
+          "text": "Le contenu commence par un titre, Bienvenue.",
+          "startMs": 10505,
+          "endMs": 13478,
+          "method": "silence",
+          "absoluteStartS": 285.895,
+          "absoluteEndS": 288.868
+        },
+        {
+          "text": "Ajoutons deux conseils simples :",
+          "startMs": 14079,
+          "endMs": 16021,
+          "method": "silence",
+          "absoluteStartS": 289.469,
+          "absoluteEndS": 291.411
+        },
+        {
+          "text": "vérifier son planning et partager son lien public.",
+          "startMs": 16622,
+          "endMs": 19602,
+          "method": "silence",
+          "absoluteStartS": 292.012,
+          "absoluteEndS": 294.992
+        },
+        {
+          "text": "Un lien vers le guide termine le message.",
+          "startMs": 20224,
+          "endMs": 20478,
+          "method": "silence",
+          "absoluteStartS": 295.614,
+          "absoluteEndS": 295.868
+        },
+        {
+          "text": "Prenons le temps de relire ces quelques lignes :",
+          "startMs": 20806,
+          "endMs": 25638,
+          "method": "silence",
+          "absoluteStartS": 296.196,
+          "absoluteEndS": 301.028
+        },
+        {
+          "text": "elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront.",
+          "startMs": 26118,
+          "endMs": 30450,
+          "method": "silence",
+          "absoluteStartS": 301.508,
+          "absoluteEndS": 305.84
+        },
+        {
+          "text": "L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi.",
+          "startMs": 31513,
+          "endMs": 35332,
+          "method": "silence",
+          "absoluteStartS": 306.903,
+          "absoluteEndS": 310.722
+        },
+        {
+          "text": "Utilisons Envoyer un test, uniquement vers notre adresse de formation.",
+          "startMs": 36107,
+          "endMs": 40635,
+          "method": "silence",
+          "absoluteStartS": 311.497,
+          "absoluteEndS": 316.025
+        },
+        {
+          "text": "Ouvrons le vrai email pour contrôler l'objet et le contenu reçu.",
+          "startMs": 41410,
+          "endMs": 45204,
+          "method": "silence",
+          "absoluteStartS": 316.8,
+          "absoluteEndS": 320.594
+        },
+        {
+          "text": "Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique.",
+          "startMs": 45764,
+          "endMs": 50321,
+          "method": "silence",
+          "absoluteStartS": 321.154,
+          "absoluteEndS": 325.711
+        },
+        {
+          "text": "Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
+          "startMs": 51056,
+          "endMs": 55882,
+          "method": "silence",
+          "absoluteStartS": 326.446,
+          "absoluteEndS": 331.272
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 280910
+        },
+        {
+          "kind": "key",
+          "atMs": 281217
+        },
+        {
+          "kind": "key",
+          "atMs": 281217
+        },
+        {
+          "kind": "key",
+          "atMs": 281220
+        },
+        {
+          "kind": "key",
+          "atMs": 281331
+        },
+        {
+          "kind": "key",
+          "atMs": 281443
+        },
+        {
+          "kind": "key",
+          "atMs": 281555
+        },
+        {
+          "kind": "key",
+          "atMs": 281667
+        },
+        {
+          "kind": "key",
+          "atMs": 281778
+        },
+        {
+          "kind": "key",
+          "atMs": 281890
+        },
+        {
+          "kind": "key",
+          "atMs": 282005
+        },
+        {
+          "kind": "key",
+          "atMs": 282120
+        },
+        {
+          "kind": "key",
+          "atMs": 282236
+        },
+        {
+          "kind": "key",
+          "atMs": 282465
+        },
+        {
+          "kind": "key",
+          "atMs": 282577
+        },
+        {
+          "kind": "key",
+          "atMs": 282690
+        },
+        {
+          "kind": "key",
+          "atMs": 282919
+        },
+        {
+          "kind": "key",
+          "atMs": 283031
+        },
+        {
+          "kind": "key",
+          "atMs": 283148
+        },
+        {
+          "kind": "key",
+          "atMs": 283265
+        },
+        {
+          "kind": "key",
+          "atMs": 283381
+        },
+        {
+          "kind": "key",
+          "atMs": 283497
+        },
+        {
+          "kind": "key",
+          "atMs": 283615
+        },
+        {
+          "kind": "key",
+          "atMs": 283731
+        },
+        {
+          "kind": "key",
+          "atMs": 283844
+        },
+        {
+          "kind": "key",
+          "atMs": 283961
+        },
+        {
+          "kind": "key",
+          "atMs": 284079
+        },
+        {
+          "kind": "key",
+          "atMs": 284193
+        },
+        {
+          "kind": "key",
+          "atMs": 284310
+        },
+        {
+          "kind": "key",
+          "atMs": 284427
+        },
+        {
+          "kind": "key",
+          "atMs": 284543
+        },
+        {
+          "kind": "key",
+          "atMs": 284660
+        },
+        {
+          "kind": "key",
+          "atMs": 284778
+        },
+        {
+          "kind": "key",
+          "atMs": 284894
+        },
+        {
+          "kind": "key",
+          "atMs": 285008
+        },
+        {
+          "kind": "key",
+          "atMs": 285122
+        },
+        {
+          "kind": "key",
+          "atMs": 285240
+        },
+        {
+          "kind": "key",
+          "atMs": 285468
+        },
+        {
+          "kind": "key",
+          "atMs": 285696
+        },
+        {
+          "kind": "key",
+          "atMs": 285813
+        },
+        {
+          "kind": "key",
+          "atMs": 285927
+        },
+        {
+          "kind": "key",
+          "atMs": 286046
+        },
+        {
+          "kind": "key",
+          "atMs": 286158
+        },
+        {
+          "kind": "key",
+          "atMs": 286275
+        },
+        {
+          "kind": "click",
+          "atMs": 286858
+        },
+        {
+          "kind": "key",
+          "atMs": 287163
+        },
+        {
+          "kind": "key",
+          "atMs": 287164
+        },
+        {
+          "kind": "key",
+          "atMs": 287167
+        },
+        {
+          "kind": "key",
+          "atMs": 287281
+        },
+        {
+          "kind": "key",
+          "atMs": 287394
+        },
+        {
+          "kind": "key",
+          "atMs": 287510
+        },
+        {
+          "kind": "key",
+          "atMs": 287622
+        },
+        {
+          "kind": "key",
+          "atMs": 287735
+        },
+        {
+          "kind": "key",
+          "atMs": 287852
+        },
+        {
+          "kind": "key",
+          "atMs": 287964
+        },
+        {
+          "kind": "key",
+          "atMs": 288080
+        },
+        {
+          "kind": "key",
+          "atMs": 288193
+        },
+        {
+          "kind": "key",
+          "atMs": 288306
+        },
+        {
+          "kind": "key",
+          "atMs": 288420
+        },
+        {
+          "kind": "key",
+          "atMs": 288534
+        },
+        {
+          "kind": "key",
+          "atMs": 288647
+        },
+        {
+          "kind": "key",
+          "atMs": 288761
+        },
+        {
+          "kind": "key",
+          "atMs": 288879
+        },
+        {
+          "kind": "key",
+          "atMs": 288991
+        },
+        {
+          "kind": "key",
+          "atMs": 289223
+        },
+        {
+          "kind": "key",
+          "atMs": 289335
+        },
+        {
+          "kind": "key",
+          "atMs": 289448
+        },
+        {
+          "kind": "key",
+          "atMs": 289561
+        },
+        {
+          "kind": "key",
+          "atMs": 289674
+        },
+        {
+          "kind": "key",
+          "atMs": 289787
+        },
+        {
+          "kind": "key",
+          "atMs": 289899
+        },
+        {
+          "kind": "key",
+          "atMs": 290011
+        },
+        {
+          "kind": "key",
+          "atMs": 290127
+        },
+        {
+          "kind": "key",
+          "atMs": 290243
+        },
+        {
+          "kind": "key",
+          "atMs": 290357
+        },
+        {
+          "kind": "key",
+          "atMs": 290470
+        },
+        {
+          "kind": "key",
+          "atMs": 290583
+        },
+        {
+          "kind": "key",
+          "atMs": 290700
+        },
+        {
+          "kind": "key",
+          "atMs": 290815
+        },
+        {
+          "kind": "key",
+          "atMs": 290932
+        },
+        {
+          "kind": "key",
+          "atMs": 291045
+        },
+        {
+          "kind": "key",
+          "atMs": 291157
+        },
+        {
+          "kind": "key",
+          "atMs": 291276
+        },
+        {
+          "kind": "key",
+          "atMs": 291391
+        },
+        {
+          "kind": "key",
+          "atMs": 291508
+        },
+        {
+          "kind": "key",
+          "atMs": 291623
+        },
+        {
+          "kind": "key",
+          "atMs": 291738
+        },
+        {
+          "kind": "key",
+          "atMs": 291856
+        },
+        {
+          "kind": "key",
+          "atMs": 291970
+        },
+        {
+          "kind": "key",
+          "atMs": 292081
+        },
+        {
+          "kind": "key",
+          "atMs": 292194
+        },
+        {
+          "kind": "key",
+          "atMs": 292308
+        },
+        {
+          "kind": "key",
+          "atMs": 292420
+        },
+        {
+          "kind": "key",
+          "atMs": 292537
+        },
+        {
+          "kind": "key",
+          "atMs": 292655
+        },
+        {
+          "kind": "key",
+          "atMs": 292772
+        },
+        {
+          "kind": "key",
+          "atMs": 292888
+        },
+        {
+          "kind": "key",
+          "atMs": 293003
+        },
+        {
+          "kind": "key",
+          "atMs": 293122
+        },
+        {
+          "kind": "key",
+          "atMs": 293235
+        },
+        {
+          "kind": "key",
+          "atMs": 293351
+        },
+        {
+          "kind": "key",
+          "atMs": 293465
+        },
+        {
+          "kind": "key",
+          "atMs": 293582
+        },
+        {
+          "kind": "key",
+          "atMs": 293697
+        },
+        {
+          "kind": "key",
+          "atMs": 293815
+        },
+        {
+          "kind": "key",
+          "atMs": 293934
+        },
+        {
+          "kind": "key",
+          "atMs": 294048
+        },
+        {
+          "kind": "key",
+          "atMs": 294162
+        },
+        {
+          "kind": "key",
+          "atMs": 294282
+        },
+        {
+          "kind": "key",
+          "atMs": 294398
+        },
+        {
+          "kind": "key",
+          "atMs": 294513
+        },
+        {
+          "kind": "key",
+          "atMs": 294630
+        },
+        {
+          "kind": "key",
+          "atMs": 294745
+        },
+        {
+          "kind": "key",
+          "atMs": 294861
+        },
+        {
+          "kind": "key",
+          "atMs": 294977
+        },
+        {
+          "kind": "key",
+          "atMs": 295093
+        },
+        {
+          "kind": "key",
+          "atMs": 295206
+        },
+        {
+          "kind": "key",
+          "atMs": 295321
+        },
+        {
+          "kind": "key",
+          "atMs": 295439
+        },
+        {
+          "kind": "key",
+          "atMs": 295554
+        },
+        {
+          "kind": "key",
+          "atMs": 295671
+        },
+        {
+          "kind": "key",
+          "atMs": 295785
+        },
+        {
+          "kind": "key",
+          "atMs": 295902
+        },
+        {
+          "kind": "key",
+          "atMs": 296017
+        },
+        {
+          "kind": "key",
+          "atMs": 296134
+        },
+        {
+          "kind": "key",
+          "atMs": 296250
+        },
+        {
+          "kind": "key",
+          "atMs": 296367
+        },
+        {
+          "kind": "key",
+          "atMs": 296483
+        },
+        {
+          "kind": "key",
+          "atMs": 296601
+        },
+        {
+          "kind": "key",
+          "atMs": 296714
+        },
+        {
+          "kind": "key",
+          "atMs": 296827
+        },
+        {
+          "kind": "key",
+          "atMs": 296944
+        },
+        {
+          "kind": "key",
+          "atMs": 297060
+        },
+        {
+          "kind": "key",
+          "atMs": 297174
+        },
+        {
+          "kind": "key",
+          "atMs": 297290
+        },
+        {
+          "kind": "key",
+          "atMs": 297408
+        },
+        {
+          "kind": "key",
+          "atMs": 297523
+        },
+        {
+          "kind": "key",
+          "atMs": 297636
+        },
+        {
+          "kind": "key",
+          "atMs": 297751
+        },
+        {
+          "kind": "key",
+          "atMs": 297866
+        },
+        {
+          "kind": "key",
+          "atMs": 297982
+        },
+        {
+          "kind": "key",
+          "atMs": 298104
+        },
+        {
+          "kind": "key",
+          "atMs": 298217
+        },
+        {
+          "kind": "key",
+          "atMs": 298331
+        },
+        {
+          "kind": "key",
+          "atMs": 298446
+        },
+        {
+          "kind": "key",
+          "atMs": 298564
+        },
+        {
+          "kind": "key",
+          "atMs": 298678
+        },
+        {
+          "kind": "key",
+          "atMs": 298795
+        },
+        {
+          "kind": "key",
+          "atMs": 298910
+        },
+        {
+          "kind": "key",
+          "atMs": 299023
+        },
+        {
+          "kind": "key",
+          "atMs": 299136
+        },
+        {
+          "kind": "key",
+          "atMs": 299250
+        },
+        {
+          "kind": "key",
+          "atMs": 299363
+        },
+        {
+          "kind": "key",
+          "atMs": 299476
+        },
+        {
+          "kind": "key",
+          "atMs": 299589
+        },
+        {
+          "kind": "key",
+          "atMs": 299705
+        },
+        {
+          "kind": "key",
+          "atMs": 299819
+        },
+        {
+          "kind": "key",
+          "atMs": 299932
+        },
+        {
+          "kind": "key",
+          "atMs": 300046
+        },
+        {
+          "kind": "key",
+          "atMs": 300163
+        },
+        {
+          "kind": "key",
+          "atMs": 300286
+        },
+        {
+          "kind": "key",
+          "atMs": 300402
+        },
+        {
+          "kind": "key",
+          "atMs": 300516
+        },
+        {
+          "kind": "key",
+          "atMs": 300632
+        },
+        {
+          "kind": "key",
+          "atMs": 300748
+        },
+        {
+          "kind": "key",
+          "atMs": 300865
+        },
+        {
+          "kind": "key",
+          "atMs": 300979
+        },
+        {
+          "kind": "click",
+          "atMs": 312742
+        }
+      ]
+    },
+    {
+      "id": "broadcast",
+      "startMs": 333530,
+      "endMs": 392766,
+      "sentences": [
+        {
+          "text": "Le test est bon ?",
+          "startMs": 122,
+          "endMs": 1040,
+          "method": "silence",
+          "absoluteStartS": 333.652,
+          "absoluteEndS": 334.57
+        },
+        {
+          "text": "Revenons au formulaire pour préparer la diffusion.",
+          "startMs": 1243,
+          "endMs": 3448,
+          "method": "silence",
+          "absoluteStartS": 334.773,
+          "absoluteEndS": 336.978
+        },
+        {
+          "text": "Reprenons notre objet, puis le contenu que nous venons de vérifier.",
+          "startMs": 4263,
+          "endMs": 8209,
+          "method": "silence",
+          "absoluteStartS": 337.793,
+          "absoluteEndS": 341.739
+        },
+        {
+          "text": "Le titre accueille les administrateurs, la liste rappelle les deux gestes utiles et le lien conduit au guide.",
+          "startMs": 9045,
+          "endMs": 15710,
+          "method": "silence",
+          "absoluteStartS": 342.575,
+          "absoluteEndS": 349.24
+        },
+        {
+          "text": "Nous conservons exactement le message testé, sans nouvelle information ajoutée à la dernière minute.",
+          "startMs": 16549,
+          "endMs": 21824,
+          "method": "silence",
+          "absoluteStartS": 350.079,
+          "absoluteEndS": 355.354
+        },
+        {
+          "text": "Avant la diffusion, vérifions le nombre de destinataires et lisons la confirmation.",
+          "startMs": 22648,
+          "endMs": 27140,
+          "method": "silence",
+          "absoluteStartS": 356.178,
+          "absoluteEndS": 360.67
+        },
+        {
+          "text": "Seuls les comptes actifs abonnés aux communications sont concernés.",
+          "startMs": 27633,
+          "endMs": 31000,
+          "method": "silence",
+          "absoluteStartS": 361.163,
+          "absoluteEndS": 364.53
+        },
+        {
+          "text": "Dans notre base séparée, ce sont uniquement des comptes fictifs.",
+          "startMs": 31767,
+          "endMs": 36490,
+          "method": "silence",
+          "absoluteStartS": 365.297,
+          "absoluteEndS": 370.02
+        },
+        {
+          "text": "Validons, puis regardons le nombre d'envois réussis et l'historique.",
+          "startMs": 36643,
+          "endMs": 40511,
+          "method": "silence",
+          "absoluteStartS": 370.173,
+          "absoluteEndS": 374.041
+        },
+        {
+          "text": "Un compte non abonné n'a rien reçu.",
+          "startMs": 40639,
+          "endMs": 42572,
+          "method": "silence",
+          "absoluteStartS": 374.169,
+          "absoluteEndS": 376.102
+        },
+        {
+          "text": "Ouvrons un message livré et utilisons son lien de désabonnement.",
+          "startMs": 43415,
+          "endMs": 47010,
+          "method": "silence",
+          "absoluteStartS": 376.945,
+          "absoluteEndS": 380.54
+        },
+        {
+          "text": "Le choix est enregistré ;",
+          "startMs": 47866,
+          "endMs": 49070,
+          "method": "silence",
+          "absoluteStartS": 381.396,
+          "absoluteEndS": 382.6
+        },
+        {
+          "text": "le nombre de destinataires d'une prochaine diffusion diminue.",
+          "startMs": 49283,
+          "endMs": 52499,
+          "method": "silence",
+          "absoluteStartS": 382.813,
+          "absoluteEndS": 386.029
+        },
+        {
+          "text": "Un envoi réussi signifie ici que le serveur de messagerie l'a accepté, pas que son destinataire l'a lu.",
+          "startMs": 53026,
+          "endMs": 58847,
+          "method": "silence",
+          "absoluteStartS": 386.556,
+          "absoluteEndS": 392.377
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 338265
+        },
+        {
+          "kind": "key",
+          "atMs": 338572
+        },
+        {
+          "kind": "key",
+          "atMs": 338572
+        },
+        {
+          "kind": "key",
+          "atMs": 338575
+        },
+        {
+          "kind": "key",
+          "atMs": 338686
+        },
+        {
+          "kind": "key",
+          "atMs": 338798
+        },
+        {
+          "kind": "key",
+          "atMs": 338911
+        },
+        {
+          "kind": "key",
+          "atMs": 339024
+        },
+        {
+          "kind": "key",
+          "atMs": 339140
+        },
+        {
+          "kind": "key",
+          "atMs": 339255
+        },
+        {
+          "kind": "key",
+          "atMs": 339367
+        },
+        {
+          "kind": "key",
+          "atMs": 339479
+        },
+        {
+          "kind": "key",
+          "atMs": 339591
+        },
+        {
+          "kind": "key",
+          "atMs": 339819
+        },
+        {
+          "kind": "key",
+          "atMs": 339932
+        },
+        {
+          "kind": "key",
+          "atMs": 340050
+        },
+        {
+          "kind": "key",
+          "atMs": 340279
+        },
+        {
+          "kind": "key",
+          "atMs": 340391
+        },
+        {
+          "kind": "key",
+          "atMs": 340509
+        },
+        {
+          "kind": "key",
+          "atMs": 340624
+        },
+        {
+          "kind": "key",
+          "atMs": 340738
+        },
+        {
+          "kind": "key",
+          "atMs": 340851
+        },
+        {
+          "kind": "key",
+          "atMs": 340962
+        },
+        {
+          "kind": "key",
+          "atMs": 341074
+        },
+        {
+          "kind": "key",
+          "atMs": 341187
+        },
+        {
+          "kind": "key",
+          "atMs": 341300
+        },
+        {
+          "kind": "key",
+          "atMs": 341415
+        },
+        {
+          "kind": "key",
+          "atMs": 341531
+        },
+        {
+          "kind": "key",
+          "atMs": 341644
+        },
+        {
+          "kind": "key",
+          "atMs": 341760
+        },
+        {
+          "kind": "key",
+          "atMs": 341875
+        },
+        {
+          "kind": "key",
+          "atMs": 341992
+        },
+        {
+          "kind": "key",
+          "atMs": 342110
+        },
+        {
+          "kind": "key",
+          "atMs": 342227
+        },
+        {
+          "kind": "key",
+          "atMs": 342344
+        },
+        {
+          "kind": "key",
+          "atMs": 342460
+        },
+        {
+          "kind": "key",
+          "atMs": 342576
+        },
+        {
+          "kind": "key",
+          "atMs": 342804
+        },
+        {
+          "kind": "key",
+          "atMs": 343032
+        },
+        {
+          "kind": "key",
+          "atMs": 343144
+        },
+        {
+          "kind": "key",
+          "atMs": 343256
+        },
+        {
+          "kind": "key",
+          "atMs": 343371
+        },
+        {
+          "kind": "key",
+          "atMs": 343487
+        },
+        {
+          "kind": "key",
+          "atMs": 343602
+        },
+        {
+          "kind": "click",
+          "atMs": 344180
+        },
+        {
+          "kind": "key",
+          "atMs": 344486
+        },
+        {
+          "kind": "key",
+          "atMs": 344487
+        },
+        {
+          "kind": "key",
+          "atMs": 344489
+        },
+        {
+          "kind": "key",
+          "atMs": 344603
+        },
+        {
+          "kind": "key",
+          "atMs": 344715
+        },
+        {
+          "kind": "key",
+          "atMs": 344828
+        },
+        {
+          "kind": "key",
+          "atMs": 344941
+        },
+        {
+          "kind": "key",
+          "atMs": 345056
+        },
+        {
+          "kind": "key",
+          "atMs": 345172
+        },
+        {
+          "kind": "key",
+          "atMs": 345287
+        },
+        {
+          "kind": "key",
+          "atMs": 345399
+        },
+        {
+          "kind": "key",
+          "atMs": 345515
+        },
+        {
+          "kind": "key",
+          "atMs": 345633
+        },
+        {
+          "kind": "key",
+          "atMs": 345750
+        },
+        {
+          "kind": "key",
+          "atMs": 345863
+        },
+        {
+          "kind": "key",
+          "atMs": 345981
+        },
+        {
+          "kind": "key",
+          "atMs": 346098
+        },
+        {
+          "kind": "key",
+          "atMs": 346216
+        },
+        {
+          "kind": "key",
+          "atMs": 346331
+        },
+        {
+          "kind": "key",
+          "atMs": 346563
+        },
+        {
+          "kind": "key",
+          "atMs": 346675
+        },
+        {
+          "kind": "key",
+          "atMs": 346791
+        },
+        {
+          "kind": "key",
+          "atMs": 346912
+        },
+        {
+          "kind": "key",
+          "atMs": 347025
+        },
+        {
+          "kind": "key",
+          "atMs": 347142
+        },
+        {
+          "kind": "key",
+          "atMs": 347258
+        },
+        {
+          "kind": "key",
+          "atMs": 347376
+        },
+        {
+          "kind": "key",
+          "atMs": 347492
+        },
+        {
+          "kind": "key",
+          "atMs": 347609
+        },
+        {
+          "kind": "key",
+          "atMs": 347731
+        },
+        {
+          "kind": "key",
+          "atMs": 347848
+        },
+        {
+          "kind": "key",
+          "atMs": 347962
+        },
+        {
+          "kind": "key",
+          "atMs": 348078
+        },
+        {
+          "kind": "key",
+          "atMs": 348195
+        },
+        {
+          "kind": "key",
+          "atMs": 348309
+        },
+        {
+          "kind": "key",
+          "atMs": 348426
+        },
+        {
+          "kind": "key",
+          "atMs": 348544
+        },
+        {
+          "kind": "key",
+          "atMs": 348661
+        },
+        {
+          "kind": "key",
+          "atMs": 348773
+        },
+        {
+          "kind": "key",
+          "atMs": 348886
+        },
+        {
+          "kind": "key",
+          "atMs": 349003
+        },
+        {
+          "kind": "key",
+          "atMs": 349121
+        },
+        {
+          "kind": "key",
+          "atMs": 349238
+        },
+        {
+          "kind": "key",
+          "atMs": 349352
+        },
+        {
+          "kind": "key",
+          "atMs": 349468
+        },
+        {
+          "kind": "key",
+          "atMs": 349584
+        },
+        {
+          "kind": "key",
+          "atMs": 349702
+        },
+        {
+          "kind": "key",
+          "atMs": 349818
+        },
+        {
+          "kind": "key",
+          "atMs": 349939
+        },
+        {
+          "kind": "key",
+          "atMs": 350054
+        },
+        {
+          "kind": "key",
+          "atMs": 350174
+        },
+        {
+          "kind": "key",
+          "atMs": 350291
+        },
+        {
+          "kind": "key",
+          "atMs": 350408
+        },
+        {
+          "kind": "key",
+          "atMs": 350527
+        },
+        {
+          "kind": "key",
+          "atMs": 350643
+        },
+        {
+          "kind": "key",
+          "atMs": 350761
+        },
+        {
+          "kind": "key",
+          "atMs": 350877
+        },
+        {
+          "kind": "key",
+          "atMs": 350993
+        },
+        {
+          "kind": "key",
+          "atMs": 351114
+        },
+        {
+          "kind": "key",
+          "atMs": 351231
+        },
+        {
+          "kind": "key",
+          "atMs": 351345
+        },
+        {
+          "kind": "key",
+          "atMs": 351468
+        },
+        {
+          "kind": "key",
+          "atMs": 351587
+        },
+        {
+          "kind": "key",
+          "atMs": 351699
+        },
+        {
+          "kind": "key",
+          "atMs": 351816
+        },
+        {
+          "kind": "key",
+          "atMs": 351933
+        },
+        {
+          "kind": "key",
+          "atMs": 352049
+        },
+        {
+          "kind": "key",
+          "atMs": 352164
+        },
+        {
+          "kind": "key",
+          "atMs": 352282
+        },
+        {
+          "kind": "key",
+          "atMs": 352399
+        },
+        {
+          "kind": "key",
+          "atMs": 352516
+        },
+        {
+          "kind": "key",
+          "atMs": 352634
+        },
+        {
+          "kind": "key",
+          "atMs": 352750
+        },
+        {
+          "kind": "key",
+          "atMs": 352866
+        },
+        {
+          "kind": "key",
+          "atMs": 352986
+        },
+        {
+          "kind": "key",
+          "atMs": 353101
+        },
+        {
+          "kind": "key",
+          "atMs": 353220
+        },
+        {
+          "kind": "key",
+          "atMs": 353334
+        },
+        {
+          "kind": "key",
+          "atMs": 353454
+        },
+        {
+          "kind": "key",
+          "atMs": 353567
+        },
+        {
+          "kind": "key",
+          "atMs": 353681
+        },
+        {
+          "kind": "key",
+          "atMs": 353798
+        },
+        {
+          "kind": "key",
+          "atMs": 353912
+        },
+        {
+          "kind": "key",
+          "atMs": 354033
+        },
+        {
+          "kind": "key",
+          "atMs": 354148
+        },
+        {
+          "kind": "key",
+          "atMs": 354264
+        },
+        {
+          "kind": "key",
+          "atMs": 354382
+        },
+        {
+          "kind": "key",
+          "atMs": 354501
+        },
+        {
+          "kind": "key",
+          "atMs": 354616
+        },
+        {
+          "kind": "key",
+          "atMs": 354731
+        },
+        {
+          "kind": "key",
+          "atMs": 354850
+        },
+        {
+          "kind": "key",
+          "atMs": 354974
+        },
+        {
+          "kind": "key",
+          "atMs": 355089
+        },
+        {
+          "kind": "key",
+          "atMs": 355207
+        },
+        {
+          "kind": "key",
+          "atMs": 355326
+        },
+        {
+          "kind": "key",
+          "atMs": 355440
+        },
+        {
+          "kind": "key",
+          "atMs": 355559
+        },
+        {
+          "kind": "key",
+          "atMs": 355675
+        },
+        {
+          "kind": "key",
+          "atMs": 355793
+        },
+        {
+          "kind": "key",
+          "atMs": 355919
+        },
+        {
+          "kind": "key",
+          "atMs": 356036
+        },
+        {
+          "kind": "key",
+          "atMs": 356152
+        },
+        {
+          "kind": "key",
+          "atMs": 356271
+        },
+        {
+          "kind": "key",
+          "atMs": 356386
+        },
+        {
+          "kind": "key",
+          "atMs": 356505
+        },
+        {
+          "kind": "key",
+          "atMs": 356620
+        },
+        {
+          "kind": "key",
+          "atMs": 356738
+        },
+        {
+          "kind": "key",
+          "atMs": 356854
+        },
+        {
+          "kind": "key",
+          "atMs": 356970
+        },
+        {
+          "kind": "key",
+          "atMs": 357085
+        },
+        {
+          "kind": "key",
+          "atMs": 357204
+        },
+        {
+          "kind": "key",
+          "atMs": 357319
+        },
+        {
+          "kind": "key",
+          "atMs": 357437
+        },
+        {
+          "kind": "key",
+          "atMs": 357551
+        },
+        {
+          "kind": "key",
+          "atMs": 357670
+        },
+        {
+          "kind": "key",
+          "atMs": 357787
+        },
+        {
+          "kind": "key",
+          "atMs": 357902
+        },
+        {
+          "kind": "key",
+          "atMs": 358020
+        },
+        {
+          "kind": "key",
+          "atMs": 358135
+        },
+        {
+          "kind": "key",
+          "atMs": 358253
+        },
+        {
+          "kind": "key",
+          "atMs": 358369
+        },
+        {
+          "kind": "key",
+          "atMs": 358486
+        },
+        {
+          "kind": "click",
+          "atMs": 360680
+        },
+        {
+          "kind": "click",
+          "atMs": 370713
+        }
+      ]
+    },
+    {
+      "id": "delete",
+      "startMs": 395035,
+      "endMs": 432137,
+      "sentences": [
+        {
+          "text": "La suppression définitive demande une autre précaution.",
+          "startMs": 389,
+          "endMs": 3995,
+          "method": "silence",
+          "absoluteStartS": 395.424,
+          "absoluteEndS": 399.03
+        },
+        {
+          "text": "Utilisons seulement notre nouvel espace de formation, que nous avons créé pour cette démonstration.",
+          "startMs": 4500,
+          "endMs": 11280,
+          "method": "silence",
+          "absoluteStartS": 399.535,
+          "absoluteEndS": 406.315
+        },
+        {
+          "text": "Désactivons-le d'abord.",
+          "startMs": 11782,
+          "endMs": 11872,
+          "method": "silence",
+          "absoluteStartS": 406.817,
+          "absoluteEndS": 406.907
+        },
+        {
+          "text": "Le bouton de suppression apparaît alors.",
+          "startMs": 12169,
+          "endMs": 14281,
+          "method": "silence",
+          "absoluteStartS": 407.204,
+          "absoluteEndS": 409.316
+        },
+        {
+          "text": "Lisons le récapitulatif :",
+          "startMs": 15177,
+          "endMs": 16543,
+          "method": "silence",
+          "absoluteStartS": 410.212,
+          "absoluteEndS": 411.578
+        },
+        {
+          "text": "cette action retire l'organisation et les données associées, ce n'est pas une pause.",
+          "startMs": 17116,
+          "endMs": 22023,
+          "method": "silence",
+          "absoluteStartS": 412.151,
+          "absoluteEndS": 417.058
+        },
+        {
+          "text": "La confirmation demande de saisir exactement son identifiant.",
+          "startMs": 22173,
+          "endMs": 25621,
+          "method": "silence",
+          "absoluteStartS": 417.208,
+          "absoluteEndS": 420.656
+        },
+        {
+          "text": "Vérifions-le, puis validons la suppression de cet espace jetable.",
+          "startMs": 26290,
+          "endMs": 29812,
+          "method": "silence",
+          "absoluteStartS": 421.325,
+          "absoluteEndS": 424.847
+        },
+        {
+          "text": "Il disparaît de la liste.",
+          "startMs": 30598,
+          "endMs": 31708,
+          "method": "silence",
+          "absoluteStartS": 425.633,
+          "absoluteEndS": 426.743
+        },
+        {
+          "text": "Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
+          "startMs": 32216,
+          "endMs": 37100,
+          "method": "silence",
+          "absoluteStartS": 427.251,
+          "absoluteEndS": 432.135
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 407292
+        },
+        {
+          "kind": "click",
+          "atMs": 408074
+        },
+        {
+          "kind": "click",
+          "atMs": 408857
+        },
+        {
+          "kind": "click",
+          "atMs": 417673
+        },
+        {
+          "kind": "key",
+          "atMs": 417980
+        },
+        {
+          "kind": "key",
+          "atMs": 417980
+        },
+        {
+          "kind": "key",
+          "atMs": 417983
+        },
+        {
+          "kind": "key",
+          "atMs": 418097
+        },
+        {
+          "kind": "key",
+          "atMs": 418209
+        },
+        {
+          "kind": "key",
+          "atMs": 418321
+        },
+        {
+          "kind": "key",
+          "atMs": 418434
+        },
+        {
+          "kind": "key",
+          "atMs": 418552
+        },
+        {
+          "kind": "key",
+          "atMs": 418667
+        },
+        {
+          "kind": "key",
+          "atMs": 418785
+        },
+        {
+          "kind": "key",
+          "atMs": 418896
+        },
+        {
+          "kind": "key",
+          "atMs": 419009
+        },
+        {
+          "kind": "key",
+          "atMs": 419123
+        },
+        {
+          "kind": "key",
+          "atMs": 419238
+        },
+        {
+          "kind": "key",
+          "atMs": 419354
+        },
+        {
+          "kind": "key",
+          "atMs": 419472
+        },
+        {
+          "kind": "key",
+          "atMs": 419586
+        },
+        {
+          "kind": "key",
+          "atMs": 419704
+        },
+        {
+          "kind": "key",
+          "atMs": 419818
+        },
+        {
+          "kind": "key",
+          "atMs": 419959
+        },
+        {
+          "kind": "key",
+          "atMs": 420072
+        },
+        {
+          "kind": "key",
+          "atMs": 420184
+        },
+        {
+          "kind": "key",
+          "atMs": 420299
+        },
+        {
+          "kind": "key",
+          "atMs": 420417
+        },
+        {
+          "kind": "key",
+          "atMs": 420532
+        },
+        {
+          "kind": "key",
+          "atMs": 420651
+        },
+        {
+          "kind": "key",
+          "atMs": 420767
+        },
+        {
+          "kind": "key",
+          "atMs": 420881
+        },
+        {
+          "kind": "key",
+          "atMs": 420999
+        },
+        {
+          "kind": "key",
+          "atMs": 421112
+        },
+        {
+          "kind": "key",
+          "atMs": 421230
+        },
+        {
+          "kind": "key",
+          "atMs": 421348
+        },
+        {
+          "kind": "key",
+          "atMs": 421462
+        },
+        {
+          "kind": "key",
+          "atMs": 421580
+        },
+        {
+          "kind": "key",
+          "atMs": 421692
+        },
+        {
+          "kind": "key",
+          "atMs": 421808
+        },
+        {
+          "kind": "key",
+          "atMs": 421927
+        },
+        {
+          "kind": "key",
+          "atMs": 422041
+        },
+        {
+          "kind": "click",
+          "atMs": 422624
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "startMs": 434398,
+      "endMs": 471626,
+      "sentences": [
+        {
+          "text": "Terminons en revenant au périmètre de chaque compte.",
+          "startMs": 0,
+          "endMs": 3001,
+          "method": "silence",
+          "absoluteStartS": 434.398,
+          "absoluteEndS": 437.399
+        },
+        {
+          "text": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme.",
+          "startMs": 3846,
+          "endMs": 8202,
+          "method": "silence",
+          "absoluteStartS": 438.244,
+          "absoluteEndS": 442.6
+        },
+        {
+          "text": "L'opérateur, lui, choisit son organisation avant d'y travailler.",
+          "startMs": 8715,
+          "endMs": 12694,
+          "method": "silence",
+          "absoluteStartS": 443.113,
+          "absoluteEndS": 447.092
+        },
+        {
+          "text": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes.",
+          "startMs": 13492,
+          "endMs": 19423,
+          "method": "silence",
+          "absoluteStartS": 447.89,
+          "absoluteEndS": 453.821
+        },
+        {
+          "text": "Avant une communication, vérifions les destinataires ;",
+          "startMs": 19881,
+          "endMs": 21501,
+          "method": "silence",
+          "absoluteStartS": 454.279,
+          "absoluteEndS": 455.899
+        },
+        {
+          "text": "avant une action irréversible, relisons la confirmation.",
+          "startMs": 21672,
+          "endMs": 24913,
+          "method": "silence",
+          "absoluteStartS": 456.07,
+          "absoluteEndS": 459.311
+        },
+        {
+          "text": "Ces gestes simples permettent d'accompagner les organisations avec soin.",
+          "startMs": 25166,
+          "endMs": 30461,
+          "method": "silence",
+          "absoluteStartS": 459.564,
+          "absoluteEndS": 464.859
+        },
+        {
+          "text": "Cette démonstration explique le fonctionnement observé, elle ne prétend pas remplacer un audit de sécurité complet.",
+          "startMs": 31233,
+          "endMs": 36906,
+          "method": "silence",
+          "absoluteStartS": 465.631,
+          "absoluteEndS": 471.304
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 440103
+        }
+      ]
+    }
+  ]
+}

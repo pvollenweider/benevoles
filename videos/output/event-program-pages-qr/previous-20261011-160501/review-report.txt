@@ -1,0 +1,18 @@
+STATUS: NOT READY
+ID: EVENT_PROGRAM_PAGES_QR
+Commit: 57ead48691c549980f7aae34cd5710df60d7d8c8
+BUILD_ID: wehNI4lfzOGIMmAjJ-tMC (one shared verified product build)
+Duration: 150.840 s (2:30.84)
+Music smallest/largest gap: 14.3 / 18.2 LU; median voice -16.4 LUFS; no music-only windows detected; audio-levels issues empty.
+Narration: existing audio preserved initially; generation fingerprint refused by current tooling. Regenerated one continuous Kore take. Initial automatic segmentation displaced sentences; seven boundaries located against real silences, recut and independently audited: 0% WER in all eight source chapters. Final MP4 ASR passes eight chapters (program 2%, others 0%).
+Objective validation passes eight scenes (0–2 ms drift), 0 original sentence anchors, content and music. Hashes match final MP4/audio-levels/audio-mix/timeline/effects; 22 clicks and 115 keys match markers. VTT exactly matches readableCaptions output (34 cues); date/hour normalization is equivalent French display typography, not an audio mismatch. Posters metadata written only review/renders-generated.json.
+Reviewed six final frames in every chapter plus full-size early-page-edit.png (78 s), iso-show-date.png (46 s), public-formatted-list.png (104 s), qr-public-address.png (122 s), sentence-action-timing.txt/json and OCR 48 frames. Independent audiovisual aid reports eight chapters / zero flags, but missed the measured early action below; frame evidence takes precedence.
+Failures:
+- page-order: Modifier click at +6.25 s / 77.68 s global; its sentence begins +8.46 / 79.89 s. Full-size 78 s frame already shows Modifier la page before that phrase. Save +11.42 occurs while the relevant compound sentence is still spoken; not independently considered faulty. Deletion +15.25 vs phrase +13.15 is also late.
+- pages: content input click/typing begins +6.82 s vs “Saisissons une courte liste” +12.13 s; final save +17.12 after sentence about purpose begins +16.82. The initial Markdown explanation can accompany existing text, but the concrete typing request is out of sync.
+- program: typing begins +3.63 s before “Saisissons Concert du village” +4.15 s (small early cue).
+- Product date display in Spectacles row is ISO 2026-11-14, while date inputs are French 14.11.2026. Full-size 46 s evidence. Local product fix formats row date DD.MM.YYYY.
+Source changes: record.ts program typing, pages typing/save, page-order move/edit/save/delete/cancel, public-page open and print focus changed to exact sentence anchors. Faster Markdown typing leaves room for the save within its sentence. EventForm.tsx row date changed to French order. No re-film or rebuild.
+Current labels match, including Frise. No visible localhost/org-admin@localhost/dev overlay in reviewed final frames/OCR. PNG downloads decode to https://formation-pages.benevol.app/rencontre-0; SVG exists; actual phone scan explicitly remains a user instruction. Public list includes gourde, bold shoes and reordered links.
+No confirmed product layout defect; dialog movement between samples is visible but no clipping/obscured controls established. Date display issue is reported above. No public doc screenshot depends on EventForm (checked transitive screenshot source map); no new feature or accessibility limitation introduced.
+Real-time subjective listening unavailable, not a failure reason. NOT READY follows measured action timing and date format.

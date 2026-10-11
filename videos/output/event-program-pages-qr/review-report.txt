@@ -1,0 +1,11 @@
+STATUS: READY
+ID: EVENT_PROGRAM_PAGES_QR
+Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
+BUILD_ID: awdEYi1bluVzpj2kEgGcs (shared verified production build)
+Duration: 150.880 s. Existing Kore narration reused; no generation.
+Validation: all 8 scenes, 10 sentence anchors and music pass; smallest/largest gap 14.3/18.2 LU. Final MP4 ASR passes all 8 scenes (0–2.0% difference). Exact VTT content verified (34 cues). MP4/effects/timeline/music hashes match; 22 click and 115 key markers.
+Reviewed actual final MP4 scene sheets, anchor frames and sentence/action timing. Program creation/correction, Markdown creation/save, ordering/edit/delete cancellation and public page opening align with spoken actions. Current labels and French dates; Frise, no localhost/org-admin@localhost/dev overlay. Popovers remain visible. QR PNG decodes to https://formation-pages.benevol.app/rencontre-0; PNG and SVG downloads captured. No physical phone scan claimed. Audiovisual audit: 8 scenes, zero flags.
+No product layout bug observed. No source change. doc-img: unchanged.
+Real-time subjective listening unavailable; objective audio, captions, timing and music checks pass.
+
+Batch source validation: video tooling TypeScript passes 185 explicit sources; all sentence anchors resolve in their chapters. Generated poster metadata is separate; videos/renders.json unchanged.

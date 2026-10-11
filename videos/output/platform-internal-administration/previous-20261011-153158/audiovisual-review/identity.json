@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:34:19.996Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "b1ff09285b14fe2c7c4f73686105eb55c7e84015bdbbf30fe6ccec9954339d20",
+  "clipSha256": "c2aa68035c686f6b285ad06033744f3e411bf6234bea7b1c4b935d39b5e63e48",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Le nom affiché et l'identifiant public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Modifions d'abord le nom et enregistrons-le.",
+        "visibleSeconds": 8,
+        "visible": "Le champ Nom est modifié et validé avec le bouton OK, le titre en haut se met à jour.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Pour l'identifiant, essayons une valeur déjà utilisée : l'application la refuse.",
+        "visibleSeconds": 13,
+        "visible": "Aucune tentative d'identifiant déjà pris ni message de refus : saisie continue d'une chaîne sans validation d'erreur.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Choisissons alors un identifiant libre et enregistrons.",
+        "visibleSeconds": 17.5,
+        "visible": "La valeur 'formation-operateur-jetable-renommee' est tapée dans le champ Slug mais l'enregistrement n'est pas cliqué.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 19.2,
+        "spoken": "Le détail s'ouvre sous ce nouvel identifiant.",
+        "visibleSeconds": 21,
+        "visible": "L'écran reste statique sur la page d'administration sans validation ni réouverture de la page.",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "00:10 - 00:14 : Le test d'un identifiant existant et le refus associé ne sont pas montrés à l'écran.",
+      "00:17 - 00:36 : Le bouton OK du champ Slug n'est jamais cliqué et la page ne s'ouvre pas sous le nouvel identifiant comme annoncé."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

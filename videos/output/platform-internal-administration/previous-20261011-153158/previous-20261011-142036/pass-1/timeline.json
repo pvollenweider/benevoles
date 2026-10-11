@@ -1,0 +1,68 @@
+{
+  "slug": "platform-internal-administration",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T06:25:32.822Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 3,
+      "endMs": 29810
+    },
+    {
+      "id": "create",
+      "startMs": 32075,
+      "endMs": 61446
+    },
+    {
+      "id": "renew",
+      "startMs": 63713,
+      "endMs": 93984
+    },
+    {
+      "id": "activate",
+      "startMs": 96246,
+      "endMs": 125999
+    },
+    {
+      "id": "identity",
+      "startMs": 128264,
+      "endMs": 165121
+    },
+    {
+      "id": "availability",
+      "startMs": 167392,
+      "endMs": 199343
+    },
+    {
+      "id": "context",
+      "startMs": 201619,
+      "endMs": 230664
+    },
+    {
+      "id": "health",
+      "startMs": 232928,
+      "endMs": 273157
+    },
+    {
+      "id": "preview",
+      "startMs": 275421,
+      "endMs": 331305
+    },
+    {
+      "id": "broadcast",
+      "startMs": 333569,
+      "endMs": 392805
+    },
+    {
+      "id": "delete",
+      "startMs": 395081,
+      "endMs": 432186
+    },
+    {
+      "id": "result",
+      "startMs": 434449,
+      "endMs": 471678
+    }
+  ]
+}

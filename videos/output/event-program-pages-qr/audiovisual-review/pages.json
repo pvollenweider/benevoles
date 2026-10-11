@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:00:04.358Z",
-  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
-  "promptSha256": "e03616a194dbbb77eb244e069d90fc67731bf3e09e4378e4cb080267f6efcdb2",
-  "clipSha256": "d015c984616861926b1ba3bd0d2543155a9d92baf2533bbe96350b1dcbf290dc",
+  "reviewedAt": "2026-10-11T14:10:04.682Z",
+  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
+  "promptSha256": "9bb637546250a0a1f5ece1246ded182e5ac35f6080a965f2f3beaca1e595902a",
+  "clipSha256": "cb3d4f9746eaf474476096498ae4c43f22b1fab78abb759e7cb700b47fee8ff0",
   "scene": "pages",
   "review": {
     "heardOpening": "Créons une page",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Créons une page Ce qu’il faut apporter",
-        "visibleSeconds": 1.2,
-        "visible": "Clic sur Ajouter une page puis saisie du titre",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur Ajouter une page et ouverture de la modale avec saisie du titre",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.5,
         "spoken": "Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras",
-        "visibleSeconds": 8,
-        "visible": "Saisie Markdown avec titre dièse, tirets et astérisques",
+        "visibleSeconds": 12.5,
+        "visible": "Saisie dans le champ Contenu avec un dièse, des tirets et des astérisques",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
-        "spoken": "puis enregistrons",
-        "visibleSeconds": 17,
-        "visible": "Clic sur Enregistrer et affichage de la nouvelle ligne dans la liste",
+        "spokenSeconds": 14,
+        "spoken": "Saisissons une courte liste, puis enregistrons",
+        "visibleSeconds": 16.5,
+        "visible": "Clic sur Enregistrer et apparition de la page dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation pédagogique claire."
+      "observation": "Voix off féminine claire, fluide et naturelle, bien calée sur les manipulations."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

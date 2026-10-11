@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:35:13.288Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "8a9c4e5066cfe52e7be665a870f0b8e8e62a0c0edebdcfd9703e67531e4bbb5a",
+  "clipSha256": "6f2478513a78725183a17752aeb9e20fea435cbe93682b5d388f7d2858358aa2",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Préparons une communication destinée aux administrateurs abonnés.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Préparons une communication destinée aux administrateurs abonnés.",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page Communications admin avec le formulaire Nouveau message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Donnons-lui un objet clair : Formation, préparer votre prochain événement.",
+        "visibleSeconds": 6.2,
+        "visible": "Saisie de l'objet dans le champ Objet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "Le contenu commence par un titre, Bienvenue.",
+        "visibleSeconds": 11.8,
+        "visible": "Saisie de # Bienvenue ! et affichage instantané dans l'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Ajoutons deux conseils simples : vérifier son planning et partager son lien public.",
+        "visibleSeconds": 15.2,
+        "visible": "Saisie des deux puces dans le texte Markdown avec rendu dans l'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.6,
+        "spoken": "Utilisons Envoyer un test, uniquement vers notre adresse de formation.",
+        "visibleSeconds": 37.4,
+        "visible": "Clic sur le bouton Envoyer un test et apparition de la confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 41.6,
+        "spoken": "Ouvrons le vrai email pour contrôler l'objet et le contenu reçu.",
+        "visibleSeconds": 42.6,
+        "visible": "Bascule vers la boîte Mailpit affichant l'email de test reçu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:04:37.596Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "f84d2e3315578c9ee088932857c4195925fa0abe09d3d67a045a1d14f2c37040",
+  "clipSha256": "816dfa587a0c4ca39b72d02c6699bbe12a86ea357f27c3b122c5135525759ce0",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Vous avez un programme corrigé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "et deux fichiers QR téléchargés",
+        "visibleSeconds": 4.1,
+        "visible": "Page affichant le QR code avec les options Télécharger PNG et Télécharger SVG",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "scannez le code avec un vrai téléphone",
+        "visibleSeconds": 7.3,
+        "visible": "Le QR code grand format au centre de l'écran prêt à être scanné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Vérifiez que la page attendue s’ouvre",
+        "visibleSeconds": 13.5,
+        "visible": "Écran stable de conclusion présentant les consignes de vérification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec le propos de conclusion."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

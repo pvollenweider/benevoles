@@ -1,0 +1,393 @@
+WEBVTT
+
+00:00:00.004 --> 00:00:03.875
+Bienvenue dans l'administration de la
+plateforme. Ce parcours s'adresse à
+
+00:00:03.875 --> 00:00:08.133
+l'opérateur qui gère les espaces des
+organisations, pas aux bénévoles. Notre
+
+00:00:08.133 --> 00:00:12.390
+liste contient trois organisations de
+formation. Elle montre leur nom, leur
+
+00:00:12.390 --> 00:00:16.261
+identifiant, leur état et les nombres
+d'événements, d'administrateurs et de
+
+00:00:16.261 --> 00:00:20.906
+membres. Ouvrons un détail pour retrouver
+ces informations et les comptes associés.
+
+00:00:20.906 --> 00:00:25.551
+Toutes les personnes utilisées ici sont
+fictives. Nous travaillons dans une base
+
+00:00:25.551 --> 00:00:29.809
+locale séparée : aucun message ne part
+vers une vraie association.
+
+00:00:32.073 --> 00:00:35.411
+Pour accueillir une nouvelle organisation,
+ouvrons le formulaire de création.
+
+00:00:35.411 --> 00:00:39.416
+Renseignons son nom, puis le nom et
+l'adresse email de son premier
+
+00:00:39.416 --> 00:00:43.421
+administrateur. Prenons le temps de
+vérifier cette adresse : c'est elle qui
+
+00:00:43.421 --> 00:00:47.092
+recevra son accès. Créons l'espace. Le
+résultat affiche un lien d'activation
+
+00:00:47.092 --> 00:00:51.097
+valable sept jours. Le compte attend
+encore son activation. La création ne
+
+00:00:51.097 --> 00:00:56.104
+suffit donc pas à dire que la personne
+s'est connectée, et nous ne lui remettons
+
+00:00:56.104 --> 00:01:01.110
+pas un mot de passe temporaire. Le lien
+permettra de choisir son propre mot de
+
+00:01:01.110 --> 00:01:01.444
+passe.
+
+00:01:03.710 --> 00:01:07.791
+Envoyons maintenant l'invitation et
+ouvrons le vrai message reçu dans la boîte
+
+00:01:07.791 --> 00:01:11.532
+de formation. Son lien donne accès à
+l'activation. Avant de l'utiliser,
+
+00:01:11.532 --> 00:01:15.614
+revenons au détail de l'organisation et
+renvoyons l'invitation au compte encore en
+
+00:01:15.614 --> 00:01:20.035
+attente. Un nouveau lien est affiché, avec
+une nouvelle durée de validité. Vérifions
+
+00:01:20.035 --> 00:01:25.136
+l'ancien : il est refusé. Le renvoi n'est
+donc pas une simple copie du premier
+
+00:01:25.136 --> 00:01:29.898
+message. Si l'envoi échoue, il faut tout
+de même utiliser le nouveau lien indiqué,
+
+00:01:29.898 --> 00:01:33.639
+pas continuer à transmettre l'ancien.
+Ouvrons le second message reçu pour
+
+00:01:33.639 --> 00:01:33.979
+poursuivre.
+
+00:01:36.241 --> 00:01:41.321
+La personne invitée ouvre son nouveau lien
+dans sa propre session. Elle choisit son
+
+00:01:41.321 --> 00:01:46.763
+mot de passe et termine l'activation. Le
+mot de passe n'a pas besoin d'être partagé
+
+00:01:46.763 --> 00:01:50.755
+avec l'opérateur. Connectons-nous ensuite
+avec ce nouveau compte : nous arrivons
+
+00:01:50.755 --> 00:01:54.383
+dans son organisation, encore sans
+événement. Revenons au détail côté
+
+00:01:54.383 --> 00:01:59.100
+opérateur pour vérifier que le compte
+apparaît actif. Le lien d'activation a été
+
+00:01:59.100 --> 00:02:04.180
+utilisé ; il n'est pas un lien permanent
+de connexion. Pour revenir plus tard,
+
+00:02:04.180 --> 00:02:05.994
+l'administrateur utilise sa connexion
+habituelle.
+
+00:02:08.262 --> 00:02:12.598
+Le nom affiché et l'identifiant public
+sont deux informations différentes.
+
+00:02:12.598 --> 00:02:16.067
+Modifions d'abord le nom et
+enregistrons-le. Pour l'identifiant,
+
+00:02:16.067 --> 00:02:20.837
+essayons une valeur déjà utilisée :
+l'application la refuse. Choisissons alors
+
+00:02:20.837 --> 00:02:26.040
+un identifiant libre et enregistrons. Le
+détail s'ouvre sous ce nouvel identifiant.
+
+00:02:26.040 --> 00:02:31.243
+Ce changement concerne les adresses
+publiques ; il faut donc vérifier les
+
+00:02:31.243 --> 00:02:36.880
+liens qui ont déjà été diffusés et la
+redirection de l'ancien identifiant. Ne
+
+00:02:36.880 --> 00:02:42.084
+changeons pas une adresse simplement pour
+corriger le nom affiché. Vérifions le
+
+00:02:42.084 --> 00:02:45.119
+résultat avant de communiquer la nouvelle
+adresse.
+
+00:02:47.396 --> 00:02:51.845
+Désactiver une organisation n'est pas la
+supprimer. Ouvrons la confirmation et
+
+00:02:51.845 --> 00:02:56.698
+lisons les conséquences avant de valider.
+Dans la session organisateur déjà ouverte,
+
+00:02:56.698 --> 00:03:00.742
+une nouvelle requête est maintenant
+refusée. L'espace existe toujours, avec
+
+00:03:00.742 --> 00:03:04.787
+ses données. Revenons côté opérateur et
+réactivons-le. La session organisateur
+
+00:03:04.787 --> 00:03:10.044
+peut à nouveau accéder à ses événements.
+Cette vérification est importante : un
+
+00:03:10.044 --> 00:03:15.302
+écran déjà affiché n'est pas la preuve que
+les nouvelles actions restent autorisées.
+
+00:03:15.302 --> 00:03:19.346
+Contrôlons le résultat de la requête après
+chaque changement d'état.
+
+00:03:21.619 --> 00:03:25.295
+Pour travailler dans une organisation,
+l'opérateur doit la choisir explicitement.
+
+00:03:25.295 --> 00:03:29.707
+Sans ce choix, l'application demande de
+sélectionner un espace. Depuis son détail,
+
+00:03:29.707 --> 00:03:34.119
+utilisons Gérer et vérifions le nom du
+contexte avant d'ouvrir les événements.
+
+00:03:34.119 --> 00:03:38.898
+Nous retrouvons ici ceux du Parc, pas ceux
+du Quartier. Un super-administrateur peut
+
+00:03:38.898 --> 00:03:44.045
+agir dans l'organisation sélectionnée : ce
+n'est pas une vue sans accès aux données.
+
+00:03:44.045 --> 00:03:48.824
+Avant une modification ou un envoi,
+prenons donc ce petit réflexe : regarder
+
+00:03:48.824 --> 00:03:50.662
+dans quel espace nous sommes.
+
+00:03:52.925 --> 00:03:58.609
+La page Santé du service regroupe trois
+ensembles d'informations : le service, les
+
+00:03:58.609 --> 00:04:03.419
+tâches planifiées et les sauvegardes, puis
+la configuration. Regardons les états
+
+00:04:03.419 --> 00:04:08.229
+visibles, la date de contrôle et la
+version. Recharger relance la
+
+00:04:08.229 --> 00:04:12.164
+vérification. Dans notre environnement
+local, certaines tâches n'ont jamais
+
+00:04:12.164 --> 00:04:18.286
+tourné : leur état reste inconnu ou en
+avertissement. Nous ne le transformons pas
+
+00:04:18.286 --> 00:04:24.408
+en succès pour la démonstration. Et une
+sauvegarde signalée ne prouve pas à elle
+
+00:04:24.408 --> 00:04:29.655
+seule qu'une restauration a été testée.
+Ces indicateurs aident à repérer un
+
+00:04:29.655 --> 00:04:33.153
+problème ; ils ne remplacent pas son
+analyse.
+
+00:04:35.420 --> 00:04:39.380
+Préparons une communication destinée aux
+administrateurs abonnés. Donnons-lui un
+
+00:04:39.380 --> 00:04:44.220
+objet clair : Formation, préparer votre
+prochain événement. Le contenu commence
+
+00:04:44.220 --> 00:04:49.501
+par un titre, Bienvenue. Ajoutons deux
+conseils simples : vérifier son planning
+
+00:04:49.501 --> 00:04:56.101
+et partager son lien public. Un lien vers
+le guide termine le message. Prenons le
+
+00:04:56.101 --> 00:05:01.821
+temps de relire ces quelques lignes :
+elles doivent être utiles, faciles à
+
+00:05:01.821 --> 00:05:07.101
+comprendre et adaptées aux personnes qui
+les recevront. L'aperçu permet de vérifier
+
+00:05:07.101 --> 00:05:12.821
+la mise en forme Markdown avant l'envoi.
+Utilisons Envoyer un test, uniquement vers
+
+00:05:12.821 --> 00:05:18.542
+notre adresse de formation. Ouvrons le
+vrai email pour contrôler l'objet et le
+
+00:05:18.542 --> 00:05:24.702
+contenu reçu. Ce test n'est pas une
+diffusion générale et ne crée pas une
+
+00:05:24.702 --> 00:05:30.422
+entrée dans son historique. Corrigeons ce
+qui serait peu clair avant d'envoyer à
+
+00:05:30.422 --> 00:05:31.302
+plusieurs personnes.
+
+00:05:33.567 --> 00:05:38.952
+Le test est bon ? Revenons au formulaire
+pour préparer la diffusion. Reprenons
+
+00:05:38.952 --> 00:05:44.751
+notre objet, puis le contenu que nous
+venons de vérifier. Le titre accueille les
+
+00:05:44.751 --> 00:05:50.136
+administrateurs, la liste rappelle les
+deux gestes utiles et le lien conduit au
+
+00:05:50.136 --> 00:05:54.278
+guide. Nous conservons exactement le
+message testé, sans nouvelle information
+
+00:05:54.278 --> 00:05:59.249
+ajoutée à la dernière minute. Avant la
+diffusion, vérifions le nombre de
+
+00:05:59.249 --> 00:06:03.805
+destinataires et lisons la confirmation.
+Seuls les comptes actifs abonnés aux
+
+00:06:03.805 --> 00:06:08.362
+communications sont concernés. Dans notre
+base séparée, ce sont uniquement des
+
+00:06:08.362 --> 00:06:12.504
+comptes fictifs. Validons, puis regardons
+le nombre d'envois réussis et
+
+00:06:12.504 --> 00:06:17.889
+l'historique. Un compte non abonné n'a
+rien reçu. Ouvrons un message livré et
+
+00:06:17.889 --> 00:06:23.274
+utilisons son lien de désabonnement. Le
+choix est enregistré ; le nombre de
+
+00:06:23.274 --> 00:06:27.830
+destinataires d'une prochaine diffusion
+diminue. Un envoi réussi signifie ici que
+
+00:06:27.830 --> 00:06:32.801
+le serveur de messagerie l'a accepté, pas
+que son destinataire l'a lu.
+
+00:06:35.073 --> 00:06:39.096
+La suppression définitive demande une
+autre précaution. Utilisons seulement
+
+00:06:39.096 --> 00:06:44.460
+notre nouvel espace de formation, que nous
+avons créé pour cette démonstration.
+
+00:06:44.460 --> 00:06:48.930
+Désactivons-le d'abord. Le bouton de
+suppression apparaît alors. Lisons le
+
+00:06:48.930 --> 00:06:53.400
+récapitulatif : cette action retire
+l'organisation et les données associées,
+
+00:06:53.400 --> 00:06:58.763
+ce n'est pas une pause. La confirmation
+demande de saisir exactement son
+
+00:06:58.763 --> 00:07:03.680
+identifiant. Vérifions-le, puis validons
+la suppression de cet espace jetable. Il
+
+00:07:03.680 --> 00:07:10.385
+disparaît de la liste. Pour une vraie
+organisation, on ne fait pas cet essai sur
+
+00:07:10.385 --> 00:07:12.173
+un espace encore utile.
+
+00:07:14.441 --> 00:07:19.435
+Terminons en revenant au périmètre de
+chaque compte. Un organisateur ordinaire
+
+00:07:19.435 --> 00:07:25.337
+ne peut pas ouvrir les routes de gestion
+de la plateforme. L'opérateur, lui,
+
+00:07:25.337 --> 00:07:30.331
+choisit son organisation avant d'y
+travailler. Créer un espace, activer un
+
+00:07:30.331 --> 00:07:34.871
+compte, désactiver et supprimer sont des
+actions différentes. Avant une
+
+00:07:34.871 --> 00:07:39.411
+communication, vérifions les destinataires
+; avant une action irréversible, relisons
+
+00:07:39.411 --> 00:07:43.497
+la confirmation. Ces gestes simples
+permettent d'accompagner les organisations
+
+00:07:43.497 --> 00:07:48.491
+avec soin. Cette démonstration explique le
+fonctionnement observé, elle ne prétend
+
+00:07:48.491 --> 00:07:51.669
+pas remplacer un audit de sécurité
+complet.
+

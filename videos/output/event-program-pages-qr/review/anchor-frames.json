@@ -1,0 +1,122 @@
+[
+  {
+    "scene": "program",
+    "seconds": 17.767,
+    "label": "Saisissons Concert du village BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/program-anchor-0.png"
+  },
+  {
+    "scene": "program",
+    "seconds": 19.517,
+    "label": "Saisissons Concert du village AFTER",
+    "file": "videos/output/event-program-pages-qr/review/program-anchor-1.png"
+  },
+  {
+    "scene": "pages",
+    "seconds": 61.698,
+    "label": "Saisissons une courte liste BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/pages-anchor-0.png"
+  },
+  {
+    "scene": "pages",
+    "seconds": 63.448,
+    "label": "Saisissons une courte liste AFTER",
+    "file": "videos/output/event-program-pages-qr/review/pages-anchor-1.png"
+  },
+  {
+    "scene": "pages",
+    "seconds": 61.698,
+    "label": "Saisissons une courte liste BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/pages-anchor-2.png"
+  },
+  {
+    "scene": "pages",
+    "seconds": 63.448,
+    "label": "Saisissons une courte liste AFTER",
+    "file": "videos/output/event-program-pages-qr/review/pages-anchor-3.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 76.663,
+    "label": "Faisons monter Ce qu’il faut apporter BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-0.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 78.413,
+    "label": "Faisons monter Ce qu’il faut apporter AFTER",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-1.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 79.553,
+    "label": "Ouvrons ensuite Modifier BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-2.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 81.303,
+    "label": "Ouvrons ensuite Modifier AFTER",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-3.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 79.553,
+    "label": "Ouvrons ensuite Modifier BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-4.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 81.303,
+    "label": "Ouvrons ensuite Modifier AFTER",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-5.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 84.25,
+    "label": "Pour supprimer une page BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-6.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 86.0,
+    "label": "Pour supprimer une page AFTER",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-7.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 87.818,
+    "label": "vérifions-la sans perdre notre contenu BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-8.png"
+  },
+  {
+    "scene": "page-order",
+    "seconds": 89.568,
+    "label": "vérifions-la sans perdre notre contenu AFTER",
+    "file": "videos/output/event-program-pages-qr/review/page-order-anchor-9.png"
+  },
+  {
+    "scene": "public",
+    "seconds": 99.443,
+    "label": "Ouvrons Ce qu’il faut apporter BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/public-anchor-0.png"
+  },
+  {
+    "scene": "public",
+    "seconds": 101.193,
+    "label": "Ouvrons Ce qu’il faut apporter AFTER",
+    "file": "videos/output/event-program-pages-qr/review/public-anchor-1.png"
+  },
+  {
+    "scene": "qr",
+    "seconds": 119.525,
+    "label": "La commande Imprimer BEFORE",
+    "file": "videos/output/event-program-pages-qr/review/qr-anchor-0.png"
+  },
+  {
+    "scene": "qr",
+    "seconds": 121.275,
+    "label": "La commande Imprimer AFTER",
+    "file": "videos/output/event-program-pages-qr/review/qr-anchor-1.png"
+  }
+]
