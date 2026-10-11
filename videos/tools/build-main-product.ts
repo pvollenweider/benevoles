@@ -11,10 +11,19 @@ const exec = promisify(execFile)
 async function main() {
   const snapshot = path.resolve(process.argv[2] ?? "")
   if (!/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(snapshot)) throw new Error("Explicit temporary video snapshot required")
+  const pinnedCommit = process.argv[3] === "--commit" ? process.argv[4] : undefined
+  if (process.argv.length > 3 && (!pinnedCommit || process.argv.length !== 5 || !/^[a-f0-9]{40}$/.test(pinnedCommit))) {
+    throw new Error("Usage: build-main-product.ts SNAPSHOT [--commit FULL_SHA]")
+  }
   const { stdout: revision } = await exec("git", ["rev-parse", "origin/main"])
-  const commit = revision.trim()
-  const { stdout: remote } = await exec("git", ["ls-remote", "origin", "refs/heads/main"])
-  if (remote.split(/\s/)[0] !== commit) throw new Error("Remote main advanced; refresh the target before building")
+  const commit = pinnedCommit ?? revision.trim()
+  if (pinnedCommit) {
+    const { stdout: head } = await exec("git", ["rev-parse", "HEAD"])
+    if (head.trim() !== pinnedCommit || revision.trim() !== pinnedCommit) throw new Error("Pinned build must match both checkout HEAD and local origin/main")
+  } else {
+    const { stdout: remote } = await exec("git", ["ls-remote", "origin", "refs/heads/main"])
+    if (remote.split(/\s/)[0] !== commit) throw new Error("Remote main advanced; refresh the target before building")
+  }
   const { stdout: tree } = await exec("git", ["ls-tree", "-r", commit], { maxBuffer: 10 * 1024 * 1024 })
   const selected = tree.trim().split("\n").map(line => {
     const [header, file] = line.split("\t")

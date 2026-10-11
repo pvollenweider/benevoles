@@ -939,6 +939,19 @@ async function main() {
         await page.getByRole("heading", { name: "Fuseau horaire" }).scrollIntoViewIfNeeded()
       })
     } else if (slug === "shift-night-dst") {
+      const popoverChecks: Record<string, unknown> = {}
+      const inspectNightPopover = async (chapter: string) => {
+        const dialog = page.getByRole("dialog")
+        await dialog.waitFor()
+        popoverChecks[chapter] = await dialog.evaluate(element => {
+          const rect = element.getBoundingClientRect()
+          return { top: rect.top, bottom: rect.bottom, height: rect.height,
+            viewportHeight: window.innerHeight, clientHeight: element.clientHeight,
+            scrollHeight: element.scrollHeight, overflowY: getComputedStyle(element).overflowY,
+            outsideViewport: rect.top < 0 || rect.bottom > window.innerHeight }
+        })
+        await writeFile(path.join(dir, "popover-checks.json"), JSON.stringify(popoverChecks, null, 2))
+      }
       const nightEvent = await page.evaluate(async () => {
         const eventResponse = await fetch("/api/admin/events", {
           method: "POST", headers: { "Content-Type": "application/json" },
@@ -967,7 +980,7 @@ async function main() {
         await shift.scrollIntoViewIfNeeded()
         await at("Ouvrons maintenant le créneau")
         await tap(page, shift)
-        await page.getByRole("dialog").waitFor()
+        await inspectNightPopover("ordinary")
       })
       await scene("spring", async (at) => {
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
@@ -975,6 +988,7 @@ async function main() {
         await shift.scrollIntoViewIfNeeded()
         await at("Un créneau affiché")
         await tap(page, shift)
+        await inspectNightPopover("spring")
       })
       await scene("autumn", async (at) => {
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
@@ -982,7 +996,7 @@ async function main() {
         await shift.scrollIntoViewIfNeeded()
         await at("Le même créneau")
         await tap(page, shift)
-        await page.getByRole("dialog").waitFor()
+        await inspectNightPopover("autumn")
       })
       await scene("timezone", async (at) => {
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)

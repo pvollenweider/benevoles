@@ -1,0 +1,18 @@
+{
+  "status": "READY",
+  "videoSha256": "5245bd3d3133893679c8c6f8eb81ab666fcb7291cbb3e25597f2ff34f552e2f3",
+  "allChaptersInspected": true,
+  "sentenceActionSync": "passed with anchor frames and chapter sheets",
+  "labels": "passed",
+  "FrenchDates": "passed",
+  "forbiddenHostsAndDevOverlay": "none observed",
+  "effectsExact": true,
+  "captionsAndFinalSpeech": "passed",
+  "music": {
+    "voicedWindows": 124,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 19.9,
+    "quietestMusicOnlyLufs": -30.7
+  }
+}

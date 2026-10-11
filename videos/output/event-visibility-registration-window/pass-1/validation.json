@@ -1,0 +1,70 @@
+{
+  "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+  "slug": "event-visibility-registration-window",
+  "validatedAt": "2026-10-11T09:33:19.542Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 14960,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15237,
+      "audioMs": 16958,
+      "driftMs": -1721
+    },
+    {
+      "id": "statuses",
+      "visualMs": 16036,
+      "audioMs": 17757,
+      "driftMs": -1721
+    },
+    {
+      "id": "unlisted",
+      "visualMs": 19207,
+      "audioMs": 21325,
+      "driftMs": -2118
+    },
+    {
+      "id": "window",
+      "visualMs": 17326,
+      "audioMs": 25845,
+      "driftMs": -8519
+    },
+    {
+      "id": "public-result",
+      "visualMs": 14579,
+      "audioMs": 10687,
+      "driftMs": 3892
+    },
+    {
+      "id": "archive",
+      "visualMs": 13714,
+      "audioMs": 16533,
+      "driftMs": -2819
+    },
+    {
+      "id": "result",
+      "visualMs": 19317,
+      "audioMs": 17215,
+      "driftMs": 2102
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": null,
+  "issues": [
+    "window: independent narration audit missing, outdated or failed",
+    "public-result: independent narration audit missing, outdated or failed",
+    "archive: independent narration audit missing, outdated or failed",
+    "result: independent narration audit missing, outdated or failed",
+    "welcome: visual/audio drift -1721 ms",
+    "statuses: visual/audio drift -1721 ms",
+    "unlisted: visual/audio drift -2118 ms",
+    "window: visual/audio drift -8519 ms",
+    "public-result: visual/audio drift 3892 ms",
+    "archive: visual/audio drift -2819 ms",
+    "result: visual/audio drift 2102 ms",
+    "music levels not measured (audio-levels.json missing); assemble with the current assembler",
+    "capture ends 109413 ms before the timeline"
+  ]
+}

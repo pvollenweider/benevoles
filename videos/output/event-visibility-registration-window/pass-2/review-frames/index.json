@@ -1,0 +1,262 @@
+{
+  "video": "event-visibility-registration-window",
+  "source": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/event-visibility-registration-window.mp4",
+  "sourceSha256": "f4e900e7114a57a6234b5c43faa87bc13af6fa67ca86320067d6d0d48cfe1310",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-11T10:05:41.380Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.03537735849056604,
+      "seconds": 1.703,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 5.343,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 8.735,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 11.279,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 15.519,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9823113207547169,
+      "seconds": 17.763,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.033772374197906116,
+      "seconds": 19.114,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-3.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.25,
+      "seconds": 22.9555,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-25.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.45,
+      "seconds": 26.5087,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-45.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.6,
+      "seconds": 29.173599999999997,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-60.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.85,
+      "seconds": 33.6151,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-85.png"
+    },
+    {
+      "scene": "statuses",
+      "fraction": 0.9831138129010469,
+      "seconds": 35.98,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/statuses-end.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.028133352088901394,
+      "seconds": 39.042,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-3.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.25,
+      "seconds": 43.77375,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-25.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.45,
+      "seconds": 48.03915,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-45.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.6,
+      "seconds": 51.2382,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-60.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.85,
+      "seconds": 56.56995,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-85.png"
+    },
+    {
+      "scene": "unlisted",
+      "fraction": 0.9859333239555493,
+      "seconds": 59.469,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/unlisted-end.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.032386915686062834,
+      "seconds": 62.531,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-3.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.25,
+      "seconds": 66.5625,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-25.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.45,
+      "seconds": 70.26769999999999,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-45.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.6,
+      "seconds": 73.04660000000001,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-60.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.85,
+      "seconds": 77.6781,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-85.png"
+    },
+    {
+      "scene": "window",
+      "fraction": 0.9838065421569686,
+      "seconds": 80.157,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/window-end.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.037262451869333,
+      "seconds": 82.655,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-4.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.25,
+      "seconds": 86.0805,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-25.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.45,
+      "seconds": 89.3009,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-45.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.6,
+      "seconds": 91.7162,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-60.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.85,
+      "seconds": 95.7417,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-85.png"
+    },
+    {
+      "scene": "public-result",
+      "fraction": 0.9813687740653335,
+      "seconds": 97.857,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/public-result-end.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.03903454557283196,
+      "seconds": 99.21,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-4.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.25,
+      "seconds": 102.45275,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-25.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.45,
+      "seconds": 105.52695,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-45.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.6,
+      "seconds": 107.8326,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-60.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.85,
+      "seconds": 111.67535000000001,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-85.png"
+    },
+    {
+      "scene": "archive",
+      "fraction": 0.980482727213584,
+      "seconds": 113.681,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/archive-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.02957121734844751,
+      "seconds": 115.035,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-3.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 119.5075,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 123.5655,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 126.609,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 131.6815,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9852143913257763,
+      "seconds": 134.425,
+      "file": "/private/tmp/codex-video/videos/output/event-visibility-registration-window/review-frames/result-end.png"
+    }
+  ]
+}

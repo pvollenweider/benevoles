@@ -1,54 +1,62 @@
 {
   "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
   "slug": "event-visibility-registration-window",
-  "validatedAt": "2026-10-05T11:11:43.941Z",
+  "validatedAt": "2026-10-11T11:05:21.884Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 125240,
+  "captureMs": 143960,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 15237,
-      "audioMs": 15236,
+      "visualMs": 16959,
+      "audioMs": 16958,
       "driftMs": 1
     },
     {
       "id": "statuses",
-      "visualMs": 16036,
-      "audioMs": 16030,
-      "driftMs": 6
+      "visualMs": 17759,
+      "audioMs": 17757,
+      "driftMs": 2
     },
     {
       "id": "unlisted",
-      "visualMs": 19207,
-      "audioMs": 19205,
+      "visualMs": 21327,
+      "audioMs": 21325,
       "driftMs": 2
     },
     {
       "id": "window",
-      "visualMs": 17326,
-      "audioMs": 17324,
-      "driftMs": 2
+      "visualMs": 18525,
+      "audioMs": 18524,
+      "driftMs": 1
     },
     {
       "id": "public-result",
-      "visualMs": 14579,
-      "audioMs": 14577,
+      "visualMs": 16104,
+      "audioMs": 16102,
       "driftMs": 2
     },
     {
       "id": "archive",
-      "visualMs": 13714,
-      "audioMs": 13712,
-      "driftMs": 2
+      "visualMs": 15371,
+      "audioMs": 15368,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 19317,
-      "audioMs": 19316,
-      "driftMs": 1
+      "visualMs": 20287,
+      "audioMs": 20287,
+      "driftMs": 0
     }
   ],
+  "anchorsChecked": 5,
+  "music": {
+    "voicedWindows": 124,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 19.9,
+    "quietestMusicOnlyLufs": -30.7
+  },
   "issues": []
 }

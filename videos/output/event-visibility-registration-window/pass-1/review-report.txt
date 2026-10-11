@@ -1,0 +1,38 @@
+STATUS: NOT READY
+ID: EVENT_VISIBILITY_REGISTRATION_WINDOW
+Commit: e0f32ad7d6ad8d60f98346662eb9328ec2205483
+Shared BUILD_ID: 1xyUm1Sg6zIWjELSDJ9vx
+Duration: N/A — no current final MP4
+Music smallest/largest gap: N/A — assembly not reached
+
+Fresh guarded demo reseed succeeded; organizer renamed once before any default take to elodie.rochat@example.org. Rehearsal reached statuses then failed waiting for obsolete exact “Enregistré ✓” after setting Brouillon. Current EventForm displays “Modifications enregistrées à …” and only announces its first save accessibly. Saved rehearsal-failure.png shows actual draft status and current UI; date controls use dd.mm.yyyy. No development overlay or forbidden visible identity/address in that frame.
+
+Source correction, not re-filmed: this recorder branch now registers a PATCH response wait before each demonstrated autosave mutation, requires successful HTTP response, then checks the current timestamp label as attached (it may be above the viewport). This avoids both the obsolete text and reusing a previous saved message as proof. Opening and closing registration-window fields each await their own actual save. local-production.ts now accepts this ID in its explicit local-take allowlist. Product itself unchanged.
+
+Forced fresh continuous Puck TTS generated. Independent audit: welcome 0%, statuses 0%, unlisted 1.7% passed; window 44.9%, public-result 53.7%, archive 28.9%, result 19.4% flagged displaced chapter opening/ending words. Narration must be recut at independently located real silences and re-audited before the rerun, or regenerated if words are missing. No failed narration is labeled verified. See narration-audit.json and batch-1-review/visibility-audit.log.
+
+Per instruction to fix locally and move on after a source failure, no second rehearsal or narrated filming, assembly, posters, final-MP4 review performed. Existing tracked timeline/validation/MP4 audit records in this directory are from older renders and are NOT evidence for this attempt. Music, effects, sentence/action sync, full chapter UI, subtitles and subjective listening cannot be approved without a new successful narrated capture and final MP4. No renders-generated.json produced because no new poster exists. No publish, push, commit or PR.
+
+Explicit video:validate after failed rehearsal (does not approve this attempt):
+
+> benevoles@2.2.0 video:validate
+> node --import tsx videos/tools/validate.ts EVENT_VISIBILITY_REGISTRATION_WINDOW
+
+Error: EVENT_VISIBILITY_REGISTRATION_WINDOW synchronization failed:
+- window: independent narration audit missing, outdated or failed
+- public-result: independent narration audit missing, outdated or failed
+- archive: independent narration audit missing, outdated or failed
+- result: independent narration audit missing, outdated or failed
+- welcome: visual/audio drift -1721 ms
+- statuses: visual/audio drift -1721 ms
+- unlisted: visual/audio drift -2118 ms
+- window: visual/audio drift -8519 ms
+- public-result: visual/audio drift 3892 ms
+- archive: visual/audio drift -2819 ms
+- result: visual/audio drift 2102 ms
+- music levels not measured (audio-levels.json missing); assemble with the current assembler
+- capture ends 109413 ms before the timeline
+    at main (/private/tmp/codex-video/videos/tools/validate.ts:130:32)
+
+
+Final source checks: explicit 185-source video type check and git diff --check passed. No refilm performed; fixes require future rehearsal. Only this batch’s owned video server processes stopped; local DB/Mailpit services preserved.
