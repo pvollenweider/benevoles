@@ -18,6 +18,11 @@ function appUrl(): string {
   return (runtimeEnv("NEXT_PUBLIC_APP_URL") || "http://localhost:3000").replace(/\/+$/, "")
 }
 
+/** NEXT_PUBLIC_APP_URL when the running server has one, else undefined (no localhost default). */
+export function configuredAppUrl(): string | undefined {
+  return runtimeEnv("NEXT_PUBLIC_APP_URL") || undefined
+}
+
 /** The apex (marketing and documentation) base URL, e.g. https://www.benevol.app. */
 export function apexBaseUrl(): string {
   return appUrl()

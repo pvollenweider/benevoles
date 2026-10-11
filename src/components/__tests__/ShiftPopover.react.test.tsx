@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
 
 import ShiftPopover from "../admin/day-timeline/ShiftPopover"
 import type { AdminShift } from "../admin/AdminDayTimeline"
@@ -26,6 +26,93 @@ describe("ShiftPopover", () => {
     render(<ShiftPopover {...props} />)
     return props
   }
+
+  it("stays inside the viewport: below a high bar, above a bar near the bottom", () => {
+    const vh = window.innerHeight
+    const props = {
+      shift, eventId: "evt-1", onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(),
+      onDuplicate: vi.fn(), onApplyCapacity: vi.fn(),
+    }
+    const { unmount } = render(<ShiftPopover {...props} anchor={{ x: 100, y: 100, w: 80 }} />)
+    const below = screen.getByRole("dialog")
+    expect(parseFloat(below.style.top)).toBe(100 + 48 + 6)
+    expect(parseFloat(below.style.top) + parseFloat(below.style.maxHeight)).toBeLessThanOrEqual(vh)
+    unmount()
+    render(<ShiftPopover {...props} anchor={{ x: 100, y: vh - 60, w: 80 }} />)
+    const above = screen.getByRole("dialog")
+    expect(parseFloat(above.style.top)).toBeGreaterThanOrEqual(0)
+    expect(parseFloat(above.style.top) + parseFloat(above.style.maxHeight)).toBeLessThanOrEqual(vh - 60)
+  })
+
+  it("is placed again inside the viewport when the window gets shorter", () => {
+    const original = window.innerHeight
+    try {
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 300, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyCapacity={vi.fn()} />)
+      Object.defineProperty(window, "innerHeight", { value: 380, configurable: true, writable: true })
+      act(() => { window.dispatchEvent(new Event("resize")) })
+      const dialog = screen.getByRole("dialog")
+      expect(parseFloat(dialog.style.top)).toBeGreaterThanOrEqual(0)
+      expect(parseFloat(dialog.style.top) + parseFloat(dialog.style.maxHeight)).toBeLessThanOrEqual(380)
+    } finally {
+      Object.defineProperty(window, "innerHeight", { value: original, configurable: true, writable: true })
+    }
+  })
+
+  it("uses the measured content height: a short popover stays below a bar in the lower half", () => {
+    const vh = window.innerHeight
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "offsetHeight")
+    Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+      configurable: true,
+      get() { return (this as HTMLElement).hasAttribute("data-popover-content") ? 100 : 0 },
+    })
+    try {
+      const y = vh - 260
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyCapacity={vi.fn()} />)
+      // Unmeasured, the larger side (above) would be taken; 100 px fit in the 206 px below.
+      expect(parseFloat(screen.getByRole("dialog").style.top)).toBe(y + 48 + 6)
+    } finally {
+      if (descriptor) Object.defineProperty(HTMLElement.prototype, "offsetHeight", descriptor)
+    }
+  })
+
+  it("closes and saves without pulling focus back when focus leaves for another control", () => {
+    const outside = document.createElement("button")
+    document.body.appendChild(outside)
+    const opener = document.createElement("button")
+    document.body.appendChild(opener)
+    opener.focus()
+    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyCapacity: vi.fn() }
+    try {
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 100, w: 80 }} {...props} />)
+      const heading = screen.getByRole("heading", { name: /Bar/ })
+      fireEvent.focusOut(heading, { relatedTarget: null })
+      expect(props.onClose).not.toHaveBeenCalled()
+      outside.focus()
+      fireEvent.focusOut(heading, { relatedTarget: outside })
+      expect(props.onPatch).toHaveBeenCalledTimes(1)
+      expect(props.onClose).toHaveBeenCalledTimes(1)
+      expect(outside).toHaveFocus()
+    } finally {
+      outside.remove()
+      opener.remove()
+    }
+  })
+
+  it("Escape gives focus back to the bar only when focus was inside the popover", () => {
+    const opener = document.createElement("button")
+    document.body.appendChild(opener)
+    opener.focus()
+    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyCapacity: vi.fn() }
+    try {
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 100, w: 80 }} {...props} />)
+      expect(screen.getByRole("heading", { name: /Bar/ })).toHaveFocus()
+      fireEvent.keyDown(document, { key: "Escape" })
+      expect(props.onClose).toHaveBeenCalledTimes(1)
+      expect(opener).toHaveFocus()
+    } finally {
+      opener.remove()
+    }
+  })
 
   it("is a labelled dialog whose fields have names, focused on its heading", () => {
     setup()
