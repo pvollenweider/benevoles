@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { readFile } from "node:fs/promises"
 import type { Locator, Page } from "playwright"
+import type { Cue } from "./sentence-timing"
 
 type QuestionKind = "text" | "yesno" | "single" | "multiple"
 export const trainingQuestions: { label: string; type: QuestionKind; required: boolean; options: string[] }[] = [
@@ -43,7 +44,7 @@ export function assertQuestionConfiguration(snapshot: QuestionSnapshot, expected
     assert.deepEqual(actual.options, definition.options)
   }
 }
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export type QuestionRecordingOptions = {
   page: Page; base: string; eventId: string; email: string; publicSlug: string
   /** A real seeded invitation for precisely this fixture member, never an invented token. */
@@ -89,7 +90,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   }
   await go(admin)
   await scene("welcome", async at => {
-    await at(0.20)
+    await at("Ouvrons Questions aux bénévoles pour")
     await tap(page, page.getByRole("link", { name: "Questions", exact: true }))
     await page.getByRole("heading", { name: "Questions aux bénévoles", exact: true }).waitFor()
     await page.getByText(/Ne demandez que ce qui est nécessaire/).scrollIntoViewIfNeeded()
@@ -105,7 +106,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
       await tap(page, page.getByRole("button", { name: "Ajouter une question", exact: true }))
       const form = questionForm(); await form.waitFor()
       await write(form.getByLabel("Question posée aux bénévoles *", { exact: true }), question.label)
-      await at(0.24); await tap(page, form.getByLabel("Type de réponse", { exact: true }))
+      await at(0.24) /* shared helper: scene-independent */; await tap(page, form.getByLabel("Type de réponse", { exact: true }))
       await form.getByLabel("Type de réponse", { exact: true }).selectOption(question.type)
       if (question.options.length) await write(form.getByLabel("Choix proposés *", { exact: true }), question.options.join("\n"))
       await at(timing.required)
@@ -123,9 +124,9 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     })
   }
   await scene("order", async at => {
-    await at(0.2)
+    await at(0.2) /* mid-sentence */
     await mutate("POST", `/api/admin/events/${eventId}/questions/reorder`, () => tap(page, page.getByRole("button", { name: "Monter « Permis de conduire »", exact: true })))
-    await at(0.62)
+    await at("Les bénévoles retrouveront cet ordre")
     await page.reload(); await settle(page)
     assert.equal((await read()).questions.filter(item => item.active)[0]?.label, "Permis de conduire")
     await page.getByRole("button", { name: "Modifier la question « Permis de conduire »", exact: true }).scrollIntoViewIfNeeded()
@@ -141,21 +142,21 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     })
     await evidence("order", { orderPersistedAfterReload: true, actualFirstQuestionVisibleAfterReload: true })
   })
-  const fillAnswers = async (second = false, anonymousProbe = false, at?: (fraction: number) => Promise<void>) => {
+  const fillAnswers = async (second = false, anonymousProbe = false, at?: Cue) => {
     const shirt = page.getByRole("group", { name: /^Taille de t-shirt/ })
-    if (at) await at(0.055)
+    if (at) await at(0.055) /* shared helper: scene-independent */
     await tap(page, shirt.getByRole("radio", { name: anonymousProbe ? "S" : second ? "L" : "M", exact: true }))
-    if (at) await at(0.12)
+    if (at) await at(0.12) /* shared helper: scene-independent */
     const permit = page.getByRole("group", { name: /^Permis de conduire/ }).getByRole("radio", { name: "Oui", exact: true })
     await tap(page, permit)
     assert(await permit.isChecked(), "Real permit answer must be selected")
     if (!second) {
       const transport = page.getByRole("group", { name: /^Matériel de transport/ })
-      if (at) await at(0.20)
+      if (at) await at(0.20) /* mid-sentence */
       await tap(page, transport.getByRole("checkbox", { name: "Vélo", exact: true }))
-      if (at) await at(0.25)
+      if (at) await at(0.25) /* shared helper: scene-independent */
       await tap(page, transport.getByRole("checkbox", { name: "Remorque", exact: true }))
-      if (at) await at(0.34)
+      if (at) await at(0.34) /* shared helper: scene-independent */
       await write(page.getByLabel(/^Point de rendez-vous préféré/), "Entrée nord")
     } else {
       // Invitations can prefill saved answers: actively clear the optional UI
@@ -191,7 +192,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   }
   await scene("required-validation", async at => {
     await page.evaluate(() => document.getElementById("video-questions-reload-note")?.remove())
-    await at(0.13)
+    await at("Renseignons son identité et les")
     await openSignup(publicUrl, 0)
     let submissions = 0
     const observed = (request: import("playwright").Request) => {
@@ -199,7 +200,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     }
     page.on("request", observed)
     try {
-      await at(0.46)
+      await at("Le formulaire indique ce qui")
       await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
       // Current main has native required radio inputs and no novalidate. The
       // browser intercepts this click before React's custom answer check runs.
@@ -217,12 +218,12 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   await scene("volunteer-form", async at => {
     assert.equal(await page.getByRole("group", { name: /^Permis de conduire/ }).getByRole("radio", { name: "Oui", exact: true }).isChecked(), false, "Native validation focus must not be mistaken for an already selected answer")
     await fillAnswers(false, false, at)
-    await at(0.54)
+    await at("Vérifions, puis confirmons réellement l'inscription.")
     const recap = page.getByText("Transmis à l'organisation", { exact: true }).filter({ visible: true }).first().locator("..")
     await recap.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
     const box = await recap.boundingBox(); const viewport = page.viewportSize()!
     assert(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width && box.y + box.height <= viewport.height, "Actual transmitted-data recap must be fully visible before submit")
-    await at(0.73)
+    await at("Ces réponses sont enregistrées une")
     const response = await submit(); const result = await response.json()
     // Member already exists: without an invitation its access link belongs only in email.
     assert.equal(result.editToken, null); assert.equal(result.linkSentByEmail, true)
@@ -234,7 +235,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await evidence("volunteer-form", { actualSignup: true, accessLinkOnlyByEmail: true, fourAnswersStored: snapshot.answers.length === 4 })
   })
   await scene("email-proof", async at => {
-    await at(0.42)
+    await at("Ouvrons le nouveau message réellement")
     const message = await options.showConfirmationEmail(page, email)
     assert.equal(message.recipient, email)
     const link = new URL(message.actualPersonalLink)
@@ -246,14 +247,14 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await go(`${admin}/registrations`)
     await page.getByText(email, { exact: true }).first().waitFor()
     await page.getByText(/Taille de t-shirt.*M/).first().scrollIntoViewIfNeeded()
-    await at(0.29)
+    await at("la Synthèse des réponses compte")
     await go(`${admin}/questions`)
     await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).waitFor()
     assert.equal((await read()).confirmedRegistrationCount, 1)
     await evidence("admin-read", { actualAnswersAndSummary: true })
   })
   await scene("summary-export", async at => {
-    await at(0.05)
+    await at("Le fichier rassemble les questions")
     const waiting = page.waitForEvent("download")
     await tap(page, page.getByRole("link", { name: /^Télécharger la synthèse \(CSV\)/ }))
     const download = await waiting
@@ -262,7 +263,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert(csv.includes("Taille de t-shirt") && csv.includes("Permis de conduire"))
     assert(!csv.includes(email), "Aggregate supplier summary must not disclose member email")
     assert(!csv.includes("Aline Mercier") && !csv.includes("Aline Exemple"), "Aggregate supplier summary must not disclose member identity")
-    await at(0.16)
+    await at("Le fichier rassemble les questions")
     const { parse } = await import("csv-parse/sync")
     const rows = parse(csv, { bom: true, delimiter: ";" }) as string[][]
     const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -273,14 +274,14 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   })
   await scene("invited-update", async at => {
     await openSignup(options.invitationUrl, 1)
-    await at(0.28)
+    await at("Choisissons L au lieu de")
     await page.getByRole("group", { name: /^Taille de t-shirt/ }).scrollIntoViewIfNeeded()
     await fillAnswers(true)
     const chosen = page.getByRole("group", { name: /^Taille de t-shirt/ }).getByRole("radio", { name: "L", exact: true })
     assert(await chosen.isChecked())
     await chosen.scrollIntoViewIfNeeded()
-    await at(0.43)
-    await at(0.60)
+    await at("Conservons Oui pour le permis")
+    await at("Les deux réponses facultatives laissées")
     await submit()
     const snapshot = await read(); assertAnswer(snapshot, "Taille de t-shirt", "L")
     assert.equal(snapshot.confirmedRegistrationCount, 2)
@@ -300,44 +301,44 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     const form = questionForm()
     assert(await form.getByLabel("Type de réponse", { exact: true }).isDisabled())
     await form.getByLabel("Type de réponse", { exact: true }).scrollIntoViewIfNeeded()
-    await at(0.39)
+    await at("Essayons aussi de retirer L")
     await write(form.getByLabel("Choix proposés *", { exact: true }), "S\nM\nXL")
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${(await read()).questions.find(item => item.label === "Taille de t-shirt")!.id}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })), 409)
     await page.getByText(/ces choix ne peuvent pas être retirés/).waitFor()
-    await at(0.63); await tap(page, form.getByRole("button", { name: "Annuler", exact: true }))
+    await at("La réponse d'Aline reste intacte."); await tap(page, form.getByRole("button", { name: "Annuler", exact: true }))
     assertAnswer(await read(), "Taille de t-shirt", "L")
     await evidence("answered-lock", { typeReallyDisabled: true, usedChoiceRemovalReallyRejected: true })
   })
   await scene("edit-choices", async at => {
-    await at(0.15)
+    await at("Rouvrons la question et ajoutons")
     await tap(page, page.getByRole("button", { name: "Modifier la question « Taille de t-shirt »", exact: true }))
     const form = questionForm()
     await write(form.getByLabel("Choix proposés *", { exact: true }), "S\nM\nL\nXL\nXXL")
     const questionId = (await read()).questions.find(q => q.label === "Taille de t-shirt")!.id
-    await at(0.41)
+    await at("la taille L d'Aline reste")
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${questionId}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })))
     await form.waitFor({ state: "hidden" })
     assert.deepEqual((await read()).questions.find(q => q.id === questionId)?.options, ["S", "M", "L", "XL", "XXL"])
     assertAnswer(await read(), "Taille de t-shirt", "L")
-    await at(0.53)
+    await at("Ajouter une possibilité et retirer")
     await go(`${admin}/registrations`)
     await page.getByText(/Taille de t-shirt.*L/).first().scrollIntoViewIfNeeded()
     await evidence("edit-choices", { additionalChoicePersisted: true, existingResponseUnchanged: true })
   })
   await scene("retire", async at => {
     await go(`${admin}/questions`)
-    await at(0.105)
+    await at("Cliquons sur Retirer, puis lisons")
     await tap(page, page.getByRole("button", { name: "Retirer la question « Taille de t-shirt »", exact: true }))
     const dialog = page.getByRole("alertdialog", { name: "Retirer la question « Taille de t-shirt » ?", exact: true })
     await dialog.waitFor()
     const questionId = (await read()).questions.find(item => item.label === "Taille de t-shirt")!.id
-    await at(0.36)
+    await at("Confirmons.")
     const response = await mutate("DELETE", `/api/admin/events/${eventId}/questions/${questionId}`, () => tap(page, dialog.getByRole("button", { name: "Retirer", exact: true })))
     assert.equal((await response.json()).archived, true)
     const snapshot = await read(); assertAnswer(snapshot, "Taille de t-shirt", "L")
     assert.equal(snapshot.questions.find(item => item.id === questionId)?.active, false)
     await go(`${admin}/registrations`); await page.getByText(/Taille de t-shirt.*question retirée.*L/).first().scrollIntoViewIfNeeded()
-    await at(0.57)
+    await at("Ouvrons enfin un autre créneau")
     await openSignup(publicUrl, 3, false)
     assert.equal(await page.getByRole("group", { name: /^Taille de t-shirt/ }).count(), 0)
     await page.getByRole("group", { name: /^Permis de conduire/ }).waitFor()

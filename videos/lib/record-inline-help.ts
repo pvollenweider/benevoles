@@ -1,8 +1,9 @@
 import assert from "node:assert/strict"
 import type { Page } from "playwright"
+import type { Cue } from "./sentence-timing"
 
 /** Actual #735 player. No catalogue overrides, fake media or published-state changes. */
-export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: Page, target: ReturnType<Page["locator"]>) => Promise<void>, at: (fraction: number) => Promise<void>) {
+export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: Page, target: ReturnType<Page["locator"]>) => Promise<void>, at: Cue) {
   const help = page.getByRole("link", { name: "Aide (ouvre dans un nouvel onglet)", exact: true }).first()
   assert.equal(await help.getAttribute("href"), "/doc/admin")
   const popupReady = page.waitForEvent("popup")

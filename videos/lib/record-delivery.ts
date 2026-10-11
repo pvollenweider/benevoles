@@ -11,6 +11,7 @@ import { controlledSmtp } from "./controlled-smtp"
 import { loadCurrentDeliveryRuntime } from "../tools/prepare-delivery"
 import { verifyProductBuild } from "./product-build"
 import { loadManifest, type AudioMetadata } from "./manifest"
+import type { Cue } from "./sentence-timing"
 
 export async function validateDeliveryNarration(directory: string) {
   const manifest = await loadManifest("EMAIL_DELIVERY_FAILURES")
@@ -28,7 +29,7 @@ export async function validateDeliveryNarration(directory: string) {
   }
 }
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export async function recordDeliveryStates(options: {
   page: Page; base: string; directory: string; title: string; db: PrismaClient;
   scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void>;
@@ -50,10 +51,10 @@ export async function recordDeliveryStates(options: {
   await go()
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { description: "Lire l'état, vérifier la cause, choisir le bon envoi", duration: 6000 })
-    await at(0.18)
+    await at("Dans Paramètres, puis Emails, les")
     await rowFor("pending").scrollIntoViewIfNeeded()
     assert(await rowFor("pending").isVisible(), "Owner's actual delivery history must be visible while described")
-    await at(0.58)
+    await at("Il retrouve le suivi et")
     // Switch to the real synthetic organizer account, rather than injecting a
     // role or hiding the owner's form with CSS. Keep this account for the rest.
     await page.goto("about:blank")
@@ -83,7 +84,7 @@ export async function recordDeliveryStates(options: {
       note.style.cssText = "position:fixed;bottom:18px;left:10%;width:80%;padding:14px;box-sizing:border-box;background:#172033;color:white;border-radius:10px;text-align:center;font:18px/1.4 Arial,sans-serif;z-index:2147483647;pointer-events:none"
       document.body.append(note)
     })
-    await at(0.94)
+    await at("Lisons le détail avant de")
     await page.evaluate(() => document.getElementById("video-delivery-time-note")?.remove())
   })
   await scene("reason", async at => {
@@ -91,7 +92,7 @@ export async function recordDeliveryStates(options: {
     const wrongText = await rowFor("wrong").innerText()
     assert(wrongText.includes("Refus définitif du serveur d'envoi") && wrongText.includes("Adresse à vérifier"))
     assert(!wrongText.includes("Synthetic recipient rejected") && !wrongText.includes("550 5.1.1"), "Raw SMTP recipient details must stay out of UI")
-    await at(0.55)
+    await at(0.55) /* mid-sentence */
     await rowFor("retrying").scrollIntoViewIfNeeded()
   })
   await scene("retry", async at => {
@@ -99,7 +100,7 @@ export async function recordDeliveryStates(options: {
     const inboxBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
     const priorIds = new Set(inboxBefore.messages.map((mail: { ID: string }) => mail.ID))
     await rowFor("recoverable").scrollIntoViewIfNeeded()
-    await at(0.18)
+    await at("Sur l'échec définitif, Renvoyer remet")
     await tap(page, rowFor("recoverable").getByRole("button", { name: /^Renvoyer/ }))
     await page.getByRole("status").filter({ hasText: "Renvoi programmé" }).waitFor()
     let after = await db.notificationOutbox.findUniqueOrThrow({ where: { id: before.id } })
@@ -108,14 +109,14 @@ export async function recordDeliveryStates(options: {
       after = await db.notificationOutbox.findUniqueOrThrow({ where: { id: before.id } })
     }
     assert(after.status === "sent" && JSON.stringify(after.payload) === JSON.stringify(before.payload))
-    await at(0.45)
+    await at("La ligne passe à Envoyé")
     await go()
     await rowFor("recoverable").scrollIntoViewIfNeeded()
     assert((await rowFor("recoverable").innerText()).includes("Envoyé"))
     const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
     const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject === "Formation — recoverable — Atelier des emails" && item.To.some(to => to.Address === "video.delivery.recoverable@example.org"))
     assert(mail, "Actual new retry email required")
-    await at(0.62)
+    await at("Ouvrons ensuite l'email réellement reçu")
     await page.goto(`http://localhost:48026/view/${mail.ID}`)
     await settle(page)
     await page.frameLocator("iframe").getByText("Données fictives. Rendez-vous au stand quinze minutes avant votre créneau.", { exact: true }).filter({ visible: true }).first().waitFor()
@@ -163,29 +164,29 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       await go("/admin/members")
       const currentMember = await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })
       assert(currentMember.organizationId === "video-delivery" && currentMember.firstName === "Léa")
-      await at(0.065)
+      await at("Corrigeons son email et enregistrons.")
       await tap(page, page.getByRole("button", { name: `Éditer ${currentMember.firstName} ${currentMember.lastName}`, exact: true }))
       const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
       await write(dialog.getByLabel("Email", { exact: true }), "video.delivery.corrected@example.org")
       await tap(page, dialog.getByRole("button", { name: "Enregistrer", exact: true }))
       await dialog.waitFor({ state: "hidden" })
       assert.equal((await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })).email, "video.delivery.corrected@example.org")
-      await at(0.16); await go("/admin/settings/notifications")
+      await at("l'ancien email en échec garde"); await go("/admin/settings/notifications")
       await page.getByRole("row").filter({ hasText: "video.delivery.wrong@example.org" }).scrollIntoViewIfNeeded()
       assert(JSON.stringify((await db.notificationOutbox.findUniqueOrThrow({ where: { id: wrong.id } })).payload) === JSON.stringify(wrong.payload))
-      await at(0.44)
+      await at("ce message partira à toutes")
       const inboxBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
       const priorIds = new Set(inboxBefore.messages.map((mail: { ID: string }) => mail.ID))
       // A short, actual operational instruction remains readable at the same
       // natural typing speed; do not accelerate keys to fit the narration.
-      const history = await send("Formation — adresse corrigée", "Bonjour {prénom}, rendez-vous au stand. Merci !", () => at(0.65))
+      const history = await send("Formation — adresse corrigée", "Bonjour {prénom}, rendez-vous au stand. Merci !", () => at("Cet envoi crée un nouveau"))
       const rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } })
       assert.equal(rows.length, 2)
       for (const row of rows) await waitDelivered(row.id)
       const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
       const mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorIds.has(item.ID) && item.Subject === "Formation — adresse corrigée — Atelier des emails" && item.To.some(to => to.Address === "video.delivery.corrected@example.org"))
       assert(mail, "Actual new corrected-address email required")
-      await at(0.82); await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
+      await at("l'adresse corrigée apparaît dans le"); await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
       checks.correctedRecipientMailId = mail.ID; checks.correctedRecipientMailIsNew = true; checks.oldPayloadUnchanged = true
     })
     await scene("campaign", async at => {
@@ -204,20 +205,20 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       const refusedAgain = await deliverOutbox({ ids: [failed.id], now })
       assert.equal(refusedAgain.sent, 0)
       assert.equal((await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })).attempts, 1)
-      await at(0.43); await go(`/admin/events/${eventId}/message`)
+      await at("Voir le texte envoyé permet"); await go(`/admin/events/${eventId}/message`)
       const article = page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) })
       await article.scrollIntoViewIfNeeded()
       assert((await article.innerText()).includes("1 envoyé, 1 en échec"))
-      await at(0.45); await tap(page, article.locator("summary"))
+      await at("Le refus de test est"); await tap(page, article.locator("summary"))
       fixture.rejected.delete("video.delivery.recoverable@example.org")
-      await at(0.60); await tap(page, article.getByRole("button", { name: /^Renvoyer/ }))
+      await at("seule Emma repart dans la"); await tap(page, article.getByRole("button", { name: /^Renvoyer/ }))
       const used = article.getByRole("button", { name: /^Remis en file/ })
       await used.waitFor(); assert.equal(await used.getAttribute("aria-disabled"), "true")
       await waitDelivered(failed.id)
       const repeated = await page.request.post(`${base}/api/admin/events/${eventId}/messages/${history.id}/resend-failed`)
       assert.equal((await repeated.json()).resent, 0)
       assert.equal((await db.notificationOutbox.findUniqueOrThrow({ where: { id: successful.id } })).sentAt?.toISOString(), successful.sentAt?.toISOString())
-      await at(0.86); await go(`/admin/events/${eventId}/message`)
+      await at("Les rappels et confirmations automatiques"); await go(`/admin/events/${eventId}/message`)
       const completed = page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) })
       await completed.scrollIntoViewIfNeeded()
       assert((await completed.innerText()).includes("2 envoyés"))
@@ -226,7 +227,7 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
     await scene("retention", async at => {
       await go("/admin/settings/notifications")
       await page.getByText(/Les emails envoyés sont effacés chaque nuit/).scrollIntoViewIfNeeded()
-      await at(0.46); await go(`/admin/events/${eventId}/message`)
+      await at("L'historique des messages ciblés est"); await go(`/admin/events/${eventId}/message`)
       await page.getByText(/Les messages sont conservés 12 mois/).scrollIntoViewIfNeeded()
     })
     await scene("result", async () => {

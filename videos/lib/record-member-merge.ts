@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto"
 import type { Locator, Page } from "playwright"
 import { verifyProductBuild } from "./product-build"
+import type { Cue } from "./sentence-timing"
 
 type Member = {
   id: string; organizationId: string; firstName: string; lastName: string
@@ -31,7 +32,7 @@ export type MemberMergeRecordingOptions = {
   /** Callbacks must read the actual isolated fixture/database, never return canned assertions. */
   readBefore: () => Promise<MemberMergeBefore>
   readAfter: () => Promise<MemberMergeAfter>
-  scene: (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+  scene: (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
   settle: (page: Page) => Promise<void>
   tap: (page: Page, target: Locator) => Promise<void>
 }
@@ -121,17 +122,17 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     await page.goto(`${baseUrl}/admin/members`); await settle(page)
     const duplicates = page.getByRole("link", { name: /^Doublons possibles \(/ })
     await duplicates.waitFor()
-    await at(0.20); await tap(page, duplicates)
+    await at("Les raisons du rapprochement sont"); await tap(page, duplicates)
     await page.getByRole("heading", { name: "Doublons possibles", exact: true }).waitFor()
     const pair = page.locator("li").filter({ has: page.locator(`a[href="/admin/members/${before.keep.id}/merge?with=${before.absorb.id}"]`) }).filter({ hasText: `${name} et ${absorbedName}` })
     // Only the outer pair list item has this link. Do not take an unrelated namesake.
     check(await pair.count() === 1, "expected pair absent or reversed; retained member must match the actual Compare link")
     await pair.scrollIntoViewIfNeeded()
-    await at(0.43); await tap(page, pair.getByRole("link", { name: /^Comparer et fusionner/ }))
+    await at("Comparer et fusionner ouvre un"); await tap(page, pair.getByRole("link", { name: /^Comparer et fusionner/ }))
     await page.getByRole("heading", { name: `Aperçu de la fusion avec ${absorbedName}`, exact: true }).waitFor()
-    await at(0.60); await page.goBack(); await settle(page)
+    await at("Ignorer retire simplement la paire"); await page.goBack(); await settle(page)
     await page.getByRole("heading", { name: "Doublons possibles", exact: true }).waitFor()
-    await at(0.72); await tap(page, pair.getByRole("button", { name: /^Ignorer la paire/ }))
+    await at("Les deux fiches existent toujours"); await tap(page, pair.getByRole("button", { name: /^Ignorer la paire/ }))
     await page.getByText("Aucune paire possible en double pour l'instant.", { exact: true }).waitFor()
     // Dismissing a suggestion is not a merge: read the actual fixture again to prove both
     // records and their personal links still exist unchanged before the next entry point.
@@ -146,18 +147,18 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     // Bind the action to this precise retained member, not another namesake link.
     const manualMerge = page.getByRole("link", { name: "Fusionner avec un autre membre (doublon confirmé)", exact: true })
     check(await manualMerge.getAttribute("href") === `/admin/members/${before.keep.id}/merge`, "manual merge entry must retain the expected member")
-    await at(0.34); await tap(page, manualMerge)
+    await at("Recherchez précisément l’adresse de la"); await tap(page, manualMerge)
     await page.getByRole("heading", { name: `Fusionner ${name}`, exact: true }).waitFor()
     const search = page.getByLabel("Rechercher un membre par nom ou email", { exact: true })
-    await at(0.46); await tap(page, search)
+    await at("Recherchez précisément l’adresse de la"); await tap(page, search)
     await search.pressSequentially(before.absorb.email!, { delay: 95 })
-    await at(0.60); await tap(page, page.getByRole("button", { name: "Chercher", exact: true }))
+    await at("Celle-ci sera absorbée."); await tap(page, page.getByRole("button", { name: "Chercher", exact: true }))
     const result = page.locator("#member-merge-panel li").filter({ hasText: before.absorb.email! })
     await result.waitFor()
     check(await result.count() === 1, "search must identify the precise absorbed synthetic email")
-    await at(0.67); await tap(page, result.getByRole("button", { name: /^Fusionner avec cette fiche/ }))
+    await at("L’aperçu permet maintenant de comparer"); await tap(page, result.getByRole("button", { name: /^Fusionner avec cette fiche/ }))
     await page.getByRole("heading", { name: `Aperçu de la fusion avec ${absorbedName}`, exact: true }).waitFor()
-    await at(0.83); await page.getByRole("group", { name: "Champs du profil à conserver", exact: true }).scrollIntoViewIfNeeded()
+    await at("Vérifiez bien quelle fiche vous"); await page.getByRole("group", { name: "Champs du profil à conserver", exact: true }).scrollIntoViewIfNeeded()
     const email = page.getByRole("group", { name: "Email", exact: true })
     await email.getByRole("radio", { name: `Garder « ${before.keep.email} » (${name})`, exact: true }).waitFor()
   })
@@ -168,29 +169,29 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
   }
   await scene("fields", async at => {
     const email = page.getByRole("group", { name: "Email", exact: true })
-    await at(0.12); await tap(page, email.getByRole("radio", { name: `Garder « ${before.keep.email} » (${name})`, exact: true }))
+    await at("Ici, on conserve la bonne"); await tap(page, email.getByRole("radio", { name: `Garder « ${before.keep.email} » (${name})`, exact: true }))
     await waitPreview()
     if (before.keep.phone !== before.absorb.phone) {
-      await at(0.28)
+      await at("Les notes internes peuvent aussi")
       await tap(page, page.getByRole("group", { name: "Téléphone", exact: true }).getByRole("radio", { name: `Prendre « ${before.absorb.phone ?? "(vide)"} » (${absorbedName})`, exact: true }))
       await waitPreview()
     }
-    await at(0.35); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
+    await at("pratique pour ne rien oublier."); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
     await waitPreview()
-    await at(0.59); await page.getByRole("table", { name: "Nombre de lignes concernées par la fusion, par type", exact: true }).scrollIntoViewIfNeeded()
+    await at("Le tableau récapitule les inscriptions"); await page.getByRole("table", { name: "Nombre de lignes concernées par la fusion, par type", exact: true }).scrollIntoViewIfNeeded()
   })
   await scene("conflicts", async at => {
     await page.getByRole("heading", { name: "Points à vérifier", exact: true }).scrollIntoViewIfNeeded()
     const merge = page.getByRole("button", { name: "Fusionner les deux fiches", exact: true })
     check(await merge.getAttribute("aria-disabled") === "true", "fixture did not produce actual blocking choices")
-    await at(0.68)
+    await at("Ici, on garde la réponse")
     for (const id of before.questionConflictIds) {
       const radio = page.locator(`input[type="radio"][name="answer-${id}"]`).locator("..").filter({ hasText: "Prendre la réponse de la fiche absorbée" }).getByRole("radio")
       await tap(page, radio)
       check(await radio.isChecked(), "answer choice was not actually selected")
       await waitPreview()
     }
-    await at(0.80)
+    await at("On choisit aussi son invitation.")
     for (const id of before.invitationConflictEventIds) {
       const radio = page.locator(`input[type="radio"][name="invite-${id}"]`).locator("..").filter({ hasText: "Prendre l'invitation de la fiche absorbée" }).getByRole("radio")
       await tap(page, radio)
@@ -203,28 +204,28 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     const sendLinks = page.getByRole("checkbox", { name: "Envoyer les nouveaux liens personnels à l'adresse conservée", exact: true })
     await sendLinks.scrollIntoViewIfNeeded()
     // Show the real option without claiming an email was sent; this demonstration sends none.
-    await at(0.08); await tap(page, sendLinks)
+    await at("Dans cette démonstration, on la"); await tap(page, sendLinks)
     check(await sendLinks.isChecked(), "new-link email option did not turn on")
     await waitPreview()
-    await at(0.23); await tap(page, sendLinks)
+    await at("aucun email ne sera envoyé."); await tap(page, sendLinks)
     check(!(await sendLinks.isChecked()), "demonstration must not send email unexpectedly")
     await waitPreview()
-    await at(0.42); await page.getByRole("heading", { name: "Résumé avant confirmation", exact: true }).scrollIntoViewIfNeeded()
-    await at(0.74); await tap(page, page.getByRole("button", { name: "Fusionner les deux fiches", exact: true }))
+    await at("la fiche absorbée sera désactivée"); await page.getByRole("heading", { name: "Résumé avant confirmation", exact: true }).scrollIntoViewIfNeeded()
+    await at("Fusionner les deux fiches ouvre"); await tap(page, page.getByRole("button", { name: "Fusionner les deux fiches", exact: true }))
     const confirmation = page.getByRole("alertdialog", { name: "Confirmer la fusion", exact: true })
     await confirmation.waitFor()
-    await at(0.90); await tap(page, confirmation.getByRole("button", { name: "Confirmer la fusion", exact: true }))
+    await at("Quand vous êtes vraiment sûr"); await tap(page, confirmation.getByRole("button", { name: "Confirmer la fusion", exact: true }))
     await page.getByRole("heading", { name: "Fusion effectuée", exact: true }).waitFor()
   })
   const after = await options.readAfter()
   const links = validateMemberMergeAfter(before, after, baseUrl)
   await scene("result", async at => {
     await page.getByRole("heading", { name: "Fusion effectuée", exact: true }).scrollIntoViewIfNeeded()
-    await at(0.27); await tap(page, page.getByRole("link", { name: `Retour à la fiche de ${name}`, exact: true }))
+    await at("Dans la liste des membres"); await tap(page, page.getByRole("link", { name: `Retour à la fiche de ${name}`, exact: true }))
     await settle(page)
-    await at(0.37); await page.goto(`${baseUrl}/admin/members?q=${encodeURIComponent(before.keep.email!)}`); await settle(page)
+    await at(0.37) /* mid-sentence */; await page.goto(`${baseUrl}/admin/members?q=${encodeURIComponent(before.keep.email!)}`); await settle(page)
     check(await page.locator("tbody tr").filter({ hasText: before.keep.email! }).count() === 1, "retained member not unique in the real members list")
-    await at(0.58); await page.goto(`${baseUrl}/admin/members/${before.keep.id}`); await settle(page)
+    await at("les faits enregistrés sous l’ancienne"); await page.goto(`${baseUrl}/admin/members/${before.keep.id}`); await settle(page)
     await page.getByRole("heading", { name: `Activité de ${name}`, exact: true }).waitFor()
   })
   const linkChecks: Array<{ kind: string; entityId: string; oldStatus: number; newStatus: number }> = []
@@ -244,11 +245,11 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     }
     const oldRegistration = before.oldMovedLinks.find(link => link.kind === "registration" && (link.expectedAfterStatus ?? 200) === 200)!
     const token = validateMergeLink(oldRegistration, baseUrl).pathname.split("/").at(-1)!
-    await at(0.12); await page.goto(`${baseUrl}/my/${token}`); await settle(page)
+    await at("c’est normal, il a été"); await page.goto(`${baseUrl}/my/${token}`); await settle(page)
     await page.getByRole("heading", { name: "Ce lien ne fonctionne pas", exact: true }).waitFor()
     const newRegistration = after.newMovedLinks.find(link => link.entityId === oldRegistration.entityId && link.kind === "registration")!
     const newToken = validateMergeLink(newRegistration, baseUrl).pathname.split("/").at(-1)!
-    await at(0.33); await page.goto(`${baseUrl}/my/${newToken}`); await settle(page)
+    await at("Le nouveau lien ouvre bien"); await page.goto(`${baseUrl}/my/${newToken}`); await settle(page)
     await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).waitFor()
     await page.getByRole("region", { name: "Tous mes créneaux", exact: true }).waitFor()
   })
