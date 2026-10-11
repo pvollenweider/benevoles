@@ -1,0 +1,6 @@
+STATUS: NOT READY
+ID: EVENT_CREATE_PUBLISH_OVERVIEW
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+No final render: rehearsal failed in registration waiting for obsolete Enregistré ✓ label. Updated to current Modifications enregistrées à label; no refilm. Public URL selector also corrected after ORG_FIRST_STEPS rehearsal.
+Audio fingerprint rejected: continuous narration regenerated; preview boundary recut to 83.916687 s and independently audited successfully before rehearsal.
+Final duration/music/sync checks unavailable without final MP4.

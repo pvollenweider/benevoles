@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe",
+  "windowStart": 6.918999999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 9.23,
+    "wordsHeard": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe"
+  },
+  "onset": 16.148999999999997,
+  "proposedCut": 16.0309165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

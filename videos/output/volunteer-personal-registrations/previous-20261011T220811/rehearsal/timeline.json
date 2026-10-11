@@ -1,0 +1,172 @@
+{
+  "slug": "volunteer-personal-registrations",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T20:19:54.470Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4695
+    },
+    {
+      "kind": "click",
+      "atMs": 5477
+    },
+    {
+      "kind": "click",
+      "atMs": 6261
+    },
+    {
+      "kind": "click",
+      "atMs": 7061
+    },
+    {
+      "kind": "click",
+      "atMs": 8310
+    },
+    {
+      "kind": "click",
+      "atMs": 9094
+    },
+    {
+      "kind": "click",
+      "atMs": 10326
+    },
+    {
+      "kind": "click",
+      "atMs": 11109
+    },
+    {
+      "kind": "click",
+      "atMs": 12344
+    },
+    {
+      "kind": "click",
+      "atMs": 13126
+    },
+    {
+      "kind": "click",
+      "atMs": 14528
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 37,
+      "endMs": 2692
+    },
+    {
+      "id": "practical",
+      "startMs": 3144,
+      "endMs": 3225
+    },
+    {
+      "id": "states",
+      "startMs": 3678,
+      "endMs": 3757
+    },
+    {
+      "id": "cancel",
+      "startMs": 4210,
+      "endMs": 7368
+    },
+    {
+      "id": "waiting",
+      "startMs": 7821,
+      "endMs": 9399
+    },
+    {
+      "id": "offer",
+      "startMs": 9853,
+      "endMs": 11416
+    },
+    {
+      "id": "request",
+      "startMs": 11869,
+      "endMs": 13583
+    },
+    {
+      "id": "return",
+      "startMs": 14037,
+      "endMs": 15758
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ici, Camille a une place",
+      "startMs": 7700,
+      "endMs": 16400,
+      "cueMs": 2661
+    },
+    {
+      "segmentId": "practical",
+      "phrase": "Le lien carte aide à",
+      "startMs": 13527,
+      "endMs": 16909,
+      "cueMs": 3160
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une place proposée affiche une",
+      "startMs": 9920,
+      "endMs": 16051,
+      "cueMs": 3691
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une demande sur validation attend",
+      "startMs": 21624,
+      "endMs": 29984,
+      "cueMs": 3727
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "rien n'est retiré.",
+      "startMs": 8278,
+      "endMs": 10008,
+      "cueMs": 5001
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "La carte disparaît de la",
+      "startMs": 13714,
+      "endMs": 18039,
+      "cueMs": 5783
+    },
+    {
+      "segmentId": "waiting",
+      "phrase": "Confirme uniquement si c'est ce",
+      "startMs": 16629,
+      "endMs": 21124,
+      "cueMs": 8616
+    },
+    {
+      "segmentId": "return",
+      "phrase": "Retirer une inscription ne supprime",
+      "startMs": 13511,
+      "endMs": 22021,
+      "cueMs": 15737
+    }
+  ]
+}

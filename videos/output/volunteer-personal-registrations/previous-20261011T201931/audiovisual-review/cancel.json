@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:34:59.342Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "e10143114c49e16debaf4b7a2569854ffe0ed4363f9284c6b8f3384bbf05f482",
+  "clipSha256": "022db29a86fdc38f73ef6c59bc18fa6bf111a441d4b85116a90125ba9e0e830a",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Pour l'Accueil, Annuler ouvre une confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Annuler ouvre une confirmation",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton Annuler et affichage de l'encart « Confirmer l'annulation ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Tu peux encore choisir Non, garder : rien n'est retiré",
+        "visibleSeconds": 5.6,
+        "visible": "Clic sur « Non, garder », le formulaire de confirmation se referme et le créneau reste en place",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Reprenons et confirmons cette fois",
+        "visibleSeconds": 8.7,
+        "visible": "Nouveau clic sur « Annuler », puis clic sur « Oui, annuler »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "La carte disparaît de la page personnelle",
+        "visibleSeconds": 12.3,
+        "visible": "Le créneau Accueil disparaît de la liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, naturelle et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

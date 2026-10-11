@@ -1,0 +1,360 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1094,
+    "sentences": [
+      {
+        "text": "Choisir ses créneaux, c’est construire un engagement réaliste avant de donner ses coordonnées.",
+        "startMs": 267,
+        "endMs": 4418,
+        "method": "silence",
+        "absoluteStartMs": 1361
+      },
+      {
+        "text": "Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer.",
+        "startMs": 4642,
+        "endMs": 9600,
+        "method": "silence",
+        "absoluteStartMs": 5736
+      },
+      {
+        "text": "L’inscription ne partira qu’après le formulaire et sa confirmation.",
+        "startMs": 9840,
+        "endMs": 12801,
+        "method": "silence",
+        "absoluteStartMs": 10934
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "select",
+    "startMs": 16519,
+    "sentences": [
+      {
+        "text": "Clique sur une mission disponible pour la sélectionner.",
+        "startMs": 388,
+        "endMs": 2892,
+        "method": "silence",
+        "absoluteStartMs": 16907
+      },
+      {
+        "text": "Elle change d’état et rejoint le récapitulatif à droite.",
+        "startMs": 3286,
+        "endMs": 5807,
+        "method": "silence",
+        "absoluteStartMs": 19805
+      },
+      {
+        "text": "Tu peux en ajouter plusieurs, même sur deux journées.",
+        "startMs": 6086,
+        "endMs": 8550,
+        "method": "silence",
+        "absoluteStartMs": 22605
+      },
+      {
+        "text": "Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif :",
+        "startMs": 9157,
+        "endMs": 14035,
+        "method": "silence",
+        "absoluteStartMs": 25676
+      },
+      {
+        "text": "aucune place n’a encore été réservée.",
+        "startMs": 14388,
+        "endMs": 15895,
+        "method": "silence",
+        "absoluteStartMs": 30907
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 17023
+      },
+      {
+        "kind": "click",
+        "atMs": 23106
+      },
+      {
+        "kind": "click",
+        "atMs": 28706
+      }
+    ]
+  },
+  {
+    "id": "capacity",
+    "startMs": 33251,
+    "sentences": [
+      {
+        "text": "Chaque barre indique les inscriptions sur la capacité totale.",
+        "startMs": 384,
+        "endMs": 3885,
+        "method": "silence",
+        "absoluteStartMs": 33635
+      },
+      {
+        "text": "Deux sur trois signifie qu’il reste une place.",
+        "startMs": 4335,
+        "endMs": 6167,
+        "method": "silence",
+        "absoluteStartMs": 37586
+      },
+      {
+        "text": "Un créneau complet sans liste d’attente ne peut plus être choisi.",
+        "startMs": 6510,
+        "endMs": 9699,
+        "method": "silence",
+        "absoluteStartMs": 39761
+      },
+      {
+        "text": "S’il reste important pour toi, contacte l’association plutôt que de remplacer quelqu’un ou de partager une invitation.",
+        "startMs": 10223,
+        "endMs": 15041,
+        "method": "silence",
+        "absoluteStartMs": 43474
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "waitlist",
+    "startMs": 49216,
+    "sentences": [
+      {
+        "text": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste cliquable.",
+        "startMs": 466,
+        "endMs": 4802,
+        "method": "silence",
+        "absoluteStartMs": 49682
+      },
+      {
+        "text": "Le choix devient En attente et le récapitulatif le distingue d’une place confirmable.",
+        "startMs": 5012,
+        "endMs": 9484,
+        "method": "silence",
+        "absoluteStartMs": 54228
+      },
+      {
+        "text": "Reclique pour le retirer.",
+        "startMs": 10145,
+        "endMs": 11182,
+        "method": "silence",
+        "absoluteStartMs": 59361
+      },
+      {
+        "text": "La position et une éventuelle offre de place n’existeront qu’après l’envoi du formulaire.",
+        "startMs": 11433,
+        "endMs": 15461,
+        "method": "silence",
+        "absoluteStartMs": 60649
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 49738
+      },
+      {
+        "kind": "click",
+        "atMs": 59856
+      }
+    ]
+  },
+  {
+    "id": "approval-reserved",
+    "startMs": 66292,
+    "sentences": [
+      {
+        "text": "D’autres missions ont une règle particulière.",
+        "startMs": 388,
+        "endMs": 2713,
+        "method": "silence",
+        "absoluteStartMs": 66680
+      },
+      {
+        "text": "Chauffeur navette affiche Sur validation :",
+        "startMs": 3236,
+        "endMs": 5095,
+        "method": "silence",
+        "absoluteStartMs": 69528
+      },
+      {
+        "text": "tu peux la demander, puis l’organisateur décidera.",
+        "startMs": 5533,
+        "endMs": 7938,
+        "method": "silence",
+        "absoluteStartMs": 71825
+      },
+      {
+        "text": "Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle.",
+        "startMs": 8453,
+        "endMs": 12671,
+        "method": "silence",
+        "absoluteStartMs": 74745
+      },
+      {
+        "text": "Ces deux états ne veulent donc pas dire complet, et ils ne produisent pas le même suivi.",
+        "startMs": 12872,
+        "endMs": 16455,
+        "method": "silence",
+        "absoluteStartMs": 79164
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "conflict",
+    "startMs": 85383,
+    "sentences": [
+      {
+        "text": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles.",
+        "startMs": 469,
+        "endMs": 4692,
+        "method": "silence",
+        "absoluteStartMs": 85852
+      },
+      {
+        "text": "Ici, Accueil de quinze à dix-huit heures empêche la Navette de quatorze à dix-huit heures.",
+        "startMs": 5287,
+        "endMs": 9231,
+        "method": "silence",
+        "absoluteStartMs": 90670
+      },
+      {
+        "text": "Retire le premier choix si la seconde mission te convient mieux.",
+        "startMs": 9758,
+        "endMs": 11989,
+        "method": "silence",
+        "absoluteStartMs": 95141
+      },
+      {
+        "text": "Le serveur vérifiera encore ce conflit au moment de confirmer.",
+        "startMs": 12287,
+        "endMs": 15913,
+        "method": "silence",
+        "absoluteStartMs": 97670
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 85904
+      },
+      {
+        "kind": "click",
+        "atMs": 95635
+      }
+    ]
+  },
+  {
+    "id": "known",
+    "startMs": 101956,
+    "sentences": [
+      {
+        "text": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède déjà.",
+        "startMs": 207,
+        "endMs": 4016,
+        "method": "silence",
+        "absoluteStartMs": 102163
+      },
+      {
+        "text": "Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois.",
+        "startMs": 4606,
+        "endMs": 8276,
+        "method": "silence",
+        "absoluteStartMs": 106562
+      },
+      {
+        "text": "Elle peut ajouter une autre mission, mais l’annulation d’un engagement existant demande une confirmation séparée pour éviter un clic accidentel.",
+        "startMs": 8632,
+        "endMs": 16407,
+        "method": "silence",
+        "absoluteStartMs": 110588
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "limit",
+    "startMs": 119128,
+    "sentences": [
+      {
+        "text": "La Buvette est limitée à deux créneaux par personne.",
+        "startMs": 307,
+        "endMs": 3012,
+        "method": "silence",
+        "absoluteStartMs": 119435
+      },
+      {
+        "text": "Camille a déjà atteint ce maximum :",
+        "startMs": 3534,
+        "endMs": 7105,
+        "method": "silence",
+        "absoluteStartMs": 122662
+      },
+      {
+        "text": "les autres plages restent visibles, mais annoncent la limite et ne peuvent pas être ajoutées.",
+        "startMs": 7316,
+        "endMs": 9531,
+        "method": "silence",
+        "absoluteStartMs": 126444
+      },
+      {
+        "text": "Elle doit d’abord annuler une Buvette existante, ou demander à l’organisateur de corriger son planning.",
+        "startMs": 10157,
+        "endMs": 15018,
+        "method": "silence",
+        "absoluteStartMs": 129285
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "result",
+    "startMs": 135151,
+    "sentences": [
+      {
+        "text": "Avant de continuer, relis le récapitulatif :",
+        "startMs": 551,
+        "endMs": 3331,
+        "method": "silence",
+        "absoluteStartMs": 135702
+      },
+      {
+        "text": "jours, heures, missions, attente ou demande sur validation.",
+        "startMs": 3931,
+        "endMs": 7700,
+        "method": "silence",
+        "absoluteStartMs": 139082
+      },
+      {
+        "text": "Tu peux encore tout ajuster sans envoyer de données.",
+        "startMs": 7857,
+        "endMs": 10854,
+        "method": "silence",
+        "absoluteStartMs": 143008
+      },
+      {
+        "text": "Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire ;",
+        "startMs": 11525,
+        "endMs": 14548,
+        "method": "silence",
+        "absoluteStartMs": 146676
+      },
+      {
+        "text": "il ne confirme toujours rien tant que tu n’as pas validé la dernière étape.",
+        "startMs": 14740,
+        "endMs": 19565,
+        "method": "silence",
+        "absoluteStartMs": 149891
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 135663
+      }
+    ]
+  }
+]

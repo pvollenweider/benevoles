@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:34:15.892Z",
+  "revalidatedAt": "2026-10-11T18:34:15.893Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "practical",
+      "audioSha256": "8cfe461779cef69e14f51711c5c882367b8df5922eee062e772253c1b07e9a5a",
+      "recognized": "Commençons par l'accueil confirmé. La carte indique le jour et les horaires, le rendez-vous et les consignes expliquent où aller et comment se préparer, le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits. Garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "expected": "Commençons par l'Accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits : garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

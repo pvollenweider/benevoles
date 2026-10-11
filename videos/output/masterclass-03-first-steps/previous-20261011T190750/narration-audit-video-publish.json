@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:13.364Z",
+  "revalidatedAt": "2026-10-11T17:47:13.364Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "publish",
+      "audioSha256": "d77a02ee9a88f532648dbdeca5bce06aee4009175650f2149fb2e7da1021416c",
+      "recognized": "La page de vérification rappelle ce qui est obligatoire et ce qui pourrait encore être amélioré. Un événement sans créneau ne peut pas être publié. Ici, le minimum est prêt, on publie. La page d'inscription devient accessible, mais aucun email collectif ne part automatiquement.",
+      "expected": "La page de vérification rappelle ce qui est obligatoire et ce qui pourrait encore être amélioré. Un événement sans créneau ne peut pas être publié. Ici, le minimum est prêt : on publie. La page d’inscription devient accessible, mais aucun email collectif ne part automatiquement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

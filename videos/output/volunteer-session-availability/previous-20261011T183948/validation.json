@@ -1,0 +1,60 @@
+{
+  "id": "VOLUNTEER_SESSION_AVAILABILITY",
+  "slug": "volunteer-session-availability",
+  "validatedAt": "2026-10-05T11:33:07.195Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 185760,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 20353,
+      "audioMs": 20351,
+      "driftMs": 2
+    },
+    {
+      "id": "session",
+      "visualMs": 22632,
+      "audioMs": 22631,
+      "driftMs": 1
+    },
+    {
+      "id": "resend",
+      "visualMs": 20994,
+      "audioMs": 20993,
+      "driftMs": 1
+    },
+    {
+      "id": "recover",
+      "visualMs": 19472,
+      "audioMs": 19471,
+      "driftMs": 1
+    },
+    {
+      "id": "limit",
+      "visualMs": 19991,
+      "audioMs": 19990,
+      "driftMs": 1
+    },
+    {
+      "id": "availability",
+      "visualMs": 26991,
+      "audioMs": 26991,
+      "driftMs": 0
+    },
+    {
+      "id": "organizer",
+      "visualMs": 22512,
+      "audioMs": 22510,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 21545,
+      "audioMs": 21544,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

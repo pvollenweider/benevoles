@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: VOLUNTEER_FORM_RECAP
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe (verified target build; no final MP4)
+DURATION: — seconds
+MUSIC: smallest — / largest — LU
+PROBLEMS: Rehearsal fails at recap: obsolete Vos créneaux scope does not match current Tes créneaux sidebar. No final MP4; existing narration and audit accepted unchanged.
+SOURCE CHANGES: videos/tools/record.ts: scope recap by Tes créneaux; match current overnight mention with lendemain. No refilm.
+VALIDATION: "unavailable"; sentence anchors checked: —
+FINAL AUDIO: []
+CAPTIONS/EFFECTS: transcript match None; marker counts None; exact synthesized bytes None; clicks None, keys None.
+REVIEW: final MP4/objective music, subtitle, effects and sentence/action checks unavailable. Narration audit and rehearsal/pipeline failure evidence are retained in this slug and /tmp/batch4-*.log. No final readiness claim.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

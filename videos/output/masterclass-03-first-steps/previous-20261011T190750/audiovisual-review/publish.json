@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:49:51.398Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "40f3de47804e3b01fcc86252973cc4388a414e2054d37282f2bdd0b9d57d31a2",
+  "clipSha256": "e2c64e1f6c25d9b8c9b72a9315c79216e5dea74bb86de030fa92a481f741b3b2",
+  "scene": "publish",
+  "review": {
+    "heardOpening": "La page de vérification rappelle ce qui est obligatoire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La page de vérification rappelle ce qui est obligatoire",
+        "visibleSeconds": 2,
+        "visible": "Affichage de l'étape 3 « Vérification et publication » avec la liste des éléments requis et recommandés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Un événement sans créneau ne peut pas être publié.",
+        "visibleSeconds": 5.2,
+        "visible": "Page de vérification stable affichant le statut des créneaux et des postes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Ici, le minimum est prêt : on publie.",
+        "visibleSeconds": 8,
+        "visible": "La mention sous le titre bascule à « L'événement est publié : les bénévoles peuvent s'inscrire. » sans clic visible sur un bouton de publication",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "La page d’inscription devient accessible",
+        "visibleSeconds": 12,
+        "visible": "L'écran reste sur la page de vérification sans afficher la page d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:08, l'événement passe à l'état publié sans qu'aucun clic ni bouton « Publier » ne soit visible à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine fluide, posée et bien articulée, avec un ton explicatif clair."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

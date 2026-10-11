@@ -1,0 +1,99 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T20:37:04.623Z",
+  "revalidatedAt": "2026-10-11T20:37:04.626Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "b788008ed0712de326e0cc7a169d6a593534fc0a0f14c6f24f814a6015d362ed",
+      "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone. Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "expected": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "wordErrorRate": 0.6551724137931034,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "discover",
+      "audioSha256": "19836996ea259bc1768a4d4bda8f05e6c28f10fdb7cb835918034e0191758055",
+      "recognized": "Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de quinze heures à dix-huit heures.",
+      "expected": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "wordErrorRate": 1.105263157894737,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "choose",
+      "audioSha256": "0c3b056266f06b78de3520a15a8b03b020d860a332b75de75fc5a6fa8d3f0a9f",
+      "recognized": "Ajoute ensuite tes coordonnées, elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
+      "expected": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+      "wordErrorRate": 1,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "details",
+      "audioSha256": "a30d34a84aa34dc1af6b1d3e3a49728ff8cc88c3815ecd864bda857f72c3d5bc",
+      "recognized": "Réponds aux quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
+      "expected": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+      "wordErrorRate": 0.95,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "preferences",
+      "audioSha256": "0bb9ad60c264ae89d12f9f38ff24ecbf8e84916549fe0d841026393ef343fe2a",
+      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti !",
+      "expected": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+      "wordErrorRate": 0.9444444444444444,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "81ed4fd1c10c8e43b9493d94af5169e53dfaaab6ba9c34d19ddac3b797969e37",
+      "recognized": "confirme ton inscription. Et voilà.",
+      "expected": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
+      "wordErrorRate": 0.9285714285714286,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "success",
+      "audioSha256": "48a33032009036f418b0ae4fe3c776a1aa0d444e314fcdd359824d5a25721870",
+      "recognized": "Tu fais partie de l'équipe. Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "expected": "Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "wordErrorRate": 0.07142857142857142,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+  "slug": "volunteer-personal-registrations",
+  "validatedAt": "2026-10-11T20:23:03.713Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 173360,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21651,
+      "audioMs": 21649,
+      "driftMs": 2
+    },
+    {
+      "id": "practical",
+      "visualMs": 20688,
+      "audioMs": 20686,
+      "driftMs": 2
+    },
+    {
+      "id": "states",
+      "visualMs": 23365,
+      "audioMs": 23363,
+      "driftMs": 2
+    },
+    {
+      "id": "cancel",
+      "visualMs": 19856,
+      "audioMs": 19856,
+      "driftMs": 0
+    },
+    {
+      "id": "waiting",
+      "visualMs": 19091,
+      "audioMs": 19089,
+      "driftMs": 2
+    },
+    {
+      "id": "offer",
+      "visualMs": 21980,
+      "audioMs": 21979,
+      "driftMs": 1
+    },
+    {
+      "id": "request",
+      "visualMs": 21971,
+      "audioMs": 21970,
+      "driftMs": 1
+    },
+    {
+      "id": "return",
+      "visualMs": 20611,
+      "audioMs": 20608,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 8,
+  "music": {
+    "voicedWindows": 167,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

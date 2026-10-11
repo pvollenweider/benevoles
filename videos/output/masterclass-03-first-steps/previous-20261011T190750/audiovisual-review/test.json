@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:50:06.030Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "350c9388cca12fcadc4f34ae12bd4be862759af0d184bffad7b65e64edb34c9a",
+  "clipSha256": "6c93a7f34fb19cfe761c9db22058b014ef52d193731223a4dd23ffd1a06b39fe",
+  "scene": "test",
+  "review": {
+    "heardOpening": "Dernière étape : vivre le parcours comme un bénévole.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Sélectionnez Accueil",
+        "visibleSeconds": 0.5,
+        "visible": "Le créneau Accueil est sélectionné et la page du formulaire s'affiche dès 00:01",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "complétez les coordonnées fictives",
+        "visibleSeconds": 6.2,
+        "visible": "Remplissage des champs Prénom, Nom et Email avec des données fictives",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "acceptez la convention et confirmez",
+        "visibleSeconds": 13.8,
+        "visible": "Coche de la convention à 00:13 puis clic sur Confirmer mon inscription à 00:14",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "le message de succès",
+        "visibleSeconds": 14.8,
+        "visible": "Écran de confirmation « Inscription confirmée ! » affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:00 - 00:03 : Le clic sur le créneau Accueil a lieu dès 00:00 avant la consigne vocale prononcée à 00:03.",
+      "00:07 - 00:14 : L'acceptation de la convention et la confirmation sont annoncées à 00:07-00:09 mais ne sont exécutées qu'à 00:13-00:14 après la fin de la saisie de l'adresse email."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

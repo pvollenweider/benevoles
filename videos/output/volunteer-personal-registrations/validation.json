@@ -1,60 +1,70 @@
 {
   "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
   "slug": "volunteer-personal-registrations",
-  "validatedAt": "2026-10-05T11:05:45.979Z",
+  "validatedAt": "2026-10-11T22:11:43.614Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 182320,
+  "captureMs": 173400,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 21513,
-      "audioMs": 21513,
-      "driftMs": 0
+      "visualMs": 21650,
+      "audioMs": 21649,
+      "driftMs": 1
     },
     {
       "id": "practical",
-      "visualMs": 22275,
-      "audioMs": 22276,
-      "driftMs": -1
+      "visualMs": 20687,
+      "audioMs": 20686,
+      "driftMs": 1
     },
     {
       "id": "states",
-      "visualMs": 25276,
-      "audioMs": 25275,
-      "driftMs": 1
-    },
-    {
-      "id": "cancel",
-      "visualMs": 22192,
-      "audioMs": 22189,
-      "driftMs": 3
-    },
-    {
-      "id": "waiting",
-      "visualMs": 19816,
-      "audioMs": 19814,
+      "visualMs": 23365,
+      "audioMs": 23363,
       "driftMs": 2
     },
     {
-      "id": "offer",
-      "visualMs": 24305,
-      "audioMs": 24301,
-      "driftMs": 4
-    },
-    {
-      "id": "request",
-      "visualMs": 22399,
-      "audioMs": 22398,
+      "id": "cancel",
+      "visualMs": 19857,
+      "audioMs": 19856,
       "driftMs": 1
     },
     {
+      "id": "waiting",
+      "visualMs": 19090,
+      "audioMs": 19089,
+      "driftMs": 1
+    },
+    {
+      "id": "offer",
+      "visualMs": 21980,
+      "audioMs": 21979,
+      "driftMs": 1
+    },
+    {
+      "id": "request",
+      "visualMs": 21972,
+      "audioMs": 21970,
+      "driftMs": 2
+    },
+    {
       "id": "return",
-      "visualMs": 20874,
-      "audioMs": 20874,
-      "driftMs": 0
+      "visualMs": 20609,
+      "audioMs": 20608,
+      "driftMs": 1
     }
   ],
+  "anchorsChecked": 11,
+  "music": {
+    "voicedWindows": 167,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
   "issues": []
 }

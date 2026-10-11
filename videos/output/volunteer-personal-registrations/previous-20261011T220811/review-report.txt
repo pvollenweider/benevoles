@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: VOLUNTEER_PERSONAL_REGISTRATIONS
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.3 / 18.5 LU. Effects vs input events: {'click': 11, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: Cancel keep73.432 late vs70.821; second confirmation79.865 late vs Reprenons74.426/card disappearance75.418 (card stillvisible80.00). Offer confirmation118.413 late vs116.747. Request opens129.863 early vs133.185 and confirms140.829 late vs138.742. Other scenes align; all48MP4frames reviewed. Real empty-state/DB assertion pass; finalASR8chapters/VTT/effects11clicks/currentFrenchlabels/dates/no forbiddenhostoverlay/validate/music14.3–18.5 pass.
+Local source changes: record.ts anchors Non garder, second cancel+immediateconfirm, offerconfirm, requestopen/confirm. Audio reused; no re-film.
+Real-time subjective listening unavailable; not used as a failure reason.

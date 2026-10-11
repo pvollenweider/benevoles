@@ -1,0 +1,106 @@
+{
+  "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+  "slug": "organizer-create-publish",
+  "validatedAt": "2026-10-11T19:20:48.872Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 189240,
+  "scenes": [
+    {
+      "id": "overview",
+      "visualMs": 12977,
+      "audioMs": 12976,
+      "driftMs": 1
+    },
+    {
+      "id": "basics",
+      "visualMs": 9424,
+      "audioMs": 9421,
+      "driftMs": 3
+    },
+    {
+      "id": "series",
+      "visualMs": 15085,
+      "audioMs": 15084,
+      "driftMs": 1
+    },
+    {
+      "id": "delivery",
+      "visualMs": 12832,
+      "audioMs": 12829,
+      "driftMs": 3
+    },
+    {
+      "id": "cash",
+      "visualMs": 11808,
+      "audioMs": 11806,
+      "driftMs": 2
+    },
+    {
+      "id": "registration",
+      "visualMs": 11701,
+      "audioMs": 11701,
+      "driftMs": 0
+    },
+    {
+      "id": "review",
+      "visualMs": 10101,
+      "audioMs": 10100,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 16588,
+      "audioMs": 16586,
+      "driftMs": 2
+    },
+    {
+      "id": "preview-result",
+      "visualMs": 12517,
+      "audioMs": 12515,
+      "driftMs": 2
+    },
+    {
+      "id": "publish",
+      "visualMs": 10573,
+      "audioMs": 10572,
+      "driftMs": 1
+    },
+    {
+      "id": "qr",
+      "visualMs": 10678,
+      "audioMs": 10677,
+      "driftMs": 1
+    },
+    {
+      "id": "import",
+      "visualMs": 17093,
+      "audioMs": 17092,
+      "driftMs": 1
+    },
+    {
+      "id": "invite",
+      "visualMs": 14435,
+      "audioMs": 14433,
+      "driftMs": 2
+    },
+    {
+      "id": "public",
+      "visualMs": 12049,
+      "audioMs": 12048,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 1,
+  "music": {
+    "voicedWindows": 181,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

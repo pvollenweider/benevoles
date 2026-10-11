@@ -1,0 +1,190 @@
+{
+  "slug": "volunteer-choose-shifts",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T20:01:21.754Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_CHOOSE_SHIFTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 17054
+    },
+    {
+      "kind": "click",
+      "atMs": 23103
+    },
+    {
+      "kind": "click",
+      "atMs": 28736
+    },
+    {
+      "kind": "click",
+      "atMs": 49734
+    },
+    {
+      "kind": "click",
+      "atMs": 61118
+    },
+    {
+      "kind": "click",
+      "atMs": 65983
+    },
+    {
+      "kind": "click",
+      "atMs": 85899
+    },
+    {
+      "kind": "click",
+      "atMs": 98148
+    },
+    {
+      "kind": "click",
+      "atMs": 135661
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1097,
+      "endMs": 14360
+    },
+    {
+      "id": "select",
+      "startMs": 16521,
+      "endMs": 32800
+    },
+    {
+      "id": "capacity",
+      "startMs": 33253,
+      "endMs": 48762
+    },
+    {
+      "id": "waitlist",
+      "startMs": 49215,
+      "endMs": 65066
+    },
+    {
+      "id": "approval-reserved",
+      "startMs": 66289,
+      "endMs": 83215
+    },
+    {
+      "id": "conflict",
+      "startMs": 85383,
+      "endMs": 101504
+    },
+    {
+      "id": "known",
+      "startMs": 101957,
+      "endMs": 118676
+    },
+    {
+      "id": "limit",
+      "startMs": 119129,
+      "endMs": 134697
+    },
+    {
+      "id": "result",
+      "startMs": 135149,
+      "endMs": 154929
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "select",
+      "phrase": "Tu peux en ajouter plusieurs",
+      "startMs": 6086,
+      "endMs": 8550,
+      "cueMs": 22607
+    },
+    {
+      "segmentId": "select",
+      "phrase": "Pour retirer un choix avant",
+      "startMs": 9157,
+      "endMs": 14035,
+      "cueMs": 25680
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Un créneau complet sans liste",
+      "startMs": 6510,
+      "endMs": 9699,
+      "cueMs": 39765
+    },
+    {
+      "segmentId": "waitlist",
+      "phrase": "La position et une éventuelle",
+      "startMs": 11433,
+      "endMs": 15461,
+      "cueMs": 60649
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Sécurité est réservée à certains",
+      "startMs": 8453,
+      "endMs": 12671,
+      "cueMs": 74743
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Ces deux états ne veulent",
+      "startMs": 12872,
+      "endMs": 16455,
+      "cueMs": 79163
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Le serveur vérifiera encore ce",
+      "startMs": 12287,
+      "endMs": 15913,
+      "cueMs": 97672
+    },
+    {
+      "segmentId": "known",
+      "phrase": "Ils apparaissent dans son récapitulatif",
+      "startMs": 4606,
+      "endMs": 8276,
+      "cueMs": 106565
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "les autres plages restent visibles",
+      "startMs": 7316,
+      "endMs": 9531,
+      "cueMs": 126446
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "Elle doit d’abord annuler une",
+      "startMs": 10157,
+      "endMs": 15018,
+      "cueMs": 129288
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Tu peux encore tout ajuster",
+      "startMs": 7857,
+      "endMs": 10854,
+      "cueMs": 143006
+    }
+  ]
+}

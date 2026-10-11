@@ -1,0 +1,105 @@
+{
+  "slug": "volunteer-register-mobile",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T20:39:56.941Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_REGISTER",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile": true
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4714
+    },
+    {
+      "kind": "click",
+      "atMs": 6464
+    },
+    {
+      "kind": "click",
+      "atMs": 7731
+    },
+    {
+      "kind": "click",
+      "atMs": 8746
+    },
+    {
+      "kind": "click",
+      "atMs": 9729
+    },
+    {
+      "kind": "click",
+      "atMs": 10728
+    },
+    {
+      "kind": "click",
+      "atMs": 12197
+    },
+    {
+      "kind": "click",
+      "atMs": 12979
+    },
+    {
+      "kind": "click",
+      "atMs": 13779
+    },
+    {
+      "kind": "click",
+      "atMs": 15713
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 2608
+    },
+    {
+      "id": "discover",
+      "startMs": 3061,
+      "endMs": 3780
+    },
+    {
+      "id": "choose",
+      "startMs": 4233,
+      "endMs": 6777
+    },
+    {
+      "id": "details",
+      "startMs": 7229,
+      "endMs": 11219
+    },
+    {
+      "id": "preferences",
+      "startMs": 11676,
+      "endMs": 14083
+    },
+    {
+      "id": "confirm",
+      "startMs": 14535,
+      "endMs": 16021
+    },
+    {
+      "id": "success",
+      "startMs": 16474,
+      "endMs": 17397
+    }
+  ]
+}

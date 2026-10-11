@@ -1,0 +1,53 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 48,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "inputCounts": {
+    "click": 10,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "confirm",
+      "phrase": "Un dernier coup d’œil au",
+      "startMs": 333,
+      "endMs": 3630,
+      "cueMs": 37502,
+      "sentenceAbsoluteMs": 37500,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 41833
+      },
+      "deltaMs": 4333
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "confirme ton inscription.",
+      "startMs": 4163,
+      "endMs": 5184,
+      "cueMs": 41334,
+      "sentenceAbsoluteMs": 41330,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 41833
+      },
+      "deltaMs": 503
+    }
+  ]
+}

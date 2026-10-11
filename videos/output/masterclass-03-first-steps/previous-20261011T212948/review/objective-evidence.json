@@ -1,0 +1,154 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 188,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 17.4,
+    "quietestMusicOnlyLufs": -32.3,
+    "loudestMusicOnlyLufs": -32.3,
+    "medianVoiceLufs": -17.1
+  },
+  "inputCounts": {
+    "click": 30,
+    "key": 30
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "checklist",
+      "phrase": "Les coches sont calculées à",
+      "startMs": 12961,
+      "endMs": 15533,
+      "cueMs": 27986,
+      "sentenceAbsoluteMs": 27985,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Dans les paramètres, donnez à",
+      "startMs": 3017,
+      "endMs": 9150,
+      "cueMs": 37200,
+      "sentenceAbsoluteMs": 37198,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 37706
+      },
+      "deltaMs": 508
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Gardons toutes ses clauses",
+      "startMs": 14268,
+      "endMs": 14349,
+      "cueMs": 48451,
+      "sentenceAbsoluteMs": 48449,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 48922
+      },
+      "deltaMs": 473
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Enregistrons le texte entier",
+      "startMs": 20256,
+      "endMs": 23742,
+      "cueMs": 54436,
+      "sentenceAbsoluteMs": 54437,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 54907
+      },
+      "deltaMs": 470
+    },
+    {
+      "segmentId": "timezone",
+      "phrase": "Changer ce réglage adapte les",
+      "startMs": 11909,
+      "endMs": 16167,
+      "cueMs": 70726,
+      "sentenceAbsoluteMs": 70725,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 71222
+      },
+      "deltaMs": 497
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5259,
+      "endMs": 7225,
+      "cueMs": 82355,
+      "sentenceAbsoluteMs": 82353,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 82856
+      },
+      "deltaMs": 503
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutez un créneau, choisissez le",
+      "startMs": 3298,
+      "endMs": 8595,
+      "cueMs": 100679,
+      "sentenceAbsoluteMs": 100677,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 101172
+      },
+      "deltaMs": 495
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Ici, le minimum est prêt",
+      "startMs": 8748,
+      "endMs": 9043,
+      "cueMs": 124602,
+      "sentenceAbsoluteMs": 124601,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 125072
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 136979,
+      "sentenceAbsoluteMs": 136977,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 137447
+      },
+      "deltaMs": 470
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 142537,
+      "sentenceAbsoluteMs": 136977,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 142995
+      },
+      "deltaMs": 6018
+    }
+  ]
+}

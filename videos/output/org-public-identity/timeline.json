@@ -1,48 +1,342 @@
 {
   "slug": "org-public-identity",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T02:36:50.749Z",
+  "recordedAt": "2026-10-11T22:46:23.377Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "fetes-de-montvert",
+    "scenario": "ORG_PUBLIC_IDENTITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 26870
+    },
+    {
+      "kind": "key",
+      "atMs": 27180
+    },
+    {
+      "kind": "click",
+      "atMs": 27704
+    },
+    {
+      "kind": "key",
+      "atMs": 28012
+    },
+    {
+      "kind": "key",
+      "atMs": 28109
+    },
+    {
+      "kind": "key",
+      "atMs": 28206
+    },
+    {
+      "kind": "key",
+      "atMs": 28306
+    },
+    {
+      "kind": "key",
+      "atMs": 28404
+    },
+    {
+      "kind": "key",
+      "atMs": 28604
+    },
+    {
+      "kind": "key",
+      "atMs": 28804
+    },
+    {
+      "kind": "key",
+      "atMs": 28903
+    },
+    {
+      "kind": "key",
+      "atMs": 29007
+    },
+    {
+      "kind": "key",
+      "atMs": 29108
+    },
+    {
+      "kind": "key",
+      "atMs": 29208
+    },
+    {
+      "kind": "key",
+      "atMs": 29313
+    },
+    {
+      "kind": "key",
+      "atMs": 29412
+    },
+    {
+      "kind": "key",
+      "atMs": 29512
+    },
+    {
+      "kind": "key",
+      "atMs": 29612
+    },
+    {
+      "kind": "key",
+      "atMs": 29710
+    },
+    {
+      "kind": "key",
+      "atMs": 29808
+    },
+    {
+      "kind": "key",
+      "atMs": 30014
+    },
+    {
+      "kind": "key",
+      "atMs": 30112
+    },
+    {
+      "kind": "key",
+      "atMs": 30214
+    },
+    {
+      "kind": "key",
+      "atMs": 30314
+    },
+    {
+      "kind": "key",
+      "atMs": 30412
+    },
+    {
+      "kind": "key",
+      "atMs": 30512
+    },
+    {
+      "kind": "key",
+      "atMs": 30618
+    },
+    {
+      "kind": "key",
+      "atMs": 30720
+    },
+    {
+      "kind": "key",
+      "atMs": 30822
+    },
+    {
+      "kind": "key",
+      "atMs": 30919
+    },
+    {
+      "kind": "key",
+      "atMs": 31016
+    },
+    {
+      "kind": "key",
+      "atMs": 31114
+    },
+    {
+      "kind": "key",
+      "atMs": 31216
+    },
+    {
+      "kind": "key",
+      "atMs": 31317
+    },
+    {
+      "kind": "key",
+      "atMs": 31420
+    },
+    {
+      "kind": "click",
+      "atMs": 32169
+    },
+    {
+      "kind": "click",
+      "atMs": 47054
+    },
+    {
+      "kind": "click",
+      "atMs": 58868
+    },
+    {
+      "kind": "click",
+      "atMs": 66486
+    },
+    {
+      "kind": "click",
+      "atMs": 79518
+    },
+    {
+      "kind": "click",
+      "atMs": 104757
+    },
+    {
+      "kind": "click",
+      "atMs": 119998
+    },
+    {
+      "kind": "click",
+      "atMs": 126945
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1098,
-      "endMs": 14092
+      "startMs": 1118,
+      "endMs": 14784
     },
     {
       "id": "names",
-      "startMs": 14545,
-      "endMs": 34795
+      "startMs": 15237,
+      "endMs": 37073
     },
     {
       "id": "logo",
-      "startMs": 35247,
-      "endMs": 52960
+      "startMs": 37525,
+      "endMs": 55367
     },
     {
       "id": "slug",
-      "startMs": 53414,
-      "endMs": 77942
+      "startMs": 55821,
+      "endMs": 81326
     },
     {
       "id": "public-page",
-      "startMs": 79532,
-      "endMs": 98318
+      "startMs": 82945,
+      "endMs": 102685
     },
     {
       "id": "event-result",
-      "startMs": 98783,
-      "endMs": 116178
+      "startMs": 103138,
+      "endMs": 117794
     },
     {
       "id": "remove-logo",
-      "startMs": 116632,
-      "endMs": 138198
+      "startMs": 118248,
+      "endMs": 136378
     },
     {
       "id": "result",
-      "startMs": 138650,
-      "endMs": 159551
+      "startMs": 136830,
+      "endMs": 156503
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "names",
+      "phrase": "Le titre de la page",
+      "startMs": 8077,
+      "endMs": 10640,
+      "cueMs": 23315
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Remplaçons-le par Les bénévoles des",
+      "startMs": 11162,
+      "endMs": 15299,
+      "cueMs": 26403
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Le message Titre enregistré confirme",
+      "startMs": 16397,
+      "endMs": 19283,
+      "cueMs": 31701
+    },
+    {
+      "segmentId": "logo",
+      "phrase": "L’image enregistrée apparaît dans les",
+      "startMs": 9031,
+      "endMs": 12838,
+      "cueMs": 46559
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Si vous changez l’identifiant alors",
+      "startMs": 10162,
+      "endMs": 14679,
+      "cueMs": 65986
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79049
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79828
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "elle est publiée, mais non",
+      "startMs": 9586,
+      "endMs": 11448,
+      "cueMs": 92533
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "Ouvrons son lien direct pour",
+      "startMs": 12097,
+      "endMs": 15508,
+      "cueMs": 95044
+    },
+    {
+      "segmentId": "event-result",
+      "phrase": "On peut donc réutiliser la",
+      "startMs": 10085,
+      "endMs": 14654,
+      "cueMs": 113225
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Pour retirer le logo, revenez",
+      "startMs": 183,
+      "endMs": 5451,
+      "cueMs": 119492
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Après validation, l’image disparaît des",
+      "startMs": 8232,
+      "endMs": 13968,
+      "cueMs": 126481
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ces réglages sont réservés au",
+      "startMs": 8043,
+      "endMs": 11791,
+      "cueMs": 144874
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un texte visible",
+      "startMs": 12521,
+      "endMs": 19352,
+      "cueMs": 149353
     }
   ]
 }

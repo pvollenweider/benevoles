@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:32.749Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "9f34540abe3dc2c1fd6bf102af6d4a0abeb574186c82df952c44af7c757d5a1d",
+  "clipSha256": "ce62e7fd9a35cc288513e858b91f0c1523b9a7efc777bc249d381757eb365c5e",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le nouveau récapitulatif garde trois missions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le nouveau récapitulatif garde trois missions et une vraie pause",
+        "visibleSeconds": 0,
+        "visible": "Le panneau récapitulatif à droite affiche 3 créneaux avec une pause indiquée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Les informations saisies sont conservées",
+        "visibleSeconds": 5,
+        "visible": "Les champs du formulaire conservent les valeurs saisies (nom, email, téléphone, date de naissance)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "avant Confirmer mon inscription",
+        "visibleSeconds": 11.5,
+        "visible": "Défilement vers le bas révélant le bouton bleu Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "nous restons juste avant ce bouton : rien n’a été envoyé",
+        "visibleSeconds": 15,
+        "visible": "La page reste positionnée devant le bouton sans cliquer dessus",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

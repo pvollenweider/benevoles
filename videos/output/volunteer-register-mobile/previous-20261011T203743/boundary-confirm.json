@@ -1,0 +1,12 @@
+{
+  "anchor": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme",
+  "windowStart": 23.787,
+  "result": {
+    "found": true,
+    "startSeconds": 11.08,
+    "wordsHeard": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme"
+  },
+  "onset": 34.867,
+  "proposedCut": 34.8911875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

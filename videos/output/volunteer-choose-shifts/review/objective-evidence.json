@@ -1,0 +1,162 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 145,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 12.2,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.5
+  },
+  "inputCounts": {
+    "click": 9,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "select",
+      "phrase": "Tu peux en ajouter plusieurs",
+      "startMs": 6086,
+      "endMs": 8550,
+      "cueMs": 22608,
+      "sentenceAbsoluteMs": 22605,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 23106
+      },
+      "deltaMs": 501
+    },
+    {
+      "segmentId": "select",
+      "phrase": "Pour retirer un choix avant",
+      "startMs": 9157,
+      "endMs": 14035,
+      "cueMs": 25677,
+      "sentenceAbsoluteMs": 25676,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 28706
+      },
+      "deltaMs": 3030
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Un créneau complet sans liste",
+      "startMs": 6510,
+      "endMs": 9699,
+      "cueMs": 39763,
+      "sentenceAbsoluteMs": 39761,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "waitlist",
+      "phrase": "Reclique pour le retirer.",
+      "startMs": 10145,
+      "endMs": 11182,
+      "cueMs": 59362,
+      "sentenceAbsoluteMs": 59361,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 59856
+      },
+      "deltaMs": 495
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Sécurité est réservée à certains",
+      "startMs": 8453,
+      "endMs": 12671,
+      "cueMs": 74747,
+      "sentenceAbsoluteMs": 74745,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Ces deux états ne veulent",
+      "startMs": 12872,
+      "endMs": 16455,
+      "cueMs": 79166,
+      "sentenceAbsoluteMs": 79164,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Ici, Accueil de quinze à",
+      "startMs": 5287,
+      "endMs": 9231,
+      "cueMs": 90673,
+      "sentenceAbsoluteMs": 90670,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 95635
+      },
+      "deltaMs": 4965
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Retire le premier choix si",
+      "startMs": 9758,
+      "endMs": 11989,
+      "cueMs": 95141,
+      "sentenceAbsoluteMs": 95141,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 95635
+      },
+      "deltaMs": 494
+    },
+    {
+      "segmentId": "known",
+      "phrase": "Ils apparaissent dans son récapitulatif",
+      "startMs": 4606,
+      "endMs": 8276,
+      "cueMs": 106563,
+      "sentenceAbsoluteMs": 106562,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "les autres plages restent visibles",
+      "startMs": 7316,
+      "endMs": 9531,
+      "cueMs": 126444,
+      "sentenceAbsoluteMs": 126444,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "Elle doit d’abord annuler une",
+      "startMs": 10157,
+      "endMs": 15018,
+      "cueMs": 129287,
+      "sentenceAbsoluteMs": 129285,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Tu peux encore tout ajuster",
+      "startMs": 7857,
+      "endMs": 10854,
+      "cueMs": 143009,
+      "sentenceAbsoluteMs": 143008,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

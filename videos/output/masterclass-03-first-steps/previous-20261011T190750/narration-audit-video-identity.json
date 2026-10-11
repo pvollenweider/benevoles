@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:09.187Z",
+  "revalidatedAt": "2026-10-11T17:47:09.188Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "identity",
+      "audioSha256": "95d2a8347bb533a1cc73f94d7d102abd50ae1e202b84a782a3635bea32526c4c",
+      "recognized": "Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant. Puis, lisez la convention des bénévoles complète. Ce texte explique le cadre de l'engagement et devra être accepté dans le formulaire. Gardons toutes ces clauses. Dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.",
+      "expected": "Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la Convention des Bénévoles complète. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Gardons toutes ses clauses : dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.",
+      "wordErrorRate": 0.014492753623188406,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:35:05.004Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "d683292ae9207a8e18b025ed6c849db362c31ba3ba67881dbd82efbe0383dfbf",
+  "clipSha256": "1b4c932cb6da07cf71a177dc8c5ad8e98508262d7dd79b74d557e21b05e9e9a9",
+  "scene": "waiting",
+  "review": {
+    "heardOpening": "Si tu n'es plus disponible pour la Buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "choisis Quitter la liste d'attente",
+        "visibleSeconds": 0.8,
+        "visible": "Le clic sur « Quitter la liste d'attente » est déjà effectué et le volet de confirmation s'affiche",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Confirme uniquement si c'est ce que tu souhaites",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur le bouton rouge « Oui, quitter »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "La carte disparaît : tu n'es plus dans cette file",
+        "visibleSeconds": 10.6,
+        "visible": "La carte en liste d'attente a disparu de l'écran",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:00 : Le clic sur « Quitter la liste d'attente » intervient avant même le début de la voix off.",
+      "00:13 : L'annonce « La carte disparaît » intervient environ 3 secondes après la disparition effective de la carte à l'écran (00:10)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec une intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

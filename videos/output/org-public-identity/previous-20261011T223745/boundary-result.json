@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous avez une identité cohérente : le nom de l’association, un",
+  "windowStart": 119.19400000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 12.7,
+    "wordsHeard": "Vous avez une identité cohérente : le nom de l’association, un"
+  },
+  "onset": 131.894,
+  "proposedCut": 131.368646,
+  "note": "Proposal only; recut then independently audit before capture"
+}

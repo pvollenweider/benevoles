@@ -1,0 +1,298 @@
+{
+  "video": "volunteer-session-availability",
+  "source": "/private/tmp/codex-video/videos/output/volunteer-session-availability/volunteer-session-availability.mp4",
+  "sourceSha256": "8a68c4756cb0a8b96ebd52280477c8b99b9b1e6d6549b22156fdece424b12813",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-11T22:17:11.080Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.03253619651862697,
+      "seconds": 0.6,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-3.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.61025,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 8.29845,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 11.0646,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 15.674850000000001,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9837319017406865,
+      "seconds": 18.141,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.02647019896766224,
+      "seconds": 19.493,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-3.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.25,
+      "seconds": 24.55975,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-25.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.45,
+      "seconds": 29.09315,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-45.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.6,
+      "seconds": 32.493199999999995,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-60.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.85,
+      "seconds": 38.159949999999995,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-85.png"
+    },
+    {
+      "scene": "session",
+      "fraction": 0.9867649005161688,
+      "seconds": 41.26,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/session-end.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.030149238731722025,
+      "seconds": 42.611,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-3.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.25,
+      "seconds": 46.98625,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-25.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.45,
+      "seconds": 50.966449999999995,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-45.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.6,
+      "seconds": 53.9516,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-60.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.85,
+      "seconds": 58.92685,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-85.png"
+    },
+    {
+      "scene": "resend",
+      "fraction": 0.984925380634139,
+      "seconds": 61.612,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/resend-end.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.02907681124303368,
+      "seconds": 62.966,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-3.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.25,
+      "seconds": 67.52475,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-25.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.45,
+      "seconds": 71.65175,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-45.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.6,
+      "seconds": 74.747,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-60.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.85,
+      "seconds": 79.90575,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-85.png"
+    },
+    {
+      "scene": "recover",
+      "fraction": 0.9854615943784831,
+      "seconds": 82.701,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/recover-end.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.03289834411667946,
+      "seconds": 84.054,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-3.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.25,
+      "seconds": 88.0135,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-25.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.45,
+      "seconds": 91.6611,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-45.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.6,
+      "seconds": 94.3968,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-60.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.85,
+      "seconds": 98.9563,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-85.png"
+    },
+    {
+      "scene": "limit",
+      "fraction": 0.9835508279416603,
+      "seconds": 101.392,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/limit-end.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.025007293794023257,
+      "seconds": 102.745,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-3.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.25,
+      "seconds": 108.14325,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-25.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.45,
+      "seconds": 112.94185,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-45.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.6,
+      "seconds": 116.5408,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-60.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.85,
+      "seconds": 122.53905,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-85.png"
+    },
+    {
+      "scene": "availability",
+      "fraction": 0.9874963531029883,
+      "seconds": 125.838,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/availability-end.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.028807374687920106,
+      "seconds": 127.19,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-3.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.25,
+      "seconds": 131.797,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-25.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.45,
+      "seconds": 135.9626,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-45.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.6,
+      "seconds": 139.08679999999998,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-60.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.85,
+      "seconds": 144.29379999999998,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-85.png"
+    },
+    {
+      "scene": "organizer",
+      "fraction": 0.98559631265604,
+      "seconds": 147.118,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/organizer-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.02763576067431256,
+      "seconds": 148.469,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-3.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 153.29675,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 157.63895000000002,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 160.8956,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 166.32335,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9861821196628437,
+      "seconds": 169.28,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-session-availability/review-frames/result-end.png"
+    }
+  ]
+}

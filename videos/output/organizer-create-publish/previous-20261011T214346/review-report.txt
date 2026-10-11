@@ -1,0 +1,11 @@
+STATUS: NOT READY
+Commit ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID urE8YE_Qy4c7ji_FfJcAe.
+Narration reused, source audited. Capture and assembly pass; validation incl. music and sentence anchors passes (14.2–18.3 LU). Posters use review/renders-generated.json, renders.json unchanged. Final ASR and objective-evidence.json retained alongside 84 chapter frames and seven review sheets.
+Semantic sync failures proven by sentence-action-evidence.json and MP4 frames:
+- Series opened at 23.770 s before « Quand les horaires se répètent » 28.070 s; series-25.png already shows form. Replaced unanchored opening with sentence anchor.
+- Preview shift chosen at 88.36 s before « Choisis un créneau » 93.39 s; preview-25.png already shows personal form. Anchored selection and shortened field holds to fit the later start.
+- Preview-result returns to review by 107.27 s while voice still describes email until 113.63 s; preview-result-25.png proves missing display. Anchored return to « Rien n’est réellement enregistré ».
+- Import confirmed at 141.49 s before explanation « L’application analyse… » 148.53 s; import-25.png already shows final members. Anchored analysis and held its actual preview before confirmation.
+- Invitation filtering/selection early (158.19 vs 159.66 s). Anchored to « Filtre les membres par tag ».
+Product bug: wizard header continues to say no shifts after creation (series-60.png). Reported; no re-film because failure is not only video-source timing.
+Frise, French dates, example.org identities, no visible localhost/old admin/dev overlay observed. QR points to configured organization public host (amis-du-parc.benevol.app). Input effects counts verified separately. Real-time subjective listening unavailable, not a rejection reason.

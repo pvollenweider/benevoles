@@ -1,0 +1,378 @@
+{
+  "slug": "volunteer-session-availability",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T20:31:00.028Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_SESSION_AVAILABILITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4714
+    },
+    {
+      "kind": "click",
+      "atMs": 7042
+    },
+    {
+      "kind": "click",
+      "atMs": 9501
+    },
+    {
+      "kind": "click",
+      "atMs": 11908
+    },
+    {
+      "kind": "key",
+      "atMs": 12216
+    },
+    {
+      "kind": "key",
+      "atMs": 12312
+    },
+    {
+      "kind": "key",
+      "atMs": 12411
+    },
+    {
+      "kind": "key",
+      "atMs": 12510
+    },
+    {
+      "kind": "key",
+      "atMs": 12609
+    },
+    {
+      "kind": "key",
+      "atMs": 12713
+    },
+    {
+      "kind": "key",
+      "atMs": 12814
+    },
+    {
+      "kind": "key",
+      "atMs": 12917
+    },
+    {
+      "kind": "key",
+      "atMs": 13020
+    },
+    {
+      "kind": "key",
+      "atMs": 13121
+    },
+    {
+      "kind": "key",
+      "atMs": 13220
+    },
+    {
+      "kind": "key",
+      "atMs": 13322
+    },
+    {
+      "kind": "key",
+      "atMs": 13424
+    },
+    {
+      "kind": "key",
+      "atMs": 13524
+    },
+    {
+      "kind": "key",
+      "atMs": 13627
+    },
+    {
+      "kind": "key",
+      "atMs": 13729
+    },
+    {
+      "kind": "key",
+      "atMs": 13831
+    },
+    {
+      "kind": "key",
+      "atMs": 13932
+    },
+    {
+      "kind": "key",
+      "atMs": 14030
+    },
+    {
+      "kind": "key",
+      "atMs": 14129
+    },
+    {
+      "kind": "key",
+      "atMs": 14229
+    },
+    {
+      "kind": "key",
+      "atMs": 14332
+    },
+    {
+      "kind": "key",
+      "atMs": 14433
+    },
+    {
+      "kind": "key",
+      "atMs": 14539
+    },
+    {
+      "kind": "key",
+      "atMs": 14635
+    },
+    {
+      "kind": "key",
+      "atMs": 14734
+    },
+    {
+      "kind": "click",
+      "atMs": 15491
+    },
+    {
+      "kind": "click",
+      "atMs": 16307
+    },
+    {
+      "kind": "click",
+      "atMs": 17941
+    },
+    {
+      "kind": "click",
+      "atMs": 20254
+    },
+    {
+      "kind": "click",
+      "atMs": 21054
+    },
+    {
+      "kind": "click",
+      "atMs": 21852
+    },
+    {
+      "kind": "click",
+      "atMs": 23286
+    },
+    {
+      "kind": "click",
+      "atMs": 24071
+    },
+    {
+      "kind": "click",
+      "atMs": 24887
+    },
+    {
+      "kind": "key",
+      "atMs": 25194
+    },
+    {
+      "kind": "key",
+      "atMs": 25293
+    },
+    {
+      "kind": "key",
+      "atMs": 25390
+    },
+    {
+      "kind": "key",
+      "atMs": 25489
+    },
+    {
+      "kind": "key",
+      "atMs": 25588
+    },
+    {
+      "kind": "key",
+      "atMs": 25687
+    },
+    {
+      "kind": "key",
+      "atMs": 25786
+    },
+    {
+      "kind": "key",
+      "atMs": 25883
+    },
+    {
+      "kind": "key",
+      "atMs": 25982
+    },
+    {
+      "kind": "key",
+      "atMs": 26084
+    },
+    {
+      "kind": "key",
+      "atMs": 26185
+    },
+    {
+      "kind": "key",
+      "atMs": 26288
+    },
+    {
+      "kind": "key",
+      "atMs": 26389
+    },
+    {
+      "kind": "key",
+      "atMs": 26493
+    },
+    {
+      "kind": "key",
+      "atMs": 26593
+    },
+    {
+      "kind": "key",
+      "atMs": 26695
+    },
+    {
+      "kind": "key",
+      "atMs": 26800
+    },
+    {
+      "kind": "key",
+      "atMs": 26902
+    },
+    {
+      "kind": "key",
+      "atMs": 27004
+    },
+    {
+      "kind": "key",
+      "atMs": 27106
+    },
+    {
+      "kind": "key",
+      "atMs": 27205
+    },
+    {
+      "kind": "click",
+      "atMs": 27952
+    },
+    {
+      "kind": "click",
+      "atMs": 33125
+    },
+    {
+      "kind": "click",
+      "atMs": 33907
+    },
+    {
+      "kind": "click",
+      "atMs": 34723
+    },
+    {
+      "kind": "key",
+      "atMs": 35032
+    },
+    {
+      "kind": "click",
+      "atMs": 36374
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 2647
+    },
+    {
+      "id": "session",
+      "startMs": 3099,
+      "endMs": 5020
+    },
+    {
+      "id": "resend",
+      "startMs": 5474,
+      "endMs": 9865
+    },
+    {
+      "id": "recover",
+      "startMs": 10319,
+      "endMs": 18246
+    },
+    {
+      "id": "limit",
+      "startMs": 18698,
+      "endMs": 22185
+    },
+    {
+      "id": "availability",
+      "startMs": 22639,
+      "endMs": 29387
+    },
+    {
+      "id": "organizer",
+      "startMs": 29839,
+      "endMs": 32205
+    },
+    {
+      "id": "result",
+      "startMs": 32658,
+      "endMs": 36705
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ce lien donne accès à",
+      "startMs": 12418,
+      "endMs": 18901,
+      "cueMs": 2619
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "elle ne révèle pas les",
+      "startMs": 19932,
+      "endMs": 25508,
+      "cueMs": 15798
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Après Enregistrer mes disponibilités, le",
+      "startMs": 21444,
+      "endMs": 28838,
+      "cueMs": 27489
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Rechargeons la page ",
+      "startMs": 28838,
+      "endMs": 30933,
+      "cueMs": 28267
+    },
+    {
+      "segmentId": "organizer",
+      "phrase": "Une disponibilité générale ne garantit",
+      "startMs": 22444,
+      "endMs": 32000,
+      "cueMs": 31106
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Le lien personnel reste ton",
+      "startMs": 18612,
+      "endMs": 32000,
+      "cueMs": 36681
+    }
+  ]
+}

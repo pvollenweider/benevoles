@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:10.504Z",
+  "revalidatedAt": "2026-10-11T17:47:10.504Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "event",
+      "audioSha256": "957a8494ad06d98b59eda538bf656af8328e0e61ccce145e3ea2e13c5dbda373",
+      "recognized": "De retour au premier pas, les réglages facultatifs sont maintenant cochés. Créons La fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l'événement naît en brouillon. Les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.",
+      "expected": "De retour aux Premiers pas, les réglages facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisissez un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.",
+      "wordErrorRate": 0.03636363636363636,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

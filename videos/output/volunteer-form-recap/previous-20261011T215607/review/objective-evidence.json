@@ -1,0 +1,109 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.4
+  },
+  "inputCounts": {
+    "click": 20,
+    "key": 96
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "selection",
+      "phrase": "Le récapitulatif les classe dans",
+      "startMs": 12008,
+      "endMs": 18550,
+      "cueMs": 30586,
+      "sentenceAbsoluteMs": 30586,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 31051
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "agreement",
+      "phrase": "Ouvre la Convention des Bénévoles",
+      "startMs": 605,
+      "endMs": 5611,
+      "cueMs": 77510,
+      "sentenceAbsoluteMs": 77508,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 77983
+      },
+      "deltaMs": 475
+    },
+    {
+      "segmentId": "agreement",
+      "phrase": "Lire puis cocher ces deux",
+      "startMs": 12540,
+      "endMs": 16343,
+      "cueMs": 89445,
+      "sentenceAbsoluteMs": 89443,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 89915
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "recap",
+      "phrase": "Les lieux, consignes et liens",
+      "startMs": 9591,
+      "endMs": 15809,
+      "cueMs": 103850,
+      "sentenceAbsoluteMs": 103848,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "recap",
+      "phrase": "En bas, Transmis à l’organisation",
+      "startMs": 16438,
+      "endMs": 21670,
+      "cueMs": 110696,
+      "sentenceAbsoluteMs": 110695,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "workload",
+      "phrase": "Pour alléger, reviens au planning",
+      "startMs": 16690,
+      "endMs": 19535,
+      "cueMs": 133534,
+      "sentenceAbsoluteMs": 133533,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 133996
+      },
+      "deltaMs": 463
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Les informations saisies sont conservées.",
+      "startMs": 5747,
+      "endMs": 7308,
+      "cueMs": 146142,
+      "sentenceAbsoluteMs": 146141,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

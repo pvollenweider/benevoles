@@ -1,0 +1,882 @@
+{
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 30,
+  "keys": 58,
+  "product": {
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 1112,
+      "endMs": 14581,
+      "sentences": [
+        {
+          "text": "Quand une association découvre benevol point app, la liste Premiers pas lui donne un ordre simple.",
+          "startMs": 282,
+          "endMs": 5032,
+          "method": "silence",
+          "globalStartMs": 1394,
+          "globalEndMs": 6144
+        },
+        {
+          "text": "Elle ne fait rien à votre place :",
+          "startMs": 5572,
+          "endMs": 6867,
+          "method": "silence",
+          "globalStartMs": 6684,
+          "globalEndMs": 7979
+        },
+        {
+          "text": "elle indique ce qui est déjà prêt, la prochaine action utile, et le résultat à vérifier avant d’inviter de vrais bénévoles.",
+          "startMs": 7248,
+          "endMs": 13035,
+          "method": "silence",
+          "globalStartMs": 8360,
+          "globalEndMs": 14147
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "checklist",
+      "startMs": 15034,
+      "endMs": 32578,
+      "sentences": [
+        {
+          "text": "Les quatre étapes obligatoires sont de créer l’événement, définir ses créneaux, le publier, puis faire une inscription de test.",
+          "startMs": 446,
+          "endMs": 7005,
+          "method": "silence",
+          "globalStartMs": 15480,
+          "globalEndMs": 22039
+        },
+        {
+          "text": "Le titre public, la charte et le fuseau horaire sont facultatifs, car des valeurs par défaut existent.",
+          "startMs": 7825,
+          "endMs": 12838,
+          "method": "silence",
+          "globalStartMs": 22859,
+          "globalEndMs": 27872
+        },
+        {
+          "text": "Les coches sont calculées à partir des données :",
+          "startMs": 12961,
+          "endMs": 15533,
+          "method": "silence",
+          "globalStartMs": 27995,
+          "globalEndMs": 30567
+        },
+        {
+          "text": "pas besoin de les remplir manuellement.",
+          "startMs": 15839,
+          "endMs": 17044,
+          "method": "silence",
+          "globalStartMs": 30873,
+          "globalEndMs": 32078
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "checklist",
+          "phrase": "Les coches sont calculées à",
+          "startMs": 12961,
+          "endMs": 15533,
+          "cueMs": 27997
+        }
+      ],
+      "inputs": []
+    },
+    {
+      "scene": "identity",
+      "startMs": 34188,
+      "endMs": 58371,
+      "sentences": [
+        {
+          "text": "Commençons par ce que verront les bénévoles.",
+          "startMs": 503,
+          "endMs": 2308,
+          "method": "silence",
+          "globalStartMs": 34691,
+          "globalEndMs": 36496
+        },
+        {
+          "text": "Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la Convention des Bénévoles complète.",
+          "startMs": 3017,
+          "endMs": 9150,
+          "method": "silence",
+          "globalStartMs": 37205,
+          "globalEndMs": 43338
+        },
+        {
+          "text": "Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire.",
+          "startMs": 9835,
+          "endMs": 13519,
+          "method": "silence",
+          "globalStartMs": 44023,
+          "globalEndMs": 47707
+        },
+        {
+          "text": "Gardons toutes ses clauses :",
+          "startMs": 14268,
+          "endMs": 14349,
+          "method": "silence",
+          "globalStartMs": 48456,
+          "globalEndMs": 48537
+        },
+        {
+          "text": "dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie.",
+          "startMs": 14486,
+          "endMs": 19408,
+          "method": "silence",
+          "globalStartMs": 48674,
+          "globalEndMs": 53596
+        },
+        {
+          "text": "Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.",
+          "startMs": 20256,
+          "endMs": 23742,
+          "method": "silence",
+          "globalStartMs": 54444,
+          "globalEndMs": 57930
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "identity",
+          "phrase": "Gardons toutes ses clauses ",
+          "startMs": 14268,
+          "endMs": 14349,
+          "cueMs": 48458
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 34696
+        },
+        {
+          "kind": "click",
+          "atMs": 36330
+        },
+        {
+          "kind": "click",
+          "atMs": 48978
+        },
+        {
+          "kind": "key",
+          "atMs": 49287
+        },
+        {
+          "kind": "key",
+          "atMs": 49288
+        },
+        {
+          "kind": "click",
+          "atMs": 52062
+        }
+      ]
+    },
+    {
+      "scene": "timezone",
+      "startMs": 58824,
+      "endMs": 75503,
+      "sentences": [
+        {
+          "text": "Vérifiez ensuite le fuseau horaire.",
+          "startMs": 441,
+          "endMs": 2450,
+          "method": "silence",
+          "globalStartMs": 59265,
+          "globalEndMs": 61274
+        },
+        {
+          "text": "Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents.",
+          "startMs": 2582,
+          "endMs": 8371,
+          "method": "silence",
+          "globalStartMs": 61406,
+          "globalEndMs": 67195
+        },
+        {
+          "text": "Ici, l’association travaille en Europe Zurich.",
+          "startMs": 9019,
+          "endMs": 11298,
+          "method": "silence",
+          "globalStartMs": 67843,
+          "globalEndMs": 70122
+        },
+        {
+          "text": "Changer ce réglage adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.",
+          "startMs": 11909,
+          "endMs": 16167,
+          "method": "silence",
+          "globalStartMs": 70733,
+          "globalEndMs": 74991
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "timezone",
+          "phrase": "Changer ce réglage adapte les",
+          "startMs": 11909,
+          "endMs": 16167,
+          "cueMs": 70735
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 71210
+        }
+      ]
+    },
+    {
+      "scene": "event",
+      "startMs": 77089,
+      "endMs": 96919,
+      "sentences": [
+        {
+          "text": "De retour aux Premiers pas, les réglages facultatifs sont maintenant cochés.",
+          "startMs": 530,
+          "endMs": 5120,
+          "method": "silence",
+          "globalStartMs": 77619,
+          "globalEndMs": 82209
+        },
+        {
+          "text": "Créons la Fête du parc depuis une page blanche.",
+          "startMs": 5259,
+          "endMs": 7225,
+          "method": "silence",
+          "globalStartMs": 82348,
+          "globalEndMs": 84314
+        },
+        {
+          "text": "Saisissez un titre clair, le lieu, puis les dates de début et de fin.",
+          "startMs": 7831,
+          "endMs": 10796,
+          "method": "silence",
+          "globalStartMs": 84920,
+          "globalEndMs": 87885
+        },
+        {
+          "text": "À la validation, l’événement naît en brouillon :",
+          "startMs": 10934,
+          "endMs": 14225,
+          "method": "silence",
+          "globalStartMs": 88023,
+          "globalEndMs": 91314
+        },
+        {
+          "text": "les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.",
+          "startMs": 14380,
+          "endMs": 19354,
+          "method": "silence",
+          "globalStartMs": 91469,
+          "globalEndMs": 96443
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "event",
+          "phrase": "Créons la Fête du parc",
+          "startMs": 5259,
+          "endMs": 7225,
+          "cueMs": 82351
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 79955
+        },
+        {
+          "kind": "click",
+          "atMs": 80739
+        },
+        {
+          "kind": "click",
+          "atMs": 82853
+        },
+        {
+          "kind": "key",
+          "atMs": 83163
+        },
+        {
+          "kind": "key",
+          "atMs": 83359
+        },
+        {
+          "kind": "key",
+          "atMs": 83458
+        },
+        {
+          "kind": "key",
+          "atMs": 83557
+        },
+        {
+          "kind": "key",
+          "atMs": 83656
+        },
+        {
+          "kind": "key",
+          "atMs": 83754
+        },
+        {
+          "kind": "key",
+          "atMs": 83853
+        },
+        {
+          "kind": "key",
+          "atMs": 83956
+        },
+        {
+          "kind": "key",
+          "atMs": 84054
+        },
+        {
+          "kind": "key",
+          "atMs": 84158
+        },
+        {
+          "kind": "key",
+          "atMs": 84259
+        },
+        {
+          "kind": "click",
+          "atMs": 85055
+        },
+        {
+          "kind": "click",
+          "atMs": 86722
+        },
+        {
+          "kind": "click",
+          "atMs": 88388
+        },
+        {
+          "kind": "click",
+          "atMs": 90037
+        }
+      ]
+    },
+    {
+      "scene": "shift",
+      "startMs": 97371,
+      "endMs": 115393,
+      "sentences": [
+        {
+          "text": "La prochaine étape consiste à rendre le planning concret.",
+          "startMs": 475,
+          "endMs": 2910,
+          "method": "silence",
+          "globalStartMs": 97846,
+          "globalEndMs": 100281
+        },
+        {
+          "text": "Ajoutez un créneau, choisissez le poste Accueil, puis indiquez neuf heures, midi et trois places.",
+          "startMs": 3298,
+          "endMs": 8595,
+          "method": "silence",
+          "globalStartMs": 100669,
+          "globalEndMs": 105966
+        },
+        {
+          "text": "Après validation, le créneau apparaît réellement dans le planning, regroupé sous son poste.",
+          "startMs": 8804,
+          "endMs": 13899,
+          "method": "silence",
+          "globalStartMs": 106175,
+          "globalEndMs": 111270
+        },
+        {
+          "text": "Vous pouvez encore le modifier ou l’annuler avant toute publication.",
+          "startMs": 14513,
+          "endMs": 17839,
+          "method": "silence",
+          "globalStartMs": 111884,
+          "globalEndMs": 115210
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "shift",
+          "phrase": "Ajoutez un créneau, choisissez le",
+          "startMs": 3298,
+          "endMs": 8595,
+          "cueMs": 100671
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 101138
+        },
+        {
+          "kind": "click",
+          "atMs": 101971
+        },
+        {
+          "kind": "key",
+          "atMs": 102277
+        },
+        {
+          "kind": "key",
+          "atMs": 102375
+        },
+        {
+          "kind": "key",
+          "atMs": 102473
+        },
+        {
+          "kind": "key",
+          "atMs": 102572
+        },
+        {
+          "kind": "key",
+          "atMs": 102671
+        },
+        {
+          "kind": "key",
+          "atMs": 102770
+        },
+        {
+          "kind": "key",
+          "atMs": 102869
+        },
+        {
+          "kind": "click",
+          "atMs": 110119
+        }
+      ]
+    },
+    {
+      "scene": "publish",
+      "startMs": 115847,
+      "endMs": 131910,
+      "sentences": [
+        {
+          "text": "La page de vérification rappelle ce qui est obligatoire et ce qui pourrait encore être amélioré.",
+          "startMs": 162,
+          "endMs": 4923,
+          "method": "silence",
+          "globalStartMs": 116009,
+          "globalEndMs": 120770
+        },
+        {
+          "text": "Un événement sans créneau ne peut pas être publié.",
+          "startMs": 5828,
+          "endMs": 7799,
+          "method": "silence",
+          "globalStartMs": 121675,
+          "globalEndMs": 123646
+        },
+        {
+          "text": "Ici, le minimum est prêt :",
+          "startMs": 8748,
+          "endMs": 9043,
+          "method": "silence",
+          "globalStartMs": 124595,
+          "globalEndMs": 124890
+        },
+        {
+          "text": "on publie.",
+          "startMs": 9309,
+          "endMs": 10029,
+          "method": "silence",
+          "globalStartMs": 125156,
+          "globalEndMs": 125876
+        },
+        {
+          "text": "La page d’inscription devient accessible, mais aucun email collectif ne part automatiquement.",
+          "startMs": 10403,
+          "endMs": 15674,
+          "method": "silence",
+          "globalStartMs": 126250,
+          "globalEndMs": 131521
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "publish",
+          "phrase": "Ici, le minimum est prêt",
+          "startMs": 8748,
+          "endMs": 9043,
+          "cueMs": 124597
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 117919
+        },
+        {
+          "kind": "click",
+          "atMs": 125086
+        }
+      ]
+    },
+    {
+      "scene": "test",
+      "startMs": 133549,
+      "endMs": 154380,
+      "sentences": [
+        {
+          "text": "Dernière étape :",
+          "startMs": 394,
+          "endMs": 1089,
+          "method": "silence",
+          "globalStartMs": 133943,
+          "globalEndMs": 134638
+        },
+        {
+          "text": "vivre le parcours comme un bénévole.",
+          "startMs": 1330,
+          "endMs": 2940,
+          "method": "silence",
+          "globalStartMs": 134879,
+          "globalEndMs": 136489
+        },
+        {
+          "text": "Sélectionnez Accueil, complétez les coordonnées fictives, acceptez la convention et confirmez.",
+          "startMs": 3370,
+          "endMs": 8562,
+          "method": "silence",
+          "globalStartMs": 136919,
+          "globalEndMs": 142111
+        },
+        {
+          "text": "Cette vraie inscription vérifie en même temps le formulaire, le message de succès et l’email contenant le lien personnel.",
+          "startMs": 8932,
+          "endMs": 15711,
+          "method": "silence",
+          "globalStartMs": 142481,
+          "globalEndMs": 149260
+        },
+        {
+          "text": "Dans un événement réel, vous annuleriez ensuite cette inscription de test pour libérer la place.",
+          "startMs": 16491,
+          "endMs": 20374,
+          "method": "silence",
+          "globalStartMs": 150040,
+          "globalEndMs": 153923
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 134035
+        },
+        {
+          "kind": "click",
+          "atMs": 134832
+        },
+        {
+          "kind": "click",
+          "atMs": 139884
+        },
+        {
+          "kind": "key",
+          "atMs": 140191
+        },
+        {
+          "kind": "key",
+          "atMs": 140289
+        },
+        {
+          "kind": "key",
+          "atMs": 140389
+        },
+        {
+          "kind": "key",
+          "atMs": 140489
+        },
+        {
+          "kind": "click",
+          "atMs": 141265
+        },
+        {
+          "kind": "key",
+          "atMs": 141571
+        },
+        {
+          "kind": "key",
+          "atMs": 141671
+        },
+        {
+          "kind": "key",
+          "atMs": 141770
+        },
+        {
+          "kind": "key",
+          "atMs": 141869
+        },
+        {
+          "kind": "key",
+          "atMs": 141967
+        },
+        {
+          "kind": "key",
+          "atMs": 142067
+        },
+        {
+          "kind": "click",
+          "atMs": 142849
+        },
+        {
+          "kind": "key",
+          "atMs": 143155
+        },
+        {
+          "kind": "key",
+          "atMs": 143254
+        },
+        {
+          "kind": "key",
+          "atMs": 143353
+        },
+        {
+          "kind": "key",
+          "atMs": 143452
+        },
+        {
+          "kind": "key",
+          "atMs": 143551
+        },
+        {
+          "kind": "key",
+          "atMs": 143650
+        },
+        {
+          "kind": "key",
+          "atMs": 143749
+        },
+        {
+          "kind": "key",
+          "atMs": 143846
+        },
+        {
+          "kind": "key",
+          "atMs": 143949
+        },
+        {
+          "kind": "key",
+          "atMs": 144055
+        },
+        {
+          "kind": "key",
+          "atMs": 144157
+        },
+        {
+          "kind": "key",
+          "atMs": 144258
+        },
+        {
+          "kind": "key",
+          "atMs": 144363
+        },
+        {
+          "kind": "key",
+          "atMs": 144464
+        },
+        {
+          "kind": "key",
+          "atMs": 144565
+        },
+        {
+          "kind": "key",
+          "atMs": 144669
+        },
+        {
+          "kind": "key",
+          "atMs": 144771
+        },
+        {
+          "kind": "key",
+          "atMs": 144873
+        },
+        {
+          "kind": "key",
+          "atMs": 144975
+        },
+        {
+          "kind": "key",
+          "atMs": 145081
+        },
+        {
+          "kind": "key",
+          "atMs": 145182
+        },
+        {
+          "kind": "key",
+          "atMs": 145283
+        },
+        {
+          "kind": "key",
+          "atMs": 145388
+        },
+        {
+          "kind": "key",
+          "atMs": 145487
+        },
+        {
+          "kind": "key",
+          "atMs": 145584
+        },
+        {
+          "kind": "key",
+          "atMs": 145682
+        },
+        {
+          "kind": "key",
+          "atMs": 145782
+        },
+        {
+          "kind": "key",
+          "atMs": 145881
+        },
+        {
+          "kind": "click",
+          "atMs": 146932
+        },
+        {
+          "kind": "click",
+          "atMs": 147715
+        },
+        {
+          "kind": "click",
+          "atMs": 148499
+        }
+      ]
+    },
+    {
+      "scene": "help",
+      "startMs": 156030,
+      "endMs": 180639,
+      "sentences": [
+        {
+          "text": "Besoin d’aide ?",
+          "startMs": 458,
+          "endMs": 998,
+          "method": "silence",
+          "globalStartMs": 156488,
+          "globalEndMs": 157028
+        },
+        {
+          "text": "Aide ouvre le guide organisateur dans un nouvel onglet.",
+          "startMs": 1606,
+          "endMs": 4038,
+          "method": "silence",
+          "globalStartMs": 157636,
+          "globalEndMs": 160068
+        },
+        {
+          "text": "Retrouvons Premiers pas.",
+          "startMs": 4620,
+          "endMs": 5612,
+          "method": "silence",
+          "globalStartMs": 160650,
+          "globalEndMs": 161642
+        },
+        {
+          "text": "Quand une vidéo est disponible, Voir la vidéo ouvre le lecteur directement dans la documentation et lance la lecture grâce à votre clic.",
+          "startMs": 6311,
+          "endMs": 12948,
+          "method": "silence",
+          "globalStartMs": 162341,
+          "globalEndMs": 168978
+        },
+        {
+          "text": "Les commandes du lecteur permettent ensuite de mettre en pause et d’activer les sous-titres.",
+          "startMs": 13742,
+          "endMs": 17099,
+          "method": "silence",
+          "globalStartMs": 169772,
+          "globalEndMs": 173129
+        },
+        {
+          "text": "La transcription reste consultable juste dessous.",
+          "startMs": 17768,
+          "endMs": 19802,
+          "method": "silence",
+          "globalStartMs": 173798,
+          "globalEndMs": 175832
+        },
+        {
+          "text": "Vous pouvez aussi ouvrir la bibliothèque, ou replier le lecteur pour continuer votre lecture.",
+          "startMs": 20379,
+          "endMs": 24266,
+          "method": "silence",
+          "globalStartMs": 176409,
+          "globalEndMs": 180296
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 156525
+        },
+        {
+          "kind": "click",
+          "atMs": 160222
+        },
+        {
+          "kind": "click",
+          "atMs": 165135
+        },
+        {
+          "kind": "click",
+          "atMs": 170769
+        },
+        {
+          "kind": "click",
+          "atMs": 176185
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 182261,
+      "endMs": 200523,
+      "sentences": [
+        {
+          "text": "En revenant dans l’administration, les étapes obligatoires sont terminées et la checklist disparaît.",
+          "startMs": 346,
+          "endMs": 4694,
+          "method": "silence",
+          "globalStartMs": 182607,
+          "globalEndMs": 186955
+        },
+        {
+          "text": "L’association possède maintenant une identité publique, le bon fuseau, un événement publié et un parcours testé de bout en bout.",
+          "startMs": 5275,
+          "endMs": 11538,
+          "method": "silence",
+          "globalStartMs": 187536,
+          "globalEndMs": 193799
+        },
+        {
+          "text": "Si vous préférez retirer la liste plus tôt, un propriétaire peut la masquer pour toute l’équipe, sans pour autant réaliser les étapes manquantes.",
+          "startMs": 12056,
+          "endMs": 17954,
+          "method": "silence",
+          "globalStartMs": 194317,
+          "globalEndMs": 200215
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    }
+  ]
+}

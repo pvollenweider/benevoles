@@ -1,0 +1,399 @@
+{
+  "slug": "masterclass-03-first-steps",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T21:32:08.311Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ORG_FIRST_STEPS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6400
+    },
+    {
+      "kind": "click",
+      "atMs": 8032
+    },
+    {
+      "kind": "click",
+      "atMs": 8848
+    },
+    {
+      "kind": "key",
+      "atMs": 9157
+    },
+    {
+      "kind": "key",
+      "atMs": 9157
+    },
+    {
+      "kind": "click",
+      "atMs": 9650
+    },
+    {
+      "kind": "click",
+      "atMs": 10914
+    },
+    {
+      "kind": "click",
+      "atMs": 13335
+    },
+    {
+      "kind": "click",
+      "atMs": 14118
+    },
+    {
+      "kind": "click",
+      "atMs": 14952
+    },
+    {
+      "kind": "key",
+      "atMs": 15260
+    },
+    {
+      "kind": "key",
+      "atMs": 15457
+    },
+    {
+      "kind": "key",
+      "atMs": 15556
+    },
+    {
+      "kind": "key",
+      "atMs": 15655
+    },
+    {
+      "kind": "key",
+      "atMs": 15754
+    },
+    {
+      "kind": "key",
+      "atMs": 15853
+    },
+    {
+      "kind": "key",
+      "atMs": 15955
+    },
+    {
+      "kind": "key",
+      "atMs": 16053
+    },
+    {
+      "kind": "key",
+      "atMs": 16160
+    },
+    {
+      "kind": "key",
+      "atMs": 16263
+    },
+    {
+      "kind": "key",
+      "atMs": 16362
+    },
+    {
+      "kind": "click",
+      "atMs": 17184
+    },
+    {
+      "kind": "click",
+      "atMs": 18852
+    },
+    {
+      "kind": "click",
+      "atMs": 20535
+    },
+    {
+      "kind": "click",
+      "atMs": 22168
+    },
+    {
+      "kind": "click",
+      "atMs": 23401
+    },
+    {
+      "kind": "click",
+      "atMs": 24235
+    },
+    {
+      "kind": "key",
+      "atMs": 24541
+    },
+    {
+      "kind": "key",
+      "atMs": 24640
+    },
+    {
+      "kind": "key",
+      "atMs": 24739
+    },
+    {
+      "kind": "key",
+      "atMs": 24838
+    },
+    {
+      "kind": "key",
+      "atMs": 24937
+    },
+    {
+      "kind": "key",
+      "atMs": 25036
+    },
+    {
+      "kind": "key",
+      "atMs": 25135
+    },
+    {
+      "kind": "click",
+      "atMs": 25919
+    },
+    {
+      "kind": "click",
+      "atMs": 27168
+    },
+    {
+      "kind": "click",
+      "atMs": 27985
+    },
+    {
+      "kind": "click",
+      "atMs": 30430
+    },
+    {
+      "kind": "click",
+      "atMs": 31209
+    },
+    {
+      "kind": "click",
+      "atMs": 32044
+    },
+    {
+      "kind": "key",
+      "atMs": 32352
+    },
+    {
+      "kind": "key",
+      "atMs": 32450
+    },
+    {
+      "kind": "key",
+      "atMs": 32550
+    },
+    {
+      "kind": "key",
+      "atMs": 32649
+    },
+    {
+      "kind": "click",
+      "atMs": 33428
+    },
+    {
+      "kind": "key",
+      "atMs": 33735
+    },
+    {
+      "kind": "key",
+      "atMs": 33832
+    },
+    {
+      "kind": "key",
+      "atMs": 33932
+    },
+    {
+      "kind": "key",
+      "atMs": 34029
+    },
+    {
+      "kind": "key",
+      "atMs": 34129
+    },
+    {
+      "kind": "key",
+      "atMs": 34229
+    },
+    {
+      "kind": "click",
+      "atMs": 35009
+    },
+    {
+      "kind": "click",
+      "atMs": 35960
+    },
+    {
+      "kind": "click",
+      "atMs": 36743
+    },
+    {
+      "kind": "click",
+      "atMs": 37528
+    },
+    {
+      "kind": "click",
+      "atMs": 40008
+    },
+    {
+      "kind": "click",
+      "atMs": 40873
+    },
+    {
+      "kind": "click",
+      "atMs": 41671
+    },
+    {
+      "kind": "click",
+      "atMs": 42471
+    },
+    {
+      "kind": "click",
+      "atMs": 43255
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1116,
+      "endMs": 3741
+    },
+    {
+      "id": "checklist",
+      "startMs": 4194,
+      "endMs": 4281
+    },
+    {
+      "id": "identity",
+      "startMs": 5893,
+      "endMs": 9959
+    },
+    {
+      "id": "timezone",
+      "startMs": 10412,
+      "endMs": 11223
+    },
+    {
+      "id": "event",
+      "startMs": 12827,
+      "endMs": 22473
+    },
+    {
+      "id": "shift",
+      "startMs": 22928,
+      "endMs": 26225
+    },
+    {
+      "id": "publish",
+      "startMs": 26679,
+      "endMs": 28295
+    },
+    {
+      "id": "test",
+      "startMs": 29954,
+      "endMs": 37835
+    },
+    {
+      "id": "help",
+      "startMs": 39497,
+      "endMs": 43566
+    },
+    {
+      "id": "result",
+      "startMs": 45146,
+      "endMs": 45166
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "checklist",
+      "phrase": "Les coches sont calculées à",
+      "startMs": 12996,
+      "endMs": 15707,
+      "cueMs": 4250
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Dans les paramètres, donnez à",
+      "startMs": 2218,
+      "endMs": 8033,
+      "cueMs": 5894
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Gardons toutes ses clauses",
+      "startMs": 12169,
+      "endMs": 13548,
+      "cueMs": 8365
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Enregistrons le texte entier",
+      "startMs": 18044,
+      "endMs": 22000,
+      "cueMs": 9158
+    },
+    {
+      "segmentId": "timezone",
+      "phrase": "Changer ce réglage adapte les",
+      "startMs": 11615,
+      "endMs": 18000,
+      "cueMs": 10434
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5215,
+      "endMs": 8311,
+      "cueMs": 12845
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5215,
+      "endMs": 8311,
+      "cueMs": 14423
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutez un créneau, choisissez le",
+      "startMs": 3508,
+      "endMs": 9281,
+      "cueMs": 22929
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Ici, le minimum est prêt",
+      "startMs": 9595,
+      "endMs": 11101,
+      "cueMs": 27499
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3253,
+      "endMs": 9382,
+      "cueMs": 29968
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3253,
+      "endMs": 9382,
+      "cueMs": 35499
+    }
+  ]
+}

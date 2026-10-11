@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une place proposée, le bouton est Refuser la place. Lis",
+  "windowStart": 93.737,
+  "result": {
+    "found": true,
+    "startSeconds": 11.14,
+    "wordsHeard": "Pour une place proposée, le bouton est Refuser la place. Lis"
+  },
+  "onset": 104.877,
+  "proposedCut": 104.643167,
+  "note": "Proposal only; recut then independently audit before capture"
+}

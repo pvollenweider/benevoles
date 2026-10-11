@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:48:30.247Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "85cae117fc487d6c63a9304472ef45f9a0d8b83083db4ee1bda2cffb6c6529f7",
+  "clipSha256": "4a5cc35e76f1eadfc333c82e183f98b4fb672c2ec0d588147a8e83811ac3da80",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand une association découvre benevol point app",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "la liste Premiers pas lui donne un ordre simple",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition de l'encart d'introduction et affichage de la liste « Premiers pas » dans l'onglet Événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "elle indique ce qui est déjà prêt",
+        "visibleSeconds": 7.2,
+        "visible": "Étapes 1 et 2 marquées comme facultatives avec valeurs par défaut déjà définies",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "la prochaine action utile",
+        "visibleSeconds": 9,
+        "visible": "Étape 3 « Créer votre premier événement » identifiée par la mention « — prochaine étape »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "et le résultat à vérifier avant d’inviter de vrais bénévoles",
+        "visibleSeconds": 10.5,
+        "visible": "Étape 6 « Faire une inscription de test » expliquant la vérification du parcours bénévole",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée, fluide et claire, soutenue par une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,40 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 181,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "inputCounts": {
+    "click": 47,
+    "key": 102
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "basics",
+      "phrase": "Donne-lui un nom clair",
+      "startMs": 472,
+      "endMs": 4611,
+      "cueMs": 13906,
+      "sentenceAbsoluteMs": 13903,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 14403
+      },
+      "deltaMs": 500
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:13.022Z",
+  "revalidatedAt": "2026-10-11T17:47:13.022Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "shift",
+      "audioSha256": "6093beff5f2bbb518f22a5150072af14b32bbb11512f85e9b368b5193f711206",
+      "recognized": "La prochaine étape consiste à rendre le planning concret. Ajoutez un créneau, choisissez le poste accueil, puis indiquez neuf heures, midi et trois places. Après validation, le créneau apparaît réellement dans le planning, regroupé sous son poste. Vous pouvez encore le modifier ou l'annuler avant toute publication.",
+      "expected": "La prochaine étape consiste à rendre le planning concret. Ajoutez un créneau, choisissez le poste Accueil, puis indiquez neuf heures, midi et trois places. Après validation, le créneau apparaît réellement dans le planning, regroupé sous son poste. Vous pouvez encore le modifier ou l’annuler avant toute publication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

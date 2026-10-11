@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:42.937Z",
+  "revalidatedAt": "2026-10-11T18:22:42.938Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "identity",
+      "audioSha256": "5d67447dd980e78ab9302eece435f3573b59f6c68071ab561324dafc85f0c172",
+      "recognized": "Indique ton prénom et ton nom, puis vérifie soigneusement l'adresse e-mail. La confirmation et le lien personnel arriveront là. Le téléphone est obligatoire pour cet événement. La date de naissance apparaît parce que l'engagement demande dix-huit ans minimum. Elle permet de vérifier l'âge à la date de la mission.",
+      "expected": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email : la confirmation et le lien personnel arriveront là. Le téléphone est obligatoire pour cet événement. La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum ; elle permet de vérifier l’âge à la date de la mission.",
+      "wordErrorRate": 0.03773584905660377,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

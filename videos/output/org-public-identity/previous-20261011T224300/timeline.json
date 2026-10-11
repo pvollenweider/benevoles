@@ -1,0 +1,328 @@
+{
+  "slug": "org-public-identity",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T22:41:26.597Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "fetes-de-montvert",
+    "scenario": "ORG_PUBLIC_IDENTITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 23809
+    },
+    {
+      "kind": "key",
+      "atMs": 24119
+    },
+    {
+      "kind": "click",
+      "atMs": 24642
+    },
+    {
+      "kind": "key",
+      "atMs": 24949
+    },
+    {
+      "kind": "key",
+      "atMs": 25046
+    },
+    {
+      "kind": "key",
+      "atMs": 25145
+    },
+    {
+      "kind": "key",
+      "atMs": 25244
+    },
+    {
+      "kind": "key",
+      "atMs": 25342
+    },
+    {
+      "kind": "key",
+      "atMs": 25542
+    },
+    {
+      "kind": "key",
+      "atMs": 25743
+    },
+    {
+      "kind": "key",
+      "atMs": 25841
+    },
+    {
+      "kind": "key",
+      "atMs": 25940
+    },
+    {
+      "kind": "key",
+      "atMs": 26040
+    },
+    {
+      "kind": "key",
+      "atMs": 26138
+    },
+    {
+      "kind": "key",
+      "atMs": 26234
+    },
+    {
+      "kind": "key",
+      "atMs": 26337
+    },
+    {
+      "kind": "key",
+      "atMs": 26438
+    },
+    {
+      "kind": "key",
+      "atMs": 26540
+    },
+    {
+      "kind": "key",
+      "atMs": 26638
+    },
+    {
+      "kind": "key",
+      "atMs": 26741
+    },
+    {
+      "kind": "key",
+      "atMs": 26941
+    },
+    {
+      "kind": "key",
+      "atMs": 27038
+    },
+    {
+      "kind": "key",
+      "atMs": 27139
+    },
+    {
+      "kind": "key",
+      "atMs": 27243
+    },
+    {
+      "kind": "key",
+      "atMs": 27343
+    },
+    {
+      "kind": "key",
+      "atMs": 27444
+    },
+    {
+      "kind": "key",
+      "atMs": 27546
+    },
+    {
+      "kind": "key",
+      "atMs": 27650
+    },
+    {
+      "kind": "key",
+      "atMs": 27764
+    },
+    {
+      "kind": "key",
+      "atMs": 27864
+    },
+    {
+      "kind": "key",
+      "atMs": 27970
+    },
+    {
+      "kind": "key",
+      "atMs": 28070
+    },
+    {
+      "kind": "key",
+      "atMs": 28172
+    },
+    {
+      "kind": "key",
+      "atMs": 28272
+    },
+    {
+      "kind": "key",
+      "atMs": 28370
+    },
+    {
+      "kind": "click",
+      "atMs": 32092
+    },
+    {
+      "kind": "click",
+      "atMs": 47024
+    },
+    {
+      "kind": "click",
+      "atMs": 58874
+    },
+    {
+      "kind": "click",
+      "atMs": 66491
+    },
+    {
+      "kind": "click",
+      "atMs": 79540
+    },
+    {
+      "kind": "click",
+      "atMs": 104729
+    },
+    {
+      "kind": "click",
+      "atMs": 124807
+    },
+    {
+      "kind": "click",
+      "atMs": 127439
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1108,
+      "endMs": 14774
+    },
+    {
+      "id": "names",
+      "startMs": 15228,
+      "endMs": 37067
+    },
+    {
+      "id": "logo",
+      "startMs": 37521,
+      "endMs": 55379
+    },
+    {
+      "id": "slug",
+      "startMs": 55833,
+      "endMs": 81339
+    },
+    {
+      "id": "public-page",
+      "startMs": 82951,
+      "endMs": 102691
+    },
+    {
+      "id": "event-result",
+      "startMs": 103143,
+      "endMs": 117797
+    },
+    {
+      "id": "remove-logo",
+      "startMs": 118250,
+      "endMs": 136381
+    },
+    {
+      "id": "result",
+      "startMs": 136835,
+      "endMs": 156509
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "names",
+      "phrase": "Le titre de la page",
+      "startMs": 8077,
+      "endMs": 10640,
+      "cueMs": 23306
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Le message Titre enregistré confirme",
+      "startMs": 16397,
+      "endMs": 19283,
+      "cueMs": 31628
+    },
+    {
+      "segmentId": "logo",
+      "phrase": "L’image enregistrée apparaît dans les",
+      "startMs": 9031,
+      "endMs": 12838,
+      "cueMs": 46554
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Si vous changez l’identifiant alors",
+      "startMs": 10162,
+      "endMs": 14679,
+      "cueMs": 65998
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79058
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79849
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "elle est publiée, mais non",
+      "startMs": 9586,
+      "endMs": 11448,
+      "cueMs": 92536
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "Ouvrons son lien direct pour",
+      "startMs": 12097,
+      "endMs": 15508,
+      "cueMs": 95051
+    },
+    {
+      "segmentId": "event-result",
+      "phrase": "On peut donc réutiliser la",
+      "startMs": 10085,
+      "endMs": 14654,
+      "cueMs": 113229
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "La confirmation vous laisse encore",
+      "startMs": 6085,
+      "endMs": 7646,
+      "cueMs": 124336
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ces réglages sont réservés au",
+      "startMs": 8043,
+      "endMs": 11791,
+      "cueMs": 144879
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un texte visible",
+      "startMs": 12521,
+      "endMs": 19352,
+      "cueMs": 149357
+    }
+  ]
+}

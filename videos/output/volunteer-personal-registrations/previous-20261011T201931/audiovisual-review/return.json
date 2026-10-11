@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:35:11.236Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "10197575de63a21446836f564e70a96fc93fb4e60ed5c901d36d6aebb513b81e",
+  "clipSha256": "d0faa4eaa1a283915cea6f7efe18e3c30741e3dd3b4eb2a51853ca655f620f01",
+  "scene": "return",
+  "review": {
+    "heardOpening": "Le lien Retour à l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Le lien Retour à l'accueil ramène à la page de l'événement.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la page de l'événement Fête du village de Montvert avec le planning en frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Tu peux regarder les places disponibles et choisir un autre créneau",
+        "visibleSeconds": 4,
+        "visible": "Planning de l'événement visible avec les créneaux horaires et places disponibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+        "visibleSeconds": 16,
+        "visible": "Page d'information et planning de l'événement affichée de manière stable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la transition vers la page de l'événement."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:21.699Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "0a6238ee7c033a17710b31284fc65a54bc676f983a55289be95eced92fa5ebc9",
+  "clipSha256": "d9c1db3f3b4c90dc6bd543f2bce0c922efe468af7f879b2dd6804c593a8a4ac1",
+  "scene": "recap",
+  "review": {
+    "heardOpening": "Relis maintenant les jours et les heures",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Relis maintenant les jours et les heures.",
+        "visibleSeconds": 0.5,
+        "visible": "Récapitulatif des créneaux avec dates et horaires affiché dans la colonne latérale droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Le créneau de nuit dit explicitement fin le lendemain.",
+        "visibleSeconds": 3.2,
+        "visible": "Mention '18:00-02:00 fin le lendemain' affichée sous le créneau Rangement de nuit",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Les intervalles montrent où se trouvent les pauses.",
+        "visibleSeconds": 6.3,
+        "visible": "Créneaux espacés affichant les disponibilités et enchaînements dans la colonne de droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "En bas, Transmis à l’organisation énumère les données et les questions auxquelles tu as répondu.",
+        "visibleSeconds": 16.5,
+        "visible": "Encadré 'Transmis à l’organisation' listant les données transmises en bas à droite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec les éléments fixes affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

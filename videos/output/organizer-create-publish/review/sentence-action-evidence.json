@@ -1,0 +1,827 @@
+[
+  {
+    "id": "overview",
+    "startMs": 0,
+    "sentences": [
+      {
+        "text": "Voici comment préparer et partager un planning bénévole.",
+        "startMs": 141,
+        "endMs": 3520,
+        "method": "silence",
+        "absoluteStartMs": 141
+      },
+      {
+        "text": "Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche.",
+        "startMs": 3708,
+        "endMs": 9913,
+        "method": "silence",
+        "absoluteStartMs": 3708
+      },
+      {
+        "text": "Ici, on va tout créer depuis le début.",
+        "startMs": 10497,
+        "endMs": 12508,
+        "method": "silence",
+        "absoluteStartMs": 10497
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 3089
+      },
+      {
+        "kind": "click",
+        "atMs": 5088
+      }
+    ]
+  },
+  {
+    "id": "basics",
+    "startMs": 13430,
+    "sentences": [
+      {
+        "text": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates.",
+        "startMs": 472,
+        "endMs": 4611,
+        "method": "silence",
+        "absoluteStartMs": 13902
+      },
+      {
+        "text": "L’événement reste en brouillon :",
+        "startMs": 4772,
+        "endMs": 4774,
+        "method": "silence",
+        "absoluteStartMs": 18202
+      },
+      {
+        "text": "rien n’est visible tant que tu n’as pas terminé ton planning.",
+        "startMs": 5411,
+        "endMs": 8907,
+        "method": "silence",
+        "absoluteStartMs": 18841
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 14405
+      },
+      {
+        "kind": "click",
+        "atMs": 15422
+      },
+      {
+        "kind": "click",
+        "atMs": 16438
+      },
+      {
+        "kind": "click",
+        "atMs": 17455
+      },
+      {
+        "kind": "click",
+        "atMs": 18471
+      },
+      {
+        "kind": "click",
+        "atMs": 19488
+      }
+    ]
+  },
+  {
+    "id": "series",
+    "startMs": 23307,
+    "sentences": [
+      {
+        "text": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement.",
+        "startMs": 569,
+        "endMs": 3957,
+        "method": "silence",
+        "absoluteStartMs": 23876
+      },
+      {
+        "text": "Quand les horaires se répètent, la création en série va plus vite :",
+        "startMs": 4762,
+        "endMs": 7589,
+        "method": "silence",
+        "absoluteStartMs": 28069
+      },
+      {
+        "text": "pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+        "startMs": 8332,
+        "endMs": 14506,
+        "method": "silence",
+        "absoluteStartMs": 31639
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 28554
+      },
+      {
+        "kind": "click",
+        "atMs": 29389
+      },
+      {
+        "kind": "key",
+        "atMs": 29696
+      },
+      {
+        "kind": "key",
+        "atMs": 29794
+      },
+      {
+        "kind": "key",
+        "atMs": 29892
+      },
+      {
+        "kind": "key",
+        "atMs": 29992
+      },
+      {
+        "kind": "key",
+        "atMs": 30091
+      },
+      {
+        "kind": "key",
+        "atMs": 30190
+      },
+      {
+        "kind": "key",
+        "atMs": 30291
+      },
+      {
+        "kind": "click",
+        "atMs": 31103
+      },
+      {
+        "kind": "click",
+        "atMs": 33020
+      },
+      {
+        "kind": "click",
+        "atMs": 35920
+      }
+    ]
+  },
+  {
+    "id": "delivery",
+    "startMs": 38846,
+    "sentences": [
+      {
+        "text": "Ajoute ensuite manuellement un poste Livraison.",
+        "startMs": 581,
+        "endMs": 2911,
+        "method": "silence",
+        "absoluteStartMs": 39427
+      },
+      {
+        "text": "Il faut avoir au moins dix-huit ans et posséder un permis B valide.",
+        "startMs": 3652,
+        "endMs": 6843,
+        "method": "silence",
+        "absoluteStartMs": 42498
+      },
+      {
+        "text": "Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+        "startMs": 7821,
+        "endMs": 12250,
+        "method": "silence",
+        "absoluteStartMs": 46667
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 39320
+      },
+      {
+        "kind": "click",
+        "atMs": 40137
+      },
+      {
+        "kind": "key",
+        "atMs": 40446
+      },
+      {
+        "kind": "key",
+        "atMs": 40544
+      },
+      {
+        "kind": "key",
+        "atMs": 40643
+      },
+      {
+        "kind": "key",
+        "atMs": 40742
+      },
+      {
+        "kind": "key",
+        "atMs": 40841
+      },
+      {
+        "kind": "key",
+        "atMs": 40940
+      },
+      {
+        "kind": "key",
+        "atMs": 41039
+      },
+      {
+        "kind": "key",
+        "atMs": 41138
+      },
+      {
+        "kind": "key",
+        "atMs": 41236
+      },
+      {
+        "kind": "click",
+        "atMs": 42036
+      },
+      {
+        "kind": "click",
+        "atMs": 43270
+      },
+      {
+        "kind": "click",
+        "atMs": 44504
+      },
+      {
+        "kind": "click",
+        "atMs": 45720
+      },
+      {
+        "kind": "click",
+        "atMs": 46936
+      },
+      {
+        "kind": "click",
+        "atMs": 48154
+      },
+      {
+        "kind": "click",
+        "atMs": 49338
+      }
+    ]
+  },
+  {
+    "id": "cash",
+    "startMs": 52130,
+    "sentences": [
+      {
+        "text": "Pour un poste sensible comme la Caisse, active l’inscription sur validation.",
+        "startMs": 594,
+        "endMs": 5072,
+        "method": "silence",
+        "absoluteStartMs": 52724
+      },
+      {
+        "text": "Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+        "startMs": 5939,
+        "endMs": 11344,
+        "method": "silence",
+        "absoluteStartMs": 58069
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 52603
+      },
+      {
+        "kind": "click",
+        "atMs": 53421
+      },
+      {
+        "kind": "key",
+        "atMs": 53731
+      },
+      {
+        "kind": "key",
+        "atMs": 53827
+      },
+      {
+        "kind": "key",
+        "atMs": 53927
+      },
+      {
+        "kind": "key",
+        "atMs": 54026
+      },
+      {
+        "kind": "key",
+        "atMs": 54124
+      },
+      {
+        "kind": "key",
+        "atMs": 54223
+      },
+      {
+        "kind": "click",
+        "atMs": 55002
+      },
+      {
+        "kind": "click",
+        "atMs": 55786
+      }
+    ]
+  },
+  {
+    "id": "registration",
+    "startMs": 64390,
+    "sentences": [
+      {
+        "text": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation.",
+        "startMs": 470,
+        "endMs": 6407,
+        "method": "silence",
+        "absoluteStartMs": 64860
+      },
+      {
+        "text": "Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
+        "startMs": 7148,
+        "endMs": 11163,
+        "method": "silence",
+        "absoluteStartMs": 71538
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 66050
+      },
+      {
+        "kind": "click",
+        "atMs": 67866
+      }
+    ]
+  },
+  {
+    "id": "review",
+    "startMs": 76545,
+    "sentences": [
+      {
+        "text": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places.",
+        "startMs": 544,
+        "endMs": 5514,
+        "method": "silence",
+        "absoluteStartMs": 77089
+      },
+      {
+        "text": "Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+        "startMs": 6109,
+        "endMs": 9640,
+        "method": "silence",
+        "absoluteStartMs": 82654
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "preview",
+    "startMs": 87098,
+    "sentences": [
+      {
+        "text": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription.",
+        "startMs": 462,
+        "endMs": 5478,
+        "method": "silence",
+        "absoluteStartMs": 87560
+      },
+      {
+        "text": "Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix.",
+        "startMs": 6281,
+        "endMs": 10478,
+        "method": "silence",
+        "absoluteStartMs": 93379
+      },
+      {
+        "text": "Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+        "startMs": 11391,
+        "endMs": 16586,
+        "method": "silence",
+        "absoluteStartMs": 98489
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 87578
+      },
+      {
+        "kind": "click",
+        "atMs": 93844
+      },
+      {
+        "kind": "click",
+        "atMs": 94627
+      },
+      {
+        "kind": "click",
+        "atMs": 95459
+      },
+      {
+        "kind": "click",
+        "atMs": 96443
+      },
+      {
+        "kind": "click",
+        "atMs": 97427
+      },
+      {
+        "kind": "click",
+        "atMs": 98376
+      },
+      {
+        "kind": "click",
+        "atMs": 99160
+      },
+      {
+        "kind": "click",
+        "atMs": 99943
+      }
+    ]
+  },
+  {
+    "id": "preview-result",
+    "startMs": 104139,
+    "sentences": [
+      {
+        "text": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel.",
+        "startMs": 183,
+        "endMs": 8852,
+        "method": "silence",
+        "absoluteStartMs": 104322
+      },
+      {
+        "text": "Rien n’est réellement enregistré ni expédié pendant ce test.",
+        "startMs": 9483,
+        "endMs": 12237,
+        "method": "silence",
+        "absoluteStartMs": 113622
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "publish",
+    "startMs": 117110,
+    "sentences": [
+      {
+        "text": "Quand tout est prêt, publie le planning.",
+        "startMs": 280,
+        "endMs": 2493,
+        "method": "silence",
+        "absoluteStartMs": 117390
+      },
+      {
+        "text": "La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement :",
+        "startMs": 2805,
+        "endMs": 7484,
+        "method": "silence",
+        "absoluteStartMs": 119915
+      },
+      {
+        "text": "tu gardes la main sur sa diffusion.",
+        "startMs": 7838,
+        "endMs": 10572,
+        "method": "silence",
+        "absoluteStartMs": 124948
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 117596
+      }
+    ]
+  },
+  {
+    "id": "qr",
+    "startMs": 128134,
+    "sentences": [
+      {
+        "text": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code.",
+        "startMs": 197,
+        "endMs": 4266,
+        "method": "silence",
+        "absoluteStartMs": 128331
+      },
+      {
+        "text": "Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+        "startMs": 4865,
+        "endMs": 10254,
+        "method": "silence",
+        "absoluteStartMs": 132999
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 128612
+      }
+    ]
+  },
+  {
+    "id": "import",
+    "startMs": 139266,
+    "sentences": [
+      {
+        "text": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel.",
+        "startMs": 425,
+        "endMs": 8801,
+        "method": "silence",
+        "absoluteStartMs": 139691
+      },
+      {
+        "text": "L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+        "startMs": 9266,
+        "endMs": 16943,
+        "method": "silence",
+        "absoluteStartMs": 148532
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 139896
+      },
+      {
+        "kind": "click",
+        "atMs": 149012
+      },
+      {
+        "kind": "click",
+        "atMs": 154461
+      },
+      {
+        "kind": "click",
+        "atMs": 155243
+      }
+    ]
+  },
+  {
+    "id": "invite",
+    "startMs": 156815,
+    "sentences": [
+      {
+        "text": "Retourne ensuite dans les invitations de l’événement.",
+        "startMs": 170,
+        "endMs": 2157,
+        "method": "silence",
+        "absoluteStartMs": 156985
+      },
+      {
+        "text": "Filtre les membres par tag et sélectionne les personnes concernées.",
+        "startMs": 2844,
+        "endMs": 6661,
+        "method": "silence",
+        "absoluteStartMs": 159659
+      },
+      {
+        "text": "Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
+        "startMs": 6841,
+        "endMs": 14311,
+        "method": "silence",
+        "absoluteStartMs": 163656
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 157395
+      },
+      {
+        "kind": "click",
+        "atMs": 160145
+      },
+      {
+        "kind": "click",
+        "atMs": 160961
+      },
+      {
+        "kind": "key",
+        "atMs": 161268
+      },
+      {
+        "kind": "key",
+        "atMs": 161367
+      },
+      {
+        "kind": "key",
+        "atMs": 161465
+      },
+      {
+        "kind": "key",
+        "atMs": 161563
+      },
+      {
+        "kind": "key",
+        "atMs": 161662
+      },
+      {
+        "kind": "key",
+        "atMs": 161761
+      },
+      {
+        "kind": "key",
+        "atMs": 161863
+      },
+      {
+        "kind": "key",
+        "atMs": 161964
+      },
+      {
+        "kind": "key",
+        "atMs": 162065
+      },
+      {
+        "kind": "key",
+        "atMs": 162168
+      },
+      {
+        "kind": "key",
+        "atMs": 162271
+      },
+      {
+        "kind": "key",
+        "atMs": 162371
+      },
+      {
+        "kind": "key",
+        "atMs": 162475
+      },
+      {
+        "kind": "key",
+        "atMs": 162576
+      },
+      {
+        "kind": "key",
+        "atMs": 162681
+      },
+      {
+        "kind": "key",
+        "atMs": 162781
+      },
+      {
+        "kind": "key",
+        "atMs": 162884
+      },
+      {
+        "kind": "key",
+        "atMs": 162986
+      },
+      {
+        "kind": "key",
+        "atMs": 163089
+      },
+      {
+        "kind": "key",
+        "atMs": 163190
+      },
+      {
+        "kind": "key",
+        "atMs": 163293
+      },
+      {
+        "kind": "key",
+        "atMs": 163397
+      },
+      {
+        "kind": "key",
+        "atMs": 163497
+      },
+      {
+        "kind": "key",
+        "atMs": 163600
+      },
+      {
+        "kind": "key",
+        "atMs": 163706
+      },
+      {
+        "kind": "key",
+        "atMs": 163807
+      },
+      {
+        "kind": "key",
+        "atMs": 163908
+      },
+      {
+        "kind": "key",
+        "atMs": 164009
+      },
+      {
+        "kind": "key",
+        "atMs": 164108
+      },
+      {
+        "kind": "key",
+        "atMs": 164207
+      },
+      {
+        "kind": "key",
+        "atMs": 164307
+      },
+      {
+        "kind": "key",
+        "atMs": 164407
+      },
+      {
+        "kind": "key",
+        "atMs": 164512
+      },
+      {
+        "kind": "key",
+        "atMs": 164611
+      },
+      {
+        "kind": "key",
+        "atMs": 164714
+      },
+      {
+        "kind": "key",
+        "atMs": 164916
+      },
+      {
+        "kind": "key",
+        "atMs": 165015
+      },
+      {
+        "kind": "key",
+        "atMs": 165117
+      },
+      {
+        "kind": "key",
+        "atMs": 165216
+      },
+      {
+        "kind": "key",
+        "atMs": 165322
+      },
+      {
+        "kind": "key",
+        "atMs": 165421
+      },
+      {
+        "kind": "key",
+        "atMs": 165524
+      },
+      {
+        "kind": "key",
+        "atMs": 165628
+      },
+      {
+        "kind": "key",
+        "atMs": 165729
+      },
+      {
+        "kind": "key",
+        "atMs": 165833
+      },
+      {
+        "kind": "key",
+        "atMs": 165937
+      },
+      {
+        "kind": "key",
+        "atMs": 166040
+      },
+      {
+        "kind": "click",
+        "atMs": 166812
+      }
+    ]
+  },
+  {
+    "id": "public",
+    "startMs": 171700,
+    "sentences": [
+      {
+        "text": "Et voilà le résultat côté bénévoles :",
+        "startMs": 160,
+        "endMs": 1878,
+        "method": "silence",
+        "absoluteStartMs": 171860
+      },
+      {
+        "text": "plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation.",
+        "startMs": 2460,
+        "endMs": 7236,
+        "method": "silence",
+        "absoluteStartMs": 174160
+      },
+      {
+        "text": "Le planning est prêt à circuler par lien, QR code ou invitation !",
+        "startMs": 8090,
+        "endMs": 11789,
+        "method": "silence",
+        "absoluteStartMs": 179790
+      }
+    ],
+    "inputs": []
+  }
+]

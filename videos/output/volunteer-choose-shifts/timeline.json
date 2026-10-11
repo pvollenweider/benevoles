@@ -1,52 +1,197 @@
 {
   "slug": "volunteer-choose-shifts",
-  "recordedAt": "2026-10-05T07:21:10.869Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T21:53:55.702Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_CHOOSE_SHIFTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 17023
+    },
+    {
+      "kind": "click",
+      "atMs": 23106
+    },
+    {
+      "kind": "click",
+      "atMs": 28706
+    },
+    {
+      "kind": "click",
+      "atMs": 49738
+    },
+    {
+      "kind": "click",
+      "atMs": 59856
+    },
+    {
+      "kind": "click",
+      "atMs": 65988
+    },
+    {
+      "kind": "click",
+      "atMs": 85904
+    },
+    {
+      "kind": "click",
+      "atMs": 95635
+    },
+    {
+      "kind": "click",
+      "atMs": 135663
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1192,
-      "endMs": 15575
+      "startMs": 1094,
+      "endMs": 14357
     },
     {
       "id": "select",
-      "startMs": 17740,
-      "endMs": 35460
+      "startMs": 16519,
+      "endMs": 32799
     },
     {
       "id": "capacity",
-      "startMs": 35912,
-      "endMs": 52003
+      "startMs": 33251,
+      "endMs": 48763
     },
     {
       "id": "waitlist",
-      "startMs": 52454,
-      "endMs": 69072
+      "startMs": 49216,
+      "endMs": 65066
     },
     {
       "id": "approval-reserved",
-      "startMs": 69525,
-      "endMs": 87881
+      "startMs": 66292,
+      "endMs": 83218
     },
     {
       "id": "conflict",
-      "startMs": 90041,
-      "endMs": 105459
+      "startMs": 85383,
+      "endMs": 101504
     },
     {
       "id": "known",
-      "startMs": 105911,
-      "endMs": 127072
+      "startMs": 101956,
+      "endMs": 118674
     },
     {
       "id": "limit",
-      "startMs": 127524,
-      "endMs": 143842
+      "startMs": 119128,
+      "endMs": 134698
     },
     {
       "id": "result",
-      "startMs": 144295,
-      "endMs": 159768
+      "startMs": 135151,
+      "endMs": 154932
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "select",
+      "phrase": "Tu peux en ajouter plusieurs",
+      "startMs": 6086,
+      "endMs": 8550,
+      "cueMs": 22608
+    },
+    {
+      "segmentId": "select",
+      "phrase": "Pour retirer un choix avant",
+      "startMs": 9157,
+      "endMs": 14035,
+      "cueMs": 25677
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Un créneau complet sans liste",
+      "startMs": 6510,
+      "endMs": 9699,
+      "cueMs": 39763
+    },
+    {
+      "segmentId": "waitlist",
+      "phrase": "Reclique pour le retirer.",
+      "startMs": 10145,
+      "endMs": 11182,
+      "cueMs": 59362
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Sécurité est réservée à certains",
+      "startMs": 8453,
+      "endMs": 12671,
+      "cueMs": 74747
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Ces deux états ne veulent",
+      "startMs": 12872,
+      "endMs": 16455,
+      "cueMs": 79166
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Ici, Accueil de quinze à",
+      "startMs": 5287,
+      "endMs": 9231,
+      "cueMs": 90673
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Retire le premier choix si",
+      "startMs": 9758,
+      "endMs": 11989,
+      "cueMs": 95141
+    },
+    {
+      "segmentId": "known",
+      "phrase": "Ils apparaissent dans son récapitulatif",
+      "startMs": 4606,
+      "endMs": 8276,
+      "cueMs": 106563
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "les autres plages restent visibles",
+      "startMs": 7316,
+      "endMs": 9531,
+      "cueMs": 126444
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "Elle doit d’abord annuler une",
+      "startMs": 10157,
+      "endMs": 15018,
+      "cueMs": 129287
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Tu peux encore tout ajuster",
+      "startMs": 7857,
+      "endMs": 10854,
+      "cueMs": 143009
     }
   ]
 }

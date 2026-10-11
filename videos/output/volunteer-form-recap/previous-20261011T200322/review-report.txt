@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: VOLUNTEER_FORM_RECAP
+COMMIT: d1482d273bc0c97c3efff59e76dc57205e0a2995
+BUILD_ID: Ur_-usFFdKv05dBCDAbrt
+DURATION: 167.28 seconds
+MUSIC: smallest 13.9 / largest 17.8 LU
+PROBLEMS: Workload returns to planning at 12.02 s before return instruction at 16.69 s; convention opens 138 ms before sentence. ASR/captions/effects/music/validation pass. Frame evidence disproves automated missing-consent and missing-removal claims: consent is checked at 13.0 s and Logistique removed at 17.17 s.
+SOURCE CHANGES: record.ts: anchor convention opening to Ouvre la Convention des Bénévoles; move Pour alléger sentence anchor before Retour. No re-film.
+VALIDATION: []; sentence anchors checked: 6
+FINAL AUDIO: [('welcome', 0, False), ('selection', 0.021739130434782608, False), ('identity', 0.03773584905660377, False), ('questions', 0.017857142857142856, False), ('agreement', 0, False), ('recap', 0.01639344262295082, False), ('workload', 0, False), ('result', 0, False)]
+CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 20, keys 96.
+REVIEW: final MP4 chapter sheets and flagged one-second sequences inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

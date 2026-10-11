@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant de continuer, relis le récapitulatif : jours, heures, missions, attente",
+  "windowStart": 114.84,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Avant"
+  },
+  "onset": 126.64,
+  "proposedCut": 126.221396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

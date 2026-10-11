@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:50.420Z",
+  "revalidatedAt": "2026-10-11T18:22:50.420Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "workload",
+      "audioSha256": "9d57b73ff3d605699ba276e51947794f7af2afbd93941ccbabba0c74f410b309",
+      "recognized": "Ce planning affiche journée chargée. Accueil et logistique font neuf heures d'affilée sans une pause de trente minutes, et la nuit ajoute encore quatre heures. L'avertissement conseille de revoir l'engagement mais ne bloque pas la confirmation. Pour alléger, reviens au planning et retire logistique. Les horaires sont recalculés immédiatement.",
+      "expected": "Ce planning affiche Journée chargée : Accueil et Logistique font neuf heures d’affilée, sans une pause de trente minutes, et la nuit ajoute encore quatre heures. L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation. Pour alléger, reviens au planning et retire Logistique : les horaires sont recalculés immédiatement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

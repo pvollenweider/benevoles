@@ -1,0 +1,193 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 0,
+    "sentences": [
+      {
+        "text": "Envie de donner un coup de main ?",
+        "startMs": 281,
+        "endMs": 1413,
+        "method": "silence",
+        "absoluteStartMs": 281
+      },
+      {
+        "text": "Ouvre le lien reçu, ou scanne le QR code affiché par l’association.",
+        "startMs": 1991,
+        "endMs": 5745,
+        "method": "silence",
+        "absoluteStartMs": 1991
+      },
+      {
+        "text": "Tu peux choisir ton créneau directement depuis ton téléphone.",
+        "startMs": 6121,
+        "endMs": 9147,
+        "method": "silence",
+        "absoluteStartMs": 6121
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "discover",
+    "startMs": 9987,
+    "sentences": [
+      {
+        "text": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+        "startMs": 391,
+        "endMs": 6185,
+        "method": "silence",
+        "absoluteStartMs": 10378
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "choose",
+    "startMs": 16945,
+    "sentences": [
+      {
+        "text": "Choisis simplement le créneau qui te convient.",
+        "startMs": 395,
+        "endMs": 2201,
+        "method": "silence",
+        "absoluteStartMs": 17340
+      },
+      {
+        "text": "Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+        "startMs": 2659,
+        "endMs": 5615,
+        "method": "silence",
+        "absoluteStartMs": 19604
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 17433
+      },
+      {
+        "kind": "click",
+        "atMs": 19147
+      }
+    ]
+  },
+  {
+    "id": "details",
+    "startMs": 23286,
+    "sentences": [
+      {
+        "text": "Ajoute ensuite tes coordonnées.",
+        "startMs": 253,
+        "endMs": 1912,
+        "method": "silence",
+        "absoluteStartMs": 23539
+      },
+      {
+        "text": "Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+        "startMs": 2242,
+        "endMs": 5893,
+        "method": "silence",
+        "absoluteStartMs": 25528
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 23780
+      },
+      {
+        "kind": "click",
+        "atMs": 24762
+      },
+      {
+        "kind": "click",
+        "atMs": 25745
+      },
+      {
+        "kind": "click",
+        "atMs": 26746
+      }
+    ]
+  },
+  {
+    "id": "preferences",
+    "startMs": 30130,
+    "sentences": [
+      {
+        "text": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+        "startMs": 496,
+        "endMs": 6136,
+        "method": "silence",
+        "absoluteStartMs": 30626
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 30645
+      },
+      {
+        "kind": "click",
+        "atMs": 31429
+      },
+      {
+        "kind": "click",
+        "atMs": 32212
+      }
+    ]
+  },
+  {
+    "id": "confirm",
+    "startMs": 37169,
+    "sentences": [
+      {
+        "text": "Un dernier coup d’œil au récapitulatif, et c’est parti :",
+        "startMs": 333,
+        "endMs": 3630,
+        "method": "silence",
+        "absoluteStartMs": 37502
+      },
+      {
+        "text": "confirme ton inscription.",
+        "startMs": 4163,
+        "endMs": 5184,
+        "method": "silence",
+        "absoluteStartMs": 41332
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 41794
+      }
+    ]
+  },
+  {
+    "id": "success",
+    "startMs": 43134,
+    "sentences": [
+      {
+        "text": "Et voilà, tu fais partie de l’équipe !",
+        "startMs": 336,
+        "endMs": 2222,
+        "method": "silence",
+        "absoluteStartMs": 43470
+      },
+      {
+        "text": "Un e-mail de confirmation arrive dans ta boîte.",
+        "startMs": 2382,
+        "endMs": 4724,
+        "method": "silence",
+        "absoluteStartMs": 45516
+      },
+      {
+        "text": "Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+        "startMs": 4938,
+        "endMs": 9947,
+        "method": "silence",
+        "absoluteStartMs": 48072
+      }
+    ],
+    "inputs": []
+  }
+]

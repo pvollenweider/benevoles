@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:06.405Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "61c7b05ab1d981c800db63a3f7e4af4e230dd212a4a3d3871b922763fddfc34a",
+  "clipSha256": "04b476561e3a81d4501bb80fc7052afd9ad2ec4a58e1f513274e0e9022eb5177",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le formulaire sert à transmettre les bonnes informations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le formulaire sert à transmettre les bonnes informations à l’association",
+        "visibleSeconds": 0.5,
+        "visible": "Titre d'introduction 'Remplir le formulaire et relire son planning' affiché au centre de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Nous allons remplir un exemple complet, lire les questions et la convention",
+        "visibleSeconds": 7,
+        "visible": "Écran stable de la frise planning de la Fête du village de Montvert (annonce des étapes à venir)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Prends ton temps : aucune inscription ne part pendant la saisie.",
+        "visibleSeconds": 14,
+        "visible": "Page de l'événement stable, introduction générale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement conforme au texte prévu."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

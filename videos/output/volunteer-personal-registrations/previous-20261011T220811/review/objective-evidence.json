@@ -1,0 +1,116 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 167,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "inputCounts": {
+    "click": 11,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ici, Camille a une place",
+      "startMs": 5002,
+      "endMs": 11628,
+      "cueMs": 5028,
+      "sentenceAbsoluteMs": 5026,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "practical",
+      "phrase": "Le lien carte aide à",
+      "startMs": 10433,
+      "endMs": 11321,
+      "cueMs": 32561,
+      "sentenceAbsoluteMs": 32559,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une place proposée affiche une",
+      "startMs": 6774,
+      "endMs": 10801,
+      "cueMs": 50042,
+      "sentenceAbsoluteMs": 50040,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Une demande sur validation attend",
+      "startMs": 14446,
+      "endMs": 19824,
+      "cueMs": 57715,
+      "sentenceAbsoluteMs": 57712,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "rien n'est retiré.",
+      "startMs": 5852,
+      "endMs": 6584,
+      "cueMs": 72938,
+      "sentenceAbsoluteMs": 72936,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 73432
+      },
+      "deltaMs": 496
+    },
+    {
+      "segmentId": "cancel",
+      "phrase": "La carte disparaît de la",
+      "startMs": 8334,
+      "endMs": 11858,
+      "cueMs": 75421,
+      "sentenceAbsoluteMs": 75418,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 75915
+      },
+      "deltaMs": 497
+    },
+    {
+      "segmentId": "waiting",
+      "phrase": "Confirme uniquement si c'est ce",
+      "startMs": 10577,
+      "endMs": 13096,
+      "cueMs": 97972,
+      "sentenceAbsoluteMs": 97971,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 98431
+      },
+      "deltaMs": 460
+    },
+    {
+      "segmentId": "return",
+      "phrase": "Retirer une inscription ne supprime",
+      "startMs": 9611,
+      "endMs": 15014,
+      "cueMs": 161408,
+      "sentenceAbsoluteMs": 161406,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

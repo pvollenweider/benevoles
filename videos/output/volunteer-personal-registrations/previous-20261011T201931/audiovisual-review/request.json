@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:35:11.314Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "5c4b699d098be910d4d007fc4399a0ef3eaef62d6c6159652bca14ca13944cab",
+  "clipSha256": "7e2fa0532a5710d3d1106edecd526b9e64825aa6e859ad5ee36e40fb80412e6b",
+  "scene": "request",
+  "review": {
+    "heardOpening": "Il reste la demande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Il reste la demande pour la Navette du dimanche.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Tous mes créneaux avec le bloc Navette du dimanche en attente de réponse.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Retirer ma demande ouvre sa confirmation",
+        "visibleSeconds": 1.1,
+        "visible": "Clic sur « Retirer ma demande » et apparition du formulaire de confirmation « Retirer la demande ? ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "En confirmant, tu retires cette candidature",
+        "visibleSeconds": 10.6,
+        "visible": "Clic sur le bouton rouge « Oui, retirer ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "La page indique maintenant que toutes ses inscriptions ont été annulées.",
+        "visibleSeconds": 12,
+        "visible": "Affichage de l'écran de confirmation « Toutes tes inscriptions ont été annulées ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

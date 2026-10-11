@@ -1,59 +1,70 @@
 {
   "id": "VOLUNTEER_FORM_RECAP",
   "slug": "volunteer-form-recap",
-  "validatedAt": "2026-10-05T09:48:33.047Z",
+  "validatedAt": "2026-10-11T21:59:46.632Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 165160,
+  "captureMs": 167280,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 18018,
-      "audioMs": 18015,
-      "driftMs": 3
-    },
-    {
-      "id": "selection",
-      "visualMs": 20509,
-      "audioMs": 20509,
-      "driftMs": 0
-    },
-    {
-      "id": "identity",
-      "visualMs": 21097,
-      "audioMs": 21096,
-      "driftMs": 1
-    },
-    {
-      "id": "questions",
-      "visualMs": 17030,
-      "audioMs": 17028,
+      "visualMs": 18125,
+      "audioMs": 18123,
       "driftMs": 2
     },
     {
+      "id": "selection",
+      "visualMs": 19257,
+      "audioMs": 19248,
+      "driftMs": 9
+    },
+    {
+      "id": "identity",
+      "visualMs": 17870,
+      "audioMs": 17867,
+      "driftMs": 3
+    },
+    {
+      "id": "questions",
+      "visualMs": 19847,
+      "audioMs": 19844,
+      "driftMs": 3
+    },
+    {
       "id": "agreement",
-      "visualMs": 16520,
-      "audioMs": 16518,
+      "visualMs": 16894,
+      "audioMs": 16892,
       "driftMs": 2
     },
     {
       "id": "recap",
-      "visualMs": 22286,
-      "audioMs": 22283,
-      "driftMs": 3
+      "visualMs": 22131,
+      "audioMs": 22130,
+      "driftMs": 1
     },
     {
       "id": "workload",
-      "visualMs": 21540,
-      "audioMs": 21538,
+      "visualMs": 23098,
+      "audioMs": 23096,
       "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 17776,
-      "audioMs": 17773,
-      "driftMs": 3
+      "visualMs": 19162,
+      "audioMs": 19160,
+      "driftMs": 2
     }
   ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 151,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.4
+  },
   "issues": []
 }

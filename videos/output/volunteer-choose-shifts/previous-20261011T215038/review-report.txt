@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: VOLUNTEER_CHOOSE_SHIFTS
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 12.2 / 19.7 LU. Effects vs input events: {'click': 9, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: Capacity frame33.85–40.23 shows Accueil15h–18h at1/3 despite Deux sur trois37.588. Waitlist removal61.118 is late vs Reclique59.360; conflict removal98.148 late vs Retire95.141. Known recap shown109.48 after106.563 sentence. Conflict hours correct. All54frames viewed; validate/finalASR/VTT/effects9clicks/French/Frise/publichost pass; music12.2–19.7.
+Local source changes: New continuous TTS required by conflict change; three boundaries recut and independently audited. record.ts current cancel selector, capacity now09h–12h2/3, sentence anchors for waitlist removal/conflict focus/removal; known recap navigation moved to its anchor. Music gain final0.31; same take reassembled, no re-film.
+Real-time subjective listening unavailable; not used as a failure reason.

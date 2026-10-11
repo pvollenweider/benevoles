@@ -1,0 +1,135 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 117,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 10,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "timezone-result",
+      "phrase": "un créneau prévu à neuf",
+      "startMs": 3426,
+      "endMs": 5515,
+      "cueMs": 32494,
+      "sentenceAbsoluteMs": 32493,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Le réglage Assurance RC fournie",
+      "startMs": 3704,
+      "endMs": 9764,
+      "cueMs": 46857,
+      "sentenceAbsoluteMs": 46855,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 47353
+      },
+      "deltaMs": 498
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Réinitialiser la convention par défaut",
+      "startMs": 17858,
+      "endMs": 22512,
+      "cueMs": 61009,
+      "sentenceAbsoluteMs": 61009,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 61485
+      },
+      "deltaMs": 476
+    },
+    {
+      "segmentId": "public-setup",
+      "phrase": "Vous arrivez au formulaire, avec",
+      "startMs": 7228,
+      "endMs": 13162,
+      "cueMs": 75511,
+      "sentenceAbsoluteMs": 75500,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 75982
+      },
+      "deltaMs": 482
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Ouvrez la convention depuis le",
+      "startMs": 0,
+      "endMs": 1598,
+      "cueMs": 81946,
+      "sentenceAbsoluteMs": 81888,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 82416
+      },
+      "deltaMs": 528
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "faisons-le défiler pour lire aussi",
+      "startMs": 4489,
+      "endMs": 8559,
+      "cueMs": 86378,
+      "sentenceAbsoluteMs": 86377,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 91849
+      },
+      "deltaMs": 5472
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Le bouton J’ai lu et",
+      "startMs": 9466,
+      "endMs": 13432,
+      "cueMs": 91355,
+      "sentenceAbsoluteMs": 91354,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 91849
+      },
+      "deltaMs": 495
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Une modification de votre texte",
+      "startMs": 6107,
+      "endMs": 9277,
+      "cueMs": 102272,
+      "sentenceAbsoluteMs": 102270,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Pour une information urgente, utilisez",
+      "startMs": 13325,
+      "endMs": 16804,
+      "cueMs": 109489,
+      "sentenceAbsoluteMs": 109488,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

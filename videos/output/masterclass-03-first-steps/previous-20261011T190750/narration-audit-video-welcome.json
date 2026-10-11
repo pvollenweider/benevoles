@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:07.666Z",
+  "revalidatedAt": "2026-10-11T17:47:07.666Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c9b73b4b8acdf17bc059048f1a2704f0b8029a2a73870bda17861ad76631b746",
+      "recognized": "Quand une association découvre benevole.app, la liste premiers pas lui donne un ordre simple. Elle ne fait rien à votre place. Elle indique ce qui est déjà prêt, la prochaine action utile et le résultat à vérifier avant d'inviter de vrais bénévoles.",
+      "expected": "Quand une association découvre benevol point app, la liste Premiers pas lui donne un ordre simple. Elle ne fait rien à votre place : elle indique ce qui est déjà prêt, la prochaine action utile, et le résultat à vérifier avant d’inviter de vrais bénévoles.",
+      "wordErrorRate": 0.044444444444444446,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

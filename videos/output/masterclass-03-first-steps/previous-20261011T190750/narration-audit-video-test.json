@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:15.014Z",
+  "revalidatedAt": "2026-10-11T17:47:15.015Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "test",
+      "audioSha256": "c89e5ec0574359e873fab670285f68fb3092f3390975ba0e1b32914a658c2077",
+      "recognized": "Dernière étape, vivre le parcours comme un bénévole. Sélectionner Accueil, compléter les coordonnées fictives, accepter la convention et confirmer. Cette vraie inscription vérifie en même temps le formulaire, le message de succès et l'e-mail contenant le lien personnel. Dans un événement réel, vous annuleriez ensuite cette inscription de test pour libérer la place.",
+      "expected": "Dernière étape : vivre le parcours comme un bénévole. Sélectionnez Accueil, complétez les coordonnées fictives, acceptez la convention et confirmez. Cette vraie inscription vérifie en même temps le formulaire, le message de succès et l’email contenant le lien personnel. Dans un événement réel, vous annuleriez ensuite cette inscription de test pour libérer la place.",
+      "wordErrorRate": 0.07407407407407407,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

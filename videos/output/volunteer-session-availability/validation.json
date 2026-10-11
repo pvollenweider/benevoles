@@ -1,60 +1,70 @@
 {
   "id": "VOLUNTEER_SESSION_AVAILABILITY",
   "slug": "volunteer-session-availability",
-  "validatedAt": "2026-10-05T11:33:07.195Z",
+  "validatedAt": "2026-10-11T22:17:06.971Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 185760,
+  "captureMs": 174560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 20353,
-      "audioMs": 20351,
-      "driftMs": 2
+      "visualMs": 18441,
+      "audioMs": 18438,
+      "driftMs": 3
     },
     {
       "id": "session",
-      "visualMs": 22632,
-      "audioMs": 22631,
-      "driftMs": 1
+      "visualMs": 22667,
+      "audioMs": 22665,
+      "driftMs": 2
     },
     {
       "id": "resend",
-      "visualMs": 20994,
-      "audioMs": 20993,
+      "visualMs": 19901,
+      "audioMs": 19900,
       "driftMs": 1
     },
     {
       "id": "recover",
-      "visualMs": 19472,
-      "audioMs": 19471,
-      "driftMs": 1
+      "visualMs": 20635,
+      "audioMs": 20633,
+      "driftMs": 2
     },
     {
       "id": "limit",
-      "visualMs": 19991,
-      "audioMs": 19990,
+      "visualMs": 18238,
+      "audioMs": 18237,
       "driftMs": 1
     },
     {
       "id": "availability",
-      "visualMs": 26991,
-      "audioMs": 26991,
-      "driftMs": 0
+      "visualMs": 23993,
+      "audioMs": 23992,
+      "driftMs": 1
     },
     {
       "id": "organizer",
-      "visualMs": 22512,
-      "audioMs": 22510,
-      "driftMs": 2
+      "visualMs": 20828,
+      "audioMs": 20825,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 21545,
-      "audioMs": 21544,
+      "visualMs": 21711,
+      "audioMs": 21710,
       "driftMs": 1
     }
   ],
+  "anchorsChecked": 12,
+  "music": {
+    "voicedWindows": 164,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -31.4,
+    "loudestMusicOnlyLufs": -31.4,
+    "medianVoiceLufs": -16.2
+  },
   "issues": []
 }

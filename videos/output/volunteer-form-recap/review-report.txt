@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_FORM_RECAP
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.3 / 18.3 LU. Effects vs input events: {'click': 20, 'key': 96}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All48finalframes reviewed. Continuer29.751 vs29.283; birth49.919 vs49.411; t-shirt60.204 vs59.711; comment69.669 vs69.14 align. Date12.06.1994French, nighttimefinlelendemain, chargeddaythen3missions/pause retainedvalues and finalunsentstate correct. Currentlabels/publichost/nooverlay/Frise/finalASR/VTT/exacteffects/musicpass. Freshprofile, no signup or remembered-contact notice.
+Local source changes: None; narration reused.
+Real-time subjective listening unavailable; not used as a failure reason.

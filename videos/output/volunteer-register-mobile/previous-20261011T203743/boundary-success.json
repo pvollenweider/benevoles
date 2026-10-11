@@ -1,0 +1,12 @@
+{
+  "anchor": "Et voilà, tu fais partie de l’équipe ! Un e-mail de",
+  "windowStart": 26.510999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 13.9,
+    "wordsHeard": "Et voilà, tu fais partie de l’équipe ! Un e-mail de"
+  },
+  "onset": 40.410999999999994,
+  "proposedCut": 40.400271000000004,
+  "note": "Proposal only; recut then independently audit before capture"
+}

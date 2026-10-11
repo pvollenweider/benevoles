@@ -504,7 +504,7 @@ async function main() {
     await scene("confirm", async (at) => {
       const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
       await at("Un dernier coup d’œil au")
-      await page.locator(".lg\\:col-start-2").filter({ hasText: "Tes créneaux" }).first().scrollIntoViewIfNeeded()
+      await page.getByText(/^Tes créneaux/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
       await at("confirme ton inscription.")
       await submit.scrollIntoViewIfNeeded()
       await tap(page, submit)
@@ -746,6 +746,7 @@ async function main() {
         await titleHeading.scrollIntoViewIfNeeded()
         const form = titleHeading.locator("xpath=ancestor::form")
         const field = form.getByLabel("Titre affiché en haut de la page de vos événements")
+        await at("Remplaçons-le par Les bénévoles des")
         await tap(page, field)
         await field.fill("")
         await typeNaturally(page, field, "Les bénévoles des Fêtes de Montvert")
@@ -813,11 +814,11 @@ async function main() {
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
         const panel = page.getByRole("heading", { name: "Logo de l'organisation", exact: true }).locator("..")
         await panel.scrollIntoViewIfNeeded()
-        await at("La confirmation vous laisse encore")
+        await at("Pour retirer le logo, revenez")
         await tap(page, panel.getByRole("button", { name: "Retirer le logo", exact: true }))
         const confirmation = page.getByRole("alertdialog", { name: "Retirer le logo de l'organisation ?" })
         await confirmation.waitFor()
-        await at(0.48) /* mid-sentence */
+        await at("Après validation, l’image disparaît des")
         await tap(page, confirmation.getByRole("button", { name: "Retirer le logo", exact: true }))
         await panel.getByText("Logo retiré. Le nom de l'organisation reste affiché.", { exact: true }).waitFor()
         await at(0.67) /* mid-sentence */
@@ -860,7 +861,7 @@ async function main() {
         await tap(page, form.getByRole("button", { name: "Enregistrer" }))
         await at("un créneau prévu à neuf")
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        const unchangedSlot = page.getByRole("button", { name: /Accueil.*09h.*12h/ })
+        const unchangedSlot = page.getByRole("button", { name: /^09h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ })
         await unchangedSlot.waitFor()
         await unchangedSlot.scrollIntoViewIfNeeded()
         await at(0.84) /* mid-sentence */
@@ -895,7 +896,7 @@ async function main() {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
         await at(0.22) /* mid-sentence */
-        await tap(page, page.getByRole("button", { name: /Accueil.*09h.*12h/ }))
+        await tap(page, page.getByRole("button", { name: /^09h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
         await at("Vous arrivez au formulaire, avec")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
@@ -903,7 +904,7 @@ async function main() {
 
       await scene("public-result", async (at) => {
         await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
-        await at("Le texte enregistré est présenté")
+        await at("Ouvrez la convention depuis le")
         await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
         await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
         await at("faisons-le défiler pour lire aussi")
@@ -4383,12 +4384,12 @@ async function main() {
 
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("invite", async (at) => {
-        await at(0.12) /* mid-sentence */
+        await at("Pour inviter Léa, ouvrez le")
         await tap(page, page.getByRole("button", { name: "Inviter" }))
         const form = page.getByRole("heading", { name: "Inviter un administrateur" }).locator("xpath=ancestor::form")
-        await typeNaturally(page, form.getByLabel("Nom"), "Léa Martin")
-        await typeNaturally(page, form.getByLabel("Email"), "video.team.lea@example.org")
-        await at(0.62) /* mid-sentence */
+        await fillVisibly(page, form.getByLabel("Nom"), "Léa Martin")
+        await fillVisibly(page, form.getByLabel("Email"), "video.team.lea@example.org")
+        await at("Prenons Organisateur")
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at("Cliquez sur Envoyer l’invitation ")
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
@@ -4409,9 +4410,9 @@ async function main() {
         const row = page.locator("div.px-4.py-3").filter({ hasText: "Léa Martin" })
         const role = row.getByLabel("Rôle de Léa Martin")
         await role.scrollIntoViewIfNeeded()
-        await at(0.20) /* mid-sentence */
+        await at("On choisit d’abord Propriétaire dans")
         await role.selectOption("admin")
-        await at(0.38) /* mid-sentence */
+        await at("On choisit d’abord Propriétaire dans")
         await tap(page, row.getByRole("button", { name: /Appliquer/ }))
         await page.getByRole("status").filter({ hasText: /Léa Martin : propriétaire/ }).waitFor()
         await at(0.74) /* mid-sentence */
@@ -5160,7 +5161,7 @@ async function main() {
         await editor.getByLabel("Début *").fill("09:00")
         await editor.getByLabel("Fin *").fill("12:00")
         await editor.getByLabel("Capacité *").fill("3")
-        await at(0.68) /* mid-sentence */
+        await at("Après validation, le créneau apparaît")
         await tap(page, editor.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByRole("status").filter({ hasText: /Créneau ajouté/ }).waitFor()
       })
@@ -5197,10 +5198,8 @@ async function main() {
       })
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
-      await scene("help", async at => {
-        const { recordInlineHelp } = await import("../lib/record-inline-help")
-        await recordInlineHelp(page, baseUrl, tap, at)
-      })
+      const { recordInlineHelp } = await import("../lib/record-inline-help")
+      await recordInlineHelp(page, baseUrl, tap, scene)
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
       await scene("result", async (at) => {
         await page.getByRole("heading", { name: "Événements" }).waitFor()

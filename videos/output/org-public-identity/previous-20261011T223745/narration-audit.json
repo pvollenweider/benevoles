@@ -1,0 +1,94 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T22:36:06.819Z",
+  "revalidatedAt": "2026-10-11T22:36:06.823Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "6f479a1e6ae476071dec3518decf58e17525cbcc948b3ea285cf24fc5eba96fa",
+      "recognized": "L'identité de l'organisation donne un point d'entrée commun à tous ses événements. Elle sert à présenter clairement l'association, à fournir une adresse facile à partager, et à éviter que les bénévoles confondent un nom technique avec le titre qu'ils voient.",
+      "expected": "L’identité de l’organisation donne un point d’entrée commun à tous ses événements. Elle sert à présenter clairement l’association, à fournir une adresse facile à partager et à éviter que les bénévoles confondent un nom technique avec le titre qu’ils voient.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "names",
+      "audioSha256": "4e83de503f7a85ce56579e30f524aea934a766b775ecbacff641ffff25786886",
+      "recognized": "Dans Paramètres, le nom de l'organisation apparaît dans l'administration, les e-mails et au-dessus du titre public. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Mont-Veyrier, puis enregistrons. Le message Titre enregistré confirme la modification. Les titres des événements ne changent pas.",
+      "expected": "Dans Paramètres, le nom de l’organisation apparaît dans l’administration, les emails et au-dessus du titre public. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Le message Titre enregistré confirme la modification : les titres des événements ne changent pas.",
+      "wordErrorRate": 0.07407407407407407,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "logo",
+      "audioSha256": "35bb83037c80269850ff1947e1d823300a8ee75db6889e0b656fa93939a30fa5",
+      "recognized": "Ajoutons le logo de l'association. Choisissez une image dans les formats indiqués, vérifiez son aperçu, puis cliquez sur Enregistrer le logo. L'image enregistrée apparaît dans les pages publiques, les e-mails et les documents. Le nom de l'association reste écrit à côté. Le logo ne remplace pas ce repère.",
+      "expected": "Ajoutons le logo de l’association. Choisissez une image dans les formats indiqués, vérifiez son aperçu, puis cliquez sur Enregistrer le logo. L’image enregistrée apparaît dans les pages publiques, les emails et les documents. Le nom de l’association reste écrit à côté : le logo ne remplace pas ce repère.",
+      "wordErrorRate": 0.0392156862745098,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "slug",
+      "audioSha256": "52877e17ec121e7ade475b7be7be51ef2a0a71aa597a520686dd53ae8b51c9e5",
+      "recognized": "L'identifiant public, ou slug, sert à former l'adresse de votre association sur Benevole.app. Ici, les adresses appartiennent à notre environnement de démonstration. Si vous changez l'identifiant alors que des événements sont publiés, une confirmation est demandée. Les anciens identifiants continuent de rediriger vers l'actuel, tant que vous les conservez. C'est leur suppression qui casse les anciens liens et QR codes. Ici, gardons l'adresse actuelle.",
+      "expected": "L’identifiant public, ou slug, sert à former l’adresse de votre association sur benevol point app. Ici, les adresses appartiennent à notre environnement de démonstration. Si vous changez l’identifiant alors que des événements sont publiés, une confirmation est demandée. Les anciens identifiants continuent de rediriger vers l’actuel tant que vous les conservez. C’est leur suppression qui casse les anciens liens et QR codes. Ici, gardons l’adresse actuelle.",
+      "wordErrorRate": 0.027777777777777776,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "public-page",
+      "audioSha256": "6c918f8155427ac3b3b5febdc4a71d3b2891dc9ad53a1812a576341c7fdaad37",
+      "recognized": "Ouvrons la page publique. Le nouveau titre et le logo apparaissent au-dessus des deux événements publiés et répertoriés. La rencontre des organisateurs n'est pas dans cette liste. Elle est publiée mais non répertoriée. Ouvrons son lien direct pour vérifier qu'elle reste accessible aux personnes qui le reçoivent. Non répertorié ne signifie pas protéger par un mot de passe.",
+      "expected": "Ouvrons la page publique. Le nouveau titre et le logo apparaissent au-dessus des deux événements publiés et répertoriés. La rencontre des organisateurs n’est pas dans cette liste : elle est publiée, mais non répertoriée. Ouvrons son lien direct pour vérifier qu’elle reste accessible aux personnes qui le reçoivent. Non répertorié ne signifie pas protégé par un mot de passe.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "event-result",
+      "audioSha256": "6145ea2679922814a57ed7e0b80ed01b8fc461a922b04c4e1cbf2c5ccb2002d0",
+      "recognized": "En ouvrant la fête du village, on retrouve l'identité de l'organisation avec les informations propres à cet événement. Le nom de l'événement, son lieu et son planning restent indépendants. On peut donc réutiliser la même page d'organisation pour plusieurs manifestations au fil de l'année.",
+      "expected": "En ouvrant la Fête du village, on retrouve l’identité de l’organisation avec les informations propres à cet événement. Le nom de l’événement, son lieu et son planning restent indépendants. On peut donc réutiliser la même page d’organisation pour plusieurs manifestations au fil de l’année.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "remove-logo",
+      "audioSha256": "9f26fc137a80ac855172ae7d9c82f68da6547a791dd49a32c81e2870fa6a50c6",
+      "recognized": "Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le logo. La confirmation vous laisse encore annuler. Après validation, l'image disparaît des pages et des prochains documents, mais le nom et le titre restent affichés. Cela ne retire pas une copie déjà téléchargée ou un ancien e-mail. Vous avez une identité cohérente",
+      "expected": "Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le logo. La confirmation vous laisse encore annuler. Après validation, l’image disparaît des pages et des prochains documents, mais le nom et le titre restent affichés. Cela ne retire pas une copie déjà téléchargée ou un ancien email.",
+      "wordErrorRate": 0.10204081632653061,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "result",
+      "audioSha256": "c2e8222aa80f5f13aaea3c9e1f2dd731e9dec79521e14378e22b310b9bd372d7",
+      "recognized": "Le nom de l'association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces réglages sont réservés aux propriétaires. Pour corriger un texte visible, modifiez son titre plutôt que l'adresse, et conservez les anciens identifiants si vous avez déjà diffusé leur lien.",
+      "expected": "Vous avez une identité cohérente : le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces réglages sont réservés au propriétaire. Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.",
+      "wordErrorRate": 0.17647058823529413,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing"
+      ]
+    }
+  ]
+}

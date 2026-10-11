@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+  "status": "NOT READY",
+  "duration": 173.36,
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {
+    "voicedWindows": 167,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 17.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Overview omits offered/requested cards; waiting confirmation 0.56s early. Opening click is aligned (88ms after sentence), contrary to AV flag. New TTS required by rejected cache fingerprint; offer boundary recut and all audits passed.",
+  "sourceChanges": "Added overview scroll and waiting confirmation sentence anchors; no refilm."
+}

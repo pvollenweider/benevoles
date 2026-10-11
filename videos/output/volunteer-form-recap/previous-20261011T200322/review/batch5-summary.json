@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_FORM_RECAP",
+  "status": "NOT READY",
+  "duration": 167.28,
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 17.8,
+    "quietestMusicOnlyLufs": -32.5,
+    "loudestMusicOnlyLufs": -31.9,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Workload returns to planning at 12.02 s before return instruction at 16.69 s; convention opens 138 ms before sentence. ASR/captions/effects/music/validation pass. Frame evidence disproves automated missing-consent and missing-removal claims: consent is checked at 13.0 s and Logistique removed at 17.17 s.",
+  "sourceChanges": "record.ts: anchor convention opening to Ouvre la Convention des Bénévoles; move Pour alléger sentence anchor before Retour. No re-film."
+}

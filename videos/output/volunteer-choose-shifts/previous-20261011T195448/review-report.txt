@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: VOLUNTEER_CHOOSE_SHIFTS
+COMMIT: d1482d273bc0c97c3efff59e76dc57205e0a2995
+BUILD_ID: Ur_-usFFdKv05dBCDAbrt
+DURATION: — seconds
+MUSIC: smallest — / largest — LU
+PROBLEMS: Conflict rehearsal failed: morning Navette is already full; stale selector assumes time-first name and scenario cannot demonstrate conflict-driven unavailability. No final MP4.
+SOURCE CHANGES: record.ts plus manifest/script: use available afternoon Accueil 15–18 / Navette 14–18 and assert conflict wording. Transcript changed: next retake requires regenerated TTS; current batch narration reused and not regenerated.
+VALIDATION: "unavailable"; sentence anchors checked: —
+FINAL AUDIO: []
+CAPTIONS/EFFECTS: transcript match None; marker counts None; exact synthesized bytes None; clicks None, keys None.
+REVIEW: No assembled final MP4; complete final audiovisual, subtitle, effect and music checks unavailable. See review/pipeline-error.txt and /tmp/batch5-*.log. No readiness claim.
+LIMIT: No real-time subjective listening available; this alone does not affect readiness.

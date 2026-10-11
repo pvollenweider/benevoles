@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:18.009Z",
+  "revalidatedAt": "2026-10-11T17:47:18.009Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "help",
+      "audioSha256": "79b3d735ffb64e01c7e7015797b8fac10097c85fae7c317dac8b95baf9fe5869",
+      "recognized": "Besoin d'aide ? Aide ouvre le guide organisateur dans un nouvel onglet. Retrouvons premiers pas. Quand une vidéo est disponible, voir la vidéo ouvre le lecteur directement dans la documentation et lance la lecture grâce à votre clic. Les commandes du lecteur permettent ensuite de mettre en pause et d'activer les sous-titres. La transcription reste consultable juste dessous. Vous pouvez aussi ouvrir la bibliothèque ou replier le lecteur pour continuer votre lecture.",
+      "expected": "Besoin d’aide ? Aide ouvre le guide organisateur dans un nouvel onglet. Retrouvons Premiers pas. Quand une vidéo est disponible, Voir la vidéo ouvre le lecteur directement dans la documentation et lance la lecture grâce à votre clic. Les commandes du lecteur permettent ensuite de mettre en pause et d’activer les sous-titres. La transcription reste consultable juste dessous. Vous pouvez aussi ouvrir la bibliothèque, ou replier le lecteur pour continuer votre lecture.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

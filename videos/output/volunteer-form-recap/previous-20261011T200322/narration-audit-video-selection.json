@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:40.448Z",
+  "revalidatedAt": "2026-10-11T18:22:40.448Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "selection",
+      "audioSha256": "bd2cbf10f731e67d4f0c11c2b358c5585830c048a598de4d9203a36eac8a8a51",
+      "recognized": "Voici quatre missions : accueil le matin, logistique juste après, rangement en soirée jusqu'à deux heures du matin, puis buvette le dimanche. Le bouton Continuer ouvre le formulaire avec ce choix. Le récapitulatif les classe dans l'ordre chronologique, même si tu les as sélectionnés autrement.",
+      "expected": "Voici quatre missions : Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche. Le bouton Continuer ouvre le formulaire avec ce choix. Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+      "wordErrorRate": 0.021739130434782608,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,291 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1120,
+    "sentences": [
+      {
+        "text": "Deux réglages communs évitent beaucoup de malentendus :",
+        "startMs": 276,
+        "endMs": 2579,
+        "method": "silence",
+        "absoluteStartMs": 1396
+      },
+      {
+        "text": "le fuseau horaire donne la bonne référence aux calculs automatiques, et la Convention des Bénévoles explique clairement le cadre accepté avant chaque inscription.",
+        "startMs": 2906,
+        "endMs": 10679,
+        "method": "silence",
+        "absoluteStartMs": 4026
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "timezone",
+    "startMs": 14481,
+    "sentences": [
+      {
+        "text": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements.",
+        "startMs": 525,
+        "endMs": 3621,
+        "method": "silence",
+        "absoluteStartMs": 15006
+      },
+      {
+        "text": "Europe Zurich tient compte de l’heure d’hiver et de l’heure d’été.",
+        "startMs": 4262,
+        "endMs": 6630,
+        "method": "silence",
+        "absoluteStartMs": 18743
+      },
+      {
+        "text": "Ce réglage donne la bonne référence aux rappels, aux délais des offres de liste d’attente et aux dates affichées dans le journal et les documents.",
+        "startMs": 7234,
+        "endMs": 13639,
+        "method": "silence",
+        "absoluteStartMs": 21715
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "timezone-result",
+    "startMs": 29067,
+    "sentences": [
+      {
+        "text": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning :",
+        "startMs": 494,
+        "endMs": 3272,
+        "method": "silence",
+        "absoluteStartMs": 29561
+      },
+      {
+        "text": "un créneau prévu à neuf heures reste affiché à neuf heures.",
+        "startMs": 3426,
+        "endMs": 5515,
+        "method": "silence",
+        "absoluteStartMs": 32493
+      },
+      {
+        "text": "Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.",
+        "startMs": 5941,
+        "endMs": 11455,
+        "method": "silence",
+        "absoluteStartMs": 35008
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 29533
+      }
+    ]
+  },
+  {
+    "id": "charter",
+    "startMs": 43151,
+    "sentences": [
+      {
+        "text": "La Convention des Bénévoles présente le cadre de l’engagement.",
+        "startMs": 463,
+        "endMs": 2825,
+        "method": "silence",
+        "absoluteStartMs": 43614
+      },
+      {
+        "text": "Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé :",
+        "startMs": 3704,
+        "endMs": 9764,
+        "method": "silence",
+        "absoluteStartMs": 46855
+      },
+      {
+        "text": "choisissez-le selon la situation réelle de votre association.",
+        "startMs": 9898,
+        "endMs": 12934,
+        "method": "silence",
+        "absoluteStartMs": 53049
+      },
+      {
+        "text": "Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible.",
+        "startMs": 13130,
+        "endMs": 17216,
+        "method": "silence",
+        "absoluteStartMs": 56281
+      },
+      {
+        "text": "Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+        "startMs": 17858,
+        "endMs": 22512,
+        "method": "silence",
+        "absoluteStartMs": 61009
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 47353
+      },
+      {
+        "kind": "click",
+        "atMs": 48920
+      },
+      {
+        "kind": "click",
+        "atMs": 61485
+      },
+      {
+        "kind": "click",
+        "atMs": 62268
+      },
+      {
+        "kind": "click",
+        "atMs": 63135
+      }
+    ]
+  },
+  {
+    "id": "public-setup",
+    "startMs": 68272,
+    "sentences": [
+      {
+        "text": "Vérifions le résultat côté bénévole.",
+        "startMs": 441,
+        "endMs": 1821,
+        "method": "silence",
+        "absoluteStartMs": 68713
+      },
+      {
+        "text": "Ouvrez l’événement public, sélectionnez un créneau, puis cliquez sur Continuer.",
+        "startMs": 2477,
+        "endMs": 6478,
+        "method": "silence",
+        "absoluteStartMs": 70749
+      },
+      {
+        "text": "Vous arrivez au formulaire, avec les informations demandées et les consentements, avant toute confirmation d’inscription.",
+        "startMs": 7228,
+        "endMs": 13162,
+        "method": "silence",
+        "absoluteStartMs": 75500
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 71634
+      },
+      {
+        "kind": "click",
+        "atMs": 75982
+      }
+    ]
+  },
+  {
+    "id": "public-result",
+    "startMs": 81888,
+    "sentences": [
+      {
+        "text": "Ouvrez la convention depuis le formulaire.",
+        "startMs": 0,
+        "endMs": 1598,
+        "method": "silence",
+        "absoluteStartMs": 81888
+      },
+      {
+        "text": "Le texte enregistré est présenté au bénévole :",
+        "startMs": 2131,
+        "endMs": 3887,
+        "method": "silence",
+        "absoluteStartMs": 84019
+      },
+      {
+        "text": "faisons-le défiler pour lire aussi les engagements de l’organisation et la clause d’assurance.",
+        "startMs": 4489,
+        "endMs": 8559,
+        "method": "silence",
+        "absoluteStartMs": 86377
+      },
+      {
+        "text": "Le bouton J’ai lu et j’accepte ferme la fenêtre et coche l’acceptation dans le formulaire.",
+        "startMs": 9466,
+        "endMs": 13432,
+        "method": "silence",
+        "absoluteStartMs": 91354
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 82416
+      },
+      {
+        "kind": "click",
+        "atMs": 91849
+      }
+    ]
+  },
+  {
+    "id": "attention",
+    "startMs": 96163,
+    "sentences": [
+      {
+        "text": "Quand le bénévole confirme son inscription, la version exacte de la convention acceptée et la date sont conservées.",
+        "startMs": 390,
+        "endMs": 5481,
+        "method": "silence",
+        "absoluteStartMs": 96553
+      },
+      {
+        "text": "Une modification de votre texte concerne les prochaines inscriptions ;",
+        "startMs": 6107,
+        "endMs": 9277,
+        "method": "silence",
+        "absoluteStartMs": 102270
+      },
+      {
+        "text": "elle n’envoie pas automatiquement un message aux personnes déjà inscrites.",
+        "startMs": 9550,
+        "endMs": 12735,
+        "method": "silence",
+        "absoluteStartMs": 105713
+      },
+      {
+        "text": "Pour une information urgente, utilisez les communications de l’événement.",
+        "startMs": 13325,
+        "endMs": 16804,
+        "method": "silence",
+        "absoluteStartMs": 109488
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "result",
+    "startMs": 114013,
+    "sentences": [
+      {
+        "text": "Le résultat est prévisible :",
+        "startMs": 597,
+        "endMs": 2051,
+        "method": "silence",
+        "absoluteStartMs": 114610
+      },
+      {
+        "text": "les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre.",
+        "startMs": 2652,
+        "endMs": 7448,
+        "method": "silence",
+        "absoluteStartMs": 116665
+      },
+      {
+        "text": "Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
+        "startMs": 8252,
+        "endMs": 15160,
+        "method": "silence",
+        "absoluteStartMs": 122265
+      }
+    ],
+    "inputs": []
+  }
+]

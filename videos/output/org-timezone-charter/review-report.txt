@@ -1,0 +1,8 @@
+STATUS: READY
+ID: ORG_TIMEZONE_CHARTER
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14 / 18.3 LU. Effects vs input events: {'click': 10, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: 48 images finales et séquence convention revues ; clic ouverture 82.416 s vs phrase 81.888, défilement réel et acceptation 91.849 vs 91.354. Horaire 09h–12h inchangé, texte complet et clause assurance visibles. Aucun signup. ASR final réussi après recontrôle de variation de reconnaissance de introduction ; sous-titres, effets et musique conformes.
+Local source changes: Sélecteurs des créneaux actualisés ; ouverture de convention convertie en ancre de phrase, reprise unique acceptée. Narration réutilisée, trois coupes corrigées aux silences mesurés puis auditées.
+Real-time subjective listening unavailable; not used as a failure reason.

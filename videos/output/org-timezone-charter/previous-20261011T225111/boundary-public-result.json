@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrez la convention depuis le formulaire. Le texte enregistré est présenté",
+  "windowStart": 60.209999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 13.24,
+    "wordsHeard": "Ouvrez la convention depuis le formulaire. Le texte enregistré est présenté"
+  },
+  "onset": 73.44999999999999,
+  "proposedCut": 73.3549375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "ORG_PUBLIC_IDENTITY",
+  "slug": "org-public-identity",
+  "validatedAt": "2026-10-04T12:14:17.883Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 106080,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14028,
+      "audioMs": 14025,
+      "driftMs": 3
+    },
+    {
+      "id": "names",
+      "visualMs": 17610,
+      "audioMs": 17609,
+      "driftMs": 1
+    },
+    {
+      "id": "slug",
+      "visualMs": 20768,
+      "audioMs": 20768,
+      "driftMs": 0
+    },
+    {
+      "id": "public-page",
+      "visualMs": 9309,
+      "audioMs": 9303,
+      "driftMs": 6
+    },
+    {
+      "id": "event-result",
+      "visualMs": 21145,
+      "audioMs": 21144,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 17793,
+      "audioMs": 17791,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,70 @@
+{
+  "id": "VOLUNTEER_FORM_RECAP",
+  "slug": "volunteer-form-recap",
+  "validatedAt": "2026-10-11T20:07:00.521Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 167240,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 18125,
+      "audioMs": 18123,
+      "driftMs": 2
+    },
+    {
+      "id": "selection",
+      "visualMs": 19249,
+      "audioMs": 19248,
+      "driftMs": 1
+    },
+    {
+      "id": "identity",
+      "visualMs": 17870,
+      "audioMs": 17867,
+      "driftMs": 3
+    },
+    {
+      "id": "questions",
+      "visualMs": 19846,
+      "audioMs": 19844,
+      "driftMs": 2
+    },
+    {
+      "id": "agreement",
+      "visualMs": 16897,
+      "audioMs": 16892,
+      "driftMs": 5
+    },
+    {
+      "id": "recap",
+      "visualMs": 22133,
+      "audioMs": 22130,
+      "driftMs": 3
+    },
+    {
+      "id": "workload",
+      "visualMs": 23098,
+      "audioMs": 23096,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 19160,
+      "audioMs": 19160,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

@@ -1,0 +1,8 @@
+STATUS: READY
+ID: ORG_FIRST_STEPS
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 60 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 13.7 / 18 LU. Effects vs input events: {'click': 30, 'key': 30}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: One accepted re-film resolves shift validation (106.700s vs sentence106.227) and help actions (158.193/161.222/162.887/174.351/176.952 at their sentences). All chapters reviewed with actual MP4 sheets and one-second shift/help evidence. Wizard empty hint disappears; current labels, French dates, public address, final ASR, VTT, exact synthesized effects and music pass. Fresh profile; one signup.
+Local source changes: record.ts shift validation sentence anchor; record-inline-help.ts sentence anchors and internal help scene. Narration reused. Local media configuration restored, no product changes.
+Real-time subjective listening unavailable; not used as a failure reason.

@@ -1,0 +1,565 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 330,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -33.1,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 29,
+    "key": 177
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [
+    {
+      "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/signup-85.png",
+      "line": "Accueil - équipe A • 24/10/2026 • 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-60.png",
+      "line": "H : accepté par le serveur d'envoi ; 11/10/2026 22:54 Confirmation d'inscription : accepté par le serveur d'envoi 11/10/2026 22:54"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-85.png",
+      "line": "# : accepté par le serveur d'envoi ; 11/10/2026 22:54 Confirmation d'inscription : accepté par le serveur d'envoi 11/10/2026 22:54"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-end.png",
+      "line": "# : accepté par le serveur d'envoi ; 11/10/2026 22:54 Confirmation d'inscription : accepté par le serveur d'envoi 11/10/2026 22:54"
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Dans notre démonstration, deux organisations",
+      "startMs": 12942,
+      "endMs": 18865,
+      "cueMs": 12946,
+      "sentenceAbsoluteMs": 12946,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Les noms se ressemblent, mais",
+      "startMs": 18990,
+      "endMs": 23473,
+      "cueMs": 18996,
+      "sentenceAbsoluteMs": 18994,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Toutes les personnes et coordonnées",
+      "startMs": 28279,
+      "endMs": 31126,
+      "cueMs": 28285,
+      "sentenceAbsoluteMs": 28283,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "signup",
+      "phrase": "Jules choisit un créneau et",
+      "startMs": 5068,
+      "endMs": 7490,
+      "cueMs": 38861,
+      "sentenceAbsoluteMs": 38859,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 39336
+      },
+      "deltaMs": 477
+    },
+    {
+      "segmentId": "signup",
+      "phrase": "Il accepte ensuite les conditions",
+      "startMs": 14991,
+      "endMs": 16894,
+      "cueMs": 50439,
+      "sentenceAbsoluteMs": 48782,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 50901
+      },
+      "deltaMs": 2119
+    },
+    {
+      "segmentId": "signup",
+      "phrase": "Après l'envoi, l'inscription est enregistrée",
+      "startMs": 17322,
+      "endMs": 20758,
+      "cueMs": 51992,
+      "sentenceAbsoluteMs": 51113,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 52484
+      },
+      "deltaMs": 1371
+    },
+    {
+      "segmentId": "signup",
+      "phrase": "Ouvrons donc le vrai message",
+      "startMs": 29210,
+      "endMs": 32935,
+      "cueMs": 63003,
+      "sentenceAbsoluteMs": 63001,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "signup",
+      "phrase": "Nous arrivons sur sa propre",
+      "startMs": 33831,
+      "endMs": 37301,
+      "cueMs": 67623,
+      "sentenceAbsoluteMs": 67622,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "personal",
+      "phrase": "Le panneau Ton lien personnel",
+      "startMs": 5324,
+      "endMs": 8486,
+      "cueMs": 79129,
+      "sentenceAbsoluteMs": 79127,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 90927
+      },
+      "deltaMs": 11800
+    },
+    {
+      "segmentId": "personal",
+      "phrase": "Utilisons Recevoir ce lien par",
+      "startMs": 16651,
+      "endMs": 19410,
+      "cueMs": 90455,
+      "sentenceAbsoluteMs": 90454,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 90927
+      },
+      "deltaMs": 473
+    },
+    {
+      "segmentId": "personal",
+      "phrase": "Cette action renvoie l'accès ",
+      "startMs": 19545,
+      "endMs": 20774,
+      "cueMs": 93350,
+      "sentenceAbsoluteMs": 93348,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "personal",
+      "phrase": "Pour inviter des amis à",
+      "startMs": 24980,
+      "endMs": 28400,
+      "cueMs": 98785,
+      "sentenceAbsoluteMs": 98783,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "recovery",
+      "phrase": "Depuis la page de récupération",
+      "startMs": 1795,
+      "endMs": 5151,
+      "cueMs": 106721,
+      "sentenceAbsoluteMs": 106719,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 107254
+      },
+      "deltaMs": 535
+    },
+    {
+      "segmentId": "recovery",
+      "phrase": "Vérifions le message reçu dans",
+      "startMs": 11463,
+      "endMs": 14177,
+      "cueMs": 116390,
+      "sentenceAbsoluteMs": 116387,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 124113
+      },
+      "deltaMs": 7726
+    },
+    {
+      "segmentId": "recovery",
+      "phrase": "la réponse affichée reste la",
+      "startMs": 17557,
+      "endMs": 19675,
+      "cueMs": 122482,
+      "sentenceAbsoluteMs": 122481,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 124113
+      },
+      "deltaMs": 1632
+    },
+    {
+      "segmentId": "recovery",
+      "phrase": "La réponse ne révèle pas",
+      "startMs": 25478,
+      "endMs": 29747,
+      "cueMs": 130404,
+      "sentenceAbsoluteMs": 130402,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 131990
+      },
+      "deltaMs": 1588
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "L'organisation l'envoie à Zoé, puis",
+      "startMs": 4360,
+      "endMs": 8402,
+      "cueMs": 149042,
+      "sentenceAbsoluteMs": 149041,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 149523
+      },
+      "deltaMs": 482
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Son lien conduit au formulaire",
+      "startMs": 8804,
+      "endMs": 13298,
+      "cueMs": 153486,
+      "sentenceAbsoluteMs": 153485,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 153973
+      },
+      "deltaMs": 488
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Son lien conduit au formulaire",
+      "startMs": 8804,
+      "endMs": 13298,
+      "cueMs": 156084,
+      "sentenceAbsoluteMs": 153485,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 160054
+      },
+      "deltaMs": 6569
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Cela facilite l'inscription de la",
+      "startMs": 13763,
+      "endMs": 15970,
+      "cueMs": 158446,
+      "sentenceAbsoluteMs": 158444,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 160054
+      },
+      "deltaMs": 1610
+    },
+    {
+      "segmentId": "leader",
+      "phrase": "Il voit les bénévoles de",
+      "startMs": 7259,
+      "endMs": 12335,
+      "cueMs": 184949,
+      "sentenceAbsoluteMs": 184947,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 202825
+      },
+      "deltaMs": 17878
+    },
+    {
+      "segmentId": "leader",
+      "phrase": "Revenons dans l'administration et retirons",
+      "startMs": 23434,
+      "endMs": 26415,
+      "cueMs": 201125,
+      "sentenceAbsoluteMs": 201122,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 202825
+      },
+      "deltaMs": 1703
+    },
+    {
+      "segmentId": "leader",
+      "phrase": "En rouvrant son ancien lien",
+      "startMs": 27135,
+      "endMs": 30120,
+      "cueMs": 204825,
+      "sentenceAbsoluteMs": 204823,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 205289
+      },
+      "deltaMs": 466
+    },
+    {
+      "segmentId": "leader",
+      "phrase": "Cela permet de retirer cet",
+      "startMs": 30615,
+      "endMs": 33993,
+      "cueMs": 208306,
+      "sentenceAbsoluteMs": 208303,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Dans les inscriptions, il retrouve",
+      "startMs": 5034,
+      "endMs": 9209,
+      "cueMs": 219587,
+      "sentenceAbsoluteMs": 219586,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 230596
+      },
+      "deltaMs": 11010
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Dans les membres, il peut",
+      "startMs": 10215,
+      "endMs": 15242,
+      "cueMs": 224768,
+      "sentenceAbsoluteMs": 224767,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 230596
+      },
+      "deltaMs": 5829
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Regardons la fiche de Léa",
+      "startMs": 15563,
+      "endMs": 19126,
+      "cueMs": 230117,
+      "sentenceAbsoluteMs": 230115,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 230596
+      },
+      "deltaMs": 481
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Sa page personnelle ne montre",
+      "startMs": 19601,
+      "endMs": 21993,
+      "cueMs": 234154,
+      "sentenceAbsoluteMs": 234153,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 234629
+      },
+      "deltaMs": 476
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Le responsable reçoit les contacts",
+      "startMs": 22365,
+      "endMs": 26518,
+      "cueMs": 236919,
+      "sentenceAbsoluteMs": 236917,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "Avant de transmettre une information",
+      "startMs": 27293,
+      "endMs": 31731,
+      "cueMs": 241847,
+      "sentenceAbsoluteMs": 241845,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "Ouvrons Confidentialité.",
+      "startMs": 3372,
+      "endMs": 5146,
+      "cueMs": 256993,
+      "sentenceAbsoluteMs": 256991,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 257506
+      },
+      "deltaMs": 515
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "Repérons aussi les indications de",
+      "startMs": 10666,
+      "endMs": 14477,
+      "cueMs": 264286,
+      "sentenceAbsoluteMs": 264285,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 277034
+      },
+      "deltaMs": 12749
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "Pour une question ou une",
+      "startMs": 14985,
+      "endMs": 21369,
+      "cueMs": 268608,
+      "sentenceAbsoluteMs": 268604,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 277034
+      },
+      "deltaMs": 8430
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "Pour une question ou une",
+      "startMs": 14985,
+      "endMs": 21369,
+      "cueMs": 268619,
+      "sentenceAbsoluteMs": 268604,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 277034
+      },
+      "deltaMs": 8430
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "Ouvrons maintenant les conditions d'utilisation",
+      "startMs": 21762,
+      "endMs": 25421,
+      "cueMs": 275382,
+      "sentenceAbsoluteMs": 275381,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 277034
+      },
+      "deltaMs": 1653
+    },
+    {
+      "segmentId": "legal",
+      "phrase": "elle ne remplace pas une",
+      "startMs": 28541,
+      "endMs": 32136,
+      "cueMs": 282160,
+      "sentenceAbsoluteMs": 282160,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "copies",
+      "phrase": "Ouvrons le rapport prévu pour",
+      "startMs": 3498,
+      "endMs": 7142,
+      "cueMs": 296493,
+      "sentenceAbsoluteMs": 296491,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 296982
+      },
+      "deltaMs": 491
+    },
+    {
+      "segmentId": "copies",
+      "phrase": "ce fichier comporte notamment des",
+      "startMs": 10172,
+      "endMs": 13421,
+      "cueMs": 303167,
+      "sentenceAbsoluteMs": 303165,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 304862
+      },
+      "deltaMs": 1697
+    },
+    {
+      "segmentId": "copies",
+      "phrase": "Il n'est donc pas à",
+      "startMs": 13628,
+      "endMs": 16495,
+      "cueMs": 306624,
+      "sentenceAbsoluteMs": 306621,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "copies",
+      "phrase": "Choisis le document adapté à",
+      "startMs": 17107,
+      "endMs": 22095,
+      "cueMs": 310100,
+      "sentenceAbsoluteMs": 310100,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour recruter, partage la page",
+      "startMs": 3617,
+      "endMs": 6001,
+      "cueMs": 331693,
+      "sentenceAbsoluteMs": 331692,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour gérer une inscription, garde",
+      "startMs": 6688,
+      "endMs": 10317,
+      "cueMs": 334765,
+      "sentenceAbsoluteMs": 334763,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour coordonner un poste, remets",
+      "startMs": 11077,
+      "endMs": 14929,
+      "cueMs": 339155,
+      "sentenceAbsoluteMs": 339152,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Si un accès a été",
+      "startMs": 15527,
+      "endMs": 20579,
+      "cueMs": 343604,
+      "sentenceAbsoluteMs": 343602,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

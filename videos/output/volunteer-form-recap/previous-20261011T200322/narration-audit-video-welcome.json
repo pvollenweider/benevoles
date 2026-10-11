@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:40.168Z",
+  "revalidatedAt": "2026-10-11T18:22:40.169Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "7beb383e0f3ab6618a5ffe49b65108272ffc4f278a419766b1ceabd9b07e9f23",
+      "recognized": "Le formulaire sert à transmettre les bonnes informations à l'association et à vérifier ton engagement avant de confirmer. Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé. Prends ton temps, aucune inscription ne part pendant la saisie.",
+      "expected": "Le formulaire sert à transmettre les bonnes informations à l’association et à vérifier ton engagement avant de confirmer. Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé. Prends ton temps : aucune inscription ne part pendant la saisie.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "slug": "org-public-identity",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T22:43:37.568Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "fetes-de-montvert",
+    "scenario": "ORG_PUBLIC_IDENTITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4748
+    },
+    {
+      "kind": "key",
+      "atMs": 5056
+    },
+    {
+      "kind": "click",
+      "atMs": 5581
+    },
+    {
+      "kind": "key",
+      "atMs": 5889
+    },
+    {
+      "kind": "key",
+      "atMs": 5987
+    },
+    {
+      "kind": "key",
+      "atMs": 6084
+    },
+    {
+      "kind": "key",
+      "atMs": 6183
+    },
+    {
+      "kind": "key",
+      "atMs": 6281
+    },
+    {
+      "kind": "key",
+      "atMs": 6482
+    },
+    {
+      "kind": "key",
+      "atMs": 6682
+    },
+    {
+      "kind": "key",
+      "atMs": 6781
+    },
+    {
+      "kind": "key",
+      "atMs": 6879
+    },
+    {
+      "kind": "key",
+      "atMs": 6979
+    },
+    {
+      "kind": "key",
+      "atMs": 7077
+    },
+    {
+      "kind": "key",
+      "atMs": 7175
+    },
+    {
+      "kind": "key",
+      "atMs": 7274
+    },
+    {
+      "kind": "key",
+      "atMs": 7375
+    },
+    {
+      "kind": "key",
+      "atMs": 7478
+    },
+    {
+      "kind": "key",
+      "atMs": 7578
+    },
+    {
+      "kind": "key",
+      "atMs": 7679
+    },
+    {
+      "kind": "key",
+      "atMs": 7878
+    },
+    {
+      "kind": "key",
+      "atMs": 7976
+    },
+    {
+      "kind": "key",
+      "atMs": 8079
+    },
+    {
+      "kind": "key",
+      "atMs": 8177
+    },
+    {
+      "kind": "key",
+      "atMs": 8275
+    },
+    {
+      "kind": "key",
+      "atMs": 8379
+    },
+    {
+      "kind": "key",
+      "atMs": 8480
+    },
+    {
+      "kind": "key",
+      "atMs": 8579
+    },
+    {
+      "kind": "key",
+      "atMs": 8679
+    },
+    {
+      "kind": "key",
+      "atMs": 8780
+    },
+    {
+      "kind": "key",
+      "atMs": 8882
+    },
+    {
+      "kind": "key",
+      "atMs": 8985
+    },
+    {
+      "kind": "key",
+      "atMs": 9086
+    },
+    {
+      "kind": "key",
+      "atMs": 9189
+    },
+    {
+      "kind": "key",
+      "atMs": 9287
+    },
+    {
+      "kind": "click",
+      "atMs": 10064
+    },
+    {
+      "kind": "click",
+      "atMs": 11331
+    },
+    {
+      "kind": "click",
+      "atMs": 12614
+    },
+    {
+      "kind": "click",
+      "atMs": 13431
+    },
+    {
+      "kind": "click",
+      "atMs": 14231
+    },
+    {
+      "kind": "click",
+      "atMs": 19358
+    },
+    {
+      "kind": "click",
+      "atMs": 22901
+    },
+    {
+      "kind": "click",
+      "atMs": 23683
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1115,
+      "endMs": 3741
+    },
+    {
+      "id": "names",
+      "startMs": 4194,
+      "endMs": 10371
+    },
+    {
+      "id": "logo",
+      "startMs": 10824,
+      "endMs": 11663
+    },
+    {
+      "id": "slug",
+      "startMs": 12116,
+      "endMs": 14567
+    },
+    {
+      "id": "public-page",
+      "startMs": 16133,
+      "endMs": 17300
+    },
+    {
+      "id": "event-result",
+      "startMs": 17752,
+      "endMs": 20801
+    },
+    {
+      "id": "remove-logo",
+      "startMs": 21260,
+      "endMs": 25109
+    },
+    {
+      "id": "result",
+      "startMs": 25562,
+      "endMs": 27896
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "names",
+      "phrase": "Le titre de la page",
+      "startMs": 8605,
+      "endMs": 12861,
+      "cueMs": 4215
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Remplaçons-le par Les bénévoles des",
+      "startMs": 12861,
+      "endMs": 18505,
+      "cueMs": 4249
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Le message Titre enregistré confirme",
+      "startMs": 18505,
+      "endMs": 22762,
+      "cueMs": 9573
+    },
+    {
+      "segmentId": "logo",
+      "phrase": "L’image enregistrée apparaît dans les",
+      "startMs": 12260,
+      "endMs": 19553,
+      "cueMs": 10857
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Si vous changez l’identifiant alors",
+      "startMs": 12626,
+      "endMs": 20111,
+      "cueMs": 12945
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 31655,
+      "endMs": 34000,
+      "cueMs": 13739
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 31655,
+      "endMs": 34000,
+      "cueMs": 14540
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "elle est publiée, mais non",
+      "startMs": 14463,
+      "endMs": 17590,
+      "cueMs": 16154
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "Ouvrons son lien direct pour",
+      "startMs": 17590,
+      "endMs": 25309,
+      "cueMs": 16173
+    },
+    {
+      "segmentId": "event-result",
+      "phrase": "On peut donc réutiliser la",
+      "startMs": 12966,
+      "endMs": 20000,
+      "cueMs": 20784
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Pour retirer le logo, revenez",
+      "startMs": 0,
+      "endMs": 6121,
+      "cueMs": 22413
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Après validation, l’image disparaît des",
+      "startMs": 9717,
+      "endMs": 18850,
+      "cueMs": 23208
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ces réglages sont réservés au",
+      "startMs": 9830,
+      "endMs": 13107,
+      "cueMs": 26684
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un texte visible",
+      "startMs": 13107,
+      "endMs": 24000,
+      "cueMs": 27828
+    }
+  ]
+}

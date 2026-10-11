@@ -1,0 +1,167 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 188,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.7,
+    "largestGapLu": 17.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -17.1
+  },
+  "inputCounts": {
+    "click": 30,
+    "key": 30
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "checklist",
+      "phrase": "Les coches sont calculées à",
+      "startMs": 12961,
+      "endMs": 15533,
+      "cueMs": 28001,
+      "sentenceAbsoluteMs": 27999,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Dans les paramètres, donnez à",
+      "startMs": 3017,
+      "endMs": 9150,
+      "cueMs": 37210,
+      "sentenceAbsoluteMs": 37209,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 37731
+      },
+      "deltaMs": 522
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Gardons toutes ses clauses",
+      "startMs": 14268,
+      "endMs": 14349,
+      "cueMs": 48461,
+      "sentenceAbsoluteMs": 48460,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 48931
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Enregistrons le texte entier",
+      "startMs": 20256,
+      "endMs": 23742,
+      "cueMs": 54448,
+      "sentenceAbsoluteMs": 54448,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 54913
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "timezone",
+      "phrase": "Changer ce réglage adapte les",
+      "startMs": 11909,
+      "endMs": 16167,
+      "cueMs": 70736,
+      "sentenceAbsoluteMs": 70735,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 71230
+      },
+      "deltaMs": 495
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5259,
+      "endMs": 7225,
+      "cueMs": 82392,
+      "sentenceAbsoluteMs": 82390,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 82861
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5259,
+      "endMs": 7225,
+      "cueMs": 83965,
+      "sentenceAbsoluteMs": 82390,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 84477
+      },
+      "deltaMs": 2087
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutez un créneau, choisissez le",
+      "startMs": 3298,
+      "endMs": 8595,
+      "cueMs": 100717,
+      "sentenceAbsoluteMs": 100714,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 101210
+      },
+      "deltaMs": 496
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Ici, le minimum est prêt",
+      "startMs": 8748,
+      "endMs": 9043,
+      "cueMs": 124642,
+      "sentenceAbsoluteMs": 124641,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 125110
+      },
+      "deltaMs": 469
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 137004,
+      "sentenceAbsoluteMs": 137003,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 137470
+      },
+      "deltaMs": 467
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 142543,
+      "sentenceAbsoluteMs": 137003,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 143000
+      },
+      "deltaMs": 5997
+    }
+  ]
+}

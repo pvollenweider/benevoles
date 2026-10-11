@@ -1,0 +1,9 @@
+{
+  "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Rehearsal passed; narrated capture stopped: delivery chapter overran narration by 1516 ms. No final MP4/music validation or complete final review possible.",
+  "sourceChanges": "record.ts: reduce delivery field hold times to 400 ms, saving 3.5 seconds; no re-film."
+}

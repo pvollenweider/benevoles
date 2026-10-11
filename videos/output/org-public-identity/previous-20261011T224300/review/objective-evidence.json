@@ -1,0 +1,165 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 10,
+    "key": 33
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "names",
+      "phrase": "Le titre de la page",
+      "startMs": 8077,
+      "endMs": 10640,
+      "cueMs": 23306,
+      "sentenceAbsoluteMs": 23305,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 23809
+      },
+      "deltaMs": 504
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Le message Titre enregistré confirme",
+      "startMs": 16397,
+      "endMs": 19283,
+      "cueMs": 31628,
+      "sentenceAbsoluteMs": 31625,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 32092
+      },
+      "deltaMs": 467
+    },
+    {
+      "segmentId": "logo",
+      "phrase": "L’image enregistrée apparaît dans les",
+      "startMs": 9031,
+      "endMs": 12838,
+      "cueMs": 46554,
+      "sentenceAbsoluteMs": 46552,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 47024
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Si vous changez l’identifiant alors",
+      "startMs": 10162,
+      "endMs": 14679,
+      "cueMs": 65998,
+      "sentenceAbsoluteMs": 65995,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 66491
+      },
+      "deltaMs": 496
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79058,
+      "sentenceAbsoluteMs": 79055,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 79540
+      },
+      "deltaMs": 485
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79849,
+      "sentenceAbsoluteMs": 79055,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "elle est publiée, mais non",
+      "startMs": 9586,
+      "endMs": 11448,
+      "cueMs": 92536,
+      "sentenceAbsoluteMs": 92537,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "Ouvrons son lien direct pour",
+      "startMs": 12097,
+      "endMs": 15508,
+      "cueMs": 95051,
+      "sentenceAbsoluteMs": 95048,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "event-result",
+      "phrase": "On peut donc réutiliser la",
+      "startMs": 10085,
+      "endMs": 14654,
+      "cueMs": 113229,
+      "sentenceAbsoluteMs": 113228,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "La confirmation vous laisse encore",
+      "startMs": 6085,
+      "endMs": 7646,
+      "cueMs": 124336,
+      "sentenceAbsoluteMs": 124335,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 124807
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ces réglages sont réservés au",
+      "startMs": 8043,
+      "endMs": 11791,
+      "cueMs": 144879,
+      "sentenceAbsoluteMs": 144878,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un texte visible",
+      "startMs": 12521,
+      "endMs": 19352,
+      "cueMs": 149357,
+      "sentenceAbsoluteMs": 149356,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

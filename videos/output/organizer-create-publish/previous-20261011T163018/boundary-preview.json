@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription.",
+  "windowStart": 72.734,
+  "result": {
+    "found": true,
+    "startSeconds": 11.66,
+    "wordsHeard": "Avant"
+  },
+  "onset": 84.39399999999999,
+  "proposedCut": 83.9166875,
+  "note": "Proposal only; recut then independently audit before capture"
+}
