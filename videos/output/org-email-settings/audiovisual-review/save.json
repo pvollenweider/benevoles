@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:14:54.734Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "2b6b0bdd17b23439c4fdb30f9d51f53186c8d3c436a56297eafff7c71819375a",
-  "clipSha256": "821f6f8cfe1b74c3f796a3a562aa09a58dd4c6d3424199843ac1ca79df6b21af",
+  "reviewedAt": "2026-10-11T15:14:09.170Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "002418480b9f274cbefe51029a029fbd5ac72e26794fc831795306ca6fc82afa",
+  "clipSha256": "e011edd47a68c0427e16ccf43a15f5526dccdb46e9695e30bde4044f79768b09",
   "scene": "save",
   "review": {
-    "heardOpening": "Enregistrez les réglages avant de les tester",
+    "heardOpening": "Enregistrez les réglages avant de les tester.",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Enregistrez les réglages avant de les tester",
+        "spoken": "Enregistrez les réglages avant de les tester.",
         "visibleSeconds": 2.2,
-        "visible": "Défilement vers le bas révélant le bouton Enregistrer et le bouton de test",
+        "visible": "Clic sur le bouton bleu « Enregistrer » sous l'adresse de réponse.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "Le message Réglages enregistrés confirme que vos choix sont conservés",
-        "visibleSeconds": 4.1,
-        "visible": "Affichage de la mention Réglages enregistrés sous le bouton Enregistrer",
+        "spokenSeconds": 3.2,
+        "spoken": "Le message Réglages enregistrés confirme que vos choix sont conservés.",
+        "visibleSeconds": 2.8,
+        "visible": "La bannière de confirmation verte « Réglages enregistrés. » s'affiche sous les boutons.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.8,
-        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée",
-        "visibleSeconds": 12,
-        "visible": "Bouton M'envoyer un email de test affiché à côté du bouton Enregistrer",
+        "spokenSeconds": 10.9,
+        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée.",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage stable de la section des réglages avec le bouton « M'envoyer un email de test » et la mention associée.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'action de sauvegarde à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

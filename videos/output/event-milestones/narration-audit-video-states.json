@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:36.827Z",
+  "revalidatedAt": "2026-10-11T15:07:36.831Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "states",
+      "audioSha256": "4f483bf992197df43e1493b1453b5617e9fddada015035c50489dbad55fc2f75",
+      "recognized": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée. Une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+      "expected": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée ; une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

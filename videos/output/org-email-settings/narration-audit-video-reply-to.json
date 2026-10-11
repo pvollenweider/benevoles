@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:13:26.223Z",
+  "revalidatedAt": "2026-10-11T15:13:26.224Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "reply-to",
+      "audioSha256": "94a624ede35f53967c4610a6adb2bb05a01313eb301deb62f0513ae305fac7b9",
+      "recognized": "L'adresse de réponse indique où arrive un message lorsqu'un bénévole répond à un e-mail de la plateforme. Saisissons benevole@example.org. Si le champ reste vide, l'adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.",
+      "expected": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.",
+      "wordErrorRate": 0.043478260869565216,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

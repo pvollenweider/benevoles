@@ -1,0 +1,12 @@
+{
+  "anchor": "Enregistrez les réglages avant de les tester. Le message Réglages enregistrés",
+  "windowStart": 108.508,
+  "result": {
+    "found": true,
+    "startSeconds": 12.8,
+    "wordsHeard": "Enregistrez les réglages avant de les tester. Le message Réglages enregistrés"
+  },
+  "onset": 121.30799999999999,
+  "proposedCut": 120.8042915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

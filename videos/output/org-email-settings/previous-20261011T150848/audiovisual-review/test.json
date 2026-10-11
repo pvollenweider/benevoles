@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:18:27.927Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "d890527ccc2514a73bbbfa7f1a98b9c1246cfde3c93ebb3fe383a34af73891c0",
+  "clipSha256": "d7f8075ec00baced10eca786bd9e37acc69f12e6e61bdf366069addc03647e59",
+  "scene": "test",
+  "review": {
+    "heardOpening": "M'envoyer un email de test envoie un exemple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "M’envoyer un email de test envoie un exemple à votre propre compte",
+        "visibleSeconds": 0,
+        "visible": "Le bouton « M'envoyer un email de test » et le message de confirmation d'envoi sont affichés sur l'interface",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Ouvrons le message reçu dans la boîte locale de démonstration",
+        "visibleSeconds": 4.8,
+        "visible": "Bascule sur l'interface Mailpit affichant le courriel de test ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le contenu du message",
+        "visibleSeconds": 5,
+        "visible": "Les champs d'en-tête (From, Reply-To benevoles@example.org) et le corps du message sont bien lisibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement intelligible, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

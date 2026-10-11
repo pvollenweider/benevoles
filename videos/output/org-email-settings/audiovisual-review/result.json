@@ -1,45 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:15:17.292Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "570935770205638415a354f406b5b598a519ba31c72bc8291641435a906d5401",
-  "clipSha256": "654f2d0b632956749a65ae751e4e076e52ff2d187a10880394f734ebd353f32e",
+  "reviewedAt": "2026-10-11T15:14:16.713Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "ebfa92c86a0553043b53a7d6f0f27d8d6dd0f8b61823a818670f84e7193cd75f",
+  "clipSha256": "5de26cdb07249e4bba50cf943260f125a2c686d196a6d68c4b04a15e1eb847ec",
   "scene": "result",
   "review": {
-    "heardOpening": "Les réglages sont enregistrés",
+    "heardOpening": "Les réglages sont enregistrés et le message de test",
     "checkpoints": [
       {
-        "spokenSeconds": 1.8,
+        "spokenSeconds": 1.2,
         "spoken": "le message de test est visible dans la boîte de démonstration",
-        "visibleSeconds": 1,
-        "visible": "Affichage de la messagerie Mailpit avec le message de test",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 5.2,
-        "spoken": "Dans Emails envoyés, Envoyé indique une acceptation",
-        "visibleSeconds": 5,
-        "visible": "Tableau Emails envoyés avec statut Envoyé affiché",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 13.5,
-        "spoken": "utilisez plutôt les messages ciblés de l’événement",
-        "visibleSeconds": 14,
-        "visible": "L'écran reste figé sur les paramètres d'emails sans montrer les messages ciblés",
+        "visibleSeconds": 1.2,
+        "visible": "La boîte de démonstration n'est pas affichée ; l'écran reste sur le haut de la page des réglages d'emails",
         "sync": "missing",
         "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Dans Emails envoyés",
+        "visibleSeconds": 5.5,
+        "visible": "Défilement vers le bas découvrant la section et le tableau « Emails envoyés »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Envoyé indique une acceptation par le serveur d’envoi",
+        "visibleSeconds": 6.5,
+        "visible": "Colonne État affichant le badge vert « Envoyé » pour chaque email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "utilisez plutôt les messages ciblés de l’événement",
+        "visibleSeconds": 14,
+        "visible": "Conseil méthodologique sur plan fixe du tableau des emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
     "issues": [
-      "00:14 : mention des messages ciblés de l'événement sans transition visuelle vers la fonctionnalité"
+      "00:01 - 00:04 : La boîte de démonstration mentionnée à l'oral (« le message de test est visible dans la boîte de démonstration ») n'est pas montrée à l'écran."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, rythme fluide et ton adapté."
+      "observation": "Voix claire, posée et bien articulée, qualité audio irréprochable."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

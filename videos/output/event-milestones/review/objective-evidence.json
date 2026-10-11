@@ -1,0 +1,334 @@
+{
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 6,
+  "keys": 0,
+  "product": {
+    "commit": "dbe9875584400f2cc3f331ea19267ab04c1eec19",
+    "sourceTree": "fb6a1a9f8277f2e5b3f0c8535d658ce3313d7f19",
+    "productSourceSha256": "6fe23426e0e658114fbbfe4bb7df5410b2606e03a5bfc04603392aa88114dfb3",
+    "buildId": "FCLCqO4jFR7lUbWQJ4dOp",
+    "snapshot": "/tmp/benevoles-video-production.batch3",
+    "builtAt": "2026-10-11T14:44:49.543Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 1208,
+      "endMs": 12757,
+      "sentences": [
+        {
+          "text": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement.",
+          "startMs": 290,
+          "endMs": 4157,
+          "method": "silence",
+          "globalStartMs": 1498,
+          "globalEndMs": 5365
+        },
+        {
+          "text": "Ils ne remplacent pas un outil de gestion de projet :",
+          "startMs": 4578,
+          "endMs": 6771,
+          "method": "silence",
+          "globalStartMs": 5786,
+          "globalEndMs": 7979
+        },
+        {
+          "text": "ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.",
+          "startMs": 7035,
+          "endMs": 11142,
+          "method": "silence",
+          "globalStartMs": 8243,
+          "globalEndMs": 12350
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "create",
+      "startMs": 13212,
+      "endMs": 29508,
+      "sentences": [
+        {
+          "text": "Ajoutons Fermer les inscriptions avec une date d’échéance.",
+          "startMs": 405,
+          "endMs": 3825,
+          "method": "silence",
+          "globalStartMs": 13617,
+          "globalEndMs": 17037
+        },
+        {
+          "text": "Un bon jalon décrit un résultat vérifiable :",
+          "startMs": 4403,
+          "endMs": 6694,
+          "method": "silence",
+          "globalStartMs": 17615,
+          "globalEndMs": 19906
+        },
+        {
+          "text": "valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles.",
+          "startMs": 7156,
+          "endMs": 12061,
+          "method": "silence",
+          "globalStartMs": 20368,
+          "globalEndMs": 25273
+        },
+        {
+          "text": "Évitez les formulations vagues comme penser à la communication.",
+          "startMs": 12444,
+          "endMs": 15863,
+          "method": "silence",
+          "globalStartMs": 25656,
+          "globalEndMs": 29075
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "create",
+          "phrase": "Ajoutons Fermer les inscriptions",
+          "startMs": 405,
+          "endMs": 3825,
+          "cueMs": 13618
+        },
+        {
+          "segmentId": "create",
+          "phrase": "Ajoutons Fermer les inscriptions",
+          "startMs": 405,
+          "endMs": 3825,
+          "cueMs": 14430
+        },
+        {
+          "segmentId": "create",
+          "phrase": "Ajoutons Fermer les inscriptions",
+          "startMs": 405,
+          "endMs": 3825,
+          "cueMs": 14447
+        },
+        {
+          "segmentId": "create",
+          "phrase": "Ajoutons Fermer les inscriptions",
+          "startMs": 405,
+          "endMs": 3825,
+          "cueMs": 14451
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 14117
+        },
+        {
+          "kind": "click",
+          "atMs": 14946
+        }
+      ]
+    },
+    {
+      "scene": "states",
+      "startMs": 29961,
+      "endMs": 44043,
+      "sentences": [
+        {
+          "text": "La liste est triée par date.",
+          "startMs": 529,
+          "endMs": 1798,
+          "method": "silence",
+          "globalStartMs": 30490,
+          "globalEndMs": 31759
+        },
+        {
+          "text": "Une échéance passée et non terminée est signalée comme dépassée ;",
+          "startMs": 2257,
+          "endMs": 5706,
+          "method": "silence",
+          "globalStartMs": 32218,
+          "globalEndMs": 35667
+        },
+        {
+          "text": "une étape faite est barrée mais reste visible.",
+          "startMs": 6003,
+          "endMs": 8587,
+          "method": "silence",
+          "globalStartMs": 35964,
+          "globalEndMs": 38548
+        },
+        {
+          "text": "On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+          "startMs": 8982,
+          "endMs": 13683,
+          "method": "silence",
+          "globalStartMs": 38943,
+          "globalEndMs": 43644
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "toggle",
+      "startMs": 44495,
+      "endMs": 57308,
+      "sentences": [
+        {
+          "text": "Quand une étape est terminée, cochez-la.",
+          "startMs": 469,
+          "endMs": 2348,
+          "method": "silence",
+          "globalStartMs": 44964,
+          "globalEndMs": 46843
+        },
+        {
+          "text": "Le titre devient barré.",
+          "startMs": 2832,
+          "endMs": 3825,
+          "method": "silence",
+          "globalStartMs": 47327,
+          "globalEndMs": 48320
+        },
+        {
+          "text": "Si la situation change, décochez-la pour la remettre à faire :",
+          "startMs": 4268,
+          "endMs": 7203,
+          "method": "silence",
+          "globalStartMs": 48763,
+          "globalEndMs": 51698
+        },
+        {
+          "text": "la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.",
+          "startMs": 7328,
+          "endMs": 12316,
+          "method": "silence",
+          "globalStartMs": 51823,
+          "globalEndMs": 56811
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "toggle",
+          "phrase": "Quand une étape est terminée",
+          "startMs": 469,
+          "endMs": 2348,
+          "cueMs": 45064
+        },
+        {
+          "segmentId": "toggle",
+          "phrase": "Si la situation change",
+          "startMs": 4268,
+          "endMs": 7203,
+          "cueMs": 48765
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 45543
+        },
+        {
+          "kind": "click",
+          "atMs": 49226
+        }
+      ]
+    },
+    {
+      "scene": "dashboard",
+      "startMs": 57759,
+      "endMs": 71978,
+      "sentences": [
+        {
+          "text": "Ouvrons le Tableau de bord de l’association.",
+          "startMs": 497,
+          "endMs": 2293,
+          "method": "silence",
+          "globalStartMs": 58256,
+          "globalEndMs": 60052
+        },
+        {
+          "text": "Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné.",
+          "startMs": 2802,
+          "endMs": 7282,
+          "method": "silence",
+          "globalStartMs": 60561,
+          "globalEndMs": 65041
+        },
+        {
+          "text": "Les jalons à venir restent visibles sur la page de leur événement :",
+          "startMs": 7673,
+          "endMs": 10482,
+          "method": "silence",
+          "globalStartMs": 65432,
+          "globalEndMs": 68241
+        },
+        {
+          "text": "ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+          "startMs": 10814,
+          "endMs": 13841,
+          "method": "silence",
+          "globalStartMs": 68573,
+          "globalEndMs": 71600
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "dashboard",
+          "phrase": "Les jalons à venir restent visibles",
+          "startMs": 7673,
+          "endMs": 10482,
+          "cueMs": 65433
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 58229
+        },
+        {
+          "kind": "click",
+          "atMs": 65925
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 72430,
+      "endMs": 84161,
+      "sentences": [
+        {
+          "text": "Gardez cette liste courte et utile.",
+          "startMs": 389,
+          "endMs": 2335,
+          "method": "silence",
+          "globalStartMs": 72819,
+          "globalEndMs": 74765
+        },
+        {
+          "text": "Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue.",
+          "startMs": 2646,
+          "endMs": 7029,
+          "method": "silence",
+          "globalStartMs": 75076,
+          "globalEndMs": 79459
+        },
+        {
+          "text": "Le résultat attendu est simple :",
+          "startMs": 7560,
+          "endMs": 9016,
+          "method": "silence",
+          "globalStartMs": 79990,
+          "globalEndMs": 81446
+        },
+        {
+          "text": "chacun sait quelle est la prochaine étape importante.",
+          "startMs": 9475,
+          "endMs": 11391,
+          "method": "silence",
+          "globalStartMs": 81905,
+          "globalEndMs": 83821
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    }
+  ]
+}

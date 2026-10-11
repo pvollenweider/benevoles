@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:15:05.285Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "7d76a28cadc92f85e63b0f9ed666b81b8d2e1684ad6fa6fc40f8f31413e13a61",
-  "clipSha256": "4bd5e26f8acf99c0f67fe1f632050f05ebcbe8b00a5a94259a380a9c329600cb",
+  "reviewedAt": "2026-10-11T15:14:08.372Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "b0a2aad92a2e5e6d323ddc47fb3d67ec6f426cb3a03c3411fdf5b089cb57f941",
+  "clipSha256": "ac418f8332ccf9ba2d9c7c5f9889f0821c4c9ebdaf9021ff0117aeb3f139f7a6",
   "scene": "test",
   "review": {
-    "heardOpening": "M'envoyer un email de test",
+    "heardOpening": "M'envoyer un email de test envoie un exemple",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "M'envoyer un email de test envoie un exemple",
-        "visibleSeconds": 3.8,
-        "visible": "Clic sur le bouton et affichage du message de confirmation d'envoi",
+        "spokenSeconds": 0,
+        "spoken": "M’envoyer un email de test envoie un exemple à votre propre compte",
+        "visibleSeconds": 0,
+        "visible": "Clic sur le bouton M'envoyer un email de test et affichage du message de confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "Ouvrons le message reçu dans la boîte locale",
-        "visibleSeconds": 7.5,
-        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail ouvert",
+        "spokenSeconds": 4.6,
+        "spoken": "Ouvrons le message reçu dans la boîte locale de démonstration",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage de la boîte de réception Mailpit avec le courriel de test ouvert",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Vérifiez l'expéditeur et l'adresse de réponse, ici benevoles arobase example point org",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage des en-têtes Reply-To avec l'adresse benevoles@example.org et du corps du message",
+        "spokenSeconds": 8,
+        "spoken": "Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org",
+        "visibleSeconds": 5.5,
+        "visible": "Champs From et Reply-To affichant benevoles@example.org et corps du message visibles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, diction claire et ton pédagogique adapté."
+      "observation": "Voix fluide, claire et bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

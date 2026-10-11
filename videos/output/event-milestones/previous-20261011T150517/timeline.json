@@ -1,0 +1,110 @@
+{
+  "slug": "event-milestones",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T14:03:09.224Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "77b3556736243e72449cc7f778cb9959fd10d9df",
+    "sourceTree": "9438ec458b12ce29c7e2f4ac20619cf0ffc335fb",
+    "productSourceSha256": "786a101b78224b1fe735df94e3a1facac276d916a40cb9ef710805e0bcba4992",
+    "buildId": "awdEYi1bluVzpj2kEgGcs",
+    "snapshot": "/tmp/benevoles-video-production.batch2pass2",
+    "builtAt": "2026-10-11T13:32:58.428Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-milestones",
+    "scenario": "EVENT_MILESTONES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 14148
+    },
+    {
+      "kind": "click",
+      "atMs": 27348
+    },
+    {
+      "kind": "click",
+      "atMs": 45445
+    },
+    {
+      "kind": "click",
+      "atMs": 49213
+    },
+    {
+      "kind": "click",
+      "atMs": 58211
+    },
+    {
+      "kind": "click",
+      "atMs": 64896
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1196,
+      "endMs": 12742
+    },
+    {
+      "id": "create",
+      "startMs": 13195,
+      "endMs": 29491
+    },
+    {
+      "id": "states",
+      "startMs": 29944,
+      "endMs": 44027
+    },
+    {
+      "id": "toggle",
+      "startMs": 44479,
+      "endMs": 57293
+    },
+    {
+      "id": "dashboard",
+      "startMs": 57746,
+      "endMs": 71965
+    },
+    {
+      "id": "result",
+      "startMs": 72418,
+      "endMs": 84149
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "toggle",
+      "phrase": "Quand une étape est terminée",
+      "startMs": 469,
+      "endMs": 2348,
+      "cueMs": 44951
+    },
+    {
+      "segmentId": "toggle",
+      "phrase": "Si la situation change",
+      "startMs": 4268,
+      "endMs": 7203,
+      "cueMs": 48748
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 44496,
+      "endMs": 57308,
+      "x": 97,
+      "y": 292,
+      "width": 640,
+      "height": 400
+    }
+  ]
+}

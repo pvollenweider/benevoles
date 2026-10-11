@@ -89,9 +89,9 @@ export async function recordReminders(options: { page: Page; base: string; event
         await page.getByText("Réglages enregistrés.", { exact: true }).waitFor()
       }
       if (!await checkbox.isChecked()) throw new Error("J-1 fixture must start enabled")
-      await at(0.48); await save(false)
-      await at(0.68); await save(true)
-      await at(0.83); await page.getByLabel("Adresse de réponse", { exact: true }).scrollIntoViewIfNeeded()
+      await at("Nous coupons celui de la veille"); await save(false)
+      await save(true)
+      await at("Vous trouvez aussi l'adresse de réponse"); await page.getByLabel("Adresse de réponse", { exact: true }).scrollIntoViewIfNeeded()
       checks.organizationSavedOffThenOn = true
     })
     await scene("event-switch", async at => {

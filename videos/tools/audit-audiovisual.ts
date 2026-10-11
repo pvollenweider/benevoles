@@ -96,7 +96,7 @@ async function main() {
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Navigation review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-navigation-current" }, include: { events: true, volunteers: true, admins: true } })
       const { assertNavigationMembers } = await import("../lib/navigation-classroom")
-      assertNavigationMembers(fixture.volunteers)
+      assertNavigationMembers(fixture.volunteers, true)
       if (fixture.slug !== "formation-navigation" || fixture.events.length !== 3 || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.navigation.owner@example.org") throw new Error("Navigation data is not exclusively synthetic")
     } else if (manifest.id === "GLOBAL_SEARCH") {
       const url = new URL(process.env.DATABASE_URL!)

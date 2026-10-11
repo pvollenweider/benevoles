@@ -60,7 +60,7 @@
     "poster": true
   },
   "event-milestones": {
-    "durationMs": 96880,
+    "durationMs": 90320,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -144,7 +144,7 @@
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 193000,
+    "durationMs": 189200,
     "width": 1280,
     "height": 800,
     "poster": true

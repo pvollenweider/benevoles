@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:14:14.526Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "85af7c909afc257b426afd506c95c7d1e10fba3638c5d015b14ba42b07160172",
-  "clipSha256": "0aa66445090cb6b1f71acee77572c6d29e7e5228f9154f9a60a209e52488949a",
+  "reviewedAt": "2026-10-11T15:13:48.550Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "6b50a931184e04fe354b00af3b805261d2e6b5d2b35b4bc5a9b12ef37a884402",
+  "clipSha256": "f3e174e4f076e3d3bb15e3985f3b14bf0ea45b37e35d5ef25b5757e120992c6a",
   "scene": "admin-alert",
   "review": {
-    "heardOpening": "L'option Prévenir les administrateurs",
+    "heardOpening": "L'option Prévenir les administrateurs à chaque inscription",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
         "spoken": "Prévenir les administrateurs à chaque inscription",
-        "visibleSeconds": 0.8,
-        "visible": "Option visible avec case cochée sur la page",
+        "visibleSeconds": 1,
+        "visible": "L'option 'Prévenir les administrateurs à chaque inscription' est affichée et cochée dans les réglages des emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4,
-        "spoken": "envoie un email à chaque administrateur actif",
-        "visibleSeconds": 4.1,
-        "visible": "Curseur décochant temporairement la case",
+        "spoken": "lorsqu’une personne s’inscrit depuis la page publique",
+        "visibleSeconds": 4.8,
+        "visible": "Le curseur décoche la case 'Prévenir les administrateurs à chaque inscription'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Elle facilite le suivi d'un petit événement",
-        "visibleSeconds": 8.5,
-        "visible": "Case à cocher réactivée",
+        "spokenSeconds": 7.5,
+        "spoken": "Elle facilite le suivi d’un petit événement",
+        "visibleSeconds": 7.2,
+        "visible": "Le curseur recoche la case 'Prévenir les administrateurs à chaque inscription'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée et claire, débit régulier."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

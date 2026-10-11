@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:26:26.275Z",
+  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
+  "promptSha256": "880883518de0e3eed754103cd3146e2369a49b47b507700c4d13d608f99d6d81",
+  "clipSha256": "d1894f5740016ab8df56d4bc69da62264ab59290b0bdbc588587bd7a8eb96066",
+  "scene": "dashboard",
+  "review": {
+    "heardOpening": "Ouvrons le Tableau de bord",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Ouvrons le Tableau de bord de l’association",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné",
+        "visibleSeconds": 3,
+        "visible": "Section 'Ce qui demande votre attention' avec alerte jalon et lien",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Les jalons à venir restent visibles sur la page de leur événement",
+        "visibleSeconds": 7.5,
+        "visible": "Retour sur la page de l'événement montrant la liste des jalons",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

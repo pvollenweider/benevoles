@@ -1,0 +1,10 @@
+STATUS: NOT READY
+ID: EVENT_MILESTONES
+Commit: 57ead48691c549980f7aae34cd5710df60d7d8c8
+BUILD_ID: wehNI4lfzOGIMmAjJ-tMC (verified shared product build)
+Complete duration: unavailable; interrupted final capture: 48.000 s.
+Music smallest/largest gap: unavailable (no complete narrated MP4).
+Existing audio was preserved initially. Generation tooling rejected its fingerprint; regenerated one continuous Puck take. Source narration audit passes all six chapters (0% WER).
+Quick rehearsal completed six chapters. Final capture stops in toggle, with no complete timeline.json. Last frame review/final-last-frame.png shows the reopened checkbox. Exact failing assertion output was unavailable after context compaction; do not infer a product defect from this incomplete take.
+Source correction: toggle actions now sentence anchors at("Quand une étape est terminée") and at("Si la situation change"); both await the successful PATCH and settled UI before asserting. No re-film.
+Objective validation, final subtitles/audio, music, full sentence/action and effects checks cannot pass without complete artifacts. No READY certification. No confirmed product layout bug in reviewed partial frame. Real-time subjective listening unavailable, not a status reason.

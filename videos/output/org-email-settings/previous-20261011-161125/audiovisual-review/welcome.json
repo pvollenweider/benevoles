@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:12:58.267Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "205e0c5f23449835dba607e49f33ce64bd2a0f262e5d1e4e686392a850a4c407",
+  "clipSha256": "af439a7346f306a79cd00723b6b53e084231dfaa25a7a0c7e55fe1351d671b3e",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Dans Paramètres, Emails, le propriétaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles",
+        "visibleSeconds": 1,
+        "visible": "Page Paramètres > Emails affichée en arrière-plan sous le bandeau d'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Voyons les rappels, les alertes et l’adresse de réponse",
+        "visibleSeconds": 10,
+        "visible": "Disparition de l'encart d'introduction, révélant les options Rappel, alertes administrateurs et champ Adresse de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "puis vérifions un vrai message de test, sans contacter les bénévoles",
+        "visibleSeconds": 14.5,
+        "visible": "Écran stable récapitulatif des réglages d'emails annonçant les étapes suivantes du tutoriel",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement intelligible, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

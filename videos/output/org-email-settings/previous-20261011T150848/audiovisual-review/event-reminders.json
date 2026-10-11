@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:16:46.439Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "adae9a8542fe8f41bec6fc696311966dba7eda53e7f13cd186889d027cedc35b",
+  "clipSha256": "f0af9d87f001c1726631ae541bb36fba07aa76d1a844156b70094403a5dd51e3",
+  "scene": "event-reminders",
+  "review": {
+    "heardOpening": "Dans les réglages d'un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "la case Rappels automatiques peut couper tous ses rappels",
+        "visibleSeconds": 2.5,
+        "visible": "Défilement vers la case 'Rappels automatiques' qui est mise en évidence et désactivée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Sa section Communications indique ce qui partira vraiment",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de la page de l'événement avec la section Communications indiquant 'Rappels automatiques coupés pour cet événement'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Pour un événement publié, les rappels suivent les choix de l'organisation",
+        "visibleSeconds": 12.5,
+        "visible": "Vue stable de l'événement au statut 'Publié' avec les détails sous Communications",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

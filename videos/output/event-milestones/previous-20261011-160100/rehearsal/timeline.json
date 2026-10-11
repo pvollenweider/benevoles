@@ -1,0 +1,94 @@
+{
+  "slug": "event-milestones",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T12:51:42.446Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "57ead48691c549980f7aae34cd5710df60d7d8c8",
+    "sourceTree": "d494522d746e261c4ef0424b5458c8d0871e1a41",
+    "productSourceSha256": "ff371c7b367d508d345e823e07cd3af07dd66ad002fd5b3b497c326b47830523",
+    "buildId": "wehNI4lfzOGIMmAjJ-tMC",
+    "snapshot": "/tmp/benevoles-video-production.batch2",
+    "builtAt": "2026-10-11T12:21:27.882Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-milestones",
+    "scenario": "EVENT_MILESTONES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4820
+    },
+    {
+      "kind": "click",
+      "atMs": 5653
+    },
+    {
+      "kind": "click",
+      "atMs": 7443
+    },
+    {
+      "kind": "click",
+      "atMs": 8374
+    },
+    {
+      "kind": "click",
+      "atMs": 9773
+    },
+    {
+      "kind": "click",
+      "atMs": 11102
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1223,
+      "endMs": 3854
+    },
+    {
+      "id": "create",
+      "startMs": 4306,
+      "endMs": 5963
+    },
+    {
+      "id": "states",
+      "startMs": 6415,
+      "endMs": 6467
+    },
+    {
+      "id": "toggle",
+      "startMs": 6919,
+      "endMs": 8803
+    },
+    {
+      "id": "dashboard",
+      "startMs": 9262,
+      "endMs": 11997
+    },
+    {
+      "id": "result",
+      "startMs": 12456,
+      "endMs": 14898
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 6939,
+      "endMs": 26939,
+      "x": 97,
+      "y": 292,
+      "width": 640,
+      "height": 400
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+[
+  {
+    "id": "welcome",
+    "cue": {
+      "id": "welcome",
+      "startMs": 1196,
+      "endMs": 12742
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement.",
+        "startMs": 290,
+        "endMs": 4157,
+        "method": "silence"
+      },
+      {
+        "text": "Ils ne remplacent pas un outil de gestion de projet :",
+        "startMs": 4578,
+        "endMs": 6771,
+        "method": "silence"
+      },
+      {
+        "text": "ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.",
+        "startMs": 7035,
+        "endMs": 11142,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "create",
+    "cue": {
+      "id": "create",
+      "startMs": 13195,
+      "endMs": 29491
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 14148
+      },
+      {
+        "kind": "click",
+        "atMs": 27348
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Ajoutons Fermer les inscriptions avec une date d’échéance.",
+        "startMs": 405,
+        "endMs": 3825,
+        "method": "silence"
+      },
+      {
+        "text": "Un bon jalon décrit un résultat vérifiable :",
+        "startMs": 4403,
+        "endMs": 6694,
+        "method": "silence"
+      },
+      {
+        "text": "valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles.",
+        "startMs": 7156,
+        "endMs": 12061,
+        "method": "silence"
+      },
+      {
+        "text": "Évitez les formulations vagues comme penser à la communication.",
+        "startMs": 12444,
+        "endMs": 15863,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "states",
+    "cue": {
+      "id": "states",
+      "startMs": 29944,
+      "endMs": 44027
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "La liste est triée par date.",
+        "startMs": 529,
+        "endMs": 1798,
+        "method": "silence"
+      },
+      {
+        "text": "Une échéance passée et non terminée est signalée comme dépassée ;",
+        "startMs": 2257,
+        "endMs": 5706,
+        "method": "silence"
+      },
+      {
+        "text": "une étape faite est barrée mais reste visible.",
+        "startMs": 6003,
+        "endMs": 8587,
+        "method": "silence"
+      },
+      {
+        "text": "On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+        "startMs": 8982,
+        "endMs": 13683,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "toggle",
+    "cue": {
+      "id": "toggle",
+      "startMs": 44479,
+      "endMs": 57293
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 45445
+      },
+      {
+        "kind": "click",
+        "atMs": 49213
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Quand une étape est terminée, cochez-la.",
+        "startMs": 469,
+        "endMs": 2348,
+        "method": "silence"
+      },
+      {
+        "text": "Le titre devient barré.",
+        "startMs": 2832,
+        "endMs": 3825,
+        "method": "silence"
+      },
+      {
+        "text": "Si la situation change, décochez-la pour la remettre à faire :",
+        "startMs": 4268,
+        "endMs": 7203,
+        "method": "silence"
+      },
+      {
+        "text": "la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.",
+        "startMs": 7328,
+        "endMs": 12316,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "dashboard",
+    "cue": {
+      "id": "dashboard",
+      "startMs": 57746,
+      "endMs": 71965
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 58211
+      },
+      {
+        "kind": "click",
+        "atMs": 64896
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Ouvrons le Tableau de bord de l’association.",
+        "startMs": 497,
+        "endMs": 2293,
+        "method": "silence"
+      },
+      {
+        "text": "Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné.",
+        "startMs": 2802,
+        "endMs": 7282,
+        "method": "silence"
+      },
+      {
+        "text": "Les jalons à venir restent visibles sur la page de leur événement :",
+        "startMs": 7673,
+        "endMs": 10482,
+        "method": "silence"
+      },
+      {
+        "text": "ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+        "startMs": 10814,
+        "endMs": 13841,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "cue": {
+      "id": "result",
+      "startMs": 72418,
+      "endMs": 84149
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Gardez cette liste courte et utile.",
+        "startMs": 389,
+        "endMs": 2335,
+        "method": "silence"
+      },
+      {
+        "text": "Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue.",
+        "startMs": 2646,
+        "endMs": 7029,
+        "method": "silence"
+      },
+      {
+        "text": "Le résultat attendu est simple :",
+        "startMs": 7560,
+        "endMs": 9016,
+        "method": "silence"
+      },
+      {
+        "text": "chacun sait quelle est la prochaine étape importante.",
+        "startMs": 9475,
+        "endMs": 11391,
+        "method": "silence"
+      }
+    ]
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "receivedAt": "2026-10-11T12:50:43.583Z",
+  "status": "completed",
+  "usage": {
+    "total_tokens": 2360,
+    "total_input_tokens": 342,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 342
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 2018,
+    "output_tokens_by_modality": [
+      {
+        "modality": "audio",
+        "tokens": 2018
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 0,
+    "raw_prompt_token": 1096,
+    "model_invocation_token_counts": [
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 837
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2019
+          }
+        ]
+      }
+    ],
+    "non_grounding_model_invocation_token_counts": [
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 837
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2019
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "type": "model_output",
+      "content": [
+        {
+          "type": "audio",
+          "encodedLength": 5171676
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "M’envoyer un email de test envoie un exemple à votre propre",
+  "windowStart": 120.17599999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.9,
+    "wordsHeard": "M’envoyer"
+  },
+  "onset": 136.076,
+  "proposedCut": 136.115771,
+  "note": "Proposal only; recut then independently audit before capture"
+}

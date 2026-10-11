@@ -1,0 +1,58 @@
+{
+  "id": "EVENT_MILESTONES",
+  "slug": "event-milestones",
+  "validatedAt": "2026-10-11T14:03:15.768Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 91280,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 11546,
+      "audioMs": 11546,
+      "driftMs": 0
+    },
+    {
+      "id": "create",
+      "visualMs": 16296,
+      "audioMs": 16293,
+      "driftMs": 3
+    },
+    {
+      "id": "states",
+      "visualMs": 14083,
+      "audioMs": 14081,
+      "driftMs": 2
+    },
+    {
+      "id": "toggle",
+      "visualMs": 12814,
+      "audioMs": 12812,
+      "driftMs": 2
+    },
+    {
+      "id": "dashboard",
+      "visualMs": 14219,
+      "audioMs": 14218,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 11731,
+      "audioMs": 11730,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 2,
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 17.8,
+    "quietestMusicOnlyLufs": -32.2,
+    "loudestMusicOnlyLufs": -31.9,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

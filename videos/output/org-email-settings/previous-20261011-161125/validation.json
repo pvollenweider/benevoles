@@ -1,0 +1,82 @@
+{
+  "id": "ORG_EMAIL_SETTINGS",
+  "slug": "org-email-settings",
+  "validatedAt": "2026-10-11T13:12:25.433Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 184920,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 18058,
+      "audioMs": 18057,
+      "driftMs": 1
+    },
+    {
+      "id": "reminders",
+      "visualMs": 17983,
+      "audioMs": 17981,
+      "driftMs": 2
+    },
+    {
+      "id": "event-reminders",
+      "visualMs": 17389,
+      "audioMs": 17388,
+      "driftMs": 1
+    },
+    {
+      "id": "admin-alert",
+      "visualMs": 14180,
+      "audioMs": 14179,
+      "driftMs": 1
+    },
+    {
+      "id": "withdrawal",
+      "visualMs": 19308,
+      "audioMs": 19308,
+      "driftMs": 0
+    },
+    {
+      "id": "addresses",
+      "visualMs": 17851,
+      "audioMs": 17846,
+      "driftMs": 5
+    },
+    {
+      "id": "reply-to",
+      "visualMs": 16048,
+      "audioMs": 16045,
+      "driftMs": 3
+    },
+    {
+      "id": "save",
+      "visualMs": 15313,
+      "audioMs": 15311,
+      "driftMs": 2
+    },
+    {
+      "id": "test",
+      "visualMs": 19716,
+      "audioMs": 19713,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 17531,
+      "audioMs": 17531,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": {
+    "voicedWindows": 171,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.2,
+    "largestGapLu": 18.1,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

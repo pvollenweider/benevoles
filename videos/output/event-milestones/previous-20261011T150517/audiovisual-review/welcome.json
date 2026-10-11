@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:03:47.794Z",
+  "videoSha256": "97aa2c5014dd142da66d03937a38070beb3c90db740eba3e5c4eb6e1792121da",
+  "promptSha256": "13f6595076c8efffc278b70ff84217b06170375b8f2e18ffbbdcd16054105ed3",
+  "clipSha256": "b17caad61ab502e9674adc997120a93704f662a0f7378c0f93df88e80e10d836",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Les jalons servent à garder sous les yeux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les jalons servent à garder sous les yeux les quelques échéances",
+        "visibleSeconds": 0,
+        "visible": "Titre superposé « Jalons et pilotage de la préparation - Les échéances essentielles, au même endroit »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "Ils ne remplacent pas un outil de gestion de projet",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la page de gestion de l'événement « Fête du village de Montvert »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "directement à côté des inscriptions et du planning.",
+        "visibleSeconds": 8.5,
+        "visible": "Vue d'ensemble avec les boutons « Gérer les créneaux » et « Voir les inscriptions »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec le visuel d'introduction."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

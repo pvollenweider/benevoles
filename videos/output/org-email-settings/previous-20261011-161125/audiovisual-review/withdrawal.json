@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:13:40.847Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "5f4e191af8be7116a2f0f73785e4bc171b3feb043a87472f975c8813beeb2013",
+  "clipSha256": "6295030c3c6f2256c368912afc5dd3c540f70189f0814ddbf0794fd341ec7f7c",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Prévenir en cas de désistement est un réglage séparé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Prévenir en cas de désistement est un réglage séparé",
+        "visibleSeconds": 0,
+        "visible": "L'option « Prévenir en cas de désistement » est affichée et cochée dans la section Réglages des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Il informe les administrateurs et les responsables du poste quand une place confirmée ou une demande est annulée",
+        "visibleSeconds": 0,
+        "visible": "La description sous l'option précise l'envoi d'un email aux administrateurs et responsables",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Décocher cette option coupe aussi l’email aux responsables",
+        "visibleSeconds": 11.2,
+        "visible": "L'écran reste statique sur la page des paramètres d'emails sans modification de la case cochée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

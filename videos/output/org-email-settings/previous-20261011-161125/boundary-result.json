@@ -1,0 +1,12 @@
+{
+  "anchor": "Les réglages sont enregistrés et le message de test est visible",
+  "windowStart": 140.82899999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Les réglages sont enregistrés et le message de test est visible"
+  },
+  "onset": 155.82899999999998,
+  "proposedCut": 155.8286875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

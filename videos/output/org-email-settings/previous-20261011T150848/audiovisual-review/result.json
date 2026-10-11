@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:19:01.270Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "cab246fbcba5c3bff90bbb81820d627fe8b6812d101e7e9a805e00aa73c9396b",
+  "clipSha256": "5251d70bc3ed2e4f12fd8e820ab27a9083fbc547e73566028f43a950d27b2220",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Les réglages sont enregistrés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "le message de test est visible dans la boîte de démonstration",
+        "visibleSeconds": 1.7,
+        "visible": "La boîte de réception de démonstration n'est pas montrée, la page reste sur le formulaire des réglages",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans Emails envoyés",
+        "visibleSeconds": 5.5,
+        "visible": "Défilement vers le bas révélant la section et le tableau Emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Envoyé indique une acceptation par le serveur d’envoi",
+        "visibleSeconds": 6,
+        "visible": "Colonne État avec le statut Envoyé en vert bien visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "utilisez plutôt les messages ciblés de l’événement",
+        "visibleSeconds": 14.8,
+        "visible": "Conseil méthodologique sur écran stable affichant l'historique des emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02, la boîte de démonstration annoncée pour vérifier le message de test n'est pas affichée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle, bien synchronisée avec le défilement."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

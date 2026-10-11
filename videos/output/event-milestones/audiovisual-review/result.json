@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:26:36.805Z",
-  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
-  "promptSha256": "ac1a4408768c067eb5bc1174f757fd0265165622b2f1c889914563b0da94c678",
-  "clipSha256": "432ba69194e24f959ccaed903dc614a224e0a3a94b8145f63f9357a8390fa115",
+  "reviewedAt": "2026-10-11T15:08:11.143Z",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "promptSha256": "ca540019f526e348e5dd3698e0903a09275f51d2f5231607c7dfb78397d67b8d",
+  "clipSha256": "6f7d201e78b91b3c57cfadb4987926f6d054c880c5162f3296008caae21726a1",
   "scene": "result",
   "review": {
-    "heardOpening": "Gardez cette liste courte",
+    "heardOpening": "Gardez cette liste courte et utile",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.5,
         "spoken": "Gardez cette liste courte et utile.",
-        "visibleSeconds": 1,
-        "visible": "Affichage de la section Jalons avec 4 éléments.",
+        "visibleSeconds": 0.8,
+        "visible": "Défilement vers la section Jalons affichant une liste synthétique de 4 jalons.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
+        "spokenSeconds": 2.5,
         "spoken": "Quelques jalons datés, avec un état fiable",
-        "visibleSeconds": 1,
-        "visible": "Liste des jalons avec dates et statuts cochés visible à l'écran.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage des jalons avec cases à cocher d'état et dates associées en français (sam. 10 oct., dim. 11 oct.).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 8,
         "spoken": "chacun sait quelle est la prochaine étape importante.",
-        "visibleSeconds": 1,
-        "visible": "Vue statique sur les étapes et échéances.",
+        "visibleSeconds": 8,
+        "visible": "L'écran reste stable sur la liste où le prochain jalon non coché est visible (Envoyer les consignes).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction posée et claire, niveau sonore équilibré."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec le défilement."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

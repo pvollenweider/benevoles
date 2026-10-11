@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:14:24.809Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "645203fb681277c400f6b9624660d0bdbaddf353a0c174641269d2be4aa030a3",
-  "clipSha256": "e319d4a3b196b8868fa2c0285f0a18becaf8d4eb2a22654c6f14429b0b68774a",
+  "reviewedAt": "2026-10-11T15:13:55.522Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "53552e173a2bee5379e8535fcfe847b9cfb168f2a485f8fd6306d5f6b2524090",
+  "clipSha256": "3237c57ccad819d2d9ca5d50cc03f75add29d205f5525b26621fa45786acae5d",
   "scene": "withdrawal",
   "review": {
     "heardOpening": "Prévenir en cas de désistement est un réglage séparé",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0.5,
         "spoken": "Prévenir en cas de désistement est un réglage séparé",
         "visibleSeconds": 0.5,
-        "visible": "Option 'Prévenir en cas de désistement' cochée dans la liste des réglages",
+        "visible": "Option 'Prévenir en cas de désistement' affichée et cochée dans les réglages des emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
-        "spoken": "Il informe les administrateurs et les responsables du poste",
-        "visibleSeconds": 3,
-        "visible": "Sous-texte explicatif affiché sous l'option",
+        "spokenSeconds": 3.8,
+        "spoken": "Il informe les administrateurs et les responsables du poste quand une place confirmée ou une demande est annulée",
+        "visibleSeconds": 3.8,
+        "visible": "Description sous la case à cocher explicitant les destinataires et les cas d'envoi",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 11.5,
         "spoken": "Décocher cette option coupe aussi l’email aux responsables",
-        "visibleSeconds": 12,
-        "visible": "Option visible à l'écran sans manipulation directe",
+        "visibleSeconds": 11.5,
+        "visible": "La mention 'coupe aussi l'email aux responsables' est lisible dans l'aide sous l'option",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et ton calme bien adapté au tutoriel."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de la page de réglages."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

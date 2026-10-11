@@ -1,0 +1,470 @@
+[
+  {
+    "id": "welcome",
+    "cue": {
+      "id": "welcome",
+      "startMs": 1106,
+      "endMs": 19164
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation.",
+        "startMs": 292,
+        "endMs": 5678,
+        "method": "silence"
+      },
+      {
+        "text": "Les organisateurs peuvent suivre les envois, mais pas changer ces réglages.",
+        "startMs": 6378,
+        "endMs": 10273,
+        "method": "silence"
+      },
+      {
+        "text": "Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+        "startMs": 10614,
+        "endMs": 17795,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "reminders",
+    "cue": {
+      "id": "reminders",
+      "startMs": 21327,
+      "endMs": 39310
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 28657
+      },
+      {
+        "kind": "click",
+        "atMs": 30424
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée.",
+        "startMs": 350,
+        "endMs": 7131,
+        "method": "silence"
+      },
+      {
+        "text": "Décochons puis recochons le premier rappel.",
+        "startMs": 7808,
+        "endMs": 9706,
+        "method": "silence"
+      },
+      {
+        "text": "Pour une personne sur plusieurs créneaux du même événement le même jour, chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.",
+        "startMs": 10187,
+        "endMs": 17697,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "event-reminders",
+    "cue": {
+      "id": "event-reminders",
+      "startMs": 39764,
+      "endMs": 57153
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 43553
+      },
+      {
+        "kind": "click",
+        "atMs": 46337
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Dans les réglages d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements.",
+        "startMs": 284,
+        "endMs": 6990,
+        "method": "silence"
+      },
+      {
+        "text": "Sa section Communications indique ce qui partira vraiment.",
+        "startMs": 7120,
+        "endMs": 10177,
+        "method": "silence"
+      },
+      {
+        "text": "Un brouillon n’envoie pas de rappel.",
+        "startMs": 10752,
+        "endMs": 12025,
+        "method": "silence"
+      },
+      {
+        "text": "Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.",
+        "startMs": 12291,
+        "endMs": 17388,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "admin-alert",
+    "cue": {
+      "id": "admin-alert",
+      "startMs": 57606,
+      "endMs": 71786
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 62354
+      },
+      {
+        "kind": "click",
+        "atMs": 66887
+      }
+    ],
+    "sentences": [
+      {
+        "text": "L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique.",
+        "startMs": 238,
+        "endMs": 7867,
+        "method": "silence"
+      },
+      {
+        "text": "Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+        "startMs": 8417,
+        "endMs": 14179,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "withdrawal",
+    "cue": {
+      "id": "withdrawal",
+      "startMs": 72237,
+      "endMs": 91545
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 80237
+      },
+      {
+        "kind": "click",
+        "atMs": 87020
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Prévenir en cas de désistement est un réglage séparé.",
+        "startMs": 0,
+        "endMs": 2810,
+        "method": "silence"
+      },
+      {
+        "text": "Il informe les administrateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole.",
+        "startMs": 2987,
+        "endMs": 10785,
+        "method": "silence"
+      },
+      {
+        "text": "Décocher cette option coupe aussi l’email aux responsables.",
+        "startMs": 11550,
+        "endMs": 14715,
+        "method": "silence"
+      },
+      {
+        "text": "Quitter une liste d’attente ou refuser une place proposée n’envoie pas cette alerte.",
+        "startMs": 14935,
+        "endMs": 19183,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "addresses",
+    "cue": {
+      "id": "addresses",
+      "startMs": 92000,
+      "endMs": 109851
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 99269
+      },
+      {
+        "kind": "click",
+        "atMs": 105318
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.",
+        "startMs": 140,
+        "endMs": 4349,
+        "method": "silence"
+      },
+      {
+        "text": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille.",
+        "startMs": 4509,
+        "endMs": 10277,
+        "method": "silence"
+      },
+      {
+        "text": "Un incident temporaire seul ne le déclenche pas.",
+        "startMs": 10858,
+        "endMs": 12746,
+        "method": "silence"
+      },
+      {
+        "text": "L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+        "startMs": 13438,
+        "endMs": 17549,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "reply-to",
+    "cue": {
+      "id": "reply-to",
+      "startMs": 112017,
+      "endMs": 128065
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 117618
+      },
+      {
+        "kind": "key",
+        "atMs": 117931
+      },
+      {
+        "kind": "key",
+        "atMs": 117936
+      },
+      {
+        "kind": "key",
+        "atMs": 118055
+      },
+      {
+        "kind": "key",
+        "atMs": 118175
+      },
+      {
+        "kind": "key",
+        "atMs": 118294
+      },
+      {
+        "kind": "key",
+        "atMs": 118411
+      },
+      {
+        "kind": "key",
+        "atMs": 118530
+      },
+      {
+        "kind": "key",
+        "atMs": 118651
+      },
+      {
+        "kind": "key",
+        "atMs": 118774
+      },
+      {
+        "kind": "key",
+        "atMs": 118897
+      },
+      {
+        "kind": "key",
+        "atMs": 119020
+      },
+      {
+        "kind": "key",
+        "atMs": 119142
+      },
+      {
+        "kind": "key",
+        "atMs": 119262
+      },
+      {
+        "kind": "key",
+        "atMs": 119385
+      },
+      {
+        "kind": "key",
+        "atMs": 119506
+      },
+      {
+        "kind": "key",
+        "atMs": 119625
+      },
+      {
+        "kind": "key",
+        "atMs": 119743
+      },
+      {
+        "kind": "key",
+        "atMs": 119862
+      },
+      {
+        "kind": "key",
+        "atMs": 119984
+      },
+      {
+        "kind": "key",
+        "atMs": 120105
+      },
+      {
+        "kind": "key",
+        "atMs": 120228
+      },
+      {
+        "kind": "key",
+        "atMs": 120350
+      }
+    ],
+    "sentences": [
+      {
+        "text": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme.",
+        "startMs": 288,
+        "endMs": 5558,
+        "method": "silence"
+      },
+      {
+        "text": "Saisissons benevoles arobase example point org.",
+        "startMs": 5894,
+        "endMs": 8857,
+        "method": "silence"
+      },
+      {
+        "text": "Si le champ reste vide, l’adresse par défaut est utilisée.",
+        "startMs": 9163,
+        "endMs": 12051,
+        "method": "silence"
+      },
+      {
+        "text": "Cette adresse apparaît aussi sur la page personnelle des bénévoles.",
+        "startMs": 12651,
+        "endMs": 15695,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "save",
+    "cue": {
+      "id": "save",
+      "startMs": 128518,
+      "endMs": 143831
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 131133
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Enregistrez les réglages avant de les tester.",
+        "startMs": 345,
+        "endMs": 2497,
+        "method": "silence"
+      },
+      {
+        "text": "Le message Réglages enregistrés confirme que vos choix sont conservés.",
+        "startMs": 2911,
+        "endMs": 6875,
+        "method": "silence"
+      },
+      {
+        "text": "Modifier les cases sans enregistrer ne change pas les prochains envois.",
+        "startMs": 7620,
+        "endMs": 10599,
+        "method": "silence"
+      },
+      {
+        "text": "Le test utilise lui aussi la dernière configuration enregistrée.",
+        "startMs": 10954,
+        "endMs": 15311,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "test",
+    "cue": {
+      "id": "test",
+      "startMs": 145992,
+      "endMs": 165708
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 150017
+      }
+    ],
+    "sentences": [
+      {
+        "text": "M’envoyer un email de test envoie un exemple à votre propre compte, pas aux bénévoles.",
+        "startMs": 0,
+        "endMs": 4167,
+        "method": "silence"
+      },
+      {
+        "text": "Ouvrons le message reçu dans la boîte locale de démonstration.",
+        "startMs": 4624,
+        "endMs": 7474,
+        "method": "silence"
+      },
+      {
+        "text": "Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le contenu du message.",
+        "startMs": 7784,
+        "endMs": 14809,
+        "method": "silence"
+      },
+      {
+        "text": "Dans cette formation, les emails restent sur notre serveur local et ne partent pas sur Internet.",
+        "startMs": 15228,
+        "endMs": 19396,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "cue": {
+      "id": "result",
+      "startMs": 166162,
+      "endMs": 183693
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Les réglages sont enregistrés et le message de test est visible dans la boîte de démonstration.",
+        "startMs": 363,
+        "endMs": 5687,
+        "method": "silence"
+      },
+      {
+        "text": "Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi, pas une preuve de remise ni de lecture par le bénévole.",
+        "startMs": 6065,
+        "endMs": 12925,
+        "method": "silence"
+      },
+      {
+        "text": "Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement.",
+        "startMs": 13231,
+        "endMs": 17235,
+        "method": "silence"
+      }
+    ]
+  }
+]

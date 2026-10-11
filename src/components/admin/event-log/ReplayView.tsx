@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from "react"
 import { describeChanges, describeEntry } from "@/lib/event-log-narrative"
 import type { ShiftLabel } from "@/lib/event-log-read"
-import { ENTITY_LABELS, fmtDateTime, isBaseline, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
+import { fmtDateTime, replayHeading, isBaseline, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
 import { EmptyTabPrompt } from "./Pickers"
 
 export default function ReplayView({
@@ -59,7 +59,7 @@ export default function ReplayView({
     <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-500">
-          Historique de {ENTITY_LABELS[scope.entityType]?.toLowerCase() ?? scope.entityType} · {entries.length} étape{entries.length > 1 ? "s" : ""}
+          {replayHeading(scope.entityType)} · {entries.length} étape{entries.length > 1 ? "s" : ""}
         </p>
         <button onClick={onClear} className="text-xs text-gray-500 hover:text-gray-800">Changer d'élément</button>
       </div>

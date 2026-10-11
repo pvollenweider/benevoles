@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:04:06.109Z",
+  "videoSha256": "97aa2c5014dd142da66d03937a38070beb3c90db740eba3e5c4eb6e1792121da",
+  "promptSha256": "6ff9e184946cd5218a1a7cc1f73f53f66cfc5343f3d0769ee4ba35b507396966",
+  "clipSha256": "4d8a96135fac159123f9c8f44ac278be8588e1b3c66ecca8b1673f98b0ab0b82",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Ajoutons Fermer les inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Ajoutons Fermer les inscriptions",
+        "visibleSeconds": 1,
+        "visible": "Le formulaire d'ajout d'un jalon est ouvert avec le titre 'Fermer les inscriptions' pré-rempli",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "avec une date d’échéance",
+        "visibleSeconds": 3,
+        "visible": "La date d'échéance 19.10.2026 est renseignée dans le champ prévu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "valider le plan de sécurité, envoyer les consignes",
+        "visibleSeconds": 6,
+        "visible": "Les jalons 'Valider le plan de sécurité' et 'Envoyer les consignes' sont visibles dans la liste au-dessus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Évitez les formulations vagues",
+        "visibleSeconds": 14,
+        "visible": "Le bouton Ajouter est cliqué et le nouveau jalon 'Fermer les inscriptions' s'ajoute à la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

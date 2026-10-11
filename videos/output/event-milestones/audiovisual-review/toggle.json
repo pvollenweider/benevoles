@@ -1,45 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:26:14.683Z",
-  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
-  "promptSha256": "65fb67e94415bbb60931dc23814dfa34a2332f7b46000d7888690d33192065a3",
-  "clipSha256": "dd9c1887beb8fdffe0f9dc668aacce7b1cdaeb3becaa8a667499bf014e3911fb",
+  "reviewedAt": "2026-10-11T15:08:13.022Z",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "promptSha256": "0e30c6a8c9882da91b0b4d0cb8694725caa5126824a1f2ef8872975c767af3e7",
+  "clipSha256": "cc68af6c7541dcad5d2c393a019477fc0fde31c0cbd0509e6e31d6b35c14df7c",
   "scene": "toggle",
   "review": {
     "heardOpening": "Quand une étape est terminée",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
+        "spokenSeconds": 1.7,
         "spoken": "cochez-la",
-        "visibleSeconds": 2.2,
-        "visible": "Clic sur la case Fermer les inscriptions qui se coche",
+        "visibleSeconds": 0.8,
+        "visible": "La case « Fermer les inscriptions » est cochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.9,
+        "spokenSeconds": 2.7,
         "spoken": "Le titre devient barré",
-        "visibleSeconds": 3.2,
-        "visible": "Le texte Fermer les inscriptions ne devient pas barré à l'écran",
+        "visibleSeconds": 2.7,
+        "visible": "Le texte du jalon coché ne devient pas barré",
         "sync": "missing",
-        "severity": "minor"
+        "severity": "major"
       },
       {
-        "spokenSeconds": 6.1,
+        "spokenSeconds": 5.2,
         "spoken": "décochez-la pour la remettre à faire",
-        "visibleSeconds": 6.5,
-        "visible": "Clic pour décocher la case Fermer les inscriptions",
+        "visibleSeconds": 4.2,
+        "visible": "Clic sur la case « Fermer les inscriptions » qui est décochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "la date et le titre sont conservés",
+        "visibleSeconds": 7.5,
+        "visible": "Le titre reste affiché, mais aucune date n'apparaît sur les jalons visibles",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "00:03 - L'intitulé coché ne s'affiche pas barré comme annoncé par la voix."
+      "00:02 - 00:03 : L'affirmation « Le titre devient barré » n'est pas vérifiée à l'écran : le texte du jalon coché ne prend aucun style barré."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée et fluide."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'action de cocher/décocher."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

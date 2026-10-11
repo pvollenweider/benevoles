@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:43.524Z",
+  "revalidatedAt": "2026-10-11T15:07:43.524Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "aea2303cbebdadaefbae66c920acf0ded3514d98e6f0c93d163e3ce0697177bf",
+      "recognized": "Gardez cette liste courte et utile. Quelques jalons datés avec un état fiable sont plus efficaces qu'une longue liste jamais relue. Le résultat attendu est simple. Chacun sait quelle est la prochaine étape importante.",
+      "expected": "Gardez cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

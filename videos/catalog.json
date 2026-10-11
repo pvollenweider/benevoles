@@ -142,8 +142,8 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-11",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -315,8 +315,8 @@
         "organisateur"
       ],
       "feature": "Jalons de préparation",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-11",
+      "revision": 3,
       "level": "avance"
     },
     {

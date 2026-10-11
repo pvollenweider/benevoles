@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:16:58.969Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "bb0f1bf25e001997a3735e4857c0cc5d9fec5ce5e20a8caf2c83ee154ca5e930",
+  "clipSha256": "4a697c0543657304817b4d2411f43b3deb03afafdfa4b6bfc8ae0138d98c312d",
+  "scene": "admin-alert",
+  "review": {
+    "heardOpening": "L'option Prévenir les administrateurs",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.7,
+        "spoken": "Prévenir les administrateurs à chaque inscription",
+        "visibleSeconds": 0.8,
+        "visible": "L'option 'Prévenir les administrateurs à chaque inscription' est affichée et cochée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "envoie un e-mail à chaque administrateur actif",
+        "visibleSeconds": 4.6,
+        "visible": "Le curseur clique sur la case pour la décocher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Elle facilite le suivi d'un petit événement",
+        "visibleSeconds": 7.6,
+        "visible": "Le curseur recoche la case de l'option",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off naturelle, fluide et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

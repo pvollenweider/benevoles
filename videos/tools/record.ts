@@ -527,12 +527,12 @@ async function main() {
         await at("Le Tableau de bord rassemble")
         await tap(page, page.getByRole("link", { name: "Tableau de bord", exact: true }).first())
         await settle(page)
-        await at(0.28) /* mid-sentence */
+        await at("Événements ouvre la liste")
         await tap(page, page.getByRole("link", { name: "Événements", exact: true }).first())
-        await at("Paramètres concerne les réglages communs.")
+        await at("et Membres les personnes connues")
         await tap(page, page.getByRole("link", { name: "Membres", exact: true }).first())
         await page.getByRole("heading", { name: "Membres" }).waitFor()
-        await at("Certaines modifications sont réservées au")
+        await at("Paramètres concerne les réglages communs.")
         await tap(page, page.getByRole("link", { name: "Paramètres", exact: true }).first())
         await page.getByRole("heading", { name: "Paramètres" }).waitFor()
         await at(0.91) /* mid-sentence */
@@ -620,7 +620,7 @@ async function main() {
         await at(0.10) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: /Menu/ }))
         await page.getByRole("link", { name: "Membres", exact: true }).waitFor()
-        await at("ce lien évite de traverser")
+        await at("Sur ordinateur, la première tabulation")
         portraitFrames.push({ startMs: portraitStart, endMs: Math.round(performance.now() - startedAt), width: 390, height: 800 })
         await page.setViewportSize({ width: 1280, height: 800 })
         await page.goto(`${baseUrl}/admin/events`); await settle(page)
@@ -1270,7 +1270,7 @@ async function main() {
       await scene("create", async (at) => {
         const create = page.getByRole("button", { name: "Créer 6 créneaux" })
         await create.scrollIntoViewIfNeeded()
-        await at("Les nouvelles barres apparaissent dans")
+        await at("Créons la série")
         await tap(page, create)
         await page.getByText("Buvette série", { exact: true }).first().waitFor()
         await at("chacune possède son propre effectif")
@@ -1287,7 +1287,7 @@ async function main() {
         const capacity = page.getByLabel(/^Capacité(?: \*)?$/)
         await tap(page, capacity)
         await capacity.fill("4")
-        await at("Cette modification concerne seulement cette")
+        await at("Enregistrons")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
         await settle(page)
@@ -4297,6 +4297,7 @@ async function main() {
         await typeNaturally(page, instructions, "Entre par la cour nord. Arrive quinze minutes avant ton créneau.")
         await at(0.48) /* mid-sentence */
         const confirmation = page.getByText("Message de confirmation", { exact: true }).locator("xpath=following-sibling::textarea")
+        await confirmation.fill("")
         await typeNaturally(page, confirmation, "Merci {prénom} ! Ton inscription est confirmée. Retrouve ton planning par email.")
         await at(0.78) /* mid-sentence */
         await page.getByText(/Supporte le \*\*gras\*\*/).scrollIntoViewIfNeeded()
@@ -4327,7 +4328,7 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${createdEventId}/edit`); await settle(page)
         const description = page.getByLabel("Description")
         await description.scrollIntoViewIfNeeded()
-        await at(0.48) /* mid-sentence */
+        await at("Corrigeons la description")
         await tap(page, description)
         await description.fill("Deux jours de rencontres, de musique, de repas partagés et d’activités pour les familles du quartier.")
         await page.getByText(/^Modifications enregistrées à/).waitFor({ timeout: 10_000 })
@@ -4337,7 +4338,7 @@ async function main() {
         await page.getByLabel("Statut").scrollIntoViewIfNeeded()
         await at(0.37) /* mid-sentence */
         await page.getByText(/Un événement ne peut être publié qu'avec au moins un créneau/).scrollIntoViewIfNeeded()
-        await at("Il reste à créer les")
+        await at("Retrouvons-le dans les événements")
         await page.goto(`${baseUrl}/admin/events`); await settle(page)
         await page.getByRole("link", { name: "Fête du quartier des Tilleuls", exact: true }).scrollIntoViewIfNeeded()
       })
@@ -4625,7 +4626,7 @@ async function main() {
         await settle(page)
         await fillVisibly(page, page.getByLabel("Ouverture programmée (facultatif)"), "2026-10-01T09:00", 1_000)
         await fillVisibly(page, page.getByLabel("Fermeture programmée (facultatif)"), "2031-05-09T18:00", 1_000)
-        await page.getByText("Enregistré ✓").waitFor({ timeout: 10_000 })
+        await page.getByText(/^Modifications enregistrées à/).waitFor({ timeout: 10_000 })
         await page.getByText(/Heures du fuseau de l'organisation/).scrollIntoViewIfNeeded()
       })
 
@@ -4666,7 +4667,7 @@ async function main() {
       await scene("publish", async () => {
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
-        organizerPublicUrl = await page.locator('a[target="_blank"][href*="?org="]').getAttribute("href") ?? ""
+        organizerPublicUrl = (await page.getByText("Lien à partager :", { exact: false }).locator("span").textContent())?.trim() ?? ""
         if (!organizerPublicUrl) throw new Error("Published event has no public URL")
       })
 
@@ -5154,7 +5155,7 @@ async function main() {
         await at("Ici, le minimum est prêt")
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
-        onboardingPublicUrl = await page.locator('a[target="_blank"][href*="?org="]').getAttribute("href") ?? ""
+        onboardingPublicUrl = (await page.getByText("Lien à partager :", { exact: false }).locator("span").textContent())?.trim() ?? ""
         if (!onboardingPublicUrl) throw new Error("Onboarding event has no public URL")
       })
 

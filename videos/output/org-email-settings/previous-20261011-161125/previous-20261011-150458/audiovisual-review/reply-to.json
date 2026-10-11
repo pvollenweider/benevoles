@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:46.684Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "35739231e427a79f4d5f62f5a6b1adb7dff901f779533e6e73da251bb877016d",
+  "clipSha256": "2a40260acc8c4b7ce8c10f3f492b34621b00645d5e3b3ca3767b06972540b7a9",
+  "scene": "reply-to",
+  "review": {
+    "heardOpening": "L'adresse de réponse indique où arrive",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "L'adresse de réponse indique où arrive un message",
+        "visibleSeconds": 1,
+        "visible": "Section Adresse de réponse visible dans les réglages des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Saisissons benevoles arobase example point org",
+        "visibleSeconds": 7.5,
+        "visible": "Le texte saisi s'arrête à 'benevol' sans terminer l'adresse",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Si le champ reste vide, l'adresse par défaut est utilisée",
+        "visibleSeconds": 11.5,
+        "visible": "Texte d'aide sous le champ visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:07 - 00:10 : la saisie dans le champ 'Adresse de réponse' est incomplète (seul 'benevol' est tapé au lieu de l'adresse complète)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

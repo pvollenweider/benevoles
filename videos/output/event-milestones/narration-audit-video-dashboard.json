@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:42.184Z",
+  "revalidatedAt": "2026-10-11T15:07:42.185Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "dashboard",
+      "audioSha256": "7df95c89d4e75a5c129d361c7f7aec6ff97fd3b24e669dcf7678c6a561ba4e3b",
+      "recognized": "Ouvrons le tableau de bord de l'association. Les jalons en retard y apparaissent parmi les priorités avec un lien vers l'événement concerné. Les jalons à venir restent visibles sur la page de leur événement. Ils ne déclenchent ni e-mail, ni fermeture automatique des inscriptions.",
+      "expected": "Ouvrons le Tableau de bord de l’association. Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné. Les jalons à venir restent visibles sur la page de leur événement : ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

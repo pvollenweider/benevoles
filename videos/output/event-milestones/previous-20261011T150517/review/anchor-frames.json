@@ -1,0 +1,26 @@
+[
+  {
+    "scene": "toggle",
+    "seconds": 44.598,
+    "label": "Quand une étape est terminée BEFORE",
+    "file": "videos/output/event-milestones/review/toggle-anchor-0.png"
+  },
+  {
+    "scene": "toggle",
+    "seconds": 46.348,
+    "label": "Quand une étape est terminée AFTER",
+    "file": "videos/output/event-milestones/review/toggle-anchor-1.png"
+  },
+  {
+    "scene": "toggle",
+    "seconds": 48.397,
+    "label": "Si la situation change BEFORE",
+    "file": "videos/output/event-milestones/review/toggle-anchor-2.png"
+  },
+  {
+    "scene": "toggle",
+    "seconds": 50.147,
+    "label": "Si la situation change AFTER",
+    "file": "videos/output/event-milestones/review/toggle-anchor-3.png"
+  }
+]

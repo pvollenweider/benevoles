@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:35.764Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "cb58ccd274db7c47af5a0e4f99b8aeb230b0d7137611ff2be31971c45f7fa0a5",
+  "clipSha256": "60b5e4c11f838fdd97501b11baba4f5abe84707b53bf515872b0daa795d16ccc",
+  "scene": "addresses",
+  "review": {
+    "heardOpening": "Le résumé quotidien des adresses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.",
+        "visibleSeconds": 0.5,
+        "visible": "Option 'Résumé quotidien des adresses à vérifier' affichée et cochée sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué",
+        "visibleSeconds": 5.2,
+        "visible": "Texte explicatif visible sous l'option décrivant les conditions d'envoi en cas d'échec définitif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+        "visibleSeconds": 13.9,
+        "visible": "Mention 'Un email par jour aux administrateurs actifs' lisible sous la case",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
