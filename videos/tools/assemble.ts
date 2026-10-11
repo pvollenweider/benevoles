@@ -10,7 +10,7 @@ import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { readableCaptions } from "../lib/captions"
 import { inputAudio } from "../lib/input-audio"
-import { MUSIC_LOOP, MUSIC_MIX, MUSIC_RULE, musicLevelIssues, musicLevelSummary, musicLoopCopies, musicWindows, parseEbur128Momentary } from "../lib/music-levels"
+import { frameLevels, MUSIC_LOOP, MUSIC_MIX, MUSIC_RULE, musicLevelIssues, musicLevelSummary, musicLoopCopies, musicWindows, NARRATION_LEVEL, parseEbur128Integrated, parseEbur128Momentary, segmentGainDb } from "../lib/music-levels"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
@@ -33,6 +33,11 @@ async function mediaDuration(file: string): Promise<number> {
   const seconds = Number(stdout.trim())
   if (!Number.isFinite(seconds) || seconds <= 0) throw new Error(`Invalid media duration for ${file}`)
   return seconds
+}
+
+async function integratedLoudness(file: string): Promise<number | null> {
+  const { stderr } = await exec("ffmpeg", ["-hide_banner", "-nostats", "-i", file, "-af", "ebur128", "-f", "null", "-"], { maxBuffer: 64 * 1024 * 1024 })
+  return parseEbur128Integrated(stderr)
 }
 
 async function main() {
@@ -137,18 +142,24 @@ async function main() {
     videoMap = `[${previous}]`
   }
 
-  manifest.segments.forEach((segment, index) => {
+  const segmentGains: Record<string, number> = {}
+  for (const [index, segment] of manifest.segments.entries()) {
     const cue = cues.get(segment.id)
     const generated = audio.segments[segment.id]
     if (!cue || !generated) throw new Error(`Missing timeline or audio for ${segment.id}`)
-    inputs.push("-i", path.join(dir, generated.file))
+    const file = path.join(dir, generated.file)
+    inputs.push("-i", file)
+    // Every chapter at the same loudness before mixing (see NARRATION_LEVEL).
+    const gain = segmentGainDb(await integratedLoudness(file))
+    segmentGains[segment.id] = gain
     const label = `voice${index}`
-    filters.push(`[${index + 1}:a]adelay=delays=${cue.startMs}:all=1[${label}]`)
+    filters.push(`[${index + 1}:a]volume=${gain}dB,adelay=delays=${cue.startMs}:all=1[${label}]`)
     labels.push(`[${label}]`)
     for (const caption of readableCaptions(segment.transcript, cue.startMs, generated.durationMs)) vtt.push(`${vttTime(caption.startMs)} --> ${vttTime(caption.endMs)}`, caption.text, "")
     transcript.push(segment.transcript, "")
-  })
-  filters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000[narration]`)
+  }
+  // Chapters never overlap: no amix normalization, so the compressor sees the levelled voice.
+  filters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0:normalize=0,acompressor=${NARRATION_LEVEL.compressor},loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000[narration]`)
   const musicInput = manifest.segments.length + 1
   const fadeOut = Math.max(0, captureDuration - 2)
   const copies = musicLoopCopies(captureDuration)
@@ -167,7 +178,10 @@ async function main() {
   filters.push("[narration]asplit=2[narrationMix][narrationStem]")
   inputs.push("-i", effects)
   filters.push(`[${musicInput + 1}:a]aresample=48000[effects]`)
-  filters.push("[narrationMix][music][effects]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000,apad[final]")
+  // No second loudnorm on the mix: in dynamic mode it lifted the music in every pause
+  // (about 5 LU over its level under the voice). The narration already sits at -16 LUFS
+  // and the music far under it, so a peak limiter is enough.
+  filters.push("[narrationMix][music][effects]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0,alimiter=limit=0.79:level=false:latency=true,aresample=48000,apad[final]")
 
   const stems = await mkdtemp(path.join(os.tmpdir(), "benevol-music-stems-"))
   await exec("ffmpeg", [
@@ -190,13 +204,13 @@ async function main() {
   ], { maxBuffer: 10 * 1024 * 1024 })
   const momentary = async (file: string) => {
     const { stderr } = await exec("ffmpeg", ["-hide_banner", "-nostats", "-loglevel", "verbose", "-i", file, "-af", "ebur128=framelog=verbose", "-f", "null", "-"], { maxBuffer: 64 * 1024 * 1024 })
-    return parseEbur128Momentary(stderr).map(frame => frame.m)
+    return frameLevels(parseEbur128Momentary(stderr))
   }
   const windows = musicWindows(await momentary(path.join(stems, "voice.wav")), await momentary(path.join(stems, "music.wav")), await momentary(output), { durationS: captureDuration, fadeInS: 1.5, fadeOutS: 2 })
   await rm(stems, { recursive: true, force: true })
   const levelIssues = musicLevelIssues(windows)
   const videoSha256 = createHash("sha256").update(await readFile(output)).digest("hex")
-  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: MUSIC_MIX, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
+  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: MUSIC_MIX, narration: { ...NARRATION_LEVEL, segmentGainsDb: segmentGains }, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
 
   await writeFile(path.join(dir, `${manifest.slug}.vtt`), `${vtt.join("\n")}\n`)
   await writeFile(path.join(dir, `${manifest.slug}.txt`), `${transcript.join("\n").trim()}\n`)
