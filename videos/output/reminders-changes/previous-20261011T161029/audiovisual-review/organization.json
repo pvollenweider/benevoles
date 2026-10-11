@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:13.551Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "bdac9d221f775a402f1e2ce231bfbb39d6c93a9cc4b29dc92cfeed44f084c326",
+  "clipSha256": "34a0a57a822c30fca4866cfa18502c31c00f75e1833155f2cc16e06be7008d79",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Dans Paramètres, puis Emails, vous choisissez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, puis Emails, vous choisissez les rappels automatiques de toute l'organisation",
+        "visibleSeconds": 1,
+        "visible": "Page Paramètres > Emails affichant la section Réglages des emails avec Rappel J-2, Rappel J-1 et Rappel du jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Nous coupons celui de la veille, enregistrons, puis le réactivons.",
+        "visibleSeconds": 13,
+        "visible": "Aucune case n'est décochée (Rappel J-1 reste cochée) et aucun clic n'est effectué sur Enregistrer",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Vous trouvez aussi l'adresse de réponse",
+        "visibleSeconds": 17.5,
+        "visible": "Champ Adresse de réponse bien visible sous les cases de configuration",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "De 00:12 à 00:17, l'action annoncée (« Nous coupons celui de la veille, enregistrons, puis le réactivons ») n'est pas réalisée à l'écran : la case Rappel J-1 reste cochée et aucun enregistrement n'a lieu."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

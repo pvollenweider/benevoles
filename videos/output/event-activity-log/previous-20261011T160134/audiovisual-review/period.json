@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:52:54.731Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "1e232ed65fed5fc3c1d0172196b78d9a4090f689662bf6654e081102f3560266",
+  "clipSha256": "697bf0e40b8a65ab7ba0b8fb7021468e16b758f7494cd3864159f49ddcd7f503",
+  "scene": "period",
+  "review": {
+    "heardOpening": "Vous savez quand le changement a eu lieu ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Renseignez Depuis et Jusqu'à pour limiter la période",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de dates dans les champs de filtre Depuis et Jusqu'à",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Une liste vide peut simplement venir des filtres",
+        "visibleSeconds": 9,
+        "visible": "Message « Aucune entrée pour ces filtres. » affiché au centre de la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Charger plus complète la liste",
+        "visibleSeconds": 16,
+        "visible": "Défilement vers le bas de la liste d'événements affichant des entrées supplémentaires",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:01 - L'espace réservé (placeholder) des champs de date affiche le format anglophone « dd.mm.yyyy » au lieu d'un format français (ex. jj.mm.aaaa)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

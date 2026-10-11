@@ -1,0 +1,100 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T12:48:04.194Z",
+  "revalidatedAt": "2026-10-11T12:48:04.195Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "eee99b547d53625a0f8654172fa7e990ee4d0b36e2e33f659c47e819313baf0c",
+      "recognized": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous et si l'horaire change, mieux vaut les prévenir clairement. Ici, nous allons distinguer trois choses : le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement. Nous utiliserons un événement de démonstration et sa vraie boîte mail de test pour regarder ce que les personnes reçoivent.",
+      "expected": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous. Et si l'horaire change, mieux vaut les prévenir clairement. Ici, nous allons distinguer trois choses : le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement. Nous utiliserons un événement de démonstration et sa vraie boîte mail de test pour regarder ce que les personnes reçoivent.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "manual-message",
+      "audioSha256": "9daaaf2f64f40e034ed818dfd3f5fbf98794ef6f3871061e44172e6b3de7d948",
+      "recognized": "Dans les réglages de l'événement, le message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : retrouve-nous au stand quinze minutes avant ton horaire et merci pour ton aide. Le texte s'enregistre automatiquement. Attendez la confirmation enregistré avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation. Il accompagne le planning des personnes déjà confirmées.",
+      "expected": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : retrouve-nous au stand quinze minutes avant ton horaire, et merci pour ton aide. Le texte s'enregistre automatiquement : attendez la confirmation Enregistré avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "manual-send",
+      "audioSha256": "eb3b06c979ee9d85eaa7c15e9c7304bd8d269dbbc1bd5480f54b30e765a250ae",
+      "recognized": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'e-mail de Léa. Ses deux créneaux sont regroupés dans un seul message avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
+      "expected": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "organization",
+      "audioSha256": "11745359d89693eeac8c66f5b5e0fc1001a7c4d9038fdc7ce0af7181514b38ba",
+      "recognized": "Dans paramètres, puis e-mail, vous choisissez les rappels automatiques de toute l'organisation. J-2, J-1 et le rappel du jour. Une case décochée ne suffit pas, il faut enregistrer le changement. Nous coupons celui de la veille, enregistrons, puis le réactivons. Vous trouvez aussi l'adresse de réponse. C'est là que les réponses des bénévoles arrivent, pas une adresse différente pour chaque rappel.",
+      "expected": "Dans Paramètres, puis Emails, vous choisissez les rappels automatiques de toute l'organisation : J moins deux, J moins un et le rappel du jour. Une case décochée ne suffit pas : il faut enregistrer le changement. Nous coupons celui de la veille, enregistrons, puis le réactivons. Vous trouvez aussi l'adresse de réponse : c'est là que les réponses des bénévoles arrivent, pas une adresse différente pour chaque rappel.",
+      "wordErrorRate": 0.07352941176470588,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "event-switch",
+      "audioSha256": "08308bbfac4838c79dc96cd10891a2f6bb8fa155822f41b03c97ea77d4e63e6b",
+      "recognized": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans la version actuelle, le formulaire de l'événement ne propose pas de bouton pour couper seulement ces rappels. Ne confondez pas non plus rappel automatique et rappel manuel, ce sont deux actions différentes. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "expected": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans la version actuelle, le formulaire de l'événement ne propose pas de bouton pour couper seulement ses rappels. Ne confondez pas non plus rappel automatique et rappel manuel : ce sont deux actions différentes. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "wordErrorRate": 0.015873015873015872,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timing",
+      "audioSha256": "9c9cfa075f0f6e727eabcefe7cccfb581a57e0d38dcf6a97dddd48e535976eaa",
+      "recognized": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau. Ce n'est pas une promesse d'envoi à une minute fixe. Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici. Voici les trois e-mails réellement reçus pour nos trois échéances. Chacun retrouve son horaire local, le point de rendez-vous et les informations utiles à son poste.",
+      "expected": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau. Ce n'est pas une promesse d'envoi à une minute fixe. Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici. Voici les trois emails réellement reçus pour nos trois échéances : chacun retrouve son horaire local, le point de rendez-vous et les informations utiles à son poste.",
+      "wordErrorRate": 0.02666666666666667,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "exclusions",
+      "audioSha256": "bede41a114d96b61018a311d3e651ee34d81c9b2174a1812988a2707475bf924",
+      "recognized": "Une demande à valider ou une place en attente n'est pas une inscription confirmée, elle ne reçoit pas ces rappels. Même chose pour notre brouillon et l'événement dont les rappels sont coupés. En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas, les personnes déjà confirmées peuvent encore recevoir leur rappel. Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés dans notre démonstration.",
+      "expected": "Une demande à valider ou une place en attente n'est pas une inscription confirmée : elle ne reçoit pas ces rappels. Même chose pour notre brouillon et l'événement dont les rappels sont coupés. En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas. Les personnes déjà confirmées peuvent encore recevoir leur rappel. Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés dans notre démonstration.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "changed",
+      "audioSha256": "fed1c0f92da1ca7d181031979103371ed4a48d5b2c22517c5f385452411851c7",
+      "recognized": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail plutôt que de supposer qu'un clic prouve la réception.",
+      "expected": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cancelled",
+      "audioSha256": "503ff7c67b1b045c13867c5b49acf69151f17058f0526fc58d3518f09f4001ee",
+      "recognized": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler, ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe. Envoyer ne veut pas dire lu.",
+      "expected": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe : envoyé ne veut pas dire lu.",
+      "wordErrorRate": 0.013513513513513514,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

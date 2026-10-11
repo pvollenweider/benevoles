@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:30.354Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "b621959b5304e99be7c1a92cb0469c8f3ddd65878db89aa7e9eb57efa68582dc",
+  "clipSha256": "f02e240923d2108fc5479c7563d545b21c35163e5a43403c8dc9ff8016df5769",
+  "scene": "changed",
+  "review": {
+    "heardOpening": "Si un horaire change, ouvrez le créneau concerné.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Si un horaire change, ouvrez le créneau concerné.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire de modification du créneau du mercredi 14 octobre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Nous décalons son début et sa fin, puis enregistrons.",
+        "visibleSeconds": 4.5,
+        "visible": "Modification de l'heure de début à 17:28, puis de fin à 19:28 et enregistrement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Voici l'email réellement reçu avec le nouvel horaire.",
+        "visibleSeconds": 12,
+        "visible": "Affichage dans la boîte mail Mailpit du courriel avec le nouvel horaire 17:28-19:28.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Vérifions donc le résultat dans le planning et dans la boîte mail",
+        "visibleSeconds": 21,
+        "visible": "Retour à l'application dans la vue frise puis retour dans la liste des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

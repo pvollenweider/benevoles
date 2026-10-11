@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:18:39.997Z",
+  "revalidatedAt": "2026-10-11T15:18:39.997Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "create",
+      "audioSha256": "c1f9e75b3d195f05056e32a273414a565e5380eae65978006db9752eddb86ce1",
+      "recognized": "Le bouton Créer l'événement enregistre maintenant un brouillon, puis ouvre directement l'étape des créneaux. Rien n'est encore publié. Le bandeau de progression montre clairement qu'il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+      "expected": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement l’étape des créneaux. Rien n’est encore publié. Le bandeau de progression montre clairement qu’il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

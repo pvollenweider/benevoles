@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:08:59.121Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "5744229f8a24a1b7526054718b2874179abb4bd606115cd06d46034dec25c375",
+  "clipSha256": "2c0576866cf8ee6f7ae2b6673d8d97ef0e1dd76c04553f6afeb389828eeaf6bd",
+  "scene": "read",
+  "review": {
+    "heardOpening": "Dans Explorer, chaque entrée indique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action.",
+        "visibleSeconds": 0.8,
+        "visible": "L'onglet Explorer affiche les entrées avec leur type (Inscription, Créneau), la date (11 oct., 18:02) et leur déclencheur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Une action automatique apparaît avec le système, pas avec le nom d'un organisateur.",
+        "visibleSeconds": 6,
+        "visible": "La première ligne décrit une libération automatique sans nom d'organisateur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées.",
+        "visibleSeconds": 13.8,
+        "visible": "Sous les entrées d'inscription et de créneau apparaissent les deltas (statut : active -> cancelled, capacite : 3 -> 4).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, sans artefact audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

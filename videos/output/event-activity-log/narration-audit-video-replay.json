@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:07:38.005Z",
+  "revalidatedAt": "2026-10-11T16:07:38.005Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "replay",
+      "audioSha256": "70a67f979723e1d86bae2a9c095350c04a3083a1817387b5581c673e704ca0ca",
+      "recognized": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons Précédent et Suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état. C'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+      "expected": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état : c'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

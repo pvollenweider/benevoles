@@ -110,7 +110,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       const response = await page.request.patch(`${base}/api/admin/shifts/video-errors-shift-0`, { data: { capacity: 1 } })
       assert.equal(response.status(), 200)
       await post(409)
-      await page.getByText("Votre sélection n'est plus disponible", { exact: true }).waitFor()
+      await page.getByText("Ta sélection n'est plus disponible", { exact: true }).waitFor()
       await at("Une place visible quelques minutes"); await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
       checks.actualCapacityRefusal = true
     })

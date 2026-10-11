@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:19:15.605Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "c5671b15a5851bc233d18f51433d20a5e2e22d900feb6dcde1e97b9412e5f2e8",
+  "clipSha256": "139c559e6334199b568d382dd3405d2a62f3a2d55eab4deb7d6d03de13216f13",
+  "scene": "autosave",
+  "review": {
+    "heardOpening": "Après la création, les modifications des réglages",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.7,
+        "spoken": "Corrigeons la description, puis attendons",
+        "visibleSeconds": 6.8,
+        "visible": "Le texte du champ Description est modifié en direct",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Modifications enregistrées à, suivi de l’heure",
+        "visibleSeconds": 10.3,
+        "visible": "Affichage de la mention « Modifications enregistrées à 17h17 » en haut du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Si la page dit Modifications non enregistrées, restez sur place et réessayez",
+        "visibleSeconds": 14.5,
+        "visible": "Formulaire stable affichant la confirmation de sauvegarde pendant l'explication du cas d'erreur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

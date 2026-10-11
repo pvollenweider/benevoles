@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:08:14.250Z",
+  "revalidatedAt": "2026-10-11T16:08:14.251Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "privacy",
+      "audioSha256": "63dbe8e277dbc470a8987de5cd828b7b06a28c4479b815d951a4b0f70076ab78",
+      "recognized": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms, partagez-la seulement avec les personnes qui en ont besoin.",
+      "expected": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partagez-la seulement avec les personnes qui en ont besoin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

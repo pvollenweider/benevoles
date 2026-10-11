@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:17.523Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "28629be4e46b21dd7ace18ff6f058c30ee39eba132727bb5e908a8f04f86f0fb",
+  "clipSha256": "b85019d39028e850b9c294ed906d0b3f79e6e36d0b985cae7926b3cb4d2d7f7b",
+  "scene": "timing",
+  "review": {
+    "heardOpening": "Les rappels partent autour de",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les rappels partent autour de deux jours avant",
+        "visibleSeconds": 0.5,
+        "visible": "Page Paramètres > Emails affichant les réglages Rappel J-2, J-1 et Rappel du jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Voici les trois emails réellement reçus pour nos trois échéances",
+        "visibleSeconds": 13,
+        "visible": "Boîte Mailpit affichant les emails de rappel reçus, consultation successive des messages J-2 et J-1",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "chacun retrouve son horaire local, le point de rendez-vous et les informations utiles",
+        "visibleSeconds": 19.8,
+        "visible": "Affichage de l'email de rappel du jour (Léa) avec les horaires, le lieu et les consignes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisation naturelle avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

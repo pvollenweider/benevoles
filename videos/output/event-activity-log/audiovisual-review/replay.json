@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:09:27.562Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "99ebf011438bd951d3ba217ec74ee4b913bbb74a7cfb29bfcea952db39bd3889",
+  "clipSha256": "a5dd7e6409fdbce2d2cb7889af3d669efb6aa9d9df988ae1b42214ef407a17d2",
+  "scene": "replay",
+  "review": {
+    "heardOpening": "Pour comprendre l'évolution d'un même créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons Rejouer",
+        "visibleSeconds": 2.8,
+        "visible": "L'onglet Rejouer est affiché avec la liste des éléments à rejouer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Choisissons un élément qui possède plusieurs entrées",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection du premier élément de la liste comportant 57 entrées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Les boutons précédent et suivant, comme le curseur",
+        "visibleSeconds": 11.5,
+        "visible": "Utilisation des contrôles de navigation dans l'historique de 57 étapes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Regardons la capacité avant et après sa modification",
+        "visibleSeconds": 17.5,
+        "visible": "Détail affiché : Élodie Rochat a modifié ce créneau, capacité : 1 -> 2",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.1,
+        "spoken": "Changer d'élément permet ensuite de suivre une inscription",
+        "visibleSeconds": 27.2,
+        "visible": "Clic sur Changer d'élément puis sélection d'une inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et dynamique, synchronisation fluide avec l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,711 @@
+{
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 19,
+  "keys": 1,
+  "product": {
+    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
+    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
+    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
+    "buildId": "vU8UL5zPG_yurF8zdluCe",
+    "snapshot": "/tmp/benevoles-video-production.batch4",
+    "builtAt": "2026-10-11T16:01:24.202Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 1306,
+      "endMs": 25694,
+      "sentences": [
+        {
+          "text": "Une inscription a disparu, un horaire a changé :",
+          "startMs": 296,
+          "endMs": 1712,
+          "method": "silence",
+          "globalStartMs": 1602,
+          "globalEndMs": 3018
+        },
+        {
+          "text": "avant de chercher un coupable, retrouvons ce qui s'est passé.",
+          "startMs": 2258,
+          "endMs": 5227,
+          "method": "silence",
+          "globalStartMs": 3564,
+          "globalEndMs": 6533
+        },
+        {
+          "text": "Depuis notre événement de démonstration, ouvrons le Journal.",
+          "startMs": 5447,
+          "endMs": 9063,
+          "method": "silence",
+          "globalStartMs": 6753,
+          "globalEndMs": 10369
+        },
+        {
+          "text": "Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement.",
+          "startMs": 9334,
+          "endMs": 15231,
+          "method": "silence",
+          "globalStartMs": 10640,
+          "globalEndMs": 16537
+        },
+        {
+          "text": "Nous allons lire une entrée, filtrer la liste et suivre un enchaînement.",
+          "startMs": 15881,
+          "endMs": 18179,
+          "method": "silence",
+          "globalStartMs": 17187,
+          "globalEndMs": 19485
+        },
+        {
+          "text": "Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+          "startMs": 18402,
+          "endMs": 23887,
+          "method": "silence",
+          "globalStartMs": 19708,
+          "globalEndMs": 25193
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 7887
+        }
+      ]
+    },
+    {
+      "scene": "read",
+      "startMs": 27953,
+      "endMs": 52236,
+      "sentences": [
+        {
+          "text": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action.",
+          "startMs": 514,
+          "endMs": 5422,
+          "method": "silence",
+          "globalStartMs": 28467,
+          "globalEndMs": 33375
+        },
+        {
+          "text": "Une action automatique apparaît avec le système, pas avec le nom d'un organisateur.",
+          "startMs": 6180,
+          "endMs": 9851,
+          "method": "silence",
+          "globalStartMs": 34133,
+          "globalEndMs": 37804
+        },
+        {
+          "text": "Lisons une inscription, puis une modification de créneau.",
+          "startMs": 10645,
+          "endMs": 11543,
+          "method": "silence",
+          "globalStartMs": 38598,
+          "globalEndMs": 39496
+        },
+        {
+          "text": "Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées.",
+          "startMs": 12165,
+          "endMs": 17786,
+          "method": "silence",
+          "globalStartMs": 40118,
+          "globalEndMs": 45739
+        },
+        {
+          "text": "Le journal aide à comprendre une modification ;",
+          "startMs": 18516,
+          "endMs": 20702,
+          "method": "silence",
+          "globalStartMs": 46469,
+          "globalEndMs": 48655
+        },
+        {
+          "text": "il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+          "startMs": 20887,
+          "endMs": 23803,
+          "method": "silence",
+          "globalStartMs": 48840,
+          "globalEndMs": 51756
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "filters",
+      "startMs": 54499,
+      "endMs": 79008,
+      "sentences": [
+        {
+          "text": "Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription.",
+          "startMs": 499,
+          "endMs": 5174,
+          "method": "silence",
+          "globalStartMs": 54998,
+          "globalEndMs": 59673
+        },
+        {
+          "text": "Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système.",
+          "startMs": 6071,
+          "endMs": 10377,
+          "method": "silence",
+          "globalStartMs": 60570,
+          "globalEndMs": 64876
+        },
+        {
+          "text": "Il ne recherche pas un prénom.",
+          "startMs": 10624,
+          "endMs": 11537,
+          "method": "silence",
+          "globalStartMs": 65123,
+          "globalEndMs": 66036
+        },
+        {
+          "text": "Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages.",
+          "startMs": 12246,
+          "endMs": 16290,
+          "method": "silence",
+          "globalStartMs": 66745,
+          "globalEndMs": 70789
+        },
+        {
+          "text": "Regardons la liste changer, puis revenons à toutes les actions.",
+          "startMs": 16952,
+          "endMs": 19701,
+          "method": "silence",
+          "globalStartMs": 71451,
+          "globalEndMs": 74200
+        },
+        {
+          "text": "Les filtres limitent l'affichage ;",
+          "startMs": 20645,
+          "endMs": 21989,
+          "method": "silence",
+          "globalStartMs": 75144,
+          "globalEndMs": 76488
+        },
+        {
+          "text": "ils ne suppriment aucune entrée de l'historique.",
+          "startMs": 22204,
+          "endMs": 23979,
+          "method": "silence",
+          "globalStartMs": 76703,
+          "globalEndMs": 78478
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "filters",
+          "phrase": "Le filtre Qui distingue",
+          "startMs": 6071,
+          "endMs": 10377,
+          "cueMs": 60570
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 57917
+        },
+        {
+          "kind": "click",
+          "atMs": 61050
+        },
+        {
+          "kind": "click",
+          "atMs": 67467
+        }
+      ]
+    },
+    {
+      "scene": "period",
+      "startMs": 81281,
+      "endMs": 103883,
+      "sentences": [
+        {
+          "text": "Vous savez quand le changement a eu lieu ?",
+          "startMs": 529,
+          "endMs": 2320,
+          "method": "silence",
+          "globalStartMs": 81810,
+          "globalEndMs": 83601
+        },
+        {
+          "text": "Renseignez Depuis et Jusqu'à pour limiter la période.",
+          "startMs": 2471,
+          "endMs": 4511,
+          "method": "silence",
+          "globalStartMs": 83752,
+          "globalEndMs": 85792
+        },
+        {
+          "text": "Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche.",
+          "startMs": 4744,
+          "endMs": 9534,
+          "method": "silence",
+          "globalStartMs": 86025,
+          "globalEndMs": 90815
+        },
+        {
+          "text": "Une liste vide peut simplement venir des filtres :",
+          "startMs": 10183,
+          "endMs": 12370,
+          "method": "silence",
+          "globalStartMs": 91464,
+          "globalEndMs": 93651
+        },
+        {
+          "text": "ce n'est pas la preuve qu'aucune action n'a jamais eu lieu.",
+          "startMs": 12516,
+          "endMs": 14251,
+          "method": "silence",
+          "globalStartMs": 93797,
+          "globalEndMs": 95532
+        },
+        {
+          "text": "Quand il reste des entrées à lire, Charger plus complète la liste.",
+          "startMs": 15136,
+          "endMs": 18274,
+          "method": "silence",
+          "globalStartMs": 96417,
+          "globalEndMs": 99555
+        },
+        {
+          "text": "Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+          "startMs": 18685,
+          "endMs": 22081,
+          "method": "silence",
+          "globalStartMs": 99966,
+          "globalEndMs": 103362
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 98273
+        }
+      ]
+    },
+    {
+      "scene": "replay",
+      "startMs": 106148,
+      "endMs": 138827,
+      "sentences": [
+        {
+          "text": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer.",
+          "startMs": 519,
+          "endMs": 3735,
+          "method": "silence",
+          "globalStartMs": 106667,
+          "globalEndMs": 109883
+        },
+        {
+          "text": "Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape.",
+          "startMs": 4265,
+          "endMs": 10018,
+          "method": "silence",
+          "globalStartMs": 110413,
+          "globalEndMs": 116166
+        },
+        {
+          "text": "Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés.",
+          "startMs": 10145,
+          "endMs": 16054,
+          "method": "silence",
+          "globalStartMs": 116293,
+          "globalEndMs": 122202
+        },
+        {
+          "text": "Regardons la capacité avant et après sa modification.",
+          "startMs": 16617,
+          "endMs": 20243,
+          "method": "silence",
+          "globalStartMs": 122765,
+          "globalEndMs": 126391
+        },
+        {
+          "text": "Rejouer ne remet pas l'événement dans un ancien état :",
+          "startMs": 20827,
+          "endMs": 24507,
+          "method": "silence",
+          "globalStartMs": 126975,
+          "globalEndMs": 130655
+        },
+        {
+          "text": "c'est une lecture de l'historique, pas une restauration.",
+          "startMs": 25108,
+          "endMs": 26655,
+          "method": "silence",
+          "globalStartMs": 131256,
+          "globalEndMs": 132803
+        },
+        {
+          "text": "Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+          "startMs": 26913,
+          "endMs": 32252,
+          "method": "silence",
+          "globalStartMs": 133061,
+          "globalEndMs": 138400
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "replay",
+          "phrase": "Pour comprendre l'évolution d'un même créneau",
+          "startMs": 519,
+          "endMs": 3735,
+          "cueMs": 106668
+        },
+        {
+          "segmentId": "replay",
+          "phrase": "Choisissons un élément qui possède plusieurs entrées",
+          "startMs": 4265,
+          "endMs": 10018,
+          "cueMs": 110415
+        },
+        {
+          "segmentId": "replay",
+          "phrase": "Changer d'élément permet ensuite",
+          "startMs": 26913,
+          "endMs": 32252,
+          "cueMs": 133062
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 107139
+        },
+        {
+          "kind": "click",
+          "atMs": 110888
+        },
+        {
+          "kind": "click",
+          "atMs": 117071
+        },
+        {
+          "kind": "click",
+          "atMs": 120671
+        },
+        {
+          "kind": "click",
+          "atMs": 124270
+        },
+        {
+          "kind": "click",
+          "atMs": 127539
+        },
+        {
+          "kind": "key",
+          "atMs": 127846
+        },
+        {
+          "kind": "click",
+          "atMs": 133537
+        },
+        {
+          "kind": "click",
+          "atMs": 134738
+        }
+      ]
+    },
+    {
+      "scene": "story",
+      "startMs": 141089,
+      "endMs": 170037,
+      "sentences": [
+        {
+          "text": "Le mode Récit répond à une autre question :",
+          "startMs": 427,
+          "endMs": 3579,
+          "method": "silence",
+          "globalStartMs": 141516,
+          "globalEndMs": 144668
+        },
+        {
+          "text": "quelle action en a provoqué une autre ?",
+          "startMs": 3752,
+          "endMs": 6236,
+          "method": "silence",
+          "globalStartMs": 144841,
+          "globalEndMs": 147325
+        },
+        {
+          "text": "Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente.",
+          "startMs": 7044,
+          "endMs": 11969,
+          "method": "silence",
+          "globalStartMs": 148133,
+          "globalEndMs": 153058
+        },
+        {
+          "text": "Ouvrons cet enchaînement et lisons le résultat.",
+          "startMs": 12530,
+          "endMs": 15224,
+          "method": "silence",
+          "globalStartMs": 153619,
+          "globalEndMs": 156313
+        },
+        {
+          "text": "Deux actions proches dans le temps ne forment pas automatiquement une chaîne.",
+          "startMs": 16279,
+          "endMs": 20174,
+          "method": "silence",
+          "globalStartMs": 157368,
+          "globalEndMs": 161263
+        },
+        {
+          "text": "Le récit utilise les liens de cause enregistrés par l'application ;",
+          "startMs": 20617,
+          "endMs": 24159,
+          "method": "silence",
+          "globalStartMs": 161706,
+          "globalEndMs": 165248
+        },
+        {
+          "text": "il n'invente pas une explication à partir de la seule chronologie.",
+          "startMs": 24637,
+          "endMs": 28821,
+          "method": "silence",
+          "globalStartMs": 165726,
+          "globalEndMs": 169910
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "story",
+          "phrase": "Le mode Récit répond à une autre question",
+          "startMs": 427,
+          "endMs": 3579,
+          "cueMs": 141518
+        },
+        {
+          "segmentId": "story",
+          "phrase": "Ouvrons cet enchaînement",
+          "startMs": 12530,
+          "endMs": 15224,
+          "cueMs": 153620
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 141987
+        },
+        {
+          "kind": "click",
+          "atMs": 154104
+        },
+        {
+          "kind": "click",
+          "atMs": 161820
+        }
+      ]
+    },
+    {
+      "scene": "baseline",
+      "startMs": 173441,
+      "endMs": 200874,
+      "sentences": [
+        {
+          "text": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré.",
+          "startMs": 188,
+          "endMs": 4695,
+          "method": "silence",
+          "globalStartMs": 173629,
+          "globalEndMs": 178136
+        },
+        {
+          "text": "Générer l'état initial ajoute alors un point de départ pour ces éléments existants.",
+          "startMs": 4913,
+          "endMs": 9010,
+          "method": "silence",
+          "globalStartMs": 178354,
+          "globalEndMs": 182451
+        },
+        {
+          "text": "Faisons-le sur notre second exemple, puis lisons la mention grise :",
+          "startMs": 9561,
+          "endMs": 13988,
+          "method": "silence",
+          "globalStartMs": 183002,
+          "globalEndMs": 187429
+        },
+        {
+          "text": "Généré, pas une action réelle.",
+          "startMs": 14395,
+          "endMs": 15346,
+          "method": "silence",
+          "globalStartMs": 187836,
+          "globalEndMs": 188787
+        },
+        {
+          "text": "Ce bouton ne retrouve pas les anciennes manipulations oubliées.",
+          "startMs": 15947,
+          "endMs": 19524,
+          "method": "silence",
+          "globalStartMs": 189388,
+          "globalEndMs": 192965
+        },
+        {
+          "text": "Une nouvelle génération ne doit pas créer de doublons.",
+          "startMs": 19736,
+          "endMs": 21915,
+          "method": "silence",
+          "globalStartMs": 193177,
+          "globalEndMs": 195356
+        },
+        {
+          "text": "Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+          "startMs": 22435,
+          "endMs": 27432,
+          "method": "silence",
+          "globalStartMs": 195876,
+          "globalEndMs": 200873
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 183517
+        }
+      ]
+    },
+    {
+      "scene": "privacy",
+      "startMs": 204270,
+      "endMs": 227460,
+      "sentences": [
+        {
+          "text": "Le journal n'est pas un carnet d'adresses.",
+          "startMs": 239,
+          "endMs": 1942,
+          "method": "silence",
+          "globalStartMs": 204509,
+          "globalEndMs": 206212
+        },
+        {
+          "text": "Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés.",
+          "startMs": 2327,
+          "endMs": 6319,
+          "method": "silence",
+          "globalStartMs": 206597,
+          "globalEndMs": 210589
+        },
+        {
+          "text": "Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore.",
+          "startMs": 6842,
+          "endMs": 11517,
+          "method": "silence",
+          "globalStartMs": 211112,
+          "globalEndMs": 215787
+        },
+        {
+          "text": "Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires.",
+          "startMs": 11835,
+          "endMs": 17039,
+          "method": "silence",
+          "globalStartMs": 216105,
+          "globalEndMs": 221309
+        },
+        {
+          "text": "Une capture d'historique peut tout de même contenir des noms :",
+          "startMs": 17437,
+          "endMs": 20013,
+          "method": "silence",
+          "globalStartMs": 221707,
+          "globalEndMs": 224283
+        },
+        {
+          "text": "partagez-la seulement avec les personnes qui en ont besoin.",
+          "startMs": 20434,
+          "endMs": 22886,
+          "method": "silence",
+          "globalStartMs": 224704,
+          "globalEndMs": 227156
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "privacy",
+          "phrase": "Pour joindre une personne",
+          "startMs": 11835,
+          "endMs": 17039,
+          "cueMs": 216108
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 208222
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 229723,
+      "endMs": 259510,
+      "sentences": [
+        {
+          "text": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning.",
+          "startMs": 311,
+          "endMs": 6558,
+          "method": "silence",
+          "globalStartMs": 230034,
+          "globalEndMs": 236281
+        },
+        {
+          "text": "Pour agir, revenez ensuite aux inscriptions ou aux créneaux concernés.",
+          "startMs": 7221,
+          "endMs": 11051,
+          "method": "silence",
+          "globalStartMs": 236944,
+          "globalEndMs": 240774
+        },
+        {
+          "text": "Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure.",
+          "startMs": 11501,
+          "endMs": 16337,
+          "method": "silence",
+          "globalStartMs": 241224,
+          "globalEndMs": 246060
+        },
+        {
+          "text": "Le journal facilite la coordination quand plusieurs personnes organisent ensemble.",
+          "startMs": 16607,
+          "endMs": 22136,
+          "method": "silence",
+          "globalStartMs": 246330,
+          "globalEndMs": 251859
+        },
+        {
+          "text": "Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+          "startMs": 22437,
+          "endMs": 29390,
+          "method": "silence",
+          "globalStartMs": 252160,
+          "globalEndMs": 259113
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "result",
+          "phrase": "Pour agir, revenez ensuite",
+          "startMs": 7221,
+          "endMs": 11051,
+          "cueMs": 236946
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 238565
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu",
+  "windowStart": 196.922,
+  "result": {
+    "found": true,
+    "startSeconds": 11.22,
+    "wordsHeard": "Nous avons retrouvé une action, vu l'évolution d'un élément, et lu"
+  },
+  "onset": 208.142,
+  "proposedCut": 208.016146,
+  "note": "Proposal only; recut then independently audit before capture"
+}

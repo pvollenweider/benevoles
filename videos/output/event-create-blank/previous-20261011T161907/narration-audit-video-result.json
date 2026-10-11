@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:18:44.861Z",
+  "revalidatedAt": "2026-10-11T15:18:44.861Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "e682f5ac826591032e86f7828424a3c53cbb78a020716e6a7f6561b7569e1d01",
+      "recognized": "Le résultat est un brouillon structuré, encore invisible au public. Identité, date, adresse, point sur la carte et message sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l'aperçu, puis publier quand tout est prêt.",
+      "expected": "Le résultat est un brouillon structuré, encore invisible au public : identité, dates, adresse, point sur la carte et messages sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
+      "wordErrorRate": 0.044444444444444446,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

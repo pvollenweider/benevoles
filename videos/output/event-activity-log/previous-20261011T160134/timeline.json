@@ -1,0 +1,213 @@
+{
+  "slug": "event-activity-log",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T14:50:28.595Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "dbe9875584400f2cc3f331ea19267ab04c1eec19",
+    "sourceTree": "fb6a1a9f8277f2e5b3f0c8535d658ce3313d7f19",
+    "productSourceSha256": "6fe23426e0e658114fbbfe4bb7df5410b2606e03a5bfc04603392aa88114dfb3",
+    "buildId": "FCLCqO4jFR7lUbWQJ4dOp",
+    "snapshot": "/tmp/benevoles-video-production.batch3",
+    "builtAt": "2026-10-11T14:44:49.543Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7889
+    },
+    {
+      "kind": "click",
+      "atMs": 57920
+    },
+    {
+      "kind": "click",
+      "atMs": 61069
+    },
+    {
+      "kind": "click",
+      "atMs": 67486
+    },
+    {
+      "kind": "click",
+      "atMs": 98263
+    },
+    {
+      "kind": "click",
+      "atMs": 107145
+    },
+    {
+      "kind": "click",
+      "atMs": 110895
+    },
+    {
+      "kind": "click",
+      "atMs": 117079
+    },
+    {
+      "kind": "click",
+      "atMs": 120678
+    },
+    {
+      "kind": "click",
+      "atMs": 124278
+    },
+    {
+      "kind": "click",
+      "atMs": 127544
+    },
+    {
+      "kind": "key",
+      "atMs": 127852
+    },
+    {
+      "kind": "click",
+      "atMs": 133544
+    },
+    {
+      "kind": "click",
+      "atMs": 134727
+    },
+    {
+      "kind": "click",
+      "atMs": 141993
+    },
+    {
+      "kind": "click",
+      "atMs": 154093
+    },
+    {
+      "kind": "click",
+      "atMs": 161842
+    },
+    {
+      "kind": "click",
+      "atMs": 183525
+    },
+    {
+      "kind": "click",
+      "atMs": 208202
+    },
+    {
+      "kind": "click",
+      "atMs": 238553
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1322,
+      "endMs": 25710
+    },
+    {
+      "id": "read",
+      "startMs": 27972,
+      "endMs": 52255
+    },
+    {
+      "id": "filters",
+      "startMs": 54514,
+      "endMs": 79022
+    },
+    {
+      "id": "period",
+      "startMs": 81292,
+      "endMs": 103894
+    },
+    {
+      "id": "replay",
+      "startMs": 106156,
+      "endMs": 138835
+    },
+    {
+      "id": "story",
+      "startMs": 141096,
+      "endMs": 170042
+    },
+    {
+      "id": "baseline",
+      "startMs": 173453,
+      "endMs": 200888
+    },
+    {
+      "id": "privacy",
+      "startMs": 204257,
+      "endMs": 227446
+    },
+    {
+      "id": "result",
+      "startMs": 229710,
+      "endMs": 259496
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "filters",
+      "phrase": "Le filtre Qui distingue",
+      "startMs": 6071,
+      "endMs": 10377,
+      "cueMs": 60586
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Pour comprendre l'évolution d'un même créneau",
+      "startMs": 519,
+      "endMs": 3735,
+      "cueMs": 106677
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Choisissons un élément qui possède plusieurs entrées",
+      "startMs": 4265,
+      "endMs": 10018,
+      "cueMs": 110422
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Changer d'élément permet ensuite",
+      "startMs": 26913,
+      "endMs": 32252,
+      "cueMs": 133070
+    },
+    {
+      "segmentId": "story",
+      "phrase": "Le mode Récit répond à une autre question",
+      "startMs": 427,
+      "endMs": 3579,
+      "cueMs": 141523
+    },
+    {
+      "segmentId": "story",
+      "phrase": "Ouvrons cet enchaînement",
+      "startMs": 12530,
+      "endMs": 15224,
+      "cueMs": 153627
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Pour joindre une personne",
+      "startMs": 11835,
+      "endMs": 17039,
+      "cueMs": 216093
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour agir, revenez ensuite",
+      "startMs": 7221,
+      "endMs": 11051,
+      "cueMs": 236932
+    }
+  ]
+}

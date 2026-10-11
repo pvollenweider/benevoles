@@ -1,0 +1,14 @@
+STATUS: NOT READY
+ID: EVENT_ACTIVITY_LOG
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 260.0 seconds
+MUSIC: 13.8 / 18.4 LU under narration; every music window passes.
+PROBLEM: replay chapter at about 136 s: product label “Historique de inscription”; source corrected to elide de before vowel. The rendered build is unchanged; no retake. Evidence: review-frames/replay-end.png.
+SOURCE CHANGE: src/components/admin/event-log/ReplayView.tsx. No feature change or accessibility-limit change; journal screen is not in DOC_SCREENSHOTS.
+AUDIO: existing WAVs and independent audit reused; no regeneration. Independent final-MP4 ASR: all nine chapters 0% word difference. VTT text exactly matches manifest.
+EFFECTS: 19 clicks, 1 key, counts equal recorded input markers.
+VISUAL: all nine chapter sheets inspected, current French labels, Frise, production share URLs, French day-month dates, no localhost/old admin/dev overlay. Native date placeholder dd.mm.yyyy is day-month-year, not US mm/dd; automated placeholder flags are dismissed with period-sheet.png evidence. No layout bug observed.
+SYNC: each chapter cross-checked against review/objective-evidence.json sentence times and interaction times plus final-MP4 frames; independent audiovisual checkpoints agree. welcome Journal ~6.6 s; filters Qui ~6.6 s; replay opening ~1.0 s and element ~4.7 s; story ~0.9/13.0 s; baseline generate ~10.1 s; privacy inscriptions on sentence ~11.8 s; result shifts on sentence ~7.2 s.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; validation.json; audio-levels.json; audio-mix.json.
+REVIEW LIMIT: no real-time subjective listening available; no subjective voice certification claimed.

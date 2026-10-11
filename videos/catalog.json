@@ -167,8 +167,8 @@
         "organisateur"
       ],
       "feature": "Création d'un événement",
-      "updatedAt": "2026-10-07",
-      "revision": 4,
+      "updatedAt": "2026-10-11",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -1029,8 +1029,8 @@
         "organisateur"
       ],
       "feature": "Journal de l'événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -1125,8 +1125,8 @@
         "organisateur"
       ],
       "feature": "Rappels et messages de changement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "essentiel"
     },
     {

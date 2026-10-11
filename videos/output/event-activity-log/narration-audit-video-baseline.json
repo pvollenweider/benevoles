@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:08:11.277Z",
+  "revalidatedAt": "2026-10-11T16:08:11.278Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "baseline",
+      "audioSha256": "d03e4a13ef7b9937e604301489da57ab28666d29c1ee41d4422f725a4e245541",
+      "recognized": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple, puis lisons la mention grise, générer pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+      "expected": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple, puis lisons la mention grise : Généré, pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+      "wordErrorRate": 0.012658227848101266,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

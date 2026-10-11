@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:36:13.765Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "1e99918f39bb1c2ab3ea8b4aacd4f5dcdfec22356c39470da5196914b49b54c1",
+  "clipSha256": "0f2241003d00506696547a7d8e7f521d6a4a647cbcc0c0c63e96bc22e43ec1a5",
+  "scene": "phone-color",
+  "review": {
+    "heardOpening": "Rendez le téléphone obligatoire seulement si",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Rendez le téléphone obligatoire",
+        "visibleSeconds": 0.9,
+        "visible": "Coche de la case Téléphone obligatoire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Choisissons Émeraude",
+        "visibleSeconds": 11.4,
+        "visible": "Sélection de la pastille de couleur Émeraude",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "regardons l'aperçu",
+        "visibleSeconds": 12,
+        "visible": "Affichage du bandeau d'aperçu coloré",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et conforme au script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

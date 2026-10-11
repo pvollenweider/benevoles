@@ -1,0 +1,1206 @@
+{
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 22,
+  "keys": 126,
+  "product": {
+    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
+    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
+    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
+    "buildId": "vU8UL5zPG_yurF8zdluCe",
+    "snapshot": "/tmp/benevoles-video-production.batch4",
+    "builtAt": "2026-10-11T16:01:24.202Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 169,
+      "endMs": 20854,
+      "sentences": [
+        {
+          "text": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous.",
+          "startMs": 247,
+          "endMs": 3516,
+          "method": "silence",
+          "globalStartMs": 416,
+          "globalEndMs": 3685
+        },
+        {
+          "text": "Et si l'horaire change, mieux vaut les prévenir clairement.",
+          "startMs": 3666,
+          "endMs": 6481,
+          "method": "silence",
+          "globalStartMs": 3835,
+          "globalEndMs": 6650
+        },
+        {
+          "text": "Ici, nous allons distinguer trois choses :",
+          "startMs": 6699,
+          "endMs": 8824,
+          "method": "silence",
+          "globalStartMs": 6868,
+          "globalEndMs": 8993
+        },
+        {
+          "text": "le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement.",
+          "startMs": 9238,
+          "endMs": 13872,
+          "method": "silence",
+          "globalStartMs": 9407,
+          "globalEndMs": 14041
+        },
+        {
+          "text": "Nous utiliserons un événement de démonstration et sa vraie boîte mail de test pour regarder ce que les personnes reçoivent.",
+          "startMs": 14428,
+          "endMs": 20380,
+          "method": "silence",
+          "globalStartMs": 14597,
+          "globalEndMs": 20549
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "manual-message",
+      "startMs": 23115,
+      "endMs": 49686,
+      "sentences": [
+        {
+          "text": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux.",
+          "startMs": 356,
+          "endMs": 5327,
+          "method": "silence",
+          "globalStartMs": 23471,
+          "globalEndMs": 28442
+        },
+        {
+          "text": "Écrivons une consigne simple :",
+          "startMs": 5960,
+          "endMs": 7540,
+          "method": "silence",
+          "globalStartMs": 29075,
+          "globalEndMs": 30655
+        },
+        {
+          "text": "retrouve-nous au stand quinze minutes avant ton horaire, et merci pour ton aide.",
+          "startMs": 7759,
+          "endMs": 11381,
+          "method": "silence",
+          "globalStartMs": 30874,
+          "globalEndMs": 34496
+        },
+        {
+          "text": "Le texte s'enregistre automatiquement :",
+          "startMs": 11941,
+          "endMs": 15382,
+          "method": "silence",
+          "globalStartMs": 35056,
+          "globalEndMs": 38497
+        },
+        {
+          "text": "attendez la confirmation Modifications enregistrées avant de quitter la page.",
+          "startMs": 15518,
+          "endMs": 18061,
+          "method": "silence",
+          "globalStartMs": 38633,
+          "globalEndMs": 41176
+        },
+        {
+          "text": "Ce message est propre à cet événement.",
+          "startMs": 18580,
+          "endMs": 20441,
+          "method": "silence",
+          "globalStartMs": 41695,
+          "globalEndMs": 43556
+        },
+        {
+          "text": "Ce n'est pas un modèle de campagne ni une nouvelle invitation :",
+          "startMs": 20613,
+          "endMs": 23255,
+          "method": "silence",
+          "globalStartMs": 43728,
+          "globalEndMs": 46370
+        },
+        {
+          "text": "il accompagne le planning des personnes déjà confirmées.",
+          "startMs": 23414,
+          "endMs": 26210,
+          "method": "silence",
+          "globalStartMs": 46529,
+          "globalEndMs": 49325
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "manual-message",
+          "phrase": "Le texte s'enregistre automatiquement",
+          "startMs": 11941,
+          "endMs": 15382,
+          "cueMs": 38521
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 27582
+        },
+        {
+          "kind": "key",
+          "atMs": 27890
+        },
+        {
+          "kind": "key",
+          "atMs": 27891
+        },
+        {
+          "kind": "key",
+          "atMs": 27895
+        },
+        {
+          "kind": "key",
+          "atMs": 27996
+        },
+        {
+          "kind": "key",
+          "atMs": 28095
+        },
+        {
+          "kind": "key",
+          "atMs": 28194
+        },
+        {
+          "kind": "key",
+          "atMs": 28293
+        },
+        {
+          "kind": "key",
+          "atMs": 28392
+        },
+        {
+          "kind": "key",
+          "atMs": 28492
+        },
+        {
+          "kind": "key",
+          "atMs": 28590
+        },
+        {
+          "kind": "key",
+          "atMs": 28688
+        },
+        {
+          "kind": "key",
+          "atMs": 28790
+        },
+        {
+          "kind": "key",
+          "atMs": 28896
+        },
+        {
+          "kind": "key",
+          "atMs": 28999
+        },
+        {
+          "kind": "key",
+          "atMs": 29101
+        },
+        {
+          "kind": "key",
+          "atMs": 29202
+        },
+        {
+          "kind": "key",
+          "atMs": 29306
+        },
+        {
+          "kind": "key",
+          "atMs": 29408
+        },
+        {
+          "kind": "key",
+          "atMs": 29510
+        },
+        {
+          "kind": "key",
+          "atMs": 29612
+        },
+        {
+          "kind": "key",
+          "atMs": 29716
+        },
+        {
+          "kind": "key",
+          "atMs": 29816
+        },
+        {
+          "kind": "key",
+          "atMs": 29919
+        },
+        {
+          "kind": "key",
+          "atMs": 30018
+        },
+        {
+          "kind": "key",
+          "atMs": 30122
+        },
+        {
+          "kind": "key",
+          "atMs": 30228
+        },
+        {
+          "kind": "key",
+          "atMs": 30329
+        },
+        {
+          "kind": "key",
+          "atMs": 30430
+        },
+        {
+          "kind": "key",
+          "atMs": 30532
+        },
+        {
+          "kind": "key",
+          "atMs": 30636
+        },
+        {
+          "kind": "key",
+          "atMs": 30739
+        },
+        {
+          "kind": "key",
+          "atMs": 30837
+        },
+        {
+          "kind": "key",
+          "atMs": 30935
+        },
+        {
+          "kind": "key",
+          "atMs": 31033
+        },
+        {
+          "kind": "key",
+          "atMs": 31132
+        },
+        {
+          "kind": "key",
+          "atMs": 31231
+        },
+        {
+          "kind": "key",
+          "atMs": 31333
+        },
+        {
+          "kind": "key",
+          "atMs": 31432
+        },
+        {
+          "kind": "key",
+          "atMs": 31533
+        },
+        {
+          "kind": "key",
+          "atMs": 31635
+        },
+        {
+          "kind": "key",
+          "atMs": 31736
+        },
+        {
+          "kind": "key",
+          "atMs": 31838
+        },
+        {
+          "kind": "key",
+          "atMs": 31940
+        },
+        {
+          "kind": "key",
+          "atMs": 32042
+        },
+        {
+          "kind": "key",
+          "atMs": 32143
+        },
+        {
+          "kind": "key",
+          "atMs": 32244
+        },
+        {
+          "kind": "key",
+          "atMs": 32349
+        },
+        {
+          "kind": "key",
+          "atMs": 32449
+        },
+        {
+          "kind": "key",
+          "atMs": 32548
+        },
+        {
+          "kind": "key",
+          "atMs": 32651
+        },
+        {
+          "kind": "key",
+          "atMs": 32748
+        },
+        {
+          "kind": "key",
+          "atMs": 32846
+        },
+        {
+          "kind": "key",
+          "atMs": 32946
+        },
+        {
+          "kind": "key",
+          "atMs": 33046
+        },
+        {
+          "kind": "key",
+          "atMs": 33150
+        },
+        {
+          "kind": "key",
+          "atMs": 33252
+        },
+        {
+          "kind": "key",
+          "atMs": 33356
+        },
+        {
+          "kind": "key",
+          "atMs": 33460
+        },
+        {
+          "kind": "key",
+          "atMs": 33560
+        },
+        {
+          "kind": "key",
+          "atMs": 33665
+        },
+        {
+          "kind": "key",
+          "atMs": 33764
+        },
+        {
+          "kind": "key",
+          "atMs": 33869
+        },
+        {
+          "kind": "key",
+          "atMs": 33968
+        },
+        {
+          "kind": "key",
+          "atMs": 34069
+        },
+        {
+          "kind": "key",
+          "atMs": 34176
+        },
+        {
+          "kind": "key",
+          "atMs": 34279
+        },
+        {
+          "kind": "key",
+          "atMs": 34380
+        },
+        {
+          "kind": "key",
+          "atMs": 34484
+        },
+        {
+          "kind": "key",
+          "atMs": 34584
+        },
+        {
+          "kind": "key",
+          "atMs": 34686
+        },
+        {
+          "kind": "key",
+          "atMs": 34789
+        },
+        {
+          "kind": "key",
+          "atMs": 34886
+        },
+        {
+          "kind": "key",
+          "atMs": 34988
+        },
+        {
+          "kind": "key",
+          "atMs": 35090
+        },
+        {
+          "kind": "key",
+          "atMs": 35191
+        },
+        {
+          "kind": "key",
+          "atMs": 35293
+        },
+        {
+          "kind": "key",
+          "atMs": 35399
+        },
+        {
+          "kind": "key",
+          "atMs": 35498
+        },
+        {
+          "kind": "key",
+          "atMs": 35598
+        },
+        {
+          "kind": "key",
+          "atMs": 35699
+        },
+        {
+          "kind": "key",
+          "atMs": 35802
+        },
+        {
+          "kind": "key",
+          "atMs": 35904
+        },
+        {
+          "kind": "key",
+          "atMs": 36002
+        },
+        {
+          "kind": "key",
+          "atMs": 36101
+        },
+        {
+          "kind": "key",
+          "atMs": 36199
+        },
+        {
+          "kind": "key",
+          "atMs": 36296
+        },
+        {
+          "kind": "key",
+          "atMs": 36398
+        },
+        {
+          "kind": "key",
+          "atMs": 36500
+        },
+        {
+          "kind": "key",
+          "atMs": 36603
+        },
+        {
+          "kind": "key",
+          "atMs": 36704
+        },
+        {
+          "kind": "key",
+          "atMs": 36805
+        },
+        {
+          "kind": "key",
+          "atMs": 36909
+        },
+        {
+          "kind": "key",
+          "atMs": 37007
+        },
+        {
+          "kind": "key",
+          "atMs": 37106
+        },
+        {
+          "kind": "key",
+          "atMs": 37204
+        },
+        {
+          "kind": "key",
+          "atMs": 37305
+        },
+        {
+          "kind": "key",
+          "atMs": 37410
+        },
+        {
+          "kind": "key",
+          "atMs": 37511
+        },
+        {
+          "kind": "key",
+          "atMs": 37614
+        }
+      ]
+    },
+    {
+      "scene": "manual-send",
+      "startMs": 51952,
+      "endMs": 76337,
+      "sentences": [
+        {
+          "text": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation.",
+          "startMs": 346,
+          "endMs": 4512,
+          "method": "silence",
+          "globalStartMs": 52298,
+          "globalEndMs": 56464
+        },
+        {
+          "text": "Nous annulons une première fois, puis reprenons et confirmons le véritable envoi.",
+          "startMs": 5267,
+          "endMs": 7539,
+          "method": "silence",
+          "globalStartMs": 57219,
+          "globalEndMs": 59491
+        },
+        {
+          "text": "Ouvrons l'email de Léa :",
+          "startMs": 7801,
+          "endMs": 9324,
+          "method": "silence",
+          "globalStartMs": 59753,
+          "globalEndMs": 61276
+        },
+        {
+          "text": "ses deux créneaux sont regroupés dans un seul message, avec notre consigne.",
+          "startMs": 9939,
+          "endMs": 15030,
+          "method": "silence",
+          "globalStartMs": 61891,
+          "globalEndMs": 66982
+        },
+        {
+          "text": "Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées.",
+          "startMs": 15541,
+          "endMs": 20357,
+          "method": "silence",
+          "globalStartMs": 67493,
+          "globalEndMs": 72309
+        },
+        {
+          "text": "Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
+          "startMs": 20839,
+          "endMs": 24037,
+          "method": "silence",
+          "globalStartMs": 72791,
+          "globalEndMs": 75989
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 53671
+        },
+        {
+          "kind": "click",
+          "atMs": 56104
+        },
+        {
+          "kind": "click",
+          "atMs": 58520
+        },
+        {
+          "kind": "click",
+          "atMs": 60236
+        }
+      ]
+    },
+    {
+      "scene": "organization",
+      "startMs": 78600,
+      "endMs": 102038,
+      "sentences": [
+        {
+          "text": "Dans Paramètres, puis Emails, vous choisissez les rappels automatiques de toute l'organisation :",
+          "startMs": 349,
+          "endMs": 5288,
+          "method": "silence",
+          "globalStartMs": 78949,
+          "globalEndMs": 83888
+        },
+        {
+          "text": "J moins deux, J moins un et le rappel du jour.",
+          "startMs": 5793,
+          "endMs": 7394,
+          "method": "silence",
+          "globalStartMs": 84393,
+          "globalEndMs": 85994
+        },
+        {
+          "text": "Une case décochée ne suffit pas :",
+          "startMs": 7831,
+          "endMs": 8666,
+          "method": "silence",
+          "globalStartMs": 86431,
+          "globalEndMs": 87266
+        },
+        {
+          "text": "il faut enregistrer le changement.",
+          "startMs": 9173,
+          "endMs": 12244,
+          "method": "silence",
+          "globalStartMs": 87773,
+          "globalEndMs": 90844
+        },
+        {
+          "text": "Nous coupons celui de la veille, enregistrons, puis le réactivons.",
+          "startMs": 12818,
+          "endMs": 15328,
+          "method": "silence",
+          "globalStartMs": 91418,
+          "globalEndMs": 93928
+        },
+        {
+          "text": "Vous trouvez aussi l'adresse de réponse :",
+          "startMs": 15754,
+          "endMs": 16748,
+          "method": "silence",
+          "globalStartMs": 94354,
+          "globalEndMs": 95348
+        },
+        {
+          "text": "c'est là que les réponses des bénévoles arrivent, pas une adresse différente pour chaque rappel.",
+          "startMs": 17264,
+          "endMs": 23145,
+          "method": "silence",
+          "globalStartMs": 95864,
+          "globalEndMs": 101745
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "organization",
+          "phrase": "Nous coupons celui de la veille",
+          "startMs": 12818,
+          "endMs": 15328,
+          "cueMs": 91420
+        },
+        {
+          "segmentId": "organization",
+          "phrase": "Vous trouvez aussi l'adresse de réponse",
+          "startMs": 15754,
+          "endMs": 16748,
+          "cueMs": 94592
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 91917
+        },
+        {
+          "kind": "click",
+          "atMs": 92717
+        },
+        {
+          "kind": "click",
+          "atMs": 93501
+        },
+        {
+          "kind": "click",
+          "atMs": 94284
+        }
+      ]
+    },
+    {
+      "scene": "event-switch",
+      "startMs": 104303,
+      "endMs": 130112,
+      "sentences": [
+        {
+          "text": "Les trois cases que nous venons de voir concernent toute l'organisation.",
+          "startMs": 205,
+          "endMs": 3584,
+          "method": "silence",
+          "globalStartMs": 104508,
+          "globalEndMs": 107887
+        },
+        {
+          "text": "Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques.",
+          "startMs": 3907,
+          "endMs": 9176,
+          "method": "silence",
+          "globalStartMs": 108210,
+          "globalEndMs": 113479
+        },
+        {
+          "text": "Décochons Rappels automatiques et attendons l'enregistrement.",
+          "startMs": 9313,
+          "endMs": 12120,
+          "method": "silence",
+          "globalStartMs": 113616,
+          "globalEndMs": 116423
+        },
+        {
+          "text": "Réactivons-les pour poursuivre notre exemple.",
+          "startMs": 12922,
+          "endMs": 15309,
+          "method": "silence",
+          "globalStartMs": 117225,
+          "globalEndMs": 119612
+        },
+        {
+          "text": "Ce réglage ne change pas le rappel manuel.",
+          "startMs": 15607,
+          "endMs": 17504,
+          "method": "silence",
+          "globalStartMs": 119910,
+          "globalEndMs": 121807
+        },
+        {
+          "text": "Regardons maintenant notre événement en brouillon.",
+          "startMs": 18273,
+          "endMs": 20656,
+          "method": "silence",
+          "globalStartMs": 122576,
+          "globalEndMs": 124959
+        },
+        {
+          "text": "Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+          "startMs": 21261,
+          "endMs": 25808,
+          "method": "silence",
+          "globalStartMs": 125564,
+          "globalEndMs": 130111
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "event-switch",
+          "phrase": "Décochons Rappels automatiques",
+          "startMs": 9313,
+          "endMs": 12120,
+          "cueMs": 113617
+        },
+        {
+          "segmentId": "event-switch",
+          "phrase": "Réactivons-les",
+          "startMs": 12922,
+          "endMs": 15309,
+          "cueMs": 117226
+        },
+        {
+          "segmentId": "event-switch",
+          "phrase": "Regardons maintenant notre événement en brouillon",
+          "startMs": 18273,
+          "endMs": 20656,
+          "cueMs": 122576
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 114084
+        },
+        {
+          "kind": "click",
+          "atMs": 117699
+        }
+      ]
+    },
+    {
+      "scene": "timing",
+      "startMs": 132378,
+      "endMs": 155992,
+      "sentences": [
+        {
+          "text": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures avant le début du créneau.",
+          "startMs": 188,
+          "endMs": 7086,
+          "method": "silence",
+          "globalStartMs": 132566,
+          "globalEndMs": 139464
+        },
+        {
+          "text": "Ce n'est pas une promesse d'envoi à une minute fixe.",
+          "startMs": 7617,
+          "endMs": 9956,
+          "method": "silence",
+          "globalStartMs": 139995,
+          "globalEndMs": 142334
+        },
+        {
+          "text": "Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici.",
+          "startMs": 10328,
+          "endMs": 14159,
+          "method": "silence",
+          "globalStartMs": 142706,
+          "globalEndMs": 146537
+        },
+        {
+          "text": "Voici les trois emails réellement reçus pour nos trois échéances :",
+          "startMs": 14791,
+          "endMs": 18048,
+          "method": "silence",
+          "globalStartMs": 147169,
+          "globalEndMs": 150426
+        },
+        {
+          "text": "chacun retrouve son horaire local, le point de rendez-vous et les informations utiles à son poste.",
+          "startMs": 18393,
+          "endMs": 23271,
+          "method": "silence",
+          "globalStartMs": 150771,
+          "globalEndMs": 155649
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "exclusions",
+      "startMs": 158262,
+      "endMs": 184019,
+      "sentences": [
+        {
+          "text": "Une demande à valider ou une place en attente n'est pas une inscription confirmée :",
+          "startMs": 348,
+          "endMs": 5330,
+          "method": "silence",
+          "globalStartMs": 158610,
+          "globalEndMs": 163592
+        },
+        {
+          "text": "elle ne reçoit pas ces rappels.",
+          "startMs": 5884,
+          "endMs": 7153,
+          "method": "silence",
+          "globalStartMs": 164146,
+          "globalEndMs": 165415
+        },
+        {
+          "text": "Même chose pour notre brouillon et l'événement dont les rappels sont coupés.",
+          "startMs": 7923,
+          "endMs": 11039,
+          "method": "silence",
+          "globalStartMs": 166185,
+          "globalEndMs": 169301
+        },
+        {
+          "text": "En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas.",
+          "startMs": 11633,
+          "endMs": 15895,
+          "method": "silence",
+          "globalStartMs": 169895,
+          "globalEndMs": 174157
+        },
+        {
+          "text": "Les personnes déjà confirmées peuvent encore recevoir leur rappel.",
+          "startMs": 16270,
+          "endMs": 19430,
+          "method": "silence",
+          "globalStartMs": 174532,
+          "globalEndMs": 177692
+        },
+        {
+          "text": "Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés dans notre démonstration.",
+          "startMs": 20266,
+          "endMs": 25356,
+          "method": "silence",
+          "globalStartMs": 178528,
+          "globalEndMs": 183618
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 159904
+        },
+        {
+          "kind": "key",
+          "atMs": 160213
+        },
+        {
+          "kind": "key",
+          "atMs": 160213
+        },
+        {
+          "kind": "key",
+          "atMs": 160216
+        },
+        {
+          "kind": "key",
+          "atMs": 160316
+        },
+        {
+          "kind": "key",
+          "atMs": 160416
+        },
+        {
+          "kind": "key",
+          "atMs": 160514
+        },
+        {
+          "kind": "key",
+          "atMs": 160613
+        },
+        {
+          "kind": "click",
+          "atMs": 165170
+        },
+        {
+          "kind": "key",
+          "atMs": 165478
+        },
+        {
+          "kind": "key",
+          "atMs": 165478
+        },
+        {
+          "kind": "key",
+          "atMs": 165481
+        },
+        {
+          "kind": "key",
+          "atMs": 165583
+        },
+        {
+          "kind": "key",
+          "atMs": 165682
+        },
+        {
+          "kind": "key",
+          "atMs": 165779
+        },
+        {
+          "kind": "click",
+          "atMs": 172260
+        }
+      ]
+    },
+    {
+      "scene": "changed",
+      "startMs": 186283,
+      "endMs": 213082,
+      "sentences": [
+        {
+          "text": "Si un horaire change, ouvrez le créneau concerné.",
+          "startMs": 411,
+          "endMs": 3292,
+          "method": "silence",
+          "globalStartMs": 186694,
+          "globalEndMs": 189575
+        },
+        {
+          "text": "Nous décalons son début et sa fin, puis enregistrons.",
+          "startMs": 4010,
+          "endMs": 5445,
+          "method": "silence",
+          "globalStartMs": 190293,
+          "globalEndMs": 191728
+        },
+        {
+          "text": "Le système prépare automatiquement le message de changement pour les confirmations de ce créneau.",
+          "startMs": 5928,
+          "endMs": 11679,
+          "method": "silence",
+          "globalStartMs": 192211,
+          "globalEndMs": 197962
+        },
+        {
+          "text": "Voici l'email réellement reçu avec le nouvel horaire.",
+          "startMs": 12415,
+          "endMs": 15090,
+          "method": "silence",
+          "globalStartMs": 198698,
+          "globalEndMs": 201373
+        },
+        {
+          "text": "La personne dont la demande attend encore une décision n'a pas reçu ce message.",
+          "startMs": 15451,
+          "endMs": 19863,
+          "method": "silence",
+          "globalStartMs": 201734,
+          "globalEndMs": 206146
+        },
+        {
+          "text": "Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+          "startMs": 20798,
+          "endMs": 26413,
+          "method": "silence",
+          "globalStartMs": 207081,
+          "globalEndMs": 212696
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 186777
+        },
+        {
+          "kind": "click",
+          "atMs": 187576
+        },
+        {
+          "kind": "key",
+          "atMs": 187884
+        },
+        {
+          "kind": "key",
+          "atMs": 187885
+        },
+        {
+          "kind": "key",
+          "atMs": 187887
+        },
+        {
+          "kind": "key",
+          "atMs": 187984
+        },
+        {
+          "kind": "key",
+          "atMs": 188083
+        },
+        {
+          "kind": "key",
+          "atMs": 188182
+        },
+        {
+          "kind": "key",
+          "atMs": 188281
+        },
+        {
+          "kind": "click",
+          "atMs": 193477
+        },
+        {
+          "kind": "key",
+          "atMs": 193784
+        },
+        {
+          "kind": "key",
+          "atMs": 193785
+        },
+        {
+          "kind": "key",
+          "atMs": 193787
+        },
+        {
+          "kind": "key",
+          "atMs": 193885
+        },
+        {
+          "kind": "key",
+          "atMs": 193984
+        },
+        {
+          "kind": "key",
+          "atMs": 194084
+        },
+        {
+          "kind": "key",
+          "atMs": 194182
+        },
+        {
+          "kind": "click",
+          "atMs": 197476
+        },
+        {
+          "kind": "click",
+          "atMs": 208806
+        }
+      ]
+    },
+    {
+      "scene": "cancelled",
+      "startMs": 215343,
+      "endMs": 246498,
+      "sentences": [
+        {
+          "text": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer.",
+          "startMs": 384,
+          "endMs": 4824,
+          "method": "silence",
+          "globalStartMs": 215727,
+          "globalEndMs": 220167
+        },
+        {
+          "text": "Ce n'est pas simplement retirer une personne de son horaire.",
+          "startMs": 5368,
+          "endMs": 9252,
+          "method": "silence",
+          "globalStartMs": 220711,
+          "globalEndMs": 224595
+        },
+        {
+          "text": "Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues.",
+          "startMs": 9675,
+          "endMs": 15786,
+          "method": "silence",
+          "globalStartMs": 225018,
+          "globalEndMs": 231129
+        },
+        {
+          "text": "Ouvrons les messages reçus puis revenons au planning.",
+          "startMs": 16129,
+          "endMs": 19704,
+          "method": "silence",
+          "globalStartMs": 231472,
+          "globalEndMs": 235047
+        },
+        {
+          "text": "Rappeler, modifier, annuler :",
+          "startMs": 20119,
+          "endMs": 20527,
+          "method": "silence",
+          "globalStartMs": 235462,
+          "globalEndMs": 235870
+        },
+        {
+          "text": "ce sont trois situations différentes.",
+          "startMs": 20990,
+          "endMs": 23124,
+          "method": "silence",
+          "globalStartMs": 236333,
+          "globalEndMs": 238467
+        },
+        {
+          "text": "Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe :",
+          "startMs": 23431,
+          "endMs": 28571,
+          "method": "silence",
+          "globalStartMs": 238774,
+          "globalEndMs": 243914
+        },
+        {
+          "text": "envoyé ne veut pas dire lu.",
+          "startMs": 28976,
+          "endMs": 30777,
+          "method": "silence",
+          "globalStartMs": 244319,
+          "globalEndMs": 246120
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 216949
+        },
+        {
+          "kind": "click",
+          "atMs": 217764
+        },
+        {
+          "kind": "click",
+          "atMs": 222980
+        }
+      ]
+    }
+  ]
+}

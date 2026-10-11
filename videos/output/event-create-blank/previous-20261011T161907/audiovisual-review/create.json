@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:19:09.395Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "3851b231c410086a4cf5b3f75c5df37862f23ed82a1e8993b39806b285cf2a75",
+  "clipSha256": "46a2d2f1ff6b3ad2424d701ab9655e891cec924edf3399b2a965cf2621ef6801",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Le bouton Créer l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton Créer l’événement enregistre maintenant un brouillon",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton bleu « Créer l'événement » en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "puis ouvre directement l’étape des créneaux",
+        "visibleSeconds": 3.2,
+        "visible": "Chargement et affichage de la page de gestion des créneaux (étape 2)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Rien n’est encore publié",
+        "visibleSeconds": 4,
+        "visible": "Mention « Aucun créneau pour l'instant : la publication attendra » sous le bouton de continuation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Le bandeau de progression montre clairement qu’il reste à construire le planning",
+        "visibleSeconds": 7.8,
+        "visible": "Bandeau d'étapes visible en haut avec étape 1 validée, étape 2 active et étape 3 « Vérification et publication »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et posée, bien synchronisée avec les transitions de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

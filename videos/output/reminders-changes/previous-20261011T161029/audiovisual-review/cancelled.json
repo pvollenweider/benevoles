@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:34.166Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "124587fc734cc9c8852023b8e7218691b67169dcb5074b630f10fa1a76ca13c1",
+  "clipSha256": "7c3f83906c9d0c631594a54511517b6fda67c3d52821192f0892ef0182300b84",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Pour annuler un créneau entier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "lisez bien le récapitulatif avant de confirmer",
+        "visibleSeconds": 1.8,
+        "visible": "Ouverture de la boîte de dialogue de confirmation récapitulant la suppression du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Dans notre exemple, une inscription confirmée et une demande sont annulées",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le bouton rouge Supprimer et disparition du créneau dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "Ouvrons les messages reçus",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la boîte Mailpit montrant les courriels d'annulation adressés aux bénévoles (Aline, puis Lucas)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.3,
+        "spoken": "puis revenons au planning",
+        "visibleSeconds": 17.8,
+        "visible": "Retour à la vue Frise du planning des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

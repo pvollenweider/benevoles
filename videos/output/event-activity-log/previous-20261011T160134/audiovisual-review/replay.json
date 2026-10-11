@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:53:13.682Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "c010921eef16c7c592c1f03adfec55401def373f64bf2992b8c88c74be634d66",
+  "clipSha256": "dc63959bdfa3cd7c0522470cd916dc5916b3b601d0a1c24835afd63491289f46",
+  "scene": "replay",
+  "review": {
+    "heardOpening": "Pour comprendre l'évolution d'un même créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons Rejouer",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur l'onglet Rejouer et affichage de la sélection des éléments",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Choisissons un élément qui possède plusieurs entrées",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le premier créneau comportant 57 entrées et ouverture de l'historique pas à pas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés",
+        "visibleSeconds": 10.8,
+        "visible": "Clic sur la flèche suivante et avancée vers l'étape suivante de l'historique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Regardons la capacité avant et après sa modification",
+        "visibleSeconds": 16.5,
+        "visible": "Affichage de la ligne « capacité : 1 -> 2 » modifiée par Élodie Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau",
+        "visibleSeconds": 28.2,
+        "visible": "Clic sur « Changer d'élément » puis sélection d'une inscription à 2 entrées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:29 - Faute de syntaxe dans l'interface du produit : affichage de « Historique de inscription » au lieu de « Historique d'inscription »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, naturelle et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

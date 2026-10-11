@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:18:58.756Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "d4a0423d764a7be690959bb82407c02955756ee00515d05ead968490f96bd3d9",
+  "clipSha256": "d37d0b3f98d46aaa6f0996f460c02bc908dc073a4655557981ead77a1345239a",
+  "scene": "identity-dates",
+  "review": {
+    "heardOpening": "Commençons par un titre parlant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Commençons par un titre parlant",
+        "visibleSeconds": 1,
+        "visible": "Saisie de 'Fête du quartier des Tilleuls' dans le champ Titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "une courte description",
+        "visibleSeconds": 4,
+        "visible": "Saisie du texte dans le champ Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La date de fin se cale d'abord sur la date de début",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du 14.11.2026 en date de début qui se duplique automatiquement dans la date de fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "nous la faisons terminer le dimanche",
+        "visibleSeconds": 12,
+        "visible": "Modification de la date de fin au 15.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

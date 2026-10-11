@@ -1,35 +1,35 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:35:51.954Z",
-  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
-  "promptSha256": "d7817b0e8be7461ed8b0503e9b23f93282a3c21afaabb3ef84db5b5d71cd824f",
-  "clipSha256": "67d2d50b8c84183a5530d2e3185ba7560a8dc88de661be3739d015cd6173ddbc",
+  "reviewedAt": "2026-10-11T16:23:44.283Z",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "promptSha256": "0b42ab5601d13b19398795fb0ea81bc69cb8975a9fb50949059fa099cadba040",
+  "clipSha256": "f654ce370c57604488d1015a1492019a5caa8da3822115db9527e92c12086e32",
   "scene": "location",
   "review": {
     "heardOpening": "Le lieu reste lisible comme une adresse",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Le lieu reste lisible comme une adresse",
-        "visibleSeconds": 1,
-        "visible": "Saisie de l'adresse textuelle dans le champ Lieu",
+        "visibleSeconds": 0.5,
+        "visible": "L'adresse 'Maison de quartier, 12 avenue des Tilleuls, Montvert' est saisie dans le champ Lieu",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
+        "spokenSeconds": 2.8,
         "spoken": "collez une paire de coordonnées ou un lien de carte reconnu",
         "visibleSeconds": 4,
-        "visible": "Insertion des coordonnées GPS dans le champ dédié",
+        "visible": "Collage des coordonnées '46.180573, 6.122829' dans le champ GPS",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 7.2,
         "spoken": "prépare un lien Vérifier sur la carte",
-        "visibleSeconds": 4.5,
-        "visible": "Affichage du lien cliquable Vérifier sur la carte sous le champ",
-        "sync": "aligned",
+        "visibleSeconds": 5.4,
+        "visible": "Apparition du lien cliquable 'Vérifier sur la carte' sous le champ de coordonnées",
+        "sync": "early",
         "severity": "none"
       }
     ],
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, posée et bien articulée."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

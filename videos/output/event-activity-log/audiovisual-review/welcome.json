@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:09:06.265Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "3aa81026cbe5c45ca4840655752b8a7cb87dd141f79b5cff5328fcf503e4034a",
+  "clipSha256": "8196083aff93e483ef56442bfc6bf270c0a569314318368736e24177d725e5be",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une inscription a disparu, un horaire a changé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une inscription a disparu, un horaire a changé",
+        "visibleSeconds": 0,
+        "visible": "Vignette de titre « Comprendre ce qui a changé dans son événement » sur la page de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "ouvrons le Journal",
+        "visibleSeconds": 6,
+        "visible": "Clic sur le sous-onglet Journal et affichage de la page d'historique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Son historique contient des actions sur les créneaux, les inscriptions",
+        "visibleSeconds": 8,
+        "visible": "Liste du journal affichant des entrées d'actions sur des inscriptions et des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Nous allons lire une entrée, filtrer la liste et suivre un enchaînement",
+        "visibleSeconds": 16,
+        "visible": "Vue d'ensemble de la page Journal avec les filtres et le bouton Voir le récit",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

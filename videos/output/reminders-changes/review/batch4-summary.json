@@ -1,0 +1,17 @@
+{
+  "id": "REMINDERS_CHANGES",
+  "status": "READY",
+  "duration": 249.88,
+  "buildId": "vU8UL5zPG_yurF8zdluCe",
+  "music": {
+    "voicedWindows": 220,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Known product nit: Prévenir en cas de désistement checkbox offset (organization-sheet.png); report only. Mailpit English dates are external test UI. Automated organization missing-action flag dismissed: sentence 91.418 s; actual clicks 91.917/92.717/93.501/94.284 s uncheck/save/recheck/save; organization-seconds.png and organization-unchecked-proof.png show it.",
+  "sourceChanges": "None; existing narration reused, no regeneration."
+}

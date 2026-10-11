@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:08:09.067Z",
+  "revalidatedAt": "2026-10-11T16:08:09.067Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "story",
+      "audioSha256": "8bc0871d8ccff34c9f1021b2d39def232683b9429b1420b933785a28ff7bbd23",
+      "recognized": "Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le Récit utilise les liens de cause enregistrés par l'application. Il n'invente pas une explication à partir de la seule chronologie.",
+      "expected": "Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le récit utilise les liens de cause enregistrés par l'application ; il n'invente pas une explication à partir de la seule chronologie.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

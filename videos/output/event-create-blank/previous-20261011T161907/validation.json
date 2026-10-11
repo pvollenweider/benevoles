@@ -1,0 +1,70 @@
+{
+  "id": "EVENT_CREATE_BLANK",
+  "slug": "event-create-blank",
+  "validatedAt": "2026-10-11T15:18:26.833Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 152640,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14277,
+      "audioMs": 14275,
+      "driftMs": 2
+    },
+    {
+      "id": "identity-dates",
+      "visualMs": 17750,
+      "audioMs": 17749,
+      "driftMs": 1
+    },
+    {
+      "id": "location",
+      "visualMs": 18361,
+      "audioMs": 18359,
+      "driftMs": 2
+    },
+    {
+      "id": "public-content",
+      "visualMs": 19195,
+      "audioMs": 19193,
+      "driftMs": 2
+    },
+    {
+      "id": "phone-color",
+      "visualMs": 16955,
+      "audioMs": 16954,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 15712,
+      "audioMs": 15711,
+      "driftMs": 1
+    },
+    {
+      "id": "autosave",
+      "visualMs": 20393,
+      "audioMs": 20392,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 16928,
+      "audioMs": 16927,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 6,
+  "music": {
+    "voicedWindows": 139,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -32.6,
+    "loudestMusicOnlyLufs": -32.3,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

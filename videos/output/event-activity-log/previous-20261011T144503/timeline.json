@@ -1,0 +1,185 @@
+{
+  "slug": "event-activity-log",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T13:52:47.382Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "77b3556736243e72449cc7f778cb9959fd10d9df",
+    "sourceTree": "9438ec458b12ce29c7e2f4ac20619cf0ffc335fb",
+    "productSourceSha256": "786a101b78224b1fe735df94e3a1facac276d916a40cb9ef710805e0bcba4992",
+    "buildId": "awdEYi1bluVzpj2kEgGcs",
+    "snapshot": "/tmp/benevoles-video-production.batch2pass2",
+    "builtAt": "2026-10-11T13:32:58.428Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7914
+    },
+    {
+      "kind": "click",
+      "atMs": 57944
+    },
+    {
+      "kind": "click",
+      "atMs": 62861
+    },
+    {
+      "kind": "click",
+      "atMs": 67526
+    },
+    {
+      "kind": "click",
+      "atMs": 98303
+    },
+    {
+      "kind": "click",
+      "atMs": 109920
+    },
+    {
+      "kind": "click",
+      "atMs": 113185
+    },
+    {
+      "kind": "click",
+      "atMs": 117136
+    },
+    {
+      "kind": "click",
+      "atMs": 120702
+    },
+    {
+      "kind": "click",
+      "atMs": 124302
+    },
+    {
+      "kind": "click",
+      "atMs": 127585
+    },
+    {
+      "kind": "key",
+      "atMs": 127892
+    },
+    {
+      "kind": "click",
+      "atMs": 133567
+    },
+    {
+      "kind": "click",
+      "atMs": 134751
+    },
+    {
+      "kind": "click",
+      "atMs": 145068
+    },
+    {
+      "kind": "click",
+      "atMs": 154151
+    },
+    {
+      "kind": "click",
+      "atMs": 161849
+    },
+    {
+      "kind": "click",
+      "atMs": 183529
+    },
+    {
+      "kind": "click",
+      "atMs": 208225
+    },
+    {
+      "kind": "click",
+      "atMs": 238583
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1337,
+      "endMs": 25726
+    },
+    {
+      "id": "read",
+      "startMs": 27989,
+      "endMs": 52274
+    },
+    {
+      "id": "filters",
+      "startMs": 54535,
+      "endMs": 79043
+    },
+    {
+      "id": "period",
+      "startMs": 81316,
+      "endMs": 103921
+    },
+    {
+      "id": "replay",
+      "startMs": 106184,
+      "endMs": 138865
+    },
+    {
+      "id": "story",
+      "startMs": 141128,
+      "endMs": 170074
+    },
+    {
+      "id": "baseline",
+      "startMs": 173454,
+      "endMs": 200887
+    },
+    {
+      "id": "privacy",
+      "startMs": 204281,
+      "endMs": 227470
+    },
+    {
+      "id": "result",
+      "startMs": 229732,
+      "endMs": 259517
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "replay",
+      "phrase": "Changer d'élément permet ensuite",
+      "startMs": 26913,
+      "endMs": 32252,
+      "cueMs": 133099
+    },
+    {
+      "segmentId": "story",
+      "phrase": "Ouvrons cet enchaînement",
+      "startMs": 12530,
+      "endMs": 15224,
+      "cueMs": 153659
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Pour joindre une personne",
+      "startMs": 11835,
+      "endMs": 17039,
+      "cueMs": 216119
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour agir, revenez ensuite",
+      "startMs": 7221,
+      "endMs": 11051,
+      "cueMs": 236956
+    }
+  ]
+}

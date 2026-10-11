@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:17:24.498Z",
+  "revalidatedAt": "2026-10-11T16:17:24.499Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "cancelled",
+      "audioSha256": "e3c47571f877eb91307462fe9413fc128f26dcf24f3a8c199a77658d913e2d95",
+      "recognized": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées et leurs personnes sont prévenues. Ouvrons les messages reçus, puis revenons au planning. Rappeler, modifier, annuler, ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe. Envoyer ne veut pas dire lu.",
+      "expected": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe : envoyé ne veut pas dire lu.",
+      "wordErrorRate": 0.013513513513513514,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

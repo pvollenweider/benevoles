@@ -1,0 +1,18 @@
+STATUS: NOT READY
+ID: EVENT_ACTIVITY_LOG
+Commit: 57ead48691c549980f7aae34cd5710df60d7d8c8
+BUILD_ID: wehNI4lfzOGIMmAjJ-tMC
+Duration: 260.240 s
+Music smallest/largest gap: 13.8 / 18.4 LU; no music rule issues.
+Narration: existing cache refused because generation fingerprint/transcripts period/privacy/result changed. One new continuous Puck take generated. Initial split failed source ASR; real-silence boundaries replay=95.774687, story=128.452458, result=208.016146 applied; independent source re-audit and final MP4 ASR pass all nine chapters. No transcript source change in this batch.
+Objective checks: video:validate passes (zero existing sentence anchors); effects metadata/hash matches 19 clicks and 1 key; VTT text matches all transcripts exactly; final narration edges pass. Posters metadata saved only in review/renders-generated.json.
+All nine final scene sheets visually inspected: welcome/read/filters/period/replay/story/baseline/privacy/result. Current Journal/Explorer/Rejouer/Récit labels, actual filters, empty period, pagination, replay values, linked story and three generated baseline records verified. Dates are day-month (10.10.2026/12.10.2026/13.10.2026 and French textual dates); Frise visible in result; no localhost, org-admin@localhost or development overlay found.
+FAIL replay: change-element click 25.96s vs sentence 26.91s; picker already visible at global132.6s, before phrase global133.06s. .78 replaced by at("Changer d'élément permet ensuite").
+FAIL story: actual chain opens after click9.17s vs Ouvrons sentence12.53s; chain visible global151.3s, sentence global153.62s. .30 replaced by at("Ouvrons cet enchaînement").
+FAIL privacy: navigation to registrations delayed to~15.07s vs sentence11.84s; global218s still page journal, global221s registrations. .65 replaced by at("Pour joindre une personne").
+FAIL result: shifts navigation begins~8.94s vs sentence7.22s and List click10.66s; global238s still registrations. .30 replaced by at("Pour agir, revenez ensuite").
+Other numeric cues checked against sentence-action-timing.json and chapter frames; no other confirmed action/sentence mismatch requiring a source correction.
+Actual-route coverage: 64 logs, causal chain, three baseline records, read-only replay, idempotent baseline verified. History is created today; current narration promises a few example days, not two weeks.
+External visual upload is explicitly unauthorized by verify-event-log-coverage; local frame/timing review performed. Audio-only final ASR performed. Real-time subjective listening unavailable and not a failure reason.
+Product layout bugs: none observed in this video.
+Local source change: videos/lib/record-event-log.ts uses Cue and four sentence anchors. No re-film.

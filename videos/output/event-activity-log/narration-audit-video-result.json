@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:08:21.337Z",
+  "revalidatedAt": "2026-10-11T16:08:21.337Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "f2d71c00597f4b39e015b02c77603c6352ed9486e36afa402602c036d1cd9512",
+      "recognized": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, revenez ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+      "expected": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, revenez ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

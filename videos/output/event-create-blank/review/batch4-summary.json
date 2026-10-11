@@ -1,0 +1,17 @@
+{
+  "id": "EVENT_CREATE_BLANK",
+  "status": "READY",
+  "duration": 154.72,
+  "buildId": "vU8UL5zPG_yurF8zdluCe",
+  "music": {
+    "voicedWindows": 139,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -32.8,
+    "loudestMusicOnlyLufs": -32.3,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "None. Automatic map-link appearance during coordinate entry is expected; no early narrated action. All eight chapter frames and checkpoints reviewed.",
+  "sourceChanges": "None; existing narration reused, no regeneration."
+}

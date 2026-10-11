@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:23:09.861Z",
+  "revalidatedAt": "2026-10-11T16:23:09.862Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "location",
+      "audioSha256": "f8097aa3a3a30d58007c73e2a5c5f2897f62bc82773e7ba7a43f7ebc88d26517",
+      "recognized": "Le lieu reste lisible comme une adresse. Juste dessous, collez une paire de coordonnées ou un lien de carte reconnue. L'application extrait le point et prépare un lien Vérifier sur la carte. Le bénévole trouvera Voir sur la carte sur la page publique. La carte externe ne s'ouvre que lorsqu'on suit ce lien.",
+      "expected": "Le lieu reste lisible comme une adresse. Juste dessous, collez une paire de coordonnées ou un lien de carte reconnu. L’application extrait le point et prépare un lien Vérifier sur la carte. Le bénévole trouvera Voir sur la carte sur la page publique. La carte externe ne s’ouvre que lorsqu’on suit ce lien.",
+      "wordErrorRate": 0.017857142857142856,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "slug": "event-activity-log",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T12:39:01.603Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "57ead48691c549980f7aae34cd5710df60d7d8c8",
+    "sourceTree": "d494522d746e261c4ef0424b5458c8d0871e1a41",
+    "productSourceSha256": "ff371c7b367d508d345e823e07cd3af07dd66ad002fd5b3b497c326b47830523",
+    "buildId": "wehNI4lfzOGIMmAjJ-tMC",
+    "snapshot": "/tmp/benevoles-video-production.batch2",
+    "builtAt": "2026-10-11T12:21:27.882Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4584
+    },
+    {
+      "kind": "click",
+      "atMs": 9982
+    },
+    {
+      "kind": "click",
+      "atMs": 11298
+    },
+    {
+      "kind": "click",
+      "atMs": 12581
+    },
+    {
+      "kind": "click",
+      "atMs": 19977
+    },
+    {
+      "kind": "click",
+      "atMs": 23575
+    },
+    {
+      "kind": "click",
+      "atMs": 24359
+    },
+    {
+      "kind": "click",
+      "atMs": 25143
+    },
+    {
+      "kind": "click",
+      "atMs": 25925
+    },
+    {
+      "kind": "click",
+      "atMs": 26708
+    },
+    {
+      "kind": "click",
+      "atMs": 27492
+    },
+    {
+      "kind": "key",
+      "atMs": 27803
+    },
+    {
+      "kind": "click",
+      "atMs": 28293
+    },
+    {
+      "kind": "click",
+      "atMs": 29077
+    },
+    {
+      "kind": "click",
+      "atMs": 32175
+    },
+    {
+      "kind": "click",
+      "atMs": 32992
+    },
+    {
+      "kind": "click",
+      "atMs": 33791
+    },
+    {
+      "kind": "click",
+      "atMs": 37967
+    },
+    {
+      "kind": "click",
+      "atMs": 42201
+    },
+    {
+      "kind": "click",
+      "atMs": 48096
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1362,
+      "endMs": 4891
+    },
+    {
+      "id": "read",
+      "startMs": 7153,
+      "endMs": 7248
+    },
+    {
+      "id": "filters",
+      "startMs": 9508,
+      "endMs": 14526
+    },
+    {
+      "id": "period",
+      "startMs": 16799,
+      "endMs": 20806
+    },
+    {
+      "id": "replay",
+      "startMs": 23071,
+      "endMs": 29426
+    },
+    {
+      "id": "story",
+      "startMs": 31687,
+      "endMs": 34097
+    },
+    {
+      "id": "baseline",
+      "startMs": 37476,
+      "endMs": 38319
+    },
+    {
+      "id": "privacy",
+      "startMs": 41697,
+      "endMs": 44216
+    },
+    {
+      "id": "result",
+      "startMs": 46478,
+      "endMs": 48405
+    }
+  ]
+}

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:43:08.391Z",
-  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
-  "promptSha256": "73d02fe8ff34481303da308990b47b6c130de7919d595be2f392aa3569351f03",
-  "clipSha256": "56c885719b700aade0b78db5bd059e8b9ebe1826dcc9f6589d4a2b1017e2ddbe",
+  "reviewedAt": "2026-10-11T16:18:48.075Z",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "promptSha256": "1b7bb2f1bfa1540b779ab0172e4eaca32ed87ce7717b20074e33abac5e627585",
+  "clipSha256": "15104e04427aace5bf2a1ffac84ff5d7d9d530f39580b5114f278a285b40357e",
   "scene": "exclusions",
   "review": {
     "heardOpening": "Une demande à valider",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Une demande à valider ou une place en attente n'est pas une inscription confirmée",
+        "spokenSeconds": 1,
+        "spoken": "Une demande à valider",
         "visibleSeconds": 2,
-        "visible": "Affichage de la liste des inscriptions avec le filtre Demandes à traiter coché",
+        "visible": "Filtre sur Lucas montrant les inscriptions avec le statut Demande à traiter",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "Même chose pour notre brouillon",
-        "visibleSeconds": 7,
-        "visible": "Filtrage sur Anna affichant un statut Place proposée",
+        "spokenSeconds": 2.5,
+        "spoken": "ou une place en attente",
+        "visibleSeconds": 6.5,
+        "visible": "Filtre sur Anna affichant la demande avec le statut Place proposée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas",
-        "visibleSeconds": 12.5,
-        "visible": "Affichage de la liste des créneaux avec un créneau au statut Fermé",
+        "spokenSeconds": 12,
+        "spoken": "fermer un créneau aux nouvelles inscriptions ne l'annule pas",
+        "visibleSeconds": 14,
+        "visible": "Basculement sur l'onglet Liste de Créneaux avec un créneau au statut Fermé bien visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés",
+        "visibleSeconds": 20.5,
+        "visible": "Vue stable de la liste des créneaux servant de support à l'explication",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et ton calme bien adapté au tutoriel."
+      "observation": "Voix féminine claire, posée et parfaitement audible, avec un débit régulier en accord avec la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:01.822Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "3a98dec25abd009a8891a3df6d5a1a2f1e1778835cd581e069b82400e4d23679",
+  "clipSha256": "d025747ebe72d7101939229be3155b58c6203e3b349996b9e8e70d3b21c69061",
+  "scene": "manual-send",
+  "review": {
+    "heardOpening": "Depuis la page de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation.",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton 'Envoyer le rappel (3 bénévoles)' et ouverture de la boîte de dialogue de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Nous annulons une première fois, puis reprenons et confirmons le véritable envoi.",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur 'Annuler', réouverture immédiate de la modale puis clic sur 'Envoyer' avec confirmation de 3 rappels envoyés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne.",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail ouvert pour Léa contenant la consigne et ses deux créneaux regroupés.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

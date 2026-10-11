@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:36:23.814Z",
-  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
-  "promptSha256": "259f0875afc280d6d825a699c5b1c4905f9a5c51d63f53169b8bcf81f4a94b67",
-  "clipSha256": "bb48e44010052a14f10edb0d16aa4c09fce197bd65be553e24b734894d808ffe",
+  "reviewedAt": "2026-10-11T16:24:08.012Z",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "promptSha256": "3851b231c410086a4cf5b3f75c5df37862f23ed82a1e8993b39806b285cf2a75",
+  "clipSha256": "6a6d38ea4c365de91e44bf630159d64e2ec076fa75991e69b681b72989bd8d15",
   "scene": "create",
   "review": {
-    "heardOpening": "Ouais, le bouton Créer l'événement",
+    "heardOpening": "Le bouton Créer l'événement",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Le bouton Créer l'événement enregistre maintenant un brouillon",
-        "visibleSeconds": 2,
+        "spokenSeconds": 0.5,
+        "spoken": "Le bouton Créer l’événement enregistre maintenant un brouillon",
+        "visibleSeconds": 2.1,
         "visible": "Clic sur le bouton vert Créer l'événement en bas de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.6,
-        "spoken": "puis ouvre directement l'étape des créneaux",
-        "visibleSeconds": 3,
-        "visible": "Affichage de la page de l'étape 2 Postes et créneaux",
+        "spokenSeconds": 3.2,
+        "spoken": "puis ouvre directement l’étape des créneaux",
+        "visibleSeconds": 2.9,
+        "visible": "Affichage de la page Événements à l'étape 2 Postes et créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8,
-        "spoken": "Le bandeau de progression montre clairement qu'il reste à construire le planning",
-        "visibleSeconds": 3.5,
-        "visible": "Bandeau d'étapes visible en haut avec l'étape 2 active",
+        "spoken": "Le bandeau de progression montre clairement qu’il reste à construire le planning",
+        "visibleSeconds": 8,
+        "visible": "Bandeau supérieur indiquant l'étape 1 validée, l'étape 2 active et l'étape 3 Vérification et publication",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:00 - Bruit de voix parasite (« Ouais ») avant la première phrase."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire et posée malgré l'amorce sonore involontaire au tout début."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

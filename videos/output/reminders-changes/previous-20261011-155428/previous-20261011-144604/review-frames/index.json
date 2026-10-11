@@ -1,0 +1,225 @@
+{
+  "video": "reminders-changes",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/reminders-changes.mp4",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-05T18:46:36.953Z",
+  "note": "Four actual MP4 frames per scene, including chapter start; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.026807255830578143,
+      "seconds": 0.82,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/welcome-3.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 5.8155,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 13.649199999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 19.2447,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.021147610320033837,
+      "seconds": 23.655,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-message-2.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.25,
+      "seconds": 30.148,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-message-25.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.6,
+      "seconds": 40.078199999999995,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-message-60.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.85,
+      "seconds": 47.1712,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-message-85.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.022425714819659878,
+      "seconds": 52.481,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-send-2.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.25,
+      "seconds": 58.56975,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-send-25.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.6,
+      "seconds": 67.934,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-send-60.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.85,
+      "seconds": 74.62275,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/manual-send-85.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.023876795734012496,
+      "seconds": 79.688,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/organization-2.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.25,
+      "seconds": 85.37025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/organization-25.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.6,
+      "seconds": 94.16539999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/organization-60.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.85,
+      "seconds": 100.44765,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/organization-85.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.02493972898827833,
+      "seconds": 105.271,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/event-switch-2.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.25,
+      "seconds": 110.6855,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/event-switch-25.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.6,
+      "seconds": 119.1058,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/event-switch-60.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.85,
+      "seconds": 125.1203,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/event-switch-85.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.02586206896551724,
+      "seconds": 129.782,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/timing-3.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.25,
+      "seconds": 134.982,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/timing-25.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.6,
+      "seconds": 143.102,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/timing-60.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.85,
+      "seconds": 148.902,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/timing-85.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.02570253598355038,
+      "seconds": 153.435,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/exclusions-3.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.25,
+      "seconds": 158.671,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/exclusions-25.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.6,
+      "seconds": 166.8414,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/exclusions-60.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.85,
+      "seconds": 172.6774,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/exclusions-85.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.023414634146341463,
+      "seconds": 177.232,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/changed-2.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.25,
+      "seconds": 183.03825,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/changed-25.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.6,
+      "seconds": 192.007,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/changed-60.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.85,
+      "seconds": 198.41325,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/changed-85.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.019872155797701452,
+      "seconds": 203.308,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/cancelled-2.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.25,
+      "seconds": 210.25625,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/cancelled-25.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.6,
+      "seconds": 220.82379999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/cancelled-60.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.85,
+      "seconds": 228.37205,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/review-frames/cancelled-85.png"
+    }
+  ]
+}

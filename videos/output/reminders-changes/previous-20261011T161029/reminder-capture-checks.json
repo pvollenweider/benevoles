@@ -1,0 +1,125 @@
+{
+  "checkedAt": "2026-10-11T15:03:08.146Z",
+  "audiovisualValidation": false,
+  "pushReceptionVerified": false,
+  "perEventToggleAvailableInForm": true,
+  "messageAutoSaved": true,
+  "manualReminder": {
+    "sent": 3,
+    "cancelledWithoutEmail": true,
+    "twoShiftsInOneEmail": true,
+    "mailIds": [
+      "3RsxMCFN1B9IIiEkmembFa",
+      "10vgx2l8iLauSE35pwkGEv",
+      "0OTFeMOEnKoTJhhvB2bh80"
+    ]
+  },
+  "organizationSavedOffThenOn": true,
+  "perEventSavedOffThenOn": true,
+  "automaticReminders": {
+    "mailIds": [
+      "5aZP1WtMx8f4eCbPZIbCfQ",
+      "2u8OU93UwAfSoEtpncyCmV",
+      "3kzdL4MlEzFq4sRsMd68i1"
+    ],
+    "noDuplicate": true,
+    "first": {
+      "runAt": "2026-10-11T15:01:14.480Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 1,
+          "groups": 1,
+          "sent": 1,
+          "failed": 0
+        }
+      },
+      "expiredOffers": 0,
+      "waitlist": {
+        "shifts": 2,
+        "offered": 1
+      },
+      "outbox": {
+        "sent": 1,
+        "retried": 0,
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true,
+        "stuck": false
+      }
+    },
+    "second": {
+      "runAt": "2026-10-11T15:01:14.804Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        }
+      },
+      "expiredOffers": 0,
+      "waitlist": {
+        "shifts": 1,
+        "offered": 0
+      },
+      "outbox": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true,
+        "stuck": false
+      }
+    }
+  },
+  "excludedWitnesses": 6,
+  "changed": {
+    "notified": 1,
+    "pendingRequestExcluded": true,
+    "mailId": "7lti06a15rkC7HcbCskK5w"
+  },
+  "cancelled": {
+    "registrations": 2,
+    "includesPendingRequest": true,
+    "mailIds": [
+      "0gLY4PPh8JfmRKTLAY5Zdl",
+      "0UKzcXpxidyi8VJyXGzRbK"
+    ]
+  }
+}

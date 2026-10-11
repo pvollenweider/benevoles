@@ -1,0 +1,14 @@
+STATUS: NOT READY
+ID: REMINDERS_CHANGES
+Target commit: 57ead48691c549980f7aae34cd5710df60d7d8c8
+Verified server BUILD_ID: wehNI4lfzOGIMmAjJ-tMC
+Final MP4 duration: unavailable (no fresh final MP4). Partial rehearsal duration: 48.680 s.
+Music smallest/largest gap: unavailable; no final mix assembled.
+Narration: existing generation fingerprint rejected; seven chapter transcripts differ from old audit. One new continuous Kore take generated, boundary cancelled recut at191.554666 real-silence midpoint; independent re-audit then passed. Subsequent source corrections manual-message/event-switch make that take outdated for the NEXT render; no second generation in this batch.
+FAIL rehearsal manual-message: autosave response succeeded, but stale exact selector Enregistré ✓ timed out. Current source label is Modifications enregistrées à …, at top of EventForm; its status is out of viewport when editing reminder at bottom. Recorder now waits for current label and scrolls it on sentence anchor.
+FAIL transcript/current UI: rehearsal-saved-label.png @17s shows checked Rappels automatiques. Current event-switch narration incorrectly claims this control is absent. Both manifest and editorial script corrected; recorder uses real checkbox off/on with persisted API/database assertions and sentence anchors.
+Product layout issue: autosave status is at top of the long form and outside viewport during edits near reminder text; user can edit without seeing the visual confirmation. Reported, not hidden. No product UI layout modification made.
+video:validate attempted; fails because no narrated timeline.json. No final posters, music numbers, sentence-action MP4 review, final subtitles/audio audit or READY claim fabricated from previous artifacts or rehearsal. Previous files archived before this video.
+Local source changes: videos/lib/record-reminders.ts (Cue, autosave selector/scroll, real event toggle actions), videos/manifests/reminders-changes.json and videos/scripts/reminders-changes.md (current label and available toggle). Existing product capability, no FEATURES availability change.
+Stopped after this source fix, per instruction to fix locally and move on; no repeated rehearsal or narrated capture.
+No real-time subjective listening failure is asserted.

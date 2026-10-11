@@ -30,7 +30,7 @@
     "poster": true
   },
   "event-activity-log": {
-    "durationMs": 245120,
+    "durationMs": 259960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -42,7 +42,7 @@
     "poster": true
   },
   "event-create-blank": {
-    "durationMs": 153640,
+    "durationMs": 154720,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -204,7 +204,7 @@
     "poster": true
   },
   "reminders-changes": {
-    "durationMs": 233800,
+    "durationMs": 249880,
     "width": 1280,
     "height": 800,
     "poster": true

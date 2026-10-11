@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:08:38.225Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "2afb51f2534cc8dd0d196b364feb309514d2d084c3166e121bd8b68cb85fee8f",
+  "clipSha256": "b3341c1d01e55edb72a9d04acabcfaede84cc8f635f285b001a05f073d2146a0",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Pour retrouver une désinscription, commençons par",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "commençons par Type d'élément, puis choisissons Inscription.",
+        "visibleSeconds": 3.7,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Le filtre Qui distingue les actions des bénévoles",
+        "visibleSeconds": 6.8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "Le filtre Action permet aussi de se concentrer sur les inscriptions",
+        "visibleSeconds": 13,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.7,
+        "spoken": "Regardons la liste changer, puis revenons à toutes les actions.",
+        "visibleSeconds": 17.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

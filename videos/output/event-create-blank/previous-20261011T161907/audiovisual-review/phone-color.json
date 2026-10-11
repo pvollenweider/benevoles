@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:19:11.363Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "b0ada2c178cc4532a246987a51678fc54a06df3a21c59778f67a66c2fe46555e",
+  "clipSha256": "ab2d0dbf780c35b892d860e5ac264f5f9444ae59b645f5ba222be03f82880bfb",
+  "scene": "phone-color",
+  "review": {
+    "heardOpening": "Rendez le téléphone obligatoire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Rendez le téléphone obligatoire",
+        "visibleSeconds": 0.6,
+        "visible": "Coche de la case « Téléphone obligatoire à l'inscription »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "Choisissons Émeraude",
+        "visibleSeconds": 11.4,
+        "visible": "Sélection de la pastille de couleur Émeraude",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.6,
+        "spoken": "et regardons l'aperçu",
+        "visibleSeconds": 11.6,
+        "visible": "Affichage du bandeau « Aperçu du titre public » sur fond émeraude",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

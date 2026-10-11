@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:36:01.698Z",
-  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
-  "promptSha256": "cf52058a5a1008218328af6125c5196112422dee4ef0ec2b486918de12b63963",
-  "clipSha256": "d5dbc1c7a383ea7b9cc3c5b9f89c657dbda3084e1496e40b612aef0a5287e56c",
+  "reviewedAt": "2026-10-11T16:23:53.783Z",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "promptSha256": "d2f520ef27137745dae64544b4b3374571844db9d09902970f19103e593eeb49",
+  "clipSha256": "0e47bb8e80970efd6e69287b1d89b1c753379d4f7afec5b7d720185f9c2a57ca",
   "scene": "public-content",
   "review": {
     "heardOpening": "Les instructions publiques apparaissent avant l'inscription",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Les instructions publiques apparaissent avant l'inscription",
-        "visibleSeconds": 1,
-        "visible": "Saisie de texte dans le champ Instructions publiques",
+        "spokenSeconds": 3.4,
+        "spoken": "indiquez ici l'entrée à utiliser et le moment d'arrivée",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie dans le champ « Instructions publiques » de « Entre par la cour nord. Arrive quinze minutes avant ton créneau. »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.4,
         "spoken": "Le message de confirmation est affiché juste après l'inscription",
-        "visibleSeconds": 7.8,
-        "visible": "Défilement vers le bas et focus sur le champ Message de confirmation",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le bas et sélection du champ « Message de confirmation »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Il doit rassurer et donner la prochaine étape",
-        "visibleSeconds": 14,
-        "visible": "Saisie en cours du texte de confirmation avec variable",
+        "spokenSeconds": 10.8,
+        "spoken": "et accepte du texte mis en forme ainsi que des variables",
+        "visibleSeconds": 10,
+        "visible": "Saisie dans le champ avec variable : « Merci {prénom} ! Ton inscription est confirmée... »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la saisie des formulaires."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

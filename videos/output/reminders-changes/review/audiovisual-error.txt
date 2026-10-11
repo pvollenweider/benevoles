@@ -1,0 +1,2 @@
+Error: videos/output/batch3-audit.ts exit 1
+Error: videos/output/batch3-audit.ts exit 1

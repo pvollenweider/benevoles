@@ -1,0 +1,213 @@
+{
+  "slug": "event-activity-log",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T16:02:32.425Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
+    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
+    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
+    "buildId": "vU8UL5zPG_yurF8zdluCe",
+    "snapshot": "/tmp/benevoles-video-production.batch4",
+    "builtAt": "2026-10-11T16:01:24.202Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4573
+    },
+    {
+      "kind": "click",
+      "atMs": 9990
+    },
+    {
+      "kind": "click",
+      "atMs": 11272
+    },
+    {
+      "kind": "click",
+      "atMs": 12571
+    },
+    {
+      "kind": "click",
+      "atMs": 19984
+    },
+    {
+      "kind": "click",
+      "atMs": 23599
+    },
+    {
+      "kind": "click",
+      "atMs": 24383
+    },
+    {
+      "kind": "click",
+      "atMs": 25164
+    },
+    {
+      "kind": "click",
+      "atMs": 25949
+    },
+    {
+      "kind": "click",
+      "atMs": 26732
+    },
+    {
+      "kind": "click",
+      "atMs": 27516
+    },
+    {
+      "kind": "key",
+      "atMs": 27824
+    },
+    {
+      "kind": "click",
+      "atMs": 28315
+    },
+    {
+      "kind": "click",
+      "atMs": 29098
+    },
+    {
+      "kind": "click",
+      "atMs": 32199
+    },
+    {
+      "kind": "click",
+      "atMs": 33014
+    },
+    {
+      "kind": "click",
+      "atMs": 33830
+    },
+    {
+      "kind": "click",
+      "atMs": 38026
+    },
+    {
+      "kind": "click",
+      "atMs": 42274
+    },
+    {
+      "kind": "click",
+      "atMs": 48168
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1344,
+      "endMs": 4881
+    },
+    {
+      "id": "read",
+      "startMs": 7138,
+      "endMs": 7238
+    },
+    {
+      "id": "filters",
+      "startMs": 9499,
+      "endMs": 14497
+    },
+    {
+      "id": "period",
+      "startMs": 16769,
+      "endMs": 20813
+    },
+    {
+      "id": "replay",
+      "startMs": 23078,
+      "endMs": 29445
+    },
+    {
+      "id": "story",
+      "startMs": 31708,
+      "endMs": 34134
+    },
+    {
+      "id": "baseline",
+      "startMs": 37520,
+      "endMs": 38371
+    },
+    {
+      "id": "privacy",
+      "startMs": 41766,
+      "endMs": 44291
+    },
+    {
+      "id": "result",
+      "startMs": 46556,
+      "endMs": 48477
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "filters",
+      "phrase": "Le filtre Qui distingue",
+      "startMs": 10829,
+      "endMs": 20321,
+      "cueMs": 10809
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Pour comprendre l'évolution d'un même créneau",
+      "startMs": 0,
+      "endMs": 6579,
+      "cueMs": 23113
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Choisissons un élément qui possède plusieurs entrées",
+      "startMs": 6579,
+      "endMs": 15562,
+      "cueMs": 23904
+    },
+    {
+      "segmentId": "replay",
+      "phrase": "Changer d'élément permet ensuite",
+      "startMs": 43523,
+      "endMs": 52000,
+      "cueMs": 27826
+    },
+    {
+      "segmentId": "story",
+      "phrase": "Le mode Récit répond à une autre question",
+      "startMs": 0,
+      "endMs": 4762,
+      "cueMs": 31708
+    },
+    {
+      "segmentId": "story",
+      "phrase": "Ouvrons cet enchaînement",
+      "startMs": 20028,
+      "endMs": 25630,
+      "cueMs": 32532
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Pour joindre une personne",
+      "startMs": 23597,
+      "endMs": 36234,
+      "cueMs": 43115
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour agir, revenez ensuite",
+      "startMs": 11288,
+      "endMs": 18856,
+      "cueMs": 46556
+    }
+  ]
+}

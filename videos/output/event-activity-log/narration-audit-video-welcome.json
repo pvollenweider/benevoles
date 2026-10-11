@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:07:51.972Z",
+  "revalidatedAt": "2026-10-11T16:07:51.973Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "8cf60d54088b852a506122c175436af45cc2ba574d46adef8d42eb9e29d91557",
+      "recognized": "Une inscription a disparu ? Un horaire a changé ? Avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+      "expected": "Une inscription a disparu, un horaire a changé : avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le Journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

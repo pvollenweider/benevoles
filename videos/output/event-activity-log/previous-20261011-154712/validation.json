@@ -1,0 +1,76 @@
+{
+  "id": "EVENT_ACTIVITY_LOG",
+  "slug": "event-activity-log",
+  "validatedAt": "2026-10-11T12:44:32.830Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 260240,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 24387,
+      "audioMs": 24386,
+      "driftMs": 1
+    },
+    {
+      "id": "read",
+      "visualMs": 24286,
+      "audioMs": 24282,
+      "driftMs": 4
+    },
+    {
+      "id": "filters",
+      "visualMs": 24508,
+      "audioMs": 24506,
+      "driftMs": 2
+    },
+    {
+      "id": "period",
+      "visualMs": 22604,
+      "audioMs": 22601,
+      "driftMs": 3
+    },
+    {
+      "id": "replay",
+      "visualMs": 32680,
+      "audioMs": 32678,
+      "driftMs": 2
+    },
+    {
+      "id": "story",
+      "visualMs": 28945,
+      "audioMs": 28945,
+      "driftMs": 0
+    },
+    {
+      "id": "baseline",
+      "visualMs": 27439,
+      "audioMs": 27432,
+      "driftMs": 7
+    },
+    {
+      "id": "privacy",
+      "visualMs": 23189,
+      "audioMs": 23187,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 29790,
+      "audioMs": 29784,
+      "driftMs": 6
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": {
+    "voicedWindows": 229,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": -32.8,
+    "loudestMusicOnlyLufs": -31.6,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

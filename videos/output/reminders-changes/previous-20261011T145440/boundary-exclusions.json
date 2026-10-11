@@ -1,0 +1,12 @@
+{
+  "anchor": "Une demande à valider ou une place en attente n'est pas",
+  "windowStart": 135.099,
+  "result": {
+    "found": true,
+    "startSeconds": 9.95,
+    "wordsHeard": "Une"
+  },
+  "onset": 145.04899999999998,
+  "proposedCut": 144.49337500000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

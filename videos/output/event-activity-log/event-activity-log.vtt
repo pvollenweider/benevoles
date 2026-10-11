@@ -1,29 +1,224 @@
 WEBVTT
 
-00:00:01.504 --> 00:00:27.158
-Une inscription a disparu, un horaire a changé : avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le Journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.
+00:00:01.306 --> 00:00:06.183
+Une inscription a disparu, un horaire a
+changé : avant de chercher un coupable,
 
-00:00:27.612 --> 00:00:53.324
-Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification ; il ne faut pas confondre son auteur avec la personne concernée par l'inscription.
+00:00:06.183 --> 00:00:10.015
+retrouvons ce qui s'est passé. Depuis
+notre événement de démonstration, ouvrons
 
-00:00:53.778 --> 00:01:18.873
-Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription. Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système. Il ne recherche pas un prénom. Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer, puis revenons à toutes les actions. Les filtres limitent l'affichage ; ils ne suppriment aucune entrée de l'historique.
+00:00:10.015 --> 00:00:14.196
+le Journal. Son historique contient des
+actions sur les créneaux, les inscriptions
 
-00:01:19.325 --> 00:01:42.471
-Tu sais quand le changement a eu lieu ? Renseigne Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.
+00:00:14.196 --> 00:00:19.073
+et les réglages de cet événement. Nous
+allons lire une entrée, filtrer la liste
 
-00:01:42.923 --> 00:02:13.452
-Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état : c'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.
+00:00:19.073 --> 00:00:23.253
+et suivre un enchaînement. Les personnes
+et l'histoire utilisées ici sont fictives,
 
-00:02:13.904 --> 00:02:39.686
-Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le récit utilise les liens de cause enregistrés par l'application ; il n'invente pas une explication à partir de la seule chronologie.
+00:00:23.253 --> 00:00:25.692
+mais les écrans sont ceux de
+l'application.
 
-00:02:41.360 --> 00:03:07.723
-Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple, puis lisons la mention grise : Généré, pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.
+00:00:27.953 --> 00:00:32.675
+Dans Explorer, chaque entrée indique le
+type d'élément, la date et la personne à
 
-00:03:09.462 --> 00:03:33.639
-Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retourne à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partage-la seulement avec les personnes qui en ont besoin.
+00:00:32.675 --> 00:00:36.384
+l'origine de l'action. Une action
+automatique apparaît avec le système, pas
 
-00:03:34.091 --> 00:04:04.683
-Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, reviens ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.
+00:00:36.384 --> 00:00:40.431
+avec le nom d'un organisateur. Lisons une
+inscription, puis une modification de
+
+00:00:40.431 --> 00:00:44.816
+créneau. Quand des valeurs ont changé, les
+lignes en dessous donnent les différences
+
+00:00:44.816 --> 00:00:49.200
+enregistrées. Le journal aide à comprendre
+une modification ; il ne faut pas
+
+00:00:49.200 --> 00:00:52.235
+confondre son auteur avec la personne
+concernée par l'inscription.
+
+00:00:54.499 --> 00:00:57.742
+Pour retrouver une désinscription,
+commençons par Type d'élément, puis
+
+00:00:57.742 --> 00:01:01.707
+choisissons Inscription. Le filtre Qui
+distingue les actions des bénévoles, des
+
+00:01:01.707 --> 00:01:06.392
+administrateurs et du système. Il ne
+recherche pas un prénom. Le filtre Action
+
+00:01:06.392 --> 00:01:11.077
+permet aussi de se concentrer sur les
+inscriptions, les créneaux ou les pages.
+
+00:01:11.077 --> 00:01:15.762
+Regardons la liste changer, puis revenons
+à toutes les actions. Les filtres limitent
+
+00:01:15.762 --> 00:01:19.005
+l'affichage ; ils ne suppriment aucune
+entrée de l'historique.
+
+00:01:21.281 --> 00:01:25.742
+Vous savez quand le changement a eu lieu ?
+Renseignez Depuis et Jusqu'à pour limiter
+
+00:01:25.742 --> 00:01:29.310
+la période. Choisissons quelques jours de
+notre exemple, puis élargissons à nouveau
+
+00:01:29.310 --> 00:01:33.176
+la recherche. Une liste vide peut
+simplement venir des filtres : ce n'est
+
+00:01:33.176 --> 00:01:37.637
+pas la preuve qu'aucune action n'a jamais
+eu lieu. Quand il reste des entrées à
+
+00:01:37.637 --> 00:01:42.098
+lire, Charger plus complète la liste. Le
+nombre affiché décrit ce qui a été chargé,
+
+00:01:42.098 --> 00:01:43.882
+pas forcément tout l'historique de
+l'événement.
+
+00:01:46.148 --> 00:01:50.751
+Pour comprendre l'évolution d'un même
+créneau, ouvrons Rejouer. Choisissons un
+
+00:01:50.751 --> 00:01:56.274
+élément qui possède plusieurs entrées,
+puis avançons étape par étape. Les boutons
+
+00:01:56.274 --> 00:02:01.336
+précédent et suivant, comme le curseur,
+permettent de parcourir les changements
+
+00:02:01.336 --> 00:02:06.859
+enregistrés. Regardons la capacité avant
+et après sa modification. Rejouer ne remet
+
+00:02:06.859 --> 00:02:13.303
+pas l'événement dans un ancien état :
+c'est une lecture de l'historique, pas une
+
+00:02:13.303 --> 00:02:17.905
+restauration. Changer d'élément permet
+ensuite de suivre une inscription plutôt
+
+00:02:17.905 --> 00:02:18.826
+qu'un créneau.
+
+00:02:21.089 --> 00:02:27.739
+Le mode Récit répond à une autre question
+: quelle action en a provoqué une autre ?
+
+00:02:27.739 --> 00:02:33.215
+Dans notre exemple, une annulation libère
+une place et déclenche une offre à la
+
+00:02:33.215 --> 00:02:37.517
+liste d'attente. Ouvrons cet enchaînement
+et lisons le résultat. Deux actions
+
+00:02:37.517 --> 00:02:42.211
+proches dans le temps ne forment pas
+automatiquement une chaîne. Le récit
+
+00:02:42.211 --> 00:02:47.296
+utilise les liens de cause enregistrés par
+l'application ; il n'invente pas une
+
+00:02:47.296 --> 00:02:50.034
+explication à partir de la seule
+chronologie.
+
+00:02:53.441 --> 00:02:57.411
+Un ancien événement peut avoir des
+créneaux et des inscriptions sans
+
+00:02:57.411 --> 00:03:01.382
+historique enregistré. Générer l'état
+initial ajoute alors un point de départ
+
+00:03:01.382 --> 00:03:05.713
+pour ces éléments existants. Faisons-le
+sur notre second exemple, puis lisons la
+
+00:03:05.713 --> 00:03:10.766
+mention grise : Généré, pas une action
+réelle. Ce bouton ne retrouve pas les
+
+00:03:10.766 --> 00:03:14.737
+anciennes manipulations oubliées. Une
+nouvelle génération ne doit pas créer de
+
+00:03:14.737 --> 00:03:19.790
+doublons. Elle sert à partir d'un état
+connu, pas à prétendre que l'on connaît
+
+00:03:19.790 --> 00:03:20.873
+tout le passé.
+
+00:03:24.270 --> 00:03:28.541
+Le journal n'est pas un carnet d'adresses.
+Le contenu des pages personnalisées et les
+
+00:03:28.541 --> 00:03:32.507
+coordonnées des bénévoles n'y sont pas
+recopiés. Il montre les champs modifiés et
+
+00:03:32.507 --> 00:03:36.474
+résout le nom de l'auteur lorsque ce
+compte existe encore. Pour joindre une
+
+00:03:36.474 --> 00:03:40.745
+personne, retournez à la vue prévue pour
+les inscriptions ou les membres, avec les
+
+00:03:40.745 --> 00:03:43.796
+droits nécessaires. Une capture
+d'historique peut tout de même contenir
+
+00:03:43.796 --> 00:03:47.457
+des noms : partagez-la seulement avec les
+personnes qui en ont besoin.
+
+00:03:49.723 --> 00:03:54.687
+Nous avons retrouvé une action, vu
+l'évolution d'un élément et lu un
+
+00:03:54.687 --> 00:03:58.824
+enchaînement sans modifier le planning.
+Pour agir, revenez ensuite aux
+
+00:03:58.824 --> 00:04:04.615
+inscriptions ou aux créneaux concernés. Le
+bon réflexe, c'est de vérifier le type, la
+
+00:04:04.615 --> 00:04:09.579
+période et l'origine avant de conclure. Le
+journal facilite la coordination quand
+
+00:04:09.579 --> 00:04:14.957
+plusieurs personnes organisent ensemble.
+Il aide à poser une question précise et à
+
+00:04:14.957 --> 00:04:19.507
+corriger le bon problème, calmement,
+plutôt qu'à recommencer tout le planning.
 

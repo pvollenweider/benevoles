@@ -1,0 +1,50 @@
+[
+  {
+    "scene": "replay",
+    "seconds": 132.747,
+    "label": "Changer d'élément permet ensuite BEFORE",
+    "file": "videos/output/event-activity-log/review/replay-anchor-0.png"
+  },
+  {
+    "scene": "replay",
+    "seconds": 134.497,
+    "label": "Changer d'élément permet ensuite AFTER",
+    "file": "videos/output/event-activity-log/review/replay-anchor-1.png"
+  },
+  {
+    "scene": "story",
+    "seconds": 153.308,
+    "label": "Ouvrons cet enchaînement BEFORE",
+    "file": "videos/output/event-activity-log/review/story-anchor-0.png"
+  },
+  {
+    "scene": "story",
+    "seconds": 155.058,
+    "label": "Ouvrons cet enchaînement AFTER",
+    "file": "videos/output/event-activity-log/review/story-anchor-1.png"
+  },
+  {
+    "scene": "privacy",
+    "seconds": 215.766,
+    "label": "Pour joindre une personne BEFORE",
+    "file": "videos/output/event-activity-log/review/privacy-anchor-0.png"
+  },
+  {
+    "scene": "privacy",
+    "seconds": 217.516,
+    "label": "Pour joindre une personne AFTER",
+    "file": "videos/output/event-activity-log/review/privacy-anchor-1.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 236.603,
+    "label": "Pour agir, revenez ensuite BEFORE",
+    "file": "videos/output/event-activity-log/review/result-anchor-0.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 238.353,
+    "label": "Pour agir, revenez ensuite AFTER",
+    "file": "videos/output/event-activity-log/review/result-anchor-1.png"
+  }
+]

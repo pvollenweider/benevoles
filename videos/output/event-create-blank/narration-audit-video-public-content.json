@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:23:11.169Z",
+  "revalidatedAt": "2026-10-11T16:23:11.170Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "public-content",
+      "audioSha256": "96492461547527c0bd5107db27f603f99d5f045b185f8811963cb6ce61e80a39",
+      "recognized": "Les instructions publiques apparaissent avant l'inscription. Indiquez ici l'entrée à utiliser et le moment d'arrivée. Le message de confirmation est affiché juste après l'inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape sans remplacer les consignes propres à chaque créneau.",
+      "expected": "Les instructions publiques apparaissent avant l’inscription : indiquez ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}
