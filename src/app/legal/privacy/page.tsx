@@ -131,8 +131,10 @@ export default function PrivacyPage() {
       </p>
       <p>
         L&apos;interface publique (formulaires bénévoles) utilise le <code>localStorage</code> du
-        navigateur pour mémoriser temporairement une session locale (sans compte). Ces données
-        restent sur l&apos;appareil de l&apos;utilisateur et ne sont pas transmises à nos serveurs.
+        navigateur pour mémoriser temporairement une session locale (sans compte), ainsi que le prénom,
+        le nom, l&apos;email et le téléphone de la dernière inscription, pour ne pas les ressaisir sur un
+        autre événement. Ces données restent sur l&apos;appareil de l&apos;utilisateur ; elles
+        s&apos;effacent avec « Ce n&apos;est pas moi, effacer » ou « Quitter la session ».
       </p>
 
       <h2>3. Données que nous traitons en qualité de sous-traitant</h2>

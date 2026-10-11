@@ -30,6 +30,7 @@ import {
 } from "@/lib/public-signup"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
 import { announce } from "@/lib/announce"
+import { forgetRememberedContact, loadRememberedContact, saveRememberedContact } from "@/lib/remembered-contact"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
 import ModalShell from "@/components/admin/ModalShell"
@@ -190,6 +191,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
   const [form, setForm] = useState<SignupForm>(EMPTY_SIGNUP_FORM)
+  // Contact details brought back from this device's last signup (#901), with a way to clear them.
+  const [usedRemembered, setUsedRemembered] = useState(false)
   // Preview (#370): focus the result when it appears, and the submit button when going back to
   // the form (the result panel unmounts, focus would otherwise fall to <body>).
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
@@ -456,6 +459,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
     // No editToken when the address already belonged to a volunteer and nothing proved the
     // submitter owns it: the management link then only goes out by email (#285).
+    saveRememberedContact(form)
     const params = new URLSearchParams()
     if (data.editToken) {
       localStorage.setItem(storageKey, data.editToken)
@@ -472,10 +476,32 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   function quitSession() {
     localStorage.removeItem(storageKey)
+    forgetRememberedContact()
+    setUsedRemembered(false)
     setMyRegistrations([])
     setSelectedShifts(new Set())
     setForm(EMPTY_SIGNUP_FORM)
     requestAnimationFrame(() => titleRef.current?.focus())
+  }
+
+  // Another event's signup on this device (#901) fills the empty contact fields when the form
+  // opens. An invitation brings its own member, and this event's session its own volunteer.
+  function openForm() {
+    setStep("form")
+    if (previewEventId || inviteToken || myRegistrations.length > 0) return
+    const remembered = loadRememberedContact()
+    if (!remembered) return
+    setForm((f) => prefillContact(f, remembered, "form"))
+    setUsedRemembered(true)
+  }
+
+  // A shared device (#901): someone else's details go, and so does the memory of them.
+  function forgetContact() {
+    forgetRememberedContact()
+    setUsedRemembered(false)
+    setForm((f) => ({ ...f, firstName: "", lastName: "", email: "", phone: "" }))
+    announce(setActionNotice, "Coordonnées effacées de cet appareil.")
+    requestAnimationFrame(() => document.getElementById("reg-firstname")?.focus())
   }
 
   // The charter closes back to its link (ModalShell also restores its opener; WebKit never focused a tapped one).
@@ -853,7 +879,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
                           <button
-                            onClick={() => setStep("form")}
+                            onClick={openForm}
                             className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
                             Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
@@ -871,7 +897,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
                 <div className="max-w-2xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
                   <button
-                    onClick={() => setStep("form")}
+                    onClick={openForm}
                     className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
                     Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
@@ -927,6 +953,18 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+                {usedRemembered && myRegistrations.length === 0 && (
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl bg-gray-50 border border-gray-200 px-3 py-2">
+                    <p className="text-sm text-gray-700">Coordonnées reprises de ta dernière inscription sur cet appareil.</p>
+                    <button
+                      type="button"
+                      onClick={forgetContact}
+                      className="text-sm text-blue-700 underline underline-offset-2 rounded min-h-11 sm:min-h-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    >
+                      Ce n&apos;est pas moi, effacer
+                    </button>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label htmlFor="reg-firstname" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>

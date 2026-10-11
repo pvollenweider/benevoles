@@ -24,6 +24,8 @@ Renseigne :
 - **Convention des bénévoles** : coche « J'ai lu et j'accepte la convention des bénévoles » ; le lien « convention des bénévoles » ouvre le texte complet, dont le bouton « J'ai lu et j'accepte » coche la case pour toi ;
 - **Consentement** : coche « J'accepte que l'association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants. » Tes coordonnées rejoignent la liste des bénévoles de l'organisation, qui peut t'inviter à ses prochains événements. Le lien juste en dessous ouvre, dans un nouvel onglet, la politique de confidentialité : tes droits et la durée de conservation de tes données.
 
+Si tu t'es déjà inscrit à un autre événement depuis ce navigateur, ton prénom, ton nom, ton email et ton téléphone sont déjà remplis : vérifie-les, c'est tout. Ces coordonnées restent seulement sur ton appareil. Sur un appareil partagé, **Ce n'est pas moi, effacer** vide ces champs et les oublie ; **Quitter la session** les oublie aussi.
+
 Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinateur, au-dessus du formulaire sur téléphone) reprend tes créneaux dans l'ordre, avec le jour et les heures (« jusqu'au lendemain » pour un créneau qui passe minuit), ce qui les sépare (enchaînés, pause, ou **chevauchement** : dans ce cas l'inscription sera refusée, retire un créneau), si chaque inscription est ferme, en liste d'attente ou sur validation, l'âge minimum éventuel, et la liste exacte des données transmises à l'organisation.
 
 ## Infos pratiques d'un créneau

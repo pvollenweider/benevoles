@@ -36,7 +36,7 @@ En savoir plus : [créer un événement](guide/creer-un-evenement.md), [configur
 
 <!-- image: VOLUNTEER_REGISTER | La page d'inscription sur un téléphone : le créneau choisi, puis le court formulaire « Vos informations ». -->
 
-- **Sans compte ni mot de passe** : un lien, quelques créneaux, une confirmation.
+- **Sans compte ni mot de passe** : un lien, quelques créneaux, une confirmation. Pour un deuxième événement, les coordonnées sont déjà remplies sur le même appareil.
 - **Plusieurs créneaux en une fois**, avec les places restantes, les chevauchements signalés et un récapitulatif clair avant de confirmer.
 - **En frise ou en liste** : le planning de la journée s'affiche en frise, ou en liste dans l'ordre des heures, plus confortable sur un petit téléphone ; le choix reste gardé sur l'appareil.
 - **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
