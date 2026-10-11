@@ -86,7 +86,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await page.context().clearCookies()
     if (cookies) await page.context().addCookies(cookies)
   }
-  const write = async (field: Locator, value: string, delay = 110) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
+  const write = async (field: Locator, value: string, delay = 50) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
   type Mail = { ID: string; To: { Address: string }[]; Subject: string }
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
   const ids = async () => new Set((await inbox()).map(mail => mail.ID))
@@ -141,7 +141,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByText("Nouveau lien d'activation", { exact: false }).first().waitFor()
       await at(.52); await session(null); await go(oldInvite)
       await page.getByRole("heading", { name: "Lien invalide", exact: true }).waitFor()
-      await at(.85); const second = await openMail(secondBefore, ownerEmail, "invite"); newInvite = second.localPath
+      await at("Ouvrons le second message reçu"); const second = await openMail(secondBefore, ownerEmail, "invite"); newInvite = second.localPath
       checks.actualInviteMails = [first.id, second.id]; checks.oldInviteRefused = true
     })
     await scene("activate", async at => {
@@ -149,7 +149,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByLabel("Nouveau mot de passe", { exact: true }).waitFor()
       await at("Elle choisit son mot de passe"); await write(page.getByLabel("Nouveau mot de passe", { exact: true }), password)
       await write(page.getByLabel("Confirmer le mot de passe", { exact: true }), password)
-      await at(.27); await tap(page, page.getByRole("button", { name: "Créer mon mot de passe", exact: true }))
+      await at("Elle choisit son mot de passe"); await tap(page, page.getByRole("button", { name: "Créer mon mot de passe", exact: true }))
       await page.getByRole("heading", { name: "Mot de passe créé", exact: true }).waitFor()
       await at("Connectons-nous ensuite"); await tap(page, page.getByRole("link", { name: "Se connecter", exact: true }))
       await write(page.getByLabel("Email", { exact: true }), ownerEmail, 45)
@@ -219,7 +219,11 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("preview", async at => {
       await at(.03); await go("/super-admin/product-updates")
       await at("Donnons-lui un objet clair"); await write(page.getByLabel("Objet *", { exact: true }), subject)
-      await at("Le contenu commence"); await write(page.getByLabel(/^Contenu \(Markdown/), content)
+      const message = page.getByLabel(/^Contenu \(Markdown/)
+      const lines = content.split("\n")
+      await at("Le contenu commence"); await write(message, `${lines[0]}\n`)
+      await at("Ajoutons deux conseils simples"); await message.pressSequentially(`${lines.slice(1, 3).join("\n")}\n`, { delay: 50 })
+      await at("Un lien vers le guide"); await message.pressSequentially(lines[3], { delay: 50 })
       await at(.51); await page.getByRole("heading", { name: "Aperçu", exact: true }).scrollIntoViewIfNeeded()
       testBefore = await ids()
       await at(.66); await tap(page, page.getByRole("button", { name: "Envoyer un test", exact: true }))
@@ -241,10 +245,10 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByRole("status").filter({ hasText: "Communication envoyée à 2/2 destinataires." }).waitFor()
       assert.equal(await db.productUpdateSend.count({ where: { subject, successCount: 2, recipientCount: 2 } }), 1)
       await at(.65); await page.getByRole("heading", { name: /Historique/ }).scrollIntoViewIfNeeded()
-      await at(.76); lastMail = await openMail(broadcastBefore, ownerEmail, "broadcast")
+      await at("Ouvrons un message livré"); lastMail = await openMail(broadcastBefore, ownerEmail, "broadcast")
       const delivered = (await inbox()).filter(mail => !broadcastBefore.has(mail.ID) && mail.Subject === subject)
       assert.deepEqual(delivered.flatMap(mail => mail.To.map(to => to.Address)).sort(), recipients.map(row => row.email).sort())
-      await at(.82)
+      await at("Ouvrons un message livré")
       const unsubscribe = await page.request.get(`${base}${lastMail.localPath}`, { maxRedirects: 0 })
       assert.equal(unsubscribe.status(), 307)
       const redirect = new URL(unsubscribe.headers().location)
@@ -275,7 +279,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
       await page.waitForURL(/\/admin\/events/)
       assert.equal((await page.request.get(`${base}/api/super-admin/organizations`)).status(), 403)
-      await at(.36); await session(setup.platformCookies); await go("/super-admin/organizations")
+      await at("L’opérateur, lui"); await session(setup.platformCookies); await go("/super-admin/organizations")
       checks.ordinaryOwnerPlatformAccessRefused = true
     })
     await writeFile(path.join(directory, "capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))

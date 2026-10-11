@@ -1,15 +1,15 @@
 {
   "slug": "shift-night-dst",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T16:10:32.802Z",
+  "recordedAt": "2026-10-11T11:36:32.839Z",
   "video": "capture.webm",
   "product": {
-    "commit": "12928a8936f7b69d6ecf6ef91f6ecdbdffa09b60",
-    "sourceTree": "30dbb5aedc053cdb4c8279f2b678cc73eece207e",
-    "productSourceSha256": "c99792f1a68d4f9cd696d47c05d5c6a8d06aaa190f0a9cf15281957940612e03",
-    "buildId": "_3C5UypUJK5dyJUxNVbyG",
-    "snapshot": "/tmp/benevoles-video-production.fLrGxy",
-    "builtAt": "2026-10-06T16:02:24.130Z"
+    "commit": "538a7f9494012c8ab9f86d71d3b2a09fb57fdc50",
+    "sourceTree": "83b7764a488e9c7ee887407aefd967a00b3e48b1",
+    "productSourceSha256": "2edf691a7eec77bd67fbe630a0b1db9836fc5551c1f7f086ce448e71c9096342",
+    "buildId": "ivxjXmRYPnZg3PpogRvW3",
+    "snapshot": "/tmp/benevoles-video-production.C3fhyfsN",
+    "builtAt": "2026-10-11T11:32:08.394Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,64 +26,106 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 21842
+      "atMs": 28246
     },
     {
       "kind": "click",
-      "atMs": 31608
+      "atMs": 37128
     },
     {
       "kind": "click",
-      "atMs": 37841
+      "atMs": 42412
     },
     {
       "kind": "click",
-      "atMs": 45607
+      "atMs": 52144
     },
     {
       "kind": "click",
-      "atMs": 51407
+      "atMs": 56927
     },
     {
       "kind": "click",
-      "atMs": 71891
+      "atMs": 67985
+    },
+    {
+      "kind": "click",
+      "atMs": 83612
+    },
+    {
+      "kind": "click",
+      "atMs": 97501
+    },
+    {
+      "kind": "click",
+      "atMs": 98333
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1266,
-      "endMs": 14181
+      "startMs": 1193,
+      "endMs": 15351
     },
     {
       "id": "ordinary",
-      "startMs": 14633,
-      "endMs": 30691
+      "startMs": 15803,
+      "endMs": 36180
     },
     {
       "id": "spring",
-      "startMs": 31143,
-      "endMs": 44686
+      "startMs": 36633,
+      "endMs": 51232
     },
     {
       "id": "autumn",
-      "startMs": 45140,
-      "endMs": 57733
+      "startMs": 51684,
+      "endMs": 65751
     },
     {
       "id": "timezone",
-      "startMs": 58185,
-      "endMs": 69751
+      "startMs": 66207,
+      "endMs": 79210
     },
     {
       "id": "calendar",
-      "startMs": 70202,
-      "endMs": 82073
+      "startMs": 79662,
+      "endMs": 95448
     },
     {
       "id": "result",
-      "startMs": 82524,
-      "endMs": 94469
+      "startMs": 95900,
+      "endMs": 109625
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "ordinary",
+      "phrase": "Ouvrons maintenant le créneau",
+      "startMs": 11974,
+      "endMs": 12854,
+      "cueMs": 27778
+    },
+    {
+      "segmentId": "spring",
+      "phrase": "Un créneau affiché",
+      "startMs": 5305,
+      "endMs": 8322,
+      "cueMs": 41940
+    },
+    {
+      "segmentId": "autumn",
+      "phrase": "Le même créneau",
+      "startMs": 4767,
+      "endMs": 7469,
+      "cueMs": 56456
+    },
+    {
+      "segmentId": "timezone",
+      "phrase": "Ces calculs dépendent du fuseau horaire",
+      "startMs": 626,
+      "endMs": 4734,
+      "cueMs": 67523
     }
   ]
 }
