@@ -1,0 +1,298 @@
+{
+  "video": "volunteer-personal-registrations",
+  "source": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/volunteer-personal-registrations.mp4",
+  "sourceSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-11T18:34:11.454Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.02771490600027715,
+      "seconds": 0.63,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-3.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 5.44225,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 9.772050000000002,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 13.0194,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 18.431649999999998,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9861425469998615,
+      "seconds": 21.379,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.029002320185614848,
+      "seconds": 22.731,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-3.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.25,
+      "seconds": 27.303,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-25.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.45,
+      "seconds": 31.4406,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-45.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.6,
+      "seconds": 34.543800000000005,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-60.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.85,
+      "seconds": 39.7158,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-85.png"
+    },
+    {
+      "scene": "practical",
+      "fraction": 0.9854988399071926,
+      "seconds": 42.519,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/practical-end.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.025679435052428846,
+      "seconds": 43.872,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-3.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.25,
+      "seconds": 49.11325,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-25.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.45,
+      "seconds": 53.78625,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-45.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.6,
+      "seconds": 57.291,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-60.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.85,
+      "seconds": 63.13225,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-85.png"
+    },
+    {
+      "scene": "states",
+      "fraction": 0.9871602824737856,
+      "seconds": 66.337,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/states-end.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.030217566478646252,
+      "seconds": 67.691,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-3.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.25,
+      "seconds": 72.055,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-25.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.45,
+      "seconds": 76.0262,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-45.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.6,
+      "seconds": 79.00460000000001,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-60.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.85,
+      "seconds": 83.96860000000001,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-85.png"
+    },
+    {
+      "scene": "cancel",
+      "fraction": 0.9848912167606769,
+      "seconds": 86.647,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/cancel-end.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.031428421769420144,
+      "seconds": 88.003,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-3.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.25,
+      "seconds": 92.17575,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-25.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.45,
+      "seconds": 95.99395,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-45.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.6,
+      "seconds": 98.8576,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-60.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.85,
+      "seconds": 103.63035,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-85.png"
+    },
+    {
+      "scene": "waiting",
+      "fraction": 0.98428578911529,
+      "seconds": 106.194,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/waiting-end.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.02729878520405842,
+      "seconds": 107.545,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-3.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.25,
+      "seconds": 112.43975,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-25.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.45,
+      "seconds": 116.83555,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-45.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.6,
+      "seconds": 120.13239999999999,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-60.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.85,
+      "seconds": 125.62715,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-85.png"
+    },
+    {
+      "scene": "offer",
+      "fraction": 0.9863506073979708,
+      "seconds": 128.624,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/offer-end.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.027306239475720202,
+      "seconds": 129.978,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-3.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.25,
+      "seconds": 134.87125,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-25.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.45,
+      "seconds": 139.26585,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-45.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.6,
+      "seconds": 142.56179999999998,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-60.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.85,
+      "seconds": 148.05505,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-85.png"
+    },
+    {
+      "scene": "request",
+      "fraction": 0.9863468802621399,
+      "seconds": 151.051,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/request-end.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.029113494104517443,
+      "seconds": 152.404,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-3.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.25,
+      "seconds": 156.95625,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-25.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.45,
+      "seconds": 161.07805,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-45.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.6,
+      "seconds": 164.1694,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-60.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.85,
+      "seconds": 169.32165,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-85.png"
+    },
+    {
+      "scene": "return",
+      "fraction": 0.9854432529477413,
+      "seconds": 172.113,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-personal-registrations/review-frames/return-end.png"
+    }
+  ]
+}

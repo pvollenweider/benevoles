@@ -1,0 +1,80 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T20:38:07.416Z",
+  "revalidatedAt": "2026-10-11T22:18:55.011Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "020a621f76378380c442b3b0ad82caf06a37c0c650a79a75ef74b720c89b7f21",
+      "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "expected": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "discover",
+      "audioSha256": "70653390a03839cdd2b53eb3f3f3d9dd3e452d1eec2823abf3a74ab91fd3d5d5",
+      "recognized": "Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "expected": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "choose",
+      "audioSha256": "3e44b485c1462109cc766e7ac3ae859726b08bcbc9f8a1558e9315249a1171b4",
+      "recognized": "Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de quinze heures à dix-huit heures.",
+      "expected": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "details",
+      "audioSha256": "558eedffdd65bc49ff173aed194a58588dda89e19bee05968f28ad565d606c0e",
+      "recognized": "Ajoute ensuite tes coordonnées, elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
+      "expected": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preferences",
+      "audioSha256": "e8d4a1e950e36c57fd5400d4acb85b86be3a2992309ae99e5f0694994fe12f62",
+      "recognized": "Réponds aux quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
+      "expected": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "5c9c403018b13f1c8b316be2338b8d96484b0f75003afd55e89c2bc62cef7ff3",
+      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti ! Confirme ton inscription.",
+      "expected": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "success",
+      "audioSha256": "fa421929527ef4c82b35145f609705a06d9df13c44d6028c20969526c8dfa73b",
+      "recognized": "Et voilà, tu fais partie de l'équipe. Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "expected": "Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

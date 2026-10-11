@@ -1,0 +1,9 @@
+{
+  "id": "ORG_FIRST_STEPS",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "No final MP4: rehearsal fails on exact accessible-name assertion for library link; title is now included in the accessible name. Media configuration fixed locally using the actual published MP4 served from disposable snapshot; no fabricated media. Batch-3 narration accepted unchanged.",
+  "sourceChanges": "videos/lib/record-inline-help.ts: match library link prefix including colon rather than outdated exact name; no refilm."
+}

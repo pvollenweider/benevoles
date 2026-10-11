@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:49.678Z",
+  "revalidatedAt": "2026-10-11T18:22:49.679Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "65a404c79f53e85e0f6184d23188666abe077d406b0a704e67afe02c472d2b44",
+      "recognized": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton e-mail, tes réponses et les horaires avant « Confirmer mon inscription ». Dans cette démonstration, nous restons juste avant ce bouton. Rien n'a été envoyé.",
+      "expected": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription. Dans cette démonstration, nous restons juste avant ce bouton : rien n’a été envoyé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

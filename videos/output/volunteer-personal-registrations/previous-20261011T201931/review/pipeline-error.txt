@@ -1,0 +1,1 @@
+Error: videos/tools/audit-narration.ts exit 1

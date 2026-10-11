@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:34:17.882Z",
+  "revalidatedAt": "2026-10-11T18:34:17.883Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "85364a1e307a785179a3337ceb433de31d9449703bad2cf9b7365945a58691a0",
+      "recognized": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel, il permet d'agir sur tes inscriptions.",
+      "expected": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel : il permet d'agir sur tes inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

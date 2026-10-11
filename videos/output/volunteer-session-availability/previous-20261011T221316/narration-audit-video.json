@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T20:34:43.376Z",
+  "revalidatedAt": "2026-10-11T20:34:43.376Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "66c48cb0806c181176ecd9e26fb8333b804065888a541f82817a5aa87ec60b65",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "b539a6ff8f92602f0bdfb6d1993d4ebfc7776d9be3666f4aa4ceba564301fb34",
+      "recognized": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton e-mail contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux. Garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "expected": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux : garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "session",
+      "audioSha256": "6563469bf9dee9a9b3fccae03340c2289225f64c43b598bd9feec836b7696e08",
+      "recognized": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "expected": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "resend",
+      "audioSha256": "3b89ff59328b72274df40683a4b18314f1d456f6a1d6b13ebb5c341ec9afbb61",
+      "recognized": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec Recevoir ce lien par e-mail, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriels indésirables et l'adresse utilisée lors de ton inscription.",
+      "expected": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec Recevoir ce lien par email, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "recover",
+      "audioSha256": "8d4e32ef40c033e1234086155b6fd248ff5e23e1de2974e27828b6da43f1e50b",
+      "recognized": "Si un ancien lien ne fonctionne plus, la page propose recevoir un nouveau lien. Saisis l'adresse e-mail utilisée pour t'inscrire. La réponse reste volontairement la même, que cette adresse soit connue ou non. Elle ne révèle pas les inscriptions d'une autre personne. Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par e-mail.",
+      "expected": "Si un ancien lien ne fonctionne plus, la page propose Recevoir un nouveau lien. Saisis l'adresse email utilisée pour t'inscrire. La réponse reste volontairement la même, que cette adresse soit connue ou non : elle ne révèle pas les inscriptions d'une autre personne. Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par email.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limit",
+      "audioSha256": "5382e5c80f4b9358c2b06f288d588eb553d804c5ba32665e1a726ef732a96918",
+      "recognized": "Les demandes de renvoi sont limitées pour éviter les abus. Si tu demandes plusieurs liens trop vite, un message t'invite à patienter. Inutile de multiplier les clics. Vérifie ta boîte email, puis réessaie plus tard si nécessaire. Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+      "expected": "Les demandes de renvoi sont limitées pour éviter les abus. Si tu demandes plusieurs liens trop vite, un message t'invite à patienter. Inutile de multiplier les clics. Vérifie ta boîte email, puis réessaie plus tard si nécessaire. Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "availability",
+      "audioSha256": "7b3a8f11e8bf4c8718a8fafc87d69d59625af98ad65981f1c576d7fb75ffa813",
+      "recognized": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche matin et soir, puis ajoute une exception, pas le dimanche matin. Ces informations sont facultatives. Après enregistrer mes disponibilités, le message confirme le résultat. Rechargeons la page. Les choix et la note sont bien conservés.",
+      "expected": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche Matin et Soir, puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après Enregistrer mes disponibilités, le message confirme le résultat. Rechargeons la page : les choix et la note sont bien conservés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "organizer",
+      "audioSha256": "79c0e2c5adb148323e84611aa3f01169480907f903a83b5cddaf27ed955563d4",
+      "recognized": "L'organisation retrouve cette indication dans ta fiche. Elle peut s'en servir si elle doit te proposer un autre créneau. Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires. Tu choisis toujours tes créneaux toi-même. Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse.",
+      "expected": "L'organisation retrouve cette indication dans ta fiche. Elle peut s'en servir si elle doit te proposer un autre créneau. Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires. Tu choisis toujours tes créneaux toi-même. Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "9a44e670d37f0d08910b7f4937abf96f04ae8d45e7b7287cf1eccee15714b46d",
+      "recognized": "Tes habitudes changent ? Reviens sur ta page personnelle pour modifier la note ou décocher les périodes. Enregistre à nouveau et vérifie le message. Effacer tes disponibilités ne retire aucune inscription. Le lien personnel reste ton point d'entrée, l'e-mail t'aide à le retrouver et quitter la session protège ton accès quand tu utilises un appareil partagé.",
+      "expected": "Tes habitudes changent ? Reviens sur ta page personnelle pour modifier la note ou décocher les périodes. Enregistre à nouveau et vérifie le message. Effacer tes disponibilités ne retire aucune inscription. Le lien personnel reste ton point d'entrée, l'email t'aide à le retrouver, et Quitter la session protège ton accès quand tu utilises un appareil partagé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

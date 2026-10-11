@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:07.860Z",
+  "revalidatedAt": "2026-10-11T17:47:07.861Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "checklist",
+      "audioSha256": "d23e1a7593a5803fb1da77b948c841d36b2aedd316ca91159e94240885598797",
+      "recognized": "Les quatre étapes obligatoires sont de créer l'événement, définir ses créneaux, le publier, puis faire une inscription de test. Le titre public, la charte et le fuseau horaire sont facultatifs, car des valeurs par défaut existent. Les coches sont calculées à partir des données, pas besoin de les remplir manuellement.",
+      "expected": "Les quatre étapes obligatoires sont de créer l’événement, définir ses créneaux, le publier, puis faire une inscription de test. Le titre public, la charte et le fuseau horaire sont facultatifs, car des valeurs par défaut existent. Les coches sont calculées à partir des données : pas besoin de les remplir manuellement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

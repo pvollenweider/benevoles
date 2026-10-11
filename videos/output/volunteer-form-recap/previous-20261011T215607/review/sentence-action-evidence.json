@@ -1,0 +1,786 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1,
+    "sentences": [
+      {
+        "text": "Le formulaire sert à transmettre les bonnes informations à l’association et à vérifier ton engagement avant de confirmer.",
+        "startMs": 309,
+        "endMs": 6239,
+        "method": "silence",
+        "absoluteStartMs": 310
+      },
+      {
+        "text": "Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé.",
+        "startMs": 7176,
+        "endMs": 13629,
+        "method": "silence",
+        "absoluteStartMs": 7177
+      },
+      {
+        "text": "Prends ton temps :",
+        "startMs": 14364,
+        "endMs": 14811,
+        "method": "silence",
+        "absoluteStartMs": 14365
+      },
+      {
+        "text": "aucune inscription ne part pendant la saisie.",
+        "startMs": 15351,
+        "endMs": 17321,
+        "method": "silence",
+        "absoluteStartMs": 15352
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "selection",
+    "startMs": 18578,
+    "sentences": [
+      {
+        "text": "Voici quatre missions :",
+        "startMs": 804,
+        "endMs": 1833,
+        "method": "silence",
+        "absoluteStartMs": 19382
+      },
+      {
+        "text": "Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche.",
+        "startMs": 2506,
+        "endMs": 9399,
+        "method": "silence",
+        "absoluteStartMs": 21084
+      },
+      {
+        "text": "Le bouton Continuer ouvre le formulaire avec ce choix.",
+        "startMs": 10705,
+        "endMs": 11783,
+        "method": "silence",
+        "absoluteStartMs": 29283
+      },
+      {
+        "text": "Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+        "startMs": 12008,
+        "endMs": 18550,
+        "method": "silence",
+        "absoluteStartMs": 30586
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 19052
+      },
+      {
+        "kind": "click",
+        "atMs": 20635
+      },
+      {
+        "kind": "click",
+        "atMs": 22218
+      },
+      {
+        "kind": "click",
+        "atMs": 23802
+      },
+      {
+        "kind": "click",
+        "atMs": 31051
+      }
+    ]
+  },
+  {
+    "id": "identity",
+    "startMs": 38281,
+    "sentences": [
+      {
+        "text": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email :",
+        "startMs": 708,
+        "endMs": 4518,
+        "method": "silence",
+        "absoluteStartMs": 38989
+      },
+      {
+        "text": "la confirmation et le lien personnel arriveront là.",
+        "startMs": 4884,
+        "endMs": 7138,
+        "method": "silence",
+        "absoluteStartMs": 43165
+      },
+      {
+        "text": "Le téléphone est obligatoire pour cet événement.",
+        "startMs": 8125,
+        "endMs": 9916,
+        "method": "silence",
+        "absoluteStartMs": 46406
+      },
+      {
+        "text": "La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum ;",
+        "startMs": 11123,
+        "endMs": 14545,
+        "method": "silence",
+        "absoluteStartMs": 49404
+      },
+      {
+        "text": "elle permet de vérifier l’âge à la date de la mission.",
+        "startMs": 15236,
+        "endMs": 17306,
+        "method": "silence",
+        "absoluteStartMs": 53517
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 38784
+      },
+      {
+        "kind": "key",
+        "atMs": 39093
+      },
+      {
+        "kind": "key",
+        "atMs": 39191
+      },
+      {
+        "kind": "key",
+        "atMs": 39292
+      },
+      {
+        "kind": "key",
+        "atMs": 39393
+      },
+      {
+        "kind": "click",
+        "atMs": 40168
+      },
+      {
+        "kind": "key",
+        "atMs": 40474
+      },
+      {
+        "kind": "key",
+        "atMs": 40573
+      },
+      {
+        "kind": "key",
+        "atMs": 40672
+      },
+      {
+        "kind": "key",
+        "atMs": 40771
+      },
+      {
+        "kind": "key",
+        "atMs": 40872
+      },
+      {
+        "kind": "key",
+        "atMs": 40971
+      },
+      {
+        "kind": "click",
+        "atMs": 41767
+      },
+      {
+        "kind": "key",
+        "atMs": 42074
+      },
+      {
+        "kind": "key",
+        "atMs": 42174
+      },
+      {
+        "kind": "key",
+        "atMs": 42274
+      },
+      {
+        "kind": "key",
+        "atMs": 42374
+      },
+      {
+        "kind": "key",
+        "atMs": 42474
+      },
+      {
+        "kind": "key",
+        "atMs": 42575
+      },
+      {
+        "kind": "key",
+        "atMs": 42675
+      },
+      {
+        "kind": "key",
+        "atMs": 42774
+      },
+      {
+        "kind": "key",
+        "atMs": 42873
+      },
+      {
+        "kind": "key",
+        "atMs": 42973
+      },
+      {
+        "kind": "key",
+        "atMs": 43073
+      },
+      {
+        "kind": "key",
+        "atMs": 43173
+      },
+      {
+        "kind": "key",
+        "atMs": 43273
+      },
+      {
+        "kind": "key",
+        "atMs": 43375
+      },
+      {
+        "kind": "key",
+        "atMs": 43478
+      },
+      {
+        "kind": "key",
+        "atMs": 43581
+      },
+      {
+        "kind": "key",
+        "atMs": 43680
+      },
+      {
+        "kind": "key",
+        "atMs": 43783
+      },
+      {
+        "kind": "key",
+        "atMs": 43886
+      },
+      {
+        "kind": "key",
+        "atMs": 43988
+      },
+      {
+        "kind": "key",
+        "atMs": 44088
+      },
+      {
+        "kind": "key",
+        "atMs": 44195
+      },
+      {
+        "kind": "key",
+        "atMs": 44301
+      },
+      {
+        "kind": "click",
+        "atMs": 45100
+      },
+      {
+        "kind": "key",
+        "atMs": 45408
+      },
+      {
+        "kind": "key",
+        "atMs": 45507
+      },
+      {
+        "kind": "key",
+        "atMs": 45610
+      },
+      {
+        "kind": "key",
+        "atMs": 45712
+      },
+      {
+        "kind": "key",
+        "atMs": 45812
+      },
+      {
+        "kind": "key",
+        "atMs": 45913
+      },
+      {
+        "kind": "key",
+        "atMs": 46014
+      },
+      {
+        "kind": "key",
+        "atMs": 46115
+      },
+      {
+        "kind": "key",
+        "atMs": 46215
+      },
+      {
+        "kind": "key",
+        "atMs": 46316
+      },
+      {
+        "kind": "key",
+        "atMs": 46417
+      },
+      {
+        "kind": "key",
+        "atMs": 46517
+      },
+      {
+        "kind": "key",
+        "atMs": 46618
+      },
+      {
+        "kind": "click",
+        "atMs": 51667
+      }
+    ]
+  },
+  {
+    "id": "questions",
+    "startMs": 56605,
+    "sentences": [
+      {
+        "text": "L’association a ajouté ses questions.",
+        "startMs": 564,
+        "endMs": 2149,
+        "method": "silence",
+        "absoluteStartMs": 57169
+      },
+      {
+        "text": "La taille de t-shirt est obligatoire, tandis que le régime alimentaire et le permis sont facultatifs.",
+        "startMs": 3099,
+        "endMs": 7758,
+        "method": "silence",
+        "absoluteStartMs": 59704
+      },
+      {
+        "text": "Réponds seulement avec des informations utiles à l’organisation.",
+        "startMs": 8718,
+        "endMs": 11474,
+        "method": "silence",
+        "absoluteStartMs": 65323
+      },
+      {
+        "text": "Le commentaire permet de préciser un point pratique, par exemple un besoin de pause ;",
+        "startMs": 12533,
+        "endMs": 16123,
+        "method": "silence",
+        "absoluteStartMs": 69138
+      },
+      {
+        "text": "il ne remplace pas une discussion urgente avec l’équipe.",
+        "startMs": 16905,
+        "endMs": 19159,
+        "method": "silence",
+        "absoluteStartMs": 73510
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 57066
+      },
+      {
+        "kind": "click",
+        "atMs": 61883
+      },
+      {
+        "kind": "key",
+        "atMs": 62190
+      },
+      {
+        "kind": "key",
+        "atMs": 62389
+      },
+      {
+        "kind": "key",
+        "atMs": 62588
+      },
+      {
+        "kind": "key",
+        "atMs": 62688
+      },
+      {
+        "kind": "key",
+        "atMs": 62792
+      },
+      {
+        "kind": "key",
+        "atMs": 62892
+      },
+      {
+        "kind": "key",
+        "atMs": 62996
+      },
+      {
+        "kind": "key",
+        "atMs": 63099
+      },
+      {
+        "kind": "click",
+        "atMs": 66650
+      },
+      {
+        "kind": "key",
+        "atMs": 66957
+      },
+      {
+        "kind": "key",
+        "atMs": 67057
+      },
+      {
+        "kind": "key",
+        "atMs": 67158
+      },
+      {
+        "kind": "key",
+        "atMs": 67258
+      },
+      {
+        "kind": "key",
+        "atMs": 67359
+      },
+      {
+        "kind": "key",
+        "atMs": 67458
+      },
+      {
+        "kind": "key",
+        "atMs": 67558
+      },
+      {
+        "kind": "key",
+        "atMs": 67658
+      },
+      {
+        "kind": "click",
+        "atMs": 70616
+      },
+      {
+        "kind": "key",
+        "atMs": 70923
+      },
+      {
+        "kind": "key",
+        "atMs": 71021
+      },
+      {
+        "kind": "key",
+        "atMs": 71121
+      },
+      {
+        "kind": "key",
+        "atMs": 71221
+      },
+      {
+        "kind": "key",
+        "atMs": 71321
+      },
+      {
+        "kind": "key",
+        "atMs": 71526
+      },
+      {
+        "kind": "key",
+        "atMs": 71624
+      },
+      {
+        "kind": "key",
+        "atMs": 71725
+      },
+      {
+        "kind": "key",
+        "atMs": 71824
+      },
+      {
+        "kind": "key",
+        "atMs": 71924
+      },
+      {
+        "kind": "key",
+        "atMs": 72025
+      },
+      {
+        "kind": "key",
+        "atMs": 72126
+      },
+      {
+        "kind": "key",
+        "atMs": 72227
+      },
+      {
+        "kind": "key",
+        "atMs": 72330
+      },
+      {
+        "kind": "key",
+        "atMs": 72438
+      },
+      {
+        "kind": "key",
+        "atMs": 72542
+      },
+      {
+        "kind": "key",
+        "atMs": 72644
+      },
+      {
+        "kind": "key",
+        "atMs": 72744
+      },
+      {
+        "kind": "key",
+        "atMs": 72843
+      },
+      {
+        "kind": "key",
+        "atMs": 72943
+      },
+      {
+        "kind": "key",
+        "atMs": 73044
+      },
+      {
+        "kind": "key",
+        "atMs": 73144
+      },
+      {
+        "kind": "key",
+        "atMs": 73244
+      },
+      {
+        "kind": "key",
+        "atMs": 73345
+      },
+      {
+        "kind": "key",
+        "atMs": 73446
+      },
+      {
+        "kind": "key",
+        "atMs": 73545
+      },
+      {
+        "kind": "key",
+        "atMs": 73646
+      },
+      {
+        "kind": "key",
+        "atMs": 73747
+      },
+      {
+        "kind": "key",
+        "atMs": 73848
+      },
+      {
+        "kind": "key",
+        "atMs": 73948
+      },
+      {
+        "kind": "key",
+        "atMs": 74049
+      },
+      {
+        "kind": "key",
+        "atMs": 74157
+      },
+      {
+        "kind": "key",
+        "atMs": 74260
+      },
+      {
+        "kind": "key",
+        "atMs": 74365
+      }
+    ]
+  },
+  {
+    "id": "agreement",
+    "startMs": 76903,
+    "sentences": [
+      {
+        "text": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement, puis accepte-la si elle te convient.",
+        "startMs": 605,
+        "endMs": 5611,
+        "method": "silence",
+        "absoluteStartMs": 77508
+      },
+      {
+        "text": "Le consentement sur les données est une case distincte :",
+        "startMs": 6735,
+        "endMs": 8910,
+        "method": "silence",
+        "absoluteStartMs": 83638
+      },
+      {
+        "text": "il concerne leur utilisation pour cet événement.",
+        "startMs": 9385,
+        "endMs": 11409,
+        "method": "silence",
+        "absoluteStartMs": 86288
+      },
+      {
+        "text": "Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+        "startMs": 12540,
+        "endMs": 16343,
+        "method": "silence",
+        "absoluteStartMs": 89443
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 77983
+      },
+      {
+        "kind": "click",
+        "atMs": 84799
+      },
+      {
+        "kind": "click",
+        "atMs": 89915
+      }
+    ]
+  },
+  {
+    "id": "recap",
+    "startMs": 94257,
+    "sentences": [
+      {
+        "text": "Relis maintenant les jours et les heures.",
+        "startMs": 548,
+        "endMs": 2276,
+        "method": "silence",
+        "absoluteStartMs": 94805
+      },
+      {
+        "text": "Le créneau de nuit dit explicitement fin le lendemain.",
+        "startMs": 3096,
+        "endMs": 5693,
+        "method": "silence",
+        "absoluteStartMs": 97353
+      },
+      {
+        "text": "Les intervalles montrent où se trouvent les pauses.",
+        "startMs": 6726,
+        "endMs": 8580,
+        "method": "silence",
+        "absoluteStartMs": 100983
+      },
+      {
+        "text": "Les lieux, consignes et liens de carte restent accessibles, mais les coordonnées personnelles du contact ne sont fournies qu’après inscription.",
+        "startMs": 9591,
+        "endMs": 15809,
+        "method": "silence",
+        "absoluteStartMs": 103848
+      },
+      {
+        "text": "En bas, Transmis à l’organisation énumère les données et les questions auxquelles tu as répondu.",
+        "startMs": 16438,
+        "endMs": 21670,
+        "method": "silence",
+        "absoluteStartMs": 110695
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "workload",
+    "startMs": 116843,
+    "sentences": [
+      {
+        "text": "Ce planning affiche Journée chargée :",
+        "startMs": 492,
+        "endMs": 2890,
+        "method": "silence",
+        "absoluteStartMs": 117335
+      },
+      {
+        "text": "Accueil et Logistique font neuf heures d’affilée, sans une pause de trente minutes, et la nuit ajoute encore quatre heures.",
+        "startMs": 3420,
+        "endMs": 9680,
+        "method": "silence",
+        "absoluteStartMs": 120263
+      },
+      {
+        "text": "L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation.",
+        "startMs": 10897,
+        "endMs": 16290,
+        "method": "silence",
+        "absoluteStartMs": 127740
+      },
+      {
+        "text": "Pour alléger, reviens au planning et retire Logistique :",
+        "startMs": 16690,
+        "endMs": 19535,
+        "method": "silence",
+        "absoluteStartMs": 133533
+      },
+      {
+        "text": "les horaires sont recalculés immédiatement.",
+        "startMs": 20209,
+        "endMs": 23096,
+        "method": "silence",
+        "absoluteStartMs": 137052
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 133996
+      },
+      {
+        "kind": "click",
+        "atMs": 134781
+      },
+      {
+        "kind": "click",
+        "atMs": 135564
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "startMs": 140394,
+    "sentences": [
+      {
+        "text": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit.",
+        "startMs": 0,
+        "endMs": 4715,
+        "method": "silence",
+        "absoluteStartMs": 140394
+      },
+      {
+        "text": "Les informations saisies sont conservées.",
+        "startMs": 5747,
+        "endMs": 7308,
+        "method": "silence",
+        "absoluteStartMs": 146141
+      },
+      {
+        "text": "Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription.",
+        "startMs": 8369,
+        "endMs": 13890,
+        "method": "silence",
+        "absoluteStartMs": 148763
+      },
+      {
+        "text": "Dans cette démonstration, nous restons juste avant ce bouton :",
+        "startMs": 14509,
+        "endMs": 17479,
+        "method": "silence",
+        "absoluteStartMs": 154903
+      },
+      {
+        "text": "rien n’a été envoyé.",
+        "startMs": 17941,
+        "endMs": 18820,
+        "method": "silence",
+        "absoluteStartMs": 158335
+      }
+    ],
+    "inputs": []
+  }
+]

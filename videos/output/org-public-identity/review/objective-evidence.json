@@ -1,0 +1,191 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 10,
+    "key": 33
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "names",
+      "phrase": "Le titre de la page",
+      "startMs": 8077,
+      "endMs": 10640,
+      "cueMs": 23315,
+      "sentenceAbsoluteMs": 23314,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 26870
+      },
+      "deltaMs": 3556
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Remplaçons-le par Les bénévoles des",
+      "startMs": 11162,
+      "endMs": 15299,
+      "cueMs": 26403,
+      "sentenceAbsoluteMs": 26399,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 26870
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "names",
+      "phrase": "Le message Titre enregistré confirme",
+      "startMs": 16397,
+      "endMs": 19283,
+      "cueMs": 31701,
+      "sentenceAbsoluteMs": 31634,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 32169
+      },
+      "deltaMs": 535
+    },
+    {
+      "segmentId": "logo",
+      "phrase": "L’image enregistrée apparaît dans les",
+      "startMs": 9031,
+      "endMs": 12838,
+      "cueMs": 46559,
+      "sentenceAbsoluteMs": 46556,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 47054
+      },
+      "deltaMs": 498
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Si vous changez l’identifiant alors",
+      "startMs": 10162,
+      "endMs": 14679,
+      "cueMs": 65986,
+      "sentenceAbsoluteMs": 65983,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 66486
+      },
+      "deltaMs": 503
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79049,
+      "sentenceAbsoluteMs": 79043,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 79518
+      },
+      "deltaMs": 475
+    },
+    {
+      "segmentId": "slug",
+      "phrase": "Ici, gardons l’adresse actuelle.",
+      "startMs": 23222,
+      "endMs": 24973,
+      "cueMs": 79828,
+      "sentenceAbsoluteMs": 79043,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "elle est publiée, mais non",
+      "startMs": 9586,
+      "endMs": 11448,
+      "cueMs": 92533,
+      "sentenceAbsoluteMs": 92531,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "public-page",
+      "phrase": "Ouvrons son lien direct pour",
+      "startMs": 12097,
+      "endMs": 15508,
+      "cueMs": 95044,
+      "sentenceAbsoluteMs": 95042,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "event-result",
+      "phrase": "On peut donc réutiliser la",
+      "startMs": 10085,
+      "endMs": 14654,
+      "cueMs": 113225,
+      "sentenceAbsoluteMs": 113223,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Pour retirer le logo, revenez",
+      "startMs": 183,
+      "endMs": 5451,
+      "cueMs": 119492,
+      "sentenceAbsoluteMs": 118431,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 119998
+      },
+      "deltaMs": 1567
+    },
+    {
+      "segmentId": "remove-logo",
+      "phrase": "Après validation, l’image disparaît des",
+      "startMs": 8232,
+      "endMs": 13968,
+      "cueMs": 126481,
+      "sentenceAbsoluteMs": 126480,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 126945
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ces réglages sont réservés au",
+      "startMs": 8043,
+      "endMs": 11791,
+      "cueMs": 144874,
+      "sentenceAbsoluteMs": 144873,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un texte visible",
+      "startMs": 12521,
+      "endMs": 19352,
+      "cueMs": 149353,
+      "sentenceAbsoluteMs": 149351,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

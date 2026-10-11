@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:34:50.899Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "5d74363a5eca7b8de7b7afdb462ec98148b2dc1cac8337f93aac09c9b7fb8905",
+  "clipSha256": "1bfab1ef7fcf349ce825c8e4209e241c349ce79933057f6ae43189f72c5513df",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Ton lien personnel permet de retrouver",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Ici, Camille a une place confirmée",
+        "visibleSeconds": 3,
+        "visible": "Identité Camille Rochat et créneau Accueil confirmé visibles après disparition du bandeau d'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "une inscription en attente",
+        "visibleSeconds": 3,
+        "visible": "Créneau Buvette avec statut 'Liste d'attente : position 1' affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "une place proposée et une demande à valider",
+        "visibleSeconds": 9.2,
+        "visible": "Éléments non visibles à l'écran, coupés sous la ligne de flottaison sans défilement",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:09, la place proposée et la demande à valider mentionnées par la voix ne sont pas visibles à l'écran (hors champ en bas de page)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, articulée et fluide, enregistrement propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

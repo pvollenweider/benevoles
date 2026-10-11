@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: VOLUNTEER_FORM_RECAP
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.3 / 18.3 LU. Effects vs input events: {'click': 20, 'key': 96}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: Continuer31.051 late vs sentence29.283 (form only shown34.94). T-shirt57.066 early vs59.704; birth date51.667 late vs49.404, blank49.00frame. Comment70.616 vs69.138. Other chapters including night/charged-day/return retained values/final unsent state align. All48frames reviewed; French12.06.1994, current labels, no forbidden address/overlay; all ASR/VTT/effects20click96key/validate/music14.3–18.3 pass.
+Local source changes: record.ts sentence anchors for Continuer, birth date, t-shirt, comment. Audio reused; no re-film.
+Real-time subjective listening unavailable; not used as a failure reason.

@@ -1,0 +1,9 @@
+{
+  "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "Narrated capture aborted: basics scene overruns 9.421 s narration by 7.383 s. Rehearsal passes; no final MP4 or final music/sync checks. Batch-3 narration accepted unchanged.",
+  "sourceChanges": "videos/tools/record.ts basics: sentence anchor Donne-lui un nom clair; visible field fills with 200 ms pauses replace slow typing and 1100 ms date pauses. No refilm."
+}

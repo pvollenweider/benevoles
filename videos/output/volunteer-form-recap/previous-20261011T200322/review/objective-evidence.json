@@ -1,0 +1,901 @@
+{
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 20,
+  "keys": 96,
+  "product": {
+    "commit": "d1482d273bc0c97c3efff59e76dc57205e0a2995",
+    "sourceTree": "bf998a3b71fbdcd75dc6dc6c63191527e8e0b4db",
+    "productSourceSha256": "a798dee696972458140d858238f325792b4d9e70e1fad63591962a86a2728c88",
+    "buildId": "Ur_-usFFdKv05dBCDAbrt",
+    "snapshot": "/tmp/benevoles-video-production.batch5",
+    "builtAt": "2026-10-11T17:39:39.504Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 0,
+      "endMs": 18125,
+      "sentences": [
+        {
+          "text": "Le formulaire sert à transmettre les bonnes informations à l’association et à vérifier ton engagement avant de confirmer.",
+          "startMs": 309,
+          "endMs": 6239,
+          "method": "silence",
+          "globalStartMs": 309,
+          "globalEndMs": 6239
+        },
+        {
+          "text": "Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé.",
+          "startMs": 7176,
+          "endMs": 13629,
+          "method": "silence",
+          "globalStartMs": 7176,
+          "globalEndMs": 13629
+        },
+        {
+          "text": "Prends ton temps :",
+          "startMs": 14364,
+          "endMs": 14811,
+          "method": "silence",
+          "globalStartMs": 14364,
+          "globalEndMs": 14811
+        },
+        {
+          "text": "aucune inscription ne part pendant la saisie.",
+          "startMs": 15351,
+          "endMs": 17321,
+          "method": "silence",
+          "globalStartMs": 15351,
+          "globalEndMs": 17321
+        }
+      ],
+      "anchors": [],
+      "inputs": []
+    },
+    {
+      "scene": "selection",
+      "startMs": 18577,
+      "endMs": 37829,
+      "sentences": [
+        {
+          "text": "Voici quatre missions :",
+          "startMs": 804,
+          "endMs": 1833,
+          "method": "silence",
+          "globalStartMs": 19381,
+          "globalEndMs": 20410
+        },
+        {
+          "text": "Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche.",
+          "startMs": 2506,
+          "endMs": 9399,
+          "method": "silence",
+          "globalStartMs": 21083,
+          "globalEndMs": 27976
+        },
+        {
+          "text": "Le bouton Continuer ouvre le formulaire avec ce choix.",
+          "startMs": 10705,
+          "endMs": 11783,
+          "method": "silence",
+          "globalStartMs": 29282,
+          "globalEndMs": 30360
+        },
+        {
+          "text": "Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+          "startMs": 12008,
+          "endMs": 18550,
+          "method": "silence",
+          "globalStartMs": 30585,
+          "globalEndMs": 37127
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "selection",
+          "phrase": "Le récapitulatif les classe dans",
+          "startMs": 12008,
+          "endMs": 18550,
+          "cueMs": 30587
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 19055
+        },
+        {
+          "kind": "click",
+          "atMs": 20638
+        },
+        {
+          "kind": "click",
+          "atMs": 22222
+        },
+        {
+          "kind": "click",
+          "atMs": 23803
+        },
+        {
+          "kind": "click",
+          "atMs": 31054
+        }
+      ]
+    },
+    {
+      "scene": "identity",
+      "startMs": 38282,
+      "endMs": 56152,
+      "sentences": [
+        {
+          "text": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email :",
+          "startMs": 708,
+          "endMs": 4518,
+          "method": "silence",
+          "globalStartMs": 38990,
+          "globalEndMs": 42800
+        },
+        {
+          "text": "la confirmation et le lien personnel arriveront là.",
+          "startMs": 4884,
+          "endMs": 7138,
+          "method": "silence",
+          "globalStartMs": 43166,
+          "globalEndMs": 45420
+        },
+        {
+          "text": "Le téléphone est obligatoire pour cet événement.",
+          "startMs": 8125,
+          "endMs": 9916,
+          "method": "silence",
+          "globalStartMs": 46407,
+          "globalEndMs": 48198
+        },
+        {
+          "text": "La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum ;",
+          "startMs": 11123,
+          "endMs": 14545,
+          "method": "silence",
+          "globalStartMs": 49405,
+          "globalEndMs": 52827
+        },
+        {
+          "text": "elle permet de vérifier l’âge à la date de la mission.",
+          "startMs": 15236,
+          "endMs": 17306,
+          "method": "silence",
+          "globalStartMs": 53518,
+          "globalEndMs": 55588
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 38786
+        },
+        {
+          "kind": "key",
+          "atMs": 39095
+        },
+        {
+          "kind": "key",
+          "atMs": 39195
+        },
+        {
+          "kind": "key",
+          "atMs": 39296
+        },
+        {
+          "kind": "key",
+          "atMs": 39397
+        },
+        {
+          "kind": "click",
+          "atMs": 40202
+        },
+        {
+          "kind": "key",
+          "atMs": 40510
+        },
+        {
+          "kind": "key",
+          "atMs": 40609
+        },
+        {
+          "kind": "key",
+          "atMs": 40709
+        },
+        {
+          "kind": "key",
+          "atMs": 40809
+        },
+        {
+          "kind": "key",
+          "atMs": 40909
+        },
+        {
+          "kind": "key",
+          "atMs": 41010
+        },
+        {
+          "kind": "click",
+          "atMs": 41820
+        },
+        {
+          "kind": "key",
+          "atMs": 42127
+        },
+        {
+          "kind": "key",
+          "atMs": 42226
+        },
+        {
+          "kind": "key",
+          "atMs": 42327
+        },
+        {
+          "kind": "key",
+          "atMs": 42427
+        },
+        {
+          "kind": "key",
+          "atMs": 42527
+        },
+        {
+          "kind": "key",
+          "atMs": 42627
+        },
+        {
+          "kind": "key",
+          "atMs": 42728
+        },
+        {
+          "kind": "key",
+          "atMs": 42828
+        },
+        {
+          "kind": "key",
+          "atMs": 42929
+        },
+        {
+          "kind": "key",
+          "atMs": 43030
+        },
+        {
+          "kind": "key",
+          "atMs": 43130
+        },
+        {
+          "kind": "key",
+          "atMs": 43232
+        },
+        {
+          "kind": "key",
+          "atMs": 43330
+        },
+        {
+          "kind": "key",
+          "atMs": 43433
+        },
+        {
+          "kind": "key",
+          "atMs": 43534
+        },
+        {
+          "kind": "key",
+          "atMs": 43637
+        },
+        {
+          "kind": "key",
+          "atMs": 43743
+        },
+        {
+          "kind": "key",
+          "atMs": 43845
+        },
+        {
+          "kind": "key",
+          "atMs": 43947
+        },
+        {
+          "kind": "key",
+          "atMs": 44050
+        },
+        {
+          "kind": "key",
+          "atMs": 44154
+        },
+        {
+          "kind": "key",
+          "atMs": 44258
+        },
+        {
+          "kind": "key",
+          "atMs": 44361
+        },
+        {
+          "kind": "click",
+          "atMs": 45168
+        },
+        {
+          "kind": "key",
+          "atMs": 45476
+        },
+        {
+          "kind": "key",
+          "atMs": 45576
+        },
+        {
+          "kind": "key",
+          "atMs": 45675
+        },
+        {
+          "kind": "key",
+          "atMs": 45776
+        },
+        {
+          "kind": "key",
+          "atMs": 45877
+        },
+        {
+          "kind": "key",
+          "atMs": 45977
+        },
+        {
+          "kind": "key",
+          "atMs": 46077
+        },
+        {
+          "kind": "key",
+          "atMs": 46177
+        },
+        {
+          "kind": "key",
+          "atMs": 46277
+        },
+        {
+          "kind": "key",
+          "atMs": 46378
+        },
+        {
+          "kind": "key",
+          "atMs": 46480
+        },
+        {
+          "kind": "key",
+          "atMs": 46580
+        },
+        {
+          "kind": "key",
+          "atMs": 46681
+        },
+        {
+          "kind": "click",
+          "atMs": 51670
+        }
+      ]
+    },
+    {
+      "scene": "questions",
+      "startMs": 56604,
+      "endMs": 76450,
+      "sentences": [
+        {
+          "text": "L’association a ajouté ses questions.",
+          "startMs": 564,
+          "endMs": 2149,
+          "method": "silence",
+          "globalStartMs": 57168,
+          "globalEndMs": 58753
+        },
+        {
+          "text": "La taille de t-shirt est obligatoire, tandis que le régime alimentaire et le permis sont facultatifs.",
+          "startMs": 3099,
+          "endMs": 7758,
+          "method": "silence",
+          "globalStartMs": 59703,
+          "globalEndMs": 64362
+        },
+        {
+          "text": "Réponds seulement avec des informations utiles à l’organisation.",
+          "startMs": 8718,
+          "endMs": 11474,
+          "method": "silence",
+          "globalStartMs": 65322,
+          "globalEndMs": 68078
+        },
+        {
+          "text": "Le commentaire permet de préciser un point pratique, par exemple un besoin de pause ;",
+          "startMs": 12533,
+          "endMs": 16123,
+          "method": "silence",
+          "globalStartMs": 69137,
+          "globalEndMs": 72727
+        },
+        {
+          "text": "il ne remplace pas une discussion urgente avec l’équipe.",
+          "startMs": 16905,
+          "endMs": 19159,
+          "method": "silence",
+          "globalStartMs": 73509,
+          "globalEndMs": 75763
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 57069
+        },
+        {
+          "kind": "click",
+          "atMs": 61869
+        },
+        {
+          "kind": "key",
+          "atMs": 62176
+        },
+        {
+          "kind": "key",
+          "atMs": 62376
+        },
+        {
+          "kind": "key",
+          "atMs": 62577
+        },
+        {
+          "kind": "key",
+          "atMs": 62678
+        },
+        {
+          "kind": "key",
+          "atMs": 62781
+        },
+        {
+          "kind": "key",
+          "atMs": 62886
+        },
+        {
+          "kind": "key",
+          "atMs": 62989
+        },
+        {
+          "kind": "key",
+          "atMs": 63094
+        },
+        {
+          "kind": "click",
+          "atMs": 66651
+        },
+        {
+          "kind": "key",
+          "atMs": 66958
+        },
+        {
+          "kind": "key",
+          "atMs": 67059
+        },
+        {
+          "kind": "key",
+          "atMs": 67159
+        },
+        {
+          "kind": "key",
+          "atMs": 67259
+        },
+        {
+          "kind": "key",
+          "atMs": 67360
+        },
+        {
+          "kind": "key",
+          "atMs": 67460
+        },
+        {
+          "kind": "key",
+          "atMs": 67560
+        },
+        {
+          "kind": "key",
+          "atMs": 67660
+        },
+        {
+          "kind": "click",
+          "atMs": 70601
+        },
+        {
+          "kind": "key",
+          "atMs": 70908
+        },
+        {
+          "kind": "key",
+          "atMs": 71007
+        },
+        {
+          "kind": "key",
+          "atMs": 71108
+        },
+        {
+          "kind": "key",
+          "atMs": 71209
+        },
+        {
+          "kind": "key",
+          "atMs": 71309
+        },
+        {
+          "kind": "key",
+          "atMs": 71514
+        },
+        {
+          "kind": "key",
+          "atMs": 71614
+        },
+        {
+          "kind": "key",
+          "atMs": 71717
+        },
+        {
+          "kind": "key",
+          "atMs": 71819
+        },
+        {
+          "kind": "key",
+          "atMs": 71919
+        },
+        {
+          "kind": "key",
+          "atMs": 72017
+        },
+        {
+          "kind": "key",
+          "atMs": 72117
+        },
+        {
+          "kind": "key",
+          "atMs": 72216
+        },
+        {
+          "kind": "key",
+          "atMs": 72316
+        },
+        {
+          "kind": "key",
+          "atMs": 72416
+        },
+        {
+          "kind": "key",
+          "atMs": 72516
+        },
+        {
+          "kind": "key",
+          "atMs": 72619
+        },
+        {
+          "kind": "key",
+          "atMs": 72724
+        },
+        {
+          "kind": "key",
+          "atMs": 72831
+        },
+        {
+          "kind": "key",
+          "atMs": 72933
+        },
+        {
+          "kind": "key",
+          "atMs": 73034
+        },
+        {
+          "kind": "key",
+          "atMs": 73134
+        },
+        {
+          "kind": "key",
+          "atMs": 73234
+        },
+        {
+          "kind": "key",
+          "atMs": 73335
+        },
+        {
+          "kind": "key",
+          "atMs": 73437
+        },
+        {
+          "kind": "key",
+          "atMs": 73542
+        },
+        {
+          "kind": "key",
+          "atMs": 73646
+        },
+        {
+          "kind": "key",
+          "atMs": 73750
+        },
+        {
+          "kind": "key",
+          "atMs": 73854
+        },
+        {
+          "kind": "key",
+          "atMs": 73960
+        },
+        {
+          "kind": "key",
+          "atMs": 74069
+        },
+        {
+          "kind": "key",
+          "atMs": 74168
+        },
+        {
+          "kind": "key",
+          "atMs": 74270
+        },
+        {
+          "kind": "key",
+          "atMs": 74376
+        }
+      ]
+    },
+    {
+      "scene": "agreement",
+      "startMs": 76901,
+      "endMs": 93795,
+      "sentences": [
+        {
+          "text": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement, puis accepte-la si elle te convient.",
+          "startMs": 605,
+          "endMs": 5611,
+          "method": "silence",
+          "globalStartMs": 77506,
+          "globalEndMs": 82512
+        },
+        {
+          "text": "Le consentement sur les données est une case distincte :",
+          "startMs": 6735,
+          "endMs": 8910,
+          "method": "silence",
+          "globalStartMs": 83636,
+          "globalEndMs": 85811
+        },
+        {
+          "text": "il concerne leur utilisation pour cet événement.",
+          "startMs": 9385,
+          "endMs": 11409,
+          "method": "silence",
+          "globalStartMs": 86286,
+          "globalEndMs": 88310
+        },
+        {
+          "text": "Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+          "startMs": 12540,
+          "endMs": 16343,
+          "method": "silence",
+          "globalStartMs": 89441,
+          "globalEndMs": 93244
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "agreement",
+          "phrase": "Lire puis cocher ces deux",
+          "startMs": 12540,
+          "endMs": 16343,
+          "cueMs": 89442
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 77368
+        },
+        {
+          "kind": "click",
+          "atMs": 84802
+        },
+        {
+          "kind": "click",
+          "atMs": 89917
+        }
+      ]
+    },
+    {
+      "scene": "recap",
+      "startMs": 94247,
+      "endMs": 116379,
+      "sentences": [
+        {
+          "text": "Relis maintenant les jours et les heures.",
+          "startMs": 548,
+          "endMs": 2276,
+          "method": "silence",
+          "globalStartMs": 94795,
+          "globalEndMs": 96523
+        },
+        {
+          "text": "Le créneau de nuit dit explicitement fin le lendemain.",
+          "startMs": 3096,
+          "endMs": 5693,
+          "method": "silence",
+          "globalStartMs": 97343,
+          "globalEndMs": 99940
+        },
+        {
+          "text": "Les intervalles montrent où se trouvent les pauses.",
+          "startMs": 6726,
+          "endMs": 8580,
+          "method": "silence",
+          "globalStartMs": 100973,
+          "globalEndMs": 102827
+        },
+        {
+          "text": "Les lieux, consignes et liens de carte restent accessibles, mais les coordonnées personnelles du contact ne sont fournies qu’après inscription.",
+          "startMs": 9591,
+          "endMs": 15809,
+          "method": "silence",
+          "globalStartMs": 103838,
+          "globalEndMs": 110056
+        },
+        {
+          "text": "En bas, Transmis à l’organisation énumère les données et les questions auxquelles tu as répondu.",
+          "startMs": 16438,
+          "endMs": 21670,
+          "method": "silence",
+          "globalStartMs": 110685,
+          "globalEndMs": 115917
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "recap",
+          "phrase": "Les lieux, consignes et liens",
+          "startMs": 9591,
+          "endMs": 15809,
+          "cueMs": 103838
+        },
+        {
+          "segmentId": "recap",
+          "phrase": "En bas, Transmis à l’organisation",
+          "startMs": 16438,
+          "endMs": 21670,
+          "cueMs": 110686
+        }
+      ],
+      "inputs": []
+    },
+    {
+      "scene": "workload",
+      "startMs": 116831,
+      "endMs": 139927,
+      "sentences": [
+        {
+          "text": "Ce planning affiche Journée chargée :",
+          "startMs": 492,
+          "endMs": 2890,
+          "method": "silence",
+          "globalStartMs": 117323,
+          "globalEndMs": 119721
+        },
+        {
+          "text": "Accueil et Logistique font neuf heures d’affilée, sans une pause de trente minutes, et la nuit ajoute encore quatre heures.",
+          "startMs": 3420,
+          "endMs": 9680,
+          "method": "silence",
+          "globalStartMs": 120251,
+          "globalEndMs": 126511
+        },
+        {
+          "text": "L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation.",
+          "startMs": 10897,
+          "endMs": 16290,
+          "method": "silence",
+          "globalStartMs": 127728,
+          "globalEndMs": 133121
+        },
+        {
+          "text": "Pour alléger, reviens au planning et retire Logistique :",
+          "startMs": 16690,
+          "endMs": 19535,
+          "method": "silence",
+          "globalStartMs": 133521,
+          "globalEndMs": 136366
+        },
+        {
+          "text": "les horaires sont recalculés immédiatement.",
+          "startMs": 20209,
+          "endMs": 23096,
+          "method": "silence",
+          "globalStartMs": 137040,
+          "globalEndMs": 139927
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "workload",
+          "phrase": "Pour alléger, reviens au planning",
+          "startMs": 16690,
+          "endMs": 19535,
+          "cueMs": 133523
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 128850
+        },
+        {
+          "kind": "click",
+          "atMs": 133999
+        },
+        {
+          "kind": "click",
+          "atMs": 134782
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 140379,
+      "endMs": 159540,
+      "sentences": [
+        {
+          "text": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit.",
+          "startMs": 0,
+          "endMs": 4715,
+          "method": "silence",
+          "globalStartMs": 140379,
+          "globalEndMs": 145094
+        },
+        {
+          "text": "Les informations saisies sont conservées.",
+          "startMs": 5747,
+          "endMs": 7308,
+          "method": "silence",
+          "globalStartMs": 146126,
+          "globalEndMs": 147687
+        },
+        {
+          "text": "Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription.",
+          "startMs": 8369,
+          "endMs": 13890,
+          "method": "silence",
+          "globalStartMs": 148748,
+          "globalEndMs": 154269
+        },
+        {
+          "text": "Dans cette démonstration, nous restons juste avant ce bouton :",
+          "startMs": 14509,
+          "endMs": 17479,
+          "method": "silence",
+          "globalStartMs": 154888,
+          "globalEndMs": 157858
+        },
+        {
+          "text": "rien n’a été envoyé.",
+          "startMs": 17941,
+          "endMs": 18820,
+          "method": "silence",
+          "globalStartMs": 158320,
+          "globalEndMs": 159199
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "result",
+          "phrase": "Les informations saisies sont conservées.",
+          "startMs": 5747,
+          "endMs": 7308,
+          "cueMs": 146128
+        }
+      ],
+      "inputs": []
+    }
+  ]
+}

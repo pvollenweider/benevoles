@@ -1,0 +1,8 @@
+STATUS: READY
+ID: ORG_PUBLIC_IDENTITY
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.4 / 19.8 LU. Effects vs input events: {'click': 10, 'key': 33}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: Reprise unique acceptée ; saisie 26.870 s vs phrase 26.399, confirmation de retrait visible durant sa phrase, validation 126.945 vs 126.480. Images réelles et preuves phrase/action revues ; adresse publique configurée, avertissements, événement non répertorié et retrait effectif conformes. Musique, ASR final, sous-titres et effets passent.
+Local source changes: Ancres de phrase pour saisie, ouverture et validation du retrait dans record.ts. Narration réutilisée avec recoupe au silence réel result=131.368646, audit indépendant réussi.
+Real-time subjective listening unavailable; not used as a failure reason.

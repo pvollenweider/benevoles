@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur la page de l’événement, tu retrouves les horaires, les postes",
+  "windowStart": 1.0309999999999988,
+  "result": {
+    "found": true,
+    "startSeconds": 8.4,
+    "wordsHeard": "Sur la page de l'événement tu retrouves les horaires les postes"
+  },
+  "onset": 9.431,
+  "proposedCut": 9.5310835,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: VOLUNTEER_REGISTER
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 42 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.3 / 18.2 LU. Effects vs input events: {'click': 10, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: One accepted re-film fixes4.34s coordinate-entry overrun. All42MP4frames reviewed: correct15h–18hselection/fields/consent/success, confirmationclick41.794 aligns sentence41.332; but recap instruction37.502 occurs with onlybottomform visible37.72–40.48. Source cadrage fixed after one re-film; no further take. Final7ASR0%, VTT/effects10clicks/Frenchlabels/dates/no forbiddenhostoverlay/validate/music14.3–18.2 pass.
+Local source changes: Cache rejected by generation fingerprint: newcontinuousTTS; firstgeneration splitfailed, secondgeneration sixboundariesrecut and independentlyaudited0%. record.ts fourshortvisiblefills and confirmationanchor for acceptedone-refilm; then recapscroll sentenceanchor added for nextbatch.
+Real-time subjective listening unavailable; not used as a failure reason.

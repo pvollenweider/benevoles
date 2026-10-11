@@ -1,0 +1,70 @@
+{
+  "id": "ORG_TIMEZONE_CHARTER",
+  "slug": "org-timezone-charter",
+  "validatedAt": "2026-10-11T22:56:04.916Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Charon",
+  "captureMs": 130480,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 11202,
+      "audioMs": 11200,
+      "driftMs": 2
+    },
+    {
+      "id": "timezone",
+      "visualMs": 14133,
+      "audioMs": 14130,
+      "driftMs": 3
+    },
+    {
+      "id": "timezone-result",
+      "visualMs": 11913,
+      "audioMs": 11911,
+      "driftMs": 2
+    },
+    {
+      "id": "charter",
+      "visualMs": 22955,
+      "audioMs": 22952,
+      "driftMs": 3
+    },
+    {
+      "id": "public-setup",
+      "visualMs": 13164,
+      "audioMs": 13162,
+      "driftMs": 2
+    },
+    {
+      "id": "public-result",
+      "visualMs": 13824,
+      "audioMs": 13822,
+      "driftMs": 2
+    },
+    {
+      "id": "attention",
+      "visualMs": 17397,
+      "audioMs": 17395,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 15468,
+      "audioMs": 15468,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 9,
+  "music": {
+    "voicedWindows": 117,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

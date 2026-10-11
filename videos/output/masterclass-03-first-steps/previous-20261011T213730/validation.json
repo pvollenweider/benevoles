@@ -1,0 +1,82 @@
+{
+  "id": "ORG_FIRST_STEPS",
+  "slug": "masterclass-03-first-steps",
+  "validatedAt": "2026-10-11T21:35:45.398Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Charon",
+  "captureMs": 205560,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13468,
+      "audioMs": 13467,
+      "driftMs": 1
+    },
+    {
+      "id": "checklist",
+      "visualMs": 17544,
+      "audioMs": 17542,
+      "driftMs": 2
+    },
+    {
+      "id": "identity",
+      "visualMs": 24182,
+      "audioMs": 24182,
+      "driftMs": 0
+    },
+    {
+      "id": "timezone",
+      "visualMs": 16679,
+      "audioMs": 16678,
+      "driftMs": 1
+    },
+    {
+      "id": "event",
+      "visualMs": 19833,
+      "audioMs": 19830,
+      "driftMs": 3
+    },
+    {
+      "id": "shift",
+      "visualMs": 18025,
+      "audioMs": 18022,
+      "driftMs": 3
+    },
+    {
+      "id": "publish",
+      "visualMs": 16063,
+      "audioMs": 16061,
+      "driftMs": 2
+    },
+    {
+      "id": "test",
+      "visualMs": 20831,
+      "audioMs": 20830,
+      "driftMs": 1
+    },
+    {
+      "id": "help",
+      "visualMs": 24607,
+      "audioMs": 24607,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 18264,
+      "audioMs": 18261,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 11,
+  "music": {
+    "voicedWindows": 188,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.7,
+    "largestGapLu": 17.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -17.1
+  },
+  "issues": []
+}

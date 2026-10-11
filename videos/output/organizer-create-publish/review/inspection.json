@@ -1,0 +1,2219 @@
+{
+  "duration": 187.28,
+  "videoSha256": "b416ff5ed133c57d72a31110ed4de03b4a730ce62a29940605e7185089b454d8",
+  "build": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "effects": {
+    "exactBytes": true,
+    "actualSha256": "ef81d6121cae54fd470c39cf229f6b3ddb2cf6d4e5207ef58aff00cb9ff3951e",
+    "expectedSha256": "ef81d6121cae54fd470c39cf229f6b3ddb2cf6d4e5207ef58aff00cb9ff3951e",
+    "clicks": 47,
+    "keys": 69
+  },
+  "levels": {
+    "rule": {
+      "minGapLu": 12,
+      "maxGapLu": 20,
+      "musicOnlyFloorLufs": -36,
+      "musicOnlyUnderVoiceLu": 12,
+      "speechThresholdLufs": -35,
+      "windowS": 3,
+      "stepS": 1,
+      "frameS": 0.1,
+      "voicedShare": 0.5
+    },
+    "loop": {
+      "startS": 0.5,
+      "endS": 95,
+      "crossfadeS": 2
+    },
+    "mix": {
+      "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+      "volume": 0.31
+    },
+    "narration": {
+      "segmentTargetLufs": -18,
+      "maxSegmentGainDb": 12,
+      "compressor": "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+      "segmentGainsDb": {
+        "overview": -1.3,
+        "basics": -0.3,
+        "series": -0.6,
+        "delivery": -0.9,
+        "cash": -1.3,
+        "registration": 0.3,
+        "review": -0.1,
+        "preview": -0.5,
+        "preview-result": -0.5,
+        "publish": -2,
+        "qr": -1.2,
+        "import": -1.3,
+        "invite": -1.8,
+        "public": -1.8
+      }
+    },
+    "videoSha256": "b416ff5ed133c57d72a31110ed4de03b4a730ce62a29940605e7185089b454d8",
+    "summary": {
+      "voicedWindows": 181,
+      "musicOnlyWindows": 0,
+      "smallestGapLu": 14.7,
+      "largestGapLu": 18.9,
+      "quietestMusicOnlyLufs": null,
+      "loudestMusicOnlyLufs": null,
+      "medianVoiceLufs": -16.2
+    },
+    "issues": [],
+    "windows": [
+      {
+        "startS": 1.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.3,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 2.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 3.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.5,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 4.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.1,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 5.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.1,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 6.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.6,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 7.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.9,
+        "gapLu": 16
+      },
+      {
+        "startS": 8.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.2,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 9.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.7,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 10.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.5,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 11.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 12.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -32.5,
+        "gapLu": 14.9
+      },
+      {
+        "startS": 13.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.4,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 14.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.4,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 15.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.9,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 16.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33.6,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 17.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.9,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 18.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33.7,
+        "gapLu": 18
+      },
+      {
+        "startS": 19.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.6,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 20.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.5,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 21.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.1,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 22.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 23.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 24.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.5,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 25.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.3,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 26.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.4,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 27.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.1,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 28.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.9,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 29.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.3,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 30.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.2,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 31.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.5,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 32.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.1,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 33.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33,
+        "gapLu": 16
+      },
+      {
+        "startS": 34.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.3,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 35.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -33.3,
+        "gapLu": 16
+      },
+      {
+        "startS": 36.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.7,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 37.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 38.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.8,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 39.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.9,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 40.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.7,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 41.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33.3,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 42.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.5,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 43.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.3,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 44.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.2,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 45.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 46.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.6,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 47.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 48.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.4,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 49.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.3,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 50.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.9,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 51.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.5,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 52.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.8,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 53.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.5,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 54.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33.2,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 55.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.1,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 56.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.9,
+        "gapLu": 18.4
+      },
+      {
+        "startS": 57.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.3,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 58.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.7,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 59.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.9,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 60.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 61.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.1,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 62.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.3,
+        "gapLu": 15
+      },
+      {
+        "startS": 63.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 64.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.2,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 65.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 66.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.4,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 67.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 68.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 69.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 70.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.8,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 71.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 72.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.2,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 73.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.9,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 74.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.8,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 75.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -31.8,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 76.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.1,
+        "gapLu": 17
+      },
+      {
+        "startS": 77.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 78.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.7,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 79.5,
+        "kind": "voiced",
+        "voiceLufs": -18,
+        "musicLufs": -33.2,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 80.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33.4,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 81.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 82.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.6,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 83.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 84.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.6,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 85.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.5,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 86.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.7,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 87.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.2,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 88.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.8,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 89.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -33.1,
+        "gapLu": 18
+      },
+      {
+        "startS": 90.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.7,
+        "gapLu": 17
+      },
+      {
+        "startS": 91.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33,
+        "gapLu": 17
+      },
+      {
+        "startS": 92.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.1,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 93.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.6,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 94.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.4,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 95.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 96.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 97.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 98.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.5,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 99.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.9,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 100.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.8,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 101.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.3,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 102.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.6,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 103.5,
+        "kind": "voiced",
+        "voiceLufs": -14.6,
+        "musicLufs": -33.5,
+        "gapLu": 18.9
+      },
+      {
+        "startS": 104.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -33.1,
+        "gapLu": 18
+      },
+      {
+        "startS": 105.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.1,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 106.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.3,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 107.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.6,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 108.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.8,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 109.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.9,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 110.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.4,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 111.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -34,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 112.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -33,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 113.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.1,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 114.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.9,
+        "gapLu": 17
+      },
+      {
+        "startS": 115.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -33.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 116.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.5,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 117.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.7,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 118.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.1,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 119.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.7,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 120.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 121.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.7,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 122.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.1,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 123.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.4,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 124.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.7,
+        "gapLu": 15
+      },
+      {
+        "startS": 125.5,
+        "kind": "voiced",
+        "voiceLufs": -18.1,
+        "musicLufs": -33.4,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 126.5,
+        "kind": "voiced",
+        "voiceLufs": -18.3,
+        "musicLufs": -33,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 127.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.4,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 128.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.9,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 129.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.8,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 130.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.4,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 131.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 132.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 133.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -33.4,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 134.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 135.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.4,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 136.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 137.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.9,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 138.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.3,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 139.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 140.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.1,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 141.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.5,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 142.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -33.2,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 143.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -33,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 144.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.6,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 145.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.7,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 146.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 147.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 148.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.5,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 149.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.3,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 150.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.4,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 151.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 152.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.8,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 153.5,
+        "kind": "voiced",
+        "voiceLufs": -17.8,
+        "musicLufs": -32.5,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 154.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.3,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 155.5,
+        "kind": "voiced",
+        "voiceLufs": -14.9,
+        "musicLufs": -32.7,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 156.5,
+        "kind": "voiced",
+        "voiceLufs": -14.7,
+        "musicLufs": -33,
+        "gapLu": 18.3
+      },
+      {
+        "startS": 157.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 158.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.2,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 159.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 160.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.1,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 161.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.4,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 162.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 163.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.5,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 164.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -33.3,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 165.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.8,
+        "gapLu": 17
+      },
+      {
+        "startS": 166.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.3,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 167.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -32.9,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 168.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -33.3,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 169.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.6,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 170.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 171.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.9,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 172.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.7,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 173.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.3,
+        "gapLu": 16
+      },
+      {
+        "startS": 174.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -33.1,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 175.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.5,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 176.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.7,
+        "gapLu": 16.4
+      },
+      {
+        "startS": 177.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.6,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 178.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.9,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 179.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.7,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 180.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.1,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 181.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.1,
+        "gapLu": 16.3
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "overview",
+      "startMs": 0,
+      "endMs": 12977,
+      "sentences": [
+        {
+          "text": "Voici comment préparer et partager un planning bénévole.",
+          "startMs": 141,
+          "endMs": 3520,
+          "method": "silence",
+          "absoluteStartS": 0.141,
+          "absoluteEndS": 3.52
+        },
+        {
+          "text": "Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche.",
+          "startMs": 3708,
+          "endMs": 9913,
+          "method": "silence",
+          "absoluteStartS": 3.708,
+          "absoluteEndS": 9.913
+        },
+        {
+          "text": "Ici, on va tout créer depuis le début.",
+          "startMs": 10497,
+          "endMs": 12508,
+          "method": "silence",
+          "absoluteStartS": 10.497,
+          "absoluteEndS": 12.508
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 3089
+        },
+        {
+          "kind": "click",
+          "atMs": 5088
+        }
+      ]
+    },
+    {
+      "id": "basics",
+      "startMs": 13430,
+      "endMs": 22853,
+      "sentences": [
+        {
+          "text": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates.",
+          "startMs": 472,
+          "endMs": 4611,
+          "method": "silence",
+          "absoluteStartS": 13.902,
+          "absoluteEndS": 18.041
+        },
+        {
+          "text": "L’événement reste en brouillon :",
+          "startMs": 4772,
+          "endMs": 4774,
+          "method": "silence",
+          "absoluteStartS": 18.202,
+          "absoluteEndS": 18.204
+        },
+        {
+          "text": "rien n’est visible tant que tu n’as pas terminé ton planning.",
+          "startMs": 5411,
+          "endMs": 8907,
+          "method": "silence",
+          "absoluteStartS": 18.841,
+          "absoluteEndS": 22.337
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 14405
+        },
+        {
+          "kind": "click",
+          "atMs": 15422
+        },
+        {
+          "kind": "click",
+          "atMs": 16438
+        },
+        {
+          "kind": "click",
+          "atMs": 17455
+        },
+        {
+          "kind": "click",
+          "atMs": 18471
+        },
+        {
+          "kind": "click",
+          "atMs": 19488
+        }
+      ]
+    },
+    {
+      "id": "series",
+      "startMs": 23307,
+      "endMs": 38392,
+      "sentences": [
+        {
+          "text": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement.",
+          "startMs": 569,
+          "endMs": 3957,
+          "method": "silence",
+          "absoluteStartS": 23.876,
+          "absoluteEndS": 27.264
+        },
+        {
+          "text": "Quand les horaires se répètent, la création en série va plus vite :",
+          "startMs": 4762,
+          "endMs": 7589,
+          "method": "silence",
+          "absoluteStartS": 28.069,
+          "absoluteEndS": 30.896
+        },
+        {
+          "text": "pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+          "startMs": 8332,
+          "endMs": 14506,
+          "method": "silence",
+          "absoluteStartS": 31.639,
+          "absoluteEndS": 37.813
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 28554
+        },
+        {
+          "kind": "click",
+          "atMs": 29389
+        },
+        {
+          "kind": "key",
+          "atMs": 29696
+        },
+        {
+          "kind": "key",
+          "atMs": 29794
+        },
+        {
+          "kind": "key",
+          "atMs": 29892
+        },
+        {
+          "kind": "key",
+          "atMs": 29992
+        },
+        {
+          "kind": "key",
+          "atMs": 30091
+        },
+        {
+          "kind": "key",
+          "atMs": 30190
+        },
+        {
+          "kind": "key",
+          "atMs": 30291
+        },
+        {
+          "kind": "click",
+          "atMs": 31103
+        },
+        {
+          "kind": "click",
+          "atMs": 33020
+        },
+        {
+          "kind": "click",
+          "atMs": 35920
+        }
+      ]
+    },
+    {
+      "id": "delivery",
+      "startMs": 38846,
+      "endMs": 51677,
+      "sentences": [
+        {
+          "text": "Ajoute ensuite manuellement un poste Livraison.",
+          "startMs": 581,
+          "endMs": 2911,
+          "method": "silence",
+          "absoluteStartS": 39.427,
+          "absoluteEndS": 41.757
+        },
+        {
+          "text": "Il faut avoir au moins dix-huit ans et posséder un permis B valide.",
+          "startMs": 3652,
+          "endMs": 6843,
+          "method": "silence",
+          "absoluteStartS": 42.498,
+          "absoluteEndS": 45.689
+        },
+        {
+          "text": "Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+          "startMs": 7821,
+          "endMs": 12250,
+          "method": "silence",
+          "absoluteStartS": 46.667,
+          "absoluteEndS": 51.096
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 39320
+        },
+        {
+          "kind": "click",
+          "atMs": 40137
+        },
+        {
+          "kind": "key",
+          "atMs": 40446
+        },
+        {
+          "kind": "key",
+          "atMs": 40544
+        },
+        {
+          "kind": "key",
+          "atMs": 40643
+        },
+        {
+          "kind": "key",
+          "atMs": 40742
+        },
+        {
+          "kind": "key",
+          "atMs": 40841
+        },
+        {
+          "kind": "key",
+          "atMs": 40940
+        },
+        {
+          "kind": "key",
+          "atMs": 41039
+        },
+        {
+          "kind": "key",
+          "atMs": 41138
+        },
+        {
+          "kind": "key",
+          "atMs": 41236
+        },
+        {
+          "kind": "click",
+          "atMs": 42036
+        },
+        {
+          "kind": "click",
+          "atMs": 43270
+        },
+        {
+          "kind": "click",
+          "atMs": 44504
+        },
+        {
+          "kind": "click",
+          "atMs": 45720
+        },
+        {
+          "kind": "click",
+          "atMs": 46936
+        },
+        {
+          "kind": "click",
+          "atMs": 48154
+        },
+        {
+          "kind": "click",
+          "atMs": 49338
+        }
+      ]
+    },
+    {
+      "id": "cash",
+      "startMs": 52130,
+      "endMs": 63936,
+      "sentences": [
+        {
+          "text": "Pour un poste sensible comme la Caisse, active l’inscription sur validation.",
+          "startMs": 594,
+          "endMs": 5072,
+          "method": "silence",
+          "absoluteStartS": 52.724,
+          "absoluteEndS": 57.202
+        },
+        {
+          "text": "Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+          "startMs": 5939,
+          "endMs": 11344,
+          "method": "silence",
+          "absoluteStartS": 58.069,
+          "absoluteEndS": 63.474
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 52603
+        },
+        {
+          "kind": "click",
+          "atMs": 53421
+        },
+        {
+          "kind": "key",
+          "atMs": 53731
+        },
+        {
+          "kind": "key",
+          "atMs": 53827
+        },
+        {
+          "kind": "key",
+          "atMs": 53927
+        },
+        {
+          "kind": "key",
+          "atMs": 54026
+        },
+        {
+          "kind": "key",
+          "atMs": 54124
+        },
+        {
+          "kind": "key",
+          "atMs": 54223
+        },
+        {
+          "kind": "click",
+          "atMs": 55002
+        },
+        {
+          "kind": "click",
+          "atMs": 55786
+        }
+      ]
+    },
+    {
+      "id": "registration",
+      "startMs": 64390,
+      "endMs": 76092,
+      "sentences": [
+        {
+          "text": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation.",
+          "startMs": 470,
+          "endMs": 6407,
+          "method": "silence",
+          "absoluteStartS": 64.86,
+          "absoluteEndS": 70.797
+        },
+        {
+          "text": "Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
+          "startMs": 7148,
+          "endMs": 11163,
+          "method": "silence",
+          "absoluteStartS": 71.538,
+          "absoluteEndS": 75.553
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 66050
+        },
+        {
+          "kind": "click",
+          "atMs": 67866
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "startMs": 76545,
+      "endMs": 86646,
+      "sentences": [
+        {
+          "text": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places.",
+          "startMs": 544,
+          "endMs": 5514,
+          "method": "silence",
+          "absoluteStartS": 77.089,
+          "absoluteEndS": 82.059
+        },
+        {
+          "text": "Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+          "startMs": 6109,
+          "endMs": 9640,
+          "method": "silence",
+          "absoluteStartS": 82.654,
+          "absoluteEndS": 86.185
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "preview",
+      "startMs": 87098,
+      "endMs": 103686,
+      "sentences": [
+        {
+          "text": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription.",
+          "startMs": 462,
+          "endMs": 5478,
+          "method": "silence",
+          "absoluteStartS": 87.56,
+          "absoluteEndS": 92.576
+        },
+        {
+          "text": "Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix.",
+          "startMs": 6281,
+          "endMs": 10478,
+          "method": "silence",
+          "absoluteStartS": 93.379,
+          "absoluteEndS": 97.576
+        },
+        {
+          "text": "Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+          "startMs": 11391,
+          "endMs": 16586,
+          "method": "silence",
+          "absoluteStartS": 98.489,
+          "absoluteEndS": 103.684
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 87578
+        },
+        {
+          "kind": "click",
+          "atMs": 93844
+        },
+        {
+          "kind": "click",
+          "atMs": 94627
+        },
+        {
+          "kind": "click",
+          "atMs": 95459
+        },
+        {
+          "kind": "click",
+          "atMs": 96443
+        },
+        {
+          "kind": "click",
+          "atMs": 97427
+        },
+        {
+          "kind": "click",
+          "atMs": 98376
+        },
+        {
+          "kind": "click",
+          "atMs": 99160
+        },
+        {
+          "kind": "click",
+          "atMs": 99943
+        }
+      ]
+    },
+    {
+      "id": "preview-result",
+      "startMs": 104139,
+      "endMs": 116657,
+      "sentences": [
+        {
+          "text": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel.",
+          "startMs": 183,
+          "endMs": 8852,
+          "method": "silence",
+          "absoluteStartS": 104.322,
+          "absoluteEndS": 112.991
+        },
+        {
+          "text": "Rien n’est réellement enregistré ni expédié pendant ce test.",
+          "startMs": 9483,
+          "endMs": 12237,
+          "method": "silence",
+          "absoluteStartS": 113.622,
+          "absoluteEndS": 116.376
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "publish",
+      "startMs": 117110,
+      "endMs": 127683,
+      "sentences": [
+        {
+          "text": "Quand tout est prêt, publie le planning.",
+          "startMs": 280,
+          "endMs": 2493,
+          "method": "silence",
+          "absoluteStartS": 117.39,
+          "absoluteEndS": 119.603
+        },
+        {
+          "text": "La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement :",
+          "startMs": 2805,
+          "endMs": 7484,
+          "method": "silence",
+          "absoluteStartS": 119.915,
+          "absoluteEndS": 124.594
+        },
+        {
+          "text": "tu gardes la main sur sa diffusion.",
+          "startMs": 7838,
+          "endMs": 10572,
+          "method": "silence",
+          "absoluteStartS": 124.948,
+          "absoluteEndS": 127.682
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 117596
+        }
+      ]
+    },
+    {
+      "id": "qr",
+      "startMs": 128134,
+      "endMs": 138813,
+      "sentences": [
+        {
+          "text": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code.",
+          "startMs": 197,
+          "endMs": 4266,
+          "method": "silence",
+          "absoluteStartS": 128.331,
+          "absoluteEndS": 132.4
+        },
+        {
+          "text": "Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+          "startMs": 4865,
+          "endMs": 10254,
+          "method": "silence",
+          "absoluteStartS": 132.999,
+          "absoluteEndS": 138.388
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 128612
+        }
+      ]
+    },
+    {
+      "id": "import",
+      "startMs": 139266,
+      "endMs": 156361,
+      "sentences": [
+        {
+          "text": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel.",
+          "startMs": 425,
+          "endMs": 8801,
+          "method": "silence",
+          "absoluteStartS": 139.691,
+          "absoluteEndS": 148.067
+        },
+        {
+          "text": "L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+          "startMs": 9266,
+          "endMs": 16943,
+          "method": "silence",
+          "absoluteStartS": 148.532,
+          "absoluteEndS": 156.209
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 139896
+        },
+        {
+          "kind": "click",
+          "atMs": 149012
+        },
+        {
+          "kind": "click",
+          "atMs": 154461
+        },
+        {
+          "kind": "click",
+          "atMs": 155243
+        }
+      ]
+    },
+    {
+      "id": "invite",
+      "startMs": 156815,
+      "endMs": 171249,
+      "sentences": [
+        {
+          "text": "Retourne ensuite dans les invitations de l’événement.",
+          "startMs": 170,
+          "endMs": 2157,
+          "method": "silence",
+          "absoluteStartS": 156.985,
+          "absoluteEndS": 158.972
+        },
+        {
+          "text": "Filtre les membres par tag et sélectionne les personnes concernées.",
+          "startMs": 2844,
+          "endMs": 6661,
+          "method": "silence",
+          "absoluteStartS": 159.659,
+          "absoluteEndS": 163.476
+        },
+        {
+          "text": "Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
+          "startMs": 6841,
+          "endMs": 14311,
+          "method": "silence",
+          "absoluteStartS": 163.656,
+          "absoluteEndS": 171.126
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 157395
+        },
+        {
+          "kind": "click",
+          "atMs": 160145
+        },
+        {
+          "kind": "click",
+          "atMs": 160961
+        },
+        {
+          "kind": "key",
+          "atMs": 161268
+        },
+        {
+          "kind": "key",
+          "atMs": 161367
+        },
+        {
+          "kind": "key",
+          "atMs": 161465
+        },
+        {
+          "kind": "key",
+          "atMs": 161563
+        },
+        {
+          "kind": "key",
+          "atMs": 161662
+        },
+        {
+          "kind": "key",
+          "atMs": 161761
+        },
+        {
+          "kind": "key",
+          "atMs": 161863
+        },
+        {
+          "kind": "key",
+          "atMs": 161964
+        },
+        {
+          "kind": "key",
+          "atMs": 162065
+        },
+        {
+          "kind": "key",
+          "atMs": 162168
+        },
+        {
+          "kind": "key",
+          "atMs": 162271
+        },
+        {
+          "kind": "key",
+          "atMs": 162371
+        },
+        {
+          "kind": "key",
+          "atMs": 162475
+        },
+        {
+          "kind": "key",
+          "atMs": 162576
+        },
+        {
+          "kind": "key",
+          "atMs": 162681
+        },
+        {
+          "kind": "key",
+          "atMs": 162781
+        },
+        {
+          "kind": "key",
+          "atMs": 162884
+        },
+        {
+          "kind": "key",
+          "atMs": 162986
+        },
+        {
+          "kind": "key",
+          "atMs": 163089
+        },
+        {
+          "kind": "key",
+          "atMs": 163190
+        },
+        {
+          "kind": "key",
+          "atMs": 163293
+        },
+        {
+          "kind": "key",
+          "atMs": 163397
+        },
+        {
+          "kind": "key",
+          "atMs": 163497
+        },
+        {
+          "kind": "key",
+          "atMs": 163600
+        },
+        {
+          "kind": "key",
+          "atMs": 163706
+        },
+        {
+          "kind": "key",
+          "atMs": 163807
+        },
+        {
+          "kind": "key",
+          "atMs": 163908
+        },
+        {
+          "kind": "key",
+          "atMs": 164009
+        },
+        {
+          "kind": "key",
+          "atMs": 164108
+        },
+        {
+          "kind": "key",
+          "atMs": 164207
+        },
+        {
+          "kind": "key",
+          "atMs": 164307
+        },
+        {
+          "kind": "key",
+          "atMs": 164407
+        },
+        {
+          "kind": "key",
+          "atMs": 164512
+        },
+        {
+          "kind": "key",
+          "atMs": 164611
+        },
+        {
+          "kind": "key",
+          "atMs": 164714
+        },
+        {
+          "kind": "key",
+          "atMs": 164916
+        },
+        {
+          "kind": "key",
+          "atMs": 165015
+        },
+        {
+          "kind": "key",
+          "atMs": 165117
+        },
+        {
+          "kind": "key",
+          "atMs": 165216
+        },
+        {
+          "kind": "key",
+          "atMs": 165322
+        },
+        {
+          "kind": "key",
+          "atMs": 165421
+        },
+        {
+          "kind": "key",
+          "atMs": 165524
+        },
+        {
+          "kind": "key",
+          "atMs": 165628
+        },
+        {
+          "kind": "key",
+          "atMs": 165729
+        },
+        {
+          "kind": "key",
+          "atMs": 165833
+        },
+        {
+          "kind": "key",
+          "atMs": 165937
+        },
+        {
+          "kind": "key",
+          "atMs": 166040
+        },
+        {
+          "kind": "click",
+          "atMs": 166812
+        }
+      ]
+    },
+    {
+      "id": "public",
+      "startMs": 171700,
+      "endMs": 183751,
+      "sentences": [
+        {
+          "text": "Et voilà le résultat côté bénévoles :",
+          "startMs": 160,
+          "endMs": 1878,
+          "method": "silence",
+          "absoluteStartS": 171.86,
+          "absoluteEndS": 173.578
+        },
+        {
+          "text": "plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation.",
+          "startMs": 2460,
+          "endMs": 7236,
+          "method": "silence",
+          "absoluteStartS": 174.16,
+          "absoluteEndS": 178.936
+        },
+        {
+          "text": "Le planning est prêt à circuler par lien, QR code ou invitation !",
+          "startMs": 8090,
+          "endMs": 11789,
+          "method": "silence",
+          "absoluteStartS": 179.79,
+          "absoluteEndS": 183.489
+        }
+      ],
+      "markers": []
+    }
+  ]
+}

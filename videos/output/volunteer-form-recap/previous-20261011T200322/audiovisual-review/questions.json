@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:17.642Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "4ca6781cbf9e64737fd063b4dd9a662d4e609724b342c33776b5513da131c2c8",
+  "clipSha256": "99d90607fed30c5d718cc65030b1a3a2147e23bdef4cfa56324e1391830f06d8",
+  "scene": "questions",
+  "review": {
+    "heardOpening": "L’association a ajouté ses questions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "La taille de t-shirt est obligatoire",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection de la taille M pour le t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.9,
+        "spoken": "tandis que le régime alimentaire et le permis sont facultatifs",
+        "visibleSeconds": 5.6,
+        "visible": "Saisie de « Végétarien » dans le champ régime alimentaire puis « Permis B »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Le commentaire permet de préciser un point pratique, par exemple un besoin de pause",
+        "visibleSeconds": 13.5,
+        "visible": "Saisie dans le champ Commentaire de « Je prévois une pause avant la nuit. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les saisies à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

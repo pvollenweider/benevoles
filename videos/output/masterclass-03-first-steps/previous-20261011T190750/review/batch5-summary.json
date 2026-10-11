@@ -1,0 +1,17 @@
+{
+  "id": "ORG_FIRST_STEPS",
+  "status": "NOT READY",
+  "duration": 205.84,
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {
+    "voicedWindows": 188,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.2,
+    "largestGapLu": 17.4,
+    "quietestMusicOnlyLufs": -32.2,
+    "loudestMusicOnlyLufs": -32.2,
+    "medianVoiceLufs": -17.1
+  },
+  "problems": "Identity title/save early and charter scroll late; test selection early and form confirmation late; publication button not held visibly before click. Result transition distracting. No stale labels, localhost, old admin, overlay or French-date violation seen.",
+  "sourceChanges": "record.ts: sentence-anchor identity title and charter save; earlier charter reveal; publication button revealed before cue; sentence-anchor test selection/confirmation, remove typing delay and fill email faster; keep conclusion on event list."
+}

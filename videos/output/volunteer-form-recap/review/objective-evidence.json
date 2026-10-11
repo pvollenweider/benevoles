@@ -1,0 +1,148 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 151,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.3,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -32.4,
+    "medianVoiceLufs": -16.4
+  },
+  "inputCounts": {
+    "click": 20,
+    "key": 96
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "selection",
+      "phrase": "Le bouton Continuer ouvre le",
+      "startMs": 10705,
+      "endMs": 11783,
+      "cueMs": 29285,
+      "sentenceAbsoluteMs": 29284,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 29753
+      },
+      "deltaMs": 469
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "La date de naissance apparaît",
+      "startMs": 11123,
+      "endMs": 14545,
+      "cueMs": 49413,
+      "sentenceAbsoluteMs": 49412,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 49917
+      },
+      "deltaMs": 505
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "La taille de t-shirt est",
+      "startMs": 3099,
+      "endMs": 7758,
+      "cueMs": 59711,
+      "sentenceAbsoluteMs": 59710,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 60200
+      },
+      "deltaMs": 490
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "Le commentaire permet de préciser",
+      "startMs": 12533,
+      "endMs": 16123,
+      "cueMs": 69148,
+      "sentenceAbsoluteMs": 69144,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 69666
+      },
+      "deltaMs": 522
+    },
+    {
+      "segmentId": "agreement",
+      "phrase": "Ouvre la Convention des Bénévoles",
+      "startMs": 605,
+      "endMs": 5611,
+      "cueMs": 77519,
+      "sentenceAbsoluteMs": 77517,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 77982
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "agreement",
+      "phrase": "Lire puis cocher ces deux",
+      "startMs": 12540,
+      "endMs": 16343,
+      "cueMs": 89453,
+      "sentenceAbsoluteMs": 89452,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 89916
+      },
+      "deltaMs": 464
+    },
+    {
+      "segmentId": "recap",
+      "phrase": "Les lieux, consignes et liens",
+      "startMs": 9591,
+      "endMs": 15809,
+      "cueMs": 103852,
+      "sentenceAbsoluteMs": 103850,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "recap",
+      "phrase": "En bas, Transmis à l’organisation",
+      "startMs": 16438,
+      "endMs": 21670,
+      "cueMs": 110700,
+      "sentenceAbsoluteMs": 110697,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "workload",
+      "phrase": "Pour alléger, reviens au planning",
+      "startMs": 16690,
+      "endMs": 19535,
+      "cueMs": 133534,
+      "sentenceAbsoluteMs": 133533,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 133997
+      },
+      "deltaMs": 464
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Les informations saisies sont conservées.",
+      "startMs": 5747,
+      "endMs": 7308,
+      "cueMs": 146142,
+      "sentenceAbsoluteMs": 146140,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

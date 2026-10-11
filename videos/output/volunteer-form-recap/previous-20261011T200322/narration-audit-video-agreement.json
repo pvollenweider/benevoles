@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:22:45.105Z",
+  "revalidatedAt": "2026-10-11T18:22:45.105Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "agreement",
+      "audioSha256": "038c8991a3fedb9ddda857f089b293f17805fab4ccb717b69c27aedafc5b7e32",
+      "recognized": "Ouvre la convention des bénévoles pour lire le cadre de l'engagement, puis accepte-la si elle te convient. Le consentement sur les données est une case distincte, il concerne leur utilisation pour cet événement. Lire puis cocher ces deux éléments évite de confirmer un cadre qu'on n'a pas compris.",
+      "expected": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement, puis accepte-la si elle te convient. Le consentement sur les données est une case distincte : il concerne leur utilisation pour cet événement. Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 188,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.7,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -17.1
+  },
+  "inputCounts": {
+    "click": 30,
+    "key": 30
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "checklist",
+      "phrase": "Les coches sont calculées à",
+      "startMs": 12961,
+      "endMs": 15533,
+      "cueMs": 27979,
+      "sentenceAbsoluteMs": 27977,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Dans les paramètres, donnez à",
+      "startMs": 3017,
+      "endMs": 9150,
+      "cueMs": 37225,
+      "sentenceAbsoluteMs": 37223,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 37742
+      },
+      "deltaMs": 519
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Gardons toutes ses clauses",
+      "startMs": 14268,
+      "endMs": 14349,
+      "cueMs": 48475,
+      "sentenceAbsoluteMs": 48474,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 48941
+      },
+      "deltaMs": 467
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Enregistrons le texte entier",
+      "startMs": 20256,
+      "endMs": 23742,
+      "cueMs": 54463,
+      "sentenceAbsoluteMs": 54462,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 54923
+      },
+      "deltaMs": 461
+    },
+    {
+      "segmentId": "timezone",
+      "phrase": "Changer ce réglage adapte les",
+      "startMs": 11909,
+      "endMs": 16167,
+      "cueMs": 70754,
+      "sentenceAbsoluteMs": 70752,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 71223
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5259,
+      "endMs": 7225,
+      "cueMs": 82400,
+      "sentenceAbsoluteMs": 82398,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 82869
+      },
+      "deltaMs": 471
+    },
+    {
+      "segmentId": "event",
+      "phrase": "Créons la Fête du parc",
+      "startMs": 5259,
+      "endMs": 7225,
+      "cueMs": 83973,
+      "sentenceAbsoluteMs": 82398,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 84484
+      },
+      "deltaMs": 2086
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutez un créneau, choisissez le",
+      "startMs": 3298,
+      "endMs": 8595,
+      "cueMs": 100724,
+      "sentenceAbsoluteMs": 100721,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 101215
+      },
+      "deltaMs": 494
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Après validation, le créneau apparaît",
+      "startMs": 8804,
+      "endMs": 13899,
+      "cueMs": 106229,
+      "sentenceAbsoluteMs": 106227,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 106700
+      },
+      "deltaMs": 473
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Ici, le minimum est prêt",
+      "startMs": 8748,
+      "endMs": 9043,
+      "cueMs": 124648,
+      "sentenceAbsoluteMs": 124647,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 125115
+      },
+      "deltaMs": 468
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 136985,
+      "sentenceAbsoluteMs": 136984,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 137449
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "test",
+      "phrase": "Sélectionnez Accueil",
+      "startMs": 3370,
+      "endMs": 8562,
+      "cueMs": 142524,
+      "sentenceAbsoluteMs": 136984,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 142981
+      },
+      "deltaMs": 5997
+    },
+    {
+      "segmentId": "help",
+      "phrase": "Aide ouvre le guide organisateur",
+      "startMs": 1606,
+      "endMs": 4038,
+      "cueMs": 157722,
+      "sentenceAbsoluteMs": 157721,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 158193
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "help",
+      "phrase": "Retrouvons Premiers pas",
+      "startMs": 4620,
+      "endMs": 5612,
+      "cueMs": 160736,
+      "sentenceAbsoluteMs": 160735,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 161222
+      },
+      "deltaMs": 487
+    },
+    {
+      "segmentId": "help",
+      "phrase": "Quand une vidéo est disponible",
+      "startMs": 6311,
+      "endMs": 12948,
+      "cueMs": 162428,
+      "sentenceAbsoluteMs": 162426,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 162887
+      },
+      "deltaMs": 461
+    },
+    {
+      "segmentId": "help",
+      "phrase": "La transcription reste consultable",
+      "startMs": 17768,
+      "endMs": 19802,
+      "cueMs": 173884,
+      "sentenceAbsoluteMs": 173883,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 174351
+      },
+      "deltaMs": 468
+    },
+    {
+      "segmentId": "help",
+      "phrase": "Vous pouvez aussi ouvrir la bibliothèque",
+      "startMs": 20379,
+      "endMs": 24266,
+      "cueMs": 176494,
+      "sentenceAbsoluteMs": 176494,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 176952
+      },
+      "deltaMs": 458
+    }
+  ]
+}

@@ -1,0 +1,480 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1108,
+    "sentences": [
+      {
+        "text": "L’identité de l’organisation donne un point d’entrée commun à tous ses événements.",
+        "startMs": 268,
+        "endMs": 4045,
+        "method": "silence",
+        "absoluteStartMs": 1376
+      },
+      {
+        "text": "Elle sert à présenter clairement l’association, à fournir une adresse facile à partager et à éviter que les bénévoles confondent un nom technique avec le titre qu’ils voient.",
+        "startMs": 4614,
+        "endMs": 13068,
+        "method": "silence",
+        "absoluteStartMs": 5722
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "names",
+    "startMs": 15228,
+    "sentences": [
+      {
+        "text": "Dans Paramètres, le nom de l’organisation apparaît dans l’administration, les emails et au-dessus du titre public.",
+        "startMs": 599,
+        "endMs": 7252,
+        "method": "silence",
+        "absoluteStartMs": 15827
+      },
+      {
+        "text": "Le titre de la page publique peut être plus accueillant.",
+        "startMs": 8077,
+        "endMs": 10640,
+        "method": "silence",
+        "absoluteStartMs": 23305
+      },
+      {
+        "text": "Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons.",
+        "startMs": 11162,
+        "endMs": 15299,
+        "method": "silence",
+        "absoluteStartMs": 26390
+      },
+      {
+        "text": "Le message Titre enregistré confirme la modification :",
+        "startMs": 16397,
+        "endMs": 19283,
+        "method": "silence",
+        "absoluteStartMs": 31625
+      },
+      {
+        "text": "les titres des événements ne changent pas.",
+        "startMs": 19768,
+        "endMs": 21185,
+        "method": "silence",
+        "absoluteStartMs": 34996
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 23809
+      },
+      {
+        "kind": "key",
+        "atMs": 24119
+      },
+      {
+        "kind": "click",
+        "atMs": 24642
+      },
+      {
+        "kind": "key",
+        "atMs": 24949
+      },
+      {
+        "kind": "key",
+        "atMs": 25046
+      },
+      {
+        "kind": "key",
+        "atMs": 25145
+      },
+      {
+        "kind": "key",
+        "atMs": 25244
+      },
+      {
+        "kind": "key",
+        "atMs": 25342
+      },
+      {
+        "kind": "key",
+        "atMs": 25542
+      },
+      {
+        "kind": "key",
+        "atMs": 25743
+      },
+      {
+        "kind": "key",
+        "atMs": 25841
+      },
+      {
+        "kind": "key",
+        "atMs": 25940
+      },
+      {
+        "kind": "key",
+        "atMs": 26040
+      },
+      {
+        "kind": "key",
+        "atMs": 26138
+      },
+      {
+        "kind": "key",
+        "atMs": 26234
+      },
+      {
+        "kind": "key",
+        "atMs": 26337
+      },
+      {
+        "kind": "key",
+        "atMs": 26438
+      },
+      {
+        "kind": "key",
+        "atMs": 26540
+      },
+      {
+        "kind": "key",
+        "atMs": 26638
+      },
+      {
+        "kind": "key",
+        "atMs": 26741
+      },
+      {
+        "kind": "key",
+        "atMs": 26941
+      },
+      {
+        "kind": "key",
+        "atMs": 27038
+      },
+      {
+        "kind": "key",
+        "atMs": 27139
+      },
+      {
+        "kind": "key",
+        "atMs": 27243
+      },
+      {
+        "kind": "key",
+        "atMs": 27343
+      },
+      {
+        "kind": "key",
+        "atMs": 27444
+      },
+      {
+        "kind": "key",
+        "atMs": 27546
+      },
+      {
+        "kind": "key",
+        "atMs": 27650
+      },
+      {
+        "kind": "key",
+        "atMs": 27764
+      },
+      {
+        "kind": "key",
+        "atMs": 27864
+      },
+      {
+        "kind": "key",
+        "atMs": 27970
+      },
+      {
+        "kind": "key",
+        "atMs": 28070
+      },
+      {
+        "kind": "key",
+        "atMs": 28172
+      },
+      {
+        "kind": "key",
+        "atMs": 28272
+      },
+      {
+        "kind": "key",
+        "atMs": 28370
+      },
+      {
+        "kind": "click",
+        "atMs": 32092
+      }
+    ]
+  },
+  {
+    "id": "logo",
+    "startMs": 37521,
+    "sentences": [
+      {
+        "text": "Ajoutons le logo de l’association.",
+        "startMs": 652,
+        "endMs": 2115,
+        "method": "silence",
+        "absoluteStartMs": 38173
+      },
+      {
+        "text": "Choisissez une image dans les formats indiqués, vérifiez son aperçu, puis cliquez sur Enregistrer le logo.",
+        "startMs": 2621,
+        "endMs": 8348,
+        "method": "silence",
+        "absoluteStartMs": 40142
+      },
+      {
+        "text": "L’image enregistrée apparaît dans les pages publiques, les emails et les documents.",
+        "startMs": 9031,
+        "endMs": 12838,
+        "method": "silence",
+        "absoluteStartMs": 46552
+      },
+      {
+        "text": "Le nom de l’association reste écrit à côté :",
+        "startMs": 13448,
+        "endMs": 15469,
+        "method": "silence",
+        "absoluteStartMs": 50969
+      },
+      {
+        "text": "le logo ne remplace pas ce repère.",
+        "startMs": 15469,
+        "endMs": 17296,
+        "method": "estimate",
+        "absoluteStartMs": 52990
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 47024
+      }
+    ]
+  },
+  {
+    "id": "slug",
+    "startMs": 55833,
+    "sentences": [
+      {
+        "text": "L’identifiant public, ou slug, sert à former l’adresse de votre association sur benevol point app.",
+        "startMs": 550,
+        "endMs": 5935,
+        "method": "silence",
+        "absoluteStartMs": 56383
+      },
+      {
+        "text": "Ici, les adresses appartiennent à notre environnement de démonstration.",
+        "startMs": 6585,
+        "endMs": 9662,
+        "method": "silence",
+        "absoluteStartMs": 62418
+      },
+      {
+        "text": "Si vous changez l’identifiant alors que des événements sont publiés, une confirmation est demandée.",
+        "startMs": 10162,
+        "endMs": 14679,
+        "method": "silence",
+        "absoluteStartMs": 65995
+      },
+      {
+        "text": "Les anciens identifiants continuent de rediriger vers l’actuel tant que vous les conservez.",
+        "startMs": 15359,
+        "endMs": 19512,
+        "method": "silence",
+        "absoluteStartMs": 71192
+      },
+      {
+        "text": "C’est leur suppression qui casse les anciens liens et QR codes.",
+        "startMs": 19992,
+        "endMs": 22525,
+        "method": "silence",
+        "absoluteStartMs": 75825
+      },
+      {
+        "text": "Ici, gardons l’adresse actuelle.",
+        "startMs": 23222,
+        "endMs": 24973,
+        "method": "silence",
+        "absoluteStartMs": 79055
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 58874
+      },
+      {
+        "kind": "click",
+        "atMs": 66491
+      },
+      {
+        "kind": "click",
+        "atMs": 79540
+      }
+    ]
+  },
+  {
+    "id": "public-page",
+    "startMs": 82951,
+    "sentences": [
+      {
+        "text": "Ouvrons la page publique.",
+        "startMs": 529,
+        "endMs": 1540,
+        "method": "silence",
+        "absoluteStartMs": 83480
+      },
+      {
+        "text": "Le nouveau titre et le logo apparaissent au-dessus des deux événements publiés et répertoriés.",
+        "startMs": 2427,
+        "endMs": 6364,
+        "method": "silence",
+        "absoluteStartMs": 85378
+      },
+      {
+        "text": "La rencontre des organisateurs n’est pas dans cette liste :",
+        "startMs": 7047,
+        "endMs": 9277,
+        "method": "silence",
+        "absoluteStartMs": 89998
+      },
+      {
+        "text": "elle est publiée, mais non répertoriée.",
+        "startMs": 9586,
+        "endMs": 11448,
+        "method": "silence",
+        "absoluteStartMs": 92537
+      },
+      {
+        "text": "Ouvrons son lien direct pour vérifier qu’elle reste accessible aux personnes qui le reçoivent.",
+        "startMs": 12097,
+        "endMs": 15508,
+        "method": "silence",
+        "absoluteStartMs": 95048
+      },
+      {
+        "text": "Non répertorié ne signifie pas protégé par un mot de passe.",
+        "startMs": 16237,
+        "endMs": 19384,
+        "method": "silence",
+        "absoluteStartMs": 99188
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "event-result",
+    "startMs": 103143,
+    "sentences": [
+      {
+        "text": "En ouvrant la Fête du village, on retrouve l’identité de l’organisation avec les informations propres à cet événement.",
+        "startMs": 366,
+        "endMs": 5828,
+        "method": "silence",
+        "absoluteStartMs": 103509
+      },
+      {
+        "text": "Le nom de l’événement, son lieu et son planning restent indépendants.",
+        "startMs": 6509,
+        "endMs": 9807,
+        "method": "silence",
+        "absoluteStartMs": 109652
+      },
+      {
+        "text": "On peut donc réutiliser la même page d’organisation pour plusieurs manifestations au fil de l’année.",
+        "startMs": 10085,
+        "endMs": 14654,
+        "method": "silence",
+        "absoluteStartMs": 113228
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 104729
+      }
+    ]
+  },
+  {
+    "id": "remove-logo",
+    "startMs": 118250,
+    "sentences": [
+      {
+        "text": "Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le logo.",
+        "startMs": 183,
+        "endMs": 5451,
+        "method": "silence",
+        "absoluteStartMs": 118433
+      },
+      {
+        "text": "La confirmation vous laisse encore annuler.",
+        "startMs": 6085,
+        "endMs": 7646,
+        "method": "silence",
+        "absoluteStartMs": 124335
+      },
+      {
+        "text": "Après validation, l’image disparaît des pages et des prochains documents, mais le nom et le titre restent affichés.",
+        "startMs": 8232,
+        "endMs": 13968,
+        "method": "silence",
+        "absoluteStartMs": 126482
+      },
+      {
+        "text": "Cela ne retire pas une copie déjà téléchargée ou un ancien email.",
+        "startMs": 14395,
+        "endMs": 17862,
+        "method": "silence",
+        "absoluteStartMs": 132645
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 124807
+      },
+      {
+        "kind": "click",
+        "atMs": 127439
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "startMs": 136835,
+    "sentences": [
+      {
+        "text": "Vous avez une identité cohérente :",
+        "startMs": 270,
+        "endMs": 2605,
+        "method": "silence",
+        "absoluteStartMs": 137105
+      },
+      {
+        "text": "le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable.",
+        "startMs": 3097,
+        "endMs": 7912,
+        "method": "silence",
+        "absoluteStartMs": 139932
+      },
+      {
+        "text": "Ces réglages sont réservés au propriétaire.",
+        "startMs": 8043,
+        "endMs": 11791,
+        "method": "silence",
+        "absoluteStartMs": 144878
+      },
+      {
+        "text": "Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.",
+        "startMs": 12521,
+        "endMs": 19352,
+        "method": "silence",
+        "absoluteStartMs": 149356
+      }
+    ],
+    "inputs": []
+  }
+]

@@ -1,0 +1,171 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 164,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -31.4,
+    "loudestMusicOnlyLufs": -31.4,
+    "medianVoiceLufs": -16.2
+  },
+  "inputCounts": {
+    "click": 18,
+    "key": 48
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ce lien donne accès à",
+      "startMs": 7836,
+      "endMs": 11134,
+      "cueMs": 7837,
+      "sentenceAbsoluteMs": 7836,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "resend",
+      "phrase": "Avec Recevoir ce lien par",
+      "startMs": 6829,
+      "endMs": 9413,
+      "cueMs": 48842,
+      "sentenceAbsoluteMs": 48840,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 49336
+      },
+      "deltaMs": 496
+    },
+    {
+      "segmentId": "resend",
+      "phrase": "Attendons le résultat, puis ouvrons",
+      "startMs": 9602,
+      "endMs": 14472,
+      "cueMs": 51616,
+      "sentenceAbsoluteMs": 51613,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 53736
+      },
+      "deltaMs": 2123
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "Saisis l’adresse email utilisée pour",
+      "startMs": 5153,
+      "endMs": 7541,
+      "cueMs": 67522,
+      "sentenceAbsoluteMs": 67519,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 68041
+      },
+      "deltaMs": 522
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "elle ne révèle pas les",
+      "startMs": 12391,
+      "endMs": 14418,
+      "cueMs": 74759,
+      "sentenceAbsoluteMs": 74757,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 75256
+      },
+      "deltaMs": 499
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Camille coche Matin et Soir,",
+      "startMs": 6803,
+      "endMs": 10429,
+      "cueMs": 108950,
+      "sentenceAbsoluteMs": 108948,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 109441
+      },
+      "deltaMs": 493
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Après Enregistrer mes disponibilités, le",
+      "startMs": 14558,
+      "endMs": 18957,
+      "cueMs": 116704,
+      "sentenceAbsoluteMs": 116703,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 117175
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Rechargeons la page ",
+      "startMs": 19647,
+      "endMs": 20826,
+      "cueMs": 121792,
+      "sentenceAbsoluteMs": 121792,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "organizer",
+      "phrase": "Une disponibilité générale ne garantit",
+      "startMs": 14528,
+      "endMs": 20561,
+      "cueMs": 141118,
+      "sentenceAbsoluteMs": 141118,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Reviens sur ta page personnelle",
+      "startMs": 1523,
+      "endMs": 6862,
+      "cueMs": 149394,
+      "sentenceAbsoluteMs": 149392,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 149874
+      },
+      "deltaMs": 482
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Enregistre à nouveau et vérifie",
+      "startMs": 7103,
+      "endMs": 8665,
+      "cueMs": 154974,
+      "sentenceAbsoluteMs": 154972,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 155439
+      },
+      "deltaMs": 467
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Le lien personnel reste ton",
+      "startMs": 12586,
+      "endMs": 21456,
+      "cueMs": 160456,
+      "sentenceAbsoluteMs": 160455,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

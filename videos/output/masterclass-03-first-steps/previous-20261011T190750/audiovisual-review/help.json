@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:50:13.969Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "af3576345020d04fd7b2764ead168c30a366adf44a89486c5512c99568c03502",
+  "clipSha256": "e98859f1eafa810535232204ca25f16f6b5df9e37746b39f95ccc37eb3383fe1",
+  "scene": "help",
+  "review": {
+    "heardOpening": "Besoin d'aide ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Aide ouvre le guide organisateur dans un nouvel onglet.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Guide administrateur dans benevol.app",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Retrouvons Premiers pas.",
+        "visibleSeconds": 4.1,
+        "visible": "Page Premiers pas affichée dans la documentation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "Voir la vidéo ouvre le lecteur directement dans la documentation",
+        "visibleSeconds": 8.7,
+        "visible": "Clic sur 'Voir la vidéo' et ouverture du lecteur vidéo intégré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Les commandes du lecteur permettent ensuite de mettre en pause et d’activer les sous-titres.",
+        "visibleSeconds": 14.5,
+        "visible": "Défilement vers le bas révélant la section Transcription sous la vidéo",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "replier le lecteur pour continuer votre lecture.",
+        "visibleSeconds": 21.2,
+        "visible": "Le lecteur vidéo est replié et la page de texte 'Premiers pas' réapparaît",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, fluide et posée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

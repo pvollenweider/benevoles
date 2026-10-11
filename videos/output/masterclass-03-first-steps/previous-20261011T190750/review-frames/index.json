@@ -1,0 +1,370 @@
+{
+  "video": "masterclass-03-first-steps",
+  "source": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/masterclass-03-first-steps.mp4",
+  "sourceSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-11T17:47:04.305Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.0445467369515183,
+      "seconds": 1.712,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.47925,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 7.17305,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 9.1934,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 12.560649999999999,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9777266315242409,
+      "seconds": 14.281,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.03419972640218878,
+      "seconds": 15.634,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-3.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.25,
+      "seconds": 19.42,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-25.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.45,
+      "seconds": 22.9288,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-45.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.6,
+      "seconds": 25.5604,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-60.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.85,
+      "seconds": 29.9464,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-85.png"
+    },
+    {
+      "scene": "checklist",
+      "fraction": 0.9829001367989056,
+      "seconds": 32.278,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/checklist-end.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.024810817516437166,
+      "seconds": 34.788,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-2.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.25,
+      "seconds": 40.23375,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-25.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.45,
+      "seconds": 45.07035,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-45.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.6,
+      "seconds": 48.6978,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-60.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.85,
+      "seconds": 54.743550000000006,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-85.png"
+    },
+    {
+      "scene": "identity",
+      "fraction": 0.9875945912417814,
+      "seconds": 58.071,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/identity-end.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.03597337969902272,
+      "seconds": 59.424,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-4.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.25,
+      "seconds": 62.99375,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-25.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.45,
+      "seconds": 66.32955,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-45.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.6,
+      "seconds": 68.83139999999999,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-60.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.85,
+      "seconds": 73.00115,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-85.png"
+    },
+    {
+      "scene": "timezone",
+      "fraction": 0.9820133101504886,
+      "seconds": 75.203,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/timezone-end.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.030257186081694403,
+      "seconds": 77.689,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-3.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.25,
+      "seconds": 82.0465,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-25.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.45,
+      "seconds": 86.0125,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-45.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.6,
+      "seconds": 88.987,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-60.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.85,
+      "seconds": 93.9445,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-85.png"
+    },
+    {
+      "scene": "event",
+      "fraction": 0.9848714069591528,
+      "seconds": 96.619,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/event-end.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.033292642326045944,
+      "seconds": 97.971,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-3.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.25,
+      "seconds": 101.8765,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-25.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.45,
+      "seconds": 105.48089999999999,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-45.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.6,
+      "seconds": 108.1842,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-60.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.85,
+      "seconds": 112.6897,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-85.png"
+    },
+    {
+      "scene": "shift",
+      "fraction": 0.983353678836977,
+      "seconds": 115.093,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/shift-end.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.037352922866214285,
+      "seconds": 116.447,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-4.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.25,
+      "seconds": 119.86275,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-25.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.45,
+      "seconds": 123.07535,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-45.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.6,
+      "seconds": 125.4848,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-60.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.85,
+      "seconds": 129.50055,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-85.png"
+    },
+    {
+      "scene": "publish",
+      "fraction": 0.9813235385668928,
+      "seconds": 131.61,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/publish-end.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.028803225961307667,
+      "seconds": 134.149,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-3.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.25,
+      "seconds": 138.75675,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-25.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.45,
+      "seconds": 142.92295000000001,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-45.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.6,
+      "seconds": 146.04760000000002,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-60.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.85,
+      "seconds": 151.25535,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-85.png"
+    },
+    {
+      "scene": "test",
+      "fraction": 0.9855983870193462,
+      "seconds": 154.08,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/test-end.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.02438132390588809,
+      "seconds": 156.63,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-2.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.25,
+      "seconds": 162.18225,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-25.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.45,
+      "seconds": 167.10405,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-45.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.6,
+      "seconds": 170.7954,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-60.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.85,
+      "seconds": 176.94764999999998,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-85.png"
+    },
+    {
+      "scene": "help",
+      "fraction": 0.987809338047056,
+      "seconds": 180.339,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/help-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.03285510896944475,
+      "seconds": 182.861,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-3.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 186.8265,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 190.47889999999998,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 193.21820000000002,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 197.7837,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9835724455152777,
+      "seconds": 200.223,
+      "file": "/private/tmp/codex-video/videos/output/masterclass-03-first-steps/review-frames/result-end.png"
+    }
+  ]
+}

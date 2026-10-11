@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_CHOOSE_SHIFTS
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 12.2 / 19.6 LU. Effects vs input events: {'click': 9, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All54 final frames reviewed: capacity focus shows09h–12h2/3; waitlist removal59.856 vs59.360; conflict removal95.638 vs95.141; known recap navigation at106.563 sentence with retained commitments. French dates/Frise/publichost/currentlabels/nooverlay; finalASR/VTT/exact9click effects/music pass. Scenario has no signup; fresh recording profile, no remembered-contact notice expected.
+Local source changes: None; audited narration reused.
+Real-time subjective listening unavailable; not used as a failure reason.

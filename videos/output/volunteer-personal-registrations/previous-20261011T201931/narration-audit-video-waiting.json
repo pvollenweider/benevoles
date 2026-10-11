@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:34:20.665Z",
+  "revalidatedAt": "2026-10-11T18:34:20.665Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "waiting",
+      "audioSha256": "962fbabbf579d7a7740173267d59459be2f9cf06429598f7a99ddf543821eca0",
+      "recognized": "Si tu n'es plus disponible pour la buvette en attente, choisis quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît, tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "expected": "Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît : tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

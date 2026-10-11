@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:19.305Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "d7d4630f7fc0bc36b70ec9f8fbd57934c3d6b05b415adefe331d5bdc4071a63a",
+  "clipSha256": "06c7e0e00c8de55779674c7e7ea0daa1c22e7c9650c302e0c4f9373690204e72",
+  "scene": "agreement",
+  "review": {
+    "heardOpening": "Ouvre la Convention des Bénévoles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement",
+        "visibleSeconds": 0,
+        "visible": "La fenêtre modale « Convention des Bénévoles » est déjà ouverte à l'écran dès le début",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "puis accepte-la si elle te convient.",
+        "visibleSeconds": 6.8,
+        "visible": "La modale se ferme et la case « J'ai lu et j'accepte la convention des bénévoles » est cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.7,
+        "spoken": "Le consentement sur les données est une case distincte",
+        "visibleSeconds": 7.5,
+        "visible": "La seconde case de consentement concernant l'utilisation des données reste visible mais non cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+        "visibleSeconds": 13,
+        "visible": "La deuxième case relative aux données reste décochée jusqu'à la fin de l'extrait",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:00 : La modale « Convention des Bénévoles » est déjà ouverte au lieu d'être ouverte suite à la consigne « Ouvre la Convention ».",
+      "00:12 : La consigne mentionne de cocher ces deux éléments, mais la case de consentement sur les données n'est pas cochée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement intelligible, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

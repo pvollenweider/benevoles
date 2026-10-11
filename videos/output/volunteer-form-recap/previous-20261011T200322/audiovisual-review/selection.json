@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:10.068Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "aca811858bb963ebf19953e7e094290a824bbc8c9a67cb9cd27dd4294c7f9fa6",
+  "clipSha256": "51286447e2b6ccb6001d19a4d46ff7b77c5e6409ec72181a9fa41adf511cac0e",
+  "scene": "selection",
+  "review": {
+    "heardOpening": "Voici quatre missions :",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche.",
+        "visibleSeconds": 1,
+        "visible": "Sélection successive des quatre créneaux sur la frise (Accueil, Logistique, Rangement de nuit et Buvette) qui s'ajoutent au volet latéral.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Le bouton Continuer ouvre le formulaire avec ce choix.",
+        "visibleSeconds": 12.2,
+        "visible": "Clic sur le bouton « Continuer (4 nouveaux créneaux) » et chargement du formulaire d'inscription.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+        "visibleSeconds": 13.5,
+        "visible": "Dans le panneau latéral droit, les créneaux sélectionnés sont ordonnés chronologiquement : Accueil (09h-12h), Logistique (12h-16h), Rangement de nuit (22h-02h) puis Buvette le dimanche.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

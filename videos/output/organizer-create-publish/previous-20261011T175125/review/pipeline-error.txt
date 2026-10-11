@@ -1,0 +1,1 @@
+Error: videos/tools/record.ts exit 1

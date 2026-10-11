@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:35:03.211Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "22f280ed4d92427fecd9164e56a8d6ba42c1b130f498a83cac9961cf471597a7",
+  "clipSha256": "11bc3e48807aa74daab8d738d4c24a6a0db05001c752abee89f533dd5c884fd0",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Pour une place proposée, le bouton est Refuser la place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour une place proposée, le bouton est Refuser la place.",
+        "visibleSeconds": 0,
+        "visible": "Le bouton 'Refuser la place' est cliqué et ouvre le panneau de confirmation de refus.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente.",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage du texte 'La place proposée sur le créneau Buvette passe à la personne suivante' avec les boutons d'action.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Après confirmation, cette offre disparaît.",
+        "visibleSeconds": 11.5,
+        "visible": "Clic sur 'Oui, refuser' puis disparition de l'offre Buvette de la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

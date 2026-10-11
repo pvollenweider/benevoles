@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_SESSION_AVAILABILITY
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.4 / 18.6 LU. Effects vs input events: {'click': 18, 'key': 48}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All 48 MP4 frames reviewed. Resend 49.34 vs sentence 48.84; actual mail opens 53.74 after Attendons 51.61; recovery typing 68.04 vs 67.52; availability checks 109.44/110.22 vs 108.95; save 117.17 vs 116.70; final edit 149.87 vs 149.39 and save 155.44 vs 154.97. Real mail, identical recovery response, rate limit, persistence and member note verified. English Mailpit date noted only. Current labels/French product dates/Frise/public host/no overlay, final ASR/VTT/exact effects/music pass. No new signup or hidden prefill.
+Local source changes: None; narration reused.
+Real-time subjective listening unavailable; not used as a failure reason.

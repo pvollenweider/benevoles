@@ -1,0 +1,72 @@
+{
+  "id": "PRIVACY_PERSONAL_LINKS",
+  "slug": "privacy-personal-links",
+  "validatedAt": "2026-10-05T21:53:06.436Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 349680,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 31516,
+      "audioMs": 31514,
+      "driftMs": 2
+    },
+    {
+      "id": "signup",
+      "visualMs": 37746,
+      "audioMs": 37744,
+      "driftMs": 2
+    },
+    {
+      "id": "personal",
+      "visualMs": 28828,
+      "audioMs": 28828,
+      "driftMs": 0
+    },
+    {
+      "id": "recovery",
+      "visualMs": 37494,
+      "audioMs": 37492,
+      "driftMs": 2
+    },
+    {
+      "id": "invitation",
+      "visualMs": 30750,
+      "audioMs": 30739,
+      "driftMs": 11
+    },
+    {
+      "id": "leader",
+      "visualMs": 34604,
+      "audioMs": 34603,
+      "driftMs": 1
+    },
+    {
+      "id": "admin",
+      "visualMs": 36806,
+      "audioMs": 36806,
+      "driftMs": 0
+    },
+    {
+      "id": "legal",
+      "visualMs": 37111,
+      "audioMs": 37105,
+      "driftMs": 6
+    },
+    {
+      "id": "copies",
+      "visualMs": 31685,
+      "audioMs": 31684,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 32566,
+      "audioMs": 32564,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

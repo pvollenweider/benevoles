@@ -3,23 +3,25 @@ import type { Page } from "playwright"
 import type { Cue } from "./sentence-timing"
 
 /** Actual #735 player. No catalogue overrides, fake media or published-state changes. */
-export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: Page, target: ReturnType<Page["locator"]>) => Promise<void>, at: Cue) {
+export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: Page, target: ReturnType<Page["locator"]>) => Promise<void>, scene: (id: string, action: (at: Cue) => Promise<void>) => Promise<void>) {
+  await scene("help", async at => {
   const help = page.getByRole("link", { name: "Aide (ouvre dans un nouvel onglet)", exact: true }).first()
   assert.equal(await help.getAttribute("href"), "/doc/admin")
   const popupReady = page.waitForEvent("popup")
+  await at("Aide ouvre le guide organisateur")
   await tap(page, help)
   const popup = await popupReady
   await popup.waitForLoadState("domcontentloaded")
   assert.equal(new URL(popup.url()).origin, new URL(baseUrl).origin)
   await popup.close()
   await page.goto(`${baseUrl}/doc/admin`)
-  await at(0.15)
+  await at("Retrouvons Premiers pas")
   const firstSteps = page.locator('a[href="/doc/premiers-pas"]').first()
   await firstSteps.waitFor(); await tap(page, firstSteps)
   const trigger = page.getByRole("button", { name: /^Voir la vidéo.*Bien démarrer avec une nouvelle organisation/ })
   // Unpublished/unavailable media is intentionally a blocker, never fabricated.
   await trigger.waitFor({ timeout: 8000 })
-  await at(0.35); await tap(page, trigger)
+  await at("Quand une vidéo est disponible"); await tap(page, trigger)
   const regionId = await trigger.getAttribute("aria-controls")
   assert(regionId)
   const region = page.locator(`[id="${regionId}"]`)
@@ -31,9 +33,10 @@ export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: 
     return !!el && !el.paused && el.currentTime > 0
   }, regionId, { timeout: 8000 })
   assert(await video.evaluate((el: HTMLVideoElement) => el.controls), "Show the real playback controls")
-  await at(0.58); await tap(page, region.locator("summary").filter({ hasText: "Transcription" }))
+  await at("La transcription reste consultable"); await tap(page, region.locator("summary").filter({ hasText: "Transcription" }))
   assert(await region.getByRole("link", { name: /^Ouvrir dans la bibliothèque\s*:/ }).count() === 1)
-  await at(0.80); await tap(page, trigger)
+  await at("Vous pouvez aussi ouvrir la bibliothèque"); await tap(page, trigger)
   assert.equal(await trigger.getAttribute("aria-expanded"), "false")
   assert(await video.evaluate((el: HTMLVideoElement) => el.paused))
+  })
 }

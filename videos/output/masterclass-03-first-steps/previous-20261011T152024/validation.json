@@ -1,0 +1,65 @@
+{
+  "id": "ORG_FIRST_STEPS",
+  "slug": "masterclass-03-first-steps",
+  "validatedAt": "2026-10-04T11:14:26.554Z",
+  "continuousNarration": true,
+  "voice": "Charon",
+  "captureMs": 179600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13743,
+      "audioMs": 13741,
+      "driftMs": 2
+    },
+    {
+      "id": "checklist",
+      "visualMs": 21978,
+      "audioMs": 21977,
+      "driftMs": 1
+    },
+    {
+      "id": "identity",
+      "visualMs": 17359,
+      "audioMs": 17358,
+      "driftMs": 1
+    },
+    {
+      "id": "timezone",
+      "visualMs": 16691,
+      "audioMs": 16689,
+      "driftMs": 2
+    },
+    {
+      "id": "event",
+      "visualMs": 23189,
+      "audioMs": 23187,
+      "driftMs": 2
+    },
+    {
+      "id": "shift",
+      "visualMs": 15520,
+      "audioMs": 15517,
+      "driftMs": 3
+    },
+    {
+      "id": "publish",
+      "visualMs": 18098,
+      "audioMs": 18096,
+      "driftMs": 2
+    },
+    {
+      "id": "test",
+      "visualMs": 22527,
+      "audioMs": 22525,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 20032,
+      "audioMs": 20030,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

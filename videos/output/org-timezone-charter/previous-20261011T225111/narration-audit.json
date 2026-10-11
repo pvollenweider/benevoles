@@ -1,0 +1,100 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T22:49:32.148Z",
+  "revalidatedAt": "2026-10-11T22:49:32.150Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "620488ddb33105bbb06c9118138fb13d70729815c1612276fa018b0b6c522fc5",
+      "recognized": "Deux réglages communs évitent beaucoup de malentendus. Le fuseau horaire donne la bonne référence aux calculs automatiques et la convention des bénévoles explique clairement le cadre accepté avant chaque inscription.",
+      "expected": "Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Convention des Bénévoles explique clairement le cadre accepté avant chaque inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timezone",
+      "audioSha256": "952e1c8bfc15fb61c58aededeb7d940f1527c82f3ef66cd69c75562cc23270b3",
+      "recognized": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements. Europe Zurich tient compte de l'heure d'hiver et de l'heure d'été. Ce réglage donne la bonne référence aux rappels, aux délais des offres de liste d'attente et aux dates affichées dans le journal et les documents.",
+      "expected": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements. Europe Zurich tient compte de l’heure d’hiver et de l’heure d’été. Ce réglage donne la bonne référence aux rappels, aux délais des offres de liste d’attente et aux dates affichées dans le journal et les documents.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timezone-result",
+      "audioSha256": "2f774a38f85dcd8b1eb639e16bcd8e8d1b4c83af7bd154699e398285bb0d2108",
+      "recognized": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning. Un créneau prévu à neuf heures reste affiché à neuf heures. Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d'un changement d'heure.",
+      "expected": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning : un créneau prévu à neuf heures reste affiché à neuf heures. Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "charter",
+      "audioSha256": "6f7fb2941cdeffe1b0e2113b1170036cb2f0d8027d5dfde5b7ccdc94bda94dc3",
+      "recognized": "La convention des bénévoles présente le cadre de l'engagement. Le réglage assurance RC fournie par l'organisation change la clause correspondante et remplit de nouveau le texte proposé. Choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "expected": "La Convention des Bénévoles présente le cadre de l’engagement. Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "public-setup",
+      "audioSha256": "f2003d3826deb30c336debf90e9f8c73747802f1e00294bab85caaf79453ff58",
+      "recognized": "Vérifions le résultat côté bénévole. Ouvrez l'événement public, sélectionnez un créneau, puis cliquez sur continuer. Vous arrivez au formulaire avec les informations demandées et les consentements avant toute confirmation d'inscription. Ouvrez la convention depuis le formulaire",
+      "expected": "Vérifions le résultat côté bénévole. Ouvrez l’événement public, sélectionnez un créneau, puis cliquez sur Continuer. Vous arrivez au formulaire, avec les informations demandées et les consentements, avant toute confirmation d’inscription.",
+      "wordErrorRate": 0.1875,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "public-result",
+      "audioSha256": "d0c8a86ff1f932415d2c5cac7dba7bfd2303b1571e7b357ee3f73e094d8b5759",
+      "recognized": "Le texte enregistré est présenté aux bénévoles. Faisons-le défiler pour lire aussi les engagements de l'organisation et la clause d'assurance. Le bouton j'ai lu et j'accepte ferme la fenêtre et coche l'acceptation dans le formulaire. Quand le bénévole confirme son inscription",
+      "expected": "Ouvrez la convention depuis le formulaire. Le texte enregistré est présenté au bénévole : faisons-le défiler pour lire aussi les engagements de l’organisation et la clause d’assurance. Le bouton J’ai lu et j’accepte ferme la fenêtre et coche l’acceptation dans le formulaire.",
+      "wordErrorRate": 0.2978723404255319,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "attention",
+      "audioSha256": "04014c5f0b755291a11549dc1affa23bbfc6d259a8d6f7587b86ca2b7f84b116",
+      "recognized": "La version exacte de la convention acceptée et la date sont conservées. Une modification de votre texte concerne les prochaines inscriptions. Elle n'envoie pas automatiquement un message aux personnes déjà inscrites. Pour une information urgente, utilisez les communications de l'événement. Le résultat est prévisible.",
+      "expected": "Quand le bénévole confirme son inscription, la version exacte de la convention acceptée et la date sont conservées. Une modification de votre texte concerne les prochaines inscriptions ; elle n’envoie pas automatiquement un message aux personnes déjà inscrites. Pour une information urgente, utilisez les communications de l’événement.",
+      "wordErrorRate": 0.20833333333333334,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing",
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "result",
+      "audioSha256": "14505fe1d4b2dffd897f744eaffa126c373ea3d8875b8d1896c1616261860ce2",
+      "recognized": "Les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l'organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
+      "expected": "Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
+      "wordErrorRate": 0.09523809523809523,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "opening words displaced or missing"
+      ]
+    }
+  ]
+}

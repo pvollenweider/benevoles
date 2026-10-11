@@ -1,0 +1,93 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 164,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -33.6,
+    "loudestMusicOnlyLufs": -31.2,
+    "medianVoiceLufs": -16.2
+  },
+  "inputCounts": {
+    "click": 18,
+    "key": 48
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ce lien donne accès à",
+      "startMs": 7836,
+      "endMs": 11134,
+      "cueMs": 7838,
+      "sentenceAbsoluteMs": 7838,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "recover",
+      "phrase": "elle ne révèle pas les",
+      "startMs": 12391,
+      "endMs": 14418,
+      "cueMs": 74762,
+      "sentenceAbsoluteMs": 74760,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 75277
+      },
+      "deltaMs": 517
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Après Enregistrer mes disponibilités, le",
+      "startMs": 14558,
+      "endMs": 18957,
+      "cueMs": 116710,
+      "sentenceAbsoluteMs": 116707,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 117192
+      },
+      "deltaMs": 485
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Rechargeons la page ",
+      "startMs": 19647,
+      "endMs": 20826,
+      "cueMs": 121799,
+      "sentenceAbsoluteMs": 121796,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "organizer",
+      "phrase": "Une disponibilité générale ne garantit",
+      "startMs": 14528,
+      "endMs": 20561,
+      "cueMs": 141128,
+      "sentenceAbsoluteMs": 141126,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Le lien personnel reste ton",
+      "startMs": 12586,
+      "endMs": 21456,
+      "cueMs": 160465,
+      "sentenceAbsoluteMs": 160463,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:38.801Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "a4673cb9f79beb71d8733b91339cf4ab7a9ff6fd6802d20e5d02f590041b5621",
+  "clipSha256": "20d4c7da90999be51f7c67017d3656394c40a686dd2581d6ebb14037a52529d6",
+  "scene": "workload",
+  "review": {
+    "heardOpening": "Ce planning affiche Journée chargée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Ce planning affiche Journée chargée",
+        "visibleSeconds": 1.2,
+        "visible": "L'encadré d'avertissement jaune 'Journée chargée' est bien affiché dans le récapitulatif à droite.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation.",
+        "visibleSeconds": 11.2,
+        "visible": "L'écran bascule sur la vue planning/Frise alors que la voix commente encore l'avertissement et la confirmation.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "reviens au planning et retire Logistique",
+        "visibleSeconds": 17.8,
+        "visible": "L'action de décocher le créneau Logistique sur le planning n'est pas montrée ; la vidéo coupe directement vers le formulaire.",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:11, la vue bascule prématurément sur la Frise pendant l'explication de l'avertissement du récapitulatif.",
+      "À 00:17-00:18, coupure brusque : l'action annoncée de retirer le créneau Logistique sur le planning n'est jamais montrée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

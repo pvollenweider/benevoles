@@ -1,0 +1,6 @@
+STATUS: NOT READY
+ID: ORG_FIRST_STEPS
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+No final render: rehearsal failed in publish at obsolete public URL anchor selector. Current UI displays the configured URL in EventShareLink span. Source updated in both affected scenarios; no refilm.
+Audio cache fingerprint rejected by tooling; continuous narration regenerated and independently audited before rehearsal.
+Music/final sentence sync/MP4 checks unavailable: no final MP4.

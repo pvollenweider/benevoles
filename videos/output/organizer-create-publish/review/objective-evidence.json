@@ -1,0 +1,102 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 181,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "inputCounts": {
+    "click": 47,
+    "key": 69
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "basics",
+      "phrase": "Donne-lui un nom clair",
+      "startMs": 472,
+      "endMs": 4611,
+      "cueMs": 13904,
+      "sentenceAbsoluteMs": 13902,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 14405
+      },
+      "deltaMs": 503
+    },
+    {
+      "segmentId": "series",
+      "phrase": "Quand les horaires se répètent",
+      "startMs": 4762,
+      "endMs": 7589,
+      "cueMs": 28070,
+      "sentenceAbsoluteMs": 28069,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 28554
+      },
+      "deltaMs": 485
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Choisis un créneau",
+      "startMs": 6281,
+      "endMs": 10478,
+      "cueMs": 93379,
+      "sentenceAbsoluteMs": 93379,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 93844
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "preview-result",
+      "phrase": "Rien n’est réellement enregistré",
+      "startMs": 9483,
+      "endMs": 12237,
+      "cueMs": 113624,
+      "sentenceAbsoluteMs": 113622,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "import",
+      "phrase": "L’application analyse les colonnes",
+      "startMs": 9266,
+      "endMs": 16943,
+      "cueMs": 148532,
+      "sentenceAbsoluteMs": 148532,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 149012
+      },
+      "deltaMs": 480
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Filtre les membres par tag",
+      "startMs": 2844,
+      "endMs": 6661,
+      "cueMs": 159660,
+      "sentenceAbsoluteMs": 159659,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 160145
+      },
+      "deltaMs": 486
+    }
+  ]
+}

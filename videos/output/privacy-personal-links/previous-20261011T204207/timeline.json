@@ -1,0 +1,58 @@
+{
+  "slug": "privacy-personal-links",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T21:50:56.696Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 2,
+      "endMs": 31518
+    },
+    {
+      "id": "signup",
+      "startMs": 31970,
+      "endMs": 69716
+    },
+    {
+      "id": "personal",
+      "startMs": 70169,
+      "endMs": 98997
+    },
+    {
+      "id": "recovery",
+      "startMs": 99450,
+      "endMs": 136944
+    },
+    {
+      "id": "invitation",
+      "startMs": 137396,
+      "endMs": 168146
+    },
+    {
+      "id": "leader",
+      "startMs": 168599,
+      "endMs": 203203
+    },
+    {
+      "id": "admin",
+      "startMs": 203656,
+      "endMs": 240462
+    },
+    {
+      "id": "legal",
+      "startMs": 240915,
+      "endMs": 278026
+    },
+    {
+      "id": "copies",
+      "startMs": 278482,
+      "endMs": 310167
+    },
+    {
+      "id": "result",
+      "startMs": 311761,
+      "endMs": 344327
+    }
+  ]
+}

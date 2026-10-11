@@ -1,0 +1,48 @@
+{
+  "slug": "org-public-identity",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:36:50.749Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1098,
+      "endMs": 14092
+    },
+    {
+      "id": "names",
+      "startMs": 14545,
+      "endMs": 34795
+    },
+    {
+      "id": "logo",
+      "startMs": 35247,
+      "endMs": 52960
+    },
+    {
+      "id": "slug",
+      "startMs": 53414,
+      "endMs": 77942
+    },
+    {
+      "id": "public-page",
+      "startMs": 79532,
+      "endMs": 98318
+    },
+    {
+      "id": "event-result",
+      "startMs": 98783,
+      "endMs": 116178
+    },
+    {
+      "id": "remove-logo",
+      "startMs": 116632,
+      "endMs": 138198
+    },
+    {
+      "id": "result",
+      "startMs": 138650,
+      "endMs": 159551
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_PERSONAL_REGISTRATIONS
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.2 / 18.5 LU. Effects vs input events: {'click': 11, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All 48 MP4 frames reviewed. Non garder 71.30 vs sentence 70.83; second cancellation 74.92/75.70 follows Reprenons 74.44; offer confirmation 117.23 vs 116.76; request opens 133.66 vs 133.19 and confirms 139.25 vs 138.75. Cards disappear and real empty state appears. Current labels, French dates, Frise, no forbidden address or overlay; final ASR, VTT, exact effects and music pass. No second public signup.
+Local source changes: None; narration reused.
+Real-time subjective listening unavailable; not used as a failure reason.

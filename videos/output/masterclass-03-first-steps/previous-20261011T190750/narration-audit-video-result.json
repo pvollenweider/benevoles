@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:47:17.158Z",
+  "revalidatedAt": "2026-10-11T17:47:17.159Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "c290ee59a919a8bb6d2af6a128162c5ec50e999d916eb1c1b8586b13eb2550a5",
+      "recognized": "En revenant dans l'administration, les étapes obligatoires sont terminées et la check-list disparaît. L'association possède maintenant une identité publique, le bon fuseau, un événement publié et un parcours testé de bout en bout. Si vous préférez retirer la liste plus tôt, un propriétaire peut la masquer pour toute l'équipe, sans pour autant réaliser les étapes manquantes.",
+      "expected": "En revenant dans l’administration, les étapes obligatoires sont terminées et la checklist disparaît. L’association possède maintenant une identité publique, le bon fuseau, un événement publié et un parcours testé de bout en bout. Si vous préférez retirer la liste plus tôt, un propriétaire peut la masquer pour toute l’équipe, sans pour autant réaliser les étapes manquantes.",
+      "wordErrorRate": 0.03389830508474576,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

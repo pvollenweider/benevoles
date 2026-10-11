@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:23:06.459Z",
+  "videoSha256": "5063ee62e74980d95a6436581e09ebe9336d8cd7e951336c8c0de51ad76ffa48",
+  "promptSha256": "996661ab0041e6b0c01c2d2af17be8897eac7bffa24fe379ae2e929c935c4fdf",
+  "clipSha256": "5b406f34dec88dd7f7ddd2576e816fae014619f0c3c3d66d41243bf518763d80",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Indique ton prénom et ton nom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.9,
+        "spoken": "Indique ton prénom et ton nom",
+        "visibleSeconds": 1.2,
+        "visible": "Saisie du prénom « Alex » et du nom « Martin » dans les champs respectifs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "vérifie soigneusement l'adresse email",
+        "visibleSeconds": 3.7,
+        "visible": "Saisie de l'adresse email « Alex.martin@example.org »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "Le téléphone est obligatoire pour cet événement",
+        "visibleSeconds": 7.3,
+        "visible": "Saisie du numéro de téléphone « 079 000 12 34 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum",
+        "visibleSeconds": 12.8,
+        "visible": "Sélection et saisie de la date de naissance « 12.06.1994 »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,1492 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 4,
+    "sentences": [
+      {
+        "text": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe :",
+        "startMs": 228,
+        "endMs": 5061,
+        "method": "silence",
+        "absoluteStartMs": 232
+      },
+      {
+        "text": "ils ne servent pas à la même chose.",
+        "startMs": 5525,
+        "endMs": 6955,
+        "method": "silence",
+        "absoluteStartMs": 5529
+      },
+      {
+        "text": "Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu.",
+        "startMs": 7082,
+        "endMs": 12064,
+        "method": "silence",
+        "absoluteStartMs": 7086
+      },
+      {
+        "text": "Dans notre démonstration, deux organisations ont chacune une Léa Exemple et une fête portant le même identifiant.",
+        "startMs": 12942,
+        "endMs": 18865,
+        "method": "silence",
+        "absoluteStartMs": 12946
+      },
+      {
+        "text": "Les noms se ressemblent, mais les fiches et les adresses sont différentes.",
+        "startMs": 18990,
+        "endMs": 23473,
+        "method": "silence",
+        "absoluteStartMs": 18994
+      },
+      {
+        "text": "Chaque organisation retrouve son propre événement dans son administration.",
+        "startMs": 23856,
+        "endMs": 27487,
+        "method": "silence",
+        "absoluteStartMs": 23860
+      },
+      {
+        "text": "Toutes les personnes et coordonnées utilisées ici sont fictives.",
+        "startMs": 28279,
+        "endMs": 31126,
+        "method": "silence",
+        "absoluteStartMs": 28283
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "signup",
+    "startMs": 33791,
+    "sentences": [
+      {
+        "text": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire.",
+        "startMs": 388,
+        "endMs": 4406,
+        "method": "silence",
+        "absoluteStartMs": 34179
+      },
+      {
+        "text": "Jules choisit un créneau et renseigne ses coordonnées.",
+        "startMs": 5068,
+        "endMs": 7490,
+        "method": "silence",
+        "absoluteStartMs": 38859
+      },
+      {
+        "text": "Prénom, nom, adresse email et téléphone :",
+        "startMs": 8157,
+        "endMs": 10904,
+        "method": "silence",
+        "absoluteStartMs": 41948
+      },
+      {
+        "text": "ces informations permettent à l'organisation de retrouver Jules et de le contacter.",
+        "startMs": 11133,
+        "endMs": 14456,
+        "method": "silence",
+        "absoluteStartMs": 44924
+      },
+      {
+        "text": "Il accepte ensuite les conditions du formulaire.",
+        "startMs": 14991,
+        "endMs": 16894,
+        "method": "silence",
+        "absoluteStartMs": 48782
+      },
+      {
+        "text": "Après l'envoi, l'inscription est enregistrée et un email lui est adressé.",
+        "startMs": 17322,
+        "endMs": 20758,
+        "method": "silence",
+        "absoluteStartMs": 51113
+      },
+      {
+        "text": "Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation.",
+        "startMs": 21508,
+        "endMs": 25339,
+        "method": "silence",
+        "absoluteStartMs": 55299
+      },
+      {
+        "text": "Taper une adresse ne prouve pas qu'on peut lire sa boîte email.",
+        "startMs": 26020,
+        "endMs": 28932,
+        "method": "silence",
+        "absoluteStartMs": 59811
+      },
+      {
+        "text": "Ouvrons donc le vrai message reçu par Jules, puis son lien personnel.",
+        "startMs": 29210,
+        "endMs": 32935,
+        "method": "silence",
+        "absoluteStartMs": 63001
+      },
+      {
+        "text": "Nous arrivons sur sa propre inscription, pas sur la liste de toute l'équipe.",
+        "startMs": 33831,
+        "endMs": 37301,
+        "method": "silence",
+        "absoluteStartMs": 67622
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 39336
+      },
+      {
+        "kind": "click",
+        "atMs": 40119
+      },
+      {
+        "kind": "click",
+        "atMs": 40935
+      },
+      {
+        "kind": "key",
+        "atMs": 41242
+      },
+      {
+        "kind": "key",
+        "atMs": 41243
+      },
+      {
+        "kind": "key",
+        "atMs": 41246
+      },
+      {
+        "kind": "key",
+        "atMs": 41359
+      },
+      {
+        "kind": "key",
+        "atMs": 41474
+      },
+      {
+        "kind": "key",
+        "atMs": 41586
+      },
+      {
+        "kind": "key",
+        "atMs": 41701
+      },
+      {
+        "kind": "click",
+        "atMs": 42319
+      },
+      {
+        "kind": "key",
+        "atMs": 42625
+      },
+      {
+        "kind": "key",
+        "atMs": 42626
+      },
+      {
+        "kind": "key",
+        "atMs": 42628
+      },
+      {
+        "kind": "key",
+        "atMs": 42742
+      },
+      {
+        "kind": "key",
+        "atMs": 42856
+      },
+      {
+        "kind": "key",
+        "atMs": 42970
+      },
+      {
+        "kind": "key",
+        "atMs": 43083
+      },
+      {
+        "kind": "key",
+        "atMs": 43201
+      },
+      {
+        "kind": "key",
+        "atMs": 43320
+      },
+      {
+        "kind": "click",
+        "atMs": 43935
+      },
+      {
+        "kind": "key",
+        "atMs": 44242
+      },
+      {
+        "kind": "key",
+        "atMs": 44243
+      },
+      {
+        "kind": "key",
+        "atMs": 44245
+      },
+      {
+        "kind": "key",
+        "atMs": 44358
+      },
+      {
+        "kind": "key",
+        "atMs": 44471
+      },
+      {
+        "kind": "key",
+        "atMs": 44585
+      },
+      {
+        "kind": "key",
+        "atMs": 44700
+      },
+      {
+        "kind": "key",
+        "atMs": 44819
+      },
+      {
+        "kind": "key",
+        "atMs": 44934
+      },
+      {
+        "kind": "key",
+        "atMs": 45053
+      },
+      {
+        "kind": "key",
+        "atMs": 45170
+      },
+      {
+        "kind": "key",
+        "atMs": 45289
+      },
+      {
+        "kind": "key",
+        "atMs": 45410
+      },
+      {
+        "kind": "key",
+        "atMs": 45526
+      },
+      {
+        "kind": "key",
+        "atMs": 45644
+      },
+      {
+        "kind": "key",
+        "atMs": 45760
+      },
+      {
+        "kind": "key",
+        "atMs": 45878
+      },
+      {
+        "kind": "key",
+        "atMs": 45996
+      },
+      {
+        "kind": "key",
+        "atMs": 46111
+      },
+      {
+        "kind": "key",
+        "atMs": 46225
+      },
+      {
+        "kind": "key",
+        "atMs": 46339
+      },
+      {
+        "kind": "key",
+        "atMs": 46451
+      },
+      {
+        "kind": "key",
+        "atMs": 46565
+      },
+      {
+        "kind": "key",
+        "atMs": 46679
+      },
+      {
+        "kind": "key",
+        "atMs": 46792
+      },
+      {
+        "kind": "key",
+        "atMs": 46914
+      },
+      {
+        "kind": "key",
+        "atMs": 47031
+      },
+      {
+        "kind": "key",
+        "atMs": 47149
+      },
+      {
+        "kind": "key",
+        "atMs": 47275
+      },
+      {
+        "kind": "key",
+        "atMs": 47392
+      },
+      {
+        "kind": "key",
+        "atMs": 47508
+      },
+      {
+        "kind": "key",
+        "atMs": 47629
+      },
+      {
+        "kind": "key",
+        "atMs": 47744
+      },
+      {
+        "kind": "click",
+        "atMs": 48385
+      },
+      {
+        "kind": "key",
+        "atMs": 48692
+      },
+      {
+        "kind": "key",
+        "atMs": 48692
+      },
+      {
+        "kind": "key",
+        "atMs": 48695
+      },
+      {
+        "kind": "key",
+        "atMs": 48807
+      },
+      {
+        "kind": "key",
+        "atMs": 48920
+      },
+      {
+        "kind": "key",
+        "atMs": 49033
+      },
+      {
+        "kind": "key",
+        "atMs": 49146
+      },
+      {
+        "kind": "key",
+        "atMs": 49263
+      },
+      {
+        "kind": "key",
+        "atMs": 49381
+      },
+      {
+        "kind": "key",
+        "atMs": 49500
+      },
+      {
+        "kind": "key",
+        "atMs": 49618
+      },
+      {
+        "kind": "key",
+        "atMs": 49733
+      },
+      {
+        "kind": "key",
+        "atMs": 49853
+      },
+      {
+        "kind": "key",
+        "atMs": 49971
+      },
+      {
+        "kind": "key",
+        "atMs": 50088
+      },
+      {
+        "kind": "key",
+        "atMs": 50204
+      },
+      {
+        "kind": "key",
+        "atMs": 50324
+      },
+      {
+        "kind": "click",
+        "atMs": 50901
+      },
+      {
+        "kind": "click",
+        "atMs": 51686
+      },
+      {
+        "kind": "click",
+        "atMs": 52484
+      }
+    ]
+  },
+  {
+    "id": "personal",
+    "startMs": 73803,
+    "sentences": [
+      {
+        "text": "Sur la page personnelle, Jules retrouve son créneau et les actions prévues pour son inscription.",
+        "startMs": 450,
+        "endMs": 4573,
+        "method": "silence",
+        "absoluteStartMs": 74253
+      },
+      {
+        "text": "Le panneau Ton lien personnel rappelle à quoi sert cet accès.",
+        "startMs": 5324,
+        "endMs": 8486,
+        "method": "silence",
+        "absoluteStartMs": 79127
+      },
+      {
+        "text": "Gardons ce lien pour son destinataire :",
+        "startMs": 9138,
+        "endMs": 10934,
+        "method": "silence",
+        "absoluteStartMs": 82941
+      },
+      {
+        "text": "une personne qui le reçoit peut accéder à la page correspondante.",
+        "startMs": 11055,
+        "endMs": 14152,
+        "method": "silence",
+        "absoluteStartMs": 84858
+      },
+      {
+        "text": "Ce n'est pas le lien public de recrutement.",
+        "startMs": 14279,
+        "endMs": 15858,
+        "method": "silence",
+        "absoluteStartMs": 88082
+      },
+      {
+        "text": "Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu.",
+        "startMs": 16651,
+        "endMs": 19410,
+        "method": "silence",
+        "absoluteStartMs": 90454
+      },
+      {
+        "text": "Cette action renvoie l'accès ;",
+        "startMs": 19545,
+        "endMs": 20774,
+        "method": "silence",
+        "absoluteStartMs": 93348
+      },
+      {
+        "text": "elle ne crée pas une deuxième inscription.",
+        "startMs": 21450,
+        "endMs": 24348,
+        "method": "silence",
+        "absoluteStartMs": 95253
+      },
+      {
+        "text": "Pour inviter des amis à participer, partage plutôt la page publique de l'événement.",
+        "startMs": 24980,
+        "endMs": 28400,
+        "method": "silence",
+        "absoluteStartMs": 98783
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 90927
+      }
+    ]
+  },
+  {
+    "id": "recovery",
+    "startMs": 104924,
+    "sentences": [
+      {
+        "text": "Le lien est perdu ?",
+        "startMs": 427,
+        "endMs": 1190,
+        "method": "silence",
+        "absoluteStartMs": 105351
+      },
+      {
+        "text": "Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription.",
+        "startMs": 1795,
+        "endMs": 5151,
+        "method": "silence",
+        "absoluteStartMs": 106719
+      },
+      {
+        "text": "La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel.",
+        "startMs": 5818,
+        "endMs": 10441,
+        "method": "silence",
+        "absoluteStartMs": 110742
+      },
+      {
+        "text": "Vérifions le message reçu dans la boîte de Léa.",
+        "startMs": 11463,
+        "endMs": 14177,
+        "method": "silence",
+        "absoluteStartMs": 116387
+      },
+      {
+        "text": "Recommençons avec une adresse fictive inconnue :",
+        "startMs": 14624,
+        "endMs": 16754,
+        "method": "silence",
+        "absoluteStartMs": 119548
+      },
+      {
+        "text": "la réponse affichée reste la même.",
+        "startMs": 17557,
+        "endMs": 19675,
+        "method": "silence",
+        "absoluteStartMs": 122481
+      },
+      {
+        "text": "Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B.",
+        "startMs": 19878,
+        "endMs": 24983,
+        "method": "silence",
+        "absoluteStartMs": 124802
+      },
+      {
+        "text": "La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé.",
+        "startMs": 25478,
+        "endMs": 29747,
+        "method": "silence",
+        "absoluteStartMs": 130402
+      },
+      {
+        "text": "Si tu ne reçois rien, vérifie ton adresse et les courriers indésirables, puis contacte l'organisation au besoin.",
+        "startMs": 30493,
+        "endMs": 36596,
+        "method": "silence",
+        "absoluteStartMs": 135417
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 107254
+      },
+      {
+        "kind": "key",
+        "atMs": 107560
+      },
+      {
+        "kind": "key",
+        "atMs": 107560
+      },
+      {
+        "kind": "key",
+        "atMs": 107563
+      },
+      {
+        "kind": "key",
+        "atMs": 107675
+      },
+      {
+        "kind": "key",
+        "atMs": 107787
+      },
+      {
+        "kind": "key",
+        "atMs": 107900
+      },
+      {
+        "kind": "key",
+        "atMs": 108017
+      },
+      {
+        "kind": "key",
+        "atMs": 108130
+      },
+      {
+        "kind": "key",
+        "atMs": 108243
+      },
+      {
+        "kind": "key",
+        "atMs": 108360
+      },
+      {
+        "kind": "key",
+        "atMs": 108479
+      },
+      {
+        "kind": "key",
+        "atMs": 108592
+      },
+      {
+        "kind": "key",
+        "atMs": 108710
+      },
+      {
+        "kind": "key",
+        "atMs": 108828
+      },
+      {
+        "kind": "key",
+        "atMs": 108944
+      },
+      {
+        "kind": "key",
+        "atMs": 109059
+      },
+      {
+        "kind": "key",
+        "atMs": 109177
+      },
+      {
+        "kind": "key",
+        "atMs": 109294
+      },
+      {
+        "kind": "key",
+        "atMs": 109409
+      },
+      {
+        "kind": "key",
+        "atMs": 109528
+      },
+      {
+        "kind": "key",
+        "atMs": 109645
+      },
+      {
+        "kind": "key",
+        "atMs": 109762
+      },
+      {
+        "kind": "key",
+        "atMs": 109879
+      },
+      {
+        "kind": "key",
+        "atMs": 109997
+      },
+      {
+        "kind": "key",
+        "atMs": 110112
+      },
+      {
+        "kind": "key",
+        "atMs": 110229
+      },
+      {
+        "kind": "key",
+        "atMs": 110347
+      },
+      {
+        "kind": "key",
+        "atMs": 110464
+      },
+      {
+        "kind": "key",
+        "atMs": 110583
+      },
+      {
+        "kind": "key",
+        "atMs": 110697
+      },
+      {
+        "kind": "key",
+        "atMs": 110813
+      },
+      {
+        "kind": "key",
+        "atMs": 110933
+      },
+      {
+        "kind": "key",
+        "atMs": 111052
+      },
+      {
+        "kind": "key",
+        "atMs": 111170
+      },
+      {
+        "kind": "key",
+        "atMs": 111288
+      },
+      {
+        "kind": "key",
+        "atMs": 111404
+      },
+      {
+        "kind": "key",
+        "atMs": 111521
+      },
+      {
+        "kind": "key",
+        "atMs": 111640
+      },
+      {
+        "kind": "click",
+        "atMs": 112218
+      },
+      {
+        "kind": "click",
+        "atMs": 124113
+      },
+      {
+        "kind": "key",
+        "atMs": 124419
+      },
+      {
+        "kind": "key",
+        "atMs": 124420
+      },
+      {
+        "kind": "key",
+        "atMs": 124422
+      },
+      {
+        "kind": "key",
+        "atMs": 124534
+      },
+      {
+        "kind": "key",
+        "atMs": 124647
+      },
+      {
+        "kind": "key",
+        "atMs": 124760
+      },
+      {
+        "kind": "key",
+        "atMs": 124877
+      },
+      {
+        "kind": "key",
+        "atMs": 124993
+      },
+      {
+        "kind": "key",
+        "atMs": 125106
+      },
+      {
+        "kind": "key",
+        "atMs": 125224
+      },
+      {
+        "kind": "key",
+        "atMs": 125342
+      },
+      {
+        "kind": "key",
+        "atMs": 125458
+      },
+      {
+        "kind": "key",
+        "atMs": 125577
+      },
+      {
+        "kind": "key",
+        "atMs": 125691
+      },
+      {
+        "kind": "key",
+        "atMs": 125811
+      },
+      {
+        "kind": "key",
+        "atMs": 125924
+      },
+      {
+        "kind": "key",
+        "atMs": 126038
+      },
+      {
+        "kind": "key",
+        "atMs": 126156
+      },
+      {
+        "kind": "key",
+        "atMs": 126273
+      },
+      {
+        "kind": "key",
+        "atMs": 126389
+      },
+      {
+        "kind": "key",
+        "atMs": 126506
+      },
+      {
+        "kind": "key",
+        "atMs": 126622
+      },
+      {
+        "kind": "key",
+        "atMs": 126740
+      },
+      {
+        "kind": "key",
+        "atMs": 126860
+      },
+      {
+        "kind": "key",
+        "atMs": 126978
+      },
+      {
+        "kind": "key",
+        "atMs": 127098
+      },
+      {
+        "kind": "key",
+        "atMs": 127216
+      },
+      {
+        "kind": "key",
+        "atMs": 127333
+      },
+      {
+        "kind": "key",
+        "atMs": 127450
+      },
+      {
+        "kind": "key",
+        "atMs": 127568
+      },
+      {
+        "kind": "key",
+        "atMs": 127684
+      },
+      {
+        "kind": "key",
+        "atMs": 127802
+      },
+      {
+        "kind": "key",
+        "atMs": 127919
+      },
+      {
+        "kind": "key",
+        "atMs": 128037
+      },
+      {
+        "kind": "key",
+        "atMs": 128156
+      },
+      {
+        "kind": "click",
+        "atMs": 128762
+      },
+      {
+        "kind": "click",
+        "atMs": 131990
+      },
+      {
+        "kind": "key",
+        "atMs": 132297
+      },
+      {
+        "kind": "key",
+        "atMs": 132297
+      },
+      {
+        "kind": "key",
+        "atMs": 132300
+      },
+      {
+        "kind": "key",
+        "atMs": 132411
+      },
+      {
+        "kind": "key",
+        "atMs": 132525
+      },
+      {
+        "kind": "key",
+        "atMs": 132639
+      },
+      {
+        "kind": "key",
+        "atMs": 132754
+      },
+      {
+        "kind": "key",
+        "atMs": 132872
+      },
+      {
+        "kind": "key",
+        "atMs": 132988
+      },
+      {
+        "kind": "key",
+        "atMs": 133107
+      },
+      {
+        "kind": "key",
+        "atMs": 133222
+      },
+      {
+        "kind": "key",
+        "atMs": 133338
+      },
+      {
+        "kind": "key",
+        "atMs": 133455
+      },
+      {
+        "kind": "key",
+        "atMs": 133570
+      },
+      {
+        "kind": "key",
+        "atMs": 133689
+      },
+      {
+        "kind": "key",
+        "atMs": 133804
+      },
+      {
+        "kind": "key",
+        "atMs": 133923
+      },
+      {
+        "kind": "key",
+        "atMs": 134037
+      },
+      {
+        "kind": "key",
+        "atMs": 134151
+      },
+      {
+        "kind": "key",
+        "atMs": 134264
+      },
+      {
+        "kind": "key",
+        "atMs": 134376
+      },
+      {
+        "kind": "key",
+        "atMs": 134493
+      },
+      {
+        "kind": "key",
+        "atMs": 134610
+      },
+      {
+        "kind": "key",
+        "atMs": 134727
+      },
+      {
+        "kind": "key",
+        "atMs": 134843
+      },
+      {
+        "kind": "key",
+        "atMs": 134959
+      },
+      {
+        "kind": "key",
+        "atMs": 135078
+      },
+      {
+        "kind": "key",
+        "atMs": 135197
+      },
+      {
+        "kind": "key",
+        "atMs": 135324
+      },
+      {
+        "kind": "key",
+        "atMs": 135439
+      },
+      {
+        "kind": "key",
+        "atMs": 135556
+      },
+      {
+        "kind": "key",
+        "atMs": 135673
+      },
+      {
+        "kind": "key",
+        "atMs": 135792
+      },
+      {
+        "kind": "key",
+        "atMs": 135908
+      },
+      {
+        "kind": "key",
+        "atMs": 136027
+      },
+      {
+        "kind": "key",
+        "atMs": 136141
+      },
+      {
+        "kind": "key",
+        "atMs": 136260
+      },
+      {
+        "kind": "key",
+        "atMs": 136374
+      },
+      {
+        "kind": "click",
+        "atMs": 136956
+      }
+    ]
+  },
+  {
+    "id": "invitation",
+    "startMs": 144681,
+    "sentences": [
+      {
+        "text": "Une invitation nominative est différente d'un lien public.",
+        "startMs": 896,
+        "endMs": 3607,
+        "method": "silence",
+        "absoluteStartMs": 145577
+      },
+      {
+        "text": "L'organisation l'envoie à Zoé, puis nous ouvrons le vrai email reçu.",
+        "startMs": 4360,
+        "endMs": 8402,
+        "method": "silence",
+        "absoluteStartMs": 149041
+      },
+      {
+        "text": "Son lien conduit au formulaire avec les informations prévues pour cette invitation.",
+        "startMs": 8804,
+        "endMs": 13298,
+        "method": "silence",
+        "absoluteStartMs": 153485
+      },
+      {
+        "text": "Cela facilite l'inscription de la personne concernée ;",
+        "startMs": 13763,
+        "endMs": 15970,
+        "method": "silence",
+        "absoluteStartMs": 158444
+      },
+      {
+        "text": "ce n'est pas une affiche à diffuser à tout le monde.",
+        "startMs": 16287,
+        "endMs": 18395,
+        "method": "silence",
+        "absoluteStartMs": 160968
+      },
+      {
+        "text": "Vérifions le prénom, l'adresse et le créneau avant de continuer.",
+        "startMs": 19280,
+        "endMs": 23148,
+        "method": "silence",
+        "absoluteStartMs": 163961
+      },
+      {
+        "text": "Si tu recrutes largement, utilise le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+        "startMs": 23479,
+        "endMs": 30127,
+        "method": "silence",
+        "absoluteStartMs": 168160
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 149523
+      },
+      {
+        "kind": "click",
+        "atMs": 150306
+      },
+      {
+        "kind": "click",
+        "atMs": 153973
+      },
+      {
+        "kind": "click",
+        "atMs": 160054
+      },
+      {
+        "kind": "click",
+        "atMs": 160839
+      }
+    ]
+  },
+  {
+    "id": "leader",
+    "startMs": 177688,
+    "sentences": [
+      {
+        "text": "Le responsable a lui aussi un accès destiné à sa mission.",
+        "startMs": 645,
+        "endMs": 3717,
+        "method": "silence",
+        "absoluteStartMs": 178333
+      },
+      {
+        "text": "Ouvrons le lien de Camille, responsable de l'accueil.",
+        "startMs": 3998,
+        "endMs": 6754,
+        "method": "silence",
+        "absoluteStartMs": 181686
+      },
+      {
+        "text": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter.",
+        "startMs": 7259,
+        "endMs": 12335,
+        "method": "silence",
+        "absoluteStartMs": 184947
+      },
+      {
+        "text": "Les personnes de la logistique et de l'autre organisation ne sont pas dans cette équipe.",
+        "startMs": 13105,
+        "endMs": 17569,
+        "method": "silence",
+        "absoluteStartMs": 190793
+      },
+      {
+        "text": "Ce lien donne accès à des informations opérationnelles :",
+        "startMs": 17703,
+        "endMs": 20173,
+        "method": "silence",
+        "absoluteStartMs": 195391
+      },
+      {
+        "text": "ne le publie pas sur une affiche.",
+        "startMs": 20832,
+        "endMs": 22245,
+        "method": "silence",
+        "absoluteStartMs": 198520
+      },
+      {
+        "text": "Revenons dans l'administration et retirons ce responsable.",
+        "startMs": 23434,
+        "endMs": 26415,
+        "method": "silence",
+        "absoluteStartMs": 201122
+      },
+      {
+        "text": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+        "startMs": 27135,
+        "endMs": 30120,
+        "method": "silence",
+        "absoluteStartMs": 204823
+      },
+      {
+        "text": "Cela permet de retirer cet accès quand la responsabilité prend fin.",
+        "startMs": 30615,
+        "endMs": 33993,
+        "method": "silence",
+        "absoluteStartMs": 208303
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 202825
+      },
+      {
+        "kind": "click",
+        "atMs": 205289
+      }
+    ]
+  },
+  {
+    "id": "admin",
+    "startMs": 214552,
+    "sentences": [
+      {
+        "text": "L'organisateur travaille dans son administration, avec sa propre connexion.",
+        "startMs": 610,
+        "endMs": 4710,
+        "method": "silence",
+        "absoluteStartMs": 215162
+      },
+      {
+        "text": "Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement.",
+        "startMs": 5034,
+        "endMs": 9209,
+        "method": "silence",
+        "absoluteStartMs": 219586
+      },
+      {
+        "text": "Dans les membres, il peut consulter les disponibilités et les notes internes de préparation.",
+        "startMs": 10215,
+        "endMs": 15242,
+        "method": "silence",
+        "absoluteStartMs": 224767
+      },
+      {
+        "text": "Regardons la fiche de Léa, puis comparons avec les deux vues précédentes.",
+        "startMs": 15563,
+        "endMs": 19126,
+        "method": "silence",
+        "absoluteStartMs": 230115
+      },
+      {
+        "text": "Sa page personnelle ne montre pas les notes internes.",
+        "startMs": 19601,
+        "endMs": 21993,
+        "method": "silence",
+        "absoluteStartMs": 234153
+      },
+      {
+        "text": "Le responsable reçoit les contacts de son équipe, pas la fiche membre complète.",
+        "startMs": 22365,
+        "endMs": 26518,
+        "method": "silence",
+        "absoluteStartMs": 236917
+      },
+      {
+        "text": "Avant de transmettre une information, demande-toi qui en a besoin et pour quelle tâche.",
+        "startMs": 27293,
+        "endMs": 31731,
+        "method": "silence",
+        "absoluteStartMs": 241845
+      },
+      {
+        "text": "Une note utile à l'organisation n'a pas forcément sa place dans un document distribué.",
+        "startMs": 32301,
+        "endMs": 36522,
+        "method": "silence",
+        "absoluteStartMs": 246853
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 230596
+      },
+      {
+        "kind": "click",
+        "atMs": 234629
+      }
+    ]
+  },
+  {
+    "id": "legal",
+    "startMs": 253619,
+    "sentences": [
+      {
+        "text": "Les informations publiques se trouvent aussi dans le pied de page.",
+        "startMs": 285,
+        "endMs": 3059,
+        "method": "silence",
+        "absoluteStartMs": 253904
+      },
+      {
+        "text": "Ouvrons Confidentialité.",
+        "startMs": 3372,
+        "endMs": 5146,
+        "method": "silence",
+        "absoluteStartMs": 256991
+      },
+      {
+        "text": "Cette page décrit les usages annoncés et les destinataires des données.",
+        "startMs": 6435,
+        "endMs": 10038,
+        "method": "silence",
+        "absoluteStartMs": 260054
+      },
+      {
+        "text": "Repérons aussi les indications de conservation et les moyens de contact.",
+        "startMs": 10666,
+        "endMs": 14477,
+        "method": "silence",
+        "absoluteStartMs": 264285
+      },
+      {
+        "text": "Pour une question ou une demande concernant les données, appuie-toi sur ces informations et sur l'organisation concernée.",
+        "startMs": 14985,
+        "endMs": 21369,
+        "method": "silence",
+        "absoluteStartMs": 268604
+      },
+      {
+        "text": "Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre.",
+        "startMs": 21762,
+        "endMs": 25421,
+        "method": "silence",
+        "absoluteStartMs": 275381
+      },
+      {
+        "text": "Cette vidéo explique les gestes dans l'outil ;",
+        "startMs": 26302,
+        "endMs": 28231,
+        "method": "silence",
+        "absoluteStartMs": 279921
+      },
+      {
+        "text": "elle ne remplace pas une lecture des textes actuels ni un avis juridique.",
+        "startMs": 28541,
+        "endMs": 32136,
+        "method": "silence",
+        "absoluteStartMs": 282160
+      },
+      {
+        "text": "Il n'existe pas un délai de conservation unique à appliquer sans regarder le contexte.",
+        "startMs": 32263,
+        "endMs": 36795,
+        "method": "silence",
+        "absoluteStartMs": 285882
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 257506
+      },
+      {
+        "kind": "click",
+        "atMs": 277034
+      }
+    ]
+  },
+  {
+    "id": "copies",
+    "startMs": 292993,
+    "sentences": [
+      {
+        "text": "Sur le terrain, une liste bien choisie peut suffire.",
+        "startMs": 316,
+        "endMs": 2891,
+        "method": "silence",
+        "absoluteStartMs": 293309
+      },
+      {
+        "text": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+        "startMs": 3498,
+        "endMs": 7142,
+        "method": "silence",
+        "absoluteStartMs": 296491
+      },
+      {
+        "text": "Comparons-le au CSV des membres :",
+        "startMs": 7821,
+        "endMs": 9519,
+        "method": "silence",
+        "absoluteStartMs": 300814
+      },
+      {
+        "text": "ce fichier comporte notamment des coordonnées et des notes internes.",
+        "startMs": 10172,
+        "endMs": 13421,
+        "method": "silence",
+        "absoluteStartMs": 303165
+      },
+      {
+        "text": "Il n'est donc pas à remettre indistinctement à toute l'équipe.",
+        "startMs": 13628,
+        "endMs": 16495,
+        "method": "silence",
+        "absoluteStartMs": 306621
+      },
+      {
+        "text": "Choisis le document adapté à la personne qui en a besoin, range-le dans un espace protégé et limite les copies.",
+        "startMs": 17107,
+        "endMs": 22095,
+        "method": "silence",
+        "absoluteStartMs": 310100
+      },
+      {
+        "text": "Un fichier téléchargé reste une photographie du moment :",
+        "startMs": 22279,
+        "endMs": 26325,
+        "method": "silence",
+        "absoluteStartMs": 315272
+      },
+      {
+        "text": "il ne se met pas à jour quand le planning change.",
+        "startMs": 26576,
+        "endMs": 28717,
+        "method": "silence",
+        "absoluteStartMs": 319569
+      },
+      {
+        "text": "Pense aussi aux anciennes copies devenues inutiles.",
+        "startMs": 29119,
+        "endMs": 31107,
+        "method": "silence",
+        "absoluteStartMs": 322112
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 296982
+      },
+      {
+        "kind": "click",
+        "atMs": 304862
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "startMs": 328075,
+    "sentences": [
+      {
+        "text": "Revenons à la page personnelle et à son avertissement.",
+        "startMs": 580,
+        "endMs": 3441,
+        "method": "silence",
+        "absoluteStartMs": 328655
+      },
+      {
+        "text": "Pour recruter, partage la page publique.",
+        "startMs": 3617,
+        "endMs": 6001,
+        "method": "silence",
+        "absoluteStartMs": 331692
+      },
+      {
+        "text": "Pour gérer une inscription, garde le lien personnel pour son destinataire.",
+        "startMs": 6688,
+        "endMs": 10317,
+        "method": "silence",
+        "absoluteStartMs": 334763
+      },
+      {
+        "text": "Pour coordonner un poste, remets le lien du responsable à la personne désignée.",
+        "startMs": 11077,
+        "endMs": 14929,
+        "method": "silence",
+        "absoluteStartMs": 339152
+      },
+      {
+        "text": "Si un accès a été diffusé par erreur, contacte l'organisation plutôt que de continuer à le faire circuler.",
+        "startMs": 15527,
+        "endMs": 20579,
+        "method": "silence",
+        "absoluteStartMs": 343602
+      },
+      {
+        "text": "Et avant d'envoyer un document, vérifie son contenu et ses destinataires.",
+        "startMs": 21245,
+        "endMs": 24635,
+        "method": "silence",
+        "absoluteStartMs": 349320
+      },
+      {
+        "text": "Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+        "startMs": 24765,
+        "endMs": 32236,
+        "method": "silence",
+        "absoluteStartMs": 352840
+      }
+    ],
+    "inputs": []
+  }
+]

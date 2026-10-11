@@ -1,0 +1,59 @@
+{
+  "id": "ORG_TIMEZONE_CHARTER",
+  "slug": "org-timezone-charter",
+  "validatedAt": "2026-10-04T12:55:55.428Z",
+  "continuousNarration": true,
+  "voice": "Charon",
+  "captureMs": 125120,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 10468,
+      "audioMs": 10467,
+      "driftMs": 1
+    },
+    {
+      "id": "timezone",
+      "visualMs": 14120,
+      "audioMs": 14117,
+      "driftMs": 3
+    },
+    {
+      "id": "timezone-result",
+      "visualMs": 12435,
+      "audioMs": 12434,
+      "driftMs": 1
+    },
+    {
+      "id": "charter",
+      "visualMs": 22409,
+      "audioMs": 22408,
+      "driftMs": 1
+    },
+    {
+      "id": "public-setup",
+      "visualMs": 9468,
+      "audioMs": 9467,
+      "driftMs": 1
+    },
+    {
+      "id": "public-result",
+      "visualMs": 15150,
+      "audioMs": 15146,
+      "driftMs": 4
+    },
+    {
+      "id": "attention",
+      "visualMs": 15173,
+      "audioMs": 15171,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 13552,
+      "audioMs": 13550,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

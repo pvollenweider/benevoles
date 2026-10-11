@@ -108,7 +108,7 @@
     "poster": true
   },
   "masterclass-03-first-steps": {
-    "durationMs": 179600,
+    "durationMs": 204840,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -150,7 +150,7 @@
     "poster": true
   },
   "org-public-identity": {
-    "durationMs": 164160,
+    "durationMs": 160800,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -162,7 +162,7 @@
     "poster": true
   },
   "org-timezone-charter": {
-    "durationMs": 137880,
+    "durationMs": 130480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -174,7 +174,7 @@
     "poster": true
   },
   "organizer-create-publish": {
-    "durationMs": 193240,
+    "durationMs": 187280,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -192,7 +192,7 @@
     "poster": true
   },
   "privacy-personal-links": {
-    "durationMs": 349680,
+    "durationMs": 365520,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -294,7 +294,7 @@
     "poster": true
   },
   "volunteer-choose-shifts": {
-    "durationMs": 163520,
+    "durationMs": 162280,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -312,7 +312,7 @@
     "poster": true
   },
   "volunteer-form-recap": {
-    "durationMs": 165160,
+    "durationMs": 167280,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -324,19 +324,19 @@
     "poster": true
   },
   "volunteer-personal-registrations": {
-    "durationMs": 182320,
+    "durationMs": 173400,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-register-mobile": {
-    "durationMs": 56760,
+    "durationMs": 53800,
     "width": 390,
     "height": 844,
     "poster": true
   },
   "volunteer-session-availability": {
-    "durationMs": 185760,
+    "durationMs": 174560,
     "width": 1280,
     "height": 800,
     "poster": true

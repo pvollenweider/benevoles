@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:50:24.108Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "3cd3eee370c55874037bc1d19d59234a882fabfd0d37ebd3dacda95571d9c6f4",
+  "clipSha256": "68befd34a816782036bf8df978f5cc17fb10669a75a7a4fa8d28f40e454aaa46",
+  "scene": "result",
+  "review": {
+    "heardOpening": "En revenant dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "En revenant dans l'administration, les étapes obligatoires sont terminées et la checklist disparaît",
+        "visibleSeconds": 0.5,
+        "visible": "L'écran affiche déjà la liste des Événements sans montrer le Tableau de bord ni la disparition de la checklist",
+        "sync": "uncertain",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "L'association possède maintenant une identité publique, le bon fuseau, un événement publié",
+        "visibleSeconds": 5.5,
+        "visible": "Écran Événements affichant 'Fête du parc' avec le badge Publié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "un propriétaire peut la masquer pour toute l'équipe",
+        "visibleSeconds": 13,
+        "visible": "La page Inscriptions s'affiche sans montrer l'option permettant de masquer la checklist",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:12, transition abrupte vers la page 'Inscriptions' alors que le commentaire évoque le masquage de la checklist par un propriétaire sans que cette option ne soit montrée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, posée et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

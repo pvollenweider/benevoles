@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_FORM_RECAP",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "Rehearsal fails at recap: obsolete Vos créneaux scope does not match current Tes créneaux sidebar. No final MP4; existing narration and audit accepted unchanged.",
+  "sourceChanges": "videos/tools/record.ts: scope recap by Tes créneaux; match current overnight mention with lendemain. No refilm."
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:34:46.063Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "3650d8a36f957b9da5156dd88a231d1eff20c7e47dbc48cc8b06aa63065c0fe4",
+  "clipSha256": "654942c89e19e6a64101c523ca281a1cf977544fd89261a2f153b642bd055b4f",
+  "scene": "states",
+  "review": {
+    "heardOpening": "Les autres cartes ne signifient pas la même chose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Liste d'attente indique ta position, sans place confirmée",
+        "visibleSeconds": 3,
+        "visible": "Ligne Buvette avec le statut 'Liste d'attente - position 1' affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Une place proposée affiche une échéance et un lien pour la prendre",
+        "visibleSeconds": 7,
+        "visible": "Défilement dévoilant la carte 'Une place est proposée' avec date limite et lien 'Prendre la place'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Une demande sur validation attend la décision de l'organisation",
+        "visibleSeconds": 14.5,
+        "visible": "Carte 'Navette du dimanche' visible avec 'Demande envoyée - en attente de validation'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, fluide et parfaitement synchronisée avec la présentation des statuts."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

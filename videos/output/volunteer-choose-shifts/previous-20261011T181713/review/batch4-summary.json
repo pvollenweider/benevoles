@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_CHOOSE_SHIFTS",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "Rehearsal fails in approval-reserved: Accueil 15h–18h remains selected and conflicts with available Navette 14h–18h, so requested sélectionner label is absent. Morning Navette is full. No final MP4; narration reused unchanged and audit passed.",
+  "sourceChanges": "videos/tools/record.ts: clear previous Accueil demonstration selection before approval-reserved, preserving real selection state and current selector. No refilm."
+}

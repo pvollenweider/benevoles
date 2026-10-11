@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T20:07:39.331Z",
+  "revalidatedAt": "2026-10-11T20:07:39.332Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4c8272983a3ee96b66a90e8e8a670829c3c2dee7c8b644daa6d5b690295f7274",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "939f9b961a429e4cc94f3b036edd5a80eeb7e80a1f58e848b101619816ac28a8",
+      "recognized": "Le formulaire sert à transmettre les bonnes informations à l'association et à vérifier ton engagement avant de confirmer. Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé. Prends ton temps. Aucune inscription ne part pendant la saisie.",
+      "expected": "Le formulaire sert à transmettre les bonnes informations à l’association et à vérifier ton engagement avant de confirmer. Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé. Prends ton temps : aucune inscription ne part pendant la saisie.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "selection",
+      "audioSha256": "6b343523baaa804ebe1bb164448da6f286e2900374f0095eee15093ab8e0a106",
+      "recognized": "Voici quatre missions : accueil le matin, logistique juste après, rangement en soirée jusqu'à deux heures du matin, puis buvette le dimanche. Le bouton Continuer ouvre le formulaire avec ce choix. Le récapitulatif les classe dans l'ordre chronologique, même si tu les as sélectionnés autrement.",
+      "expected": "Voici quatre missions : Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche. Le bouton Continuer ouvre le formulaire avec ce choix. Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+      "wordErrorRate": 0.021739130434782608,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "identity",
+      "audioSha256": "27aec15bc0096dc02a9dc587104be39e2b0edffd73bb6482e4704aa5824a1c2c",
+      "recognized": "Indique ton prénom et ton nom, puis vérifie soigneusement l'adresse e-mail. La confirmation et le lien personnel arriveront là. Le téléphone est obligatoire pour cet événement. La date de naissance apparaît parce que le ranch demande dix-huit ans minimum. Elle permet de vérifier l'âge à la date de la mission.",
+      "expected": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email : la confirmation et le lien personnel arriveront là. Le téléphone est obligatoire pour cet événement. La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum ; elle permet de vérifier l’âge à la date de la mission.",
+      "wordErrorRate": 0.018867924528301886,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "questions",
+      "audioSha256": "f240124ffdb6c98c5e437e4feed7ca2afd0fdf93a299abed4bc02f01ee8ade32",
+      "recognized": "L'association a ajouté ces questions. La taille de t-shirt est obligatoire, tandis que le régime alimentaire et le permis sont facultatifs. Réponds seulement avec des informations utiles à l'organisation. Le commentaire permet de préciser un point pratique, par exemple un besoin de pause. Il ne remplace pas une discussion urgente avec l'équipe.",
+      "expected": "L’association a ajouté ses questions. La taille de t-shirt est obligatoire, tandis que le régime alimentaire et le permis sont facultatifs. Réponds seulement avec des informations utiles à l’organisation. Le commentaire permet de préciser un point pratique, par exemple un besoin de pause ; il ne remplace pas une discussion urgente avec l’équipe.",
+      "wordErrorRate": 0.017857142857142856,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "agreement",
+      "audioSha256": "500498385b6a4083cd9b4bd4ae9739a883cc4805b597d4f1f7d596e7d9b16ff6",
+      "recognized": "Ouvre la convention des bénévoles pour lire le cadre de l'engagement, puis accepte-la si elle te convient. Le consentement sur les données est une case distincte. Il concerne leur utilisation pour cet événement. Lire puis cocher ces deux éléments évite de confirmer un cadre qu'on n'a pas compris.",
+      "expected": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement, puis accepte-la si elle te convient. Le consentement sur les données est une case distincte : il concerne leur utilisation pour cet événement. Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "recap",
+      "audioSha256": "e84b00b2a13bd39841ba9d4a8d6693e3207451dde7634d6027e403906ed889e1",
+      "recognized": "Relis maintenant les jours et les heures. Le créneau de nuit dit explicitement fin le lendemain. Les intervalles montrent où se trouvent les pauses. Les lieux, consignes et liens de cartes restent accessibles, mais les coordonnées personnelles du contact ne sont fournies qu'après inscription. En bas, transmis à l'organisation énumère les données et les questions auxquelles tu as répondu.",
+      "expected": "Relis maintenant les jours et les heures. Le créneau de nuit dit explicitement fin le lendemain. Les intervalles montrent où se trouvent les pauses. Les lieux, consignes et liens de carte restent accessibles, mais les coordonnées personnelles du contact ne sont fournies qu’après inscription. En bas, Transmis à l’organisation énumère les données et les questions auxquelles tu as répondu.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "workload",
+      "audioSha256": "a4acd83b232c9a19f3532b83ad31aec66bbbe29d6440395a5999626c729f55d4",
+      "recognized": "Ce planning affiche journée chargée. Accueil et logistique font neuf heures d'affilée sans une pause de trente minutes, et la nuit ajoute encore quatre heures. L'avertissement conseille de revoir l'engagement, mais ne bloque pas la confirmation. Pour alléger, reviens au planning et retire logistique. Les horaires sont recalculés immédiatement.",
+      "expected": "Ce planning affiche Journée chargée : Accueil et Logistique font neuf heures d’affilée, sans une pause de trente minutes, et la nuit ajoute encore quatre heures. L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation. Pour alléger, reviens au planning et retire Logistique : les horaires sont recalculés immédiatement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "c76df6c383a946b584fd9d81eb15df8db75a310ccf5a15a23c1d3272d8f720c6",
+      "recognized": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton e-mail, tes réponses et les horaires avant confirmer mon inscription. Dans cette démonstration, nous restons juste avant ce bouton, rien n'a été envoyé.",
+      "expected": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription. Dans cette démonstration, nous restons juste avant ce bouton : rien n’a été envoyé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

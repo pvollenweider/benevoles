@@ -1,0 +1,175 @@
+{
+  "slug": "org-timezone-charter",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T22:53:37.232Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-charter",
+    "scenario": "ORG_TIMEZONE_CHARTER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6910
+    },
+    {
+      "kind": "click",
+      "atMs": 12187
+    },
+    {
+      "kind": "click",
+      "atMs": 12986
+    },
+    {
+      "kind": "click",
+      "atMs": 13785
+    },
+    {
+      "kind": "click",
+      "atMs": 14569
+    },
+    {
+      "kind": "click",
+      "atMs": 15368
+    },
+    {
+      "kind": "click",
+      "atMs": 19426
+    },
+    {
+      "kind": "click",
+      "atMs": 20209
+    },
+    {
+      "kind": "click",
+      "atMs": 21492
+    },
+    {
+      "kind": "click",
+      "atMs": 23208
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1121,
+      "endMs": 3750
+    },
+    {
+      "id": "timezone",
+      "startMs": 5908,
+      "endMs": 5974
+    },
+    {
+      "id": "timezone-result",
+      "startMs": 6427,
+      "endMs": 9474
+    },
+    {
+      "id": "charter",
+      "startMs": 11649,
+      "endMs": 15678
+    },
+    {
+      "id": "public-setup",
+      "startMs": 17844,
+      "endMs": 20521
+    },
+    {
+      "id": "public-result",
+      "startMs": 20973,
+      "endMs": 23516
+    },
+    {
+      "id": "attention",
+      "startMs": 23969,
+      "endMs": 26364
+    },
+    {
+      "id": "result",
+      "startMs": 26817,
+      "endMs": 27972
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "timezone-result",
+      "phrase": "un créneau prévu à neuf",
+      "startMs": 5701,
+      "endMs": 10262,
+      "cueMs": 7214
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Le réglage Assurance RC fournie",
+      "startMs": 5384,
+      "endMs": 16049,
+      "cueMs": 11684
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Réinitialiser la convention par défaut",
+      "startMs": 29095,
+      "endMs": 38000,
+      "cueMs": 13291
+    },
+    {
+      "segmentId": "public-setup",
+      "phrase": "Vous arrivez au formulaire, avec",
+      "startMs": 9215,
+      "endMs": 19000,
+      "cueMs": 19735
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Le texte enregistré est présenté",
+      "startMs": 3696,
+      "endMs": 7598,
+      "cueMs": 20990
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "faisons-le défiler pour lire aussi",
+      "startMs": 7598,
+      "endMs": 15607,
+      "cueMs": 21801
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Le bouton J’ai lu et",
+      "startMs": 15607,
+      "endMs": 23000,
+      "cueMs": 22750
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Une modification de votre texte",
+      "startMs": 7858,
+      "endMs": 12769,
+      "cueMs": 24026
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Pour une information urgente, utilisez",
+      "startMs": 17925,
+      "endMs": 23000,
+      "cueMs": 25176
+    }
+  ]
+}

@@ -69,8 +69,8 @@
         "organisateur"
       ],
       "feature": "Identité publique de l'organisation",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-11",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -93,8 +93,8 @@
         "organisateur"
       ],
       "feature": "Fuseau horaire et charte des bénévoles",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-11",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -643,8 +643,8 @@
         "benevole"
       ],
       "feature": "Choix des créneaux sur la page publique",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -668,8 +668,8 @@
         "benevole"
       ],
       "feature": "Formulaire d'inscription et récapitulatif",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -715,8 +715,8 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "themes": [
         "parcours-benevole"
       ]
@@ -762,8 +762,8 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "themes": [
         "parcours-benevole"
       ]
@@ -812,8 +812,8 @@
         "benevole"
       ],
       "feature": "Inscription bénévole",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -836,8 +836,8 @@
         "organisateur"
       ],
       "feature": "Créer et publier un planning",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -904,8 +904,8 @@
         "organisateur"
       ],
       "feature": "Premiers pas d'une organisation",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -1420,8 +1420,8 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-06",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "essentiel"
     },
     {

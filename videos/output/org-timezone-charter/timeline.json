@@ -1,48 +1,175 @@
 {
   "slug": "org-timezone-charter",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T02:14:31.785Z",
+  "recordedAt": "2026-10-11T23:00:18.307Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-charter",
+    "scenario": "ORG_TIMEZONE_CHARTER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 29533
+    },
+    {
+      "kind": "click",
+      "atMs": 47353
+    },
+    {
+      "kind": "click",
+      "atMs": 48920
+    },
+    {
+      "kind": "click",
+      "atMs": 61485
+    },
+    {
+      "kind": "click",
+      "atMs": 62268
+    },
+    {
+      "kind": "click",
+      "atMs": 63135
+    },
+    {
+      "kind": "click",
+      "atMs": 71634
+    },
+    {
+      "kind": "click",
+      "atMs": 75982
+    },
+    {
+      "kind": "click",
+      "atMs": 82416
+    },
+    {
+      "kind": "click",
+      "atMs": 91849
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1104,
-      "endMs": 12472
+      "startMs": 1120,
+      "endMs": 12320
     },
     {
       "id": "timezone",
-      "startMs": 14635,
-      "endMs": 30975
+      "startMs": 14481,
+      "endMs": 28613
     },
     {
       "id": "timezone-result",
-      "startMs": 31429,
-      "endMs": 44529
+      "startMs": 29067,
+      "endMs": 40979
     },
     {
       "id": "charter",
-      "startMs": 46700,
-      "endMs": 72309
+      "startMs": 43151,
+      "endMs": 66105
     },
     {
       "id": "public-setup",
-      "startMs": 74469,
-      "endMs": 88177
+      "startMs": 68272,
+      "endMs": 81436
     },
     {
       "id": "public-result",
-      "startMs": 88628,
-      "endMs": 103039
+      "startMs": 81888,
+      "endMs": 95710
     },
     {
       "id": "attention",
-      "startMs": 103492,
-      "endMs": 121485
+      "startMs": 96163,
+      "endMs": 113559
     },
     {
       "id": "result",
-      "startMs": 121941,
-      "endMs": 136866
+      "startMs": 114013,
+      "endMs": 129484
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "timezone-result",
+      "phrase": "un créneau prévu à neuf",
+      "startMs": 3426,
+      "endMs": 5515,
+      "cueMs": 32494
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Le réglage Assurance RC fournie",
+      "startMs": 3704,
+      "endMs": 9764,
+      "cueMs": 46857
+    },
+    {
+      "segmentId": "charter",
+      "phrase": "Réinitialiser la convention par défaut",
+      "startMs": 17858,
+      "endMs": 22512,
+      "cueMs": 61009
+    },
+    {
+      "segmentId": "public-setup",
+      "phrase": "Vous arrivez au formulaire, avec",
+      "startMs": 7228,
+      "endMs": 13162,
+      "cueMs": 75511
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Ouvrez la convention depuis le",
+      "startMs": 0,
+      "endMs": 1598,
+      "cueMs": 81946
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "faisons-le défiler pour lire aussi",
+      "startMs": 4489,
+      "endMs": 8559,
+      "cueMs": 86378
+    },
+    {
+      "segmentId": "public-result",
+      "phrase": "Le bouton J’ai lu et",
+      "startMs": 9466,
+      "endMs": 13432,
+      "cueMs": 91355
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Une modification de votre texte",
+      "startMs": 6107,
+      "endMs": 9277,
+      "cueMs": 102272
+    },
+    {
+      "segmentId": "attention",
+      "phrase": "Pour une information urgente, utilisez",
+      "startMs": 13325,
+      "endMs": 16804,
+      "cueMs": 109489
     }
   ]
 }

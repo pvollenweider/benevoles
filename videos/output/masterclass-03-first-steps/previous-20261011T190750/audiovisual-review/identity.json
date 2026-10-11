@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T17:48:56.887Z",
+  "videoSha256": "d503fa1e8f349b9c7f272d5b1a268fa8296389cb3c34c3e42ff89d541e8caf68",
+  "promptSha256": "727599758c98a980e891d42ec0cb037cd63e02ab86afb8e5c78f12966dc17f7c",
+  "clipSha256": "b2f319b49152be6d6a1d26de657338345cb1725bebfb01ce267d43251976e744",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Commençons par ce que verront les bénévoles.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "donnez à la page publique un titre accueillant",
+        "visibleSeconds": 1.8,
+        "visible": "Le titre « Les bénévoles du Parc » est déjà saisi et le bouton Enregistrer est cliqué dès 00:02",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "puis lisez la Convention des Bénévoles complète",
+        "visibleSeconds": 13.5,
+        "visible": "Défilement vers la section Convention des Bénévoles et survol du texte",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 20.2,
+        "spoken": "Enregistrons le texte entier",
+        "visibleSeconds": 17.8,
+        "visible": "Clic sur le bouton Enregistrer de la convention des bénévoles",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Désynchronisation globale : les actions de validation (enregistrement du titre à 00:02 et enregistrement de la convention à 00:18) se produisent avant leur annonce vocale (respectivement à 00:03 et 00:20).",
+      "Le défilement vers la Convention des Bénévoles (00:13) intervient en retard par rapport à son annonce (00:07)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et intelligible, mais en décalage récurrent avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

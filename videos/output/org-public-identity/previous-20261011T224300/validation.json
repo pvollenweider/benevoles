@@ -1,0 +1,70 @@
+{
+  "id": "ORG_PUBLIC_IDENTITY",
+  "slug": "org-public-identity",
+  "validatedAt": "2026-10-11T22:41:35.836Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 160800,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13666,
+      "audioMs": 13665,
+      "driftMs": 1
+    },
+    {
+      "id": "names",
+      "visualMs": 21839,
+      "audioMs": 21836,
+      "driftMs": 3
+    },
+    {
+      "id": "logo",
+      "visualMs": 17858,
+      "audioMs": 17842,
+      "driftMs": 16
+    },
+    {
+      "id": "slug",
+      "visualMs": 25506,
+      "audioMs": 25503,
+      "driftMs": 3
+    },
+    {
+      "id": "public-page",
+      "visualMs": 19740,
+      "audioMs": 19739,
+      "driftMs": 1
+    },
+    {
+      "id": "event-result",
+      "visualMs": 14654,
+      "audioMs": 14654,
+      "driftMs": 0
+    },
+    {
+      "id": "remove-logo",
+      "visualMs": 18131,
+      "audioMs": 18130,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 19674,
+      "audioMs": 19671,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 12,
+  "music": {
+    "voicedWindows": 152,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

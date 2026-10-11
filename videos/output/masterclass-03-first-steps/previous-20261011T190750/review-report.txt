@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: ORG_FIRST_STEPS
+COMMIT: d1482d273bc0c97c3efff59e76dc57205e0a2995
+BUILD_ID: Ur_-usFFdKv05dBCDAbrt
+DURATION: 205.84 seconds
+MUSIC: smallest 13.2 / largest 17.4 LU
+PROBLEMS: Identity title/save early and charter scroll late; test selection early and form confirmation late; publication button not held visibly before click. Result transition distracting. No stale labels, localhost, old admin, overlay or French-date violation seen.
+SOURCE CHANGES: record.ts: sentence-anchor identity title and charter save; earlier charter reveal; publication button revealed before cue; sentence-anchor test selection/confirmation, remove typing delay and fill email faster; keep conclusion on event list.
+VALIDATION: []; sentence anchors checked: 6
+FINAL AUDIO: [('welcome', 0.044444444444444446, False), ('checklist', 0, False), ('identity', 0.014492753623188406, False), ('timezone', 0, False), ('event', 0.03636363636363636, False), ('shift', 0, False), ('publish', 0, False), ('test', 0.07407407407407407, False), ('help', 0, False), ('result', 0.03389830508474576, False)]
+CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 30, keys 58.
+REVIEW: final MP4 chapter sheets and flagged one-second sequences inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

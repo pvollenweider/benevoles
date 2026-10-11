@@ -1,0 +1,615 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 2,
+    "sentences": [
+      {
+        "text": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte.",
+        "startMs": 230,
+        "endMs": 3887,
+        "method": "silence",
+        "absoluteStartMs": 232
+      },
+      {
+        "text": "Ton email contient un lien personnel qui ouvre directement ta page.",
+        "startMs": 4118,
+        "endMs": 7450,
+        "method": "silence",
+        "absoluteStartMs": 4120
+      },
+      {
+        "text": "Ce lien donne accès à tes informations et permet d'annuler tes créneaux :",
+        "startMs": 7836,
+        "endMs": 11134,
+        "method": "silence",
+        "absoluteStartMs": 7838
+      },
+      {
+        "text": "garde-le pour toi.",
+        "startMs": 11620,
+        "endMs": 12383,
+        "method": "silence",
+        "absoluteStartMs": 11622
+      },
+      {
+        "text": "Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+        "startMs": 12909,
+        "endMs": 18043,
+        "method": "silence",
+        "absoluteStartMs": 12911
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "session",
+    "startMs": 18896,
+    "sentences": [
+      {
+        "text": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement.",
+        "startMs": 377,
+        "endMs": 5831,
+        "method": "silence",
+        "absoluteStartMs": 19273
+      },
+      {
+        "text": "Ici, Camille retrouve son nom et ses inscriptions.",
+        "startMs": 6344,
+        "endMs": 9207,
+        "method": "silence",
+        "absoluteStartMs": 25240
+      },
+      {
+        "text": "Cela aide à choisir un autre créneau sans repartir de zéro.",
+        "startMs": 9895,
+        "endMs": 12586,
+        "method": "silence",
+        "absoluteStartMs": 28791
+      },
+      {
+        "text": "Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé.",
+        "startMs": 13097,
+        "endMs": 18309,
+        "method": "silence",
+        "absoluteStartMs": 31993
+      },
+      {
+        "text": "La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+        "startMs": 18608,
+        "endMs": 22074,
+        "method": "silence",
+        "absoluteStartMs": 37504
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 32964
+      }
+    ]
+  },
+  {
+    "id": "resend",
+    "startMs": 42016,
+    "sentences": [
+      {
+        "text": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé.",
+        "startMs": 589,
+        "endMs": 6424,
+        "method": "silence",
+        "absoluteStartMs": 42605
+      },
+      {
+        "text": "Avec Recevoir ce lien par email, tu peux le retrouver dans ta boîte.",
+        "startMs": 6829,
+        "endMs": 9413,
+        "method": "silence",
+        "absoluteStartMs": 48845
+      },
+      {
+        "text": "Attendons le résultat, puis ouvrons le message réellement reçu.",
+        "startMs": 9602,
+        "endMs": 14472,
+        "method": "silence",
+        "absoluteStartMs": 51618
+      },
+      {
+        "text": "Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+        "startMs": 14998,
+        "endMs": 19304,
+        "method": "silence",
+        "absoluteStartMs": 57014
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 43604
+      },
+      {
+        "kind": "click",
+        "atMs": 56076
+      }
+    ]
+  },
+  {
+    "id": "recover",
+    "startMs": 62369,
+    "sentences": [
+      {
+        "text": "Si un ancien lien ne fonctionne plus, la page propose Recevoir un nouveau lien.",
+        "startMs": 593,
+        "endMs": 4573,
+        "method": "silence",
+        "absoluteStartMs": 62962
+      },
+      {
+        "text": "Saisis l'adresse email utilisée pour t'inscrire.",
+        "startMs": 5153,
+        "endMs": 7541,
+        "method": "silence",
+        "absoluteStartMs": 67522
+      },
+      {
+        "text": "La réponse reste volontairement la même, que cette adresse soit connue ou non :",
+        "startMs": 8072,
+        "endMs": 11909,
+        "method": "silence",
+        "absoluteStartMs": 70441
+      },
+      {
+        "text": "elle ne révèle pas les inscriptions d'une autre personne.",
+        "startMs": 12391,
+        "endMs": 14418,
+        "method": "silence",
+        "absoluteStartMs": 74760
+      },
+      {
+        "text": "Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par email.",
+        "startMs": 14860,
+        "endMs": 20377,
+        "method": "silence",
+        "absoluteStartMs": 77229
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 64028
+      },
+      {
+        "kind": "key",
+        "atMs": 64334
+      },
+      {
+        "kind": "key",
+        "atMs": 64431
+      },
+      {
+        "kind": "key",
+        "atMs": 64530
+      },
+      {
+        "kind": "key",
+        "atMs": 64628
+      },
+      {
+        "kind": "key",
+        "atMs": 64726
+      },
+      {
+        "kind": "key",
+        "atMs": 64829
+      },
+      {
+        "kind": "key",
+        "atMs": 64929
+      },
+      {
+        "kind": "key",
+        "atMs": 65030
+      },
+      {
+        "kind": "key",
+        "atMs": 65130
+      },
+      {
+        "kind": "key",
+        "atMs": 65230
+      },
+      {
+        "kind": "key",
+        "atMs": 65332
+      },
+      {
+        "kind": "key",
+        "atMs": 65433
+      },
+      {
+        "kind": "key",
+        "atMs": 65537
+      },
+      {
+        "kind": "key",
+        "atMs": 65637
+      },
+      {
+        "kind": "key",
+        "atMs": 65741
+      },
+      {
+        "kind": "key",
+        "atMs": 65843
+      },
+      {
+        "kind": "key",
+        "atMs": 65941
+      },
+      {
+        "kind": "key",
+        "atMs": 66041
+      },
+      {
+        "kind": "key",
+        "atMs": 66143
+      },
+      {
+        "kind": "key",
+        "atMs": 66241
+      },
+      {
+        "kind": "key",
+        "atMs": 66342
+      },
+      {
+        "kind": "key",
+        "atMs": 66444
+      },
+      {
+        "kind": "key",
+        "atMs": 66545
+      },
+      {
+        "kind": "key",
+        "atMs": 66652
+      },
+      {
+        "kind": "key",
+        "atMs": 66750
+      },
+      {
+        "kind": "key",
+        "atMs": 66848
+      },
+      {
+        "kind": "click",
+        "atMs": 67594
+      },
+      {
+        "kind": "click",
+        "atMs": 75277
+      },
+      {
+        "kind": "click",
+        "atMs": 76911
+      }
+    ]
+  },
+  {
+    "id": "limit",
+    "startMs": 83457,
+    "sentences": [
+      {
+        "text": "Les demandes de renvoi sont limitées pour éviter les abus.",
+        "startMs": 379,
+        "endMs": 3028,
+        "method": "silence",
+        "absoluteStartMs": 83836
+      },
+      {
+        "text": "Si tu demandes plusieurs liens trop vite, un message t'invite à patienter.",
+        "startMs": 3168,
+        "endMs": 6368,
+        "method": "silence",
+        "absoluteStartMs": 86625
+      },
+      {
+        "text": "Inutile de multiplier les clics.",
+        "startMs": 6990,
+        "endMs": 8558,
+        "method": "silence",
+        "absoluteStartMs": 90447
+      },
+      {
+        "text": "Vérifie ta boîte email, puis réessaie plus tard si nécessaire.",
+        "startMs": 8967,
+        "endMs": 11617,
+        "method": "silence",
+        "absoluteStartMs": 92424
+      },
+      {
+        "text": "Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+        "startMs": 12053,
+        "endMs": 17952,
+        "method": "silence",
+        "absoluteStartMs": 95510
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 85028
+      },
+      {
+        "kind": "click",
+        "atMs": 85826
+      },
+      {
+        "kind": "click",
+        "atMs": 86610
+      }
+    ]
+  },
+  {
+    "id": "availability",
+    "startMs": 102149,
+    "sentences": [
+      {
+        "text": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible.",
+        "startMs": 286,
+        "endMs": 6128,
+        "method": "silence",
+        "absoluteStartMs": 102435
+      },
+      {
+        "text": "Camille coche Matin et Soir, puis ajoute une exception :",
+        "startMs": 6803,
+        "endMs": 10429,
+        "method": "silence",
+        "absoluteStartMs": 108952
+      },
+      {
+        "text": "pas le dimanche matin.",
+        "startMs": 11012,
+        "endMs": 11871,
+        "method": "silence",
+        "absoluteStartMs": 113161
+      },
+      {
+        "text": "Ces informations sont facultatives.",
+        "startMs": 12264,
+        "endMs": 14239,
+        "method": "silence",
+        "absoluteStartMs": 114413
+      },
+      {
+        "text": "Après Enregistrer mes disponibilités, le message confirme le résultat.",
+        "startMs": 14558,
+        "endMs": 18957,
+        "method": "silence",
+        "absoluteStartMs": 116707
+      },
+      {
+        "text": "Rechargeons la page :",
+        "startMs": 19647,
+        "endMs": 20826,
+        "method": "silence",
+        "absoluteStartMs": 121796
+      },
+      {
+        "text": "les choix et la note sont bien conservés.",
+        "startMs": 21520,
+        "endMs": 23640,
+        "method": "silence",
+        "absoluteStartMs": 123669
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 102794
+      },
+      {
+        "kind": "click",
+        "atMs": 103577
+      },
+      {
+        "kind": "click",
+        "atMs": 104392
+      },
+      {
+        "kind": "key",
+        "atMs": 104699
+      },
+      {
+        "kind": "key",
+        "atMs": 104797
+      },
+      {
+        "kind": "key",
+        "atMs": 104896
+      },
+      {
+        "kind": "key",
+        "atMs": 104993
+      },
+      {
+        "kind": "key",
+        "atMs": 105091
+      },
+      {
+        "kind": "key",
+        "atMs": 105189
+      },
+      {
+        "kind": "key",
+        "atMs": 105287
+      },
+      {
+        "kind": "key",
+        "atMs": 105388
+      },
+      {
+        "kind": "key",
+        "atMs": 105493
+      },
+      {
+        "kind": "key",
+        "atMs": 105592
+      },
+      {
+        "kind": "key",
+        "atMs": 105693
+      },
+      {
+        "kind": "key",
+        "atMs": 105798
+      },
+      {
+        "kind": "key",
+        "atMs": 105898
+      },
+      {
+        "kind": "key",
+        "atMs": 105999
+      },
+      {
+        "kind": "key",
+        "atMs": 106096
+      },
+      {
+        "kind": "key",
+        "atMs": 106197
+      },
+      {
+        "kind": "key",
+        "atMs": 106300
+      },
+      {
+        "kind": "key",
+        "atMs": 106402
+      },
+      {
+        "kind": "key",
+        "atMs": 106507
+      },
+      {
+        "kind": "key",
+        "atMs": 106609
+      },
+      {
+        "kind": "key",
+        "atMs": 106710
+      },
+      {
+        "kind": "click",
+        "atMs": 117192
+      }
+    ]
+  },
+  {
+    "id": "organizer",
+    "startMs": 126598,
+    "sentences": [
+      {
+        "text": "L'organisation retrouve cette indication dans ta fiche.",
+        "startMs": 369,
+        "endMs": 3371,
+        "method": "silence",
+        "absoluteStartMs": 126967
+      },
+      {
+        "text": "Elle peut s'en servir si elle doit te proposer un autre créneau.",
+        "startMs": 3637,
+        "endMs": 6500,
+        "method": "silence",
+        "absoluteStartMs": 130235
+      },
+      {
+        "text": "Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires.",
+        "startMs": 6883,
+        "endMs": 11866,
+        "method": "silence",
+        "absoluteStartMs": 133481
+      },
+      {
+        "text": "Tu choisis toujours tes créneaux toi-même.",
+        "startMs": 12103,
+        "endMs": 14037,
+        "method": "silence",
+        "absoluteStartMs": 138701
+      },
+      {
+        "text": "Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse.",
+        "startMs": 14528,
+        "endMs": 20561,
+        "method": "silence",
+        "absoluteStartMs": 141126
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "result",
+    "startMs": 147877,
+    "sentences": [
+      {
+        "text": "Tes habitudes changent ?",
+        "startMs": 266,
+        "endMs": 1100,
+        "method": "silence",
+        "absoluteStartMs": 148143
+      },
+      {
+        "text": "Reviens sur ta page personnelle pour modifier la note ou décocher les périodes.",
+        "startMs": 1523,
+        "endMs": 6862,
+        "method": "silence",
+        "absoluteStartMs": 149400
+      },
+      {
+        "text": "Enregistre à nouveau et vérifie le message.",
+        "startMs": 7103,
+        "endMs": 8665,
+        "method": "silence",
+        "absoluteStartMs": 154980
+      },
+      {
+        "text": "Effacer tes disponibilités ne retire aucune inscription.",
+        "startMs": 9032,
+        "endMs": 11971,
+        "method": "silence",
+        "absoluteStartMs": 156909
+      },
+      {
+        "text": "Le lien personnel reste ton point d'entrée, l'email t'aide à le retrouver, et Quitter la session protège ton accès quand tu utilises un appareil partagé.",
+        "startMs": 12586,
+        "endMs": 21456,
+        "method": "silence",
+        "absoluteStartMs": 160463
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 148352
+      },
+      {
+        "kind": "click",
+        "atMs": 149134
+      },
+      {
+        "kind": "click",
+        "atMs": 149950
+      },
+      {
+        "kind": "key",
+        "atMs": 150258
+      },
+      {
+        "kind": "click",
+        "atMs": 151583
+      }
+    ]
+  }
+]

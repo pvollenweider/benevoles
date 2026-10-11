@@ -1,0 +1,8 @@
+STATUS: NOT READY
+Commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8
+BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Narration reused; source audit and final MP4 ASR passed for all ten chapters. validate passed, including sentence anchors and music: 13.1–17.4 LU; music-only -32.3 LUFS. Posters written only to review/renders-generated.json.
+Reviewed 60 MP4 frames across every chapter (review/sheet-0.jpg through sheet-4.jpg), source transcript, final ASR, timeline and input effects. Current Frise, French dates, configured amis-du-parc.benevol.app address, fictitious example.org addresses, no developer overlay observed. Result held on final event list. Identity/publication/test retake fixes confirmed in sheets 1/3. Effects match recorded click/key counts (objective-evidence.json).
+FAIL: New-event opening click at 79.957 s precedes sentence « Créons la Fête du parc » at 82.353 s by 2.396 s. Frame review/event-before-sentence.png (80.5 s) proves form already open. Local record.ts change: replace event at(0.12) with at("Créons la Fête du parc").
+PRODUCT BUG: wizard retains « Aucun créneau pour l'instant : la publication attendra » after actual shift creation. See review-frames/shift-85.png and shift-end.png. Reported without hiding the stale message. No re-film: failure is not solely a videos/ cue issue.
+Real-time subjective listening unavailable; not used as a rejection reason. Final audio independently transcribed; subtitles derive from the same manifest. Complete subjective voice-quality certification is not claimed.

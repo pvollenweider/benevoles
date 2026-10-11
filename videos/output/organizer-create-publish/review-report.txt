@@ -1,0 +1,8 @@
+STATUS: READY
+ID: EVENT_CREATE_PUBLISH_OVERVIEW
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 84 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.7 / 18.9 LU. Effects vs input events: {'click': 47, 'key': 69}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All84 MP4 chapter frames and sentence/input evidence reviewed. Series28.548 vs28.065; previewselection93.840 vs93.382; analysis149.011 vs148.528; invitefilter160.153 vs159.664 align. Preview email retained through113.6s then returns; wizard empty header cleared after series. Current labels/Frise/French dates/publicQRhost/nooverlay pass; final ASR/VTT/exact effects/music pass. Preview does not save remembered contacts.
+Local source changes: None for this video; narration reused.
+Real-time subjective listening unavailable; not used as a failure reason.

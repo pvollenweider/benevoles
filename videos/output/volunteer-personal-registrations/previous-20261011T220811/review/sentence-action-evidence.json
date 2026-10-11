@@ -1,0 +1,415 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 24,
+    "sentences": [
+      {
+        "text": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte.",
+        "startMs": 291,
+        "endMs": 4753,
+        "method": "silence",
+        "absoluteStartMs": 315
+      },
+      {
+        "text": "Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider.",
+        "startMs": 5002,
+        "endMs": 11628,
+        "method": "silence",
+        "absoluteStartMs": 5026
+      },
+      {
+        "text": "Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements.",
+        "startMs": 12074,
+        "endMs": 17040,
+        "method": "silence",
+        "absoluteStartMs": 12098
+      },
+      {
+        "text": "Ce lien reste confidentiel :",
+        "startMs": 17424,
+        "endMs": 19345,
+        "method": "silence",
+        "absoluteStartMs": 17448
+      },
+      {
+        "text": "il permet d'agir sur tes inscriptions.",
+        "startMs": 19520,
+        "endMs": 21229,
+        "method": "silence",
+        "absoluteStartMs": 19544
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "practical",
+    "startMs": 22126,
+    "sentences": [
+      {
+        "text": "Commençons par l'Accueil confirmé.",
+        "startMs": 421,
+        "endMs": 2617,
+        "method": "silence",
+        "absoluteStartMs": 22547
+      },
+      {
+        "text": "La carte indique le jour et les horaires.",
+        "startMs": 2989,
+        "endMs": 5462,
+        "method": "silence",
+        "absoluteStartMs": 25115
+      },
+      {
+        "text": "Le rendez-vous et les consignes expliquent où aller et comment se préparer.",
+        "startMs": 5964,
+        "endMs": 9514,
+        "method": "silence",
+        "absoluteStartMs": 28090
+      },
+      {
+        "text": "Le lien carte aide à retrouver le lieu.",
+        "startMs": 10433,
+        "endMs": 11321,
+        "method": "silence",
+        "absoluteStartMs": 32559
+      },
+      {
+        "text": "La personne de contact et son téléphone sont réservés aux inscrits :",
+        "startMs": 11476,
+        "endMs": 16352,
+        "method": "silence",
+        "absoluteStartMs": 33602
+      },
+      {
+        "text": "garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+        "startMs": 16719,
+        "endMs": 20357,
+        "method": "silence",
+        "absoluteStartMs": 38845
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "states",
+    "startMs": 43266,
+    "sentences": [
+      {
+        "text": "Les autres cartes ne signifient pas la même chose.",
+        "startMs": 333,
+        "endMs": 2746,
+        "method": "silence",
+        "absoluteStartMs": 43599
+      },
+      {
+        "text": "Liste d'attente indique ta position, sans place confirmée.",
+        "startMs": 3330,
+        "endMs": 6424,
+        "method": "silence",
+        "absoluteStartMs": 46596
+      },
+      {
+        "text": "Une place proposée affiche une échéance et un lien pour la prendre :",
+        "startMs": 6774,
+        "endMs": 10801,
+        "method": "silence",
+        "absoluteStartMs": 50040
+      },
+      {
+        "text": "tant que tu n'as pas accepté, ne la considère pas comme acquise.",
+        "startMs": 11102,
+        "endMs": 13925,
+        "method": "silence",
+        "absoluteStartMs": 54368
+      },
+      {
+        "text": "Une demande sur validation attend la décision de l'organisation, qui te prévient par email.",
+        "startMs": 14446,
+        "endMs": 19824,
+        "method": "silence",
+        "absoluteStartMs": 57712
+      },
+      {
+        "text": "Lis toujours le statut avant de préparer ton planning.",
+        "startMs": 20299,
+        "endMs": 23001,
+        "method": "silence",
+        "absoluteStartMs": 63565
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "cancel",
+    "startMs": 67084,
+    "sentences": [
+      {
+        "text": "Pour l'Accueil, Annuler ouvre une confirmation.",
+        "startMs": 406,
+        "endMs": 3335,
+        "method": "silence",
+        "absoluteStartMs": 67490
+      },
+      {
+        "text": "Tu peux encore choisir Non, garder :",
+        "startMs": 3737,
+        "endMs": 5538,
+        "method": "silence",
+        "absoluteStartMs": 70821
+      },
+      {
+        "text": "rien n'est retiré.",
+        "startMs": 5852,
+        "endMs": 6584,
+        "method": "silence",
+        "absoluteStartMs": 72936
+      },
+      {
+        "text": "Reprenons et confirmons cette fois.",
+        "startMs": 7342,
+        "endMs": 8177,
+        "method": "silence",
+        "absoluteStartMs": 74426
+      },
+      {
+        "text": "La carte disparaît de la page personnelle.",
+        "startMs": 8334,
+        "endMs": 11858,
+        "method": "silence",
+        "absoluteStartMs": 75418
+      },
+      {
+        "text": "Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place :",
+        "startMs": 12231,
+        "endMs": 17045,
+        "method": "silence",
+        "absoluteStartMs": 79315
+      },
+      {
+        "text": "cela aide l'équipe à réorganiser la relève.",
+        "startMs": 17400,
+        "endMs": 19487,
+        "method": "silence",
+        "absoluteStartMs": 84484
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 67549
+      },
+      {
+        "kind": "click",
+        "atMs": 73432
+      },
+      {
+        "kind": "click",
+        "atMs": 75915
+      },
+      {
+        "kind": "click",
+        "atMs": 79865
+      }
+    ]
+  },
+  {
+    "id": "waiting",
+    "startMs": 87394,
+    "sentences": [
+      {
+        "text": "Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente.",
+        "startMs": 382,
+        "endMs": 5513,
+        "method": "silence",
+        "absoluteStartMs": 87776
+      },
+      {
+        "text": "La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau.",
+        "startMs": 5895,
+        "endMs": 10174,
+        "method": "silence",
+        "absoluteStartMs": 93289
+      },
+      {
+        "text": "Confirme uniquement si c'est ce que tu souhaites.",
+        "startMs": 10577,
+        "endMs": 13096,
+        "method": "silence",
+        "absoluteStartMs": 97971
+      },
+      {
+        "text": "La carte disparaît :",
+        "startMs": 13697,
+        "endMs": 14913,
+        "method": "silence",
+        "absoluteStartMs": 101091
+      },
+      {
+        "text": "tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+        "startMs": 15182,
+        "endMs": 18704,
+        "method": "silence",
+        "absoluteStartMs": 102576
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 87882
+      },
+      {
+        "kind": "click",
+        "atMs": 98431
+      }
+    ]
+  },
+  {
+    "id": "offer",
+    "startMs": 106939,
+    "sentences": [
+      {
+        "text": "Pour une place proposée, le bouton est Refuser la place.",
+        "startMs": 339,
+        "endMs": 3870,
+        "method": "silence",
+        "absoluteStartMs": 107278
+      },
+      {
+        "text": "Lis les conséquences :",
+        "startMs": 4323,
+        "endMs": 5510,
+        "method": "silence",
+        "absoluteStartMs": 111262
+      },
+      {
+        "text": "la place passe à la personne suivante et tu quittes la liste d'attente.",
+        "startMs": 5884,
+        "endMs": 9134,
+        "method": "silence",
+        "absoluteStartMs": 112823
+      },
+      {
+        "text": "Après confirmation, cette offre disparaît.",
+        "startMs": 9808,
+        "endMs": 12006,
+        "method": "silence",
+        "absoluteStartMs": 116747
+      },
+      {
+        "text": "Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+        "startMs": 12330,
+        "endMs": 21710,
+        "method": "silence",
+        "absoluteStartMs": 119269
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 107414
+      },
+      {
+        "kind": "click",
+        "atMs": 118413
+      }
+    ]
+  },
+  {
+    "id": "request",
+    "startMs": 129372,
+    "sentences": [
+      {
+        "text": "Il reste la demande pour la Navette du dimanche.",
+        "startMs": 318,
+        "endMs": 3102,
+        "method": "silence",
+        "absoluteStartMs": 129690
+      },
+      {
+        "text": "Retirer ma demande ouvre sa confirmation :",
+        "startMs": 3813,
+        "endMs": 6043,
+        "method": "silence",
+        "absoluteStartMs": 133185
+      },
+      {
+        "text": "la place qui t'était réservée est libérée.",
+        "startMs": 6277,
+        "endMs": 8759,
+        "method": "silence",
+        "absoluteStartMs": 135649
+      },
+      {
+        "text": "En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur.",
+        "startMs": 9370,
+        "endMs": 13860,
+        "method": "silence",
+        "absoluteStartMs": 138742
+      },
+      {
+        "text": "C'est ici le dernier engagement de Camille.",
+        "startMs": 14312,
+        "endMs": 17348,
+        "method": "silence",
+        "absoluteStartMs": 143684
+      },
+      {
+        "text": "La page indique maintenant que toutes ses inscriptions ont été annulées.",
+        "startMs": 17968,
+        "endMs": 21573,
+        "method": "silence",
+        "absoluteStartMs": 147340
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 129863
+      },
+      {
+        "kind": "click",
+        "atMs": 140829
+      }
+    ]
+  },
+  {
+    "id": "return",
+    "startMs": 151795,
+    "sentences": [
+      {
+        "text": "Le lien Retour à l'accueil ramène à la page de l'événement.",
+        "startMs": 432,
+        "endMs": 3813,
+        "method": "silence",
+        "absoluteStartMs": 152227
+      },
+      {
+        "text": "Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé.",
+        "startMs": 4303,
+        "endMs": 9034,
+        "method": "silence",
+        "absoluteStartMs": 156098
+      },
+      {
+        "text": "Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association.",
+        "startMs": 9611,
+        "endMs": 15014,
+        "method": "silence",
+        "absoluteStartMs": 161406
+      },
+      {
+        "text": "Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+        "startMs": 15356,
+        "endMs": 20285,
+        "method": "silence",
+        "absoluteStartMs": 167151
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 152261
+      }
+    ]
+  }
+]

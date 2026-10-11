@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_CHOOSE_SHIFTS",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Conflict rehearsal failed: morning Navette is already full; stale selector assumes time-first name and scenario cannot demonstrate conflict-driven unavailability. No final MP4.",
+  "sourceChanges": "record.ts plus manifest/script: use available afternoon Accueil 15–18 / Navette 14–18 and assert conflict wording. Transcript changed: next retake requires regenerated TTS; current batch narration reused and not regenerated."
+}

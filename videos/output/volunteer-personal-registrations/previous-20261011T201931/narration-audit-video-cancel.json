@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T18:34:22.841Z",
+  "revalidatedAt": "2026-10-11T18:34:22.842Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "cancel",
+      "audioSha256": "91f17b474e5b684db2792316e4000bf002c45aed560ab79c610edb3f089a6637",
+      "recognized": "Pour l'accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder, rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place. Cela aide l'équipe à réorganiser la relève.",
+      "expected": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

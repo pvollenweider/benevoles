@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T18:34:49.059Z",
+  "videoSha256": "9e2b5919ac350c5692fa69bc823acaf94e32a434b3347fca0235fdfe443da036",
+  "promptSha256": "d866ef4f74bad71df43d9c8b85e0ead868c598101ac319d2ab26dad201251d72",
+  "clipSha256": "37ef733fd635f7d467885225ee2000fca034255f51cc4c43120dc9f1ec7e1e77",
+  "scene": "practical",
+  "review": {
+    "heardOpening": "Commençons par l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Commençons par l'accueil confirmé",
+        "visibleSeconds": 0,
+        "visible": "En-tête de section 'Avant la mission' avec le statut 'Accueil confirmé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "La carte indique le jour et les horaires",
+        "visibleSeconds": 0,
+        "visible": "Ligne 'Quand : samedi 17 octobre, 09:00–12:00'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le lien carte aide à retrouver le lieu",
+        "visibleSeconds": 0,
+        "visible": "Lien cliquable 'Voir sur la carte' sous l'intitulé Lieu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "La personne de contact et son téléphone sont réservés aux inscrits",
+        "visibleSeconds": 0,
+        "visible": "Champs 'Contact pour ce créneau' avec nom et numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien posée, parfaitement synchronisée avec la présentation des éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

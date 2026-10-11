@@ -1,0 +1,197 @@
+{
+  "slug": "volunteer-choose-shifts",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T21:51:10.046Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_CHOOSE_SHIFTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6424
+    },
+    {
+      "kind": "click",
+      "atMs": 7240
+    },
+    {
+      "kind": "click",
+      "atMs": 8056
+    },
+    {
+      "kind": "click",
+      "atMs": 9839
+    },
+    {
+      "kind": "click",
+      "atMs": 10657
+    },
+    {
+      "kind": "click",
+      "atMs": 11890
+    },
+    {
+      "kind": "click",
+      "atMs": 14938
+    },
+    {
+      "kind": "click",
+      "atMs": 15755
+    },
+    {
+      "kind": "click",
+      "atMs": 20339
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1101,
+      "endMs": 3725
+    },
+    {
+      "id": "select",
+      "startMs": 5887,
+      "endMs": 8361
+    },
+    {
+      "id": "capacity",
+      "startMs": 8813,
+      "endMs": 8873
+    },
+    {
+      "id": "waitlist",
+      "startMs": 9326,
+      "endMs": 10961
+    },
+    {
+      "id": "approval-reserved",
+      "startMs": 12195,
+      "endMs": 12257
+    },
+    {
+      "id": "conflict",
+      "startMs": 14420,
+      "endMs": 16061
+    },
+    {
+      "id": "known",
+      "startMs": 16515,
+      "endMs": 18869
+    },
+    {
+      "id": "limit",
+      "startMs": 19322,
+      "endMs": 19374
+    },
+    {
+      "id": "result",
+      "startMs": 19826,
+      "endMs": 20705
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "select",
+      "phrase": "Tu peux en ajouter plusieurs",
+      "startMs": 10831,
+      "endMs": 15839,
+      "cueMs": 6733
+    },
+    {
+      "segmentId": "select",
+      "phrase": "Pour retirer un choix avant",
+      "startMs": 15839,
+      "endMs": 25506,
+      "cueMs": 7545
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Un créneau complet sans liste",
+      "startMs": 10054,
+      "endMs": 16042,
+      "cueMs": 8844
+    },
+    {
+      "segmentId": "waitlist",
+      "phrase": "Reclique pour le retirer.",
+      "startMs": 16847,
+      "endMs": 19339,
+      "cueMs": 10171
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Sécurité est réservée à certains",
+      "startMs": 13118,
+      "endMs": 22015,
+      "cueMs": 12224
+    },
+    {
+      "segmentId": "approval-reserved",
+      "phrase": "Ces deux états ne veulent",
+      "startMs": 22015,
+      "endMs": 30000,
+      "cueMs": 12257
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Ici, Accueil de quinze à",
+      "startMs": 9011,
+      "endMs": 16736,
+      "cueMs": 15244
+    },
+    {
+      "segmentId": "conflict",
+      "phrase": "Retire le premier choix si",
+      "startMs": 16736,
+      "endMs": 22421,
+      "cueMs": 15273
+    },
+    {
+      "segmentId": "known",
+      "phrase": "Ils apparaissent dans son récapitulatif",
+      "startMs": 8625,
+      "endMs": 15955,
+      "cueMs": 17733
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "les autres plages restent visibles",
+      "startMs": 8227,
+      "endMs": 17150,
+      "cueMs": 19336
+    },
+    {
+      "segmentId": "limit",
+      "phrase": "Elle doit d’abord annuler une",
+      "startMs": 17150,
+      "endMs": 27000,
+      "cueMs": 19339
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Tu peux encore tout ajuster",
+      "startMs": 9108,
+      "endMs": 13771,
+      "cueMs": 20671
+    }
+  ]
+}
