@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:33:05.996Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "a406161e9777f25fa57984276d0986d8e1bfbe349027f557876cf7d4aa9a6a90",
+  "clipSha256": "0dfb6224859e7473be87e05cc35a5788ea7afc20befb86ffd22911a2beeaf456",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Pour accueillir une nouvelle organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrons le formulaire de création",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page « Nouvelle organisation » avec le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.4,
+        "spoken": "Renseignons son nom, puis le nom et l'adresse email de son premier administrateur",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie des informations de l'organisation et du premier administrateur dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Créons l'espace",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur le bouton « Créer l'organisation »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Le résultat affiche un lien d'activation valable sept jours",
+        "visibleSeconds": 14.5,
+        "visible": "Écran « Organisation créée » avec l'encadré du lien d'invitation valable 7 jours",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien posée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,854 @@
+[
+  {
+    "id": "welcome",
+    "cue": {
+      "id": "welcome",
+      "startMs": 1122,
+      "endMs": 13506
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Une bonne page d’inscription ne montre pas seulement des créneaux.",
+        "startMs": 317,
+        "endMs": 3037,
+        "method": "silence"
+      },
+      {
+        "text": "Le programme, les informations pratiques et un QR code simple à afficher donnent aux bénévoles le contexte dont ils ont besoin, sans alourdir le formulaire.",
+        "startMs": 3561,
+        "endMs": 12194,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "program",
+    "cue": {
+      "id": "program",
+      "startMs": 13958,
+      "endMs": 31341
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 15826
+      },
+      {
+        "kind": "click",
+        "atMs": 17590
+      },
+      {
+        "kind": "key",
+        "atMs": 17898
+      },
+      {
+        "kind": "key",
+        "atMs": 17996
+      },
+      {
+        "kind": "key",
+        "atMs": 18095
+      },
+      {
+        "kind": "key",
+        "atMs": 18192
+      },
+      {
+        "kind": "key",
+        "atMs": 18290
+      },
+      {
+        "kind": "key",
+        "atMs": 18389
+      },
+      {
+        "kind": "key",
+        "atMs": 18486
+      },
+      {
+        "kind": "key",
+        "atMs": 18587
+      },
+      {
+        "kind": "key",
+        "atMs": 18688
+      },
+      {
+        "kind": "key",
+        "atMs": 18786
+      },
+      {
+        "kind": "key",
+        "atMs": 18885
+      },
+      {
+        "kind": "key",
+        "atMs": 18986
+      },
+      {
+        "kind": "key",
+        "atMs": 19090
+      },
+      {
+        "kind": "key",
+        "atMs": 19191
+      },
+      {
+        "kind": "key",
+        "atMs": 19291
+      },
+      {
+        "kind": "key",
+        "atMs": 19394
+      },
+      {
+        "kind": "key",
+        "atMs": 19494
+      },
+      {
+        "kind": "key",
+        "atMs": 19596
+      },
+      {
+        "kind": "click",
+        "atMs": 20374
+      },
+      {
+        "kind": "click",
+        "atMs": 21890
+      },
+      {
+        "kind": "click",
+        "atMs": 23406
+      },
+      {
+        "kind": "click",
+        "atMs": 24890
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Dans les réglages de l’événement, ajoutons un spectacle au programme.",
+        "startMs": 195,
+        "endMs": 3719,
+        "method": "silence"
+      },
+      {
+        "text": "Saisissons Concert du village, le quatorze novembre deux mille vingt-six, de onze heures à douze heures trente, puis cliquez sur Ajouter.",
+        "startMs": 4146,
+        "endMs": 11534,
+        "method": "silence"
+      },
+      {
+        "text": "Son horaire sert de repère dans le planning, sans réserver de bénévoles ni créer de créneau de travail.",
+        "startMs": 11857,
+        "endMs": 17150,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "program-edit",
+    "cue": {
+      "id": "program-edit",
+      "startMs": 31794,
+      "endMs": 49446
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 35089
+      },
+      {
+        "kind": "click",
+        "atMs": 37939
+      },
+      {
+        "kind": "click",
+        "atMs": 39522
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Vous pouvez corriger le programme sans le recréer.",
+        "startMs": 0,
+        "endMs": 3013,
+        "method": "silence"
+      },
+      {
+        "text": "Ouvrons le concert avec Modifier, puis avançons sa fin à treize heures et confirmons.",
+        "startMs": 3220,
+        "endMs": 8099,
+        "method": "silence"
+      },
+      {
+        "text": "Le concert garde son nom et sa date.",
+        "startMs": 8422,
+        "endMs": 10702,
+        "method": "silence"
+      },
+      {
+        "text": "Une entrée ajoutée par erreur peut être supprimée avec sa propre commande, indépendamment des créneaux des bénévoles.",
+        "startMs": 11082,
+        "endMs": 17320,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "pages",
+    "cue": {
+      "id": "pages",
+      "startMs": 49898,
+      "endMs": 70979
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 51517
+      },
+      {
+        "kind": "click",
+        "atMs": 52332
+      },
+      {
+        "kind": "key",
+        "atMs": 52639
+      },
+      {
+        "kind": "key",
+        "atMs": 52737
+      },
+      {
+        "kind": "key",
+        "atMs": 52835
+      },
+      {
+        "kind": "key",
+        "atMs": 52933
+      },
+      {
+        "kind": "key",
+        "atMs": 53030
+      },
+      {
+        "kind": "key",
+        "atMs": 53227
+      },
+      {
+        "kind": "key",
+        "atMs": 53325
+      },
+      {
+        "kind": "key",
+        "atMs": 53425
+      },
+      {
+        "kind": "key",
+        "atMs": 53522
+      },
+      {
+        "kind": "key",
+        "atMs": 53625
+      },
+      {
+        "kind": "key",
+        "atMs": 53726
+      },
+      {
+        "kind": "key",
+        "atMs": 53828
+      },
+      {
+        "kind": "key",
+        "atMs": 53925
+      },
+      {
+        "kind": "key",
+        "atMs": 54026
+      },
+      {
+        "kind": "key",
+        "atMs": 54130
+      },
+      {
+        "kind": "key",
+        "atMs": 54230
+      },
+      {
+        "kind": "key",
+        "atMs": 54329
+      },
+      {
+        "kind": "key",
+        "atMs": 54431
+      },
+      {
+        "kind": "key",
+        "atMs": 54531
+      },
+      {
+        "kind": "key",
+        "atMs": 54633
+      },
+      {
+        "kind": "key",
+        "atMs": 54734
+      },
+      {
+        "kind": "click",
+        "atMs": 56716
+      },
+      {
+        "kind": "key",
+        "atMs": 57022
+      },
+      {
+        "kind": "key",
+        "atMs": 57124
+      },
+      {
+        "kind": "key",
+        "atMs": 57227
+      },
+      {
+        "kind": "key",
+        "atMs": 57330
+      },
+      {
+        "kind": "key",
+        "atMs": 57432
+      },
+      {
+        "kind": "key",
+        "atMs": 57535
+      },
+      {
+        "kind": "key",
+        "atMs": 57641
+      },
+      {
+        "kind": "key",
+        "atMs": 57747
+      },
+      {
+        "kind": "key",
+        "atMs": 57851
+      },
+      {
+        "kind": "key",
+        "atMs": 58055
+      },
+      {
+        "kind": "key",
+        "atMs": 58157
+      },
+      {
+        "kind": "key",
+        "atMs": 58261
+      },
+      {
+        "kind": "key",
+        "atMs": 58363
+      },
+      {
+        "kind": "key",
+        "atMs": 58466
+      },
+      {
+        "kind": "key",
+        "atMs": 58571
+      },
+      {
+        "kind": "key",
+        "atMs": 58673
+      },
+      {
+        "kind": "key",
+        "atMs": 58776
+      },
+      {
+        "kind": "key",
+        "atMs": 58881
+      },
+      {
+        "kind": "key",
+        "atMs": 58989
+      },
+      {
+        "kind": "key",
+        "atMs": 59096
+      },
+      {
+        "kind": "key",
+        "atMs": 59201
+      },
+      {
+        "kind": "key",
+        "atMs": 59308
+      },
+      {
+        "kind": "key",
+        "atMs": 59412
+      },
+      {
+        "kind": "key",
+        "atMs": 59520
+      },
+      {
+        "kind": "key",
+        "atMs": 59626
+      },
+      {
+        "kind": "key",
+        "atMs": 59734
+      },
+      {
+        "kind": "key",
+        "atMs": 59841
+      },
+      {
+        "kind": "key",
+        "atMs": 59948
+      },
+      {
+        "kind": "key",
+        "atMs": 60056
+      },
+      {
+        "kind": "key",
+        "atMs": 60161
+      },
+      {
+        "kind": "key",
+        "atMs": 60267
+      },
+      {
+        "kind": "key",
+        "atMs": 60371
+      },
+      {
+        "kind": "key",
+        "atMs": 60478
+      },
+      {
+        "kind": "key",
+        "atMs": 60588
+      },
+      {
+        "kind": "key",
+        "atMs": 60693
+      },
+      {
+        "kind": "key",
+        "atMs": 60797
+      },
+      {
+        "kind": "key",
+        "atMs": 60906
+      },
+      {
+        "kind": "key",
+        "atMs": 61011
+      },
+      {
+        "kind": "key",
+        "atMs": 61119
+      },
+      {
+        "kind": "key",
+        "atMs": 61224
+      },
+      {
+        "kind": "key",
+        "atMs": 61332
+      },
+      {
+        "kind": "key",
+        "atMs": 61438
+      },
+      {
+        "kind": "key",
+        "atMs": 61543
+      },
+      {
+        "kind": "key",
+        "atMs": 61647
+      },
+      {
+        "kind": "key",
+        "atMs": 61751
+      },
+      {
+        "kind": "key",
+        "atMs": 61860
+      },
+      {
+        "kind": "key",
+        "atMs": 62069
+      },
+      {
+        "kind": "key",
+        "atMs": 62171
+      },
+      {
+        "kind": "key",
+        "atMs": 62277
+      },
+      {
+        "kind": "key",
+        "atMs": 62381
+      },
+      {
+        "kind": "key",
+        "atMs": 62490
+      },
+      {
+        "kind": "key",
+        "atMs": 62597
+      },
+      {
+        "kind": "key",
+        "atMs": 62703
+      },
+      {
+        "kind": "key",
+        "atMs": 62808
+      },
+      {
+        "kind": "key",
+        "atMs": 62915
+      },
+      {
+        "kind": "key",
+        "atMs": 63022
+      },
+      {
+        "kind": "key",
+        "atMs": 63128
+      },
+      {
+        "kind": "key",
+        "atMs": 63235
+      },
+      {
+        "kind": "key",
+        "atMs": 63340
+      },
+      {
+        "kind": "key",
+        "atMs": 63446
+      },
+      {
+        "kind": "key",
+        "atMs": 63552
+      },
+      {
+        "kind": "key",
+        "atMs": 63656
+      },
+      {
+        "kind": "click",
+        "atMs": 67015
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Créons une page Ce qu’il faut apporter, en complément des pages d’accès et des questions fréquentes.",
+        "startMs": 332,
+        "endMs": 5564,
+        "method": "silence"
+      },
+      {
+        "text": "Le titre devient son adresse.",
+        "startMs": 5828,
+        "endMs": 7639,
+        "method": "silence"
+      },
+      {
+        "text": "Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras.",
+        "startMs": 7839,
+        "endMs": 11956,
+        "method": "silence"
+      },
+      {
+        "text": "Saisissons une courte liste, puis enregistrons.",
+        "startMs": 12135,
+        "endMs": 16289,
+        "method": "silence"
+      },
+      {
+        "text": "Cette page doit donner des informations pratiques, pas demander une nouvelle inscription.",
+        "startMs": 16823,
+        "endMs": 20725,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "page-order",
+    "cue": {
+      "id": "page-order",
+      "startMs": 71430,
+      "endMs": 90632
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 76899
+      },
+      {
+        "kind": "click",
+        "atMs": 77682
+      },
+      {
+        "kind": "click",
+        "atMs": 78465
+      },
+      {
+        "kind": "key",
+        "atMs": 78772
+      },
+      {
+        "kind": "key",
+        "atMs": 78775
+      },
+      {
+        "kind": "key",
+        "atMs": 78898
+      },
+      {
+        "kind": "key",
+        "atMs": 79020
+      },
+      {
+        "kind": "key",
+        "atMs": 79142
+      },
+      {
+        "kind": "key",
+        "atMs": 79266
+      },
+      {
+        "kind": "key",
+        "atMs": 79392
+      },
+      {
+        "kind": "key",
+        "atMs": 79517
+      },
+      {
+        "kind": "key",
+        "atMs": 79643
+      },
+      {
+        "kind": "key",
+        "atMs": 79770
+      },
+      {
+        "kind": "key",
+        "atMs": 79899
+      },
+      {
+        "kind": "key",
+        "atMs": 80025
+      },
+      {
+        "kind": "key",
+        "atMs": 80150
+      },
+      {
+        "kind": "key",
+        "atMs": 80279
+      },
+      {
+        "kind": "click",
+        "atMs": 82847
+      },
+      {
+        "kind": "click",
+        "atMs": 86681
+      },
+      {
+        "kind": "click",
+        "atMs": 89365
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Les flèches Monter et Descendre changent l’ordre des pages et l’enregistrent aussitôt.",
+        "startMs": 356,
+        "endMs": 5138,
+        "method": "silence"
+      },
+      {
+        "text": "Faisons monter Ce qu’il faut apporter.",
+        "startMs": 5568,
+        "endMs": 7819,
+        "method": "silence"
+      },
+      {
+        "text": "Ouvrons ensuite Modifier pour ajouter une gourde à sa liste, puis enregistrons.",
+        "startMs": 8458,
+        "endMs": 12794,
+        "method": "silence"
+      },
+      {
+        "text": "Pour supprimer une page, une confirmation permet encore d’annuler :",
+        "startMs": 13155,
+        "endMs": 16594,
+        "method": "silence"
+      },
+      {
+        "text": "vérifions-la sans perdre notre contenu.",
+        "startMs": 16723,
+        "endMs": 18912,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "public",
+    "cue": {
+      "id": "public",
+      "startMs": 91084,
+      "endMs": 110491
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 100677
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Ouvrons maintenant la page publique.",
+        "startMs": 291,
+        "endMs": 2023,
+        "method": "silence"
+      },
+      {
+        "text": "Le concert apparaît en repère sur le planning.",
+        "startMs": 2504,
+        "endMs": 5365,
+        "method": "silence"
+      },
+      {
+        "text": "Les liens d’information reprennent l’ordre choisi.",
+        "startMs": 5607,
+        "endMs": 8488,
+        "method": "silence"
+      },
+      {
+        "text": "Ouvrons Ce qu’il faut apporter :",
+        "startMs": 8693,
+        "endMs": 10094,
+        "method": "silence"
+      },
+      {
+        "text": "le titre, le gras et la liste sont mis en forme, et la gourde est bien présente.",
+        "startMs": 10698,
+        "endMs": 15099,
+        "method": "silence"
+      },
+      {
+        "text": "Le bénévole peut préparer son arrivée sans chercher un ancien email.",
+        "startMs": 15491,
+        "endMs": 19139,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "qr",
+    "cue": {
+      "id": "qr",
+      "startMs": 110943,
+      "endMs": 127863
+    },
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 114797
+      },
+      {
+        "kind": "click",
+        "atMs": 117846
+      }
+    ],
+    "sentences": [
+      {
+        "text": "Le QR code mène à la page publique de cet événement.",
+        "startMs": 270,
+        "endMs": 2638,
+        "method": "silence"
+      },
+      {
+        "text": "Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette.",
+        "startMs": 3266,
+        "endMs": 8402,
+        "method": "silence"
+      },
+      {
+        "text": "La commande Imprimer prépare une fiche à afficher sur un stand.",
+        "startMs": 8914,
+        "endMs": 12638,
+        "method": "silence"
+      },
+      {
+        "text": "Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
+        "startMs": 13310,
+        "endMs": 16615,
+        "method": "silence"
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "cue": {
+      "id": "result",
+      "startMs": 128314,
+      "endMs": 150412
+    },
+    "interactions": [],
+    "sentences": [
+      {
+        "text": "Vous avez un programme corrigé, des pages pratiques lisibles et deux fichiers QR téléchargés.",
+        "startMs": 308,
+        "endMs": 6162,
+        "method": "silence"
+      },
+      {
+        "text": "Avant votre diffusion, scannez le code avec un vrai téléphone :",
+        "startMs": 6850,
+        "endMs": 9974,
+        "method": "silence"
+      },
+      {
+        "text": "ce contrôle reste à faire sur votre appareil.",
+        "startMs": 10409,
+        "endMs": 12500,
+        "method": "silence"
+      },
+      {
+        "text": "Vérifiez que la page attendue s’ouvre et que les inscriptions sont ouvertes au bon moment.",
+        "startMs": 12934,
+        "endMs": 17698,
+        "method": "silence"
+      },
+      {
+        "text": "Un QR code facilite l’accès ;",
+        "startMs": 18176,
+        "endMs": 19900,
+        "method": "silence"
+      },
+      {
+        "text": "il ne change pas les règles d’inscription.",
+        "startMs": 20283,
+        "endMs": 21590,
+        "method": "silence"
+      }
+    ]
+  }
+]

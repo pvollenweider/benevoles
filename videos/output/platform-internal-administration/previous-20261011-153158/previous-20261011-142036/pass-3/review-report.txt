@@ -1,0 +1,30 @@
+STATUS: NOT READY
+ID: PLATFORM_INTERNAL_ADMINISTRATION
+Commit: 50109e997d01413760453ed446600b2f6ba55b1e
+BUILD_ID: J9FLk7d2muTPYQm0aZ-LE
+Duration: 479.280 seconds
+Music smallest/largest gap: 11.6 / 21.9 LU — FAIL; 18 voiced windows outside 12–20 rule, quietest music-only -31.3 LUFS passes floor.
+
+First-pass artifacts preserved in pass-1/. Accepted cached continuous Kore WAVs, generation fingerprint and independent text/audio audit revalidated. Fresh verified shared build served with operator-local.ts on 43104, pinned AUTH_URL and actual product registry. Provisioner checked marked operator DB and current migrations. Existing exact synthetic fixture retained, real login/scope/context/health and lifecycle preflights passed. Rehearsal now completed through the prior redirect failure. Recorder reset only its exact disposable organization/history before final take; one initially subscribed administrator verified. Actual activation, two exact fictional broadcast recipients, unsubscribe, guarded deletion and original three organizations verified in capture-checks.json.
+
+Narrated capture completed; generated MP4 retained as failed assembly evidence. Assembler and video:validate both reject music levels. Posters still generated using --metadata-output review/renders-generated.json; no metadata in renders.json. Final-MP4 speech audit, captions and frame evidence retained. No refilm or remix after failure.
+
+Direct evidence: all twelve review/*-seconds.png sheets inspected, plus sentence/action times and exact input-effect bytes in review/inspection.json; final MP4 hash there and review-frames/index.json.
+- welcome: correct three organizations/counts; detail click 18.68 follows Ouvrons 18.12.
+- create: FAIL name entry 34.86 precedes Renseignons 36.88 by 2.02 s; creation 46.62 vs Créons 45.50 late. Added name sentence wait and anchored creation.
+- renew: real first and renewed invitations; old link refused. Renvoi click 76.28 is late in instruction starting 71.70; anchored return/renew to Avant de l’utiliser.
+- activate: FAIL password entry 98.72 before Elle choisit 99.81; added sentence wait. Anchored login and return to operator instructions (106.48, 113.35) so variable typing time cannot trigger premature navigation.
+- identity: FAIL name edit 130.23 before Modifions 133.83; free identifier entry 143.85 after Choisissons 141.18. Anchored name, occupied identifier trial and free identifier selection. Actual duplicate error, saved name/identifier and old public alias checked.
+- availability: FAIL opens deactivation 169.17 before Ouvrons 171.28; reactivation 185.29 vs Revenons 181.62 late. Anchored opening, return/reactivation and restored-session view. Actual denied/restored requests confirmed.
+- context: correct Parc events, no Quartier leak; Gérer click 214.31 vs instruction 210.07 late, anchored it.
+- health: actual states, no invented backup/job successes. Reload approximately matches Recharger sentence 247.34; warnings and unknown shown.
+- preview: FAIL subject entry 278.72 before Donnons-lui 280.47, content 284.72 before Le contenu 285.93. Added both sentence waits. Test click 312.80 follows 311.54 instruction, real Mailpit message with guide link.
+- broadcast: FAIL subject 336.98 before Reprenons 337.84. Added wait. Confirmation 360.71 within invitation to check recipients 356.23; final send 370.78 follows Validons 370.22. Actual delivered mail, history and unsubscribe displayed.
+- delete: FAIL deactivation 404.84 before Désactivons 406.86, textbox 416.35 before confirmation instruction 417.25. Anchored deactivation, appearance of deletion button, exact identifier entry and final validation. Actual removal preserves three original organizations.
+- result: deleted session denied, ordinary existing owner returns 403, operator restores list. Prior wrong-port redirect absent.
+
+UI: French product dates (11 oct. 2026), fictional identities, benevol.app activation/public/guide addresses; no dev overlay or forbidden org-admin@localhost observed. Mailpit envelope date is its native English technical chrome, not a mm/dd product date. No settings-address exception. Current labels Organisations, Slug, Actif/Inactif, Communications admins and Santé du service. No Timeline wording.
+Effects: exact byte comparison passes for recorded click/key markers. Music numbers remain a blocking failure; constant-gain adjustment cannot fit 10.3 LU span into an 8 LU band, so no speculative gain-only patch applied. Narration dynamics/music mix need verified tuning in a subsequent pass. Rule unchanged.
+Subtitles: exact current-manifest VTT/TXT check and independent final-MP4 ASR; proportional timings, no forced word alignment. Full real-time subjective listening not certified.
+
+Local source changes: videos/lib/record-operator.ts uses Cue type and sentence waits/anchors for identified early/late actions. No re-filming. Product unchanged. No publish, push, commit or PR.

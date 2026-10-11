@@ -1,0 +1,47 @@
+{
+  "id": "EVENT_PROGRAM_PAGES_QR",
+  "slug": "event-program-pages-qr",
+  "validatedAt": "2026-10-04T17:14:19.225Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 90320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12585,
+      "audioMs": 12583,
+      "driftMs": 2
+    },
+    {
+      "id": "program",
+      "visualMs": 14499,
+      "audioMs": 14500,
+      "driftMs": -1
+    },
+    {
+      "id": "pages",
+      "visualMs": 12000,
+      "audioMs": 11999,
+      "driftMs": 1
+    },
+    {
+      "id": "public",
+      "visualMs": 16236,
+      "audioMs": 16236,
+      "driftMs": 0
+    },
+    {
+      "id": "qr",
+      "visualMs": 12037,
+      "audioMs": 12036,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 12689,
+      "audioMs": 12686,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

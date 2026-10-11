@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T06:27:49.730Z",
-  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
-  "promptSha256": "52ee3458f347d741b5b7ffd5041d5004b3d5c360e6549eb750f1aa7bbe882b71",
-  "clipSha256": "0568be698a974f7eb4f17c1378f92793bdfc2da7c2f84a4229062b47d1b86b39",
+  "reviewedAt": "2026-10-11T13:45:53.736Z",
+  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "promptSha256": "0eafd04b7589de4dcd88f686a90a71e3583664283eaef7597229a952f6f27413",
+  "clipSha256": "ca17d0da5f46abb1ae48f33d17b46c9d657b925c9f8db861726869fcb850f45f",
   "scene": "context",
   "review": {
     "heardOpening": "Pour travailler dans une organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8,
         "spoken": "Depuis son détail, utilisons Gérer",
-        "visibleSeconds": 10.2,
-        "visible": "Affichage de la page de détail puis clic sur le bouton Gérer",
+        "visibleSeconds": 8.8,
+        "visible": "Clic sur le bouton Gérer depuis la page de détail de l'organisation Formation Opérateur Parc",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "avant d'ouvrir les événements",
-        "visibleSeconds": 12.5,
-        "visible": "Affichage de l'onglet Événements pour Formation Opérateur Parc",
+        "spokenSeconds": 10.8,
+        "spoken": "vérifions le nom du contexte avant d'ouvrir les événements",
+        "visibleSeconds": 10,
+        "visible": "Affichage de l'espace 'Formation Opérateur Parc' dans la barre de navigation avec l'onglet Événements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Nous retrouvons ici ceux du Parc",
-        "visibleSeconds": 13.5,
-        "visible": "L'événement Parc — Fête de formation est affiché dans la liste",
+        "spokenSeconds": 14.2,
+        "spoken": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier",
+        "visibleSeconds": 14,
+        "visible": "L'événement affiché dans la liste est 'Parc – Fête de formation'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et bien articulée, synchronisée avec les actions affichées."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

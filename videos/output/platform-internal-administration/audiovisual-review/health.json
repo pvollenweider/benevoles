@@ -1,53 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T06:28:01.925Z",
-  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
-  "promptSha256": "f69b6a854b99acb511effdd90433f73db7d963c54deb6c4b798c634f830a00c0",
-  "clipSha256": "fe0fd573078017d26bff818a3d65c3076e8242581b0d029d43c48f248f7b366e",
+  "reviewedAt": "2026-10-11T13:46:05.647Z",
+  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "promptSha256": "8ad43c0c5b6bb559ae1dd73a5219a096df8fd0d9af307cf8d6b16159e7318146",
+  "clipSha256": "b14adc2baf7083fb299a8157ea22be31ff50b6b6046158af450af80598842422",
   "scene": "health",
   "review": {
-    "heardOpening": "La page Santé du service",
+    "heardOpening": "La page Santé du service regroupe",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "La page Santé du service regroupe trois ensembles d'informations",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page Santé du service avec les sections Service et Tâches planifiées",
+        "visible": "Affichage de la page Santé du service avec les rubriques Service et Tâches planifiées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "puis la configuration",
+        "spokenSeconds": 11.2,
+        "spoken": "Regardons les états visibles, la date de contrôle et la version",
+        "visibleSeconds": 11.2,
+        "visible": "Version 2.2.0 et date de vérification (11 oct., 15:39) visibles sous le titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement",
+        "visibleSeconds": 20.5,
+        "visible": "Lignes de tâches planifiées affichant « Jamais exécuté » et le statut « Inconnu »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.5,
+        "spoken": "Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée",
         "visibleSeconds": 33.5,
-        "visible": "La section Configuration n'apparaît à l'écran qu'après défilement à 33s",
-        "sync": "early",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 16,
-        "spoken": "Recharger relance la vérification",
-        "visibleSeconds": 1,
-        "visible": "Texte indicatif 'Recharger la page relance les contrôles' visible sous le sous-titre",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 23.5,
-        "spoken": "leur état reste inconnu ou en avertissement",
-        "visibleSeconds": 23.5,
-        "visible": "Statuts 'Inconnu' affichés en face des tâches planifiées",
+        "visible": "Défilement vers le bas affichant le statut « Test de restauration » à surveiller et la section Configuration",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:08 - La section Configuration est annoncée oralement mais n'apparaît à l'écran qu'à 00:34 suite au défilement."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée et claire, débit régulier en adéquation avec le contenu."
+      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les éléments affichés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

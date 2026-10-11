@@ -1,0 +1,20 @@
+STATUS: NOT READY
+ID: PLATFORM_INTERNAL_ADMINISTRATION
+Commit: 57ead48691c549980f7aae34cd5710df60d7d8c8
+BUILD_ID: wehNI4lfzOGIMmAjJ-tMC
+Duration: 474.640 s
+Music smallest/largest gap: 12.5 / 19.6 LU; no rule issues.
+Narration: existing audio reused; generation fingerprint accepted; no regeneration. Source audit reused with identical WAV/text; final-MP4 independent ASR passes all 12 chapters.
+Objective automation: video:validate passes, 27 sentence anchors; 38 clicks / 674 key events match effects metadata and hashes; VTT text exactly matches the manifest; posters metadata in review/renders-generated.json.
+Frames: six final-MP4 frames per chapter, all 12 chapter sheets visually reviewed; supplemental full-resolution frames in review/.
+FAIL: activation URL displays http://video.invalid (review/invite-url.png @51s). Product routes inlined NEXT_PUBLIC_APP_URL from build; corrected both create and send-invite routes to request-time environment lookup. Shared target build remains unchanged.
+FAIL: activate: events page is visible only around 113.0s before switching at 113.3s; invitation login takes most of the phrase announcing arrival. write delays reduced from 45 to 10 ms and explicit Événements heading/settle added, without re-filming.
+FAIL: identity: collision alert falls below 800px viewport (identity-refusal.png @140.6s). Actual save did happen: identity-saved.png @145.8s shows renamed identifier. Recorder now scrolls entire slug form and actual alert. Product layout issue: new inline error below a field at viewport bottom does not bring itself into view.
+FAIL: availability: session navigation begins ~10.22s into chapter vs sentence start 7.69s. Converted .32 to at("Dans la session organisateur déjà ouverte").
+FAIL: preview: open email waits ~43.59s vs sentence start 41.41s; before-mail frame @317.6s still composer, mail frame @320s shows Mailpit. Converted .66 test and .78 mail cues to sentence anchors.
+FAIL: broadcast: confirmation click 27.14s vs sentence 22.65s; before-confirmation @357.3s composer, confirmation @361.8s dialog. Converted .45/.62/.65 to sentence anchors. History row remains below fold (broadcast-history.png @373.5s); recorder now scrolls the actual history list item.
+Automated audiovisual reports completed for every chapter. Confirmed actual issues above; rebutted model claim that slug was never saved using route/assertions and full-resolution saved frame. Unsubscribed-recipient absence is verified by actual mailbox recipients; it need not be represented as an invented visible empty email.
+Other chapters welcome/create/renew/context/health/delete/result: current labels and actual outcomes checked against chapter sheets, narration, markers and assertions; no stale Timeline, localhost/org-admin@localhost, dev overlay or US numeric date found in inspected final frames. Product dates are French; Mailpit has its own English chrome/date header, retained as evidence.
+Subtitles: exact chapter text checked; final MP4 ASR checks audio content. Real-time subjective listening unavailable, not used as a failure reason.
+Local source changes: videos/lib/record-operator.ts plus two operator organization API routes. No transcript/audio changes. No second capture.
+No public documentation screenshot maps to the changed super-admin API link; doc-img: unchanged. No feature availability changed.

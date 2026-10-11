@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:00:17.483Z",
-  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
-  "promptSha256": "5470b56e079b5328baad2bdad7c1e064ef5f9f721c126ee37eb267af27f550f8",
-  "clipSha256": "a4949732e03700a0867501ab20562d99ef5ed3c7482e6926f024723ca370c875",
+  "reviewedAt": "2026-10-11T14:10:17.490Z",
+  "videoSha256": "b304932f76da7a0bf400c12ecd584a9f53b8c567bb0219a32394004c9fd55c37",
+  "promptSha256": "58aa1a6d18331a055517684ad1c3cf9421dc9e54bfaae6618245fd8e9f1dfab0",
+  "clipSha256": "807f81da34bb1fff29ce1194fff5fff0d7456bf4c5a90c432e12d63ff4a8dbcf",
   "scene": "page-order",
   "review": {
     "heardOpening": "Les flèches Monter et Descendre",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Faisons monter Ce qu’il faut apporter",
-        "visibleSeconds": 5,
-        "visible": "Clic sur la flèche pour faire monter l'élément",
+        "spokenSeconds": 5.2,
+        "spoken": "Faisons monter Ce qu’il faut apporter.",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur la flèche monter de la page « Ce qu'il faut apporter », qui remonte d'un rang dans la liste.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
-        "spoken": "Ouvrons ensuite Modifier pour ajouter une gourde à sa liste",
-        "visibleSeconds": 8.5,
-        "visible": "Fenêtre de modification ouverte et ajout du texte gourde",
+        "spokenSeconds": 8,
+        "spoken": "Ouvrons ensuite Modifier pour ajouter une gourde à sa liste, puis enregistrons.",
+        "visibleSeconds": 8.3,
+        "visible": "Ouverture de la fenêtre « Modifier la page », saisie de « - Une gourde » dans le contenu, puis clic sur Enregistrer.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
-        "spoken": "puis enregistrons",
-        "visibleSeconds": 11.5,
-        "visible": "Clic sur Enregistrer et fermeture de la modale",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15.5,
-        "spoken": "vérifions-la sans perdre notre contenu",
-        "visibleSeconds": 17,
-        "visible": "Ouverture de la confirmation puis clic sur Annuler",
+        "spokenSeconds": 13.5,
+        "spoken": "Pour supprimer une page, une confirmation permet encore d’annuler : vérifions-la sans perdre notre contenu.",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur Supprimer, apparition de la modale de confirmation, puis clic sur Annuler pour conserver la page.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et dynamique."
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

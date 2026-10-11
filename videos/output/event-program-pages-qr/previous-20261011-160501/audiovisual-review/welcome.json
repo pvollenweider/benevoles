@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:02:58.813Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "af2885867808234017405c7abf0fd9d8f7736baa67d9387cf9e37626de9b5537",
+  "clipSha256": "9e9f2ebf3b5b68e1ac3b1c422dc97841f2f6cf042486340f0a21ec0df0b559ce",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une bonne page d'inscription ne montre pas seulement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une bonne page d'inscription ne montre pas seulement des créneaux.",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre de section « Programme, pages d'information et QR code » affiché par-dessus la page de modification d'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Le programme, les informations pratiques",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau d'introduction, affichage du formulaire « Modifier l'événement ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "et un QR code simple à afficher",
+        "visibleSeconds": 6,
+        "visible": "Formulaire « Modifier l'événement » restant affiché en vue générale d'introduction.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement audible, avec un accompagnement musical discret en fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

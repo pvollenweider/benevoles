@@ -1,0 +1,12 @@
+{
+  "anchor": "Le QR code mène à la page publique de cet événement.",
+  "windowStart": 95.056,
+  "result": {
+    "found": true,
+    "startSeconds": 12.23,
+    "wordsHeard": "Le QR code mène à la page publique de cet événement."
+  },
+  "onset": 107.286,
+  "proposedCut": 107.10425000000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

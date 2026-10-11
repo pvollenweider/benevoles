@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:26:52.827Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "d171577f0446ccbf92ad84dcdbbf99f79f85e74597b0fc6bb5cbd03efe3b3091",
+  "clipSha256": "10c9fe7d4b75407e5bab14b46b703eb66caf403400bb9a45c94d717a38536464",
+  "scene": "renew",
+  "review": {
+    "heardOpening": "Envoyons maintenant l'invitation et ouvrons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Envoyons maintenant l'invitation",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le lien d'envoi de l'invitation par email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le vrai message reçu dans la boîte de formation",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "revenons au détail de l'organisation et renvoyons l'invitation",
+        "visibleSeconds": 11.5,
+        "visible": "Retour à la fiche organisation et clic sur Renvoyer l'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Vérifions l'ancien : il est refusé",
+        "visibleSeconds": 16,
+        "visible": "Page affichant le message Lien invalide ou déjà utilisé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "Ouvrons le second message reçu pour poursuivre",
+        "visibleSeconds": 26,
+        "visible": "Retour sur l'interface de messagerie",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier bien calé sur la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

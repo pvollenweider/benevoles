@@ -1,0 +1,131 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T11:47:00.124Z",
+  "revalidatedAt": "2026-10-11T11:47:00.125Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c09c2c658aba4156b4799c99807c1fdbc1b6f4ae89cc9fed01fe66073b4be18d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "64c060d48132bbe8b68f05f5ded7f217e452f5f142e09ee6e61ab791bf3dcb8a",
+      "recognized": "Bienvenue dans l'administration de la plateforme. Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles. Notre liste contient trois organisations de formation. Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres. Ouvrons un détail pour retrouver ces informations et les comptes associés. Toutes les personnes utilisées ici sont fictives, hein. Nous travaillons dans une base locale séparée, aucun message ne part vers une vraie association.",
+      "expected": "Bienvenue dans l'administration de la plateforme. Ce parcours s'adresse à l'opérateur qui gère les espaces des organisations, pas aux bénévoles. Notre liste contient trois organisations de formation. Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres. Ouvrons un détail pour retrouver ces informations et les comptes associés. Toutes les personnes utilisées ici sont fictives. Nous travaillons dans une base locale séparée : aucun message ne part vers une vraie association.",
+      "wordErrorRate": 0.012345679012345678,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "00b8a4e03f710005a446c1838c6ac6d8a49298208632e806f268d30f61b455d1",
+      "recognized": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons son nom, puis le nom et l'adresse email de son premier administrateur. Prenons le temps de vérifier cette adresse, c'est elle qui recevra son accès. Créons l'espace. Le résultat affiche un lien d'activation valable sept jours. Le compte attend encore son activation. La création ne suffit donc pas à dire que la personne s'est connectée, et nous ne lui remettons pas un mot de passe temporaire. Le lien permettra de choisir son propre mot de passe.",
+      "expected": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons son nom, puis le nom et l'adresse email de son premier administrateur. Prenons le temps de vérifier cette adresse : c'est elle qui recevra son accès. Créons l'espace. Le résultat affiche un lien d'activation valable sept jours. Le compte attend encore son activation. La création ne suffit donc pas à dire que la personne s'est connectée, et nous ne lui remettons pas un mot de passe temporaire. Le lien permettra de choisir son propre mot de passe.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "renew",
+      "audioSha256": "5c86bf8d03e6d22f6f5aca5bfc5bcb3114189f741bd71be7fa124e0eade1f3a7",
+      "recognized": "Envoyons maintenant l'invitation et ouvrons le vrai message reçu dans la boîte de formation. Son lien donne accès à l'activation. Avant de l'utiliser, revenons aux détails de l'organisation et renvoyons l'invitation au compte encore en attente. Un nouveau lien est affiché avec une nouvelle durée de validité. Vérifions l'ancien, il est refusé. Le renvoi n'est donc pas une simple copie du premier message. Si l'envoi échoue, il faut tout de même utiliser le nouveau lien indiqué, pas continuer à transmettre l'ancien. Ouvrons le second message reçu pour poursuivre.",
+      "expected": "Envoyons maintenant l'invitation et ouvrons le vrai message reçu dans la boîte de formation. Son lien donne accès à l'activation. Avant de l'utiliser, revenons au détail de l'organisation et renvoyons l'invitation au compte encore en attente. Un nouveau lien est affiché, avec une nouvelle durée de validité. Vérifions l'ancien : il est refusé. Le renvoi n'est donc pas une simple copie du premier message. Si l'envoi échoue, il faut tout de même utiliser le nouveau lien indiqué, pas continuer à transmettre l'ancien. Ouvrons le second message reçu pour poursuivre.",
+      "wordErrorRate": 0.020618556701030927,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "activate",
+      "audioSha256": "d7dd5c80826707a49077d23bd641d7b2c9ce91f9fb1e8483618a7c2935861758",
+      "recognized": "La personne invitée ouvre son nouveau lien dans sa propre session. Elle choisit son mot de passe et termine l'activation. Le mot de passe n'a pas besoin d'être partagé avec l'opérateur. Connectons-nous ensuite avec ce nouveau compte, nous arrivons dans son organisation, encore sans événement. Revenons aux détails côté opérateur pour vérifier que le compte apparaît actif. Le lien d'activation a été utilisé. Il n'est pas un lien permanent de connexion. Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
+      "expected": "La personne invitée ouvre son nouveau lien dans sa propre session. Elle choisit son mot de passe et termine l'activation. Le mot de passe n'a pas besoin d'être partagé avec l'opérateur. Connectons-nous ensuite avec ce nouveau compte : nous arrivons dans son organisation, encore sans événement. Revenons au détail côté opérateur pour vérifier que le compte apparaît actif. Le lien d'activation a été utilisé ; il n'est pas un lien permanent de connexion. Pour revenir plus tard, l'administrateur utilise sa connexion habituelle.",
+      "wordErrorRate": 0.022727272727272728,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "identity",
+      "audioSha256": "471b860090e0c18d48293176a1cacdfa2eafbd59923e687b8314f751a561d850",
+      "recognized": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions d'abord le nom et enregistrons-le. Pour l'identifiant, essayons une valeur déjà utilisée. L'application la refuse. Choisissons alors un identifiant libre et enregistrons. Le détail s'ouvre sous ce nouvel identifiant. Ce changement concerne les adresses publiques. Il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant. Ne changeons pas une adresse simplement pour corriger le nom affiché. Vérifions le résultat avant de communiquer la nouvelle adresse.",
+      "expected": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions d'abord le nom et enregistrons-le. Pour l'identifiant, essayons une valeur déjà utilisée : l'application la refuse. Choisissons alors un identifiant libre et enregistrons. Le détail s'ouvre sous ce nouvel identifiant. Ce changement concerne les adresses publiques ; il faut donc vérifier les liens qui ont déjà été diffusés et la redirection de l'ancien identifiant. Ne changeons pas une adresse simplement pour corriger le nom affiché. Vérifions le résultat avant de communiquer la nouvelle adresse.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "availability",
+      "audioSha256": "3fa9539d85535f5cbb61b10035103093acc6311c68f9691b142d7a09ee4509df",
+      "recognized": "Désactiver une organisation n'est pas la supprimer. Ouvrons la confirmation et lisons les conséquences avant de valider. Dans la session organisateur déjà ouverte, une nouvelle requête est maintenant refusée. L'espace existe toujours avec ses données. Revenons côté opérateur et réactivons-le. La session organisateur peut à nouveau accéder à ses événements. Cette vérification est importante, un écran déjà affiché n'est pas la preuve que les nouvelles actions restent autorisées. Contrôlons le résultat de la requête après chaque changement d'état.",
+      "expected": "Désactiver une organisation n'est pas la supprimer. Ouvrons la confirmation et lisons les conséquences avant de valider. Dans la session organisateur déjà ouverte, une nouvelle requête est maintenant refusée. L'espace existe toujours, avec ses données. Revenons côté opérateur et réactivons-le. La session organisateur peut à nouveau accéder à ses événements. Cette vérification est importante : un écran déjà affiché n'est pas la preuve que les nouvelles actions restent autorisées. Contrôlons le résultat de la requête après chaque changement d'état.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "context",
+      "audioSha256": "12fdc402880c08386cb89bb77491f16e7e3f461f0424de849eaa5fab1081d550",
+      "recognized": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans ce choix, l'application demande de sélectionner un espace. Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements. Nous retrouvons ici ceux du parc, pas ceux du quartier. Un super administrateur peut agir dans l'organisation sélectionnée, ce n'est pas une vue sans accès aux données. Avant une modification ou un envoi, prenons donc ce petit réflexe : regarder dans quel espace nous sommes.",
+      "expected": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans ce choix, l'application demande de sélectionner un espace. Depuis son détail, utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements. Nous retrouvons ici ceux du Parc, pas ceux du Quartier. Un super-administrateur peut agir dans l'organisation sélectionnée : ce n'est pas une vue sans accès aux données. Avant une modification ou un envoi, prenons donc ce petit réflexe : regarder dans quel espace nous sommes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "health",
+      "audioSha256": "3e2f8c646f9a0394aa6da483f6ae4ee022553d1910cc87c20770d40efd9d11c5",
+      "recognized": "La page Santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné. Leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème, ils ne remplacent pas son analyse.",
+      "expected": "La page Santé du service regroupe trois ensembles d'informations : le service, les tâches planifiées et les sauvegardes, puis la configuration. Regardons les états visibles, la date de contrôle et la version. Recharger relance la vérification. Dans notre environnement local, certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement. Nous ne le transformons pas en succès pour la démonstration. Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée. Ces indicateurs aident à repérer un problème ; ils ne remplacent pas son analyse.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "eca9166cfeccf49d86b6d9a49c20fc9ae8bdc3964239f27dd330d7b39fb8b8c5",
+      "recognized": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : formation, préparez votre prochain événement. Le contenu commence par un titre, bienvenue, ajoutons deux conseils simples, vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes. Elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons envoyer un test uniquement vers notre adresse de formation. Ouvrons le vrai e-mail pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
+      "expected": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : Formation, préparer votre prochain événement. Le contenu commence par un titre, Bienvenue. Ajoutons deux conseils simples : vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes : elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons Envoyer un test, uniquement vers notre adresse de formation. Ouvrons le vrai email pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
+      "wordErrorRate": 0.007692307692307693,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "broadcast",
+      "audioSha256": "fc5c37313d230fa4e1aacb5fe28517d35e462bace6b0776e02a7fd89b07b23d2",
+      "recognized": "Le test est bon ? Revenons au formulaire pour préparer la diffusion. Reprenons notre objet, puis le contenu que nous venons de vérifier. Le titre accueille les administrateurs, la liste rappelle les deux gestes utiles et le lien conduit au guide. Nous conservons exactement le message testé, sans nouvelle information ajoutée à la dernière minute. Avant la diffusion, vérifions le nombre de destinataires et lisons la confirmation. Seuls les comptes actifs abonnés aux communications sont concernés. Dans notre base séparée, ce sont uniquement des comptes fictifs. Validons, puis regardons le nombre d'envois réussis et l'historique. Un compte non abonné n'a rien reçu. Ouvrons un message livré et utilisons son lien de désabonnement. Le choix est enregistré, le nombre de destinataires d'une prochaine diffusion diminue. Un envoi réussi signifie ici que le serveur de messagerie l'a accepté, pas que son destinataire l'a lu.",
+      "expected": "Le test est bon ? Revenons au formulaire pour préparer la diffusion. Reprenons notre objet, puis le contenu que nous venons de vérifier. Le titre accueille les administrateurs, la liste rappelle les deux gestes utiles et le lien conduit au guide. Nous conservons exactement le message testé, sans nouvelle information ajoutée à la dernière minute. Avant la diffusion, vérifions le nombre de destinataires et lisons la confirmation. Seuls les comptes actifs abonnés aux communications sont concernés. Dans notre base séparée, ce sont uniquement des comptes fictifs. Validons, puis regardons le nombre d'envois réussis et l'historique. Un compte non abonné n'a rien reçu. Ouvrons un message livré et utilisons son lien de désabonnement. Le choix est enregistré ; le nombre de destinataires d'une prochaine diffusion diminue. Un envoi réussi signifie ici que le serveur de messagerie l'a accepté, pas que son destinataire l'a lu.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "delete",
+      "audioSha256": "84de35d003977eed8d0faa525af20784aa807be732abe0d027c529a2d1a17890",
+      "recognized": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel espace de formation que nous avons créé pour cette démonstration. Désactivons-le d'abord. Le bouton de suppression apparaît alors. Disons le récapitulatif. Cette action retire l'organisation et les données associées, ce n'est pas une pause. La confirmation demande de saisir exactement son identifiant. Vérifions-le, puis validons la suppression de cet espace jetable. Il disparaît de la liste. Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
+      "expected": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel espace de formation, que nous avons créé pour cette démonstration. Désactivons-le d'abord. Le bouton de suppression apparaît alors. Lisons le récapitulatif : cette action retire l'organisation et les données associées, ce n'est pas une pause. La confirmation demande de saisir exactement son identifiant. Vérifions-le, puis validons la suppression de cet espace jetable. Il disparaît de la liste. Pour une vraie organisation, on ne fait pas cet essai sur un espace encore utile.",
+      "wordErrorRate": 0.011494252873563218,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "47171ab9744e27408ce3933112fed5bb51af160dd7afce69a925bcf1cb3bde70",
+      "recognized": "Terminons en revenant au périmètre de chaque compte. Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme. L'opérateur, lui, choisit son organisation avant d'y travailler. Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes. Avant une communication, vérifions les destinataires. Avant une action irréversible, relisons la confirmation. Ces gestes simples permettent d'accompagner les organisations avec soin. Cette démonstration explique le fonctionnement observé, elle ne prétend pas remplacer un audit de sécurité complet.",
+      "expected": "Terminons en revenant au périmètre de chaque compte. Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme. L'opérateur, lui, choisit son organisation avant d'y travailler. Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes. Avant une communication, vérifions les destinataires ; avant une action irréversible, relisons la confirmation. Ces gestes simples permettent d'accompagner les organisations avec soin. Cette démonstration explique le fonctionnement observé, elle ne prétend pas remplacer un audit de sécurité complet.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

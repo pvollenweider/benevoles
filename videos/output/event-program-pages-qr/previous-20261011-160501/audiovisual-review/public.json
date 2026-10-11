@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:04:13.713Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "cca736c1159dee61585f1a0bd322d1762184c9aeaf8e33a0800f7ea0154d1a38",
+  "clipSha256": "32c7664c391b0512d7da50992299057faaca2323e3888a04f072aef34d86ce4f",
+  "scene": "public",
+  "review": {
+    "heardOpening": "Ouvrons maintenant la page publique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrons maintenant la page publique",
+        "visibleSeconds": 0,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Le concert apparaît en repère sur le planning",
+        "visibleSeconds": 2.3,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Les liens d’information reprennent l’ordre choisi",
+        "visibleSeconds": 5.4,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "Ouvrons Ce qu’il faut apporter",
+        "visibleSeconds": 9.4,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "le titre, le gras et la liste sont mis en forme, et la gourde est bien présente",
+        "visibleSeconds": 10.2,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

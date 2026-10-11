@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:34:44.878Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "0eafd04b7589de4dcd88f686a90a71e3583664283eaef7597229a952f6f27413",
+  "clipSha256": "0f23eb43ad939c600085158532e6c60972a45cb5cbbbb7d59c3e08c2349d0160",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Pour travailler dans une organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Depuis son détail, utilisons Gérer",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page de détail de l'organisation avec le bouton Gérer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "et vérifions le nom du contexte avant d'ouvrir les événements",
+        "visibleSeconds": 10,
+        "visible": "Contexte Formation Opérateur Parc affiché en haut à gauche dans l'espace Événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier",
+        "visibleSeconds": 14,
+        "visible": "Événement « Parc — Fête de formation » visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,47 +1,70 @@
 {
   "id": "EVENT_PROGRAM_PAGES_QR",
   "slug": "event-program-pages-qr",
-  "validatedAt": "2026-10-04T17:14:19.225Z",
+  "validatedAt": "2026-10-11T14:08:52.893Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 90320,
+  "captureMs": 150880,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 12585,
-      "audioMs": 12583,
-      "driftMs": 2
-    },
-    {
-      "id": "program",
-      "visualMs": 14499,
-      "audioMs": 14500,
-      "driftMs": -1
-    },
-    {
-      "id": "pages",
-      "visualMs": 12000,
-      "audioMs": 11999,
-      "driftMs": 1
-    },
-    {
-      "id": "public",
-      "visualMs": 16236,
-      "audioMs": 16236,
+      "visualMs": 12384,
+      "audioMs": 12384,
       "driftMs": 0
     },
     {
-      "id": "qr",
-      "visualMs": 12037,
-      "audioMs": 12036,
+      "id": "program",
+      "visualMs": 17384,
+      "audioMs": 17382,
+      "driftMs": 2
+    },
+    {
+      "id": "program-edit",
+      "visualMs": 17653,
+      "audioMs": 17651,
+      "driftMs": 2
+    },
+    {
+      "id": "pages",
+      "visualMs": 21081,
+      "audioMs": 21080,
       "driftMs": 1
     },
     {
+      "id": "page-order",
+      "visualMs": 19202,
+      "audioMs": 19200,
+      "driftMs": 2
+    },
+    {
+      "id": "public",
+      "visualMs": 19408,
+      "audioMs": 19406,
+      "driftMs": 2
+    },
+    {
+      "id": "qr",
+      "visualMs": 16921,
+      "audioMs": 16919,
+      "driftMs": 2
+    },
+    {
       "id": "result",
-      "visualMs": 12689,
-      "audioMs": 12686,
+      "visualMs": 22100,
+      "audioMs": 22097,
       "driftMs": 3
     }
   ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 145,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
   "issues": []
 }

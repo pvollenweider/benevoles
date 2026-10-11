@@ -1,0 +1,29 @@
+STATUS: NOT READY
+ID: PLATFORM_INTERNAL_ADMINISTRATION
+Commit: e0f32ad7d6ad8d60f98346662eb9328ec2205483
+Shared BUILD_ID: 1xyUm1Sg6zIWjELSDJ9vx
+Duration: N/A — no current final MP4
+Music smallest/largest gap: N/A — assembly not reached
+
+Cached WAVs copied from /tmp/video-audio-cache/platform-internal-administration/audio/. Existing checkout generation metadata matched the current unchanged manifest (continuous Kore, Gemini 3.8, fingerprint bcf932c31be5df131bd807691b2e7f040cc28b9f19392a242a4d602ea7891d4a). Independent audit revalidated every chapter, 0–2.5% differences, all pass. No new TTS or fabricated generation provenance.
+
+Separate marked benevoles_video_operator database provisioned/migrated and seeded, never default DB. Three synthetic organizations, four accounts, three events, nine members, one subscribed active administrator initially. Served same fresh verified standalone at 43104; operator-local.ts now writes the actual PID/build registry required by record.ts. Real login/scope/context/health preflight passed. Full lifecycle API preflight passed creation, invitation rotation, activation, slug collision/history, disable/re-enable and exact disposable deletion.
+
+Visual rehearsal progressed through welcome, creation, actual invitation emails, activation, identity, availability, context, health, preview/test mail, two-recipient broadcast, unsubscribe, and exact deletion. Failed in result when restoring the deleted owner's real session then navigating to /super-admin/organizations: ERR_CONNECTION_REFUSED. Server still listening (own PID 519); a read-only unauthenticated HTTP probe proved redirect Location was http://localhost:43100/admin/login?... rather than 43104. Auth.js env implementation confirms AUTH_URL takes precedence over NEXTAUTH_URL. Inherited fixture AUTH_URL was not pinned by either wrapper.
+
+Source correction: local-production.ts and operator-local.ts set AUTH_URL to their final NEXTAUTH_URL immediately before spawning, including specialized server ports. Product behavior and auth guard unchanged. No second rehearsal or narrated filming after failure, per move-on instruction. Failed rehearsal frame review/rehearsal-failure.png shows three original organizations preserved and current labels (Organisations, Slug, État, Création, Événements, Admins, Membres); French date 11 oct. 2026, fictional Morgane Exemple, no dev overlay or forbidden address in that frame.
+
+No narrated take, assembly, posters, full chapter audiovisual review. Old tracked timeline/validation/MP4 audit/capture-checks files are NOT evidence for this batch. Duration, music, effects, sentence/action sync and subtitle readiness remain unapproved. No renders-generated.json because no new poster exists. No subjective full listening certification. No publish, push, commit or PR.
+
+Explicit video:validate after failed rehearsal (does not approve this attempt):
+
+> benevoles@2.2.0 video:validate
+> node --import tsx videos/tools/validate.ts PLATFORM_INTERNAL_ADMINISTRATION
+
+Error: PLATFORM_INTERNAL_ADMINISTRATION synchronization failed:
+- music levels not measured (audio-levels.json missing); assemble with the current assembler
+- capture ends 317158 ms before the timeline
+    at main (/private/tmp/codex-video/videos/tools/validate.ts:130:32)
+
+
+Final source checks: explicit 185-source video type check and git diff --check passed. No refilm performed; fixes require future rehearsal. Only this batch’s owned video server processes stopped; local DB/Mailpit services preserved.

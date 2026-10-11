@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:04:26.384Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "f9a264934774dbc4087008b012415d2a8f59f55868d0d6bf0f1cfbfc9f23bf9e",
+  "clipSha256": "e45387beb1133eb58722a8e90832f79777c6de96ec67de42f5490c6500f3a38d",
+  "scene": "qr",
+  "review": {
+    "heardOpening": "Le QR code mène",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le QR code mène à la page publique de cet événement.",
+        "visibleSeconds": 0.5,
+        "visible": "Page affichant le QR code et les détails de l'événement Fête du village de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Téléchargez le PNG pour l’intégrer à un document, ou le SVG",
+        "visibleSeconds": 3.4,
+        "visible": "Mise en évidence sur le bouton Télécharger PNG à côté de Télécharger SVG",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "La commande Imprimer prépare une fiche à afficher sur un stand.",
+        "visibleSeconds": 9.8,
+        "visible": "Mise en valeur du bouton Imprimer en haut à droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
+        "visibleSeconds": 13.5,
+        "visible": "Le nom Fête du village de Montvert et l'adresse Place du Collège, Montvert sont bien visibles et pointés au-dessus du QR code",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les animations de surbrillance sur l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

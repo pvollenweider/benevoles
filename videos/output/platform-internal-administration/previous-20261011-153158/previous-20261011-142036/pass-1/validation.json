@@ -1,0 +1,89 @@
+{
+  "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+  "slug": "platform-internal-administration",
+  "validatedAt": "2026-10-11T09:33:19.791Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 154520,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 29807,
+      "audioMs": 29805,
+      "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 29371,
+      "audioMs": 29371,
+      "driftMs": 0
+    },
+    {
+      "id": "renew",
+      "visualMs": 30271,
+      "audioMs": 30269,
+      "driftMs": 2
+    },
+    {
+      "id": "activate",
+      "visualMs": 29753,
+      "audioMs": 29753,
+      "driftMs": 0
+    },
+    {
+      "id": "identity",
+      "visualMs": 36857,
+      "audioMs": 36857,
+      "driftMs": 0
+    },
+    {
+      "id": "availability",
+      "visualMs": 31951,
+      "audioMs": 31950,
+      "driftMs": 1
+    },
+    {
+      "id": "context",
+      "visualMs": 29045,
+      "audioMs": 29043,
+      "driftMs": 2
+    },
+    {
+      "id": "health",
+      "visualMs": 40229,
+      "audioMs": 40228,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 55884,
+      "audioMs": 55882,
+      "driftMs": 2
+    },
+    {
+      "id": "broadcast",
+      "visualMs": 59236,
+      "audioMs": 59234,
+      "driftMs": 2
+    },
+    {
+      "id": "delete",
+      "visualMs": 37105,
+      "audioMs": 37100,
+      "driftMs": 5
+    },
+    {
+      "id": "result",
+      "visualMs": 37229,
+      "audioMs": 37228,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": null,
+  "issues": [
+    "music levels not measured (audio-levels.json missing); assemble with the current assembler",
+    "capture ends 317158 ms before the timeline"
+  ]
+}

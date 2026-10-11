@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:27:37.339Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "fc5d27a1e80960154adadab49947381422774802e092339a8bffac3653c0262f",
+  "clipSha256": "d2a27aa0442f45d8597954cb5d2bf19350a7c953e778bf67e31d07ca071c3673",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Désactiver une organisation n'est pas la supprimer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ouvrons la confirmation et lisons les conséquences avant de valider",
+        "visibleSeconds": 2.2,
+        "visible": "Ouverture de la modale de confirmation puis clic sur Désactiver",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "une nouvelle requête est maintenant refusée",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la page de connexion suite au rejet de la session",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Revenons côté opérateur et réactivons-le",
+        "visibleSeconds": 16.5,
+        "visible": "Retour sur la vue opérateur et clic sur Réactiver dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.2,
+        "spoken": "La session organisateur peut à nouveau accéder à ses événements",
+        "visibleSeconds": 21.5,
+        "visible": "Affichage de l'espace organisateur sur l'onglet Événements",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

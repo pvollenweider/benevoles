@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:34:05.417Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "c5d658e0f9c71d26ad6231cd6e838281638b6ef4f288aed5b48d3c7a9b794d95",
+  "clipSha256": "98f4d218de4dcfffd100eff9fef0969fe57479e07799c8d94d657769b18e6509",
+  "scene": "activate",
+  "review": {
+    "heardOpening": "La personne invitée ouvre son nouveau lien dans sa propre session.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La personne invitée ouvre son nouveau lien dans sa propre session.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page « Bienvenue » de définition du mot de passe pour activer le compte.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Elle choisit son mot de passe et termine l'activation.",
+        "visibleSeconds": 4,
+        "visible": "Saisie du mot de passe, confirmation et validation via le bouton « Créer mon mot de passe ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Connectons-nous ensuite avec ce nouveau compte :",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur « Se connecter » et affichage du formulaire de connexion organisateur avec saisie des identifiants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "nous arrivons dans son organisation, encore sans événement.",
+        "visibleSeconds": 14,
+        "visible": "L'organisation du compte invité n'est jamais montrée à l'écran : l'affichage reste sur le formulaire de connexion avant de couper directement vers l'espace opérateur.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif.",
+        "visibleSeconds": 16.5,
+        "visible": "Affichage de la fiche organisation côté opérateur Super Admin montrant le statut vert « Actif ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:12-00:16, l'arrivée dans l'organisation de l'utilisateur invité (« nous arrivons dans son organisation, encore sans événement ») n'est pas affichée ; la vidéo coupe directement du formulaire de connexion vers la console d'administration opérateur."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire, fluide et posée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

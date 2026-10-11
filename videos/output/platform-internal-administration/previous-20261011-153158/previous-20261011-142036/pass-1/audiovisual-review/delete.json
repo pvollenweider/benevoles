@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:28:45.042Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "e093bc94db081b952d5ac9dacb2de06cafe04e36f42bc3f9b8e6c7935984e7c6",
+  "clipSha256": "bbacb124e3c15fc5a77657ac093c00c8703697b0217650baa00c8067541c73a3",
+  "scene": "delete",
+  "review": {
+    "heardOpening": "La suppression définitive demande une autre précaution.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Désactivons-le d'abord.",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur le bouton Désactiver puis confirmation dans la modale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Le bouton de suppression apparaît alors.",
+        "visibleSeconds": 11.2,
+        "visible": "Le bouton Supprimer définitivement s'affiche en rouge et ouvre la modale.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "La confirmation demande de saisir exactement son identifiant.",
+        "visibleSeconds": 21.5,
+        "visible": "Saisie du slug dans le champ texte de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "puis validons la suppression de cet espace jetable.",
+        "visibleSeconds": 26.3,
+        "visible": "Clic sur le bouton rouge Supprimer définitivement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.6,
+        "spoken": "Il disparaît de la liste.",
+        "visibleSeconds": 27.5,
+        "visible": "Retour à la liste des organisations sans l'élément supprimé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien calée sur les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

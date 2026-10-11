@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:32:50.738Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "06169dd04dd315eda8ea84050055f57a883b43ace0203b1f8b60d3116a74cbc1",
+  "clipSha256": "1bcd8062fb1130861a6f8acd2b335d2382d4354be3ba36aae53799c4cc659d37",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration de la plateforme",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9,
+        "spoken": "Notre liste contient trois organisations de formation.",
+        "visibleSeconds": 9,
+        "visible": "Tableau listant les 3 organisations de formation (Réserve, Quartier, Parc)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres.",
+        "visibleSeconds": 11.5,
+        "visible": "En-têtes de colonnes Nom, Slug, État, Création, Événements, Admins et Membres affichés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Ouvrons un détail pour retrouver ces informations",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Détail de la ligne Formation Opérateur Parc et ouverture de la page détaillée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.2,
+        "spoken": "Toutes les personnes utilisées ici sont fictives.",
+        "visibleSeconds": 23,
+        "visible": "Défilement vers le bas affichant le tableau des administrateurs avec le compte fictif Élodie Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

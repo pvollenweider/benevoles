@@ -1,0 +1,111 @@
+{
+  "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+  "slug": "platform-internal-administration",
+  "validatedAt": "2026-10-11T10:17:39.964Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 479280,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 29806,
+      "audioMs": 29805,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 29371,
+      "audioMs": 29371,
+      "driftMs": 0
+    },
+    {
+      "id": "renew",
+      "visualMs": 30271,
+      "audioMs": 30269,
+      "driftMs": 2
+    },
+    {
+      "id": "activate",
+      "visualMs": 29753,
+      "audioMs": 29753,
+      "driftMs": 0
+    },
+    {
+      "id": "identity",
+      "visualMs": 36859,
+      "audioMs": 36857,
+      "driftMs": 2
+    },
+    {
+      "id": "availability",
+      "visualMs": 31951,
+      "audioMs": 31950,
+      "driftMs": 1
+    },
+    {
+      "id": "context",
+      "visualMs": 29043,
+      "audioMs": 29043,
+      "driftMs": 0
+    },
+    {
+      "id": "health",
+      "visualMs": 40230,
+      "audioMs": 40228,
+      "driftMs": 2
+    },
+    {
+      "id": "preview",
+      "visualMs": 55884,
+      "audioMs": 55882,
+      "driftMs": 2
+    },
+    {
+      "id": "broadcast",
+      "visualMs": 59235,
+      "audioMs": 59234,
+      "driftMs": 1
+    },
+    {
+      "id": "delete",
+      "visualMs": 37102,
+      "audioMs": 37100,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 37228,
+      "audioMs": 37228,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 0,
+  "music": {
+    "voicedWindows": 441,
+    "musicOnlyWindows": 13,
+    "smallestGapLu": 11.6,
+    "largestGapLu": 21.9,
+    "quietestMusicOnlyLufs": -31.3
+  },
+  "issues": [
+    "music 59.5s: music only 11.6 LU under the voice (too loud, minimum 12)",
+    "music 364.5s: music 20.2 LU under the voice (inaudible, maximum 20)",
+    "music 365.5s: music 20.1 LU under the voice (inaudible, maximum 20)",
+    "music 366.5s: music 20.1 LU under the voice (inaudible, maximum 20)",
+    "music 367.5s: music 20.2 LU under the voice (inaudible, maximum 20)",
+    "music 371.5s: music 21.3 LU under the voice (inaudible, maximum 20)",
+    "music 372.5s: music 20.6 LU under the voice (inaudible, maximum 20)",
+    "music 373.5s: music 20.7 LU under the voice (inaudible, maximum 20)",
+    "music 377.5s: music 20.1 LU under the voice (inaudible, maximum 20)",
+    "music 379.5s: music 21.2 LU under the voice (inaudible, maximum 20)",
+    "music 380.5s: music 21.4 LU under the voice (inaudible, maximum 20)",
+    "music 381.5s: music 21.9 LU under the voice (inaudible, maximum 20)",
+    "music 387.5s: music 20.2 LU under the voice (inaudible, maximum 20)",
+    "music 388.5s: music 20.3 LU under the voice (inaudible, maximum 20)",
+    "music 391.5s: music 20.3 LU under the voice (inaudible, maximum 20)",
+    "music 392.5s: music 20.1 LU under the voice (inaudible, maximum 20)",
+    "music 402.5s: music 20.3 LU under the voice (inaudible, maximum 20)",
+    "music 404.5s: music 20.7 LU under the voice (inaudible, maximum 20)"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:03:38.285Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "9bb637546250a0a1f5ece1246ded182e5ac35f6080a965f2f3beaca1e595902a",
+  "clipSha256": "25de0255da5b27e9848337dcd9e29816b394a5bd215c60097f02c2f1208cff01",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Créons une page Ce qu'il faut apporter",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Créons une page Ce qu’il faut apporter",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur « + Ajouter une page » puis saisie du titre « Ce qu'il faut apporter »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "un dièse crée un titre",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie de « # Bien préparer sa mission » dans le champ Contenu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "les tirets une liste et deux astérisques du gras",
+        "visibleSeconds": 10.2,
+        "visible": "Saisie de « - **Chaussures fermées** » puis « - Une veste »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur « Enregistrer » et apparition de la nouvelle page dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T12:35:41.115Z",
+  "videoSha256": "33ccb2d1ae67747607875ca5648fc3c1d4df5d62caa0b01c740bc30c5a974bbf",
+  "promptSha256": "18835a9f4215dc11900016007fbed2420e8dd45e3970b73ff5f2dc1a0408bf78",
+  "clipSha256": "3047ad6a0086a7c0be6e9ce46f8cdc145eff9649cd00c82b6951d90db73bf163",
+  "scene": "delete",
+  "review": {
+    "heardOpening": "La suppression définitive demande une autre précaution",
+    "checkpoints": [
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Désactivons-le d'abord",
+        "visibleSeconds": 11.4,
+        "visible": "Clic sur le bouton Désactiver puis confirmation dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.7,
+        "spoken": "Le bouton de suppression apparaît alors",
+        "visibleSeconds": 13.2,
+        "visible": "Le bouton rouge Supprimer définitivement apparaît en haut à droite et est cliqué",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "La confirmation demande de saisir exactement son identifiant",
+        "visibleSeconds": 22.5,
+        "visible": "Saisie du slug dans le champ de confirmation de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "puis validons la suppression de cet espace jetable",
+        "visibleSeconds": 26.2,
+        "visible": "Clic sur le bouton Supprimer définitivement et retour à la liste des organisations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30.4,
+        "spoken": "Il disparaît de la liste",
+        "visibleSeconds": 30,
+        "visible": "Tableau des organisations affiché sans l'espace supprimé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

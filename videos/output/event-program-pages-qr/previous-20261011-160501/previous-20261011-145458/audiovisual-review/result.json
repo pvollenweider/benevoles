@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:00:53.453Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "25eed902b3f49402d8a168ea75d0ea236c8cd6e01e75ad594c5e5a93ba79e003",
+  "clipSha256": "7b6819efd064f03548108ac1cd440ff76549d1ea24a175565d37520800ada333",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Vous avez un programme corrigé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "deux fichiers QR téléchargés",
+        "visibleSeconds": 1,
+        "visible": "Page QR code avec boutons de téléchargement PNG et SVG affichés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "scannez le code avec un vrai téléphone",
+        "visibleSeconds": 8.5,
+        "visible": "QR code affiché au centre de l'écran pour vérification externe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Vérifiez que la page attendue s’ouvre",
+        "visibleSeconds": 13.5,
+        "visible": "Écran statique sur le QR code, contrôle externe à exécuter",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

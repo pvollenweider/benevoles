@@ -1,134 +1,134 @@
 WEBVTT
 
-00:00:01.107 --> 00:00:05.819
+00:00:01.133 --> 00:00:05.733
 Une bonne page d’inscription ne montre pas
 seulement des créneaux. Le programme, les
 
-00:00:05.819 --> 00:00:10.532
+00:00:05.733 --> 00:00:10.333
 informations pratiques et un QR code
 simple à afficher donnent aux bénévoles le
 
-00:00:10.532 --> 00:00:13.794
+00:00:10.333 --> 00:00:13.517
 contexte dont ils ont besoin, sans
 alourdir le formulaire.
 
-00:00:14.250 --> 00:00:18.499
+00:00:13.971 --> 00:00:17.873
 Dans les réglages de l’événement, ajoutons
 un spectacle au programme. Saisissons
 
-00:00:18.499 --> 00:00:23.521
-Concert du village, le quatorze novembre
-deux mille vingt-six, de onze heures à
+00:00:17.873 --> 00:00:22.485
+Concert du village, le 14/11/2026, de 11 h
+à
 
-00:00:23.521 --> 00:00:28.543
-douze heures trente, puis cliquez sur
-Ajouter. Son horaire sert de repère dans
+00:00:22.485 --> 00:00:27.096
+12 h 30, puis cliquez sur Ajouter. Son
+horaire sert de repère dans
 
-00:00:28.543 --> 00:00:33.179
+00:00:27.096 --> 00:00:31.353
 le planning, sans réserver de bénévoles ni
 créer de créneau de travail.
 
-00:00:33.635 --> 00:00:38.521
+00:00:31.807 --> 00:00:36.689
 Vous pouvez corriger le programme sans le
 recréer. Ouvrons le concert avec Modifier,
 
-00:00:38.521 --> 00:00:44.535
-puis avançons sa fin à treize heures et
-confirmons. Le concert garde son nom et sa
+00:00:36.689 --> 00:00:42.698
+puis avançons sa fin à 13 h et confirmons.
+Le concert garde son nom et sa
 
-00:00:44.535 --> 00:00:49.421
+00:00:42.698 --> 00:00:47.580
 date. Une entrée ajoutée par erreur peut
 être supprimée avec sa propre commande,
 
-00:00:49.421 --> 00:00:51.300
+00:00:47.580 --> 00:00:49.458
 indépendamment des créneaux des bénévoles.
 
-00:00:51.755 --> 00:00:57.374
+00:00:49.913 --> 00:00:55.183
 Créons une page Ce qu’il faut apporter, en
 complément des pages d’accès et des
 
-00:00:57.374 --> 00:01:02.994
+00:00:55.183 --> 00:01:00.453
 questions fréquentes. Le titre devient son
 adresse. Dans le contenu, un dièse crée un
 
-00:01:02.994 --> 00:01:08.211
+00:01:00.453 --> 00:01:05.347
 titre, les tirets une liste et deux
 astérisques du gras. Saisissons une courte
 
-00:01:08.211 --> 00:01:12.627
+00:01:05.347 --> 00:01:09.487
 liste, puis enregistrons. Cette page doit
 donner des informations pratiques, pas
 
-00:01:12.627 --> 00:01:14.232
+00:01:09.487 --> 00:01:10.993
 demander une nouvelle inscription.
 
-00:01:14.689 --> 00:01:19.379
+00:01:11.445 --> 00:01:16.138
 Les flèches Monter et Descendre changent
 l’ordre des pages et l’enregistrent
 
-00:01:19.379 --> 00:01:24.068
+00:01:16.138 --> 00:01:20.832
 aussitôt. Faisons monter Ce qu’il faut
 apporter. Ouvrons ensuite Modifier pour
 
-00:01:24.068 --> 00:01:29.611
+00:01:20.832 --> 00:01:26.378
 ajouter une gourde à sa liste, puis
 enregistrons. Pour supprimer une page, une
 
-00:01:29.611 --> 00:01:33.874
+00:01:26.378 --> 00:01:30.645
 confirmation permet encore d’annuler :
 vérifions-la sans perdre notre contenu.
 
-00:01:34.328 --> 00:01:38.546
+00:01:31.100 --> 00:01:35.494
 Ouvrons maintenant la page publique. Le
 concert apparaît en repère sur le
 
-00:01:38.546 --> 00:01:41.710
+00:01:35.494 --> 00:01:38.789
 planning. Les liens d’information
 reprennent l’ordre choisi. Ouvrons Ce
 
-00:01:41.710 --> 00:01:48.037
+00:01:38.789 --> 00:01:45.380
 qu’il faut apporter : le titre, le gras et
 la liste sont mis en forme, et la gourde
 
-00:01:48.037 --> 00:01:52.255
+00:01:45.380 --> 00:01:49.774
 est bien présente. Le bénévole peut
 préparer son arrivée sans chercher un
 
-00:01:52.255 --> 00:01:52.958
+00:01:49.774 --> 00:01:50.506
 ancien email.
 
-00:01:53.413 --> 00:01:59.267
+00:01:50.961 --> 00:01:56.140
 Le QR code mène à la page publique de cet
 événement. Téléchargez le PNG pour
 
-00:01:59.267 --> 00:02:04.730
+00:01:56.140 --> 00:02:00.974
 l’intégrer à un document, ou le SVG pour
 une impression nette. La commande Imprimer
 
-00:02:04.730 --> 00:02:10.194
+00:02:00.974 --> 00:02:05.808
 prépare une fiche à afficher sur un stand.
 Vérifiez le nom de l’événement et
 
-00:02:10.194 --> 00:02:12.535
+00:02:05.808 --> 00:02:07.880
 l’adresse avant de diffuser le support.
 
-00:02:12.990 --> 00:02:17.812
+00:02:08.334 --> 00:02:13.043
 Vous avez un programme corrigé, des pages
 pratiques lisibles et deux fichiers QR
 
-00:02:17.812 --> 00:02:22.263
+00:02:13.043 --> 00:02:17.390
 téléchargés. Avant votre diffusion,
 scannez le code avec un vrai téléphone :
 
-00:02:22.263 --> 00:02:27.084
+00:02:17.390 --> 00:02:22.099
 ce contrôle reste à faire sur votre
 appareil. Vérifiez que la page attendue
 
-00:02:27.084 --> 00:02:31.906
+00:02:22.099 --> 00:02:26.809
 s’ouvre et que les inscriptions sont
 ouvertes au bon moment. Un QR code
 
-00:02:31.906 --> 00:02:35.615
+00:02:26.809 --> 00:02:30.431
 facilite l’accès ; il ne change pas les
 règles d’inscription.
 

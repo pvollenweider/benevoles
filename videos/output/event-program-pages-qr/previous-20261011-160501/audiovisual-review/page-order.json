@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:04:00.408Z",
+  "videoSha256": "c37b46de488d4ff4d19b93b31b8d7d3323a59228579655738d78c54d7b131c2b",
+  "promptSha256": "58aa1a6d18331a055517684ad1c3cf9421dc9e54bfaae6618245fd8e9f1dfab0",
+  "clipSha256": "44dd53078b3d811d98f67aa5c869f062dbbcce7d2f0d2f99fd821489e497b688",
+  "scene": "page-order",
+  "review": {
+    "heardOpening": "Les flèches Monter et Descendre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Faisons monter Ce qu’il faut apporter.",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur la flèche monter en regard de « Ce qu’il faut apporter », qui remonte d'un cran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Ouvrons ensuite Modifier pour ajouter une gourde à sa liste",
+        "visibleSeconds": 6.3,
+        "visible": "Fenêtre « Modifier la page » ouverte et ajout de la ligne « - Une gourde » dans le champ Contenu",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "puis enregistrons.",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur le bouton « Enregistrer » et fermeture de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "Pour supprimer une page, une confirmation permet encore d’annuler",
+        "visibleSeconds": 14.6,
+        "visible": "Clic sur « Supprimer » et apparition de la boîte de dialogue de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "vérifions-la sans perdre notre contenu.",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur « Annuler », la modale se ferme sans supprimer la page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
