@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:04:54.778Z",
+  "videoSha256": "97aa2c5014dd142da66d03937a38070beb3c90db740eba3e5c4eb6e1792121da",
+  "promptSha256": "5c3baa665c9aedf9debdbe42e553a26ec258412f4b49d362d2ab9a885e2b8b73",
+  "clipSha256": "b6e1067fbcbafb9370bf4c0967000089f2a9de49022148a5ea6acd937e2164b2",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Gardez cette liste courte et utile",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Gardez cette liste courte et utile",
+        "visibleSeconds": 1,
+        "visible": "Défilement vers la section Jalons affichant une liste synthétique de quatre jalons",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Quelques jalons datés, avec un état fiable",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage des jalons avec leurs dates associées et case à cocher d'état",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "chacun sait quelle est la prochaine étape importante",
+        "visibleSeconds": 7.5,
+        "visible": "Écran stable sur le tableau de suivi des jalons de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, en adéquation avec le contenu récapitulatif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

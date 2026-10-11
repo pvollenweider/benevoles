@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:13:00.615Z",
+  "revalidatedAt": "2026-10-11T15:13:00.616Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "event-reminders",
+      "audioSha256": "f767fd6a11a4afa5a6154906c03406fe15ac9bff1c8e9c43bf02cef46c343472",
+      "recognized": "Dans les réglages d'un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Sa section Communication indique ce qui partira vraiment. Un brouillon n'envoie pas de rappel. Pour un événement publié, les rappels suivent les choix de l'organisation et son fuseau horaire.",
+      "expected": "Dans les réglages d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Sa section Communications indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.",
+      "wordErrorRate": 0.0196078431372549,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

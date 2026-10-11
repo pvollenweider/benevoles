@@ -1,0 +1,16 @@
+STATUS: READY
+ID: ORG_EMAIL_SETTINGS
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 189.200000 seconds
+MUSIC: {'voicedWindows': 173, 'musicOnlyWindows': 0, 'smallestGapLu': 13.2, 'largestGapLu': 18.1, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.4}
+PROBLEMS: None
+SOURCE CHANGES: None
+SOURCE AUDIO: existing cached WAVs reused, generation accepted and independent source audit revalidated; no TTS regeneration.
+FINAL AUDIO: independent final-MP4 ASR for every chapter; flagged chapters: []. VTT matches narration with intended date/hour typography, meaning preserved.
+EFFECTS: 13 clicks and 22 keys; counts match every interaction marker.
+VALIDATE: []; 11 sentence anchors remeasured.
+VISUAL REVIEW: final MP4 chapter sheets inspected for current labels, French dates, benevol.app addresses, Frise, no localhost/old admin/development overlay. Sentence/action sync checked per chapter against review/objective-evidence.json, actual MP4 frames and independent audiovisual checkpoints.
+REVIEW NOTES: Ten chapter sheets checked. J-2 toggles at chapter +8.29/+9.74 s, on the sentence starting +7.81 s. Direct final-MP4 frames review/reminders-click-29.801.png (unchecked) and reminders-click-31.253.png (checked) disprove automated “frozen/no action” claim. Address complete before save; saved confirmation visible. Test email sender and Reply-To benevoles@example.org visible; Mailpit English date noted only. No product layout bug observed. Automated result-chapter inbox-not-shown claim dismissed: first sentence summarizes the test chapter, whose actual final-MP4 test-25.png and test-45.png show that same test mailbox; the conclusion correctly shows Emails envoyés during its explanation. No new inbox-opening action is promised.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; narration-audit.json; validation.json; audio-levels.json; audio-mix.json; review/renders-generated.json.
+LIMIT: no real-time subjective listening available; this is not a failure criterion. No subjective voice certification claimed.

@@ -1,0 +1,238 @@
+{
+  "slug": "org-email-settings",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T13:08:50.135Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "57ead48691c549980f7aae34cd5710df60d7d8c8",
+    "sourceTree": "d494522d746e261c4ef0424b5458c8d0871e1a41",
+    "productSourceSha256": "ff371c7b367d508d345e823e07cd3af07dd66ad002fd5b3b497c326b47830523",
+    "buildId": "wehNI4lfzOGIMmAjJ-tMC",
+    "snapshot": "/tmp/benevoles-video-production.batch2",
+    "builtAt": "2026-10-11T12:21:27.882Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-email",
+    "scenario": "ORG_EMAIL_SETTINGS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6410
+    },
+    {
+      "kind": "click",
+      "atMs": 7193
+    },
+    {
+      "kind": "click",
+      "atMs": 9629
+    },
+    {
+      "kind": "click",
+      "atMs": 10961
+    },
+    {
+      "kind": "click",
+      "atMs": 15102
+    },
+    {
+      "kind": "click",
+      "atMs": 15884
+    },
+    {
+      "kind": "click",
+      "atMs": 17134
+    },
+    {
+      "kind": "click",
+      "atMs": 17918
+    },
+    {
+      "kind": "click",
+      "atMs": 19168
+    },
+    {
+      "kind": "click",
+      "atMs": 19951
+    },
+    {
+      "kind": "click",
+      "atMs": 22935
+    },
+    {
+      "kind": "key",
+      "atMs": 23244
+    },
+    {
+      "kind": "key",
+      "atMs": 23246
+    },
+    {
+      "kind": "key",
+      "atMs": 23363
+    },
+    {
+      "kind": "key",
+      "atMs": 23482
+    },
+    {
+      "kind": "key",
+      "atMs": 23600
+    },
+    {
+      "kind": "key",
+      "atMs": 23719
+    },
+    {
+      "kind": "key",
+      "atMs": 23835
+    },
+    {
+      "kind": "key",
+      "atMs": 23957
+    },
+    {
+      "kind": "key",
+      "atMs": 24078
+    },
+    {
+      "kind": "key",
+      "atMs": 24197
+    },
+    {
+      "kind": "key",
+      "atMs": 24319
+    },
+    {
+      "kind": "key",
+      "atMs": 24439
+    },
+    {
+      "kind": "key",
+      "atMs": 24560
+    },
+    {
+      "kind": "key",
+      "atMs": 24680
+    },
+    {
+      "kind": "key",
+      "atMs": 24801
+    },
+    {
+      "kind": "key",
+      "atMs": 24922
+    },
+    {
+      "kind": "key",
+      "atMs": 25044
+    },
+    {
+      "kind": "key",
+      "atMs": 25165
+    },
+    {
+      "kind": "key",
+      "atMs": 25285
+    },
+    {
+      "kind": "key",
+      "atMs": 25407
+    },
+    {
+      "kind": "key",
+      "atMs": 25528
+    },
+    {
+      "kind": "key",
+      "atMs": 25647
+    },
+    {
+      "kind": "click",
+      "atMs": 26701
+    },
+    {
+      "kind": "click",
+      "atMs": 29751
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1105,
+      "endMs": 3732
+    },
+    {
+      "id": "reminders",
+      "startMs": 5892,
+      "endMs": 7525
+    },
+    {
+      "id": "event-reminders",
+      "startMs": 7977,
+      "endMs": 13006
+    },
+    {
+      "id": "admin-alert",
+      "startMs": 13458,
+      "endMs": 16187
+    },
+    {
+      "id": "withdrawal",
+      "startMs": 16640,
+      "endMs": 18221
+    },
+    {
+      "id": "addresses",
+      "startMs": 18673,
+      "endMs": 20255
+    },
+    {
+      "id": "reply-to",
+      "startMs": 22417,
+      "endMs": 25784
+    },
+    {
+      "id": "save",
+      "startMs": 26236,
+      "endMs": 27032
+    },
+    {
+      "id": "test",
+      "startMs": 29193,
+      "endMs": 31302
+    },
+    {
+      "id": "result",
+      "startMs": 31754,
+      "endMs": 32917
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 5928,
+      "endMs": 5929,
+      "x": 140,
+      "y": 223,
+      "width": 640,
+      "height": 400
+    },
+    {
+      "startMs": 31302,
+      "endMs": 31303,
+      "x": 300,
+      "y": 0,
+      "width": 960,
+      "height": 600
+    }
+  ]
+}

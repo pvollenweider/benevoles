@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:42.539Z",
+  "revalidatedAt": "2026-10-11T15:07:42.541Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "toggle",
+      "audioSha256": "9438b3ab5ed7261cf7e2fa12b905d0c7db767b706dd2da60310bf17f102e0c7d",
+      "recognized": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si la situation change, décochez-la pour la remettre à faire. La date et le titre sont conservés et toute l'équipe retrouve le même état lors du prochain passage.",
+      "expected": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si la situation change, décochez-la pour la remettre à faire : la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

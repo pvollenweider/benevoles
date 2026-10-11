@@ -1,45 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:13:52.915Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "7bd138a01bb9afc1d7a1119c679dc791e55a9bc9fea7e76eaa714a4ab261c9a6",
-  "clipSha256": "9b015631da69eaf6ed91da74f7ba830d325ea4b36ffb25c13198b1b562a43a9f",
+  "reviewedAt": "2026-10-11T15:13:39.850Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "1d822b8223516ea10664c22f1cde36bb731d4e9118931d7d60ac685f9fb0deb2",
+  "clipSha256": "1264bf9d55d6bb8a2fd08ed198a4889663a27ab341d9fca790b8f99020dea522",
   "scene": "reminders",
   "review": {
-    "heardOpening": "Vous pouvez activer le rappel",
+    "heardOpening": "Vous pouvez activer le rappel à deux jours",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "activer le rappel à deux jours, à un jour, puis le jour même",
-        "visibleSeconds": 0,
-        "visible": "Cases à cocher Rappel J-2, J-1 et Rappel du jour affichées à l'écran",
+        "spokenSeconds": 0.5,
+        "spoken": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Réglages des emails' affichant les options Rappel J-2, Rappel J-1 et Rappel du jour",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Décochons puis recochons le premier rappel",
-        "visibleSeconds": 8.5,
-        "visible": "Aucune action de clic visible, la case Rappel J-2 reste immobile",
+        "spokenSeconds": 7.3,
+        "spoken": "Décochons puis recochons le premier rappel.",
+        "visibleSeconds": 7.3,
+        "visible": "Aucune action à l'écran : le curseur n'apparaît pas et la case Rappel J-2 reste cochée en continu",
         "sync": "missing",
         "severity": "major"
       },
       {
-        "spokenSeconds": 14.5,
+        "spokenSeconds": 13.8,
         "spoken": "chaque rappel regroupe ses créneaux dans un seul email",
-        "visibleSeconds": 14.5,
-        "visible": "Écran de paramétrage fixe sans visualisation d'email",
+        "visibleSeconds": 13.8,
+        "visible": "Affichage statique des paramètres de rappels automatiques",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "00:08 - L'action annoncée de décocher puis recocher le premier rappel n'est pas réalisée à l'écran."
+      "À 00:07, l'action annoncée « Décochons puis recochons le premier rappel » n'est pas réalisée : la vidéo reste entièrement figée sans clic ni changement d'état."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et fluide."
+      "observation": "Voix claire, posée et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

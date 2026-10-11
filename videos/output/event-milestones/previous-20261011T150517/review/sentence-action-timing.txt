@@ -1,0 +1,41 @@
+
+welcome @1.20
+0.29 Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement.
+4.58 Ils ne remplacent pas un outil de gestion de projet :
+7.04 ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.
+clicks: 
+
+create @13.20
+0.41 Ajoutons Fermer les inscriptions avec une date d’échéance.
+4.40 Un bon jalon décrit un résultat vérifiable :
+7.16 valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles.
+12.44 Évitez les formulations vagues comme penser à la communication.
+clicks: 0.95, 14.15
+
+states @29.94
+0.53 La liste est triée par date.
+2.26 Une échéance passée et non terminée est signalée comme dépassée ;
+6.00 une étape faite est barrée mais reste visible.
+8.98 On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.
+clicks: 
+
+toggle @44.48
+0.47 Quand une étape est terminée, cochez-la.
+2.83 Le titre devient barré.
+4.27 Si la situation change, décochez-la pour la remettre à faire :
+7.33 la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.
+clicks: 0.97, 4.73
+
+dashboard @57.75
+0.50 Ouvrons le Tableau de bord de l’association.
+2.80 Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné.
+7.67 Les jalons à venir restent visibles sur la page de leur événement :
+10.81 ils ne déclenchent ni email ni fermeture automatique des inscriptions.
+clicks: 0.47, 7.15
+
+result @72.42
+0.39 Gardez cette liste courte et utile.
+2.65 Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue.
+7.56 Le résultat attendu est simple :
+9.47 chacun sait quelle est la prochaine étape importante.
+clicks: 

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:04:17.375Z",
+  "videoSha256": "97aa2c5014dd142da66d03937a38070beb3c90db740eba3e5c4eb6e1792121da",
+  "promptSha256": "0ae1d6a742fc27b3cce880f67963c2e6ad87e08dc11759cf8111871cc78db17f",
+  "clipSha256": "c115b7b2ad0ab5f792554b0112d6a0e36354c99b1253e026ef79f77e011dc22d",
+  "scene": "states",
+  "review": {
+    "heardOpening": "La liste est triée par date",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La liste est triée par date.",
+        "visibleSeconds": 0,
+        "visible": "Section Jalons avec la liste ordonnée par date chronologique (10 oct., 12 oct., 19 oct.)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Une échéance passée et non terminée est signalée comme dépassée",
+        "visibleSeconds": 0,
+        "visible": "Jalon non coché 'Valider le plan de sécurité' affiché avec date en rouge et icône d'avertissement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "une étape faite est barrée mais reste visible.",
+        "visibleSeconds": 0,
+        "visible": "Jalon coché 'Préparer le matériel' dont le libellé apparaît barré tout en restant lisible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:26:14.683Z",
+  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
+  "promptSha256": "65fb67e94415bbb60931dc23814dfa34a2332f7b46000d7888690d33192065a3",
+  "clipSha256": "dd9c1887beb8fdffe0f9dc668aacce7b1cdaeb3becaa8a667499bf014e3911fb",
+  "scene": "toggle",
+  "review": {
+    "heardOpening": "Quand une étape est terminée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "cochez-la",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur la case Fermer les inscriptions qui se coche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.9,
+        "spoken": "Le titre devient barré",
+        "visibleSeconds": 3.2,
+        "visible": "Le texte Fermer les inscriptions ne devient pas barré à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "décochez-la pour la remettre à faire",
+        "visibleSeconds": 6.5,
+        "visible": "Clic pour décocher la case Fermer les inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:03 - L'intitulé coché ne s'affiche pas barré comme annoncé par la voix."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

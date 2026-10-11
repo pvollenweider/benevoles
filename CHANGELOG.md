@@ -64,6 +64,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 - La liste des spectacles du formulaire d'événement affiche leur date au format jour.mois.année au lieu de l'année en premier.
 - Le formulaire « Nouvelle organisation » de l'administration de la plateforme annonçait un mot de passe temporaire affiché une seule fois ; il indique maintenant que le premier administrateur reçoit un lien d'invitation pour choisir son mot de passe.
+- Le rejeu du journal d'un événement écrit « Historique d'inscription » ou « Historique d'événement » au lieu de « Historique de inscription ».
 
 - **Créneaux de la frise nommés comme ils s'affichent** (#808) : le nom lu par un lecteur d'écran ou visé par la commande vocale commence désormais par le texte de la barre (heures, nombre d'inscrits, « Complet », « Fermé », « Réservé », « En attente »), puis le poste et l'action. Un créneau qui chevauche un créneau déjà choisi ne propose plus « sélectionner » : il dit pourquoi il ne peut pas être choisi.
 - **Fuseau horaire d'un nouvel événement** (#760) : le formulaire de création supposait le fuseau de Zurich pour l'ouverture et la fermeture des inscriptions, au lieu de celui de l'organisation (déjà utilisé à la modification). Les autres replis sur Zurich suivent désormais `APP_TIME_ZONE`.

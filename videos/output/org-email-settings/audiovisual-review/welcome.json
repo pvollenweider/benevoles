@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:13:40.151Z",
-  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
-  "promptSha256": "75470f0b59ee7dd773ffeb05e3f3ec5688a77dc51e7ad973fb86cfa633f71d24",
-  "clipSha256": "852bf0e1f1c7fa3939a2064d7f2ad04dcfb1299aac6afcb4f9311de476628b10",
+  "reviewedAt": "2026-10-11T15:13:40.720Z",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "promptSha256": "7f4921e5691ad6ca321fdd5f4fdd8386da1baa01e75ff83d02d444e87af0e421",
+  "clipSha256": "6076d1eac2c9611fecffd17551f41bb1331ae4b620f0609cc1b149ebe2b903e1",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Dans Paramètres, emails",
+    "heardOpening": "Dans Paramètres, Emails, le propriétaire",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Dans Paramètres, emails",
-        "visibleSeconds": 0.5,
-        "visible": "Page Emails accessible depuis la section Paramètres",
+        "spoken": "Dans Paramètres, Emails",
+        "visibleSeconds": 0,
+        "visible": "L'écran affiche la section Paramètres > Emails avec le titre et le fil d'Ariane",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "Voyons les rappels, les alertes",
-        "visibleSeconds": 10.5,
-        "visible": "Options de rappels automatiques et alertes visibles à l'écran",
+        "spokenSeconds": 2.6,
+        "spoken": "le propriétaire choisit les messages utiles pour toute l'organisation",
+        "visibleSeconds": 3,
+        "visible": "Le bandeau de titre s'estompe, laissant voir l'ensemble des réglages d'emails généraux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.8,
-        "spoken": "et l’adresse de réponse",
-        "visibleSeconds": 12.8,
-        "visible": "Section Adresse de réponse visible au bas de la page",
+        "spokenSeconds": 10.6,
+        "spoken": "Voyons les rappels, les alertes et l'adresse de réponse",
+        "visibleSeconds": 10.6,
+        "visible": "Les sections 'Rappels automatiques', alertes d'inscription/désistement et 'Adresse de réponse' sont visibles à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien articulée."
+      "observation": "Voix claire, posée et chaleureuse, parfaitement synchronisée avec la présentation générale."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

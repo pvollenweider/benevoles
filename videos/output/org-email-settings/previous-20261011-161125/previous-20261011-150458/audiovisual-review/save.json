@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:54.734Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "2b6b0bdd17b23439c4fdb30f9d51f53186c8d3c436a56297eafff7c71819375a",
+  "clipSha256": "821f6f8cfe1b74c3f796a3a562aa09a58dd4c6d3424199843ac1ca79df6b21af",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrez les réglages avant de les tester",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Enregistrez les réglages avant de les tester",
+        "visibleSeconds": 2.2,
+        "visible": "Défilement vers le bas révélant le bouton Enregistrer et le bouton de test",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Le message Réglages enregistrés confirme que vos choix sont conservés",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage de la mention Réglages enregistrés sous le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée",
+        "visibleSeconds": 12,
+        "visible": "Bouton M'envoyer un email de test affiché à côté du bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

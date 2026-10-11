@@ -1,0 +1,19 @@
+STATUS: NOT READY
+ID: EVENT_MILESTONES
+Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
+BUILD_ID: awdEYi1bluVzpj2kEgGcs
+Duration: 91.280 s
+Music smallest/largest gap: 13.8 / 17.8 LU; two music-only windows -32.2 to -31.9 LUFS; no rule issues.
+Narration: existing continuous Puck cache accepted; identical source audio/text independently revalidated. No new TTS. Final MP4 independent ASR passes six chapters with zero word difference. Twenty VTT cues exactly match readableCaptions output.
+Objective validation passes six scenes and two sentence anchors. Effects match six clicks, zero keys; MP4/timeline/effects/music-levels hashes checked. Posters metadata saved only in review/renders-generated.json.
+Every final-MP4 chapter sheet visually reviewed, plus full-resolution toggle anchor frames, measured sentence-action-timing.txt/json and supplemental timing evidence. Product labels and actual outcomes match; French dates visible (19.10.2026 / sam.10oct. / lun.12oct.); no localhost/org-admin@localhost, Timeline, dev overlay or US numeric date found.
+FAIL create: adding the new milestone is announced +0.41, but final Ajouter click is +14.15. Form still unsaved at global25s (create-still-unsaved.png), during later explanation. Replaced at(.84) before submit with at("Ajoutons Fermer les inscriptions"); preparatory title/date fields are already filled by that point and submit can follow them immediately.
+FAIL dashboard: return click +7.15 precedes phrase +7.67. dashboard-before-return-phrase.png @65.2 captures departure before phrase begins65.42. Replaced at(.47) with at("Les jalons à venir restent visibles").
+FAIL framing welcome: all six frames show event header with only Jalons heading at bottom; the actual list is below viewport. Changed initial heading scroll from minimal scrollIntoViewIfNeeded to block:start. This is recorder framing, not a hidden product defect.
+Other chapters: states shows overdue undone, completed struck-through and forthcoming items; toggle clicks +0.97/+4.73 vs phrases +0.47/+4.27, checked/struck-through then reopened confirmed by PATCH and final anchor images; dashboard shows actual overdue priority; result retains the short list. No new product layout bug observed.
+Automated audiovisual aid reports retained; observations crosschecked against actual frames/timings. Real-time subjective listening unavailable and not a failure reason.
+Local source changes: videos/tools/record.ts, two sentence anchors and introduction framing. No repeat capture. No product feature or accessibility limitation change; doc-img: unchanged.
+
+Source follow-up: all creation steps (open, title, due date, submit) now share at("Ajoutons Fermer les inscriptions"), so old fractional waits cannot postpone the submit beyond that sentence. No re-film.
+
+Batch source validation: video tooling TypeScript passes 185 explicit sources; all sentence anchors resolve in their chapters. Generated poster metadata is separate; videos/renders.json unchanged.

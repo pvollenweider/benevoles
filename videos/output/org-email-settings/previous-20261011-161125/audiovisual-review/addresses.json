@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:13:50.910Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "ad439d9d1d8033ec4970d8717c4754ea7bab95980cd617641d86f5ab57ac0928",
+  "clipSha256": "a2ba746abc29ff9582e7b28bb7d2430fd1598fbed99d8c4ba566a84a243e955f",
+  "scene": "addresses",
+  "review": {
+    "heardOpening": "Le résumé quotidien des adresses à vérifier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.",
+        "visibleSeconds": 0,
+        "visible": "Option cochée « Résumé quotidien des adresses à vérifier » affichée sur la page des paramètres emails.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement",
+        "visibleSeconds": 0,
+        "visible": "Texte explicatif visible sous l'option détaillant les conditions d'envoi en cas d'échec définitif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "L'équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+        "visibleSeconds": 0,
+        "visible": "Mention « Un email par jour aux administrateurs actifs » lisible sous l'intitulé du paramètre.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine fluide, claire et bien articulée, synchronisée avec l'affichage de la page de paramètres."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

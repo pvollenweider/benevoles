@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:17:39.215Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "9cc7303d67ef68f2e95c963b41f3b7b10a9321138ebf6a927b6c6e801ac7fc16",
+  "clipSha256": "85cad835a79d2e79de081674327c09201b2eeba104de14e80d8077ca7ded2a89",
+  "scene": "reply-to",
+  "review": {
+    "heardOpening": "L'adresse de réponse indique où arrive",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'adresse de réponse indique où arrive un message",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la section 'Adresse de réponse' sur la page de configuration des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Saisissons benevoles arobase example point org",
+        "visibleSeconds": 6.4,
+        "visible": "Sélection du champ et saisie progressive de 'benevoles@example.org'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Si le champ reste vide, l’adresse par défaut est utilisée",
+        "visibleSeconds": 9.2,
+        "visible": "Texte explicatif visible sous le champ précisant le comportement par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Cette adresse apparaît aussi sur la page personnelle des bénévoles",
+        "visibleSeconds": 12.8,
+        "visible": "Mention correspondante lisible dans la note d'aide sous le champ",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les interactions et éléments visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

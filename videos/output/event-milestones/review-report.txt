@@ -1,0 +1,16 @@
+STATUS: READY
+ID: EVENT_MILESTONES
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 90.320000 seconds
+MUSIC: {'voicedWindows': 81, 'musicOnlyWindows': 1, 'smallestGapLu': 13.8, 'largestGapLu': 17.8, 'quietestMusicOnlyLufs': -31.9, 'loudestMusicOnlyLufs': -31.9, 'medianVoiceLufs': -16.5}
+PROBLEMS: None
+SOURCE CHANGES: None
+SOURCE AUDIO: existing cached WAVs reused, generation accepted and independent source audit revalidated; no TTS regeneration.
+FINAL AUDIO: independent final-MP4 ASR for every chapter; flagged chapters: []. VTT matches narration with intended date/hour typography, meaning preserved.
+EFFECTS: 6 clicks and 0 keys; counts match every interaction marker.
+VALIDATE: []; 7 sentence anchors remeasured.
+VISUAL REVIEW: final MP4 chapter sheets inspected for current labels, French dates, benevol.app addresses, Frise, no localhost/old admin/development overlay. Sentence/action sync checked per chapter against review/objective-evidence.json, actual MP4 frames and independent audiovisual checkpoints.
+REVIEW NOTES: All six chapters checked. toggle sentence at +0.47 s, click +1.05 s; title-barred sentence +2.83 s; final-MP4 toggle-25.png visibly barred (about 47.56 s). Reopening sentence +4.27 s and click +4.73 s; toggle-45.png visibly unchecked/unbarred. Automated no-strikethrough claim dismissed by direct frame evidence. Dashboard priority and event link visible. No layout bug observed.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; narration-audit.json; validation.json; audio-levels.json; audio-mix.json; review/renders-generated.json.
+LIMIT: no real-time subjective listening available; this is not a failure criterion. No subjective voice certification claimed.

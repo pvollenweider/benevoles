@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:37.963Z",
+  "revalidatedAt": "2026-10-11T15:07:37.964Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "create",
+      "audioSha256": "0b412db5078801ee6b933b6e85ed5f9def94f6be3b8f87dca7874ea6466fe4b8",
+      "recognized": "Ajoutons fermer les inscriptions avec une date d'échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évitez les formulations vagues comme penser à la communication,",
+      "expected": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évitez les formulations vagues comme penser à la communication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

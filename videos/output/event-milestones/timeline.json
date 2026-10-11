@@ -1,46 +1,143 @@
 {
   "slug": "event-milestones",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T02:22:01.374Z",
+  "recordedAt": "2026-10-11T15:07:22.836Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "dbe9875584400f2cc3f331ea19267ab04c1eec19",
+    "sourceTree": "fb6a1a9f8277f2e5b3f0c8535d658ce3313d7f19",
+    "productSourceSha256": "6fe23426e0e658114fbbfe4bb7df5410b2606e03a5bfc04603392aa88114dfb3",
+    "buildId": "FCLCqO4jFR7lUbWQJ4dOp",
+    "snapshot": "/tmp/benevoles-video-production.batch3",
+    "builtAt": "2026-10-11T14:44:49.543Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-milestones",
+    "scenario": "EVENT_MILESTONES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 14117
+    },
+    {
+      "kind": "click",
+      "atMs": 14946
+    },
+    {
+      "kind": "click",
+      "atMs": 45543
+    },
+    {
+      "kind": "click",
+      "atMs": 49226
+    },
+    {
+      "kind": "click",
+      "atMs": 58229
+    },
+    {
+      "kind": "click",
+      "atMs": 65925
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1186,
-      "endMs": 13338
+      "startMs": 1208,
+      "endMs": 12757
     },
     {
       "id": "create",
-      "startMs": 13792,
-      "endMs": 31016
+      "startMs": 13212,
+      "endMs": 29508
     },
     {
       "id": "states",
-      "startMs": 31470,
-      "endMs": 46326
+      "startMs": 29961,
+      "endMs": 44043
     },
     {
       "id": "toggle",
-      "startMs": 46780,
-      "endMs": 60290
+      "startMs": 44495,
+      "endMs": 57308
     },
     {
       "id": "dashboard",
-      "startMs": 60742,
-      "endMs": 76076
+      "startMs": 57759,
+      "endMs": 71978
     },
     {
       "id": "result",
-      "startMs": 76528,
-      "endMs": 89140
+      "startMs": 72430,
+      "endMs": 84161
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 405,
+      "endMs": 3825,
+      "cueMs": 13618
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 405,
+      "endMs": 3825,
+      "cueMs": 14430
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 405,
+      "endMs": 3825,
+      "cueMs": 14447
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 405,
+      "endMs": 3825,
+      "cueMs": 14451
+    },
+    {
+      "segmentId": "toggle",
+      "phrase": "Quand une étape est terminée",
+      "startMs": 469,
+      "endMs": 2348,
+      "cueMs": 45064
+    },
+    {
+      "segmentId": "toggle",
+      "phrase": "Si la situation change",
+      "startMs": 4268,
+      "endMs": 7203,
+      "cueMs": 48765
+    },
+    {
+      "segmentId": "dashboard",
+      "phrase": "Les jalons à venir restent visibles",
+      "startMs": 7673,
+      "endMs": 10482,
+      "cueMs": 65433
     }
   ],
   "detailFrames": [
     {
-      "startMs": 46804,
-      "endMs": 60313,
+      "startMs": 44510,
+      "endMs": 57322,
       "x": 97,
-      "y": 292,
+      "y": 75,
       "width": 640,
       "height": 400
     }

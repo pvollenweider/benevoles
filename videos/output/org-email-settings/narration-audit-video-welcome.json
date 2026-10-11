@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:12:59.719Z",
+  "revalidatedAt": "2026-10-11T15:12:59.719Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "9bbb2c1421b6fd3c49618cb75084bcb5f6a1de4ce7e517d2b67b4e184132b064",
+      "recognized": "Dans paramètres e-mail, le propriétaire choisit les messages utiles pour toute l'organisation. Les organisateurs peuvent suivre les envois mais pas changer ces réglages. Voyons les rappels, les alertes et l'adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+      "expected": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation. Les organisateurs peuvent suivre les envois, mais pas changer ces réglages. Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+      "wordErrorRate": 0.022222222222222223,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

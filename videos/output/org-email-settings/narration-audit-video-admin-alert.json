@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:13:01.815Z",
+  "revalidatedAt": "2026-10-11T15:13:01.816Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "admin-alert",
+      "audioSha256": "3d9d3d7fd01ff89de322d06cf019c363e93bcfc5472659a0de1c2364f8b42f11",
+      "recognized": "L'option, prévenir les administrateurs à chaque inscription, envoie un e-mail à chaque administrateur actif lorsqu'une personne s'inscrit depuis la page publique. Elle facilite le suivi d'un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "expected": "L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

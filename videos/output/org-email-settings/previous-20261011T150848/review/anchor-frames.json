@@ -1,0 +1,122 @@
+[
+  {
+    "scene": "reminders",
+    "seconds": 28.8,
+    "label": "Décochons puis recochons le premier rappel BEFORE",
+    "file": "videos/output/org-email-settings/review/reminders-anchor-0.png"
+  },
+  {
+    "scene": "reminders",
+    "seconds": 30.55,
+    "label": "Décochons puis recochons le premier rappel AFTER",
+    "file": "videos/output/org-email-settings/review/reminders-anchor-1.png"
+  },
+  {
+    "scene": "reminders",
+    "seconds": 28.8,
+    "label": "Décochons puis recochons le premier rappel BEFORE",
+    "file": "videos/output/org-email-settings/review/reminders-anchor-2.png"
+  },
+  {
+    "scene": "reminders",
+    "seconds": 30.55,
+    "label": "Décochons puis recochons le premier rappel AFTER",
+    "file": "videos/output/org-email-settings/review/reminders-anchor-3.png"
+  },
+  {
+    "scene": "event-reminders",
+    "seconds": 46.549,
+    "label": "Sa section Communications BEFORE",
+    "file": "videos/output/org-email-settings/review/event-reminders-anchor-0.png"
+  },
+  {
+    "scene": "event-reminders",
+    "seconds": 48.299,
+    "label": "Sa section Communications AFTER",
+    "file": "videos/output/org-email-settings/review/event-reminders-anchor-1.png"
+  },
+  {
+    "scene": "reply-to",
+    "seconds": 117.575,
+    "label": "Saisissons benevoles arobase example point org BEFORE",
+    "file": "videos/output/org-email-settings/review/reply-to-anchor-0.png"
+  },
+  {
+    "scene": "reply-to",
+    "seconds": 119.325,
+    "label": "Saisissons benevoles arobase example point org AFTER",
+    "file": "videos/output/org-email-settings/review/reply-to-anchor-1.png"
+  },
+  {
+    "scene": "save",
+    "seconds": 128.533,
+    "label": "Enregistrez les réglages avant de les tester BEFORE",
+    "file": "videos/output/org-email-settings/review/save-anchor-0.png"
+  },
+  {
+    "scene": "save",
+    "seconds": 130.278,
+    "label": "Enregistrez les réglages avant de les tester AFTER",
+    "file": "videos/output/org-email-settings/review/save-anchor-1.png"
+  },
+  {
+    "scene": "save",
+    "seconds": 131.094,
+    "label": "Le message Réglages enregistrés BEFORE",
+    "file": "videos/output/org-email-settings/review/save-anchor-2.png"
+  },
+  {
+    "scene": "save",
+    "seconds": 132.844,
+    "label": "Le message Réglages enregistrés AFTER",
+    "file": "videos/output/org-email-settings/review/save-anchor-3.png"
+  },
+  {
+    "scene": "test",
+    "seconds": 146.004,
+    "label": "M’envoyer un email de test BEFORE",
+    "file": "videos/output/org-email-settings/review/test-anchor-0.png"
+  },
+  {
+    "scene": "test",
+    "seconds": 147.404,
+    "label": "M’envoyer un email de test AFTER",
+    "file": "videos/output/org-email-settings/review/test-anchor-1.png"
+  },
+  {
+    "scene": "test",
+    "seconds": 150.278,
+    "label": "Ouvrons le message reçu BEFORE",
+    "file": "videos/output/org-email-settings/review/test-anchor-2.png"
+  },
+  {
+    "scene": "test",
+    "seconds": 152.028,
+    "label": "Ouvrons le message reçu AFTER",
+    "file": "videos/output/org-email-settings/review/test-anchor-3.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 166.185,
+    "label": "Les réglages sont enregistrés BEFORE",
+    "file": "videos/output/org-email-settings/review/result-anchor-0.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 167.935,
+    "label": "Les réglages sont enregistrés AFTER",
+    "file": "videos/output/org-email-settings/review/result-anchor-1.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 171.887,
+    "label": "Dans Emails envoyés BEFORE",
+    "file": "videos/output/org-email-settings/review/result-anchor-2.png"
+  },
+  {
+    "scene": "result",
+    "seconds": 173.637,
+    "label": "Dans Emails envoyés AFTER",
+    "file": "videos/output/org-email-settings/review/result-anchor-3.png"
+  }
+]

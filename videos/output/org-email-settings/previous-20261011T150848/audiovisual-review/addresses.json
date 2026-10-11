@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:17:26.267Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "ad439d9d1d8033ec4970d8717c4754ea7bab95980cd617641d86f5ab57ac0928",
+  "clipSha256": "f63f450e03449fd1e11d3e0a614dd4e6470353db526a2a90f1f6efd2ef0aee0a",
+  "scene": "addresses",
+  "review": {
+    "heardOpening": "Le résumé quotidien des adresses à vérifier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.",
+        "visibleSeconds": 0,
+        "visible": "L'option cochée « Résumé quotidien des adresses à vérifier » est visible dans la section Réglages des emails.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille.",
+        "visibleSeconds": 4.1,
+        "visible": "La description sous la case cochée explicite la condition d'envoi suite à un échec définitif depuis la veille.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+        "visibleSeconds": 13.5,
+        "visible": "L'écran reste fixe sur le réglage limitant l'envoi à un email par jour.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle avec une musique d'ambiance discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

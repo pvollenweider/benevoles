@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:13:07.748Z",
+  "revalidatedAt": "2026-10-11T15:13:07.749Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "c8ee461f9875a0574d8ad7b5459f5af09ddd9f8359561afe81168906ee958512",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "save",
+      "audioSha256": "9689cc805a489b4c556122272affdcb8fe1fe4e24e8b0d0f463e7758a7f9d6cb",
+      "recognized": "Enregistrez les réglages avant de les tester. Le message Réglages enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
+      "expected": "Enregistrez les réglages avant de les tester. Le message Réglages enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

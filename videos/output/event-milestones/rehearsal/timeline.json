@@ -1,0 +1,145 @@
+{
+  "slug": "event-milestones",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T15:05:46.153Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "dbe9875584400f2cc3f331ea19267ab04c1eec19",
+    "sourceTree": "fb6a1a9f8277f2e5b3f0c8535d658ce3313d7f19",
+    "productSourceSha256": "6fe23426e0e658114fbbfe4bb7df5410b2606e03a5bfc04603392aa88114dfb3",
+    "buildId": "FCLCqO4jFR7lUbWQJ4dOp",
+    "snapshot": "/tmp/benevoles-video-production.batch3",
+    "builtAt": "2026-10-11T14:44:49.543Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-milestones",
+    "scenario": "EVENT_MILESTONES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4843
+    },
+    {
+      "kind": "click",
+      "atMs": 5674
+    },
+    {
+      "kind": "click",
+      "atMs": 7473
+    },
+    {
+      "kind": "click",
+      "atMs": 8771
+    },
+    {
+      "kind": "click",
+      "atMs": 10541
+    },
+    {
+      "kind": "click",
+      "atMs": 11856
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1230,
+      "endMs": 3847
+    },
+    {
+      "id": "create",
+      "startMs": 4300,
+      "endMs": 5994
+    },
+    {
+      "id": "states",
+      "startMs": 6446,
+      "endMs": 6502
+    },
+    {
+      "id": "toggle",
+      "startMs": 6954,
+      "endMs": 9588
+    },
+    {
+      "id": "dashboard",
+      "startMs": 10048,
+      "endMs": 12685
+    },
+    {
+      "id": "result",
+      "startMs": 13137,
+      "endMs": 14458
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 0,
+      "endMs": 5321,
+      "cueMs": 4320
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 0,
+      "endMs": 5321,
+      "cueMs": 5150
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 0,
+      "endMs": 5321,
+      "cueMs": 5156
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Ajoutons Fermer les inscriptions",
+      "startMs": 0,
+      "endMs": 5321,
+      "cueMs": 5164
+    },
+    {
+      "segmentId": "toggle",
+      "phrase": "Quand une étape est terminée",
+      "startMs": 0,
+      "endMs": 3536,
+      "cueMs": 6974
+    },
+    {
+      "segmentId": "toggle",
+      "phrase": "Si la situation change",
+      "startMs": 5635,
+      "endMs": 11050,
+      "cueMs": 8300
+    },
+    {
+      "segmentId": "dashboard",
+      "phrase": "Les jalons à venir restent visibles",
+      "startMs": 12052,
+      "endMs": 17712,
+      "cueMs": 11371
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 6973,
+      "endMs": 26973,
+      "x": 97,
+      "y": 75,
+      "width": 640,
+      "height": 400
+    }
+  ]
+}

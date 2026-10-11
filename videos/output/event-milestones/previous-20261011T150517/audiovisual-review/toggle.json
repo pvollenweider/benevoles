@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:04:32.385Z",
+  "videoSha256": "97aa2c5014dd142da66d03937a38070beb3c90db740eba3e5c4eb6e1792121da",
+  "promptSha256": "fb4ec941d97ea3c3fd9af96a8560be0b67fe22d0e5963d4e14f81189fa4e8762",
+  "clipSha256": "8104250ad9ec3991d1025c0b049646cd72936a8753835ba37f5a3dc305ee77c0",
+  "scene": "toggle",
+  "review": {
+    "heardOpening": "Quand une étape est terminée, cochez-la.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "Quand une étape est terminée, cochez-la.",
+        "visibleSeconds": 1,
+        "visible": "La case de l'étape « Fermer les inscriptions » est cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Le titre devient barré.",
+        "visibleSeconds": 1,
+        "visible": "L'intitulé « Fermer les inscriptions » s'affiche barré.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "décochez-la pour la remettre à faire",
+        "visibleSeconds": 4.6,
+        "visible": "La case est décochée et le titre redevient normal (non barré).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, chaleureuse et claire, parfaitement audible sur une musique de fond légère."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

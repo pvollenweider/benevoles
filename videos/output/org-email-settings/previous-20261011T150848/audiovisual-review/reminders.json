@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:16:35.194Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "e99138781c5ed7c97f3d5fba12cee79a1cd125c5a3467f08b00836e04b52e6f8",
+  "clipSha256": "0e5ef5936f3ce17702fa6af73c9261f816ec14fa3af1d139f68e240e8c164647",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Vous pouvez activer le rappel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même",
+        "visibleSeconds": 0.5,
+        "visible": "Options « Rappel J-2 », « Rappel J-1 » et « Rappel du jour » affichées dans la section « Rappels automatiques aux bénévoles inscrits »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Décochons puis recochons le premier rappel.",
+        "visibleSeconds": 8,
+        "visible": "L'écran reste totalement figé : la case « Rappel J-2 » n'est ni décochée ni recochée",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.",
+        "visibleSeconds": 13,
+        "visible": "Explication générale maintenue sur la page fixe des réglages des emails",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À partir de 00:07, l'action annoncée (« Décochons puis recochons le premier rappel ») n'est pas réalisée à l'écran : l'image reste fixe et la case demeure cochée sans interaction."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,19 @@
+STATUS: NOT READY
+ID: ORG_EMAIL_SETTINGS
+Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
+BUILD_ID: awdEYi1bluVzpj2kEgGcs (shared verified product build)
+Duration: 189.240 s
+Music smallest/largest gap: 13.1 / 18.0 LU; 173 voiced windows; no music-only windows; no rule issues.
+Narration: existing continuous Kore audio accepted by generation fingerprints; no new TTS. Independent existing source evidence reused for identical audio/text; all ten chapters pass.
+Objective validation passes ten chapters and ten recorded sentence anchors. Posters generated only into review/renders-generated.json.
+Reviewed actual MP4: all ten six-frame scene sheets, sentence/action timings, sentence anchor frames, plus full-resolution reminder-unchecked.png @30.0, withdrawal-early.png @82.5, received-mail.png @152.1, history-visible.png @173.4. Current first-pass corrected actions align: reminder clicks +8.28/+9.73 vs sentence +7.81; reply typing +6.36 vs +5.89; save +0.81 vs +0.34; test send +0.56 vs sentence +0.00; receipt and final history appear during their corresponding sentences. Event Communications is shown; saved address/received body assertions pass. No volunteers contacted.
+Failure: withdrawal uncheck at +8.02 s / global80.28 precedes “Décocher cette option coupe aussi l’email aux responsables” at +11.55 s /83.81 by3.53s. withdrawal-early.png shows unchecked state before that sentence. Local source .39 cue converted to at("Décocher cette option coupe aussi"). No re-film.
+Failure: external Mailpit header date remains English, “Sun, 11 Oct 2026, 4:14 pm”, clearly visible in received-mail.png. Product dates are French (11 oct., 16:14); no mm/dd, localhost, org-admin@localhost or dev overlay in reviewed frames. External viewer date not masked or rewritten. Current labels Emails, Réglages des emails, Communications, Réglages enregistrés, Emails envoyés, Envoyé match narration. No confirmed new product layout bug; email subject redundantly repeats Email de test, reported as a copy observation, not a factual error.
+Automated audiovisual aid incorrectly says reminder action absent; reminder-unchecked.png and click markers counterprove it. Evidence from actual frames governs status.
+Local source: videos/tools/record.ts, one sentence anchor. Video TypeScript passes 185 explicit sources; all 11 current email source anchors resolve. No feature or product UI change. doc-img: unchanged.
+Real-time subjective listening unavailable and not a failure reason.
+
+Final artifacts: exact readableCaptions/VTT content passes (45 cues); MP4/mix/levels and effects/timeline hashes agree; 13 click and 22 key markers match effects. First final-ASR attempt timed out after six passing chapters; retry uses unchanged MP4, no regenerated audio.
+Audiovisual aid completed ten chapters, two flags. Reminder absent-action flag is disproved by reminder-unchecked.png @30.0 and recorded clicks. Result flag observes that settings replace the inbox during the closing summary: the received-message statement summarizes the immediately preceding test chapter, not a new requested opening. Actual received-mail.png and test assertion establish receipt, and history-visible.png establishes the next narrated state. No extra absent-action finding. The independently measured early withdrawal action remains the synchronization failure.
+
+Final MP4 ASR retry completed successfully: all ten chapters, 0–8.2% word difference, no opening/ending or unexpected-instruction flags. Report narration-audit-video.json binds actual final MP4 SHA256. Overall NOT READY remains early withdrawal and non-French Mailpit date.

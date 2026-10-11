@@ -1,0 +1,238 @@
+{
+  "slug": "org-email-settings",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T13:12:12.856Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "57ead48691c549980f7aae34cd5710df60d7d8c8",
+    "sourceTree": "d494522d746e261c4ef0424b5458c8d0871e1a41",
+    "productSourceSha256": "ff371c7b367d508d345e823e07cd3af07dd66ad002fd5b3b497c326b47830523",
+    "buildId": "wehNI4lfzOGIMmAjJ-tMC",
+    "snapshot": "/tmp/benevoles-video-production.batch2",
+    "builtAt": "2026-10-11T12:21:27.882Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-email",
+    "scenario": "ORG_EMAIL_SETTINGS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 28657
+    },
+    {
+      "kind": "click",
+      "atMs": 30424
+    },
+    {
+      "kind": "click",
+      "atMs": 43553
+    },
+    {
+      "kind": "click",
+      "atMs": 46337
+    },
+    {
+      "kind": "click",
+      "atMs": 62354
+    },
+    {
+      "kind": "click",
+      "atMs": 66887
+    },
+    {
+      "kind": "click",
+      "atMs": 80237
+    },
+    {
+      "kind": "click",
+      "atMs": 87020
+    },
+    {
+      "kind": "click",
+      "atMs": 99269
+    },
+    {
+      "kind": "click",
+      "atMs": 105318
+    },
+    {
+      "kind": "click",
+      "atMs": 117618
+    },
+    {
+      "kind": "key",
+      "atMs": 117931
+    },
+    {
+      "kind": "key",
+      "atMs": 117936
+    },
+    {
+      "kind": "key",
+      "atMs": 118055
+    },
+    {
+      "kind": "key",
+      "atMs": 118175
+    },
+    {
+      "kind": "key",
+      "atMs": 118294
+    },
+    {
+      "kind": "key",
+      "atMs": 118411
+    },
+    {
+      "kind": "key",
+      "atMs": 118530
+    },
+    {
+      "kind": "key",
+      "atMs": 118651
+    },
+    {
+      "kind": "key",
+      "atMs": 118774
+    },
+    {
+      "kind": "key",
+      "atMs": 118897
+    },
+    {
+      "kind": "key",
+      "atMs": 119020
+    },
+    {
+      "kind": "key",
+      "atMs": 119142
+    },
+    {
+      "kind": "key",
+      "atMs": 119262
+    },
+    {
+      "kind": "key",
+      "atMs": 119385
+    },
+    {
+      "kind": "key",
+      "atMs": 119506
+    },
+    {
+      "kind": "key",
+      "atMs": 119625
+    },
+    {
+      "kind": "key",
+      "atMs": 119743
+    },
+    {
+      "kind": "key",
+      "atMs": 119862
+    },
+    {
+      "kind": "key",
+      "atMs": 119984
+    },
+    {
+      "kind": "key",
+      "atMs": 120105
+    },
+    {
+      "kind": "key",
+      "atMs": 120228
+    },
+    {
+      "kind": "key",
+      "atMs": 120350
+    },
+    {
+      "kind": "click",
+      "atMs": 131133
+    },
+    {
+      "kind": "click",
+      "atMs": 150017
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1106,
+      "endMs": 19164
+    },
+    {
+      "id": "reminders",
+      "startMs": 21327,
+      "endMs": 39310
+    },
+    {
+      "id": "event-reminders",
+      "startMs": 39764,
+      "endMs": 57153
+    },
+    {
+      "id": "admin-alert",
+      "startMs": 57606,
+      "endMs": 71786
+    },
+    {
+      "id": "withdrawal",
+      "startMs": 72237,
+      "endMs": 91545
+    },
+    {
+      "id": "addresses",
+      "startMs": 92000,
+      "endMs": 109851
+    },
+    {
+      "id": "reply-to",
+      "startMs": 112017,
+      "endMs": 128065
+    },
+    {
+      "id": "save",
+      "startMs": 128518,
+      "endMs": 143831
+    },
+    {
+      "id": "test",
+      "startMs": 145992,
+      "endMs": 165708
+    },
+    {
+      "id": "result",
+      "startMs": 166162,
+      "endMs": 183693
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 21359,
+      "endMs": 21360,
+      "x": 140,
+      "y": 223,
+      "width": 640,
+      "height": 400
+    },
+    {
+      "startMs": 154285,
+      "endMs": 154286,
+      "x": 300,
+      "y": 0,
+      "width": 960,
+      "height": 600
+    }
+  ]
+}

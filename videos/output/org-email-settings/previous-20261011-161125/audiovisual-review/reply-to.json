@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:14:00.982Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "9cc7303d67ef68f2e95c963b41f3b7b10a9321138ebf6a927b6c6e801ac7fc16",
+  "clipSha256": "61db1aee7a6132f6b25e3ea5a09596a5eaa685beff64362196f3994d652033e9",
+  "scene": "reply-to",
+  "review": {
+    "heardOpening": "L'adresse de réponse indique où arrive un message",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'adresse de réponse indique où arrive un message",
+        "visibleSeconds": 0.5,
+        "visible": "Le champ « Adresse de réponse » et son texte explicatif sont affichés à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.7,
+        "spoken": "Saisissons benevoles arobase example point org",
+        "visibleSeconds": 6.2,
+        "visible": "L'adresse benevoles@example.org est saisie dans le champ de formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Si le champ reste vide, l'adresse par défaut est utilisée",
+        "visibleSeconds": 9.2,
+        "visible": "Le texte d'aide sous le champ précise l'utilisation de l'adresse par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Cette adresse apparaît aussi sur la page personnelle des bénévoles",
+        "visibleSeconds": 12.8,
+        "visible": "La mention « Cette adresse figure aussi sur la page personnelle des bénévoles » est lisible sous le champ",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

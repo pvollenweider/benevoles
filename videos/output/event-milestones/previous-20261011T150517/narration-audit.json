@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T12:51:16.465Z",
+  "revalidatedAt": "2026-10-11T14:01:01.269Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "aefdbd946d9ef123d582bdbf6c97d81352cd62d983cab838c57c9bddeee44f35",
+      "recognized": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l'événement. Ils ne remplacent pas un outil de gestion de projet, ils donnent à l'équipe un rappel commun, directement à côté des inscriptions et du planning.",
+      "expected": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement. Ils ne remplacent pas un outil de gestion de projet : ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "42f0be621d9bdb59e03821ad493019e5de7515af29a27384a7b9259c64cce38c",
+      "recognized": "Ajoutons fermer les inscriptions avec une date d'échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évitez les formulations vagues comme penser à la communication",
+      "expected": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évitez les formulations vagues comme penser à la communication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "states",
+      "audioSha256": "8e7761d23a42d078d9e0efe74071ae0a5df7d2fe7eaf43e83670d4d5b1aefaf0",
+      "recognized": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée. Une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+      "expected": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée ; une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "toggle",
+      "audioSha256": "3d1a7f17a36232ab2ee1d6b5456cde3dff84e0b2e03e1cfa64598c33ec1a75a7",
+      "recognized": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si la situation change, décochez-la pour la remettre à faire. La date et le titre sont conservés et toute l'équipe retrouve le même état lors du prochain passage.",
+      "expected": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si la situation change, décochez-la pour la remettre à faire : la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "dashboard",
+      "audioSha256": "8664db55652e9a381babdc1b83a6ae23c5d0de04131cc25f7d4cc3cfc76c5b15",
+      "recognized": "Ouvrons le tableau de bord de l'association. Les jalons en retard y apparaissent parmi les priorités avec un lien vers l'événement concerné. Les jalons à venir restent visibles sur la page de leur événement. Ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+      "expected": "Ouvrons le Tableau de bord de l’association. Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné. Les jalons à venir restent visibles sur la page de leur événement : ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "814941ce3cfbf76f034c73ca96e5228bb39999a12220ba026ec06fa71f9f340a",
+      "recognized": "Gardez cette liste courte et utile. Quelques jalons datés avec un état fiable sont plus efficaces qu'une longue liste jamais relue. Le résultat attendu est simple, chacun sait quelle est la prochaine étape importante.",
+      "expected": "Gardez cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

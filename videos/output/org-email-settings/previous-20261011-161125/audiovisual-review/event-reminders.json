@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:13:19.090Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "adae9a8542fe8f41bec6fc696311966dba7eda53e7f13cd186889d027cedc35b",
+  "clipSha256": "4987164e96e4ba974cad9b75c2fa1774512522c9b1c5d914e98ca60e4c2ab340",
+  "scene": "event-reminders",
+  "review": {
+    "heardOpening": "Dans les réglages d'un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "la case Rappels automatiques peut couper tous ses rappels",
+        "visibleSeconds": 3.3,
+        "visible": "Mise en avant et cochage de la case à cocher Rappels automatiques dans les réglages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Sa section Communications indique ce qui partira vraiment",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page de l'événement avec la section Communications détaillant l'état des rappels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Pour un événement publié, les rappels suivent les choix de l'organisation",
+        "visibleSeconds": 12.5,
+        "visible": "Statut Publié affiché sur la fiche de l'événement avec les consignes associées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

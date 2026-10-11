@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:16:17.658Z",
+  "videoSha256": "fc66f58b6e7a1111f3af628fb202e436b44df0a6fb5a2ebfc0734086a04be178",
+  "promptSha256": "205e0c5f23449835dba607e49f33ce64bd2a0f262e5d1e4e686392a850a4c407",
+  "clipSha256": "2525df02b00cd1581c151ebfaf6a77b30b8e385e6b2b3929b5ab557d0ce8934e",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Dans Paramètres, Emails, le propriétaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, Emails",
+        "visibleSeconds": 0.5,
+        "visible": "L'en-tête indique Paramètres > Emails, avec un encart de titre au centre qui s'estompe vers 0:02",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Voyons les rappels, les alertes et l’adresse de réponse",
+        "visibleSeconds": 10.5,
+        "visible": "La section Réglages des emails affiche les rappels automatiques, les alertes administrateurs et le champ Adresse de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "puis vérifions un vrai message de test",
+        "visibleSeconds": 14.5,
+        "visible": "Écran stable de présentation des réglages d'emails servant de support à l'introduction du module",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

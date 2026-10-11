@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:07:37.782Z",
+  "revalidatedAt": "2026-10-11T15:07:37.783Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4af11a57321a40a7426fa826ff01b3158232272694709600dcbeb86e9c4198f7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "4d12ed45c5eb2bb8bcc87561ead1219b395aaff92a29efdd00efceadcf1b587c",
+      "recognized": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l'événement. Ils ne remplacent pas un outil de gestion de projet, ils donnent à l'équipe un rappel commun directement à côté des inscriptions et du planning.",
+      "expected": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement. Ils ne remplacent pas un outil de gestion de projet : ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

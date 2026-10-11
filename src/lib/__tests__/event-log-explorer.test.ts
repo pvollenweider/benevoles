@@ -6,6 +6,7 @@ import {
   isBaseline,
   loadedAnnouncement,
   logQueryParams,
+  replayHeading,
   tabForKey,
 } from "../event-log-explorer"
 
@@ -73,5 +74,21 @@ describe("entries", () => {
   it("colors known entity types, grey otherwise", () => {
     expect(entityBadgeClass("Shift")).toContain("indigo")
     expect(entityBadgeClass("EventPage")).toBe("bg-gray-100 text-gray-600")
+  })
+})
+
+describe("replayHeading", () => {
+  it("elides « de » before a vowel", () => {
+    expect(replayHeading("Registration")).toBe("Historique d'inscription")
+    expect(replayHeading("Event")).toBe("Historique d'événement")
+  })
+
+  it("keeps « de » before a consonant", () => {
+    expect(replayHeading("Shift")).toBe("Historique de créneau")
+    expect(replayHeading("EventMilestone")).toBe("Historique de jalon")
+  })
+
+  it("falls back to the raw entity type", () => {
+    expect(replayHeading("Ticket")).toBe("Historique de Ticket")
   })
 })

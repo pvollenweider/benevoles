@@ -1,0 +1,53 @@
+{
+  "id": "ORG_EMAIL_SETTINGS",
+  "slug": "org-email-settings",
+  "validatedAt": "2026-10-04T13:59:48.672Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 123400,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14087,
+      "audioMs": 14084,
+      "driftMs": 3
+    },
+    {
+      "id": "reminders",
+      "visualMs": 15871,
+      "audioMs": 15870,
+      "driftMs": 1
+    },
+    {
+      "id": "admin-alert",
+      "visualMs": 15021,
+      "audioMs": 15021,
+      "driftMs": 0
+    },
+    {
+      "id": "reply-to",
+      "visualMs": 16775,
+      "audioMs": 16773,
+      "driftMs": 2
+    },
+    {
+      "id": "save",
+      "visualMs": 15112,
+      "audioMs": 15110,
+      "driftMs": 2
+    },
+    {
+      "id": "test",
+      "visualMs": 17504,
+      "audioMs": 17500,
+      "driftMs": 4
+    },
+    {
+      "id": "result",
+      "visualMs": 18443,
+      "audioMs": 18442,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

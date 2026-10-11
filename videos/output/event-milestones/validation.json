@@ -1,47 +1,58 @@
 {
   "id": "EVENT_MILESTONES",
   "slug": "event-milestones",
-  "validatedAt": "2026-10-04T17:16:00.528Z",
+  "validatedAt": "2026-10-11T15:07:29.354Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 78000,
+  "captureMs": 90320,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 11008,
-      "audioMs": 11006,
-      "driftMs": 2
+      "visualMs": 11549,
+      "audioMs": 11546,
+      "driftMs": 3
     },
     {
       "id": "create",
-      "visualMs": 12222,
-      "audioMs": 12222,
-      "driftMs": 0
+      "visualMs": 16296,
+      "audioMs": 16293,
+      "driftMs": 3
     },
     {
       "id": "states",
-      "visualMs": 16088,
-      "audioMs": 16087,
+      "visualMs": 14082,
+      "audioMs": 14081,
       "driftMs": 1
     },
     {
       "id": "toggle",
-      "visualMs": 10449,
-      "audioMs": 10449,
-      "driftMs": 0
+      "visualMs": 12813,
+      "audioMs": 12812,
+      "driftMs": 1
     },
     {
       "id": "dashboard",
-      "visualMs": 12386,
-      "audioMs": 12384,
-      "driftMs": 2
+      "visualMs": 14219,
+      "audioMs": 14218,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 11614,
-      "audioMs": 11612,
-      "driftMs": 2
+      "visualMs": 11731,
+      "audioMs": 11730,
+      "driftMs": 1
     }
   ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 17.8,
+    "quietestMusicOnlyLufs": -31.9,
+    "loudestMusicOnlyLufs": -31.9,
+    "medianVoiceLufs": -16.5
+  },
   "issues": []
 }

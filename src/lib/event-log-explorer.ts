@@ -33,6 +33,12 @@ export const ENTITY_LABELS: Record<string, string> = {
   EventQuestion: "Question",
 }
 
+/** « Historique de créneau », « Historique d'inscription » : elides « de » before a vowel. */
+export function replayHeading(entityType: string): string {
+  const label = ENTITY_LABELS[entityType]?.toLowerCase() ?? entityType
+  return /^[aeiouyàâéèêëîïôùûüœ]/i.test(label) ? `Historique d'${label}` : `Historique de ${label}`
+}
+
 export const ACTOR_TYPE_LABELS: Record<string, string> = {
   admin: "Admin",
   volunteer: "Bénévole",

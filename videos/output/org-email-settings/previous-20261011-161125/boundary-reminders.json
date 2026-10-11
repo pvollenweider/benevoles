@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous pouvez activer le rappel à deux jours, à un jour,",
+  "windowStart": 3.0569999999999986,
+  "result": {
+    "found": true,
+    "startSeconds": 15.3,
+    "wordsHeard": "Vous pouvez activer le rappel à deux jours, à un jour,"
+  },
+  "onset": 18.357,
+  "proposedCut": 18.057146,
+  "note": "Proposal only; recut then independently audit before capture"
+}

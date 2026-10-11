@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T13:14:12.933Z",
+  "videoSha256": "3f5df54d645ccfeea070c2397a5054ef0a2012a482224a2dc661645abac85c40",
+  "promptSha256": "e4dde0b013254f7da0342b58224b2685e53f77d94c389be83d305f2a9f406768",
+  "clipSha256": "6bcee682ed731eaf20bf947825cdc285863e27c4e2d9010d621fcbdee8a15f09",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrez les réglages avant de les tester",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Enregistrez les réglages avant de les tester.",
+        "visibleSeconds": 2,
+        "visible": "Défilement vers le bouton « Enregistrer » et le bouton « M'envoyer un email de test ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Le message Réglages enregistrés confirme que vos choix sont conservés.",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la confirmation « Réglages enregistrés. » sous le bouton de validation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Modifier les cases sans enregistrer ne change pas les prochains envois.",
+        "visibleSeconds": 8,
+        "visible": "Écran stable montrant les cases à cocher des rappels et le formulaire de configuration.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée.",
+        "visibleSeconds": 11.5,
+        "visible": "Présence visible du bouton « M'envoyer un email de test » à côté du bouton d'enregistrement.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

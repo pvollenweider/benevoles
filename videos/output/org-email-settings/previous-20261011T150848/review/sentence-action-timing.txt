@@ -1,0 +1,65 @@
+
+welcome @1.12
+0.29 Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation.
+6.38 Les organisateurs peuvent suivre les envois, mais pas changer ces réglages.
+10.61 Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.
+clicks: 
+
+reminders @21.34
+0.35 Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée.
+7.81 Décochons puis recochons le premier rappel.
+10.19 Pour une personne sur plusieurs créneaux du même événement le même jour, chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.
+clicks: 8.28, 9.73
+
+event-reminders @39.78
+0.28 Dans les réglages d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements.
+7.12 Sa section Communications indique ce qui partira vraiment.
+10.75 Un brouillon n’envoie pas de rappel.
+12.29 Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.
+clicks: 3.77, 6.55
+
+admin-alert @57.62
+0.24 L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique.
+8.42 Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.
+clicks: 4.73, 9.26
+
+withdrawal @72.26
+0.00 Prévenir en cas de désistement est un réglage séparé.
+2.99 Il informe les administrateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole.
+11.55 Décocher cette option coupe aussi l’email aux responsables.
+14.94 Quitter une liste d’attente ou refuser une place proposée n’envoie pas cette alerte.
+clicks: 8.02, 14.75
+
+addresses @92.02
+0.14 Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact.
+4.51 Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille.
+10.86 Un incident temporaire seul ne le déclenche pas.
+13.44 L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.
+clicks: 7.26, 13.33
+
+reply-to @112.03
+0.29 L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme.
+5.89 Saisissons benevoles arobase example point org.
+9.16 Si le champ reste vide, l’adresse par défaut est utilisée.
+12.65 Cette adresse apparaît aussi sur la page personnelle des bénévoles.
+clicks: 6.36
+
+save @128.53
+0.34 Enregistrez les réglages avant de les tester.
+2.91 Le message Réglages enregistrés confirme que vos choix sont conservés.
+7.62 Modifier les cases sans enregistrer ne change pas les prochains envois.
+10.95 Le test utilise lui aussi la dernière configuration enregistrée.
+clicks: 0.81
+
+test @146.00
+0.00 M’envoyer un email de test envoie un exemple à votre propre compte, pas aux bénévoles.
+4.62 Ouvrons le message reçu dans la boîte locale de démonstration.
+7.78 Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le contenu du message.
+15.23 Dans cette formation, les emails restent sur notre serveur local et ne partent pas sur Internet.
+clicks: 0.56
+
+result @166.17
+0.36 Les réglages sont enregistrés et le message de test est visible dans la boîte de démonstration.
+6.07 Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi, pas une preuve de remise ni de lecture par le bénévole.
+13.23 Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement.
+clicks: 
