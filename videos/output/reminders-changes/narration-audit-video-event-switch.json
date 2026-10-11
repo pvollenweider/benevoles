@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:16:58.468Z",
+  "revalidatedAt": "2026-10-11T16:16:58.468Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "event-switch",
+      "audioSha256": "aa7523849f111647f4f942ab06746277a222519c105627a8de6b1408c5aea245",
+      "recognized": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques. Décochons « Rappels automatiques » et attendons l'enregistrement. Réactivons-les pour poursuivre notre exemple. Ce réglage ne change pas le rappel manuel. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "expected": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques. Décochons Rappels automatiques et attendons l'enregistrement. Réactivons-les pour poursuivre notre exemple. Ce réglage ne change pas le rappel manuel. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

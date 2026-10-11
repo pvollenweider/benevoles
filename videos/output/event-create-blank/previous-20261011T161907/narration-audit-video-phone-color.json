@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:18:39.364Z",
+  "revalidatedAt": "2026-10-11T15:18:39.364Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "phone-color",
+      "audioSha256": "2ba8bb526e39174558b1c162bc0d8cf88512a99b15d1ec1f8f3d12e18c79e37b",
+      "recognized": "Rendez le téléphone obligatoire seulement si l'équipe doit joindre les bénévoles le jour même. La couleur personnalise l'en-tête public avec une palette prévue pour garder un texte lisible. Choisissons émeraude et regardons l'aperçu. Ces deux réglages pourront être modifiés plus tard.",
+      "expected": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles le jour même. La couleur personnalise l’en-tête public avec une palette prévue pour garder un texte lisible. Choisissons Émeraude et regardons l’aperçu. Ces deux réglages pourront être modifiés plus tard.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

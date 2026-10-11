@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:18:57.953Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "0b42ab5601d13b19398795fb0ea81bc69cb8975a9fb50949059fa099cadba040",
+  "clipSha256": "e3fc9e2294c2323ffce5d80939c403d014451e2cce486526a593a02dcd5ada40",
+  "scene": "location",
+  "review": {
+    "heardOpening": "Le lieu reste lisible comme une adresse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le lieu reste lisible comme une adresse",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie de l'adresse dans le champ Lieu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "collez une paire de coordonnées ou un lien de carte reconnu",
+        "visibleSeconds": 4.1,
+        "visible": "Collage des coordonnées GPS dans le champ Coordonnées GPS ou lien de carte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "prépare un lien Vérifier sur la carte",
+        "visibleSeconds": 5.4,
+        "visible": "Apparition du lien cliquable Vérifier sur la carte sous le champ",
+        "sync": "early",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

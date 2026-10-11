@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:52:20.292Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "00c46894a1124df49d4d203c85214be3b7653f324750cc8f3ca777f53b12caa5",
+  "clipSha256": "7974e7939295d89fd17820e51c208543e252a27601abc1932ec6d37e8106c36f",
+  "scene": "read",
+  "review": {
+    "heardOpening": "Dans Explorer, chaque entrée indique le type d'élément",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action.",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Explorer affiche la liste des entrées avec badge de type, horodatage et auteur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Une action automatique apparaît avec le système, pas avec le nom d'un organisateur.",
+        "visibleSeconds": 0,
+        "visible": "La première entrée montre une action système : « Une place s'est libérée et a été proposée » sans organisateur mentionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Lisons une inscription, puis une modification de créneau.",
+        "visibleSeconds": 0,
+        "visible": "Les lignes d'inscription (Aline Exemple) et de modification de créneau (Élodie Rochat) sont lisibles dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées.",
+        "visibleSeconds": 0,
+        "visible": "Les mentions de diffs apparaissent en gris sous les événements (ex. « statut : active -> cancelled », « capacité : 2 -> 3 »).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement intelligible, bien calée sur le contenu affiché."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

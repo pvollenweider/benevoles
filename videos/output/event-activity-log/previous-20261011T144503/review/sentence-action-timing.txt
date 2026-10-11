@@ -1,0 +1,85 @@
+
+welcome @1.34
+0.30 Une inscription a disparu, un horaire a changé :
+2.26 avant de chercher un coupable, retrouvons ce qui s'est passé.
+5.45 Depuis notre événement de démonstration, ouvrons le Journal.
+9.33 Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement.
+15.88 Nous allons lire une entrée, filtrer la liste et suivre un enchaînement.
+18.40 Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.
+clicks: 6.58
+
+read @27.99
+0.51 Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action.
+6.18 Une action automatique apparaît avec le système, pas avec le nom d'un organisateur.
+10.64 Lisons une inscription, puis une modification de créneau.
+12.16 Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées.
+18.52 Le journal aide à comprendre une modification ;
+20.89 il ne faut pas confondre son auteur avec la personne concernée par l'inscription.
+clicks: 
+
+filters @54.53
+0.50 Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription.
+6.07 Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système.
+10.62 Il ne recherche pas un prénom.
+12.25 Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages.
+16.95 Regardons la liste changer, puis revenons à toutes les actions.
+20.64 Les filtres limitent l'affichage ;
+22.20 ils ne suppriment aucune entrée de l'historique.
+clicks: 3.41, 8.33, 12.99
+
+period @81.32
+0.53 Vous savez quand le changement a eu lieu ?
+2.47 Renseignez Depuis et Jusqu'à pour limiter la période.
+4.74 Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche.
+10.18 Une liste vide peut simplement venir des filtres :
+12.52 ce n'est pas la preuve qu'aucune action n'a jamais eu lieu.
+15.14 Quand il reste des entrées à lire, Charger plus complète la liste.
+18.68 Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.
+clicks: 16.99
+
+replay @106.18
+0.52 Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer.
+4.26 Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape.
+10.14 Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés.
+16.62 Regardons la capacité avant et après sa modification.
+20.83 Rejouer ne remet pas l'événement dans un ancien état :
+25.11 c'est une lecture de l'historique, pas une restauration.
+26.91 Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.
+clicks: 3.74, 7.00, 10.95, 14.52, 18.12, 21.40, 27.38, 28.57
+
+story @141.13
+0.43 Le mode Récit répond à une autre question :
+3.75 quelle action en a provoqué une autre ?
+7.04 Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente.
+12.53 Ouvrons cet enchaînement et lisons le résultat.
+16.28 Deux actions proches dans le temps ne forment pas automatiquement une chaîne.
+20.62 Le récit utilise les liens de cause enregistrés par l'application ;
+24.64 il n'invente pas une explication à partir de la seule chronologie.
+clicks: 3.94, 13.02, 20.72
+
+baseline @173.45
+0.19 Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré.
+4.91 Générer l'état initial ajoute alors un point de départ pour ces éléments existants.
+9.56 Faisons-le sur notre second exemple, puis lisons la mention grise :
+14.39 Généré, pas une action réelle.
+15.95 Ce bouton ne retrouve pas les anciennes manipulations oubliées.
+19.74 Une nouvelle génération ne doit pas créer de doublons.
+22.43 Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.
+clicks: 10.07
+
+privacy @204.28
+0.24 Le journal n'est pas un carnet d'adresses.
+2.33 Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés.
+6.84 Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore.
+11.84 Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires.
+17.44 Une capture d'historique peut tout de même contenir des noms :
+20.43 partagez-la seulement avec les personnes qui en ont besoin.
+clicks: 3.94
+
+result @229.73
+0.31 Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning.
+7.22 Pour agir, revenez ensuite aux inscriptions ou aux créneaux concernés.
+11.50 Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure.
+16.61 Le journal facilite la coordination quand plusieurs personnes organisent ensemble.
+22.44 Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.
+clicks: 8.85

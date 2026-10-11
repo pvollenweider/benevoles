@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:18:35.260Z",
+  "revalidatedAt": "2026-10-11T15:18:35.260Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "8ef032a22295b628c54a6216443ac230745be9fef2991a521f0c857d9dd44998",
+      "recognized": "Quand aucun modèle ne correspond vraiment, partez d'une page blanche. L'événement est d'abord créé comme brouillon. Vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles. Créons ensemble une fête de quartier sur deux jours.",
+      "expected": "Quand aucun modèle ne correspond vraiment, partez d’une page blanche. L’événement est d’abord créé comme brouillon : vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles. Créons ensemble une fête de quartier sur deux jours.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

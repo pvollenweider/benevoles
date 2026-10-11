@@ -1,0 +1,12 @@
+{
+  "anchor": "Le mode Récit répond à une autre question : quelle action",
+  "windowStart": 117.30200000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 11.2,
+    "wordsHeard": "Le mode Récit répond à une autre question"
+  },
+  "onset": 128.502,
+  "proposedCut": 128.45245849999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

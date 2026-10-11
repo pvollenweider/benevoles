@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:54:15.853Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "79e0cd6c422b8d942daee411e6eccddff188a09080a25e51a428d7bac9c1efd8",
+  "clipSha256": "26fb7f97acbee1e53d6889ca565a245f66e8ea13263f3927b8d538ff1298f3f8",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons retrouvé une action",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Nous avons retrouvé une action, vu l'évolution d'un élément",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions affichant les inscriptions enregistrées et les annulations récentes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "revenez ensuite aux inscriptions ou aux créneaux concernés",
+        "visibleSeconds": 6.6,
+        "visible": "Navigation vers la page Créneaux en vue Frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "aux créneaux concernés",
+        "visibleSeconds": 8.7,
+        "visible": "Affichage de la vue Liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

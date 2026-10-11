@@ -1,0 +1,22 @@
+{
+  "preparedAt": "2026-10-11T12:38:08.936Z",
+  "scope": "actual local routes and database/mailbox assertions; not audiovisual validation",
+  "eventId": "cmv3t6r5n0000iza5i1kgxxjc",
+  "shiftId": "cmv3t6r5q0001iza59a4z633h",
+  "baselineWitnessId": "cmv3t6r650004iza50820o5tn",
+  "initialCount": 4,
+  "actualCapacityEdits": 56,
+  "firstPageCount": 50,
+  "secondPageVerified": true,
+  "rootLogId": "cmv3t6tww001rrza58h26a7sn",
+  "consequenceLogIds": [
+    "cmv3t6txh001trza5taxcmr7g"
+  ],
+  "offeredRegistrationId": "cmv3t6r5x0003iza5gb1f3cum",
+  "causalLinkVerified": true,
+  "offerEmailReceived": true,
+  "baselineWitnessUntouched": true,
+  "volunteerActorVerified": true,
+  "pageId": "cmv3t6t8f0004rza5hjdha1d0",
+  "pageContentNotCopied": true
+}

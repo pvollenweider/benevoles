@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:07:31.226Z",
+  "revalidatedAt": "2026-10-11T16:07:31.227Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "period",
+      "audioSha256": "c5fbf2a4e1ff86934e3a5d71fcfcb59cf51bdc2b8cc22db17af27874e2d3ba71",
+      "recognized": "Vous savez quand le changement a eu lieu ? Renseignez depuis et jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres, ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "expected": "Vous savez quand le changement a eu lieu ? Renseignez Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

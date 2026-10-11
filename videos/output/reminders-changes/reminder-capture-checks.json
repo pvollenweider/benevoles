@@ -1,97 +1,110 @@
 {
-  "checkedAt": "2026-10-05T18:40:03.362Z",
+  "checkedAt": "2026-10-11T16:16:09.426Z",
   "audiovisualValidation": false,
   "pushReceptionVerified": false,
-  "perEventToggleAvailableInForm": false,
+  "perEventToggleAvailableInForm": true,
   "messageAutoSaved": true,
   "manualReminder": {
     "sent": 3,
     "cancelledWithoutEmail": true,
     "twoShiftsInOneEmail": true,
     "mailIds": [
-      "6ZuFxFE1AodNx7RjHkmTeB",
-      "5M1HvoMXOtMvbKg7nlixcP",
-      "48SSkSaKaUzr4TZn36hyAT"
+      "3tpFVpX5DSYVl5rPxROYqd",
+      "1FhiQfFYIlVjMFZ2kvrSPu",
+      "7HiDEnvy6PHX4snkUbmbJ2"
     ]
   },
   "organizationSavedOffThenOn": true,
+  "perEventSavedOffThenOn": true,
   "automaticReminders": {
     "mailIds": [
-      "6cY7tIP0MTjNx3IuCBFH5Q",
-      "2U2TFZnjoaDCmyXbxvgK9q",
-      "3YwA1wG2QElRshuaVGBA40"
+      "7kEiIyFQPuup4TlTH381vG",
+      "4UfSN0HFbEEwXvLjGj5NCT",
+      "2e33f362DjyR5QEyKoNPXT"
     ],
     "noDuplicate": true,
     "first": {
-      "runAt": "2026-10-05T18:38:22.320Z",
+      "runAt": "2026-10-11T16:14:15.995Z",
       "totals": {
         "reminder_j2": {
           "eligible": 1,
+          "groups": 1,
           "sent": 1,
           "failed": 0
         },
         "reminder_j1": {
           "eligible": 1,
+          "groups": 1,
           "sent": 1,
           "failed": 0
         },
         "reminder_dd": {
           "eligible": 1,
+          "groups": 1,
           "sent": 1,
-          "failed": 0
-        }
-      },
-      "expiredOffers": 0,
-      "waitlist": {
-        "shifts": 3,
-        "offered": 1
-      },
-      "outbox": {
-        "sent": 1,
-        "retried": 0,
-        "failed": 0
-      },
-      "outboxStatus": {
-        "failedLastDay": 0,
-        "oldestPendingMinutes": null,
-        "staleClaims": 0,
-        "healthy": true
-      }
-    },
-    "second": {
-      "runAt": "2026-10-05T18:38:22.555Z",
-      "totals": {
-        "reminder_j2": {
-          "eligible": 0,
-          "sent": 0,
-          "failed": 0
-        },
-        "reminder_j1": {
-          "eligible": 0,
-          "sent": 0,
-          "failed": 0
-        },
-        "reminder_dd": {
-          "eligible": 0,
-          "sent": 0,
           "failed": 0
         }
       },
       "expiredOffers": 0,
       "waitlist": {
         "shifts": 2,
-        "offered": 0
+        "offered": 1
       },
       "outbox": {
-        "sent": 0,
+        "sent": 1,
         "retried": 0,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       },
       "outboxStatus": {
         "failedLastDay": 0,
         "oldestPendingMinutes": null,
         "staleClaims": 0,
-        "healthy": true
+        "healthy": true,
+        "stuck": false
+      }
+    },
+    "second": {
+      "runAt": "2026-10-11T16:14:16.169Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 0,
+          "groups": 0,
+          "sent": 0,
+          "failed": 0
+        }
+      },
+      "expiredOffers": 0,
+      "waitlist": {
+        "shifts": 1,
+        "offered": 0
+      },
+      "outbox": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true,
+        "stuck": false
       }
     }
   },
@@ -99,14 +112,14 @@
   "changed": {
     "notified": 1,
     "pendingRequestExcluded": true,
-    "mailId": "06RDGNZnvKCOmdhj7FaqkG"
+    "mailId": "7e2Jmwoq35jsSxhdDe7hnU"
   },
   "cancelled": {
     "registrations": 2,
     "includesPendingRequest": true,
     "mailIds": [
-      "0BlUrlR4zjgWtz6ZGTubQu",
-      "2eidROd6TsiCCXu7EsjNju"
+      "6iqzufT9C4qnPX3Xjo5rJE",
+      "1W0MzagardRlFUYtnXNVvq"
     ]
   }
 }

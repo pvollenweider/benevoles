@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:22:48.713Z",
+  "revalidatedAt": "2026-10-11T16:22:48.714Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "identity-dates",
+      "audioSha256": "fe4ed406b826b697ee2566de3a391a640471bf144cf2a5ca18f9a7ec12c32eef",
+      "recognized": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d'abord sur la date de début. Pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+      "expected": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d’abord sur la date de début ; pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

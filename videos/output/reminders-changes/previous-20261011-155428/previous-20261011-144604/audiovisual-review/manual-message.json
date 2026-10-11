@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:42:23.411Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "c1df8e1410cd41cadc6d2eb4d0084344e21b02fdf6476003deb382c4df0a2c4f",
+  "clipSha256": "fd7042c1b59d7507a6457690ce6c1ae204bc7338948cf7dec4fb49a695249c9a",
+  "scene": "manual-message",
+  "review": {
+    "heardOpening": "Dans les réglages de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans les réglages de l'événement",
+        "visibleSeconds": 1.5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Affichage du formulaire Modifier l'événement"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Écrivons une consigne simple : retrouve-nous au stand",
+        "visibleSeconds": 5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Saisie en cours dans le champ Message de rappel"
+      },
+      {
+        "spokenSeconds": 15.8,
+        "spoken": "attends la confirmation Enregistré",
+        "visibleSeconds": 16.5,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Pastille verte Enregistré visible sous le champ"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

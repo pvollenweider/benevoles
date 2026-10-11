@@ -1,0 +1,16 @@
+STATUS: NOT READY
+ID: EVENT_CREATE_BLANK
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 152.640000 seconds
+MUSIC: {'voicedWindows': 139, 'musicOnlyWindows': 2, 'smallestGapLu': 13.8, 'largestGapLu': 18.3, 'quietestMusicOnlyLufs': -32.6, 'loudestMusicOnlyLufs': -32.3, 'medianVoiceLufs': -16.3}
+PROBLEMS: Confirmation text appended to the product default, displaying À bientôt.Merci with no separator. Autosave description correction click at chapter +10.28 s vs sentence +7.41 s; return to Events starts on +11.27 s instead of Retrouvons-le at +9.16 s, with navigation delay.
+SOURCE CHANGES: videos/tools/record.ts: clear confirmation default before typing; at("Corrigeons la description"); at("Retrouvons-le dans les événements"). No refilm.
+SOURCE AUDIO: existing cached WAVs reused, generation accepted and independent source audit revalidated; no TTS regeneration.
+FINAL AUDIO: independent final-MP4 ASR for every chapter; flagged chapters: []. VTT matches narration with intended date/hour typography, meaning preserved.
+EFFECTS: 15 clicks and 188 keys; counts match every interaction marker.
+VALIDATE: []; 6 sentence anchors remeasured.
+VISUAL REVIEW: final MP4 chapter sheets inspected for current labels, French dates, benevol.app addresses, Frise, no localhost/old admin/development overlay. Sentence/action sync checked per chapter against review/objective-evidence.json, actual MP4 frames and independent audiovisual checkpoints.
+REVIEW NOTES: All eight chapter sheets and sentence/input evidence inspected. public-content-60.png and phone-color-85.png show joined confirmation; autosave-45.png still shows old description; result-60.png still shows edit screen during return sentence. Other checks pass, current French dates 14.11.2026/15.11.2026, Frise, draft creation, saved confirmation. No product layout bug observed; joined text comes from recorder data entry.
+EVIDENCE: review/objective-evidence.json; review/*-sheet.png; review-frames/index.json; audiovisual-review/*.json; narration-audit-video.json; narration-audit.json; validation.json; audio-levels.json; audio-mix.json; review/renders-generated.json.
+LIMIT: no real-time subjective listening available; this is not a failure criterion. No subjective voice certification claimed.

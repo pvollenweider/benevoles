@@ -1,0 +1,53 @@
+{
+  "slug": "reminders-changes",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:40:04.260Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 220,
+      "endMs": 22602
+    },
+    {
+      "id": "manual-message",
+      "startMs": 23055,
+      "endMs": 51427
+    },
+    {
+      "id": "manual-send",
+      "startMs": 51881,
+      "endMs": 78636
+    },
+    {
+      "id": "organization",
+      "startMs": 79088,
+      "endMs": 104217
+    },
+    {
+      "id": "event-switch",
+      "startMs": 104671,
+      "endMs": 128729
+    },
+    {
+      "id": "timing",
+      "startMs": 129182,
+      "endMs": 152382
+    },
+    {
+      "id": "exclusions",
+      "startMs": 152835,
+      "endMs": 176179
+    },
+    {
+      "id": "changed",
+      "startMs": 176632,
+      "endMs": 202257
+    },
+    {
+      "id": "cancelled",
+      "startMs": 202708,
+      "endMs": 232901
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:53:40.742Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "edf7eaff8d918be23c1e6758c190fab7a7a22b2374ce823079e79d25704fec3c",
+  "clipSha256": "086dbec81626e3852f22a8e0b47b0a863bd14db499e3ac665d28c160c0d46467",
+  "scene": "baseline",
+  "review": {
+    "heardOpening": "Un ancien événement peut avoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Générer l'état initial ajoute alors un point de départ pour ces éléments existants.",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur le lien « Générer l'état initial » sous les filtres de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Faisons-le sur notre second exemple, puis lisons la mention grise :",
+        "visibleSeconds": 10.1,
+        "visible": "Affichage de la liste des entrées du journal d'audit générées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "Généré, pas une action réelle.",
+        "visibleSeconds": 13,
+        "visible": "Mention grise « Généré, pas une action réelle » bien visible sur chaque ligne générée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'apparition des éléments à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

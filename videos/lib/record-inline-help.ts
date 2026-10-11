@@ -32,7 +32,7 @@ export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: 
   }, regionId, { timeout: 8000 })
   assert(await video.evaluate((el: HTMLVideoElement) => el.controls), "Show the real playback controls")
   await at(0.58); await tap(page, region.locator("summary").filter({ hasText: "Transcription" }))
-  assert(await region.getByRole("link", { name: "Ouvrir dans la bibliothèque", exact: true }).count() === 1)
+  assert(await region.getByRole("link", { name: /^Ouvrir dans la bibliothèque\s*:/ }).count() === 1)
   await at(0.80); await tap(page, trigger)
   assert.equal(await trigger.getAttribute("aria-expanded"), "false")
   assert(await video.evaluate((el: HTMLVideoElement) => el.paused))

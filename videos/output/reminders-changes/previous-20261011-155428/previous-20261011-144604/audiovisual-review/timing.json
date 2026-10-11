@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:43:00.776Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "8afb2f1f9665daba7d0a9f3d896cbb444069737eeba998bc75c247a99299d557",
+  "clipSha256": "ac63b58d0080f98af3cd17c0e3b9df478f18d5c3d4c835bbaeb673c69d315979",
+  "scene": "timing",
+  "review": {
+    "heardOpening": "Les rappels partent autour de deux jours avant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Les rappels partent autour de deux jours avant, autour de la veille",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page de configuration des emails avec les cases Rappel J-2, J-1 et Rappel du jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Voici les trois emails réellement reçus pour nos trois échéances",
+        "visibleSeconds": 12,
+        "visible": "Boîte Mailpit affichant les trois messages de rappel reçus, consultation du premier email J-2",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "chacun retrouve son horaire local, le point de rendez-vous",
+        "visibleSeconds": 18.8,
+        "visible": "Affichage successif des emails J-1 puis du jour J détaillant les horaires et le lieu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, rythme adapté au défilement visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

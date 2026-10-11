@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:43:22.456Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "66f9fc5bb3bee9d26f94d438321bc8379eca974c0f261b0af782051e9fc891de",
+  "clipSha256": "af11426c34a4de65e6a93ae0ffec3e007c71c9e4916decd0a3101501b527d785",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Pour annuler un créneau entier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "lis bien le récapitulatif avant de confirmer",
+        "visibleSeconds": 3.5,
+        "visible": "Ouverture de la fenêtre récapitulative de confirmation de suppression",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Ouvrons les messages reçus",
+        "visibleSeconds": 13,
+        "visible": "Affichage de la messagerie Mailpit avec les emails d'annulation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "revenons au planning",
+        "visibleSeconds": 18,
+        "visible": "Retour à la vue planning des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

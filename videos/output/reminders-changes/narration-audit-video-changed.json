@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:17:06.947Z",
+  "revalidatedAt": "2026-10-11T16:17:06.948Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "changed",
+      "audioSha256": "f75622f0dcbd0e471d87aa9aeaf477e2aa136e85cb73e66f9d1823508d658ad4",
+      "recognized": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+      "expected": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:27.694Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "1b7bb2f1bfa1540b779ab0172e4eaca32ed87ce7717b20074e33abac5e627585",
+  "clipSha256": "979a8ac822e12898bad52d670d4db5fa3c6c97a59dde27170a8b2e216af40cdd",
+  "scene": "exclusions",
+  "review": {
+    "heardOpening": "Une demande à valider ou une place en attente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Une demande à valider",
+        "visibleSeconds": 2,
+        "visible": "Filtre sur Lucas montrant les inscriptions au statut Demande à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "ou une place en attente",
+        "visibleSeconds": 7,
+        "visible": "Recherche d'Anna affichant une inscription avec statut Place proposée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "fermer un créneau aux nouvelles inscriptions ne l'annule pas",
+        "visibleSeconds": 14,
+        "visible": "Affichage de la liste des créneaux avec un créneau au statut Fermé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les exemples montrés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

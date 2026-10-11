@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T14:54:01.002Z",
+  "videoSha256": "8bc0c9feca0c2360f5aa518f40cbaf09845aff119d7d7ada5a4e4aa37639607b",
+  "promptSha256": "d357eaa2f6b60d919d4d53f0d5065e3455b5606148c3c0f3753b98c4c1146b2d",
+  "clipSha256": "9869c99fc9215a1bd1c93dc44b87b402981a8a91f04d18037661723c8fb14fbe",
+  "scene": "privacy",
+  "review": {
+    "heardOpening": "Le journal n'est pas un carnet d'adresses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection du filtre 'Page' dans le type d'élément et affichage des modifications de pages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "retournez à la vue prévue pour les inscriptions ou les membres",
+        "visibleSeconds": 12,
+        "visible": "Navigation vers la vue Inscriptions affichant les bénévoles et leurs informations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Une capture d'historique peut tout de même contenir des noms",
+        "visibleSeconds": 17.5,
+        "visible": "Écran stable des Inscriptions avec les noms et détails de contact visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:00 - Les champs de date 'Depuis' et 'Jusqu'à' du Journal affichent le format de saisie anglais 'dd.mm.yyyy' au lieu d'un format français 'jj.mm.aaaa'."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et posée, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

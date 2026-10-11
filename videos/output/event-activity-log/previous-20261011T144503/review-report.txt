@@ -1,0 +1,19 @@
+STATUS: NOT READY
+ID: EVENT_ACTIVITY_LOG
+Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
+BUILD_ID: awdEYi1bluVzpj2kEgGcs
+Duration: 259.960 s
+Music smallest/largest gap: 13.6 / 18.4 LU; five music-only windows -32.8 to -31.6 LUFS; no music rule issues.
+Narration: existing continuous Puck WAV cache accepted and independent source audit reused with identical audio/text. No new TTS. Final MP4 independent ASR audited separately; see batch-2-pass-2/event-log-final-asr.log and narration-audit-video.json.
+Objective validation passes nine scenes and four existing sentence anchors. Effects hashes/counts match nineteen clicks and one key. Final MP4/timeline/music/effects hash checks pass; exact readableCaptions VTT content checked. Posters metadata only in review/renders-generated.json.
+Reviewed every final chapter's six-frame sheet plus full-resolution anchor frames and supplemental timing evidence. Current Journal / Explorer / Rejouer / Récit / Frise labels match; dates use French textual dates or DD.MM.YYYY; no localhost/org-admin@localhost, dev overlay, Timeline or US numeric date found. No product layout bug found.
+FAIL sentence/action timing (sentence-action-timing.txt/json and actual final frames):
+- filters: Qui click +8.33 vs phrase +6.07. qui-late.png @62.2 still shows Tous after sentence began at60.60. Replaced at(.32) with at("Le filtre Qui distingue").
+- replay: opening tab click +3.74 vs phrase +0.52. replay-late.png @109.2 still Explorer, phrase began106.70. Replaced at(.10) with at("Pour comprendre l'évolution d'un même créneau").
+- replay: selecting element +7.00 vs phrase +4.26. replay-choice-late.png @112.3 still selector; phrase began110.44. Replaced at(.20) with at("Choisissons un élément qui possède plusieurs entrées").
+- story: Récit tab click +3.94 vs chapter's first phrase +0.43. story-late.png @144.2 still Rejouer, phrase began141.56. Replaced at(.12) with at("Le mode Récit répond à une autre question").
+First-pass corrected anchors now place change-element +27.38 vs26.91, chain-open13.02 vs12.53, privacy navigation at its phrase and result navigation at its phrase. Other action/results checked against chapter sheets and sentence timings: displayed registration/system/shift differences, real filter states, empty date period, pagination, capacity changes, causal chain, three generated baseline entries, privacy fields and final shift list.
+Coverage check passes 64 real-route logs, pagination, actual causal chain and three baseline records. Baseline idempotence/read-only replay remain asserted. No two-week history is claimed by current transcript. External visual upload is not authorized by the coverage guard; no audiovisual upload performed. Audio-only final ASR performed. Real-time subjective listening unavailable and not a failure reason.
+Local source change: four additional sentence anchors in videos/lib/record-event-log.ts. No re-film. No product feature change or documentation screenshot effect (doc-img: unchanged).
+
+Batch source validation: video tooling TypeScript passes 185 explicit sources; all sentence anchors resolve in their chapters. Generated poster metadata is separate; videos/renders.json unchanged.

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:17:01.960Z",
+  "revalidatedAt": "2026-10-11T16:17:01.961Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "exclusions",
+      "audioSha256": "93c79a747bf2fa9c80693717c69afc50c07ca7eda2513783960d08094f699f08",
+      "recognized": "Une demande à valider ou une place en attente n'est pas une inscription confirmée. Elle ne reçoit pas ses rappels. Même chose pour notre brouillon et l'évènement dont les rappels sont coupés. En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas. Les personnes déjà confirmées peuvent encore recevoir leurs rappels. Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés dans notre démonstration.",
+      "expected": "Une demande à valider ou une place en attente n'est pas une inscription confirmée : elle ne reçoit pas ces rappels. Même chose pour notre brouillon et l'événement dont les rappels sont coupés. En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas. Les personnes déjà confirmées peuvent encore recevoir leur rappel. Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés dans notre démonstration.",
+      "wordErrorRate": 0.041666666666666664,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

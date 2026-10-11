@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:04:13.144Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "d91f14d061b08ad90a186343705359b7e276b6e9267cd26526482e88f04b7202",
+  "clipSha256": "d0f812bee55c695964afd158b0b9d9f9b948bf95fdd5033725dbd63c636ab999",
+  "scene": "event-switch",
+  "review": {
+    "heardOpening": "Les trois cases que nous venons de voir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8,
+        "spoken": "Décochons Rappels automatiques et attendons l'enregistrement.",
+        "visibleSeconds": 9,
+        "visible": "La case « Rappels automatiques » est décochée par le curseur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Réactivons-les pour poursuivre notre exemple.",
+        "visibleSeconds": 13.5,
+        "visible": "La case « Rappels automatiques » est de nouveau cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Regardons maintenant notre événement en brouillon.",
+        "visibleSeconds": 18,
+        "visible": "Affichage de la page de gestion de l'événement « Atelier en brouillon » avec le statut Brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

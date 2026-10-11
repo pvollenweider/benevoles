@@ -1,0 +1,14 @@
+STATUS: NOT READY
+ID: REMINDERS_CHANGES
+Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
+BUILD_ID: awdEYi1bluVzpj2kEgGcs
+Duration: no final MP4; partial rehearsal only.
+Music smallest/largest gap: unavailable (no final assembly).
+Narration: new continuous Kore TTS because transcript changed; existing audio initially retained, then --force explicitly requested the required new generation. Initial paragraph splitting displaced sentence openings/endings. Six boundaries located in short real audio windows and snapped to measured silences: manual-send47.252500, event-switch95.072875, timing120.881062, exclusions144.493375, changed170.249041, cancelled197.044980. Independent source re-audit passes all nine chapters, no edge/instruction issues. New audio and cache fingerprints kept for the next pass.
+Initial rehearsal failed at automatic cron HTTP401 because production server lacked CRON_SECRET. Configuration corrected by restarting only our own common server with the same public fixture-only cron secret supplied to tools. Shared build unchanged. Data reseeded before second rehearsal; this was configuration recovery, no source change or narrated re-film.
+FAIL rehearsal changed: exact accessible name Modifier timed out. Actual final raw frame rehearsal-failure.png shows the Préparation row and visible Modifier button. Current product source adds a screen-reader suffix: Modifier le créneau <spoken shift>. Supprimer has the same naming convention. Recorder now targets these current names with row-scoped /^Modifier le créneau / and /^Supprimer le créneau /.
+No repeat after this source correction, per instruction. No narrated capture, MP4, final posters, music measurement, sentence/action MP4 evidence, final effects, subtitles/audio audit or READY claim fabricated. video:validate attempted and fails on missing complete timeline.json.
+Reviewed partial raw capture failure frame: current Frise/Liste labels and French date ordering; no localhost/org-admin@localhost or dev overlay in that frame. Current source autosave confirmation is still at the top of the long event form, outside the editing viewport; recorder's first-pass scroll now reaches it. Product layout limitation retained and reported. Mailpit English date headers remain an external viewer locale issue in rehearsed emails.
+Local source changes: videos/lib/record-reminders.ts, two accessible button selectors. No manifest/script/product UI change. doc-img: unchanged; feature availability unchanged. Real-time subjective listening is unavailable and not a failure reason.
+
+Batch source validation: video tooling TypeScript passes 185 explicit sources; all sentence anchors resolve in their chapters. Generated poster metadata is separate; videos/renders.json unchanged.

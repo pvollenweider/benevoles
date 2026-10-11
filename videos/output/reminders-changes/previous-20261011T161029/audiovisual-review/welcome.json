@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:03:57.890Z",
+  "videoSha256": "3a91873b7a3e4fcfc27d47ab41670405de27f871a5d3b4305a4a2c0b9ea1624f",
+  "promptSha256": "49e382c146f6021e2ce30c036d5e4145cd0485c853159ea94d8ba1d8d1a43c6a",
+  "clipSha256": "abf063665dd5738948e2d7c64764b800e86fbd4c80113122d565e94009f0b232",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un petit rappel aide les bénévoles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau titre affiché au centre : « Rappeler le rendez-vous et prévenir quand le planning change »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ici, nous allons distinguer trois choses",
+        "visibleSeconds": 3.2,
+        "visible": "Disparition de l'encart titre, page de l'événement « Atelier des rappels » visible en arrière-plan",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Nous utiliserons un événement de démonstration et sa vraie boîte mail de test",
+        "visibleSeconds": 15,
+        "visible": "Écran stable de la fiche événement « Atelier des rappels » (11 octobre 2026)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans parasite sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

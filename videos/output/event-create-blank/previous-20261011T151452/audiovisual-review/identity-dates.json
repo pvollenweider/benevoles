@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:35:36.811Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "e8339bc1d72fbd612c3edd52ab7e2b94563262f58a10393720c835d84c703d4d",
+  "scene": "identity-dates",
+  "review": {
+    "heardOpening": "Commençons par un titre parlant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commençons par un titre parlant",
+        "visibleSeconds": 1,
+        "visible": "Saisie du titre Fête du quartier des Tilleuls",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "une courte description",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie de la description de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La date de fin se cale d’abord sur la date de début",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage des champs Date début et Date fin calés au 14.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "nous la faisons terminer le dimanche",
+        "visibleSeconds": 12,
+        "visible": "Modification du champ Date fin au 15.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

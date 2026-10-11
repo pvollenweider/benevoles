@@ -1,0 +1,15 @@
+STATUS: NOT READY
+ID: REMINDERS_CHANGES
+COMMIT: dbe9875584400f2cc3f331ea19267ab04c1eec19
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+DURATION: 250.6 seconds
+MUSIC: {'voicedWindows': 221, 'musicOnlyWindows': 1, 'smallestGapLu': 13.9, 'largestGapLu': 17.6, 'quietestMusicOnlyLufs': -32.4, 'loudestMusicOnlyLufs': -32.4, 'medianVoiceLufs': -16.3}; validation passes every music window and all sentence anchors.
+PROBLEM: organization chapter starts 78.772 s. Sentence “Nous coupons celui de la veille...” starts +12.818 s and ends +15.328 s. J-1 off click +11.761 s, save +12.569 s, on click +16.434 s, save +17.238 s. Off is early and on/save drift into the address explanation. Independent audiovisual observer incorrectly described the actions as absent; input markers, persisted database assertions and organization-sheet.png prove both happened.
+SOURCE CHANGE: videos/lib/record-reminders.ts: at("Nous coupons celui de la veille"), sequential saved off/on, at("Vous trouvez aussi l’adresse de réponse") replaces .48/.68/.83. No refilm.
+AUDIO: latest audited cached WAVs reused; no TTS regeneration. Final-MP4 independent ASR passes all nine chapters. VTT matches source with intended date/hour typography (“quatre heures” → “4 h”), no changed meaning.
+EFFECTS: 22 clicks and 126 keys; all counts match input markers.
+VISUAL: nine chapter sheets inspected. Frise, French product dates, benevol.app links; no localhost/old admin/dev overlay. Test Mailpit dates are English, noted only. No product layout bug observed.
+FUNCTIONAL: manual reminder 3 messages, confirmed two shifts combined; saved org off/on, per-event off/on, three cron reminders with no duplicate, draft/disabled/requested/waiting distinctions; actual change and cancellation mails. reminder-capture-checks.json retains assertions.
+EVIDENCE: review/objective-evidence.json; review/organization-90.9.png and organization-95.7.png; all review/*-sheet.png; audiovisual-review/*.json; narration-audit-video.json; audio-levels.json; audio-mix.json; validation.json.
+SETUP: two rehearsals failed with cron 401 before local-only CRON_SECRET configured on batch server and recorder. Successful full rehearsal and fresh seed before final capture.
+REVIEW LIMIT: no real-time subjective listening; not a failure criterion.

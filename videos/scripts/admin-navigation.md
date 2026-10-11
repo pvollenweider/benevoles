@@ -11,6 +11,7 @@ d’atteindre une information précise sans parcourir tous les écrans.
 ## Démonstration
 
 1. Présenter la barre principale et ouvrir successivement Événements, Membres et Paramètres.
+   Dans la narration, Membres a sa propre phrase : son clic s’ancre au début de cette phrase.
 2. Entrer dans un événement, montrer son aperçu et ses destinations propres, puis revenir à la
    liste globale.
 3. Ouvrir la recherche avec `Ctrl+K` ou `Cmd+K`, chercher « Buvette » et suivre un résultat.

@@ -1,0 +1,13 @@
+STATUS: READY
+ID: REMINDERS_CHANGES
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe
+DURATION: 249.88 seconds
+MUSIC: smallest 13.1 / largest 17.6 LU
+PROBLEMS: Known product nit: Prévenir en cas de désistement checkbox offset (organization-sheet.png); report only. Mailpit English dates are external test UI. Automated organization missing-action flag dismissed: sentence 91.418 s; actual clicks 91.917/92.717/93.501/94.284 s uncheck/save/recheck/save; organization-seconds.png and organization-unchecked-proof.png show it.
+SOURCE CHANGES: None; existing narration reused, no regeneration.
+VALIDATION: []; sentence anchors checked: 6
+FINAL AUDIO: [('welcome', 0, False), ('manual-message', 0, False), ('manual-send', 0, False), ('organization', 0, False), ('event-switch', 0, False), ('timing', 0.02666666666666667, False), ('exclusions', 0.041666666666666664, False), ('changed', 0, False), ('cancelled', 0.013513513513513514, False)]
+CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 22, keys 126.
+REVIEW: final MP4 chapter sheets inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

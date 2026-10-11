@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:07:25.313Z",
+  "revalidatedAt": "2026-10-11T16:07:25.314Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "read",
+      "audioSha256": "e148daf816de2460a96510c0afcb87e09795a27669a0cdd53f90af13330804ce",
+      "recognized": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification, il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+      "expected": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification ; il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

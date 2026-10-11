@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T16:07:39.386Z",
+  "revalidatedAt": "2026-10-11T16:07:39.387Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "filters",
+      "audioSha256": "856c88371524049079c8829eb020dad23217dcb473189dd00f3731af3566a665",
+      "recognized": "Pour retrouver une désinscription, commençons par type d'élément, puis choisissons inscription. Le filtre qui distingue les actions des bénévoles, des administrateurs et du système, il ne recherche pas un prénom. Le filtre action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer, puis revenons à toutes les actions. Les filtres limitent l'affichage, ils ne suppriment aucune entrée de l'historique.",
+      "expected": "Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription. Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système. Il ne recherche pas un prénom. Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer, puis revenons à toutes les actions. Les filtres limitent l'affichage ; ils ne suppriment aucune entrée de l'historique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

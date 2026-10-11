@@ -174,7 +174,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate"].includes(slug) && process.platform === "darwin"
+  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation"].includes(slug) && process.platform === "darwin"
   if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
@@ -529,7 +529,7 @@ async function main() {
         await settle(page)
         await at("Événements ouvre la liste")
         await tap(page, page.getByRole("link", { name: "Événements", exact: true }).first())
-        await at("et Membres les personnes connues")
+        await at("Membres réunit les personnes connues")
         await tap(page, page.getByRole("link", { name: "Membres", exact: true }).first())
         await page.getByRole("heading", { name: "Membres" }).waitFor()
         await at("Paramètres concerne les réglages communs.")
@@ -1293,7 +1293,6 @@ async function main() {
         await settle(page)
       })
       await scene("result", async (at) => {
-        await page.reload(); await settle(page)
         const list = page.getByRole("button", { name: "Liste", exact: true })
         if (await list.getAttribute("aria-pressed") !== "true") await tap(page, list)
         const rows = page.locator("tr").filter({ hasText: "Buvette série" })
@@ -1301,7 +1300,8 @@ async function main() {
         const first = rows.first()
         await first.getByText("0/4", { exact: true }).waitFor()
         for (let index = 1; index < 6; index++) await rows.nth(index).getByText("0/3", { exact: true }).waitFor()
-        await first.scrollIntoViewIfNeeded()
+        await at("quatre places pour la première relève")
+        await first.evaluate(element => element.scrollIntoView({ block: "center" }))
         await at("Une série bien découpée facilite")
         await rows.last().scrollIntoViewIfNeeded()
       })
@@ -1895,7 +1895,7 @@ async function main() {
       await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
       await page.screencast.showChapter("Lire le planning", { description: "Journées, postes, capacités et programme", duration: 1_400 })
       await scene("desktop", async (at) => {
-        const firstDay = page.getByRole("region", { name: /Planning de la journée/ }).first()
+        const firstDay = page.getByRole("region", { name: /Planning du/ }).first()
         await firstDay.scrollIntoViewIfNeeded()
         await at(0.22) /* mid-sentence */
         await page.getByText(/Concert de la fanfare/).first().scrollIntoViewIfNeeded()
@@ -1930,7 +1930,7 @@ async function main() {
         const hint = page.getByText(/Faites défiler pour voir toutes les plages/).first()
         await hint.scrollIntoViewIfNeeded()
         await at("le message avec les flèches")
-        const timeline = page.getByRole("region", { name: /Planning de la journée/ }).first()
+        const timeline = page.getByRole("region", { name: /Planning du/ }).first()
         await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth * 0.46 })
         await at("Glisse doucement pour parcourir la")
         await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth })
@@ -2001,6 +2001,9 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Retirer Buvette de la sélection" }))
       })
 
+      // The earlier Accueil choice overlaps the available afternoon Navette.
+      // Clear that demonstration selection before presenting approval as its own state.
+      await tap(page, page.getByRole("button", { name: "Retirer Accueil de la sélection", exact: true }))
       await scene("approval-reserved", async (at) => {
         const approval = page.getByRole("button", { name: /, Navette[^:]*sur validation\) : sélectionner/ }).first()
         await approval.scrollIntoViewIfNeeded()
@@ -2102,9 +2105,9 @@ async function main() {
         await at("Lire puis cocher ces deux")
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
       })
-      const recap = page.locator(".lg\\:col-start-2").filter({ hasText: "Vos créneaux" }).first()
+      const recap = page.locator(".lg\\:col-start-2").filter({ hasText: "Tes créneaux" }).first()
       await scene("recap", async (at) => {
-        await recap.getByText(/fin le lendemain/).scrollIntoViewIfNeeded()
+        await recap.getByText(/lendemain/).scrollIntoViewIfNeeded()
         await at("Les lieux, consignes et liens")
         await recap.getByRole("link", { name: /Voir sur la carte/ }).first().scrollIntoViewIfNeeded()
         await at("En bas, Transmis à l’organisation")
@@ -4569,12 +4572,13 @@ async function main() {
         await tap(page, page.getByRole("radio", { name: /Page blanche/ }))
       })
 
-      await scene("basics", async () => {
-        await typeNaturally(page, page.getByLabel("Titre *"), "Fête des voisins")
-        await typeNaturally(page, page.getByLabel("Description"), "Une journée conviviale organisée par le quartier.")
-        await typeNaturally(page, page.getByLabel("Lieu"), "Place du village, Montvert")
-        await fillVisibly(page, page.getByLabel("Date début *"), "2031-05-10", 1_100)
-        await fillVisibly(page, page.getByLabel("Date fin *"), "2031-05-10", 1_100)
+      await scene("basics", async (at) => {
+        await at("Donne-lui un nom clair")
+        await fillVisibly(page, page.getByLabel("Titre *"), "Fête des voisins", 200)
+        await fillVisibly(page, page.getByLabel("Description"), "Une journée conviviale organisée par le quartier.", 200)
+        await fillVisibly(page, page.getByLabel("Lieu"), "Place du village, Montvert", 200)
+        await fillVisibly(page, page.getByLabel("Date début *"), "2031-05-10", 200)
+        await fillVisibly(page, page.getByLabel("Date fin *"), "2031-05-10", 200)
         const create = page.getByRole("button", { name: "Créer l'événement" })
         await create.scrollIntoViewIfNeeded()
         await tap(page, create)

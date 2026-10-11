@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T15:19:05.595Z",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "promptSha256": "d2f520ef27137745dae64544b4b3374571844db9d09902970f19103e593eeb49",
+  "clipSha256": "c7e6698195cd76289fac76b7ba0a4cf8ae54a2254a22f6b3b5662046ed0d1106",
+  "scene": "public-content",
+  "review": {
+    "heardOpening": "Les instructions publiques apparaissent avant l'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les instructions publiques apparaissent avant l’inscription : indiquez ici l’entrée à utiliser et le moment d’arrivée.",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie dans le champ 'Instructions publiques' du texte 'Entre par la cour nord. Arrive quinze minutes avant ton créneau.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables.",
+        "visibleSeconds": 8,
+        "visible": "Sélection du champ 'Message de confirmation' et début de saisie incluant la variable {{prenom}}.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.",
+        "visibleSeconds": 14.5,
+        "visible": "Finalisation du message de confirmation indiquant la validation et l'envoi du planning par email.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les saisies à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

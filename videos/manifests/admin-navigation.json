@@ -36,7 +36,7 @@
     },
     {
       "id": "organization-navigation",
-      "transcript": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
+      "transcript": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements. Membres réunit les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
       "fallbackDurationMs": 23000
     },
     {

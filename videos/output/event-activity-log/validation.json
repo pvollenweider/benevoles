@@ -1,66 +1,76 @@
 {
   "id": "EVENT_ACTIVITY_LOG",
   "slug": "event-activity-log",
-  "validatedAt": "2026-10-05T19:05:13.276Z",
+  "validatedAt": "2026-10-11T16:07:14.003Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 245120,
+  "captureMs": 259960,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 25654,
-      "audioMs": 25653,
-      "driftMs": 1
+      "visualMs": 24388,
+      "audioMs": 24386,
+      "driftMs": 2
     },
     {
       "id": "read",
-      "visualMs": 25712,
-      "audioMs": 25711,
+      "visualMs": 24283,
+      "audioMs": 24282,
       "driftMs": 1
     },
     {
       "id": "filters",
-      "visualMs": 25095,
-      "audioMs": 25094,
-      "driftMs": 1
+      "visualMs": 24509,
+      "audioMs": 24506,
+      "driftMs": 3
     },
     {
       "id": "period",
-      "visualMs": 23146,
-      "audioMs": 23146,
-      "driftMs": 0
+      "visualMs": 22602,
+      "audioMs": 22601,
+      "driftMs": 1
     },
     {
       "id": "replay",
-      "visualMs": 30529,
-      "audioMs": 30528,
+      "visualMs": 32679,
+      "audioMs": 32678,
       "driftMs": 1
     },
     {
       "id": "story",
-      "visualMs": 25782,
-      "audioMs": 25780,
-      "driftMs": 2
+      "visualMs": 28948,
+      "audioMs": 28945,
+      "driftMs": 3
     },
     {
       "id": "baseline",
-      "visualMs": 26363,
-      "audioMs": 26361,
-      "driftMs": 2
-    },
-    {
-      "id": "privacy",
-      "visualMs": 24177,
-      "audioMs": 24176,
+      "visualMs": 27433,
+      "audioMs": 27432,
       "driftMs": 1
     },
     {
+      "id": "privacy",
+      "visualMs": 23190,
+      "audioMs": 23187,
+      "driftMs": 3
+    },
+    {
       "id": "result",
-      "visualMs": 30592,
-      "audioMs": 30592,
-      "driftMs": 0
+      "visualMs": 29787,
+      "audioMs": 29784,
+      "driftMs": 3
     }
   ],
+  "anchorsChecked": 8,
+  "music": {
+    "voicedWindows": 230,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.6,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": -32.8,
+    "loudestMusicOnlyLufs": -31.6,
+    "medianVoiceLufs": -16.5
+  },
   "issues": []
 }

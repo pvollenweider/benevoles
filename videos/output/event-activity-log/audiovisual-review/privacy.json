@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:09:45.994Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "bc67e37f8b59352a0a303a05eadee8dcbaadb9e90fb6d0ea7aff68a0c3991113",
+  "clipSha256": "4e1b0d24ed2d87e466e2543d04150c99c09a43785cfc841c3b32bc3de8d31f92",
+  "scene": "privacy",
+  "review": {
+    "heardOpening": "Le journal n'est pas un carnet d'adresses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le journal n'est pas un carnet d'adresses.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Journal avec les filtres et les entrées d'historique récentes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés.",
+        "visibleSeconds": 3.7,
+        "visible": "Le filtre Type d'événement bascule sur Page, affichant les entrées de modification sans le contenu intégral",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore.",
+        "visibleSeconds": 7,
+        "visible": "Détail des entrées affichant le nom de l'auteur (Élodie Rochat) et les champs modifiés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres",
+        "visibleSeconds": 12,
+        "visible": "Navigation vers la page Inscriptions affichant les participants et leurs coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

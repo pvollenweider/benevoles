@@ -1,0 +1,12 @@
+STATUS: READY
+ID: EVENT_ACTIVITY_LOG
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe
+DURATION: 259.96 seconds
+MUSIC: smallest 13.6 / largest 18.4 LU; all windows pass.
+PROBLEMS: none. Corrected Historique d’inscription verified in replay-sheet.png. No layout bug observed.
+SOURCE CHANGES: none.
+AUDIO: existing narration and matching independent audit reused; no regeneration. Final MP4 independent ASR passes all nine chapters. VTT equals transcript; effects match markers and exact synthesized bytes (19 clicks, 1 key).
+REVIEW: all nine chapter sheets inspected, sentence/input timing and final MP4 checkpoints aligned. French dates including dd.mm.yyyy; Frise; benevol.app URLs; no localhost, old admin or dev overlay. Validation including anchors passes.
+EVIDENCE: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json.
+LIMIT: real-time subjective listening unavailable; no subjective certification claimed.

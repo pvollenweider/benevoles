@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T16:09:18.765Z",
+  "videoSha256": "aa3cd8586c4fa64b13b52452d5ce5e1930c9fe7056895dc43d24da9c26cd5f8d",
+  "promptSha256": "a162605a6b6ff8c51f9bf5b5f510d0b4246c86124f86df5da87230fa22c563d4",
+  "clipSha256": "76da8675ee06d130ae228358550eb4c1899615d9df8a08597674a341aebefcf5",
+  "scene": "story",
+  "review": {
+    "heardOpening": "Le mode Récit répond",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le mode Récit répond à une autre question",
+        "visibleSeconds": 0.5,
+        "visible": "Onglet Récit actif avec le menu déroulant « Choisissez un enchaînement à lire »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Ouvrons cet enchaînement et lisons le résultat",
+        "visibleSeconds": 13.2,
+        "visible": "Affichage du bloc Récit détaillant l'annulation par Aline Exemple et la libération d'une place",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.1,
+        "spoken": "Le récit utilise les liens de cause enregistrés par l'application",
+        "visibleSeconds": 21.3,
+        "visible": "Retour à la vue de sélection d'enchaînement après clic sur « Changer d'entrée »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

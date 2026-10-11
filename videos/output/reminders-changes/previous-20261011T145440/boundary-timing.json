@@ -1,0 +1,12 @@
+{
+  "anchor": "Les rappels partent autour de deux jours avant, autour de la",
+  "windowStart": 108.721,
+  "result": {
+    "found": true,
+    "startSeconds": 12.1,
+    "wordsHeard": "Les rappels partent autour de deux jours avant, autour de la"
+  },
+  "onset": 120.821,
+  "proposedCut": 120.8810625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,1222 @@
+{
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "captionsMatchTranscript": true,
+  "effectsMatchMarkers": true,
+  "clicks": 15,
+  "keys": 189,
+  "product": {
+    "commit": "c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da",
+    "sourceTree": "2423fbfb6764b6163a3c84843ec863e73f70beb7",
+    "productSourceSha256": "982fcc0bc34afe00d4ec867bd14adb2051de73f320d9e06b993c4e2cd07a9d87",
+    "buildId": "vU8UL5zPG_yurF8zdluCe",
+    "snapshot": "/tmp/benevoles-video-production.batch4",
+    "builtAt": "2026-10-11T16:01:24.202Z"
+  },
+  "sentences": [
+    {
+      "scene": "welcome",
+      "startMs": 0,
+      "endMs": 14277,
+      "sentences": [
+        {
+          "text": "Quand aucun modèle ne correspond vraiment, partez d’une page blanche.",
+          "startMs": 194,
+          "endMs": 3528,
+          "method": "silence",
+          "globalStartMs": 194,
+          "globalEndMs": 3528
+        },
+        {
+          "text": "L’événement est d’abord créé comme brouillon :",
+          "startMs": 4412,
+          "endMs": 6057,
+          "method": "silence",
+          "globalStartMs": 4412,
+          "globalEndMs": 6057
+        },
+        {
+          "text": "vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles.",
+          "startMs": 6433,
+          "endMs": 10584,
+          "method": "silence",
+          "globalStartMs": 6433,
+          "globalEndMs": 10584
+        },
+        {
+          "text": "Créons ensemble une fête de quartier sur deux jours.",
+          "startMs": 10906,
+          "endMs": 13920,
+          "method": "silence",
+          "globalStartMs": 10906,
+          "globalEndMs": 13920
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 3129
+        },
+        {
+          "kind": "click",
+          "atMs": 7327
+        }
+      ]
+    },
+    {
+      "scene": "identity-dates",
+      "startMs": 16440,
+      "endMs": 34191,
+      "sentences": [
+        {
+          "text": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation.",
+          "startMs": 536,
+          "endMs": 5933,
+          "method": "silence",
+          "globalStartMs": 16976,
+          "globalEndMs": 22373
+        },
+        {
+          "text": "La date de fin se cale d’abord sur la date de début ;",
+          "startMs": 6402,
+          "endMs": 9046,
+          "method": "silence",
+          "globalStartMs": 22842,
+          "globalEndMs": 25486
+        },
+        {
+          "text": "pour cette fête sur deux jours, nous la faisons terminer le dimanche.",
+          "startMs": 9601,
+          "endMs": 12680,
+          "method": "silence",
+          "globalStartMs": 26041,
+          "globalEndMs": 29120
+        },
+        {
+          "text": "Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+          "startMs": 13227,
+          "endMs": 17345,
+          "method": "silence",
+          "globalStartMs": 29667,
+          "globalEndMs": 33785
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "identity-dates",
+          "phrase": "pour cette fête sur deux",
+          "startMs": 9601,
+          "endMs": 12680,
+          "cueMs": 26043
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 16944
+        },
+        {
+          "kind": "key",
+          "atMs": 17251
+        },
+        {
+          "kind": "key",
+          "atMs": 17448
+        },
+        {
+          "kind": "key",
+          "atMs": 17546
+        },
+        {
+          "kind": "key",
+          "atMs": 17646
+        },
+        {
+          "kind": "key",
+          "atMs": 17745
+        },
+        {
+          "kind": "key",
+          "atMs": 17844
+        },
+        {
+          "kind": "key",
+          "atMs": 17943
+        },
+        {
+          "kind": "key",
+          "atMs": 18042
+        },
+        {
+          "kind": "key",
+          "atMs": 18141
+        },
+        {
+          "kind": "key",
+          "atMs": 18238
+        },
+        {
+          "kind": "key",
+          "atMs": 18337
+        },
+        {
+          "kind": "key",
+          "atMs": 18436
+        },
+        {
+          "kind": "key",
+          "atMs": 18537
+        },
+        {
+          "kind": "key",
+          "atMs": 18640
+        },
+        {
+          "kind": "key",
+          "atMs": 18740
+        },
+        {
+          "kind": "key",
+          "atMs": 18842
+        },
+        {
+          "kind": "key",
+          "atMs": 18944
+        },
+        {
+          "kind": "key",
+          "atMs": 19041
+        },
+        {
+          "kind": "key",
+          "atMs": 19140
+        },
+        {
+          "kind": "key",
+          "atMs": 19238
+        },
+        {
+          "kind": "key",
+          "atMs": 19337
+        },
+        {
+          "kind": "key",
+          "atMs": 19435
+        },
+        {
+          "kind": "key",
+          "atMs": 19533
+        },
+        {
+          "kind": "key",
+          "atMs": 19636
+        },
+        {
+          "kind": "key",
+          "atMs": 19738
+        },
+        {
+          "kind": "key",
+          "atMs": 19842
+        },
+        {
+          "kind": "key",
+          "atMs": 19946
+        },
+        {
+          "kind": "key",
+          "atMs": 20045
+        },
+        {
+          "kind": "click",
+          "atMs": 20826
+        },
+        {
+          "kind": "click",
+          "atMs": 26543
+        },
+        {
+          "kind": "click",
+          "atMs": 28475
+        },
+        {
+          "kind": "click",
+          "atMs": 30358
+        }
+      ]
+    },
+    {
+      "scene": "location",
+      "startMs": 34645,
+      "endMs": 53007,
+      "sentences": [
+        {
+          "text": "Le lieu reste lisible comme une adresse.",
+          "startMs": 404,
+          "endMs": 2341,
+          "method": "silence",
+          "globalStartMs": 35049,
+          "globalEndMs": 36986
+        },
+        {
+          "text": "Juste dessous, collez une paire de coordonnées ou un lien de carte reconnu.",
+          "startMs": 2951,
+          "endMs": 6750,
+          "method": "silence",
+          "globalStartMs": 37596,
+          "globalEndMs": 41395
+        },
+        {
+          "text": "L’application extrait le point et prépare un lien Vérifier sur la carte.",
+          "startMs": 7413,
+          "endMs": 11344,
+          "method": "silence",
+          "globalStartMs": 42058,
+          "globalEndMs": 45989
+        },
+        {
+          "text": "Le bénévole trouvera Voir sur la carte sur la page publique.",
+          "startMs": 11781,
+          "endMs": 14896,
+          "method": "silence",
+          "globalStartMs": 46426,
+          "globalEndMs": 49541
+        },
+        {
+          "text": "La carte externe ne s’ouvre que lorsqu’on suit ce lien.",
+          "startMs": 15333,
+          "endMs": 17682,
+          "method": "silence",
+          "globalStartMs": 49978,
+          "globalEndMs": 52327
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "location",
+          "phrase": "Juste dessous, collez une paire",
+          "startMs": 2951,
+          "endMs": 6750,
+          "cueMs": 37597
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 35160
+        },
+        {
+          "kind": "click",
+          "atMs": 38092
+        },
+        {
+          "kind": "key",
+          "atMs": 38398
+        },
+        {
+          "kind": "key",
+          "atMs": 38497
+        },
+        {
+          "kind": "key",
+          "atMs": 38595
+        },
+        {
+          "kind": "key",
+          "atMs": 38694
+        },
+        {
+          "kind": "key",
+          "atMs": 38793
+        },
+        {
+          "kind": "key",
+          "atMs": 38889
+        },
+        {
+          "kind": "key",
+          "atMs": 38990
+        },
+        {
+          "kind": "key",
+          "atMs": 39092
+        },
+        {
+          "kind": "key",
+          "atMs": 39193
+        },
+        {
+          "kind": "key",
+          "atMs": 39295
+        },
+        {
+          "kind": "key",
+          "atMs": 39400
+        },
+        {
+          "kind": "key",
+          "atMs": 39504
+        },
+        {
+          "kind": "key",
+          "atMs": 39607
+        },
+        {
+          "kind": "key",
+          "atMs": 39709
+        },
+        {
+          "kind": "key",
+          "atMs": 39810
+        },
+        {
+          "kind": "key",
+          "atMs": 39912
+        },
+        {
+          "kind": "key",
+          "atMs": 40015
+        },
+        {
+          "kind": "key",
+          "atMs": 40116
+        },
+        {
+          "kind": "key",
+          "atMs": 40219
+        }
+      ]
+    },
+    {
+      "scene": "public-content",
+      "startMs": 55170,
+      "endMs": 74365,
+      "sentences": [
+        {
+          "text": "Les instructions publiques apparaissent avant l’inscription :",
+          "startMs": 681,
+          "endMs": 3646,
+          "method": "silence",
+          "globalStartMs": 55851,
+          "globalEndMs": 58816
+        },
+        {
+          "text": "indiquez ici l’entrée à utiliser et le moment d’arrivée.",
+          "startMs": 3779,
+          "endMs": 6349,
+          "method": "silence",
+          "globalStartMs": 58949,
+          "globalEndMs": 61519
+        },
+        {
+          "text": "Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables.",
+          "startMs": 7552,
+          "endMs": 13368,
+          "method": "silence",
+          "globalStartMs": 62722,
+          "globalEndMs": 68538
+        },
+        {
+          "text": "Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.",
+          "startMs": 13891,
+          "endMs": 18494,
+          "method": "silence",
+          "globalStartMs": 69061,
+          "globalEndMs": 73664
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 55707
+        },
+        {
+          "kind": "key",
+          "atMs": 56015
+        },
+        {
+          "kind": "key",
+          "atMs": 56113
+        },
+        {
+          "kind": "key",
+          "atMs": 56213
+        },
+        {
+          "kind": "key",
+          "atMs": 56311
+        },
+        {
+          "kind": "key",
+          "atMs": 56409
+        },
+        {
+          "kind": "key",
+          "atMs": 56509
+        },
+        {
+          "kind": "key",
+          "atMs": 56607
+        },
+        {
+          "kind": "key",
+          "atMs": 56705
+        },
+        {
+          "kind": "key",
+          "atMs": 56805
+        },
+        {
+          "kind": "key",
+          "atMs": 56904
+        },
+        {
+          "kind": "key",
+          "atMs": 57002
+        },
+        {
+          "kind": "key",
+          "atMs": 57104
+        },
+        {
+          "kind": "key",
+          "atMs": 57205
+        },
+        {
+          "kind": "key",
+          "atMs": 57310
+        },
+        {
+          "kind": "key",
+          "atMs": 57413
+        },
+        {
+          "kind": "key",
+          "atMs": 57512
+        },
+        {
+          "kind": "key",
+          "atMs": 57613
+        },
+        {
+          "kind": "key",
+          "atMs": 57716
+        },
+        {
+          "kind": "key",
+          "atMs": 57818
+        },
+        {
+          "kind": "key",
+          "atMs": 57920
+        },
+        {
+          "kind": "key",
+          "atMs": 58025
+        },
+        {
+          "kind": "key",
+          "atMs": 58127
+        },
+        {
+          "kind": "key",
+          "atMs": 58228
+        },
+        {
+          "kind": "key",
+          "atMs": 58330
+        },
+        {
+          "kind": "key",
+          "atMs": 58432
+        },
+        {
+          "kind": "key",
+          "atMs": 58536
+        },
+        {
+          "kind": "key",
+          "atMs": 58637
+        },
+        {
+          "kind": "key",
+          "atMs": 58739
+        },
+        {
+          "kind": "key",
+          "atMs": 58841
+        },
+        {
+          "kind": "key",
+          "atMs": 58945
+        },
+        {
+          "kind": "key",
+          "atMs": 59048
+        },
+        {
+          "kind": "key",
+          "atMs": 59147
+        },
+        {
+          "kind": "key",
+          "atMs": 59246
+        },
+        {
+          "kind": "key",
+          "atMs": 59349
+        },
+        {
+          "kind": "key",
+          "atMs": 59448
+        },
+        {
+          "kind": "key",
+          "atMs": 59554
+        },
+        {
+          "kind": "key",
+          "atMs": 59653
+        },
+        {
+          "kind": "key",
+          "atMs": 59756
+        },
+        {
+          "kind": "key",
+          "atMs": 59856
+        },
+        {
+          "kind": "key",
+          "atMs": 59957
+        },
+        {
+          "kind": "key",
+          "atMs": 60061
+        },
+        {
+          "kind": "key",
+          "atMs": 60164
+        },
+        {
+          "kind": "key",
+          "atMs": 60268
+        },
+        {
+          "kind": "key",
+          "atMs": 60370
+        },
+        {
+          "kind": "key",
+          "atMs": 60476
+        },
+        {
+          "kind": "key",
+          "atMs": 60578
+        },
+        {
+          "kind": "key",
+          "atMs": 60708
+        },
+        {
+          "kind": "key",
+          "atMs": 60810
+        },
+        {
+          "kind": "key",
+          "atMs": 60913
+        },
+        {
+          "kind": "key",
+          "atMs": 61014
+        },
+        {
+          "kind": "key",
+          "atMs": 61118
+        },
+        {
+          "kind": "key",
+          "atMs": 61218
+        },
+        {
+          "kind": "key",
+          "atMs": 61324
+        },
+        {
+          "kind": "key",
+          "atMs": 61423
+        },
+        {
+          "kind": "key",
+          "atMs": 61524
+        },
+        {
+          "kind": "key",
+          "atMs": 61622
+        },
+        {
+          "kind": "key",
+          "atMs": 61721
+        },
+        {
+          "kind": "key",
+          "atMs": 61821
+        },
+        {
+          "kind": "key",
+          "atMs": 62022
+        },
+        {
+          "kind": "key",
+          "atMs": 62120
+        },
+        {
+          "kind": "key",
+          "atMs": 62222
+        },
+        {
+          "kind": "key",
+          "atMs": 62324
+        },
+        {
+          "kind": "key",
+          "atMs": 62428
+        },
+        {
+          "kind": "key",
+          "atMs": 64393
+        },
+        {
+          "kind": "click",
+          "atMs": 64907
+        },
+        {
+          "kind": "key",
+          "atMs": 65214
+        },
+        {
+          "kind": "key",
+          "atMs": 65313
+        },
+        {
+          "kind": "key",
+          "atMs": 65412
+        },
+        {
+          "kind": "key",
+          "atMs": 65509
+        },
+        {
+          "kind": "key",
+          "atMs": 65609
+        },
+        {
+          "kind": "key",
+          "atMs": 65708
+        },
+        {
+          "kind": "key",
+          "atMs": 65806
+        },
+        {
+          "kind": "key",
+          "atMs": 65905
+        },
+        {
+          "kind": "key",
+          "atMs": 66007
+        },
+        {
+          "kind": "key",
+          "atMs": 66210
+        },
+        {
+          "kind": "key",
+          "atMs": 66309
+        },
+        {
+          "kind": "key",
+          "atMs": 66408
+        },
+        {
+          "kind": "key",
+          "atMs": 66511
+        },
+        {
+          "kind": "key",
+          "atMs": 66610
+        },
+        {
+          "kind": "key",
+          "atMs": 66708
+        },
+        {
+          "kind": "key",
+          "atMs": 66806
+        },
+        {
+          "kind": "key",
+          "atMs": 66903
+        },
+        {
+          "kind": "key",
+          "atMs": 67000
+        },
+        {
+          "kind": "key",
+          "atMs": 67102
+        },
+        {
+          "kind": "key",
+          "atMs": 67205
+        },
+        {
+          "kind": "key",
+          "atMs": 67309
+        },
+        {
+          "kind": "key",
+          "atMs": 67412
+        },
+        {
+          "kind": "key",
+          "atMs": 67514
+        },
+        {
+          "kind": "key",
+          "atMs": 67614
+        },
+        {
+          "kind": "key",
+          "atMs": 67718
+        },
+        {
+          "kind": "key",
+          "atMs": 67821
+        },
+        {
+          "kind": "key",
+          "atMs": 67923
+        },
+        {
+          "kind": "key",
+          "atMs": 68025
+        },
+        {
+          "kind": "key",
+          "atMs": 68126
+        },
+        {
+          "kind": "key",
+          "atMs": 68228
+        },
+        {
+          "kind": "key",
+          "atMs": 68330
+        },
+        {
+          "kind": "key",
+          "atMs": 68432
+        },
+        {
+          "kind": "key",
+          "atMs": 68536
+        },
+        {
+          "kind": "key",
+          "atMs": 68635
+        },
+        {
+          "kind": "key",
+          "atMs": 68734
+        },
+        {
+          "kind": "key",
+          "atMs": 68833
+        },
+        {
+          "kind": "key",
+          "atMs": 68933
+        },
+        {
+          "kind": "key",
+          "atMs": 69034
+        },
+        {
+          "kind": "key",
+          "atMs": 69135
+        },
+        {
+          "kind": "key",
+          "atMs": 69238
+        },
+        {
+          "kind": "key",
+          "atMs": 69340
+        },
+        {
+          "kind": "key",
+          "atMs": 69439
+        },
+        {
+          "kind": "key",
+          "atMs": 69542
+        },
+        {
+          "kind": "key",
+          "atMs": 69742
+        },
+        {
+          "kind": "key",
+          "atMs": 69840
+        },
+        {
+          "kind": "key",
+          "atMs": 69941
+        },
+        {
+          "kind": "key",
+          "atMs": 70043
+        },
+        {
+          "kind": "key",
+          "atMs": 70146
+        },
+        {
+          "kind": "key",
+          "atMs": 70248
+        },
+        {
+          "kind": "key",
+          "atMs": 70349
+        },
+        {
+          "kind": "key",
+          "atMs": 70453
+        },
+        {
+          "kind": "key",
+          "atMs": 70558
+        },
+        {
+          "kind": "key",
+          "atMs": 70659
+        },
+        {
+          "kind": "key",
+          "atMs": 70761
+        },
+        {
+          "kind": "key",
+          "atMs": 70868
+        },
+        {
+          "kind": "key",
+          "atMs": 70970
+        },
+        {
+          "kind": "key",
+          "atMs": 71072
+        },
+        {
+          "kind": "key",
+          "atMs": 71172
+        },
+        {
+          "kind": "key",
+          "atMs": 71275
+        },
+        {
+          "kind": "key",
+          "atMs": 71377
+        },
+        {
+          "kind": "key",
+          "atMs": 71479
+        },
+        {
+          "kind": "key",
+          "atMs": 71580
+        },
+        {
+          "kind": "key",
+          "atMs": 71682
+        },
+        {
+          "kind": "key",
+          "atMs": 71785
+        },
+        {
+          "kind": "key",
+          "atMs": 71885
+        },
+        {
+          "kind": "key",
+          "atMs": 71983
+        },
+        {
+          "kind": "key",
+          "atMs": 72082
+        },
+        {
+          "kind": "key",
+          "atMs": 72182
+        },
+        {
+          "kind": "key",
+          "atMs": 72282
+        },
+        {
+          "kind": "key",
+          "atMs": 72380
+        },
+        {
+          "kind": "key",
+          "atMs": 72479
+        },
+        {
+          "kind": "key",
+          "atMs": 72579
+        },
+        {
+          "kind": "key",
+          "atMs": 72680
+        },
+        {
+          "kind": "key",
+          "atMs": 72782
+        },
+        {
+          "kind": "key",
+          "atMs": 72884
+        },
+        {
+          "kind": "key",
+          "atMs": 72988
+        },
+        {
+          "kind": "key",
+          "atMs": 73092
+        },
+        {
+          "kind": "key",
+          "atMs": 73193
+        }
+      ]
+    },
+    {
+      "scene": "phone-color",
+      "startMs": 74816,
+      "endMs": 91771,
+      "sentences": [
+        {
+          "text": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles le jour même.",
+          "startMs": 554,
+          "endMs": 5758,
+          "method": "silence",
+          "globalStartMs": 75370,
+          "globalEndMs": 80574
+        },
+        {
+          "text": "La couleur personnalise l’en-tête public avec une palette prévue pour garder un texte lisible.",
+          "startMs": 5915,
+          "endMs": 10388,
+          "method": "silence",
+          "globalStartMs": 80731,
+          "globalEndMs": 85204
+        },
+        {
+          "text": "Choisissons Émeraude et regardons l’aperçu.",
+          "startMs": 11104,
+          "endMs": 13717,
+          "method": "silence",
+          "globalStartMs": 85920,
+          "globalEndMs": 88533
+        },
+        {
+          "text": "Ces deux réglages pourront être modifiés plus tard.",
+          "startMs": 14688,
+          "endMs": 16490,
+          "method": "silence",
+          "globalStartMs": 89504,
+          "globalEndMs": 91306
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "phone-color",
+          "phrase": "Rendez le téléphone obligatoire seulement",
+          "startMs": 554,
+          "endMs": 5758,
+          "cueMs": 75372
+        },
+        {
+          "segmentId": "phone-color",
+          "phrase": "Choisissons Émeraude et regardons l’aperçu.",
+          "startMs": 11104,
+          "endMs": 13717,
+          "cueMs": 85921
+        },
+        {
+          "segmentId": "phone-color",
+          "phrase": "Ces deux réglages pourront être",
+          "startMs": 14688,
+          "endMs": 16490,
+          "cueMs": 89505
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 75839
+        },
+        {
+          "kind": "click",
+          "atMs": 86390
+        }
+      ]
+    },
+    {
+      "scene": "create",
+      "startMs": 92223,
+      "endMs": 107936,
+      "sentences": [
+        {
+          "text": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement l’étape des créneaux.",
+          "startMs": 485,
+          "endMs": 5622,
+          "method": "silence",
+          "globalStartMs": 92708,
+          "globalEndMs": 97845
+        },
+        {
+          "text": "Rien n’est encore publié.",
+          "startMs": 6064,
+          "endMs": 7155,
+          "method": "silence",
+          "globalStartMs": 98287,
+          "globalEndMs": 99378
+        },
+        {
+          "text": "Le bandeau de progression montre clairement qu’il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+          "startMs": 8112,
+          "endMs": 15185,
+          "method": "silence",
+          "globalStartMs": 100335,
+          "globalEndMs": 107408
+        }
+      ],
+      "anchors": [],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 94890
+        }
+      ]
+    },
+    {
+      "scene": "autosave",
+      "startMs": 108388,
+      "endMs": 128782,
+      "sentences": [
+        {
+          "text": "Après la création, les modifications des réglages s’enregistrent automatiquement après une courte pause.",
+          "startMs": 531,
+          "endMs": 7268,
+          "method": "silence",
+          "globalStartMs": 108919,
+          "globalEndMs": 115656
+        },
+        {
+          "text": "Corrigeons la description, puis attendons Modifications enregistrées à, suivi de l’heure.",
+          "startMs": 7409,
+          "endMs": 12163,
+          "method": "silence",
+          "globalStartMs": 115797,
+          "globalEndMs": 120551
+        },
+        {
+          "text": "Ce témoin confirme la sauvegarde.",
+          "startMs": 12317,
+          "endMs": 14225,
+          "method": "silence",
+          "globalStartMs": 120705,
+          "globalEndMs": 122613
+        },
+        {
+          "text": "Si la page dit Modifications non enregistrées, restez sur place et réessayez avant de partir.",
+          "startMs": 14735,
+          "endMs": 20009,
+          "method": "silence",
+          "globalStartMs": 123123,
+          "globalEndMs": 128397
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "autosave",
+          "phrase": "Corrigeons la description",
+          "startMs": 7409,
+          "endMs": 12163,
+          "cueMs": 115799
+        }
+      ],
+      "inputs": [
+        {
+          "kind": "click",
+          "atMs": 116288
+        }
+      ]
+    },
+    {
+      "scene": "result",
+      "startMs": 129234,
+      "endMs": 146161,
+      "sentences": [
+        {
+          "text": "Le résultat est un brouillon structuré, encore invisible au public :",
+          "startMs": 477,
+          "endMs": 3952,
+          "method": "silence",
+          "globalStartMs": 129711,
+          "globalEndMs": 133186
+        },
+        {
+          "text": "identité, dates, adresse, point sur la carte et messages sont prêts.",
+          "startMs": 4297,
+          "endMs": 8509,
+          "method": "silence",
+          "globalStartMs": 133531,
+          "globalEndMs": 137743
+        },
+        {
+          "text": "Retrouvons-le dans les événements.",
+          "startMs": 9161,
+          "endMs": 10752,
+          "method": "silence",
+          "globalStartMs": 138395,
+          "globalEndMs": 139986
+        },
+        {
+          "text": "Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
+          "startMs": 11273,
+          "endMs": 16686,
+          "method": "silence",
+          "globalStartMs": 140507,
+          "globalEndMs": 145920
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "result",
+          "phrase": "Retrouvons-le dans les événements",
+          "startMs": 9161,
+          "endMs": 10752,
+          "cueMs": 138398
+        }
+      ],
+      "inputs": []
+    }
+  ]
+}

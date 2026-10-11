@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:35:36.811Z",
-  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
-  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
-  "clipSha256": "e8339bc1d72fbd612c3edd52ab7e2b94563262f58a10393720c835d84c703d4d",
+  "reviewedAt": "2026-10-11T16:24:00.247Z",
+  "videoSha256": "bc05921fa19ac799780c069dcb03c95446201246078fa3fc73640f0155e920f4",
+  "promptSha256": "d4a0423d764a7be690959bb82407c02955756ee00515d05ead968490f96bd3d9",
+  "clipSha256": "d7e0b7a8909348fd2e784a95ef575612f3c59a5a35453dfec2feae19cc4f40e8",
   "scene": "identity-dates",
   "review": {
     "heardOpening": "Commençons par un titre parlant",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.1,
         "spoken": "Commençons par un titre parlant",
-        "visibleSeconds": 1,
-        "visible": "Saisie du titre Fête du quartier des Tilleuls",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie de « Fête du quartier des Tilleuls » dans le champ Titre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.3,
         "spoken": "une courte description",
-        "visibleSeconds": 3.5,
-        "visible": "Saisie de la description de l'événement",
+        "visibleSeconds": 3.6,
+        "visible": "Renseignement du champ Description",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,15 +28,15 @@
         "spokenSeconds": 6.8,
         "spoken": "La date de fin se cale d’abord sur la date de début",
         "visibleSeconds": 8.5,
-        "visible": "Affichage des champs Date début et Date fin calés au 14.11.2026",
+        "visible": "Saisie de la date de début au 14.11.2026 et duplication automatique dans le champ Date fin",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
+        "spokenSeconds": 9.8,
         "spoken": "nous la faisons terminer le dimanche",
         "visibleSeconds": 12,
-        "visible": "Modification du champ Date fin au 15.11.2026",
+        "visible": "Modification de la date de fin au 15.11.2026",
         "sync": "aligned",
         "severity": "none"
       }

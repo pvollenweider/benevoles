@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:42:52.439Z",
-  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
-  "promptSha256": "493c8bcb9657dea50780113d8e4dce725919369d52e07416962b1fb4667d0390",
-  "clipSha256": "684b779fc99b6fa729208550a51c5669d9f9f9695524d4224bde35ffaec357f0",
+  "reviewedAt": "2026-10-11T16:18:29.585Z",
+  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
+  "promptSha256": "d91f14d061b08ad90a186343705359b7e276b6e9267cd26526482e88f04b7202",
+  "clipSha256": "1815514f9a291ccc2f5769256f711492510f1b44891d941c12a8ef7dfeac9719",
   "scene": "event-switch",
   "review": {
     "heardOpening": "Les trois cases que nous venons de voir",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Les trois cases que nous venons de voir concernent toute l'organisation.",
-        "visibleSeconds": 0.5,
-        "visible": "Page Réglages des emails avec les cases à cocher sous l'encart d'introduction.",
+        "spokenSeconds": 8.5,
+        "spoken": "Décochons Rappels automatiques",
+        "visibleSeconds": 9,
+        "visible": "La case Rappels automatiques est décochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "le formulaire de l'événement ne propose pas de bouton pour couper seulement ses rappels.",
-        "visibleSeconds": 2,
-        "visible": "Formulaire de modification de l'événement affiché à l'écran.",
+        "spokenSeconds": 13,
+        "spoken": "Réactivons-les pour poursuivre notre exemple",
+        "visibleSeconds": 14,
+        "visible": "La case Rappels automatiques est recochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "Regardons maintenant notre événement en brouillon.",
-        "visibleSeconds": 16.5,
-        "visible": "Affichage de la fiche de l'événement Atelier en brouillon.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 19.5,
-        "spoken": "Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
-        "visibleSeconds": 17,
-        "visible": "Indication 'Aucun rappel n'est envoyé' visible sous le statut brouillon.",
+        "spokenSeconds": 18.5,
+        "spoken": "Regardons maintenant notre événement en brouillon",
+        "visibleSeconds": 18,
+        "visible": "Affichage de la page de l'événement Atelier en brouillon",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bonne intelligibilité d'ensemble."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

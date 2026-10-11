@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:18:35.260Z",
+  "revalidatedAt": "2026-10-11T15:18:45.377Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "eef47acb88f855a43e4992e60f37c9bff09def3e264871a961316d93d3f9d047",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "8ef032a22295b628c54a6216443ac230745be9fef2991a521f0c857d9dd44998",
+      "recognized": "Quand aucun modèle ne correspond vraiment, partez d'une page blanche. L'événement est d'abord créé comme brouillon. Vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles. Créons ensemble une fête de quartier sur deux jours.",
+      "expected": "Quand aucun modèle ne correspond vraiment, partez d’une page blanche. L’événement est d’abord créé comme brouillon : vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles. Créons ensemble une fête de quartier sur deux jours.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "identity-dates",
+      "audioSha256": "e21a1defe7ba1cee42e4a7c3244644886fefac69e9c82889a2e3a47e7d4e2ef4",
+      "recognized": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d'abord sur la date de début. Pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+      "expected": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d’abord sur la date de début ; pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "location",
+      "audioSha256": "406653e5c2c33a5922061530e7fd3bb27a9c45e3a432217cd35075f018917cf0",
+      "recognized": "Le lieu reste lisible comme une adresse. Juste dessous, coller une paire de coordonnées ou un lien de carte reconnue. L'application extrait le point et prépare un lien vérifier sur la carte. Le bénévole trouvera voir sur la carte sur la page publique. La carte externe ne s'ouvre que lorsque l'on suit ce lien.",
+      "expected": "Le lieu reste lisible comme une adresse. Juste dessous, collez une paire de coordonnées ou un lien de carte reconnu. L’application extrait le point et prépare un lien Vérifier sur la carte. Le bénévole trouvera Voir sur la carte sur la page publique. La carte externe ne s’ouvre que lorsqu’on suit ce lien.",
+      "wordErrorRate": 0.07142857142857142,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "public-content",
+      "audioSha256": "b272b9056f6f86a9f12dcfeafdfa44c6923edc1e9dd63cfac182fdd8d329750e",
+      "recognized": "Les instructions publiques apparaissent avant l'inscription. Indiquez ici l'entrée à utiliser et le moment d'arriver. Le message de confirmation est affiché juste après l'inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape sans remplacer les consignes propres à chaque créneau.",
+      "expected": "Les instructions publiques apparaissent avant l’inscription : indiquez ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.",
+      "wordErrorRate": 0.01818181818181818,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "phone-color",
+      "audioSha256": "2ba8bb526e39174558b1c162bc0d8cf88512a99b15d1ec1f8f3d12e18c79e37b",
+      "recognized": "Rendez le téléphone obligatoire seulement si l'équipe doit joindre les bénévoles le jour même. La couleur personnalise l'en-tête public avec une palette prévue pour garder un texte lisible. Choisissons émeraude et regardons l'aperçu. Ces deux réglages pourront être modifiés plus tard.",
+      "expected": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles le jour même. La couleur personnalise l’en-tête public avec une palette prévue pour garder un texte lisible. Choisissons Émeraude et regardons l’aperçu. Ces deux réglages pourront être modifiés plus tard.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "c1f9e75b3d195f05056e32a273414a565e5380eae65978006db9752eddb86ce1",
+      "recognized": "Le bouton Créer l'événement enregistre maintenant un brouillon, puis ouvre directement l'étape des créneaux. Rien n'est encore publié. Le bandeau de progression montre clairement qu'il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+      "expected": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement l’étape des créneaux. Rien n’est encore publié. Le bandeau de progression montre clairement qu’il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "autosave",
+      "audioSha256": "ef94d1cbfe1841ecd97d57bbce95bf61b81d024dfd201febf236d67f108763ed",
+      "recognized": "Après la création, les modifications des réglages s'enregistrent automatiquement après une courte pause. Corrigeons la description, puis attendons. Modifications enregistrées à, suivi de l'heure, ce témoin confirme la sauvegarde. Si la page dit modifications non enregistrées, restez sur place et réessayez avant de partir.",
+      "expected": "Après la création, les modifications des réglages s’enregistrent automatiquement après une courte pause. Corrigeons la description, puis attendons Modifications enregistrées à, suivi de l’heure. Ce témoin confirme la sauvegarde. Si la page dit Modifications non enregistrées, restez sur place et réessayez avant de partir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "e682f5ac826591032e86f7828424a3c53cbb78a020716e6a7f6561b7569e1d01",
+      "recognized": "Le résultat est un brouillon structuré, encore invisible au public. Identité, date, adresse, point sur la carte et message sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l'aperçu, puis publier quand tout est prêt.",
+      "expected": "Le résultat est un brouillon structuré, encore invisible au public : identité, dates, adresse, point sur la carte et messages sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
+      "wordErrorRate": 0.044444444444444446,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

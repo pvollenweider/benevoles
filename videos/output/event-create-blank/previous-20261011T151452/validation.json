@@ -1,0 +1,60 @@
+{
+  "id": "EVENT_CREATE_BLANK",
+  "slug": "event-create-blank",
+  "validatedAt": "2026-10-06T18:34:26.565Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 153640,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14277,
+      "audioMs": 14275,
+      "driftMs": 2
+    },
+    {
+      "id": "identity-dates",
+      "visualMs": 17751,
+      "audioMs": 17749,
+      "driftMs": 2
+    },
+    {
+      "id": "location",
+      "visualMs": 18361,
+      "audioMs": 18359,
+      "driftMs": 2
+    },
+    {
+      "id": "public-content",
+      "visualMs": 19193,
+      "audioMs": 19193,
+      "driftMs": 0
+    },
+    {
+      "id": "phone-color",
+      "visualMs": 16956,
+      "audioMs": 16954,
+      "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 15713,
+      "audioMs": 15711,
+      "driftMs": 2
+    },
+    {
+      "id": "autosave",
+      "visualMs": 20394,
+      "audioMs": 20392,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 16929,
+      "audioMs": 16927,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}
