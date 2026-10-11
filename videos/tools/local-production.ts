@@ -90,7 +90,7 @@ async function main() {
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
       const commonTake = ["EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", ...memberTakes].includes(rest[0])
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "GLOBAL_SEARCH") Object.assign(env, { ORG_ADMIN_EMAIL: "video.search.owner@example.org", VIDEO_ORG: "formation-recherche", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "ATTENDANCE_CHECK_IN") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", ORG_ADMIN_EMAIL: "video.dayof.owner@example.org", VIDEO_ORG: "formation-jour-j", VIDEO_EVENT_SLUG: "atelier-pointage" })
@@ -167,6 +167,8 @@ async function main() {
     if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
     commandArgs = ["--import", "tsx", script, ...rest]
   } else throw new Error("Usage: local-production.ts serve TEMP_COPY | run VIDEO_TOOL [LAST_MINUTE_CHANGES]")
+  // Auth.js prefers AUTH_URL over NEXTAUTH_URL; never inherit a different video port.
+  env.AUTH_URL = env.NEXTAUTH_URL
   const child = spawn(process.execPath, commandArgs, { env, stdio: "inherit", cwd: childWorkingDirectory })
   if (serving && child.pid) {
     await mkdir("videos/output", { recursive: true })
