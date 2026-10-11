@@ -16,7 +16,7 @@ Une activité qui revient chaque semaine (épicerie participative, accueil, dist
 6. Créer les créneaux ; la permanence apparaît sous « Permanences récurrentes ».
 7. « Modifier à partir d'une date » sur « Caisse et accueil » : 3 personnes par créneau, « Modifier ces dates ».
 8. « Arrêter à partir d'une date » sur « Réception des livraisons », à partir du mercredi de la cinquième semaine : deux dates avec inscrits listées, puis « Annuler aussi ces 2 dates et prévenir les inscrits ».
-9. Page publique de l'événement : « Choisir le mois », passer au mois suivant.
+9. Page publique de l'événement : les boutons de mois indiquent chacun leur nombre de dates ; passer au mois suivant. « Choisir le mois » est le nom accessible du groupe, pas un titre affiché : ne pas le décrire comme un texte visible.
 
 ## Résultat visible
 
