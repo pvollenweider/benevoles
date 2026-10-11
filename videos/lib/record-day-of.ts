@@ -3,6 +3,7 @@
 /** Real Jour J UI journey. Requires a pre-existing dedicated fixture; never seeds or fakes time. */
 import assert from "node:assert/strict"
 import type { Locator, Page } from "playwright"
+import type { Cue } from "./sentence-timing"
 
 export type DayOfRecordingFixture = {
   eventId: string; registrationId: string; volunteerName: string; volunteerEmail: string; phone: string
@@ -18,7 +19,7 @@ export function validateDayOfFixture(fixture: DayOfRecordingFixture) {
   assert(/^079000\d{4}$/.test(fixture.phone.replace(/\s/g, "")), "Fictional phone required")
   assert(fixture.roleSearch && fixture.accentSearch && fixture.expectedAccentName.includes("é"), "Real role and accent-insensitive searches required")
 }
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export type DayOfRecordingOptions = {
   page: Page; base: string; productCommit: string; fixture: DayOfRecordingFixture
   scene: Scene; settle: (page: Page) => Promise<void>; tap: (page: Page, locator: Locator) => Promise<void>
@@ -66,10 +67,10 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     await scene("dayof-window", async at => {
       await section("En cours").locator(`#dayof-shift-${f.runningShiftId}`).waitFor()
       await section("En cours").locator(`#dayof-shift-${f.nightShiftId}`).waitFor()
-      await at(0.3); await card(f.runningShiftId).scrollIntoViewIfNeeded()
+      await at("Dans les trois prochaines heures"); await card(f.runningShiftId).scrollIntoViewIfNeeded()
       assert(/présent.*attendu/i.test(await card(f.runningShiftId).innerText()), "Actual presence/expected counter required")
-      await at(0.55); await section("Dans les 3 prochaines heures").locator(`#dayof-shift-${f.upcomingShiftId}`).scrollIntoViewIfNeeded()
-      await at(0.8); await tap(page, section("Plus tôt aujourd'hui").locator("summary"))
+      await at(0.55) /* mid-sentence */; await section("Dans les 3 prochaines heures").locator(`#dayof-shift-${f.upcomingShiftId}`).scrollIntoViewIfNeeded()
+      await at("Ici, nous montrons cette page"); await tap(page, section("Plus tôt aujourd'hui").locator("summary"))
       await card(f.earlierShiftId).waitFor({ state: "visible" })
       await evidence("dayof-window", { actualServerTime: true, fourTemporalCasesVisible: true, mobileViewportSimulationOnly: true })
     })
@@ -77,9 +78,9 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     await scene("dayof-search", async at => {
       await typeNaturally(page, search(), f.accentSearch)
       await page.getByText(f.expectedAccentName, { exact: true }).first().waitFor()
-      await at(0.35); await replaceSearch(f.roleSearch)
+      await at("Les personnes de ce poste"); await replaceSearch(f.roleSearch)
       await page.locator('[id^="dayof-shift-"]').filter({ hasText: f.roleSearch }).first().waitFor({ state: "visible" })
-      await at(0.56); await replaceSearch("")
+      await at("Effaçons la recherche pour retrouver"); await replaceSearch("")
       await card(f.runningShiftId).waitFor({ state: "visible" })
       await evidence("dayof-search", { actualAccentAndRoleSearches: true, cleared: true })
     })
@@ -92,8 +93,8 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     })
     await scene("dayof-checkin", async at => {
       await card(f.runningShiftId).scrollIntoViewIfNeeded()
-      await at(0.12); await toggle(true)
-      await at(0.45); await go()
+      await at(0.12) /* mid-sentence */; await toggle(true)
+      await at(0.45) /* mid-sentence */; await go()
       await card(f.runningShiftId).scrollIntoViewIfNeeded()
       const after = await options.verifyFixture()
       assert(after.checkedInAt !== null && after.status === "active", "Check-in must persist in actual fixture")
@@ -102,15 +103,15 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     })
     await scene("dayof-refresh", async at => {
       await page.getByRole("button", { name: "Actualiser", exact: true }).scrollIntoViewIfNeeded()
-      await at(0.48)
+      await at("Dans cette démonstration, nous actualisons")
       await tap(page, page.getByRole("button", { name: "Actualiser", exact: true }))
       await page.getByRole("status").filter({ hasText: /Liste mise à jour à/ }).waitFor()
-      await at(0.6); await page.getByText(/^Mis à jour à/).waitFor()
+      await at("nous ne prétendons pas qu'une"); await page.getByText(/^Mis à jour à/).waitFor()
       await evidence("dayof-refresh", { actualRefresh: true, otherDeviceMutationDemonstrated: false })
     })
     await scene("dayof-undo", async at => {
       await card(f.runningShiftId).scrollIntoViewIfNeeded(); await toggle(false)
-      await at(0.24)
+      await at("Zoé conserve sa place, et")
       await page.reload({ waitUntil: "domcontentloaded" }); await settle(page)
       await card(f.runningShiftId).scrollIntoViewIfNeeded()
       const after = await options.verifyFixture()

@@ -277,9 +277,15 @@ trois des quatre prises du pilote `SHIFT_RECURRENCE`.
   remesure ces phrases sur l'audio du rendu et refuse un clic ou une frappe placés après l'attente
   mais avant le début de sa phrase (120 ms de marge).
 
-Pour migrer une scène : remplacer chaque `at(x)` placé juste avant l'action que décrit une phrase
-par `at("<premiers mots de cette phrase>")`. Les scénarios de `videos/lib/record-*.ts` qui typent
-`at: (fraction: number) => …` passent au type `Cue` de `sentence-timing.ts` pour en profiter.
+Tous les scénarios sont migrés : une action annoncée par une phrase attend cette phrase
+(`at("<premiers mots de cette phrase>")`). Un pourcentage ne reste que là où l'action tombe au
+milieu d'une phrase (commentaire `/* mid-sentence */`) ou dans une fonction partagée par plusieurs
+scènes, qui ne sait pas de quelle narration il s'agit (`/* shared helper: scene-independent */`).
+Les scénarios de `videos/lib/record-*.ts` typent leur paramètre avec `Cue` (`sentence-timing.ts`).
+
+`videos/lib/__tests__/sentence-anchors.test.ts` vérifie que chaque `at("…")` désigne exactement
+une phrase de sa scène (la plus proche `scene("id", …)` au-dessus) : une coquille ou une narration
+modifiée sans son repère échoue en test, pas au milieu d'une prise.
 
 ### Adresses affichées : benevol.app, jamais localhost
 

@@ -7,8 +7,9 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { verifyAttendanceTransition } from "./attendance-capture-checks"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
+import type { Cue } from "./sentence-timing"
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
 /** Arrival/correction chapters. Cancellation and export are separate required chapters. */
 export async function recordAttendanceActions(options: { page: Page; base: string; eventId: string; directory: string; personPrefix?: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
@@ -46,26 +47,26 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
       evidence.push({ action, changedIds: changed, unchangedStatuses: true, nonSelectedUnchanged: true })
     }
     await scene("one", async at => {
-      await go(); await at(0.15); await select(0)
-      await at(0.38); await apply([find(0).id], true)
-      await at(0.65); await page.reload(); await settle(page)
+      await go(); await at(0.15) /* mid-sentence */; await select(0)
+      await at("Rechargeons la page "); await apply([find(0).id], true)
+      await at("Le nombre d'inscriptions affichées décrit"); await page.reload(); await settle(page)
       if (!(await db.registration.findUniqueOrThrow({ where: { id: find(0).id } })).checkedInAt) throw new Error("Presence not persistent")
       await page.getByRole("row").filter({ hasText: "video.attendance.0@example.org" }).getByText("Présent", { exact: false }).waitFor()
     })
     await scene("group", async at => {
-      await go(); await at(0.15); await select(1); await select(2)
-      await at(0.38); await apply([find(1).id, find(2).id], true)
+      await go(); await at(0.15) /* mid-sentence */; await select(1); await select(2)
+      await at(0.38) /* mid-sentence */; await apply([find(1).id, find(2).id], true)
       if (await page.getByRole("row").filter({ hasText: "video.attendance.3@example.org" }).getByText("Présent", { exact: false }).count()) throw new Error("Absent person displayed as present")
-      await at(0.70); await page.getByRole("row").filter({ hasText: "video.attendance.5@example.org" }).scrollIntoViewIfNeeded()
+      await at("Ne la transformez pas en"); await page.getByRole("row").filter({ hasText: "video.attendance.5@example.org" }).scrollIntoViewIfNeeded()
     })
     await scene("correction", async at => {
-      await go(); await at(0.10); await select(2)
-      await at(0.18); await apply([find(2).id], false)
+      await go(); await at("La marque disparaît, mais son"); await select(2)
+      await at("La marque disparaît, mais son"); await apply([find(2).id], false)
       // The real manager clears its selection after every presence action.
-      await at(0.66); await go(); await select(2); await apply([find(2).id], true)
+      await at("Relisez le nom et l'horaire"); await go(); await select(2); await apply([find(2).id], true)
     })
     await scene("multiple", async at => {
-      await go(); await at(0.10)
+      await go(); await at("Recherchons Léa pour retrouver ses")
       const search = page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
       await tap(page, search); await search.pressSequentially("video.attendance.2@example.org", { delay: 65 })
       const lea = await db.registration.findMany({ where: { eventId, volunteerId: `${options.personPrefix ?? "video-attendance-person-"}2` }, include: { shift: true } })

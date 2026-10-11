@@ -6,6 +6,7 @@ import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import type { Locator, Page } from "playwright"
 import type { ProductBuild } from "./product-build"
+import type { Cue } from "./sentence-timing"
 
 export type HoursScenario = {
   organizationId: string; organizationName: string; organizationSlug: string; product: ProductBuild
@@ -60,7 +61,7 @@ export function assertHoursCsv(csv: string, includeAll: boolean) {
   assert(!csv.includes("@") && !csv.includes("079"), "Hours export must not include contact details")
 }
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 type PrintedPdf = { path: string; sha256: string; text: string; pages: number; printedFrom: string; product: ProductBuild; method: "native-print-dialog" | "browser-print-engine" }
 export type HoursRecordingOptions = {
   page: Page; base: string; product: ProductBuild; scene: Scene
@@ -109,18 +110,18 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const aline = row().getByRole("cell").nth(index)
     assert.match((await aline.innerText()).replace(/\s+/g, " "), /12.*sept.*2026.*Présence le 12.*sept.*2026/)
     await aline.scrollIntoViewIfNeeded()
-    await at(0.20)
+    await at("Pour Benoît, aucune présence n'a")
     const benoit = table.getByRole("row").filter({ has: page.getByRole("link", { name: "Activité de Benoît Favre", exact: true }) }).getByRole("cell").nth(index)
     assert((await benoit.innerText()).includes("Aucune présence saisie"))
     await benoit.scrollIntoViewIfNeeded()
     const sorted = table.getByRole("columnheader", { name: "Heures attestées", exact: true })
-    await at(0.40); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    await at("Vous pouvez aussi trier les"); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
     assert.equal(await sorted.getAttribute("aria-sort"), "ascending")
-    await at(0.53); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    await at("Un clic les classe par"); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
     assert.equal(await sorted.getAttribute("aria-sort"), "descending")
-    await at(0.65); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    await at("Cliquons enfin sur Dernière participation"); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
     assert.equal(await sorted.getAttribute("aria-sort"), "none")
-    await at(0.76); await tap(page, header.getByRole("button", { name: "Dernière participation", exact: true }))
+    await at("Aucun de ces repères ne"); await tap(page, header.getByRole("button", { name: "Dernière participation", exact: true }))
     assert.equal(await header.getAttribute("aria-sort"), "ascending")
     await evidence("last-participation", { confirmedDateAndPresenceDateShownSeparately: true, noPresenceNotAbsence: true, actualAttestedSortCycleVerified: true, actualLastParticipationSortVerified: true })
   })
@@ -146,9 +147,9 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
       return file
     }
     const first = await download(false)
-    await at(0.45); await tap(page, include)
+    await at("Cochons maintenant l'option pour inclure"); await tap(page, include)
     const second = await download(true)
-    await at(0.65); await showDownloadedCsv(page, second, true)
+    await at("Le total indique six heures"); await showDownloadedCsv(page, second, true)
     await evidence("period-export", { actualDownloads: 2, firstFileChecked: Boolean(first), includeZeroMemberVerified: true, plannedHours: 6, attestedHours: 2, period: "September2026" })
   })
   await scene("certificate-settings", async at => {
@@ -157,7 +158,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     await setFrenchDate(page, page.getByLabel("Du", { exact: true }), "2026-05-01")
     await setFrenchDate(page, page.getByLabel("Au", { exact: true }), "2026-09-30")
     const note = page.getByLabel("Texte libre (facultatif)", { exact: true })
-    await at(0.4); await tap(page, note); await note.pressSequentially("Accueil du public et rangement du matériel.", { delay: 75 })
+    await at("L'aperçu reprend le nom du"); await tap(page, note); await note.pressSequentially("Accueil du public et rangement du matériel.", { delay: 75 })
     await page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).scrollIntoViewIfNeeded()
     const logo = page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).locator("img")
     assert.equal(await logo.count(), 1)
@@ -175,7 +176,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const table = page.getByRole("table")
     assert.equal(await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).count(), 0)
     await table.getByRole("columnheader", { name: "Heures attestées", exact: true }).scrollIntoViewIfNeeded()
-    await at(0.45); await tap(page, include)
+    await at(0.45) /* mid-sentence */; await tap(page, include)
     await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).waitFor()
     const total = table.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Total", exact: true }) })
     assert.match((await total.innerText()).replace(/\s+/g, " "), /6\s*h.*2\s*h/)
