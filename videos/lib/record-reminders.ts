@@ -7,8 +7,9 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { addMinutes } from "../../src/lib/gantt-utils"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
+import type { Cue } from "./sentence-timing"
 
-type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
+type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 type Mail = { ID: string; To: { Address: string }[]; Subject: string }
 
 export async function recordReminders(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, locator: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
@@ -33,7 +34,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     await page.frameLocator("iframe").getByText(expected[0], { exact: false }).filter({ visible: true }).first().waitFor()
   }
   const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 95 }) }
-  const checks: Record<string, unknown> = { audiovisualValidation: false, pushReceptionVerified: false, perEventToggleAvailableInForm: false }
+  const checks: Record<string, unknown> = { audiovisualValidation: false, pushReceptionVerified: false, perEventToggleAvailableInForm: true }
   try {
     const event = await db.event.findUniqueOrThrow({ where: { id: eventId }, include: { registrations: { include: { shift: true, volunteer: true } } } })
     if (event.slug !== "atelier-rappels" || event.reminderSentAt || event.registrations.length !== 9 || event.registrations.some(r => r.reminderJ2Sent || r.reminderJ1Sent || r.reminderDdSent)) throw new Error("Fresh reminders-changes seed required")
@@ -49,7 +50,10 @@ export async function recordReminders(options: { page: Page; base: string; event
       await at(0.15)
       const saved = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${eventId}`) && r.request().method() === "PATCH" && r.ok() && r.request().postDataJSON().reminderMessage === message)
       await write(page.getByPlaceholder("Consignes vestimentaires, point de RDV, accès, parking…"), message)
-      await saved; await page.getByText("Enregistré ✓", { exact: true }).waitFor()
+      await saved
+      const status = page.getByText(/^Modifications enregistrées à /)
+      await status.waitFor()
+      await at("Le texte s'enregistre automatiquement"); await status.scrollIntoViewIfNeeded()
       if ((await db.event.findUniqueOrThrow({ where: { id: eventId } })).reminderMessage !== message) throw new Error("Reminder auto-save failed")
       checks.messageAutoSaved = true
     })
@@ -92,8 +96,19 @@ export async function recordReminders(options: { page: Page; base: string; event
     })
     await scene("event-switch", async at => {
       await go(`${eventUrl}/edit`)
-      await page.getByPlaceholder("Consignes vestimentaires, point de RDV, accès, parking…").scrollIntoViewIfNeeded()
-      await at(0.70); await go(`${base}/admin/events/${draft.id}`)
+      const checkbox = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
+      await checkbox.scrollIntoViewIfNeeded()
+      if (!await checkbox.isChecked()) throw new Error("Event reminder fixture must start enabled")
+      const setReminders = async (enabled: boolean) => {
+        const saved = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${eventId}`) && r.request().method() === "PATCH" && r.ok() && r.request().postDataJSON().remindersEnabled === enabled)
+        await tap(page, checkbox)
+        await saved
+        if ((await db.event.findUniqueOrThrow({ where: { id: eventId } })).remindersEnabled !== enabled) throw new Error("Event reminders were not auto-saved")
+      }
+      await at("Décochons Rappels automatiques"); await setReminders(false)
+      await at("Réactivons-les"); await setReminders(true)
+      checks.perEventSavedOffThenOn = true
+      await at("Regardons maintenant notre événement en brouillon"); await go(`${base}/admin/events/${draft.id}`)
       await page.getByRole("heading", { name: "Atelier en brouillon", exact: true }).waitFor()
     })
     await scene("timing", async at => {

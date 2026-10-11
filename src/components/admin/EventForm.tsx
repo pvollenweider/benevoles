@@ -366,7 +366,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                 ) : (
                   <div key={i} className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2">
                     <span className="text-[11px] text-indigo-400 font-mono whitespace-nowrap">
-                      {show.date} · {show.startTime}–{show.endTime}
+                      {show.date.split("-").reverse().join(".")} · {show.startTime}–{show.endTime}
                     </span>
                     <span className="flex-1 text-sm text-indigo-800 truncate">{show.name}</span>
                     <button type="button" onClick={() => startEditShow(i)} aria-label={`Modifier le spectacle ${show.name}`} className="min-w-6 min-h-6 text-indigo-700 hover:text-indigo-900 flex-shrink-0 text-xs"><span aria-hidden="true">✎</span></button>

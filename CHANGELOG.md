@@ -62,6 +62,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
 ### Corrigé
+- La liste des spectacles du formulaire d'événement affiche leur date au format jour.mois.année au lieu de l'année en premier.
 - Le formulaire « Nouvelle organisation » de l'administration de la plateforme annonçait un mot de passe temporaire affiché une seule fois ; il indique maintenant que le premier administrateur reçoit un lien d'invitation pour choisir son mot de passe.
 
 - **Créneaux de la frise nommés comme ils s'affichent** (#808) : le nom lu par un lecteur d'écran ou visé par la commande vocale commence désormais par le texte de la barre (heures, nombre d'inscrits, « Complet », « Fermé », « Réservé », « En attente »), puis le poste et l'action. Un créneau qui chevauche un créneau déjà choisi ne propose plus « sélectionner » : il dit pourquoi il ne peut pas être choisi.

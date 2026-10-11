@@ -10,6 +10,7 @@ import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 import { validationError } from "@/lib/api-error"
 import { isReservedOrgSlug } from "@/lib/org-subdomain"
+import { configuredAppUrl } from "@/lib/urls"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
@@ -118,7 +119,8 @@ export async function POST(req: Request) {
     },
   })
 
-  const inviteUrl = inviteLink(process.env.NEXT_PUBLIC_APP_URL, setupToken)
+  // Read at request time: Next inlines direct NEXT_PUBLIC_* accesses at build time.
+  const inviteUrl = inviteLink(configuredAppUrl(), setupToken)
 
   return NextResponse.json({ org, inviteUrl }, { status: 201 })
 }
