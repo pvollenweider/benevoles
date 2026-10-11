@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef, useCallback, useEffect, useId } from "react"
+import { useState, useRef, useCallback, useEffect, useLayoutEffect, useId } from "react"
 import Link from "next/link"
 import { getRoleAccent } from "@/lib/roles"
 import { fmt, clamp } from "@/lib/gantt-utils"
@@ -11,6 +11,7 @@ import { ROW_H } from "@/lib/day-timeline"
 import { moveProblem } from "@/lib/shift-quick-edit"
 import { normalizeTime } from "@/lib/shifts-admin"
 import { spokenTimeRange } from "@/lib/spoken-time"
+import { popoverPlacement } from "@/lib/popover-placement"
 import type { AdminShift } from "../AdminDayTimeline"
 
 /**
@@ -41,6 +42,12 @@ export default function ShiftPopover({
   const announce = (text: string) => { setMessageState(null); requestAnimationFrame(() => setMessageState(text)) }
   const ref = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
+  // Natural height of the content, measured before paint, to choose the side of the bar.
+  const [contentHeight, setContentHeight] = useState<number | undefined>(undefined)
+  useLayoutEffect(() => {
+    const h = ref.current?.scrollHeight
+    if (h && h !== contentHeight) setContentHeight(h)
+  }, [contentHeight, message])
   // The bar that opened the popover: focus goes back to it on close.
   const openerRef = useRef<HTMLElement | null>(null)
 
@@ -112,7 +119,8 @@ export default function ShiftPopover({
 
   const POPW = 280
   const left = clamp(anchor.x + anchor.w / 2 - POPW / 2, 8, window.innerWidth - POPW - 8)
-  const top  = anchor.y + ROW_H + 6
+  // Below the bar, or above it when it is low on the screen; always inside the viewport (#866 video review).
+  const { top, maxHeight } = popoverPlacement({ anchorTop: anchor.y, anchorBottom: anchor.y + ROW_H, viewportHeight: window.innerHeight, contentHeight })
   const field = "w-full text-sm border border-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
   const action = "text-sm font-medium rounded-lg px-2 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
@@ -122,7 +130,7 @@ export default function ShiftPopover({
       role="dialog"
       aria-labelledby={`${id}-title`}
       className="fixed z-50 bg-white rounded-xl shadow-xl border border-gray-200 p-3 space-y-3 overflow-y-auto"
-      style={{ left, top, width: POPW, maxHeight: Math.max(window.innerHeight - top - 8, 160) }}
+      style={{ left, top, width: POPW, maxHeight }}
       onMouseDown={e => e.stopPropagation()}
     >
       <div className="flex items-start justify-between gap-2">

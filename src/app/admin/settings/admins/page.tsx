@@ -14,6 +14,8 @@ import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import { hasLevel } from "@/lib/permissions"
 import HelpLink from "@/components/admin/HelpLink"
 import { siteDomain } from "@/lib/site"
+import { spaceBaseDomain } from "@/lib/space-address"
+import { configuredAppUrl } from "@/lib/urls"
 
 export const dynamic = "force-dynamic"
 
@@ -22,11 +24,10 @@ export default async function AdminsSettingsPage() {
   if (!ctx) redirect("/admin/login")
   const { db, organizationId, session } = ctx
 
-  // Domain the org slug is a subdomain of (e.g. "benevol.app" for "cdp.benevol.app").
+  // Domain the org slug is a subdomain of (e.g. "benevol.app" for "cdp.benevol.app"), from the
+  // configured address, not the request host (a proxy or a capture stack has its own host).
   // Computed here so the server and the client render the same address.
-  const host = (await headers()).get("host") ?? siteDomain()
-  const hostParts = host.split(".")
-  const baseDomain = hostParts.length >= 3 ? hostParts.slice(1).join(".") : host
+  const baseDomain = spaceBaseDomain(configuredAppUrl(), (await headers()).get("host"), siteDomain())
 
   const [admins, org, slugHistory, publishedEventCount] = await Promise.all([
     db.adminUser.findMany({

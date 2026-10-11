@@ -27,6 +27,23 @@ describe("ShiftPopover", () => {
     return props
   }
 
+  it("stays inside the viewport: below a high bar, above a bar near the bottom", () => {
+    const vh = window.innerHeight
+    const props = {
+      shift, eventId: "evt-1", onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(),
+      onDuplicate: vi.fn(), onApplyCapacity: vi.fn(),
+    }
+    const { unmount } = render(<ShiftPopover {...props} anchor={{ x: 100, y: 100, w: 80 }} />)
+    const below = screen.getByRole("dialog")
+    expect(parseFloat(below.style.top)).toBe(100 + 48 + 6)
+    expect(parseFloat(below.style.top) + parseFloat(below.style.maxHeight)).toBeLessThanOrEqual(vh)
+    unmount()
+    render(<ShiftPopover {...props} anchor={{ x: 100, y: vh - 60, w: 80 }} />)
+    const above = screen.getByRole("dialog")
+    expect(parseFloat(above.style.top)).toBeGreaterThanOrEqual(0)
+    expect(parseFloat(above.style.top) + parseFloat(above.style.maxHeight)).toBeLessThanOrEqual(vh - 60)
+  })
+
   it("is a labelled dialog whose fields have names, focused on its heading", () => {
     setup()
     expect(screen.getByRole("dialog", { name: /Bar/ })).toBeInTheDocument()
