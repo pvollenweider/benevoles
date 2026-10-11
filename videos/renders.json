@@ -245,6 +245,12 @@
     "height": 800,
     "poster": true
   },
+  "shift-recurrence": {
+    "durationMs": 120960,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "shift-timeline-quick-actions": {
     "durationMs": 89720,
     "width": 1280,
