@@ -1,0 +1,193 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 156,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 12.2,
+    "largestGapLu": 18.7,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -32.2,
+    "medianVoiceLufs": -16.6
+  },
+  "inputCounts": {
+    "click": 2,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "access",
+      "phrase": "Le lien direct s’ouvre dans",
+      "startMs": 3596,
+      "endMs": 5705,
+      "cueMs": 20033,
+      "sentenceAbsoluteMs": 20030,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "access",
+      "phrase": "Un lien personnel ne se",
+      "startMs": 15935,
+      "endMs": 18036,
+      "cueMs": 32371,
+      "sentenceAbsoluteMs": 32369,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Le lieu est accompagné d’un",
+      "startMs": 4410,
+      "endMs": 10322,
+      "cueMs": 40038,
+      "sentenceAbsoluteMs": 40037,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Sur ordinateur, la fiche à",
+      "startMs": 11071,
+      "endMs": 14234,
+      "cueMs": 46699,
+      "sentenceAbsoluteMs": 46698,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Accès et parking explique les",
+      "startMs": 3859,
+      "endMs": 7161,
+      "cueMs": 57558,
+      "sentenceAbsoluteMs": 57556,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Questions fréquentes précise l’assurance et",
+      "startMs": 7841,
+      "endMs": 9978,
+      "cueMs": 61540,
+      "sentenceAbsoluteMs": 61538,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Tu peux revenir au planning",
+      "startMs": 10630,
+      "endMs": 12494,
+      "cueMs": 64329,
+      "sentenceAbsoluteMs": 64327,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "desktop",
+      "phrase": "Les bandes violettes placent les",
+      "startMs": 10319,
+      "endMs": 12510,
+      "cueMs": 82617,
+      "sentenceAbsoluteMs": 82613,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Sur validation signifie que l’organisateur",
+      "startMs": 5931,
+      "endMs": 11274,
+      "cueMs": 96249,
+      "sentenceAbsoluteMs": 96248,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Dix-huit plus annonce un âge",
+      "startMs": 12204,
+      "endMs": 13865,
+      "cueMs": 102523,
+      "sentenceAbsoluteMs": 102521,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Réservé reste visible mais demande",
+      "startMs": 14182,
+      "endMs": 16289,
+      "cueMs": 104500,
+      "sentenceAbsoluteMs": 104499,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Glisse doucement pour parcourir la",
+      "startMs": 10889,
+      "endMs": 14986,
+      "cueMs": 127592,
+      "sentenceAbsoluteMs": 127590,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Tu retrouves les heures, les",
+      "startMs": 15767,
+      "endMs": 22152,
+      "cueMs": 132471,
+      "sentenceAbsoluteMs": 132468,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Ici, Julien fait partie de",
+      "startMs": 5543,
+      "endMs": 7699,
+      "cueMs": 147079,
+      "sentenceAbsoluteMs": 147078,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 154988
+      },
+      "deltaMs": 7910
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "L’invitation ne t’inscrit pas toute",
+      "startMs": 12980,
+      "endMs": 14624,
+      "cueMs": 154516,
+      "sentenceAbsoluteMs": 154515,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 154988
+      },
+      "deltaMs": 473
+    },
+    {
+      "segmentId": "result",
+      "phrase": "En cas de doute sur",
+      "startMs": 10420,
+      "endMs": 15794,
+      "cueMs": 172940,
+      "sentenceAbsoluteMs": 172938,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

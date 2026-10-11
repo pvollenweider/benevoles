@@ -57,7 +57,7 @@ async function main() {
     assert.equal(personal.volunteer.email, leaA.email)
     assert.equal(personal.volunteer.notes, undefined)
     assert.equal(personal.volunteer.availabilityPeriods[0], "morning")
-    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: "Exemple", email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true } })
+    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: "Exemple", email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true, charterAccepted: true } })
     assert.equal(registrationResponse.status(), 201)
     const signup = await registrationResponse.json()
     assert.equal(signup.editToken, null)

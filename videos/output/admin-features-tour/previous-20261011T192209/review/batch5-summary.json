@@ -1,0 +1,9 @@
+{
+  "id": "ADMIN_FEATURES_OVERVIEW",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Forced new continuous narration; repetition absent in multilingual ASR; five silence boundaries corrected and all WAV audits pass. Capture complete but assembler refused lifecycle overlap (846 ms), caused by hard-coded 1300 ms scene shortening. No final MP4.",
+  "sourceChanges": "record.ts: remove fixed lifecycle tail shortening; every scene retains full measured WAV duration. No re-film."
+}

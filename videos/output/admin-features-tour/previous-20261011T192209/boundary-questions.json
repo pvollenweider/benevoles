@@ -1,0 +1,12 @@
+{
+  "anchor": "Le formulaire peut poser quelques questions utiles : taille de t-shirt,",
+  "windowStart": 142.91,
+  "result": {
+    "found": true,
+    "startSeconds": 17.9,
+    "wordsHeard": "Le"
+  },
+  "onset": 160.81,
+  "proposedCut": 160.69008350000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

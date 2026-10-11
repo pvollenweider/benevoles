@@ -1,0 +1,9 @@
+{
+  "id": "ADMIN_FEATURES_OVERVIEW",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "Repeated intro confirmed in reused batch-3 audio. Only intro regenerated (13.160 s); independent ASR now 0% difference, no repeated clause. Strict continuous-generation gate rejects separate intro generation (honest provenance retained), so no capture/final MP4. Other 16 chapters untouched; full regeneration not performed per user instruction.",
+  "sourceChanges": "None. Replacement audio and provenance are output artifacts; strict validator retained."
+}

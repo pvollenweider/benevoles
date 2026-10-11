@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: VOLUNTEER_DISCOVER_EVENT
+COMMIT: d1482d273bc0c97c3efff59e76dc57205e0a2995
+BUILD_ID: Ur_-usFFdKv05dBCDAbrt
+DURATION: — seconds
+MUSIC: smallest — / largest — LU
+PROBLEMS: Rehearsal failed in mobile chapter: stale Fais/Faites défiler selector. Current French hint shown in review/rehearsal-failure.png; no final MP4.
+SOURCE CHANGES: record.ts: match current hint Fais défiler pour voir toutes les plages; no re-film.
+VALIDATION: "unavailable"; sentence anchors checked: —
+FINAL AUDIO: []
+CAPTIONS/EFFECTS: transcript match None; marker counts None; exact synthesized bytes None; clicks None, keys None.
+REVIEW: No assembled final MP4; complete final audiovisual, subtitle, effect and music checks unavailable. See review/pipeline-error.txt and /tmp/batch5-*.log. No readiness claim.
+LIMIT: No real-time subjective listening available; this alone does not affect readiness.

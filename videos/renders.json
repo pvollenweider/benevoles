@@ -1,6 +1,6 @@
 {
   "admin-features-tour": {
-    "durationMs": 283800,
+    "durationMs": 286680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -288,7 +288,7 @@
     "poster": true
   },
   "volunteer-calendar": {
-    "durationMs": 172680,
+    "durationMs": 198360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -306,7 +306,7 @@
     "poster": true
   },
   "volunteer-discover-event": {
-    "durationMs": 175520,
+    "durationMs": 179000,
     "width": 1280,
     "height": 800,
     "poster": true

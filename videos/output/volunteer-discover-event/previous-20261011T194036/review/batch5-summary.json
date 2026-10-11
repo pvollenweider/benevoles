@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_DISCOVER_EVENT",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Rehearsal failed in mobile chapter: stale Fais/Faites défiler selector. Current French hint shown in review/rehearsal-failure.png; no final MP4.",
+  "sourceChanges": "record.ts: match current hint Fais défiler pour voir toutes les plages; no re-film."
+}

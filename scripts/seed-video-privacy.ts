@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { createHash } from "node:crypto"
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
 
@@ -15,6 +16,15 @@ export async function seedVideoPrivacy(db: PrismaClient) {
     "reg-link-request:::1", "reg-link-request:127.0.0.1",
     "reg-token-read:127.0.0.1", "reg-link-resend:video-privacy-a-member-0",
   ] } } })
+  // Reset only this owned fixture's recipient counters between preflight and capture.
+  // Real delivery limits remain active; otherwise repeated real emails exhaust them.
+  const recipients = ["a", "b"].flatMap(side => [
+    `video.privacy.${side}.new@example.org`,
+    ...Array.from({ length: 5 }, (_, index) => `video.privacy.${side}.member.${index}@example.org`),
+  ])
+  await db.rateLimit.deleteMany({ where: { OR: recipients.map(email => ({
+    key: { startsWith: `email:recipient:${createHash("sha256").update(email).digest("hex").slice(0, 32)}:` },
+  })) } })
   const day = new Date("2026-10-24T00:00:00Z")
   for (const side of ["a", "b"] as const) {
     const organizationId = `video-privacy-${side}`

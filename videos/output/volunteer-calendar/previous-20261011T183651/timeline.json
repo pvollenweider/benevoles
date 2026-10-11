@@ -1,0 +1,52 @@
+{
+  "slug": "volunteer-calendar",
+  "recordedAt": "2026-10-05T13:14:36.039Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 2,
+      "endMs": 19425
+    },
+    {
+      "id": "one",
+      "startMs": 19878,
+      "endMs": 37567
+    },
+    {
+      "id": "all",
+      "startMs": 38020,
+      "endMs": 56955
+    },
+    {
+      "id": "import",
+      "startMs": 57408,
+      "endMs": 76492
+    },
+    {
+      "id": "details",
+      "startMs": 76945,
+      "endMs": 94359
+    },
+    {
+      "id": "night",
+      "startMs": 94816,
+      "endMs": 112738
+    },
+    {
+      "id": "change",
+      "startMs": 113195,
+      "endMs": 133691
+    },
+    {
+      "id": "reimport",
+      "startMs": 134144,
+      "endMs": 152876
+    },
+    {
+      "id": "result",
+      "startMs": 153329,
+      "endMs": 172221
+    }
+  ]
+}

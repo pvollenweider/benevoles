@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour le terrain, les rapports proposent le planning complet, une vue",
+  "windowStart": 199.71000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Pour le terrain, les rapports proposent le planning complet, une vue"
+  },
+  "onset": 211.51000000000005,
+  "proposedCut": 211.294625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

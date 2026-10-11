@@ -1,0 +1,8 @@
+STATUS: NOT READY
+First narrated take of batch 6; verified build urE8YE_Qy4c7ji_FfJcAe / ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8.
+validate and music pass (13.6–18.5 LU); source audio reused/audited. 96 actual MP4 frames reviewed in sheets 0–7; Frise, French dates and configured public addresses pass, no localhost/old admin/dev overlay. Effects count matches markers; actual VTT display text matches manifest.
+Video-only failures: appearance scroll shows color at coordinates sentence (82.64 s), location appears later (sheet-2); shift-methods resizing performed at the sentence about series (118.79 s); minimum age first revealed at list/waiting sentence (137.82 s); page title fill starts 201.31 s before Donne un titre (202.76 s).
+Local fixes: color shown within first sentence, location anchored to Le lieu; resize before series sentence and series opening anchored to Pour des horaires; age revealed earlier, waiting controls anchored to La liste; page title anchored to Donne un titre. Removed obsolete DOM address rewriting (no effect on this take; configured address already correct).
+Known product nits report-only: Prévenir en cas de désistement checkbox offset; event log exposes raw shift fields/status values. No newly blocking product layout bug seen in this video.
+Organization final-ASR output compressed a spoken public URL into an inaccurately spelled URL (15% difference); selected independent recheck requested without modifying any report.
+One video-only re-film allowed by batch 6 rules, pending current product provenance acceptance. No product sources changed.

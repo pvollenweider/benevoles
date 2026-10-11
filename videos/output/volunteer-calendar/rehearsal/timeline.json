@@ -1,0 +1,140 @@
+{
+  "slug": "volunteer-calendar",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T20:26:04.099Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_CALENDAR",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 3600
+    },
+    {
+      "kind": "click",
+      "atMs": 4850
+    },
+    {
+      "kind": "click",
+      "atMs": 8739
+    },
+    {
+      "kind": "click",
+      "atMs": 9539
+    },
+    {
+      "kind": "click",
+      "atMs": 10372
+    },
+    {
+      "kind": "click",
+      "atMs": 12004
+    },
+    {
+      "kind": "click",
+      "atMs": 14345
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 39,
+      "endMs": 2662
+    },
+    {
+      "id": "one",
+      "startMs": 3115,
+      "endMs": 3931
+    },
+    {
+      "id": "all",
+      "startMs": 4384,
+      "endMs": 5181
+    },
+    {
+      "id": "import",
+      "startMs": 5633,
+      "endMs": 5682
+    },
+    {
+      "id": "details",
+      "startMs": 6135,
+      "endMs": 6214
+    },
+    {
+      "id": "night",
+      "startMs": 6667,
+      "endMs": 6681
+    },
+    {
+      "id": "change",
+      "startMs": 7132,
+      "endMs": 13424
+    },
+    {
+      "id": "reimport",
+      "startMs": 13877,
+      "endMs": 14676
+    },
+    {
+      "id": "result",
+      "startMs": 15131,
+      "endMs": 15176
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "one",
+      "phrase": "Ce téléchargement ne crée pas",
+      "startMs": 17416,
+      "endMs": 23933,
+      "cueMs": 3906
+    },
+    {
+      "segmentId": "all",
+      "phrase": "L'inscription en liste d'attente n'y",
+      "startMs": 21111,
+      "endMs": 25333,
+      "cueMs": 5156
+    },
+    {
+      "segmentId": "details",
+      "phrase": "le lieu, les consignes et",
+      "startMs": 11011,
+      "endMs": 16517,
+      "cueMs": 6147
+    },
+    {
+      "segmentId": "details",
+      "phrase": "Garde ce fichier pour toi",
+      "startMs": 20674,
+      "endMs": 23034,
+      "cueMs": 6182
+    },
+    {
+      "segmentId": "change",
+      "phrase": "il ne se met pas",
+      "startMs": 14777,
+      "endMs": 17435,
+      "cueMs": 11534
+    }
+  ]
+}

@@ -145,7 +145,7 @@ export function musicLoopCopies(durationS: number, loop: { startS: number; endS:
 // instead of holding it, because it ducks deeper under loud sentences.
 export const MUSIC_MIX = {
   compressor: "threshold=0.1:ratio=4:attack=50:release=500",
-  volume: 0.33,
+  volume: 0.31,
 } as const
 
 // The narration is levelled before the music is set under it: each chapter brought to

@@ -79,6 +79,9 @@ try {
     const deleted = await db.volunteer.deleteMany({ where: { id: person.id, organizationId: "default", email: null, firstName: person.firstName, lastName: person.lastName, phone: person.phone, createdAt: person.createdAt } })
     assert.equal(deleted.count, 1, "Exact owned imported no-email fixture changed before reset")
   }
+  // First-steps changes the public slug. Common demo recorders use ?org=default;
+  // restore that fixture address only after the complete synthetic-ownership guard.
+  await db.organization.update({ where: { id: "default" }, data: { slug: "default" } })
   console.log(`Verified synthetic common fixture: ${fixture.events.length} events, ${fixture.volunteers.length} members. Reset confined to default training organization; other organizations preserved.`)
 } finally { await db.$disconnect() }
 await import("../../scripts/seed-demo")

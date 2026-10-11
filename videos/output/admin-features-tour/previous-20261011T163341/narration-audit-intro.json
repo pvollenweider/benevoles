@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:32:21.741Z",
+  "revalidatedAt": "2026-10-11T15:32:21.742Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "intro",
+      "audioSha256": "1dde720bb1834ea5775815974807f0df7ef0f0811c79fca6601d918ea9a2f33c",
+      "recognized": "Voici une visite complète de l'administration, dans l'ordre où tu l'utiliseras vraiment. Préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J, communiquer, puis préparer le jour J.",
+      "expected": "Voici une visite complète de l’administration, dans l’ordre où tu l’utiliseras vraiment : préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+      "wordErrorRate": 0.2,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

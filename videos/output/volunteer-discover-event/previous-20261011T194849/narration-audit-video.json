@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T19:46:59.896Z",
+  "revalidatedAt": "2026-10-11T19:46:59.897Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "ab90fc7a4208591230ac78624350e028d468ced6b300d161192036ab2cb8c6cd",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "24e5effa41677b12f66b14129c1becabc7fd5dcb813cce9bbb618fe7f7f4ee7f",
+      "recognized": "Avant de choisir un créneau, prends une minute pour lire la page de l'événement. Elle rassemble le lieu, les consignes, le programme et l'état réel des missions. Tu sais ainsi où tu vas, ce qu'on attend de toi et quelles places sont encore disponibles.",
+      "expected": "Avant de choisir un créneau, prends une minute pour lire la page de l’événement. Elle rassemble le lieu, les consignes, le programme et l’état réel des missions. Tu sais ainsi où tu vas, ce qu’on attend de toi et quelles places sont encore disponibles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "access",
+      "audioSha256": "edda29ab36b7a25c8ae9d3d14b36612b647b72d1a0c02f3025146747960a4eba",
+      "recognized": "L'organisateur peut partager cette page de trois façons. Le lien direct s'ouvre dans n'importe quel navigateur, le QR code mène exactement au même endroit depuis l'appareil photo du téléphone, et une invitation personnelle préremplit ton identité. Elle peut aussi ouvrir un poste réservé à ton équipe. Un lien personnel ne se transfère donc pas à quelqu'un d'autre.",
+      "expected": "L’organisateur peut partager cette page de trois façons. Le lien direct s’ouvre dans n’importe quel navigateur. Le QR code mène exactement au même endroit depuis l’appareil photo du téléphone. Et une invitation personnelle préremplit ton identité ; elle peut aussi ouvrir un poste réservé à ton équipe. Un lien personnel ne se transfère donc pas à quelqu’un d’autre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "identity",
+      "audioSha256": "7cc3730a471850fe3e9cde3e9c86b1ec1563989f75d8ac1f8c7b1adc24bc9e3f",
+      "recognized": "En haut, vérifie le nom de l'association et celui de l'événement. Le lieu est accompagné d'un lien vers OpenStreetMap. Puis les consignes publiques rappellent ici de passer à l'accueil quinze minutes avant le créneau. Sur ordinateur, l'affiche à droite résume aussi la description et les dates.",
+      "expected": "En haut, vérifie le nom de l’association et celui de l’événement. Le lieu est accompagné d’un lien vers OpenStreetMap, puis les consignes publiques rappellent ici de passer à l’accueil quinze minutes avant le créneau. Sur ordinateur, la fiche à droite résume aussi la description et les dates.",
+      "wordErrorRate": 0.0392156862745098,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pages",
+      "audioSha256": "26f6d6f8f08802d12ff8f7a3e0be9506c1be9503c01191b4ec5aa2ad2b931597",
+      "recognized": "Les boutons juste sous les consignes ouvrent des pages complémentaires. Accès et parking explique les transports, le stationnement et la navette. Questions fréquentes précise l'assurance et la tenue. Tu peux revenir au planning sans perdre le contexte. Ces pages servent justement à éviter les informations éparpillées dans plusieurs messages.",
+      "expected": "Les boutons juste sous les consignes ouvrent des pages complémentaires. Accès et parking explique les transports, le stationnement et la navette. Questions fréquentes précise l’assurance et la tenue. Tu peux revenir au planning sans perdre le contexte ; ces pages servent justement à éviter les informations éparpillées dans plusieurs messages.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "desktop",
+      "audioSha256": "2577284f3634e2aed50c1f1a505172b7c6f3f9a50abcc105b83c587e21466645",
+      "recognized": "Le planning se lit par journée et par poste. L'axe horizontal donne l'heure, chaque barre correspond à un créneau et le nombre dans la barre indique les inscriptions par rapport à la capacité. Les bandes violettes placent les spectacles dans la même chronologie. On voit par exemple le concert, le bal et le brunch sans les confondre avec une mission bénévole.",
+      "expected": "Le planning se lit par journée et par poste. L’axe horizontal donne l’heure, chaque barre correspond à un créneau, et le nombre dans la barre indique les inscriptions par rapport à la capacité. Les bandes violettes placent les spectacles dans la même chronologie : on voit par exemple le concert, le bal et le brunch sans les confondre avec une mission bénévole.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "states",
+      "audioSha256": "767631a9d7bd6d53bf33b4970c4fa46922de011d277c83b0e51ee432f64a02c7",
+      "recognized": "Les états sont écrits directement sur les créneaux. Complet avec file d'attente permet encore de rejoindre la liste. Sur validation signifie que l'organisateur devra accepter la demande. Dix-huit plus annonce un âge minimum. Réservé reste visible, mais demande le lien personnel reçu par e-mail. Les places libres, les couleurs et les libellés complètent cette lecture. La couleur seule n'est jamais l'unique indice.",
+      "expected": "Les états sont écrits directement sur les créneaux. Complet avec file d’attente permet encore de rejoindre la liste. Sur validation signifie que l’organisateur devra accepter la demande. Dix-huit plus annonce un âge minimum. Réservé reste visible mais demande le lien personnel reçu par email. Les places libres, les couleurs et les libellés complètent cette lecture ; la couleur seule n’est jamais l’unique indice.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "mobile",
+      "audioSha256": "80694074c306bde7de3759942f5d46cf441bd6dbc68d4ccc9d4d87627880b836",
+      "recognized": "Sur téléphone, la page garde les mêmes informations. Le planning est volontairement plus large que l'écran. Le message avec les flèches indique qu'on peut le faire défiler horizontalement. Glisse doucement pour parcourir la journée, puis verticalement pour passer au dimanche. Tu retrouves les heures, les capacités, les spectacles et les états, sans version simplifiée cachant des détails.",
+      "expected": "Sur téléphone, la page garde les mêmes informations. Le planning est volontairement plus large que l’écran : le message avec les flèches indique qu’on peut le faire défiler horizontalement. Glisse doucement pour parcourir la journée, puis verticalement pour passer au dimanche. Tu retrouves les heures, les capacités, les spectacles et les états sans version simplifiée cachant des détails.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invitation",
+      "audioSha256": "b3fc017b209b2102e15aa9676ae756af708ec2612428674abe11cbca92e8414c",
+      "recognized": "Avec une invitation personnelle, la page reste la même, mais elle te reconnaît. Ici, Julien fait partie de l'équipe sécurité. Le créneau de nuit, auparavant marqué « réservé », devient sélectionnable. L'invitation ne t'inscrit pas toute seule. Elle autorise seulement le bon parcours et préremplira ensuite les informations déjà connues.",
+      "expected": "Avec une invitation personnelle, la page reste la même, mais elle te reconnaît. Ici, Julien fait partie de l’équipe sécurité : le créneau de nuit, auparavant marqué réservé, devient sélectionnable. L’invitation ne t’inscrit pas toute seule ; elle autorise seulement le bon parcours et préremplira ensuite les informations déjà connues.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "0fa3c6db620d6b8aa0b46bd6367dbec79562e98798c7a41f0c8c50ee03e8d046",
+      "recognized": "Tu peux maintenant lire l'événement avant de t'engager, contrôler le lieu et la carte, ouvrir les informations pratiques, comparer les horaires et comprendre chaque état. En cas de doute sur une mission réservée ou une consigne, contacte l'association plutôt que de partager un lien personnel.",
+      "expected": "Tu peux maintenant lire l’événement avant de t’engager : contrôler le lieu et la carte, ouvrir les informations pratiques, comparer les horaires et comprendre chaque état. En cas de doute sur une mission réservée ou une consigne, contacte l’association plutôt que de partager un lien personnel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

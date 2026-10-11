@@ -617,8 +617,8 @@
         "benevole"
       ],
       "feature": "Page publique de l'événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -739,8 +739,8 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "themes": [
         "parcours-benevole"
       ]
@@ -858,8 +858,8 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-11",
+      "revision": 2,
       "level": "decouverte"
     },
     {

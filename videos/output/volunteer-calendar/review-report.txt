@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_CALENDAR
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.4 / 18.8 LU. Effects vs input events: {'click': 7, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: All54MP4frames reviewed; download controls, exclusion of waitlist, practical details, overnight22h→02h+1, change23h and updateddownload align with sentences. ActualICS3events/stableIDs/ZurichUTC/originalunchanged checks pass. Native calendar import explicitly not demonstrated. All9finalASR/VTT/effects7clicks/currentlabels/Frenchdates/no forbiddenaddressoverlay/validate/music14.4–18.8 pass.
+Local source changes: record.ts selector Modifier le créneau updated during rehearsal; audio reused; one narrated capture.
+Real-time subjective listening unavailable; not used as a failure reason.

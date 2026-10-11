@@ -1,0 +1,13 @@
+STATUS: NOT READY
+ID: VOLUNTEER_DISCOVER_EVENT
+COMMIT: c7cb5036b4f0bb5d5b2f3a759c4cbc14678a30da
+BUILD_ID: vU8UL5zPG_yurF8zdluCe (verified target build; no final MP4)
+DURATION: — seconds
+MUSIC: smallest — / largest — LU
+PROBLEMS: Rehearsal fails in desktop: outdated accessible region name Planning de la journée; current product uses Planning du [jour]. No final MP4. Cache fingerprint refused; new continuous narration generated and audited; boundaries states=80.554438 mobile=104.776271 invitation=127.444458 corrected and independently re-audited.
+SOURCE CHANGES: videos/tools/record.ts discovery desktop/mobile: match current Planning du accessible name. No refilm.
+VALIDATION: "unavailable"; sentence anchors checked: —
+FINAL AUDIO: []
+CAPTIONS/EFFECTS: transcript match None; marker counts None; exact synthesized bytes None; clicks None, keys None.
+REVIEW: final MP4/objective music, subtitle, effects and sentence/action checks unavailable. Narration audit and rehearsal/pipeline failure evidence are retained in this slug and /tmp/batch4-*.log. No final readiness claim.
+LIMIT: no real-time subjective listening available; this alone does not affect readiness.

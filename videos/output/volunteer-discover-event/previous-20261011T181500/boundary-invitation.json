@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec une invitation personnelle, la page reste la même, mais elle",
+  "windowStart": 116.37199999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Avec une invitation personnelle, la page reste la même, mais elle"
+  },
+  "onset": 128.172,
+  "proposedCut": 127.444458,
+  "note": "Proposal only; recut then independently audit before capture"
+}
