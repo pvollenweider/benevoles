@@ -4,9 +4,10 @@
 import { Client } from "pg"
 import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
-import { access } from "node:fs/promises"
+import { access, readFile, writeFile, mkdir } from "node:fs/promises"
 import path from "node:path"
 import { PUBLIC_APP_URL } from "../lib/public-hosts"
+import type { ProductBuild } from "../lib/product-build"
 
 async function main() {
   const source = new URL(process.env.DATABASE_URL ?? "")
@@ -26,10 +27,14 @@ async function main() {
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"), TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
   let commandArgs: string[]
   let childWorkingDirectory: string | undefined
+  let serving: ProductBuild | undefined
   if (mode === "serve") {
     const copy = path.resolve(args[0] ?? "")
     if (args.length !== 1 || !/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only existing disposable compiled video copy accepted")
     const server = path.join(copy, ".next/standalone/server.js")
+    const proof = JSON.parse(await readFile(path.join(copy, ".video-build.json"), "utf8")) as ProductBuild
+    if (proof.snapshot !== copy || !/^[a-f0-9]{40}$/.test(proof.commit) || !proof.buildId || !proof.productSourceSha256) throw new Error("Verified product build proof required before serving operator video UI")
+    serving = proof
     childWorkingDirectory = path.dirname(server)
     await access(server)
     Object.assign(env, { PORT: "43104", HOSTNAME: "127.0.0.1" })
@@ -41,7 +46,13 @@ async function main() {
   } else if (mode === "run" && args.length === 1 && ["videos/tools/prepare-operator.ts", "videos/tools/verify-operator-lifecycle.ts", "videos/tools/inspect-operator-sessions.ts"].includes(args[0])) {
     commandArgs = ["--import", "tsx", args[0]]
   } else throw new Error("Usage: operator-local.ts serve TEMP_COPY | run OPERATOR_PREFLIGHT_TOOL")
+  // Auth.js prefers AUTH_URL over NEXTAUTH_URL; keep deleted-session redirects local.
+  env.AUTH_URL = env.NEXTAUTH_URL
   const child = spawn(process.execPath, commandArgs, { env, stdio: "inherit", cwd: childWorkingDirectory })
+  if (serving && child.pid) {
+    await mkdir("videos/output", { recursive: true })
+    await writeFile("videos/output/product-server-43104.json", JSON.stringify({ ...serving, pid: child.pid, port: 43104 }, null, 2))
+  }
   child.on("error", () => { console.error("Local operator child failed to start"); process.exitCode = 1 })
   child.on("exit", code => { process.exitCode = code ?? 1 })
 }

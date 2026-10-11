@@ -5,11 +5,11 @@
 ## Démonstration
 
 1. Ouvrir un événement vidéo dédié à trois nuits.
-2. Montrer une nuit ordinaire de 22 h à 2 h.
+2. Montrer une nuit ordinaire de 22 h à 2 h et ouvrir son éditeur rapide. Les heures affichées permettent de comprendre que la fin est le lendemain ; cet éditeur n'affiche pas de récapitulatif « lendemain ».
 3. Montrer le passage à l’heure d’été : 1 h–5 h, trois heures réelles.
 4. Montrer le passage à l’heure d’hiver : 1 h–5 h, cinq heures réelles.
 5. Vérifier le fuseau Europe/Zurich.
-6. Ouvrir l’export calendrier d’un créneau.
+6. Télécharger tout le planning depuis la page personnelle du bénévole.
 
 ## Résultat visible
 

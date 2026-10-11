@@ -35,7 +35,7 @@
     },
     {
       "id": "ordinary",
-      "transcript": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Ouvrons maintenant le créneau. Son récapitulatif précise que la fin se situe le lendemain : vérifions bien cet horaire.",
+      "transcript": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Ouvrons maintenant le créneau. Les heures affichées vont de vingt-deux heures à deux heures : la fin se situe donc le lendemain. Vérifions bien cet horaire.",
       "fallbackDurationMs": 28000
     },
     {

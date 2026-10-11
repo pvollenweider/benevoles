@@ -24,12 +24,13 @@ import { mergeRenders, ogPosterFfmpegArgs, parseProbe, posterFfmpegArgs, posterF
 const exec = promisify(execFile)
 const FFMPEG = process.env.FFMPEG ?? "ffmpeg"
 const FFPROBE = process.env.FFPROBE ?? "ffprobe"
-const RENDERS_FILE = path.join(videosRoot, "renders.json")
-
 const args = process.argv.slice(2)
+const metadataIndex = args.indexOf("--metadata-output")
+if (metadataIndex >= 0 && !args[metadataIndex + 1]) throw new Error("--metadata-output requires a file")
+const RENDERS_FILE = metadataIndex >= 0 ? path.resolve(args[metadataIndex + 1]) : path.join(videosRoot, "renders.json")
 const inputIndex = args.indexOf("--input")
 const inputRoot = path.resolve(inputIndex >= 0 ? args[inputIndex + 1] : outputRoot)
-const ids = args.filter((a, i) => !a.startsWith("--") && i !== inputIndex + 1)
+const ids = args.filter((a, i) => !a.startsWith("--") && !(inputIndex >= 0 && i === inputIndex + 1) && !(metadataIndex >= 0 && i === metadataIndex + 1))
 
 async function main() {
   const catalog = await loadCatalog()
@@ -60,8 +61,9 @@ async function main() {
   }
 
   const current: Renders = existsSync(RENDERS_FILE) ? JSON.parse(await readFile(RENDERS_FILE, "utf8")) : {}
+  await mkdir(path.dirname(RENDERS_FILE), { recursive: true })
   await writeFile(RENDERS_FILE, `${JSON.stringify(mergeRenders(current, updates), null, 2)}\n`)
-  console.log(`Affiches générées : ${Object.keys(updates).length}. videos/renders.json mis à jour.`)
+  console.log(`Affiches générées : ${Object.keys(updates).length}. ${RENDERS_FILE} mis à jour.`)
   if (skipped.length) console.log(`Sans rendu dans ${inputRoot} (ignorées) : ${skipped.length}\n${skipped.map((s) => `  - ${s}`).join("\n")}`)
 }
 
