@@ -3,6 +3,10 @@
 
 import { spawn } from "node:child_process"
 import { catalogEntry, loadCatalog } from "../lib/manifest"
+import { videoAdminEmail } from "../lib/public-hosts"
+
+// Seeds and tools run below inherit it; --env-file never overrides a variable already set.
+process.env.ORG_ADMIN_EMAIL = videoAdminEmail()
 
 const requested = process.argv.slice(2).filter((argument) => !argument.startsWith("-"))
 
@@ -29,6 +33,7 @@ async function seed(scenario?: string) {
 
 async function main() {
   await run("node", ["--import", "tsx", "videos/tools/check-types.ts"])
+  await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/rename-video-admin.ts"])
   const catalog = await loadCatalog()
   const ids = requested.length > 0 ? requested : catalog.videos.map((video) => video.id)
   for (const id of ids) {

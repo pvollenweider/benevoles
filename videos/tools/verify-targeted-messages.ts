@@ -3,6 +3,7 @@
 
 /** Local preflight evidence; not a recording or an audiovisual validation. */
 import { chromium } from "playwright"
+import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { selectRecipients, selectInvitedWithoutShift, type Audience } from "../../src/lib/targeted-message"
@@ -12,11 +13,11 @@ async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Video preflight requires local host and isolated video DB")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch({ headless: true })
+  const browser = await launchVideoBrowser(chromium, { headless: true })
   try {
     const page = await browser.newPage()
     await page.goto(`${base}/admin/login`)
-    await page.getByLabel("Email", { exact: true }).fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+    await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
     await page.waitForURL(/\/admin\/events/)

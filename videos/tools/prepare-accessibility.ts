@@ -7,6 +7,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -15,7 +16,7 @@ async function main() {
   const orgId = "video-accessibility", eventId = `${orgId}-event`
   try {
     assert.equal(await db.organization.count({ where: { OR: [{ id: orgId }, { slug: "formation-clavier" }] } }), 0, "Accessibility fixture already exists: refusing overwrite")
-    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
     const date = new Date("2026-11-07T00:00:00Z")
     const definitions = [
       ["Accueil", "Accueil du matin", "10:00", "12:00"],

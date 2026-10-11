@@ -41,7 +41,7 @@ export async function verifyOperatorReviewFixture(db: PrismaClient, directory: s
   assert.equal(await db.registration.count(), 0)
   const capture = JSON.parse(await readFile(path.join(directory, "capture-checks.json"), "utf8"))
   for (const key of ["createdPendingOrganization", "oldInviteRefused", "actualActivationAndLogin", "sessionRejectedWhileInactive", "sessionRestoredAfterReactivation", "explicitContextSelection", "realHealthWithoutInventedJobs", "actualUnsubscribe", "exactDisposableDeletion", "ordinaryOwnerPlatformAccessRefused"]) assert.equal(capture[key], true, key)
-  assert.equal(capture.publicAliasRedirect?.targetHost, "formation-operateur-jetable-renommee.video.invalid")
+  assert.equal(capture.publicAliasRedirect?.targetHost, "formation-operateur-jetable-renommee.benevol.app")
   const sends = await db.productUpdateSend.findMany({ select: { subject: true, content: true, sentByAdminId: true, successCount: true, recipientCount: true } })
   assert.equal(sends.length, 1)
   assert(sends[0].subject === "Formation — préparer votre prochain événement" && sends[0].content.includes("# Bienvenue !") && sends[0].sentByAdminId === "video-operator-platform" && sends[0].successCount === 2 && sends[0].recipientCount === 2)

@@ -2,10 +2,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43104")
   assert.equal(new URL(process.env.DATABASE_URL!).pathname, "/benevoles_video_operator")
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage()
     await page.goto("http://localhost:43104/admin/login")

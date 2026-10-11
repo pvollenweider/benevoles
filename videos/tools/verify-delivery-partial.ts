@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { controlledSmtp } from "../lib/controlled-smtp"
 import { registrationToken } from "../../src/lib/token-vault"
 
@@ -14,7 +15,7 @@ async function main() {
   const { prisma: db } = await import("../../src/lib/prisma")
   const { deliverOutbox } = await import("../../src/lib/notifications/outbox")
   const fixture = await controlledSmtp()
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   const base = "http://localhost:43106", eventId = "video-delivery-event", memberId = "video-delivery-member-recoverable", regId = "video-delivery-registration-partial"
   try {
     const event = await db.event.findUniqueOrThrow({ where: { id: eventId } })

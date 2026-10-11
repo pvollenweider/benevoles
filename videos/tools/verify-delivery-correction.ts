@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import { writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
@@ -14,7 +15,7 @@ async function main() {
   assert.equal(base, "http://localhost:43102")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   const orgId = "video-delivery", eventId = "video-delivery-event", shiftId = "video-delivery-shift", registrationId = "video-delivery-registration"
   try {
     const member = await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })

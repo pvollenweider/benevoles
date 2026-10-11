@@ -3,6 +3,7 @@
 
 /** Checks the actual report links against real fixture data. No imitation document. */
 import { chromium } from "playwright"
+import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { mkdir, writeFile } from "node:fs/promises"
@@ -14,7 +15,7 @@ async function main() {
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video environment required")
   const product = await verifyProductBuild(base)
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: "festival-des-documents" }, include: { registrations: { where: { status: "active" }, include: { volunteer: true, shift: true } } } })
     if (new Set(event.registrations.map(r => r.volunteerId)).size !== 80) throw new Error("Document seed required")
@@ -22,7 +23,7 @@ async function main() {
     await mkdir(directory, { recursive: true })
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
     await page.goto(`${base}/admin/login`)
-    await page.getByLabel("Email", { exact: true }).fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+    await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
     await page.waitForURL(/\/admin\/events/)

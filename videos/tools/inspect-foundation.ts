@@ -1,8 +1,9 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage({ locale: "fr-CH" })
     await page.goto("http://localhost:43102/rencontre-0?org=formation-charter")

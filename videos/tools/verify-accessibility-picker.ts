@@ -3,6 +3,7 @@
 /** Real local UI preflight, not native screen-reader or synchronized-video evidence. */
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 
@@ -10,7 +11,7 @@ async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(url.hostname === "localhost" && url.port === "45433" && url.pathname === "/benevoles_video")
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   const directory = path.resolve("videos/output/accessibility-keyboard-display")
   await mkdir(directory, { recursive: true })
   try {

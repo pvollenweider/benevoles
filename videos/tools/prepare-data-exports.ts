@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
 import { verifyExportClassroom } from "../lib/verify-export-review-fixture"
 import { mkdir, writeFile, readFile } from "node:fs/promises"
@@ -16,7 +17,7 @@ async function main() {
   const directory = "videos/output/data-exports-archives"
   const { db, product, tokens: { registrationToken, linkToken }, unregister } = await loadCurrentVideoPrisma(base)
   await verifyExportClassroom(db)
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     await mkdir(directory, { recursive: true })
     const page = await browser.newPage({ acceptDownloads: true })

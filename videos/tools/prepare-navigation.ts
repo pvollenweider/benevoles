@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
+import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -25,7 +26,7 @@ async function main() {
       console.log("Owned fixture retained and aligned: draft, published and finished events; distinct shift labels. No deletion.")
       return
     }
-    const owner = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+    const owner = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
     await db.$transaction(async tx => {
       await tx.organization.create({ data: { id, slug: "formation-navigation", name: "Les amis de Montvert", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true } })
       await tx.adminUser.create({ data: { id: `${id}-owner`, organizationId: id, email: "video.navigation.owner@example.org", name: "Camille Martin", passwordHash: owner.passwordHash, role: "admin", isActive: true } })

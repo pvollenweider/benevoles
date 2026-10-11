@@ -147,6 +147,9 @@ video-up: ## Démarre postgres + mailpit dédiés aux captures vidéo
 video-down: ## Stoppe et supprime la stack vidéo jetable
 	docker compose -f docker-compose.video.yml down
 
+# Organisateur affiché dans les vidéos (videos/lib/public-hosts.ts) ; prime sur .env.video.e2e.
+VIDEO_ADMIN_EMAIL ?= elodie.rochat@example.org
+
 video-setup: ## Initialise la base vidéo avec les données fictives
 	@if [ ! -f .env.video.e2e ]; then \
 		echo "→ Copie videos/video.env.example → .env.video.e2e"; \
@@ -163,12 +166,13 @@ video-setup: ## Initialise la base vidéo avec les données fictives
 	fi
 	node --env-file=.env.video.e2e node_modules/.bin/prisma generate
 	node --env-file=.env.video.e2e node_modules/.bin/prisma migrate deploy
-	node --env-file=.env.video.e2e node_modules/.bin/prisma db seed
-	node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-demo.ts
+	node --env-file=.env.video.e2e --import tsx videos/tools/rename-video-admin.ts
+	ORG_ADMIN_EMAIL="$(VIDEO_ADMIN_EMAIL)" node --env-file=.env.video.e2e node_modules/.bin/prisma db seed
+	ORG_ADMIN_EMAIL="$(VIDEO_ADMIN_EMAIL)" node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-demo.ts
 
 video-seed: ## Charge un scénario masterclass (SCENARIO=fresh-organization)
 	@test -n "$(SCENARIO)" || (echo "SCENARIO est obligatoire"; exit 1)
-	node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-video-scenario.ts "$(SCENARIO)"
+	ORG_ADMIN_EMAIL="$(VIDEO_ADMIN_EMAIL)" node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-video-scenario.ts "$(SCENARIO)"
 
 video-server: ## Lance l'application vidéo sur http://localhost:43100
 	@set -a; . ./.env.video.e2e; set +a; npm run dev -- -p 43100

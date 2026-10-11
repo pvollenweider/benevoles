@@ -257,6 +257,33 @@ Variables facultatives :
 - `VIDEO_ORG`, par défaut `default` ;
 - `VIDEO_EVENT_SLUG`, par défaut `fete-du-village`.
 
+### Adresses affichées : benevol.app, jamais localhost
+
+Les liens à partager, QR codes, emails et adresses d'événement que montrent les vidéos sont ceux
+de la production : `https://<espace>.benevol.app/…`. Ils viennent de `NEXT_PUBLIC_APP_URL`, que le
+produit lit à l'exécution :
+
+- `videos/tools/local-production.ts serve` (et `operator-local.ts`) sert la compilation avec
+  `NEXT_PUBLIC_APP_URL=https://www.benevol.app` ; un serveur lancé à la main doit recevoir la même
+  valeur. `video:record` le vérifie avant de filmer (lien canonique de `/doc`) et refuse sinon.
+- Chaque navigateur des outils vidéo passe par `launchVideoBrowser` (`videos/lib/public-hosts.ts`) :
+  benevol.app et tous ses sous-domaines y sont redirigés vers un proxy TLS local, devant le serveur
+  de capture. Un lien suivi pendant le scénario reste donc sur cette machine ; sans le proxy, le port
+  est fermé et la navigation échoue, elle n'atteint jamais le vrai site. Le lanceur le prouve à
+  chaque démarrage, sur une page servie par le proxy lui-même.
+- Le navigateur continue de parler à `http://localhost:<port>` (sessions, `?org=`, contrôles côté
+  Node). Les pages qui affichent leur propre hôte, comme « Adresse de votre espace » dans
+  Paramètres, montrent donc encore `localhost:<port>`.
+
+L'organisateur de l'organisation par défaut est `elodie.rochat@example.org` (« Élodie Rochat »), et non
+plus `org-admin@localhost`. `videoAdminEmail()` remplace l'ancienne valeur d'un `.env.video.e2e`
+existant, `make video-setup` et `video:build` passent la nouvelle aux seeds, et
+`videos/tools/rename-video-admin.ts` renomme une fois le compte déjà créé dans la base vidéo :
+
+```bash
+node --env-file=.env.video.e2e --import tsx videos/tools/rename-video-admin.ts
+```
+
 Le scénario utilise les durées réelles des WAV lorsqu’elles existent, sinon les estimations du manifeste. Playwright produit `capture.webm` et `timeline.json`. Le pointeur, les clics et le titre de chapitre font partie du screencast.
 
 Pour extraire quatre images réelles du MP4 par chapitre, dont le début de l'intertitre :

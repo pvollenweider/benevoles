@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { readFile, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { linkToken } from "../../src/lib/token-vault"
@@ -15,7 +16,7 @@ async function main() {
   const proof = JSON.parse(await readFile(proofPath, "utf8"))
   assert.equal(proof.crossOrganizationDetailRefusedBothWays, true)
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage()
     await page.goto(`${base}/admin/login`)

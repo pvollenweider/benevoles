@@ -25,7 +25,7 @@
     },
     {
       "id": "unlisted",
-      "transcript": "L’option Afficher dans la liste publique agit indépendamment. Décochée sur un événement publié, elle le retire de la page d’accueil de l’organisation et du référencement, tout en gardant son lien direct et son QR code fonctionnels. Ce n’est donc pas une protection par mot de passe : toute personne qui possède le lien peut l’ouvrir.",
+      "transcript": "L’option Afficher cet événement sur la page publique de l’organisation agit à part. Décochée sur un événement publié, elle le retire de cette page et du référencement, tout en gardant son lien direct et son QR code fonctionnels. Ce n’est donc pas une protection par mot de passe : toute personne qui possède le lien peut l’ouvrir.",
       "fallbackDurationMs": 27000
     },
     {
@@ -53,7 +53,7 @@
     "summary": "Dans cette vidéo, vous réglez séparément la visibilité de votre événement et la période d'ouverture des inscriptions.",
     "steps": [
       "Choisissez le statut de l'événement : brouillon, publié ou archivé.",
-      "Décochez « Afficher dans la liste publique » pour un événement publié mais partagé seulement par lien.",
+      "Décochez « Afficher cet événement sur la page publique de l'organisation » pour un événement publié mais partagé seulement par lien.",
       "Programmez une ouverture et une fermeture des inscriptions dans le fuseau de votre organisation.",
       "Vérifiez que la page affiche la date prévue tant que les inscriptions ne sont pas ouvertes.",
       "Fermez les inscriptions pour une pause temporaire, ou archivez une fois l'événement terminé."
