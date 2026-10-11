@@ -7,7 +7,7 @@
     "summary": "Dans cette vidéo, vous activez l'inscription sur validation pour une mission sensible.",
     "steps": [
       "Activez « Sur validation » dans le créneau et ajoutez les critères utiles dans la consigne.",
-      "Laissez le bénévole envoyer sa demande : sa page personnelle affiche « Demande envoyée, en attente de réponse ».",
+      "Laissez le bénévole envoyer sa demande : sa page personnelle affiche « Demande envoyée », suivi de « en attente de réponse ».",
       "Ouvrez le filtre « Demandes à traiter » pour voir le nom, les coordonnées et les réponses de la personne.",
       "Acceptez ou refusez la demande, avec un message facultatif."
     ],

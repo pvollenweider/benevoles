@@ -5,6 +5,7 @@ import assert from "node:assert/strict"
 import type { PrismaClient } from "../../src/generated/prisma/client"
 import { registrationToken } from "../../src/lib/token-vault"
 import { openPayload } from "../../src/lib/notifications/outbox"
+import { videoAdminEmail } from "./public-hosts"
 
 // TEST-NET-1, used only by this fixture's local browser; never a deployed client.
 export const registrationErrorFixtureIp = "192.0.2.29"
@@ -14,7 +15,7 @@ export async function prepareRegistrationErrorFixture(db: PrismaClient, reset = 
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Dedicated local video database required")
   const orgId = "video-errors", eventId = `${orgId}-event`
   const existing = await db.organization.findUnique({ where: { id: orgId } })
-  const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+  const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
   if (existing) {
     assert(existing.slug === "formation-erreurs" && existing.name === "Formation — inscription robuste" && existing.replyToEmail === "video.errors.owner@example.org", "Fixture namespace mismatch")
     assert(reset, "Existing fixture requires explicit reset")

@@ -11,6 +11,7 @@ import { createRequire } from "node:module"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { privateIdentities, readPrivateIdentityVersion } from "../lib/private-identity-version"
+import { videoAdminEmail } from "../lib/public-hosts"
 
 /** Resolve worker, aliases and generated Prisma from the actual verified main snapshot. */
 export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" | "http://localhost:43106") {
@@ -104,7 +105,7 @@ async function main() {
     const owner = await db.adminUser.findUnique({ where: { id: ownerId } })
     if (owner) assert(owner.email === ownerEmail && owner.organizationId === orgId && owner.name === expectedAuthors[ownerId])
     else {
-      const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+      const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
       await db.adminUser.create({ data: { id: ownerId, organizationId: orgId, name: expectedAuthors[ownerId], email: ownerEmail, role: "admin", passwordHash: source.passwordHash } })
     }
     const organizerId = "video-delivery-organizer", organizerEmail = "video.delivery.organizer@example.org"

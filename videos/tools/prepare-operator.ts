@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
@@ -11,7 +12,7 @@ async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video_operator" || process.env.VIDEO_BASE_URL !== "http://localhost:43104") throw new Error("Isolated operator video environment required")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const platform = await browser.newPage(), owner = await browser.newPage(), anonymous = await browser.newPage()
     for (const [page, email] of [[platform, "video.operator.platform@example.org"], [owner, "video.operator.a.owner@example.org"]] as const) {

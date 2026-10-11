@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /** Read-only screenshots of the real main build, not substitutes for recordings. */
 import { chromium } from "playwright"
+import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { mkdir, writeFile } from "node:fs/promises"
 import { verifyProductBuild } from "../lib/product-build"
 
@@ -10,13 +11,13 @@ async function main() {
   const product = await verifyProductBuild(base)
   const directory = "videos/output/main-ui-baseline"
   await mkdir(directory, { recursive: true })
-  const browser = await chromium.launch({ headless: true, args: ["--lang=fr-FR"], env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" } })
+  const browser = await launchVideoBrowser(chromium, { headless: true, args: ["--lang=fr-FR"], env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" } })
   const context = await browser.newContext({ locale: "fr-FR", timezoneId: "Europe/Zurich", viewport: { width: 1280, height: 800 }, reducedMotion: "reduce" })
   const page = await context.newPage()
   const rows: { name: string; route: string; status: number; headings: string[]; screenshot: string; screenshotCoverage: string; documentHeight: number; controls: string[] }[] = []
   try {
     await page.goto(`${base}/admin/login`)
-    await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+    await page.getByLabel("Email").fill(videoAdminEmail())
     await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
     await page.waitForURL(/\/admin\/events/)

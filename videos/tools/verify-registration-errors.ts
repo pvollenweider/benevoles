@@ -3,6 +3,7 @@
 /** Real local server refusals and response-loss simulation, never fabricated UI. */
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
+import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
@@ -17,11 +18,11 @@ async function main() {
   const orgId = "video-errors", eventId = `${orgId}-event`
   const directory = path.resolve("videos/output/volunteer-confirmation-errors/server-preflight")
   await mkdir(directory, { recursive: true })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const existing = await db.organization.findUnique({ where: { id: orgId } })
     if (!existing) {
-      const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+      const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
       const day = new Date("2026-11-14T00:00:00Z")
       await db.$transaction(async tx => {
         await tx.organization.create({ data: { id: orgId, slug: "formation-erreurs", name: "Formation — inscription robuste", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true, replyToEmail: "video.errors.owner@example.org" } })

@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { readFile, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
@@ -14,7 +15,7 @@ async function main() {
   const preparation = JSON.parse(await readFile("videos/output/email-delivery-failures/outbox-preparation.json", "utf8"))
   assert.equal(preparation.organizationId, "video-delivery")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const org = await db.organization.findUniqueOrThrow({ where: { id: "video-delivery" } })
     assert.equal(org.slug, "formation-livraisons")

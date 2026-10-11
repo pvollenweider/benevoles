@@ -11,7 +11,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 const subject = "Formation — préparer votre prochain événement"
-const content = "# Bienvenue !\n- Vérifiez votre planning.\n- Partagez votre lien public.\n[Lire le guide](http://video.invalid/guide-admin)"
+const content = "# Bienvenue !\n- Vérifiez votre planning.\n- Partagez votre lien public.\n[Lire le guide](https://www.benevol.app/doc/admin)"
 const ownerEmail = "video.operator.disposable.owner@example.org"
 const initialSlug = "formation-operateur-jetable"
 const finalSlug = "formation-operateur-jetable-renommee"
@@ -176,8 +176,8 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.67)
       const redirected = await page.request.get(`${base}/?org=${initialSlug}`, { maxRedirects: 0 })
       const location = redirected.headers().location
-      assert(location && new URL(location, base).hostname === `${finalSlug}.video.invalid`, "Actual old public slug redirects to new canonical host")
-      checks.publicAliasRedirect = { status: redirected.status(), targetHost: `${finalSlug}.video.invalid` }
+      assert(location && new URL(location, base).hostname === `${finalSlug}.benevol.app`, "Actual old public slug redirects to new canonical host")
+      checks.publicAliasRedirect = { status: redirected.status(), targetHost: `${finalSlug}.benevol.app` }
     })
     await scene("availability", async at => {
       await at(.04); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))

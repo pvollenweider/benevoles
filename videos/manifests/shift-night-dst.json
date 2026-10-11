@@ -7,7 +7,7 @@
     "summary": "Dans cette vidéo, vous comprenez comment les créneaux de nuit et les changements d'heure sont affichés et calculés.",
     "steps": [
       "Créez un créneau de nuit qui se termine après minuit : il reste rattaché au jour de son début.",
-      "Vérifiez l'affichage dans la Frise et dans les textes destinés aux bénévoles (« fin à deux heures, le lendemain »).",
+      "Vérifiez l'affichage dans la Frise et dans les textes destinés aux bénévoles (« 22:00–02:00 (jusqu'au lendemain) »).",
       "Vérifiez les totaux d'heures autour du passage à l'heure d'été ou d'hiver.",
       "Retéléchargez l'export calendrier après toute modification d'un créneau de nuit."
     ],

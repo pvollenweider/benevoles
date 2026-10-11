@@ -8,6 +8,7 @@ import { access, readFile, writeFile, mkdir } from "node:fs/promises"
 import path from "node:path"
 import type { ProductBuild } from "../lib/product-build"
 import { verifyProductBuild } from "../lib/product-build"
+import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
 const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
@@ -42,7 +43,8 @@ async function main() {
     if (proof.snapshot !== copy || !/^[a-f0-9]{40}$/.test(proof.commit) || !proof.buildId || !proof.productSourceSha256) throw new Error("Verified main build proof required before serving video UI")
     childWorkingDirectory = path.dirname(server)
     await access(server)
-    Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1" })
+    // Share links, QR codes and emails read https://<org>.benevol.app on screen (videos/lib/public-hosts.ts).
+    Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: PUBLIC_APP_URL })
     if (mode === "serve-delivery") Object.assign(env, { PORT: "43106", NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-dayof") Object.assign(env, { PORT: "43108", NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
@@ -51,6 +53,7 @@ async function main() {
     serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
   } else if (mode === "run" || mode === "run-delivery") {
+    env.ORG_ADMIN_EMAIL = videoAdminEmail(env.ORG_ADMIN_EMAIL)
     const [script, ...rest] = args
     const allowed = new Set(["videos/tools/record.ts", "videos/tools/verify-last-minute-mail.ts", "videos/tools/audit-audiovisual.ts", "scripts/seed-video-scenario.ts", "videos/tools/prepare-privacy.ts", "videos/tools/verify-privacy-details.ts", "videos/tools/prepare-delivery.ts", "videos/tools/verify-delivery-details.ts", "videos/tools/verify-delivery-correction.ts"])
     allowed.add("videos/tools/verify-delivery-partial.ts")

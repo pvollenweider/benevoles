@@ -4,6 +4,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
+import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail } from "../lib/public-hosts"
 import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { pinProductBuildForCapture } from "../lib/product-build"
 
@@ -139,6 +140,9 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 }
 
 async function main() {
+  // Links, QR codes and emails on screen must read benevol.app, not this machine (public-hosts.ts):
+  // the probe page's canonical link is built from the server's NEXT_PUBLIC_APP_URL.
+  if (!servedWithPublicUrl(await (await fetch(`${baseUrl}${PUBLIC_URL_PROBE_PATH}`)).text())) throw new Error("Serve the capture build with NEXT_PUBLIC_APP_URL=https://www.benevol.app (local-production.ts serve does it)")
   const manifest = await loadManifest(reference!)
   const product = await pinProductBuildForCapture(baseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
@@ -170,12 +174,12 @@ async function main() {
   // the context's Accept-Language. Keep French narration separate from this.
   const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate"].includes(slug) && process.platform === "darwin"
   if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
-  const browser = await chromium.launch({
+  const browser = await launchVideoBrowser(chromium, {
     headless: true,
     ...(questionsFrenchLauncher ? { executablePath: path.resolve("videos/tools/chromium-fr-questions.sh") } : {}),
     args: ["--lang=fr-FR"],
     env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" },
-  })
+  }, baseUrl)
   const context = await browser.newContext({
     viewport: { width: manifest.viewport.width, height: manifest.viewport.height },
     deviceScaleFactor: manifest.viewport.deviceScaleFactor,
@@ -249,7 +253,7 @@ async function main() {
     }
     if (slug === "volunteer-form-recap") {
       await page.goto(`${baseUrl}/admin/login`)
-      await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+      await page.getByLabel("Email").fill(videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
       await page.waitForURL(/\/admin\/events/)
@@ -275,7 +279,7 @@ async function main() {
       if (!(await heading.isVisible())) throw new Error("Demo event not found; run scripts/seed-demo.ts on the local database first")
     } else if (slug !== "volunteer-form-recap" && slug !== "volunteer-confirmation-errors") {
       await page.goto(`${baseUrl}/admin/login`)
-      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
       await page.waitForURL(slug === "platform-internal-administration" ? /\/super-admin\/organizations/ : /\/admin\/(events|dashboard)/)
@@ -3261,7 +3265,7 @@ async function main() {
             const rawHref = await anchor.getAttribute("href")
             if (!rawHref) throw new Error("Real received email lacks its personal link")
             const actual = new URL(rawHref)
-            if (!(actual.hostname === "formation-questions.video.invalid" || actual.origin === baseUrl) || !/^\/my\/[^/]+$/.test(actual.pathname)) throw new Error("Received personal link is outside the fictional organization")
+            if (!(actual.hostname === "formation-questions.video.invalid" || actual.hostname === "formation-questions.benevol.app" || actual.origin === baseUrl) || !/^\/my\/[^/]+$/.test(actual.pathname)) throw new Error("Received personal link is outside the fictional organization")
             const local = new URL(actual.pathname, baseUrl)
             local.searchParams.set("org", "formation-questions")
             observations.freshEmail = { mailId: mail.ID, exactRecipient: recipient, messageProducedDuringThisTake: true, trainingDomainReplayedLocally: actual.origin !== baseUrl }

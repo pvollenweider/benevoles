@@ -3,6 +3,7 @@
 
 /** Actual local mutations, not synthetic EventLog rows; not audiovisual proof. */
 import { chromium } from "playwright"
+import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { mkdir, writeFile } from "node:fs/promises"
@@ -12,7 +13,7 @@ async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video environment required")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: "atelier-journal" }, include: { shifts: true, registrations: true } })
     if (await db.eventLog.count({ where: { eventId: event.id } })) throw new Error("Fresh event-activity-log seed required; refusing duplicate history")
@@ -22,7 +23,7 @@ async function main() {
     if (!shift?.waitlistEnabled || !active || !waiting) throw new Error("Occupied shift and real waitlist required")
     const page = await browser.newPage()
     await page.goto(`${base}/admin/login`)
-    await page.getByLabel("Email", { exact: true }).fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+    await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
     await page.waitForURL(/\/admin\/events/)

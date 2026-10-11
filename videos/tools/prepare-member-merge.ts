@@ -9,6 +9,7 @@ import { mkdir, writeFile, readFile } from "node:fs/promises"
 import path from "node:path"
 import { MERGE_ORG, MERGE_SLUG, MERGE_OWNER, MERGE_KEEP, MERGE_ABSORB, MERGE_EVENT, MERGE_MOVED_REGISTRATION, MERGE_MOVED_INVITE, MERGE_QUESTION, assertMergeDatabase, assertMergeReviewFixture } from "../lib/member-merge-fixture"
 import { readPrivateIdentityVersion } from "../lib/private-identity-version"
+import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
   const databaseUrl = process.env.DATABASE_URL ?? ""
@@ -23,7 +24,7 @@ async function main() {
   catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
   const { db, tokens: { registrationToken, linkToken }, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
   try {
-    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
+    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
     const date = new Date("2026-11-28T00:00:00Z")
     await db.$transaction(async tx => {
       const existing = await tx.organization.count({ where: { OR: [{ id: MERGE_ORG }, { slug: MERGE_SLUG }] } })

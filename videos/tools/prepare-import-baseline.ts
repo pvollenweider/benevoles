@@ -6,6 +6,7 @@ import { createHash } from "node:crypto"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
 import { ownsNaturalMemberSeed, readSeedProofV2 } from "../lib/member-fixture-v2"
 import { validateImportBaseline } from "../lib/member-import-ownership"
@@ -28,7 +29,7 @@ async function main() {
     }
     assert(before.length === 25 && before.filter(person => person.email?.endsWith("@example.org")).length === 24, "Only the exact 24-email plus M2 pre-baseline is eligible")
     assert(before.filter(person => person.email === null).length === 1 && ownsNaturalMemberSeed(before.find(person => person.id === "video-member-management-2") ?? {}, seeds), "Exact ledger-backed M2 required; unknown no-email contacts refuse preparation")
-    const browser = await chromium.launch({ headless: true })
+    const browser = await launchVideoBrowser(chromium, { headless: true })
     try {
       const page = await browser.newPage({ locale: "fr-CH", timezoneId: "Europe/Zurich" })
       await page.goto("http://localhost:43102/admin/login")

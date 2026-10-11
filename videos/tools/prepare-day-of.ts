@@ -8,6 +8,7 @@ import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { verifyDayOfReviewFixture } from "../lib/verify-dayof-review-fixture"
+import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
   assert(process.argv.slice(2).every(arg => arg === "--reset-owned") && process.argv.length <= 3)
@@ -24,7 +25,7 @@ async function main() {
       assert(existing.volunteers.length === 8 && existing.volunteers.every(v => /^video-dayof-attendance-person-[0-7]$/.test(v.id) && /^video\.attendance\.[0-7]@example\.org$/.test(v.email ?? "") && v.lastName === "Exemple"))
       assert(existing.events.length === 2 && existing.events.every(e => [eventId, liveId].includes(e.id) && !e.sectorLeaders.length && e.shifts.every(s => /^video-dayof-shift-(old-[0-2]|running|upcoming|earlier|night)$/.test(s.id)) && e.registrations.every(r => /^video-dayof-registration-(old-[0-7]|zoe|upcoming|earlier|night)$/.test(r.id))))
     } else assert.equal(await db.organization.count({ where: { slug: "formation-jour-j" } }), 0, "Slug belongs to another organization")
-    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: "org-admin@localhost" }, select: { passwordHash: true } })
+    const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
     const now = new Date()
     const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Zurich", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(now)
     const value = (type: string) => parts.find(p => p.type === type)!.value

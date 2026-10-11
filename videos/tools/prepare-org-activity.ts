@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { chromium } from "playwright"
+import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { mkdir, writeFile } from "node:fs/promises"
@@ -12,7 +13,7 @@ async function main() {
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video environment required")
   const organizationId = "video-org-activity"
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-  const browser = await chromium.launch()
+  const browser = await launchVideoBrowser(chromium)
   try {
     if (await db.orgLog.count({ where: { organizationId } }) || await db.volunteer.count({ where: { organizationId } })) throw new Error("Fresh organization-activity-log seed required")
     const contexts = await Promise.all([browser.newContext(), browser.newContext()])

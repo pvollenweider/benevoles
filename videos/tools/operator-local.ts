@@ -6,6 +6,7 @@ import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
 import { access } from "node:fs/promises"
 import path from "node:path"
+import { PUBLIC_APP_URL } from "../lib/public-hosts"
 
 async function main() {
   const source = new URL(process.env.DATABASE_URL ?? "")
@@ -19,7 +20,7 @@ async function main() {
     if (marker.rowCount !== 1 || marker.rows[0].purpose !== "benevol-masterclass-53-synthetic-only") throw new Error("Operator database is not marked for our fixture")
   } finally { await db.end() }
   const [mode, ...args] = process.argv.slice(2)
-  const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_URL: source.href, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: "http://localhost:43104", VIDEO_BASE_URL: "http://localhost:43104", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "",
+  const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_URL: source.href, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: "http://localhost:43104", VIDEO_BASE_URL: "http://localhost:43104", NEXT_PUBLIC_APP_URL: PUBLIC_APP_URL, SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "",
     SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_SECURE: "false", SMTP_USER: "", SMTP_PASSWORD: "",
     EMAIL_FROM: "Bénévoles formation <video.operator.platform@example.org>", EMAIL_REPLY_TO: "video.operator.platform@example.org",
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"), TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
