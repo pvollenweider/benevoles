@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: SHIFTS_ROLES_VIEWS -->
 
-**Événements**, puis l'événement, puis **Gérer les créneaux**
+**Événements**, puis l'événement, puis **Gérer les créneaux** (**Créneaux** sur un téléphone)
 
 Un créneau correspond à un poste de bénévolat sur une plage horaire précise.
 

@@ -48,4 +48,4 @@ Sur la page de l'événement, la section **Partager l'événement** propose **Co
 
 ## 8. Suivre les inscriptions
 
-**Voir les inscriptions**, sur la page de l'événement, liste chaque inscription avec ses coordonnées et son créneau. Pour retirer votre inscription de test, cochez sa ligne, puis **Retirer de leur créneau**. Voir [Suivre les inscriptions](suivre-les-inscriptions.md), et [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md) pour repérer les créneaux à compléter.
+**Voir les inscriptions** (**Inscriptions** sur un téléphone), sur la page de l'événement, liste chaque inscription avec ses coordonnées et son créneau. Pour retirer votre inscription de test, cochez sa ligne, puis **Retirer de leur créneau**. Voir [Suivre les inscriptions](suivre-les-inscriptions.md), et [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md) pour repérer les créneaux à compléter.

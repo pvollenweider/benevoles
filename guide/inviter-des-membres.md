@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: MEMBERS_INVITATIONS -->
 
-**Événements**, puis l'événement, puis **Inviter des membres**
+**Événements**, puis l'événement, puis **Inviter des membres** (**Inviter** sur un téléphone)
 
 Les invitations permettent d'envoyer des emails personnalisés aux membres de votre liste, avec un lien pré-rempli vers la page d'inscription.
 
