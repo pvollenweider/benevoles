@@ -14,4 +14,4 @@ Si tu rouvres la page de l'événement depuis le même navigateur (et que tu n'a
 
 Depuis ta page personnelle, le lien « Retour à l'accueil » te ramène directement sur la page de l'événement, qui te reconnaît.
 
-Pour te déconnecter de cette session (par exemple sur un appareil partagé), clique sur **Quitter la session** en haut à droite.
+Pour te déconnecter de cette session (par exemple sur un appareil partagé), clique sur **Quitter la session** en haut à droite : le navigateur oublie aussi tes coordonnées, qui ne seront plus proposées pour un autre événement.
