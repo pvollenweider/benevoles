@@ -1,0 +1,12 @@
+{
+  "anchor": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.25,
+    "wordsHeard": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une"
+  },
+  "onset": 13.25,
+  "proposedCut": 13.263103999999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

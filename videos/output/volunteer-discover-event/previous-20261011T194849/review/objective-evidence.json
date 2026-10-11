@@ -1,0 +1,193 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 156,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 13.6,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": -32.3,
+    "loudestMusicOnlyLufs": -31.8,
+    "medianVoiceLufs": -16.6
+  },
+  "inputCounts": {
+    "click": 2,
+    "key": 0
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "access",
+      "phrase": "Le lien direct s’ouvre dans",
+      "startMs": 3596,
+      "endMs": 5705,
+      "cueMs": 20022,
+      "sentenceAbsoluteMs": 20021,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "access",
+      "phrase": "Un lien personnel ne se",
+      "startMs": 15935,
+      "endMs": 18036,
+      "cueMs": 32364,
+      "sentenceAbsoluteMs": 32360,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Le lieu est accompagné d’un",
+      "startMs": 4410,
+      "endMs": 10322,
+      "cueMs": 40030,
+      "sentenceAbsoluteMs": 40028,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Sur ordinateur, la fiche à",
+      "startMs": 11071,
+      "endMs": 14234,
+      "cueMs": 46691,
+      "sentenceAbsoluteMs": 46689,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Tu peux revenir au planning",
+      "startMs": 10630,
+      "endMs": 12494,
+      "cueMs": 63063,
+      "sentenceAbsoluteMs": 63061,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "ces pages servent justement à",
+      "startMs": 12682,
+      "endMs": 15771,
+      "cueMs": 65114,
+      "sentenceAbsoluteMs": 65113,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "desktop",
+      "phrase": "Les bandes violettes placent les",
+      "startMs": 10319,
+      "endMs": 12510,
+      "cueMs": 82469,
+      "sentenceAbsoluteMs": 82467,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Sur validation signifie que l’organisateur",
+      "startMs": 5931,
+      "endMs": 11274,
+      "cueMs": 96104,
+      "sentenceAbsoluteMs": 96103,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Réservé reste visible mais demande",
+      "startMs": 14182,
+      "endMs": 16289,
+      "cueMs": 104355,
+      "sentenceAbsoluteMs": 104354,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Les places libres, les couleurs",
+      "startMs": 17133,
+      "endMs": 20664,
+      "cueMs": 107307,
+      "sentenceAbsoluteMs": 107305,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "le message avec les flèches",
+      "startMs": 6538,
+      "endMs": 10133,
+      "cueMs": 123091,
+      "sentenceAbsoluteMs": 123090,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Glisse doucement pour parcourir la",
+      "startMs": 10889,
+      "endMs": 14986,
+      "cueMs": 127442,
+      "sentenceAbsoluteMs": 127441,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Tu retrouves les heures, les",
+      "startMs": 15767,
+      "endMs": 22152,
+      "cueMs": 132320,
+      "sentenceAbsoluteMs": 132319,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Ici, Julien fait partie de",
+      "startMs": 5543,
+      "endMs": 7699,
+      "cueMs": 146925,
+      "sentenceAbsoluteMs": 146923,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 154828
+      },
+      "deltaMs": 7905
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "L’invitation ne t’inscrit pas toute",
+      "startMs": 12980,
+      "endMs": 14624,
+      "cueMs": 154362,
+      "sentenceAbsoluteMs": 154360,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 154828
+      },
+      "deltaMs": 468
+    },
+    {
+      "segmentId": "result",
+      "phrase": "En cas de doute sur",
+      "startMs": 10420,
+      "endMs": 15794,
+      "cueMs": 172785,
+      "sentenceAbsoluteMs": 172784,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

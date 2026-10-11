@@ -1,0 +1,6 @@
+STATUS: NOT READY
+ID: ADMIN_FEATURES_OVERVIEW
+BUILD_ID: FCLCqO4jFR7lUbWQJ4dOp
+No capture: narration audit gate rejects duplicated intro clause communiquer puis préparer le jour J, confirmed by second independent recognition.
+Cache fingerprint rejected; new continuous narration generated. Four chapter boundaries corrected with silence-based proposal and re-audited: team=29.894479, reminders=199.290000, reports=211.294625, activity=227.826083. Intro still fails; not filming a known-invalid take.
+No final MP4, duration/music/sync/posters unavailable. No tracked source change.

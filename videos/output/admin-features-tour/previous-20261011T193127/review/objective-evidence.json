@@ -1,0 +1,172 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 242,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 13.6,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.1,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 18,
+    "key": 8
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "team",
+      "phrase": "Les responsables de secteur reçoivent",
+      "startMs": 9329,
+      "endMs": 18457,
+      "cueMs": 41837,
+      "sentenceAbsoluteMs": 41835,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Même publié, il peut rester",
+      "startMs": 9221,
+      "endMs": 13380,
+      "cueMs": 64382,
+      "sentenceAbsoluteMs": 64379,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Les inscriptions peuvent être immédiates",
+      "startMs": 13811,
+      "endMs": 18777,
+      "cueMs": 68978,
+      "sentenceAbsoluteMs": 68969,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "appearance",
+      "phrase": "Le lieu peut recevoir des",
+      "startMs": 7869,
+      "endMs": 9393,
+      "cueMs": 82642,
+      "sentenceAbsoluteMs": 82640,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3908,
+      "endMs": 11381,
+      "cueMs": 110840,
+      "sentenceAbsoluteMs": 110837,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 111309
+      },
+      "deltaMs": 472
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3908,
+      "endMs": 11381,
+      "cueMs": 111620,
+      "sentenceAbsoluteMs": 110837,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 112094
+      },
+      "deltaMs": 1257
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "Pour des horaires répétitifs, la",
+      "startMs": 11846,
+      "endMs": 17186,
+      "cueMs": 118778,
+      "sentenceAbsoluteMs": 118775,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 118791
+      },
+      "deltaMs": 16
+    },
+    {
+      "segmentId": "shift-fields",
+      "phrase": "La liste d’attente et l’inscription",
+      "startMs": 13253,
+      "endMs": 17638,
+      "cueMs": 137824,
+      "sentenceAbsoluteMs": 137823,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "taille de t-shirt, régime alimentaire",
+      "startMs": 2826,
+      "endMs": 9284,
+      "cueMs": 183129,
+      "sentenceAbsoluteMs": 183128,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 183601
+      },
+      "deltaMs": 473
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Les modèles réutilisables acceptent des",
+      "startMs": 7101,
+      "endMs": 13671,
+      "cueMs": 220319,
+      "sentenceAbsoluteMs": 220318,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Tu prévisualises toujours le résultat",
+      "startMs": 14380,
+      "endMs": 17511,
+      "cueMs": 227598,
+      "sentenceAbsoluteMs": 227597,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "reports",
+      "phrase": "Les badges se génèrent en",
+      "startMs": 11496,
+      "endMs": 16744,
+      "cueMs": 258975,
+      "sentenceAbsoluteMs": 258975,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "activity",
+      "phrase": "La recherche globale permet ensuite",
+      "startMs": 13748,
+      "endMs": 17700,
+      "cueMs": 281577,
+      "sentenceAbsoluteMs": 281576,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 282047
+      },
+      "deltaMs": 471
+    }
+  ]
+}

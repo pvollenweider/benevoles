@@ -174,7 +174,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation"].includes(slug) && process.platform === "darwin"
+  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors"].includes(slug) && process.platform === "darwin"
   if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
@@ -485,10 +485,10 @@ async function main() {
 
     const stamp = Date.now()
     await scene("details", async () => {
-      await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
-      await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
-      await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), `alex.martin.video.${stamp}@example.org`)
-      await typeNaturally(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34")
+      await fillVisibly(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex", 180)
+      await fillVisibly(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin", 180)
+      await fillVisibly(page, page.getByRole("textbox", { name: "Email *", exact: true }), `alex.martin.video.${stamp}@example.org`, 180)
+      await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34", 180)
     })
 
     await scene("preferences", async () => {
@@ -501,10 +501,12 @@ async function main() {
       await tap(page, privacy)
     })
 
-    await scene("confirm", async () => {
+    await scene("confirm", async (at) => {
       const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
+      await at("Un dernier coup d’œil au")
+      await page.locator(".lg\\:col-start-2").filter({ hasText: "Tes créneaux" }).first().scrollIntoViewIfNeeded()
+      await at("confirme ton inscription.")
       await submit.scrollIntoViewIfNeeded()
-      await page.waitForTimeout(700)
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
       await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
@@ -1844,6 +1846,7 @@ async function main() {
         await tap(page, form.getByRole("button", { name: "Annuler", exact: true }))
       })
     } else if (slug === "volunteer-discover-event") {
+      let publicEventUrl = ""
       await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Tout comprendre avant de choisir", duration: 2_300 })
@@ -1854,6 +1857,7 @@ async function main() {
       await scene("access", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/qr`); await settle(page)
         await page.getByRole("heading", { name: "QR code", exact: true }).waitFor()
+        publicEventUrl = (await page.getByAltText(/QR code vers/).getAttribute("alt"))!.replace("QR code vers ", "")
         await at("Le lien direct s’ouvre dans")
         await page.getByAltText(/QR code vers/).scrollIntoViewIfNeeded()
         await at(0.58) /* mid-sentence */
@@ -1874,24 +1878,22 @@ async function main() {
         await page.getByText(/Deux jours de fête sur la place/).scrollIntoViewIfNeeded()
       })
 
+      // Use the configured public host so real relative links retain the tenant context.
+      await page.goto(publicEventUrl); await settle(page)
       await page.screencast.showChapter("Les informations pratiques", { description: "Tout retrouver sans fouiller ses messages", duration: 1_400 })
       await scene("pages", async (at) => {
         await tap(page, page.getByRole("link", { name: "Accès et parking" }))
-        // In production the organization subdomain carries the tenant context. The local video
-        // stack uses ?org= instead, which a relative public-page link cannot preserve by itself.
-        await page.goto(`${baseUrl}/${eventSlug}/acces?org=${encodeURIComponent(org)}`); await settle(page)
+        await settle(page)
         await page.getByRole("heading", { name: "Accès et parking" }).waitFor()
-        await at(0.30) /* mid-sentence */
+        await at("Accès et parking explique les")
         await page.getByRole("heading", { name: "En transports publics" }).scrollIntoViewIfNeeded()
-        await at("Tu peux revenir au planning")
-        await page.getByRole("heading", { name: "En voiture" }).scrollIntoViewIfNeeded()
-        await at("ces pages servent justement à")
-        await page.goto(`${baseUrl}/${eventSlug}/faq?org=${encodeURIComponent(org)}`); await settle(page)
+        await at("Questions fréquentes précise l’assurance et")
+        await page.goto(`${publicEventUrl}/faq`); await settle(page)
         await page.getByRole("heading", { name: "Questions fréquentes" }).waitFor()
-        await at(0.84) /* mid-sentence */
+        await at("Tu peux revenir au planning")
+        await page.goto(publicEventUrl); await settle(page)
       })
 
-      await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
       await page.screencast.showChapter("Lire le planning", { description: "Journées, postes, capacités et programme", duration: 1_400 })
       await scene("desktop", async (at) => {
         const firstDay = page.getByRole("region", { name: /Planning du/ }).first()
@@ -1912,11 +1914,11 @@ async function main() {
         const approval = page.getByRole("button", { name: /sur validation/ }).first()
         await approval.scrollIntoViewIfNeeded()
         await approval.focus()
-        await at("Réservé reste visible mais demande")
+        await at("Dix-huit plus annonce un âge")
         const adult = page.getByRole("button", { name: /18 ans minimum/ }).first()
         await adult.scrollIntoViewIfNeeded()
         await adult.focus()
-        await at("Les places libres, les couleurs")
+        await at("Réservé reste visible mais demande")
         const reserved = page.getByRole("button", { name: /réservé à certains membres/ }).first()
         await reserved.scrollIntoViewIfNeeded()
         await reserved.focus()
@@ -1928,10 +1930,10 @@ async function main() {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         const hint = page.getByText(/Fais défiler pour voir toutes les plages/).first()
         await hint.scrollIntoViewIfNeeded()
-        await at("le message avec les flèches")
+        await at("Glisse doucement pour parcourir la")
         const timeline = page.getByRole("region", { name: /Planning du/ }).first()
         await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth * 0.46 })
-        await at("Glisse doucement pour parcourir la")
+        await at(0.65) /* mid-sentence: continue the demonstrated horizontal swipe */
         await timeline.evaluate((element) => { element.scrollLeft = element.scrollWidth })
         await at("Tu retrouves les heures, les")
         await page.getByText(/Brunch/).first().scrollIntoViewIfNeeded()
@@ -1980,7 +1982,7 @@ async function main() {
       })
 
       await scene("capacity", async (at) => {
-        const available = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil.*2 places libres sur 3/ })
+        const available = page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil.*1 place libre sur 3/ })
         await available.scrollIntoViewIfNeeded()
         await available.focus()
         await at("Un créneau complet sans liste")
@@ -1996,7 +1998,7 @@ async function main() {
         await tap(page, waiting)
         await at(0.40) /* mid-sentence */
         await page.getByText(/Complet · liste d'attente si place libérée/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
-        await at("La position et une éventuelle")
+        await at("Reclique pour le retirer.")
         await tap(page, page.getByRole("button", { name: "Retirer Buvette de la sélection" }))
       })
 
@@ -2021,11 +2023,11 @@ async function main() {
         const afternoon = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : sélectionner/ })
         await afternoon.scrollIntoViewIfNeeded()
         await tap(page, afternoon)
-        await at(0.40) /* mid-sentence */
+        await at("Ici, Accueil de quinze à")
         const overlapping = page.getByRole("button", { name: /^14h–18h.*Navette.*chevauche un créneau déjà choisi/ }).first()
         await overlapping.scrollIntoViewIfNeeded()
         await overlapping.focus()
-        await at("Le serveur vérifiera encore ce")
+        await at("Retire le premier choix si")
         await tap(page, page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : désélectionner/ }))
       })
 
@@ -2033,11 +2035,8 @@ async function main() {
         await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
         await at("Ils apparaissent dans son récapitulatif")
-        await page.getByText(/Camille Rochat/).first().scrollIntoViewIfNeeded()
-        await at(0.44) /* mid-sentence */
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         await page.getByText(/Camille Rochat/).first().waitFor()
-        await at(0.70) /* mid-sentence */
         await page.getByText("Créneaux sélectionnés").scrollIntoViewIfNeeded()
       })
 
@@ -2047,7 +2046,7 @@ async function main() {
         await at("les autres plages restent visibles")
         await limited.focus()
         await at("Elle doit d’abord annuler une")
-        const cancel = page.getByRole("button", { name: /Annuler l'inscription à Buvette/ }).first()
+        const cancel = page.getByRole("button", { name: "Annuler le créneau Buvette", exact: true }).first()
         await cancel.scrollIntoViewIfNeeded()
         await cancel.focus()
       })
@@ -2075,7 +2074,7 @@ async function main() {
           await tap(page, button)
           await page.waitForTimeout(800)
         }
-        await at("Le récapitulatif les classe dans")
+        await at("Le bouton Continuer ouvre le")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
       })
@@ -2084,16 +2083,17 @@ async function main() {
         await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Martin")
         await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "alex.martin@example.org")
         await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 12 34")
-        await at(0.72) /* mid-sentence */
+        await at("La date de naissance apparaît")
         await fillVisibly(page, page.getByLabel("Date de naissance *"), "1994-06-12")
       })
       await scene("questions", async (at) => {
+        await at("La taille de t-shirt est")
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await at(0.24) /* mid-sentence */
         await typeNaturally(page, page.getByLabel(/Régime alimentaire/), "Végétarien")
         await at(0.48) /* mid-sentence */
         await typeNaturally(page, page.getByLabel("Permis de conduire"), "Permis B")
-        await at(0.68) /* mid-sentence */
+        await at("Le commentaire permet de préciser")
         await typeNaturally(page, page.getByLabel(/Commentaire/), "Je prévois une pause avant la nuit.")
       })
       await scene("agreement", async (at) => {
@@ -2155,12 +2155,11 @@ async function main() {
       await scene("cancel", async (at) => {
         const button = page.getByRole("button", { name: "Annuler le créneau Accueil", exact: true })
         await tap(page, button)
-        await at("rien n'est retiré.")
+        await at("Tu peux encore choisir Non,")
         await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Non, garder", exact: true }))
         await page.getByRole("alertdialog").waitFor({ state: "hidden" })
-        await at("La carte disparaît de la")
+        await at("Reprenons et confirmons cette fois.")
         await tap(page, button)
-        await at(0.62) /* mid-sentence */
         await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Oui, annuler", exact: true }))
         await button.waitFor({ state: "hidden" })
       })
@@ -2175,9 +2174,10 @@ async function main() {
       await scene("waiting", async at => withdraw(at, "Quitter la liste d'attente du créneau Buvette", "Oui, quitter", async () => {
         await at("Confirme uniquement si c'est ce")
       }))
-      await scene("offer", async at => withdraw(at, "Refuser la place proposée sur le créneau Buvette", "Oui, refuser"))
+      await scene("offer", async at => withdraw(at, "Refuser la place proposée sur le créneau Buvette", "Oui, refuser", async () => { await at("Après confirmation, cette offre disparaît.") }))
       await scene("request", async at => {
-        await withdraw(at, "Retirer ma demande pour le créneau Navette du dimanche", "Oui, retirer")
+        await at("Retirer ma demande ouvre sa")
+        await withdraw(at, "Retirer ma demande pour le créneau Navette du dimanche", "Oui, retirer", async () => { await at("En confirmant, tu retires cette") })
         await page.getByRole("heading", { name: "Toutes tes inscriptions ont été annulées" }).waitFor()
         if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Refusing personal state verification outside video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
@@ -2271,7 +2271,7 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
         await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
         const row = page.getByRole("row").filter({ hasText: "Rangement de nuit — calendrier" })
-        await tap(page, row.getByRole("button", { name: "Modifier", exact: true }))
+        await tap(page, row.getByRole("button", { name: /^Modifier le créneau/ }))
         await fillVisibly(page, page.getByLabel("Début *"), "23:00")
         await at("il ne se met pas")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
@@ -3504,15 +3504,18 @@ async function main() {
       })
       await scene("resend", async at => {
         await page.goto(personalUrl); await settle(page)
+        await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
+        await at("Avec Recevoir ce lien par")
         await tap(page, page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }))
         await page.getByText("Un nouvel email avec ton lien vient de partir.", { exact: true }).waitFor()
-        await at(0.60) /* mid-sentence */
+        await at("Attendons le résultat, puis ouvrons")
         await page.goto("http://localhost:48026"); await settle(page)
         await tap(page, page.getByText(/Ton lien pour gérer ton inscription/).first())
         await page.frameLocator("iframe").locator('a[href*="/my/"]').first().waitFor()
       })
       await scene("recover", async at => {
         await page.goto(invalidUrl); await settle(page)
+        await at("Saisis l’adresse email utilisée pour")
         await typeNaturally(page, page.getByLabel(/Adresse email utilisée/), "camille.rochat@example.org")
         await tap(page, page.getByRole("button", { name: "Recevoir un nouveau lien", exact: true }))
         const answer = page.getByText(/Si une inscription existe à cette adresse/)
@@ -3538,6 +3541,7 @@ async function main() {
       await scene("availability", async at => {
         await startSeparateReadJourney()
         await section().scrollIntoViewIfNeeded()
+        await at("Camille coche Matin et Soir,")
         await tap(page, section().getByLabel("Matin", { exact: true }))
         await tap(page, section().getByLabel("Soir", { exact: true }))
         await typeNaturally(page, section().getByLabel(/Sauf/), "Pas le dimanche matin")
@@ -3559,9 +3563,11 @@ async function main() {
         await section().scrollIntoViewIfNeeded()
       })
       await scene("result", async at => {
+        await at("Reviens sur ta page personnelle")
         await tap(page, section().getByLabel("Matin", { exact: true }))
         await tap(page, section().getByLabel("Soir", { exact: true }))
         await fillVisibly(page, section().getByLabel(/Sauf/), "")
+        await at("Enregistre à nouveau et vérifie")
         await tap(page, section().getByRole("button", { name: "Enregistrer mes disponibilités", exact: true }))
         await page.getByText("Disponibilités effacées.", { exact: true }).waitFor()
         await at("Le lien personnel reste ton")
@@ -4596,7 +4602,8 @@ async function main() {
         organizerEventId = new URL(page.url()).pathname.split("/")[3]
       })
 
-      await scene("series", async () => {
+      await scene("series", async (at) => {
+        await at("Quand les horaires se répètent")
         await tap(page, page.getByRole("button", { name: "Créer une série" }))
         const series = page.getByRole("region", { name: "Créer une série de créneaux" })
         await typeNaturally(page, series.getByLabel("Poste *"), "Accueil")
@@ -4650,17 +4657,18 @@ async function main() {
         await page.getByText("4 créneaux, 3 postes, 8 places").first().scrollIntoViewIfNeeded()
       })
 
-      await scene("preview", async () => {
+      await scene("preview", async (at) => {
         await tap(page, page.getByRole("link", { name: "Prévisualiser comme un bénévole" }))
         await page.waitForURL(/\/preview$/)
         await page.getByText(/Aperçu : la page telle que la verront les bénévoles/).waitFor()
         const previewShift = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
+        await at("Choisis un créneau")
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.martin@example.org")
+        await fillVisibly(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex", 180)
+        await fillVisibly(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin", 180)
+        await fillVisibly(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.martin@example.org", 180)
         const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
         await tap(page, charter)
         const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
@@ -4669,11 +4677,12 @@ async function main() {
         await page.getByRole("heading", { name: /Aperçu de la confirmation/ }).waitFor()
       })
 
-      await scene("preview-result", async () => {
+      await scene("preview-result", async (at) => {
         await page.getByText("Message affiché après l'inscription").scrollIntoViewIfNeeded()
         await page.waitForTimeout(1_400)
         await page.getByRole("heading", { name: /Email de confirmation/ }).scrollIntoViewIfNeeded()
         await page.waitForTimeout(1_400)
+        await at("Rien n’est réellement enregistré")
         await page.goto(`${baseUrl}/admin/events/${organizerEventId}/review`)
         await settle(page)
       })
@@ -4691,7 +4700,7 @@ async function main() {
         await page.getByText("Scanner pour s'inscrire").scrollIntoViewIfNeeded()
       })
 
-      await scene("import", async () => {
+      await scene("import", async (at) => {
         await page.goto(`${baseUrl}/admin/members`)
         await tap(page, page.getByRole("button", { name: "Importer CSV/Excel" }))
         const csv = [
@@ -4710,17 +4719,20 @@ async function main() {
           "Inès,Laurent,ines.laurent@example.org,0790000012,logistique",
         ].join("\n")
         await page.getByLabel("Fichier CSV ou Excel").setInputFiles({ name: "membres-fete.csv", mimeType: "text/csv", buffer: Buffer.from(csv) })
+        await at("L’application analyse les colonnes")
         await tap(page, page.getByRole("button", { name: "Analyser le fichier" }))
         await page.getByText("Analyse du fichier, rien n'est encore enregistré.").waitFor()
+        await at(0.86) /* mid-sentence: confirm after the analysis explanation */
         await tap(page, page.getByRole("button", { name: "Importer 12 membres" }))
         await page.getByText(/Import terminé :/).waitFor()
         await tap(page, page.getByRole("button").filter({ hasText: /^Fermer$/ }))
         await page.getByText("Sophie").first().waitFor()
       })
 
-      await scene("invite", async () => {
+      await scene("invite", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${organizerEventId}/invitations`)
         await tap(page, page.getByRole("button", { name: "+ Inviter des membres" }))
+        await at("Filtre les membres par tag")
         await page.getByLabel("Filtrer par tag").selectOption("caisse")
         await tap(page, page.getByLabel("Inviter Sophie Roch"))
         await typeNaturally(page, page.getByLabel("Message (optionnel)"), "Bonjour Sophie, peux-tu nous aider à la caisse ?")
@@ -4745,13 +4757,6 @@ async function main() {
       await scene("organization", async (at) => {
         await page.getByRole("heading", { name: "Paramètres" }).waitFor()
         await page.getByLabel("Identifiant", { exact: true }).fill("fetes-de-montvert")
-        // The local demo runs on localhost. Show the production-shaped public address in the
-        // recording so the screen matches the narration without changing any persisted setting.
-        await page.evaluate(() => {
-          for (const el of document.querySelectorAll<HTMLElement>("p, span, code")) {
-            if (el.textContent?.includes(".localhost:3100")) el.textContent = el.textContent.replace(".localhost:3100", ".benevol.app")
-          }
-        })
         const show = async (name: string, fraction: number) => {
           await at(fraction)
           await page.getByRole("heading", { name, exact: true }).evaluate((el) => el.scrollIntoView({ block: "center", behavior: "smooth" }))
@@ -4785,11 +4790,10 @@ async function main() {
         await at(0.08) /* mid-sentence */
         const editHeading = page.getByRole("heading", { name: "Modifier l'événement" })
         if (await editHeading.isVisible()) await editHeading.scrollIntoViewIfNeeded()
-        await at("Le lieu peut recevoir des")
+        await at(0.35) /* mid-sentence: color in the first sentence */
         await page.getByText("Couleur de la page publique").scrollIntoViewIfNeeded()
-        await at(0.62) /* mid-sentence */
+        await at("Le lieu peut recevoir des")
         await page.getByLabel("Lieu").scrollIntoViewIfNeeded()
-        await at(0.76) /* mid-sentence */
         const coordinates = page.getByText(/coordonnées/i).first()
         if (await coordinates.isVisible()) await coordinates.scrollIntoViewIfNeeded()
       })
@@ -4832,7 +4836,7 @@ async function main() {
         await dragVisibly(page, drawFrom, { x: drawFrom.x + 90, y: drawFrom.y })
         await page.waitForFunction((before) => document.querySelectorAll('[role="region"][aria-label^="Planning du"] [data-shift-bar]').length > before, beforeDraw)
 
-        await at("Pour des horaires répétitifs, la")
+        await at(0.66) /* mid-sentence: widen the bar before the series sentence */
         const newBar = firstRow.locator("[data-shift-bar]").last()
         const resizeHandle = newBar.locator(".cursor-ew-resize").last()
         const handleBox = await resizeHandle.boundingBox()
@@ -4840,7 +4844,7 @@ async function main() {
         const resizeFrom = { x: handleBox.x + handleBox.width / 2, y: handleBox.y + handleBox.height / 2 }
         await dragVisibly(page, resizeFrom, { x: resizeFrom.x + 48, y: resizeFrom.y })
 
-        await at(0.82) /* mid-sentence */
+        await at("Pour des horaires répétitifs, la")
         await tap(page, page.getByRole("button", { name: "Créer une série" }))
       })
 
@@ -4851,9 +4855,9 @@ async function main() {
         await editor.getByLabel("Poste *").scrollIntoViewIfNeeded()
         await at(0.48) /* mid-sentence */
         await editor.getByLabel("Lieu de rendez-vous").scrollIntoViewIfNeeded()
-        await at("La liste d’attente et l’inscription")
+        await at(0.70) /* mid-sentence: minimum age ends the field description */
         await editor.getByLabel("Âge minimum (optionnel)").scrollIntoViewIfNeeded()
-        await at(0.86) /* mid-sentence */
+        await at("La liste d’attente et l’inscription")
         await editor.getByLabel(/liste d'attente/i).scrollIntoViewIfNeeded()
       })
 
@@ -4890,7 +4894,7 @@ async function main() {
         await page.getByRole("heading", { name: "Pages" }).waitFor()
         await at(0.20) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "+ Ajouter une page" }))
-        await at(0.34) /* mid-sentence */
+        await at("Donne un titre, rédige le")
         await fillVisibly(page, page.getByLabel("Titre *"), "Accès et parking")
         await at(0.52) /* mid-sentence */
         await fillVisibly(page, page.getByLabel(/Contenu/), "## Venir sur place\n\n- Parking au nord\n- Entrée bénévoles côté scène")
@@ -5133,7 +5137,7 @@ async function main() {
       await scene("event", async (at) => {
         const checklist = page.getByRole("region", { name: "Premiers pas" })
         await checklist.getByText(/Personnaliser la page publique.*fait/).waitFor()
-        await at(0.12) /* mid-sentence */
+        await at("Créons la Fête du parc")
         await tap(page, page.getByRole("link", { name: "+ Nouvel événement" }))
         await page.getByRole("heading", { name: "Nouvel événement" }).waitFor()
         await tap(page, page.getByRole("radio", { name: /Page blanche/ }))

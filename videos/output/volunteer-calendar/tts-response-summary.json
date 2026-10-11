@@ -1,46 +1,38 @@
 {
-  "receivedAt": "2026-10-05T13:06:57.014Z",
+  "receivedAt": "2026-10-11T18:37:30.052Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 6408,
-    "total_input_tokens": 1014,
+    "total_tokens": 5310,
+    "total_input_tokens": 715,
     "input_tokens_by_modality": [
       {
-        "modality": "audio",
-        "tokens": 259
-      },
-      {
         "modality": "text",
-        "tokens": 755
+        "tokens": 715
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 5394,
+    "total_output_tokens": 4595,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 5394
+        "tokens": 4595
       }
     ],
     "total_tool_use_tokens": 0,
     "total_thought_tokens": 0,
-    "raw_prompt_token": 1045,
+    "raw_prompt_token": 976,
     "model_invocation_token_counts": [
       {
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 447
-          },
-          {
-            "modality": "audio",
-            "tokens": 259
+            "tokens": 759
           }
         ],
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1894
+            "tokens": 1955
           }
         ]
       },
@@ -48,7 +40,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1054
+            "tokens": 939
           },
           {
             "modality": "audio",
@@ -58,7 +50,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2647
+            "tokens": 2644
           }
         ]
       }
@@ -68,17 +60,13 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 447
-          },
-          {
-            "modality": "audio",
-            "tokens": 259
+            "tokens": 759
           }
         ],
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1894
+            "tokens": 1955
           }
         ]
       },
@@ -86,7 +74,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1054
+            "tokens": 939
           },
           {
             "modality": "audio",
@@ -96,7 +84,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2647
+            "tokens": 2644
           }
         ]
       }
@@ -108,7 +96,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 10795928
+          "encodedLength": 11771352
         }
       ]
     }

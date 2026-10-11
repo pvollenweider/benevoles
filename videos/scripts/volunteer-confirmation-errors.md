@@ -10,7 +10,7 @@ Comprendre comment reprendre une inscription sans perdre les champs ni créer de
 
 1. Remplir le formulaire public et oublier une question obligatoire.
 2. Corriger la taille de t-shirt après le vrai message de validation.
-3. Rendre le créneau complet dans la base locale pendant la saisie et montrer le refus serveur.
+3. Rendre le créneau complet dans la base locale pendant la saisie et montrer le refus serveur « Ta sélection n’est plus disponible ».
 4. Rétablir la capacité, interrompre une requête avec Playwright puis confirmer à nouveau.
 5. Rétablir le réseau, confirmer réellement puis ouvrir l’email dans Mailpit.
 

@@ -59,7 +59,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
   const eventId = "video-privacy-a-event"
   const go = async (route: string) => { await page.goto(route.startsWith("http://localhost:48026/") ? route : `${base}${route}`); await settle(page) }
   const session = async (cookies: Cookie[] | null) => { await page.context().clearCookies(); if (cookies) await page.context().addCookies(cookies) }
-  const write = async (field: Locator, value: string) => { await field.scrollIntoViewIfNeeded(); await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 110 }) }
+  const write = async (field: Locator, value: string, delay = 110) => { await field.scrollIntoViewIfNeeded(); await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
   const ids = async () => new Set((await inbox()).map(mail => mail.ID))
   const openMail = async (before: Set<string>, recipient: string, kind: "personal" | "invitation") => {
@@ -149,15 +149,15 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const invalid = "/my/demo-invalid-privacy?org=formation-confidentialite-a"
       await go(invalid)
       const request = async (email: string) => {
-        await write(page.getByLabel(/Adresse email utilisée pour t'inscrire/), email)
+        await write(page.getByLabel(/Adresse email utilisée pour t'inscrire/), email, 20)
         await tap(page, page.getByRole("button", { name: "Recevoir un nouveau lien", exact: true }))
         await page.getByText(LINK_REQUEST_RESPONSE, { exact: true }).waitFor()
       }
       await at("Depuis la page de récupération"); await request("video.privacy.a.member.0@example.org")
       await at("Vérifions le message reçu dans"); const mail = await openMail(before, "video.privacy.a.member.0@example.org", "personal")
       checks.recoveryMail = mail.mailId
-      await at("la réponse affichée reste la"); await go(invalid); await request("video.privacy.unknown@example.org")
-      await at("La réponse ne révèle pas"); await go(invalid); await request("video.privacy.b.member.0@example.org")
+      await at("Recommençons avec une adresse fictive"); await go(invalid); await request("video.privacy.unknown@example.org")
+      await at("Enfin, demandons depuis l'organisation A"); await go(invalid); await request("video.privacy.b.member.0@example.org")
       if (await db.notificationOutbox.count({ where: { organizationId: "video-privacy-b" } })) throw new Error("Recovery emailed another organization")
       checks.sameRecoveryMessageThreeAddresses = true
     })
@@ -167,14 +167,14 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("L'organisation l'envoie à Zoé, puis"); await tap(page, page.getByRole("button", { name: "+ Inviter des membres", exact: true }))
       const dialog = page.getByRole("dialog", { name: "Inviter des membres", exact: true })
       await tap(page, dialog.getByRole("checkbox", { name: "Inviter Zoé Exemple", exact: true }))
-      await at("Son lien conduit au formulaire"); await tap(page, dialog.getByRole("button", { name: "Envoyer 1 invitation", exact: true }))
+      await tap(page, dialog.getByRole("button", { name: "Envoyer 1 invitation", exact: true }))
       await dialog.waitFor({ state: "hidden" })
       // Zoé is a different viewer, not Jules returning on his already-selected shift.
       // Reset this event's remembered session on the application's origin, before Mailpit.
       await page.evaluate(() => localStorage.removeItem("benevoles_token_fete-des-liens"))
-      await at("Son lien conduit au formulaire"); const mail = await openMail(before, "video.privacy.a.member.3@example.org", "invitation")
+      const mail = await openMail(before, "video.privacy.a.member.3@example.org", "invitation")
       checks.invitationMail = mail.mailId
-      await at("Cela facilite l'inscription de la"); await session(null)
+      await at("Son lien conduit au formulaire"); await session(null)
       await go(`${mail.localPath}&org=formation-confidentialite-a`)
       await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
@@ -219,8 +219,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Ouvrons Confidentialité."); await page.getByRole("link", { name: "Confidentialité", exact: true }).scrollIntoViewIfNeeded()
       await tap(page, page.getByRole("link", { name: "Confidentialité", exact: true }))
       await page.getByRole("heading", { name: "Politique de confidentialité", exact: true }).waitFor()
-      await at("Repérons aussi les indications de"); await page.getByRole("heading", { name: "4. Transferts et sous-traitants", exact: true }).scrollIntoViewIfNeeded()
-      await at("Pour une question ou une"); await page.getByRole("heading", { name: "7. Conservation des données", exact: true }).scrollIntoViewIfNeeded()
+      await at("Repérons aussi les indications de"); await page.getByRole("heading", { name: "7. Conservation des données", exact: true }).scrollIntoViewIfNeeded()
       await at("Pour une question ou une"); await page.getByRole("heading", { name: "6. Droits des personnes concernées", exact: true }).scrollIntoViewIfNeeded()
       await at("Ouvrons maintenant les conditions d'utilisation"); await go(personalPath); await page.getByRole("link", { name: "CGU", exact: true }).scrollIntoViewIfNeeded(); await tap(page, page.getByRole("link", { name: "CGU", exact: true }))
       await page.getByRole("heading", { name: "Conditions générales d'utilisation", exact: true }).waitFor()
@@ -248,16 +247,15 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
     })
     await go(personalPath)
     await scene("result", async at => {
-      await at("Pour recruter, partage la page"); await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
-      await page.getByText(PERSONAL_LINK_NOTICE, { exact: true }).waitFor()
-      await at("Pour gérer une inscription, garde"); await go("/fete-des-liens?org=formation-confidentialite-a")
-      await page.getByRole("heading", { name: "Fête des liens — organisation A", exact: true }).waitFor()
-      await at("Pour coordonner un poste, remets"); await go(personalPath)
       await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
-      await at("Si un accès a été")
-      await showRecordedLeader()
-      await at(0.50) /* mid-sentence */; await page.locator("#video-recorded-leader-recap").evaluate(element => element.remove())
-      await at(0.52) /* mid-sentence */; await page.getByRole("link", { name: "Écrire à l'organisation", exact: true }).scrollIntoViewIfNeeded()
+      await page.getByText(PERSONAL_LINK_NOTICE, { exact: true }).waitFor()
+      await at("Pour recruter, partage la page"); await go("/fete-des-liens?org=formation-confidentialite-a")
+      await page.getByRole("heading", { name: "Fête des liens — organisation A", exact: true }).waitFor()
+      await at("Pour gérer une inscription, garde"); await go(personalPath)
+      await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
+      await at("Pour coordonner un poste, remets"); await showRecordedLeader()
+      await at("Si un accès a été"); await page.locator("#video-recorded-leader-recap").evaluate(element => element.remove())
+      await page.getByRole("region", { name: "Ton lien personnel", exact: true }).getByRole("link", { name: "Écrire à l'organisation", exact: true }).scrollIntoViewIfNeeded()
     })
     if (await db.registration.count({ where: { eventId, volunteer: { email: "video.privacy.a.new@example.org" } } }) !== 1 || await db.sectorLeader.count({ where: { id: setup.leaderId } })) throw new Error("Final privacy state differs")
     await writeFile(path.join(directory, "capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))

@@ -1,0 +1,531 @@
+[
+  {
+    "id": "intro",
+    "startMs": 0,
+    "sentences": [
+      {
+        "text": "Voici une visite complète de l’administration, dans l’ordre où tu l’utiliseras vraiment :",
+        "startMs": 303,
+        "endMs": 6460,
+        "method": "silence",
+        "absoluteStartMs": 303
+      },
+      {
+        "text": "préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+        "startMs": 7015,
+        "endMs": 13092,
+        "method": "silence",
+        "absoluteStartMs": 7015
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "organization",
+    "startMs": 16591,
+    "sentences": [
+      {
+        "text": "Tout commence avec l’identité de l’organisation.",
+        "startMs": 285,
+        "endMs": 2593,
+        "method": "silence",
+        "absoluteStartMs": 16876
+      },
+      {
+        "text": "Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app.",
+        "startMs": 3191,
+        "endMs": 8604,
+        "method": "silence",
+        "absoluteStartMs": 19782
+      },
+      {
+        "text": "Tu choisis aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+        "startMs": 9249,
+        "endMs": 15073,
+        "method": "silence",
+        "absoluteStartMs": 25840
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "team",
+    "startMs": 32506,
+    "sentences": [
+      {
+        "text": "Côté équipe, le propriétaire administre l’organisation et ses accès.",
+        "startMs": 407,
+        "endMs": 4419,
+        "method": "silence",
+        "absoluteStartMs": 32913
+      },
+      {
+        "text": "Les organisateurs préparent les événements, les membres et les communications.",
+        "startMs": 5197,
+        "endMs": 8882,
+        "method": "silence",
+        "absoluteStartMs": 37703
+      },
+      {
+        "text": "Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.",
+        "startMs": 9329,
+        "endMs": 18457,
+        "method": "silence",
+        "absoluteStartMs": 41835
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "lifecycle",
+    "startMs": 55158,
+    "sentences": [
+      {
+        "text": "Un événement suit un cycle clair :",
+        "startMs": 821,
+        "endMs": 2753,
+        "method": "silence",
+        "absoluteStartMs": 55979
+      },
+      {
+        "text": "brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé.",
+        "startMs": 2876,
+        "endMs": 8398,
+        "method": "silence",
+        "absoluteStartMs": 58034
+      },
+      {
+        "text": "Même publié, il peut rester non répertorié et accessible seulement par son lien.",
+        "startMs": 9221,
+        "endMs": 13380,
+        "method": "silence",
+        "absoluteStartMs": 64379
+      },
+      {
+        "text": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
+        "startMs": 13811,
+        "endMs": 18777,
+        "method": "silence",
+        "absoluteStartMs": 68969
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "appearance",
+    "startMs": 74771,
+    "sentences": [
+      {
+        "text": "Dans ses paramètres, tu règles le titre, les dates, les messages et une couleur d’en-tête accessible.",
+        "startMs": 237,
+        "endMs": 7038,
+        "method": "silence",
+        "absoluteStartMs": 75008
+      },
+      {
+        "text": "Le lieu peut recevoir des coordonnées :",
+        "startMs": 7869,
+        "endMs": 9393,
+        "method": "silence",
+        "absoluteStartMs": 82640
+      },
+      {
+        "text": "les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+        "startMs": 9953,
+        "endMs": 15175,
+        "method": "silence",
+        "absoluteStartMs": 84724
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "duplicate",
+    "startMs": 91825,
+    "sentences": [
+      {
+        "text": "Pour repartir d’une édition précédente, duplique l’événement et décale toutes les dates.",
+        "startMs": 293,
+        "endMs": 5233,
+        "method": "silence",
+        "absoluteStartMs": 92118
+      },
+      {
+        "text": "Tu choisis ce qui est repris :",
+        "startMs": 5695,
+        "endMs": 6995,
+        "method": "silence",
+        "absoluteStartMs": 97520
+      },
+      {
+        "text": "les créneaux, les réglages, les pages d’information et les responsables.",
+        "startMs": 7202,
+        "endMs": 11067,
+        "method": "silence",
+        "absoluteStartMs": 99027
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "shift-methods",
+    "startMs": 106929,
+    "sentences": [
+      {
+        "text": "Pour construire le planning, trois méthodes se complètent :",
+        "startMs": 779,
+        "endMs": 3239,
+        "method": "silence",
+        "absoluteStartMs": 107708
+      },
+      {
+        "text": "ajouter un créneau depuis la liste, copier un créneau existant, ou dessiner directement sa plage sur la frise puis l’élargir.",
+        "startMs": 3908,
+        "endMs": 11381,
+        "method": "silence",
+        "absoluteStartMs": 110837
+      },
+      {
+        "text": "Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d’un coup.",
+        "startMs": 11846,
+        "endMs": 17186,
+        "method": "silence",
+        "absoluteStartMs": 118775
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 109143
+      },
+      {
+        "kind": "click",
+        "atMs": 111309
+      },
+      {
+        "kind": "click",
+        "atMs": 112094
+      },
+      {
+        "kind": "click",
+        "atMs": 112893
+      },
+      {
+        "kind": "click",
+        "atMs": 113677
+      },
+      {
+        "kind": "click",
+        "atMs": 114626
+      },
+      {
+        "kind": "click",
+        "atMs": 115843
+      },
+      {
+        "kind": "click",
+        "atMs": 116409
+      },
+      {
+        "kind": "click",
+        "atMs": 118791
+      },
+      {
+        "kind": "click",
+        "atMs": 121494
+      }
+    ]
+  },
+  {
+    "id": "shift-fields",
+    "startMs": 124570,
+    "sentences": [
+      {
+        "text": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et la capacité, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum.",
+        "startMs": 842,
+        "endMs": 13125,
+        "method": "silence",
+        "absoluteStartMs": 125412
+      },
+      {
+        "text": "La liste d’attente et l’inscription sur validation s’activent ici.",
+        "startMs": 13253,
+        "endMs": 17638,
+        "method": "silence",
+        "absoluteStartMs": 137823
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 125043
+      }
+    ]
+  },
+  {
+    "id": "registrations",
+    "startMs": 145953,
+    "sentences": [
+      {
+        "text": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen.",
+        "startMs": 345,
+        "endMs": 4929,
+        "method": "silence",
+        "absoluteStartMs": 146298
+      },
+      {
+        "text": "Tu peux filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+        "startMs": 5274,
+        "endMs": 15246,
+        "method": "silence",
+        "absoluteStartMs": 151227
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "members",
+    "startMs": 163302,
+    "sentences": [
+      {
+        "text": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures planifiées et activité.",
+        "startMs": 409,
+        "endMs": 8799,
+        "method": "silence",
+        "absoluteStartMs": 163711
+      },
+      {
+        "text": "La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
+        "startMs": 8998,
+        "endMs": 15031,
+        "method": "silence",
+        "absoluteStartMs": 172300
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "questions",
+    "startMs": 180302,
+    "sentences": [
+      {
+        "text": "Le formulaire peut poser quelques questions utiles :",
+        "startMs": 393,
+        "endMs": 2480,
+        "method": "silence",
+        "absoluteStartMs": 180695
+      },
+      {
+        "text": "taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher.",
+        "startMs": 2826,
+        "endMs": 9284,
+        "method": "silence",
+        "absoluteStartMs": 183128
+      },
+      {
+        "text": "Tu décides si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+        "startMs": 9726,
+        "endMs": 13885,
+        "method": "silence",
+        "absoluteStartMs": 190028
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 183601
+      },
+      {
+        "kind": "click",
+        "atMs": 185100
+      }
+    ]
+  },
+  {
+    "id": "pages",
+    "startMs": 196129,
+    "sentences": [
+      {
+        "text": "Tu peux aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement.",
+        "startMs": 370,
+        "endMs": 6053,
+        "method": "silence",
+        "absoluteStartMs": 196499
+      },
+      {
+        "text": "Donne un titre, rédige le contenu, puis organise leur ordre :",
+        "startMs": 6635,
+        "endMs": 10226,
+        "method": "silence",
+        "absoluteStartMs": 202764
+      },
+      {
+        "text": "elles apparaissent directement avec la page d’inscription.",
+        "startMs": 10617,
+        "endMs": 13604,
+        "method": "silence",
+        "absoluteStartMs": 206746
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 199356
+      },
+      {
+        "kind": "click",
+        "atMs": 201305
+      },
+      {
+        "kind": "click",
+        "atMs": 203804
+      }
+    ]
+  },
+  {
+    "id": "messages",
+    "startMs": 213217,
+    "sentences": [
+      {
+        "text": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau.",
+        "startMs": 290,
+        "endMs": 6665,
+        "method": "silence",
+        "absoluteStartMs": 213507
+      },
+      {
+        "text": "Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel.",
+        "startMs": 7101,
+        "endMs": 13671,
+        "method": "silence",
+        "absoluteStartMs": 220318
+      },
+      {
+        "text": "Tu prévisualises toujours le résultat avant l’envoi.",
+        "startMs": 14380,
+        "endMs": 17511,
+        "method": "silence",
+        "absoluteStartMs": 227597
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "reminders",
+    "startMs": 232486,
+    "sentences": [
+      {
+        "text": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même.",
+        "startMs": 180,
+        "endMs": 4074,
+        "method": "silence",
+        "absoluteStartMs": 232666
+      },
+      {
+        "text": "L’organisation choisit lesquels activer, où arrivent les réponses, et si ses admins doivent être prévenus à chaque nouvelle inscription.",
+        "startMs": 4840,
+        "endMs": 11331,
+        "method": "silence",
+        "absoluteStartMs": 237326
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "reports",
+    "startMs": 247479,
+    "sentences": [
+      {
+        "text": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs.",
+        "startMs": 337,
+        "endMs": 10896,
+        "method": "silence",
+        "absoluteStartMs": 247816
+      },
+      {
+        "text": "Les badges se génèrent en PDF, par poste ou par créneau, prêts à imprimer et découper.",
+        "startMs": 11496,
+        "endMs": 16744,
+        "method": "silence",
+        "absoluteStartMs": 258975
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "activity",
+    "startMs": 267828,
+    "sentences": [
+      {
+        "text": "Enfin, le journal d’activité garde la chronologie :",
+        "startMs": 292,
+        "endMs": 3317,
+        "method": "silence",
+        "absoluteStartMs": 268120
+      },
+      {
+        "text": "création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs.",
+        "startMs": 3993,
+        "endMs": 11046,
+        "method": "silence",
+        "absoluteStartMs": 271821
+      },
+      {
+        "text": "On sait ce qui s’est passé, qui l’a fait et quand.",
+        "startMs": 11636,
+        "endMs": 13388,
+        "method": "silence",
+        "absoluteStartMs": 279464
+      },
+      {
+        "text": "La recherche globale permet ensuite de tout retrouver rapidement.",
+        "startMs": 13748,
+        "endMs": 17700,
+        "method": "silence",
+        "absoluteStartMs": 281576
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 282047
+      },
+      {
+        "kind": "click",
+        "atMs": 282864
+      },
+      {
+        "kind": "key",
+        "atMs": 283171
+      },
+      {
+        "kind": "key",
+        "atMs": 283270
+      },
+      {
+        "kind": "key",
+        "atMs": 283365
+      },
+      {
+        "kind": "key",
+        "atMs": 283464
+      },
+      {
+        "kind": "key",
+        "atMs": 283563
+      },
+      {
+        "kind": "key",
+        "atMs": 283662
+      },
+      {
+        "kind": "key",
+        "atMs": 283759
+      },
+      {
+        "kind": "key",
+        "atMs": 284044
+      }
+    ]
+  }
+]

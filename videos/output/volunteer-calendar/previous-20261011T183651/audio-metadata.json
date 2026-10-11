@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-10-05T13:11:09.664Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 19421,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "one": {
+      "file": "audio/one.wav",
+      "durationMs": 17686,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "all": {
+      "file": "audio/all.wav",
+      "durationMs": 18934,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "import": {
+      "file": "audio/import.wav",
+      "durationMs": 19082,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "details": {
+      "file": "audio/details.wav",
+      "durationMs": 17403,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "night": {
+      "file": "audio/night.wav",
+      "durationMs": 17920,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "change": {
+      "file": "audio/change.wav",
+      "durationMs": 20494,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "reimport": {
+      "file": "audio/reimport.wav",
+      "durationMs": 18731,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 18889,
+      "generationSha256": "6d4159631129bc6c785ea4366f27cf1cf47b7bee04abf86c3dc02da35aee1b9b"
+    }
+  }
+}

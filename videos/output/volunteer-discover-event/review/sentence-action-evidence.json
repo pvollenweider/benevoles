@@ -1,0 +1,362 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1093,
+    "sentences": [
+      {
+        "text": "Avant de choisir un créneau, prends une minute pour lire la page de l’événement.",
+        "startMs": 245,
+        "endMs": 3255,
+        "method": "silence",
+        "absoluteStartMs": 1338
+      },
+      {
+        "text": "Elle rassemble le lieu, les consignes, le programme et l’état réel des missions.",
+        "startMs": 3773,
+        "endMs": 8076,
+        "method": "silence",
+        "absoluteStartMs": 4866
+      },
+      {
+        "text": "Tu sais ainsi où tu vas, ce qu’on attend de toi et quelles places sont encore disponibles.",
+        "startMs": 8672,
+        "endMs": 12511,
+        "method": "silence",
+        "absoluteStartMs": 9765
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "access",
+    "startMs": 16434,
+    "sentences": [
+      {
+        "text": "L’organisateur peut partager cette page de trois façons.",
+        "startMs": 667,
+        "endMs": 2702,
+        "method": "silence",
+        "absoluteStartMs": 17101
+      },
+      {
+        "text": "Le lien direct s’ouvre dans n’importe quel navigateur.",
+        "startMs": 3596,
+        "endMs": 5705,
+        "method": "silence",
+        "absoluteStartMs": 20030
+      },
+      {
+        "text": "Le QR code mène exactement au même endroit depuis l’appareil photo du téléphone.",
+        "startMs": 6622,
+        "endMs": 9863,
+        "method": "silence",
+        "absoluteStartMs": 23056
+      },
+      {
+        "text": "Et une invitation personnelle préremplit ton identité ;",
+        "startMs": 10522,
+        "endMs": 12945,
+        "method": "silence",
+        "absoluteStartMs": 26956
+      },
+      {
+        "text": "elle peut aussi ouvrir un poste réservé à ton équipe.",
+        "startMs": 13544,
+        "endMs": 15345,
+        "method": "silence",
+        "absoluteStartMs": 29978
+      },
+      {
+        "text": "Un lien personnel ne se transfère donc pas à quelqu’un d’autre.",
+        "startMs": 15935,
+        "endMs": 18036,
+        "method": "silence",
+        "absoluteStartMs": 32369
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "identity",
+    "startMs": 35627,
+    "sentences": [
+      {
+        "text": "En haut, vérifie le nom de l’association et celui de l’événement.",
+        "startMs": 697,
+        "endMs": 3662,
+        "method": "silence",
+        "absoluteStartMs": 36324
+      },
+      {
+        "text": "Le lieu est accompagné d’un lien vers OpenStreetMap, puis les consignes publiques rappellent ici de passer à l’accueil quinze minutes avant le créneau.",
+        "startMs": 4410,
+        "endMs": 10322,
+        "method": "silence",
+        "absoluteStartMs": 40037
+      },
+      {
+        "text": "Sur ordinateur, la fiche à droite résume aussi la description et les dates.",
+        "startMs": 11071,
+        "endMs": 14234,
+        "method": "silence",
+        "absoluteStartMs": 46698
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "pages",
+    "startMs": 53697,
+    "sentences": [
+      {
+        "text": "Les boutons juste sous les consignes ouvrent des pages complémentaires.",
+        "startMs": 424,
+        "endMs": 3182,
+        "method": "silence",
+        "absoluteStartMs": 54121
+      },
+      {
+        "text": "Accès et parking explique les transports, le stationnement et la navette.",
+        "startMs": 3859,
+        "endMs": 7161,
+        "method": "silence",
+        "absoluteStartMs": 57556
+      },
+      {
+        "text": "Questions fréquentes précise l’assurance et la tenue.",
+        "startMs": 7841,
+        "endMs": 9978,
+        "method": "silence",
+        "absoluteStartMs": 61538
+      },
+      {
+        "text": "Tu peux revenir au planning sans perdre le contexte ;",
+        "startMs": 10630,
+        "endMs": 12494,
+        "method": "silence",
+        "absoluteStartMs": 64327
+      },
+      {
+        "text": "ces pages servent justement à éviter les informations éparpillées dans plusieurs messages.",
+        "startMs": 12682,
+        "endMs": 15771,
+        "method": "silence",
+        "absoluteStartMs": 66379
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 54183
+      }
+    ]
+  },
+  {
+    "id": "desktop",
+    "startMs": 72294,
+    "sentences": [
+      {
+        "text": "Le planning se lit par journée et par poste.",
+        "startMs": 652,
+        "endMs": 2468,
+        "method": "silence",
+        "absoluteStartMs": 72946
+      },
+      {
+        "text": "L’axe horizontal donne l’heure, chaque barre correspond à un créneau, et le nombre dans la barre indique les inscriptions par rapport à la capacité.",
+        "startMs": 3119,
+        "endMs": 9411,
+        "method": "silence",
+        "absoluteStartMs": 75413
+      },
+      {
+        "text": "Les bandes violettes placent les spectacles dans la même chronologie :",
+        "startMs": 10319,
+        "endMs": 12510,
+        "method": "silence",
+        "absoluteStartMs": 82613
+      },
+      {
+        "text": "on voit par exemple le concert, le bal et le brunch sans les confondre avec une mission bénévole.",
+        "startMs": 12798,
+        "endMs": 16941,
+        "method": "silence",
+        "absoluteStartMs": 85092
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "states",
+    "startMs": 90317,
+    "sentences": [
+      {
+        "text": "Les états sont écrits directement sur les créneaux.",
+        "startMs": 628,
+        "endMs": 2291,
+        "method": "silence",
+        "absoluteStartMs": 90945
+      },
+      {
+        "text": "Complet avec file d’attente permet encore de rejoindre la liste.",
+        "startMs": 2960,
+        "endMs": 5279,
+        "method": "silence",
+        "absoluteStartMs": 93277
+      },
+      {
+        "text": "Sur validation signifie que l’organisateur devra accepter la demande.",
+        "startMs": 5931,
+        "endMs": 11274,
+        "method": "silence",
+        "absoluteStartMs": 96248
+      },
+      {
+        "text": "Dix-huit plus annonce un âge minimum.",
+        "startMs": 12204,
+        "endMs": 13865,
+        "method": "silence",
+        "absoluteStartMs": 102521
+      },
+      {
+        "text": "Réservé reste visible mais demande le lien personnel reçu par email.",
+        "startMs": 14182,
+        "endMs": 16289,
+        "method": "silence",
+        "absoluteStartMs": 104499
+      },
+      {
+        "text": "Les places libres, les couleurs et les libellés complètent cette lecture ;",
+        "startMs": 17133,
+        "endMs": 20664,
+        "method": "silence",
+        "absoluteStartMs": 107450
+      },
+      {
+        "text": "la couleur seule n’est jamais l’unique indice.",
+        "startMs": 21290,
+        "endMs": 23740,
+        "method": "silence",
+        "absoluteStartMs": 111607
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "mobile",
+    "startMs": 116701,
+    "sentences": [
+      {
+        "text": "Sur téléphone, la page garde les mêmes informations.",
+        "startMs": 492,
+        "endMs": 3485,
+        "method": "silence",
+        "absoluteStartMs": 117193
+      },
+      {
+        "text": "Le planning est volontairement plus large que l’écran :",
+        "startMs": 4411,
+        "endMs": 6315,
+        "method": "silence",
+        "absoluteStartMs": 121112
+      },
+      {
+        "text": "le message avec les flèches indique qu’on peut le faire défiler horizontalement.",
+        "startMs": 6538,
+        "endMs": 10133,
+        "method": "silence",
+        "absoluteStartMs": 123239
+      },
+      {
+        "text": "Glisse doucement pour parcourir la journée, puis verticalement pour passer au dimanche.",
+        "startMs": 10889,
+        "endMs": 14986,
+        "method": "silence",
+        "absoluteStartMs": 127590
+      },
+      {
+        "text": "Tu retrouves les heures, les capacités, les spectacles et les états sans version simplifiée cachant des détails.",
+        "startMs": 15767,
+        "endMs": 22152,
+        "method": "silence",
+        "absoluteStartMs": 132468
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "invitation",
+    "startMs": 141535,
+    "sentences": [
+      {
+        "text": "Avec une invitation personnelle, la page reste la même, mais elle te reconnaît.",
+        "startMs": 519,
+        "endMs": 4957,
+        "method": "silence",
+        "absoluteStartMs": 142054
+      },
+      {
+        "text": "Ici, Julien fait partie de l’équipe sécurité :",
+        "startMs": 5543,
+        "endMs": 7699,
+        "method": "silence",
+        "absoluteStartMs": 147078
+      },
+      {
+        "text": "le créneau de nuit, auparavant marqué réservé, devient sélectionnable.",
+        "startMs": 7960,
+        "endMs": 12215,
+        "method": "silence",
+        "absoluteStartMs": 149495
+      },
+      {
+        "text": "L’invitation ne t’inscrit pas toute seule ;",
+        "startMs": 12980,
+        "endMs": 14624,
+        "method": "silence",
+        "absoluteStartMs": 154515
+      },
+      {
+        "text": "elle autorise seulement le bon parcours et préremplira ensuite les informations déjà connues.",
+        "startMs": 14781,
+        "endMs": 20529,
+        "method": "silence",
+        "absoluteStartMs": 156316
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 154988
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "startMs": 162518,
+    "sentences": [
+      {
+        "text": "Tu peux maintenant lire l’événement avant de t’engager :",
+        "startMs": 0,
+        "endMs": 2166,
+        "method": "silence",
+        "absoluteStartMs": 162518
+      },
+      {
+        "text": "contrôler le lieu et la carte, ouvrir les informations pratiques, comparer les horaires et comprendre chaque état.",
+        "startMs": 2747,
+        "endMs": 9557,
+        "method": "silence",
+        "absoluteStartMs": 165265
+      },
+      {
+        "text": "En cas de doute sur une mission réservée ou une consigne, contacte l’association plutôt que de partager un lien personnel.",
+        "startMs": 10420,
+        "endMs": 15794,
+        "method": "silence",
+        "absoluteStartMs": 172938
+      }
+    ],
+    "inputs": []
+  }
+]

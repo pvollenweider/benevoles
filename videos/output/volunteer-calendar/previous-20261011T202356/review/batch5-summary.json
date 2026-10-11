@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_CALENDAR",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Rehearsal stopped: Manon selector matches both contact and sector leader. Latent export assertions use stale fixed dates. No final MP4. Cache fingerprint rejected; new TTS all chapter audits passed.",
+  "sourceChanges": "Scoped contact selector to mission card; calendar UTC date assertions derived from fixture date. No refilm."
+}

@@ -30,7 +30,7 @@
     },
     {
       "id": "capacity",
-      "transcript": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond Votre sélection n'est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "transcript": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond Ta sélection n'est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
       "fallbackDurationMs": 42000
     },
     {

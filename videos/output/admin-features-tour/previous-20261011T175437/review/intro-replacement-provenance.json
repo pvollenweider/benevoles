@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-10-11T16:34:16.465Z",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "transcript": "Voici une visite complète de l’administration, dans l’ordre où tu l’utiliseras vraiment : préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+  "generationSha256": "50f744b211b7bb63694480d5b2c3ae3407efb8c1e9f0411e2115dc7a7186f0c8",
+  "audioSha256": "e054938aed00e1f03a9307731a0afe8dfe28c9d73b1846ead9c0e29fd53f64d2",
+  "note": "Only intro regenerated; original repeated segment archived. Separate generation honestly identified; strict continuous-generation validator may reject this repair."
+}

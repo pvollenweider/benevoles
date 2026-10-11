@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour repartir d’une édition précédente, duplique l’événement et décale toutes les",
+  "windowStart": 66.192,
+  "result": {
+    "found": true,
+    "startSeconds": 16.85,
+    "wordsHeard": "Pour repartir d’une édition précédente, duplique l’événement et décale toutes les"
+  },
+  "onset": 83.042,
+  "proposedCut": 82.621104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

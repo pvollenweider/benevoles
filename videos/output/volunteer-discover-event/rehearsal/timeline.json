@@ -1,0 +1,197 @@
+{
+  "slug": "volunteer-discover-event",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T19:49:57.571Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_DISCOVER_EVENT",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 12638
+    },
+    {
+      "kind": "click",
+      "atMs": 25717
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1093,
+      "endMs": 3719
+    },
+    {
+      "id": "access",
+      "startMs": 5880,
+      "endMs": 8219
+    },
+    {
+      "id": "identity",
+      "startMs": 8673,
+      "endMs": 8768
+    },
+    {
+      "id": "pages",
+      "startMs": 12148,
+      "endMs": 15654
+    },
+    {
+      "id": "desktop",
+      "startMs": 17826,
+      "endMs": 17949
+    },
+    {
+      "id": "states",
+      "startMs": 18402,
+      "endMs": 18518
+    },
+    {
+      "id": "mobile",
+      "startMs": 20681,
+      "endMs": 21932
+    },
+    {
+      "id": "invitation",
+      "startMs": 24097,
+      "endMs": 26029
+    },
+    {
+      "id": "result",
+      "startMs": 26482,
+      "endMs": 26565
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "access",
+      "phrase": "Le lien direct s’ouvre dans",
+      "startMs": 4906,
+      "endMs": 9498,
+      "cueMs": 7102
+    },
+    {
+      "segmentId": "access",
+      "phrase": "Un lien personnel ne se",
+      "startMs": 25781,
+      "endMs": 31000,
+      "cueMs": 7143
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Le lieu est accompagné d’un",
+      "startMs": 6456,
+      "endMs": 22278,
+      "cueMs": 8688
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Sur ordinateur, la fiche à",
+      "startMs": 22278,
+      "endMs": 30000,
+      "cueMs": 8734
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Accès et parking explique les",
+      "startMs": 6354,
+      "endMs": 12708,
+      "cueMs": 13448
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Questions fréquentes précise l’assurance et",
+      "startMs": 12708,
+      "endMs": 17396,
+      "cueMs": 13468
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Tu peux revenir au planning",
+      "startMs": 17396,
+      "endMs": 21875,
+      "cueMs": 14563
+    },
+    {
+      "segmentId": "desktop",
+      "phrase": "Les bandes violettes placent les",
+      "startMs": 16986,
+      "endMs": 23452,
+      "cueMs": 17884
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Sur validation signifie que l’organisateur",
+      "startMs": 9600,
+      "endMs": 15500,
+      "cueMs": 18418
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Dix-huit plus annonce un âge",
+      "startMs": 15500,
+      "endMs": 18500,
+      "cueMs": 18452
+    },
+    {
+      "segmentId": "states",
+      "phrase": "Réservé reste visible mais demande",
+      "startMs": 18500,
+      "endMs": 24200,
+      "cueMs": 18485
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Glisse doucement pour parcourir la",
+      "startMs": 15404,
+      "endMs": 22758,
+      "cueMs": 21899
+    },
+    {
+      "segmentId": "mobile",
+      "phrase": "Tu retrouves les heures, les",
+      "startMs": 22758,
+      "endMs": 32000,
+      "cueMs": 21905
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "Ici, Julien fait partie de",
+      "startMs": 6799,
+      "endMs": 10623,
+      "cueMs": 25213
+    },
+    {
+      "segmentId": "invitation",
+      "phrase": "L’invitation ne t’inscrit pas toute",
+      "startMs": 16890,
+      "endMs": 20502,
+      "cueMs": 25215
+    },
+    {
+      "segmentId": "result",
+      "phrase": "En cas de doute sur",
+      "startMs": 14000,
+      "endMs": 24000,
+      "cueMs": 26531
+    }
+  ]
+}

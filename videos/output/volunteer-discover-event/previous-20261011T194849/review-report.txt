@@ -1,0 +1,5 @@
+STATUS: NOT READY
+First narrated take: all objective validation/audio/caption/effects/host-label checks passed, but semantic action timing failed.
+Actual MP4 evidence sheets 1–3: transient 404 at pages 53.03s from relative link losing local tenant; FAQ spoken 60.27s but shown 65.11s; return-to-planning sentence 63.06s showed access page. Adult focus waited until reserved sentence104.35s; reserved until places sentence107.31s. Mobile swipe123.09s preceded instruction127.44s.
+Local video source corrections: use actual QR public URL for real relative page link, sentence-anchor FAQ and planning return, adult and reserved focuses, first mobile swipe. Fixture prepare-demo restores owned default public slug after ownership guard.
+One narrated re-film authorized for video-only fixes; verified product build remains ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8 / urE8YE_Qy4c7ji_FfJcAe. Real-time subjective listening unavailable.

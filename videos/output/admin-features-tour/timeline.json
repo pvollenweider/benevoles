@@ -1,87 +1,314 @@
 {
   "slug": "admin-features-tour",
-  "recordedAt": "2026-10-03T10:37:18.014Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T19:37:43.578Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ADMIN_FEATURES_OVERVIEW",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 109136
+    },
+    {
+      "kind": "click",
+      "atMs": 111337
+    },
+    {
+      "kind": "click",
+      "atMs": 112137
+    },
+    {
+      "kind": "click",
+      "atMs": 112920
+    },
+    {
+      "kind": "click",
+      "atMs": 113718
+    },
+    {
+      "kind": "click",
+      "atMs": 114635
+    },
+    {
+      "kind": "click",
+      "atMs": 115819
+    },
+    {
+      "kind": "click",
+      "atMs": 116402
+    },
+    {
+      "kind": "click",
+      "atMs": 118300
+    },
+    {
+      "kind": "click",
+      "atMs": 119953
+    },
+    {
+      "kind": "click",
+      "atMs": 125069
+    },
+    {
+      "kind": "click",
+      "atMs": 183604
+    },
+    {
+      "kind": "click",
+      "atMs": 185088
+    },
+    {
+      "kind": "click",
+      "atMs": 199344
+    },
+    {
+      "kind": "click",
+      "atMs": 203276
+    },
+    {
+      "kind": "click",
+      "atMs": 204959
+    },
+    {
+      "kind": "click",
+      "atMs": 282009
+    },
+    {
+      "kind": "click",
+      "atMs": 282824
+    },
+    {
+      "kind": "key",
+      "atMs": 283132
+    },
+    {
+      "kind": "key",
+      "atMs": 283231
+    },
+    {
+      "kind": "key",
+      "atMs": 283328
+    },
+    {
+      "kind": "key",
+      "atMs": 283426
+    },
+    {
+      "kind": "key",
+      "atMs": 283524
+    },
+    {
+      "kind": "key",
+      "atMs": 283622
+    },
+    {
+      "kind": "key",
+      "atMs": 283719
+    },
+    {
+      "kind": "key",
+      "atMs": 284004
+    }
+  ],
   "cues": [
     {
       "id": "intro",
       "startMs": 0,
-      "endMs": 11868
+      "endMs": 13264
     },
     {
       "id": "organization",
-      "startMs": 15281,
-      "endMs": 31268
+      "startMs": 16603,
+      "endMs": 32066
     },
     {
       "id": "team",
-      "startMs": 31719,
-      "endMs": 48772
+      "startMs": 32519,
+      "endMs": 51789
     },
     {
       "id": "lifecycle",
-      "startMs": 52119,
-      "endMs": 68534
+      "startMs": 55150,
+      "endMs": 74311
     },
     {
       "id": "appearance",
-      "startMs": 68986,
-      "endMs": 82397
+      "startMs": 74764,
+      "endMs": 90234
     },
     {
       "id": "duplicate",
-      "startMs": 84002,
-      "endMs": 101747
+      "startMs": 91823,
+      "endMs": 103618
     },
     {
       "id": "shift-methods",
-      "startMs": 105091,
-      "endMs": 127412
+      "startMs": 106933,
+      "endMs": 124120
     },
     {
       "id": "shift-fields",
-      "startMs": 127866,
-      "endMs": 138117
+      "startMs": 124574,
+      "endMs": 142595
     },
     {
       "id": "registrations",
-      "startMs": 141518,
-      "endMs": 160835
+      "startMs": 145943,
+      "endMs": 161600
     },
     {
       "id": "members",
-      "startMs": 162481,
-      "endMs": 173655
+      "startMs": 163295,
+      "endMs": 178721
     },
     {
       "id": "questions",
-      "startMs": 175311,
-      "endMs": 194063
+      "startMs": 180308,
+      "endMs": 194555
     },
     {
       "id": "pages",
-      "startMs": 195668,
-      "endMs": 205858
+      "startMs": 196126,
+      "endMs": 209885
     },
     {
       "id": "messages",
-      "startMs": 209319,
-      "endMs": 228846
+      "startMs": 213187,
+      "endMs": 230849
     },
     {
       "id": "reminders",
-      "startMs": 230436,
-      "endMs": 243541
+      "startMs": 232447,
+      "endMs": 244110
     },
     {
       "id": "reports",
-      "startMs": 246907,
-      "endMs": 264623
+      "startMs": 247438,
+      "endMs": 264476
     },
     {
       "id": "activity",
-      "startMs": 268116,
-      "endMs": 282978
+      "startMs": 267787,
+      "endMs": 285856
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "team",
+      "phrase": "Les responsables de secteur reçoivent",
+      "startMs": 9329,
+      "endMs": 18457,
+      "cueMs": 41850
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Même publié, il peut rester",
+      "startMs": 9221,
+      "endMs": 13380,
+      "cueMs": 64372
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Les inscriptions peuvent être immédiates",
+      "startMs": 13811,
+      "endMs": 18777,
+      "cueMs": 68963
+    },
+    {
+      "segmentId": "appearance",
+      "phrase": "Le lieu peut recevoir des",
+      "startMs": 7869,
+      "endMs": 9393,
+      "cueMs": 82639
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3908,
+      "endMs": 11381,
+      "cueMs": 110844
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "ajouter un créneau depuis la",
+      "startMs": 3908,
+      "endMs": 11381,
+      "cueMs": 111646
+    },
+    {
+      "segmentId": "shift-methods",
+      "phrase": "Pour des horaires répétitifs, la",
+      "startMs": 11846,
+      "endMs": 17186,
+      "cueMs": 119469
+    },
+    {
+      "segmentId": "shift-fields",
+      "phrase": "La liste d’attente et l’inscription",
+      "startMs": 13253,
+      "endMs": 17638,
+      "cueMs": 137829
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "taille de t-shirt, régime alimentaire",
+      "startMs": 2826,
+      "endMs": 9284,
+      "cueMs": 183136
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Donne un titre, rédige le",
+      "startMs": 6635,
+      "endMs": 10226,
+      "cueMs": 202763
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Les modèles réutilisables acceptent des",
+      "startMs": 7101,
+      "endMs": 13671,
+      "cueMs": 220289
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "Tu prévisualises toujours le résultat",
+      "startMs": 14380,
+      "endMs": 17511,
+      "cueMs": 227569
+    },
+    {
+      "segmentId": "reports",
+      "phrase": "Les badges se génèrent en",
+      "startMs": 11496,
+      "endMs": 16744,
+      "cueMs": 258936
+    },
+    {
+      "segmentId": "activity",
+      "phrase": "La recherche globale permet ensuite",
+      "startMs": 13748,
+      "endMs": 17700,
+      "cueMs": 281536
     }
   ]
 }

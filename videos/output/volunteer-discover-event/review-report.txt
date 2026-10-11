@@ -1,0 +1,8 @@
+STATUS: READY
+ID: VOLUNTEER_DISCOVER_EVENT
+Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 12.2 / 18.7 LU. Effects vs input events: {'click': 2, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: One re-film resolves transient local 404 and page/state/mobile timing. All 54 MP4 frames reviewed: access/FAQ/planning at sentence anchors; adult/reserved focuses and first swipe correctly aligned. Frise/French dates/public URL/effects/captions/final ASR pass; no forbidden address or overlay.
+Local source changes: prepare-demo.ts restores owned default slug after guard; record.ts reads actual QR public URL and anchors FAQ/planning/adult/reserved/swipe. music-levels.ts reduces music 0.33→0.32 (0.27 dB), same capture reassembled; final rule12.2–18.7 LU.
+Real-time subjective listening unavailable; not used as a failure reason.
