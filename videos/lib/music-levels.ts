@@ -9,6 +9,9 @@ export const MUSIC_RULE = {
   minGapLu: 12,
   maxGapLu: 20,
   musicOnlyFloorLufs: -36,
+  // Where nobody speaks, the music alone stays at least this far under the video's
+  // median voice level: a pause must not sound louder than the narration around it.
+  musicOnlyUnderVoiceLu: 12,
   // Momentary loudness (400 ms) above which the narration stem counts as speech.
   speechThresholdLufs: -35,
   windowS: 3,
@@ -29,15 +32,34 @@ export type MusicWindow =
 
 export type MomentarySeries = { t: number; m: number }[]
 
+/**
+ * One entry per 100 ms frame. ebur128 prints « M: nan » over digital silence (between
+ * two narration chapters): those frames are silence, not missing. Dropping them shifted
+ * every later frame earlier (6.1 s by the end of EVENT_CREATE_TEMPLATE), so speech was
+ * looked up at the wrong time.
+ */
 export function parseEbur128Momentary(log: string): MomentarySeries {
   const series: MomentarySeries = []
   for (const line of log.split("\n")) {
-    const match = line.match(/\bt:\s*(-?[\d.]+)\s.*?\bM:\s*(-?[\d.]+|-?inf)/)
+    const match = line.match(/\bt:\s*(-?[\d.]+)\s.*?\bM:\s*(-?[\d.]+|-?inf|nan)/)
     if (!match) continue
     const m = Number(match[2])
     series.push({ t: Number(match[1]), m: Number.isFinite(m) ? m : -120.7 })
   }
   return series
+}
+
+/**
+ * The series as one level per frame, placed by its timestamp (frame n ends at
+ * (n + 1) × frameS), so a line ffmpeg did not print can never shift later frames.
+ */
+export function frameLevels(series: MomentarySeries, frameS: number = MUSIC_RULE.frameS): number[] {
+  const levels: number[] = []
+  for (const { t, m } of series) {
+    const index = Math.round(t / frameS) - 1
+    if (index >= 0) levels[index] = m
+  }
+  return Array.from({ length: levels.length }, (_, index) => levels[index] ?? -120.7)
 }
 
 /** Loudness of the energy average of momentary levels (LUFS in, LUFS out). */
@@ -74,9 +96,20 @@ export function musicWindows(voice: number[], music: number[], final: number[], 
   return windows
 }
 
+/** Median voice level of the spoken windows: the reference a music-only pause is compared to. */
+export function medianVoiceLufs(windows: MusicWindow[]): number | null {
+  const levels = windows.flatMap(window => window.kind === "voiced" ? [window.voiceLufs] : []).sort((a, b) => a - b)
+  if (!levels.length) return null
+  const middle = Math.floor(levels.length / 2)
+  return levels.length % 2 ? levels[middle] : round((levels[middle - 1] + levels[middle]) / 2)
+}
+
 export function musicLevelIssues(windows: MusicWindow[]): string[] {
   const issues: string[] = []
+  const voice = medianVoiceLufs(windows)
+  const ceiling = voice === null ? null : round(voice - MUSIC_RULE.musicOnlyUnderVoiceLu)
   for (const window of windows) {
+    if (window.kind === "music-only" && ceiling !== null && window.levelLufs > ceiling) issues.push(`${window.startS}s: music alone at ${window.levelLufs} LUFS (too loud for a pause, ceiling ${ceiling}: ${MUSIC_RULE.musicOnlyUnderVoiceLu} LU under the median voice)`)
     if (window.kind === "voiced" && window.gapLu < MUSIC_RULE.minGapLu) issues.push(`${window.startS}s: music only ${window.gapLu} LU under the voice (too loud, minimum ${MUSIC_RULE.minGapLu})`)
     if (window.kind === "voiced" && window.gapLu > MUSIC_RULE.maxGapLu) issues.push(`${window.startS}s: music ${window.gapLu} LU under the voice (inaudible, maximum ${MUSIC_RULE.maxGapLu})`)
     if (window.kind === "music-only" && window.levelLufs < MUSIC_RULE.musicOnlyFloorLufs) issues.push(`${window.startS}s: music alone at ${window.levelLufs} LUFS (inaudible, floor ${MUSIC_RULE.musicOnlyFloorLufs})`)
@@ -93,6 +126,8 @@ export function musicLevelSummary(windows: MusicWindow[]) {
     smallestGapLu: voiced.length ? Math.min(...voiced.map(window => window.gapLu)) : null,
     largestGapLu: voiced.length ? Math.max(...voiced.map(window => window.gapLu)) : null,
     quietestMusicOnlyLufs: alone.length ? Math.min(...alone.map(window => window.levelLufs)) : null,
+    loudestMusicOnlyLufs: alone.length ? Math.max(...alone.map(window => window.levelLufs)) : null,
+    medianVoiceLufs: medianVoiceLufs(windows),
   }
 }
 
@@ -110,5 +145,30 @@ export function musicLoopCopies(durationS: number, loop: { startS: number; endS:
 // instead of holding it, because it ducks deeper under loud sentences.
 export const MUSIC_MIX = {
   compressor: "threshold=0.1:ratio=4:attack=50:release=500",
-  volume: 0.31,
+  volume: 0.33,
 } as const
+
+// The narration is levelled before the music is set under it: each chapter brought to
+// the same integrated loudness, then a gentle speech compressor evens out the quiet and
+// loud sentences inside a chapter. Measured on PLATFORM_INTERNAL_ADMINISTRATION (479 s,
+// 2026-10-11): the voice ranged over 9.9 LU from one 3 s window to another, wider than
+// the 8 LU band a steady music can fit in; levelled, 6.3 LU.
+export const NARRATION_LEVEL = {
+  segmentTargetLufs: -18,
+  maxSegmentGainDb: 12,
+  compressor: "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+} as const
+
+/** Integrated loudness from an ffmpeg ebur128 summary (the last « I: … LUFS »). */
+export function parseEbur128Integrated(log: string): number | null {
+  const values = [...log.matchAll(/\bI:\s+(-?[\d.]+|-inf)\s+LUFS/g)].map(match => Number(match[1]))
+  const value = values.at(-1)
+  return value === undefined || !Number.isFinite(value) ? null : value
+}
+
+/** Gain (dB) bringing one narration chapter to the common target; silent chapters are left alone. */
+export function segmentGainDb(integratedLufs: number | null, level: { segmentTargetLufs: number; maxSegmentGainDb: number } = NARRATION_LEVEL): number {
+  if (integratedLufs === null) return 0
+  const gain = level.segmentTargetLufs - integratedLufs
+  return Math.round(Math.max(-level.maxSegmentGainDb, Math.min(level.maxSegmentGainDb, gain)) * 100) / 100
+}
