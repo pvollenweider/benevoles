@@ -193,7 +193,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     try {
       const occupied = await prisma.registration.count({ where: { shiftId: registration.shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
       // Grouped (#869): withdrawals of the event within a few minutes make one email per person.
-      await queueWithdrawalNotifications({
+      const dueIds = await queueWithdrawalNotifications({
         registrationId: registration.id,
         event: registration.event,
         shift: registration.shift,
@@ -202,6 +202,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
         waitlistTookSpot,
         placesMissing: Math.max(registration.shift.capacity - occupied, 0),
       })
+      deliverAfterResponse(dueIds)
     } catch (e) {
       reportError("withdrawal.notify")(e)
     }

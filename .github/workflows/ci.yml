@@ -100,6 +100,8 @@ jobs:
       SMTP_PASSWORD: dev
       EMAIL_FROM: "Bénévoles e2e <notifications@benevol.app>"
       MAILPIT_URL: http://localhost:8025
+      # Grouped emails (#869) leave at once here: the specs read them without waiting for a cron.
+      DIGEST_DELAY_SECONDS: "0"
       NEXT_PUBLIC_APP_URL: http://localhost:3100
       AUTH_URL: http://localhost:3100
       AUTH_TRUST_HOST: "true"

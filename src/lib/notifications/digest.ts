@@ -4,6 +4,7 @@
 import { prisma } from "@/lib/prisma"
 import { openPayload, sealPayload } from "./outbox"
 import type { NotificationKind, Recipient } from "./types"
+export { digestDelayMs } from "./digest-items"
 
 /**
  * One email for several events of the same kind, to the same person, about the same subject
@@ -11,6 +12,7 @@ import type { NotificationKind, Recipient } from "./types"
  * by `delayMs`; otherwise it starts one. The 5-minute outbox cron sends it once nobody added to it
  * for that long. The payload's `data.items` holds every item, oldest first; `data` the rest.
  */
+/** Returns the row's id when it is already due (no delay), for an immediate delivery; null otherwise. */
 export async function queueDigestItem<Item>(input: {
   kind: NotificationKind
   /** Same group, same email: e.g. kind + event + recipient address. */
@@ -24,10 +26,11 @@ export async function queueDigestItem<Item>(input: {
   itemKey: string
   now: Date
   delayMs: number
-}): Promise<void> {
+}): Promise<string | null> {
   const sendAt = new Date(input.now.getTime() + input.delayMs)
+  const due = input.delayMs <= 0
   const prefix = `${input.groupKey}:`
-  await prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx) => {
     // Two items of one group at the same moment must find each other's row, not start two.
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${input.groupKey}))`
     const pending = await tx.notificationOutbox.findFirst({
@@ -37,7 +40,7 @@ export async function queueDigestItem<Item>(input: {
     if (pending) {
       const previous = openPayload(pending.payload).data as { items?: { key: string; value: Item }[] }
       const items = previous.items ?? []
-      if (items.some((i) => i.key === input.itemKey)) return
+      if (items.some((i) => i.key === input.itemKey)) return due ? pending.id : null
       await tx.notificationOutbox.update({
         where: { id: pending.id },
         data: {
@@ -45,7 +48,7 @@ export async function queueDigestItem<Item>(input: {
           nextAttemptAt: sendAt,
         },
       })
-      return
+      return due ? pending.id : null
     }
     // An item already sent in an earlier email keeps its key: queued again, it is skipped.
     await tx.notificationOutbox.createMany({
@@ -57,5 +60,8 @@ export async function queueDigestItem<Item>(input: {
       }],
       skipDuplicates: true,
     })
+    if (!due) return null
+    const row = await tx.notificationOutbox.findUnique({ where: { dedupeKey: `${prefix}${input.itemKey}` }, select: { id: true, status: true } })
+    return row?.status === "pending" ? row.id : null
   })
 }
