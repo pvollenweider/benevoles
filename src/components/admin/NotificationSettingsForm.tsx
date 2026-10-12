@@ -78,7 +78,9 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
   }
 
   const toggle = (key: ReminderKey) => setSettings((s) => ({ ...s, reminders: { ...s.reminders, [key]: !s.reminders[key] } }))
-  const checkboxClass = "mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+  // shrink-0 (#928): beside a long help text, a flex item shrank the checkbox below 16 px, out of
+  // line with its siblings (« Prévenir en cas de désistement »).
+  const checkboxClass = "mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-blue-600"
   const testDisabled = testing || !adminEmail
 
   return (

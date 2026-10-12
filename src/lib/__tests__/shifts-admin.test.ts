@@ -12,6 +12,7 @@ import {
   sortShifts,
   spokenPlaces,
   timelineBarName,
+  timelineBarPlaces,
 } from "../shifts-admin"
 
 const s = (id: string, over: Partial<{ roleName: string; label: string; date: string; startTime: string; status: string; displayOrder: number; registrationCount: number }> = {}) => ({
@@ -117,8 +118,36 @@ describe("spoken shift wording", () => {
   })
 
   it("timelineBarName starts with the role, then the time and places in words, and says when it is full", () => {
-    expect(timelineBarName(shift, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, modifier")
+    expect(timelineBarName(shift, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier")
     expect(timelineBarName({ ...shift, label: "Bar", registrationCount: 5 }, true)).toBe("Bar, de 10h30 à 12h15, 5 inscrits sur 5, complet, modifier")
-    expect(timelineBarName({ ...shift, startTime: "22:00", endTime: "02:00" }, false)).toBe("Bar, Soir, de 22h à 2h, jusqu'au lendemain, 3 inscrits sur 5, modifier")
+    expect(timelineBarName({ ...shift, startTime: "22:00", endTime: "02:00" }, false)).toBe("Bar, Soir, de 22h à 2h, jusqu'au lendemain, 3 inscrits sur 5, 2 libres, modifier")
+  })
+
+  it("timelineBarName says the free places in the bar's words, singular or plural (#925, 2.5.3)", () => {
+    expect(timelineBarName({ ...shift, registrationCount: 4 }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 4 inscrits sur 5, 1 libre, modifier")
+  })
+
+  it("timelineBarName says the minimum age, like the list view (#925)", () => {
+    expect(timelineBarName({ ...shift, minAge: 18 }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum, modifier")
+    expect(timelineBarName({ ...shift, minAge: null }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier")
+  })
+})
+
+// #925: the bar's « 2/4 · 2 libre » didn't say what it counted, nor agreed « libres ».
+describe("timelineBarPlaces", () => {
+  it("says the figures are registrations, then the free places, singular or plural", () => {
+    expect(timelineBarPlaces({ registrationCount: 2, capacity: 4 })).toBe("2/4 inscrits · 2 libres")
+    expect(timelineBarPlaces({ registrationCount: 1, capacity: 2 })).toBe("1/2 inscrit · 1 libre")
+    expect(timelineBarPlaces({ registrationCount: 0, capacity: 3 })).toBe("0/3 inscrit · 3 libres")
+  })
+
+  it("says « Complet » when no place is left, even over capacity", () => {
+    expect(timelineBarPlaces({ registrationCount: 3, capacity: 3 })).toBe("3/3 inscrits · Complet")
+    expect(timelineBarPlaces({ registrationCount: 4, capacity: 3 })).toBe("4/3 inscrits · Complet")
+  })
+
+  it("puts the minimum age first when the shift has one, so a narrow bar keeps it", () => {
+    expect(timelineBarPlaces({ registrationCount: 2, capacity: 4, minAge: 18 })).toBe("18 ans min. · 2/4 inscrits · 2 libres")
+    expect(timelineBarPlaces({ registrationCount: 2, capacity: 4, minAge: null })).toBe("2/4 inscrits · 2 libres")
   })
 })

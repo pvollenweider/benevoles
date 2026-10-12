@@ -5,31 +5,18 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { fmtRange } from "@/lib/gantt-utils"
-import { fillPercent, staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
+import { staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
 import HelpLink from "@/components/admin/HelpLink"
+import { Meter, ShiftLine, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
 
-const linkClass =
-  "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const linkClass = staffingLinkClass
 
-// Shift.date is a UTC midnight.
-const day = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 const plural = (n: number, w: string) => `${n} ${n > 1 ? (w.endsWith("eau") ? `${w}x` : `${w}s`) : w}`
-
-/** Filled share as a bar. Decorative: the figures next to it carry the meaning. */
-function Meter({ active, capacity, className = "" }: { active: number; capacity: number; className?: string }) {
-  const pct = fillPercent(active, capacity)
-  return (
-    <span aria-hidden="true" className={`block h-2 rounded-full bg-gray-200 overflow-hidden ${className}`}>
-      <span className={`block h-full rounded-full ${pct >= 100 ? "bg-gray-700" : "bg-blue-600"}`} style={{ width: `${pct}%` }} />
-    </span>
-  )
-}
 
 /** « 2/5 » on screen, « 2 sur 5 » for screen readers. */
 function Ratio({ active, capacity }: { active: number; capacity: number }) {
@@ -50,27 +37,6 @@ function Group({ id, title, count, hint, children }: { id: string; title: string
       {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
       <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">{children}</ul>
     </section>
-  )
-}
-
-function ShiftLine({ eventId, group, s, detail, action }: { eventId: string; group: string; s: StaffingShiftLine; detail: React.ReactNode; action?: React.ReactNode }) {
-  const name = s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
-  const detailId = `${group}-${s.id}-detail`
-  return (
-    <li className="px-4 py-3 text-sm grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-2 items-center">
-      <div className="min-w-0">
-        {/* Date and time inside the link: its name is what's visible, nothing duplicated for AT. */}
-        <Link href={`/admin/events/${eventId}/registrations?shift=${encodeURIComponent(s.id)}`} aria-describedby={detailId} className={linkClass}>
-          {name}
-          <span className="block sm:inline font-normal text-gray-600 sm:ml-2">{day(s.date)} · {fmtRange(s.startTime, s.endTime)}</span>
-        </Link>
-        {action}
-      </div>
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
-        <Meter active={s.active} capacity={s.capacity} className="w-full sm:w-24 shrink-0" />
-        <p id={detailId} className="text-gray-800 tabular-nums">{detail}</p>
-      </div>
-    </li>
   )
 }
 
@@ -177,7 +143,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
                   s={s}
                   detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong>{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
                   action={
-                    <Link href={`${base}/staffing/search?shift=${encodeURIComponent(s.id)}`} className={`mt-1 inline-block text-sm ${linkClass}`}>
+                    <Link href={`${base}/staffing/search?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
                       Chercher des bénévoles
                       <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
                     </Link>

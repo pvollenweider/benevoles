@@ -426,6 +426,12 @@ export default function ShiftsManager({
       )}
 
       {/* ── Frise (timeline) view ───────────────────────────────────────────────────── */}
+      {/* What the figures on a bar mean (#925), once above the days; each bar's name says it in words. */}
+      {view === "timeline" && daysWithShifts.length > 0 && (
+        <p className="text-xs text-gray-600 pl-1">
+          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne et l&apos;accès réservé se règlent sur le poste, dans « Gérer les postes ».
+        </p>
+      )}
       {view === "timeline" && daysWithShifts.map(day => (
         <div key={day} className="space-y-2">
           <h2 className="text-xs font-semibold text-gray-600">
