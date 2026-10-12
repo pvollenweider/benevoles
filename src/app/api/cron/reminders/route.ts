@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { reminderCancelNotice } from "@/lib/cancel-deadline"
+import { hasEarlierDeadline, reminderCancelNotice, selfCancelDeadline } from "@/lib/cancel-deadline"
 import { NextResponse } from "next/server"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
@@ -122,6 +122,7 @@ async function run(req: Request) {
           hoursUntil: Math.max(0, Math.round((group.earliestStart.getTime() - now.getTime()) / (3600 * 1000))),
           // The event's earlier self-cancellation deadline (#946), for the group's first shift.
           cancelNotice: reminderCancelNotice(first.shift, first.event, orgTimeZone(first.event.organization), now),
+          cancelClosed: hasEarlierDeadline(first.event) && now >= selfCancelDeadline(first.shift, first.event, orgTimeZone(first.event.organization)),
         },
       })
       if (result.ok) {

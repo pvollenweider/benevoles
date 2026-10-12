@@ -138,6 +138,11 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { ...reminder, cancelNotice: "Tu peux annuler toi-même jusqu'au jeudi 10 juillet à 09:00. Passé ce délai, préviens l'organisation." },
   }],
+  ["reminder_j2 (cancellation deadline passed, #946)", {
+    kind: "reminder_j2",
+    recipient,
+    data: { ...reminder, cancelNotice: "Le délai pour annuler toi-même est passé : en cas d'empêchement, préviens directement l'organisation.", cancelClosed: true },
+  }],
   ["reminder_j2 (group with a night shift)", { kind: "reminder_j2", recipient, data: reminderGroupNight }],
   ["reminder_j1", { kind: "reminder_j1", recipient, data: reminder }],
   ["reminder_j1 (no location, no extras)", {

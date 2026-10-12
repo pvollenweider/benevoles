@@ -146,7 +146,8 @@ export function cancelClosedText(reason: SelfCancelReason): string {
 }
 
 /** On the public event page, under a held shift that can't be cancelled online any more. */
-export const CANCEL_CLOSED_SHORT = "Plus annulable en ligne : vois les contacts sur ta page personnelle."
+export const CANCEL_CLOSED_SHORT = "Plus annulable en ligne : qui prévenir est indiqué sur"
+export const CANCEL_CLOSED_LINK = "ta page personnelle"
 
 /** The line before the contacts, when the volunteer can't cancel online any more. */
 export const CANCEL_CONTACTS_INTRO = "Si tu ne peux pas venir, préviens directement :"
@@ -199,6 +200,11 @@ export function cancelDeadlineFormFrom(s: CancelDeadlineSetting | null | undefin
   return days || hours ? { mode: "before", days: days ? String(days) : "", hours: hours ? String(hours) : "" } : { mode: "start", days: "", hours: "" }
 }
 
+const NOT_SAVED = "Ce délai n'est pas enregistré tant qu'il n'est pas corrigé."
+
+/** Said when an event is created with an invalid deadline: nothing is created. */
+export const CANCEL_DEADLINE_CREATE_ERROR = "Le délai d'annulation n'est pas valide : corrigez-le avant de créer l'événement."
+
 export type CancelDeadlineErrors = { days?: string; hours?: string; total?: string }
 
 const parseCount = (raw: string): number | null => (raw.trim() === "" ? 0 : /^\d+$/.test(raw.trim()) ? Number(raw.trim()) : null)
@@ -209,9 +215,9 @@ export function cancelDeadlineFormErrors(f: CancelDeadlineForm): CancelDeadlineE
   const errors: CancelDeadlineErrors = {}
   const days = parseCount(f.days)
   const hours = parseCount(f.hours)
-  if (days === null || days > CANCEL_DEADLINE_DAYS_MAX) errors.days = `Nombre de jours entier, de 0 à ${CANCEL_DEADLINE_DAYS_MAX}.`
-  if (hours === null || hours > CANCEL_DEADLINE_HOURS_MAX) errors.hours = `Nombre d'heures entier, de 0 à ${CANCEL_DEADLINE_HOURS_MAX}. Au-delà, utilisez les jours.`
-  if (!errors.days && !errors.hours && days === 0 && hours === 0) errors.total = "Indiquez au moins un jour ou une heure, ou choisissez « Jusqu'au début du créneau »."
+  if (days === null || days > CANCEL_DEADLINE_DAYS_MAX) errors.days = `Nombre de jours entier, de 0 à ${CANCEL_DEADLINE_DAYS_MAX}. ${NOT_SAVED}`
+  if (hours === null || hours > CANCEL_DEADLINE_HOURS_MAX) errors.hours = `Nombre d'heures entier, de 0 à ${CANCEL_DEADLINE_HOURS_MAX}. Au-delà, utilisez les jours. ${NOT_SAVED}`
+  if (!errors.days && !errors.hours && days === 0 && hours === 0) errors.total = `Indiquez au moins un jour ou une heure, ou choisissez « Jusqu'au début du créneau ». ${NOT_SAVED}`
   return errors
 }
 

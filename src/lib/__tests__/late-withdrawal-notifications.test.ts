@@ -99,7 +99,7 @@ describe("last-minute withdrawal emails", () => {
     const mail = renderSectorLeaderWithdrawalDigest({ kind: "sector_leader_withdrawal", recipient: { email: "l@x.org" }, data })
     expect(mail.subject).toBe("Désistement de dernière minute — Bar")
     expect(mail.text).toContain("le créneau commence le samedi 4 juillet à 18:00")
-    expect(mail.text).toContain("Trouver un remplaçant : l'organisation est prévenue en même temps.")
+    expect(mail.text).toContain("Pour remplacer cette personne : l'organisation est prévenue en même temps.")
   })
 
   it("an ordinary withdrawal keeps its words", () => {

@@ -106,7 +106,7 @@ export function renderSectorLeaderWithdrawal(p: NotificationPayload): RenderedEm
   // A place left empty with nobody waiting: the organisers have the « Trouver un remplaçant » page;
   // the leader, who has no admin access, is told they are on it and who to tell of a replacement.
   const replaceLine = d.late && !d.waitlistTookSpot && d.placesMissing > 0
-    ? "Trouver un remplaçant : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle."
+    ? "Pour remplacer cette personne : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle."
     : null
 
   const spotLine = d.waitlistTookSpot

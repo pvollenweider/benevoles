@@ -51,7 +51,7 @@ type RegistrationItem = {
    * Whether the volunteer can still cancel it by themself (#946), as the server saw it when the page
    * loaded: until the shift starts, or the event's earlier deadline for a confirmed place.
    */
-  selfCancel?: { allowed: boolean; deadline?: string | null; reason?: SelfCancelReason }
+  selfCancel?: { allowed: boolean; deadline?: string | null; reason?: SelfCancelReason; /** The server's refusal (409), shown in place of the reason. */ refused?: string }
   shift: ShiftRef
 }
 
@@ -186,16 +186,13 @@ export default function MyRegistrationPage() {
     setPendingCancel(null)
 
     // Too late to cancel online (#946), the page having been loaded earlier: the card switches to
-    // the contacts to tell, focus goes there, and the refusal is said once focus has moved.
+    // the refusal and the contacts to tell, a group named by the refusal that takes focus, so the
+    // refusal is read on focus and the contacts follow (no alert talking over it).
     if (failure?.status === 409) {
-      const message = withdrawFailureMessage(failure)
+      const refused = withdrawFailureMessage(failure)
       const reason: SelfCancelReason = failure.reason ?? "deadline"
-      setData((d) => d ? { ...d, registrations: d.registrations.map((r) => r.id === reg.id ? { ...r, selfCancel: { allowed: false, reason } } : r) } : d)
-      setFocusRequest({
-        candidates: [byId(closedId(reg.id)), byId(LIST_TITLE_ID)],
-        regionId: cardId(reg.id),
-        after: () => announce((text) => setWithdrawError(reg.id, text), message),
-      })
+      setData((d) => d ? { ...d, registrations: d.registrations.map((r) => r.id === reg.id ? { ...r, selfCancel: { allowed: false, reason, refused } } : r) } : d)
+      setFocusRequest({ candidates: [byId(closedId(reg.id)), byId(LIST_TITLE_ID)], regionId: cardId(reg.id) })
       return
     }
 
@@ -328,7 +325,7 @@ export default function MyRegistrationPage() {
                     )}
                     {/* An earlier deadline still ahead (#946): said under a confirmed shift. */}
                     {!closed && reg.selfCancel?.deadline && (
-                      <p className="text-xs text-gray-700 mt-1">{cancelUntilText(new Date(reg.selfCancel.deadline), data.timeZone ?? APP_TIME_ZONE)}</p>
+                      <p id={`cancel-until-${reg.id}`} className="text-xs text-gray-700 mt-1">{cancelUntilText(new Date(reg.selfCancel.deadline), data.timeZone ?? APP_TIME_ZONE)}</p>
                     )}
                     {reg.status === "requested" && (
                       <p className="text-xs text-amber-900 mt-1">Créneau sur validation : l&apos;organisation va accepter ou refuser ta demande, et te prévient par email. La place t&apos;est réservée d&apos;ici là.</p>
@@ -356,6 +353,7 @@ export default function MyRegistrationPage() {
                     type="button"
                     onClick={() => openConfirm(reg)}
                     aria-label={copy.ariaLabel}
+                    aria-describedby={reg.selfCancel?.deadline ? `cancel-until-${reg.id}` : undefined}
                     aria-expanded={isPending}
                     aria-controls={isPending ? `cancel-${reg.id}` : undefined}
                     aria-disabled={busy || undefined}
@@ -368,8 +366,8 @@ export default function MyRegistrationPage() {
                 {/* Past the deadline or the start (#946): why, and whom to tell instead. A focus
                     target after a refused withdrawal, never a control. */}
                 {closed && (
-                  <div id={closedId(reg.id)} tabIndex={-1} className="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800 focus:outline-none">
-                    <p className="font-medium">{cancelClosedText(reg.selfCancel?.reason ?? "deadline")}</p>
+                  <div id={closedId(reg.id)} role="group" aria-labelledby={`${closedId(reg.id)}-title`} tabIndex={-1} className="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800 focus:outline-none">
+                    <p id={`${closedId(reg.id)}-title`} className="font-medium">{reg.selfCancel?.refused ?? cancelClosedText(reg.selfCancel?.reason ?? "deadline")}</p>
                     {contacts.length > 0 && (
                       <>
                         <p className="mt-1">{CANCEL_CONTACTS_INTRO}</p>

@@ -25,6 +25,13 @@ type Props = {
   onKeep: () => void
   /** The confirm button: the page keeps focus there after a failure. */
   confirmRef?: React.Ref<HTMLButtonElement>
+  /**
+   * The server said it can't be cancelled online any more (#946): no confirm button nor message
+   * field, « Non, garder » becomes « J'ai compris » (the header already has a « Fermer ») and the page puts focus on it.
+   */
+  closed?: boolean
+  /** « Non, garder » / « J'ai compris », for the page to move focus there after a refusal. */
+  keepRef?: React.RefObject<HTMLButtonElement | null>
 }
 
 /**
@@ -35,10 +42,11 @@ type Props = {
  * Not ConfirmActionModal: it voices « Action en cours… » (a second announcement for one action,
  * the page announces the result) and its « Annuler » would be ambiguous next to a cancellation.
  */
-export default function WithdrawDialog({ copy, label, busy, error, message, onMessageChange, onConfirm, onKeep, confirmRef }: Props) {
+export default function WithdrawDialog({ copy, label, busy, error, message, onMessageChange, onConfirm, onKeep, confirmRef, closed = false, keepRef: keepRefProp }: Props) {
   const descId = useId()
   const messageId = useId()
-  const keepRef = useRef<HTMLButtonElement>(null)
+  const ownKeepRef = useRef<HTMLButtonElement>(null)
+  const keepRef = keepRefProp ?? ownKeepRef
 
   return (
     <ModalShell
@@ -57,7 +65,7 @@ export default function WithdrawDialog({ copy, label, busy, error, message, onMe
       <p role="alert" className={error ? "mt-3 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>
         {error ?? ""}
       </p>
-      <WithdrawMessageField id={messageId} value={message} onChange={onMessageChange} disabled={busy} />
+      {!closed && <WithdrawMessageField id={messageId} value={message} onChange={onMessageChange} disabled={busy} />}
       <div className="flex flex-wrap gap-3 pt-4">
         <button
           ref={keepRef}
@@ -66,9 +74,9 @@ export default function WithdrawDialog({ copy, label, busy, error, message, onMe
           aria-disabled={busy || undefined}
           className="flex-1 min-h-11 border border-gray-300 text-gray-800 rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-50 aria-disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          Non, garder
+          {closed ? "J'ai compris" : "Non, garder"}
         </button>
-        <button
+        {!closed && <button
           ref={confirmRef}
           type="button"
           onClick={() => { if (!busy) onConfirm() }}
@@ -77,7 +85,7 @@ export default function WithdrawDialog({ copy, label, busy, error, message, onMe
           className="flex-1 min-h-11 bg-red-700 text-white border border-transparent rounded-xl px-4 py-2 text-sm font-semibold hover:bg-red-800 aria-disabled:opacity-50 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
         >
           {copy.confirmButton}
-        </button>
+        </button>}
       </div>
       {/* Visible only: opacity alone must not carry the busy state (DESIGN.md), and the result is
           announced once by the page, so this is not a live region. */}

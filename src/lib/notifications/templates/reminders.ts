@@ -28,6 +28,8 @@ type ReminderData = {
   orgSlug?: string
   /** The event's earlier self-cancellation deadline for these shifts (#946); absent = until the start. */
   cancelNotice?: string | null
+  /** That deadline has passed (#946): the button leads to whom to tell, not to « Annuler ». */
+  cancelClosed?: boolean
 }
 
 /** The self-cancellation line (#946), only when the event sets an earlier deadline. */
@@ -120,7 +122,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
       <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
       ${shiftInfoHtml(first)}
     </div>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
     : wrap(`
@@ -130,7 +132,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
       ${d.shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Annuler un créneau si je ne peux plus venir")}</p>
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
 

@@ -61,7 +61,7 @@ test("past the deadline: no cancel button, why, and whom to tell", async ({ page
   const token = await publicSignUp(page, soon, soon.shifts.map((s) => s.id))
   await page.goto(`/my/${token}`)
   await expect(page.getByRole("heading", { level: 1, name: "Mes inscriptions" })).toBeVisible()
-  const card = page.locator("[id^='cancel-closed-']")
+  const card = page.getByRole("group", { name: "Le délai pour annuler toi-même ce créneau est passé." })
   await expect(card).toContainText("Le délai pour annuler toi-même ce créneau est passé.")
   await expect(card).toContainText("Si tu ne peux pas venir, préviens directement :")
   await expect(card.getByRole("link", { name: `${DAY_CONTACT.name}, ${DAY_CONTACT.phone}` })).toHaveAttribute("href", "tel:0790001122")
@@ -88,13 +88,12 @@ test("a page loaded before the deadline: the refusal is said, the card switches 
   await trigger.click()
   await page.getByRole("button", { name: "Oui, annuler" }).click()
 
-  const closed = page.locator("[id^='cancel-closed-']")
+  // A group named by the refusal takes focus: read first, then the contacts; no alert over it.
+  const closed = page.getByRole("group", { name: /^Le délai pour annuler toi-même ce créneau est passé : rien n'a été annulé\./ })
   await expect(closed).toBeFocused()
-  await expect(closed).toContainText("Le délai pour annuler toi-même ce créneau est passé.")
+  await expect(closed).toContainText(DAY_CONTACT.name)
   await expect(trigger).toHaveCount(0)
-  const alert = page.locator("[id^='withdraw-error-']").filter({ hasText: /./ })
-  await expect(alert).toHaveText(/^Le délai pour annuler toi-même ce créneau est passé : rien n'a été annulé\./)
-  await expect(alert).toHaveAttribute("role", "alert")
+  await expect(page.locator("[id^='withdraw-error-']").filter({ hasText: /./ })).toHaveCount(0)
 })
 
 test("the event settings: « Plus tôt » with days and hours, saved and read back", async ({ page }) => {
@@ -102,22 +101,56 @@ test("the event settings: « Plus tôt » with days and hours, saved and read ba
   await page.goto(`/admin/events/${later.eventId}/edit`)
   const group = page.getByRole("group", { name: "Annulation par le bénévole" })
   await expect(group.getByRole("radio", { name: "Plus tôt : un délai avant le début de chaque créneau" })).toBeChecked()
-  const days = group.getByRole("spinbutton", { name: "Jours" })
+  const days = group.getByRole("textbox", { name: "Jours" })
   await expect(days).toHaveValue("2")
 
   await days.fill("0")
-  await group.getByRole("spinbutton", { name: "Heures" }).fill("0")
+  await group.getByRole("textbox", { name: "Heures" }).fill("0")
   await expect(days).toHaveAttribute("aria-invalid", "true")
   await expect(group.getByText("Indiquez au moins un jour ou une heure")).toBeVisible()
 
   const saved = page.waitForResponse((r) => r.url().endsWith(`/api/admin/events/${later.eventId}`) && r.request().method() === "PATCH" && (r.request().postData() ?? "").includes(`"cancelDeadlineHours":6`))
-  await group.getByRole("spinbutton", { name: "Heures" }).fill("6")
+  await group.getByRole("textbox", { name: "Heures" }).fill("6")
   await expect(days).not.toHaveAttribute("aria-invalid", "true")
   expect((await saved).ok()).toBe(true)
   await page.reload()
-  await expect(page.getByRole("group", { name: "Annulation par le bénévole" }).getByRole("spinbutton", { name: "Heures" })).toHaveValue("6")
+  await expect(page.getByRole("group", { name: "Annulation par le bénévole" }).getByRole("textbox", { name: "Heures" })).toHaveValue("6")
 
   await page.getByRole("radio", { name: "Jusqu'au début du créneau" }).check()
-  await expect(page.getByRole("spinbutton", { name: "Jours" })).toHaveCount(0)
+  await expect(page.getByRole("textbox", { name: "Jours" })).toHaveCount(0)
   expect.soft(await seriousViolations(page)).toEqual([])
+})
+
+/** Opens the public event page with the volunteer's session (the token the page remembers). */
+async function openPublic(page: Page, event: PublicEvent, token: string) {
+  await page.goto(`/${event.slug}?org=default`)
+  await page.evaluate(([slug, t]) => localStorage.setItem(`benevoles_token_${slug}`, t), [event.slug, token])
+  await page.goto(`/${event.slug}?org=default`)
+}
+
+test("the public event page: no ✕ on a held shift past the deadline, a link to the personal page instead", async ({ page }) => {
+  const token = await publicSignUp(page, soon, soon.shifts.map((s) => s.id))
+  await openPublic(page, soon, token)
+  await expect(page.getByRole("link", { name: "ta page personnelle" })).toHaveAttribute("href", `/my/${token}`)
+  await expect(page.getByRole("button", { name: /^Annuler le créneau Bar/ })).toHaveCount(0)
+})
+
+test("the public withdraw dialog after a refusal: no confirm button, « J'ai compris » takes focus", async ({ page }) => {
+  const token = await publicSignUp(page, later, later.shifts.map((s) => s.id))
+  await openPublic(page, later, token)
+  const cancelX = page.getByRole("button", { name: "Annuler le créneau Accueil" })
+  await waitForHydration(cancelX)
+  await page.route("**/api/public/registrations/*", (route) =>
+    route.request().method() === "DELETE"
+      ? route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ error: "Le délai pour annuler toi-même ce créneau est passé : rien n'a été annulé.", code: "cancel_closed", reason: "deadline" }) })
+      : route.fallback(),
+  )
+  await cancelX.click()
+  const dialog = page.getByRole("alertdialog")
+  await dialog.getByRole("button", { name: "Oui, annuler" }).click()
+  await expect(dialog.getByRole("alert")).toHaveText("Le délai pour annuler toi-même ce créneau est passé : rien n'a été annulé.")
+  await expect(dialog.getByRole("button", { name: "J'ai compris" })).toBeFocused()
+  await expect(dialog.getByRole("button", { name: "Oui, annuler" })).toHaveCount(0)
+  await page.keyboard.press("Enter")
+  await expect(dialog).toHaveCount(0)
 })

@@ -13,7 +13,7 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
-import { CANCEL_DEADLINE_DAYS_MAX, CANCEL_DEADLINE_HOURS_MAX, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
+import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -252,6 +252,12 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // Create mode: manual submit
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
+    // An invalid deadline is never dropped silently (#946): said, and focus on the field to fix.
+    if (Object.keys(cancelErrors).length > 0) {
+      setError(CANCEL_DEADLINE_CREATE_ERROR)
+      document.getElementById(cancelErrors.hours && !cancelErrors.days && !cancelErrors.total ? "event-cancel-hours" : "event-cancel-days")?.focus()
+      return
+    }
     setSaving(true)
     setError(null)
     try {
@@ -527,38 +533,37 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                   <label htmlFor="event-cancel-days" className="block text-sm font-medium text-gray-700 mb-1">Jours</label>
                   <input
                     id="event-cancel-days"
-                    type="number"
+                    type="text"
                     inputMode="numeric"
-                    min={0}
-                    max={CANCEL_DEADLINE_DAYS_MAX}
-                    step={1}
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     value={form.cancelDeadline.days}
                     onChange={(e) => setCancelDeadline({ days: e.target.value })}
                     aria-invalid={cancelErrors.days || cancelErrors.total ? true : undefined}
                     aria-describedby={[cancelErrors.days && "event-cancel-days-error", cancelErrors.total && "event-cancel-total-error", "event-cancel-zone"].filter(Boolean).join(" ")}
                     className={`${inputCls}${cancelErrors.days || cancelErrors.total ? " !border-red-600" : ""}`}
                   />
-                  {cancelErrors.days && <p id="event-cancel-days-error" className="text-xs text-red-700 mt-1">{cancelErrors.days}</p>}
+                  {/* Always mounted: an error that appears while typing is voiced (polite). */}
+                  <div aria-live="polite">{cancelErrors.days && <p id="event-cancel-days-error" className="text-xs text-red-700 mt-1">{cancelErrors.days}</p>}</div>
                 </div>
                 <div>
                   <label htmlFor="event-cancel-hours" className="block text-sm font-medium text-gray-700 mb-1">Heures</label>
                   <input
                     id="event-cancel-hours"
-                    type="number"
+                    type="text"
                     inputMode="numeric"
-                    min={0}
-                    max={CANCEL_DEADLINE_HOURS_MAX}
-                    step={1}
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     value={form.cancelDeadline.hours}
                     onChange={(e) => setCancelDeadline({ hours: e.target.value })}
                     aria-invalid={cancelErrors.hours || cancelErrors.total ? true : undefined}
                     aria-describedby={[cancelErrors.hours && "event-cancel-hours-error", cancelErrors.total && "event-cancel-total-error", "event-cancel-zone"].filter(Boolean).join(" ")}
                     className={`${inputCls}${cancelErrors.hours || cancelErrors.total ? " !border-red-600" : ""}`}
                   />
-                  {cancelErrors.hours && <p id="event-cancel-hours-error" className="text-xs text-red-700 mt-1">{cancelErrors.hours}</p>}
+                  <div aria-live="polite">{cancelErrors.hours && <p id="event-cancel-hours-error" className="text-xs text-red-700 mt-1">{cancelErrors.hours}</p>}</div>
                 </div>
               </div>
-              {cancelErrors.total && <p id="event-cancel-total-error" className="text-xs text-red-700 mt-1">{cancelErrors.total}</p>}
+              <div aria-live="polite">{cancelErrors.total && <p id="event-cancel-total-error" className="text-xs text-red-700 mt-1">{cancelErrors.total}</p>}</div>
               <p id="event-cancel-zone" className="text-xs text-gray-600 mt-1">
                 Avant le début de chaque créneau, à l&apos;heure du fuseau de l&apos;organisation ({timeZone}). Ne concerne que les places confirmées : une personne en liste d&apos;attente ou en attente de validation peut se retirer jusqu&apos;au début du créneau.
               </p>

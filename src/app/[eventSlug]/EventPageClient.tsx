@@ -166,6 +166,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // The optional « Un mot pour l'organisation ? » (#559), reset whenever a new confirmation opens.
   const [withdrawMessage, setWithdrawMessage] = useState("")
   const withdrawConfirmRef = useRef<HTMLButtonElement>(null)
+  const withdrawKeepRef = useRef<HTMLButtonElement>(null)
   // Where the withdrawal was asked from: the ✕, its list and its place there, for the focus after.
   const withdrawFrom = useRef<{ trigger: HTMLButtonElement; list: Element | null; index: number } | null>(null)
   // Result of an action outside the sign-up steps (a withdrawal), voiced once.
@@ -231,6 +232,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
   const myStatus = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, r.status])), [myRegistrations])
   // Held shifts the volunteer can't cancel online any more (#946): no ✕, a sentence instead.
+  const myTokenByShift = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, `/my/${r.token}`])), [myRegistrations])
   const closedShiftIds = useMemo(() => new Set(myRegistrations.filter((r) => r.cancellable === false).map((r) => r.shiftId)), [myRegistrations])
   // Held shifts by status, for the schedule: named and drawn as the visitor's own (#534).
   const heldByShift = useMemo(() => heldKinds(myRegistrations), [myRegistrations])
@@ -580,8 +582,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     if (failure) {
       if (failure.status === 409) setMyRegistrations((prev) => prev.map((r) => (r.token === pending.token ? { ...r, cancellable: false } : r)))
       setWithdrawError(withdrawFailureMessage(failure))
-      // Already there after a keyboard press; WebKit leaves a tapped button unfocused.
-      setFocusRequest({ candidates: [() => withdrawConfirmRef.current] })
+      // Already there after a keyboard press; WebKit leaves a tapped button unfocused. Refused for
+      // good (#946): the confirm button goes, focus on « J'ai compris ».
+      setFocusRequest({ candidates: [() => (failure?.status === 409 ? withdrawKeepRef.current : withdrawConfirmRef.current)] })
       return
     }
 
@@ -881,7 +884,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
                   <div data-shift-list className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -912,7 +915,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         Créneaux sélectionnés
                       </p>
                       <div data-shift-list className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
@@ -1208,6 +1211,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           onConfirm={withdraw}
           onKeep={keepRegistration}
           confirmRef={withdrawConfirmRef}
+          keepRef={withdrawKeepRef}
+          closed={myRegistrations.find((r) => r.token === pendingCancel.token)?.cancellable === false}
         />
       )}
 

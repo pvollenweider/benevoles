@@ -2495,6 +2495,65 @@ exports[`render — snapshot of every notification kind > reminder_j1 1`] = `
 }
 `;
 
+exports[`render — snapshot of every notification kind > reminder_j2 (cancellation deadline passed, #946) 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Accueil · Accueil matin · samedi 12 juillet · 09:00–12:30&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.25em">Hello Julie ! 👋</h2>",
+    "    <p style="color:#555;margin:0 0 1.25em">Plus que 2 jours avant <strong>Festival du Rhône</strong>, on se réjouit de te retrouver !</p>",
+    "    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">",
+    "      <div>📅 samedi 12 juillet</div>",
+    "      <div>🕐 09:00–12:30</div>",
+    "      <div>Mission : <strong>Accueil · Accueil matin</strong></div>",
+    "      <div style="color:#444;font-size:0.85em;margin-top:4px"><div>Lieu : Place du Marché : <a href="https://www.openstreetmap.org/?mlat=46.5&amp;mlon=6.6#map=17/46.5/6.6">Voir sur la carte (OpenStreetMap)</a></div><div>Contact pour ce créneau : Marc, <a href="tel:0791234567">079 123 45 67</a></div><div>À savoir : Gilet orange fourni</div></div>",
+    "    </div>",
+    "    <p style="color:#555;font-size:0.9em;margin-top:1.25em">Le délai pour annuler toi-même est passé : en cas d'empêchement, préviens directement l'organisation.</p><p style="margin-top:1.5em"><a href="https://rhone.benevol.app/my/edit-tok" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir qui prévenir si je ne peux plus venir</a></p>",
+    "    <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>Rhône Rocks</strong></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "J-2 — On se retrouve bientôt ! Festival du Rhône",
+  "text": [
+    "Hello Julie !",
+    "Plus que 2 jours avant Festival du Rhône, on se réjouit de te retrouver !",
+    "Ton créneau :",
+    "📅 samedi 12 juillet",
+    "🕐 09:00–12:30",
+    "Mission : Accueil · Accueil matin",
+    "Lieu : Place du Marché. Voir sur la carte : https://www.openstreetmap.org/?mlat=46.5&mlon=6.6#map=17/46.5/6.6",
+    "Contact pour ce créneau : Marc, 079 123 45 67",
+    "À savoir : Gilet orange fourni",
+    "Un empêchement ? Préviens-nous le plus vite possible :",
+    "https://rhone.benevol.app/my/edit-tok",
+    "Le délai pour annuler toi-même est passé : en cas d'empêchement, préviens directement l'organisation.",
+    "Une grosse bise et à très vite !",
+    "Rhône Rocks",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > reminder_j2 (earlier cancellation deadline, #946) 1`] = `
 {
   "html": [
@@ -2928,7 +2987,7 @@ exports[`render — snapshot of every notification kind > sector_leader_withdraw
     "    <p style="color:#991b1b;font-weight:600">Désistement de dernière minute : le créneau commence le samedi 12 juillet à 09:00.</p>",
     "    <p style="color:#555"><strong>Julie Martin</strong> se désiste de <strong>Accueil matin</strong> (samedi 12 juillet · 09:00–12:30), dont vous êtes responsable pour <strong>Festival du Rhône</strong>.</p>",
     "    <p style="color:#555">Il manque maintenant 1 place sur ce créneau.</p>",
-    "    <p style="color:#555">Trouver un remplaçant : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle.</p>",
+    "    <p style="color:#555">Pour remplacer cette personne : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle.</p>",
     "    ",
     "    <p style="margin-top:1.25em"><a href="https://rhone.benevol.app/leader/lead-tok" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir la liste complète</a></p>",
     "  ",
@@ -2951,7 +3010,7 @@ exports[`render — snapshot of every notification kind > sector_leader_withdraw
     "",
     "Il manque maintenant 1 place sur ce créneau.",
     "",
-    "Trouver un remplaçant : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle.",
+    "Pour remplacer cette personne : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle.",
     "",
     "Voir la liste complète :",
     "https://rhone.benevol.app/leader/lead-tok",
