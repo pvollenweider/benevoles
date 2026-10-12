@@ -19,7 +19,12 @@ Le lien **Aide** de la barre du haut ouvre le guide administrateur, avec la list
 
 Écrivez à [contact@benevol.app](mailto:contact@benevol.app), sans compte à créer.
 
-Dites-nous d'abord où vous étiez : l'adresse de la page, ou le chemin pour y arriver, par exemple « Événements, puis l'événement, puis Créneaux ». Racontez ensuite ce que vous vouliez faire et ce qui s'est passé à la place. Si un message d'erreur s'est affiché, recopiez-le tel quel ou joignez une capture d'écran. Précisez aussi l'appareil et le navigateur, par exemple « téléphone Android, Chrome ».
+Pour qu'on puisse vous aider vite, dites-nous :
+
+- où vous étiez : l'adresse de la page, ou le chemin pour y arriver, par exemple « Événements, puis l'événement, puis Créneaux » ;
+- ce que vous vouliez faire, et ce qui s'est passé à la place ;
+- le message d'erreur, recopié tel quel, ou une capture d'écran ;
+- l'appareil et le navigateur, par exemple « téléphone Android, Chrome ».
 
 Inutile de joindre les noms, emails ou téléphones de vos bénévoles s'ils n'aident pas à comprendre le problème.
 
