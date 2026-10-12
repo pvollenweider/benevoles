@@ -43,6 +43,9 @@ async function integratedLoudness(file: string): Promise<number | null> {
 async function main() {
   const manifest = await loadManifest(reference!)
   const dir = videoDir(manifest.slug)
+  const musicGainDb = manifest.musicGainDb ?? 0
+  if (!Number.isFinite(musicGainDb) || Math.abs(musicGainDb) > 3) throw new Error("Music gain must be finite and between -3 and 3 dB; the measured music rule is unchanged")
+  const musicMix = { ...MUSIC_MIX, volume: MUSIC_MIX.volume * 10 ** (musicGainDb / 20), gainDb: musicGainDb }
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
   const { stdout: targetMain } = await exec("git", ["rev-parse", "origin/main"])
   if (timeline.product?.commit !== targetMain.trim() || !timeline.product?.buildId || !timeline.product?.productSourceSha256) throw new Error("Capture provenance missing or not on target main; recapture, never retroactively stamp an old video")
@@ -174,7 +177,7 @@ async function main() {
   // A compressed bed at a steady level: the narration is already normalized, so a steady
   // music keeps the same distance under it. Ducking was measured to widen that distance
   // (deeper under loud sentences, shallower under quiet ones), so there is none.
-  filters.push(`[${bed}]acompressor=${MUSIC_MIX.compressor},atrim=duration=${captureDuration.toFixed(3)},volume=${MUSIC_MIX.volume},afade=t=in:st=0:d=1.5,afade=t=out:st=${fadeOut.toFixed(3)}:d=2,asplit=2[music][musicStem]`)
+  filters.push(`[${bed}]acompressor=${musicMix.compressor},atrim=duration=${captureDuration.toFixed(3)},volume=${musicMix.volume},afade=t=in:st=0:d=1.5,afade=t=out:st=${fadeOut.toFixed(3)}:d=2,asplit=2[music][musicStem]`)
   filters.push("[narration]asplit=2[narrationMix][narrationStem]")
   inputs.push("-i", effects)
   filters.push(`[${musicInput + 1}:a]aresample=48000[effects]`)
@@ -210,7 +213,7 @@ async function main() {
   await rm(stems, { recursive: true, force: true })
   const levelIssues = musicLevelIssues(windows)
   const videoSha256 = createHash("sha256").update(await readFile(output)).digest("hex")
-  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: MUSIC_MIX, narration: { ...NARRATION_LEVEL, segmentGainsDb: segmentGains }, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
+  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: musicMix, narration: { ...NARRATION_LEVEL, segmentGainsDb: segmentGains }, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
 
   await writeFile(path.join(dir, `${manifest.slug}.vtt`), `${vtt.join("\n")}\n`)
   await writeFile(path.join(dir, `${manifest.slug}.txt`), `${transcript.join("\n").trim()}\n`)

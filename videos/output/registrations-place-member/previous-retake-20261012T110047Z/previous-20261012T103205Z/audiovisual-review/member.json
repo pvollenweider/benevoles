@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:31:11.171Z",
+  "videoSha256": "6154fe94f585bfee9ff5291058254524c362d5b743f3d4d66aa5a664362c9cee",
+  "promptSha256": "f55ee5482fb036d54bc68d2821a2ef06f9c4f1aa5423a926ada332b69978fdbd",
+  "clipSha256": "41d2815f175c09cb3fc58a7f704c8561b16c2627b073d99a92758d8d1812bc9f",
+  "scene": "member",
+  "review": {
+    "heardOpening": "Cherchons Sarah par son nom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Cherchons Sarah par son nom, puis cliquons sur Chercher.",
+        "visibleSeconds": 1,
+        "visible": "Saisie de 'Sarah' dans le champ de recherche puis clic sur le bouton Chercher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Le résultat affiche aussi son email pour éviter une confusion.",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la suggestion Sarah Jaquet avec l'adresse sarah.jaquet@example.org",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Cliquez sur Choisir.",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le lien Choisir",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Le résumé Membre choisi reprend ses coordonnées.",
+        "visibleSeconds": 8,
+        "visible": "Affichage de l'encadré 'Membre choisi' avec le nom, email et numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Changer de personne permet de corriger le choix avant de valider.",
+        "visibleSeconds": 8.5,
+        "visible": "Bouton 'Changer de personne' visible sous les coordonnées du membre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, parfaitement synchronisée avec les interactions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

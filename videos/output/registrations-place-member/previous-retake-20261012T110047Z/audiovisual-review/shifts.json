@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:36:35.002Z",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "promptSha256": "24c2d92cdc3b3f72bcf5c1c882ebf6e9cf0b30e7f20d700e777698387585c353",
+  "clipSha256": "0b918159850252005847510778b737abfc5f4204b5e3b7b22530eb7abc885955",
+  "scene": "shifts",
+  "review": {
+    "heardOpening": "Choisissons un premier créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissons un premier créneau, à l’accueil de quinze à dix-huit heures.",
+        "visibleSeconds": 2.1,
+        "visible": "Sélection de la ligne 'sam. 17 oct. - 15h-18h - Accueil' dans le menu déroulant.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Cliquez ensuite sur Ajouter un autre créneau.",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur le bouton '+ Ajouter un autre créneau'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "La ligne Créneau deux, facultatif, apparaît avec son bouton Retirer.",
+        "visibleSeconds": 6.3,
+        "visible": "Affichage du champ 'Créneau 2 (facultatif)' avec le lien 'Retirer'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Choisissons le démontage du lendemain, également de quinze à dix-huit heures.",
+        "visibleSeconds": 15.3,
+        "visible": "Sélection du créneau 'dim. 18 oct. - 15h-18h - Démontage' dans le second champ.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

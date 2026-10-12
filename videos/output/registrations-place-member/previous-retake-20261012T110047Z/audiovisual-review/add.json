@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:36:48.797Z",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "promptSha256": "0cf7937e6d655df5bb2086f8e8c0be826969cc5a894ad4876905e12e3ce59110",
+  "clipSha256": "74afc050d1b34b336afc06e9a5307ca9853dd50a6154062813a8334421f56aee",
+  "scene": "add",
+  "review": {
+    "heardOpening": "Avant de valider",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "lisez la phrase sous la note",
+        "visibleSeconds": 1.5,
+        "visible": "Le texte d'information sous le champ note est clairement affiché au-dessus du bouton Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Cliquez sur Ajouter",
+        "visibleSeconds": 10.2,
+        "visible": "Clic sur le bouton bleu Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Les deux inscriptions apparaissent",
+        "visibleSeconds": 12,
+        "visible": "Les deux lignes d'inscription au nom de Sarah Jaquet s'affichent en haut de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "le message confirme l’ajout sur les deux créneaux",
+        "visibleSeconds": 14,
+        "visible": "Bannière verte de confirmation affichant le récapitulatif des 2 créneaux ajoutés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, naturelle et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:37:01.484Z",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "promptSha256": "7ef9e0854fdb2c18f6110603800444e648dbe0dc0bfba355372dc17770c25db9",
+  "clipSha256": "6f0cf3e36ba0b88619aea476bc56d7e0fd5bd238c1c371d66441177681b3e06a",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Dix minutes plus tard",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "ouvrons la boîte de démonstration",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la boîte de messagerie Mailpit avec le courriel ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Le véritable email indique qui a inscrit Sarah et pour quelle organisation",
+        "visibleSeconds": 1,
+        "visible": "Le message affiche 'Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Il liste ses deux créneaux, puis son lien personnel",
+        "visibleSeconds": 1,
+        "visible": "Affichage des créneaux Accueil et Démontage suivi du bouton 'Voir mes créneaux'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,175 @@
+{
+  "checks": {
+    "mp4Sha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+    "timelineSha256": "34967d1a5cd2e81c5f2232d1ebe0af365415da0c9fa55d30ba7e3b36345b8630",
+    "effectsSha256": "978aaf2a0638b250b544a9ac9154da3862335f3010f340b6ec6e6c3c5219f26b",
+    "effectsMatchActualMarkers": true,
+    "clicks": 11,
+    "keys": 0,
+    "durationSeconds": 93.84
+  },
+  "anchors": [
+    {
+      "segment": "welcome",
+      "phrase": "Ouvrons Inscriptions, puis Ajouter manuellement",
+      "measuredSentenceStartSeconds": 7.48,
+      "actualCueSeconds": 7.481,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 7.28,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-00-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 8.98,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-00-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "member",
+      "phrase": "Cherchons Sarah par son nom",
+      "measuredSentenceStartSeconds": 16.817,
+      "actualCueSeconds": 16.819,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 16.617,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-01-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 18.317,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-01-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "member",
+      "phrase": "Cliquez sur Choisir",
+      "measuredSentenceStartSeconds": 24.807,
+      "actualCueSeconds": 24.808,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 24.607,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-02-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 26.307,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-02-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "shifts",
+      "phrase": "Choisissons un premier créneau",
+      "measuredSentenceStartSeconds": 35.088,
+      "actualCueSeconds": 35.09,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 34.888,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-03-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 36.588,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-03-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "shifts",
+      "phrase": "Cliquez ensuite sur Ajouter un autre créneau",
+      "measuredSentenceStartSeconds": 39.838,
+      "actualCueSeconds": 39.838,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 39.638,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-04-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 41.338,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-04-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "shifts",
+      "phrase": "Choisissons le démontage du lendemain",
+      "measuredSentenceStartSeconds": 48.488,
+      "actualCueSeconds": 48.49,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 48.288,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-05-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 49.988,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-05-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "add",
+      "phrase": "Avant de valider, lisez la phrase sous la note",
+      "measuredSentenceStartSeconds": 55.905,
+      "actualCueSeconds": 55.906,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 55.705,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-06-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 57.405,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-06-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "add",
+      "phrase": "Cliquez sur Ajouter",
+      "measuredSentenceStartSeconds": 65.89,
+      "actualCueSeconds": 65.891,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 65.69,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-07-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 67.39,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-07-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "email",
+      "phrase": "Dix minutes plus tard, ouvrons la boîte de démonstration",
+      "measuredSentenceStartSeconds": 73.034,
+      "actualCueSeconds": 73.036,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 72.834,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-08-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 74.534,
+          "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review/anchor-08-after.png"
+        }
+      ]
+    }
+  ]
+}

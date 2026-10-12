@@ -203,6 +203,12 @@
     "height": 800,
     "poster": true
   },
+  "registrations-place-member": {
+    "durationMs": 93840,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "reminders-changes": {
     "durationMs": 249880,
     "width": 1280,

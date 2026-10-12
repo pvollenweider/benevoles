@@ -1,0 +1,12 @@
+{
+  "anchor": "Dix minutes plus tard, ouvrons la boîte de démonstration. Le véritable",
+  "windowStart": 48.899,
+  "result": {
+    "found": true,
+    "startSeconds": 21.9,
+    "wordsHeard": "Dix"
+  },
+  "onset": 70.799,
+  "proposedCut": 70.603021,
+  "note": "Proposal only; recut then independently audit before capture"
+}

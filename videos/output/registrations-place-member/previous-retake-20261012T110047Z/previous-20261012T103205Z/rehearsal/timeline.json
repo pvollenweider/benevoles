@@ -1,0 +1,164 @@
+{
+  "slug": "registrations-place-member",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T10:28:18.098Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e44004c0d4d1e9b093609c07b572ad69d00afaaf",
+    "sourceTree": "200d57b4fcc8fa89de26319efdfc2085739d4805",
+    "productSourceSha256": "a1fa1b7c9df0f3e7f41663a7204349404a3452034a5423f45216878d2b13315f",
+    "buildId": "EEyJJLNfRQviqfGUxjSM7",
+    "snapshot": "/tmp/benevoles-video-production.batch13",
+    "builtAt": "2026-10-12T10:25:53.287Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "REGISTRATIONS_PLACE_MEMBER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 2970
+    },
+    {
+      "kind": "click",
+      "atMs": 4252
+    },
+    {
+      "kind": "click",
+      "atMs": 5886
+    },
+    {
+      "kind": "click",
+      "atMs": 6668
+    },
+    {
+      "kind": "click",
+      "atMs": 7902
+    },
+    {
+      "kind": "click",
+      "atMs": 8703
+    },
+    {
+      "kind": "click",
+      "atMs": 9502
+    },
+    {
+      "kind": "click",
+      "atMs": 10285
+    },
+    {
+      "kind": "click",
+      "atMs": 11070
+    },
+    {
+      "kind": "click",
+      "atMs": 12335
+    },
+    {
+      "kind": "click",
+      "atMs": 13153
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 151,
+      "endMs": 3285
+    },
+    {
+      "id": "member",
+      "startMs": 3738,
+      "endMs": 6978
+    },
+    {
+      "id": "shifts",
+      "startMs": 7432,
+      "endMs": 11378
+    },
+    {
+      "id": "add",
+      "startMs": 11831,
+      "endMs": 14369
+    },
+    {
+      "id": "email",
+      "startMs": 14832,
+      "endMs": 16246
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons Inscriptions, puis Ajouter manuellement",
+      "startMs": 9911,
+      "endMs": 14485,
+      "cueMs": 2469
+    },
+    {
+      "segmentId": "member",
+      "phrase": "Cherchons Sarah par son nom",
+      "startMs": 0,
+      "endMs": 4819,
+      "cueMs": 3739
+    },
+    {
+      "segmentId": "member",
+      "phrase": "Cliquez sur Choisir",
+      "startMs": 10267,
+      "endMs": 12048,
+      "cueMs": 6194
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Choisissons un premier créneau",
+      "startMs": 0,
+      "endMs": 5063,
+      "cueMs": 7433
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Cliquez ensuite sur Ajouter un autre créneau",
+      "startMs": 5063,
+      "endMs": 8381,
+      "cueMs": 9012
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Choisissons le démontage du lendemain",
+      "startMs": 13270,
+      "endMs": 18857,
+      "cueMs": 9812
+    },
+    {
+      "segmentId": "add",
+      "phrase": "Avant de valider, lisez la phrase sous la note",
+      "startMs": 0,
+      "endMs": 3449,
+      "cueMs": 11832
+    },
+    {
+      "segmentId": "add",
+      "phrase": "Cliquez sur Ajouter",
+      "startMs": 13983,
+      "endMs": 15568,
+      "cueMs": 11873
+    },
+    {
+      "segmentId": "email",
+      "phrase": "Dix minutes plus tard, ouvrons la boîte de démonstration",
+      "startMs": 0,
+      "endMs": 3493,
+      "cueMs": 14833
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant de valider, lisez la phrase sous la note. Un email",
+  "windowStart": 31.873000000000005,
+  "result": {
+    "found": true,
+    "startSeconds": 22.1,
+    "wordsHeard": "Avant de valider, lisez la phrase sous la note. Un email"
+  },
+  "onset": 53.973000000000006,
+  "proposedCut": 53.9109165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

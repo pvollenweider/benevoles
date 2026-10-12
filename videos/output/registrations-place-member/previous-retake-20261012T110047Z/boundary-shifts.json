@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisissons un premier créneau, à l’accueil de quinze à dix-huit heures.",
+  "windowStart": 18.475,
+  "result": {
+    "found": true,
+    "startSeconds": 14.92,
+    "wordsHeard": "Choisissons"
+  },
+  "onset": 33.395,
+  "proposedCut": 33.475104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

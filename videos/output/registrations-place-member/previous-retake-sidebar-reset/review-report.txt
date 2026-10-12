@@ -1,0 +1,2 @@
+STATUS: NOT READY
+Superseded diagnostic take: Mailpit direct navigation reset the search state and exposed preserved older messages in the sidebar. Replaced with result-link navigation and actual visible-link ID assertions.

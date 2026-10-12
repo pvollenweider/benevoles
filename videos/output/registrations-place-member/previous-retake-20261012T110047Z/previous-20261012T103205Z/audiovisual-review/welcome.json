@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:30:57.683Z",
+  "videoSha256": "6154fe94f585bfee9ff5291058254524c362d5b743f3d4d66aa5a664362c9cee",
+  "promptSha256": "54d0421ee72961a446fb0dd1b7f28b03aa55d7ef83c7b418172f7d06f5e48cb6",
+  "clipSha256": "d5b85f7b2844b7ca402c25eab824eed603fba13cd0f63dd892560333c16299fd",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un membre vous a confirmé deux horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Ouvrons Inscriptions",
+        "visibleSeconds": 2,
+        "visible": "La page Inscriptions est déjà affichée en arrière-plan",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "puis Ajouter manuellement",
+        "visibleSeconds": 7,
+        "visible": "Clic sur le bouton '+ Ajouter manuellement' et ouverture du volet d'inscription manuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Le formulaire commence par Membre existant",
+        "visibleSeconds": 7.5,
+        "visible": "Le champ 'Membre existant' est bien visible en haut du formulaire déplié",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec les interactions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "REGISTRATIONS_PLACE_MEMBER",
+  "slug": "registrations-place-member",
+  "validatedAt": "2026-10-12T10:56:01.927Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 93920,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15974,
+      "audioMs": 15973,
+      "driftMs": 1
+    },
+    {
+      "id": "member",
+      "visualMs": 17504,
+      "audioMs": 17502,
+      "driftMs": 2
+    },
+    {
+      "id": "shifts",
+      "visualMs": 20438,
+      "audioMs": 20436,
+      "driftMs": 2
+    },
+    {
+      "id": "add",
+      "visualMs": 16694,
+      "audioMs": 16692,
+      "driftMs": 2
+    },
+    {
+      "id": "email",
+      "visualMs": 20842,
+      "audioMs": 20837,
+      "driftMs": 5
+    }
+  ],
+  "anchorsChecked": 9,
+  "music": {
+    "voicedWindows": 88,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

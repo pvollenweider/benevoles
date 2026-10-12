@@ -192,6 +192,17 @@ async function main() {
     console.log(`✓ Staffing scenario: ${summary.totals.shifts} shifts, all five report groups, two held requests and a closed shift`)
     return
   }
+  if (scenario === "registrations-place-member") {
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const member = await prisma.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "sarah.jaquet@example.org" } })
+    const shifts = await prisma.shift.findMany({ where: { eventId: event.id, OR: [{ roleName: "Accueil", startTime: "15:00" }, { roleName: "Démontage", startTime: "15:00" }] } })
+    if (shifts.length !== 2 || shifts.some(s => s.date < new Date())) throw new Error("Expected two future fixture shifts")
+    await prisma.registration.deleteMany({ where: { eventId: event.id, volunteerId: member.id, shiftId: { in: shifts.map(s => s.id) } } })
+    await prisma.shift.updateMany({ where: { id: { in: shifts.map(s => s.id) } }, data: { capacity: 15 } })
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: "default", status: "pending", attempts: 0, dedupeKey: { startsWith: `registration_added_by_organizer:${event.id}:${member.id}:` } } })
+    console.log("✓ Placement fixture: existing Sarah, two compatible future shifts, email confirmation via real cron")
+    return
+  }
   if (scenario === "registrations-management") {
     const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
     await prisma.registration.deleteMany({ where: { eventId: event.id, volunteer: { email: { startsWith: "video.registration." } } } })

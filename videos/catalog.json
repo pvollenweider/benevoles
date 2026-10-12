@@ -1181,6 +1181,30 @@
       "level": "essentiel"
     },
     {
+      "id": "REGISTRATIONS_PLACE_MEMBER",
+      "manifest": "registrations-place-member",
+      "category": "registrations-followup",
+      "tags": [
+        "membres",
+        "ajout-manuel",
+        "plusieurs-créneaux",
+        "confirmation-email"
+      ],
+      "published": true,
+      "seedScenario": "registrations-place-member",
+      "themes": [
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Placer un membre sur plusieurs créneaux",
+      "updatedAt": "2026-10-12",
+      "added": "2026-10-12",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
       "id": "REGISTRATIONS_MANAGEMENT",
       "manifest": "registrations-management",
       "category": "registrations-followup",
@@ -1201,9 +1225,10 @@
         "organisateur"
       ],
       "feature": "Liste des inscriptions",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
-      "level": "essentiel"
+      "updatedAt": "2026-10-12",
+      "revision": 2,
+      "level": "essentiel",
+      "updated": "2026-10-12"
     },
     {
       "id": "MEMBERS_REMINDERS",

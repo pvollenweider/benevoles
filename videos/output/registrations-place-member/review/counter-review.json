@@ -1,0 +1,17 @@
+{
+  "videoSha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "scene": "member",
+  "originalFlaggedReportPreserved": true,
+  "conclusions": [
+    {
+      "claim": "Chercher not clicked at the spoken instruction; results appear automatically",
+      "result": "Refuted",
+      "evidence": "review/member-search-click.png shows the click ring on Chercher at 18.95 s (2.377 s into chapter); actual click marker 18.947 s. This is within the first sentence, measured 0.244–3.798 s."
+    },
+    {
+      "claim": "Chercher clicked instead of Choisir at 8 s",
+      "result": "Refuted",
+      "evidence": "review/member-before-choose.png at 25.24 s clearly shows the marker on Choisir. Actual click 25.281 s (8.708 s into chapter), inside measured Choisir sentence 8.234–9.377 s. review/member-chosen-result.png shows the actual chosen-member summary."
+    }
+  ]
+}
