@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:47:10.233Z",
+  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "promptSha256": "e48fa031ec7bed615b7c66eaf2d2c8018aca989778904a168cb4ccaab0b7499d",
+  "clipSha256": "24070d8b2122431d3e4b767171f81e82e08434923d7d54606bac8d5dc7d09bd7",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ta liste est prête à être utilisée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ta liste est prête à être utilisée pour les prochaines invitations",
+        "visibleSeconds": 0,
+        "visible": "Tableau de la liste des membres affiché avec l'ensemble des coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Si quelques personnes manquent, ajoute-les manuellement",
+        "visibleSeconds": 0,
+        "visible": "Bouton bleu '+ Nouveau membre' visible en haut à droite du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Et si leurs disponibilités changent, complète leur fiche séparément",
+        "visibleSeconds": 0,
+        "visible": "Actions 'Éditer' et 'Détail' visibles au bout de chaque ligne de membre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnant un écran de conclusion stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

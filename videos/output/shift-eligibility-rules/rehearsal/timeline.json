@@ -1,0 +1,237 @@
+{
+  "slug": "shift-eligibility-rules",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T04:43:52.111Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
+    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
+    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
+    "buildId": "Ro9VdxUayqlTAULEvQpY0",
+    "snapshot": "/tmp/benevoles-video-production.batch11",
+    "builtAt": "2026-10-12T04:25:58.799Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_ELIGIBILITY_RULES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4676
+    },
+    {
+      "kind": "click",
+      "atMs": 5509
+    },
+    {
+      "kind": "click",
+      "atMs": 6359
+    },
+    {
+      "kind": "click",
+      "atMs": 7141
+    },
+    {
+      "kind": "click",
+      "atMs": 7941
+    },
+    {
+      "kind": "click",
+      "atMs": 8725
+    },
+    {
+      "kind": "click",
+      "atMs": 9525
+    },
+    {
+      "kind": "click",
+      "atMs": 11965
+    },
+    {
+      "kind": "click",
+      "atMs": 12762
+    },
+    {
+      "kind": "click",
+      "atMs": 13613
+    },
+    {
+      "kind": "click",
+      "atMs": 19701
+    },
+    {
+      "kind": "click",
+      "atMs": 22090
+    },
+    {
+      "kind": "click",
+      "atMs": 26720
+    },
+    {
+      "kind": "click",
+      "atMs": 27534
+    },
+    {
+      "kind": "click",
+      "atMs": 28318
+    },
+    {
+      "kind": "click",
+      "atMs": 32034
+    },
+    {
+      "kind": "click",
+      "atMs": 33667
+    },
+    {
+      "kind": "click",
+      "atMs": 34484
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1108,
+      "endMs": 3731
+    },
+    {
+      "id": "settings",
+      "startMs": 4184,
+      "endMs": 9833
+    },
+    {
+      "id": "age",
+      "startMs": 10287,
+      "endMs": 14774
+    },
+    {
+      "id": "quota",
+      "startMs": 16937,
+      "endMs": 20036
+    },
+    {
+      "id": "reserved",
+      "startMs": 20489,
+      "endMs": 23587
+    },
+    {
+      "id": "eligible",
+      "startMs": 24041,
+      "endMs": 28627
+    },
+    {
+      "id": "result",
+      "startMs": 29084,
+      "endMs": 34788
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "settings",
+      "phrase": "L’âge minimum appartient au créneau.",
+      "startMs": 4050,
+      "endMs": 7732,
+      "cueMs": 5023
+    },
+    {
+      "segmentId": "settings",
+      "phrase": "La limite et les tags",
+      "startMs": 7732,
+      "endMs": 19514,
+      "cueMs": 5859
+    },
+    {
+      "segmentId": "settings",
+      "phrase": "Ici, Buvette est limitée à",
+      "startMs": 19514,
+      "endMs": 27000,
+      "cueMs": 8249
+    },
+    {
+      "segmentId": "age",
+      "phrase": "La date de naissance demandée",
+      "startMs": 8953,
+      "endMs": 17442,
+      "cueMs": 11462
+    },
+    {
+      "segmentId": "age",
+      "phrase": "modifier le navigateur ou masquer",
+      "startMs": 17442,
+      "endMs": 25000,
+      "cueMs": 13095
+    },
+    {
+      "segmentId": "quota",
+      "phrase": "En revenant au planning depuis",
+      "startMs": 4482,
+      "endMs": 12486,
+      "cueMs": 18088
+    },
+    {
+      "segmentId": "quota",
+      "phrase": "les autres créneaux restent visibles",
+      "startMs": 12486,
+      "endMs": 20277,
+      "cueMs": 19242
+    },
+    {
+      "segmentId": "quota",
+      "phrase": "Elle peut d’abord retirer un",
+      "startMs": 20277,
+      "endMs": 27000,
+      "cueMs": 20036
+    },
+    {
+      "segmentId": "reserved",
+      "phrase": "Le message ne révèle pas",
+      "startMs": 9033,
+      "endMs": 13305,
+      "cueMs": 22422
+    },
+    {
+      "segmentId": "reserved",
+      "phrase": "Une invitation sans le bon",
+      "startMs": 20019,
+      "endMs": 26000,
+      "cueMs": 22456
+    },
+    {
+      "segmentId": "eligible",
+      "phrase": "le lien prouve quel membre",
+      "startMs": 9840,
+      "endMs": 19440,
+      "cueMs": 27048
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Vérifions aussi le téléphone obligatoire",
+      "startMs": 11021,
+      "endMs": 17572,
+      "cueMs": 30214
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour corriger un profil, retrouvons",
+      "startMs": 17572,
+      "endMs": 24538,
+      "cueMs": 30280
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Ici, nous vérifions la fiche",
+      "startMs": 28489,
+      "endMs": 34000,
+      "cueMs": 33997
+    }
+  ]
+}

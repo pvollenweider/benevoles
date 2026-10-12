@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:45:59.097Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "04f069a5978150aba85c2a97bfc629a000c80519be85032023364362a30a0d3e",
+  "clipSha256": "f6a30df6c286a9d473dfbecc08fb08b54886a1e907d004de18b392858734e2dc",
+  "scene": "eligible",
+  "review": {
+    "heardOpening": "Julien possède le tag sécurité.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "la même mission devient sélectionnable",
+        "visibleSeconds": 5,
+        "visible": "Le créneau Sécurité 20h-02h est sélectionné et apparaît dans le panneau latéral droit",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "au moment de l’inscription",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la page « Tes informations » avec le créneau Sécurité validé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Il n’y a donc ni compte à créer, ni code à recopier",
+        "visibleSeconds": 10,
+        "visible": "Le formulaire est prérempli avec l'identité de Julien Favre sans demande de mot de passe",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, débit fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

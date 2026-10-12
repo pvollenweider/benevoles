@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:05:58.335Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "32473ed20414a61b2e53ce4a6e86067ac498893700c3ff6b3035749b8aaef752",
+  "clipSha256": "a85864c09991cea4aa09ba341ca73e55e0db0656ef0ead1badf717d80b927284",
+  "scene": "archive",
+  "review": {
+    "heardOpening": "Pour conserver un événement complet, ouvrez Rapports",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "ouvrez Rapports et descendez tout en bas, dans Archive",
+        "visibleSeconds": 5.5,
+        "visible": "Page Rapports affichée avec la section Archive tout en bas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "Le lien Archive de l’événement, JSON, télécharge le fichier",
+        "visibleSeconds": 7,
+        "visible": "Lien « Archive de l'événement (JSON) » visible dans la section Archive",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.4,
+        "spoken": "Le JSON n’est pas une feuille à afficher au stand",
+        "visibleSeconds": 15,
+        "visible": "Page « Lecture d'archive JSON » affichant la structure JSON",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine posée, fluide et parfaitement audible avec une musique de fond légère."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

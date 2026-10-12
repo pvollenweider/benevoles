@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:46:03.906Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "e78ba05abfa9ee482343252cf19ead440ce01334426f974b61e19b57e7ce6d98",
+  "clipSha256": "4f070da2ea71d17e73fba2ba86a9de44ccb377845f44a42ff2c3403a536bbf7a",
+  "scene": "quota",
+  "review": {
+    "heardOpening": "Camille possède déjà deux engagements de Buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Camille possède déjà deux engagements de Buvette.",
+        "visibleSeconds": 0,
+        "visible": "Page « Mes inscriptions » affichée, mais seul l'engagement Accueil est visible sans défilement",
+        "sync": "uncertain",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions",
+        "visibleSeconds": 3,
+        "visible": "Affichage du planning de la Fête du village de Montvert avec Camille Rochat connectée et ses créneaux listés à droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
+        "visibleSeconds": 7,
+        "visible": "Planning affiché en vue frise, mais aucune indication ou infobulle mentionnant la limite de deux n'apparaît à l'écran",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+        "visibleSeconds": 11,
+        "visible": "Écran statique sur le planning sans démonstration de retrait d'un créneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:00, les deux engagements de Buvette mentionnés ne sont pas directement visibles sur la page récapitulative sans faire défiler vers le bas.",
+      "À 00:06-00:10, l'indication que « la limite de deux est atteinte » n'est affichée nulle part sur la grille des créneaux (aucun survol ni message visible)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, bonne qualité sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

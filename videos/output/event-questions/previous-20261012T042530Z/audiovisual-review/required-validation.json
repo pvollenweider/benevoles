@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:42.320Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "4760c4c8a9c7c10fc4a842e7b183eab8d1575f65ff5188c88295064fdf8885da",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 7,
+        "visible": "Sélection du créneau 10h-12h puis clic sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 9.4,
+        "visible": "Saisie du prénom Aline, nom Mercier et de l'adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 16.5,
+        "visible": "Message d'erreur affiché sous la question obligatoire du permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:25:46.233Z",
-  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "reviewedAt": "2026-10-12T05:26:32.404Z",
+  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
   "promptSha256": "ca9d1af621b46823273d4d1a2872949391bdf66a48c875feee9d5c0556e746c8",
-  "clipSha256": "a4e24b27ca73436a6ccc1b903848251ab67caf632e9e24101d5739122e4e1e57",
+  "clipSha256": "d2533007826ec97d4210fc9f8ac43105ae924e91f82082e5943c5e3cf2a427b2",
   "scene": "availability",
   "review": {
     "heardOpening": "Les disponibilités donnent une indication générale",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
-        "spoken": "matin, après-midi, soir, et une courte exception si nécessaire",
-        "visibleSeconds": 2.8,
-        "visible": "Options de disponibilité affichées dans la modale de modification",
+        "spokenSeconds": 13.8,
+        "spoken": "Ici, Maya est disponible le soir",
+        "visibleSeconds": 14.7,
+        "visible": "Sélection du bouton radio « Soir » dans le champ « Disponible en général »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
-        "spoken": "Maya est disponible le soir, sauf le vendredi",
-        "visibleSeconds": 13,
-        "visible": "Case Soir cochée dans le formulaire",
+        "spokenSeconds": 15.8,
+        "spoken": "sauf le vendredi",
+        "visibleSeconds": 16.5,
+        "visible": "Saisie de « sauf le vendredi » dans le champ « Sauf à savoir » puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.2,
-        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste",
-        "visibleSeconds": 19,
-        "visible": "Modale fermée, mention affichée sous le contact de Maya Berger dans le tableau",
+        "spokenSeconds": 17.8,
+        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste.",
+        "visibleSeconds": 18.2,
+        "visible": "Retour à la liste des membres, la mention « Soir, sauf le vendredi » est affichée sous les coordonnées de Maya Berger",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée."
+      "observation": "Voix de synthèse claire, posée et parfaitement synchronisée avec la manipulation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

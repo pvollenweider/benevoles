@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:06:03.261Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "92fc81da4716779a8b4ba831414c21f5d3b94f71e9fefd4fb15693f30399dde9",
+  "clipSha256": "f1a4395a4134db4cd774caca8fe7026ddf4d395f429d71c062947c061ae2cf7d",
+  "scene": "contents",
+  "review": {
+    "heardOpening": "Ouvrons les différentes parties du vrai fichier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons les différentes parties du vrai fichier. On retrouve les réglages, les créneaux",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la partie 'event' puis sélection de 'shifts' à 00:04",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Les pages, les questions et leurs réponses, les responsables, les jalons et le journal",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement successif des sections du menu déroulant (registrations, questions, sectorLeaders, milestones, log)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Des nombres récapitulent plusieurs de ces collections.",
+        "visibleSeconds": 18,
+        "visible": "Sélection de la section 'counts' dans le menu déroulant",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Vérifions un créneau et une réponse de notre exemple.",
+        "visibleSeconds": 20.4,
+        "visible": "Passage sur 'shifts' à 00:20 puis sur 'questions' à 00:21",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Léger décalage lors de la mention des nombres récapitulatifs, la section 'counts' n'étant affichée qu'à 00:18 alors que 'log' reste visible pendant la phrase."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

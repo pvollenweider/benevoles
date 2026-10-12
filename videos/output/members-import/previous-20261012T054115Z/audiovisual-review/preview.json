@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:41:55.585Z",
+  "videoSha256": "15e4f2dbf2422685676a1803b33e8833a8d517d559910fed01aeb676b9fcaa38",
+  "promptSha256": "76d5f7749b7d647fc4dc4f33983c0de25f54035a66bac1105f43841d3d80d962",
+  "clipSha256": "5389b4311f49327cb54c04e8e6c456c665e5a5be76cd416f8f430aaacaa77f3d",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Ouvrez Importer des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+        "visibleSeconds": 0,
+        "visible": "La fenêtre modale Importer des membres est déjà ouverte avec le fichier Membres-a-verifier.csv préchargé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Si un email existe déjà, l'option Ignorer conserve la fiche actuelle.",
+        "visibleSeconds": 4.5,
+        "visible": "L'option radio Ignorer sous 'Si un email existe déjà' est bien cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Cliquez sur Analyser le fichier.",
+        "visibleSeconds": 10.6,
+        "visible": "Clic sur le bouton Analyser le fichier et affichage du récapitulatif d'analyse.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+        "visibleSeconds": 11.2,
+        "visible": "Le bandeau de synthèse et la section 'Lignes en erreur, non importées (3)' sont affichés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.9,
+        "spoken": "Les colonnes reconnues et les tags sont également indiqués.",
+        "visibleSeconds": 11.2,
+        "visible": "Les lignes 'Tags ajoutés' et 'Colonnes reconnues' sont visibles dans l'en-tête du rapport.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, bon mixage avec la musique de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

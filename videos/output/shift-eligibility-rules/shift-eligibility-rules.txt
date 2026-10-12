@@ -12,4 +12,4 @@ Sans invitation, le poste Sécurité reste visible mais marqué réservé à cer
 
 Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.
 
-Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.
+Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer : son tag sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.

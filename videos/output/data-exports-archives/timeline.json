@@ -1,15 +1,15 @@
 {
   "slug": "data-exports-archives",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T18:08:11.802Z",
+  "recordedAt": "2026-10-12T06:02:11.732Z",
   "video": "capture.webm",
   "product": {
-    "commit": "1937bcc499ef732c8a6ddbb3a579e8fec58cd64c",
-    "sourceTree": "8daee33cc355ebde1c6a849d2a642855f028e5ca",
-    "productSourceSha256": "564d5c1d0e7b4c129a436a7eaf9fb46afdc8c609b4b12a6899691e01097d5ff5",
-    "buildId": "OVmcFhuwHK28Ui5UakTkL",
-    "snapshot": "/tmp/benevoles-video-production.qMp68s",
-    "builtAt": "2026-10-06T18:00:42.883Z"
+    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
+    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
+    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
+    "buildId": "Ro9VdxUayqlTAULEvQpY0",
+    "snapshot": "/tmp/benevoles-video-production.batch11",
+    "builtAt": "2026-10-12T04:25:58.799Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,86 +26,375 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 31865
+      "atMs": 32626
     },
     {
       "kind": "key",
-      "atMs": 32175
+      "atMs": 32935
     },
     {
       "kind": "key",
-      "atMs": 32545
+      "atMs": 33307
     },
     {
       "kind": "click",
-      "atMs": 42381
+      "atMs": 40397
     },
     {
       "kind": "click",
-      "atMs": 123273
+      "atMs": 134509
     },
     {
       "kind": "click",
-      "atMs": 125157
+      "atMs": 141069
     },
     {
       "kind": "click",
-      "atMs": 128007
+      "atMs": 142355
     },
     {
       "kind": "click",
-      "atMs": 158300
+      "atMs": 169208
     },
     {
       "kind": "click",
-      "atMs": 162549
+      "atMs": 174905
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1552,
-      "endMs": 26576
+      "startMs": 1541,
+      "endMs": 25111
     },
     {
       "id": "members",
-      "startMs": 28836,
-      "endMs": 54462
+      "startMs": 27371,
+      "endMs": 52911
     },
     {
       "id": "columns",
-      "startMs": 56722,
-      "endMs": 84337
+      "startMs": 55173,
+      "endMs": 97445
     },
     {
       "id": "csv",
-      "startMs": 86599,
-      "endMs": 116206
+      "startMs": 99708,
+      "endMs": 130500
     },
     {
       "id": "journal",
-      "startMs": 119611,
-      "endMs": 151334
+      "startMs": 133951,
+      "endMs": 165198
     },
     {
       "id": "archive",
-      "startMs": 154816,
-      "endMs": 185019
+      "startMs": 168659,
+      "endMs": 197075
     },
     {
       "id": "contents",
-      "startMs": 187279,
-      "endMs": 217495
+      "startMs": 199340,
+      "endMs": 228866
     },
     {
       "id": "privacy",
-      "startMs": 219759,
-      "endMs": 253701
+      "startMs": 231129,
+      "endMs": 263878
     },
     {
       "id": "result",
-      "startMs": 257143,
-      "endMs": 288496
+      "startMs": 267334,
+      "endMs": 296132
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Nous allons récupérer les membres",
+      "startMs": 7802,
+      "endMs": 11554,
+      "cueMs": 9345
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Il contient les membres de",
+      "startMs": 4763,
+      "endMs": 7972,
+      "cueMs": 32138
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Gardons un filtre visible, téléchargeons",
+      "startMs": 12541,
+      "endMs": 17393,
+      "cueMs": 39914
+    },
+    {
+      "segmentId": "members",
+      "phrase": "On retrouve aussi une personne",
+      "startMs": 17859,
+      "endMs": 19267,
+      "cueMs": 45231
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Le téléchargement ne réactive personne",
+      "startMs": 20041,
+      "endMs": 25128,
+      "cueMs": 47414
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "Lisons le prénom, le nom",
+      "startMs": 2529,
+      "endMs": 5880,
+      "cueMs": 57705
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "En faisant défiler les colonnes",
+      "startMs": 6087,
+      "endMs": 17170,
+      "cueMs": 61263
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "Les derniers envois indiquent les",
+      "startMs": 17730,
+      "endMs": 24031,
+      "cueMs": 72905
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "La dernière acceptation de la",
+      "startMs": 24350,
+      "endMs": 30765,
+      "cueMs": 79524
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "Les notes sont donc dans",
+      "startMs": 34248,
+      "endMs": 35555,
+      "cueMs": 89424
+    },
+    {
+      "segmentId": "csv",
+      "phrase": "Les accents sont conservés et",
+      "startMs": 517,
+      "endMs": 5517,
+      "cueMs": 100227
+    },
+    {
+      "segmentId": "csv",
+      "phrase": "Regardez ce numéro qui commence",
+      "startMs": 8963,
+      "endMs": 12961,
+      "cueMs": 108671
+    },
+    {
+      "segmentId": "csv",
+      "phrase": "Une valeur qui commence par",
+      "startMs": 15038,
+      "endMs": 22284,
+      "cueMs": 114748
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Pour garder une copie des",
+      "startMs": 0,
+      "endMs": 6431,
+      "cueMs": 134021
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Choisissons un type, puis Exporter",
+      "startMs": 6648,
+      "endMs": 9163,
+      "cueMs": 140602
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Choisissons un type, puis Exporter",
+      "startMs": 6648,
+      "endMs": 9163,
+      "cueMs": 141893
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Il indique la date, l'acteur",
+      "startMs": 13555,
+      "endMs": 18482,
+      "cueMs": 147507
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Pour conserver un événement complet",
+      "startMs": 0,
+      "endMs": 5313,
+      "cueMs": 168706
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Pour conserver un événement complet",
+      "startMs": 0,
+      "endMs": 5313,
+      "cueMs": 170017
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le lien Archive de l’événement",
+      "startMs": 5765,
+      "endMs": 8406,
+      "cueMs": 174426
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le JSON n’est pas une",
+      "startMs": 12170,
+      "endMs": 16253,
+      "cueMs": 180830
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Il est limité à cet",
+      "startMs": 19733,
+      "endMs": 24769,
+      "cueMs": 188395
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "On retrouve les réglages, les",
+      "startMs": 2980,
+      "endMs": 7839,
+      "cueMs": 202322
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "On retrouve les réglages, les",
+      "startMs": 2980,
+      "endMs": 7839,
+      "cueMs": 203090
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "On retrouve les réglages, les",
+      "startMs": 2980,
+      "endMs": 7839,
+      "cueMs": 203891
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 207305
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 208073
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 208872
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 209675
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 210474
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Des nombres récapitulent plusieurs de",
+      "startMs": 14569,
+      "endMs": 16976,
+      "cueMs": 213910
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Vérifions un créneau et une",
+      "startMs": 17781,
+      "endMs": 19906,
+      "cueMs": 217123
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Vérifions un créneau et une",
+      "startMs": 17781,
+      "endMs": 19906,
+      "cueMs": 217908
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Si une fiche change dans",
+      "startMs": 3780,
+      "endMs": 7556,
+      "cueMs": 234910
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Si une fiche change dans",
+      "startMs": 3780,
+      "endMs": 7556,
+      "cueMs": 236143
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Consultez les durées de conservation",
+      "startMs": 20578,
+      "endMs": 23624,
+      "cueMs": 251709
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Consultez les durées de conservation",
+      "startMs": 20578,
+      "endMs": 23624,
+      "cueMs": 252847
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Il n'y a pas de",
+      "startMs": 24353,
+      "endMs": 27991,
+      "cueMs": 255484
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour relire les actions de",
+      "startMs": 4346,
+      "endMs": 7918,
+      "cueMs": 271680
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour conserver un événement et",
+      "startMs": 8703,
+      "endMs": 12235,
+      "cueMs": 276039
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Les plannings et les listes",
+      "startMs": 12972,
+      "endMs": 16305,
+      "cueMs": 280306
     }
   ]
 }

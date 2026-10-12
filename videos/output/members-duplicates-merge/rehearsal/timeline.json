@@ -1,0 +1,422 @@
+{
+  "slug": "members-duplicates-merge",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T05:50:34.871Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
+    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
+    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
+    "buildId": "Ro9VdxUayqlTAULEvQpY0",
+    "snapshot": "/tmp/benevoles-video-production.batch11",
+    "builtAt": "2026-10-12T04:25:58.799Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-fusion",
+    "scenario": "MEMBERS_DUPLICATES_MERGE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4094
+    },
+    {
+      "kind": "click",
+      "atMs": 4926
+    },
+    {
+      "kind": "click",
+      "atMs": 6226
+    },
+    {
+      "kind": "click",
+      "atMs": 10494
+    },
+    {
+      "kind": "click",
+      "atMs": 11278
+    },
+    {
+      "kind": "key",
+      "atMs": 11585
+    },
+    {
+      "kind": "key",
+      "atMs": 11683
+    },
+    {
+      "kind": "key",
+      "atMs": 11782
+    },
+    {
+      "kind": "key",
+      "atMs": 11880
+    },
+    {
+      "kind": "key",
+      "atMs": 11978
+    },
+    {
+      "kind": "key",
+      "atMs": 12076
+    },
+    {
+      "kind": "key",
+      "atMs": 12178
+    },
+    {
+      "kind": "key",
+      "atMs": 12281
+    },
+    {
+      "kind": "key",
+      "atMs": 12383
+    },
+    {
+      "kind": "key",
+      "atMs": 12487
+    },
+    {
+      "kind": "key",
+      "atMs": 12590
+    },
+    {
+      "kind": "key",
+      "atMs": 12690
+    },
+    {
+      "kind": "key",
+      "atMs": 12792
+    },
+    {
+      "kind": "key",
+      "atMs": 12892
+    },
+    {
+      "kind": "key",
+      "atMs": 12997
+    },
+    {
+      "kind": "key",
+      "atMs": 13099
+    },
+    {
+      "kind": "key",
+      "atMs": 13201
+    },
+    {
+      "kind": "key",
+      "atMs": 13305
+    },
+    {
+      "kind": "key",
+      "atMs": 13406
+    },
+    {
+      "kind": "key",
+      "atMs": 13507
+    },
+    {
+      "kind": "key",
+      "atMs": 13611
+    },
+    {
+      "kind": "key",
+      "atMs": 13715
+    },
+    {
+      "kind": "key",
+      "atMs": 13817
+    },
+    {
+      "kind": "key",
+      "atMs": 13919
+    },
+    {
+      "kind": "key",
+      "atMs": 14020
+    },
+    {
+      "kind": "key",
+      "atMs": 14120
+    },
+    {
+      "kind": "key",
+      "atMs": 14218
+    },
+    {
+      "kind": "key",
+      "atMs": 14317
+    },
+    {
+      "kind": "key",
+      "atMs": 14419
+    },
+    {
+      "kind": "click",
+      "atMs": 14993
+    },
+    {
+      "kind": "click",
+      "atMs": 15775
+    },
+    {
+      "kind": "click",
+      "atMs": 18858
+    },
+    {
+      "kind": "click",
+      "atMs": 19643
+    },
+    {
+      "kind": "click",
+      "atMs": 22760
+    },
+    {
+      "kind": "click",
+      "atMs": 23542
+    },
+    {
+      "kind": "click",
+      "atMs": 26642
+    },
+    {
+      "kind": "click",
+      "atMs": 27425
+    },
+    {
+      "kind": "click",
+      "atMs": 28243
+    },
+    {
+      "kind": "click",
+      "atMs": 29026
+    },
+    {
+      "kind": "click",
+      "atMs": 32192
+    }
+  ],
+  "cues": [
+    {
+      "id": "duplicates",
+      "startMs": 2386,
+      "endMs": 6560
+    },
+    {
+      "id": "compare",
+      "startMs": 8825,
+      "endMs": 16110
+    },
+    {
+      "id": "fields",
+      "startMs": 18382,
+      "endMs": 19975
+    },
+    {
+      "id": "conflicts",
+      "startMs": 22240,
+      "endMs": 23854
+    },
+    {
+      "id": "confirm",
+      "startMs": 26128,
+      "endMs": 29331
+    },
+    {
+      "id": "result",
+      "startMs": 31679,
+      "endMs": 35307
+    },
+    {
+      "id": "links",
+      "startMs": 37572,
+      "endMs": 39886
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "duplicates",
+      "phrase": "Dans Membres, ouvrez Doublons possibles.",
+      "startMs": 3308,
+      "endMs": 7058,
+      "cueMs": 3627
+    },
+    {
+      "segmentId": "duplicates",
+      "phrase": "Comparer et fusionner ouvre un",
+      "startMs": 19078,
+      "endMs": 25584,
+      "cueMs": 4423
+    },
+    {
+      "segmentId": "duplicates",
+      "phrase": "Revenons aux suggestions.",
+      "startMs": 25584,
+      "endMs": 28010,
+      "cueMs": 5234
+    },
+    {
+      "segmentId": "duplicates",
+      "phrase": "Ignorer retire simplement la paire",
+      "startMs": 28010,
+      "endMs": 32642,
+      "cueMs": 5754
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Fusionner avec un autre membre",
+      "startMs": 11024,
+      "endMs": 18189,
+      "cueMs": 10013
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Recherchez précisément l’adresse de la",
+      "startMs": 18189,
+      "endMs": 27228,
+      "cueMs": 10799
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Celle-ci sera absorbée.",
+      "startMs": 27228,
+      "endMs": 29323,
+      "cueMs": 14518
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "L’aperçu permet maintenant de comparer",
+      "startMs": 29323,
+      "endMs": 36598,
+      "cueMs": 15300
+    },
+    {
+      "segmentId": "compare",
+      "phrase": "Vérifiez bien quelle fiche vous",
+      "startMs": 36598,
+      "endMs": 42000,
+      "cueMs": 16083
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Ici, on conserve la bonne",
+      "startMs": 6140,
+      "endMs": 12791,
+      "cueMs": 18382
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Ici, on conserve la bonne",
+      "startMs": 6140,
+      "endMs": 12791,
+      "cueMs": 18384
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Les notes internes peuvent aussi",
+      "startMs": 12791,
+      "endMs": 17395,
+      "cueMs": 19169
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Le tableau récapitule les inscriptions",
+      "startMs": 25888,
+      "endMs": 33153,
+      "cueMs": 19950
+    },
+    {
+      "segmentId": "conflicts",
+      "phrase": "Ici, on garde la réponse",
+      "startMs": 32693,
+      "endMs": 36823,
+      "cueMs": 22276
+    },
+    {
+      "segmentId": "conflicts",
+      "phrase": "On choisit aussi son invitation.",
+      "startMs": 36823,
+      "endMs": 39920,
+      "cueMs": 23070
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Cette case permet d’envoyer les",
+      "startMs": 0,
+      "endMs": 7444,
+      "cueMs": 26156
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Dans cette démonstration, on la",
+      "startMs": 7444,
+      "endMs": 11111,
+      "cueMs": 26952
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Lisez le résumé avant de",
+      "startMs": 13556,
+      "endMs": 16778,
+      "cueMs": 27735
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Fusionner les deux fiches ouvre",
+      "startMs": 33556,
+      "endMs": 39111,
+      "cueMs": 27757
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Quand vous êtes vraiment sûr",
+      "startMs": 39111,
+      "endMs": 45000,
+      "cueMs": 28550
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Retournez à la fiche conservée",
+      "startMs": 4992,
+      "endMs": 12688,
+      "cueMs": 31706
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Dans la liste des membres",
+      "startMs": 12688,
+      "endMs": 19240,
+      "cueMs": 33002
+    },
+    {
+      "segmentId": "result",
+      "phrase": "les faits enregistrés sous l’ancienne",
+      "startMs": 21840,
+      "endMs": 29952,
+      "cueMs": 34153
+    },
+    {
+      "segmentId": "links",
+      "phrase": "L’ancien lien personnel de la",
+      "startMs": 2373,
+      "endMs": 8088,
+      "cueMs": 37660
+    },
+    {
+      "segmentId": "links",
+      "phrase": "Le nouveau lien ouvre bien",
+      "startMs": 13049,
+      "endMs": 19196,
+      "cueMs": 38782
+    }
+  ]
+}

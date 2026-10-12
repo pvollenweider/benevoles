@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:40:45.230Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "129820408457dba3852a0ef23df4ceec775ded82efbe670c63854135b8eba3c2",
+  "clipSha256": "3999bbc542d377b4a950caf0de7ab23138a4640cc5dd78712fca570d5f58e693",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un t-shirt à prévoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons Questions aux bénévoles pour notre événement de formation.",
+        "visibleSeconds": 7.4,
+        "visible": "Clic sur l'onglet Questions puis ouverture de la page « Questions aux bénévoles »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "On peut ajouter jusqu'à cinq questions.",
+        "visibleSeconds": 8,
+        "visible": "Texte explicatif à l'écran indiquant « Jusqu'à 5 questions ajoutées au formulaire d'inscription » et compteur « Questions (0/5) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.2,
+        "spoken": "Pas d'information sensible sur la santé, la religion ou les opinions.",
+        "visibleSeconds": 8,
+        "visible": "Encadré d'avertissement affiché : « pas d'information sensible (santé, religion, opinions...) »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,887 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1541,
+    "endMs": 25111,
+    "sentences": [
+      {
+        "text": "Besoin de garder une copie de vos données ou de les reprendre dans un autre outil ?",
+        "startMs": 232,
+        "endMs": 3602,
+        "method": "silence",
+        "absoluteStartMs": 1773
+      },
+      {
+        "text": "Les exports permettent de les télécharger sans demander une intervention.",
+        "startMs": 3941,
+        "endMs": 7255,
+        "method": "silence",
+        "absoluteStartMs": 5482
+      },
+      {
+        "text": "Nous allons récupérer les membres, le journal de l'organisation et l'archive d'un événement.",
+        "startMs": 7802,
+        "endMs": 11554,
+        "method": "silence",
+        "absoluteStartMs": 9343
+      },
+      {
+        "text": "Chaque fichier a son usage.",
+        "startMs": 12074,
+        "endMs": 13099,
+        "method": "silence",
+        "absoluteStartMs": 13615
+      },
+      {
+        "text": "Les personnes et les informations de cette démonstration sont fictives.",
+        "startMs": 13849,
+        "endMs": 16541,
+        "method": "silence",
+        "absoluteStartMs": 15390
+      },
+      {
+        "text": "Nous ouvrirons les vrais fichiers téléchargés, dans un visualiseur de lecture, pour comprendre ce qu'ils contiennent et ce qu'ils ne font pas.",
+        "startMs": 16958,
+        "endMs": 23297,
+        "method": "silence",
+        "absoluteStartMs": 18499
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "welcome",
+        "phrase": "Nous allons récupérer les membres",
+        "startMs": 7802,
+        "endMs": 11554,
+        "cueMs": 9345
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "members",
+    "startMs": 27371,
+    "endMs": 52911,
+    "sentences": [
+      {
+        "text": "Depuis Membres, Exporter les membres télécharge un fichier CSV.",
+        "startMs": 250,
+        "endMs": 4133,
+        "method": "silence",
+        "absoluteStartMs": 27621
+      },
+      {
+        "text": "Il contient les membres de l'organisation, y compris les fiches désactivées.",
+        "startMs": 4763,
+        "endMs": 7972,
+        "method": "silence",
+        "absoluteStartMs": 32134
+      },
+      {
+        "text": "Une recherche à l'écran ne transforme pas cet export en liste de quelques personnes.",
+        "startMs": 8847,
+        "endMs": 12172,
+        "method": "silence",
+        "absoluteStartMs": 36218
+      },
+      {
+        "text": "Gardons un filtre visible, téléchargeons, puis comparons le fichier avec la liste complète.",
+        "startMs": 12541,
+        "endMs": 17393,
+        "method": "silence",
+        "absoluteStartMs": 39912
+      },
+      {
+        "text": "On retrouve aussi une personne désactivée.",
+        "startMs": 17859,
+        "endMs": 19267,
+        "method": "silence",
+        "absoluteStartMs": 45230
+      },
+      {
+        "text": "Le téléchargement ne réactive personne, ne change aucune inscription et ne remplace pas une procédure d'import.",
+        "startMs": 20041,
+        "endMs": 25128,
+        "method": "silence",
+        "absoluteStartMs": 47412
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "members",
+        "phrase": "Il contient les membres de",
+        "startMs": 4763,
+        "endMs": 7972,
+        "cueMs": 32138
+      },
+      {
+        "segmentId": "members",
+        "phrase": "Gardons un filtre visible, téléchargeons",
+        "startMs": 12541,
+        "endMs": 17393,
+        "cueMs": 39914
+      },
+      {
+        "segmentId": "members",
+        "phrase": "On retrouve aussi une personne",
+        "startMs": 17859,
+        "endMs": 19267,
+        "cueMs": 45231
+      },
+      {
+        "segmentId": "members",
+        "phrase": "Le téléchargement ne réactive personne",
+        "startMs": 20041,
+        "endMs": 25128,
+        "cueMs": 47414
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 32626
+      },
+      {
+        "kind": "key",
+        "atMs": 32935
+      },
+      {
+        "kind": "key",
+        "atMs": 33307
+      },
+      {
+        "kind": "click",
+        "atMs": 40397
+      }
+    ]
+  },
+  {
+    "chapter": "columns",
+    "startMs": 55173,
+    "endMs": 97445,
+    "sentences": [
+      {
+        "text": "Une ligne représente une fiche membre.",
+        "startMs": 357,
+        "endMs": 2052,
+        "method": "silence",
+        "absoluteStartMs": 55530
+      },
+      {
+        "text": "Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif.",
+        "startMs": 2529,
+        "endMs": 5880,
+        "method": "silence",
+        "absoluteStartMs": 57702
+      },
+      {
+        "text": "En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes, le nombre d'inscriptions actives et la date de création de la fiche.",
+        "startMs": 6087,
+        "endMs": 17170,
+        "method": "silence",
+        "absoluteStartMs": 61260
+      },
+      {
+        "text": "Les derniers envois indiquent les résultats des emails de cette personne, avec leur date et la raison connue, sans la réponse brute du serveur.",
+        "startMs": 17730,
+        "endMs": 24031,
+        "method": "silence",
+        "absoluteStartMs": 72903
+      },
+      {
+        "text": "La dernière acceptation de la Convention indique quand elle a été acceptée lors d'une inscription.",
+        "startMs": 24350,
+        "endMs": 30765,
+        "method": "silence",
+        "absoluteStartMs": 79523
+      },
+      {
+        "text": "Une case vide n'atteste aucune acceptation.",
+        "startMs": 31183,
+        "endMs": 33295,
+        "method": "silence",
+        "absoluteStartMs": 86356
+      },
+      {
+        "text": "Les notes sont donc dans ce fichier.",
+        "startMs": 34248,
+        "endMs": 35555,
+        "method": "silence",
+        "absoluteStartMs": 89421
+      },
+      {
+        "text": "Ce n'est pas seulement un annuaire à distribuer.",
+        "startMs": 35701,
+        "endMs": 37402,
+        "method": "silence",
+        "absoluteStartMs": 90874
+      },
+      {
+        "text": "Le nombre d'inscriptions n'est pas un total d'heures ni une attestation de présence.",
+        "startMs": 38424,
+        "endMs": 41766,
+        "method": "silence",
+        "absoluteStartMs": 93597
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "columns",
+        "phrase": "Lisons le prénom, le nom",
+        "startMs": 2529,
+        "endMs": 5880,
+        "cueMs": 57705
+      },
+      {
+        "segmentId": "columns",
+        "phrase": "En faisant défiler les colonnes",
+        "startMs": 6087,
+        "endMs": 17170,
+        "cueMs": 61263
+      },
+      {
+        "segmentId": "columns",
+        "phrase": "Les derniers envois indiquent les",
+        "startMs": 17730,
+        "endMs": 24031,
+        "cueMs": 72905
+      },
+      {
+        "segmentId": "columns",
+        "phrase": "La dernière acceptation de la",
+        "startMs": 24350,
+        "endMs": 30765,
+        "cueMs": 79524
+      },
+      {
+        "segmentId": "columns",
+        "phrase": "Les notes sont donc dans",
+        "startMs": 34248,
+        "endMs": 35555,
+        "cueMs": 89424
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "csv",
+    "startMs": 99708,
+    "endMs": 130500,
+    "sentences": [
+      {
+        "text": "Les accents sont conservés et les colonnes sont séparées par des points-virgules.",
+        "startMs": 517,
+        "endMs": 5517,
+        "method": "silence",
+        "absoluteStartMs": 100225
+      },
+      {
+        "text": "Si votre tableur demande un choix, utilisez le texte en UTF huit et ce séparateur.",
+        "startMs": 5682,
+        "endMs": 8354,
+        "method": "silence",
+        "absoluteStartMs": 105390
+      },
+      {
+        "text": "Regardez ce numéro qui commence par plus quarante et un :",
+        "startMs": 8963,
+        "endMs": 12961,
+        "method": "silence",
+        "absoluteStartMs": 108671
+      },
+      {
+        "text": "une apostrophe le précède.",
+        "startMs": 13483,
+        "endMs": 14179,
+        "method": "silence",
+        "absoluteStartMs": 113191
+      },
+      {
+        "text": "C'est volontaire.",
+        "startMs": 14624,
+        "endMs": 14841,
+        "method": "silence",
+        "absoluteStartMs": 114332
+      },
+      {
+        "text": "Une valeur qui commence par égal, plus, moins ou arobase est protégée pour être lue comme du texte, pas exécutée comme une formule.",
+        "startMs": 15038,
+        "endMs": 22284,
+        "method": "silence",
+        "absoluteStartMs": 114746
+      },
+      {
+        "text": "Notre exemple égal un plus un reste une valeur textuelle.",
+        "startMs": 22803,
+        "endMs": 26762,
+        "method": "silence",
+        "absoluteStartMs": 122511
+      },
+      {
+        "text": "N'enlevez pas cette protection simplement pour rendre la colonne plus jolie.",
+        "startMs": 27408,
+        "endMs": 30397,
+        "method": "silence",
+        "absoluteStartMs": 127116
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "csv",
+        "phrase": "Les accents sont conservés et",
+        "startMs": 517,
+        "endMs": 5517,
+        "cueMs": 100227
+      },
+      {
+        "segmentId": "csv",
+        "phrase": "Regardez ce numéro qui commence",
+        "startMs": 8963,
+        "endMs": 12961,
+        "cueMs": 108671
+      },
+      {
+        "segmentId": "csv",
+        "phrase": "Une valeur qui commence par",
+        "startMs": 15038,
+        "endMs": 22284,
+        "cueMs": 114748
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "journal",
+    "startMs": 133951,
+    "endMs": 165198,
+    "sentences": [
+      {
+        "text": "Pour garder une copie des actions de l'équipe, ouvrons le journal d'activité dans les paramètres.",
+        "startMs": 0,
+        "endMs": 6431,
+        "method": "silence",
+        "absoluteStartMs": 133951
+      },
+      {
+        "text": "Choisissons un type, puis Exporter tout le journal.",
+        "startMs": 6648,
+        "endMs": 9163,
+        "method": "silence",
+        "absoluteStartMs": 140599
+      },
+      {
+        "text": "Même avec ce filtre, le CSV contient tout le journal de l'organisation.",
+        "startMs": 9460,
+        "endMs": 12940,
+        "method": "silence",
+        "absoluteStartMs": 143411
+      },
+      {
+        "text": "Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements.",
+        "startMs": 13555,
+        "endMs": 18482,
+        "method": "silence",
+        "absoluteStartMs": 147506
+      },
+      {
+        "text": "Les lignes sont classées de la plus ancienne à la plus récente.",
+        "startMs": 19097,
+        "endMs": 24219,
+        "method": "silence",
+        "absoluteStartMs": 153048
+      },
+      {
+        "text": "Ce fichier aide à relire ce qui s'est passé ;",
+        "startMs": 24788,
+        "endMs": 25753,
+        "method": "silence",
+        "absoluteStartMs": 158739
+      },
+      {
+        "text": "il n'est ni une sauvegarde complète ni une commande pour annuler les actions.",
+        "startMs": 25876,
+        "endMs": 30641,
+        "method": "silence",
+        "absoluteStartMs": 159827
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "journal",
+        "phrase": "Pour garder une copie des",
+        "startMs": 0,
+        "endMs": 6431,
+        "cueMs": 134021
+      },
+      {
+        "segmentId": "journal",
+        "phrase": "Choisissons un type, puis Exporter",
+        "startMs": 6648,
+        "endMs": 9163,
+        "cueMs": 140602
+      },
+      {
+        "segmentId": "journal",
+        "phrase": "Choisissons un type, puis Exporter",
+        "startMs": 6648,
+        "endMs": 9163,
+        "cueMs": 141893
+      },
+      {
+        "segmentId": "journal",
+        "phrase": "Il indique la date, l'acteur",
+        "startMs": 13555,
+        "endMs": 18482,
+        "cueMs": 147507
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 134509
+      },
+      {
+        "kind": "click",
+        "atMs": 141069
+      },
+      {
+        "kind": "click",
+        "atMs": 142355
+      }
+    ]
+  },
+  {
+    "chapter": "archive",
+    "startMs": 168659,
+    "endMs": 197075,
+    "sentences": [
+      {
+        "text": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en bas, dans Archive.",
+        "startMs": 0,
+        "endMs": 5313,
+        "method": "silence",
+        "absoluteStartMs": 168659
+      },
+      {
+        "text": "Le lien Archive de l’événement, JSON, télécharge le fichier.",
+        "startMs": 5765,
+        "endMs": 8406,
+        "method": "silence",
+        "absoluteStartMs": 174424
+      },
+      {
+        "text": "Faites cette copie avant de quitter l’outil ou de supprimer l’événement.",
+        "startMs": 8682,
+        "endMs": 12016,
+        "method": "silence",
+        "absoluteStartMs": 177341
+      },
+      {
+        "text": "Le JSON n’est pas une feuille à afficher au stand :",
+        "startMs": 12170,
+        "endMs": 16253,
+        "method": "silence",
+        "absoluteStartMs": 180829
+      },
+      {
+        "text": "c’est un format structuré pour conserver ou traiter les données.",
+        "startMs": 16497,
+        "endMs": 19348,
+        "method": "silence",
+        "absoluteStartMs": 185156
+      },
+      {
+        "text": "Il est limité à cet événement, sans inclure tous les autres événements ni tout l’annuaire de l’organisation.",
+        "startMs": 19733,
+        "endMs": 24769,
+        "method": "silence",
+        "absoluteStartMs": 188392
+      },
+      {
+        "text": "Le téléchargement ne crée pas une nouvelle édition de la fête.",
+        "startMs": 25314,
+        "endMs": 28401,
+        "method": "silence",
+        "absoluteStartMs": 193973
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "archive",
+        "phrase": "Pour conserver un événement complet",
+        "startMs": 0,
+        "endMs": 5313,
+        "cueMs": 168706
+      },
+      {
+        "segmentId": "archive",
+        "phrase": "Pour conserver un événement complet",
+        "startMs": 0,
+        "endMs": 5313,
+        "cueMs": 170017
+      },
+      {
+        "segmentId": "archive",
+        "phrase": "Le lien Archive de l’événement",
+        "startMs": 5765,
+        "endMs": 8406,
+        "cueMs": 174426
+      },
+      {
+        "segmentId": "archive",
+        "phrase": "Le JSON n’est pas une",
+        "startMs": 12170,
+        "endMs": 16253,
+        "cueMs": 180830
+      },
+      {
+        "segmentId": "archive",
+        "phrase": "Il est limité à cet",
+        "startMs": 19733,
+        "endMs": 24769,
+        "cueMs": 188395
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 169208
+      },
+      {
+        "kind": "click",
+        "atMs": 174905
+      }
+    ]
+  },
+  {
+    "chapter": "contents",
+    "startMs": 199340,
+    "endMs": 228866,
+    "sentences": [
+      {
+        "text": "Ouvrons les différentes parties du vrai fichier.",
+        "startMs": 0,
+        "endMs": 2254,
+        "method": "silence",
+        "absoluteStartMs": 199340
+      },
+      {
+        "text": "On retrouve les réglages, les créneaux et les inscriptions avec les données des bénévoles concernés.",
+        "startMs": 2980,
+        "endMs": 7839,
+        "method": "silence",
+        "absoluteStartMs": 202320
+      },
+      {
+        "text": "Les pages, les questions et leurs réponses, les responsables, les jalons et le journal sont également présents.",
+        "startMs": 7964,
+        "endMs": 13993,
+        "method": "silence",
+        "absoluteStartMs": 207304
+      },
+      {
+        "text": "Des nombres récapitulent plusieurs de ces collections.",
+        "startMs": 14569,
+        "endMs": 16976,
+        "method": "silence",
+        "absoluteStartMs": 213909
+      },
+      {
+        "text": "Vérifions un créneau et une réponse de notre exemple.",
+        "startMs": 17781,
+        "endMs": 19906,
+        "method": "silence",
+        "absoluteStartMs": 217121
+      },
+      {
+        "text": "Les jetons d'accès et les liens personnels ne sont pas exportés.",
+        "startMs": 20341,
+        "endMs": 23064,
+        "method": "silence",
+        "absoluteStartMs": 219681
+      },
+      {
+        "text": "Cela ne rend pas le fichier anonyme :",
+        "startMs": 23555,
+        "endMs": 25427,
+        "method": "silence",
+        "absoluteStartMs": 222895
+      },
+      {
+        "text": "les coordonnées et d'autres informations personnelles restent dans les données.",
+        "startMs": 25644,
+        "endMs": 28887,
+        "method": "silence",
+        "absoluteStartMs": 224984
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "contents",
+        "phrase": "On retrouve les réglages, les",
+        "startMs": 2980,
+        "endMs": 7839,
+        "cueMs": 202322
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "On retrouve les réglages, les",
+        "startMs": 2980,
+        "endMs": 7839,
+        "cueMs": 203090
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "On retrouve les réglages, les",
+        "startMs": 2980,
+        "endMs": 7839,
+        "cueMs": 203891
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Les pages, les questions et",
+        "startMs": 7964,
+        "endMs": 13993,
+        "cueMs": 207305
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Les pages, les questions et",
+        "startMs": 7964,
+        "endMs": 13993,
+        "cueMs": 208073
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Les pages, les questions et",
+        "startMs": 7964,
+        "endMs": 13993,
+        "cueMs": 208872
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Les pages, les questions et",
+        "startMs": 7964,
+        "endMs": 13993,
+        "cueMs": 209675
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Les pages, les questions et",
+        "startMs": 7964,
+        "endMs": 13993,
+        "cueMs": 210474
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Des nombres récapitulent plusieurs de",
+        "startMs": 14569,
+        "endMs": 16976,
+        "cueMs": 213910
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Vérifions un créneau et une",
+        "startMs": 17781,
+        "endMs": 19906,
+        "cueMs": 217123
+      },
+      {
+        "segmentId": "contents",
+        "phrase": "Vérifions un créneau et une",
+        "startMs": 17781,
+        "endMs": 19906,
+        "cueMs": 217908
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "privacy",
+    "startMs": 231129,
+    "endMs": 263878,
+    "sentences": [
+      {
+        "text": "Une fois téléchargée, cette copie ne se met pas à jour.",
+        "startMs": 645,
+        "endMs": 3346,
+        "method": "silence",
+        "absoluteStartMs": 231774
+      },
+      {
+        "text": "Si une fiche change dans l'application, l'ancien fichier reste identique.",
+        "startMs": 3780,
+        "endMs": 7556,
+        "method": "silence",
+        "absoluteStartMs": 234909
+      },
+      {
+        "text": "Rangez-le dans un espace protégé, limitez les destinataires et supprimez les copies devenues inutiles.",
+        "startMs": 8428,
+        "endMs": 13937,
+        "method": "silence",
+        "absoluteStartMs": 239557
+      },
+      {
+        "text": "Archiver un événement dans l'application n'est pas le supprimer ;",
+        "startMs": 14680,
+        "endMs": 17047,
+        "method": "silence",
+        "absoluteStartMs": 245809
+      },
+      {
+        "text": "une suppression efface ses données et son historique.",
+        "startMs": 17301,
+        "endMs": 19996,
+        "method": "silence",
+        "absoluteStartMs": 248430
+      },
+      {
+        "text": "Consultez les durées de conservation dans le guide avant de décider.",
+        "startMs": 20578,
+        "endMs": 23624,
+        "method": "silence",
+        "absoluteStartMs": 251707
+      },
+      {
+        "text": "Il n'y a pas de bouton pour restaurer un événement depuis ce JSON.",
+        "startMs": 24353,
+        "endMs": 27991,
+        "method": "silence",
+        "absoluteStartMs": 255482
+      },
+      {
+        "text": "Ne le présentez pas comme une sauvegarde que l'application saurait réimporter automatiquement.",
+        "startMs": 28302,
+        "endMs": 32332,
+        "method": "silence",
+        "absoluteStartMs": 259431
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "privacy",
+        "phrase": "Si une fiche change dans",
+        "startMs": 3780,
+        "endMs": 7556,
+        "cueMs": 234910
+      },
+      {
+        "segmentId": "privacy",
+        "phrase": "Si une fiche change dans",
+        "startMs": 3780,
+        "endMs": 7556,
+        "cueMs": 236143
+      },
+      {
+        "segmentId": "privacy",
+        "phrase": "Consultez les durées de conservation",
+        "startMs": 20578,
+        "endMs": 23624,
+        "cueMs": 251709
+      },
+      {
+        "segmentId": "privacy",
+        "phrase": "Consultez les durées de conservation",
+        "startMs": 20578,
+        "endMs": 23624,
+        "cueMs": 252847
+      },
+      {
+        "segmentId": "privacy",
+        "phrase": "Il n'y a pas de",
+        "startMs": 24353,
+        "endMs": 27991,
+        "cueMs": 255484
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "result",
+    "startMs": 267334,
+    "endMs": 296132,
+    "sentences": [
+      {
+        "text": "Pour travailler sur les fiches, prenez le CSV des membres.",
+        "startMs": 418,
+        "endMs": 3558,
+        "method": "silence",
+        "absoluteStartMs": 267752
+      },
+      {
+        "text": "Pour relire les actions de l'organisation, prenez le CSV du journal.",
+        "startMs": 4346,
+        "endMs": 7918,
+        "method": "silence",
+        "absoluteStartMs": 271680
+      },
+      {
+        "text": "Pour conserver un événement et ses données liées, prenez son archive JSON.",
+        "startMs": 8703,
+        "endMs": 12235,
+        "method": "silence",
+        "absoluteStartMs": 276037
+      },
+      {
+        "text": "Les plannings et les listes à remettre sur place se choisissent dans Rapports :",
+        "startMs": 12972,
+        "endMs": 16305,
+        "method": "silence",
+        "absoluteStartMs": 280306
+      },
+      {
+        "text": "ils répondent à un autre besoin.",
+        "startMs": 16726,
+        "endMs": 17927,
+        "method": "silence",
+        "absoluteStartMs": 284060
+      },
+      {
+        "text": "Nous avons téléchargé, ouvert et vérifié chaque type de fichier.",
+        "startMs": 18466,
+        "endMs": 22331,
+        "method": "silence",
+        "absoluteStartMs": 285800
+      },
+      {
+        "text": "Le bon export, au bon endroit et pour les bonnes personnes :",
+        "startMs": 22864,
+        "endMs": 24610,
+        "method": "silence",
+        "absoluteStartMs": 290198
+      },
+      {
+        "text": "c'est une manière simple de garder la maîtrise de vos données.",
+        "startMs": 24915,
+        "endMs": 28444,
+        "method": "silence",
+        "absoluteStartMs": 292249
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "Pour relire les actions de",
+        "startMs": 4346,
+        "endMs": 7918,
+        "cueMs": 271680
+      },
+      {
+        "segmentId": "result",
+        "phrase": "Pour conserver un événement et",
+        "startMs": 8703,
+        "endMs": 12235,
+        "cueMs": 276039
+      },
+      {
+        "segmentId": "result",
+        "phrase": "Les plannings et les listes",
+        "startMs": 12972,
+        "endMs": 16305,
+        "cueMs": 280306
+      }
+    ],
+    "interactions": []
+  }
+]

@@ -1,0 +1,209 @@
+{
+  "slug": "members-import",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T03:36:33.445Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+    "sourceTree": "6bd88ba443f7d5ee07d2901c2716c26c9e295066",
+    "productSourceSha256": "760923bf907b82f394b0fd73f5126b0ab9fb3191ae0733a02658aa2af7869cf9",
+    "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+    "snapshot": "/tmp/benevoles-video-production.batch10",
+    "builtAt": "2026-10-12T02:25:28.637Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "MEMBERS_IMPORT",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 3833
+    },
+    {
+      "kind": "click",
+      "atMs": 5099
+    },
+    {
+      "kind": "click",
+      "atMs": 6865
+    },
+    {
+      "kind": "click",
+      "atMs": 7648
+    },
+    {
+      "kind": "click",
+      "atMs": 8432
+    },
+    {
+      "kind": "click",
+      "atMs": 9732
+    },
+    {
+      "kind": "click",
+      "atMs": 10549
+    },
+    {
+      "kind": "click",
+      "atMs": 11965
+    },
+    {
+      "kind": "click",
+      "atMs": 12814
+    },
+    {
+      "kind": "click",
+      "atMs": 13632
+    },
+    {
+      "kind": "click",
+      "atMs": 15265
+    },
+    {
+      "kind": "click",
+      "atMs": 16064
+    },
+    {
+      "kind": "click",
+      "atMs": 17348
+    },
+    {
+      "kind": "key",
+      "atMs": 17658
+    },
+    {
+      "kind": "click",
+      "atMs": 19031
+    },
+    {
+      "kind": "click",
+      "atMs": 19848
+    },
+    {
+      "kind": "click",
+      "atMs": 20649
+    },
+    {
+      "kind": "click",
+      "atMs": 21464
+    },
+    {
+      "kind": "click",
+      "atMs": 22264
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 282,
+      "endMs": 2898
+    },
+    {
+      "id": "file",
+      "startMs": 3351,
+      "endMs": 4180
+    },
+    {
+      "id": "preview",
+      "startMs": 4633,
+      "endMs": 5446
+    },
+    {
+      "id": "errors",
+      "startMs": 5900,
+      "endMs": 5945
+    },
+    {
+      "id": "update",
+      "startMs": 6398,
+      "endMs": 8780
+    },
+    {
+      "id": "corrected",
+      "startMs": 9233,
+      "endMs": 10897
+    },
+    {
+      "id": "confirm",
+      "startMs": 11350,
+      "endMs": 16370
+    },
+    {
+      "id": "repeat",
+      "startMs": 16823,
+      "endMs": 22571
+    },
+    {
+      "id": "result",
+      "startMs": 23025,
+      "endMs": 23046
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "file",
+      "phrase": "prénom, nom, email, téléphone et",
+      "startMs": 9412,
+      "endMs": 13203,
+      "cueMs": 4148
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Le récapitulatif montre les créations",
+      "startMs": 15407,
+      "endMs": 24854,
+      "cueMs": 4634
+    },
+    {
+      "segmentId": "errors",
+      "phrase": "Corrige le fichier d'origine plutôt",
+      "startMs": 21718,
+      "endMs": 29080,
+      "cueMs": 5914
+    },
+    {
+      "segmentId": "update",
+      "phrase": "Ici, Camille et Julien passent",
+      "startMs": 31664,
+      "endMs": 43000,
+      "cueMs": 8741
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "Les erreurs ont disparu.",
+      "startMs": 7997,
+      "endMs": 10457,
+      "cueMs": 10044
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "René n'a pas d'email ",
+      "startMs": 18085,
+      "endMs": 19931,
+      "cueMs": 10859
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Importer une personne ne l'inscrit",
+      "startMs": 33783,
+      "endMs": 39000,
+      "cueMs": 15575
+    },
+    {
+      "segmentId": "repeat",
+      "phrase": "Regardez toujours le nombre de",
+      "startMs": 24820,
+      "endMs": 34000,
+      "cueMs": 20960
+    }
+  ]
+}

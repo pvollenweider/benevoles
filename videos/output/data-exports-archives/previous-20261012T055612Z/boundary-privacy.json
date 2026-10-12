@@ -1,0 +1,12 @@
+{
+  "anchor": "Une fois téléchargée, cette copie ne se met pas à jour.",
+  "windowStart": 199.89800000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 11.78,
+    "wordsHeard": "Une"
+  },
+  "onset": 211.67800000000003,
+  "proposedCut": 211.3361455,
+  "note": "Proposal only; recut then independently audit before capture"
+}

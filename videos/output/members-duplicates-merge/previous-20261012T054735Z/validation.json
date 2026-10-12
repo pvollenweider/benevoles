@@ -1,0 +1,64 @@
+{
+  "id": "MEMBERS_DUPLICATES_MERGE",
+  "slug": "members-duplicates-merge",
+  "validatedAt": "2026-10-12T03:51:49.369Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 219160,
+  "scenes": [
+    {
+      "id": "duplicates",
+      "visualMs": 27527,
+      "audioMs": 27525,
+      "driftMs": 2
+    },
+    {
+      "id": "compare",
+      "visualMs": 26912,
+      "audioMs": 26912,
+      "driftMs": 0
+    },
+    {
+      "id": "fields",
+      "visualMs": 29699,
+      "audioMs": 29686,
+      "driftMs": 13
+    },
+    {
+      "id": "conflicts",
+      "visualMs": 28630,
+      "audioMs": 28628,
+      "driftMs": 2
+    },
+    {
+      "id": "confirm",
+      "visualMs": 31332,
+      "audioMs": 31332,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 26935,
+      "audioMs": 26935,
+      "driftMs": 0
+    },
+    {
+      "id": "links",
+      "visualMs": 28346,
+      "audioMs": 28343,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 24,
+  "music": {
+    "voicedWindows": 195,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.5,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

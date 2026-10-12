@@ -1,0 +1,1255 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 0,
+    "endMs": 22625,
+    "sentences": [
+      {
+        "text": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement.",
+        "startMs": 405,
+        "endMs": 5381,
+        "method": "silence",
+        "absoluteStartMs": 405
+      },
+      {
+        "text": "Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées.",
+        "startMs": 6049,
+        "endMs": 12208,
+        "method": "silence",
+        "absoluteStartMs": 6049
+      },
+      {
+        "text": "Ajouter un membre ne l'inscrit pas automatiquement à une fête.",
+        "startMs": 13049,
+        "endMs": 16005,
+        "method": "silence",
+        "absoluteStartMs": 13049
+      },
+      {
+        "text": "Sa fiche et ses inscriptions sont deux choses différentes.",
+        "startMs": 16480,
+        "endMs": 19009,
+        "method": "silence",
+        "absoluteStartMs": 16480
+      },
+      {
+        "text": "Voyons comment garder cette liste utile et à jour.",
+        "startMs": 19557,
+        "endMs": 22163,
+        "method": "silence",
+        "absoluteStartMs": 19557
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "create",
+    "startMs": 23077,
+    "endMs": 44344,
+    "sentences": [
+      {
+        "text": "Pour ajouter une personne, cliquez sur Nouveau membre.",
+        "startMs": 466,
+        "endMs": 2988,
+        "method": "silence",
+        "absoluteStartMs": 23543
+      },
+      {
+        "text": "Saisissez son prénom et son nom, puis son email et son téléphone si vous les connaissez.",
+        "startMs": 3514,
+        "endMs": 7700,
+        "method": "silence",
+        "absoluteStartMs": 26591
+      },
+      {
+        "text": "Nous ajoutons Maya Berger avec des coordonnées de démonstration.",
+        "startMs": 8484,
+        "endMs": 11558,
+        "method": "silence",
+        "absoluteStartMs": 31561
+      },
+      {
+        "text": "Prenez le temps de vérifier l'adresse avant de créer la fiche :",
+        "startMs": 12094,
+        "endMs": 14846,
+        "method": "silence",
+        "absoluteStartMs": 35171
+      },
+      {
+        "text": "une faute de frappe peut empêcher les prochains messages d'arriver.",
+        "startMs": 15279,
+        "endMs": 17848,
+        "method": "silence",
+        "absoluteStartMs": 38356
+      },
+      {
+        "text": "Après la création, Maya apparaît dans la liste.",
+        "startMs": 18188,
+        "endMs": 20840,
+        "method": "silence",
+        "absoluteStartMs": 41265
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "create",
+        "phrase": "Après la création, Maya apparaît",
+        "startMs": 18188,
+        "endMs": 20840,
+        "cueMs": 41269
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 23559
+      },
+      {
+        "kind": "click",
+        "atMs": 24409
+      },
+      {
+        "kind": "key",
+        "atMs": 24721
+      },
+      {
+        "kind": "key",
+        "atMs": 24820
+      },
+      {
+        "kind": "key",
+        "atMs": 24921
+      },
+      {
+        "kind": "key",
+        "atMs": 25020
+      },
+      {
+        "kind": "click",
+        "atMs": 25808
+      },
+      {
+        "kind": "key",
+        "atMs": 26116
+      },
+      {
+        "kind": "key",
+        "atMs": 26215
+      },
+      {
+        "kind": "key",
+        "atMs": 26314
+      },
+      {
+        "kind": "key",
+        "atMs": 26413
+      },
+      {
+        "kind": "key",
+        "atMs": 26512
+      },
+      {
+        "kind": "key",
+        "atMs": 26610
+      },
+      {
+        "kind": "click",
+        "atMs": 27424
+      },
+      {
+        "kind": "key",
+        "atMs": 27732
+      },
+      {
+        "kind": "key",
+        "atMs": 27830
+      },
+      {
+        "kind": "key",
+        "atMs": 27929
+      },
+      {
+        "kind": "key",
+        "atMs": 28028
+      },
+      {
+        "kind": "key",
+        "atMs": 28126
+      },
+      {
+        "kind": "key",
+        "atMs": 28224
+      },
+      {
+        "kind": "key",
+        "atMs": 28322
+      },
+      {
+        "kind": "key",
+        "atMs": 28422
+      },
+      {
+        "kind": "key",
+        "atMs": 28525
+      },
+      {
+        "kind": "key",
+        "atMs": 28629
+      },
+      {
+        "kind": "key",
+        "atMs": 28730
+      },
+      {
+        "kind": "key",
+        "atMs": 28830
+      },
+      {
+        "kind": "key",
+        "atMs": 28930
+      },
+      {
+        "kind": "key",
+        "atMs": 29031
+      },
+      {
+        "kind": "key",
+        "atMs": 29135
+      },
+      {
+        "kind": "key",
+        "atMs": 29236
+      },
+      {
+        "kind": "key",
+        "atMs": 29344
+      },
+      {
+        "kind": "key",
+        "atMs": 29446
+      },
+      {
+        "kind": "key",
+        "atMs": 29546
+      },
+      {
+        "kind": "key",
+        "atMs": 29648
+      },
+      {
+        "kind": "key",
+        "atMs": 29753
+      },
+      {
+        "kind": "key",
+        "atMs": 29851
+      },
+      {
+        "kind": "key",
+        "atMs": 29956
+      },
+      {
+        "kind": "click",
+        "atMs": 30759
+      },
+      {
+        "kind": "key",
+        "atMs": 31067
+      },
+      {
+        "kind": "key",
+        "atMs": 31164
+      },
+      {
+        "kind": "key",
+        "atMs": 31263
+      },
+      {
+        "kind": "key",
+        "atMs": 31361
+      },
+      {
+        "kind": "key",
+        "atMs": 31461
+      },
+      {
+        "kind": "key",
+        "atMs": 31559
+      },
+      {
+        "kind": "key",
+        "atMs": 31658
+      },
+      {
+        "kind": "key",
+        "atMs": 31760
+      },
+      {
+        "kind": "key",
+        "atMs": 31863
+      },
+      {
+        "kind": "key",
+        "atMs": 31965
+      },
+      {
+        "kind": "key",
+        "atMs": 32068
+      },
+      {
+        "kind": "key",
+        "atMs": 32167
+      },
+      {
+        "kind": "key",
+        "atMs": 32267
+      },
+      {
+        "kind": "click",
+        "atMs": 41775
+      }
+    ]
+  },
+  {
+    "chapter": "edit",
+    "startMs": 44797,
+    "endMs": 66521,
+    "sentences": [
+      {
+        "text": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations.",
+        "startMs": 432,
+        "endMs": 3793,
+        "method": "silence",
+        "absoluteStartMs": 45229
+      },
+      {
+        "text": "Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b.",
+        "startMs": 4455,
+        "endMs": 9953,
+        "method": "silence",
+        "absoluteStartMs": 49252
+      },
+      {
+        "text": "La note peut rappeler un détail pratique utile à l'organisation.",
+        "startMs": 10827,
+        "endMs": 13392,
+        "method": "silence",
+        "absoluteStartMs": 55624
+      },
+      {
+        "text": "Garde-la courte et évite les informations personnelles inutiles.",
+        "startMs": 13804,
+        "endMs": 16813,
+        "method": "silence",
+        "absoluteStartMs": 58601
+      },
+      {
+        "text": "Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+        "startMs": 17526,
+        "endMs": 21309,
+        "method": "silence",
+        "absoluteStartMs": 62323
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "edit",
+        "phrase": "Enregistrons, puis rouvrons la fiche",
+        "startMs": 17526,
+        "endMs": 21309,
+        "cueMs": 62325
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 45291
+      },
+      {
+        "kind": "click",
+        "atMs": 46141
+      },
+      {
+        "kind": "key",
+        "atMs": 46449
+      },
+      {
+        "kind": "key",
+        "atMs": 46548
+      },
+      {
+        "kind": "key",
+        "atMs": 46647
+      },
+      {
+        "kind": "key",
+        "atMs": 46746
+      },
+      {
+        "kind": "key",
+        "atMs": 46845
+      },
+      {
+        "kind": "key",
+        "atMs": 46943
+      },
+      {
+        "kind": "key",
+        "atMs": 47042
+      },
+      {
+        "kind": "key",
+        "atMs": 47142
+      },
+      {
+        "kind": "key",
+        "atMs": 47251
+      },
+      {
+        "kind": "key",
+        "atMs": 47355
+      },
+      {
+        "kind": "key",
+        "atMs": 47457
+      },
+      {
+        "kind": "key",
+        "atMs": 47556
+      },
+      {
+        "kind": "key",
+        "atMs": 47658
+      },
+      {
+        "kind": "key",
+        "atMs": 47760
+      },
+      {
+        "kind": "key",
+        "atMs": 47861
+      },
+      {
+        "kind": "key",
+        "atMs": 47963
+      },
+      {
+        "kind": "key",
+        "atMs": 48065
+      },
+      {
+        "kind": "click",
+        "atMs": 48875
+      },
+      {
+        "kind": "key",
+        "atMs": 49182
+      },
+      {
+        "kind": "key",
+        "atMs": 49280
+      },
+      {
+        "kind": "key",
+        "atMs": 49478
+      },
+      {
+        "kind": "key",
+        "atMs": 49681
+      },
+      {
+        "kind": "key",
+        "atMs": 49780
+      },
+      {
+        "kind": "key",
+        "atMs": 49878
+      },
+      {
+        "kind": "key",
+        "atMs": 49979
+      },
+      {
+        "kind": "key",
+        "atMs": 50083
+      },
+      {
+        "kind": "key",
+        "atMs": 50182
+      },
+      {
+        "kind": "key",
+        "atMs": 50282
+      },
+      {
+        "kind": "key",
+        "atMs": 50380
+      },
+      {
+        "kind": "key",
+        "atMs": 50478
+      },
+      {
+        "kind": "key",
+        "atMs": 50580
+      },
+      {
+        "kind": "key",
+        "atMs": 50680
+      },
+      {
+        "kind": "key",
+        "atMs": 50782
+      },
+      {
+        "kind": "key",
+        "atMs": 50887
+      },
+      {
+        "kind": "key",
+        "atMs": 50988
+      },
+      {
+        "kind": "key",
+        "atMs": 51088
+      },
+      {
+        "kind": "key",
+        "atMs": 51189
+      },
+      {
+        "kind": "key",
+        "atMs": 51291
+      },
+      {
+        "kind": "key",
+        "atMs": 51392
+      },
+      {
+        "kind": "key",
+        "atMs": 51491
+      },
+      {
+        "kind": "key",
+        "atMs": 51590
+      },
+      {
+        "kind": "key",
+        "atMs": 51687
+      },
+      {
+        "kind": "key",
+        "atMs": 51789
+      },
+      {
+        "kind": "click",
+        "atMs": 62823
+      },
+      {
+        "kind": "click",
+        "atMs": 64125
+      }
+    ]
+  },
+  {
+    "chapter": "availability",
+    "startMs": 66975,
+    "endMs": 88665,
+    "sentences": [
+      {
+        "text": "Les disponibilités donnent une indication générale :",
+        "startMs": 231,
+        "endMs": 3105,
+        "method": "silence",
+        "absoluteStartMs": 67206
+      },
+      {
+        "text": "matin, après-midi, soir, et une courte exception si nécessaire.",
+        "startMs": 3303,
+        "endMs": 7124,
+        "method": "silence",
+        "absoluteStartMs": 70278
+      },
+      {
+        "text": "Elles peuvent aider quand vous proposez un autre horaire.",
+        "startMs": 7683,
+        "endMs": 9802,
+        "method": "silence",
+        "absoluteStartMs": 74658
+      },
+      {
+        "text": "Elles ne réservent aucune place et ne remplacent pas le choix des créneaux.",
+        "startMs": 10536,
+        "endMs": 13308,
+        "method": "silence",
+        "absoluteStartMs": 77511
+      },
+      {
+        "text": "Ici, Maya est disponible le soir, sauf le vendredi.",
+        "startMs": 14268,
+        "endMs": 16377,
+        "method": "silence",
+        "absoluteStartMs": 81243
+      },
+      {
+        "text": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste.",
+        "startMs": 16562,
+        "endMs": 21262,
+        "method": "silence",
+        "absoluteStartMs": 83537
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "availability",
+        "phrase": "Ici, Maya est disponible le",
+        "startMs": 14268,
+        "endMs": 16377,
+        "cueMs": 81244
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 81723
+      },
+      {
+        "kind": "click",
+        "atMs": 82555
+      },
+      {
+        "kind": "key",
+        "atMs": 82863
+      },
+      {
+        "kind": "key",
+        "atMs": 82961
+      },
+      {
+        "kind": "key",
+        "atMs": 83061
+      },
+      {
+        "kind": "key",
+        "atMs": 83160
+      },
+      {
+        "kind": "key",
+        "atMs": 83259
+      },
+      {
+        "kind": "key",
+        "atMs": 83357
+      },
+      {
+        "kind": "key",
+        "atMs": 83455
+      },
+      {
+        "kind": "key",
+        "atMs": 83556
+      },
+      {
+        "kind": "key",
+        "atMs": 83659
+      },
+      {
+        "kind": "key",
+        "atMs": 83761
+      },
+      {
+        "kind": "key",
+        "atMs": 83866
+      },
+      {
+        "kind": "key",
+        "atMs": 83967
+      },
+      {
+        "kind": "key",
+        "atMs": 84069
+      },
+      {
+        "kind": "key",
+        "atMs": 84172
+      },
+      {
+        "kind": "key",
+        "atMs": 84275
+      },
+      {
+        "kind": "click",
+        "atMs": 86123
+      }
+    ]
+  },
+  {
+    "chapter": "no-email",
+    "startMs": 89123,
+    "endMs": 107352,
+    "sentences": [
+      {
+        "text": "Une personne peut avoir une fiche sans adresse email.",
+        "startMs": 429,
+        "endMs": 2868,
+        "method": "silence",
+        "absoluteStartMs": 89552
+      },
+      {
+        "text": "Nous créons René Aubert avec son téléphone seulement.",
+        "startMs": 3565,
+        "endMs": 5877,
+        "method": "silence",
+        "absoluteStartMs": 92688
+      },
+      {
+        "text": "Vous pouvez ainsi garder un contact et organiser son inscription manuellement.",
+        "startMs": 6515,
+        "endMs": 9740,
+        "method": "silence",
+        "absoluteStartMs": 95638
+      },
+      {
+        "text": "En revanche, le système ne peut pas lui envoyer un email tant que l'adresse manque.",
+        "startMs": 10448,
+        "endMs": 13791,
+        "method": "silence",
+        "absoluteStartMs": 99571
+      },
+      {
+        "text": "Prévoyez avec lui une autre manière de communiquer les horaires et les changements.",
+        "startMs": 14306,
+        "endMs": 18226,
+        "method": "silence",
+        "absoluteStartMs": 103429
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 89588
+      },
+      {
+        "kind": "click",
+        "atMs": 90406
+      },
+      {
+        "kind": "key",
+        "atMs": 90713
+      },
+      {
+        "kind": "key",
+        "atMs": 90811
+      },
+      {
+        "kind": "key",
+        "atMs": 90909
+      },
+      {
+        "kind": "click",
+        "atMs": 91788
+      },
+      {
+        "kind": "key",
+        "atMs": 92096
+      },
+      {
+        "kind": "key",
+        "atMs": 92195
+      },
+      {
+        "kind": "key",
+        "atMs": 92294
+      },
+      {
+        "kind": "key",
+        "atMs": 92392
+      },
+      {
+        "kind": "key",
+        "atMs": 92490
+      },
+      {
+        "kind": "key",
+        "atMs": 92588
+      },
+      {
+        "kind": "click",
+        "atMs": 93389
+      },
+      {
+        "kind": "key",
+        "atMs": 93698
+      },
+      {
+        "kind": "key",
+        "atMs": 93795
+      },
+      {
+        "kind": "key",
+        "atMs": 93893
+      },
+      {
+        "kind": "key",
+        "atMs": 93993
+      },
+      {
+        "kind": "key",
+        "atMs": 94090
+      },
+      {
+        "kind": "key",
+        "atMs": 94189
+      },
+      {
+        "kind": "key",
+        "atMs": 94287
+      },
+      {
+        "kind": "key",
+        "atMs": 94385
+      },
+      {
+        "kind": "key",
+        "atMs": 94484
+      },
+      {
+        "kind": "key",
+        "atMs": 94582
+      },
+      {
+        "kind": "key",
+        "atMs": 94681
+      },
+      {
+        "kind": "key",
+        "atMs": 94782
+      },
+      {
+        "kind": "key",
+        "atMs": 94889
+      },
+      {
+        "kind": "click",
+        "atMs": 101089
+      }
+    ]
+  },
+  {
+    "chapter": "search",
+    "startMs": 107804,
+    "endMs": 129381,
+    "sentences": [
+      {
+        "text": "La recherchez aide à retrouver une personne par son nom, son email ou son téléphone.",
+        "startMs": 0,
+        "endMs": 4607,
+        "method": "silence",
+        "absoluteStartMs": 107804
+      },
+      {
+        "text": "Les accents ne doivent pas compliquer la recherche.",
+        "startMs": 4999,
+        "endMs": 7301,
+        "method": "silence",
+        "absoluteStartMs": 112803
+      },
+      {
+        "text": "Attention aussi aux homonymes :",
+        "startMs": 7896,
+        "endMs": 9606,
+        "method": "silence",
+        "absoluteStartMs": 115700
+      },
+      {
+        "text": "ici, deux Stéphane Favre ont des coordonnées différentes.",
+        "startMs": 9991,
+        "endMs": 13281,
+        "method": "silence",
+        "absoluteStartMs": 117795
+      },
+      {
+        "text": "Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon.",
+        "startMs": 13626,
+        "endMs": 16932,
+        "method": "silence",
+        "absoluteStartMs": 121430
+      },
+      {
+        "text": "Vérifiez le contact et les inscriptions avant de modifier une fiche.",
+        "startMs": 17434,
+        "endMs": 21238,
+        "method": "silence",
+        "absoluteStartMs": 125238
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "search",
+        "phrase": "ici, deux Stéphane Favre ont",
+        "startMs": 9991,
+        "endMs": 13281,
+        "cueMs": 117798
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 108320
+      },
+      {
+        "kind": "key",
+        "atMs": 108629
+      },
+      {
+        "kind": "key",
+        "atMs": 108728
+      },
+      {
+        "kind": "key",
+        "atMs": 108831
+      },
+      {
+        "kind": "key",
+        "atMs": 108931
+      },
+      {
+        "kind": "key",
+        "atMs": 109031
+      },
+      {
+        "kind": "key",
+        "atMs": 109130
+      },
+      {
+        "kind": "click",
+        "atMs": 118319
+      }
+    ]
+  },
+  {
+    "chapter": "filter",
+    "startMs": 129843,
+    "endMs": 154219,
+    "sentences": [
+      {
+        "text": "Avec le filtre de tags, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Tous les tags.",
+        "startMs": 326,
+        "endMs": 6006,
+        "method": "silence",
+        "absoluteStartMs": 130169
+      },
+      {
+        "text": "Les en-têtes permettent aussi de trier la liste.",
+        "startMs": 6526,
+        "endMs": 8778,
+        "method": "silence",
+        "absoluteStartMs": 136369
+      },
+      {
+        "text": "Les heures planifiées additionnent les durées des créneaux passés, confirmés et non annulés.",
+        "startMs": 9518,
+        "endMs": 13906,
+        "method": "silence",
+        "absoluteStartMs": 139361
+      },
+      {
+        "text": "Les heures attestées en sont la part avec une présence enregistrée, pas un chronométrage du travail réel.",
+        "startMs": 14468,
+        "endMs": 20063,
+        "method": "silence",
+        "absoluteStartMs": 144311
+      },
+      {
+        "text": "Ces repères aident à organiser ;",
+        "startMs": 20543,
+        "endMs": 22237,
+        "method": "silence",
+        "absoluteStartMs": 150386
+      },
+      {
+        "text": "ils ne classent pas la valeur des bénévoles.",
+        "startMs": 22658,
+        "endMs": 24086,
+        "method": "silence",
+        "absoluteStartMs": 152501
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "filter",
+        "phrase": "Les en-têtes permettent aussi de",
+        "startMs": 6526,
+        "endMs": 8778,
+        "cueMs": 136371
+      },
+      {
+        "segmentId": "filter",
+        "phrase": "Les heures planifiées additionnent les",
+        "startMs": 9518,
+        "endMs": 13906,
+        "cueMs": 139363
+      },
+      {
+        "segmentId": "filter",
+        "phrase": "Les heures planifiées additionnent les",
+        "startMs": 9518,
+        "endMs": 13906,
+        "cueMs": 140170
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 130370
+      },
+      {
+        "kind": "key",
+        "atMs": 130680
+      },
+      {
+        "kind": "click",
+        "atMs": 132038
+      },
+      {
+        "kind": "click",
+        "atMs": 136837
+      },
+      {
+        "kind": "click",
+        "atMs": 139853
+      },
+      {
+        "kind": "click",
+        "atMs": 140653
+      }
+    ]
+  },
+  {
+    "chapter": "deactivate",
+    "startMs": 154671,
+    "endMs": 176160,
+    "sentences": [
+      {
+        "text": "Pour mettre une fiche de côté, vous pouvez la désactiver.",
+        "startMs": 290,
+        "endMs": 2904,
+        "method": "silence",
+        "absoluteStartMs": 154961
+      },
+      {
+        "text": "Ici, Maya n'a aucune inscription :",
+        "startMs": 3611,
+        "endMs": 5696,
+        "method": "silence",
+        "absoluteStartMs": 158282
+      },
+      {
+        "text": "nous confirmons sa désactivation, puis elle disparaît de la liste habituelle.",
+        "startMs": 6242,
+        "endMs": 10041,
+        "method": "silence",
+        "absoluteStartMs": 160913
+      },
+      {
+        "text": "Avec Inclure inactifs, nous la retrouvons.",
+        "startMs": 10590,
+        "endMs": 12447,
+        "method": "silence",
+        "absoluteStartMs": 165261
+      },
+      {
+        "text": "Dans Éditer, la case Membre actif permet de la réactiver.",
+        "startMs": 12781,
+        "endMs": 17446,
+        "method": "silence",
+        "absoluteStartMs": 167452
+      },
+      {
+        "text": "Après enregistrement, elle revient parmi les membres affichés normalement.",
+        "startMs": 18248,
+        "endMs": 21073,
+        "method": "silence",
+        "absoluteStartMs": 172919
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "deactivate",
+        "phrase": "nous confirmons sa désactivation, puis",
+        "startMs": 6242,
+        "endMs": 10041,
+        "cueMs": 160915
+      },
+      {
+        "segmentId": "deactivate",
+        "phrase": "Avec Inclure inactifs, nous la",
+        "startMs": 10590,
+        "endMs": 12447,
+        "cueMs": 165262
+      },
+      {
+        "segmentId": "deactivate",
+        "phrase": "Dans Éditer, la case Membre",
+        "startMs": 12781,
+        "endMs": 17446,
+        "cueMs": 167454
+      },
+      {
+        "segmentId": "deactivate",
+        "phrase": "Après enregistrement, elle revient parmi",
+        "startMs": 18248,
+        "endMs": 21073,
+        "cueMs": 172921
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 155187
+      },
+      {
+        "kind": "click",
+        "atMs": 156818
+      },
+      {
+        "kind": "click",
+        "atMs": 161386
+      },
+      {
+        "kind": "click",
+        "atMs": 165734
+      },
+      {
+        "kind": "click",
+        "atMs": 167918
+      },
+      {
+        "kind": "click",
+        "atMs": 168717
+      },
+      {
+        "kind": "click",
+        "atMs": 173384
+      },
+      {
+        "kind": "click",
+        "atMs": 174685
+      }
+    ]
+  },
+  {
+    "chapter": "activity",
+    "startMs": 176612,
+    "endMs": 197306,
+    "sentences": [
+      {
+        "text": "Le lien Activité ouvre l'historique factuel d'une personne.",
+        "startMs": 408,
+        "endMs": 3877,
+        "method": "silence",
+        "absoluteStartMs": 177020
+      },
+      {
+        "text": "Pour Camille, la page est déjà renseignée :",
+        "startMs": 4628,
+        "endMs": 6372,
+        "method": "silence",
+        "absoluteStartMs": 181240
+      },
+      {
+        "text": "on peut parcourir les faits enregistrés, leurs dates et l'événement concerné.",
+        "startMs": 7036,
+        "endMs": 9334,
+        "method": "silence",
+        "absoluteStartMs": 183648
+      },
+      {
+        "text": "Cette vue rassemble notamment les inscriptions et les autres actions disponibles dans son historique.",
+        "startMs": 9666,
+        "endMs": 15858,
+        "method": "silence",
+        "absoluteStartMs": 186278
+      },
+      {
+        "text": "Elle ne donne pas de score.",
+        "startMs": 16488,
+        "endMs": 17415,
+        "method": "silence",
+        "absoluteStartMs": 193100
+      },
+      {
+        "text": "Une inscription n'est pas à elle seule une preuve de présence.",
+        "startMs": 17733,
+        "endMs": 20337,
+        "method": "silence",
+        "absoluteStartMs": 194345
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "activity",
+        "phrase": "Cette vue rassemble notamment les",
+        "startMs": 9666,
+        "endMs": 15858,
+        "cueMs": 186279
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 177133
+      },
+      {
+        "kind": "click",
+        "atMs": 178787
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 197759,
+    "endMs": 218789,
+    "sentences": [
+      {
+        "text": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories utiles et des informations que l'on comprend.",
+        "startMs": 316,
+        "endMs": 6737,
+        "method": "silence",
+        "absoluteStartMs": 198075
+      },
+      {
+        "text": "Mets les fiches à jour quand une personne te signale un changement.",
+        "startMs": 7408,
+        "endMs": 9670,
+        "method": "silence",
+        "absoluteStartMs": 205167
+      },
+      {
+        "text": "Utilise les disponibilités pour dialoguer, pas pour décider à sa place.",
+        "startMs": 10395,
+        "endMs": 14133,
+        "method": "silence",
+        "absoluteStartMs": 208154
+      },
+      {
+        "text": "Et garde seulement les notes nécessaires :",
+        "startMs": 14693,
+        "endMs": 16343,
+        "method": "silence",
+        "absoluteStartMs": 212452
+      },
+      {
+        "text": "l'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.",
+        "startMs": 16551,
+        "endMs": 20737,
+        "method": "silence",
+        "absoluteStartMs": 214310
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

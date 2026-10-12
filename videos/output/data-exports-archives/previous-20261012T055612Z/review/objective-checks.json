@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T04:06:16.306Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 7,
+    "keys": 2
+  },
+  "music": {
+    "voicedWindows": 264,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.6
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "Colonnes inscriptions/date création absentes pendant leur annonce ; Derniers envois tronqué ; formule =1+1 hors écran pendant explication. Journal ouvert +7,13 s ; Rapports +6,26 s ; counts +3,21 s ; retour journal +4,35 s. Choose File anglais dans Paramètres. 54 images finales et guide à 253,5 s revus, ASR/validate/objectifs passent ; vrais CSV/JSON et copie figée vérifiés. Signalement de changement de voix CSV non confirmé par le contre-contrôle audio seul. Aucun nouveau défaut de disposition produit hormis les actions Membres hors largeur à 1280 px.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

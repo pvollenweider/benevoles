@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:09:53.858Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:03:46.929Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "53465209d788219b3af48f2659622b5f8c412ecf14c3e0c16125e36df00e6c09",
-  "clipSha256": "72989afdefb50eb5bb0c69e6c8ae7934c1129765982095244343529c3afedeeb",
+  "clipSha256": "ac5f89c915438df6cd8a1855fe8c993bb13d6da7f0f2e512beda5680e9e0c942",
   "scene": "csv",
   "review": {
     "heardOpening": "Les accents sont conservés",
     "checkpoints": [
       {
-        "spokenSeconds": 8.8,
-        "spoken": "Regardez ce numéro qui commence par plus quarante et un",
-        "visibleSeconds": 8.5,
-        "visible": "Colonne Téléphone affichée avec les numéros au format international précédés d'une apostrophe",
+        "spokenSeconds": 9,
+        "spoken": "Regardez ce numéro qui commence par plus quarante et un : une apostrophe le précède",
+        "visibleSeconds": 0,
+        "visible": "Colonne Téléphone affichant les numéros précédés d'une apostrophe comme '+41 79 000 0001",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
+        "spokenSeconds": 15,
         "spoken": "Une valeur qui commence par égal, plus, moins ou arobase est protégée",
-        "visibleSeconds": 14,
-        "visible": "Retour sur la colonne Notes montrant les caractères initiaux protégés",
+        "visibleSeconds": 15,
+        "visible": "Affichage des colonnes de droite dont la colonne Notes avec des préfixes apostrophes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.3,
+        "spokenSeconds": 23.5,
         "spoken": "Notre exemple égal un plus un reste une valeur textuelle",
-        "visibleSeconds": 22,
-        "visible": "Ligne affichant la valeur '=1+1 dans la colonne Notes",
+        "visibleSeconds": 15,
+        "visible": "Valeur '=1+1 affichée dans la colonne Notes sur la ligne de Léa Rochat",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier adapté à la démonstration."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les éléments du tableau."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

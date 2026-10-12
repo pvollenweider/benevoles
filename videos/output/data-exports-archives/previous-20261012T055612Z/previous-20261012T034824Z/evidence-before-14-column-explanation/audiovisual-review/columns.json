@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:09:41.264Z",
+  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "promptSha256": "6de9b8ae5e4150cb3e47ca9e2473ac0ec2470026e47672d729298dfdad3c2509",
+  "clipSha256": "a39f463513f2220cb772faadc25fd7700facf3bb0e918576d91d1d7d065e4869",
+  "scene": "columns",
+  "review": {
+    "heardOpening": "Une ligne représente une fiche membre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif",
+        "visibleSeconds": 2.5,
+        "visible": "Colonnes Prénom, Nom, Email, Téléphone, Étiquettes et Actif affichées dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement horizontal révélant les colonnes Date de naissance, Disponibilités, Remarque de disponibilité et Notes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "le nombre d'inscriptions actives et la date de création de la fiche",
+        "visibleSeconds": 13,
+        "visible": "Second défilement affichant les colonnes Inscriptions et Membre depuis",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et bien rythmée sur les mouvements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

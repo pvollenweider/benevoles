@@ -1,0 +1,344 @@
+{
+  "slug": "data-exports-archives",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T04:04:31.147Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+    "sourceTree": "6bd88ba443f7d5ee07d2901c2716c26c9e295066",
+    "productSourceSha256": "760923bf907b82f394b0fd73f5126b0ab9fb3191ae0733a02658aa2af7869cf9",
+    "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+    "snapshot": "/tmp/benevoles-video-production.batch10",
+    "builtAt": "2026-10-12T02:25:28.637Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-exports",
+    "scenario": "DATA_EXPORTS_ARCHIVES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 32621
+    },
+    {
+      "kind": "key",
+      "atMs": 32930
+    },
+    {
+      "kind": "key",
+      "atMs": 33303
+    },
+    {
+      "kind": "click",
+      "atMs": 40371
+    },
+    {
+      "kind": "click",
+      "atMs": 141078
+    },
+    {
+      "kind": "click",
+      "atMs": 142378
+    },
+    {
+      "kind": "click",
+      "atMs": 143876
+    },
+    {
+      "kind": "click",
+      "atMs": 174925
+    },
+    {
+      "kind": "click",
+      "atMs": 177824
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1532,
+      "endMs": 25101
+    },
+    {
+      "id": "members",
+      "startMs": 27361,
+      "endMs": 52901
+    },
+    {
+      "id": "columns",
+      "startMs": 55169,
+      "endMs": 97440
+    },
+    {
+      "id": "csv",
+      "startMs": 99704,
+      "endMs": 130497
+    },
+    {
+      "id": "journal",
+      "startMs": 133944,
+      "endMs": 165189
+    },
+    {
+      "id": "archive",
+      "startMs": 168666,
+      "endMs": 197069
+    },
+    {
+      "id": "contents",
+      "startMs": 199330,
+      "endMs": 228855
+    },
+    {
+      "id": "privacy",
+      "startMs": 231116,
+      "endMs": 263863
+    },
+    {
+      "id": "result",
+      "startMs": 267303,
+      "endMs": 296106
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Nous allons récupérer les membres",
+      "startMs": 7802,
+      "endMs": 11554,
+      "cueMs": 9334
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Il contient les membres de",
+      "startMs": 4763,
+      "endMs": 7972,
+      "cueMs": 32127
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Gardons un filtre visible, téléchargeons",
+      "startMs": 12541,
+      "endMs": 17393,
+      "cueMs": 39904
+    },
+    {
+      "segmentId": "members",
+      "phrase": "On retrouve aussi une personne",
+      "startMs": 17859,
+      "endMs": 19267,
+      "cueMs": 45222
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Le téléchargement ne réactive personne",
+      "startMs": 20041,
+      "endMs": 25128,
+      "cueMs": 47405
+    },
+    {
+      "segmentId": "columns",
+      "phrase": "En faisant défiler les colonnes",
+      "startMs": 6087,
+      "endMs": 17170,
+      "cueMs": 61257
+    },
+    {
+      "segmentId": "csv",
+      "phrase": "Si votre tableur demande un",
+      "startMs": 5682,
+      "endMs": 8354,
+      "cueMs": 105387
+    },
+    {
+      "segmentId": "csv",
+      "phrase": "Une valeur qui commence par",
+      "startMs": 15038,
+      "endMs": 22284,
+      "cueMs": 114743
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Choisissons un type, puis Exporter",
+      "startMs": 6648,
+      "endMs": 9163,
+      "cueMs": 140596
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Choisissons un type, puis Exporter",
+      "startMs": 6648,
+      "endMs": 9163,
+      "cueMs": 141886
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Même avec ce filtre, le",
+      "startMs": 9460,
+      "endMs": 12940,
+      "cueMs": 143405
+    },
+    {
+      "segmentId": "journal",
+      "phrase": "Il indique la date, l'acteur",
+      "startMs": 13555,
+      "endMs": 18482,
+      "cueMs": 147500
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le lien Archive de l’événement",
+      "startMs": 5765,
+      "endMs": 8406,
+      "cueMs": 174431
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le lien Archive de l’événement",
+      "startMs": 5765,
+      "endMs": 8406,
+      "cueMs": 175734
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Faites cette copie avant de",
+      "startMs": 8682,
+      "endMs": 12016,
+      "cueMs": 177350
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "c’est un format structuré pour",
+      "startMs": 16497,
+      "endMs": 19348,
+      "cueMs": 185163
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Il est limité à cet",
+      "startMs": 19733,
+      "endMs": 24769,
+      "cueMs": 188400
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "On retrouve les réglages, les",
+      "startMs": 2980,
+      "endMs": 7839,
+      "cueMs": 202311
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "On retrouve les réglages, les",
+      "startMs": 2980,
+      "endMs": 7839,
+      "cueMs": 203079
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 207295
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les pages, les questions et",
+      "startMs": 7964,
+      "endMs": 13993,
+      "cueMs": 208078
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Des nombres récapitulent plusieurs de",
+      "startMs": 14569,
+      "endMs": 16976,
+      "cueMs": 213898
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Des nombres récapitulent plusieurs de",
+      "startMs": 14569,
+      "endMs": 16976,
+      "cueMs": 214693
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Vérifions un créneau et une",
+      "startMs": 17781,
+      "endMs": 19906,
+      "cueMs": 217113
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les jetons d'accès et les",
+      "startMs": 20341,
+      "endMs": 23064,
+      "cueMs": 219672
+    },
+    {
+      "segmentId": "contents",
+      "phrase": "Les jetons d'accès et les",
+      "startMs": 20341,
+      "endMs": 23064,
+      "cueMs": 220462
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Si une fiche change dans",
+      "startMs": 3780,
+      "endMs": 7556,
+      "cueMs": 234898
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Consultez les durées de conservation",
+      "startMs": 20578,
+      "endMs": 23624,
+      "cueMs": 251695
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Consultez les durées de conservation",
+      "startMs": 20578,
+      "endMs": 23624,
+      "cueMs": 252832
+    },
+    {
+      "segmentId": "privacy",
+      "phrase": "Il n'y a pas de",
+      "startMs": 24353,
+      "endMs": 27991,
+      "cueMs": 255471
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Pour conserver un événement et",
+      "startMs": 8703,
+      "endMs": 12235,
+      "cueMs": 276007
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Les plannings et les listes",
+      "startMs": 12972,
+      "endMs": 16305,
+      "cueMs": 280277
+    },
+    {
+      "segmentId": "result",
+      "phrase": "ils répondent à un autre",
+      "startMs": 16726,
+      "endMs": 17927,
+      "cueMs": 284030
+    }
+  ]
+}

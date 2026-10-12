@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T04:46:35.530Z",
+  "revalidatedAt": "2026-10-12T04:46:35.532Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "743bb52b35dc792aa504405cce356645bf857423380060d38219b1a166ad2793",
+      "recognized": "Certaines missions demandent une règle simple, un âge minimum, un nombre maximum de créneaux ou l'appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l'inscription.",
+      "expected": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings",
+      "audioSha256": "61d59e917a065b6d2a07997f84913b1f2d6104fcbd0581aa7ff45743155082fa",
+      "recognized": "Les règles se configurent au bon niveau. L'âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier pour rester cohérent sur toutes ses plages horaires. Ici, buvette est limitée à deux créneaux et sécurité exige le tag sécurité.",
+      "expected": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+      "wordErrorRate": 0.022727272727272728,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "age",
+      "audioSha256": "ac80dd4c971343f8d473bde3123d8674ec6aced5d80fd06a15ed26bd8d21ca4b",
+      "recognized": "Sur le planning public, la buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle. Modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "expected": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "quota",
+      "audioSha256": "1f66fbf71799354a0a42b9b4528d8d2155b71de39c4c3cb65c91da86bca211b1",
+      "recognized": "Camille possède déjà deux engagements de buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ses inscriptions. Les autres créneaux restent visibles mais indiquent que la limite de deux est atteinte. Elle peut d'abord retirer un engagement si elle souhaite en choisir un autre.",
+      "expected": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "wordErrorRate": 0.020833333333333332,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reserved",
+      "audioSha256": "5842b5e8d23df324aa71bb1565fc791cf62ea0f85dcdbd568f3de355eb554d6d",
+      "recognized": "Sans invitation, le poste sécurité reste visible, mais marqué réservé à certains membres. Le message ne révèle pas les tags internes, il demande simplement d'utiliser le lien personnel reçu par e-mail. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "expected": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "eligible",
+      "audioSha256": "d9d2601412238917a075c13d635035cfd5a738d8a2452c4568a1e00cb4e11807",
+      "recognized": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable. Le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l'inscription. Il n'y a donc ni compte à créer, ni code à recopier.",
+      "expected": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "f3757dd4b9b934d49ca19c24d477327e9e5c664aa6dfbf9e27e78aa35c269e69",
+      "recognized": "Ces règles doivent rester compréhensibles. Dans les paramètres de l'événement, la description permet d'expliquer les critères. Vérifions aussi le téléphone obligatoire si l'équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer. Son tag sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "expected": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer : son tag sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

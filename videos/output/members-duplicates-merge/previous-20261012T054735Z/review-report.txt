@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "MEMBERS_DUPLICATES_MERGE",
+  "status": "NOT READY",
+  "duration": 219.16,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 195,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.5,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "problems": "Décalages : ouverture Doublons +3,85 s, Ignorer +4,89 s, téléphone après sa phrase, notes +6,10 s, retour fiche +5,39 s, ancien lien +3,73 s. Case cochée pendant « on la décoche ». 42 images finales, ASR et contrôles objectifs passent ; aucun email envoyé, fusion/liens réellement vérifiés. Pas de nouveau défaut de disposition. Le contre-contrôle audio seul confirme « fuche » à 14 s de confirm (ASR global 0 % ne détectait pas cette prononciation). Cache conservé, aucun remplacement sonore.",
+  "sourceChanges": "Ancres de phrase corrigées dans record-member-merge ; éviter la resélection inutile de l’email. Fixture originale créée puis noms migrés par garde réelle ; reset conserve organisation/date/noms et refuse les historiques absents. Aucun re-film.",
+  "report": "videos/output/members-duplicates-merge/review-report.txt",
+  "videoSha256": "df258f713444d4734d49ed470bac295799d31c9e6b31c6109d85273914e03a23"
+}
+Real-time subjective listening unavailable; status uses objective final MP4 checks, measured sentence/actions, final frames, independent ASR and audio-only pronunciation countercheck.

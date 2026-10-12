@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00:01.532 --> 00:00:06.735
+Besoin de garder une copie de vos données
+ou de les reprendre dans un autre outil ?
+
+00:00:06.735 --> 00:00:10.102
+Les exports permettent de les télécharger
+sans demander une intervention. Nous
+
+00:00:10.102 --> 00:00:13.469
+allons récupérer les membres, le journal
+de l'organisation et l'archive d'un
+
+00:00:13.469 --> 00:00:17.447
+événement. Chaque fichier a son usage. Les
+personnes et les informations de cette
+
+00:00:17.447 --> 00:00:20.202
+démonstration sont fictives. Nous
+ouvrirons les vrais fichiers téléchargés,
+
+00:00:20.202 --> 00:00:23.875
+dans un visualiseur de lecture, pour
+comprendre ce qu'ils contiennent et ce
+
+00:00:23.875 --> 00:00:25.099
+qu'ils ne font pas.
+
+00:00:27.361 --> 00:00:31.802
+Depuis Membres, Exporter les membres
+télécharge un fichier CSV. Il contient les
+
+00:00:31.802 --> 00:00:35.874
+membres de l'organisation, y compris les
+fiches désactivées. Une recherche à
+
+00:00:35.874 --> 00:00:40.685
+l'écran ne transforme pas cet export en
+liste de quelques personnes. Gardons un
+
+00:00:40.685 --> 00:00:44.386
+filtre visible, téléchargeons, puis
+comparons le fichier avec la liste
+
+00:00:44.386 --> 00:00:48.458
+complète. On retrouve aussi une personne
+désactivée. Le téléchargement ne réactive
+
+00:00:48.458 --> 00:00:52.899
+personne, ne change aucune inscription et
+ne remplace pas une procédure d'import.
+
+00:00:55.169 --> 00:00:59.941
+Une ligne représente une fiche membre.
+Lisons le prénom, le nom, l'email et le
+
+00:00:59.941 --> 00:01:04.373
+téléphone, puis les étiquettes et l'état
+actif. En faisant défiler les colonnes, on
+
+00:01:04.373 --> 00:01:08.123
+retrouve la date de naissance, les
+disponibilités, leur remarque, les notes
+
+00:01:08.123 --> 00:01:12.895
+internes, le nombre d'inscriptions actives
+et la date de création de la fiche. Les
+
+00:01:12.895 --> 00:01:16.986
+derniers envois indiquent les résultats
+des emails de cette personne, avec leur
+
+00:01:16.986 --> 00:01:21.758
+date et la raison connue, sans la réponse
+brute du serveur. La dernière acceptation
+
+00:01:21.758 --> 00:01:26.531
+de la Convention indique quand elle a été
+acceptée lors d'une inscription. Une case
+
+00:01:26.531 --> 00:01:30.962
+vide n'atteste aucune acceptation. Les
+notes sont donc dans ce fichier. Ce n'est
+
+00:01:30.962 --> 00:01:35.394
+pas seulement un annuaire à distribuer. Le
+nombre d'inscriptions n'est pas un total
+
+00:01:35.394 --> 00:01:37.439
+d'heures ni une attestation de présence.
+
+00:01:39.704 --> 00:01:44.253
+Les accents sont conservés et les colonnes
+sont séparées par des points-virgules. Si
+
+00:01:44.253 --> 00:01:49.151
+votre tableur demande un choix, utilisez
+le texte en UTF huit et ce séparateur.
+
+00:01:49.151 --> 00:01:54.050
+Regardez ce numéro qui commence par plus
+quarante et un : une apostrophe le
+
+00:01:54.050 --> 00:01:58.598
+précède. C'est volontaire. Une valeur qui
+commence par égal, plus, moins ou arobase
+
+00:01:58.598 --> 00:02:03.497
+est protégée pour être lue comme du texte,
+pas exécutée comme une formule. Notre
+
+00:02:03.497 --> 00:02:08.046
+exemple égal un plus un reste une valeur
+textuelle. N'enlevez pas cette protection
+
+00:02:08.046 --> 00:02:10.495
+simplement pour rendre la colonne plus
+jolie.
+
+00:02:13.944 --> 00:02:18.461
+Pour garder une copie des actions de
+l'équipe, ouvrons le journal d'activité
+
+00:02:18.461 --> 00:02:23.355
+dans les paramètres. Choisissons un type,
+puis Exporter tout le journal. Même avec
+
+00:02:23.355 --> 00:02:28.625
+ce filtre, le CSV contient tout le journal
+de l'organisation. Il indique la date,
+
+00:02:28.625 --> 00:02:32.390
+l'acteur, son type, l'action, l'entité,
+l'identifiant et les changements. Les
+
+00:02:32.390 --> 00:02:38.413
+lignes sont classées de la plus ancienne à
+la plus récente. Ce fichier aide à relire
+
+00:02:38.413 --> 00:02:44.060
+ce qui s'est passé ; il n'est ni une
+sauvegarde complète ni une commande pour
+
+00:02:44.060 --> 00:02:45.189
+annuler les actions.
+
+00:02:48.666 --> 00:02:52.772
+Pour conserver un événement complet,
+ouvrez Rapports et descendez tout en bas,
+
+00:02:52.772 --> 00:02:56.536
+dans Archive. Le lien Archive de
+l’événement, JSON, télécharge le fichier.
+
+00:02:56.536 --> 00:03:00.642
+Faites cette copie avant de quitter
+l’outil ou de supprimer l’événement. Le
+
+00:03:00.642 --> 00:03:05.775
+JSON n’est pas une feuille à afficher au
+stand : c’est un format structuré pour
+
+00:03:05.775 --> 00:03:10.566
+conserver ou traiter les données. Il est
+limité à cet événement, sans inclure tous
+
+00:03:10.566 --> 00:03:14.330
+les autres événements ni tout l’annuaire
+de l’organisation. Le téléchargement ne
+
+00:03:14.330 --> 00:03:17.067
+crée pas une nouvelle édition de la fête.
+
+00:03:19.330 --> 00:03:23.548
+Ouvrons les différentes parties du vrai
+fichier. On retrouve les réglages, les
+
+00:03:23.548 --> 00:03:27.414
+créneaux et les inscriptions avec les
+données des bénévoles concernés. Les
+
+00:03:27.414 --> 00:03:31.984
+pages, les questions et leurs réponses,
+les responsables, les jalons et le journal
+
+00:03:31.984 --> 00:03:35.498
+sont également présents. Des nombres
+récapitulent plusieurs de ces collections.
+
+00:03:35.498 --> 00:03:40.419
+Vérifions un créneau et une réponse de
+notre exemple. Les jetons d'accès et les
+
+00:03:40.419 --> 00:03:45.692
+liens personnels ne sont pas exportés.
+Cela ne rend pas le fichier anonyme : les
+
+00:03:45.692 --> 00:03:48.855
+coordonnées et d'autres informations
+personnelles restent dans les données.
+
+00:03:51.116 --> 00:03:57.003
+Une fois téléchargée, cette copie ne se
+met pas à jour. Si une fiche change dans
+
+00:03:57.003 --> 00:04:00.315
+l'application, l'ancien fichier reste
+identique. Rangez-le dans un espace
+
+00:04:00.315 --> 00:04:03.994
+protégé, limitez les destinataires et
+supprimez les copies devenues inutiles.
+
+00:04:03.994 --> 00:04:08.409
+Archiver un événement dans l'application
+n'est pas le supprimer ; une suppression
+
+00:04:08.409 --> 00:04:12.825
+efface ses données et son historique.
+Consultez les durées de conservation dans
+
+00:04:12.825 --> 00:04:18.712
+le guide avant de décider. Il n'y a pas de
+bouton pour restaurer un événement depuis
+
+00:04:18.712 --> 00:04:23.127
+ce JSON. Ne le présentez pas comme une
+sauvegarde que l'application saurait
+
+00:04:23.127 --> 00:04:23.863
+réimporter automatiquement.
+
+00:04:27.303 --> 00:04:31.991
+Pour travailler sur les fiches, prenez le
+CSV des membres. Pour relire les actions
+
+00:04:31.991 --> 00:04:36.009
+de l'organisation, prenez le CSV du
+journal. Pour conserver un événement et
+
+00:04:36.009 --> 00:04:40.362
+ses données liées, prenez son archive
+JSON. Les plannings et les listes à
+
+00:04:40.362 --> 00:04:44.715
+remettre sur place se choisissent dans
+Rapports : ils répondent à un autre
+
+00:04:44.715 --> 00:04:49.068
+besoin. Nous avons téléchargé, ouvert et
+vérifié chaque type de fichier. Le bon
+
+00:04:49.068 --> 00:04:54.091
+export, au bon endroit et pour les bonnes
+personnes : c'est une manière simple de
+
+00:04:54.091 --> 00:04:56.100
+garder la maîtrise de vos données.
+

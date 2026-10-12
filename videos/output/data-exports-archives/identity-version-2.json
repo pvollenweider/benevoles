@@ -17,21 +17,21 @@
     "video-data-exports-member-2",
     "video-data-exports-member-3"
   ],
-  "actionSha256": "d10e23423043ccf5910a1da9eb0496d3d86454b1a6525ec58276c5e851153910",
+  "actionSha256": "d99f95176954f8ba2e3a637a7642da52fcf259848b7e360dc506c58633f0951f",
   "product": {
-    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
-    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
-    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
-    "buildId": "uqE7YLJo_7r8CbyaqRify",
-    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
-    "builtAt": "2026-10-06T18:15:27.264Z"
+    "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+    "sourceTree": "6bd88ba443f7d5ee07d2901c2716c26c9e295066",
+    "productSourceSha256": "760923bf907b82f394b0fd73f5126b0ab9fb3191ae0733a02658aa2af7869cf9",
+    "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+    "snapshot": "/tmp/benevoles-video-production.batch10",
+    "builtAt": "2026-10-12T02:25:28.637Z"
   },
-  "migratedAt": "2026-10-06T18:25:47.142Z",
-  "protectedBeforeSha256": "fd455c4619b32368798b462a54ef4df8b2cad5d8c0043f2caaa5fc1ee477b979",
-  "protectedAfterSha256": "fd455c4619b32368798b462a54ef4df8b2cad5d8c0043f2caaa5fc1ee477b979",
+  "migratedAt": "2026-10-12T03:54:27.898Z",
+  "protectedBeforeSha256": "62586d0789663aa671ddf59d6ccd661e2056ae78c19ccc198a9dd496f5a3dc42",
+  "protectedAfterSha256": "62586d0789663aa671ddf59d6ccd661e2056ae78c19ccc198a9dd496f5a3dc42",
   "authorHistoryIds": [
-    "cmux07cqd000bo1a52byny9tb"
+    "cmv4pworh0066nba5g0u8q2mv"
   ],
-  "leaderId": "cmuvpbr9u0006jsa5ia66qez7",
+  "leaderId": "cmv4pwjn9000119a5xwrplg1z",
   "note": "Existing sent email bodies and acceptance hashes are immutable; no outbox rewrite or deletion."
 }

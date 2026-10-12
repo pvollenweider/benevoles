@@ -1,12 +1,12 @@
 {
   "anchor": "Les points à vérifier évitent les surprises. Sur un même créneau,",
-  "windowStart": 56.891999999999996,
+  "windowStart": 62.848,
   "result": {
     "found": true,
-    "startSeconds": 27.32,
-    "wordsHeard": "Les points"
+    "startSeconds": 22.38,
+    "wordsHeard": "Les points à vérifier évitent les surprises. Sur un même créneau,"
   },
-  "onset": 84.21199999999999,
-  "proposedCut": 84.12239550000001,
+  "onset": 85.228,
+  "proposedCut": 84.6995,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:40:53.460Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "06bb4cc729b3d72a2a297a6317cb6b11eac9740d51d6922e4a32aac08796f3a1",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2.1,
+        "visible": "Le bouton « Ajouter une question » est cliqué et le formulaire s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.7,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 4.2,
+        "visible": "La saisie de « Taille de t-shirt » est effectuée dans le champ d'intitulé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "choisissons Choix unique",
+        "visibleSeconds": 9.3,
+        "visible": "Le type de réponse « Choix unique » est sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.7,
+        "spoken": "Voici S, M, L et XL",
+        "visibleSeconds": 11.8,
+        "visible": "Les options S, M, L et XL apparaissent déjà saisies dans le champ des choix",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 25.3,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 24.9,
+        "visible": "La case « Réponse obligatoire » est cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.3,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 30,
+        "spoken": "La question est maintenant dans la liste",
+        "visibleSeconds": 28.5,
+        "visible": "La question enregistrée s'affiche dans la liste des questions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

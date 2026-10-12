@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "DATA_EXPORTS_ARCHIVES",
+  "status": "NOT READY",
+  "duration": 299.16,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 264,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "Colonnes inscriptions/date création absentes pendant leur annonce ; Derniers envois tronqué ; formule =1+1 hors écran pendant explication. Journal ouvert +7,13 s ; Rapports +6,26 s ; counts +3,21 s ; retour journal +4,35 s. Choose File anglais dans Paramètres. 54 images finales et guide à 253,5 s revus, ASR/validate/objectifs passent ; vrais CSV/JSON et copie figée vérifiés. Signalement de changement de voix CSV non confirmé par le contre-contrôle audio seul. Aucun nouveau défaut de disposition produit hormis les actions Membres hors largeur à 1280 px.",
+  "sourceChanges": "Seed création seule : IDs réservés et téléphone alignés aux gardes, refus d’une fixture existante sans écriture ; fixture absente créée/enrichie par actions réelles puis noms migrés. Cache refusé 7c1c→1af9 : narration régénérée, 8 frontières recalées. Ancres corrigées et cadrage par colonnes/cellules ; lancement français. Aucun re-film.",
+  "report": "videos/output/data-exports-archives/review-report.txt",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

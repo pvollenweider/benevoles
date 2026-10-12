@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:42.382Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "4ed9dcbbc93eddacefc303d32aeec74424b2f47835da9395868982dd933d6347",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Aline choisit M pour son t-shirt, puis Oui pour le permis.",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection de l'option M pour la taille du t-shirt puis de Oui pour le permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "visibleSeconds": 7,
+        "visible": "Sélection des cases à cocher Vélo puis Remorque",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Dans le texte libre, écrivons Entrée nord.",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie de 'Entrée nord' dans le champ Point de rendez-vous préféré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations qui seront partagées.",
+        "visibleSeconds": 18.5,
+        "visible": "Défilement vers le haut montrant l'encadré latéral Transmis à l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "Vérifions, puis confirmons réellement l'inscription.",
+        "visibleSeconds": 23,
+        "visible": "Clic sur le bouton Confirmer mon inscription suivi de l'écran Inscription confirmée !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, en parfaite cohérence avec le déroulement visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-12T03:56:40.620Z",
+  "masterSha256": "5a111fab9b279dbd73b749009aece442e59836fddeac18de0c813252d40fd759",
+  "totalSeconds": 272.88,
+  "cuts": [
+    {
+      "id": "members",
+      "seconds": 23.566792
+    },
+    {
+      "id": "columns",
+      "seconds": 49.1048125
+    },
+    {
+      "id": "csv",
+      "seconds": 91.3752085
+    },
+    {
+      "id": "journal",
+      "seconds": 122.166125
+    },
+    {
+      "id": "archive",
+      "seconds": 153.410854
+    },
+    {
+      "id": "contents",
+      "seconds": 181.8114375
+    },
+    {
+      "id": "privacy",
+      "seconds": 211.3361455
+    },
+    {
+      "id": "result",
+      "seconds": 244.08306249999998
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

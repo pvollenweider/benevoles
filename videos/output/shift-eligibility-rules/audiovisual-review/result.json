@@ -1,47 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:19:21.271Z",
-  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
-  "promptSha256": "b3a120f767de777ba2f931c3f2bedec2ce43ddd1839f345bfd07db496b180b74",
-  "clipSha256": "da51d0bba4d3565231ed422b9502f09db44a699736ddd135a76b16039d0f4ad6",
+  "reviewedAt": "2026-10-12T04:51:04.309Z",
+  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
+  "promptSha256": "012e91ac10a8ccdddfa24aa64195672dbb676f994b46939337a3636310dffae2",
+  "clipSha256": "da96c1b10f973bba498055d1b4c289d047f05c424f770d72621701566b4e2d8e",
   "scene": "result",
   "review": {
-    "heardOpening": "Ces règles doivent rester rares",
+    "heardOpening": "Ces règles doivent rester compréhensibles",
     "checkpoints": [
       {
         "spokenSeconds": 3,
-        "spoken": "Indique les critères dans la description",
-        "visibleSeconds": 1,
-        "visible": "Le champ description a défilé hors champ vers le bas",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 7,
-        "spoken": "vérifie le téléphone obligatoire si l'équipe doit appeler le jour J",
-        "visibleSeconds": 7,
-        "visible": "Case Téléphone obligatoire à l'inscription cochée à l'écran",
+        "spoken": "la description permet d'expliquer les critères",
+        "visibleSeconds": 2,
+        "visible": "Page Modifier l'événement affichant le champ Description",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
-        "spoken": "prévois toujours une manière de corriger un profil ou une affectation",
-        "visibleSeconds": 11,
-        "visible": "Écran figé sur les messages et rappels, aucun écran de profil affiché",
-        "sync": "missing",
-        "severity": "minor"
+        "spokenSeconds": 6.8,
+        "spoken": "Vérifions aussi le téléphone obligatoire",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers l'option Téléphone obligatoire à l'inscription cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "retrouvons Julien dans les membres",
+        "visibleSeconds": 14,
+        "visible": "Recherche de Julien Favre dans l'onglet Membres avec résultat filtré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "puis ouvrons Éditer",
+        "visibleSeconds": 15.8,
+        "visible": "Clic sur Éditer et ouverture de la modale Modifier le membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "puis nous annulons",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur Annuler et fermeture de la modale",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:03 - Le champ description n'est plus visible lors de sa mention suite au défilement.",
-      "00:05 - Les tags internes ne figurent pas sur la vue affichée.",
-      "00:11 - La correction de profil ou d'affectation n'est pas illustrée à l'écran."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton régulier."
+      "observation": "Voix off féminine claire, fluide et parfaitement synchronisée avec les actions à l'écran, accompagnée d'un léger fond musical."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

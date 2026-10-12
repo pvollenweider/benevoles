@@ -1,43 +1,46 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:03:42.571Z",
-  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
+  "reviewedAt": "2026-10-12T05:55:26.181Z",
+  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
   "promptSha256": "64aab1e687beb3df5d5ca469d447aaa5729535d2a120357d7d7469971fcf810f",
-  "clipSha256": "fe1842b99440dbfb924b6830a44c1e336f4a24546726775dc46828f111cf1f70",
+  "clipSha256": "b2b4bc723ab8b4ed0fdd12367159e8f25a5f1ff25d841db5172ffaa718aed314",
   "scene": "confirm",
   "review": {
     "heardOpening": "Cette case permet d'envoyer les nouveaux liens personnels",
     "checkpoints": [
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 5.5,
         "spoken": "Dans cette démonstration, on la décoche",
-        "visibleSeconds": 6.8,
-        "visible": "La case à cocher est désélectionnée",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 6,
+        "visible": "La case « Envoyer les nouveaux liens personnels » reste cochée à l'écran",
+        "sync": "missing",
+        "severity": "major"
       },
       {
         "spokenSeconds": 23,
         "spoken": "Fusionner les deux fiches ouvre une dernière confirmation",
-        "visibleSeconds": 23.8,
-        "visible": "Clic sur le bouton et ouverture de la fenêtre modale de confirmation",
+        "visibleSeconds": 23.5,
+        "visible": "Ouverture de la modale « Confirmer la fusion »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 28.1,
+        "spokenSeconds": 28.5,
         "spoken": "confirmez la fusion",
-        "visibleSeconds": 28.6,
-        "visible": "Clic sur le bouton de confirmation finale et affichage du résultat",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 26.5,
+        "visible": "La confirmation a déjà été validée et la page affiche « Fusion effectuée » dès 00:27",
+        "sync": "early",
+        "severity": "minor"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:05, la consigne « on la décoche » n'est pas effectuée : la case reste cochée.",
+      "À 00:26-00:27, la confirmation de la fusion est validée à l'écran avant que la voix ne demande de confirmer (00:29)."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et rythme régulier adapté aux actions."
+      "observation": "Voix claire, posée et bien articulée tout au long de l'extrait."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

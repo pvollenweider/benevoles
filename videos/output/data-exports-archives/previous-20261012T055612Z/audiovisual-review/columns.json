@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:05:48.922Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "8dbb1c597aeb6fa5aaf75d84f708c71bbb1fcbbd603c3c8286a00b884aa2e6b7",
+  "clipSha256": "48d2373653a13392826d160b879edd57fa069523c3870204b06d10a71218114a",
+  "scene": "columns",
+  "review": {
+    "heardOpening": "Une ligne représente une fiche membre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif.",
+        "visibleSeconds": 0,
+        "visible": "Tableau affichant les colonnes Prénom, Nom, Email, Téléphone, Étiquettes et Actif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque",
+        "visibleSeconds": 11.5,
+        "visible": "Défilement horizontal révélant Date de naissance, Disponibilités, Remarque de disponibilité et Notes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Les derniers envois indiquent les résultats des emails de cette personne",
+        "visibleSeconds": 19,
+        "visible": "Défilement vers la droite montrant les résultats d'envoi, mais l'intitulé de colonne est rogné dans l'en-tête.",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "La dernière acceptation de la Convention indique quand elle a été acceptée",
+        "visibleSeconds": 19,
+        "visible": "Colonne 'Convention acceptée (dernière fois)' visible avec dates associées.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:15 et 00:18, les colonnes annoncées « nombre d'inscriptions actives » et « date de création de la fiche » ne sont pas visibles lors du défilement.",
+      "À 00:19, le titre de colonne pour les derniers envois d'emails est manquant ou tronqué dans le bandeau bleu d'en-tête."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

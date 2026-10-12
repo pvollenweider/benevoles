@@ -1,0 +1,11 @@
+{
+  "model": "gemini-3.8-flash",
+  "audioSha256": "0d5447fd8fb290b85999d856195699daea2c2d9946dd4bfb1416cc0c1eb87717",
+  "source": "actual final MP4 confirm chapter",
+  "review": {
+    "transcript": "Cette case permet d'envoyer les nouveaux liens personnels à l'adresse conservée. Dans cette démonstration, on la décoche. Aucun e-mail ne sera envoyé. Lisez le résumé avant de confirmer. La fusion est irréversible. La fiche absorbée sera désactivée, évidée de ses informations personnelles. Ses liens déplacés seront régénérés et les anciens ne fonctionneront plus. Fusionner les deux fiches ouvre une dernière confirmation. Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+    "pronunciationIssue": true,
+    "observation": "À environ 14 secondes, la locutrice prononce distinctement « fuche » [fyʃ] avec le son [y] au lieu de « fiche » [fiʃ]. Il s'agit d'un lapsus de prononciation (sans doute influencé par la proximité phonétique du mot « fusion » prononcé juste avant). Plus loin (vers 24 secondes), le mot « fiches » est en revanche prononcé tout à fait normalement avec le son [i].",
+    "uncertainty": "très faible"
+  }
+}

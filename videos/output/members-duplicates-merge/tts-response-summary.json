@@ -1,25 +1,21 @@
 {
-  "receivedAt": "2026-10-06T17:00:56.026Z",
+  "receivedAt": "2026-10-12T05:48:16.037Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 5930,
-    "total_input_tokens": 946,
+    "total_tokens": 5645,
+    "total_input_tokens": 745,
     "input_tokens_by_modality": [
-      {
-        "modality": "audio",
-        "tokens": 201
-      },
       {
         "modality": "text",
         "tokens": 745
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 4984,
+    "total_output_tokens": 4900,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 4984
+        "tokens": 4900
       }
     ],
     "total_tool_use_tokens": 0,
@@ -30,17 +26,13 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 469
-          },
-          {
-            "modality": "audio",
-            "tokens": 201
+            "tokens": 871
           }
         ],
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2280
+            "tokens": 2172
           }
         ]
       },
@@ -58,7 +50,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2708
+            "tokens": 2732
           }
         ]
       }
@@ -68,17 +60,13 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 469
-          },
-          {
-            "modality": "audio",
-            "tokens": 201
+            "tokens": 871
           }
         ],
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2280
+            "tokens": 2172
           }
         ]
       },
@@ -96,7 +84,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2708
+            "tokens": 2732
           }
         ]
       }
@@ -108,7 +96,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 12767192
+          "encodedLength": 12552152
         }
       ]
     }

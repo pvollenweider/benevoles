@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour chaque information différente, vous choisissez la valeur à garder. Ici,",
+  "windowStart": 24.436999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.38,
+    "wordsHeard": "Pour chaque information différente, vous choisissez la valeur à garder. Ici,"
+  },
+  "onset": 54.81699999999999,
+  "proposedCut": 54.436708499999995,
+  "note": "Proposal only; recut then independently audit before capture"
+}

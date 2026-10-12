@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:42:17.322Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "9b1201b6bca994ca5471ab80b0428762c9d1fd671b6da2e0ea73169f1c28d8ed",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Cliquons sur Retirer",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture de la boîte de dialogue de confirmation pour retirer la question Taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 13.2,
+        "visible": "Clic sur Retirer dans la modale et affichage du message confirmant le retrait",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
+        "visibleSeconds": 15,
+        "visible": "Page Inscriptions affichée avec la mention Taille de t-shirt (question retirée) : L pour Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.6,
+        "spoken": "Ouvrons enfin un autre créneau public : la question n'est plus proposée",
+        "visibleSeconds": 21.8,
+        "visible": "Formulaire d'inscription public ouvert sans le champ Taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

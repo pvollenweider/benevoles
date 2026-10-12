@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:25.376Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "b2b9c2ae71eb60d4ea7f95f2aca66d0bada0016809cff476c4a776288de72c1e",
+  "clipSha256": "b04e950e921c88c87f7e7e07cfd9d69b10419f83996753a3d41a3b0ede29137f",
+  "scene": "order",
+  "review": {
+    "heardOpening": "L'ordre compte aussi pour rendre le formulaire agréable.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis.",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur le lien Monter sur la ligne Permis de conduire, qui passe en première position.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "La question remonte d'une position.",
+        "visibleSeconds": 9.8,
+        "visible": "Le message de confirmation indique la position 1 sur 4 et le permis apparaît au-dessus de la taille de t-shirt.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Rechargeons la page : le nouvel ordre est conservé.",
+        "visibleSeconds": 17,
+        "visible": "Un bandeau textuel confirme la conservation de l'ordre après rechargement de la page.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

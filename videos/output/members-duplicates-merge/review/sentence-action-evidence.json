@@ -1,0 +1,811 @@
+[
+  {
+    "chapter": "duplicates",
+    "startMs": 2331,
+    "endMs": 30108,
+    "sentences": [
+      {
+        "text": "Deux fiches pour une seule personne ?",
+        "startMs": 201,
+        "endMs": 1747,
+        "method": "silence",
+        "absoluteStartMs": 2532
+      },
+      {
+        "text": "Dans Membres, ouvrez Doublons possibles.",
+        "startMs": 2060,
+        "endMs": 4811,
+        "method": "silence",
+        "absoluteStartMs": 4391
+      },
+      {
+        "text": "Les raisons du rapprochement sont expliquées, mais un nom identique ne suffit pas à décider :",
+        "startMs": 5226,
+        "endMs": 10003,
+        "method": "silence",
+        "absoluteStartMs": 7557
+      },
+      {
+        "text": "deux personnes peuvent être homonymes.",
+        "startMs": 10153,
+        "endMs": 11733,
+        "method": "silence",
+        "absoluteStartMs": 12484
+      },
+      {
+        "text": "Comparer et fusionner ouvre un aperçu, sans encore modifier les fiches.",
+        "startMs": 12183,
+        "endMs": 16732,
+        "method": "silence",
+        "absoluteStartMs": 14514
+      },
+      {
+        "text": "Revenons aux suggestions.",
+        "startMs": 17418,
+        "endMs": 17647,
+        "method": "silence",
+        "absoluteStartMs": 19749
+      },
+      {
+        "text": "Ignorer retire simplement la paire de cette liste.",
+        "startMs": 17812,
+        "endMs": 20057,
+        "method": "silence",
+        "absoluteStartMs": 20143
+      },
+      {
+        "text": "Les deux fiches existent toujours, et une nouvelle raison de rapprochement pourrait faire revenir la suggestion plus tard.",
+        "startMs": 20341,
+        "endMs": 27505,
+        "method": "silence",
+        "absoluteStartMs": 22672
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "duplicates",
+        "phrase": "Dans Membres, ouvrez Doublons possibles.",
+        "startMs": 2060,
+        "endMs": 4811,
+        "cueMs": 4392
+      },
+      {
+        "segmentId": "duplicates",
+        "phrase": "Comparer et fusionner ouvre un",
+        "startMs": 12183,
+        "endMs": 16732,
+        "cueMs": 14516
+      },
+      {
+        "segmentId": "duplicates",
+        "phrase": "Revenons aux suggestions.",
+        "startMs": 17418,
+        "endMs": 17647,
+        "cueMs": 19750
+      },
+      {
+        "segmentId": "duplicates",
+        "phrase": "Ignorer retire simplement la paire",
+        "startMs": 17812,
+        "endMs": 20057,
+        "cueMs": 20264
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 4880
+      },
+      {
+        "kind": "click",
+        "atMs": 14979
+      },
+      {
+        "kind": "click",
+        "atMs": 20729
+      }
+    ]
+  },
+  {
+    "chapter": "compare",
+    "startMs": 32371,
+    "endMs": 60413,
+    "sentences": [
+      {
+        "text": "Si vous savez que ces deux fiches désignent bien la même personne, ouvrez l’activité de la fiche que vous voulez conserver.",
+        "startMs": 289,
+        "endMs": 6802,
+        "method": "silence",
+        "absoluteStartMs": 32660
+      },
+      {
+        "text": "Fusionner avec un autre membre est réservé au propriétaire de l’organisation.",
+        "startMs": 7482,
+        "endMs": 11571,
+        "method": "silence",
+        "absoluteStartMs": 39853
+      },
+      {
+        "text": "Recherchez précisément l’adresse de la seconde fiche, puis choisissez Fusionner avec cette fiche.",
+        "startMs": 12092,
+        "endMs": 17809,
+        "method": "silence",
+        "absoluteStartMs": 44463
+      },
+      {
+        "text": "Celle-ci sera absorbée.",
+        "startMs": 18163,
+        "endMs": 19188,
+        "method": "silence",
+        "absoluteStartMs": 50534
+      },
+      {
+        "text": "L’aperçu permet maintenant de comparer les informations, sans lancer la fusion.",
+        "startMs": 19319,
+        "endMs": 24438,
+        "method": "silence",
+        "absoluteStartMs": 51690
+      },
+      {
+        "text": "Vérifiez bien quelle fiche vous gardez avant de continuer.",
+        "startMs": 25085,
+        "endMs": 27634,
+        "method": "silence",
+        "absoluteStartMs": 57456
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "compare",
+        "phrase": "Fusionner avec un autre membre",
+        "startMs": 7482,
+        "endMs": 11571,
+        "cueMs": 39854
+      },
+      {
+        "segmentId": "compare",
+        "phrase": "Recherchez précisément l’adresse de la",
+        "startMs": 12092,
+        "endMs": 17809,
+        "cueMs": 44466
+      },
+      {
+        "segmentId": "compare",
+        "phrase": "Celle-ci sera absorbée.",
+        "startMs": 18163,
+        "endMs": 19188,
+        "cueMs": 50536
+      },
+      {
+        "segmentId": "compare",
+        "phrase": "L’aperçu permet maintenant de comparer",
+        "startMs": 19319,
+        "endMs": 24438,
+        "cueMs": 51690
+      },
+      {
+        "segmentId": "compare",
+        "phrase": "Vérifiez bien quelle fiche vous",
+        "startMs": 25085,
+        "endMs": 27634,
+        "cueMs": 57458
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 40348
+      },
+      {
+        "kind": "click",
+        "atMs": 44931
+      },
+      {
+        "kind": "key",
+        "atMs": 45239
+      },
+      {
+        "kind": "key",
+        "atMs": 45336
+      },
+      {
+        "kind": "key",
+        "atMs": 45435
+      },
+      {
+        "kind": "key",
+        "atMs": 45534
+      },
+      {
+        "kind": "key",
+        "atMs": 45633
+      },
+      {
+        "kind": "key",
+        "atMs": 45735
+      },
+      {
+        "kind": "key",
+        "atMs": 45838
+      },
+      {
+        "kind": "key",
+        "atMs": 45941
+      },
+      {
+        "kind": "key",
+        "atMs": 46041
+      },
+      {
+        "kind": "key",
+        "atMs": 46146
+      },
+      {
+        "kind": "key",
+        "atMs": 46245
+      },
+      {
+        "kind": "key",
+        "atMs": 46348
+      },
+      {
+        "kind": "key",
+        "atMs": 46450
+      },
+      {
+        "kind": "key",
+        "atMs": 46552
+      },
+      {
+        "kind": "key",
+        "atMs": 46651
+      },
+      {
+        "kind": "key",
+        "atMs": 46750
+      },
+      {
+        "kind": "key",
+        "atMs": 46851
+      },
+      {
+        "kind": "key",
+        "atMs": 46959
+      },
+      {
+        "kind": "key",
+        "atMs": 47059
+      },
+      {
+        "kind": "key",
+        "atMs": 47164
+      },
+      {
+        "kind": "key",
+        "atMs": 47268
+      },
+      {
+        "kind": "key",
+        "atMs": 47370
+      },
+      {
+        "kind": "key",
+        "atMs": 47472
+      },
+      {
+        "kind": "key",
+        "atMs": 47574
+      },
+      {
+        "kind": "key",
+        "atMs": 47675
+      },
+      {
+        "kind": "key",
+        "atMs": 47780
+      },
+      {
+        "kind": "key",
+        "atMs": 47882
+      },
+      {
+        "kind": "key",
+        "atMs": 47982
+      },
+      {
+        "kind": "key",
+        "atMs": 48085
+      },
+      {
+        "kind": "click",
+        "atMs": 51031
+      },
+      {
+        "kind": "click",
+        "atMs": 52163
+      }
+    ]
+  },
+  {
+    "chapter": "fields",
+    "startMs": 62673,
+    "endMs": 91558,
+    "sentences": [
+      {
+        "text": "Pour chaque information différente, vous choisissez la valeur à garder.",
+        "startMs": 394,
+        "endMs": 4006,
+        "method": "silence",
+        "absoluteStartMs": 63067
+      },
+      {
+        "text": "Ici, on conserve la bonne adresse email et on prend le téléphone de l’autre fiche.",
+        "startMs": 4466,
+        "endMs": 8619,
+        "method": "silence",
+        "absoluteStartMs": 67139
+      },
+      {
+        "text": "Les notes internes peuvent aussi être mises à la suite :",
+        "startMs": 9224,
+        "endMs": 11789,
+        "method": "silence",
+        "absoluteStartMs": 71897
+      },
+      {
+        "text": "pratique pour ne rien oublier.",
+        "startMs": 11922,
+        "endMs": 13006,
+        "method": "silence",
+        "absoluteStartMs": 74595
+      },
+      {
+        "text": "Les étiquettes et les disponibilités sont réunies automatiquement.",
+        "startMs": 13720,
+        "endMs": 16761,
+        "method": "silence",
+        "absoluteStartMs": 76393
+      },
+      {
+        "text": "Le tableau récapitule les inscriptions, les invitations et les réponses concernées.",
+        "startMs": 17230,
+        "endMs": 21672,
+        "method": "silence",
+        "absoluteStartMs": 79903
+      },
+      {
+        "text": "Attention :",
+        "startMs": 22394,
+        "endMs": 22868,
+        "method": "silence",
+        "absoluteStartMs": 85067
+      },
+      {
+        "text": "les abonnements aux notifications du navigateur ne sont jamais déplacés.",
+        "startMs": 23101,
+        "endMs": 26430,
+        "method": "silence",
+        "absoluteStartMs": 85774
+      },
+      {
+        "text": "La personne devra les réactiver elle-même.",
+        "startMs": 26706,
+        "endMs": 28627,
+        "method": "silence",
+        "absoluteStartMs": 89379
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "fields",
+        "phrase": "Ici, on conserve la bonne",
+        "startMs": 4466,
+        "endMs": 8619,
+        "cueMs": 67142
+      },
+      {
+        "segmentId": "fields",
+        "phrase": "Ici, on conserve la bonne",
+        "startMs": 4466,
+        "endMs": 8619,
+        "cueMs": 67147
+      },
+      {
+        "segmentId": "fields",
+        "phrase": "Les notes internes peuvent aussi",
+        "startMs": 9224,
+        "endMs": 11789,
+        "cueMs": 71897
+      },
+      {
+        "segmentId": "fields",
+        "phrase": "Le tableau récapitule les inscriptions",
+        "startMs": 17230,
+        "endMs": 21672,
+        "cueMs": 79905
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 67613
+      },
+      {
+        "kind": "click",
+        "atMs": 72362
+      }
+    ]
+  },
+  {
+    "chapter": "conflicts",
+    "startMs": 93816,
+    "endMs": 121963,
+    "sentences": [
+      {
+        "text": "Les points à vérifier évitent les surprises.",
+        "startMs": 265,
+        "endMs": 2742,
+        "method": "silence",
+        "absoluteStartMs": 94081
+      },
+      {
+        "text": "Sur un même créneau, l’inscription la plus avancée est conservée ;",
+        "startMs": 3210,
+        "endMs": 6383,
+        "method": "silence",
+        "absoluteStartMs": 97026
+      },
+      {
+        "text": "l’autre sera annulée avec une trace dans le journal.",
+        "startMs": 6668,
+        "endMs": 9042,
+        "method": "silence",
+        "absoluteStartMs": 100484
+      },
+      {
+        "text": "Les chevauchements, limites, âges minimums et postes réservés sont signalés, mais ne bloquent pas la fusion.",
+        "startMs": 9567,
+        "endMs": 15359,
+        "method": "silence",
+        "absoluteStartMs": 103383
+      },
+      {
+        "text": "En revanche, deux réponses différentes à la même question demandent un choix.",
+        "startMs": 16055,
+        "endMs": 19602,
+        "method": "silence",
+        "absoluteStartMs": 109871
+      },
+      {
+        "text": "Ici, on garde la réponse de la fiche absorbée.",
+        "startMs": 20070,
+        "endMs": 22322,
+        "method": "silence",
+        "absoluteStartMs": 113886
+      },
+      {
+        "text": "On choisit aussi son invitation.",
+        "startMs": 22854,
+        "endMs": 24176,
+        "method": "silence",
+        "absoluteStartMs": 116670
+      },
+      {
+        "text": "Une fois ces choix résolus, la confirmation devient disponible.",
+        "startMs": 24782,
+        "endMs": 27925,
+        "method": "silence",
+        "absoluteStartMs": 118598
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "conflicts",
+        "phrase": "Ici, on garde la réponse",
+        "startMs": 20070,
+        "endMs": 22322,
+        "cueMs": 113886
+      },
+      {
+        "segmentId": "conflicts",
+        "phrase": "On choisit aussi son invitation.",
+        "startMs": 22854,
+        "endMs": 24176,
+        "cueMs": 116672
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 114378
+      },
+      {
+        "kind": "click",
+        "atMs": 117161
+      }
+    ]
+  },
+  {
+    "chapter": "confirm",
+    "startMs": 124228,
+    "endMs": 154769,
+    "sentences": [
+      {
+        "text": "Cette case permet d’envoyer les nouveaux liens personnels à l’adresse conservée.",
+        "startMs": 302,
+        "endMs": 4664,
+        "method": "silence",
+        "absoluteStartMs": 124530
+      },
+      {
+        "text": "Dans cette démonstration, on la décoche :",
+        "startMs": 4797,
+        "endMs": 8190,
+        "method": "silence",
+        "absoluteStartMs": 129025
+      },
+      {
+        "text": "aucun email ne sera envoyé.",
+        "startMs": 8711,
+        "endMs": 8763,
+        "method": "silence",
+        "absoluteStartMs": 132939
+      },
+      {
+        "text": "Lisez le résumé avant de confirmer.",
+        "startMs": 9325,
+        "endMs": 11171,
+        "method": "silence",
+        "absoluteStartMs": 133553
+      },
+      {
+        "text": "La fusion est irréversible :",
+        "startMs": 11629,
+        "endMs": 13331,
+        "method": "silence",
+        "absoluteStartMs": 135857
+      },
+      {
+        "text": "la fiche absorbée sera désactivée et vidée de ses informations personnelles.",
+        "startMs": 13511,
+        "endMs": 17573,
+        "method": "silence",
+        "absoluteStartMs": 137739
+      },
+      {
+        "text": "Ses liens déplacés seront régénérés, et les anciens ne fonctionneront plus.",
+        "startMs": 17857,
+        "endMs": 22525,
+        "method": "silence",
+        "absoluteStartMs": 142085
+      },
+      {
+        "text": "Fusionner les deux fiches ouvre une dernière confirmation.",
+        "startMs": 23482,
+        "endMs": 26354,
+        "method": "silence",
+        "absoluteStartMs": 147710
+      },
+      {
+        "text": "Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+        "startMs": 26705,
+        "endMs": 30033,
+        "method": "silence",
+        "absoluteStartMs": 150933
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "confirm",
+        "phrase": "Cette case permet d’envoyer les",
+        "startMs": 302,
+        "endMs": 4664,
+        "cueMs": 124532
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Dans cette démonstration, on la",
+        "startMs": 4797,
+        "endMs": 8190,
+        "cueMs": 129026
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Lisez le résumé avant de",
+        "startMs": 9325,
+        "endMs": 11171,
+        "cueMs": 133555
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Fusionner les deux fiches ouvre",
+        "startMs": 23482,
+        "endMs": 26354,
+        "cueMs": 147711
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Quand vous êtes vraiment sûr",
+        "startMs": 26705,
+        "endMs": 30033,
+        "cueMs": 150933
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 124993
+      },
+      {
+        "kind": "click",
+        "atMs": 129493
+      },
+      {
+        "kind": "click",
+        "atMs": 148177
+      },
+      {
+        "kind": "click",
+        "atMs": 151427
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 157115,
+    "endMs": 182893,
+    "sentences": [
+      {
+        "text": "Fusion effectuée :",
+        "startMs": 483,
+        "endMs": 1408,
+        "method": "silence",
+        "absoluteStartMs": 157598
+      },
+      {
+        "text": "le résultat indique ce qui a été déplacé.",
+        "startMs": 1977,
+        "endMs": 4000,
+        "method": "silence",
+        "absoluteStartMs": 159092
+      },
+      {
+        "text": "Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies.",
+        "startMs": 4394,
+        "endMs": 8523,
+        "method": "silence",
+        "absoluteStartMs": 161509
+      },
+      {
+        "text": "Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne.",
+        "startMs": 9656,
+        "endMs": 13336,
+        "method": "silence",
+        "absoluteStartMs": 166771
+      },
+      {
+        "text": "L’historique n’est pas réécrit :",
+        "startMs": 14106,
+        "endMs": 15408,
+        "method": "silence",
+        "absoluteStartMs": 171221
+      },
+      {
+        "text": "les faits enregistrés sous l’ancienne fiche restent consultables depuis la fiche conservée.",
+        "startMs": 15608,
+        "endMs": 19498,
+        "method": "silence",
+        "absoluteStartMs": 172723
+      },
+      {
+        "text": "Si un responsable de secteur utilisait l’adresse abandonnée, son adresse doit être vérifiée séparément.",
+        "startMs": 19866,
+        "endMs": 25412,
+        "method": "silence",
+        "absoluteStartMs": 176981
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "Retournez à la fiche conservée",
+        "startMs": 4394,
+        "endMs": 8523,
+        "cueMs": 161510
+      },
+      {
+        "segmentId": "result",
+        "phrase": "Dans la liste des membres",
+        "startMs": 9656,
+        "endMs": 13336,
+        "cueMs": 166773
+      },
+      {
+        "segmentId": "result",
+        "phrase": "les faits enregistrés sous l’ancienne",
+        "startMs": 15608,
+        "endMs": 19498,
+        "cueMs": 172725
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 161975
+      }
+    ]
+  },
+  {
+    "chapter": "links",
+    "startMs": 185158,
+    "endMs": 211995,
+    "sentences": [
+      {
+        "text": "Vérifions enfin les liens.",
+        "startMs": 367,
+        "endMs": 1545,
+        "method": "silence",
+        "absoluteStartMs": 185525
+      },
+      {
+        "text": "L’ancien lien personnel de la fiche absorbée ne fonctionne plus :",
+        "startMs": 1997,
+        "endMs": 4875,
+        "method": "silence",
+        "absoluteStartMs": 187155
+      },
+      {
+        "text": "c’est normal, il a été remplacé pour protéger la personne.",
+        "startMs": 5093,
+        "endMs": 8114,
+        "method": "silence",
+        "absoluteStartMs": 190251
+      },
+      {
+        "text": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée.",
+        "startMs": 8416,
+        "endMs": 11485,
+        "method": "silence",
+        "absoluteStartMs": 193574
+      },
+      {
+        "text": "Une inscription annulée parce qu’elle faisait doublon ne redevient pas active.",
+        "startMs": 11959,
+        "endMs": 15908,
+        "method": "silence",
+        "absoluteStartMs": 197117
+      },
+      {
+        "text": "Si vous cochez l’envoi des liens lors d’une vraie fusion, la personne reçoit ses nouveaux accès à l’adresse choisie.",
+        "startMs": 16536,
+        "endMs": 21292,
+        "method": "silence",
+        "absoluteStartMs": 201694
+      },
+      {
+        "text": "Vous avez ainsi une seule fiche, des informations cohérentes, et des accès renouvelés.",
+        "startMs": 21645,
+        "endMs": 26497,
+        "method": "silence",
+        "absoluteStartMs": 206803
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "links",
+        "phrase": "L’ancien lien personnel de la",
+        "startMs": 1997,
+        "endMs": 4875,
+        "cueMs": 187156
+      },
+      {
+        "segmentId": "links",
+        "phrase": "Le nouveau lien ouvre bien",
+        "startMs": 8416,
+        "endMs": 11485,
+        "cueMs": 193575
+      }
+    ],
+    "interactions": []
+  }
+]

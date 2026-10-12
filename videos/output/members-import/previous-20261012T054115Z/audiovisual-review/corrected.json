@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:42:08.395Z",
+  "videoSha256": "15e4f2dbf2422685676a1803b33e8833a8d517d559910fed01aeb676b9fcaa38",
+  "promptSha256": "4722abadbb7f9a2435deca588f03c7540debb407a43556355a40d1edb9d8809e",
+  "clipSha256": "832d448f111ed742633997aa8ebc9bfc5f2ab65d792e2c72712167c875f3c936",
+  "scene": "corrected",
+  "review": {
+    "heardOpening": "Nous choisissons maintenant le fichier Excel corrigé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse.",
+        "visibleSeconds": 1,
+        "visible": "La fenêtre d'import affiche le fichier 'membres-corriges.xlsx' sélectionné puis le bouton 'Analyser le fichier' est cliqué.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
+        "visibleSeconds": 5.5,
+        "visible": "Le résultat de l'analyse s'affiche avec 0 ligne en erreur et la section 'Membres du fichier (40)'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone.",
+        "visibleSeconds": 11.8,
+        "visible": "La ligne 3 montre René Meyer sans adresse email avec l'action 'Créer'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Vérifiez une dernière fois les noms, les catégories et le récapitulatif.",
+        "visibleSeconds": 16.5,
+        "visible": "Le tableau récapitulatif avec les colonnes Nom, Tags et le résumé en haut de la modale restent bien visibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

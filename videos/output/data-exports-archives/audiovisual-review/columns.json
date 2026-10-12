@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:09:41.264Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
-  "promptSha256": "6de9b8ae5e4150cb3e47ca9e2473ac0ec2470026e47672d729298dfdad3c2509",
-  "clipSha256": "a39f463513f2220cb772faadc25fd7700facf3bb0e918576d91d1d7d065e4869",
+  "reviewedAt": "2026-10-12T06:03:37.076Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
+  "promptSha256": "8dbb1c597aeb6fa5aaf75d84f708c71bbb1fcbbd603c3c8286a00b884aa2e6b7",
+  "clipSha256": "732db6b864fe301abbb5b6a969bfd0e5c99d06f453ca76d50fb1103552ceb5fe",
   "scene": "columns",
   "review": {
-    "heardOpening": "Une ligne représente une fiche membre",
+    "heardOpening": "Une ligne représente une fiche membre. Lisons le prénom",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif",
-        "visibleSeconds": 2.5,
-        "visible": "Colonnes Prénom, Nom, Email, Téléphone, Étiquettes et Actif affichées dans le tableau",
+        "spokenSeconds": 2.2,
+        "spoken": "Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif.",
+        "visibleSeconds": 1,
+        "visible": "Affichage des colonnes Prénom, Nom, Email, Téléphone, Étiquettes et Actif dans le tableau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes",
-        "visibleSeconds": 7.5,
-        "visible": "Défilement horizontal révélant les colonnes Date de naissance, Disponibilités, Remarque de disponibilité et Notes",
+        "spokenSeconds": 8.1,
+        "spoken": "En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque",
+        "visibleSeconds": 6,
+        "visible": "Défilement horizontal vers la droite révélant les colonnes Date de naissance, Disponibilités, Remarque de disponibilité et Notes.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
-        "spoken": "le nombre d'inscriptions actives et la date de création de la fiche",
-        "visibleSeconds": 13,
-        "visible": "Second défilement affichant les colonnes Inscriptions et Membre depuis",
+        "spokenSeconds": 19.3,
+        "spoken": "Les derniers envois indiquent les résultats des emails de cette personne",
+        "visibleSeconds": 18,
+        "visible": "Défilement montrant la colonne Derniers envois (résultat).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.6,
+        "spoken": "La dernière acceptation de la Convention indique quand elle a été acceptée",
+        "visibleSeconds": 24.5,
+        "visible": "Défilement affichant la colonne Convention acceptée (dernière fois).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, posée et bien rythmée sur les mouvements d'écran."
+      "observation": "Voix de synthèse masculine claire, posée et bien articulée, synchronisée avec les mouvements de défilement."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

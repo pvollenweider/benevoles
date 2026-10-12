@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:52:51.761Z",
+  "videoSha256": "df258f713444d4734d49ed470bac295799d31c9e6b31c6109d85273914e03a23",
+  "promptSha256": "3d20f0a23e0d73cc6f4359d14b5436ac2a62a718c075e02832adb36774802ce0",
+  "clipSha256": "f513be2c5088d0c7f4f0c8850a45dad93507db122698c880d0754ba4d1a9fd40",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Fusion effectuée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Fusion effectuée : le résultat indique ce qui a été déplacé.",
+        "visibleSeconds": 0,
+        "visible": "Page confirmant la fusion avec le détail des éléments déplacés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Retournez à la fiche conservée pour retrouver son activité",
+        "visibleSeconds": 9,
+        "visible": "Navigation vers la page 'Activité de Robin Favre'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne.",
+        "visibleSeconds": 10,
+        "visible": "Liste filtrée des membres montrant l'unique entrée pour Robin Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables",
+        "visibleSeconds": 14,
+        "visible": "Écran de l'activité conservée affichant les inscriptions et invitations antérieures",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, bien rythmée avec les écrans présentés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

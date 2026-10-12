@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:50:09.451Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:40:07.741Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
-  "clipSha256": "a3f8ce70ac97de377de8bad7c6a6beedb1b7d6b73d168a559380bbc2ed00d6a4",
+  "clipSha256": "f4068296733ecaabd06e6e7dd02b226074ef3d24724ab8c320d6c7496eb0984b",
   "scene": "unverified-update",
   "review": {
-    "heardOpening": "Comparons avec une inscription",
+    "heardOpening": "Comparons avec une inscription depuis le simple formulaire public",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Comparons avec une inscription depuis le simple formulaire public",
+        "spokenSeconds": 0.6,
+        "spoken": "Comparons avec une inscription depuis le simple formulaire public, sans invitation.",
         "visibleSeconds": 2.2,
-        "visible": "Affichage de la page du formulaire public d'inscription",
+        "visible": "Sélection d'un créneau puis validation pour accéder au formulaire public d'inscription",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "mais choisissons S",
-        "visibleSeconds": 8.5,
-        "visible": "Sélection de la taille S dans les options du formulaire",
+        "spokenSeconds": 5.4,
+        "spoken": "Saisissons la même adresse pour un troisième créneau,",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie de l'adresse email video.questions.aline@example.org dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "L'inscription peut être créée",
-        "visibleSeconds": 13,
-        "visible": "Validation du formulaire et affichage du message Inscription confirmée",
+        "spokenSeconds": 8.3,
+        "spoken": "mais choisissons S.",
+        "visibleSeconds": 10.1,
+        "visible": "Sélection de la taille de t-shirt S",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "L'inscription peut être créée,",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur 'Confirmer mon inscription' et affichage de l'écran 'Inscription confirmée !'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide, claire et conforme au texte."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

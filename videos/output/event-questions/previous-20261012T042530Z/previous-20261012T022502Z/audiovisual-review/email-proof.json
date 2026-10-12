@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:49:17.028Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "promptSha256": "f3cb4fd8d4b53d49030b8840b22871d2f5258fe9e7a1933cf680fcb158e9192f",
+  "clipSha256": "35c7a730128e82009f984db71e5bf9146f19e1a0464c572cab6387d954064675",
+  "scene": "email-proof",
+  "review": {
+    "heardOpening": "Aline existait déjà dans la liste des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Aline existait déjà dans la liste des membres",
+        "visibleSeconds": 1,
+        "visible": "Page de confirmation d'inscription affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test",
+        "visibleSeconds": 14,
+        "visible": "Interface Mailpit ouverte affichant le courriel reçu pour Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.1,
+        "spoken": "avec son lien personnel",
+        "visibleSeconds": 20,
+        "visible": "Bouton d'accès 'Gérer mes inscriptions' présent dans le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

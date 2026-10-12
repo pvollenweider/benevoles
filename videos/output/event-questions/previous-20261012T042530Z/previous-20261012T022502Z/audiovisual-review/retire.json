@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:50:52.690Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "ef99faa9de8fe33511cf037921498a68b147b3a1df2591a98b07fbf3c94f5130",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur Retirer et apparition de la boîte de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Confirmons",
+        "visibleSeconds": 11.6,
+        "visible": "Validation dans la modale et transition vers les inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible",
+        "visibleSeconds": 14,
+        "visible": "Détail d'Aline Mercier avec la taille L et la mention question retirée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Ouvrons enfin un autre créneau public",
+        "visibleSeconds": 20.2,
+        "visible": "Affichage du formulaire public sans le champ de taille",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Ton fluide, posé et bien synchronisé avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

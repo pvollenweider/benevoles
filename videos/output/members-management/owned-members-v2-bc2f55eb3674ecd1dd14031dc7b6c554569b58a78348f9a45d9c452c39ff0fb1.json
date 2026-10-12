@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 2,
+  "scenario": "members-management",
+  "members": [
+    {
+      "id": "cmv4o8c5p001dnba57omdo22a",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-12T03:07:07.311Z",
+      "actualCreatedAt": "2026-10-12T03:07:07.021Z"
+    },
+    {
+      "id": "cmv4oba5o001knba5mzmnze77",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-12T03:09:24.660Z",
+      "actualCreatedAt": "2026-10-12T03:09:24.396Z"
+    },
+    {
+      "id": "cmv4ogzw4001rnba5xp7u02ld",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-12T03:13:51.310Z",
+      "actualCreatedAt": "2026-10-12T03:13:51.028Z"
+    },
+    {
+      "id": "cmv4p6api003rnba58uvdwtj8",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-12T03:33:31.457Z",
+      "actualCreatedAt": "2026-10-12T03:33:31.446Z"
+    },
+    {
+      "id": "cmv4t0f6n001dlva5arp5lm1q",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-12T05:20:56.069Z",
+      "actualCreatedAt": "2026-10-12T05:20:55.775Z"
+    }
+  ]
+}

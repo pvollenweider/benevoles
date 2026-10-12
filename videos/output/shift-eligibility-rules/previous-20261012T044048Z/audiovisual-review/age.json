@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:45:45.673Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "b2a9c9822bf1d0e1a4995e07fe08d7d521ec996cf24cd8d99824eeaff8b8e07d",
+  "clipSha256": "4a057d83cbd1d8589bfaa8a2d437048edf1da2342d0558d40b9ae94577edca32",
+  "scene": "age",
+  "review": {
+    "heardOpening": "Sur le planning public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum",
+        "visibleSeconds": 0.8,
+        "visible": "Le créneau Buvette 18h-22h affiche l'indication 18 ans min. sur la frise du planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "La date de naissance demandée dans le formulaire",
+        "visibleSeconds": 6.3,
+        "visible": "Ouverture du formulaire d'inscription affichant le champ Date de naissance obligatoire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "modifier le navigateur ou masquer le texte ne permet donc pas de la contourner",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie de la date de naissance dans le champ avec mention Requiers Buvette (18 ans min.)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

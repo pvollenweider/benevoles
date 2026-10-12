@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:46:47.106Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "d087171a16979b7e6a63a1ee43b96a3a40e9443e9da0587e0a2d4b781df8bb8f",
+  "clipSha256": "d1cea9077b4a88dcd3fbed51f192703fa4eeb7c69adc88adb43d6aeff1f161b4",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Certaines missions demandent une règle simple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Certaines missions demandent une règle simple",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre « Âge, quotas et postes réservés - Des règles simples, expliquées avant l'inscription » affiché au centre de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "un âge minimum, un nombre maximum de créneaux",
+        "visibleSeconds": 2.6,
+        "visible": "Disparition de l'encart d'introduction et affichage du planning des créneaux (vue Frise)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, naturelle et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

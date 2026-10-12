@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:10:31.827Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:04:02.091Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "92fc81da4716779a8b4ba831414c21f5d3b94f71e9fefd4fb15693f30399dde9",
-  "clipSha256": "a24789dfaf2abe3775303b45fddbca84fefbebfc9ef933ec26d0aa8b8502b5c9",
+  "clipSha256": "b07b3a24efecd4301f991bed9b81579701d8df58ccff581ec444c4c75d35828c",
   "scene": "contents",
   "review": {
     "heardOpening": "Ouvrons les différentes parties du vrai fichier",
     "checkpoints": [
       {
-        "spokenSeconds": 3.8,
-        "spoken": "les créneaux et les inscriptions",
-        "visibleSeconds": 4.1,
-        "visible": "Sélection de shifts puis registrations dans le menu déroulant",
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons les différentes parties du vrai fichier",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la section 'event' dans la lecture de l'archive JSON",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
+        "spokenSeconds": 4,
+        "spoken": "les créneaux et les inscriptions avec les données des bénévoles concernés",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection de la partie 'registrations' dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
         "spoken": "Des nombres récapitulent plusieurs de ces collections",
-        "visibleSeconds": 15.7,
-        "visible": "Affichage de la section counts montrant les totaux JSON",
+        "visibleSeconds": 14.8,
+        "visible": "Affichage de la partie 'counts' listant les compteurs",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 17.5,
         "spoken": "Vérifions un créneau et une réponse de notre exemple",
-        "visibleSeconds": 18.4,
-        "visible": "Bascule sur shifts puis questions dans le sélecteur",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 18.5,
+        "visible": "Affichage uniquement de la section 'questions' ; aucun créneau ('shifts') n'est affiché",
+        "sync": "missing",
+        "severity": "minor"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:17, la voix annonce la vérification d'un créneau et d'une réponse, mais seul l'écran des questions/réponses est affiché, aucun créneau n'est montré."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec la navigation."
+      "observation": "Voix masculine calme, claire et bien articulée, avec un débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:28.335Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
+  "clipSha256": "87312a7616fd31dcd3a8ec998f4e4e5e6473c2644c198b008d811f0679feefae",
+  "scene": "create-multiple",
+  "review": {
+    "heardOpening": "Passons au matériel de transport",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Créons la question",
+        "visibleSeconds": 2.7,
+        "visible": "Clic sur Ajouter une question et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "puis choisissons Choix multiple",
+        "visibleSeconds": 7.7,
+        "visible": "Sélection de Choix multiple dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Saisissons Vélo, Remorque et Voiture",
+        "visibleSeconds": 9.1,
+        "visible": "Saisie successive de Vélo, Remorque et Voiture dans les choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Laissons Réponse obligatoire décochée",
+        "visibleSeconds": 17.5,
+        "visible": "La case Réponse obligatoire est visible et reste non cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.4,
+        "spoken": "Enregistrons et vérifions les trois choix dans la liste",
+        "visibleSeconds": 23.3,
+        "visible": "Clic sur Enregistrer et affichage de la question Matériel de transport avec les choix dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

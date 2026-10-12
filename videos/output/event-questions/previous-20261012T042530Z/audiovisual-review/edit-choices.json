@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:42:18.157Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
+  "clipSha256": "6fa8db16b1b0827e7a6d682e134865756b48b1a4ca740752941eeeb8e8b4a95f",
+  "scene": "edit-choices",
+  "review": {
+    "heardOpening": "On peut cependant enrichir la liste sans perdre ce qui existe.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Rouvrons la question et ajoutons XXL",
+        "visibleSeconds": 5.2,
+        "visible": "Le formulaire de modification de la question s'ouvre, mais XXL n'est jamais saisi dans le champ des choix",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Le nouveau choix apparaît dans la liste",
+        "visibleSeconds": 12.3,
+        "visible": "La liste des choix affichée ne contient toujours que S, M, L et XL ; XXL est absent",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "la taille L d'Aline reste conservée.",
+        "visibleSeconds": 14.5,
+        "visible": "Sur la page des inscriptions, la fiche d'Aline Mercier indique bien Taille de t-shirt : L",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, l'option XXL n'est pas saisie dans le champ des choix proposés.",
+      "À 00:12, le nouveau choix XXL n'apparaît pas dans la liste récapitulative après enregistrement."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec une ambiance sonore propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

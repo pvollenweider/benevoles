@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:45:44.179Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "d087171a16979b7e6a63a1ee43b96a3a40e9443e9da0587e0a2d4b781df8bb8f",
+  "clipSha256": "633aefea6c51733e566b71433ec09deecf4128781d1cf7180e15049ab8fbda9f",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Certaines missions demandent une règle simple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Certaines missions demandent une règle simple",
+        "visibleSeconds": 0,
+        "visible": "Bandeau d'introduction affiché : Âge, quotas et postes réservés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "un âge minimum, un nombre maximum de créneaux",
+        "visibleSeconds": 2.7,
+        "visible": "Disparition du bandeau et affichage du planning des créneaux en vue frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Ces contrôles évitent les affectations impossibles",
+        "visibleSeconds": 8,
+        "visible": "Écran stable présentant la grille des créneaux d'événements",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée, parfaitement synchronisée avec l'introduction visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

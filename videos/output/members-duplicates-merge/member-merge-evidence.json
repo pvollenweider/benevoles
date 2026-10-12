@@ -1,52 +1,52 @@
 {
-  "recordedAt": "2026-10-07T02:01:33.008Z",
+  "recordedAt": "2026-10-12T05:54:10.619Z",
   "productBuild": {
-    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
-    "sourceTree": "bfab8fbc924aded37eb0fd93e8d919c9adbeb263",
-    "productSourceSha256": "22bb6e20c2de867839c01472d726f2c928ea5f47ec1923cece8b72c11c3df37e",
-    "buildId": "D_AkF4h7ikVJu_EdLprcI",
-    "snapshot": "/tmp/benevoles-video-production.bI4zju",
-    "builtAt": "2026-10-07T01:56:36.997Z"
+    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
+    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
+    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
+    "buildId": "Ro9VdxUayqlTAULEvQpY0",
+    "snapshot": "/tmp/benevoles-video-production.batch11",
+    "builtAt": "2026-10-12T04:25:58.799Z"
   },
-  "organizationId": "video-member-merge-v5",
-  "keepId": "video-member-merge-v5-a",
-  "absorbId": "video-member-merge-v5-b",
+  "organizationId": "video-member-merge",
+  "keepId": "video-member-merge-a",
+  "absorbId": "video-member-merge-b",
   "linkFingerprints": [
     {
       "kind": "registration",
-      "entityId": "video-member-merge-v5-registration-moved",
-      "oldLinkSha256": "6e19015fb23203de7f7d1d326772cb6b223ad593d2c560d0794d04f82e8f9829",
-      "newLinkSha256": "34ef1057b4c15e90bf5187fa4f9453f761a70028075dda2b0be56529b58dbdb9"
+      "entityId": "video-member-merge-registration-moved",
+      "oldLinkSha256": "4b136836487dde208660f0de88eac10708d829afb287112424c564cbfdacb532",
+      "newLinkSha256": "504b27e4699e7851a848648adb7e2c72565cd513e4ef854f335cd2a935f2929b"
     },
     {
       "kind": "registration",
-      "entityId": "video-member-merge-v5-registration-same",
-      "oldLinkSha256": "f5528d96db102bd47a40f4d6e77d75e83ba8c0e21aa0be40c1a16dd76d8cbac0",
-      "newLinkSha256": "3cb0460ff4293e3e08372232524f89b0d8e22cc0cfd893f15377df59ed778bf9"
+      "entityId": "video-member-merge-registration-same",
+      "oldLinkSha256": "f1de4ab85d449a880bebef049b7c6cdcd4bc4793c6e98b9f9de9a6148dcfb58f",
+      "newLinkSha256": "31be6aaafe9254fea8a1070680d83edc0c07808b40ba081b5248f25333f65ce9"
     },
     {
       "kind": "invitation",
-      "entityId": "video-member-merge-v5-invite-absorb",
-      "oldLinkSha256": "b03e663985384f6745d268c5f76d32d8ef9d831e10876eaa2a92894e27e884fa",
-      "newLinkSha256": "fe6e83dacba83e69de1efdd8b6ce1b018ef230a23ffb8540c1804232c1de43c4"
+      "entityId": "video-member-merge-invite-absorb",
+      "oldLinkSha256": "84972f32e7c8f85ee77d88b59caea692ce09118722d0714b2c6e86ef4211cb1d",
+      "newLinkSha256": "796e1dc91288d5181b49ec3185189d9354fe4393ffff7e79cf5d63068196b761"
     }
   ],
   "linkChecks": [
     {
       "kind": "registration",
-      "entityId": "video-member-merge-v5-registration-moved",
+      "entityId": "video-member-merge-registration-moved",
       "oldStatus": 404,
       "newStatus": 200
     },
     {
       "kind": "registration",
-      "entityId": "video-member-merge-v5-registration-same",
+      "entityId": "video-member-merge-registration-same",
       "oldStatus": 404,
       "newStatus": 404
     },
     {
       "kind": "invitation",
-      "entityId": "video-member-merge-v5-invite-absorb",
+      "entityId": "video-member-merge-invite-absorb",
       "oldStatus": 404,
       "newStatus": 200
     }

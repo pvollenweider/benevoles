@@ -1,262 +1,262 @@
 {
   "video": "members-duplicates-merge",
-  "source": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/members-duplicates-merge.mp4",
-  "sourceSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
+  "source": "/private/tmp/codex-video/videos/output/members-duplicates-merge/members-duplicates-merge.mp4",
+  "sourceSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-07T02:02:28.828Z",
+  "extractedAt": "2026-10-12T05:54:29.094Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "duplicates",
-      "fraction": 0.02179678134195517,
-      "seconds": 2.929,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-2.png"
+      "fraction": 0.021600604816934873,
+      "seconds": 2.931,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-2.png"
     },
     {
       "scene": "duplicates",
       "fraction": 0.25,
-      "seconds": 9.21075,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-25.png"
+      "seconds": 9.27525,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-25.png"
     },
     {
       "scene": "duplicates",
       "fraction": 0.45,
-      "seconds": 14.716149999999999,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-45.png"
+      "seconds": 14.83065,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-45.png"
     },
     {
       "scene": "duplicates",
       "fraction": 0.6,
-      "seconds": 18.845200000000002,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-60.png"
+      "seconds": 18.9972,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-60.png"
     },
     {
       "scene": "duplicates",
       "fraction": 0.85,
-      "seconds": 25.726950000000002,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-85.png"
+      "seconds": 25.94145,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-85.png"
     },
     {
       "scene": "duplicates",
-      "fraction": 0.9891016093290225,
-      "seconds": 29.556,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/duplicates-end.png"
+      "fraction": 0.9891996975915326,
+      "seconds": 29.808,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/duplicates-end.png"
     },
     {
       "scene": "compare",
-      "fraction": 0.022294058633374206,
-      "seconds": 32.728,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-2.png"
+      "fraction": 0.021396476713501176,
+      "seconds": 32.971,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-2.png"
     },
     {
       "scene": "compare",
       "fraction": 0.25,
-      "seconds": 38.85625,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-25.png"
+      "seconds": 39.3815,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-25.png"
     },
     {
       "scene": "compare",
       "fraction": 0.45,
-      "seconds": 44.23885,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-45.png"
+      "seconds": 44.9899,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-45.png"
     },
     {
       "scene": "compare",
       "fraction": 0.6,
-      "seconds": 48.275800000000004,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-60.png"
+      "seconds": 49.1962,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-60.png"
     },
     {
       "scene": "compare",
       "fraction": 0.85,
-      "seconds": 55.00405,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-85.png"
+      "seconds": 56.2067,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-85.png"
     },
     {
       "scene": "compare",
-      "fraction": 0.9888529706833129,
-      "seconds": 58.741,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/compare-end.png"
+      "fraction": 0.9893017616432495,
+      "seconds": 60.113,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/compare-end.png"
     },
     {
       "scene": "fields",
-      "fraction": 0.02021018593371059,
-      "seconds": 61.905,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-2.png"
+      "fraction": 0.020772027003635105,
+      "seconds": 63.273,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-2.png"
     },
     {
       "scene": "fields",
       "fraction": 0.25,
-      "seconds": 68.727,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-25.png"
+      "seconds": 69.89425,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-25.png"
     },
     {
       "scene": "fields",
       "fraction": 0.45,
-      "seconds": 74.66460000000001,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-45.png"
+      "seconds": 75.67125,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-45.png"
     },
     {
       "scene": "fields",
       "fraction": 0.6,
-      "seconds": 79.1178,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-60.png"
+      "seconds": 80.004,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-60.png"
     },
     {
       "scene": "fields",
       "fraction": 0.85,
-      "seconds": 86.5398,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-85.png"
+      "seconds": 87.22525,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-85.png"
     },
     {
       "scene": "fields",
-      "fraction": 0.9898949070331448,
-      "seconds": 90.693,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/fields-end.png"
+      "fraction": 0.9896139864981824,
+      "seconds": 91.258,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/fields-end.png"
     },
     {
       "scene": "conflicts",
-      "fraction": 0.020957038071952497,
-      "seconds": 93.858,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-2.png"
+      "fraction": 0.02131665896898426,
+      "seconds": 94.416,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-2.png"
     },
     {
       "scene": "conflicts",
       "fraction": 0.25,
-      "seconds": 100.4155,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-25.png"
+      "seconds": 100.85275,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-25.png"
     },
     {
       "scene": "conflicts",
       "fraction": 0.45,
-      "seconds": 106.1415,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-45.png"
+      "seconds": 106.48214999999999,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-45.png"
     },
     {
       "scene": "conflicts",
       "fraction": 0.6,
-      "seconds": 110.436,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-60.png"
+      "seconds": 110.7042,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-60.png"
     },
     {
       "scene": "conflicts",
       "fraction": 0.85,
-      "seconds": 117.5935,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-85.png"
+      "seconds": 117.74095,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-85.png"
     },
     {
       "scene": "conflicts",
-      "fraction": 0.9895214809640237,
-      "seconds": 121.588,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/conflicts-end.png"
+      "fraction": 0.9893416705155079,
+      "seconds": 121.663,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/conflicts-end.png"
     },
     {
       "scene": "confirm",
-      "fraction": 0.019147917663954045,
-      "seconds": 124.752,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-2.png"
+      "fraction": 0.019645722144003144,
+      "seconds": 124.828,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-2.png"
     },
     {
       "scene": "confirm",
       "fraction": 0.25,
-      "seconds": 131.98575,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-25.png"
+      "seconds": 131.86325,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-25.png"
     },
     {
       "scene": "confirm",
       "fraction": 0.45,
-      "seconds": 138.25275,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-45.png"
+      "seconds": 137.97145,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-45.png"
     },
     {
       "scene": "confirm",
       "fraction": 0.6,
-      "seconds": 142.953,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-60.png"
+      "seconds": 142.5526,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-60.png"
     },
     {
       "scene": "confirm",
       "fraction": 0.85,
-      "seconds": 150.78675,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-85.png"
+      "seconds": 150.18785,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-85.png"
     },
     {
       "scene": "confirm",
-      "fraction": 0.990426041168023,
-      "seconds": 155.187,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/confirm-end.png"
+      "fraction": 0.9901771389279984,
+      "seconds": 154.469,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/confirm-end.png"
     },
     {
       "scene": "result",
-      "fraction": 0.02227006161383713,
-      "seconds": 158.432,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-2.png"
+      "fraction": 0.023275661416711925,
+      "seconds": 157.715,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-2.png"
     },
     {
       "scene": "result",
       "fraction": 0.25,
-      "seconds": 164.5675,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-25.png"
+      "seconds": 163.5595,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-25.png"
     },
     {
       "scene": "result",
       "fraction": 0.45,
-      "seconds": 169.95589999999999,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-45.png"
+      "seconds": 168.7151,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-45.png"
     },
     {
       "scene": "result",
       "fraction": 0.6,
-      "seconds": 173.99720000000002,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-60.png"
+      "seconds": 172.5818,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-60.png"
     },
     {
       "scene": "result",
       "fraction": 0.85,
-      "seconds": 180.73270000000002,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-85.png"
+      "seconds": 179.0263,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-85.png"
     },
     {
       "scene": "result",
-      "fraction": 0.9888649691930814,
-      "seconds": 184.474,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/result-end.png"
+      "fraction": 0.988362169291644,
+      "seconds": 182.593,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/result-end.png"
     },
     {
       "scene": "links",
-      "fraction": 0.02116700769067946,
-      "seconds": 187.642,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-2.png"
+      "fraction": 0.022357193426985132,
+      "seconds": 185.758,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-2.png"
     },
     {
       "scene": "links",
       "fraction": 0.25,
-      "seconds": 194.1285,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-25.png"
+      "seconds": 191.86725,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-25.png"
     },
     {
       "scene": "links",
       "fraction": 0.45,
-      "seconds": 199.79770000000002,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-45.png"
+      "seconds": 197.23465,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-45.png"
     },
     {
       "scene": "links",
       "fraction": 0.6,
-      "seconds": 204.0496,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-60.png"
+      "seconds": 201.2602,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-60.png"
     },
     {
       "scene": "links",
       "fraction": 0.85,
-      "seconds": 211.1361,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-85.png"
+      "seconds": 207.96945000000002,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-85.png"
     },
     {
       "scene": "links",
-      "fraction": 0.9894164961546603,
-      "seconds": 215.088,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/members-duplicates-merge/review-frames/links-end.png"
+      "fraction": 0.9888214032865075,
+      "seconds": 211.695,
+      "file": "/private/tmp/codex-video/videos/output/members-duplicates-merge/review-frames/links-end.png"
     }
   ]
 }

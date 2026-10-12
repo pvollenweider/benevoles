@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:47:09.490Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "012e91ac10a8ccdddfa24aa64195672dbb676f994b46939337a3636310dffae2",
+  "clipSha256": "24a4142fe9bd654122f65c9e33165f0c83707f73e8002131639194418d273ffe",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ces règles doivent rester compréhensibles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Dans les paramètres de l’événement, la description permet d’expliquer les critères.",
+        "visibleSeconds": 2.5,
+        "visible": "Page Modifier l'événement affichant le champ Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J.",
+        "visibleSeconds": 7.2,
+        "visible": "Défilement vers le bas révélant la case cochée Téléphone obligatoire à l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "retrouvons Julien dans les membres",
+        "visibleSeconds": 13.5,
+        "visible": "Navigation vers l'onglet Membres et recherche de Julien Favre filtrant la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "puis ouvrons Éditer",
+        "visibleSeconds": 16,
+        "visible": "Clic sur Éditer et ouverture de la fenêtre modale Modifier le membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "son tag sécurité est une information interne.",
+        "visibleSeconds": 17.5,
+        "visible": "Le champ Tags contient la mention sécurité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.8,
+        "spoken": "puis nous annulons.",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur le bouton Annuler et fermeture du formulaire de modification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien rythmée, parfaitement calée avec les démonstrations visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,83 @@
+{
+  "organizationId": "video-data-exports",
+  "eventId": "video-data-exports-event",
+  "memberId": "video-data-exports-member-2",
+  "shiftId": "cmuvpbr9i0001jsa553j0izrc",
+  "signupStatus": 201,
+  "registrationId": "cmux07clp0007o1a5hyeufw2x",
+  "initialRegistrationIds": [
+    "cmuvpbr9k0002jsa5lu09cnww",
+    "cmuvpbr9p0003jsa5nh9ohyc1",
+    "cmuvpbr9q0004jsa58dp7b9b4"
+  ],
+  "charterAcceptedAt": "2026-10-06T18:20:06.908Z",
+  "charterAcceptedHash": "241e171634d39aed15fce32fbf9606aae5a802453b850c0ebd9619d28343846d",
+  "publicStatus": "published",
+  "isListed": false,
+  "completed": true,
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "outboxIds": [
+    "cmux07cly0008o1a5jzlxywaj",
+    "cmux07cm10009o1a52gmh18ca",
+    "cmux07cqf000co1a5zdy6q54v",
+    "cmux07cqi000do1a5uz2f699j"
+  ],
+  "outcomeIds": [
+    "cmux07crh000fo1a52d4x45lo",
+    "cmux07crm000go1a5nflwbknv"
+  ],
+  "mailpitMessageId": "3ieey5YJ8tVmeb7y4zV9pE",
+  "workerProduct": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "workerSourcePaths": [
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/prisma.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/outbox.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/outbox-view.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/report-error.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/index.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/channels/email.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/env.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/index.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/shared.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/urls.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/shift-info.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/map-link.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/org-logo.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/registration.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/message-variables.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/gantt-utils.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/markdown.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/spoken-time.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/registrations-list.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/text-fold.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/utils.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/invitations.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/reminders.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/waitlist.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/waitlist-copy.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/open-shifts.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/availability.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/role-reservation.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/administration.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/smtp-outcome.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/types.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/token-vault.ts?namespace=delivery-f1768d83-387b-454e-a65a-188e88ff2efb"
+  ]
+}

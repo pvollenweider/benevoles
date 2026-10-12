@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:45:44.532Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "c72a80aeb574bd7a9ab8c871bf73dc70c40ede0fc4ccfc627723bacfe4674113",
+  "clipSha256": "3046f7ca383c94af29c31f58491a81e5ecc04d5959cdecd906713e9e4deb089f",
+  "scene": "settings",
+  "review": {
+    "heardOpening": "Les règles se configurent au bon niveau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "L'âge minimum appartient au créneau",
+        "visibleSeconds": 3.7,
+        "visible": "Ouverture du formulaire d'édition d'un créneau affichant le champ Âge minimum",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La limite et les tags réservés appartiennent au poste entier",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture de la fenêtre Gérer les postes listant les postes et leurs règles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Ici, Buvette est limitée à deux créneaux",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage de la limite de 2 créneaux configurée pour le poste Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "et Sécurité exige le tag sécurité",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur la règle d'accès du poste Sécurité affichant le tag sécurité",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

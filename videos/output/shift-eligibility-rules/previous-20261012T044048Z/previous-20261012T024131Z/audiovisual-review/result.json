@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:19:21.271Z",
+  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
+  "promptSha256": "b3a120f767de777ba2f931c3f2bedec2ce43ddd1839f345bfd07db496b180b74",
+  "clipSha256": "da51d0bba4d3565231ed422b9502f09db44a699736ddd135a76b16039d0f4ad6",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ces règles doivent rester rares",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Indique les critères dans la description",
+        "visibleSeconds": 1,
+        "visible": "Le champ description a défilé hors champ vers le bas",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "vérifie le téléphone obligatoire si l'équipe doit appeler le jour J",
+        "visibleSeconds": 7,
+        "visible": "Case Téléphone obligatoire à l'inscription cochée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "prévois toujours une manière de corriger un profil ou une affectation",
+        "visibleSeconds": 11,
+        "visible": "Écran figé sur les messages et rappels, aucun écran de profil affiché",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:03 - Le champ description n'est plus visible lors de sa mention suite au défilement.",
+      "00:05 - Les tags internes ne figurent pas sur la vue affichée.",
+      "00:11 - La correction de profil ou d'affectation n'est pas illustrée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

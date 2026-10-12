@@ -1,50 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:09:28.248Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:03:37.209Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "4022cee9662af32a7f91deea4864ef5672f041cee395e584a895e4fe87f50e80",
-  "clipSha256": "58bab4b872539b86504778647bcfb2182ce0f518c4dc762a45a27b9e58f4c229",
+  "clipSha256": "dc905056c56fc60a7ea28a54e99de811391d0b358489c22147b68bf6d92e74aa",
   "scene": "members",
   "review": {
     "heardOpening": "Depuis Membres, Exporter les membres",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "Exporter les membres télécharge un fichier CSV.",
-        "visibleSeconds": 1,
-        "visible": "Onglet Membres affiché avec le bouton Exporter les membres (CSV)",
+        "spokenSeconds": 5.4,
+        "spoken": "Une recherche à l'écran ne transforme pas cet export",
+        "visibleSeconds": 5.3,
+        "visible": "Le terme « Léa » est saisi dans le champ de recherche filtrant la liste des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Une recherche à l'écran ne transforme pas cet export en liste de quelques personnes.",
-        "visibleSeconds": 3,
-        "visible": "Filtre de recherche 'Léa' saisi filtrant la liste",
+        "spokenSeconds": 13.9,
+        "spoken": "téléchargeons, puis comparons le fichier avec la liste complète",
+        "visibleSeconds": 17.2,
+        "visible": "Affichage de l'écran « Lecture du CSV des membres » présentant l'intégralité des 4 fiches",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "Gardons un filtre visible, téléchargeons",
-        "visibleSeconds": 13.2,
-        "visible": "Clic sur le bouton Exporter les membres (CSV)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15,
-        "spoken": "puis comparons le fichier avec la liste complète.",
-        "visibleSeconds": 14.8,
-        "visible": "Affichage de la vue 'Lecture du CSV des membres'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17.5,
-        "spoken": "On retrouve aussi une personne désactivée.",
-        "visibleSeconds": 17,
-        "visible": "Ligne avec Étienne indiquant 'non' dans la colonne Actif",
+        "spokenSeconds": 18.2,
+        "spoken": "On retrouve aussi une personne désactivée",
+        "visibleSeconds": 18,
+        "visible": "La première ligne du tableau montre Étienne Favre avec la colonne Actif à non",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et diction claire, synchronisation adéquate avec les actions."
+      "observation": "Voix masculine claire, fluide et posée, bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

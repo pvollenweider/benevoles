@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:03:57.951Z",
-  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
+  "reviewedAt": "2026-10-12T05:55:23.949Z",
+  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
   "promptSha256": "3d20f0a23e0d73cc6f4359d14b5436ac2a62a718c075e02832adb36774802ce0",
-  "clipSha256": "73701350799f0d8d48c3116345716e07d94cb352fedd0255e56eed81b21fd612",
+  "clipSha256": "09393c972c270e9350c28fe5afaa81fb1581056c774387ee4a4a509312fa371c",
   "scene": "result",
   "review": {
-    "heardOpening": "Fusion effectuée",
+    "heardOpening": "Fusion effectuée le résultat indique",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Fusion effectuée : le résultat indique ce qui a été déplacé.",
-        "visibleSeconds": 0.5,
-        "visible": "Page de confirmation affichant les éléments déplacés.",
+        "visibleSeconds": 0,
+        "visible": "Page de confirmation de fusion affichant le récapitulatif des éléments déplacés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "Retournez à la fiche conservée pour retrouver son activité",
-        "visibleSeconds": 7,
-        "visible": "Clic sur le lien de retour et affichage de la page d'activité.",
+        "spokenSeconds": 4,
+        "spoken": "Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la page Activité de Robin Favre avec les inscriptions consolidées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "Dans la liste des membres actifs, il ne reste qu’une fiche",
-        "visibleSeconds": 10,
-        "visible": "Affichage de la liste des membres filtrée sur une seule ligne.",
+        "spokenSeconds": 9,
+        "spoken": "Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne.",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la liste des membres montrant une seule ligne pour Robin Favre.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
-        "spoken": "les faits enregistrés sous l’ancienne fiche restent consultables",
-        "visibleSeconds": 15,
-        "visible": "Retour à la vue de l'historique d'activité du membre.",
+        "spokenSeconds": 14,
+        "spoken": "L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables",
+        "visibleSeconds": 14.5,
+        "visible": "Retour à l'activité montrant les événements historiques tracés avec mention de la fusion.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Ton calme, diction claire et rythme régulier."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

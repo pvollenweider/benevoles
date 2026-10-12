@@ -1,12 +1,12 @@
 {
   "anchor": "Cette case permet d’envoyer les nouveaux liens personnels à l’adresse conservée.",
-  "windowStart": 82.751,
+  "windowStart": 94.172,
   "result": {
     "found": true,
-    "startSeconds": 30.4,
-    "wordsHeard": "Cette case permet d’envoyer les nouveaux liens personnels à l’adresse conservée."
+    "startSeconds": 18.66,
+    "wordsHeard": "Cette"
   },
-  "onset": 113.15100000000001,
-  "proposedCut": 112.750625,
+  "onset": 112.832,
+  "proposedCut": 112.84560400000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,7 +1,7 @@
 {
   "format": "benevol-event-archive",
   "version": 1,
-  "exportedAt": "2026-10-06T18:26:23.871Z",
+  "exportedAt": "2026-10-12T05:57:10.903Z",
   "organization": {
     "name": "Formation — données et archives",
     "slug": "formation-exports"
@@ -32,12 +32,13 @@
     "longitude": 6.14,
     "dayContactName": null,
     "dayContactPhone": null,
-    "createdAt": "2026-10-05T20:27:50.593Z",
-    "updatedAt": "2026-10-06T18:20:06.869Z"
+    "personalDataAnonymizedAt": null,
+    "createdAt": "2026-10-12T03:53:56.070Z",
+    "updatedAt": "2026-10-12T03:54:02.532Z"
   },
   "shifts": [
     {
-      "id": "cmuvpbr9g0000jsa5dhwiy9o2",
+      "id": "video-data-exports-shift-accueil",
       "eventId": "video-data-exports-event",
       "roleName": "Accueil",
       "label": "Accueil — archives",
@@ -61,8 +62,9 @@
       "colorKey": null,
       "maxPerVolunteer": null,
       "reservedTags": [],
-      "createdAt": "2026-10-05T20:27:50.596Z",
-      "updatedAt": "2026-10-05T20:27:50.596Z"
+      "recurrenceId": null,
+      "createdAt": "2026-10-12T03:53:56.072Z",
+      "updatedAt": "2026-10-12T03:53:56.072Z"
     },
     {
       "id": "cmuvpbr9i0001jsa553j0izrc",
@@ -89,15 +91,16 @@
       "colorKey": null,
       "maxPerVolunteer": null,
       "reservedTags": [],
-      "createdAt": "2026-10-05T20:27:50.598Z",
-      "updatedAt": "2026-10-05T20:27:50.598Z"
+      "recurrenceId": null,
+      "createdAt": "2026-10-12T03:53:56.074Z",
+      "updatedAt": "2026-10-12T03:53:56.074Z"
     }
   ],
   "registrations": [
     {
       "id": "cmuvpbr9k0002jsa5lu09cnww",
       "eventId": "video-data-exports-event",
-      "shiftId": "cmuvpbr9g0000jsa5dhwiy9o2",
+      "shiftId": "video-data-exports-shift-accueil",
       "volunteerId": "video-data-exports-member-0",
       "status": "active",
       "source": "admin_manual",
@@ -113,8 +116,8 @@
       "linkEmailedAt": null,
       "charterAcceptedHash": null,
       "charterAcceptedAt": null,
-      "createdAt": "2026-10-05T20:27:50.600Z",
-      "updatedAt": "2026-10-05T20:27:50.600Z",
+      "createdAt": "2026-10-12T03:53:56.077Z",
+      "updatedAt": "2026-10-12T03:53:56.077Z",
       "volunteer": {
         "id": "video-data-exports-member-0",
         "organizationId": "video-data-exports",
@@ -136,14 +139,14 @@
         "mergedIntoId": null,
         "mergedAt": null,
         "erasedAt": null,
-        "createdAt": "2026-10-05T20:27:50.582Z",
-        "updatedAt": "2026-10-06T18:26:22.510Z"
+        "createdAt": "2026-10-12T03:53:56.059Z",
+        "updatedAt": "2026-10-12T05:57:10.451Z"
       }
     },
     {
       "id": "cmuvpbr9p0003jsa5nh9ohyc1",
       "eventId": "video-data-exports-event",
-      "shiftId": "cmuvpbr9g0000jsa5dhwiy9o2",
+      "shiftId": "video-data-exports-shift-accueil",
       "volunteerId": "video-data-exports-member-2",
       "status": "active",
       "source": "admin_manual",
@@ -159,8 +162,8 @@
       "linkEmailedAt": null,
       "charterAcceptedHash": null,
       "charterAcceptedAt": null,
-      "createdAt": "2026-10-05T20:27:50.605Z",
-      "updatedAt": "2026-10-05T20:27:50.605Z",
+      "createdAt": "2026-10-12T03:53:56.079Z",
+      "updatedAt": "2026-10-12T03:53:56.079Z",
       "volunteer": {
         "id": "video-data-exports-member-2",
         "organizationId": "video-data-exports",
@@ -181,8 +184,8 @@
         "mergedIntoId": null,
         "mergedAt": null,
         "erasedAt": null,
-        "createdAt": "2026-10-05T20:27:50.588Z",
-        "updatedAt": "2026-10-05T20:27:50.588Z"
+        "createdAt": "2026-10-12T03:53:56.065Z",
+        "updatedAt": "2026-10-12T03:53:56.065Z"
       }
     },
     {
@@ -204,8 +207,8 @@
       "linkEmailedAt": null,
       "charterAcceptedHash": null,
       "charterAcceptedAt": null,
-      "createdAt": "2026-10-05T20:27:50.606Z",
-      "updatedAt": "2026-10-05T20:27:50.606Z",
+      "createdAt": "2026-10-12T03:53:56.081Z",
+      "updatedAt": "2026-10-12T03:53:56.081Z",
       "volunteer": {
         "id": "video-data-exports-member-3",
         "organizationId": "video-data-exports",
@@ -222,12 +225,12 @@
         "mergedIntoId": null,
         "mergedAt": null,
         "erasedAt": null,
-        "createdAt": "2026-10-05T20:27:50.590Z",
-        "updatedAt": "2026-10-05T20:27:50.590Z"
+        "createdAt": "2026-10-12T03:53:56.067Z",
+        "updatedAt": "2026-10-12T03:53:56.067Z"
       }
     },
     {
-      "id": "cmux07clp0007o1a5hyeufw2x",
+      "id": "cmv4pwonf0061nba5etwjfif9",
       "eventId": "video-data-exports-event",
       "shiftId": "cmuvpbr9i0001jsa553j0izrc",
       "volunteerId": "video-data-exports-member-2",
@@ -242,11 +245,11 @@
       "waitingOfferedAt": null,
       "waitingExpiresAt": null,
       "checkedInAt": null,
-      "linkEmailedAt": "2026-10-06T18:20:06.924Z",
+      "linkEmailedAt": "2026-10-12T03:54:02.570Z",
       "charterAcceptedHash": "241e171634d39aed15fce32fbf9606aae5a802453b850c0ebd9619d28343846d",
-      "charterAcceptedAt": "2026-10-06T18:20:06.908Z",
-      "createdAt": "2026-10-06T18:20:06.925Z",
-      "updatedAt": "2026-10-06T18:20:06.925Z",
+      "charterAcceptedAt": "2026-10-12T03:54:02.561Z",
+      "createdAt": "2026-10-12T03:54:02.571Z",
+      "updatedAt": "2026-10-12T03:54:02.571Z",
       "volunteer": {
         "id": "video-data-exports-member-2",
         "organizationId": "video-data-exports",
@@ -267,26 +270,26 @@
         "mergedIntoId": null,
         "mergedAt": null,
         "erasedAt": null,
-        "createdAt": "2026-10-05T20:27:50.588Z",
-        "updatedAt": "2026-10-05T20:27:50.588Z"
+        "createdAt": "2026-10-12T03:53:56.065Z",
+        "updatedAt": "2026-10-12T03:53:56.065Z"
       }
     }
   ],
   "pages": [
     {
-      "id": "cmuvpbr9s0005jsa51leloi6j",
+      "id": "cmv4pwjn7000019a5k3f0junf",
       "eventId": "video-data-exports-event",
       "slug": "bienvenue",
       "title": "Bienvenue au stand",
       "content": "Informations fictives pour la fête des archives.",
       "displayOrder": 0,
-      "createdAt": "2026-10-05T20:27:50.608Z",
-      "updatedAt": "2026-10-05T20:27:50.608Z"
+      "createdAt": "2026-10-12T03:53:56.083Z",
+      "updatedAt": "2026-10-12T03:53:56.083Z"
     }
   ],
   "questions": [
     {
-      "id": "cmuvpbr9y0008jsa5s9c9wbof",
+      "id": "cmv4pwjnd000319a5dve21i0d",
       "eventId": "video-data-exports-event",
       "position": 0,
       "label": "Taille du t-shirt",
@@ -298,14 +301,14 @@
       ],
       "required": false,
       "archivedAt": null,
-      "createdAt": "2026-10-05T20:27:50.614Z",
+      "createdAt": "2026-10-12T03:53:56.089Z",
       "answers": [
         {
           "volunteerId": "video-data-exports-member-0",
           "values": [
             "M"
           ],
-          "updatedAt": "2026-10-05T20:27:50.616Z"
+          "updatedAt": "2026-10-12T03:53:56.091Z"
         }
       ]
     }
@@ -315,58 +318,29 @@
       "roleName": "Accueil",
       "name": "Nicolas Berger",
       "email": "video.exports.leader@example.org",
-      "createdAt": "2026-10-05T20:27:50.610Z"
+      "createdAt": "2026-10-12T03:53:56.085Z"
     }
   ],
   "milestones": [
     {
-      "id": "cmuvpbr9x0007jsa5xdc3uns0",
+      "id": "cmv4pwjnc000219a51binlgct",
       "eventId": "video-data-exports-event",
       "title": "Préparer les panneaux",
       "dueDate": "2026-10-15T12:00:00.000Z",
       "done": true,
-      "createdAt": "2026-10-05T20:27:50.613Z",
-      "updatedAt": "2026-10-05T20:27:50.613Z"
+      "createdAt": "2026-10-12T03:53:56.088Z",
+      "updatedAt": "2026-10-12T03:53:56.088Z"
     }
   ],
   "log": [
     {
-      "id": "cmuvpcz5600p4mna503tetmfz",
-      "eventId": "video-data-exports-event",
-      "actorType": "system",
-      "actorId": null,
-      "action": "event.baseline",
-      "entityType": "Event",
-      "entityId": "video-data-exports-event",
-      "changes": {
-        "title": {
-          "to": "Fête des archives — démonstration",
-          "from": null
-        },
-        "endDate": {
-          "to": "2026-10-17T00:00:00.000Z",
-          "from": null
-        },
-        "startDate": {
-          "to": "2026-10-17T00:00:00.000Z",
-          "from": null
-        },
-        "publicStatus": {
-          "to": "draft",
-          "from": null
-        }
-      },
-      "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.593Z"
-    },
-    {
-      "id": "cmuvpcz5a00p5mna5yfeypbyh",
+      "id": "cmv4pwpxq006enba52s3azijo",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "shift.baseline",
       "entityType": "Shift",
-      "entityId": "cmuvpbr9g0000jsa5dhwiy9o2",
+      "entityId": "video-data-exports-shift-accueil",
       "changes": {
         "date": {
           "to": "2026-10-17T00:00:00.000Z",
@@ -398,10 +372,10 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.596Z"
+      "createdAt": "2026-10-12T03:53:56.072Z"
     },
     {
-      "id": "cmuvpcz5d00p6mna5tt31hc6x",
+      "id": "cmv4pwpxr006fnba562b8bcrp",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
@@ -439,10 +413,10 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.598Z"
+      "createdAt": "2026-10-12T03:53:56.074Z"
     },
     {
-      "id": "cmuvpcz5f00p7mna57plb5m1v",
+      "id": "cmv4pwpxs006gnba587ajgrmv",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
@@ -459,15 +433,15 @@
           "from": null
         },
         "shiftId": {
-          "to": "cmuvpbr9g0000jsa5dhwiy9o2",
+          "to": "video-data-exports-shift-accueil",
           "from": null
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.600Z"
+      "createdAt": "2026-10-12T03:53:56.077Z"
     },
     {
-      "id": "cmuvpcz5h00p8mna5q97wtjyp",
+      "id": "cmv4pwpxt006hnba5jqfp95wd",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
@@ -484,15 +458,15 @@
           "from": null
         },
         "shiftId": {
-          "to": "cmuvpbr9g0000jsa5dhwiy9o2",
+          "to": "video-data-exports-shift-accueil",
           "from": null
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.605Z"
+      "createdAt": "2026-10-12T03:53:56.079Z"
     },
     {
-      "id": "cmuvpcz5j00p9mna5wx8muw6b",
+      "id": "cmv4pwpxt006inba5iga3ac62",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
@@ -514,10 +488,10 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T20:27:50.606Z"
+      "createdAt": "2026-10-12T03:53:56.081Z"
     },
     {
-      "id": "cmux07ck70005o1a5sd1q3fj7",
+      "id": "cmv4pwome005znba5r70hzk6w",
       "eventId": "video-data-exports-event",
       "actorType": "admin",
       "actorId": "video-data-exports-owner",
@@ -535,16 +509,16 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-06T18:20:06.871Z"
+      "createdAt": "2026-10-12T03:54:02.535Z"
     },
     {
-      "id": "cmux07cm4000ao1a58acghofh",
+      "id": "cmv4pwonq0064nba5i638mnho",
       "eventId": "video-data-exports-event",
       "actorType": "volunteer",
       "actorId": "video-data-exports-member-2",
       "action": "registration.created",
       "entityType": "Registration",
-      "entityId": "cmux07clp0007o1a5hyeufw2x",
+      "entityId": "cmv4pwonf0061nba5etwjfif9",
       "changes": {
         "source": {
           "to": "public_form",
@@ -556,10 +530,10 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-06T18:20:06.940Z"
+      "createdAt": "2026-10-12T03:54:02.582Z"
     },
     {
-      "id": "cmux07cqm000eo1a56xgim6zj",
+      "id": "cmv4pworp0069nba5b3i2bzvt",
       "eventId": "video-data-exports-event",
       "actorType": "admin",
       "actorId": "video-data-exports-owner",
@@ -581,7 +555,7 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-06T18:20:07.102Z"
+      "createdAt": "2026-10-12T03:54:02.725Z"
     }
   ],
   "counts": {
@@ -590,6 +564,6 @@
     "pages": 1,
     "sectorLeaders": 1,
     "milestones": 1,
-    "log": 9
+    "log": 8
   }
 }

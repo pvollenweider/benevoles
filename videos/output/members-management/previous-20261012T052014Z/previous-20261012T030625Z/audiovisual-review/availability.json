@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:25:46.233Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "promptSha256": "ca9d1af621b46823273d4d1a2872949391bdf66a48c875feee9d5c0556e746c8",
+  "clipSha256": "a4e24b27ca73436a6ccc1b903848251ab67caf632e9e24101d5739122e4e1e57",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Les disponibilités donnent une indication générale",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "matin, après-midi, soir, et une courte exception si nécessaire",
+        "visibleSeconds": 2.8,
+        "visible": "Options de disponibilité affichées dans la modale de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Maya est disponible le soir, sauf le vendredi",
+        "visibleSeconds": 13,
+        "visible": "Case Soir cochée dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste",
+        "visibleSeconds": 19,
+        "visible": "Modale fermée, mention affichée sous le contact de Maya Berger dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

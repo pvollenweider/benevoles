@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T03:17:01.009Z",
+  "videoSha256": "416bbd17ef764f8c8c6a9e48118559dfb336c9e898fb666570cf58f3f4a72530",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 36,
+    "keys": 132
+  },
+  "music": {
+    "voicedWindows": 216,
+    "musicOnlyWindows": 7,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -34.1,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.7
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "60 images finales revues. Une reprise après dépassement1.58s de deactivate ; réactivation corrigée. Disponibilités sauvegardées19.15s vs phrase16.56s : retard encore présent. AV interdit par guard : seed legacy M2 sans preuve naturelle actuelle, aucune image envoyée. Validation, ASR10/10,VTT,effets,musique passent ; dates françaises/aucune adresse interdite/overlay. Tableau Membres nécessite défilement horizontal pour actions à1280px.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

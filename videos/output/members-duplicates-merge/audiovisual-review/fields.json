@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:03:05.626Z",
-  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
+  "reviewedAt": "2026-10-12T05:55:11.536Z",
+  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
   "promptSha256": "b57868132dc29bbd659231c1323f74e8e2317cad66dc125a0198a5bf5b05b912",
-  "clipSha256": "255fd93d2cf54acc8d70ca601997b223097b64f859f91dbb57a0dc3c3b3e6612",
+  "clipSha256": "cdd769cc2faec8897fee975fc2a91b2059b20b38062d4c9fa97695e42281e749",
   "scene": "fields",
   "review": {
-    "heardOpening": "Pour chaque information différente, vous choisissez",
+    "heardOpening": "Pour chaque information différente",
     "checkpoints": [
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 6.8,
         "spoken": "on prend le téléphone de l'autre fiche",
-        "visibleSeconds": 7,
-        "visible": "Sélection du second numéro de téléphone par bouton radio",
+        "visibleSeconds": 7.4,
+        "visible": "Sélection de l'option radio pour le second numéro de téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 9.3,
         "spoken": "Les notes internes peuvent aussi être mises à la suite",
-        "visibleSeconds": 11,
-        "visible": "Sélection de l'option 'Mettre les deux notes à la suite'",
+        "visibleSeconds": 10.4,
+        "visible": "Sélection de l'option radio « Mettre les deux notes à la suite »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 17.5,
         "spoken": "Le tableau récapitule les inscriptions, les invitations et les réponses concernées",
-        "visibleSeconds": 18.5,
-        "visible": "Défilement affichant le tableau récapitulatif 'Ce qui sera déplacé'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 23.2,
-        "spoken": "les abonnements aux notifications du navigateur ne sont jamais déplacés",
-        "visibleSeconds": 18.5,
-        "visible": "Ligne 'Abonnements aux notifications du navigateur' visible dans le tableau",
+        "visibleSeconds": 16.8,
+        "visible": "Défilement vers le bas affichant le tableau récapitulatif « Ce qui sera déplacé »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution calme, fluide et bien articulée."
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T16:17:44.819Z",
+  "revalidatedAt": "2026-10-06T16:17:44.819Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "b4e4a99714069f6143309a5eb12e493d93a8864c7703d715a4e4b00c0b30d2cd",
+      "recognized": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux ou l'appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l'inscription.",
+      "expected": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings",
+      "audioSha256": "979fa55929dd65089e1125096faa606f5b80b317f406cea934e68f4fe191a365",
+      "recognized": "Les règles se configurent au bon niveau. L'âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier pour rester cohérent sur toutes ses plages horaires. Ici, buvette est limitée à deux créneaux et sécurité exige le tag sécurité.",
+      "expected": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+      "wordErrorRate": 0.022727272727272728,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "age",
+      "audioSha256": "25780da5b63c45fa82e894c4f9984f25ed446872af6f53313f855b2ef8f1a4ce",
+      "recognized": "Sur le planning public, la buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle. Modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "expected": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "quota",
+      "audioSha256": "2d43bedfbccdd610f53d3cad06706b18f848015c872383a51c9afa0a201650f1",
+      "recognized": "Camille possède déjà deux engagements de buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ses inscriptions. Les autres créneaux restent visibles mais indiquent que la limite de deux est atteinte. Elle peut d'abord retirer un engagement si elle souhaite en choisir un autre.",
+      "expected": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "wordErrorRate": 0.020833333333333332,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reserved",
+      "audioSha256": "2856609d0ea04c2d55f2cd5c47109e320eac15df582e1bb64b63cdbb07b6c462",
+      "recognized": "Sans invitation, le poste sécurisé reste visible, mais marqué réservé à certains membres. Le message ne révèle pas les tags internes. Il demande simplement d'utiliser le lien personnel reçu par e-mail. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "expected": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "wordErrorRate": 0.023255813953488372,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "eligible",
+      "audioSha256": "62377f5f81412607086c393190625e4471bbd63c63523f8fb5336148e4e105f9",
+      "recognized": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable. Le lien prouve quel membre a été invité, et le serveur contrôle ses tags au moment de l'inscription. Il n'y a donc ni compte à créer, ni code à recopier.",
+      "expected": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "4ff14f9ac30635d55be5c27d747492e2dd57b5f1ee7d72c9607a27f102eb1c8c",
+      "recognized": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l'équipe doit appeler le jour J et prévois toujours une manière de corriger un profil ou une affectation.",
+      "expected": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

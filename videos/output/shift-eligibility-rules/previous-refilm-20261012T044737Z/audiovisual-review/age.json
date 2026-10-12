@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:46:45.953Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "b2a9c9822bf1d0e1a4995e07fe08d7d521ec996cf24cd8d99824eeaff8b8e07d",
+  "clipSha256": "3debfa254931c436d4ede96227899711379ad9a164efb7900ef1cda3e31bc9e9",
+  "scene": "age",
+  "review": {
+    "heardOpening": "Sur le planning public, la buvette du soir annonce",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur le planning public, la buvette du soir annonce 18 ans minimum avant toute sélection.",
+        "visibleSeconds": 0.5,
+        "visible": "Planning public avec le créneau Buvette 18h-22h affichant la mention 18 ans minimum.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle",
+        "visibleSeconds": 6.4,
+        "visible": "Transition vers le formulaire 'Tes informations' présentant le champ obligatoire Date de naissance.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+        "visibleSeconds": 9.5,
+        "visible": "Le champ Date de naissance est sélectionné et une date commence à être saisie.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et naturelle, parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "MEMBERS_IMPORT",
+  "status": "NOT READY",
+  "duration": 220.92,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 215,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "54 images finales revues, AV9chapitres. Fermeture résultat9.26s vs phrase13.54s et Éditer Maya11.71s vs17.59s : actions anticipées4.3/5.9s. Contrôle natif Choose File anglais. Validation, ASR9/9,VTT,effets,musique passent ; vrai Excel/CSV,38créations+2misesàjour,64membres,réanalyse39ignorés+1sans-email annulée. Aucune adresse interdite/overlay ; défilement horizontal des actions Membres à1280px, pas de nouveau bug produit.",
+  "sourceChanges": "Deux ancres fermeture/Éditer ; lanceur natiffrançais pour import ; précontrôle26membres autorisé. XLSXv2 XML normalisés sans changement valeurs/styles/pixels,empreintes actualisées,ancienne empreinte admise uniquement historique. Cache accepté ; aucun re-film.",
+  "report": "videos/output/members-import/review-report.txt",
+  "videoSha256": "15e4f2dbf2422685676a1803b33e8833a8d517d559910fed01aeb676b9fcaa38"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

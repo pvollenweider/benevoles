@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:49:05.556Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:39:47.090Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
-  "clipSha256": "20d4727d0ad1d878f93eaa6d74e625eaa0048a09a19a9ed9d592e44a648dc9f3",
+  "clipSha256": "de70e880dcd56b2cd42635c4bdc131b7f5c2c2369b029c6d9f32c700649ffd65",
   "scene": "volunteer-form",
   "review": {
-    "heardOpening": "Répondons maintenant",
+    "heardOpening": "Répondons maintenant.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Aline choisit M pour son t-shirt, puis Oui pour le permis.",
-        "visibleSeconds": 3,
-        "visible": "Sélection de la taille M puis case Oui cochée pour le permis",
+        "spokenSeconds": 2,
+        "spoken": "Aline choisit M pour son t-shirt",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection de la taille M parmi les options de t-shirt",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "spokenSeconds": 7,
+        "spoken": "elle coche Vélo et Remorque",
         "visibleSeconds": 6.8,
-        "visible": "Cases Vélo et Remorque cochées successivement",
+        "visible": "Cochage successif des cases Vélo puis Remorque",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "Dans le texte libre, écrivons Entrée nord.",
-        "visibleSeconds": 11.4,
-        "visible": "Saisie de Entrée nord dans le champ point de rendez-vous",
+        "spokenSeconds": 12,
+        "spoken": "écrivons Entrée nord",
+        "visibleSeconds": 11.8,
+        "visible": "Saisie du texte « Entrée nord » dans le champ Point de rendez-vous préféré",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
-        "spoken": "le récapitulatif Transmis à l'organisation",
-        "visibleSeconds": 16.8,
-        "visible": "Défilement vers le haut affichant l'encart Transmis à l'organisation",
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
+        "visibleSeconds": 19,
+        "visible": "Remontée sur la page affichant le bloc latéral « Transmis à l'organisation »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.1,
+        "spokenSeconds": 22.5,
         "spoken": "confirmons réellement l'inscription",
-        "visibleSeconds": 22.3,
-        "visible": "Clic sur le bouton et affichage de l'écran Inscription confirmée",
+        "visibleSeconds": 23.5,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » puis affichage de l'écran « Inscription confirmée ! »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec les manipulations à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

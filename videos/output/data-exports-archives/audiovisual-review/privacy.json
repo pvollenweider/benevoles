@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:10:43.553Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:04:02.299Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "a65d876db883d9fc9d112d2e29d9b497efe40f56d91a5cc7152027a5d4acca4a",
-  "clipSha256": "cd446028f9a3cc9bc8bfd30a7b91a3ad9ac4b1d179f6617a48f9714e7a26f0bb",
+  "clipSha256": "40a69fba472f21cdc0b2d8afa673625f0089d8b0ec5aed26c965aeff40f367f5",
   "scene": "privacy",
   "review": {
-    "heardOpening": "Une fois téléchargée",
+    "heardOpening": "Une fois téléchargée, cette copie ne se met pas à jour",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "cette copie ne se met pas à jour",
-        "visibleSeconds": 0.5,
-        "visible": "Affichage de la visionneuse JSON pour les questions",
+        "spokenSeconds": 0,
+        "spoken": "Une fois téléchargée, cette copie ne se met pas à jour.",
+        "visibleSeconds": 0,
+        "visible": "Affichage du visualiseur avec le titre 'Lecture de l'archive JSON'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Si une fiche change dans l'application",
-        "visibleSeconds": 4,
-        "visible": "Affichage de la liste des membres dans l'application",
+        "spokenSeconds": 3.5,
+        "spoken": "Si une fiche change dans l'application, l'ancien fichier reste identique.",
+        "visibleSeconds": 4.8,
+        "visible": "Transition vers le tableau 'Lecture du CSV des membres'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Rangez-le dans un espace protégé",
-        "visibleSeconds": 8.5,
-        "visible": "Affichage de la lecture du fichier CSV des membres exporté",
+        "spokenSeconds": 20.5,
+        "spoken": "Consultez les durées de conservation dans le guide avant de décider.",
+        "visibleSeconds": 20.5,
+        "visible": "Affichage de la documentation avec le tableau 'Durées de conservation'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "Consultez les durées de conservation dans le guide",
-        "visibleSeconds": 20,
-        "visible": "Page du guide affichant le tableau des durées de conservation",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 25.1,
-        "spoken": "Il n'y a pas de bouton pour restaurer un événement",
-        "visibleSeconds": 25,
-        "visible": "Retour à la visionneuse JSON montrant l'absence de bouton de restauration",
+        "spokenSeconds": 24.8,
+        "spoken": "Il n'y a pas de bouton pour restaurer un événement depuis ce JSON.",
+        "visibleSeconds": 24,
+        "visible": "Retour à la page 'Lecture de l'archive JSON'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et diction claire, parfaitement intelligible."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les changements d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

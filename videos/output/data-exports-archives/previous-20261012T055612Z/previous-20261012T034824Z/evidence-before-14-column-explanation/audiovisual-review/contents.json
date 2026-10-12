@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:10:31.827Z",
+  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "promptSha256": "92fc81da4716779a8b4ba831414c21f5d3b94f71e9fefd4fb15693f30399dde9",
+  "clipSha256": "a24789dfaf2abe3775303b45fddbca84fefbebfc9ef933ec26d0aa8b8502b5c9",
+  "scene": "contents",
+  "review": {
+    "heardOpening": "Ouvrons les différentes parties du vrai fichier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "les créneaux et les inscriptions",
+        "visibleSeconds": 4.1,
+        "visible": "Sélection de shifts puis registrations dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Des nombres récapitulent plusieurs de ces collections",
+        "visibleSeconds": 15.7,
+        "visible": "Affichage de la section counts montrant les totaux JSON",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Vérifions un créneau et une réponse de notre exemple",
+        "visibleSeconds": 18.4,
+        "visible": "Bascule sur shifts puis questions dans le sélecteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
