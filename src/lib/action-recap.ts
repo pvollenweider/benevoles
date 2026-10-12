@@ -185,6 +185,23 @@ export function deleteMilestoneRecap(title: string): ActionRecap {
   }
 }
 
+/** Deleting a share link per group (#947): the registrations it brought stay. */
+export function deleteGroupLinkRecap(name: string, registrations: number): ActionRecap {
+  return {
+    title: `Supprimer le lien « ${name} » ?`,
+    lines: [
+      "Le lien et son QR code ouvriront la page de l'événement avec tous ses postes, sans filtre.",
+      registrations > 0
+        ? `${registrations === 1 ? "L'inscription venue" : `Les ${registrations} inscriptions venues`} de ce lien ${registrations === 1 ? "est conservée" : "sont conservées"}, mais ne ${registrations === 1 ? "sera" : "seront"} plus comptée${registrations === 1 ? "" : "s"} pour ce groupe.`
+        : "Aucune inscription n'est venue de ce lien.",
+      "Aucun email n'est envoyé.",
+      LOGGED,
+    ],
+    confirmLabel: "Supprimer le lien",
+    danger: true,
+  }
+}
+
 export function deletePageRecap(title: string): ActionRecap {
   return {
     title: `Supprimer la page « ${title} » ?`,

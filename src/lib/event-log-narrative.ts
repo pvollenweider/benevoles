@@ -57,6 +57,11 @@ const FIELD_LABELS: Record<string, string> = {
   resent: "envois relancés",
   personalLink: "lien personnel",
   confirmationEmail: "email de confirmation",
+  // Share links per group (#947).
+  name: "nom",
+  roleNames: "postes",
+  hideFull: "créneaux complets masqués",
+  groupLink: "lien de groupe",
 }
 
 /**
@@ -140,6 +145,9 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "eventmilestone.created": (a) => `${a} a ajouté un jalon`,
   "eventmilestone.updated": (a) => `${a} a modifié un jalon`,
   "eventmilestone.deleted": (a) => `${a} a supprimé un jalon`,
+  "grouplink.created": (a) => `${a} a créé un lien de groupe`,
+  "grouplink.updated": (a) => `${a} a modifié un lien de groupe`,
+  "grouplink.deleted": (a) => `${a} a supprimé un lien de groupe`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".
   "shift.baseline": () => "état initial observé (avant le suivi du journal)",

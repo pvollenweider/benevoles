@@ -224,6 +224,17 @@ async function main() {
   // Manual add, with a note.
   await register(accueil1, ines, { source: "admin_manual", comment: "Inscrite par téléphone" })
 
+  // Share links per group (#947): the village clubs each recruit for their roles, with fixed codes
+  // (demo only) so the guide's captures can open them. Some sign-ups came through them.
+  const pompiers = await prisma.eventGroupLink.create({
+    data: { eventId: event.id, code: "pmpr2345", name: "Amicale des pompiers", roleNames: ["Montage", "Sécurité", "Démontage"] },
+  })
+  const fanfare = await prisma.eventGroupLink.create({
+    data: { eventId: event.id, code: "fanfare2", name: "Fanfare L'Écho du Mont", roleNames: ["Buvette"], hideFull: true },
+  })
+  await prisma.registration.updateMany({ where: { shiftId: { in: [montage.id, securite.id] } }, data: { groupLinkId: pompiers.id } })
+  await prisma.registration.updateMany({ where: { shiftId: buvette1.id, volunteerId: { in: [noah.id, chloe.id] } }, data: { groupLinkId: fanfare.id } })
+
   await prisma.sectorLeader.create({
     data: { eventId: event.id, roleName: "Buvette", name: "Élodie Rochat", email: "elodie.rochat@example.org", ...linkToken.data(DEMO_TOKENS.leader) },
   })

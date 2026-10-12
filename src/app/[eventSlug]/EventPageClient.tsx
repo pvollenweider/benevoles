@@ -50,6 +50,7 @@ import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
+import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
 
 
 type Shift = {
@@ -122,14 +123,19 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * `initialEvent` (#773): the public page's data, read by the server page as the public API sends
  * it. The page is then server-rendered with its schedule; without it (the preview), the event is
  * fetched after mounting.
+ *
+ * `groupFilter` (#947): the share link per group the page was opened with (`?groupe=`), resolved by
+ * the server. A filtered page shows only the link's roles, says so, and lets the visitor see every
+ * role; the sign-up is counted for the link either way.
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" } }: {
   /** The consent's privacy link, from the server (#760: the operator page on another instance). */
   privacyHref?: string
   orgSlug: string
   eventSlug: string
   preview?: { eventId: string; adminEventUrl: string }
   initialEvent?: EventData
+  groupFilter?: GroupFilter
 }) {
   const previewEventId = preview?.eventId ?? null
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
@@ -172,6 +178,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // Result of an action outside the sign-up steps (a withdrawal), voiced once.
   const [actionNotice, setActionNotice] = useState("")
   const [step, setStep] = useState<"select" | "form">("select")
+  // « Voir tous les postes » (#947): the visitor lifts the group link's filter, and can put it back.
+  const [showAllRoles, setShowAllRoles] = useState(false)
+  const [groupNote, setGroupNote] = useState("")
   // « Frise » or « Liste » (#808): the timeline by default (and in the server HTML), the visitor's
   // choice kept on the device and read once hydrated. The admin preview never reads storage.
   const hydrated = useHydrated()
@@ -326,7 +335,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const accepting = windowState.open
   const windowClosedText = closedMessage(windowState, event.timeZone)
   const windowUntilText = openUntilMessage(windowState, event.timeZone)
-  const shiftsByDay = groupShiftsByDay(event.shifts)
+  // A group link (#947) shows its roles only; the visitor's held and selected shifts always stay.
+  const groupFiltered = groupFilter.kind === "filtered"
+  const keptShiftIds = new Set([...myShiftIds, ...selectedShifts])
+  const shownShifts = groupFiltered && !showAllRoles ? shiftsForGroup(event.shifts, groupFilter, keptShiftIds) : event.shifts
+  const groupNotice = groupFilterNotice(groupFilter)
+  const shiftsByDay = groupShiftsByDay(shownShifts)
   // A season of permanences (#866): past days left out, one month at a time from 8 dates on.
   // « Today » in the organisation's zone; the server answers the same for the days it renders.
   const longEvent = isLongEvent(event.startDate, event.endDate)
@@ -335,7 +349,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const months = usesMonthView(shownDays) ? groupDaysByMonth(shownDays) : null
   const month = months ? (months.find((m) => m.key === chosenMonth) ?? months[0]) : null
   const daysOnPage = month ? month.days : shownDays
-  const hasAvailableShift = anyShiftAvailable(event.shifts)
+  const hasAvailableShift = anyShiftAvailable(shownShifts)
+
+  function toggleGroupFilter() {
+    if (groupFilter.kind !== "filtered") return
+    const next = !showAllRoles
+    setShowAllRoles(next)
+    announce(setGroupNote, groupToggleAnnouncement(next, groupFilter.name))
+  }
 
   /** Selects or unselects a shift; false when refused (the reason is said where it applies). */
   function toggleShift(id: string): boolean {
@@ -431,6 +452,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           charterAccepted,
           answers,
           inviteToken: inviteToken ?? undefined,
+          // The sign-up counts for the group link the page was opened with (#947).
+          groupCode: attributionCode(groupFilter) ?? undefined,
         }),
       })
     } catch {
@@ -784,6 +807,27 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               )
             })()}
 
+            {/* Share link per group (#947): which group the page is for, and the way out of the filter.
+                One button whose label flips, so the focus stays on it; the result is announced. */}
+            {groupFilter.kind === "filtered" && (
+              <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-950 flex flex-wrap items-center justify-between gap-3">
+                <p className="min-w-0 break-words">
+                  {showAllRoles ? "Tous les postes de l'événement sont affichés." : groupFilterLine(groupFilter.name, groupFilter.roleNames.length)}
+                </p>
+                <button
+                  type="button"
+                  onClick={toggleGroupFilter}
+                  className="min-h-11 rounded-xl border border-blue-700 bg-white px-4 font-medium text-blue-800 hover:bg-blue-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                  {showAllRoles ? `Revenir aux postes de « ${groupFilter.name} »` : "Voir tous les postes"}
+                </button>
+              </div>
+            )}
+            {groupFilter.kind === "filtered" && <p role="status" className="sr-only">{groupNote}</p>}
+            {groupNotice && (
+              <p className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">{groupNotice}</p>
+            )}
+
             {/* Frise or Liste (#808), once above every day; the pressed state says which is shown. */}
             <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
               {(["frise", "liste"] as const).map((view) => (
@@ -876,7 +920,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
                 {!hasAvailableShift && (
                   <div className="text-center py-8 text-gray-500">
-                    <p className="text-lg font-medium">Tous les créneaux sont complets.</p>
+                    <p className="text-lg font-medium">{groupFiltered && !showAllRoles ? "Tous les créneaux de ces postes sont complets." : "Tous les créneaux sont complets."}</p>
                     <p className="text-sm mt-1">Merci pour ton intérêt !</p>
                   </div>
                 )}

@@ -50,4 +50,4 @@ Le slug de l'organisation est un sous-domaine, pas un chemin : chaque organisati
 
 ## Vue publique
 
-Le lien **Vue publique ↗** apparaît sur la page admin dès que l'événement est publié. Il ouvre la page telle qu'un bénévole la voit, dans un nouvel onglet. Pratique pour vérifier l'affichage avant de partager (voir [Partager le lien de l'événement](partager-le-lien.md)).
+Le lien **Vue publique ↗** apparaît sur la page admin dès que l'événement est publié. Il ouvre la page telle qu'un bénévole la voit, dans un nouvel onglet. Pratique pour vérifier l'affichage avant de partager (voir [Partager le lien de l'événement](partager-le-lien.md)). Quand plusieurs clubs ou équipes recrutent chacun pour leurs postes, donnez-leur [un lien par groupe](partager-le-lien.md#un-lien-par-groupe), filtré sur leurs postes.

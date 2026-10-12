@@ -46,6 +46,7 @@ import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 import { touchOrgActivity } from "@/lib/org-activity"
+import { parseGroupCode } from "@/lib/group-links"
 import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
 
@@ -68,6 +69,8 @@ const schema = z.object({
   inviteToken: z.string().optional(),
   /** Answers to the event's custom questions (#483), by question id. */
   answers: z.record(z.string(), z.unknown()).optional(),
+  /** Code of the share link per group (#947) the page was opened with; resolved below, never an id. */
+  groupCode: z.string().max(64).optional(),
 })
 
 export async function POST(req: Request) {
@@ -145,6 +148,13 @@ export async function POST(req: Request) {
       : null,
   })
   if (roleRefusal) return refuse(roleRefusal)
+
+  // Share link per group (#947): the sign-up counts for the link of this event with that code. An
+  // unknown, malformed or other event's code is ignored, never refused: the sign-up goes through.
+  const groupCode = parseGroupCode(parsed.data.groupCode)
+  const groupLink = groupCode
+    ? await prisma.eventGroupLink.findFirst({ where: { eventId, code: groupCode }, select: { id: true, name: true } })
+    : null
 
   // Custom questions (#483), checked here whatever the page did; stored with the registration.
   const questions = await prisma.eventQuestion.findMany({
@@ -310,6 +320,7 @@ export async function POST(req: Request) {
               // sign-up creates.
               charterAcceptedHash: charterHash,
               charterAcceptedAt,
+              groupLinkId: groupLink?.id ?? null,
             },
           })
         )
@@ -380,7 +391,11 @@ export async function POST(req: Request) {
       action: reg.status === "waiting" ? "registration.waitlist_joined" : reg.status === "requested" ? "registration.requested" : "registration.created",
       entityType: "Registration",
       entityId: reg.id,
-      changes: { shiftId: { from: null, to: reg.shiftId }, source: { from: null, to: "public_form" } },
+      changes: {
+        shiftId: { from: null, to: reg.shiftId },
+        source: { from: null, to: "public_form" },
+        ...(groupLink ? { groupLink: { from: null, to: groupLink.name } } : {}),
+      },
     })
   }
 

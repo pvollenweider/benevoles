@@ -31,6 +31,7 @@ export const ENTITY_LABELS: Record<string, string> = {
   SectorLeader: "Responsable de secteur",
   EventMilestone: "Jalon",
   EventQuestion: "Question",
+  GroupLink: "Lien de groupe",
 }
 
 /** « Historique de créneau », « Historique d'inscription » : elides « de » before a vowel. */
@@ -54,6 +55,7 @@ export const ACTION_PREFIXES = [
   { value: "eventpage", label: "Pages" },
   { value: "sectorleader", label: "Responsables de secteur" },
   { value: "eventmilestone", label: "Jalons" },
+  { value: "grouplink", label: "Liens de groupe" },
   { value: "message", label: "Messages" },
   { value: "question", label: "Questions" },
 ]

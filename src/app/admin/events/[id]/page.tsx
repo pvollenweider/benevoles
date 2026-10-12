@@ -15,6 +15,8 @@ import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import EventShareLink from "@/components/admin/EventShareLink"
+import GroupLinksManager from "@/components/admin/GroupLinksManager"
+import { liveRoleNames, loadAdminGroupLinks } from "@/lib/group-links-data"
 import EventActions from "@/components/admin/EventActions"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
@@ -64,6 +66,9 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         db.memberInvite.count({ where: { eventId: id } }),
       ])
     : [0, 0, 0]
+
+  // Share links per group (#947), with the roles a link can show.
+  const [groupLinks, roles] = await Promise.all([loadAdminGroupLinks(db, event), liveRoleNames(db, event.id)])
 
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
   const totalRegistered = event.shifts.reduce(
@@ -195,10 +200,17 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         </p>
       )}
 
-      {event.publicStatus === "published" && (
-        <section aria-labelledby="event-share-heading" className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
+      {/* The public link once published; the links per group (#947) can be prepared before. */}
+      {(event.publicStatus === "published" || event.publicStatus === "draft") && (
+        <section aria-labelledby="event-share-heading" className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
           <h2 id="event-share-heading" className="text-sm font-semibold text-gray-700">Partager l&apos;événement</h2>
-          <EventShareLink url={eventPublicUrl(event.organization.slug, event.slug)} />
+          {event.publicStatus === "published" && <EventShareLink url={eventPublicUrl(event.organization.slug, event.slug)} />}
+          <GroupLinksManager
+            eventId={event.id}
+            roles={roles}
+            initialLinks={groupLinks}
+            published={event.publicStatus === "published"}
+          />
         </section>
       )}
 
