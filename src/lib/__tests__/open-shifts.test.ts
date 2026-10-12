@@ -192,10 +192,13 @@ describe("email and history", () => {
     expect(subject).toBe("Fête : on cherche encore du monde")
     expect(text).toContain("- Bar : samedi 4 juillet, de 22:00 à 02:00 le lendemain, 2 places libres")
     expect(text).toContain("- Accueil (Accueil public) : dimanche 5 juillet, de 10:00 à 12:00, 1 place libre")
-    expect(text).toContain("T'inscrire : https://x/fete?t=1")
+    expect(text).toContain("Tous les créneaux : https://x/fete?t=1")
+    // #869: one « Je prends ce créneau » link per shift, the shift proposed on the sign-up page.
+    expect(text).toContain("  Je prends ce créneau : https://x/fete?t=1&creneau=bar")
+    expect(html).toContain("Je prends ce créneau")
     expect(text).toContain("Pas disponible cette fois ? Tu peux le dire ici : https://x/fete?t=1&decline=1")
     expect(text).toContain("Merci !")
-    expect(html).toContain("Choisir mon créneau")
+    expect(html).toContain("Voir tous les créneaux")
     for (const s of [subject, text]) expect(s).not.toMatch(/[·—]/)
   })
 

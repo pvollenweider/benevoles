@@ -27,6 +27,23 @@ export type OpenShiftsEmailData = {
   orgSlug?: string
 }
 
+/** The sign-up link with one shift proposed (#869): the page offers it in one click (`?creneau=`). */
+export function takeShiftUrl(signupUrl: string, shiftId: string): string {
+  try {
+    const url = new URL(signupUrl)
+    url.searchParams.set("creneau", shiftId)
+    return url.toString()
+  } catch {
+    return `${signupUrl}${signupUrl.includes("?") ? "&" : "?"}creneau=${encodeURIComponent(shiftId)}`
+  }
+}
+
+/** « Bar, 4 juillet »: tells the « Je prends ce créneau » links apart when several are listed. */
+function takeLabel(s: OpenShift): string {
+  const day = new Date(`${String(s.date).slice(0, 10)}T12:00:00Z`).toLocaleDateString("fr-CH", { day: "numeric", month: "long", timeZone: "UTC" })
+  return `${s.label !== s.roleName ? `${s.roleName}, ${s.label}` : s.roleName}, ${day}`
+}
+
 export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
   const d = p.data as OpenShiftsEmailData
   const firstName = d.volunteerName.split(" ")[0]
@@ -46,9 +63,9 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     ...(note ? [``, note] : []),
     ``,
     several ? `Les créneaux à compléter :` : `Le créneau à compléter :`,
-    ...lines.map((l) => `- ${l}`),
+    ...d.shifts.flatMap((s, i) => [`- ${lines[i]}`, `  Je prends ce créneau : ${takeShiftUrl(d.signupUrl, s.id)}`]),
     ``,
-    `T'inscrire : ${d.signupUrl}`,
+    several ? `Tous les créneaux : ${d.signupUrl}` : `T'inscrire : ${d.signupUrl}`,
     ...(editUrl ? [`Tes inscriptions : ${editUrl}`] : []),
     ...(d.declineUrl ? [``, `Pas disponible cette fois ? Tu peux le dire ici : ${d.declineUrl}`] : []),
     ``,
@@ -62,9 +79,9 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     ${note ? `<div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1em">${escapeHtml(note)}</div>` : ""}
     <p style="color:#555;margin-bottom:0.5em">${several ? "Les créneaux à compléter :" : "Le créneau à compléter :"}</p>
     <ul style="background:#f9fafb;border-radius:10px;padding:12px 16px 12px 32px;margin:0">
-      ${lines.map((l) => `<li style="padding:4px 0">${escapeHtml(l)}</li>`).join("")}
+      ${d.shifts.map((s, i) => `<li style="padding:4px 0">${escapeHtml(lines[i])}<br><a href="${escapeHtml(takeShiftUrl(d.signupUrl, s.id))}" style="color:#1d4ed8;font-weight:600">Je prends ce créneau${several ? ` (${escapeHtml(takeLabel(s))})` : ""}</a></li>`).join("")}
     </ul>
-    <p style="margin-top:1.5em">${btn(escapeHtml(d.signupUrl), "Choisir mon créneau")}</p>
+    <p style="margin-top:1.5em">${btn(escapeHtml(d.signupUrl), several ? "Voir tous les créneaux" : "Choisir mon créneau")}</p>
     ${editUrl ? `<p style="font-size:0.9em"><a href="${escapeHtml(editUrl)}" style="color:#2563eb">Voir mes inscriptions</a></p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Merci d'avance !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
     ${d.declineUrl ? `<p style="color:#666;font-size:0.8em">Pas disponible cette fois ? <a href="${escapeHtml(d.declineUrl)}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>` : ""}

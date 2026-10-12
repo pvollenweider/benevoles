@@ -22,6 +22,8 @@ import {
   hasAvailableShift as anyShiftAvailable,
   isShiftSelectable,
   prefillContact,
+  proposedShiftState,
+  proposedShiftText,
   shiftsByDay as groupShiftsByDay,
   toMyRegistrations,
   validateSignup,
@@ -29,6 +31,7 @@ import {
   type SignupForm,
 } from "@/lib/public-signup"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
+import { spokenShift } from "@/lib/spoken-time"
 import { announce } from "@/lib/announce"
 import { forgetRememberedContact, loadRememberedContact, saveRememberedContact } from "@/lib/remembered-contact"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
@@ -133,6 +136,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const router = useRouter()
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get("token")
+  // « Je prends ce créneau » from an organizer's email (#869): the proposed shift, offered in one click.
+  const proposedShiftId = searchParams.get("creneau")
+  const proposalTextRef = useRef<HTMLParagraphElement>(null)
   // The email's second link (#558): opens the decline confirmation step right away.
   const autoOpenDecline = searchParams.get("decline") === "1"
 
@@ -327,12 +333,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const daysOnPage = month ? month.days : shownDays
   const hasAvailableShift = anyShiftAvailable(event.shifts)
 
-  function toggleShift(id: string) {
-    if (!accepting && !selectedShifts.has(id)) return
+  /** Selects or unselects a shift; false when refused (the reason is said where it applies). */
+  function toggleShift(id: string): boolean {
+    if (!accepting && !selectedShifts.has(id)) return false
     const target = event?.shifts.find((s) => s.id === id)
-    if (!isShiftSelectable(target, myShiftIds)) return
+    if (!isShiftSelectable(target, myShiftIds)) return false
     // Reserved bars are disabled (#470); this guards any other way in.
-    if (reservedShiftIds.has(id) && !selectedShifts.has(id)) return
+    if (reservedShiftIds.has(id) && !selectedShifts.has(id)) return false
     // Shifts per volunteer for a role (#466): said here, before the form; the server decides.
     if (target && event && !selectedShifts.has(id)) {
       const asked = event.shifts.filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id))
@@ -341,7 +348,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       if (breach) {
         setLimitNoticeDay(target.date.slice(0, 10))
         announce(setLimitNotice, roleLimitSelectionMessage(breach))
-        return
+        return false
       }
     }
     setLimitNotice("")
@@ -352,6 +359,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       next.add(id)
       return next
     })
+    return true
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -742,6 +750,29 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 <button onClick={() => setError(null)} aria-label="Fermer le message d'erreur" className="text-red-700 hover:text-red-900 flex-shrink-0"><span aria-hidden="true">✕</span></button>
               </div>
             )}
+
+            {proposedShiftId && (() => {
+              const proposed = event.shifts.find((s) => s.id === proposedShiftId)
+              const state = proposedShiftState(proposed, { myShiftIds, selected: selectedShifts, reservedIds: reservedShiftIds, accepting })
+              const text = proposedShiftText(state, proposed ? spokenShift(proposed) : "")
+              return (
+                <div className={`rounded-xl border p-4 text-sm ${state === "unavailable" ? "border-amber-300 bg-amber-50 text-amber-950" : "border-blue-200 bg-blue-50 text-blue-950"}`}>
+                  {/* Focused after « Je prends ce créneau »: the button is gone, this says what happened. */}
+                  <p ref={proposalTextRef} tabIndex={-1} className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded">{text}</p>
+                  {proposed && (state === "offer" || state === "waitlist") && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (toggleShift(proposed.id)) requestAnimationFrame(() => proposalTextRef.current?.focus())
+                      }}
+                      className="mt-3 min-h-11 rounded-xl bg-blue-700 px-4 font-medium text-white hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    >
+                      {state === "offer" ? "Je prends ce créneau" : "Rejoindre la liste d'attente"}
+                    </button>
+                  )}
+                </div>
+              )
+            })()}
 
             {/* Frise or Liste (#808), once above every day; the pressed state says which is shown. */}
             <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">

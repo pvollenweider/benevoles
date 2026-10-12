@@ -12,6 +12,8 @@ import {
   toMyRegistrations,
   validateSignup,
   type SignupShift,
+  proposedShiftState,
+  proposedShiftText,
 } from "../public-signup"
 
 const shift = (id: string, over: Partial<SignupShift> = {}): SignupShift => ({
@@ -134,5 +136,37 @@ describe("sign-up consent (#706)", () => {
     expect(read("src/app/legal/privacy/page.tsx")).toContain(`id="${anchor}"`)
     expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("privacyHref = CONSENT_PRIVACY_HREF")
     expect(read("src/app/[eventSlug]/page.tsx")).toContain("privacyHref={consentPrivacyHref()}")
+  })
+})
+
+// #869: a shift proposed by an organizer's email, offered in one click on the sign-up page.
+describe("proposedShiftState", () => {
+  const shift = (over: Partial<{ id: string; status: string; waitlistEnabled: boolean }> = {}) =>
+    ({ id: "s1", label: "Bar", date: "2030-07-04", startTime: "10:00", endTime: "12:00", status: "open", waitlistEnabled: false, minAge: null, ...over })
+  const ctx = { myShiftIds: new Set<string>(), selected: new Set<string>(), reservedIds: new Set<string>(), accepting: true }
+
+  it("offers a free shift, or its waitlist when full", () => {
+    expect(proposedShiftState(shift(), ctx)).toBe("offer")
+    expect(proposedShiftState(shift({ status: "full", waitlistEnabled: true }), ctx)).toBe("waitlist")
+  })
+
+  it("says when it is already chosen or held", () => {
+    expect(proposedShiftState(shift(), { ...ctx, selected: new Set(["s1"]) })).toBe("selected")
+    expect(proposedShiftState(shift(), { ...ctx, myShiftIds: new Set(["s1"]) })).toBe("held")
+    expect(proposedShiftState(shift({ status: "full", waitlistEnabled: true }), { ...ctx, selected: new Set(["s1"]) })).toBe("selected_waitlist")
+    expect(proposedShiftText("selected_waitlist", "Bar")).toBe("Liste d'attente choisie : Bar. Continue pour confirmer ton inscription sur la liste d'attente.")
+  })
+
+  it("is unavailable when gone, full without waitlist, reserved, closed or out of the window", () => {
+    expect(proposedShiftState(undefined, ctx)).toBe("unavailable")
+    expect(proposedShiftState(shift({ status: "full" }), ctx)).toBe("unavailable")
+    expect(proposedShiftState(shift({ status: "cancelled" }), ctx)).toBe("unavailable")
+    expect(proposedShiftState(shift(), { ...ctx, reservedIds: new Set(["s1"]) })).toBe("unavailable")
+    expect(proposedShiftState(shift(), { ...ctx, accepting: false })).toBe("unavailable")
+  })
+
+  it("words each state", () => {
+    expect(proposedShiftText("offer", "Bar, samedi 4 juillet, de 10 h à 12 h")).toBe("On te propose ce créneau : Bar, samedi 4 juillet, de 10 h à 12 h.")
+    expect(proposedShiftText("unavailable", "")).toBe("Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous.")
   })
 })
