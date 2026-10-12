@@ -147,6 +147,12 @@ model Event {
   // individual printed sheet), never on the public page, the public API or metadata.
   dayContactName      String?
   dayContactPhone     String?
+  // Self-cancellation deadline (#946): how long before each shift's start a confirmed
+  // volunteer can still cancel with their personal link. Both null (or 0) = until the shift starts,
+  // the default for every event; never after the start. Days are calendar days in the
+  // organisation's zone, hours a duration on top. Admin removal is never limited by it.
+  cancelDeadlineDays  Int?
+  cancelDeadlineHours Int?
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())

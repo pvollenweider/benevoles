@@ -70,9 +70,13 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     placesMissing: number
     waitlistTookSpot: boolean
     message?: string | null
+    /** Less than 24 hours before the start (#946): sent at once, with the start in words. */
+    late?: boolean
+    startsAt?: string
   }
   const shiftName = d.shiftLabel && d.shiftLabel !== d.roleName ? `${d.roleName} · ${d.shiftLabel}` : d.roleName
-  const subject = `Désistement — ${d.eventTitle}`
+  const subject = d.late ? `Désistement de dernière minute — ${d.eventTitle}` : `Désistement — ${d.eventTitle}`
+  const lateLine = d.late ? `Désistement de dernière minute : le créneau commence ${d.startsAt ? `le ${d.startsAt}` : "dans moins de 24 heures"}.` : null
   const shiftUrl = adminShiftUrl(d.eventId, d.shiftId)
   const staffingUrl = adminStaffingUrl(d.eventId)
   // A place left empty with nobody waiting (#869): straight to the members free for this shift.
@@ -89,6 +93,7 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
       : "Ce créneau n'a pas de place manquante."
 
   const text = [
+    ...(lateLine ? [lateLine, ``] : []),
     `${d.volunteerName} se désiste de ${shiftName} (${d.shiftDate} · ${clockTime(d.startTime)}–${clockTime(d.endTime)}) pour ${d.eventTitle}.`,
     ``,
     spotLine,
@@ -103,7 +108,8 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     ...(restoreUrl ? [``, restoreLine, restoreUrl] : []),
   ].join("\n")
 
-  const html = wrap(`
+  const html = wrap(`${lateLine ? `
+    <p style="color:#991b1b;font-weight:600">${escapeHtml(lateLine)}</p>` : ""}
     <p><strong>${escapeHtml(d.volunteerName)}</strong> se désiste de <strong>${escapeHtml(shiftName)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.startTime))}–${escapeHtml(clockTime(d.endTime))}) pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p style="color:#555">${escapeHtml(spotLine)}</p>
     ${d.message ? `<p style="color:#444;background:#f3f4f6;border-radius:8px;padding:10px 14px;white-space:pre-wrap">${escapeHtml(d.message)}</p>` : ""}
@@ -112,7 +118,7 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
       : `<p style="margin-top:1.25em">${btn(shiftUrl, "Voir l'inscription")}</p>`}
     <p style="margin-top:0.75em"><a href="${staffingUrl}" style="color:#2563eb">Suivi des effectifs</a></p>
     ${restoreUrl ? `<p style="color:#555;margin-top:1.5em">${escapeHtml(restoreLine)} <a href="${restoreUrl}" style="color:#1d4ed8;text-decoration:underline">Rétablir l'inscription</a></p>` : ""}
-  `, `${d.volunteerName} se désiste de ${shiftName}.`)
+  `, d.late ? `Dernière minute : ${d.volunteerName} se désiste de ${shiftName}.` : `${d.volunteerName} se désiste de ${shiftName}.`)
 
   return { subject, html, text }
 }

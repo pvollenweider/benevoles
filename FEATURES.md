@@ -50,7 +50,7 @@ En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/l
 
 <!-- image: TARGETED_MESSAGES | Les modèles de messages : un briefing réutilisable, avec le prénom du bénévole et le nom de l'événement remplis à l'envoi. -->
 
-- **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux, les modifier, les annuler ou les ajouter à son calendrier.
+- **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux, les modifier, les annuler ou les ajouter à son calendrier. L'annulation reste possible jusqu'au début du créneau, ou jusqu'au délai que vous fixez (par exemple 2 jours avant) ; ensuite, le bénévole voit qui prévenir.
 - **Des rappels automatiques** deux jours avant, la veille et le jour même. Quand un bénévole a plusieurs créneaux le même jour pour le même événement, un seul rappel les regroupe.
 - **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois.
 - **Les inscrits sont prévenus** par email si un créneau change d'horaire ou est annulé.
@@ -65,7 +65,7 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 
 - **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
 - **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois. C'est vous qui choisissez, l'outil ne classe ni ne présélectionne personne. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
-- **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Une annulation faite par erreur se rétablit depuis les inscriptions.
+- **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Un désistement moins de 24 heures avant le début vous parvient tout de suite, marqué « dernière minute ». Une annulation faite par erreur se rétablit depuis les inscriptions.
 - **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard.
 - **Une recherche globale** (Ctrl + K, ou Cmd + K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.
 

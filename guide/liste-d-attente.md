@@ -13,7 +13,7 @@ aliases: []
 
 <!-- video: SHIFT_WAITLIST_OFFER -->
 
-Un créneau complet peut garder une liste d'attente : les inscriptions suivantes y prennent rang dans l'ordre d'arrivée, sans être confirmées. Quand une place se libère, elle est proposée à la première personne de la file, qui a **24 heures** pour la prendre avant qu'elle passe à la suivante.
+Un créneau complet peut garder une liste d'attente : les inscriptions suivantes y prennent rang dans l'ordre d'arrivée, sans être confirmées. Quand une place se libère, elle est proposée à la première personne de la file, qui a **24 heures** pour la prendre avant qu'elle passe à la suivante. Ce délai s'arrête au début du créneau : une place libérée la veille au soir reste à prendre jusqu'au début du créneau seulement, et une place libérée moins d'une heure avant le début n'est plus proposée (l'organisation, prévenue tout de suite du désistement, cherche quelqu'un elle-même).
 
 ## Côté bénévole
 
@@ -23,13 +23,13 @@ Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (ra
 
 1. ton inscription **n'est pas encore confirmée** : le créneau est complet ;
 2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (ta position figure dans l'email et sur ta page personnelle) ;
-3. dès qu'une place se libère, tu reçois un **email avec un lien** pour la prendre, valable **24 heures** ;
+3. dès qu'une place se libère, tu reçois un **email avec un lien** pour la prendre, valable **24 heures**, jamais au-delà du début du créneau ;
 4. pour accepter, clique sur ce lien (ou sur **Prendre la place** depuis ta page personnelle) : la place est à toi et tu reçois la confirmation ;
 5. sans réponse dans le délai, la place passe à la personne suivante ; tu restes en liste d'attente.
 
 Une fois les inscriptions de l'événement fermées, la liste d'attente ne propose plus de place ; une place qui t'est déjà proposée reste à prendre pendant son délai.
 
-Tu ne veux plus de ce créneau ? Sur [ta page personnelle](ma-page-personnelle.md), **Quitter la liste d'attente** (ou **Refuser la place** si elle t'est proposée).
+Tu ne veux plus de ce créneau ? Sur [ta page personnelle](ma-page-personnelle.md), **Quitter la liste d'attente** (ou **Refuser la place** si elle t'est proposée), jusqu'au début du créneau, même si l'organisation a fixé un délai d'annulation plus tôt pour les places confirmées.
 
 Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquable : reviens plus tard ou contacte l'organisation.
 
@@ -41,4 +41,4 @@ Les inscriptions de l'événement affichent les bénévoles en attente (**Liste 
 
 ### Un poste est complet mais j'ai encore des demandes : je perds ces bénévoles ?
 
-Non, si la liste d'attente est activée sur le créneau : une place libérée est proposée automatiquement à la première personne en attente, avec 24 h pour confirmer. Vous n'avez personne à recontacter à la main.
+Non, si la liste d'attente est activée sur le créneau : une place libérée est proposée automatiquement à la première personne en attente, avec 24 h pour confirmer (jamais au-delà du début du créneau). Vous n'avez personne à recontacter à la main. Une place libérée moins d'une heure avant le début n'est pas proposée : c'est à vous de trouver quelqu'un, l'email « Désistement de dernière minute » vous prévient aussitôt.

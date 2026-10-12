@@ -112,9 +112,12 @@ describe("POST /api/public/registrations under contention", () => {
   })
 })
 
+// A shift a week ahead, 10:00 in the deployment's zone (#946: the offer window depends on its start).
+const weekAhead = () => new Date(`${new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10)}T00:00:00Z`)
+
 describe("promoteNextInWaitlist under contention", () => {
   it("offers the spot when one is free", async () => {
-    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open" })
+    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open", date: weekAhead(), startTime: "10:00" })
     m.regCount.mockResolvedValue(1)
     m.regFindFirst.mockResolvedValue({ id: "w1" })
     m.regFindUniqueOrThrow.mockResolvedValue({
@@ -135,7 +138,7 @@ describe("promoteNextInWaitlist under contention", () => {
   })
 
   it("doesn't offer when no spot is actually free (e.g. second promotion for the same freed spot)", async () => {
-    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open" })
+    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open", date: weekAhead(), startTime: "10:00" })
     m.regCount.mockResolvedValue(2) // the first promotion's offer already holds the spot
     const { promoteNextInWaitlist } = await import("@/lib/waitlist")
     enqueueNotifications.mockClear()
@@ -144,11 +147,46 @@ describe("promoteNextInWaitlist under contention", () => {
     expect(m.regUpdate).not.toHaveBeenCalled()
     expect(enqueueNotifications).not.toHaveBeenCalled()
   })
+
+  // #946: the 24-hour answer window never runs past the shift's start; within the hour, no offer.
+  it("caps the offer's expiry at the shift's start", async () => {
+    const now = new Date("2026-07-03T20:00:00Z")
+    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open", date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", event: { publicStatus: "published", registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null, organization: { timeZone: "Europe/Zurich" } } })
+    m.regCount.mockResolvedValue(1)
+    m.regFindFirst.mockResolvedValue({ id: "w1" })
+    m.regFindUniqueOrThrow.mockResolvedValue({
+      id: "w1", eventId: "evt-1", editTokenLegacy: "t", editTokenEnc: null,
+      volunteer: { email: "w@x.com", firstName: "W" },
+      shift: { label: "Bar", date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      event: { title: "F", organization: { slug: "a", name: "A", timeZone: "Europe/Zurich" } },
+    })
+    m.regUpdate.mockClear()
+    const { promoteNextInWaitlist } = await import("@/lib/waitlist")
+    await promoteNextInWaitlist("shift-1", undefined, now)
+    expect(m.regUpdate.mock.calls[0][0].data.waitingExpiresAt).toEqual(new Date("2026-07-04T08:00:00Z"))
+  })
+
+  it("does not offer a spot when the shift starts within the hour", async () => {
+    const now = new Date("2026-07-04T07:30:00Z")
+    m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open", date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", event: { publicStatus: "published", registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null, organization: { timeZone: "Europe/Zurich" } } })
+    m.regCount.mockResolvedValue(1)
+    m.regFindFirst.mockClear()
+    m.regUpdate.mockClear()
+    enqueueNotifications.mockClear()
+    const { promoteNextInWaitlist } = await import("@/lib/waitlist")
+    expect(await promoteNextInWaitlist("shift-1", undefined, now)).toBe(false)
+    expect(m.regFindFirst).not.toHaveBeenCalled()
+    expect(m.regUpdate).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+  })
 })
 
 describe("conditional transitions", () => {
   it("public cancel: a second concurrent cancel gets 404 and doesn't promote again", async () => {
-    m.regFindFirst.mockResolvedValue({ id: "r1", eventId: "evt-1", shiftId: "shift-1", volunteerId: "v1", status: "active" })
+    m.regFindFirst.mockResolvedValue({
+      id: "r1", eventId: "evt-1", shiftId: "shift-1", volunteerId: "v1", status: "active",
+      shift: { date: weekAhead(), startTime: "10:00", endTime: "12:00" }, event: { organization: { timeZone: "Europe/Zurich" } },
+    })
     m.regUpdateMany.mockResolvedValue({ count: 0 })
     const { DELETE } = await import("@/app/api/public/registrations/[token]/route")
     const res = await DELETE(new Request("http://localhost/x", { method: "DELETE", headers: ip() }), { params: Promise.resolve({ token: "tok" }) })

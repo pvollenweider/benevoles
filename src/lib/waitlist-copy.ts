@@ -7,13 +7,16 @@
  * order is set, how long an offer lasts, how to accept, what happens without an answer.
  */
 
-/** How long an offered spot stays reserved, in hours (see promoteNextInWaitlist). */
+/**
+ * How long an offered spot stays reserved, in hours, cut short at the shift's start; a spot freed
+ * less than an hour before the start is not offered (#946, see waitlistOfferExpiry).
+ */
 export const WAITLIST_OFFER_HOURS = 24
 
 export const WAITLIST_STEPS: readonly string[] = [
   "Ton inscription n'est pas encore confirmée : le créneau est complet.",
   "L'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue.",
-  `Dès qu'une place se libère, tu reçois un email avec un lien pour la prendre. Tu as ${WAITLIST_OFFER_HOURS} heures à partir de cet email.`,
+  `Dès qu'une place se libère, tu reçois un email avec un lien pour la prendre. Tu as ${WAITLIST_OFFER_HOURS} heures à partir de cet email, jamais au-delà du début du créneau.`,
   "Pour accepter, clique sur le lien de cet email (ou sur « Prendre la place » sur ta page personnelle) : la place est à toi, tu reçois la confirmation.",
   `Si tu ne réponds pas dans les ${WAITLIST_OFFER_HOURS} heures, la place passe à la personne suivante ; tu restes en liste d'attente.`,
 ] as const

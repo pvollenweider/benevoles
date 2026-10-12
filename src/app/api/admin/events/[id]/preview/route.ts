@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { cancelPolicySentence } from "@/lib/cancel-deadline"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -72,6 +73,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       editToken: "apercu",
       orgSlug: event.organization.slug,
       confirmationMessage: event.confirmationMessage ?? undefined,
+      cancelNotice: cancelPolicySentence(event),
     },
   })
 

@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import { utcToLocalInput } from "@/lib/registration-window"
 import { orgTimeZone } from "@/lib/time-zone"
+import { cancelDeadlineFormFrom } from "@/lib/cancel-deadline"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventForm from "@/components/admin/EventForm"
 import Link from "next/link"
@@ -43,6 +44,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     longitude: event.longitude,
     dayContactName: event.dayContactName ?? "",
     dayContactPhone: event.dayContactPhone ?? "",
+    cancelDeadline: cancelDeadlineFormFrom(event),
     showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 

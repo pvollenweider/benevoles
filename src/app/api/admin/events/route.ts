@@ -10,6 +10,7 @@ import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { dayContactSchema } from "@/lib/day-contact"
+import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
 
 const showSchema = z.object({
   name: z.string(),
@@ -34,6 +35,8 @@ const schema = z.object({
   longitude: z.number().min(-180).max(180).nullable().optional(),
   /** Day-of contact (#560), for registered volunteers only. */
   ...dayContactSchema,
+  /** Volunteer self-cancellation deadline (#946): days and hours before each shift, null = until the start. */
+  ...cancelDeadlineSchema,
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] }).refine((d) => isOrderedPeriod(d.startDate, d.endDate), { message: DATE_ORDER_ERROR, path: ["endDate"] })
 
 export async function GET() {

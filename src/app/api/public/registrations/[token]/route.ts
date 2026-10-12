@@ -17,6 +17,7 @@ import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, w
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
 import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
@@ -37,6 +38,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           id: true, title: true, slug: true, confirmationMessage: true, publicStatus: true,
           location: true, latitude: true, longitude: true, publicInstructions: true,
           dayContactName: true, dayContactPhone: true,
+          cancelDeadlineDays: true, cancelDeadlineHours: true,
           pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
           // The sector leaders' names only (#560): never their email nor their link.
           sectorLeaders: { select: { roleName: true, name: true } },
@@ -67,6 +69,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const baseUrl = orgBaseUrl(orgSlug)
   const eventUrl = `${baseUrl}/${registration.event.slug}`
   const { event } = registration
+  const timeZone = orgTimeZone(registration.event.organization)
+  const now = new Date()
   return NextResponse.json({
     // What the « Avant ta mission » block falls back on (#560). The information pages only
     // open once the event is published: no link to a page that would answer 404.
@@ -83,7 +87,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     confirmationMessage: registration.event.confirmationMessage ?? null,
     orgHomeUrl: baseUrl,
     eventUrl,
-    timeZone: orgTimeZone(registration.event.organization),
+    timeZone,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
     contactEmail: registration.event.organization.replyToEmail || process.env.EMAIL_REPLY_TO || null,
@@ -106,6 +110,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       status: r.status,
       waitingPosition: r.waitingPosition,
       waitingExpiresAt: r.waitingExpiresAt,
+      // Whether the volunteer can still cancel it by themself (#946), as of this answer: the
+      // DELETE below decides again, so a page left open past the deadline is refused there.
+      selfCancel: (() => {
+        const state = selfCancelState({ status: r.status, shift: r.shift, setting: event, timeZone, now })
+        return state.allowed ? { allowed: true, deadline: state.deadline } : { allowed: false, reason: state.reason }
+      })(),
       shift: {
         id: r.shift.id,
         label: r.shift.label,
@@ -143,7 +153,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true } },
-      event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true, timeZone: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { slug: true, timeZone: true } } } },
     },
   })
   const plan = registration && planVolunteerWithdraw(registration.status)
@@ -153,6 +163,15 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
   if (!(await tokenUseAllowed(token, "withdraw"))) return tooManyAttempts()
+
+  // Never once the shift has started, nor past the event's earlier deadline for a confirmed place
+  // (#946). The source of truth: the page may have been loaded before the deadline.
+  const timeZone = orgTimeZone(registration.event.organization)
+  const now = new Date()
+  const cancel = selfCancelState({ status: registration.status, shift: registration.shift, setting: registration.event, timeZone, now })
+  if (!cancel.allowed) {
+    return NextResponse.json({ error: cancelRefusedError(cancel.reason), code: "cancel_closed", reason: cancel.reason }, { status: 409 })
+  }
 
   // Conditional on still being in the status read above (#264): a double click would otherwise
   // cancel twice, log twice and trigger two waitlist promotions for a single freed spot. Same
@@ -193,6 +212,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     try {
       const occupied = await prisma.registration.count({ where: { shiftId: registration.shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
       // Grouped (#869): withdrawals of the event within a few minutes make one email per person.
+      // Less than 24 hours before the start (#946): sent at once, not grouped.
+      const late = isLateWithdrawal(shiftStartsAt(registration.shift, timeZone), now)
       const dueIds = await queueWithdrawalNotifications({
         registrationId: registration.id,
         event: registration.event,
@@ -201,7 +222,9 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
         message,
         waitlistTookSpot,
         placesMissing: Math.max(registration.shift.capacity - occupied, 0),
-      })
+        late,
+        timeZone,
+      }, now)
       deliverAfterResponse(dueIds)
     } catch (e) {
       reportError("withdrawal.notify")(e)
@@ -222,7 +245,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
           volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
           eventTitle: registration.event.title,
           what: withdrawalConfirmation(registration.status),
-          when: withdrawalMoment(new Date(), orgTimeZone(registration.event.organization)),
+          when: withdrawalMoment(now, timeZone),
           shift: { roleName: registration.shift.roleName, label: registration.shift.label, date: registration.shift.date.toISOString().slice(0, 10), startTime: registration.shift.startTime, endTime: registration.shift.endTime },
         },
       }], prisma, { organizationId: registration.event.organizationId })

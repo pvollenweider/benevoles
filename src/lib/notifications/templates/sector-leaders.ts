@@ -95,10 +95,19 @@ export function renderSectorLeaderWithdrawal(p: NotificationPayload): RenderedEm
     message?: string | null
     orgSlug: string
     token: string
+    /** Less than 24 hours before the start (#946): sent at once, with the start in words. */
+    late?: boolean
+    startsAt?: string
   }
   const firstName = d.leaderName.split(" ")[0]
   const leaderUrl = leaderPageUrl(d.orgSlug, d.token)
-  const subject = `Désistement — ${d.roleName}`
+  const subject = d.late ? `Désistement de dernière minute — ${d.roleName}` : `Désistement — ${d.roleName}`
+  const lateLine = d.late ? `Désistement de dernière minute : le créneau commence ${d.startsAt ? `le ${d.startsAt}` : "dans moins de 24 heures"}.` : null
+  // A place left empty with nobody waiting: the organisers have the « Trouver un remplaçant » page;
+  // the leader, who has no admin access, is told they are on it and who to tell of a replacement.
+  const replaceLine = d.late && !d.waitlistTookSpot && d.placesMissing > 0
+    ? "Trouver un remplaçant : l'organisation est prévenue en même temps. Si vous connaissez quelqu'un de disponible, voyez avec elle."
+    : null
 
   const spotLine = d.waitlistTookSpot
     ? "La place a été reprise automatiquement par la personne suivante sur la liste d'attente."
@@ -109,9 +118,11 @@ export function renderSectorLeaderWithdrawal(p: NotificationPayload): RenderedEm
   const text = [
     `Bonjour ${firstName},`,
     ``,
+    ...(lateLine ? [lateLine, ``] : []),
     `${d.volunteerName} se désiste de « ${d.shiftLabel} » (${d.shiftDate} · ${clockTime(d.startTime)}–${clockTime(d.endTime)}), dont vous êtes responsable pour ${d.eventTitle}.`,
     ``,
     spotLine,
+    ...(replaceLine ? [``, replaceLine] : []),
     ...(d.message ? [``, `Message laissé :`, `« ${d.message} »`] : []),
     ``,
     `Voir la liste complète :`,
@@ -119,12 +130,14 @@ export function renderSectorLeaderWithdrawal(p: NotificationPayload): RenderedEm
   ].join("\n")
 
   const html = wrap(`
-    <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(firstName)},</h2>
+    <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(firstName)},</h2>${lateLine ? `
+    <p style="color:#991b1b;font-weight:600">${escapeHtml(lateLine)}</p>` : ""}
     <p style="color:#555"><strong>${escapeHtml(d.volunteerName)}</strong> se désiste de <strong>${escapeHtml(d.shiftLabel)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.startTime))}–${escapeHtml(clockTime(d.endTime))}), dont vous êtes responsable pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
-    <p style="color:#555">${escapeHtml(spotLine)}</p>
+    <p style="color:#555">${escapeHtml(spotLine)}</p>${replaceLine ? `
+    <p style="color:#555">${escapeHtml(replaceLine)}</p>` : ""}
     ${d.message ? `<p style="color:#444;background:#f3f4f6;border-radius:8px;padding:10px 14px;white-space:pre-wrap">${escapeHtml(d.message)}</p>` : ""}
     <p style="margin-top:1.25em">${btn(leaderUrl, "Voir la liste complète")}</p>
-  `, `${d.volunteerName} se désiste de ${d.roleName}.`)
+  `, d.late ? `Dernière minute : ${d.volunteerName} se désiste de ${d.roleName}.` : `${d.volunteerName} se désiste de ${d.roleName}.`)
 
   return { subject, html, text }
 }

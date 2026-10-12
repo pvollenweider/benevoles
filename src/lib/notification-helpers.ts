@@ -24,6 +24,8 @@ type RegistrationEmailData = {
   editToken: string
   orgSlug?: string
   confirmationMessage?: string
+  /** The event's self-cancellation deadline in one sentence (#946), when it sets an earlier one. */
+  cancelNotice?: string | null
   /** For the SMTP delivery outcome (#598); nullable, same as the payload field. */
   volunteerId?: string | null
   organizationId?: string | null
@@ -42,6 +44,7 @@ export async function sendConfirmationEmail(data: RegistrationEmailData, send: S
       editToken: data.editToken,
       orgSlug: data.orgSlug,
       confirmationMessage: data.confirmationMessage,
+      ...(data.cancelNotice ? { cancelNotice: data.cancelNotice } : {}),
     },
   })
 }
