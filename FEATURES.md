@@ -2,7 +2,7 @@
 
 Vous créez les postes et les créneaux, vous partagez un lien, et chaque bénévole choisit ses créneaux depuis son téléphone, sans compte à créer. Vous voyez tout de suite où il manque du monde, et les rappels partent tout seuls.
 
-Gratuit, open source et hébergé en France, pour une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive.
+C'est gratuit, open source et hébergé en France. Ça convient aussi bien à une fête de village ou à une buvette qu'à un festival sur plusieurs jours ou à une manifestation sportive.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
@@ -16,14 +16,14 @@ Gratuit, open source et hébergé en France, pour une fête de village, une buve
 
 1. **Préparez le planning.** Créez l'événement, ses postes et ses créneaux, à partir d'un modèle ou de l'édition de l'an dernier.
 2. **Partagez le lien.** Les bénévoles ouvrent la page sur leur téléphone, choisissent leurs créneaux et confirment, sans compte ni mot de passe.
-3. **Suivez et prévenez.** Vous voyez où il manque du monde, les confirmations et les rappels partent par email, et le jour J vous pointez les arrivées.
+3. **Suivez et prévenez.** Vous voyez où il manque du monde pendant que les confirmations et les rappels partent par email. Le jour J, vous pointez les arrivées.
 
 ## Préparer le planning
 
 <!-- image: SHIFTS_ROLES_VIEWS | La Frise des créneaux d'un événement : une ligne par poste, chaque créneau placé sur la journée avec ses places. -->
 
 - **Des postes et des créneaux**, avec le nombre de places voulu. Un créneau de nuit peut finir le lendemain.
-- **Des créneaux en série** : une buvette de 10 h à 22 h par tranches de deux heures se crée en une fois, avec un aperçu avant.
+- **Des créneaux en série** : pour une buvette ouverte de 10 h à 22 h, les six créneaux de deux heures se créent en une fois, et vous voyez un aperçu avant de valider.
 - **Des permanences qui reviennent chaque semaine** : l'accueil du mercredi ou la distribution du samedi se décrit une fois pour toute la saison, jours fériés et fermetures exclus.
 - **Un bon départ** : des modèles d'événement (festival, buvette, manifestation sportive, fête de village) et d'activités régulières (épicerie participative, distribution alimentaire, permanence d'accueil, repair café), ou l'événement de l'an dernier dupliqué avec toutes ses dates décalées.
 - **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque : un créneau sans lieu ou sans contact, des inscriptions fermées sans date d'ouverture.
@@ -36,8 +36,8 @@ En savoir plus : [créer un événement](guide/creer-un-evenement.md), [configur
 
 <!-- image: VOLUNTEER_REGISTER | La page d'inscription sur un téléphone : le créneau choisi, puis le court formulaire « Vos informations ». -->
 
-- **Sans compte ni mot de passe** : un lien, quelques créneaux, une confirmation. Pour un deuxième événement, les coordonnées sont déjà remplies sur le même appareil.
-- **Plusieurs créneaux en une fois**, avec les places restantes, les chevauchements signalés et un récapitulatif clair avant de confirmer.
+- **Sans compte ni mot de passe** : le bénévole ouvre le lien, choisit ses créneaux et confirme. Pour un deuxième événement, ses coordonnées sont déjà remplies s'il utilise le même appareil.
+- **Plusieurs créneaux en une fois**, avec les places restantes et les chevauchements signalés, puis un récapitulatif avant de confirmer.
 - **En frise ou en liste** : le planning de la journée s'affiche en frise, ou en liste dans l'ordre des heures, plus confortable sur un petit téléphone ; le choix reste gardé sur l'appareil.
 - **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Vos règles** : un âge minimum, un téléphone obligatoire, une validation pour les postes sensibles, quelques questions (taille de t-shirt, permis), des postes réservés aux membres qui portent une étiquette.
@@ -51,9 +51,9 @@ En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/l
 <!-- image: TARGETED_MESSAGES | Les modèles de messages : un briefing réutilisable, avec le prénom du bénévole et le nom de l'événement remplis à l'envoi. -->
 
 - **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux, les modifier, les annuler ou les ajouter à son calendrier.
-- **Des rappels automatiques** deux jours avant, la veille et le jour même. Plusieurs créneaux le même jour pour le même événement : un seul rappel les regroupe.
+- **Des rappels automatiques** deux jours avant, la veille et le jour même. Quand un bénévole a plusieurs créneaux le même jour pour le même événement, un seul rappel les regroupe.
 - **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois.
-- **Prévenus des changements** : si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
+- **Les inscrits sont prévenus** par email si un créneau change d'horaire ou est annulé.
 
 <!-- video: TARGETED_MESSAGES -->
 
@@ -64,7 +64,7 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 <!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
 
 - **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
-- **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois, sans classement ni présélection : vous choisissez. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
+- **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois. C'est vous qui choisissez, l'outil ne classe ni ne présélectionne personne. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
 - **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Une annulation faite par erreur se rétablit depuis les inscriptions.
 - **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard.
 - **Une recherche globale** (Ctrl + K, ou Cmd + K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.
@@ -77,7 +77,7 @@ En savoir plus : [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md),
 
 <!-- image: EVENT_REPORTS | Le planning imprimé : pour chaque poste, les créneaux de la journée et le nom des bénévoles inscrits, lisible en noir et blanc. -->
 
-- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Un toucher pointe une arrivée, un autre appelle.
+- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, ou son numéro pour l'appeler.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
 - **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte.
@@ -88,7 +88,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapp
 
 ## Après l'événement
 
-- **Le bilan** : bénévoles distincts, nouveaux et de retour, heures planifiées et heures attestées par une présence, remplissage par poste, créneaux restés incomplets. Un résumé imprimable.
+- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures planifiées et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
 - **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures.
 - **Les heures par bénévole** sur une période, dans un fichier CSV, pour le rapport annuel.
 - **Tout est noté** : le journal d'activité de chaque événement retrace qui a fait quoi, et quand.
@@ -103,7 +103,7 @@ En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.
 
 - **Vos membres au même endroit** : fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel.
 - **Placer un membre sur un ou plusieurs créneaux** depuis les inscriptions : cherchez-le par nom ou email, sans retaper ses coordonnées ; il reçoit un seul email de confirmation avec son lien.
-- **Les doublons repérés**, jamais fusionnés sans vous : vous choisissez champ par champ, sans perdre d'inscription.
+- **Les doublons sont repérés**, mais jamais fusionnés sans vous. Vous choisissez champ par champ ce que vous gardez, et aucune inscription n'est perdue.
 - **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
 - **L'effacement sur demande** : les données personnelles d'un membre s'effacent en une action, ses inscriptions restent sans identité pour que les chiffres restent justes.
 
@@ -121,11 +121,11 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 
 ## Un outil sur lequel compter
 
-- **Gratuit et open source** : le code est publié sous licence AGPL. Pas d'abonnement, pas de fonction payante.
-- **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Aucun cookie de pistage, d'analyse ou de publicité.
+- **Gratuit et open source** : le code est publié sous licence AGPL. Il n'y a ni abonnement ni fonction payante.
+- **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité.
 - **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) et la [liste des sous-traitants](SOUS-TRAITANTS.md), avec leur localisation et leurs garanties.
 - **Chaque organisation est séparée**, et les liens personnels restent privés : ils sont envoyés par email, et un lien perdu se redemande avec son adresse.
-- **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
+- **Pensé pour tous** : l'inscription et l'administration s'utilisent au clavier et avec un lecteur d'écran ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 - **Ce qui change, en clair** : les [nouveautés](CHANGELOG.md) disent ce que chaque version apporte, avec sa date.
 
 ## Se former

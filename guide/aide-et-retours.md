@@ -13,21 +13,16 @@ aliases: []
 
 ## Aide depuis chaque écran
 
-Le lien **Aide** de la barre du haut ouvre le guide administrateur, avec la liste de toutes les pages de la documentation. Les principaux écrans d'un événement (création, modification, vérification et publication, créneaux, questions, inscriptions, invitations, écrire aux bénévoles, « Où manque-t-il du monde ? », jour J) et les paramètres (équipe admin, emails) ont en plus, sous leur titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Elle s'ouvre dans un nouvel onglet : la page sur laquelle vous travailliez reste telle quelle, formulaire en cours compris.
+Le lien **Aide** de la barre du haut ouvre le guide administrateur, avec la liste de toutes les pages de la documentation. Les principaux écrans d'un événement (création, modification, vérification et publication, créneaux, questions, inscriptions, invitations, écrire aux bénévoles, « Où manque-t-il du monde ? », jour J) et les paramètres (équipe admin, emails) ont en plus, sous leur titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Cette page s'ouvre dans un nouvel onglet, si bien que l'écran sur lequel vous travailliez reste tel quel, même avec un formulaire à moitié rempli.
 
 ## Signaler un problème ou proposer une amélioration
 
-Écrivez à [contact@benevol.app](mailto:contact@benevol.app). C'est le moyen le plus simple, aucun compte n'est nécessaire.
+Écrivez à [contact@benevol.app](mailto:contact@benevol.app), sans compte à créer.
 
-Pour qu'on puisse vous aider vite, indiquez si possible :
+Dites-nous d'abord où vous étiez : l'adresse de la page, ou le chemin pour y arriver, par exemple « Événements, puis l'événement, puis Créneaux ». Racontez ensuite ce que vous vouliez faire et ce qui s'est passé à la place. Si un message d'erreur s'est affiché, recopiez-le tel quel ou joignez une capture d'écran. Précisez aussi l'appareil et le navigateur, par exemple « téléphone Android, Chrome ».
 
-- la page concernée (son adresse, ou le chemin pour y arriver, par exemple « Événements, puis l'événement, puis Créneaux ») ;
-- ce que vous vouliez faire, et ce qui s'est passé à la place ;
-- le message d'erreur exact s'il y en a un, ou une capture d'écran ;
-- l'appareil et le navigateur utilisés (par exemple « téléphone Android, Chrome »).
+Inutile de joindre les noms, emails ou téléphones de vos bénévoles s'ils n'aident pas à comprendre le problème.
 
-N'envoyez pas de données personnelles de bénévoles (noms, emails, téléphones) qui ne sont pas utiles pour comprendre le problème.
+Si votre organisation utilise sa propre installation de benevol.app, adressez-vous d'abord à la personne qui l'administre. Elle seule peut agir sur vos données et sur les réglages de cette installation.
 
-Si votre organisation utilise sa propre installation de benevol.app, adressez-vous d'abord à la personne qui l'administre : elle seule peut agir sur vos données et ses réglages.
-
-**Suivre une demande en public (facultatif).** Les demandes et les corrections en cours figurent aussi dans [le suivi public sur GitHub](https://github.com/pvollenweider/benevoles/issues) (en anglais). Si vous avez un compte GitHub, vous pouvez y suivre une demande existante, la commenter ou en ouvrir une. Ce n'est jamais obligatoire : un email suffit.
+Les demandes et les corrections en cours figurent aussi dans [le suivi public sur GitHub](https://github.com/pvollenweider/benevoles/issues) (en anglais). Avec un compte GitHub, vous pouvez y suivre une demande existante, la commenter ou en ouvrir une, mais c'est facultatif : un email suffit.

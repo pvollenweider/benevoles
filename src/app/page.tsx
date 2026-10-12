@@ -180,34 +180,34 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 const STEPS = [
   {
     title: "Vous préparez le planning",
-    text: "Des postes, des créneaux, un nombre de places. Partez d'un modèle (festival, buvette, fête de village) ou de l'édition de l'an dernier, décalée à la bonne date.",
+    text: "Vous créez les postes, puis pour chacun les créneaux et le nombre de places. Pour aller plus vite, partez d'un modèle (festival, buvette, fête de village) ou dupliquez l'édition de l'an dernier, décalée à la bonne date.",
   },
   {
     title: "Vous partagez un lien",
-    text: "Votre page, à l'adresse de votre association, s'envoie par email, se poste sur les réseaux ou s'imprime sur une affiche. Vous pouvez aussi inviter directement les membres de votre équipe.",
+    text: "La page d'inscription porte l'adresse de votre association. Envoyez le lien par email, postez-le sur les réseaux ou imprimez-le sur une affiche. Les membres de votre équipe, vous pouvez aussi les inviter directement.",
   },
   {
     title: "Ils choisissent leurs créneaux",
-    text: "Depuis leur téléphone, sans compte ni mot de passe. Ils reçoivent une confirmation, des rappels, et un lien personnel pour modifier ou annuler.",
+    text: "Ils s'inscrivent depuis leur téléphone, sans compte ni mot de passe. Un email confirme l'inscription, les rappels suivent, et chacun garde un lien personnel pour modifier ou annuler.",
   },
 ]
 
 const BENEFITS = [
   {
     title: "Vous savez où il manque du monde",
-    text: "Le tableau de bord commence par ce qui presse : créneaux pas encore complets, demandes à valider, places de liste d'attente qui expirent. Une page par événement classe les créneaux du plus dégarni au presque complet, et chaque ligne mène là où on agit.",
+    text: "En haut du tableau de bord, il y a ce qui presse : les créneaux pas encore complets, les demandes à valider, les places de liste d'attente qui vont expirer. Chaque événement a aussi une page qui classe ses créneaux du plus dégarni au presque complet, et chaque ligne mène directement à l'écran où agir.",
     image: "/doc-img/admin-staffing.png",
     alt: "Page « Où manque-t-il du monde ? » : 29 places pourvues sur 44, puis la liste des créneaux à compléter, chacun avec sa barre de remplissage et le nombre de personnes qui manquent.",
   },
   {
     title: "Les messages partent tout seuls",
-    text: "Confirmation à l'inscription, rappels deux jours avant, la veille et le jour même. Quand une place se libère, la personne suivante sur la liste d'attente est prévenue. Pour le reste, écrivez à tous les inscrits, à un poste ou à un créneau, avec un aperçu avant l'envoi.",
+    text: "Chaque bénévole reçoit une confirmation quand il s'inscrit, puis un rappel deux jours avant, la veille et le jour même. Quand une place se libère, la personne suivante sur la liste d'attente est prévenue. Pour tout le reste, vous écrivez vous-même à tous les inscrits, à un poste ou à un créneau, et vous relisez l'aperçu avant l'envoi.",
     image: "/doc-img/admin-message.png",
     alt: "Page « Écrire aux bénévoles » : choix des destinataires (tous les inscrits, un poste, un créneau, la liste d'attente, les invités sans créneau) et modèles de message réutilisables.",
   },
   {
     title: "Le jour J tient sur une feuille",
-    text: "Plannings par jour, par poste ou par bénévole, feuille de présence à cocher, badges à découper : tout s'imprime lisiblement en noir et blanc, ou s'enregistre en PDF.",
+    text: "Vous imprimez le planning par jour, par poste ou par bénévole, la feuille de présence à cocher et les badges à découper. Tout reste lisible en noir et blanc, et chaque document peut aussi s'enregistrer en PDF.",
     image: "/doc-img/admin-print.png",
     alt: "Page « Rapports » : export complet, archive de l'événement, plannings par jour, par poste et individuel, prêts à imprimer.",
   },
@@ -294,12 +294,13 @@ function LandingPage() {
               Un lien, et vos bénévoles s&apos;inscrivent.
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>
-              Ils choisissent leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez où il
-              manque du monde, les rappels partent tout seuls, et le jour J tient sur une feuille.
+              Ils choisissent leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez tout de
+              suite où il manque du monde, et l&apos;application envoie les rappels à votre place. Le jour
+              J, le planning s&apos;imprime sur une feuille.
             </p>
             <p className="mt-3 text-base text-blue-200 max-w-xl leading-relaxed">
-              Pour les festivals, les buvettes, les fêtes de village et toutes les associations qui
-              comptent sur des bénévoles.
+              Fait pour les festivals, les buvettes et les fêtes de village, mais aussi pour toute
+              association qui a besoin de bénévoles sur des créneaux.
             </p>
             <div className="mt-10 flex flex-wrap gap-x-6 gap-y-4 items-center">
               <Link
@@ -416,15 +417,15 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Gratuit et open source</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Pas d&apos;abonnement ni de version payante. Le code est public, sous licence AGPL-3.0,
-                et l&apos;outil grandit avec les retours des associations qui l&apos;utilisent.
+                Il n&apos;y a ni abonnement ni version payante. Le code est public (licence AGPL-3.0)
+                et l&apos;outil évolue avec les retours des associations qui l&apos;utilisent.
               </dd>
             </div>
             <div>
               <dt className="text-lg font-semibold">Hébergé en France, sans pistage</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                L&apos;application et sa base de données sont chez OVH, en France. Aucun cookie de
-                pistage, analytique ou publicitaire.{" "}
+                L&apos;application et sa base de données sont hébergées chez OVH, en France. Le site ne
+                dépose aucun cookie de pistage, ni analytique ni publicitaire.{" "}
                 <Link href="/legal/privacy" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Politique de confidentialité
                 </Link>
@@ -433,15 +434,16 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Vos données restent les vôtres</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Chaque organisation ne voit que ses événements et ses bénévoles. Membres, journal
-                d&apos;activité, archive complète d&apos;un événement : tout s&apos;exporte, à tout moment.
+                Chaque organisation ne voit que ses propres événements et ses bénévoles. Vous pouvez
+                exporter à tout moment la liste des membres, le journal d&apos;activité ou l&apos;archive
+                complète d&apos;un événement.
               </dd>
             </div>
             <div>
               <dt className="text-lg font-semibold">Pensé pour tout le monde</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Inscription et administration conçues pour le clavier et les lecteurs d&apos;écran,
-                vérifiées à chaque modification.{" "}
+                L&apos;inscription comme l&apos;administration s&apos;utilisent au clavier et avec un
+                lecteur d&apos;écran, et c&apos;est vérifié à chaque modification.{" "}
                 <Link href="/accessibilite" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Déclaration d&apos;accessibilité
                 </Link>
@@ -502,8 +504,8 @@ function LandingPage() {
               Votre prochain événement commence ici
             </h2>
             <p className="mt-4 text-lg text-blue-100 leading-relaxed">
-              Créez votre espace en ligne : il est prêt dès que vous avez confirmé votre adresse, et une
-              liste de premiers pas vous guide. La publication suit une courte vérification.
+              Votre espace est prêt dès que vous avez confirmé votre adresse email, avec une liste de
+              premiers pas pour vous guider. La publication, elle, attend une courte vérification.
             </p>
             <Link
               href="/inscription"
