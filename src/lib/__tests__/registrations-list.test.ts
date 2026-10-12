@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
+  isAddFormPerson, shiftsOfAddFormPerson, memberChoiceLabel, memberResultsSentence, MEMBER_CHOICES_SHOWN,
   addConflictMessage,
   charterAcceptanceLabel,
   cancelAnnouncement, heldAnnouncement, undoneAnnouncement,
@@ -168,5 +169,36 @@ describe("charterAcceptanceLabel (#569)", () => {
   it("crosses midnight with the zone, not the server", () => {
     expect(charterAcceptanceLabel({ acceptedAt: new Date("2026-10-05T22:30:00Z"), hash: null, currentHash: "abc", timeZone: "Europe/Zurich" }))
       .toBe("Convention acceptée le 6 octobre 2026 à 0h30")
+  })
+})
+
+describe("add form person (#914)", () => {
+  const shiftRef = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
+  const regs = [
+    { shift: shiftRef, volunteer: { id: "mem-2", firstName: "René", lastName: "Meyer", email: null } },
+    { shift: { ...shiftRef, id: "s2" }, volunteer: { id: "mem-3", firstName: "Aline", lastName: "Exemple", email: "Aline@x.org" } },
+  ]
+
+  it("matches a chosen member by id, even without email", () => {
+    expect(isAddFormPerson(regs[0].volunteer, { volunteerId: "mem-2", email: "" })).toBe(true)
+    expect(shiftsOfAddFormPerson(regs, { volunteerId: "mem-2", email: "" })?.map((s) => s.id)).toEqual(["s1"])
+  })
+
+  it("matches a typed email, case-insensitively, and nothing when empty", () => {
+    expect(shiftsOfAddFormPerson(regs, { volunteerId: "", email: " aline@x.org " })?.map((s) => s.id)).toEqual(["s2"])
+    expect(shiftsOfAddFormPerson(regs, { volunteerId: "", email: "" })).toBeUndefined()
+  })
+
+  it("prefers the chosen member over a typed email", () => {
+    expect(isAddFormPerson(regs[1].volunteer, { volunteerId: "mem-2", email: "aline@x.org" })).toBe(false)
+  })
+
+  it("labels a member and announces the search results", () => {
+    expect(memberChoiceLabel({ id: "m", firstName: "René", lastName: "Meyer", email: null, phone: null, active: false })).toBe("René Meyer (fiche inactive)")
+    expect(memberChoiceLabel({ id: "m", firstName: "Aline", lastName: "Exemple", email: "a@x.org", phone: null, active: true })).toBe("Aline Exemple, a@x.org")
+    expect(memberResultsSentence(0)).toBe("Aucun membre trouvé. Remplissez les champs pour une nouvelle personne.")
+    expect(memberResultsSentence(1)).toBe("1 membre trouvé.")
+    expect(memberResultsSentence(3)).toBe("3 membres trouvés.")
+    expect(memberResultsSentence(MEMBER_CHOICES_SHOWN + 4)).toBe(`${MEMBER_CHOICES_SHOWN + 4} membres trouvés, les ${MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.`)
   })
 })

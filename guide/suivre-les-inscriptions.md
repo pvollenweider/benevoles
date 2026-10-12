@@ -46,10 +46,14 @@ Quand une personne vous répond « ce n'était pas moi » après l'email qui lui
 
 ## Ajouter quelqu'un à la main
 
-**+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle** : prénom et nom (obligatoires), email, téléphone, créneau (obligatoire) et une note (par exemple « Inscrit par téléphone »). Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.
+**+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle**.
+
+- **Membre existant** : cherchez par nom ou email une personne déjà dans la liste des membres, vous-même compris, puis **Choisir**. Ses coordonnées sont reprises sans rien retaper, même sans email, et l'inscription est rattachée à sa fiche. **Changer de personne** revient à la recherche.
+- Pour une nouvelle personne : prénom et nom (obligatoires), email, téléphone. Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.
+- Puis le créneau (obligatoire) et une note (par exemple « Inscrit par téléphone »).
 
 - L'inscription est confirmée directement, même sur un créneau sur validation : pas de demande à traiter.
 - Les conditions du formulaire public ne s'appliquent pas : inscriptions fermées, téléphone obligatoire, âge minimum, accès réservé.
-- Pour une personne déjà inscrite à l'événement (même email), le formulaire signale qu'elle a déjà un créneau sur la même plage horaire, et si ce créneau lui donnerait une charge élevée ; l'ajout reste possible. Une seconde inscription de la même personne sur le même créneau est refusée.
+- Pour une personne déjà inscrite à l'événement (membre choisi, ou même email), le formulaire signale qu'elle a déjà un créneau sur la même plage horaire, et si ce créneau lui donnerait une charge élevée ; l'ajout reste possible. Une seconde inscription de la même personne sur le même créneau est refusée.
 - Si la personne a déjà atteint la limite de créneaux par personne du poste, l'ajout est refusé avec la raison et le bouton **Ajouter quand même** ; l'ajout au-delà de la limite est noté dans le journal.
 - L'ajout n'envoie aucun email. Pour transmettre son lien personnel à la personne, sélectionnez sa ligne puis **Renvoyer le lien**.

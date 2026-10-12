@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Documents à imprimer vérifiés automatiquement** : le planning par jour, par poste et individuel, la feuille de présence, la liste avec téléphones, la synthèse des réponses, l'export complet et les badges sont analysés à chaque changement par les mêmes tests d'accessibilité que le reste du site. Ces pages, ouvertes dans le navigateur, sont la version accessible des documents ; un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait.
 
 ### Ajouté
+- Inscriptions > Ajouter manuellement : un **membre existant** se cherche par nom ou email et se place sur un créneau sans retaper ses coordonnées, même sans email, sans créer de doublon (#914).
 
 - **Coordonnées reprises d'un événement à l'autre** (#901) : après une inscription, le navigateur garde le prénom, le nom, l'email et le téléphone du bénévole, et les remplit sur le formulaire d'un autre événement. Rien n'est envoyé au serveur ; « Ce n'est pas moi, effacer » et « Quitter la session » les oublient.
 - **Modèles d'activités régulières** (#866) : épicerie participative, distribution alimentaire, permanence d'accueil et repair café créent un événement de 13 semaines déjà rempli de permanences récurrentes, jours fériés exclus selon le pays de l'organisation.
@@ -63,6 +64,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
 ### Corrigé
+- Dans l'ajout manuel d'une inscription, un refus (par exemple « déjà inscrite sur ce créneau ») disparaît dès qu'on change de créneau ou de personne, au lieu de rester affiché.
 - Dans l'assistant de création d'événement, la page Créneaux n'affiche plus « Aucun créneau pour l'instant : la publication attendra » une fois le premier créneau ajouté.
 - Le lien d'invitation d'un nouvel administrateur, envoyé depuis Paramètres, utilise l'adresse du site configurée sur le serveur au lieu d'une valeur figée à la compilation.
 - Dans Paramètres, un organisateur voit « Charte des bénévoles : par défaut » quand l'organisation garde le texte par défaut, et non plus « aucune » alors que les bénévoles l'acceptent bien.

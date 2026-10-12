@@ -48,7 +48,7 @@ describe("ManualAddForm", () => {
     await waitFor(() => expect(onAdded).toHaveBeenCalled())
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("/api/admin/registrations")
-    expect(JSON.parse(init.body)).toEqual({ eventId: "evt-1", firstName: "Chloé", lastName: "Roy", email: "", phone: "", shiftId: "s1", comment: "" })
+    expect(JSON.parse(init.body)).toEqual({ eventId: "evt-1", volunteerId: "", firstName: "Chloé", lastName: "Roy", email: "", phone: "", shiftId: "s1", comment: "" })
     const reg = onAdded.mock.calls[0][0] as Registration
     expect(reg).toMatchObject({ id: "r9", isLeader: false, waitingPosition: null })
     expect(reg.shift).toMatchObject({ id: "s1", date: "2026-07-04", capacity: 3, registrationCount: 2 })
@@ -126,6 +126,57 @@ describe("ManualAddForm", () => {
     fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
     expect(screen.queryByRole("button", { name: "Ajouter quand même" })).toBeNull()
     expect(screen.getByRole("alert")).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
+  })
+
+  // #914: a member already in the list is placed without retyping, email or not.
+  it("places a member found in the list, sending its id", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: true, status: 200, json: async () => ([
+      { id: "mem-2", firstName: "René", lastName: "Meyer", email: null, phone: "079 000 02 00", active: true },
+    ]) })
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+    fireEvent.change(screen.getByRole("searchbox", { name: "Membre existant" }), { target: { value: "Meyer" } })
+    fireEvent.keyDown(screen.getByRole("searchbox", { name: "Membre existant" }), { key: "Enter" })
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/admin/members?q=Meyer")
+    const list = await screen.findByRole("list", { name: "Membres trouvés" })
+    expect(list).toHaveTextContent("René Meyer")
+    fireEvent.click(within(list).getByRole("button", { name: /^Choisir\s*René Meyer$/ }))
+
+    const chosen = screen.getByRole("group", { name: "Membre choisi" })
+    expect(chosen).toHaveTextContent("René Meyer, 079 000 02 00")
+    expect(screen.queryByRole("textbox", { name: "Prénom" })).toBeNull()
+    await waitFor(() => expect(combo()).toHaveFocus())
+
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Cette personne est déjà inscrite sur ce créneau." }) })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await screen.findByRole("alert")
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ volunteerId: "mem-2", firstName: "René", lastName: "Meyer", email: "", shiftId: "s1" })
+  })
+
+  it("goes back to the search through Changer de personne", async () => {
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, volunteerId: "mem-2", firstName: "René", lastName: "Meyer" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Changer de personne" }))
+    await waitFor(() => expect(screen.getByRole("searchbox", { name: "Membre existant" })).toHaveFocus())
+    expect(screen.getByRole("textbox", { name: "Prénom" })).toHaveValue("")
+  })
+
+  it("recognizes a chosen member without email on the event, by id", () => {
+    const held = {
+      id: "r1", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z", waitingPosition: null, isLeader: false,
+      volunteer: { id: "mem-2", firstName: "René", lastName: "Meyer", email: null, phone: null },
+      shift,
+    } as Registration
+    render(<Harness registrations={[held]} initial={{ ...EMPTY_ADD_FORM, volunteerId: "mem-2", firstName: "René", lastName: "Meyer", shiftId: "s1" }} />)
+    expect(combo()).toHaveAccessibleDescription("Ce bénévole est déjà inscrit à ce créneau.")
+  })
+
+  // Seen in the REGISTRATIONS_MANAGEMENT recording: the refusal stayed after another shift was picked.
+  it("hides a refusal once the form changes", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Cette personne est déjà inscrite sur ce créneau." }) })
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    expect(await screen.findByRole("alert")).toHaveTextContent("Cette personne est déjà inscrite sur ce créneau.")
+    fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
+    expect(screen.queryByRole("alert")).toBeNull()
   })
 
   it("closes through Annuler", () => {

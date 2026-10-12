@@ -66,10 +66,43 @@ export function filterRegistrations<R extends ListRegistration>(
 
 /** Shifts already held by the volunteer with this email (add form), or undefined if none. */
 export function shiftsOfEmail(registrations: ListRegistration[], email: string): ShiftRef[] | undefined {
-  const normalized = email.trim().toLowerCase()
-  if (!normalized) return undefined
-  const found = registrations.filter((r) => r.volunteer.email?.toLowerCase() === normalized).map((r) => r.shift)
+  return shiftsOfAddFormPerson(registrations, { volunteerId: "", email })
+}
+
+/** Who the add form is about (#914): the member chosen from the list, else the typed email. */
+export type AddFormPerson = { volunteerId: string; email: string }
+
+/** Whether a registration's volunteer is the add form's person. A chosen member is matched by id,
+ * so a member without email is recognized too. */
+export function isAddFormPerson(volunteer: { id: string; email: string | null }, person: AddFormPerson): boolean {
+  if (person.volunteerId) return volunteer.id === person.volunteerId
+  const normalized = person.email.trim().toLowerCase()
+  return normalized !== "" && volunteer.email?.toLowerCase() === normalized
+}
+
+/** Shifts already held by the add form's person, or undefined if none. */
+export function shiftsOfAddFormPerson(registrations: ListRegistration[], person: AddFormPerson): ShiftRef[] | undefined {
+  const found = registrations.filter((r) => isAddFormPerson(r.volunteer, person)).map((r) => r.shift)
   return found.length > 0 ? found : undefined
+}
+
+/** A member offered by the « Membre existant » search of the add form (#914). */
+export type MemberChoice = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null; active: boolean }
+
+/** How many search results the add form lists; the rest asks for a narrower search. */
+export const MEMBER_CHOICES_SHOWN = 8
+
+/** « Aline Exemple, aline@example.org » — commas, read naturally by screen readers. */
+export function memberChoiceLabel(m: MemberChoice): string {
+  return `${m.firstName} ${m.lastName}${m.email ? `, ${m.email}` : ""}${m.active ? "" : " (fiche inactive)"}`
+}
+
+/** The sentence announced after a member search of the add form. */
+export function memberResultsSentence(found: number): string {
+  if (found === 0) return "Aucun membre trouvé. Remplissez les champs pour une nouvelle personne."
+  if (found === 1) return "1 membre trouvé."
+  if (found > MEMBER_CHOICES_SHOWN) return `${found} membres trouvés, les ${MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.`
+  return `${found} membres trouvés.`
 }
 
 /** Why the selected shift can't be added for that volunteer, or null. */

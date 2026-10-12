@@ -26,10 +26,11 @@ export type Registration = {
   charterAcceptance?: string | null
 }
 
-/** The fields of the manual addition form. */
-export type AddFormValues = { firstName: string; lastName: string; email: string; phone: string; shiftId: string; comment: string }
+/** The fields of the manual addition form. `volunteerId` is the member chosen from the list (#914),
+ * "" for a new person typed by hand. */
+export type AddFormValues = { volunteerId: string; firstName: string; lastName: string; email: string; phone: string; shiftId: string; comment: string }
 
-export const EMPTY_ADD_FORM: AddFormValues = { firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" }
+export const EMPTY_ADD_FORM: AddFormValues = { volunteerId: "", firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" }
 
 /** « Bar, Soir »: commas, not the « · » screen readers read « point » (#582). */
 export const shiftName = (r: Registration) => spokenShiftName(r.shift)
