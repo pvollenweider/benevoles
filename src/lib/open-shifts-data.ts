@@ -23,7 +23,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true, reservedTags: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true, reservedTags: true, minAge: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, status: true } },
         },
       },
@@ -36,7 +36,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
     db.volunteer.findMany({
       where: { mergedIntoId: null },
       orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
-      select: { id: true, firstName: true, lastName: true, email: true, active: true, tags: true, availabilityPeriods: true, availabilityNote: true },
+      select: { id: true, firstName: true, lastName: true, email: true, active: true, tags: true, availabilityPeriods: true, availabilityNote: true, birthDate: true },
     }),
     db.memberInvite.findMany({ where: { eventId }, select: { volunteerId: true, declinedAt: true } }),
   ])
@@ -54,16 +54,18 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
     })),
     [],
   )
+  const minAgeOf = new Map(event.shifts.map((s) => [s.id, s.minAge]))
   // Reserved roles (#470): one set of tags per role, whichever shift carries it.
   const reserved = reservedRoles(event.shifts)
   // Underfilled shifts in time order: the order the email and the picker read best in.
   const openShifts: OpenShift[] = summary.underfilled
-    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [] }))
+    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr"))
 
   const members: PoolMember[] = volunteers.map((v) => ({
     id: v.id, firstName: v.firstName, lastName: v.lastName, hasEmail: !!v.email?.trim(), active: v.active, tags: v.tags,
     availabilityPeriods: v.availabilityPeriods, availabilityNote: v.availabilityNote,
+    birthDate: v.birthDate ? v.birthDate.toISOString().slice(0, 10) : null,
   }))
   const registrations: LiveRegistration[] = event.shifts.flatMap((s) => s.registrations.map((r) => ({ volunteerId: r.volunteerId, shiftId: s.id, status: r.status })))
   const inviteRefs: InviteRef[] = invites.map((i) => ({ volunteerId: i.volunteerId, declined: !!i.declinedAt }))

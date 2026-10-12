@@ -87,7 +87,7 @@ describe("findCandidates", () => {
   it("lists members by name only, with nothing ranked, and leaves out inactive, email-less and declined members with a count", () => {
     const { candidates, excluded } = findCandidates({ ...base, shifts: [open(bar)] })
     expect(candidates.map((c) => c.member.id)).toEqual(["ana", "ovl", "sel", "zoe"])
-    expect(excluded).toEqual({ inactive: 1, noEmail: 1, declined: 1, alreadyOnShifts: 1, reserved: 0 })
+    expect(excluded).toEqual({ inactive: 1, noEmail: 1, declined: 1, alreadyOnShifts: 1, reserved: 0, tooYoung: 0 })
     expect(exclusionSentence(excluded)).toBe("Non proposés : 1 membre inactif, 1 membre sans email, 1 membre qui a répondu « pas disponible », 1 membre déjà inscrit sur ces créneaux.")
   })
 
@@ -125,10 +125,26 @@ describe("findCandidates", () => {
     expect(candidates.find((c) => c.member.id === "sel")!.link).toBe("new_invitation")
   })
 
+  // #869: a replacement is never someone sign-up would refuse for their age.
+  it("does not offer a shift to a member known to be under its minimum age, and counts them", () => {
+    const young = [member("kid", { lastName: "Kid", birthDate: "2012-05-01" }), member("adult", { lastName: "Adult", birthDate: "1990-01-01" }), member("unk", { lastName: "Unknown" })]
+    const { candidates, excluded } = findCandidates({ eventShifts, members: young, registrations: [], invites: [], shifts: [{ ...open(bar), minAge: 18 }] })
+    expect(candidates.map((c) => c.member.id)).toEqual(["adult", "unk"])
+    expect(excluded.tooYoung).toBe(1)
+    expect(exclusionSentence(excluded)).toBe("Non proposés : 1 membre sous l'âge minimum.")
+  })
+
+  it("still offers another selected shift without minimum age to a younger member", () => {
+    const kid = member("kid", { lastName: "Kid", birthDate: "2012-05-01" })
+    const { candidates } = findCandidates({ eventShifts, members: [kid], registrations: [], invites: [], shifts: [{ ...open(bar), minAge: 18 }, open(acc)] })
+    expect(candidates[0].offer).toEqual(["acc"])
+    expect(candidateReasons(candidates[0], [{ ...open(bar), minAge: 18 }, open(acc)]).join("\n")).toMatch(/âge minimum non atteint, pas proposé/)
+  })
+
   it("filters on a tag, case-insensitively, before counting who was left out", () => {
     const { candidates, excluded } = findCandidates({ ...base, shifts: [open(bar)], tag: "bar" })
     expect(candidates.map((c) => c.member.id)).toEqual(["ana"])
-    expect(excluded).toEqual({ inactive: 0, noEmail: 0, declined: 0, alreadyOnShifts: 0, reserved: 0 })
+    expect(excluded).toEqual({ inactive: 0, noEmail: 0, declined: 0, alreadyOnShifts: 0, reserved: 0, tooYoung: 0 })
   })
 
   it("picks the link: their invitation, a new one, or the event page for members already registered", () => {

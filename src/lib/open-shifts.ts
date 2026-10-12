@@ -11,6 +11,7 @@
 import { AVAILABILITY_PERIODS, type AvailabilityPeriod } from "./availability"
 import { clockTime, crossesMidnight, toMin, toMinEnd } from "./gantt-utils"
 import { memberMayTake } from "./role-reservation"
+import { shiftsTooYoungFor } from "./utils"
 
 export const OPEN_SHIFTS_MAX_SHIFTS = 20
 export const OPEN_SHIFTS_MAX_RECIPIENTS = 200
@@ -25,7 +26,9 @@ type DateLike = Date | string
 export type EventShiftRef = { id: string; roleName: string; label: string; date: DateLike; startTime: string; endTime: string }
 
 /** An underfilled shift the organizer picked: places left, and the tags its role is reserved to (#470). */
-export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[] }
+export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[]
+  /** Shift.minAge (#869): a member known to be younger on the shift's day is not offered it. */
+  minAge?: number | null }
 
 export type PoolMember = {
   id: string
@@ -36,6 +39,8 @@ export type PoolMember = {
   tags: string[]
   availabilityPeriods?: string[] | null
   availabilityNote?: string | null
+  /** "YYYY-MM-DD" when known; unknown means the sign-up form will ask it, as for anyone. */
+  birthDate?: string | null
 }
 
 /** A live registration (active, requested, waiting or offered) of a member on this event. */
@@ -107,9 +112,10 @@ export type ShiftFit = {
   /**
    * offer: the email lists it. registered: already on it (any live status). overlap: one of the
    * member's registrations on the event overlaps it, even by a few minutes; sign-up would refuse it.
-   * reserved: its role is reserved to tags the member doesn't carry.
+   * reserved: its role is reserved to tags the member doesn't carry. too_young: their known birth
+   * date is under the shift's minimum age on its day (#869); sign-up would refuse it.
    */
-  status: "offer" | "registered" | "overlap" | "reserved"
+  status: "offer" | "registered" | "overlap" | "reserved" | "too_young"
   overlap?: { shift: EventShiftRef; minutes: number; status: string }
   availability: AvailabilityFit
 }
@@ -141,6 +147,8 @@ export type Exclusions = {
   alreadyOnShifts: number
   /** Nothing to offer because every selected shift's role is reserved to other tags. */
   reserved: number
+  /** Nothing to offer because they are under the minimum age of every selected shift (#869). */
+  tooYoung: number
 }
 
 const tagKey = (t: string) => t.trim().toLocaleLowerCase("fr")
@@ -157,7 +165,7 @@ export function findCandidates(input: {
   tag?: string
   includeDeclined?: boolean
 }): { candidates: Candidate[]; excluded: Exclusions } {
-  const excluded: Exclusions = { inactive: 0, noEmail: 0, declined: 0, alreadyOnShifts: 0, reserved: 0 }
+  const excluded: Exclusions = { inactive: 0, noEmail: 0, declined: 0, alreadyOnShifts: 0, reserved: 0, tooYoung: 0 }
   const eventShifts = new Map(input.eventShifts.map((s) => [s.id, s]))
   const regsOf = new Map<string, LiveRegistration[]>()
   for (const r of input.registrations) regsOf.set(r.volunteerId, [...(regsOf.get(r.volunteerId) ?? []), r])
@@ -177,6 +185,9 @@ export function findCandidates(input: {
       const availability = availabilityFit(member, shift)
       if (regs.some((r) => r.shiftId === shift.id)) return { shiftId: shift.id, status: "registered", availability }
       if (!memberMayTake(member.tags, shift.reservedTags ?? [])) return { shiftId: shift.id, status: "reserved", availability }
+      if (member.birthDate && shiftsTooYoungFor(member.birthDate, [{ minAge: shift.minAge ?? null, date: shift.date }]).length > 0) {
+        return { shiftId: shift.id, status: "too_young", availability }
+      }
       let overlap: ShiftFit["overlap"]
       for (const r of regs) {
         const other = eventShifts.get(r.shiftId)
@@ -191,6 +202,7 @@ export function findCandidates(input: {
     const offer = fits.filter((f) => f.status === "offer").map((f) => f.shiftId)
     if (offer.length === 0 && !fits.some((f) => f.status === "overlap")) {
       if (fits.some((f) => f.status === "registered")) excluded.alreadyOnShifts++
+      else if (fits.some((f) => f.status === "too_young")) excluded.tooYoung++
       else excluded.reserved++
       continue
     }
@@ -310,6 +322,8 @@ export function candidateReasons(c: Candidate, shifts: OpenShift[]): string[] {
       out.push(`Déjà sur ${which} : pas proposé à nouveau`)
     } else if (f.status === "reserved") {
       out.push(`${which.charAt(0).toUpperCase()}${which.slice(1)} : poste réservé à d'autres tags, pas proposé`)
+    } else if (f.status === "too_young") {
+      out.push(`${which.charAt(0).toUpperCase()}${which.slice(1)} : âge minimum non atteint, pas proposé`)
     }
   }
 
@@ -327,6 +341,7 @@ export function exclusionSentence(e: Exclusions): string | null {
     e.declined > 0 ? `${plural(e.declined, "membre qui a", "membres qui ont")} répondu « pas disponible »` : null,
     e.alreadyOnShifts > 0 ? `${plural(e.alreadyOnShifts, "membre déjà inscrit", "membres déjà inscrits")} sur ces créneaux` : null,
     e.reserved > 0 ? `${plural(e.reserved, "membre", "membres")} sans le tag des postes réservés` : null,
+    e.tooYoung > 0 ? `${plural(e.tooYoung, "membre", "membres")} sous l'âge minimum` : null,
   ].filter(Boolean)
   return parts.length > 0 ? `Non proposés : ${parts.join(", ")}.` : null
 }
