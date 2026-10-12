@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:58:42.419Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "32bae3e8c2e2e3cac9d0f45a8e2bccbdb40820c70321ca8c38f50379e97b4286",
-  "clipSha256": "c9e5b10843d039cfd4d704ec66f44dfdd576863532b6388633efddf01ab625d4",
+  "reviewedAt": "2026-10-12T07:11:25.367Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
+  "clipSha256": "dd5a91633d4c744458bc149dbb442ca810e1a7321d25e0acd8f85a9c730ed805",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul.",
+    "heardOpening": "Le jour de la fête",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul.",
+        "spokenSeconds": 0,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
         "visibleSeconds": 0,
-        "visible": "Bandeau de titre « Responsable de poste : accompagner son équipe » affiché au centre de l'écran.",
+        "visible": "Titre d'introduction « Responsable de poste : accompagner son équipe » affiché au premier plan.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "Un responsable de poste peut suivre son équipe",
-        "visibleSeconds": 2.5,
-        "visible": "Disparition du bandeau, affichage de la page « Responsables de secteur » avec les postes Accueil et Buvette.",
+        "spokenSeconds": 4.1,
+        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
+        "visibleSeconds": 3,
+        "visible": "Page « Responsables de secteur » affichant les responsables désignés pour l'Accueil et la Buvette avec leurs adresses e-mail.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
-        "visibleSeconds": 8.5,
-        "visible": "Écran fixe sur la liste des responsables de secteur avec le bouton « + Ajouter un responsable » (annonce générale).",
+        "spokenSeconds": 9.8,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
+        "visibleSeconds": 9.8,
+        "visible": "Vue d'ensemble stable de la page des responsables avec le bouton « + Ajouter un responsable » (annonce au futur du déroulé de la formation).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Aucun accès à toute l'administration n'est nécessaire.",
+        "visibleSeconds": 15.1,
+        "visible": "Le sous-titre de la page mentionne explicitement « sans accès admin au reste de l'événement ».",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, débit régulier et audio clair."
+      "observation": "Voix masculine claire, posée, bien articulée et parfaitement synchronisée avec l'affichage de présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

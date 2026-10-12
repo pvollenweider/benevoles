@@ -50,7 +50,7 @@ export async function recordReportDocuments(options: { page: Page; base: string;
   await scene("individual", async at => {
     await at("Sa frise montre aussi les"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-04.png"), "planning de Léa, première feuille")
     await at("On retrouve ensuite le lieu"); await page.locator("img").evaluate(img => { window.scrollTo({ top: img.getBoundingClientRect().height * 0.57, behavior: "smooth" }) })
-    await at("Remettez-lui les deux pages de"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-05.png"), "planning de Léa, feuille suivante")
+    await at("passons à la suivante pour lire le dernier poste"); await showRenderedPdfPage(page, path.join(directory, "documents", "rendered", "individual", "page-05.png"), "planning de Léa, feuille suivante")
   })
   await open("Feuille de présence", "sheets/attendance")
   await scene("attendance", async at => {

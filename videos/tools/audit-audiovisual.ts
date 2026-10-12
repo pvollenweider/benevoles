@@ -12,7 +12,7 @@ import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import assert from "node:assert/strict"
 import { pathToFileURL } from "node:url"
-import { ownsRecordedNoEmailMember, recordedMembers } from "./prepare-demo"
+import { ownsRecordedNoEmailMember, ownsTargetedMessageNoEmailMember, recordedMembers } from "./prepare-demo"
 import { ownsImportedNoEmailMember, readImportOwnership, type ImportOwnership } from "../lib/member-import-ownership"
 import { ownsNaturalMemberSeed, readSeedProofV2, type SeedProofV2, type SeedIdentity } from "../lib/member-fixture-v2"
 
@@ -37,7 +37,7 @@ export function validateMemberReviewFixture(databaseUrl: string, fixture: Member
     if (member.email !== null) return false
     // Exact two seed identities, not every no-email contact with a familiar name.
     if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now)
-    return ownsRecordedNoEmailMember(member, owned, now) || imported?.schemaVersion === 3 && ownsImportedNoEmailMember(member, imported, now)
+    return ownsTargetedMessageNoEmailMember(member) || ownsRecordedNoEmailMember(member, owned, now) || imported?.schemaVersion === 3 && ownsImportedNoEmailMember(member, imported, now)
   }
   assert(fixture.volunteers.every(synthetic), "Member review contains non-synthetic organization members")
   assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer)) && event.sectorLeaders.every(leader => leader.email.endsWith("@example.org"))), "Member review contains non-synthetic event recipients")
@@ -60,7 +60,7 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
@@ -73,7 +73,17 @@ async function main() {
       validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
-    if (manifest.id === "VOLUNTEER_HOURS_CERTIFICATE") {
+    if (manifest.id === "ORGANIZATION_ACTIVITY_LOG") {
+      const url = new URL(process.env.DATABASE_URL!)
+      assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Organization journal review requires isolated video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-org-activity" }, include: { volunteers: true, admins: true, events: { include: { registrations: true } } } })
+      const emails = new Set(["video.org-activity.owner@example.org", "video.org-activity.organizer@example.org", "video.org-activity.invited@example.org"])
+      assert(fixture.slug === "formation-journal" && fixture.name === "Formation — journal d'organisation" && fixture.admins.length === 3 && fixture.admins.every(admin => emails.has(admin.email)), "Journal administrators must be exclusively synthetic")
+      assert(fixture.volunteers.length === 56 && fixture.volunteers.every(member => /^video\.org-activity\.member\.\d{1,2}@example\.org$/.test(member.email ?? "") && /^Exemple \d{2}$/.test(member.lastName) && /^\+41 79 000 \d{4}$/.test(member.phone ?? "")), "Journal members must be exclusively synthetic")
+      assert(fixture.events.length === 1 && fixture.events[0].slug === "atelier-journal-organisation" && fixture.events[0].registrations.length === 1 && fixture.volunteers.some(member => member.id === fixture.events[0].registrations[0].volunteerId), "Only the actual journal demonstration registration may be reviewed")
+      const logs = await db.orgLog.findMany({ where: { organizationId: fixture.id } })
+      assert(logs.length === 61 && logs.every(log => fixture.admins.some(admin => admin.id === log.actorId)), "Journal must contain the actual synthetic actors only")
+    } else if (manifest.id === "VOLUNTEER_HOURS_CERTIFICATE") {
       await (await import("../lib/volunteer-hours-fixture")).assertOwnedHoursFixture(db)
     } else if (manifest.id === "EVENT_QUESTIONS") {
       await (await import("../lib/event-questions-fixture")).assertQuestionsReviewFixture(db)

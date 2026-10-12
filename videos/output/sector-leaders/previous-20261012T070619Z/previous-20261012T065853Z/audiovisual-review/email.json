@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:17.744Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "9596e7c9b64e1c7512eba1ec275bae89d3e26e33efc5df775e7b9463ea2dc8b1",
+  "clipSha256": "bdc00bb90132d5e8d8095d30d5dd67d389c7ec3152eebcdc39bc3d24504068cc",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Voici l'email reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Voici l'email reçu",
+        "visibleSeconds": 0,
+        "visible": "Boîte de réception Mailpit affichant le courriel destiné au responsable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "Le responsable ouvre son lien personnel directement",
+        "visibleSeconds": 3.5,
+        "visible": "Ouverture directe de la page « Responsable - Démontage » sans écran de connexion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "il donne accès aux coordonnées de l'équipe",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la liste des bénévoles inscrits avec leurs adresses email et numéros de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et posée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

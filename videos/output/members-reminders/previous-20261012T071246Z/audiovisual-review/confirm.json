@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:32:17.246Z",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d",
+  "promptSha256": "289751b2bc9e154177efb5dfbdd6f03382d4887b7a692b96322485ee10c77e83",
+  "clipSha256": "166424efc50baf3d389882a7e307809cb2bca7069819e508d1ea5aa20310e157",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton Relancer les personnes sans créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur « Relancer les 3 sans créneau » et ouverture de la fenêtre modale récapitulative",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Vous pouvez encore annuler",
+        "visibleSeconds": 6,
+        "visible": "Clic sur le bouton « Annuler » fermant la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Pour cette démonstration, nous confirmons l'envoi réel",
+        "visibleSeconds": 8.5,
+        "visible": "Réouverture et clic sur le bouton bleu « Relancer » pour valider l'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Le résultat indique le nombre effectivement envoyé",
+        "visibleSeconds": 9.5,
+        "visible": "La mention « 3 relances envoyées » apparaît à côté des boutons d'action",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

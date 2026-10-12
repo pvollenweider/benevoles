@@ -1,54 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:59:43.867Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "169b324f2cfc9c7cdc7c7ac63cf25319adf1bde61657a5d16829ce5b29423c1a",
-  "clipSha256": "bf65241133171e41be5f532c31384dabe84158f38718e33d23b4c2294e8531da",
+  "reviewedAt": "2026-10-12T07:11:38.967Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
+  "clipSha256": "52c721353c5b1f32bb88c346f6089038277d5404a361a20ab9108ded92102da6",
   "scene": "mobile",
   "review": {
-    "heardOpening": "Sur téléphone, la même page",
+    "heardOpening": "Sur téléphone, la même page accompagne",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Sur téléphone, la même page accompagne le responsable",
-        "visibleSeconds": 0,
-        "visible": "Vue mobile de la liste des bénévoles par créneau",
+        "spokenSeconds": 0,
+        "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage adapté au format mobile de la liste des bénévoles inscrits par créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
-        "visibleSeconds": 4.5,
-        "visible": "Liens d'adresses email et numéros de téléphone visibles pour chaque contact",
+        "spokenSeconds": 3.8,
+        "spoken": "Les liens e-mail et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 4,
+        "visible": "Adresses e-mail et numéros de téléphone cliquables sous les noms des bénévoles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "retrouver l'équipe du prochain créneau et vérifier les horaires",
-        "visibleSeconds": 9,
-        "visible": "Affichage des plages horaires et des équipes associées",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 13.5,
-        "spoken": "Les coordonnées servent à l'organisation de la mission",
-        "visibleSeconds": 13.5,
-        "visible": "Défilement montrant la suite des créneaux et des coordonnées",
+        "spokenSeconds": 8.7,
+        "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires",
+        "visibleSeconds": 8.8,
+        "visible": "Défilement de la page montrant les créneaux horaires suivants et les membres assignés",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:08 : changement de voix pour la phrase suivante",
-      "00:13 : nouveau changement de timbre vocal"
-    ],
+    "issues": [],
     "voice": {
-      "consistent": false,
+      "consistent": true,
       "warm": true,
-      "observation": "Succession de plusieurs voix différentes au fil des phrases."
+      "observation": "Voix masculine naturelle, claire et posée, bien synchronisée avec le défilement de l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

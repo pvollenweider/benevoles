@@ -1,0 +1,63 @@
+{
+  "slug": "sector-leaders",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T07:57:13.310Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 17172
+    },
+    {
+      "id": "nominate",
+      "startMs": 17626,
+      "endMs": 37291
+    },
+    {
+      "id": "registered",
+      "startMs": 37744,
+      "endMs": 55160
+    },
+    {
+      "id": "email",
+      "startMs": 55614,
+      "endMs": 71169
+    },
+    {
+      "id": "roster",
+      "startMs": 71621,
+      "endMs": 90527
+    },
+    {
+      "id": "mobile",
+      "startMs": 90978,
+      "endMs": 109842
+    },
+    {
+      "id": "scope",
+      "startMs": 110293,
+      "endMs": 125635
+    },
+    {
+      "id": "new-signup",
+      "startMs": 126088,
+      "endMs": 157091
+    },
+    {
+      "id": "notification",
+      "startMs": 160005,
+      "endMs": 181012
+    },
+    {
+      "id": "contact",
+      "startMs": 181464,
+      "endMs": 198467
+    },
+    {
+      "id": "remove",
+      "startMs": 198919,
+      "endMs": 219294
+    }
+  ]
+}

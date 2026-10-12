@@ -1,0 +1,12 @@
+{
+  "anchor": "Cet espace est en lecture seule : le responsable ne modifie",
+  "windowStart": 92.987,
+  "result": {
+    "found": true,
+    "startSeconds": 14.8,
+    "wordsHeard": "Cet espace est en lecture seule : le responsable ne modifie"
+  },
+  "onset": 107.78699999999999,
+  "proposedCut": 107.98679150000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

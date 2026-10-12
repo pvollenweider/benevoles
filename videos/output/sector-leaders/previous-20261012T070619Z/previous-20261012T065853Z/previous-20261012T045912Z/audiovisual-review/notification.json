@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:05:02.031Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
+  "clipSha256": "52c8bafb514919d085372666b38ef13dd5eb2ff5e3370c208e9707c1551ce30a",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable, voici l'email réellement reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la boîte de messagerie avec l'email de notification d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il indique le nom de Nora et le créneau de la buvette du dimanche",
+        "visibleSeconds": 4,
+        "visible": "Dans le contenu du message, présence de la mention Nora Perrin et du créneau Buvette du 18/10/2026 10:00-14:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 7.5,
+        "visible": "Bouton d'action bleu 'Voir la liste complète' affiché dans le corps de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées",
+        "visibleSeconds": 11,
+        "visible": "Page Responsable - Buvette affichant Nora Perrin avec email et téléphone sous le créneau buvette du dimanche 18 octobre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse naturelle, fluide et bien calée sur l'enchaînement des écrans."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

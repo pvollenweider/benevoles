@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:05.383Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "cdfd64997d8285f9b3b741ed6f93a76b41ca523b192a612692d28d14a7f4b689",
+  "clipSha256": "38af8f9b718c7f9555d55186aca49d3a79089cc24030b98d3141af2632e830dc",
+  "scene": "nominate",
+  "review": {
+    "heardOpening": "Dans l'événement, ouvrez les responsables",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "ouvrez les responsables et ajoutez une personne.",
+        "visibleSeconds": 0.8,
+        "visible": "Le formulaire d'ajout d'un responsable s'affiche à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Choisissez le poste",
+        "visibleSeconds": 6.1,
+        "visible": "Le mot Montage est saisi dans le champ Poste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "puis renseignez son nom et son email.",
+        "visibleSeconds": 8.5,
+        "visible": "Le nom Samira Perrin et son adresse email sont saisis dans les champs dédiés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Ajouter et envoyer le lien enregistre la nomination",
+        "visibleSeconds": 16.5,
+        "visible": "Clic sur Ajouter et envoyer le lien, Samira Perrin apparaît dans la liste des responsables.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec la saisie."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

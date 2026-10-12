@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:24:56.962Z",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5",
+  "promptSha256": "c4b013c9a8c2f92c9cb23d7f24efa0fe3dd6ff5ea582f3b5e2f572eb43167e59",
+  "clipSha256": "37144c3d89cb42c442efc097f57ad9bbfe813a7503f5fbd426d7791d6cadac12",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Une fois le groupe et le texte vérifiés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "confirmons l'envoi",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur 'Envoyer à 3 personnes' puis validation dans la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Nous ouvrons le vrai message reçu",
+        "visibleSeconds": 6.4,
+        "visible": "Affichage de l'outil de messagerie Mailpit avec le courriel reçu ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "L'historique aide à savoir ce qui a été envoyé",
+        "visibleSeconds": 15.2,
+        "visible": "Retour sur l'interface d'administration avec défilement vers la section 'Messages envoyés'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle, bien synchronisée avec le déroulement des actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

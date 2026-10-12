@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:00:37.296Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "c2a606cd70e6ecac41e2ecb00ed31520a001ad23289873286f75a50b1c3ccff7",
-  "clipSha256": "7a53d59d95c1217e902b463b5882a1cb81492b6372f9bf0e7bf4899b0cd7babc",
+  "reviewedAt": "2026-10-12T07:11:57.328Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "fb41faee6480d77874c2003aa5b99d521c8de86e6ee34635f6a7f1f54e2dc137",
+  "clipSha256": "dfa5466e3f60c9a7e9a62fa8693bb3cb28c8898114fd4b029868299b3c3a9978",
   "scene": "contact",
   "review": {
     "heardOpening": "Attention à une autre distinction",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 1.8,
         "spoken": "le contact opérationnel indiqué sur un créneau",
-        "visibleSeconds": 2.2,
-        "visible": "Affichage du formulaire Nouveau créneau et saisie de la Personne de contact",
+        "visibleSeconds": 1.9,
+        "visible": "Affichage du formulaire Nouveau créneau avec la section Infos pratiques pour les bénévoles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "doivent joindre sur place",
-        "visibleSeconds": 5,
-        "visible": "Saisie du numéro dans le champ Téléphone du contact",
+        "spokenSeconds": 5.2,
+        "spoken": "joindre sur place",
+        "visibleSeconds": 4,
+        "visible": "Saisie du nom Élodie Rochat puis du numéro de téléphone dans les champs de contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
-        "spoken": "renseigne ce contact séparément dans le créneau",
-        "visibleSeconds": 11.5,
-        "visible": "Champs de contact opérationnel visibles et complétés dans les infos pratiques",
+        "spokenSeconds": 11.4,
+        "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
+        "visibleSeconds": 6.5,
+        "visible": "Les coordonnées du contact opérationnel restent affichées renseignées dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien articulée."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec l'illustration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

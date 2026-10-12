@@ -57,9 +57,9 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
     await page.locator("img").evaluateAll(async images => { await Promise.all(images.map(img => (img as HTMLImageElement).decode())) })
   })
   await scene("individual", async at => {
-    await go(); await at("Nous avons deux Camille Berger"); await choose("Bénévole (réimpression)", "video-document-person-1")
+    await go(); await choose("Poste", "Buvette"); await at("Nous avons deux Camille Berger"); await choose("Bénévole (réimpression)", "video-document-person-1")
     await at("Elle n'est pas imprimée sur"); await choose("Bénévole (réimpression)", "video-document-person-2")
-    await at("Sélectionnons la bonne Camille, puis"); await open(1)
+    await at("Sélectionnons la bonne Camille, puis"); await choose("Bénévole (réimpression)", "video-document-person-1"); await open(1)
     await page.locator(".badge").filter({ hasText: "Camille" }).waitFor()
   })
   await scene("empty", async at => {
@@ -84,8 +84,8 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
   })
   await scene("print", async at => {
     await go(); await at("Voici le document imprimable "); await open(80)
-    await at("Vérifions aussi Jean-Baptiste et Marie-Charlotte"); await page.locator(".sheet").last().scrollIntoViewIfNeeded()
-    await at("Vérifions aussi Jean-Baptiste et Marie-Charlotte"); await page.locator(".sheet").first().scrollIntoViewIfNeeded()
+    await at("Vérifions aussi Jean-Baptiste et Marie-Charlotte"); await page.locator(".badge").filter({ hasText: "Marie-Charlotte" }).scrollIntoViewIfNeeded()
+    await at("La boîte d'impression du navigateur n'est pas filmée ici"); await page.locator(".sheet").first().scrollIntoViewIfNeeded()
     await at("Regardons le vrai PDF obtenu"); await showRenderedPdfPage(page, path.resolve("videos/output/volunteer-badges/documents/rendered/all/page-1.png"), "Badges — page 1 sur 8")
     await at("Une première feuille d'essai coûte"); await showRenderedPdfPage(page, path.resolve("videos/output/volunteer-badges/documents/rendered/all/page-8.png"), "Badges — page 8 sur 8")
   })

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:58:42.419Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "32bae3e8c2e2e3cac9d0f45a8e2bccbdb40820c70321ca8c38f50379e97b4286",
+  "clipSha256": "c9e5b10843d039cfd4d704ec66f44dfdd576863532b6388633efddf01ab625d4",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul.",
+        "visibleSeconds": 0,
+        "visible": "Bandeau de titre « Responsable de poste : accompagner son équipe » affiché au centre de l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Un responsable de poste peut suivre son équipe",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du bandeau, affichage de la page « Responsables de secteur » avec les postes Accueil et Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
+        "visibleSeconds": 8.5,
+        "visible": "Écran fixe sur la liste des responsables de secteur avec le bouton « + Ajouter un responsable » (annonce générale).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, débit régulier et audio clair."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

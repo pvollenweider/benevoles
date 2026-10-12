@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:51.137Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "0963e0e8f9f2ae169306bd1acec0016e62cbc2ae7e030c1c674d9fd3e74320d9",
+  "clipSha256": "b4eab4aa82ca451e47df8f7851781276c80b490738e6330d4fe47222c6594f11",
+  "scene": "remove",
+  "review": {
+    "heardOpening": "Quand la responsabilité change",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "retirez la personne de ce poste et confirmez",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur Retirer à côté d'Élodie Rochat puis validation dans la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage de la page d'erreur avec le message Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "désigner la nouvelle personne et lui envoyer son propre lien",
+        "visibleSeconds": 12,
+        "visible": "L'écran reste figé sur la page Lien introuvable sans retour à l'interface de gestion",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Rupture de timbre et changement net de voix entre 00:11 et 00:16 sur la phrase « Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien ».",
+      "L'écran reste bloqué sur la page « Lien introuvable » de 00:04 jusqu'à la fin (00:19) sans revenir à la liste des responsables."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Changement de voix manifeste au milieu de l'extrait (voix différente insérée entre 00:11 et 00:16)."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T07:05:57.089Z",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861",
+  "promptSha256": "0963e0e8f9f2ae169306bd1acec0016e62cbc2ae7e030c1c674d9fd3e74320d9",
+  "clipSha256": "b2810308c1369e28b88b5aa467e163e3b2f6d8ae2b02ac66cfdb74a4c4832e24",
+  "scene": "remove",
+  "review": {
+    "heardOpening": "Quand la responsabilité change",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "retirez la personne de ce poste et confirmez",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur Retirer en face d'Élodie Rochat, puis confirmation dans la boîte de dialogue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la page d'erreur Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien",
+        "visibleSeconds": 12,
+        "visible": "L'écran reste figé sur la page Lien introuvable, aucun retour à l'interface d'ajout",
+        "sync": "uncertain",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À partir de 00:11, l'écran reste sur le message d'erreur 'Lien introuvable' pendant l'évocation de l'ajout d'une nouvelle personne et la conclusion."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

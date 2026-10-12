@@ -1,0 +1,12 @@
+{
+  "anchor": "Si la personne participe déjà, la liste des inscrits permet de",
+  "windowStart": 19.368000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 19.68,
+    "wordsHeard": "Si la personne participe déjà, la liste des inscrits permet de"
+  },
+  "onset": 39.048,
+  "proposedCut": 38.845187499999994,
+  "note": "Proposal only; recut then independently audit before capture"
+}

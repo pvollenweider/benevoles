@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:11:32.634Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "66c157c605b8f8dd7b337e0776ce19fd8c7861318817d3f5ed3d6f7714aa98b6",
+  "clipSha256": "7380ab0915c788b1b95a01a837915c2e0b4e3fdd2af34958d95421095660dcf1",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Cliquez sur Inviter des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Cliquez sur Inviter des membres",
+        "visibleSeconds": 1.8,
+        "visible": "Ouverture de la fenêtre modale d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "recherchez Aline, puis cochez seulement sa fiche",
+        "visibleSeconds": 4,
+        "visible": "Filtre 'Aline' actif et sélection d'Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Le compteur indique une personne sélectionnée",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage de '1 sélectionné' et bouton 'Envoyer 1 invitation'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "puis envoyez cette invitation",
+        "visibleSeconds": 18.8,
+        "visible": "Validation et confirmation de l'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "La personne apparaît ensuite dans le tableau",
+        "visibleSeconds": 20.5,
+        "visible": "Aline Mercier visible dans la liste des invités",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide, claire et bien synchronisée avec l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "SECTOR_LEADERS",
+  "status": "READY",
+  "duration": 213.8,
+  "buildId": "RNDQIXzICnt5M_573dvDi",
+  "music": {
+    "voicedWindows": 204,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "66 images finales revues, AV11/11, ASR final11/11, provenance, validate, ancres, VTT, effets et musique passent. Formulaire de remplacement visible à12.8s pour phrase12.3s ; révocation visible à4s. Nora et contact correctement cadrés ; Frise, dates françaises, aucune adresse interdite/overlay. Nit : dates Mailpit anglaises.",
+  "sourceChanges": "record.ts : retour Ajouter un responsable sur at(\"Vous pouvez ensuite désigner la nouvelle personne\"). Unique re-film du batch utilisé, provenance même commit/build acceptée. Audio cohérent batch11 conservé sans régénération.",
+  "report": "videos/output/sector-leaders/review-report.txt",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

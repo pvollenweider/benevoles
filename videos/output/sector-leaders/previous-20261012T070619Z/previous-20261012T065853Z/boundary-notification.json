@@ -1,0 +1,12 @@
+{
+  "anchor": "Côté responsable, voici l'email réellement reçu à la suite de cette",
+  "windowStart": 134.941,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Côté responsable, voici l'email réellement reçu à la suite de cette"
+  },
+  "onset": 149.941,
+  "proposedCut": 149.9410625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

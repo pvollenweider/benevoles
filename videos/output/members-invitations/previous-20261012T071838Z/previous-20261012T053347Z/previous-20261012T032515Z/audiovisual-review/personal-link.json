@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:12:05.251Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
+  "clipSha256": "d77b29aef460608a12115cb7ad557954882d3d7864d231182152057f787dcbda",
+  "scene": "personal-link",
+  "review": {
+    "heardOpening": "Ouvrons le lien reçu par Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons le lien reçu par Aline",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la page de l'événement Fête du Village de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "choisir un créneau disponible",
+        "visibleSeconds": 7,
+        "visible": "Sélection d'un créneau Démontage le dimanche puis clic sur continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "compléter les informations demandées",
+        "visibleSeconds": 10,
+        "visible": "Formulaire affiché avec nom prérempli et sélection de la taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "jusqu'à la confirmation",
+        "visibleSeconds": 18.5,
+        "visible": "Écran Inscription confirmée affiché après validation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

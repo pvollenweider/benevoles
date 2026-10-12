@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:12:29.160Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
+  "clipSha256": "e9743961dc8462f6335184d9e23c4e2ca37589abe2eadb184d4ac496f4a390de",
+  "scene": "status",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0,
+        "visible": "Page Invitations affichée avec la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Aline a maintenant une participation confirmée",
+        "visibleSeconds": 0,
+        "visible": "Ligne Aline Mercier avec le statut Participation confirmée visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "D'autres personnes restent sans créneau confirmé",
+        "visibleSeconds": 0,
+        "visible": "Membres avec le statut Sans réponse visibles en haut de tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Le tableau sert à suivre la participation",
+        "visibleSeconds": 0,
+        "visible": "Tableau de suivi complet affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

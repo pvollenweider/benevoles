@@ -1,0 +1,858 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 165,
+    "endMs": 24004,
+    "sentences": [
+      {
+        "text": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé.",
+        "startMs": 258,
+        "endMs": 4517,
+        "method": "silence",
+        "absoluteStartMs": 423
+      },
+      {
+        "text": "Une relance peut les aider à retrouver leur lien, sans leur mettre la pression.",
+        "startMs": 4984,
+        "endMs": 9593,
+        "method": "silence",
+        "absoluteStartMs": 5149
+      },
+      {
+        "text": "Dans Invitations, regarde d'abord la date d'envoi et les statuts.",
+        "startMs": 10383,
+        "endMs": 13669,
+        "method": "silence",
+        "absoluteStartMs": 10548
+      },
+      {
+        "text": "Une ancienne invitation ne prouve pas que la personne a oublié de répondre.",
+        "startMs": 13895,
+        "endMs": 19114,
+        "method": "silence",
+        "absoluteStartMs": 14060
+      },
+      {
+        "text": "Peut-être attend-elle simplement de connaître ses disponibilités.",
+        "startMs": 19446,
+        "endMs": 23458,
+        "method": "silence",
+        "absoluteStartMs": 19611
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "statuses",
+    "startMs": 24456,
+    "endMs": 50556,
+    "sentences": [
+      {
+        "text": "Sans créneau confirmé ne signifie pas forcément aucune démarche.",
+        "startMs": 383,
+        "endMs": 4785,
+        "method": "silence",
+        "absoluteStartMs": 24839
+      },
+      {
+        "text": "Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur.",
+        "startMs": 5388,
+        "endMs": 12643,
+        "method": "silence",
+        "absoluteStartMs": 29844
+      },
+      {
+        "text": "Une autre a déjà une participation confirmée.",
+        "startMs": 13085,
+        "endMs": 16010,
+        "method": "silence",
+        "absoluteStartMs": 37541
+      },
+      {
+        "text": "Vérifiez ces situations avant de relancer.",
+        "startMs": 16627,
+        "endMs": 18159,
+        "method": "silence",
+        "absoluteStartMs": 41083
+      },
+      {
+        "text": "Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+        "startMs": 18309,
+        "endMs": 25680,
+        "method": "silence",
+        "absoluteStartMs": 42765
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "statuses",
+        "phrase": "Une autre a déjà une",
+        "startMs": 13085,
+        "endMs": 16010,
+        "cueMs": 37544
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 26167
+      },
+      {
+        "kind": "click",
+        "atMs": 31765
+      },
+      {
+        "kind": "click",
+        "atMs": 35931
+      },
+      {
+        "kind": "click",
+        "atMs": 38065
+      }
+    ]
+  },
+  {
+    "chapter": "confirm",
+    "startMs": 51009,
+    "endMs": 76310,
+    "sentences": [
+      {
+        "text": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif.",
+        "startMs": 414,
+        "endMs": 4913,
+        "method": "silence",
+        "absoluteStartMs": 51423
+      },
+      {
+        "text": "Vous pouvez encore annuler.",
+        "startMs": 5473,
+        "endMs": 6486,
+        "method": "silence",
+        "absoluteStartMs": 56482
+      },
+      {
+        "text": "Pour cette démonstration, nous confirmons l'envoi réel.",
+        "startMs": 7204,
+        "endMs": 10245,
+        "method": "silence",
+        "absoluteStartMs": 58213
+      },
+      {
+        "text": "Les membres déjà inscrits ne sont pas relancés.",
+        "startMs": 10941,
+        "endMs": 13250,
+        "method": "silence",
+        "absoluteStartMs": 61950
+      },
+      {
+        "text": "Les fiches inactives et celles sans email ne reçoivent pas ce message non plus.",
+        "startMs": 13612,
+        "endMs": 17660,
+        "method": "silence",
+        "absoluteStartMs": 64621
+      },
+      {
+        "text": "Le résultat indique le nombre effectivement envoyé :",
+        "startMs": 18239,
+        "endMs": 21365,
+        "method": "silence",
+        "absoluteStartMs": 69248
+      },
+      {
+        "text": "lisez-le, plutôt que de vous fier seulement au compteur initial.",
+        "startMs": 21905,
+        "endMs": 24924,
+        "method": "silence",
+        "absoluteStartMs": 72914
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "confirm",
+        "phrase": "Vous pouvez encore annuler.",
+        "startMs": 5473,
+        "endMs": 6486,
+        "cueMs": 56483
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Pour cette démonstration, nous confirmons",
+        "startMs": 7204,
+        "endMs": 10245,
+        "cueMs": 58215
+      },
+      {
+        "segmentId": "confirm",
+        "phrase": "Pour cette démonstration, nous confirmons",
+        "startMs": 7204,
+        "endMs": 10245,
+        "cueMs": 58987
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 52664
+      },
+      {
+        "kind": "click",
+        "atMs": 56947
+      },
+      {
+        "kind": "click",
+        "atMs": 58681
+      },
+      {
+        "kind": "click",
+        "atMs": 59464
+      }
+    ]
+  },
+  {
+    "chapter": "link",
+    "startMs": 76766,
+    "endMs": 98419,
+    "sentences": [
+      {
+        "text": "Ouvrons l'email reçu dans la boîte de démonstration.",
+        "startMs": 380,
+        "endMs": 2818,
+        "method": "silence",
+        "absoluteStartMs": 77146
+      },
+      {
+        "text": "Il propose à nouveau le lien d'invitation.",
+        "startMs": 3356,
+        "endMs": 5462,
+        "method": "silence",
+        "absoluteStartMs": 80122
+      },
+      {
+        "text": "Ce lien est conservé :",
+        "startMs": 6099,
+        "endMs": 7116,
+        "method": "silence",
+        "absoluteStartMs": 82865
+      },
+      {
+        "text": "la relance ne crée pas une deuxième invitation ni une inscription automatique.",
+        "startMs": 7531,
+        "endMs": 11718,
+        "method": "silence",
+        "absoluteStartMs": 84297
+      },
+      {
+        "text": "Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé.",
+        "startMs": 12076,
+        "endMs": 17211,
+        "method": "silence",
+        "absoluteStartMs": 88842
+      },
+      {
+        "text": "C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
+        "startMs": 17892,
+        "endMs": 21229,
+        "method": "silence",
+        "absoluteStartMs": 94658
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "link",
+        "phrase": "Ouvrons l'email reçu dans",
+        "startMs": 380,
+        "endMs": 2818,
+        "cueMs": 77149
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "message",
+    "startMs": 98872,
+    "endMs": 121768,
+    "sentences": [
+      {
+        "text": "Pour expliquer davantage, utilisez Écrire un message aux personnes sans créneau.",
+        "startMs": 429,
+        "endMs": 5006,
+        "method": "silence",
+        "absoluteStartMs": 99301
+      },
+      {
+        "text": "Le groupe est déjà choisi dans la page de message.",
+        "startMs": 5672,
+        "endMs": 7851,
+        "method": "silence",
+        "absoluteStartMs": 104544
+      },
+      {
+        "text": "Nous saisissons un objet clair et quelques mots bienveillants :",
+        "startMs": 8616,
+        "endMs": 11864,
+        "method": "silence",
+        "absoluteStartMs": 107488
+      },
+      {
+        "text": "vous pouvez encore choisir un horaire si vous le souhaitez.",
+        "startMs": 12436,
+        "endMs": 14612,
+        "method": "silence",
+        "absoluteStartMs": 111308
+      },
+      {
+        "text": "Avant d'envoyer, prévisualisez les destinataires et le contenu.",
+        "startMs": 15341,
+        "endMs": 18671,
+        "method": "silence",
+        "absoluteStartMs": 114213
+      },
+      {
+        "text": "L'aperçu permet de vérifier à qui vous écrivez réellement.",
+        "startMs": 19431,
+        "endMs": 22535,
+        "method": "silence",
+        "absoluteStartMs": 118303
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "message",
+        "phrase": "Avant d'envoyer, prévisualisez",
+        "startMs": 15341,
+        "endMs": 18671,
+        "cueMs": 114214
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 100518
+      },
+      {
+        "kind": "click",
+        "atMs": 101835
+      },
+      {
+        "kind": "key",
+        "atMs": 102143
+      },
+      {
+        "kind": "key",
+        "atMs": 102240
+      },
+      {
+        "kind": "key",
+        "atMs": 102339
+      },
+      {
+        "kind": "key",
+        "atMs": 102438
+      },
+      {
+        "kind": "key",
+        "atMs": 102538
+      },
+      {
+        "kind": "key",
+        "atMs": 102637
+      },
+      {
+        "kind": "key",
+        "atMs": 102736
+      },
+      {
+        "kind": "key",
+        "atMs": 102834
+      },
+      {
+        "kind": "key",
+        "atMs": 102934
+      },
+      {
+        "kind": "key",
+        "atMs": 103036
+      },
+      {
+        "kind": "key",
+        "atMs": 103135
+      },
+      {
+        "kind": "key",
+        "atMs": 103239
+      },
+      {
+        "kind": "key",
+        "atMs": 103340
+      },
+      {
+        "kind": "key",
+        "atMs": 103439
+      },
+      {
+        "kind": "key",
+        "atMs": 103542
+      },
+      {
+        "kind": "key",
+        "atMs": 103646
+      },
+      {
+        "kind": "key",
+        "atMs": 103746
+      },
+      {
+        "kind": "key",
+        "atMs": 103845
+      },
+      {
+        "kind": "key",
+        "atMs": 103946
+      },
+      {
+        "kind": "key",
+        "atMs": 104050
+      },
+      {
+        "kind": "key",
+        "atMs": 104147
+      },
+      {
+        "kind": "key",
+        "atMs": 104245
+      },
+      {
+        "kind": "key",
+        "atMs": 104344
+      },
+      {
+        "kind": "key",
+        "atMs": 104442
+      },
+      {
+        "kind": "key",
+        "atMs": 104540
+      },
+      {
+        "kind": "key",
+        "atMs": 104639
+      },
+      {
+        "kind": "click",
+        "atMs": 105417
+      },
+      {
+        "kind": "key",
+        "atMs": 105723
+      },
+      {
+        "kind": "key",
+        "atMs": 105823
+      },
+      {
+        "kind": "key",
+        "atMs": 105922
+      },
+      {
+        "kind": "key",
+        "atMs": 106020
+      },
+      {
+        "kind": "key",
+        "atMs": 106116
+      },
+      {
+        "kind": "key",
+        "atMs": 106215
+      },
+      {
+        "kind": "key",
+        "atMs": 106313
+      },
+      {
+        "kind": "key",
+        "atMs": 106412
+      },
+      {
+        "kind": "key",
+        "atMs": 106516
+      },
+      {
+        "kind": "key",
+        "atMs": 106618
+      },
+      {
+        "kind": "key",
+        "atMs": 106718
+      },
+      {
+        "kind": "key",
+        "atMs": 106820
+      },
+      {
+        "kind": "key",
+        "atMs": 106921
+      },
+      {
+        "kind": "key",
+        "atMs": 107022
+      },
+      {
+        "kind": "key",
+        "atMs": 107124
+      },
+      {
+        "kind": "key",
+        "atMs": 107227
+      },
+      {
+        "kind": "key",
+        "atMs": 107333
+      },
+      {
+        "kind": "key",
+        "atMs": 107435
+      },
+      {
+        "kind": "key",
+        "atMs": 107537
+      },
+      {
+        "kind": "key",
+        "atMs": 107640
+      },
+      {
+        "kind": "key",
+        "atMs": 107738
+      },
+      {
+        "kind": "key",
+        "atMs": 107837
+      },
+      {
+        "kind": "key",
+        "atMs": 107934
+      },
+      {
+        "kind": "key",
+        "atMs": 108034
+      },
+      {
+        "kind": "key",
+        "atMs": 108146
+      },
+      {
+        "kind": "key",
+        "atMs": 108255
+      },
+      {
+        "kind": "key",
+        "atMs": 108357
+      },
+      {
+        "kind": "key",
+        "atMs": 108458
+      },
+      {
+        "kind": "key",
+        "atMs": 108559
+      },
+      {
+        "kind": "key",
+        "atMs": 108661
+      },
+      {
+        "kind": "key",
+        "atMs": 108764
+      },
+      {
+        "kind": "key",
+        "atMs": 108865
+      },
+      {
+        "kind": "key",
+        "atMs": 108963
+      },
+      {
+        "kind": "key",
+        "atMs": 109063
+      },
+      {
+        "kind": "key",
+        "atMs": 109164
+      },
+      {
+        "kind": "key",
+        "atMs": 109263
+      },
+      {
+        "kind": "key",
+        "atMs": 109363
+      },
+      {
+        "kind": "key",
+        "atMs": 109464
+      },
+      {
+        "kind": "key",
+        "atMs": 109564
+      },
+      {
+        "kind": "key",
+        "atMs": 109666
+      },
+      {
+        "kind": "key",
+        "atMs": 109770
+      },
+      {
+        "kind": "key",
+        "atMs": 109873
+      },
+      {
+        "kind": "key",
+        "atMs": 109975
+      },
+      {
+        "kind": "key",
+        "atMs": 110076
+      },
+      {
+        "kind": "key",
+        "atMs": 110178
+      },
+      {
+        "kind": "key",
+        "atMs": 110282
+      },
+      {
+        "kind": "key",
+        "atMs": 110385
+      },
+      {
+        "kind": "key",
+        "atMs": 110487
+      },
+      {
+        "kind": "key",
+        "atMs": 110592
+      },
+      {
+        "kind": "key",
+        "atMs": 110697
+      },
+      {
+        "kind": "key",
+        "atMs": 110800
+      },
+      {
+        "kind": "key",
+        "atMs": 110900
+      },
+      {
+        "kind": "key",
+        "atMs": 111001
+      },
+      {
+        "kind": "key",
+        "atMs": 111104
+      },
+      {
+        "kind": "click",
+        "atMs": 114683
+      }
+    ]
+  },
+  {
+    "chapter": "waitlist",
+    "startMs": 122221,
+    "endMs": 144743,
+    "sentences": [
+      {
+        "text": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente.",
+        "startMs": 369,
+        "endMs": 5042,
+        "method": "silence",
+        "absoluteStartMs": 122590
+      },
+      {
+        "text": "Leur situation mérite une formulation différente.",
+        "startMs": 5325,
+        "endMs": 7801,
+        "method": "silence",
+        "absoluteStartMs": 127546
+      },
+      {
+        "text": "Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente.",
+        "startMs": 8518,
+        "endMs": 15998,
+        "method": "silence",
+        "absoluteStartMs": 130739
+      },
+      {
+        "text": "La relance simple, elle, n'attend pas automatiquement trois jours :",
+        "startMs": 16496,
+        "endMs": 20073,
+        "method": "silence",
+        "absoluteStartMs": 138717
+      },
+      {
+        "text": "c'est vous qui choisissez le bon moment.",
+        "startMs": 20463,
+        "endMs": 22197,
+        "method": "silence",
+        "absoluteStartMs": 142684
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "waitlist",
+        "phrase": "Vous pouvez rappeler qu'elles n'ont",
+        "startMs": 8518,
+        "endMs": 15998,
+        "cueMs": 130741
+      },
+      {
+        "segmentId": "waitlist",
+        "phrase": "Vous pouvez rappeler qu'elles n'ont",
+        "startMs": 8518,
+        "endMs": 15998,
+        "cueMs": 131531
+      },
+      {
+        "segmentId": "waitlist",
+        "phrase": "c'est vous qui choisissez le",
+        "startMs": 20463,
+        "endMs": 22197,
+        "cueMs": 142687
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 131200
+      },
+      {
+        "kind": "click",
+        "atMs": 132050
+      },
+      {
+        "kind": "click",
+        "atMs": 143149
+      }
+    ]
+  },
+  {
+    "chapter": "send",
+    "startMs": 145196,
+    "endMs": 166400,
+    "sentences": [
+      {
+        "text": "Une fois le groupe et le texte vérifiés, confirme l'envoi.",
+        "startMs": 324,
+        "endMs": 4035,
+        "method": "silence",
+        "absoluteStartMs": 145520
+      },
+      {
+        "text": "Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration.",
+        "startMs": 4822,
+        "endMs": 10058,
+        "method": "silence",
+        "absoluteStartMs": 150018
+      },
+      {
+        "text": "Un email remis au serveur n'est pas une preuve de lecture par la personne.",
+        "startMs": 10722,
+        "endMs": 14818,
+        "method": "silence",
+        "absoluteStartMs": 155918
+      },
+      {
+        "text": "L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
+        "startMs": 15302,
+        "endMs": 20940,
+        "method": "silence",
+        "absoluteStartMs": 160498
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "send",
+        "phrase": "Une fois le groupe et",
+        "startMs": 324,
+        "endMs": 4035,
+        "cueMs": 145522
+      },
+      {
+        "segmentId": "send",
+        "phrase": "Nous ouvrons le vrai message",
+        "startMs": 4822,
+        "endMs": 10058,
+        "cueMs": 150020
+      },
+      {
+        "segmentId": "send",
+        "phrase": "Un email remis au serveur",
+        "startMs": 10722,
+        "endMs": 14818,
+        "cueMs": 155919
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 146017
+      },
+      {
+        "kind": "click",
+        "atMs": 146800
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 166853,
+    "endMs": 187562,
+    "sentences": [
+      {
+        "text": "De retour dans Invitations, les participations n'ont pas changé simplement parce qu'un message est parti.",
+        "startMs": 269,
+        "endMs": 6411,
+        "method": "silence",
+        "absoluteStartMs": 167122
+      },
+      {
+        "text": "La prochaine étape appartient aux bénévoles.",
+        "startMs": 6675,
+        "endMs": 8830,
+        "method": "silence",
+        "absoluteStartMs": 173528
+      },
+      {
+        "text": "Une relance courte, au bon moment, avec un lien facile à retrouver :",
+        "startMs": 9243,
+        "endMs": 9492,
+        "method": "silence",
+        "absoluteStartMs": 176096
+      },
+      {
+        "text": "c'est souvent suffisant.",
+        "startMs": 9693,
+        "endMs": 14353,
+        "method": "silence",
+        "absoluteStartMs": 176546
+      },
+      {
+        "text": "Et si vous savez qu'une personne ne peut pas venir, respectez sa réponse plutôt que de multiplier les messages.",
+        "startMs": 14968,
+        "endMs": 20432,
+        "method": "silence",
+        "absoluteStartMs": 181821
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

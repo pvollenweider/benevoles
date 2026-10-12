@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:04:38.130Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
+  "clipSha256": "8894a9e873220e33dc1800c7128f05c42f7274dd3a4903628db89fb73488c198",
+  "scene": "mobile",
+  "review": {
+    "heardOpening": "Sur téléphone, la même page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain",
+        "visibleSeconds": 0,
+        "visible": "Affichage mobile centré de la liste des bénévoles pour le poste Responsable - Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 3.7,
+        "visible": "Présence des liens emails et numéros de téléphone pour chaque bénévole",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires",
+        "visibleSeconds": 9.2,
+        "visible": "Créneaux horaires Buvette affichés avec la liste des bénévoles assignés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Les coordonnées servent à l'organisation de la mission",
+        "visibleSeconds": 13.8,
+        "visible": "Défilement vers le bas de la liste mobile jusqu'au pied de page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec l'affichage et le défilement."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

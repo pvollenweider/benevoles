@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:29.091Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
+  "clipSha256": "ae40ceb9057214ce7d0190ffdcfa620bd857aaf181223a2e315d2bd33d718f1c",
+  "scene": "personal-link",
+  "review": {
+    "heardOpening": "Ouvrons le lien reçu par Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons le lien reçu par Aline",
+        "visibleSeconds": 0,
+        "visible": "Clic sur le bouton « Voir les missions et m'inscrire » dans l'e-mail reçu par Aline sur Mailpit",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "choisir un créneau disponible",
+        "visibleSeconds": 7,
+        "visible": "Sélection du créneau « Démontage » et clic sur « Continuer (1 nouveau créneau) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "compléter les informations demandées",
+        "visibleSeconds": 9,
+        "visible": "Affichage du formulaire avec coordonnées préremplies pour Aline Mercier et validation des options",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "jusqu'à la confirmation",
+        "visibleSeconds": 13,
+        "visible": "Écran de confirmation « Inscription confirmée ! » affiché après validation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec le déroulement de la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:32:36.089Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "promptSha256": "688765ad85350345999f8bf58a5060d13c0fe3221bfe18d3c2fde4c38ae88dd3",
+  "clipSha256": "513b33ac4858bc6f6b6b956e1f9a7059068b81071157763c13f4d4f87ea69cdd",
+  "scene": "existing",
+  "review": {
+    "heardOpening": "La case Cacher déjà invités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "La case Cacher déjà invités évite de sélectionner",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture de la fenêtre modale 'Inviter des membres' affichant la case cochée 'Cacher déjà invités'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Décochez-la si vous voulez les retrouver.",
+        "visibleSeconds": 8.7,
+        "visible": "La case 'Cacher déjà invités' est décochée par un clic",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Prenez néanmoins le temps de vérifier le groupe avant d'envoyer",
+        "visibleSeconds": 16.5,
+        "visible": "Affichage des membres correspondants avec les informations de groupe et les invitations existantes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

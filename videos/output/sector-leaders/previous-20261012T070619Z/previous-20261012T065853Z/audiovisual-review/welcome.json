@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:07.382Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
+  "clipSha256": "5ec97ce0ac77becbb887ef390231060a9168f1ddeff2cba840d4b3cff431bc73",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête, vous n'avez pas besoin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre 'Responsable de poste : accompagner son équipe' qui s'estompe pour révéler la page 'Responsables de secteur'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la liste des postes et de leurs responsables (Accueil avec Manon Aebi, Buvette avec Élodie Rochat).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
+        "visibleSeconds": 9.6,
+        "visible": "Écran stable de présentation avec le bouton '+ Ajouter un responsable' visible pour la suite annoncée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine naturelle et pédagogique, élocution claire accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

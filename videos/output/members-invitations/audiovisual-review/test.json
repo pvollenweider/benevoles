@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:11:21.243Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:30.225Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "db4029b7864d61b9f8ec0de746ee8a377b463cfc933ddd9fe8a48e154f4e1cff",
-  "clipSha256": "f88c95eade30b0996d0a381bef0f3ade05c5fb343ec49a555b82080f2523353c",
+  "clipSha256": "d0e7fee5e895b78283a972b7c6d8dbe3a3e18491d48e720dccd931e7131bfdd4",
   "scene": "test",
   "review": {
     "heardOpening": "Avant de contacter l'équipe",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 4.1,
         "spoken": "Indiquez une adresse que vous utilisez pour vérifier les messages",
-        "visibleSeconds": 1.2,
-        "visible": "Champ d'adresse affiché avec saisie de l'email de test",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 3.8,
+        "visible": "L'adresse test.invitation@example.org est saisie dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
         "spokenSeconds": 7.3,
         "spoken": "puis envoyez le test",
-        "visibleSeconds": 5.4,
-        "visible": "Clic sur le bouton Envoyer le test et confirmation Envoyé affichée",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le bouton Envoyer le test, qui affiche la confirmation Envoyé",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
+        "spokenSeconds": 9.4,
         "spoken": "Nous ouvrons ici le message reçu dans notre boîte de démonstration",
-        "visibleSeconds": 11.2,
-        "visible": "Affichage de la boîte Mailpit avec l'e-mail ouvert",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail de test ouvert",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton régulier adapté au tutoriel."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:00:49.626Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "05a82ed04ed9b86773ffd953217742a9454cf50c5afbd8827500819e76ed3bbc",
-  "clipSha256": "552b2b2c7de5c5e56018b63adcced02b163bb463ecee8240093305763f5d09f1",
+  "reviewedAt": "2026-10-12T07:12:00.288Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "0963e0e8f9f2ae169306bd1acec0016e62cbc2ae7e030c1c674d9fd3e74320d9",
+  "clipSha256": "baa036c33a12c4593186a6695c1fd8531418f2d23fd37f8aa42495ec501fc9d7",
   "scene": "remove",
   "review": {
     "heardOpening": "Quand la responsabilité change",
     "checkpoints": [
       {
-        "spokenSeconds": 1.8,
-        "spoken": "retire la personne de ce poste et confirme",
-        "visibleSeconds": 2.2,
-        "visible": "Clic sur 'Retirer' pour Élodie Rochat puis confirmation dans la modale",
+        "spokenSeconds": 1.6,
+        "spoken": "retirez la personne de ce poste et confirmez",
+        "visibleSeconds": 1.7,
+        "visible": "Clic sur Retirer à côté d'Élodie Rochat puis confirmation dans la modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 3.7,
         "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
-        "visibleSeconds": 8.7,
-        "visible": "Affichage de la page 'Lien introuvable'",
-        "sync": "late",
-        "severity": "minor"
+        "visibleSeconds": 4,
+        "visible": "Affichage de la page d'erreur Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 13.2,
-        "spoken": "Tu peux ensuite désigner la nouvelle personne",
-        "visibleSeconds": 14,
-        "visible": "L'interface reste figée sur l'écran d'erreur 'Lien introuvable'",
-        "sync": "missing",
-        "severity": "major"
+        "spokenSeconds": 12.3,
+        "spoken": "désigner la nouvelle personne et lui envoyer son propre lien",
+        "visibleSeconds": 12.8,
+        "visible": "Clic sur Ajouter un responsable et ouverture du formulaire avec bouton Ajouter et envoyer le lien",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "À partir de 00:13, l'ajout d'une nouvelle personne n'est pas illustré, l'écran restant bloqué sur 'Lien introuvable'."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation naturelle."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

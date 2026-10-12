@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T07:05:19.386Z",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861",
+  "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
+  "clipSha256": "e7a965e5f8112e029c00b15ac15f9945940f5253788c70a6203a71becae6e5db",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre 'Responsable de poste : accompagner son équipe' affiché au centre de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux",
+        "visibleSeconds": 3.4,
+        "visible": "Disparition de l'encart et affichage de la page 'Responsables de secteur' listant les postes Accueil et Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
+        "visibleSeconds": 10,
+        "visible": "Plan fixe d'introduction sur la page 'Responsables de secteur' annonçant les étapes à venir",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et bien posée, accompagnée d'un léger fond musical régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

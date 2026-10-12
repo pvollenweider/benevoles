@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:12:16.400Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:47.397Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "7c46c796a76ed473e2e9d3b76729516086eb4077bfebeb0fb2c729159b5fc64d",
-  "clipSha256": "6ed09dba61fd89b17f0d1d1eb30ee6d38dd7a4a0489d3a93350e53129839511c",
+  "clipSha256": "ee62aec3580b8b023b6768ab36fbdf278da36106bc9b73cf67a1fc0a3f02b0a8",
   "scene": "reserved",
   "review": {
     "heardOpening": "Une invitation peut aussi donner accès",
     "checkpoints": [
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Ici, Nicolas a le tag sécurité.",
-        "visibleSeconds": 6.8,
-        "visible": "Sélection du créneau rouge réservé Sécurité sur le planning",
+        "spokenSeconds": 5.6,
+        "spoken": "Ici, Nicolas a le tag sécurité",
+        "visibleSeconds": 7.5,
+        "visible": "La grille affiche une ligne de créneau 'Sécurité' avec mention réservé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "il peut choisir le poste réservé correspondant.",
-        "visibleSeconds": 12,
-        "visible": "Clic sur Continuer puis transition vers la page de coordonnées",
+        "spokenSeconds": 10.3,
+        "spoken": "il peut choisir le poste réservé correspondant",
+        "visibleSeconds": 10,
+        "visible": "Sélection du créneau rouge réservé 20h-02h Sécurité puis bouton Continuer",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 15,
-        "spoken": "les tags actuels sont revérifiés à l'inscription.",
-        "visibleSeconds": 13,
-        "visible": "Formulaire d'inscription affichant le nom de Nicolas Renaud",
+        "spoken": "les tags actuels sont revérifiés à l'inscription",
+        "visibleSeconds": 16,
+        "visible": "Affichage du formulaire d'inscription prérempli au nom de Nicolas Renaud",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation naturelle."
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

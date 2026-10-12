@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:12:52.827Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:56.655Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "98ad904a9aefb3497e90e7ea24b5ff1474fc6d60910fa3c34352e9dd00e3d3e4",
-  "clipSha256": "199e69742769a6877f17eb4aa606a39c32d1b536a83fe69163ee07925b0f0a56",
+  "clipSha256": "6fa6004e8af01c27c4f17b7ca998f10cbeb790d63e3294cb64ef0f5d28406052",
   "scene": "no-email",
   "review": {
-    "heardOpening": "Enfin, une fiche sans e-mail",
+    "heardOpening": "Enfin, une fiche sans email peut être sélectionnée",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
-        "spoken": "une fiche sans e-mail peut être sélectionnée",
+        "spokenSeconds": 1.2,
+        "spoken": "une fiche sans email peut être sélectionnée",
         "visibleSeconds": 2.5,
-        "visible": "Sélection du profil de René Meyer sans adresse e-mail",
+        "visible": "La fiche de René Meyer avec la mention 'pas d'email' est cochée dans la modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7,
         "spoken": "René devra être contacté autrement",
-        "visibleSeconds": 9,
-        "visible": "Affichage de René Meyer dans la liste avec la mention pas d'e-mail",
+        "visibleSeconds": 7,
+        "visible": "René Meyer est sélectionné sans adresse email dans la liste d'invitation",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10.5,
-        "spoken": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés",
-        "visibleSeconds": 10,
-        "visible": "Compteur d'invités mis à jour à 13",
+        "spoken": "Le nombre d'invités ne correspond donc pas forcément",
+        "visibleSeconds": 11.5,
+        "visible": "Validation de l'invitation et passage du compteur d'invités à 13 avec René Meyer affiché en 'pas d'email'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Ton calme, clair et régulier tout au long du passage."
+      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

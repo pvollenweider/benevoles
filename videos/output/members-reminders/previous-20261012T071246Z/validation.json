@@ -1,0 +1,70 @@
+{
+  "id": "MEMBERS_REMINDERS",
+  "slug": "members-reminders",
+  "validatedAt": "2026-10-12T05:31:30.933Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 193240,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 23836,
+      "audioMs": 23836,
+      "driftMs": 0
+    },
+    {
+      "id": "statuses",
+      "visualMs": 26092,
+      "audioMs": 26088,
+      "driftMs": 4
+    },
+    {
+      "id": "confirm",
+      "visualMs": 25300,
+      "audioMs": 25299,
+      "driftMs": 1
+    },
+    {
+      "id": "link",
+      "visualMs": 21653,
+      "audioMs": 21651,
+      "driftMs": 2
+    },
+    {
+      "id": "message",
+      "visualMs": 22895,
+      "audioMs": 22895,
+      "driftMs": 0
+    },
+    {
+      "id": "waitlist",
+      "visualMs": 22522,
+      "audioMs": 22520,
+      "driftMs": 2
+    },
+    {
+      "id": "send",
+      "visualMs": 21204,
+      "audioMs": 21202,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 20711,
+      "audioMs": 20709,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 11,
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.7,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

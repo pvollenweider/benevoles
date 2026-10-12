@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:38.150Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
+  "clipSha256": "82c21f77337be0aef83b6e1dd0b65ac9826a58aa158238be2e09729c5a4877a6",
+  "scene": "status",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0.5,
+        "visible": "Page Invitations de l'événement affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Aline a maintenant une participation confirmée",
+        "visibleSeconds": 2.8,
+        "visible": "Ligne d'Aline Mercier affichée avec le statut Participation confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "D'autres personnes restent sans créneau confirmé",
+        "visibleSeconds": 6.5,
+        "visible": "Lignes de Nicolas Renaud et Sébastien Perret avec le statut Sans réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.9,
+        "spoken": "Le tableau sert à suivre la participation",
+        "visibleSeconds": 16.9,
+        "visible": "Tableau récapitulatif des membres et de leurs statuts de participation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de l'écran récapitulatif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:59:43.867Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "169b324f2cfc9c7cdc7c7ac63cf25319adf1bde61657a5d16829ce5b29423c1a",
+  "clipSha256": "bf65241133171e41be5f532c31384dabe84158f38718e33d23b4c2294e8531da",
+  "scene": "mobile",
+  "review": {
+    "heardOpening": "Sur téléphone, la même page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur téléphone, la même page accompagne le responsable",
+        "visibleSeconds": 0,
+        "visible": "Vue mobile de la liste des bénévoles par créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 4.5,
+        "visible": "Liens d'adresses email et numéros de téléphone visibles pour chaque contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "retrouver l'équipe du prochain créneau et vérifier les horaires",
+        "visibleSeconds": 9,
+        "visible": "Affichage des plages horaires et des équipes associées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Les coordonnées servent à l'organisation de la mission",
+        "visibleSeconds": 13.5,
+        "visible": "Défilement montrant la suite des créneaux et des coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:08 : changement de voix pour la phrase suivante",
+      "00:13 : nouveau changement de timbre vocal"
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Succession de plusieurs voix différentes au fil des phrases."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

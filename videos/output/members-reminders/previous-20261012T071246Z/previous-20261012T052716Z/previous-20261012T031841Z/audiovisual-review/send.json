@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:38:22.588Z",
+  "videoSha256": "96f25dcd75edf073893a4fa9444b8ee84771dfad727624389ba8c38a02331343",
+  "promptSha256": "c4b013c9a8c2f92c9cb23d7f24efa0fe3dd6ff5ea582f3b5e2f572eb43167e59",
+  "clipSha256": "5b43dff1ac6c2ac6cc5de682ed0e4b4c2aad8ce56b48a7221370c88d6b1f5e0f",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Une fois le groupe et le texte vérifiés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "confirmons l'envoi",
+        "visibleSeconds": 0.8,
+        "visible": "Envoi déjà validé avec message de confirmation affiché",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Ouvrons le vrai message reçu",
+        "visibleSeconds": 6.5,
+        "visible": "Interface Mailpit affichant l'e-mail reçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "L'historique aide à savoir ce qui a été envoyé",
+        "visibleSeconds": 15.8,
+        "visible": "Section Messages envoyés visible dans l'administration",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:03, la validation de l'envoi est demandée alors que le clic a déjà eu lieu à 00:00."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

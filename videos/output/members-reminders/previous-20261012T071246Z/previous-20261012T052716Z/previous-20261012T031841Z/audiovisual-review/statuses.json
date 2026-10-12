@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:54:58.809Z",
+  "videoSha256": "7865ee3c9d753ad6be7f07a321542b52dd57d845b40ef40c31ca2901050f5f45",
+  "promptSha256": "fde43b2c713e15d88bdbb83c55e87007119d2c919e3698f9a3ef712868882299",
+  "clipSha256": "037450984d447c76c7e476be719c97d14d0ab7cdd8f6d2cfe8595e24aa2045bf",
+  "scene": "statuses",
+  "review": {
+    "heardOpening": "Sans créneau confirmé ne signifie pas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "une personne peut être en liste d'attente",
+        "visibleSeconds": 2.2,
+        "visible": "Filtre sur Anna affichant le statut Liste d'attente",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "recevoir une offre",
+        "visibleSeconds": 7.3,
+        "visible": "Filtre sur Tom affichant le statut Place proposée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "attendre la validation de l'organisateur",
+        "visibleSeconds": 12.3,
+        "visible": "Filtre sur Lucas affichant Demande à traiter",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "a déjà une participation confirmée",
+        "visibleSeconds": 15,
+        "visible": "Filtre sur Camille montrant des affectations confirmées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

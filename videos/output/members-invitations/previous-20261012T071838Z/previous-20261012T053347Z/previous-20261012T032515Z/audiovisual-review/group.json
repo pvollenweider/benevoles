@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:11:44.071Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "1fd816bdca1cb126f462024dcaa7686d77a6b79ae38a543719232ac03e25c717",
+  "clipSha256": "fe3f598c80a2fd96417f2f75dfeaccfaab39119c1b5180d689dc0c1cb88015f8",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Pour un groupe, utilisez le filtre de tags",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection du tag accueil dans le filtre de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Tout sélectionner ajoute les membres visibles à votre sélection",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur Tout sélectionner et mise à jour du bouton à 17 invitations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "une personne déjà cochée peut rester sélectionnée après un changement de filtre",
+        "visibleSeconds": 12,
+        "visible": "Filtrage sur sécurité avec maintien des 17 membres sélectionnés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Avec Effacer, repartez d'une sélection vide",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur Effacer réinitialisant le compteur à 0 sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme bien synchronisé avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

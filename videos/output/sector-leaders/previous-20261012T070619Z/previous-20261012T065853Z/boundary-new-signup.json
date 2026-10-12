@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à",
+  "windowStart": 106.839,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Pour voir comment une équipe évolue inscrivons une nouvelle personne à"
+  },
+  "onset": 121.839,
+  "proposedCut": 121.838729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

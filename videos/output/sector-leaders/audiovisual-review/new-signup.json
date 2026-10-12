@@ -1,38 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:00:09.651Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "d7a4785fdb221f19602eac61c2ed1d6ef5edad549346966c30b23d068d24809e",
-  "clipSha256": "e5cc114f5e67c4bb03d1b73b5079e4e456d970faaa3fb0512e637484710d558c",
+  "reviewedAt": "2026-10-12T07:11:49.234Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
+  "clipSha256": "25b232219a250fce2b843394eb5fae997331429fa4af9fdd5602c8e99cd61f55",
   "scene": "new-signup",
   "review": {
     "heardOpening": "Pour voir comment une équipe évolue",
     "checkpoints": [
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire.",
-        "visibleSeconds": 5.8,
+        "spokenSeconds": 2.2,
+        "spoken": "inscrivons une nouvelle personne à la Buvette du dimanche",
+        "visibleSeconds": 1.8,
+        "visible": "Sélection du créneau Buvette le dimanche 18 octobre (10h-14h)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone.",
+        "spokenSeconds": 5.2,
+        "spoken": "puis continue vers le formulaire",
+        "visibleSeconds": 5.6,
+        "visible": "Clic sur « Continuer » et ouverture de la page du formulaire « Tes informations »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone",
         "visibleSeconds": 8.5,
+        "visible": "Saisie successive des champs Prénom, Nom, Email et Téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.1,
+        "spokenSeconds": 14.5,
         "spoken": "Elle choisit une taille, accepte la convention",
-        "visibleSeconds": 16.8,
+        "visibleSeconds": 17.2,
+        "visible": "Sélection de la taille M et cochage des cases de consentement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.5,
-        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
-        "visibleSeconds": 27.5,
+        "spokenSeconds": 20.8,
+        "spoken": "Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi",
+        "visibleSeconds": 21.4,
+        "visible": "Défilement vers le haut pour relire les coordonnées et le récapitulatif du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.1,
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée",
+        "visibleSeconds": 25,
+        "visible": "Clic sur « Confirmer mon inscription » et affichage de l'écran « Inscription confirmée ! »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -41,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et élocution nette."
+      "observation": "Voix off posée, claire et fluide, en parfaite synchronisation avec le déroulement de la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

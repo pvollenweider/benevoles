@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:28.971Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
+  "clipSha256": "7bb214ca381f1e10e8664b50dfe8b5e3a1adab0e0345bd29db5baf1d4e11c3fb",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la boîte de réception Mailpit avec le courriel 'Nouvelle inscription - Buvette'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il indique le nom de Nora et le créneau de la Buvette du dimanche",
+        "visibleSeconds": 3,
+        "visible": "L'email affiche le texte 'Nora Perrin vient de s'inscrire sur Buvette (18/10/2026 - 10:00-14:00)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 8,
+        "visible": "Bouton bleu 'Voir la liste complète' affiché dans l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées",
+        "visibleSeconds": 11,
+        "visible": "Transition vers la page 'Responsable - Buvette' où Nora Perrin figure sous le créneau du dimanche 18 octobre avec son email et numéro",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -22,6 +22,13 @@ export function ownsRecordedNoEmailMember(person: Omit<OwnedMember, "responseSta
     (!entry.actualCreatedAt || !!person.createdAt && new Date(entry.actualCreatedAt).getTime() === new Date(person.createdAt).getTime()) &&
     Number.isFinite(Date.parse(entry.createdAt)) && Date.parse(entry.createdAt) <= now + 60_000 && Date.parse(entry.createdAt) >= now - 30 * 86_400_000)
 }
+/** Exact fixed identity created by seed-video-scenario targeted-messages only. */
+export function ownsTargetedMessageNoEmailMember(person: Partial<SeedIdentity>) {
+  return person.id === "video-message-sansmail" && person.organizationId === "default" &&
+    person.firstName === "René" && person.lastName === "Sansmail" && person.email === null &&
+    person.phone === null && person.active === true && person.notes === null && person.birthDate === null &&
+    person.availabilityNote === null && person.tags?.length === 0 && person.availabilityPeriods?.length === 0
+}
 export async function recordedMembers(): Promise<OwnedMember[]> {
   const entries: OwnedMember[] = []
   for (const [file, version] of [["owned-members.json", 1], ["owned-members-v2.json", 2]] as const) {
@@ -64,7 +71,7 @@ try {
   const synthetic = (person: SeedIdentity) =>
     Boolean(person.email?.endsWith("@example.org")) ||
     (person.email === null && (exactLegacyM2ForMigration(person) || ownsNaturalMemberSeed(person, seedProof))) ||
-    ownsRecordedNoEmailMember(person, owned) || ownsImport(person)
+    ownsRecordedNoEmailMember(person, owned) || ownsImport(person) || ownsTargetedMessageNoEmailMember(person)
   assert(fixture.volunteers.every(synthetic), "Non-training member found")
   assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer))), "Non-training registration found")
   assert(fixture.admins.every(admin => admin.email.endsWith("@example.org") || admin.email === "org-admin@localhost"), "Non-training administrator found")

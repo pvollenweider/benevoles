@@ -27,7 +27,7 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
   await go("/admin/settings/admins")
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { duration: 2400 })
-    await at("Le journal de l'organisation aide"); await tap(page, page.getByRole("link", { name: "Journal d'activité", exact: true }))
+    await at("Ouvrons Journal d'activité depuis les paramètres"); await tap(page, page.getByRole("link", { name: "Journal d'activité", exact: true }))
     await page.getByRole("heading", { name: "Journal d'activité", exact: true }).waitFor()
   })
   await scene("read", async at => {
@@ -41,12 +41,12 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
     await at(0.06) /* mid-sentence */; await filter("Member")
     await at("Ce sont des actions sur"); await entries().filter({ hasText: "a créé un membre" }).first().scrollIntoViewIfNeeded()
     await at(0.24) /* mid-sentence */; await entries().filter({ hasText: "a modifié un membre" }).scrollIntoViewIfNeeded()
-    await at("Pour comprendre ses inscriptions, ouvrons"); await entries().filter({ hasText: "a désactivé un membre" }).scrollIntoViewIfNeeded()
-    await at("Nous pouvons ensuite revenir au"); await go(`/admin/members/${prepared.firstMemberId}`)
+    await at(0.24) /* mid-sentence */; await entries().filter({ hasText: "a désactivé un membre" }).scrollIntoViewIfNeeded()
+    await at("Pour comprendre ses inscriptions, ouvrons"); await go(`/admin/members/${prepared.firstMemberId}`)
     await page.getByRole("heading", { name: "Activité de Aline Exemple 01", exact: true }).waitFor()
     if (!(await page.locator("ol li").allTextContents()).some(text => text.includes("Accueil"))) throw new Error("Real member registration missing from chronology")
     await at("Cette distinction évite de prendre"); await page.locator("ol li").first().scrollIntoViewIfNeeded()
-    await at("Lire une entrée ne modifie"); await go(journal)
+    await at("Nous pouvons ensuite revenir au"); await go(journal)
     checks.memberActivityNotEmpty = true
   })
   await scene("team", async at => {
@@ -59,16 +59,16 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
   })
   await scene("filters", async at => {
     await at("Choisissons Membres, puis Comptes admin"); await filter("Member")
-    await at("Revenons ensuite à Tous les"); await filter("AdminUser")
+    await at("Choisissons Membres, puis Comptes admin"); await filter("AdminUser")
     if (await entries().count() !== 2) throw new Error("Admin filter must contain actual invitation and role change only")
-    await at("il limite la liste affichée."); await filter("")
+    await at("Revenons ensuite à Tous les"); await filter("")
     if (await entries().count() !== 50 || await page.getByRole("tab", { name: "Rejouer", exact: true }).count()) throw new Error("Organization journal must show its actual controls, not event replay")
     checks.actualTypeFilters = true
   })
   await scene("pages", async at => {
     const before = await entries().count()
     await at("Descendons, utilisons le bouton et"); await page.getByRole("button", { name: "Charger plus", exact: true }).scrollIntoViewIfNeeded()
-    await at("Le nombre d'entrées déjà chargées"); await tap(page, page.getByRole("button", { name: "Charger plus", exact: true })); await settle(page)
+    await at("Descendons, utilisons le bouton et"); await tap(page, page.getByRole("button", { name: "Charger plus", exact: true })); await settle(page)
     const after = await entries().count()
     if (before !== 50 || after !== 61) throw new Error("Actual load-more must extend 50 entries to 61")
     await at("Si une sélection ne donne"); await entries().last().scrollIntoViewIfNeeded()
@@ -85,7 +85,7 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
     const download = await downloading
     const file = path.join(directory, "organization-activity-capture.csv")
     await download.saveAs(file)
-    await at(0.28) /* mid-sentence */
+    await at("Ouvrons le vrai fichier téléchargé")
     const csv = await showActivityCsv(page, file)
     if (csv.sha256 !== preflight.fileSha256 || csv.rows !== 61) throw new Error("Capture download differs from independently reconciled CSV")
     await at("Il contient la date, l'acteur"); await page.locator(".scroll").evaluate(element => { element.scrollLeft = element.scrollWidth })

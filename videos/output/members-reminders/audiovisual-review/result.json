@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:38:32.544Z",
-  "videoSha256": "96f25dcd75edf073893a4fa9444b8ee84771dfad727624389ba8c38a02331343",
+  "reviewedAt": "2026-10-12T07:18:23.775Z",
+  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
   "promptSha256": "709ed43fc1b3db4e357fd03c7fc8e37e3779f322e26c4b63842dde8dacc3c42e",
-  "clipSha256": "3f5d9906304f5e7b788d736e31a8fff0b80f1ef414bfea30f8a87f77b42ae89b",
+  "clipSha256": "2301b5c8612fc4763df6dac918ff2c0d0c83a534c61031e99cae36ce64a44139",
   "scene": "result",
   "review": {
     "heardOpening": "De retour dans Invitations",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0.8,
         "spoken": "De retour dans Invitations",
         "visibleSeconds": 0,
-        "visible": "Page Invitations affichée à l'écran",
+        "visible": "L'écran affiche la vue Invitations avec les compteurs (10 invités, 7 inscrits, 0 pas disponible, 3 sans réponse)",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 2.5,
-        "spoken": "les participations n'ont pas changé",
-        "visibleSeconds": 0,
-        "visible": "Tableau récapitulatif des statuts et présences",
+        "spoken": "les participations n'ont pas changé simplement parce qu'un message est parti",
+        "visibleSeconds": 2.5,
+        "visible": "Le tableau récapitulatif des membres et de leurs statuts reste affiché de manière stable",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.5,
-        "spoken": "Une relance courte, au bon moment",
-        "visibleSeconds": 0,
-        "visible": "Boutons d'action de relance visibles",
+        "spoken": "Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant",
+        "visibleSeconds": 9.5,
+        "visible": "Écran stable montrant notamment le bouton Relancer les 3 sans créneau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, accompagnant un écran récapitulatif statique."
+      "observation": "Voix off féminine claire, posée et parfaitement intelligible, débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

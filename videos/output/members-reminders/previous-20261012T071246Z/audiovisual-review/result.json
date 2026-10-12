@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:32:44.754Z",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d",
+  "promptSha256": "709ed43fc1b3db4e357fd03c7fc8e37e3779f322e26c4b63842dde8dacc3c42e",
+  "clipSha256": "4b370d3f9eea909f25e5cd7f0e47d19d41296035690546a6757ce5bff30de930",
+  "scene": "result",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0,
+        "visible": "Page Invitations affichée avec les compteurs (10 invités, 7 inscrits, 0 pas disponible, 3 sans réponse)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "les participations n'ont pas changé simplement parce qu'un message est parti",
+        "visibleSeconds": 0,
+        "visible": "Tableau récapitulatif des membres avec leur statut de participation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Une relance courte, au bon moment",
+        "visibleSeconds": 0,
+        "visible": "Options de relance visibles au-dessus du tableau (Relancer les 3 sans créneau, Écrire un message aux 3 sans créneau)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bienveillante, parfaitement intelligible sur fond musical doux."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

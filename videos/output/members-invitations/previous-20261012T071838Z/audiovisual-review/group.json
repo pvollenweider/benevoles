@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:26.371Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "1fd816bdca1cb126f462024dcaa7686d77a6b79ae38a543719232ac03e25c717",
+  "clipSha256": "a7fe0ac8b4de62397545a58694b886c3632815401ca2eb0d763f91528eca8f90",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Pour un groupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez le filtre de tags",
+        "visibleSeconds": 2.2,
+        "visible": "Ouverture de la fenêtre « Inviter des membres » et sélection du filtre de tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "retrouver les personnes de l'accueil",
+        "visibleSeconds": 3,
+        "visible": "Filtre « accueil » sélectionné avec affichage des membres correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Tout sélectionner ajoute les membres visibles à votre sélection",
+        "visibleSeconds": 3.5,
+        "visible": "Clic sur « Tout sélectionner », 17 membres cochés",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "après un changement de filtre. Le compteur reste votre repère.",
+        "visibleSeconds": 12.3,
+        "visible": "Filtre changé sur « sécurité », le compteur indique toujours 17 sélectionnés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Avec Effacer, repartez d'une sélection vide",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur « Effacer », réinitialisation à 0 sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

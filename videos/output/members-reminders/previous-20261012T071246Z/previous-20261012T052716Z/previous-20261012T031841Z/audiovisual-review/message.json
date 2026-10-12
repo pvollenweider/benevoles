@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:55:40.903Z",
+  "videoSha256": "7865ee3c9d753ad6be7f07a321542b52dd57d845b40ef40c31ca2901050f5f45",
+  "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
+  "clipSha256": "62a866aecf0405ed9109075ffcaa294ab1d42238b825bd8f4c5b518c999a8c42",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Pour expliquer davantage, utilisez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez Écrire un message aux personnes sans créneau",
+        "visibleSeconds": 1.4,
+        "visible": "Clic sur le lien 'Écrire un message aux sans créneau'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Le groupe est déjà choisi dans la page de message",
+        "visibleSeconds": 2.5,
+        "visible": "Option 'Les invités sans créneau confirmé' cochée par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
+        "visibleSeconds": 7,
+        "visible": "Saisie en cours dans le champ message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "prévisualisez les destinataires et le contenu",
+        "visibleSeconds": 17.6,
+        "visible": "Clic sur le bouton et affichage de la modale d'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

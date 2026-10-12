@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le",
+  "windowStart": 3.404,
+  "result": {
+    "found": true,
+    "startSeconds": 15.5,
+    "wordsHeard": "Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le"
+  },
+  "onset": 18.904,
+  "proposedCut": 18.403771,
+  "note": "Proposal only; recut then independently audit before capture"
+}

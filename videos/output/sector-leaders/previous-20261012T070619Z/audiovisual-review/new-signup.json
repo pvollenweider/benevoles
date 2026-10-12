@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T07:05:45.312Z",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861",
+  "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
+  "clipSha256": "28f92b4a8284b87d327e018f30c57a50a94d60025dea5a721c261cf9c9456777",
+  "scene": "new-signup",
+  "review": {
+    "heardOpening": "Pour voir comment une équipe évolue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "inscrivons une nouvelle personne à la Buvette du dimanche",
+        "visibleSeconds": 2,
+        "visible": "Sélection du créneau Buvette pour le dimanche et affichage du panneau récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis continue vers le formulaire",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le bouton pour continuer et ouverture de la page du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone",
+        "visibleSeconds": 8.5,
+        "visible": "Remplissage progressif des champs de coordonnées de Nora Perrin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Elle choisit une taille, accepte la convention et l'utilisation de ses données",
+        "visibleSeconds": 16.5,
+        "visible": "Sélection de la taille de t-shirt M et validation des deux cases à cocher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée",
+        "visibleSeconds": 24.5,
+        "visible": "Clic sur Confirmer mon inscription puis affichage du message Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine naturelle, claire et fluide, parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

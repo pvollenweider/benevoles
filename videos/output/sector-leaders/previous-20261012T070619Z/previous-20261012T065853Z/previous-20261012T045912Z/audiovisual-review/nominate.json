@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:04:22.146Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "cdfd64997d8285f9b3b741ed6f93a76b41ca523b192a612692d28d14a7f4b689",
+  "clipSha256": "c828056f44112585ea6daed4fa30ca47948aea9f14ea35988777f1fe48cd4037",
+  "scene": "nominate",
+  "review": {
+    "heardOpening": "Dans l'événement, ouvrez les responsables",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans l'événement, ouvrez les responsables et ajoutez une personne.",
+        "visibleSeconds": 0.5,
+        "visible": "Clic sur le bouton '+ Ajouter un responsable', ce qui ouvre le formulaire d'ajout.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Choisissez le poste",
+        "visibleSeconds": 5,
+        "visible": "Sélection de l'option 'Montage' dans la liste déroulante Poste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "puis renseignez son nom et son email.",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie de 'Samira Perrin' dans le champ Nom, puis de l'adresse email.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Ajouter et envoyer le lien enregistre la nomination",
+        "visibleSeconds": 14.6,
+        "visible": "Clic sur 'Ajouter et envoyer le lien' et apparition du responsable 'Montage' dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

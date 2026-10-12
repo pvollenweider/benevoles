@@ -1,0 +1,88 @@
+{
+  "id": "SECTOR_LEADERS",
+  "slug": "sector-leaders",
+  "validatedAt": "2026-10-12T03:03:13.858Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 213960,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 17552,
+      "audioMs": 17551,
+      "driftMs": 1
+    },
+    {
+      "id": "nominate",
+      "visualMs": 18799,
+      "audioMs": 18797,
+      "driftMs": 2
+    },
+    {
+      "id": "registered",
+      "visualMs": 17575,
+      "audioMs": 17574,
+      "driftMs": 1
+    },
+    {
+      "id": "email",
+      "visualMs": 15626,
+      "audioMs": 15624,
+      "driftMs": 2
+    },
+    {
+      "id": "roster",
+      "visualMs": 18410,
+      "audioMs": 18404,
+      "driftMs": 6
+    },
+    {
+      "id": "mobile",
+      "visualMs": 19167,
+      "audioMs": 19166,
+      "driftMs": 1
+    },
+    {
+      "id": "scope",
+      "visualMs": 13424,
+      "audioMs": 13422,
+      "driftMs": 2
+    },
+    {
+      "id": "new-signup",
+      "visualMs": 29480,
+      "audioMs": 29477,
+      "driftMs": 3
+    },
+    {
+      "id": "notification",
+      "visualMs": 19033,
+      "audioMs": 19031,
+      "driftMs": 2
+    },
+    {
+      "id": "contact",
+      "visualMs": 15483,
+      "audioMs": 15480,
+      "driftMs": 3
+    },
+    {
+      "id": "remove",
+      "visualMs": 19956,
+      "audioMs": 19955,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 15,
+  "music": {
+    "voicedWindows": 205,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.3,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -32.5,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}
