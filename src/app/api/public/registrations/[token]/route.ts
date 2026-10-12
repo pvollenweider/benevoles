@@ -15,7 +15,7 @@ import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-in
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, withdrawalMoment } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
-import { buildWithdrawalNotifications } from "@/lib/withdrawal-notifications"
+import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
@@ -192,7 +192,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   if (plan.notifiesOrganizers) {
     try {
       const occupied = await prisma.registration.count({ where: { shiftId: registration.shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
-      const payloads = await buildWithdrawalNotifications({
+      // Grouped (#869): withdrawals of the event within a few minutes make one email per person.
+      const dueIds = await queueWithdrawalNotifications({
         registrationId: registration.id,
         event: registration.event,
         shift: registration.shift,
@@ -201,8 +202,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
         waitlistTookSpot,
         placesMissing: Math.max(registration.shift.capacity - occupied, 0),
       })
-      const outboxIds = await enqueueNotifications(payloads, prisma, { organizationId: registration.event.organizationId })
-      deliverAfterResponse(outboxIds)
+      deliverAfterResponse(dueIds)
     } catch (e) {
       reportError("withdrawal.notify")(e)
     }

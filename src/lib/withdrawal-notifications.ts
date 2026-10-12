@@ -16,6 +16,7 @@ import { prisma } from "./prisma"
 import { parseNotificationSettings } from "./notification-settings"
 import type { NotificationPayload } from "./notifications"
 import { collectNotifications } from "./notifications/outbox"
+import { digestDelayMs, queueDigestItem } from "./notifications/digest"
 import { linkToken } from "./token-vault"
 
 export type WithdrawalNotificationInput = {
@@ -100,4 +101,38 @@ export async function buildWithdrawalNotifications(
     ...p,
     dedupeKey: `${p.kind}:${input.registrationId}:${p.recipient.email ?? ""}`,
   }))
+}
+
+/** How long a withdrawal email waits for others of the same event (#869): one email for several. */
+export const WITHDRAWAL_DIGEST_DELAY_MS = 5 * 60 * 1000
+
+/** The per-withdrawal part of the email; the rest (event, leader) is shared by the group. */
+const ITEM_KEYS = ["volunteerName", "shiftId", "shiftLabel", "roleName", "shiftDate", "startTime", "endTime", "placesMissing", "waitlistTookSpot", "message"] as const
+
+/**
+ * Queues the withdrawal emails grouped (#869): several withdrawals of one event within a few
+ * minutes reach each organiser and sector leader as one email listing them, instead of one each.
+ */
+export async function queueWithdrawalNotifications(input: WithdrawalNotificationInput, now: Date = new Date()): Promise<string[]> {
+  const delayMs = digestDelayMs(WITHDRAWAL_DIGEST_DELAY_MS)
+  const dueIds: string[] = []
+  for (const payload of await buildWithdrawalNotifications(input)) {
+    const data = payload.data as Record<string, unknown>
+    const item = Object.fromEntries(ITEM_KEYS.map((k) => [k, data[k]]))
+    const base = Object.fromEntries(Object.entries(data).filter(([k]) => !(ITEM_KEYS as readonly string[]).includes(k)))
+    const dueId = await queueDigestItem({
+      kind: payload.kind,
+      groupKey: `${payload.kind}:${input.event.id}:${(payload.recipient.email ?? "").toLowerCase()}`,
+      recipient: payload.recipient,
+      organizationId: input.event.organizationId,
+      base,
+      item,
+      itemKey: input.registrationId,
+      now,
+      delayMs,
+    })
+    if (dueId) dueIds.push(dueId)
+  }
+  // Due at once only without a delay (DIGEST_DELAY_SECONDS=0): the caller delivers them now.
+  return dueIds
 }
