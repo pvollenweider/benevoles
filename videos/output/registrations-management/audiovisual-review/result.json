@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T12:00:08.315Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "b0cc187b6d3102ef20f42c995fd95cc66c5bdd02233ec61af0ab1202b9568409",
+  "clipSha256": "1f0b5a39d9c0c92d73c7d501188d51e59c25965660793940f7b219d14523956d",
+  "scene": "result",
+  "review": {
+    "heardOpening": "La liste sert à agir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ouvrons l'action correspondant au retrait dans le journal de l'événement",
+        "visibleSeconds": 4.6,
+        "visible": "Affichage de la page Journal avec l'entrée d'annulation, mais aucune ouverture n'est effectuée",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.4,
+        "spoken": "vous retrouvez qui a agi et quand",
+        "visibleSeconds": 8,
+        "visible": "Ligne du journal mentionnant Élodie Rochat et la date du 12 oct., 13:56",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "vérifiez les filtres et videz la sélection",
+        "visibleSeconds": 9.9,
+        "visible": "Retour à la page Inscriptions : la recherche textuelle est effacée, mais Demandes à traiter reste coché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:04, l'action annoncée (« Ouvrons l'action correspondant au retrait ») n'est pas exécutée à l'écran : le journal est affiché mais aucun détail ni bouton « Voir le récit » n'est ouvert avant le retour à la page précédente à 00:09."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et intelligible sans artefact."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

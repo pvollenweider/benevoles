@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T12:00:00.981Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "a162cb9b719973795c747fbb75a0fa4a05e8bd69832f3cdd5dddb3556e0919a2",
+  "clipSha256": "58e73bb94e54d8901c11f76d0c9f72df2158d030044caf9ba05b4168d3b20b8d",
+  "scene": "workload",
+  "review": {
+    "heardOpening": "Une autre vérification utile",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Noah a le montage, la buvette du matin et celle du soir",
+        "visibleSeconds": 1.5,
+        "visible": "Filtre 'Noah' appliqué avec ses 3 créneaux affichés : Montage (7h-9h), Buvette (10h-14h) et Buvette (18h-22h)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Cela représente dix heures sur la journée",
+        "visibleSeconds": 2,
+        "visible": "Mention '10 h de créneaux dans la journée' visible sous chaque entrée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "L'alerte Charge élevée conseille l'organisateur",
+        "visibleSeconds": 2,
+        "visible": "Badges d'avertissement 'Charge élevée' visibles sur la liste des inscriptions de Noah",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

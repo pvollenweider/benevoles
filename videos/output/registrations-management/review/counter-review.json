@@ -1,0 +1,18 @@
+{
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "automatedFlagsRetained": true,
+  "findings": [
+    {
+      "chapter": "leader",
+      "disposition": "false negative in automated badge observation",
+      "evidence": "leader-badge-241.5.png",
+      "reason": "Responsable badge visibly beside Sarah Jaquet. Spoken badge sentence is 237.933–242.992s; frame 241.5s is inside it."
+    },
+    {
+      "chapter": "result",
+      "disposition": "no confirmed mismatch",
+      "evidence": "journal-326.5.png",
+      "reason": "The real cancellation journal link opens the focused action directly (blue outline), displaying actor and timestamp during its sentence (324.072–326.914s). Narration does not promise the separate Voir le récit view. Demandes à traiter is visibly unchecked (empty box), and recorder proves filters/selection cleared."
+    }
+  ]
+}

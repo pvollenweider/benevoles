@@ -1,0 +1,164 @@
+{
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "reviewedAt": "2026-10-12T12:01:24.966419+00:00",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "80 live registration rows, chapter title and explanation match the current screen.",
+      "evidence": [
+        "chapter-six-sheet-00.jpg",
+        "chapter-welcome-45.png",
+        "chapter-welcome-85.png"
+      ]
+    },
+    {
+      "chapter": "columns",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Camille coordinates/answers and multiple rows, Inès manual note; waiting row now 18–22h.",
+      "evidence": [
+        "chapter-six-sheet-00.jpg",
+        "chapter-columns-45.png",
+        "chapter-columns-85.png"
+      ]
+    },
+    {
+      "chapter": "filters",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Name, role and afternoon shift filters, matching write link and full reset.",
+      "evidence": [
+        "chapter-six-sheet-01.jpg",
+        "chapter-filters-45.png",
+        "chapter-filters-85.png"
+      ]
+    },
+    {
+      "chapter": "requests",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Lucas request and confirmation consequences; cancellation leaves requested status and sends no decision email.",
+      "evidence": [
+        "chapter-six-sheet-01.jpg",
+        "chapter-requests-45.png",
+        "chapter-requests-85.png"
+      ]
+    },
+    {
+      "chapter": "manual-identity",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Current existing-member search, Choisir, Membre choisi and note; no duplicate contact.",
+      "evidence": [
+        "chapter-six-sheet-02.jpg",
+        "chapter-manual-identity-45.png",
+        "chapter-manual-identity-85.png"
+      ]
+    },
+    {
+      "chapter": "manual-check",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Real duplicate refusal, morning overlap warning, then compatible 15–18h choice with no overlap warning.",
+      "evidence": [
+        "chapter-six-sheet-02.jpg",
+        "chapter-manual-check-45.png",
+        "chapter-manual-check-85.png"
+      ]
+    },
+    {
+      "chapter": "manual-result",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Notice readable without conflict, real addition and actual cron confirmation with one current-take inbox message.",
+      "evidence": [
+        "chapter-six-sheet-03.jpg",
+        "chapter-manual-result-45.png",
+        "chapter-manual-result-85.png"
+      ]
+    },
+    {
+      "chapter": "selection",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Two checked rows remain selected behind Sarah filter, then deselection resets count.",
+      "evidence": [
+        "chapter-six-sheet-03.jpg",
+        "chapter-selection-45.png",
+        "chapter-selection-85.png"
+      ]
+    },
+    {
+      "chapter": "resend",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Confirmation readable; one real personal-link email for two rows; two current-take messages visible.",
+      "evidence": [
+        "chapter-six-sheet-04.jpg",
+        "chapter-resend-45.png",
+        "chapter-resend-85.png"
+      ]
+    },
+    {
+      "chapter": "leader",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Sarah nomination, actual team-link email; badge visible at 241.5s within spoken sentence. Three current-take messages.",
+      "evidence": [
+        "chapter-six-sheet-04.jpg",
+        "chapter-leader-45.png",
+        "chapter-leader-85.png"
+      ]
+    },
+    {
+      "chapter": "undo",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Confirmation and paused undo bar, restored row; no committed cancellation or email.",
+      "evidence": [
+        "chapter-six-sheet-05.jpg",
+        "chapter-undo-45.png",
+        "chapter-undo-85.png"
+      ]
+    },
+    {
+      "chapter": "remove",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Immediate real cancellation, freed place, real cancellation email; four current-take messages.",
+      "evidence": [
+        "chapter-six-sheet-05.jpg",
+        "chapter-remove-45.png",
+        "chapter-remove-85.png"
+      ]
+    },
+    {
+      "chapter": "workload",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Noah three real separated shifts and ten-hour Charge élevée warning.",
+      "evidence": [
+        "chapter-six-sheet-06.jpg",
+        "chapter-workload-45.png",
+        "chapter-workload-85.png"
+      ]
+    },
+    {
+      "chapter": "result",
+      "status": "pass",
+      "frameReviewComplete": true,
+      "note": "Direct journal link opens focused cancellation entry with actor/date; final filters and selection reset.",
+      "evidence": [
+        "chapter-six-sheet-06.jpg",
+        "chapter-result-45.png",
+        "chapter-result-85.png"
+      ]
+    }
+  ],
+  "anchorsReviewed": 32,
+  "anchorFramesReviewed": 64,
+  "emailSamplesReviewed": 100,
+  "allEmailListsOnlyThisTake": true
+}

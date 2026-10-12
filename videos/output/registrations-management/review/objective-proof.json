@@ -1,0 +1,589 @@
+{
+  "checks": {
+    "mp4Sha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+    "timelineSha256": "36060e42cdd2cd1d6642c1e1b049615bdc0f75416e1bb85c0e19f4cc509faa00",
+    "effectsSha256": "9924f2a06634a0adf753a41e309622c44bae37426777dc221bb7e6810f9e713b",
+    "effectsMatchActualMarkers": true,
+    "clicks": 57,
+    "keys": 29,
+    "durationSeconds": 344.32
+  },
+  "anchors": [
+    {
+      "segment": "welcome",
+      "phrase": "Notre fête contient quatre-vingts lignes",
+      "measuredSentenceStartSeconds": 11.467,
+      "actualCueSeconds": 11.469,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 11.267000000000001,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-00-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 12.967,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-00-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "columns",
+      "phrase": "Une note, comme inscrit par",
+      "measuredSentenceStartSeconds": 39.084,
+      "actualCueSeconds": 39.087,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 38.884,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-01-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 40.584,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-01-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "columns",
+      "phrase": "elle participe à plusieurs créneaux.",
+      "measuredSentenceStartSeconds": 44.542,
+      "actualCueSeconds": 44.543,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 44.342,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-02-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 46.042,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-02-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "filters",
+      "phrase": "Nous choisissons Accueil, et seulement",
+      "measuredSentenceStartSeconds": 53.864,
+      "actualCueSeconds": 53.867,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 53.663999999999994,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-03-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 55.364,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-03-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "filters",
+      "phrase": "la liste se réduit aux",
+      "measuredSentenceStartSeconds": 57.635,
+      "actualCueSeconds": 57.636,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 57.434999999999995,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-04-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 59.135,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-04-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "filters",
+      "phrase": "Pour retrouver toute la liste",
+      "measuredSentenceStartSeconds": 63.491,
+      "actualCueSeconds": 63.492,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 63.291,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-05-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 64.991,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-05-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "requests",
+      "phrase": "ses réponses peuvent aider à",
+      "measuredSentenceStartSeconds": 78.452,
+      "actualCueSeconds": 78.454,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 78.252,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-06-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 79.952,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-06-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "requests",
+      "phrase": "Ici, nous annulons ",
+      "measuredSentenceStartSeconds": 86.092,
+      "actualCueSeconds": 86.094,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 85.892,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-07-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 87.592,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-07-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-identity",
+      "phrase": "Cliquez sur Ajouter manuellement",
+      "measuredSentenceStartSeconds": 95.281,
+      "actualCueSeconds": 95.282,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 95.081,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-08-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 96.781,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-08-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-identity",
+      "phrase": "Dans Membre existant, cherchez Camille",
+      "measuredSentenceStartSeconds": 96.994,
+      "actualCueSeconds": 96.995,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 96.794,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-09-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 98.494,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-09-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-identity",
+      "phrase": "Cliquez sur Choisir",
+      "measuredSentenceStartSeconds": 102.326,
+      "actualCueSeconds": 102.327,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 102.12599999999999,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-10-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 103.826,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-10-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-identity",
+      "phrase": "horaire convenu par téléphone",
+      "measuredSentenceStartSeconds": 110.369,
+      "actualCueSeconds": 110.371,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 110.169,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-11-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 111.869,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-11-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-check",
+      "phrase": "Si nous essayons de l'ajouter",
+      "measuredSentenceStartSeconds": 127.036,
+      "actualCueSeconds": 127.038,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 126.836,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-12-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 128.536,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-12-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-check",
+      "phrase": "Sur la buvette du matin",
+      "measuredSentenceStartSeconds": 131.909,
+      "actualCueSeconds": 131.909,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 131.709,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-13-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 133.409,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-13-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-check",
+      "phrase": "Choisissons plutôt un horaire compatible",
+      "measuredSentenceStartSeconds": 143.15,
+      "actualCueSeconds": 143.151,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 142.95000000000002,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-14-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 144.65,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-14-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-result",
+      "phrase": "Avant de valider, lisez l'annonce",
+      "measuredSentenceStartSeconds": 149.765,
+      "actualCueSeconds": 149.767,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 149.565,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-15-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 151.265,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-15-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-result",
+      "phrase": "Cliquez sur Ajouter",
+      "measuredSentenceStartSeconds": 161.125,
+      "actualCueSeconds": 161.126,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 160.925,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-16-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 162.625,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-16-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-result",
+      "phrase": "Dix minutes plus tard, ouvrons le véritable email reçu",
+      "measuredSentenceStartSeconds": 166.605,
+      "actualCueSeconds": 166.606,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 166.405,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-17-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 168.105,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-17-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "manual-result",
+      "phrase": "Nous revenons ensuite à la liste des inscriptions",
+      "measuredSentenceStartSeconds": 174.158,
+      "actualCueSeconds": 174.159,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 173.958,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-18-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 175.658,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-18-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "selection",
+      "phrase": "présence, responsable, lien personnel ou",
+      "measuredSentenceStartSeconds": 183.312,
+      "actualCueSeconds": 183.313,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 183.11200000000002,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-19-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 184.812,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-19-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "selection",
+      "phrase": "Désélectionner remet ce nombre à",
+      "measuredSentenceStartSeconds": 194.42,
+      "actualCueSeconds": 194.422,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 194.22,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-20-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 195.92,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-20-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "resend",
+      "phrase": "Confirme seulement après l'avoir lu.",
+      "measuredSentenceStartSeconds": 208.685,
+      "actualCueSeconds": 208.686,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 208.485,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-21-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 210.185,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-21-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "resend",
+      "phrase": "Camille y retrouve son lien",
+      "measuredSentenceStartSeconds": 213.112,
+      "actualCueSeconds": 213.115,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 212.912,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-22-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 214.612,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-22-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "leader",
+      "phrase": "Vérifie le poste et l'adresse",
+      "measuredSentenceStartSeconds": 228.819,
+      "actualCueSeconds": 228.821,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 228.619,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-23-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 230.319,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-23-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "leader",
+      "phrase": "L'email donne accès à la",
+      "measuredSentenceStartSeconds": 233.148,
+      "actualCueSeconds": 233.151,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 232.948,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-24-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 234.648,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-24-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "undo",
+      "phrase": "Après confirmation, une barre laisse",
+      "measuredSentenceStartSeconds": 253.883,
+      "actualCueSeconds": 253.884,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 253.68300000000002,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-25-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 255.383,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-25-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "undo",
+      "phrase": "la ligne revient, sans annulation",
+      "measuredSentenceStartSeconds": 264.164,
+      "actualCueSeconds": 264.165,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 263.964,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-26-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 265.664,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-26-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "remove",
+      "phrase": "Nous refaisons le retrait, puis",
+      "measuredSentenceStartSeconds": 274.434,
+      "actualCueSeconds": 274.435,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 274.23400000000004,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-27-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 275.934,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-27-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "remove",
+      "phrase": "L'inscription disparaît et la place",
+      "measuredSentenceStartSeconds": 279.806,
+      "actualCueSeconds": 279.807,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 279.606,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-28-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 281.306,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-28-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "remove",
+      "phrase": "Ouvrons le message réellement reçu",
+      "measuredSentenceStartSeconds": 285.901,
+      "actualCueSeconds": 285.903,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 285.701,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-29-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 287.401,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-29-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "result",
+      "phrase": "Ouvrons l'action correspondant au retrait",
+      "measuredSentenceStartSeconds": 324.072,
+      "actualCueSeconds": 324.073,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 323.872,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-30-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 325.572,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-30-after.png"
+        }
+      ]
+    },
+    {
+      "segment": "result",
+      "phrase": "Avant de passer à autre chose",
+      "measuredSentenceStartSeconds": 329.268,
+      "actualCueSeconds": 329.277,
+      "frames": [
+        {
+          "label": "before",
+          "seconds": 329.068,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-31-before.png"
+        },
+        {
+          "label": "after",
+          "seconds": 330.768,
+          "file": "/private/tmp/codex-video/videos/output/registrations-management/review/anchor-31-after.png"
+        }
+      ]
+    }
+  ]
+}

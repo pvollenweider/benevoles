@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:18.227Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "e04aebd24872473a9e66331142830fe48759cd06501c6796d2b65fbf14801c2c",
+  "clipSha256": "d41b8f4dc4b1c7152f778b7b3131d470811ddb747a5fd99b00d8c54314970655",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le planning se remplit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans Inscriptions, chaque ligne correspond à une inscription sur un créneau",
+        "visibleSeconds": 3,
+        "visible": "Disparition de l'encart titre et affichage de la page Inscriptions avec le tableau des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Notre fête contient quatre-vingts lignes, avec plusieurs situations",
+        "visibleSeconds": 11,
+        "visible": "Défilement vers le bas de la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Nous allons retrouver les bonnes personnes, ajouter un horaire et effectuer quelques actions",
+        "visibleSeconds": 16.5,
+        "visible": "Remontée en haut du tableau des inscriptions avec les filtres et boutons d'action visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement intelligible, sans artefact audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

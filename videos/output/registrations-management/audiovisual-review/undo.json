@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:53.079Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "8cbe2e9f8cc23dfcffce6d2f3681e39bdcacb57e0a33f7e30aa37861b8caf68d",
+  "clipSha256": "64148e797c362229bfa087a29af06a56af2a511c8010029f513994025b8a41a8",
+  "scene": "undo",
+  "review": {
+    "heardOpening": "Pour retirer quelqu'un d'un horaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "lis d'abord la confirmation : inscription annulée, place libérée",
+        "visibleSeconds": 2.8,
+        "visible": "Ouverture de la modale de confirmation « Retirer 1 bénévole de leur créneau ? » détaillant l'annulation et les places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Après confirmation, une barre laisse dix secondes pour annuler.",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur « Retirer », apparition du bandeau d'attente avec compte à rebours de 10 secondes et option d'annulation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.6,
+        "spoken": "Nous utilisons Annuler le retrait : la ligne revient",
+        "visibleSeconds": 19.4,
+        "visible": "Clic sur « Annuler le retrait » dans la barre, réapparition de la ligne dans la liste et bandeau de confirmation vert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:19.493Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "4d1f990cbe91673735871eae0b1966b19793322df5a1c51f59d471f49df1a96a",
+  "clipSha256": "e11f1768f5b3e0852e2689ad5abdb82dbb12b3cad463bf56cbe4594321edfc29",
+  "scene": "columns",
+  "review": {
+    "heardOpening": "Regardons Camille. Vous retrouvez son nom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Regardons Camille.",
+        "visibleSeconds": 1,
+        "visible": "Le filtre 'Camille' est appliqué et affiche les inscriptions de Camille Rochat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "ici la taille de t-shirt.",
+        "visibleSeconds": 1,
+        "visible": "La mention 'Taille de t-shirt : M' est visible dans les détails sous le bénévole.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Une note, comme inscrit par téléphone, donne du contexte.",
+        "visibleSeconds": 17,
+        "visible": "La recherche bascule sur Inès avec la mention 'Inscrite par téléphone' et la source 'Manuel'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Plusieurs lignes pour Camille sont normales : elle participe à plusieurs créneaux.",
+        "visibleSeconds": 21,
+        "visible": "L'affichage revient sur les multiples lignes de créneaux de Camille.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les changements à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

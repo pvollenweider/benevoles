@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:58.624Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "bf49e888f42064706c6d5b37a4a3b7a0a9d815dc8eaed4a773f3094ed38cdc79",
+  "clipSha256": "59b9213fc683920177eba022190367ac8fd599a5d444f4ad9e1a02c769449905",
+  "scene": "remove",
+  "review": {
+    "heardOpening": "Cette fois",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "utilisons Retirer maintenant pour le valider sans attendre",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur le bouton Retirer maintenant dans le bandeau jaune d'attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "L'inscription disparaît et la place est libérée",
+        "visibleSeconds": 10.5,
+        "visible": "La ligne du créneau d'accueil disparaît du tableau et la confirmation s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Ouvrons le message réellement reçu dans notre boîte de démonstration",
+        "visibleSeconds": 18,
+        "visible": "Basculement sur Mailpit et ouverture de l'e-mail de notification d'annulation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
