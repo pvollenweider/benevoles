@@ -33,6 +33,11 @@ export function adminRecentCancellationsUrl(eventId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/registrations#annulations`
 }
 
+/** « Chercher des bénévoles » with this shift already selected (#869): the members free for it. */
+export function adminFindReplacementUrl(eventId: string, shiftId: string): string {
+  return `${BASE_URL}/admin/events/${eventId}/staffing/search?shift=${encodeURIComponent(shiftId)}`
+}
+
 export function adminStaffingUrl(eventId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/staffing`
 }

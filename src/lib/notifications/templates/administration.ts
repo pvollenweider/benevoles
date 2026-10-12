@@ -8,7 +8,7 @@
 import type { NotificationPayload } from "../types"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
-import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, adminRecentCancellationsUrl, BASE_URL, type RenderedEmail } from "./shared"
+import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, adminFindReplacementUrl, adminRecentCancellationsUrl, BASE_URL, type RenderedEmail } from "./shared"
 import { docUnitHref } from "@/lib/doc-href"
 import { WELCOME_HELP_SLUG, welcomeDocLinks } from "@/lib/signup-welcome"
 import { siteName } from "@/lib/site"
@@ -75,6 +75,9 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
   const subject = `Désistement — ${d.eventTitle}`
   const shiftUrl = adminShiftUrl(d.eventId, d.shiftId)
   const staffingUrl = adminStaffingUrl(d.eventId)
+  // A place left empty with nobody waiting (#869): straight to the members free for this shift.
+  const replaceUrl = !d.waitlistTookSpot && d.placesMissing > 0 ? adminFindReplacementUrl(d.eventId, d.shiftId) : null
+  const replaceLine = "Pour trouver quelqu'un : les membres libres à cet horaire, et un message à ceux que vous choisissez."
   // A mistake, or a link used by someone else (#809): the place can be put back while it's free.
   const restoreUrl = d.waitlistTookSpot ? null : adminRecentCancellationsUrl(d.eventId)
   const restoreLine = "Une erreur, ou un désistement que la personne n'a pas fait ? Tant que la place est libre et que le créneau n'a pas commencé, vous pouvez rétablir l'inscription :"
@@ -90,6 +93,7 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     ``,
     spotLine,
     ...(d.message ? [``, `Message laissé :`, `« ${d.message} »`] : []),
+    ...(replaceUrl ? [``, replaceLine, replaceUrl] : []),
     ``,
     `Voir l'inscription :`,
     shiftUrl,
@@ -103,7 +107,9 @@ export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEma
     <p><strong>${escapeHtml(d.volunteerName)}</strong> se désiste de <strong>${escapeHtml(shiftName)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.startTime))}–${escapeHtml(clockTime(d.endTime))}) pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p style="color:#555">${escapeHtml(spotLine)}</p>
     ${d.message ? `<p style="color:#444;background:#f3f4f6;border-radius:8px;padding:10px 14px;white-space:pre-wrap">${escapeHtml(d.message)}</p>` : ""}
-    <p style="margin-top:1.25em">${btn(shiftUrl, "Voir l'inscription")}</p>
+    ${replaceUrl
+      ? `<p style="color:#555;margin-top:1.25em">${escapeHtml(replaceLine)}</p><p>${btn(replaceUrl, "Trouver un remplaçant")}</p><p style="margin-top:0.75em"><a href="${shiftUrl}" style="color:#2563eb">Voir l'inscription</a></p>`
+      : `<p style="margin-top:1.25em">${btn(shiftUrl, "Voir l'inscription")}</p>`}
     <p style="margin-top:0.75em"><a href="${staffingUrl}" style="color:#2563eb">Suivi des effectifs</a></p>
     ${restoreUrl ? `<p style="color:#555;margin-top:1.5em">${escapeHtml(restoreLine)} <a href="${restoreUrl}" style="color:#1d4ed8;text-decoration:underline">Rétablir l'inscription</a></p>` : ""}
   `, `${d.volunteerName} se désiste de ${shiftName}.`)
