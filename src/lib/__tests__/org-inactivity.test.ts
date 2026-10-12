@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { assessInactivity, deactivationDate, inactivityMode, procedureAction, inactivitySince, inactivityStatusText, isMeaningfulWrite, isPostponeMonths, postponedUntil, type InactivityFacts } from "../org-inactivity"
+import { assessInactivity, deactivationDate, erasureDate, erasureDue, ERASURE_AFTER_DEACTIVATION_DAYS, INACTIVITY_STEPS, inactivityMode, procedureAction, inactivitySince, inactivityStatusText, isMeaningfulWrite, isPostponeMonths, postponedUntil, type InactivityFacts } from "../org-inactivity"
 
 const facts = (over: Partial<InactivityFacts> = {}): InactivityFacts => ({
   lastActivityAt: new Date("2025-01-15T10:00:00Z"), lastRetentionConfirmedAt: null, hasUpcomingEvent: false, everUsed: true, suspended: false, active: true, postponedUntil: null, exempt: false, ...over,
@@ -111,5 +111,20 @@ describe("periodic check of inactive organisations (#811)", () => {
       .toBe("Dernière activité : le 2025-01-15. Premier email « Souhaitez-vous conserver votre espace ? » envoyé le 2027-06-01 (2 emails sur 3) ; sans réponse, désactivation le 2027-08-15.")
     expect(inactivityStatusText({ lastActivityAt: null, postponedUntil: null, assessment: { state: "excluded", reason: "deactivated" }, deactivatedAt: new Date("2027-08-15T03:00:00Z") }, "on", now, day))
       .toBe("Dernière activité : jamais mesurée. Désactivée faute de réponse le 2027-08-15 ; ses administrateurs peuvent la réactiver depuis la page de connexion.")
+  })
+})
+
+// #811 rollout 3, observation only: when a space deactivated for inactivity would be erased.
+describe("erasure date after an automatic deactivation", () => {
+  it("is 90 days after the deactivation, the gap between the « deactivate » and « erase » steps", () => {
+    const steps = Object.fromEntries(INACTIVITY_STEPS.map((s) => [s.key, s.days]))
+    expect(ERASURE_AFTER_DEACTIVATION_DAYS).toBe(steps.erase - steps.deactivate)
+    expect(erasureDate(new Date("2026-10-01T00:00:00Z")).toISOString()).toBe("2026-12-30T00:00:00.000Z")
+  })
+
+  it("is due only once that date has come", () => {
+    const deactivated = new Date("2026-10-01T00:00:00Z")
+    expect(erasureDue(deactivated, new Date("2026-12-29T23:59:59Z"))).toBe(false)
+    expect(erasureDue(deactivated, new Date("2026-12-30T00:00:00Z"))).toBe(true)
   })
 })

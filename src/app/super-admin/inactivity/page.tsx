@@ -6,7 +6,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { loadDeactivatedForInactivity, loadExemptOrganizations, loadInactivityReport, SOON_DAYS } from "@/lib/org-inactivity-data"
-import { deactivationDate, inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
+import { deactivationDate, erasureDate, erasureDue, inactivityMode, INACTIVITY_MONTHS } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { noReachableAdmin, reachabilityNote } from "@/lib/admin-reachability"
 
@@ -107,12 +107,12 @@ export default async function InactivityPage() {
       {mode !== "off" && deactivated.length > 0 && (
         <section aria-labelledby="inactivity-deactivated" className="space-y-2">
           <h2 id="inactivity-deactivated" className="text-base font-semibold text-gray-900">Désactivées faute d&apos;activité</h2>
-          <p className="text-sm text-gray-700">Elles n&apos;ont répondu à aucun des trois messages. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées.</p>
+          <p className="text-sm text-gray-700">Elles n&apos;ont répondu à aucun des trois messages. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées. L&apos;effacement automatique, 90 jours après la désactivation, n&apos;est pas activé : la date indiquée est celle qu&apos;il suivrait.</p>
           <ul className="list-disc pl-5 text-sm">
             {deactivated.map((o) => (
               <li key={o.id}>
                 <Link href={`/super-admin/organizations/${o.slug}`} className="text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{o.name}</Link>
-                {o.inactivityDeactivatedAt && ` : désactivée le ${day(o.inactivityDeactivatedAt)}`}
+                {o.inactivityDeactivatedAt && ` : désactivée le ${day(o.inactivityDeactivatedAt)}, effacement prévu le ${day(erasureDate(o.inactivityDeactivatedAt))}${erasureDue(o.inactivityDeactivatedAt, now) ? " (échéance passée, effacement non activé)" : ""}`}
               </li>
             ))}
           </ul>
