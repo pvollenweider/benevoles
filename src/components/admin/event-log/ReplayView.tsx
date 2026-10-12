@@ -45,7 +45,7 @@ export default function ReplayView({
     if (entries.length === 0) return
     const entry = entries[step]
     const id = setTimeout(() => {
-      setAnnouncement([describeEntry(entry, shiftLabels), ...describeChanges(entry.changes, shiftLabels)].join(". ") + ".")
+      setAnnouncement([describeEntry(entry, shiftLabels), ...describeChanges(entry.changes, shiftLabels, entry.entityType)].join(". ") + ".")
     }, 400)
     return () => clearTimeout(id)
   }, [step, entries, shiftLabels])
@@ -78,7 +78,7 @@ export default function ReplayView({
         <p className={`text-sm font-medium ${isBaseline(entry.action) ? "text-gray-500 italic" : "text-gray-900"}`}>{describeEntry(entry, shiftLabels)}</p>
         {entry.changes && (
           <ul className="mt-2 space-y-0.5">
-            {describeChanges(entry.changes, shiftLabels).map((line) => (
+            {describeChanges(entry.changes, shiftLabels, entry.entityType).map((line) => (
               <li key={line} className="text-xs text-gray-600 tabular-nums">{line}</li>
             ))}
           </ul>

@@ -21,8 +21,35 @@ function entry(overrides: Partial<EventLogEntry>): EventLogEntry {
 
 describe("describeChanges", () => {
   it("renders each changed field with its French label", () => {
-    const lines = describeChanges({ capacity: { from: 3, to: 4 }, status: { from: "open", to: "full" } })
-    expect(lines).toEqual(["capacité : 3 → 4", "statut : open → full"])
+    const lines = describeChanges({ capacity: { from: 3, to: 4 }, status: { from: "open", to: "full" } }, undefined, "Shift")
+    expect(lines).toEqual(["capacité : 3 → 4", "statut : ouvert → complet"])
+  })
+
+  it("shows a registration status change in French, not the stored values (#929)", () => {
+    expect(describeChanges({ status: { from: "waiting", to: "offered" } }, undefined, "Registration")).toEqual([
+      "statut : liste d'attente → place proposée",
+    ])
+  })
+
+  it("agrees « annulé(e) » with the entity whose status changed (#929)", () => {
+    expect(describeChanges({ status: { from: "active", to: "cancelled" } }, undefined, "Registration")).toEqual(["statut : confirmée → annulée"])
+    expect(describeChanges({ status: { from: "full", to: "cancelled" } }, undefined, "Shift")).toEqual(["statut : complet → annulé"])
+  })
+
+  it("labels the source, the publication status and booleans (#929)", () => {
+    expect(describeChanges({
+      source: { from: null, to: "admin_manual" },
+      publicStatus: { from: "published", to: "draft" },
+      waitlistEnabled: { from: false, to: true },
+    }, undefined, "Event")).toEqual([
+      "origine : — → manuel",
+      "statut de publication : publié → brouillon",
+      "liste d'attente : non → oui",
+    ])
+  })
+
+  it("keeps an unknown value as stored (#929)", () => {
+    expect(describeChanges({ status: { from: "mystery", to: "open" } }, undefined, "Shift")).toEqual(["statut : mystery → ouvert"])
   })
 
   it("returns an empty list when there is nothing to show", () => {
