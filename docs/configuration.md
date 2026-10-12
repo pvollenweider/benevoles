@@ -42,6 +42,7 @@ Modèles de fichiers fournis :
 | `TRUSTED_PROXY_HOPS` | non | Nombre de proxies qui ajoutent une entrée à `X-Forwarded-For` devant l'application (défaut `1` : Traefik). L'adresse client utilisée pour les limites de débit est la n-ième en partant de la droite ; à augmenter seulement si un autre proxy ou répartiteur ajoute sa propre entrée devant Traefik |
 | `MIGRATE_ON_START` | non | Toute valeur autre que `false` : `docker-entrypoint.sh` applique `prisma migrate deploy` avant de lancer le serveur (défaut, Docker Compose). `false` dans `k8s/deployment.yaml`, où le Job `k8s/job-migrate.yaml` (qui la met à `true`) les applique une seule fois par déploiement |
 | `WARMUP` | non | Toute valeur autre que `false` : au démarrage, `docker-entrypoint.sh` préchauffe les pages publiques avant que `/api/health/ready` réponde 200 (défaut). Réglages fins (`WARMUP_TIMEOUT_MS`, `WARMUP_REQUEST_TIMEOUT_MS`, `WARMUP_CONCURRENCY`, `WARMUP_READY_FILE`) : voir [Préchauffage avant la mise en service](deploiement.md#préchauffage-avant-la-mise-en-service) |
+| `DIGEST_DELAY_SECONDS` | non, tests | Remplace le délai de regroupement des emails groupés (#869, #916) : 5 minutes pour les désistements d'un même événement, 10 minutes pour « inscrit par un organisateur ». Nombre de secondes, `0` compris ; une valeur négative ou non numérique est ignorée. `0` dans le job E2E de la CI : l'email part tout de suite, sans attendre `/api/cron/outbox`. À laisser vide en production, qui garde les délais par défaut ; pas transmise par `deploy.yml` |
 | `GIT_SHA` | non | Commit déployé, fixé au build de l'image (argument de build `GIT_SHA`, rempli par `deploy.yml`). Affiché sur la page Santé du service |
 
 L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet aussi `POSTGRES_HOST` et `POSTGRES_USER` à l'application, qui ne les lit pas.
@@ -133,7 +134,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 ## Scripts et tests
 
 - `npm run screenshots` (`scripts/screenshots.mjs`) : `BASE_URL` (défaut `http://localhost:3200`), `DEMO_ORG` (défaut `default`), `ORG_ADMIN_EMAIL` / `ORG_ADMIN_PASSWORD` (connexion admin), `ONLY` (liste de captures séparées par des virgules), `PUBLIC_ONLY` (pages publiques seules).
-- Playwright : `E2E_PORT` (défaut `3100`), `PLAYWRIGHT_BASE_URL` (défaut `http://localhost:$E2E_PORT`), `MAILPIT_URL` (lecture des emails capturés, défaut `http://localhost:8026`), `CI` (une relance en cas d'échec, rapport GitHub, pas de réutilisation d'un serveur existant).
+- Playwright : `E2E_PORT` (défaut `3100`), `PLAYWRIGHT_BASE_URL` (défaut `http://localhost:$E2E_PORT`), `MAILPIT_URL` (lecture des emails capturés, défaut `http://localhost:8026`), `CI` (une relance en cas d'échec, rapport GitHub, pas de réutilisation d'un serveur existant), `DIGEST_DELAY_SECONDS=0` pour que les emails groupés partent sans attendre (voir plus haut).
 - `npm run test:integration` : `DATABASE_URL` d'un PostgreSQL jetable.
 
 ## Secrets Kubernetes

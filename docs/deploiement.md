@@ -34,7 +34,7 @@ docker compose up -d
 
 - Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
 - Sans `AUTH_SECRET` exporté, il démarre sans erreur avec la valeur connue `change-me-in-production-32chars` : toujours l'exporter.
-- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README).
+- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
 - Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
 
   ```bash
@@ -63,6 +63,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `certificate-wildcard.yaml` | Certificate `benevol-app-wildcard` | non | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`, hors dépôt) |
 | `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
 | `cronjob-reminders.yaml` | CronJob `app-reminders` | oui | Rappels, toutes les heures |
+| `cronjob-outbox.yaml` | CronJob `app-outbox` | oui | Envoi des emails arrivés à échéance (`POST /api/cron/outbox`), toutes les 5 minutes : emails groupés « inscrit par un organisateur » et désistements d'un même événement |
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
@@ -98,7 +99,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    3. régénère `benevoles-secret` (« Sync k8s secret ») ;
    4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les cinq CronJobs ;
+   6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
    7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé.
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
@@ -172,7 +173,7 @@ kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
 kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
-kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
+kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application
 APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
@@ -207,7 +208,14 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 | `WARMUP_READY_FILE` | `/tmp/benevoles-ready` | Fichier qui marque la fin du préchauffage |
 
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
-- Les cron jobs de rappels et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
+- Les cron jobs de rappels, d'envoi des emails et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
+
+## Mise à jour depuis 2.2.x
+
+Aucune action obligatoire : les migrations de base passent par le Job habituel, et aucune variable n'est ajoutée ou rendue obligatoire.
+
+- **Nouveau CronJob `k8s/cronjob-outbox.yaml`** (`app-outbox`) : il appelle `POST /api/cron/outbox` toutes les 5 minutes pour envoyer les emails arrivés à échéance. Les emails groupés (« inscrit par un organisateur », qui attend 10 minutes après le dernier ajout, et les désistements d'un même événement, 5 minutes) l'attendent ; sans lui, ils partent seulement au passage horaire de `/api/cron/reminders`. `deploy.yml` l'applique ; en déploiement manuel : `kubectl apply -f k8s/cronjob-outbox.yaml`. Il lit `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`, comme les autres.
+- **Docker Compose ou autre hébergement** : ajouter au cron de l'hôte `*/5 * * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/outbox` (voir [Tâches planifiées](../README.md#tâches-planifiées-cron)).
 
 ## Mise à jour depuis 1.x
 

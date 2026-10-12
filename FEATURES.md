@@ -64,7 +64,8 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 <!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
 
 - **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
-- **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois, sans classement ni présélection : vous choisissez.
+- **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois, sans classement ni présélection : vous choisissez. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
+- **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Une annulation faite par erreur se rétablit depuis les inscriptions.
 - **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard.
 - **Une recherche globale** (Ctrl + K, ou Cmd + K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.
 
@@ -135,7 +136,7 @@ Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec
 
 ## Démarrer
 
-benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : on vous crée un espace, puis la page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](guide/premiers-pas.md) suit le même chemin.
+benevol.app est ouvert aux associations qui veulent l'essayer. Demandez votre espace en ligne : il est prêt dès que vous avez confirmé votre adresse, et la publication suit une courte vérification. Ensuite, la page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](guide/premiers-pas.md) suit le même chemin.
 
 <!-- actions -->
 - [Demander un espace](/inscription)

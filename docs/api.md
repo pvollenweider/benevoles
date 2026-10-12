@@ -132,6 +132,7 @@ Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées 
 | Route | Méthodes | Accès | Rôle |
 |-------|----------|-------|------|
 | `/api/cron/reminders` | GET, POST | cron | Rappels J-2, J-1, Jour J ; expiration des offres de liste d'attente |
+| `/api/cron/outbox` | POST | cron | Envoi des emails de la file arrivés à échéance, dont les emails groupés (#869, #916) ; toutes les 5 minutes |
 | `/api/cron/cleanup` | GET, POST | cron | Purge RGPD |
 | `/api/cron/heartbeat` | POST | cron | Battement des tâches hors application (#383) : `{ job, ok, error?, summary? }`, `job` parmi `reminders`, `cleanup`, `backup`, `backup-offsite`, `restore-test` ; alimente la page `/super-admin/health` |
 | `/api/health` | GET | public | `200 { "ok": true }` si la base répond, sinon `503` |
