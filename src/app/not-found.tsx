@@ -9,11 +9,10 @@ import { ORG_HEADER } from "@/lib/org-subdomain"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { apexBaseUrl } from "@/lib/urls"
 
-// Absolute: a title template added to the root layout must not double the site name. No robots
-// here (#935): Next.js already writes `<meta name="robots" content="noindex">` on every 404, and
-// a second tag of ours made two robots metas; without `nofollow`, links are followed anyway.
+// Absolute: a title template added to the root layout must not double the site name.
 export const metadata: Metadata = {
   title: { absolute: NOT_FOUND_TITLE },
+  robots: { index: false, follow: true },
 }
 
 /** The organization of the host (or `?org=`), or null: the 404 page must render even if it can't be read. */

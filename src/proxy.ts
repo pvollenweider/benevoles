@@ -4,35 +4,11 @@
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
-import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
+import { withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl } from "@/lib/urls"
-import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
-import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
-import { loadVideoCatalog } from "@/lib/video-catalog-load"
-import { reportError } from "@/lib/report-error"
 
 const { auth } = NextAuth(authConfig)
-
-// The lookups of the server-rendered 404 (#935), read from the files shipped in the image. A
-// source that can't be read answers « exists »: the page then decides, as before.
-function docSlugExists(slug: string): boolean {
-  try {
-    return resolveDocSlug(slug, loadDocUnits()) !== null
-  } catch (error) {
-    reportError("proxy-not-found-doc")(error)
-    return true
-  }
-}
-
-function videoExists(param: string): boolean {
-  try {
-    return loadVideoCatalog().some((v) => v.id === param || v.slug === param)
-  } catch (error) {
-    reportError("proxy-not-found-video")(error)
-    return true
-  }
-}
 
 // Proxy file convention (Next.js 16, formerly `middleware`): a first filter on pages from the JWT
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
@@ -78,13 +54,6 @@ export default auth((req) => {
   // [orgSlug].benevol.app (or ?org= without an org subdomain) → x-org-slug for pages and API
   // routes; a value sent by the client is always dropped first (#541).
   const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
-
-  // --- A 404 rendered on the server (#935): what is known missing here is answered by the
-  // not-found route itself, whose HTML carries the page; `notFound()` during a page's render only
-  // sends an empty document that the browser fills in. See src/lib/server-not-found.ts. ---
-  if (isServerNotFound(pathname, { hasOrg: requestHeaders.has(ORG_HEADER), docSlugExists, videoExists })) {
-    return NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
-  }
 
   return NextResponse.next({ request: { headers: requestHeaders } })
 })
