@@ -377,16 +377,20 @@ export function renderSheet(view: SheetView, d: SheetData): string {
 
     /* ── Gantt (shared markup with the full export), monochrome and ink-sparing: white bars with a
           thick outline instead of solid fills, bold header text instead of a band ─────────── */
-    .gantt-table { border-collapse: collapse; table-layout: auto; width: 100%; margin: 4px 0 8px; }
+    /* Fixed layout (#923): the colgroup scales the time axis to the page width, so a long day
+       never runs past the right edge of the sheet or of the screen preview. */
+    .gantt-table { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 4px 0 8px; }
     .gantt-table th, .gantt-table td { border: 1px solid var(--rule-soft); padding: 2px 4px; vertical-align: middle; }
-    .gantt-table .th-role, .gantt-table .th-label { min-width: 90px; text-align: left; font-size: 11px; font-weight: 700; background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }
-    .gantt-table .slot-th { min-width: 14px; font-size: 11px; color: var(--ink-2); text-align: left; padding: 1px 2px; border-left: 1px solid var(--rule-soft); border-right: 0; background: #fff; }
+    .gantt-table .th-role, .gantt-table .th-label { text-align: left; font-size: 11px; font-weight: 700; background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }
+    /* The hour label sits on the hour line and runs over the next (unlabelled) slots. */
+    .gantt-table .slot-th { font-size: 11px; color: var(--ink-2); text-align: left; padding: 1px 0 1px 2px; white-space: nowrap; overflow: visible; border-left: 1px solid var(--rule-soft); border-right: 0; background: #fff; }
+    .gantt-table .empty-cell { padding: 0; }
     .gantt-table thead th { border-bottom: 2px solid var(--ink); }
     .gantt-table .hour-th { border-left: 2px solid var(--ink) !important; font-weight: 700; color: var(--ink); }
     .gantt-table .hour-mark { border-left: 2px solid var(--rule) !important; }
     .gantt-table .role-cell { text-align: left; font-weight: 700; font-size: 11px; white-space: normal; border-right: 2px solid var(--ink); border-top: 2px solid var(--ink); }
     .gantt-table .label-cell { font-size: 11px; color: var(--ink-2); white-space: normal; border-right: 2px solid var(--ink); }
-    .gantt-table .shift-cell { background: #fff; color: var(--ink); font-size: 11px; font-weight: 600; text-align: left; vertical-align: top; white-space: normal; line-height: 1.3; padding: 3px 5px; border: 2px solid var(--ink) !important; }
+    .gantt-table .shift-cell { background: #fff; color: var(--ink); font-size: 11px; font-weight: 600; text-align: left; vertical-align: top; white-space: normal; line-height: 1.3; padding: 3px 4px; overflow-wrap: anywhere; border: 2px solid var(--ink) !important; }
     /* Two bars back to back: a double rule so the boundary reads as two boxes, not one split box. */
     .gantt-table .shift-cell + .shift-cell { border-left: 5px double var(--ink) !important; }
     .gantt-table .empty-cell { background: #fff; border-left: 1px solid var(--rule-soft); border-right: 0; }

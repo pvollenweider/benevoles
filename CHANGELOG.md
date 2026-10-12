@@ -69,6 +69,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
 ### Corrigé
+- La frise des rapports imprimés (export complet, planning par jour, par poste et individuel) tient dans la largeur de la page et de l'aperçu à l'écran : une longue journée ne déborde plus à droite, la soirée n'est plus coupée (#923).
 - Le journal d'un événement affiche les statuts, l'origine d'une inscription et le statut de publication en français, avec les mêmes mots que le reste de l'administration (« statut : liste d'attente → place proposée » au lieu de « waiting → offered ») (#929). Les exports du journal gardent les valeurs enregistrées.
 - Dans l'ajout manuel d'une inscription, un refus (par exemple « déjà inscrite sur ce créneau ») disparaît dès qu'on change de créneau ou de personne, au lieu de rester affiché.
 - Dans l'assistant de création d'événement, la page Créneaux n'affiche plus « Aucun créneau pour l'instant : la publication attendra » une fois le premier créneau ajouté.

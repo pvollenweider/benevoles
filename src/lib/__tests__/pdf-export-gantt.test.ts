@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { buildDayParts, type ShiftRow } from "../pdf-export-gantt"
+import { buildDayParts, ganttColumnWidths, type ShiftRow } from "../pdf-export-gantt"
 
 function shift(overrides: Partial<ShiftRow> & Pick<ShiftRow, "id" | "roleName" | "startTime" | "endTime">): ShiftRow {
   return {
@@ -103,5 +103,44 @@ describe("buildDayParts (PDF export)", () => {
     expect(gantt).toContain("Bar — service")
     expect(recap).toContain("Libellé")
     expect(recap).toContain("Bar — service")
+  })
+
+  it("scales the time axis to the page width instead of overflowing it (#923 regression)", () => {
+    // 08:00 to 02:00 is 72 quarter-hour slots: with a minimum width per slot the table ran past
+    // the right edge of the page and of the screen preview, cutting the evening off.
+    const shifts = [
+      shift({ id: "1", roleName: "Accueil", startTime: "08:00", endTime: "10:00" }),
+      shift({ id: "2", roleName: "Loge", label: "Rangement de nuit", startTime: "22:00", endTime: "02:00" }),
+    ]
+    const { gantt } = buildDayParts(new Date("2026-10-10"), shifts, [], false)
+    const cols = [...gantt.matchAll(/<col(?: span="(\d+)")? style="width:([\d.]+)%">/g)]
+    expect(cols).toHaveLength(3) // role, label, then one col element spanning every slot
+    expect(Number(cols[2][1])).toBe(72)
+    const total = Number(cols[0][2]) + Number(cols[1][2]) + Number(cols[2][1]) * Number(cols[2][2])
+    expect(total).toBeLessThanOrEqual(100)
+    expect(total).toBeGreaterThan(99.9)
+    // The last hour is still on the axis.
+    expect(gantt).toContain(">1h<")
+  })
+})
+
+describe("ganttColumnWidths (#923)", () => {
+  it("never adds up to more than the page width, with or without the label column", () => {
+    for (const hasLabel of [true, false]) for (const n of [1, 4, 7, 72, 96, 200]) {
+      const w = ganttColumnWidths(n, hasLabel)
+      const sum = w.role + (w.label ?? 0) + n * w.slot
+      expect(sum).toBeLessThanOrEqual(100)
+      expect(sum).toBeGreaterThan(99.9)
+    }
+  })
+
+  it("gives the label column a share only when there is one", () => {
+    expect(ganttColumnWidths(8, true).label).toBe(10)
+    expect(ganttColumnWidths(8, false).label).toBeNull()
+    expect(ganttColumnWidths(8, false).role).toBeGreaterThan(ganttColumnWidths(8, true).role)
+  })
+
+  it("has no slot width for an empty axis", () => {
+    expect(ganttColumnWidths(0, false).slot).toBe(0)
   })
 })
