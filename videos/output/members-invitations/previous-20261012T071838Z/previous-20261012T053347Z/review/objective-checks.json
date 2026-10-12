@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T03:32:43.805Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 34,
+    "keys": 124
+  },
+  "music": {
+    "voicedWindows": 224,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.6,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "60 images finales revues, AV10chapitres. Lien Aline annoncé0.30s mais email jusquà5.88s ; confirmation20.54s vs vraie inscription12.84s. Emailtest ouvert après ancre13.31s vs Nous ouvrons9.84s ; envoi individuel20.44 vs16.41 ; Cacher déjà invités10.01 vsDécochez7.02. Validation, ASR10/10,VTT,effets,musique passent ; vraies invitations, inscription Aline et Nicolas bon formulaire ; dates françaises/Frise/aucune adresse interdite/overlay. Mailpit anglais connu ; aucun nouveau bug disposition.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

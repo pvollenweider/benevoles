@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:32:33.749Z",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d",
+  "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
+  "clipSha256": "672bd9dacdf593deac01ea1f5408699df8371fd62f303c5e510c6307abeeeec2",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Pour expliquer davantage",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez Écrire un message aux personnes sans créneau",
+        "visibleSeconds": 1.4,
+        "visible": "Clic sur le lien « Écrire un message aux 3 sans créneau » puis ouverture de la page de rédaction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Le groupe est déjà choisi dans la page de message",
+        "visibleSeconds": 5,
+        "visible": "L'option « Les invités sans créneau confirmé » est sélectionnée par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie du texte dans le champ Message (« Tu peux choisir un horaire si tu le souhaites. Merci ! »)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "prévisualisez les destinataires et le contenu",
+        "visibleSeconds": 15.8,
+        "visible": "Clic sur « Voir l'aperçu et envoyer » et affichage de la modale d'aperçu de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

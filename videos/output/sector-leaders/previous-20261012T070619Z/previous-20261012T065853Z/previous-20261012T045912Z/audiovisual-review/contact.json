@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:05:00.139Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "fb41faee6480d77874c2003aa5b99d521c8de86e6ee34635f6a7f1f54e2dc137",
+  "clipSha256": "0cf46dbb2633cd414bf69aafbe6a3cf75ec2c168adea1d821bb7368b36840cbf",
+  "scene": "contact",
+  "review": {
+    "heardOpening": "Attention à une autre distinction : le contact opérationnel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "le contact opérationnel indiqué sur un créneau",
+        "visibleSeconds": 2,
+        "visible": "Affichage du formulaire 'Nouveau créneau' avec la section 'Infos pratiques pour les bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "est la personne que les bénévoles doivent joindre sur place",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie du nom 'Élodie Rochat' dans le champ 'Personne de contact'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
+        "visibleSeconds": 6.3,
+        "visible": "Le champ Téléphone du contact est renseigné avec '079 000 00 05' sous les coordonnées du contact",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

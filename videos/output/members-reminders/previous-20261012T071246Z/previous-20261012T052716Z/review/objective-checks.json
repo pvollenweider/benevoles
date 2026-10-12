@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T03:24:58.073Z",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 17,
+    "keys": 184
+  },
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.8,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -33.4,
+    "medianVoiceLufs": -16.3
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "48 images finales revues, AV8chapitres. Attente/offre bascule trop tôt ; Lucas validation apparaissait sur phrase de participation confirmée. Aperçu message19.89s vs phrase15.34s ; envoi5.29s vs phrase0.32s. Texte adapté appendé au précédent (répétition). Validation, ASR8/8,VTT,effets,musique passent ; vrai jeton conservé et compteurs inchangés, dates françaises, aucune adresse interdite/overlay. Mailpit dates anglaises connues, aucun nouveau bug disposition.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-10-12T06:58:53.950Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 18404,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "nominate": {
+      "file": "audio/nominate.wav",
+      "durationMs": 20441,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "registered": {
+      "file": "audio/registered.wav",
+      "durationMs": 16835,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "email": {
+      "file": "audio/email.wav",
+      "durationMs": 14837,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "roster": {
+      "file": "audio/roster.wav",
+      "durationMs": 18779,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "mobile": {
+      "file": "audio/mobile.wav",
+      "durationMs": 18690,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "scope": {
+      "file": "audio/scope.wav",
+      "durationMs": 13852,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "new-signup": {
+      "file": "audio/new-signup.wav",
+      "durationMs": 28102,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "notification": {
+      "file": "audio/notification.wav",
+      "durationMs": 19141,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "contact": {
+      "file": "audio/contact.wav",
+      "durationMs": 16044,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    },
+    "remove": {
+      "file": "audio/remove.wav",
+      "durationMs": 19835,
+      "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:19.102Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
+  "clipSha256": "b49342ab8872d101b0783ffa94e9f7581bed742c9053b6fc3f7dc1243712d138",
+  "scene": "mobile",
+  "review": {
+    "heardOpening": "Sur téléphone, la même page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
+        "visibleSeconds": 0,
+        "visible": "Affichage au format mobile de la liste des bénévoles inscrits par créneau pour le responsable de la buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 3.6,
+        "visible": "Présence des adresses e-mail et des numéros de téléphone associés à chaque bénévole sur la fiche.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires.",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement vers le bas découvrant les créneaux suivants et leurs horaires respectifs.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+        "visibleSeconds": 14.5,
+        "visible": "Bas de page affiché après le défilement pendant le rappel des consignes d'utilisation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

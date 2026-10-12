@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:51.533Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "98ad904a9aefb3497e90e7ea24b5ff1474fc6d60910fa3c34352e9dd00e3d3e4",
+  "clipSha256": "200e79eef994933ceba396bf1a233a92a31e2c3601c3e65b18683daa7d54acf8",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Enfin, une fiche sans email peut être sélectionnée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "une fiche sans email peut être sélectionnée",
+        "visibleSeconds": 2.5,
+        "visible": "René Meyer, annoté « pas d'email », est sélectionné dans la fenêtre d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "René devra être contacté autrement",
+        "visibleSeconds": 7,
+        "visible": "La mention « 1 invité, 1 sans email » s'affiche au bas de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés",
+        "visibleSeconds": 11.5,
+        "visible": "Le compteur d'invités passe à 13 et René Meyer apparaît dans le tableau avec l'alerte « pas d'email »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et dynamique, parfaitement synchronisée avec la manipulation de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

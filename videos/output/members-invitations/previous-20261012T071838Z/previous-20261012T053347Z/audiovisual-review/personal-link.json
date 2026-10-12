@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:32:23.499Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
+  "clipSha256": "6d56dc1b3cf94bbe52f62154d7799e4759fa3e93bcd288b42b40745877baf923",
+  "scene": "personal-link",
+  "review": {
+    "heardOpening": "Ouvrons le lien reçu par Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons le lien reçu par Aline",
+        "visibleSeconds": 5.5,
+        "visible": "L'email reste affiché dans Mailpit jusqu'à 00:05 avant d'ouvrir la page de la fête",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "choisir un créneau disponible",
+        "visibleSeconds": 7.8,
+        "visible": "Sélection d'un créneau de démontage sur la frise et validation avec Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "compléter les informations demandées",
+        "visibleSeconds": 11.5,
+        "visible": "Formulaire affiché avec les données d'Aline préremplies et cases à cocher validées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "jusqu'à la confirmation",
+        "visibleSeconds": 21,
+        "visible": "Clic sur Confirmer mon inscription puis affichage de la page Inscription confirmée",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:00, l'ouverture du lien est annoncée et commentée alors que l'email reste figé jusqu'à 00:05 (plus de 5 secondes de décalage).",
+      "À 00:15-00:17, la confirmation est évoquée mais le clic final et l'écran de confirmation n'apparaissent qu'à 00:20-00:21."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix synthétique claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

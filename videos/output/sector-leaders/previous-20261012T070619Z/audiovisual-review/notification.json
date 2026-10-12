@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T07:05:43.091Z",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861",
+  "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
+  "clipSha256": "2cef34cb36c7f6912b6e45a59795765a2b399f07c9e526469d587950f5b3a62e",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable, voici l'email réellement reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0.5,
+        "visible": "L'interface de messagerie affiche l'email d'inscription pour la Buvette avec le bouton d'accès à la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il indique le nom de Nora et le créneau de la Buvette du dimanche",
+        "visibleSeconds": 4.1,
+        "visible": "Le texte du courriel mentionne Nora Perrin et le créneau du 18/10/2026 de 10:00 à 14:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau",
+        "visibleSeconds": 11,
+        "visible": "Affichage de la page Responsable - Buvette avec Nora Perrin listée le dimanche 18 octobre (10:00-14:00)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

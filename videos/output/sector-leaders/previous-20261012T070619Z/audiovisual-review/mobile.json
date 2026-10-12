@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T07:05:30.182Z",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861",
+  "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
+  "clipSha256": "8227a48d2514d8712e73650968e6bfcfb731af3d49725b71ffa012bded493880",
+  "scene": "mobile",
+  "review": {
+    "heardOpening": "Sur téléphone, la même page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage adapté au format mobile de la liste des bénévoles par créneau avec l'en-tête Responsable - Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 4,
+        "visible": "Adresses email et numéros de téléphone affichés sous forme de liens cliquables pour chaque bénévole.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "retrouver l'équipe du prochain créneau et vérifier les horaires.",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement de la page affichant les créneaux suivants et leurs horaires (18:00–22:00, dimanche 10:00–14:00).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

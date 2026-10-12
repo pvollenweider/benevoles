@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:24:43.355Z",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5",
+  "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
+  "clipSha256": "3b55bdd379be8d380be3fc868fe77998fbe692bfc5c170b226a824b2371cb6fe",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Pour expliquer davantage",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez Écrire un message aux personnes sans créneau",
+        "visibleSeconds": 1.6,
+        "visible": "Clic sur le lien 'Écrire un message aux 3 sans créneau' puis ouverture du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Le groupe est déjà choisi dans la page de message",
+        "visibleSeconds": 5,
+        "visible": "L'option 'Les invités sans créneau confirmé' est cochée par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
+        "visibleSeconds": 7,
+        "visible": "Saisie de l'objet puis du texte du message dans les champs respectifs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "prévisualisez les destinataires et le contenu",
+        "visibleSeconds": 19.4,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer' et affichage de la fenêtre modale d'aperçu de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, naturelle, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -929,8 +929,8 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1226,8 +1226,8 @@
         "organisateur"
       ],
       "feature": "Relance des invités",
-      "updatedAt": "2026-10-07",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1250,8 +1250,8 @@
         "organisateur"
       ],
       "feature": "Invitations des membres",
-      "updatedAt": "2026-10-07",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "essentiel"
     },
     {

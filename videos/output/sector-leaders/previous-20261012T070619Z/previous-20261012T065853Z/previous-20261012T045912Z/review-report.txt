@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "SECTOR_LEADERS",
+  "status": "NOT READY",
+  "duration": 213.96,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 205,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.3,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -32.5,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "66 images finales et email58.5s revus. Révocation : lien invalide visible8.7s vs phrase4.86s, retard3.84s. Rupture timbre remove11.8s confirmée par contre-audit audio seul ; narration à régénérer pour prochaine prise. Tous autres chapitres AV conformes. Validation, ASR11/11,VTT,effets,musique passent ; Frise, dates françaises, aucune adresse interdite/overlay ; dates Mailpit anglaises connues, aucun nouveau défaut disposition.",
+  "sourceChanges": "Retirer et ancien lien ancrés sur Quand la responsabilité change et Son ancien lien ne donne. Aucun re-film. Cache accepté par fingerprint et ASR, puis audit vocal refuse le timbre ; audio conservé comme preuve de prise rejetée.",
+  "report": "videos/output/sector-leaders/review-report.txt",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

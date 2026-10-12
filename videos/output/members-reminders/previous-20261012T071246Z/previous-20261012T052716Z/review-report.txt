@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "MEMBERS_REMINDERS",
+  "status": "NOT READY",
+  "duration": 193.24,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.8,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -33.4,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "48 images finales revues, AV8chapitres. Attente/offre bascule trop tôt ; Lucas validation apparaissait sur phrase de participation confirmée. Aperçu message19.89s vs phrase15.34s ; envoi5.29s vs phrase0.32s. Texte adapté appendé au précédent (répétition). Validation, ASR8/8,VTT,effets,musique passent ; vrai jeton conservé et compteurs inchangés, dates françaises, aucune adresse interdite/overlay. Mailpit dates anglaises connues, aucun nouveau bug disposition.",
+  "sourceChanges": "Annulation/confirmation et email/aperçu/envoi sur phrases ; Lucas avancé au milieu de la phrase des statuts ; fillVisibly remplace le texte. Seed réelv2 utilisé ; cache accepté ; aucun re-film.",
+  "report": "videos/output/members-reminders/review-report.txt",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:12:29.160Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:52.395Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
-  "clipSha256": "e9743961dc8462f6335184d9e23c4e2ca37589abe2eadb184d4ac496f4a390de",
+  "clipSha256": "1ad59d265e0e7b18dc97728a9f069aefd2563901733747dbd50def6fdb69ce76",
   "scene": "status",
   "review": {
-    "heardOpening": "De retour dans Invitations",
+    "heardOpening": "De retour dans Invitations, Aline a maintenant une participation confirmée.",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 1.1,
         "spoken": "De retour dans Invitations",
-        "visibleSeconds": 0,
-        "visible": "Page Invitations affichée avec la liste des membres",
+        "visibleSeconds": 1.1,
+        "visible": "La page Invitations de l'événement est affichée à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 3.2,
         "spoken": "Aline a maintenant une participation confirmée",
-        "visibleSeconds": 0,
-        "visible": "Ligne Aline Mercier avec le statut Participation confirmée visible",
+        "visibleSeconds": 3.2,
+        "visible": "La ligne Aline Mercier affiche le statut vert « Participation confirmée »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.3,
         "spoken": "D'autres personnes restent sans créneau confirmé",
-        "visibleSeconds": 0,
-        "visible": "Membres avec le statut Sans réponse visibles en haut de tableau",
+        "visibleSeconds": 6.3,
+        "visible": "Les membres Nicolas Renaud et Sébastien Perret sont listés avec le statut « Sans réponse » et le bouton « Relancer les 3 sans créneau » est affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.8,
+        "spokenSeconds": 17,
         "spoken": "Le tableau sert à suivre la participation",
-        "visibleSeconds": 0,
-        "visible": "Tableau de suivi complet affiché à l'écran",
+        "visibleSeconds": 17,
+        "visible": "Le tableau récapitulatif des invités et statuts reste visible",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
+      "observation": "Voix posée, claire et bien articulée, avec un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:59:16.079Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "ef693048d3fae3e13a5df5cee99fb3427032b3bc080d4f5d9feec4a5d9278249",
+  "clipSha256": "a8615dfbf68189d0466bdc49b9b4b66de6cbca161d14e1bad9d8beb2e4a56d8a",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Voici l'email reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Voici l'email reçu",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de l'e-mail reçu dans Mailpit",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Le responsable ouvre son lien personnel directement",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page de gestion avec la liste des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "il donne accès aux coordonnées de l'équipe",
+        "visibleSeconds": 4,
+        "visible": "Coordonnées de l'équipe affichées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

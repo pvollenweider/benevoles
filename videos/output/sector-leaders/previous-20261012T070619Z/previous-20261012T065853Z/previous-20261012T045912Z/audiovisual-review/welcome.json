@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:04:21.041Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
+  "clipSha256": "5f924bd78cf5bd13f949f8a2658b27ca18415c3058ec80cddb1375866d1889f1",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour de la fête, vous n'avez pas besoin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction affiché au centre : « Responsable de poste : accompagner son équipe ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
+        "visibleSeconds": 3.4,
+        "visible": "L'encart disparaît et révèle la vue « Responsables de secteur » avec la liste des postes existants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
+        "visibleSeconds": 9.2,
+        "visible": "Écran stable de gestion des responsables de secteur illustrant l'annonce du programme à venir.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

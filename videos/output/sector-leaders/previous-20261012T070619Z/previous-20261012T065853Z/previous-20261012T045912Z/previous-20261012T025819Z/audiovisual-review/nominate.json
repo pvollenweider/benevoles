@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:58:55.591Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "2d88ba5add5e170f79f2c7b886e96455d8dc57312ef0960fffc6c3ed8378f832",
+  "clipSha256": "f39b28c54197dc094284eefe628a4e8e8931d2c4f7118aa72c7687cc0a8e3452",
+  "scene": "nominate",
+  "review": {
+    "heardOpening": "Dans l'événement, ouvre les responsables",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ajoute une personne",
+        "visibleSeconds": 1,
+        "visible": "Affichage du formulaire d'ajout d'un responsable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Choisis le poste",
+        "visibleSeconds": 3.2,
+        "visible": "Saisie de « Montage » dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "renseigne son nom et son email",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie du nom puis de l'adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Ajouter et envoyer le lien enregistre la nomination",
+        "visibleSeconds": 14.8,
+        "visible": "Validation par clic et apparition du responsable dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide et ton pédagogique constant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

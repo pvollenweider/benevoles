@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:32:42.387Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "promptSha256": "98ad904a9aefb3497e90e7ea24b5ff1474fc6d60910fa3c34352e9dd00e3d3e4",
+  "clipSha256": "dcfd6c29eec6cbeb1f71fbf64b0321c3e3cb716283ebf9365419ee33bf4887d3",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Enfin, une fiche sans email peut être sélectionnée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "une fiche sans email peut être sélectionnée",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection de la case René Meyer portant la mention « pas d'email » dans la modale d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "René devra être contacté autrement",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur le bouton « Envoyer 1 invitation » avec l'indication « 1 invité, 1 sans email »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés",
+        "visibleSeconds": 11.5,
+        "visible": "Le compteur des invités s'actualise à 13 et René Meyer apparaît en tête de liste avec la mention « pas d'email »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

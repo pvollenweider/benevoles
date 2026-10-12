@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:59:07.393Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "d0640de5be736575c7eadefc36219278aa09dd5f3a2921452ac38f16d8e9e4f8",
-  "clipSha256": "40741e55fb82f8c3b3528c5fee55b2eac3b4ce9410e02a45ab6e66f6f0e1dee4",
+  "reviewedAt": "2026-10-12T07:11:21.963Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "0046baa415cc739f7d652a4f8c13886647e90a6197de268151e266d1ae9f87f3",
+  "clipSha256": "f8000c76f52264943c6d59adea9648f54a5968c9f2d9b9402dea2474f9fa0550",
   "scene": "registered",
   "review": {
     "heardOpening": "Si la personne participe déjà",
     "checkpoints": [
       {
         "spokenSeconds": 2.2,
-        "spoken": "la liste des inscrits permet de reprendre ses coordonnées",
+        "spoken": "la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir",
         "visibleSeconds": 2,
-        "visible": "Champs préremplis avec les informations du bénévole sélectionné",
+        "visible": "Le formulaire préremplit automatiquement le nom Camille Rochat et son adresse email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Vérifie le poste proposé avant de confirmer",
-        "visibleSeconds": 7.5,
-        "visible": "Modification du champ Poste vers Démontage",
+        "spokenSeconds": 5.8,
+        "spoken": "Vérifiez le poste proposé avant de confirmer",
+        "visibleSeconds": 8.5,
+        "visible": "Le champ Poste est modifié d'Accueil vers Démontage",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.8,
+        "spokenSeconds": 7.1,
         "spoken": "avant de confirmer",
-        "visibleSeconds": 12.2,
-        "visible": "Validation via le bouton Ajouter et affichage du responsable",
+        "visibleSeconds": 12,
+        "visible": "Clic sur le bouton Ajouter et envoyer le lien, le responsable Démontage apparaît dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation pédagogique adaptée."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

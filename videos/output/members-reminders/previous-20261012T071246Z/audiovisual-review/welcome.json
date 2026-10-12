@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:32:21.979Z",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d",
+  "promptSha256": "4840d461f8dd73bb0666de55b346595ad5592df14dbc86f2b1576f8755a509ba",
+  "clipSha256": "0e659d8cba108c868ac46567a2bda99642926d6ddeaa4473e378d492ae5d61fc",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quelques membres ont été invités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé",
+        "visibleSeconds": 2.8,
+        "visible": "Le bandeau de titre s'estompe pour afficher la liste des invitations avec les membres sans réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Dans Invitations, regarde d'abord la date d'envoi et les statuts",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage des colonnes 'Invité le' et 'Statut' dans le tableau des invitations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Une ancienne invitation ne prouve pas que la personne a oublié de répondre",
+        "visibleSeconds": 15.8,
+        "visible": "Les dates d'envoi et les statuts 'Sans réponse' demeurent consultables dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bienveillante, en parfaite adéquation avec le ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

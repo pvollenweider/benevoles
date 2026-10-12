@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:04:44.325Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "1d2d62b22d9ea7722de99fd68c6d428234a5a86f22114394c19ca95d2d557e33",
+  "clipSha256": "8156aec19f3404bf56306f331c2655cb638acd420d911de0c8504c99c450f1fd",
+  "scene": "roster",
+  "review": {
+    "heardOpening": "Sur ce lien, la responsable de la Buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "la responsable de la Buvette retrouve uniquement les inscriptions de son poste",
+        "visibleSeconds": 0,
+        "visible": "Titre « Responsable - Buvette » et liste des inscriptions filtrée pour ce poste affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires",
+        "visibleSeconds": 0,
+        "visible": "En-têtes de blocs par créneau (« Buvette samedi 17 octobre 10:00–14:00 », etc.)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné",
+        "visibleSeconds": 0,
+        "visible": "Chaque bénévole est affiché avec son nom, adresse email et numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée",
+        "visibleSeconds": 0,
+        "visible": "Badges jaunes « Liste d'attente » visibles à droite de certains inscrits (Camille Rochat, Anna Bühler)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, posée et bien articulée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

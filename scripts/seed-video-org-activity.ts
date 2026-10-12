@@ -11,6 +11,10 @@ export async function seedVideoOrgActivity(db: PrismaClient) {
   if (existing && (existing.slug !== slug || existing.name !== "Formation — journal d'organisation")) throw new Error("Organization namespace is not the recorder-owned fixture")
   const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
   // Exact dedicated organization only; these synthetic accounts have no production counterpart.
+  // Export preflight creates a real event/registration; reset its children before members.
+  const events = await db.event.findMany({ where: { organizationId: id }, select: { id: true, slug: true } })
+  if (events.some(event => event.slug !== "atelier-journal-organisation")) throw new Error("Unexpected event in the recorder-owned journal fixture")
+  await db.event.deleteMany({ where: { organizationId: id, slug: "atelier-journal-organisation" } })
   await db.volunteer.deleteMany({ where: { organizationId: id } })
   await db.adminUser.deleteMany({ where: { organizationId: id } })
   await db.organization.deleteMany({ where: { id, slug } })

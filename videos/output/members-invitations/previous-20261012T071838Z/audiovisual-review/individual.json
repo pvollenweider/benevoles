@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:16.043Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "66c157c605b8f8dd7b337e0776ce19fd8c7861318817d3f5ed3d6f7714aa98b6",
+  "clipSha256": "c14acf0c85632ef1e808b1575855a5a5f4b8be7b01bbe2a38e8e370043c8d8be",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Cliquez sur Inviter des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cliquez sur Inviter des membres",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton Inviter des membres et ouverture de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "recherchez Aline, puis cochez seulement sa fiche",
+        "visibleSeconds": 3.2,
+        "visible": "Saisie de Aline dans la recherche puis sélection de la case d'Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Le compteur indique une personne sélectionnée",
+        "visibleSeconds": 7,
+        "visible": "Indication 1 sélectionnés en haut et bouton Envoyer 1 invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Vous pouvez ajouter un court mot d'accompagnement",
+        "visibleSeconds": 10.8,
+        "visible": "Saisie du message personnalisé dans le champ dédié terminée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "puis envoyez cette invitation",
+        "visibleSeconds": 17.4,
+        "visible": "Clic sur le bouton bleu Envoyer 1 invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.6,
+        "spoken": "La personne apparaît ensuite dans le tableau de l'événement",
+        "visibleSeconds": 19,
+        "visible": "Aline Mercier est ajoutée en tête du tableau des invités",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, calme et fluide, en parfaite adéquation avec le rythme des actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

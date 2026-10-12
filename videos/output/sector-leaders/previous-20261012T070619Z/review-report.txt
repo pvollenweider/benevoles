@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "SECTOR_LEADERS",
+  "status": "NOT READY",
+  "duration": 213.4,
+  "buildId": "RNDQIXzICnt5M_573dvDi",
+  "music": {
+    "voicedWindows": 203,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Premier rendu : validate, ASR11/11, musique,VTT,effets passent ; 66 images revues. Fin reste sur Lien introuvable pendant explication du remplacement. AV10/11 sans réserve, réserve remove confirmée.",
+  "sourceChanges": "record.ts : retour au formulaire Ajouter un responsable pendant la phrase de remplacement. Unique re-film du batch prévu ; audio cohérent batch11 conservé.",
+  "report": "videos/output/sector-leaders/review-report.txt",
+  "videoSha256": "d9325a1b6bbf487d09594244b258b221209f217ed5c0752275c8e9e217c06861"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

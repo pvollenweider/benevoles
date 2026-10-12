@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:25.705Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "8989cbed4d5978cbbb41f9b21ec12f27eef6505f9533950fa52198738dcc08db",
+  "clipSha256": "753a4539497ad04c799d4a8b9c13d8fdc99984b1d617f48ffbc3335132d34efa",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Nous sélectionnons maintenant deux personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Nous sélectionnons maintenant deux personnes",
+        "visibleSeconds": 0.8,
+        "visible": "Deux membres (Nicolas Renaud et Sébastien Perret) sont cochés dans la liste d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "et ajoutons un message commun",
+        "visibleSeconds": 2.4,
+        "visible": "Le texte « Merci pour ton aide ! » est saisi dans le champ Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Envoyer deux invitations",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le bouton bleu « Envoyer 2 invitations »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Dans la boîte de démonstration, chaque personne reçoit son propre email",
+        "visibleSeconds": 7.3,
+        "visible": "Affichage de la boîte Mailpit avec le premier courriel personnalisé pour Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "La remise à cette boîte de test",
+        "visibleSeconds": 15.6,
+        "visible": "Sélection du second courriel reçu adressé individuellement à Sébastien",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

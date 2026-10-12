@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:08.092Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "0046baa415cc739f7d652a4f8c13886647e90a6197de268151e266d1ae9f87f3",
+  "clipSha256": "fa7d78642d85d333a15fc50974ab5427636eb3ab870b52010af75e34a99fb15d",
+  "scene": "registered",
+  "review": {
+    "heardOpening": "Si la personne participe déjà",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir",
+        "visibleSeconds": 2,
+        "visible": "Le formulaire préremplit le nom Camille Rochat et son adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Vérifiez le poste proposé avant de confirmer",
+        "visibleSeconds": 8.3,
+        "visible": "Le poste Accueil est modifié pour Démontage dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "la nomination ne remplace pas une inscription",
+        "visibleSeconds": 12.3,
+        "visible": "Clic sur Ajouter et envoyer le lien puis Camille Rochat apparaît comme responsable du Démontage",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, accompagnant les actions de façon fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "MEMBERS_INVITATIONS",
+  "status": "NOT READY",
+  "duration": 234.04,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 224,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.4,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "60images et3images précises revues ; Tout sélectionner cliqué3.5s avant phrase6.1s,confirmé par images group-exact3.5/5/6.5s. Autres points lot10 corrigés,AV10/10 sans autre défaut,ASR10/10,validate,ancres,VTT,effets,musique passent,vrais emails et inscription Aline,Nicolas bon formulaire. Dates françaises,Frise,aucune adresse interdite/overlay ; Mailpit anglais connu.",
+  "sourceChanges": "Trois ancres groupe : Tout sélectionner ajoute,une personne déjà cochée peut,Avec Effacer repartez. Audio réutilisé,aucun re-film supplémentaire.",
+  "report": "videos/output/members-invitations/review-report.txt",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

@@ -1,78 +1,88 @@
 {
   "id": "SECTOR_LEADERS",
   "slug": "sector-leaders",
-  "validatedAt": "2026-10-06T07:58:26.188Z",
+  "validatedAt": "2026-10-12T07:10:10.391Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 221800,
+  "captureMs": 213800,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 17172,
-      "audioMs": 17166,
-      "driftMs": 6
+      "visualMs": 18406,
+      "audioMs": 18404,
+      "driftMs": 2
     },
     {
       "id": "nominate",
-      "visualMs": 19665,
-      "audioMs": 19665,
-      "driftMs": 0
+      "visualMs": 20443,
+      "audioMs": 20441,
+      "driftMs": 2
     },
     {
       "id": "registered",
-      "visualMs": 17416,
-      "audioMs": 17415,
-      "driftMs": 1
+      "visualMs": 16837,
+      "audioMs": 16835,
+      "driftMs": 2
     },
     {
       "id": "email",
-      "visualMs": 15555,
-      "audioMs": 15554,
-      "driftMs": 1
+      "visualMs": 14841,
+      "audioMs": 14837,
+      "driftMs": 4
     },
     {
       "id": "roster",
-      "visualMs": 18906,
-      "audioMs": 18898,
-      "driftMs": 8
+      "visualMs": 18782,
+      "audioMs": 18779,
+      "driftMs": 3
     },
     {
       "id": "mobile",
-      "visualMs": 18864,
-      "audioMs": 18862,
+      "visualMs": 18692,
+      "audioMs": 18690,
       "driftMs": 2
     },
     {
       "id": "scope",
-      "visualMs": 15342,
-      "audioMs": 15338,
-      "driftMs": 4
+      "visualMs": 13853,
+      "audioMs": 13852,
+      "driftMs": 1
     },
     {
       "id": "new-signup",
-      "visualMs": 31003,
-      "audioMs": 31001,
+      "visualMs": 28104,
+      "audioMs": 28102,
       "driftMs": 2
     },
     {
       "id": "notification",
-      "visualMs": 21007,
-      "audioMs": 21006,
-      "driftMs": 1
+      "visualMs": 19143,
+      "audioMs": 19141,
+      "driftMs": 2
     },
     {
       "id": "contact",
-      "visualMs": 17003,
-      "audioMs": 17001,
-      "driftMs": 2
+      "visualMs": 16047,
+      "audioMs": 16044,
+      "driftMs": 3
     },
     {
       "id": "remove",
-      "visualMs": 20375,
-      "audioMs": 20373,
-      "driftMs": 2
+      "visualMs": 19836,
+      "audioMs": 19835,
+      "driftMs": 1
     }
   ],
+  "anchorsChecked": 19,
+  "music": {
+    "voicedWindows": 204,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
   "issues": []
 }

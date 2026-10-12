@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:11:44.071Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:37.448Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "1fd816bdca1cb126f462024dcaa7686d77a6b79ae38a543719232ac03e25c717",
-  "clipSha256": "fe3f598c80a2fd96417f2f75dfeaccfaab39119c1b5180d689dc0c1cb88015f8",
+  "clipSha256": "84c7b3f11a72285cd6ff0324fea4aa4d9f89c2daf43501526cea9e8d0efed719",
   "scene": "group",
   "review": {
-    "heardOpening": "Pour un groupe, utilisez le filtre de tags",
+    "heardOpening": "Pour un groupe, utilisez le filtre de tags.",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil",
-        "visibleSeconds": 2.5,
-        "visible": "Sélection du tag accueil dans le filtre de la fenêtre modale",
+        "spokenSeconds": 0.8,
+        "spoken": "utilisez le filtre de tags",
+        "visibleSeconds": 2.2,
+        "visible": "Ouverture de la modale 'Inviter des membres' avec le filtre 'Tous les tags'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.1,
-        "spoken": "Tout sélectionner ajoute les membres visibles à votre sélection",
-        "visibleSeconds": 5.5,
-        "visible": "Clic sur Tout sélectionner et mise à jour du bouton à 17 invitations",
+        "spokenSeconds": 3.4,
+        "spoken": "retrouver les personnes de l'accueil",
+        "visibleSeconds": 3,
+        "visible": "Sélection du tag 'accueil' dans le filtre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "une personne déjà cochée peut rester sélectionnée après un changement de filtre",
-        "visibleSeconds": 12,
-        "visible": "Filtrage sur sécurité avec maintien des 17 membres sélectionnés",
+        "spokenSeconds": 6.2,
+        "spoken": "Tout sélectionner ajoute les membres visibles",
+        "visibleSeconds": 6,
+        "visible": "Clic sur 'Tout sélectionner', le bouton bleu passe à 'Envoyer 17 invitations'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "après un changement de filtre",
+        "visibleSeconds": 10.5,
+        "visible": "Changement du filtre vers 'sécurité', le compteur affiche toujours 17 sélectionnés",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
         "spoken": "Avec Effacer, repartez d'une sélection vide",
-        "visibleSeconds": 17.5,
-        "visible": "Clic sur Effacer réinitialisant le compteur à 0 sélectionné",
+        "visibleSeconds": 16.8,
+        "visible": "Clic sur 'Effacer', le compteur repasse à '0 sélectionné' et le bouton à 'Envoyer 0 invitation'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme bien synchronisé avec la démonstration."
+      "observation": "Voix off masculine fluide, claire et parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

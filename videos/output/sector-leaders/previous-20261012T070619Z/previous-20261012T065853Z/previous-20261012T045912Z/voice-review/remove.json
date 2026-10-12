@@ -1,0 +1,22 @@
+{
+  "reviewedAt": "2026-10-12T03:05:37.221Z",
+  "model": "gemini-3.8-flash",
+  "source": "two generated WAV excerpts, audio only",
+  "openingSha256": "942af50846d4dd37b5f27a45b0876da6f12d2dca801433fef5e4e250a097e256",
+  "chapterSha256": "4d6853f24fcd9a17c2a8b7312e4f9a45275d9b50843c7d64ca733401dcff836b",
+  "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241",
+  "review": {
+    "consistent": false,
+    "warm": true,
+    "observation": "Le second extrait commence avec la même voix masculine que l'extrait de référence (chaleureuse et dynamique), mais change nettement de locuteur vers 11,8 secondes pour une voix masculine différente, plus âgée, plus grave et au timbre plus posé.",
+    "changes": [
+      {
+        "seconds": 11.8,
+        "words": "Vous pouvez ensuite désigner",
+        "observation": "Changement net d'identité vocale : apparition d'une voix masculine plus mature, plus grave et avec un grain différent."
+      }
+    ],
+    "uncertainty": "aucune"
+  },
+  "note": "Automated listening observation; does not replace the original audiovisual report or prove human listening validation"
+}

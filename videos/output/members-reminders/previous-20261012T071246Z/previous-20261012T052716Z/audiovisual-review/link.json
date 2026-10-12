@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:24:38.370Z",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5",
+  "promptSha256": "098877742f200f530075ffdffcd425a741efb62887012dda6dfcdd84969db141",
+  "clipSha256": "6387065b03332f0395a542adb4a5c9983400a60f5cb2c17b711f6e97ad846a52",
+  "scene": "link",
+  "review": {
+    "heardOpening": "Ouvrons l'email reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons l'email reçu dans la boîte de démonstration.",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la boîte Mailpit affichant l'e-mail adressé à Anna Bühler.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Il propose à nouveau le lien d'invitation.",
+        "visibleSeconds": 3,
+        "visible": "Bouton bleu « Voir les missions et m'inscrire » bien visible dans le corps du message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique.",
+        "visibleSeconds": 6,
+        "visible": "Écran stable sur l'e-mail de relance illustrant l'explication.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, débit fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

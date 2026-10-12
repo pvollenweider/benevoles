@@ -1,7 +1,7 @@
 {
   "id": "MEMBERS_INVITATIONS",
   "slug": "members-invitations",
-  "validatedAt": "2026-10-07T05:10:57.031Z",
+  "validatedAt": "2026-10-12T07:24:32.459Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
@@ -9,51 +9,51 @@
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 24218,
+      "visualMs": 24217,
       "audioMs": 24216,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "test",
-      "visualMs": 20555,
+      "visualMs": 20553,
       "audioMs": 20551,
-      "driftMs": 4
+      "driftMs": 2
     },
     {
       "id": "individual",
-      "visualMs": 22679,
+      "visualMs": 22678,
       "audioMs": 22677,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "group",
-      "visualMs": 22140,
+      "visualMs": 22141,
       "audioMs": 22140,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "send",
-      "visualMs": 20374,
+      "visualMs": 20377,
       "audioMs": 20375,
-      "driftMs": -1
-    },
-    {
-      "id": "personal-link",
-      "visualMs": 24411,
-      "audioMs": 24409,
       "driftMs": 2
     },
     {
+      "id": "personal-link",
+      "visualMs": 24410,
+      "audioMs": 24409,
+      "driftMs": 1
+    },
+    {
       "id": "reserved",
-      "visualMs": 24840,
+      "visualMs": 24837,
       "audioMs": 24836,
-      "driftMs": 4
+      "driftMs": 1
     },
     {
       "id": "status",
-      "visualMs": 21548,
+      "visualMs": 21549,
       "audioMs": 21547,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "existing",
@@ -63,10 +63,20 @@
     },
     {
       "id": "no-email",
-      "visualMs": 23891,
+      "visualMs": 23889,
       "audioMs": 23889,
-      "driftMs": 2
+      "driftMs": 0
     }
   ],
+  "anchorsChecked": 14,
+  "music": {
+    "voicedWindows": 224,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.4,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
   "issues": []
 }

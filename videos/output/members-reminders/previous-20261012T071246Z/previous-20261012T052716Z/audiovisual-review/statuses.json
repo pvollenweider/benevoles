@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:24:33.726Z",
+  "videoSha256": "107015ebf7f301d8dc614d27787bccc74e963dea748bc4eeaeded161ff63a3a5",
+  "promptSha256": "fde43b2c713e15d88bdbb83c55e87007119d2c919e3698f9a3ef712868882299",
+  "clipSha256": "acc36f8689dedf01b0ddce7ee47dd76a19d400b109a1a2895771eafa4f5bf75e",
+  "scene": "statuses",
+  "review": {
+    "heardOpening": "Sans créneau confirmé ne signifie pas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "une personne peut être en liste d'attente",
+        "visibleSeconds": 2.2,
+        "visible": "Filtre sur « Anna » affichant Anna Bühler avec le statut « Liste d'attente »",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "recevoir une offre",
+        "visibleSeconds": 7,
+        "visible": "Filtre sur « Tom » affichant Tom Rossier avec le statut « Place proposée »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "attendre la validation de l'organisateur",
+        "visibleSeconds": 12.3,
+        "visible": "Filtre sur « Lucas » affichant Lucas Girard avec le statut « Demande à traiter » et les boutons Accepter/Refuser",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Une autre a déjà une participation confirmée",
+        "visibleSeconds": 16,
+        "visible": "Filtre sur « Camille » affichant Camille Rochat avec plusieurs créneaux confirmés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, lorsque la voix mentionne la liste d'attente, l'écran est déjà en train de basculer sur Tom (« Place proposée »), le profil d'Anna en liste d'attente ayant été montré en avance dès 00:02."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

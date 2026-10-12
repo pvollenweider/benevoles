@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:35.403Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
+  "clipSha256": "f84e7a75307335a0d518f11656164d5d7ca69290e70770b7b708d702f6c5b715",
+  "scene": "new-signup",
+  "review": {
+    "heardOpening": "Pour voir comment une équipe évolue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "inscrivons une nouvelle personne à la Buvette du dimanche",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection du créneau Buvette du dimanche 18 octobre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis continue vers le formulaire",
+        "visibleSeconds": 6.2,
+        "visible": "Clic sur le bouton Continuer et chargement de la page Tes informations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie successive de Nora Perrin, de l'email et du téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Elle choisit une taille, accepte la convention et l'utilisation de ses données",
+        "visibleSeconds": 15.5,
+        "visible": "Sélection de la taille M et cochage des deux cases à cocher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi",
+        "visibleSeconds": 21,
+        "visible": "Aucune vérification visible : la page reste immobile en bas de formulaire",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 24,
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée",
+        "visibleSeconds": 25,
+        "visible": "Clic sur Confirmer mon inscription puis affichage de l'écran Inscription confirmée !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:21, la voix annonce la vérification des coordonnées et du créneau choisi, mais l'écran reste statique au niveau du bouton de confirmation sans remonter afficher ces éléments."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

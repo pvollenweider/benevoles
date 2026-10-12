@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:11.558Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "39ce652defb685e6ad5cb10709b45ab64e39346715651c8166c679011589a4e3",
+  "clipSha256": "199415a57336f6edd6ea3e737ee47bc75408c33f4ceb9238c36996b5424a4747",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Votre fête est prête",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Dans Invitations, vous pouvez contacter une personne ou un groupe",
+        "visibleSeconds": 5.3,
+        "visible": "Page Invitations affichée avec le bouton '+ Inviter des membres' et les options de contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.3,
+        "spoken": "Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé",
+        "visibleSeconds": 15.3,
+        "visible": "Compteurs visibles en haut de page ('9 Invités', '8 Inscrits', '0 Pas disponible', '1 Sans réponse')",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.7,
+        "spoken": "Voyons tout le parcours, de l'envoi au choix du bénévole",
+        "visibleSeconds": 20.7,
+        "visible": "Vue d'ensemble de la liste des invitations et du tableau des membres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec la présentation générale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,1168 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1,
+    "endMs": 18407,
+    "sentences": [
+      {
+        "text": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
+        "startMs": 232,
+        "endMs": 4049,
+        "method": "silence",
+        "absoluteStartMs": 233
+      },
+      {
+        "text": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
+        "startMs": 4285,
+        "endMs": 9210,
+        "method": "silence",
+        "absoluteStartMs": 4286
+      },
+      {
+        "text": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
+        "startMs": 9760,
+        "endMs": 14744,
+        "method": "silence",
+        "absoluteStartMs": 9761
+      },
+      {
+        "text": "Aucun accès à toute l'administration n'est nécessaire.",
+        "startMs": 15340,
+        "endMs": 17886,
+        "method": "silence",
+        "absoluteStartMs": 15341
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "nominate",
+    "startMs": 18860,
+    "endMs": 39302,
+    "sentences": [
+      {
+        "text": "Dans l'événement, ouvrez les responsables et ajoutez une personne.",
+        "startMs": 521,
+        "endMs": 4710,
+        "method": "silence",
+        "absoluteStartMs": 19381
+      },
+      {
+        "text": "Choisissez le poste, puis renseignez son nom et son email.",
+        "startMs": 5376,
+        "endMs": 6308,
+        "method": "silence",
+        "absoluteStartMs": 24236
+      },
+      {
+        "text": "Vérifiez bien cette adresse :",
+        "startMs": 6881,
+        "endMs": 8518,
+        "method": "silence",
+        "absoluteStartMs": 25741
+      },
+      {
+        "text": "c'est là que son lien sera envoyé.",
+        "startMs": 8938,
+        "endMs": 11700,
+        "method": "silence",
+        "absoluteStartMs": 27798
+      },
+      {
+        "text": "Vous pouvez désigner quelqu'un qui n'est pas lui-même inscrit à un créneau.",
+        "startMs": 12676,
+        "endMs": 15407,
+        "method": "silence",
+        "absoluteStartMs": 31536
+      },
+      {
+        "text": "Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+        "startMs": 16525,
+        "endMs": 20000,
+        "method": "silence",
+        "absoluteStartMs": 35385
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "nominate",
+        "phrase": "Choisissez le poste, puis renseignez",
+        "startMs": 5376,
+        "endMs": 6308,
+        "cueMs": 24239
+      },
+      {
+        "segmentId": "nominate",
+        "phrase": "Ajouter et envoyer le lien",
+        "startMs": 16525,
+        "endMs": 20000,
+        "cueMs": 35388
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 19328
+      },
+      {
+        "kind": "click",
+        "atMs": 24760
+      },
+      {
+        "kind": "key",
+        "atMs": 25069
+      },
+      {
+        "kind": "key",
+        "atMs": 25167
+      },
+      {
+        "kind": "key",
+        "atMs": 25267
+      },
+      {
+        "kind": "key",
+        "atMs": 25365
+      },
+      {
+        "kind": "key",
+        "atMs": 25463
+      },
+      {
+        "kind": "key",
+        "atMs": 25562
+      },
+      {
+        "kind": "key",
+        "atMs": 25661
+      },
+      {
+        "kind": "click",
+        "atMs": 26444
+      },
+      {
+        "kind": "key",
+        "atMs": 26752
+      },
+      {
+        "kind": "key",
+        "atMs": 26849
+      },
+      {
+        "kind": "key",
+        "atMs": 26947
+      },
+      {
+        "kind": "key",
+        "atMs": 27045
+      },
+      {
+        "kind": "key",
+        "atMs": 27144
+      },
+      {
+        "kind": "key",
+        "atMs": 27241
+      },
+      {
+        "kind": "key",
+        "atMs": 27344
+      },
+      {
+        "kind": "key",
+        "atMs": 27446
+      },
+      {
+        "kind": "key",
+        "atMs": 27547
+      },
+      {
+        "kind": "key",
+        "atMs": 27650
+      },
+      {
+        "kind": "key",
+        "atMs": 27754
+      },
+      {
+        "kind": "key",
+        "atMs": 27856
+      },
+      {
+        "kind": "key",
+        "atMs": 27954
+      },
+      {
+        "kind": "click",
+        "atMs": 28758
+      },
+      {
+        "kind": "key",
+        "atMs": 29066
+      },
+      {
+        "kind": "key",
+        "atMs": 29165
+      },
+      {
+        "kind": "key",
+        "atMs": 29264
+      },
+      {
+        "kind": "key",
+        "atMs": 29363
+      },
+      {
+        "kind": "key",
+        "atMs": 29461
+      },
+      {
+        "kind": "key",
+        "atMs": 29561
+      },
+      {
+        "kind": "key",
+        "atMs": 29660
+      },
+      {
+        "kind": "key",
+        "atMs": 29763
+      },
+      {
+        "kind": "key",
+        "atMs": 29866
+      },
+      {
+        "kind": "key",
+        "atMs": 29971
+      },
+      {
+        "kind": "key",
+        "atMs": 30072
+      },
+      {
+        "kind": "key",
+        "atMs": 30175
+      },
+      {
+        "kind": "key",
+        "atMs": 30274
+      },
+      {
+        "kind": "key",
+        "atMs": 30378
+      },
+      {
+        "kind": "key",
+        "atMs": 30481
+      },
+      {
+        "kind": "key",
+        "atMs": 30585
+      },
+      {
+        "kind": "key",
+        "atMs": 30689
+      },
+      {
+        "kind": "key",
+        "atMs": 30791
+      },
+      {
+        "kind": "key",
+        "atMs": 30889
+      },
+      {
+        "kind": "key",
+        "atMs": 30988
+      },
+      {
+        "kind": "key",
+        "atMs": 31087
+      },
+      {
+        "kind": "key",
+        "atMs": 31186
+      },
+      {
+        "kind": "key",
+        "atMs": 31288
+      },
+      {
+        "kind": "key",
+        "atMs": 31388
+      },
+      {
+        "kind": "key",
+        "atMs": 31493
+      },
+      {
+        "kind": "click",
+        "atMs": 35860
+      }
+    ]
+  },
+  {
+    "chapter": "registered",
+    "startMs": 39755,
+    "endMs": 56592,
+    "sentences": [
+      {
+        "text": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir.",
+        "startMs": 380,
+        "endMs": 5020,
+        "method": "silence",
+        "absoluteStartMs": 40135
+      },
+      {
+        "text": "Vérifiez le poste proposé avant de confirmer.",
+        "startMs": 5866,
+        "endMs": 7740,
+        "method": "silence",
+        "absoluteStartMs": 45621
+      },
+      {
+        "text": "Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes :",
+        "startMs": 8392,
+        "endMs": 12197,
+        "method": "silence",
+        "absoluteStartMs": 48147
+      },
+      {
+        "text": "la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+        "startMs": 12546,
+        "endMs": 16275,
+        "method": "silence",
+        "absoluteStartMs": 52301
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "registered",
+        "phrase": "Être responsable d'un poste et",
+        "startMs": 8392,
+        "endMs": 12197,
+        "cueMs": 48149
+      },
+      {
+        "segmentId": "registered",
+        "phrase": "la nomination ne remplace pas",
+        "startMs": 12546,
+        "endMs": 16275,
+        "cueMs": 52305
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 40243
+      },
+      {
+        "kind": "click",
+        "atMs": 41026
+      },
+      {
+        "kind": "click",
+        "atMs": 48642
+      },
+      {
+        "kind": "click",
+        "atMs": 52775
+      }
+    ]
+  },
+  {
+    "chapter": "email",
+    "startMs": 57045,
+    "endMs": 71883,
+    "sentences": [
+      {
+        "text": "Voici l'email reçu.",
+        "startMs": 541,
+        "endMs": 1345,
+        "method": "silence",
+        "absoluteStartMs": 57586
+      },
+      {
+        "text": "Le responsable ouvre son lien personnel directement, sans créer de compte ni choisir de mot de passe.",
+        "startMs": 1661,
+        "endMs": 6480,
+        "method": "silence",
+        "absoluteStartMs": 58706
+      },
+      {
+        "text": "Ce lien est confidentiel :",
+        "startMs": 7213,
+        "endMs": 8313,
+        "method": "silence",
+        "absoluteStartMs": 64258
+      },
+      {
+        "text": "il donne accès aux coordonnées de l'équipe.",
+        "startMs": 8647,
+        "endMs": 9930,
+        "method": "silence",
+        "absoluteStartMs": 65692
+      },
+      {
+        "text": "On le garde pour soi, et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+        "startMs": 10510,
+        "endMs": 14388,
+        "method": "silence",
+        "absoluteStartMs": 67555
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 59218
+      }
+    ]
+  },
+  {
+    "chapter": "roster",
+    "startMs": 72336,
+    "endMs": 91118,
+    "sentences": [
+      {
+        "text": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste.",
+        "startMs": 454,
+        "endMs": 4257,
+        "method": "silence",
+        "absoluteStartMs": 72790
+      },
+      {
+        "text": "Les personnes sont regroupées par créneau, avec la date et les horaires.",
+        "startMs": 4965,
+        "endMs": 7751,
+        "method": "silence",
+        "absoluteStartMs": 77301
+      },
+      {
+        "text": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel.",
+        "startMs": 8463,
+        "endMs": 13505,
+        "method": "silence",
+        "absoluteStartMs": 80799
+      },
+      {
+        "text": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+        "startMs": 14183,
+        "endMs": 18254,
+        "method": "silence",
+        "absoluteStartMs": 86519
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "roster",
+        "phrase": "Chaque ligne donne le nom",
+        "startMs": 8463,
+        "endMs": 13505,
+        "cueMs": 80801
+      },
+      {
+        "segmentId": "roster",
+        "phrase": "La mention Liste d'attente distingue",
+        "startMs": 14183,
+        "endMs": 18254,
+        "cueMs": 86520
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "mobile",
+    "startMs": 91572,
+    "endMs": 110265,
+    "sentences": [
+      {
+        "text": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
+        "startMs": 528,
+        "endMs": 3217,
+        "method": "silence",
+        "absoluteStartMs": 92100
+      },
+      {
+        "text": "Les liens email et téléphone permettent de préparer un message ou un appel avec les applications du téléphone.",
+        "startMs": 3899,
+        "endMs": 8745,
+        "method": "silence",
+        "absoluteStartMs": 95471
+      },
+      {
+        "text": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires.",
+        "startMs": 9292,
+        "endMs": 12534,
+        "method": "silence",
+        "absoluteStartMs": 100864
+      },
+      {
+        "text": "Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+        "startMs": 13315,
+        "endMs": 18308,
+        "method": "silence",
+        "absoluteStartMs": 104887
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "mobile",
+        "phrase": "Les liens email et téléphone",
+        "startMs": 3899,
+        "endMs": 8745,
+        "cueMs": 95473
+      },
+      {
+        "segmentId": "mobile",
+        "phrase": "On peut ainsi retrouver l'équipe",
+        "startMs": 9292,
+        "endMs": 12534,
+        "cueMs": 100866
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "scope",
+    "startMs": 110717,
+    "endMs": 124570,
+    "sentences": [
+      {
+        "text": "Cet espace est en lecture seule :",
+        "startMs": 384,
+        "endMs": 2050,
+        "method": "silence",
+        "absoluteStartMs": 111101
+      },
+      {
+        "text": "le responsable ne modifie pas les créneaux et ne retire pas les inscriptions.",
+        "startMs": 2640,
+        "endMs": 5889,
+        "method": "silence",
+        "absoluteStartMs": 113357
+      },
+      {
+        "text": "Il ne voit pas les équipes des autres postes.",
+        "startMs": 6676,
+        "endMs": 8184,
+        "method": "silence",
+        "absoluteStartMs": 117393
+      },
+      {
+        "text": "Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+        "startMs": 8520,
+        "endMs": 13487,
+        "method": "silence",
+        "absoluteStartMs": 119237
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "scope",
+        "phrase": "Pour une modification du planning",
+        "startMs": 8520,
+        "endMs": 13487,
+        "cueMs": 119239
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "new-signup",
+    "startMs": 125023,
+    "endMs": 153125,
+    "sentences": [
+      {
+        "text": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche.",
+        "startMs": 383,
+        "endMs": 5658,
+        "method": "silence",
+        "absoluteStartMs": 125406
+      },
+      {
+        "text": "Nora choisit ce créneau, puis continue vers le formulaire.",
+        "startMs": 5948,
+        "endMs": 7174,
+        "method": "silence",
+        "absoluteStartMs": 130971
+      },
+      {
+        "text": "Elle renseigne son prénom et son nom, son adresse email et son téléphone.",
+        "startMs": 7861,
+        "endMs": 11789,
+        "method": "silence",
+        "absoluteStartMs": 132884
+      },
+      {
+        "text": "La taille du t-shirt est obligatoire pour cet événement.",
+        "startMs": 12051,
+        "endMs": 13960,
+        "method": "silence",
+        "absoluteStartMs": 137074
+      },
+      {
+        "text": "Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation.",
+        "startMs": 14507,
+        "endMs": 20086,
+        "method": "silence",
+        "absoluteStartMs": 139530
+      },
+      {
+        "text": "Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi.",
+        "startMs": 20764,
+        "endMs": 23842,
+        "method": "silence",
+        "absoluteStartMs": 145787
+      },
+      {
+        "text": "Nous confirmons maintenant :",
+        "startMs": 24470,
+        "endMs": 25288,
+        "method": "silence",
+        "absoluteStartMs": 149493
+      },
+      {
+        "text": "la page indique que son inscription est enregistrée.",
+        "startMs": 25850,
+        "endMs": 27773,
+        "method": "silence",
+        "absoluteStartMs": 150873
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "new-signup",
+        "phrase": "Nora choisit ce créneau, puis",
+        "startMs": 5948,
+        "endMs": 7174,
+        "cueMs": 130972
+      },
+      {
+        "segmentId": "new-signup",
+        "phrase": "Elle renseigne son prénom et",
+        "startMs": 7861,
+        "endMs": 11789,
+        "cueMs": 132885
+      },
+      {
+        "segmentId": "new-signup",
+        "phrase": "La taille du t-shirt est",
+        "startMs": 12051,
+        "endMs": 13960,
+        "cueMs": 137076
+      },
+      {
+        "segmentId": "new-signup",
+        "phrase": "Elle choisit une taille, accepte",
+        "startMs": 14507,
+        "endMs": 20086,
+        "cueMs": 142540
+      },
+      {
+        "segmentId": "new-signup",
+        "phrase": "Avant de confirmer, elle vérifie",
+        "startMs": 20764,
+        "endMs": 23842,
+        "cueMs": 145789
+      },
+      {
+        "segmentId": "new-signup",
+        "phrase": "Nous confirmons maintenant",
+        "startMs": 24470,
+        "endMs": 25288,
+        "cueMs": 149496
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 126682
+      },
+      {
+        "kind": "click",
+        "atMs": 131463
+      },
+      {
+        "kind": "click",
+        "atMs": 133382
+      },
+      {
+        "kind": "key",
+        "atMs": 133689
+      },
+      {
+        "kind": "key",
+        "atMs": 133787
+      },
+      {
+        "kind": "key",
+        "atMs": 133887
+      },
+      {
+        "kind": "key",
+        "atMs": 133986
+      },
+      {
+        "kind": "click",
+        "atMs": 134764
+      },
+      {
+        "kind": "key",
+        "atMs": 135070
+      },
+      {
+        "kind": "key",
+        "atMs": 135170
+      },
+      {
+        "kind": "key",
+        "atMs": 135269
+      },
+      {
+        "kind": "key",
+        "atMs": 135369
+      },
+      {
+        "kind": "key",
+        "atMs": 135467
+      },
+      {
+        "kind": "key",
+        "atMs": 135567
+      },
+      {
+        "kind": "click",
+        "atMs": 137580
+      },
+      {
+        "kind": "key",
+        "atMs": 137887
+      },
+      {
+        "kind": "key",
+        "atMs": 137986
+      },
+      {
+        "kind": "key",
+        "atMs": 138086
+      },
+      {
+        "kind": "key",
+        "atMs": 138185
+      },
+      {
+        "kind": "key",
+        "atMs": 138284
+      },
+      {
+        "kind": "key",
+        "atMs": 138383
+      },
+      {
+        "kind": "key",
+        "atMs": 138481
+      },
+      {
+        "kind": "key",
+        "atMs": 138580
+      },
+      {
+        "kind": "key",
+        "atMs": 138678
+      },
+      {
+        "kind": "key",
+        "atMs": 138778
+      },
+      {
+        "kind": "key",
+        "atMs": 138879
+      },
+      {
+        "kind": "key",
+        "atMs": 138983
+      },
+      {
+        "kind": "key",
+        "atMs": 139088
+      },
+      {
+        "kind": "key",
+        "atMs": 139192
+      },
+      {
+        "kind": "key",
+        "atMs": 139296
+      },
+      {
+        "kind": "key",
+        "atMs": 139400
+      },
+      {
+        "kind": "key",
+        "atMs": 139503
+      },
+      {
+        "kind": "key",
+        "atMs": 139602
+      },
+      {
+        "kind": "key",
+        "atMs": 139706
+      },
+      {
+        "kind": "key",
+        "atMs": 139807
+      },
+      {
+        "kind": "key",
+        "atMs": 139910
+      },
+      {
+        "kind": "click",
+        "atMs": 140713
+      },
+      {
+        "kind": "key",
+        "atMs": 141020
+      },
+      {
+        "kind": "key",
+        "atMs": 141119
+      },
+      {
+        "kind": "key",
+        "atMs": 141218
+      },
+      {
+        "kind": "key",
+        "atMs": 141318
+      },
+      {
+        "kind": "key",
+        "atMs": 141417
+      },
+      {
+        "kind": "key",
+        "atMs": 141517
+      },
+      {
+        "kind": "key",
+        "atMs": 141620
+      },
+      {
+        "kind": "key",
+        "atMs": 141724
+      },
+      {
+        "kind": "key",
+        "atMs": 141828
+      },
+      {
+        "kind": "key",
+        "atMs": 141930
+      },
+      {
+        "kind": "key",
+        "atMs": 142035
+      },
+      {
+        "kind": "key",
+        "atMs": 142137
+      },
+      {
+        "kind": "key",
+        "atMs": 142244
+      },
+      {
+        "kind": "click",
+        "atMs": 143013
+      },
+      {
+        "kind": "click",
+        "atMs": 143796
+      },
+      {
+        "kind": "click",
+        "atMs": 144580
+      },
+      {
+        "kind": "click",
+        "atMs": 149962
+      }
+    ]
+  },
+  {
+    "chapter": "notification",
+    "startMs": 156026,
+    "endMs": 175168,
+    "sentences": [
+      {
+        "text": "Côté responsable, voici l'email réellement reçu à la suite de cette inscription.",
+        "startMs": 329,
+        "endMs": 4059,
+        "method": "silence",
+        "absoluteStartMs": 156355
+      },
+      {
+        "text": "Il indique le nom de Nora et le créneau de la Buvette du dimanche.",
+        "startMs": 4566,
+        "endMs": 7381,
+        "method": "silence",
+        "absoluteStartMs": 160592
+      },
+      {
+        "text": "Le lien permet de retrouver l'équipe complète.",
+        "startMs": 8185,
+        "endMs": 9933,
+        "method": "silence",
+        "absoluteStartMs": 164211
+      },
+      {
+        "text": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées.",
+        "startMs": 10708,
+        "endMs": 14422,
+        "method": "silence",
+        "absoluteStartMs": 166734
+      },
+      {
+        "text": "La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+        "startMs": 15079,
+        "endMs": 18786,
+        "method": "silence",
+        "absoluteStartMs": 171105
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "notification",
+        "phrase": "En rouvrant la page, Nora",
+        "startMs": 10708,
+        "endMs": 14422,
+        "cueMs": 166734
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "contact",
+    "startMs": 175620,
+    "endMs": 191671,
+    "sentences": [
+      {
+        "text": "Attention à une autre distinction :",
+        "startMs": 360,
+        "endMs": 1983,
+        "method": "silence",
+        "absoluteStartMs": 175980
+      },
+      {
+        "text": "le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place.",
+        "startMs": 2136,
+        "endMs": 6645,
+        "method": "silence",
+        "absoluteStartMs": 177756
+      },
+      {
+        "text": "Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact.",
+        "startMs": 7326,
+        "endMs": 10846,
+        "method": "silence",
+        "absoluteStartMs": 182946
+      },
+      {
+        "text": "L'organisateur renseigne ce contact séparément dans le créneau, si c'est bien la personne à appeler.",
+        "startMs": 11138,
+        "endMs": 15711,
+        "method": "silence",
+        "absoluteStartMs": 186758
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 177260
+      },
+      {
+        "kind": "click",
+        "atMs": 178126
+      },
+      {
+        "kind": "key",
+        "atMs": 178533
+      },
+      {
+        "kind": "key",
+        "atMs": 178632
+      },
+      {
+        "kind": "key",
+        "atMs": 178731
+      },
+      {
+        "kind": "key",
+        "atMs": 178830
+      },
+      {
+        "kind": "key",
+        "atMs": 178929
+      },
+      {
+        "kind": "key",
+        "atMs": 179030
+      },
+      {
+        "kind": "key",
+        "atMs": 179135
+      },
+      {
+        "kind": "key",
+        "atMs": 179237
+      },
+      {
+        "kind": "key",
+        "atMs": 179336
+      },
+      {
+        "kind": "key",
+        "atMs": 179435
+      },
+      {
+        "kind": "key",
+        "atMs": 179533
+      },
+      {
+        "kind": "key",
+        "atMs": 179633
+      },
+      {
+        "kind": "click",
+        "atMs": 180410
+      },
+      {
+        "kind": "key",
+        "atMs": 180716
+      },
+      {
+        "kind": "key",
+        "atMs": 180815
+      },
+      {
+        "kind": "key",
+        "atMs": 180913
+      },
+      {
+        "kind": "key",
+        "atMs": 181012
+      },
+      {
+        "kind": "key",
+        "atMs": 181109
+      },
+      {
+        "kind": "key",
+        "atMs": 181207
+      },
+      {
+        "kind": "key",
+        "atMs": 181306
+      },
+      {
+        "kind": "key",
+        "atMs": 181405
+      },
+      {
+        "kind": "key",
+        "atMs": 181505
+      },
+      {
+        "kind": "key",
+        "atMs": 181605
+      },
+      {
+        "kind": "key",
+        "atMs": 181723
+      },
+      {
+        "kind": "key",
+        "atMs": 181825
+      },
+      {
+        "kind": "key",
+        "atMs": 181922
+      }
+    ]
+  },
+  {
+    "chapter": "remove",
+    "startMs": 192126,
+    "endMs": 211965,
+    "sentences": [
+      {
+        "text": "Quand la responsabilité change, retirez la personne de ce poste et confirmez.",
+        "startMs": 346,
+        "endMs": 4002,
+        "method": "silence",
+        "absoluteStartMs": 192472
+      },
+      {
+        "text": "Son ancien lien ne donne alors plus accès à cette équipe.",
+        "startMs": 4434,
+        "endMs": 7074,
+        "method": "silence",
+        "absoluteStartMs": 196560
+      },
+      {
+        "text": "Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole.",
+        "startMs": 7199,
+        "endMs": 11068,
+        "method": "silence",
+        "absoluteStartMs": 199325
+      },
+      {
+        "text": "Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien :",
+        "startMs": 11595,
+        "endMs": 15957,
+        "method": "silence",
+        "absoluteStartMs": 203721
+      },
+      {
+        "text": "chacun dispose du bon accès, au bon moment.",
+        "startMs": 16503,
+        "endMs": 19502,
+        "method": "silence",
+        "absoluteStartMs": 208629
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "remove",
+        "phrase": "Quand la responsabilité change, retirez",
+        "startMs": 346,
+        "endMs": 4002,
+        "cueMs": 194539
+      },
+      {
+        "segmentId": "remove",
+        "phrase": "Son ancien lien ne donne",
+        "startMs": 4434,
+        "endMs": 7074,
+        "cueMs": 196561
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 193944
+      },
+      {
+        "kind": "click",
+        "atMs": 195024
+      }
+    ]
+  }
+]

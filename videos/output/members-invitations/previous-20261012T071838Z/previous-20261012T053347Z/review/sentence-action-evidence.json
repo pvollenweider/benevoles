@@ -1,0 +1,1212 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 0,
+    "endMs": 24217,
+    "sentences": [
+      {
+        "text": "Votre fête est prête, et vous souhaitez proposer des créneaux aux membres de votre association ?",
+        "startMs": 317,
+        "endMs": 5581,
+        "method": "silence",
+        "absoluteStartMs": 317
+      },
+      {
+        "text": "Dans Invitations, vous pouvez contacter une personne ou un groupe.",
+        "startMs": 5716,
+        "endMs": 9106,
+        "method": "silence",
+        "absoluteStartMs": 5716
+      },
+      {
+        "text": "Une invitation n'est pas une inscription :",
+        "startMs": 9916,
+        "endMs": 12087,
+        "method": "silence",
+        "absoluteStartMs": 9916
+      },
+      {
+        "text": "chacun choisit ensuite sa participation.",
+        "startMs": 12233,
+        "endMs": 14160,
+        "method": "silence",
+        "absoluteStartMs": 12233
+      },
+      {
+        "text": "Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé.",
+        "startMs": 15365,
+        "endMs": 19326,
+        "method": "silence",
+        "absoluteStartMs": 15365
+      },
+      {
+        "text": "Voyons tout le parcours, de l'envoi au choix du bénévole.",
+        "startMs": 20356,
+        "endMs": 23556,
+        "method": "silence",
+        "absoluteStartMs": 20356
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "test",
+    "startMs": 24671,
+    "endMs": 45224,
+    "sentences": [
+      {
+        "text": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'email.",
+        "startMs": 664,
+        "endMs": 3616,
+        "method": "silence",
+        "absoluteStartMs": 25335
+      },
+      {
+        "text": "Indiquez une adresse que vous utilisez pour vérifier les messages, puis envoyez le test.",
+        "startMs": 4584,
+        "endMs": 8822,
+        "method": "silence",
+        "absoluteStartMs": 29255
+      },
+      {
+        "text": "Nous ouvrons ici le message reçu dans notre boîte de démonstration.",
+        "startMs": 9838,
+        "endMs": 12528,
+        "method": "silence",
+        "absoluteStartMs": 34509
+      },
+      {
+        "text": "Cela permet de regarder la présentation.",
+        "startMs": 13310,
+        "endMs": 15035,
+        "method": "silence",
+        "absoluteStartMs": 37981
+      },
+      {
+        "text": "Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
+        "startMs": 16050,
+        "endMs": 20151,
+        "method": "silence",
+        "absoluteStartMs": 40721
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "test",
+        "phrase": "Cela permet de regarder la",
+        "startMs": 13310,
+        "endMs": 15035,
+        "cueMs": 37984
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 25148
+      },
+      {
+        "kind": "click",
+        "atMs": 25964
+      },
+      {
+        "kind": "key",
+        "atMs": 26272
+      },
+      {
+        "kind": "key",
+        "atMs": 26370
+      },
+      {
+        "kind": "key",
+        "atMs": 26467
+      },
+      {
+        "kind": "key",
+        "atMs": 26565
+      },
+      {
+        "kind": "key",
+        "atMs": 26664
+      },
+      {
+        "kind": "key",
+        "atMs": 26763
+      },
+      {
+        "kind": "key",
+        "atMs": 26862
+      },
+      {
+        "kind": "key",
+        "atMs": 26961
+      },
+      {
+        "kind": "key",
+        "atMs": 27059
+      },
+      {
+        "kind": "key",
+        "atMs": 27158
+      },
+      {
+        "kind": "key",
+        "atMs": 27256
+      },
+      {
+        "kind": "key",
+        "atMs": 27355
+      },
+      {
+        "kind": "key",
+        "atMs": 27454
+      },
+      {
+        "kind": "key",
+        "atMs": 27557
+      },
+      {
+        "kind": "key",
+        "atMs": 27657
+      },
+      {
+        "kind": "key",
+        "atMs": 27762
+      },
+      {
+        "kind": "key",
+        "atMs": 27867
+      },
+      {
+        "kind": "key",
+        "atMs": 27966
+      },
+      {
+        "kind": "key",
+        "atMs": 28069
+      },
+      {
+        "kind": "key",
+        "atMs": 28185
+      },
+      {
+        "kind": "key",
+        "atMs": 28289
+      },
+      {
+        "kind": "key",
+        "atMs": 28393
+      },
+      {
+        "kind": "key",
+        "atMs": 28495
+      },
+      {
+        "kind": "key",
+        "atMs": 28597
+      },
+      {
+        "kind": "key",
+        "atMs": 28699
+      },
+      {
+        "kind": "key",
+        "atMs": 28806
+      },
+      {
+        "kind": "key",
+        "atMs": 28907
+      },
+      {
+        "kind": "click",
+        "atMs": 29681
+      }
+    ]
+  },
+  {
+    "chapter": "individual",
+    "startMs": 45678,
+    "endMs": 68356,
+    "sentences": [
+      {
+        "text": "Cliquez sur Inviter des membres.",
+        "startMs": 399,
+        "endMs": 2012,
+        "method": "silence",
+        "absoluteStartMs": 46077
+      },
+      {
+        "text": "Pour une invitation individuelle, recherchez Aline, puis cochez seulement sa fiche.",
+        "startMs": 2896,
+        "endMs": 6852,
+        "method": "silence",
+        "absoluteStartMs": 48574
+      },
+      {
+        "text": "Le compteur indique une personne sélectionnée.",
+        "startMs": 7581,
+        "endMs": 9551,
+        "method": "silence",
+        "absoluteStartMs": 53259
+      },
+      {
+        "text": "Vous pouvez ajouter un court mot d'accompagnement :",
+        "startMs": 10571,
+        "endMs": 12362,
+        "method": "silence",
+        "absoluteStartMs": 56249
+      },
+      {
+        "text": "Bonjour Aline, nous serions ravis de te retrouver à l'accueil.",
+        "startMs": 13143,
+        "endMs": 15740,
+        "method": "silence",
+        "absoluteStartMs": 58821
+      },
+      {
+        "text": "Vérifiez le destinataire, puis envoyez cette invitation.",
+        "startMs": 16414,
+        "endMs": 19105,
+        "method": "silence",
+        "absoluteStartMs": 62092
+      },
+      {
+        "text": "La personne apparaît ensuite dans le tableau de l'événement.",
+        "startMs": 19976,
+        "endMs": 22184,
+        "method": "silence",
+        "absoluteStartMs": 65654
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "individual",
+        "phrase": "La personne apparaît ensuite dans",
+        "startMs": 19976,
+        "endMs": 22184,
+        "cueMs": 65656
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 47338
+      },
+      {
+        "kind": "click",
+        "atMs": 48188
+      },
+      {
+        "kind": "key",
+        "atMs": 48497
+      },
+      {
+        "kind": "key",
+        "atMs": 48596
+      },
+      {
+        "kind": "key",
+        "atMs": 48696
+      },
+      {
+        "kind": "key",
+        "atMs": 48794
+      },
+      {
+        "kind": "key",
+        "atMs": 48894
+      },
+      {
+        "kind": "click",
+        "atMs": 49638
+      },
+      {
+        "kind": "click",
+        "atMs": 50453
+      },
+      {
+        "kind": "key",
+        "atMs": 50761
+      },
+      {
+        "kind": "key",
+        "atMs": 50861
+      },
+      {
+        "kind": "key",
+        "atMs": 50959
+      },
+      {
+        "kind": "key",
+        "atMs": 51056
+      },
+      {
+        "kind": "key",
+        "atMs": 51154
+      },
+      {
+        "kind": "key",
+        "atMs": 51253
+      },
+      {
+        "kind": "key",
+        "atMs": 51352
+      },
+      {
+        "kind": "key",
+        "atMs": 51450
+      },
+      {
+        "kind": "key",
+        "atMs": 51550
+      },
+      {
+        "kind": "key",
+        "atMs": 51649
+      },
+      {
+        "kind": "key",
+        "atMs": 51747
+      },
+      {
+        "kind": "key",
+        "atMs": 51846
+      },
+      {
+        "kind": "key",
+        "atMs": 51947
+      },
+      {
+        "kind": "key",
+        "atMs": 52048
+      },
+      {
+        "kind": "key",
+        "atMs": 52150
+      },
+      {
+        "kind": "key",
+        "atMs": 52250
+      },
+      {
+        "kind": "key",
+        "atMs": 52354
+      },
+      {
+        "kind": "key",
+        "atMs": 52454
+      },
+      {
+        "kind": "key",
+        "atMs": 52557
+      },
+      {
+        "kind": "key",
+        "atMs": 52659
+      },
+      {
+        "kind": "key",
+        "atMs": 52762
+      },
+      {
+        "kind": "key",
+        "atMs": 52863
+      },
+      {
+        "kind": "key",
+        "atMs": 52963
+      },
+      {
+        "kind": "key",
+        "atMs": 53062
+      },
+      {
+        "kind": "key",
+        "atMs": 53161
+      },
+      {
+        "kind": "key",
+        "atMs": 53259
+      },
+      {
+        "kind": "key",
+        "atMs": 53356
+      },
+      {
+        "kind": "key",
+        "atMs": 53455
+      },
+      {
+        "kind": "key",
+        "atMs": 53554
+      },
+      {
+        "kind": "key",
+        "atMs": 53652
+      },
+      {
+        "kind": "key",
+        "atMs": 53754
+      },
+      {
+        "kind": "key",
+        "atMs": 53855
+      },
+      {
+        "kind": "key",
+        "atMs": 53959
+      },
+      {
+        "kind": "key",
+        "atMs": 54060
+      },
+      {
+        "kind": "key",
+        "atMs": 54164
+      },
+      {
+        "kind": "key",
+        "atMs": 54278
+      },
+      {
+        "kind": "key",
+        "atMs": 54379
+      },
+      {
+        "kind": "key",
+        "atMs": 54481
+      },
+      {
+        "kind": "key",
+        "atMs": 54584
+      },
+      {
+        "kind": "key",
+        "atMs": 54684
+      },
+      {
+        "kind": "key",
+        "atMs": 54788
+      },
+      {
+        "kind": "key",
+        "atMs": 54889
+      },
+      {
+        "kind": "key",
+        "atMs": 54992
+      },
+      {
+        "kind": "key",
+        "atMs": 55093
+      },
+      {
+        "kind": "key",
+        "atMs": 55195
+      },
+      {
+        "kind": "key",
+        "atMs": 55299
+      },
+      {
+        "kind": "key",
+        "atMs": 55400
+      },
+      {
+        "kind": "key",
+        "atMs": 55501
+      },
+      {
+        "kind": "key",
+        "atMs": 55600
+      },
+      {
+        "kind": "key",
+        "atMs": 55703
+      },
+      {
+        "kind": "key",
+        "atMs": 55904
+      },
+      {
+        "kind": "key",
+        "atMs": 56003
+      },
+      {
+        "kind": "key",
+        "atMs": 56102
+      },
+      {
+        "kind": "key",
+        "atMs": 56206
+      },
+      {
+        "kind": "key",
+        "atMs": 56307
+      },
+      {
+        "kind": "key",
+        "atMs": 56405
+      },
+      {
+        "kind": "key",
+        "atMs": 56503
+      },
+      {
+        "kind": "key",
+        "atMs": 56602
+      },
+      {
+        "kind": "key",
+        "atMs": 56701
+      },
+      {
+        "kind": "key",
+        "atMs": 56799
+      },
+      {
+        "kind": "key",
+        "atMs": 56898
+      },
+      {
+        "kind": "click",
+        "atMs": 66121
+      }
+    ]
+  },
+  {
+    "chapter": "group",
+    "startMs": 68809,
+    "endMs": 90952,
+    "sentences": [
+      {
+        "text": "Pour un groupe, utilisez le filtre de tags.",
+        "startMs": 500,
+        "endMs": 2566,
+        "method": "silence",
+        "absoluteStartMs": 69309
+      },
+      {
+        "text": "Il permet par exemple de retrouver les personnes de l'accueil.",
+        "startMs": 3242,
+        "endMs": 5626,
+        "method": "silence",
+        "absoluteStartMs": 72051
+      },
+      {
+        "text": "Tout sélectionner ajoute les membres visibles à votre sélection.",
+        "startMs": 6399,
+        "endMs": 9005,
+        "method": "silence",
+        "absoluteStartMs": 75208
+      },
+      {
+        "text": "Attention :",
+        "startMs": 9733,
+        "endMs": 10171,
+        "method": "silence",
+        "absoluteStartMs": 78542
+      },
+      {
+        "text": "une personne déjà cochée peut rester sélectionnée après un changement de filtre.",
+        "startMs": 10467,
+        "endMs": 13569,
+        "method": "silence",
+        "absoluteStartMs": 79276
+      },
+      {
+        "text": "Le compteur reste votre repère.",
+        "startMs": 14146,
+        "endMs": 15609,
+        "method": "silence",
+        "absoluteStartMs": 82955
+      },
+      {
+        "text": "Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
+        "startMs": 16493,
+        "endMs": 21721,
+        "method": "silence",
+        "absoluteStartMs": 85302
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 70418
+      },
+      {
+        "kind": "click",
+        "atMs": 71218
+      },
+      {
+        "kind": "click",
+        "atMs": 72001
+      },
+      {
+        "kind": "click",
+        "atMs": 81233
+      },
+      {
+        "kind": "click",
+        "atMs": 86349
+      }
+    ]
+  },
+  {
+    "chapter": "send",
+    "startMs": 91405,
+    "endMs": 111781,
+    "sentences": [
+      {
+        "text": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun.",
+        "startMs": 421,
+        "endMs": 3649,
+        "method": "silence",
+        "absoluteStartMs": 91826
+      },
+      {
+        "text": "Envoyer deux invitations déclenche des messages individuels.",
+        "startMs": 4450,
+        "endMs": 6972,
+        "method": "silence",
+        "absoluteStartMs": 95855
+      },
+      {
+        "text": "Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien.",
+        "startMs": 7641,
+        "endMs": 11656,
+        "method": "silence",
+        "absoluteStartMs": 99046
+      },
+      {
+        "text": "Les coordonnées des autres invités ne sont pas affichées dans son message.",
+        "startMs": 12582,
+        "endMs": 15323,
+        "method": "silence",
+        "absoluteStartMs": 103987
+      },
+      {
+        "text": "La remise à cette boîte de test ne prouve évidemment pas qu'un bénévole a lu son email.",
+        "startMs": 16198,
+        "endMs": 20072,
+        "method": "silence",
+        "absoluteStartMs": 107603
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "send",
+        "phrase": "Envoyer deux invitations déclenche des",
+        "startMs": 4450,
+        "endMs": 6972,
+        "cueMs": 96145
+      },
+      {
+        "segmentId": "send",
+        "phrase": "La remise à cette boîte",
+        "startMs": 16198,
+        "endMs": 20072,
+        "cueMs": 107604
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 91882
+      },
+      {
+        "kind": "click",
+        "atMs": 92682
+      },
+      {
+        "kind": "click",
+        "atMs": 93500
+      },
+      {
+        "kind": "key",
+        "atMs": 93807
+      },
+      {
+        "kind": "key",
+        "atMs": 93907
+      },
+      {
+        "kind": "key",
+        "atMs": 94006
+      },
+      {
+        "kind": "key",
+        "atMs": 94106
+      },
+      {
+        "kind": "key",
+        "atMs": 94206
+      },
+      {
+        "kind": "key",
+        "atMs": 94304
+      },
+      {
+        "kind": "key",
+        "atMs": 94403
+      },
+      {
+        "kind": "key",
+        "atMs": 94502
+      },
+      {
+        "kind": "key",
+        "atMs": 94601
+      },
+      {
+        "kind": "key",
+        "atMs": 94701
+      },
+      {
+        "kind": "key",
+        "atMs": 94800
+      },
+      {
+        "kind": "key",
+        "atMs": 94904
+      },
+      {
+        "kind": "key",
+        "atMs": 95002
+      },
+      {
+        "kind": "key",
+        "atMs": 95105
+      },
+      {
+        "kind": "key",
+        "atMs": 95205
+      },
+      {
+        "kind": "key",
+        "atMs": 95308
+      },
+      {
+        "kind": "key",
+        "atMs": 95404
+      },
+      {
+        "kind": "key",
+        "atMs": 95506
+      },
+      {
+        "kind": "key",
+        "atMs": 95606
+      },
+      {
+        "kind": "key",
+        "atMs": 95708
+      },
+      {
+        "kind": "key",
+        "atMs": 95807
+      },
+      {
+        "kind": "click",
+        "atMs": 96615
+      }
+    ]
+  },
+  {
+    "chapter": "personal-link",
+    "startMs": 112238,
+    "endMs": 136648,
+    "sentences": [
+      {
+        "text": "Ouvrons le lien reçu par Aline.",
+        "startMs": 303,
+        "endMs": 1884,
+        "method": "silence",
+        "absoluteStartMs": 112541
+      },
+      {
+        "text": "Il mène à la fête avec ses coordonnées préremplies.",
+        "startMs": 2306,
+        "endMs": 5340,
+        "method": "silence",
+        "absoluteStartMs": 114544
+      },
+      {
+        "text": "Elle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées.",
+        "startMs": 5881,
+        "endMs": 11905,
+        "method": "silence",
+        "absoluteStartMs": 118119
+      },
+      {
+        "text": "Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation.",
+        "startMs": 12838,
+        "endMs": 16961,
+        "method": "silence",
+        "absoluteStartMs": 125076
+      },
+      {
+        "text": "Le lien est personnel :",
+        "startMs": 17586,
+        "endMs": 19879,
+        "method": "silence",
+        "absoluteStartMs": 129824
+      },
+      {
+        "text": "il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
+        "startMs": 20048,
+        "endMs": 24202,
+        "method": "silence",
+        "absoluteStartMs": 132286
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "personal-link",
+        "phrase": "Elle peut regarder les horaires",
+        "startMs": 5881,
+        "endMs": 11905,
+        "cueMs": 118120
+      },
+      {
+        "segmentId": "personal-link",
+        "phrase": "il ne faut pas le",
+        "startMs": 20048,
+        "endMs": 24202,
+        "cueMs": 132288
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 119762
+      },
+      {
+        "kind": "click",
+        "atMs": 121012
+      },
+      {
+        "kind": "click",
+        "atMs": 122962
+      },
+      {
+        "kind": "click",
+        "atMs": 123744
+      },
+      {
+        "kind": "click",
+        "atMs": 124528
+      },
+      {
+        "kind": "click",
+        "atMs": 132777
+      }
+    ]
+  },
+  {
+    "chapter": "reserved",
+    "startMs": 137101,
+    "endMs": 161939,
+    "sentences": [
+      {
+        "text": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag.",
+        "startMs": 207,
+        "endMs": 6305,
+        "method": "silence",
+        "absoluteStartMs": 137308
+      },
+      {
+        "text": "Ici, Nicolas a le tag sécurité.",
+        "startMs": 6427,
+        "endMs": 8098,
+        "method": "silence",
+        "absoluteStartMs": 143528
+      },
+      {
+        "text": "Avec son invitation valide, il peut choisir le poste réservé correspondant.",
+        "startMs": 8936,
+        "endMs": 12546,
+        "method": "silence",
+        "absoluteStartMs": 146037
+      },
+      {
+        "text": "Ce n'est pas une autorisation générale :",
+        "startMs": 13421,
+        "endMs": 15037,
+        "method": "silence",
+        "absoluteStartMs": 150522
+      },
+      {
+        "text": "les tags actuels sont revérifiés à l'inscription.",
+        "startMs": 15170,
+        "endMs": 17788,
+        "method": "silence",
+        "absoluteStartMs": 152271
+      },
+      {
+        "text": "Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
+        "startMs": 18553,
+        "endMs": 24101,
+        "method": "silence",
+        "absoluteStartMs": 155654
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "reserved",
+        "phrase": "Avec son invitation valide, il",
+        "startMs": 8936,
+        "endMs": 12546,
+        "cueMs": 146037
+      },
+      {
+        "segmentId": "reserved",
+        "phrase": "les tags actuels sont revérifiés",
+        "startMs": 15170,
+        "endMs": 17788,
+        "cueMs": 152272
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 138668
+      },
+      {
+        "kind": "click",
+        "atMs": 147621
+      },
+      {
+        "kind": "click",
+        "atMs": 152738
+      }
+    ]
+  },
+  {
+    "chapter": "status",
+    "startMs": 162392,
+    "endMs": 183941,
+    "sentences": [
+      {
+        "text": "De retour dans Invitations, Aline a maintenant une participation confirmée.",
+        "startMs": 748,
+        "endMs": 5226,
+        "method": "silence",
+        "absoluteStartMs": 163140
+      },
+      {
+        "text": "D'autres personnes restent sans créneau confirmé.",
+        "startMs": 6019,
+        "endMs": 8441,
+        "method": "silence",
+        "absoluteStartMs": 168411
+      },
+      {
+        "text": "Ce statut ne dit pas si elles ont ouvert leur email.",
+        "startMs": 9248,
+        "endMs": 11850,
+        "method": "silence",
+        "absoluteStartMs": 171640
+      },
+      {
+        "text": "Il peut aussi concerner une personne en liste d'attente ou une demande encore à valider.",
+        "startMs": 11993,
+        "endMs": 15977,
+        "method": "silence",
+        "absoluteStartMs": 174385
+      },
+      {
+        "text": "Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
+        "startMs": 16721,
+        "endMs": 21009,
+        "method": "silence",
+        "absoluteStartMs": 179113
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "status",
+        "phrase": "Il peut aussi concerner une",
+        "startMs": 11993,
+        "endMs": 15977,
+        "cueMs": 174387
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "existing",
+    "startMs": 184394,
+    "endMs": 207437,
+    "sentences": [
+      {
+        "text": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau.",
+        "startMs": 538,
+        "endMs": 6196,
+        "method": "silence",
+        "absoluteStartMs": 184932
+      },
+      {
+        "text": "Décochez-la si vous voulez les retrouver.",
+        "startMs": 7020,
+        "endMs": 8614,
+        "method": "silence",
+        "absoluteStartMs": 191414
+      },
+      {
+        "text": "Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde.",
+        "startMs": 9510,
+        "endMs": 14476,
+        "method": "silence",
+        "absoluteStartMs": 193904
+      },
+      {
+        "text": "Prenez néanmoins le temps de vérifier le groupe avant d'envoyer :",
+        "startMs": 14742,
+        "endMs": 18520,
+        "method": "silence",
+        "absoluteStartMs": 199136
+      },
+      {
+        "text": "recevoir plusieurs messages identiques peut vite devenir agaçant.",
+        "startMs": 18660,
+        "endMs": 22400,
+        "method": "silence",
+        "absoluteStartMs": 203054
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "existing",
+        "phrase": "Un nouvel envoi à une",
+        "startMs": 9510,
+        "endMs": 14476,
+        "cueMs": 193906
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 184873
+      },
+      {
+        "kind": "click",
+        "atMs": 194404
+      },
+      {
+        "kind": "click",
+        "atMs": 195223
+      },
+      {
+        "kind": "key",
+        "atMs": 195530
+      },
+      {
+        "kind": "key",
+        "atMs": 195631
+      },
+      {
+        "kind": "key",
+        "atMs": 195730
+      },
+      {
+        "kind": "key",
+        "atMs": 195829
+      },
+      {
+        "kind": "key",
+        "atMs": 195929
+      }
+    ]
+  },
+  {
+    "chapter": "no-email",
+    "startMs": 208661,
+    "endMs": 232552,
+    "sentences": [
+      {
+        "text": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente.",
+        "startMs": 644,
+        "endMs": 6804,
+        "method": "silence",
+        "absoluteStartMs": 209305
+      },
+      {
+        "text": "René devra être contacté autrement.",
+        "startMs": 7547,
+        "endMs": 9061,
+        "method": "silence",
+        "absoluteStartMs": 216208
+      },
+      {
+        "text": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés, encore moins au nombre de messages lus.",
+        "startMs": 9736,
+        "endMs": 15590,
+        "method": "silence",
+        "absoluteStartMs": 218397
+      },
+      {
+        "text": "Une invitation claire, le bon groupe et quelques vérifications :",
+        "startMs": 16424,
+        "endMs": 19042,
+        "method": "silence",
+        "absoluteStartMs": 225085
+      },
+      {
+        "text": "c'est tout ce qu'il faut pour lancer la participation sereinement.",
+        "startMs": 19456,
+        "endMs": 23633,
+        "method": "silence",
+        "absoluteStartMs": 228117
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "no-email",
+        "phrase": "Le nombre d'invités ne correspond",
+        "startMs": 9736,
+        "endMs": 15590,
+        "cueMs": 218399
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 209139
+      },
+      {
+        "kind": "click",
+        "atMs": 209955
+      },
+      {
+        "kind": "key",
+        "atMs": 210269
+      },
+      {
+        "kind": "key",
+        "atMs": 210367
+      },
+      {
+        "kind": "key",
+        "atMs": 210467
+      },
+      {
+        "kind": "key",
+        "atMs": 210564
+      },
+      {
+        "kind": "key",
+        "atMs": 210663
+      },
+      {
+        "kind": "click",
+        "atMs": 211404
+      },
+      {
+        "kind": "click",
+        "atMs": 218871
+      }
+    ]
+  }
+]

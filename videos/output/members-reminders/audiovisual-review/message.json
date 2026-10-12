@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:55:40.903Z",
-  "videoSha256": "7865ee3c9d753ad6be7f07a321542b52dd57d845b40ef40c31ca2901050f5f45",
+  "reviewedAt": "2026-10-12T07:18:14.180Z",
+  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
   "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
-  "clipSha256": "62a866aecf0405ed9109075ffcaa294ab1d42238b825bd8f4c5b518c999a8c42",
+  "clipSha256": "0d1c34c00b33ab82326b5c34dc4d11ee2bd6098f516a1a98f3d58c6eb7999d32",
   "scene": "message",
   "review": {
-    "heardOpening": "Pour expliquer davantage, utilisez",
+    "heardOpening": "Pour expliquer davantage",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 1.7,
         "spoken": "utilisez Écrire un message aux personnes sans créneau",
         "visibleSeconds": 1.4,
-        "visible": "Clic sur le lien 'Écrire un message aux sans créneau'",
+        "visible": "Clic sur le lien « Écrire un message aux 3 sans créneau » puis ouverture de la page de rédaction",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5.4,
         "spoken": "Le groupe est déjà choisi dans la page de message",
-        "visibleSeconds": 2.5,
-        "visible": "Option 'Les invités sans créneau confirmé' cochée par défaut",
+        "visibleSeconds": 5.4,
+        "visible": "L'option « Les invités sans créneau confirmé » est cochée par défaut sous Destinataires",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8.7,
         "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
-        "visibleSeconds": 7,
-        "visible": "Saisie en cours dans le champ message",
+        "visibleSeconds": 9.2,
+        "visible": "Saisie de l'objet et du corps du message dans les champs dédiés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.2,
+        "spokenSeconds": 15.3,
         "spoken": "prévisualisez les destinataires et le contenu",
-        "visibleSeconds": 17.6,
-        "visible": "Clic sur le bouton et affichage de la modale d'aperçu",
+        "visibleSeconds": 15.6,
+        "visible": "Clic sur « Voir l'aperçu et envoyer » et ouverture de la fenêtre modale « Aperçu de l'email »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et fluide."
+      "observation": "Voix fluide, claire et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

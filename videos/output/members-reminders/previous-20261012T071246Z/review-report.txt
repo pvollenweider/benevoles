@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "MEMBERS_REMINDERS",
+  "status": "NOT READY",
+  "duration": 193.24,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.7,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "48images revues, AV8chapitres. Historique annoncé7.5s mais montré14.5s ; Mailpit reste pendant explication remise serveur. Autres anciens problèmes corrigés : statuts,aperçu,envoi,texte remplacé sans répétition. ASR8/8,validate,ancres,VTT,effets,musique passent,vrai jeton/compteurs conservés,dates françaises,aucune adresse interdite/overlay. Mailpit anglais connu.",
+  "sourceChanges": "Envoyer : ouverture email sur ancre Nous ouvrons le vrai message ; historique suit dans même phrase avant Un email remis au serveur. Audio réutilisé,aucun re-film supplémentaire.",
+  "report": "videos/output/members-reminders/review-report.txt",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

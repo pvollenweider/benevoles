@@ -1,35 +1,35 @@
 {
   "id": "MEMBERS_REMINDERS",
   "slug": "members-reminders",
-  "validatedAt": "2026-10-06T18:54:35.990Z",
+  "validatedAt": "2026-10-12T07:17:09.196Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 194120,
+  "captureMs": 202560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 23837,
+      "visualMs": 23839,
       "audioMs": 23836,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "statuses",
-      "visualMs": 26089,
+      "visualMs": 26100,
       "audioMs": 26088,
-      "driftMs": 1
+      "driftMs": 12
     },
     {
       "id": "confirm",
-      "visualMs": 25300,
+      "visualMs": 25301,
       "audioMs": 25299,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "link",
-      "visualMs": 21652,
+      "visualMs": 21653,
       "audioMs": 21651,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "message",
@@ -39,22 +39,32 @@
     },
     {
       "id": "waitlist",
-      "visualMs": 22523,
+      "visualMs": 22522,
       "audioMs": 22520,
-      "driftMs": 3
+      "driftMs": 2
     },
     {
       "id": "send",
-      "visualMs": 21202,
+      "visualMs": 21204,
       "audioMs": 21202,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 20713,
+      "visualMs": 20709,
       "audioMs": 20709,
-      "driftMs": 4
+      "driftMs": 0
     }
   ],
+  "anchorsChecked": 12,
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 15.8,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -34.3,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
   "issues": []
 }

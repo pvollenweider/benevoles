@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T05:12:05.251Z",
-  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "reviewedAt": "2026-10-12T07:25:47.385Z",
+  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
   "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
-  "clipSha256": "d77b29aef460608a12115cb7ad557954882d3d7864d231182152057f787dcbda",
+  "clipSha256": "3c28c6f0954d1267135c827232bf810b5797103f6155846573a61a8414009a7a",
   "scene": "personal-link",
   "review": {
     "heardOpening": "Ouvrons le lien reçu par Aline",
     "checkpoints": [
       {
         "spokenSeconds": 0,
-        "spoken": "Ouvrons le lien reçu par Aline",
-        "visibleSeconds": 3.5,
-        "visible": "Affichage de la page de l'événement Fête du Village de Montvert",
+        "spoken": "Ouvrons le lien reçu par Aline.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la page de la Fête du village de Montvert depuis l'e-mail",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
+        "spokenSeconds": 7,
         "spoken": "choisir un créneau disponible",
-        "visibleSeconds": 7,
-        "visible": "Sélection d'un créneau Démontage le dimanche puis clic sur continuer",
+        "visibleSeconds": 7.5,
+        "visible": "Sélection du créneau Démontage sur la frise et validation avec le bouton Continuer",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
+        "spokenSeconds": 9.5,
         "spoken": "compléter les informations demandées",
-        "visibleSeconds": 10,
-        "visible": "Formulaire affiché avec nom prérempli et sélection de la taille de t-shirt",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage des coordonnées préremplies d'Aline et cochage des options/conditions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
+        "spokenSeconds": 15,
         "spoken": "jusqu'à la confirmation",
-        "visibleSeconds": 18.5,
-        "visible": "Écran Inscription confirmée affiché après validation",
+        "visibleSeconds": 13,
+        "visible": "Écran 'Inscription confirmée !' affiché après clic sur Confirmer mon inscription",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation pédagogique claire."
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

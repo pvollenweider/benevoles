@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:59:54.684Z",
-  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
-  "promptSha256": "4ca6b25b56680c6034d6b1081fc8a4931cb57ce573f488eb3a0e6f73891c544d",
-  "clipSha256": "2ec9b8755394ca0cd71c958e0bb31605acb995de1e1ec713888f7bb067fa4e2b",
+  "reviewedAt": "2026-10-12T07:11:41.025Z",
+  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "promptSha256": "9e1c41918bfb701f5c3241dcf92cbce881609e46930f5483d70ab476293d180e",
+  "clipSha256": "ec4c1e42593bca9f1e44a542422c83e6042b8e73bd79a39b01b1400744292f11",
   "scene": "scope",
   "review": {
     "heardOpening": "Cet espace est en lecture seule",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Cet espace est en lecture seule",
         "visibleSeconds": 0,
-        "visible": "Affichage en lecture seule du planning pour le poste Buvette",
+        "visible": "Affichage de la page Responsable - Buvette avec liste des créneaux et bénévoles sans bouton d'édition",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.7,
+        "spokenSeconds": 6.3,
         "spoken": "Il ne voit pas les équipes des autres postes",
-        "visibleSeconds": 6.7,
-        "visible": "Liste restreinte uniquement aux créneaux du poste Buvette",
+        "visibleSeconds": 6.3,
+        "visible": "Seuls les créneaux du poste Buvette sont listés à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
+        "spokenSeconds": 9,
         "spoken": "Pour une modification du planning ou une décision d'inscription",
         "visibleSeconds": 8.5,
-        "visible": "Défilement vers le bas de la liste des inscriptions sans option d'édition",
+        "visible": "Défilement vers le bas montrant les créneaux suivants et le pied de page",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, conforme au script."
+      "observation": "Voix claire, posée et bien synchronisée avec le défilement de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

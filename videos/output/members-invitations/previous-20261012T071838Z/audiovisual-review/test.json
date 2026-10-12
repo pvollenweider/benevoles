@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:40:13.889Z",
+  "videoSha256": "5397d03ad7db9c0f6261feff15d1b96aab234c4453c8234787c2f9c5f8922f72",
+  "promptSha256": "db4029b7864d61b9f8ec0de746ee8a377b463cfc933ddd9fe8a48e154f4e1cff",
+  "clipSha256": "cf8e9064e8bd41c489398249270f2d571eec40615c2cc5c6280187df8639fe8f",
+  "scene": "test",
+  "review": {
+    "heardOpening": "Avant de contacter l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "vous pouvez tester l'envoi d'email",
+        "visibleSeconds": 1,
+        "visible": "L'interrupteur 'Tester l'envoi d'email' est activé et le champ de saisie apparaît",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "puis envoyez le test",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur le bouton 'Envoyer le test' qui affiche brièvement la confirmation 'Envoyé !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Nous ouvrons ici le message reçu dans notre boîte de démonstration",
+        "visibleSeconds": 9.8,
+        "visible": "Affichage de l'outil de messagerie Mailpit avec le courriel de test ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

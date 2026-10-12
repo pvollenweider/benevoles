@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "SECTOR_LEADERS",
+  "status": "NOT READY",
+  "duration": 213.76,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 204,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "problems": "66 images revues ; vérification des coordonnées annoncée à20.76s mais écran reste en bas ; défilement prochain créneau mobile tardif12.5 vs9.29s. Timbre remove : génération1 refusée ; génération2 acceptée par audio seul source ET extrait du MP4 final, signalement AV contradictoire réfuté. Révocation/ancien lien alignés. ASR11/11,validate,VTT,effets,musique passent,dates françaises/Frise/aucune adresse interdite/overlay. Mailpit anglais connu.",
+  "sourceChanges": "Deux générations continues pour corriger le timbre ; seconde recoupée10frontières et auditée. Recorder : téléphone puis prochain créneau mobile sur leurs phrases ; remontrer coordonnées sur Avant de confirmer ; confirmation sur Nous confirmons maintenant. Aucun re-film supplémentaire.",
+  "report": "videos/output/sector-leaders/review-report.txt",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "MEMBERS_REMINDERS",
+  "status": "READY",
+  "duration": 202.56,
+  "buildId": "RNDQIXzICnt5M_573dvDi",
+  "music": {
+    "voicedWindows": 185,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 15.8,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -34.3,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "48 images finales revues ; AV8/8, ASR final8/8, provenance, validate, ancres,VTT,effets,musique passent. Trois relances réelles, lien original conservé, aperçu adapté aux attentes, message et historique alignés. Dates françaises, aucune adresse interdite/overlay. Nit : dates Mailpit anglaises.",
+  "sourceChanges": "Aucune ; narration batch11 acceptée sans régénération, aucun re-film.",
+  "report": "videos/output/members-reminders/review-report.txt",
+  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

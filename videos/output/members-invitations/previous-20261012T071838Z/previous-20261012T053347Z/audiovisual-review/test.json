@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:32:02.388Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "promptSha256": "db4029b7864d61b9f8ec0de746ee8a377b463cfc933ddd9fe8a48e154f4e1cff",
+  "clipSha256": "16782aa58c98aa6f9b812f549431e3af82dd46d5480ba2c86bf69c39d32593e8",
+  "scene": "test",
+  "review": {
+    "heardOpening": "Avant de contacter l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "vous pouvez tester l'envoi d'email",
+        "visibleSeconds": 1,
+        "visible": "Affichage du champ de saisie d'email de test et début de la saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "puis envoyez le test",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le bouton Envoyer le test qui passe à l'état Envoyé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Nous ouvrons ici le message reçu dans notre boîte de démonstration",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de la boîte de réception Mailpit avec le message sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Cela permet de regarder la présentation",
+        "visibleSeconds": 13.5,
+        "visible": "Aperçu du contenu HTML du message de test affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, naturelle et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

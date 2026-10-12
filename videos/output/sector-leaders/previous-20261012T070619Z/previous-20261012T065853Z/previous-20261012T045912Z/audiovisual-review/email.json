@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:04:31.556Z",
+  "videoSha256": "21b001e5afae2ca19fe382200499e5faea39ef6a21ecc637fd824a3bbf811e78",
+  "promptSha256": "9596e7c9b64e1c7512eba1ec275bae89d3e26e33efc5df775e7b9463ea2dc8b1",
+  "clipSha256": "3adcd4639dc274250643906c3ee5b644a1eb600ac51fa10332d335f334a81eff",
+  "scene": "email",
+  "review": {
+    "heardOpening": "Voici l'email reçu.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Voici l'email reçu.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la boîte de réception Mailpit puis ouverture de l'email du responsable.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Le responsable ouvre son lien personnel directement",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur « Voir qui est inscrit » et affichage direct de la page de la tranche de démontage sans étape de connexion.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "il donne accès aux coordonnées de l'équipe.",
+        "visibleSeconds": 4.5,
+        "visible": "Liste des 4 bénévoles inscrits avec leurs adresses email et numéros de téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions à l'écran. Une légère expiration/souffle s'entend en toute fin d'enregistrement à 00:15."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

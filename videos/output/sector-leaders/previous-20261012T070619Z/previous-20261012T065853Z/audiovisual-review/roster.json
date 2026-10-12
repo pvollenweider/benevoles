@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:13:18.477Z",
+  "videoSha256": "0fbe13ad7d2099b77ed2a5369ec64fbd743e806dc3d2eb25a52ae8fd0288434a",
+  "promptSha256": "1d2d62b22d9ea7722de99fd68c6d428234a5a86f22114394c19ca95d2d557e33",
+  "clipSha256": "39b27fa61de4ff3aec3d821cb7c41f17ea573f8dee8262a6b4f3810ef930653a",
+  "scene": "roster",
+  "review": {
+    "heardOpening": "Sur ce lien, la responsable de la Buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste.",
+        "visibleSeconds": 0,
+        "visible": "Page 'Responsable - Buvette' affichant la liste des 16 bénévoles inscrits pour la buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires.",
+        "visibleSeconds": 4.8,
+        "visible": "En-têtes de sections affichant la date et les tranches horaires (ex. samedi 17 octobre 10:00-14:00).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné",
+        "visibleSeconds": 8.5,
+        "visible": "Détails des inscrits avec nom, adresse email et numéro de téléphone portable.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+        "visibleSeconds": 14.3,
+        "visible": "Badges 'Liste d'attente' sur fond jaune visibles à côté de certains noms.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

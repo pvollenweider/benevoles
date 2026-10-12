@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:32:31.585Z",
+  "videoSha256": "985703e583d5fd37307d4093669771af70b8ef0112fa30f99c1e26b03861c130",
+  "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
+  "clipSha256": "ea43297c424de9c26e0b9f2ad58a4051bca838dafee31c2e0eabfa19f34a1a3e",
+  "scene": "status",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0,
+        "visible": "Page affichant le titre Invitations dans la section Événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Aline a maintenant une participation confirmée",
+        "visibleSeconds": 0,
+        "visible": "Ligne Aline Mercier avec le statut vert Participation confirmée dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "D'autres personnes restent sans créneau confirmé",
+        "visibleSeconds": 0,
+        "visible": "Membres avec le statut Sans réponse affichés en haut de liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

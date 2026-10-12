@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:32:44.754Z",
+  "videoSha256": "817d28037af80ae3cc8baf547d38a43f149c63c007e836bac815761b4275518d",
+  "promptSha256": "c4b013c9a8c2f92c9cb23d7f24efa0fe3dd6ff5ea582f3b5e2f572eb43167e59",
+  "clipSha256": "32fb7f7a04c73df18f6ed66997689f31bfa4feb1c38f9026b31e20700fcffa2e",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Une fois le groupe et le texte vérifiés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "confirmons l'envoi",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le bouton 'Confirmer l'envoi' et affichage de la confirmation d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Nous ouvrons le vrai message reçu",
+        "visibleSeconds": 7,
+        "visible": "Ouverture de la boîte de réception Mailpit affichant le courriel reçu par Lucas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "puis l'historique disponible dans l'administration",
+        "visibleSeconds": 14.5,
+        "visible": "Retour à la page d'administration affichant l'historique des messages envoyés",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:07, la voix annonce l'ouverture de l'historique dans l'administration, mais l'écran reste sur Mailpit jusqu'à 00:14 pendant l'explication sur la remise au serveur."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, avec un ton explicatif naturel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

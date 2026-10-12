@@ -55,7 +55,7 @@
     },
     {
       "id": "resend",
-      "transcript": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel et son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
+      "transcript": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel pour accéder à son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
       "fallbackDurationMs": 35000
     },
     {
@@ -70,7 +70,7 @@
     },
     {
       "id": "remove",
-      "transcript": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer l'accueil de l'après-midi. Nous refaisons le retrait, puis utilisons Retirer maintenant pour le valider sans attendre. L'inscription disparaît et la place est libérée. Attention : le récapitulatif annonce un email, mais nous n'en constatons pas dans cette version. Préviens la personne directement. Le journal conserve l'action, même si la ligne annulée n'apparaît plus ici.",
+      "transcript": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer l'accueil de l'après-midi. Nous refaisons le retrait, puis utilisons Retirer maintenant pour le valider sans attendre. L'inscription disparaît et la place est libérée. Un email informe Camille du créneau retiré. Ouvrons le message réellement reçu dans notre boîte de démonstration. Il ne prouve pas qu'elle l'a lu. Le journal conserve l'action, même si la ligne annulée n'apparaît plus ici.",
       "fallbackDurationMs": 43000
     },
     {

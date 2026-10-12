@@ -1,0 +1,16 @@
+{
+  "reviewedAt": "2026-10-12T05:07:16.342Z",
+  "model": "gemini-3.8-flash",
+  "source": "two generated WAV excerpts, audio only",
+  "openingSha256": "b5ac8344036860bb5fe04459abb22e75d41bace36020d12ffc15c4ffe6e56883",
+  "chapterSha256": "ebcc2141ecd6b38ba41dbdeaf163b2cedd2c9a341b66e8814dbc214510e96e34",
+  "generationSha256": "319fa89b5fc685526c4e9defbfebf7922ec613c9fe97f9ecaf1236299fdf2241",
+  "review": {
+    "consistent": true,
+    "warm": true,
+    "observation": "La voix masculine est parfaitement identique entre l'extrait de référence et le second extrait, ainsi qu'au sein du second extrait. Le timbre, le rythme et le ton posé et bienveillant demeurent constants tout au long de la narration, sans changement de locuteur.",
+    "changes": [],
+    "uncertainty": "aucune"
+  },
+  "note": "Automated listening observation; does not replace the original audiovisual report or prove human listening validation"
+}
