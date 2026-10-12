@@ -100,6 +100,18 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
+    // The product newsletters, archived (#944): an index of the posts of blog/ (src/lib/blog.ts),
+    // newest first, one page per post at /blog/<slug> (in the sitemap after the documentation).
+    path: "/blog",
+    title: "Blog",
+    summary: `Les nouvelles de ${SITE_NAME}, une par version, la plus récente en premier.`,
+    metaTitle: "Le blog, les nouvelles du produit",
+    metaDescription: `Les nouvelles de ${SITE_NAME}, une par version : ce qui change pour les organisateurs et les bénévoles, expliqué en clair, la plus récente en premier.`,
+    source: null,
+    priority: 0.5,
+    guide: false,
+  },
+  {
     path: "/accessibilite",
     title: "Accessibilité",
     summary: "Ce qui a été vérifié pour l'accessibilité, comment, et les limites connues.",
@@ -193,8 +205,11 @@ export const DOC_PAGES = PUBLIC_PAGES.filter((p) => p.path === "/doc" || p.path.
 /** The guides, for the doc index. */
 export const DOC_GUIDES = PUBLIC_PAGES.filter((p) => p.guide)
 
-/** The header navigation of the public content pages: features, then the guides. */
-export const CONTENT_NAV = PUBLIC_PAGES.filter((p) => p.path === "/fonctionnalites" || p.guide)
+/** The header navigation of the public content pages: features, the guides, then the blog (#944). */
+export const CONTENT_NAV = [
+  ...PUBLIC_PAGES.filter((p) => p.path === "/fonctionnalites" || p.guide),
+  ...PUBLIC_PAGES.filter((p) => p.path === "/blog"),
+]
 
 /** Whether a public page exists on this instance (#760). */
 export function pageAvailable(page: Pick<PublicPage, "availability">, hosted: boolean = isHostedService()): boolean {
@@ -274,18 +289,26 @@ export function apexSitemap(
   modifiedAt: (source: string) => Date | null,
   units: readonly { slug: string; source: string }[] = [],
   hosted: boolean = isHostedService(),
+  posts: readonly { slug: string; date: string }[] = [],
 ): MetadataRoute.Sitemap {
   const root = base.replace(/\/+$/, "")
+  const day = (date: string) => new Date(`${date}T00:00:00Z`)
   const entry = (pagePath: string, source: string | null, priority: number) => {
-    const lastModified = source ? modifiedAt(source) : null
+    // The blog's index changes with its newest post (#944), the day it was sent.
+    const lastModified = source ? modifiedAt(source) : pagePath === "/blog" && posts.length > 0 ? day([...posts].sort((a, b) => b.date.localeCompare(a.date))[0].date) : null
     return { url: `${root}${pagePath}`, changeFrequency: "monthly" as const, priority, ...(lastModified ? { lastModified } : {}) }
   }
   return [
     { url: `${root}/`, changeFrequency: "weekly", priority: 1 },
     ...availablePublicPages(hosted).map((p) => entry(p.path, p.source, p.priority)),
     ...units.map((u) => entry(`/doc/${u.slug}`, u.source, DOC_UNIT_PRIORITY)),
+    // The blog's posts (#944): a post doesn't change once sent, its date is its last change.
+    ...posts.map((p) => ({ url: `${root}/blog/${p.slug}`, changeFrequency: "yearly" as const, priority: BLOG_POST_PRIORITY, lastModified: day(p.date) })),
   ]
 }
 
 /** Sitemap priority of a documentation unit: under the guides' indexes, above the legal pages. */
 export const DOC_UNIT_PRIORITY = 0.5
+
+/** Sitemap priority of a blog post (#944): under the documentation, a dated piece of news. */
+export const BLOG_POST_PRIORITY = 0.4

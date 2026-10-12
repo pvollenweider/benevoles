@@ -12,6 +12,7 @@ import { parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, 
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
+import { hideLineArrows, type BlogPost } from "@/lib/blog"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
 import { REPOSITORY_URL } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
@@ -130,6 +131,17 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     return link ? renderDocVideoCard(link) : ""
   }
   return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
+}
+
+const blogPostCache = createRenderCache<string>()
+
+/**
+ * A blog post's HTML (#944), the same rendering and sanitizer as the documentation: its headings at
+ * their written depth under the page's <h1> (the title, from the front matter), each with an id,
+ * links between sources made site links.
+ */
+export function renderBlogPost(post: Pick<BlogPost, "source" | "body">): string {
+  return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, headingIds: true, image: docImageHtml })))
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */

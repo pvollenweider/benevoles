@@ -33,7 +33,7 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 13)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 14)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
@@ -42,6 +42,8 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/inscription",
       // What changed, rendered from CHANGELOG.md (#757).
       "https://www.benevol.app/nouveautes",
+      // The product newsletters, archived (#944).
+      "https://www.benevol.app/blog",
       "https://www.benevol.app/accessibilite",
       // Privacy and terms (#747), written in their page.tsx: no source file, so no lastmod.
       "https://www.benevol.app/legal/privacy",
@@ -55,7 +57,13 @@ describe("sitemap on the apex host", () => {
     // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order. No video:
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
-    expect(entries.map((e) => e.url).slice(13)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    const units = readDocUnits()
+    expect(entries.map((e) => e.url).slice(14, 14 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    // Then the blog posts of blog/ (#944), newest first, each dated the day it was sent.
+    const { readBlogPosts } = await import("../lib/blog")
+    const posts = readBlogPosts()
+    expect(entries.map((e) => e.url).slice(14 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
+    expect(entries.at(-1)?.lastModified).toEqual(new Date(`${posts.at(-1)!.date}T00:00:00Z`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,

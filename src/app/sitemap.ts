@@ -8,6 +8,8 @@ import { apexBaseUrl, isKnownHost, orgBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
+import { loadBlogPosts } from "@/lib/blog"
+import { isHostedService } from "@/lib/site"
 import { docLastmodLookup } from "@/lib/doc-lastmod"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { videoSitemapEntries } from "@/lib/video-seo"
@@ -52,7 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    return [...apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits()), ...apexVideoEntries()]
+    return [...apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits(), isHostedService(), loadBlogPosts()), ...apexVideoEntries()]
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)

@@ -3,6 +3,7 @@
 
 import { DOC_ROLE_INFO, docGroup, docGroupHref, type DocUnit } from "@/lib/doc-units"
 import { publicPage } from "@/lib/doc-pages"
+import type { BlogPost } from "@/lib/blog"
 import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
 import { contactEmail } from "@/lib/site"
 
@@ -161,7 +162,7 @@ const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-pla
 export function publicPageJsonLd(path: string, base: string, faq: readonly FaqItem[] = []): JsonLdNode {
   const page = publicPage(path)
   const nodes: JsonLdNode[] = [
-    webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" ? "CollectionPage" : "WebPage" }),
+    webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage" }),
     breadcrumbNode(base, page.path, publicPageCrumbs(page.path, page.title)),
     websiteNode(base),
     organizationNode(base),
@@ -199,6 +200,36 @@ export function docUnitJsonLd(unit: DocUnit, base: string, dateModified?: Date |
   return jsonLdGraph([
     article,
     breadcrumbNode(base, path, [{ name: "Documentation", path: "/doc" }, { name: group.title, path: docGroupHref(group) }, { name: unit.title }]),
+    websiteNode(base),
+    organizationNode(base),
+  ])
+}
+
+/**
+ * The structured data of a blog post (#944): a BlogPosting in French by the site, published the
+ * day the newsletter was sent, with the title and summary the page shows, its image (its own or the
+ * site's card), and its breadcrumb (Accueil, Blog, the post).
+ */
+export function blogPostJsonLd(post: Pick<BlogPost, "slug" | "title" | "summary" | "date" | "image">, base: string): JsonLdNode {
+  const path = `/blog/${post.slug}`
+  const url = absoluteUrl(base, path)
+  const posting: JsonLdNode = {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    url,
+    mainEntityOfPage: url,
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.date,
+    inLanguage: "fr",
+    image: absoluteUrl(base, post.image ?? "/og-image.png"),
+    author: idOf(base, "organization"),
+    publisher: idOf(base, "organization"),
+    isPartOf: idOf(base, "website"),
+  }
+  return jsonLdGraph([
+    posting,
+    breadcrumbNode(base, path, [{ name: "Accueil", path: "/" }, { name: "Blog", path: "/blog" }, { name: post.title }]),
     websiteNode(base),
     organizationNode(base),
   ])

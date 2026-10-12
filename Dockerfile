@@ -77,6 +77,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.
 COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md
 COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md
 COPY --from=builder --chown=nextjs:nodejs /app/CHANGELOG.md ./CHANGELOG.md
+# Blog (#944) : blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
+COPY --from=builder --chown=nextjs:nodejs /app/blog ./blog
 # Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.
 COPY --from=builder --chown=nextjs:nodejs /app/guide ./guide
 # Date du dernier commit de chacune de ces sources (lastmod du sitemap), écrite par
