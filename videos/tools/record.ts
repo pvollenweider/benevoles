@@ -2879,6 +2879,8 @@ async function main() {
           checks.overlapWarningObservedWithoutSubmitting = true
           await at("Choisissons plutôt un horaire compatible")
           await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
+          if (await page.locator("#add-shift-conflict").isVisible()) throw new Error("Narrated compatible shift still has an overlap warning; correct the management fixture before filming")
+          checks.compatibleShiftWithoutWarning = true
         })
         await scene("manual-result", async at => {
           await at("Avant de valider, lisez l'annonce")

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:50.155Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "42555d2664c71b6dbf95f5adf56bfc20e2984c134143ca93b491cf509d4f0eb1",
+  "clipSha256": "a38a2b32d844b588d40d805dab5236c68b4a8c5dd41a48c94ad8577850e08c70",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Pour désigner un responsable depuis une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "sélectionne la personne puis Rendre responsable",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection de Sarah Jaquet et ouverture de la boîte modale Rendre responsable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.6,
+        "spoken": "puis confirme",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur le bouton Rendre responsable pour valider",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "L'email donne accès à la vue de son équipe",
+        "visibleSeconds": 14.5,
+        "visible": "Consultation dans Mailpit du courriel envoyé à Sarah Jaquet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "le badge Responsable apparaît sur ses inscriptions du poste concerné",
+        "visibleSeconds": 21.5,
+        "visible": "La liste se recharge avec le filtre Sarah, mais aucun badge Responsable n'apparaît sur la ligne",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:21, après le rechargement de la page des inscriptions, le badge « Responsable » promis par la voix n'apparaît pas sur l'inscription de Sarah Jaquet."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

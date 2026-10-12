@@ -1,0 +1,348 @@
+[
+  {
+    "checkedAt": "2026-10-12T11:54:28.569Z",
+    "openedId": "630eTbOtEiY5CsLqmo93Uw",
+    "visibleIds": [
+      "630eTbOtEiY5CsLqmo93Uw"
+    ],
+    "messages": [
+      {
+        "ID": "630eTbOtEiY5CsLqmo93Uw",
+        "MessageID": "outbox-cmv572cge00029ra56sr91qe3@video.invalid",
+        "Read": false,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+        "Created": "2026-10-12T11:54:25.296Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3728,
+        "Attachments": 0,
+        "Snippet": "Inscrit·e : Accueil, samedi 17 octobre, de 15h à 18h. Hello Camille, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert : Accueil, samedi 17 octobre, de 15h à 18h..."
+      }
+    ],
+    "onlyThisTake": true
+  },
+  {
+    "checkedAt": "2026-10-12T11:55:14.807Z",
+    "openedId": "26WC2YJrZ8XdqeOxaJ09c6",
+    "visibleIds": [
+      "26WC2YJrZ8XdqeOxaJ09c6",
+      "630eTbOtEiY5CsLqmo93Uw"
+    ],
+    "messages": [
+      {
+        "ID": "26WC2YJrZ8XdqeOxaJ09c6",
+        "MessageID": "819aaa10-f69c-858e-8681-66f893106fd3@benevol.app",
+        "Read": false,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Ton lien pour gérer ton inscription — Fête du village de Montvert",
+        "Created": "2026-10-12T11:55:07.755Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3381,
+        "Attachments": 0,
+        "Snippet": "Ton lien pour Fête du village de Montvert Hello Camille ! 👋 Voici ton lien personnel pour voir ou modifier ton inscription à Fête du village de Montvert. Gérer mon inscription À très vite ! b..."
+      },
+      {
+        "ID": "630eTbOtEiY5CsLqmo93Uw",
+        "MessageID": "outbox-cmv572cge00029ra56sr91qe3@video.invalid",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+        "Created": "2026-10-12T11:54:25.296Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3728,
+        "Attachments": 0,
+        "Snippet": "Inscrit·e : Accueil, samedi 17 octobre, de 15h à 18h. Hello Camille, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert : Accueil, samedi 17 octobre, de 15h à 18h..."
+      }
+    ],
+    "onlyThisTake": true
+  },
+  {
+    "checkedAt": "2026-10-12T11:55:34.803Z",
+    "openedId": "7RubIWieMlcAXrAVoYWP5y",
+    "visibleIds": [
+      "7RubIWieMlcAXrAVoYWP5y",
+      "26WC2YJrZ8XdqeOxaJ09c6",
+      "630eTbOtEiY5CsLqmo93Uw"
+    ],
+    "messages": [
+      {
+        "ID": "7RubIWieMlcAXrAVoYWP5y",
+        "MessageID": "outbox-cmv573sns00079ra5d0wiw61o@video.invalid",
+        "Read": false,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "sarah.jaquet@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Vous êtes responsable de « Accueil » — Fête du village de Montvert",
+        "Created": "2026-10-12T11:55:27.877Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3685,
+        "Attachments": 0,
+        "Snippet": "Consultez la liste des bénévoles inscrits sur « Accueil ». Bonjour Sarah, Vous avez été désigné·e responsable du poste Accueil pour Fête du village de Montvert. Voir qui est inscrit Ce lien ..."
+      },
+      {
+        "ID": "26WC2YJrZ8XdqeOxaJ09c6",
+        "MessageID": "819aaa10-f69c-858e-8681-66f893106fd3@benevol.app",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Ton lien pour gérer ton inscription — Fête du village de Montvert",
+        "Created": "2026-10-12T11:55:07.755Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3381,
+        "Attachments": 0,
+        "Snippet": "Ton lien pour Fête du village de Montvert Hello Camille ! 👋 Voici ton lien personnel pour voir ou modifier ton inscription à Fête du village de Montvert. Gérer mon inscription À très vite ! b..."
+      },
+      {
+        "ID": "630eTbOtEiY5CsLqmo93Uw",
+        "MessageID": "outbox-cmv572cge00029ra56sr91qe3@video.invalid",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+        "Created": "2026-10-12T11:54:25.296Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3728,
+        "Attachments": 0,
+        "Snippet": "Inscrit·e : Accueil, samedi 17 octobre, de 15h à 18h. Hello Camille, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert : Accueil, samedi 17 octobre, de 15h à 18h..."
+      }
+    ],
+    "onlyThisTake": true
+  },
+  {
+    "checkedAt": "2026-10-12T11:56:27.516Z",
+    "openedId": "2I0VExGX9C13TczyWjRr1g",
+    "visibleIds": [
+      "2I0VExGX9C13TczyWjRr1g",
+      "7RubIWieMlcAXrAVoYWP5y",
+      "26WC2YJrZ8XdqeOxaJ09c6",
+      "630eTbOtEiY5CsLqmo93Uw"
+    ],
+    "messages": [
+      {
+        "ID": "2I0VExGX9C13TczyWjRr1g",
+        "MessageID": "outbox-cmv574w1c000a9ra5bkpq7bjd@video.invalid",
+        "Read": false,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Inscription annulée : Fête du village de Montvert",
+        "Created": "2026-10-12T11:56:19.011Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3768,
+        "Attachments": 0,
+        "Snippet": "Créneau annulé : Accueil, samedi 17 octobre, de 15h à 18h. Hello Camille, L'organisation de Fête du village de Montvert a annulé ton inscription à ce créneau : Accueil, samedi 17 octobre, de 15..."
+      },
+      {
+        "ID": "7RubIWieMlcAXrAVoYWP5y",
+        "MessageID": "outbox-cmv573sns00079ra5d0wiw61o@video.invalid",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "sarah.jaquet@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Vous êtes responsable de « Accueil » — Fête du village de Montvert",
+        "Created": "2026-10-12T11:55:27.877Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3685,
+        "Attachments": 0,
+        "Snippet": "Consultez la liste des bénévoles inscrits sur « Accueil ». Bonjour Sarah, Vous avez été désigné·e responsable du poste Accueil pour Fête du village de Montvert. Voir qui est inscrit Ce lien ..."
+      },
+      {
+        "ID": "26WC2YJrZ8XdqeOxaJ09c6",
+        "MessageID": "819aaa10-f69c-858e-8681-66f893106fd3@benevol.app",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Ton lien pour gérer ton inscription — Fête du village de Montvert",
+        "Created": "2026-10-12T11:55:07.755Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3381,
+        "Attachments": 0,
+        "Snippet": "Ton lien pour Fête du village de Montvert Hello Camille ! 👋 Voici ton lien personnel pour voir ou modifier ton inscription à Fête du village de Montvert. Gérer mon inscription À très vite ! b..."
+      },
+      {
+        "ID": "630eTbOtEiY5CsLqmo93Uw",
+        "MessageID": "outbox-cmv572cge00029ra56sr91qe3@video.invalid",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "camille.rochat@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+        "Created": "2026-10-12T11:54:25.296Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3728,
+        "Attachments": 0,
+        "Snippet": "Inscrit·e : Accueil, samedi 17 octobre, de 15h à 18h. Hello Camille, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert : Accueil, samedi 17 octobre, de 15h à 18h..."
+      }
+    ],
+    "onlyThisTake": true
+  }
+]

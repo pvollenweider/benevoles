@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:36.035Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "3c214375856a411992bb9593aaa0204f94c432a204744dd4a47ac4cf7e8ee554",
+  "clipSha256": "f8b3eb9bb0daff7d76e3884bfd509edcea444a5cba1212b3eba8ebeadc40a7ec",
+  "scene": "manual-check",
+  "review": {
+    "heardOpening": "Ouvrons le choix du créneau.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.7,
+        "spoken": "Ouvrons le choix du créneau.",
+        "visibleSeconds": 1,
+        "visible": "Sélection du créneau de 9h à 12h Accueil dans le champ.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "le système refuse ce doublon.",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur Ajouter et affichage du message bloquant rouge en bas du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Sur la buvette du matin, l'indication conflit signale un chevauchement",
+        "visibleSeconds": 11.8,
+        "visible": "Sélection du créneau Buvette 10h-14h et affichage de l'avertissement sous le champ.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "Choisissons plutôt un horaire compatible.",
+        "visibleSeconds": 23.5,
+        "visible": "Ouverture du menu déroulant affichant les mentions et choix d'un horaire sans conflit (15h-18h).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

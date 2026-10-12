@@ -1,0 +1,72 @@
+[
+  {
+    "scene": "welcome",
+    "exitCode": 0,
+    "output": "welcome: 3 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "columns",
+    "exitCode": 0,
+    "output": "columns: 4 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "filters",
+    "exitCode": 0,
+    "output": "filters: 5 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "requests",
+    "exitCode": 0,
+    "output": "requests: 4 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "manual-identity",
+    "exitCode": 0,
+    "output": "manual-identity: 5 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "manual-check",
+    "exitCode": 0,
+    "output": "manual-check: 4 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "manual-result",
+    "exitCode": 0,
+    "output": "manual-result: 5 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "selection",
+    "exitCode": 0,
+    "output": "selection: 4 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "resend",
+    "exitCode": 0,
+    "output": "resend: 6 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "leader",
+    "exitCode": 1,
+    "output": "leader: 4 audiovisual checkpoints; REVIEW\n  À 00:21, après le rechargement de la page des inscriptions, le badge « Responsable » promis par la voix n'apparaît pas sur l'inscription de Sarah Jaquet.\n1 scene reviews; 1 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "undo",
+    "exitCode": 0,
+    "output": "undo: 3 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "remove",
+    "exitCode": 0,
+    "output": "remove: 3 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "workload",
+    "exitCode": 0,
+    "output": "workload: 3 audiovisual checkpoints; no issue reported\n1 scene reviews; 0 flagged. This does not replace inspection of the final video.\n"
+  },
+  {
+    "scene": "result",
+    "exitCode": 1,
+    "output": "result: 3 audiovisual checkpoints; REVIEW\n  À 00:04, l'action annoncée (« Ouvrons l'action correspondant au retrait ») n'est pas exécutée à l'écran : le journal est affiché mais aucun détail ni bouton « Voir le récit » n'est ouvert avant le retour à la page précédente à 00:09.\n1 scene reviews; 1 flagged. This does not replace inspection of the final video.\n"
+  }
+]

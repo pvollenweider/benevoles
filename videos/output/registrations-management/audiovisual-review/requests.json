@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:27.128Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "54f908048cad40803193c98dabe6283112ac0f9164f9d7512d15b33c9bd79227",
+  "clipSha256": "59b0e12d15fb2780cd4eeb5e3059a20c246dc8d88240484725443c04c6bc9020",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Le filtre Demandes à traiter montre les personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le filtre Demandes à traiter montre les personnes qui attendent une décision",
+        "visibleSeconds": 0.5,
+        "visible": "La case Demandes à traiter (2) est cochée et filtre la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Lucas a demandé une place à la navette",
+        "visibleSeconds": 2,
+        "visible": "Fiche de Lucas Girard visible avec le créneau Navette, Chauffeur navette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Le bouton Accepter ouvre une confirmation",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur Accepter et apparition de la boîte de dialogue Accepter la demande de Lucas Girard ?",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Ici, nous annulons",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur Annuler dans la boîte de dialogue qui se ferme",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisation globale très correcte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,151 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T11:59:07.028Z",
+  "revalidatedAt": "2026-10-12T11:59:07.029Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "d079126a02fd7717de896ad39906a1f25f44fa28307fc1c9c5490b70555814ec",
+      "recognized": "Le planning se remplit. C'est le moment de savoir qui vient et quand. Dans inscriptions, chaque ligne correspond à une inscription sur un créneau, pas forcément à une personne différente. Notre feuille contient quatre-vingts lignes, avec plusieurs situations. Nous allons retrouver les bonnes personnes, ajouter un horaire et effectuer quelques actions en regardant chaque fois ce qui change réellement.",
+      "expected": "Le planning se remplit : c'est le moment de savoir qui vient, et quand. Dans Inscriptions, chaque ligne correspond à une inscription sur un créneau, pas forcément à une personne différente. Notre fête contient quatre-vingts lignes, avec plusieurs situations. Nous allons retrouver les bonnes personnes, ajouter un horaire et effectuer quelques actions, en regardant chaque fois ce qui change réellement.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "columns",
+      "audioSha256": "2cb54dc0479e16021a43bf685b69166d77e47955bdc8d1f684651f1fc38ad90a",
+      "recognized": "Regardons Camille. Vous retrouvez son nom, son e-mail, son téléphone, ses disponibilités et les réponses aux questions. Ici, la taille de t-shirt. À droite figure le poste et ses horaires. La source distingue le formulaire public de l'ajout manuel. Une note comme inscrit par téléphone donne du contexte. Plusieurs lignes pour Camille sont normales, elle participe à plusieurs créneaux.",
+      "expected": "Regardons Camille. Vous retrouvez son nom, son email, son téléphone, ses disponibilités et les réponses aux questions, ici la taille de t-shirt. À droite figurent le poste et ses horaires. La source distingue le formulaire public de l'ajout manuel. Une note, comme inscrit par téléphone, donne du contexte. Plusieurs lignes pour Camille sont normales : elle participe à plusieurs créneaux.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "filters",
+      "audioSha256": "4c11551273828e8b8c1059d84180c9c6c99a9e7d0db5feea3785bbf44ddcaba2",
+      "recognized": "Pour chercher une personne, saisissez son nom ou son email. Vous pouvez ensuite filtrer par poste, puis par créneau. Nous choisissons accueil et seulement l'horaire de l'après-midi. La liste se réduit aux inscriptions correspondantes. Le lien pour écrire s'adapte aussi aux filtres. Pour retrouver toute la liste, remettez tous les postes et tous les créneaux, puis effacez la recherche.",
+      "expected": "Pour chercher une personne, saisissez son nom ou son email. Vous pouvez ensuite filtrer par poste, puis par créneau. Nous choisissons Accueil, et seulement l'horaire de l'après-midi : la liste se réduit aux inscriptions correspondantes. Le lien pour écrire s'adapte aussi au filtre. Pour retrouver toute la liste, remettez tous les postes et tous les créneaux, puis effacez la recherche.",
+      "wordErrorRate": 0.031746031746031744,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "requests",
+      "audioSha256": "ecf45d59abd8c0778d36cf26f5583b563f1426d12dc85215c24e781f538e335b",
+      "recognized": "Le filtre Demandes à traiter montre les personnes qui attendent une décision. Ce n'est pas une participation confirmée. Lucas a demandé une place à la navette. Ses réponses peuvent t'aider à vérifier les conditions du poste. Le bouton Accepter ouvre une confirmation avec les conséquences de la décision. Ici, nous annulons. Sa demande reste à traiter et aucun e-mail de décision ne part.",
+      "expected": "Le filtre Demandes à traiter montre les personnes qui attendent une décision. Ce n'est pas une participation confirmée. Lucas a demandé une place à la navette ; ses réponses peuvent aider à vérifier les conditions du poste. Le bouton Accepter ouvre une confirmation avec les conséquences de la décision. Ici, nous annulons : sa demande reste à traiter et aucun email de décision ne part.",
+      "wordErrorRate": 0.015625,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "manual-identity",
+      "audioSha256": "90145f669c663956c38e1893f062ed5827e152fd64497207cd347f3eb05b6c55",
+      "recognized": "Un bénévole vous confirme un nouvel horaire par téléphone ? Cliquez sur Ajouter manuellement. Dans Membre existant, cherchez Camille par son nom ou son e-mail, puis cliquez sur Chercher. Cliquez sur Choisir. Le résumé Membre choisi reprend ses coordonnées, sans créer une nouvelle fiche. Ajoutons une courte note : horaire convenu par téléphone. Pour une nouvelle personne, vous pouvez aussi remplir les champs sous la recherche. Sans adresse e-mail, aucun message de confirmation ne part.",
+      "expected": "Un bénévole vous confirme un nouvel horaire par téléphone ? Cliquez sur Ajouter manuellement. Dans Membre existant, cherchez Camille par son nom ou son email, puis cliquez sur Chercher. Cliquez sur Choisir. Le résumé Membre choisi reprend ses coordonnées, sans créer une nouvelle fiche. Ajoutons une courte note : horaire convenu par téléphone. Pour une nouvelle personne, vous pouvez aussi remplir les champs sous la recherche. Sans adresse email, aucun message de confirmation ne part.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "manual-check",
+      "audioSha256": "29e665e54fecbf8a58609e1a1f7ad3c292176c76f6888bc5879d747e3c48c680",
+      "recognized": "Ouvrons le choix du créneau. Déjà inscrit signale l'horaire que Camille possède déjà. Si nous essayons de l'ajouter une seconde fois, le système refuse ce doublon. Sur la buvette du matin, l'indication conflit signale un chevauchement avec son accueil. Dans l'ajout manuel, c'est un avertissement à lire avant de décider. Ne le confondez pas avec un contrôle bloquant. Choisissons plutôt un horaire compatible.",
+      "expected": "Ouvrons le choix du créneau. Déjà inscrit signale l'horaire que Camille possède déjà. Si nous essayons de l'ajouter une seconde fois, le système refuse ce doublon. Sur la buvette du matin, l'indication conflit signale un chevauchement avec son accueil. Dans l'ajout manuel, c'est un avertissement à lire avant de décider : ne le confondez pas avec un contrôle bloquant. Choisissons plutôt un horaire compatible.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "manual-result",
+      "audioSha256": "705d8ed07d0795d45354be4a0f21889d4d18127e7a5cf5411a5272f94cba59ab",
+      "recognized": "Nous choisissons l'accueil de quinze à dix-huit heures. Avant de valider, lisez l'annonce. Un e-mail de confirmation partira à Camille dans une dizaine de minutes. Il regroupe les créneaux ajoutés pour cette personne et cet événement après le dernier ajout. Cliquez sur Ajouter. La nouvelle ligne apparaît avec la source manuel, intranet. Dix minutes plus tard, ouvrons le véritable e-mail reçu. Il indique qui a inscrit Camille, son créneau et son lien personnel. Nous revenons ensuite à la liste des inscriptions.",
+      "expected": "Nous choisissons l'accueil de quinze à dix-huit heures. Avant de valider, lisez l'annonce : un email de confirmation partira à Camille dans une dizaine de minutes. Il regroupe les créneaux ajoutés pour cette personne et cet événement après le dernier ajout. Cliquez sur Ajouter. La nouvelle ligne apparaît avec la source Manuel et notre note. Dix minutes plus tard, ouvrons le véritable email reçu. Il indique qui a inscrit Camille, son créneau et son lien personnel. Nous revenons ensuite à la liste des inscriptions.",
+      "wordErrorRate": 0.03488372093023256,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "selection",
+      "audioSha256": "b7924a80e7f84b0882a29d888b36d1d984e5ad56b47373d016c7ce65eddb7d17",
+      "recognized": "Les cases permettent de sélectionner une inscription ou plusieurs. La barre propose les actions applicables : présence, responsable, lien personnel ou retrait. Une sélection reste active quand une recherche masque ces lignes. Un filtre n'est donc pas une nouvelle sélection. Regarde toujours le nombre sélectionné. Désélectionner remet ce nombre à zéro avant de préparer une autre action.",
+      "expected": "Les cases permettent de sélectionner une inscription, ou plusieurs. La barre propose les actions applicables : présence, responsable, lien personnel ou retrait. Une sélection reste active quand une recherche masque ses lignes ; un filtre n'est donc pas une nouvelle sélection. Regarde toujours le nombre sélectionné. Désélectionner remet ce nombre à zéro avant de préparer une autre action.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "resend",
+      "audioSha256": "5b5b29b3f7064cebd8b577d07ed2665b1add188277bb0134778d07b1e673a5cc",
+      "recognized": "Sélectionnons deux inscriptions confirmées de Camille puis renvoyer lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu. Camille retrouve son lien personnel pour accéder à son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
+      "expected": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel pour accéder à son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
+      "wordErrorRate": 0.034482758620689655,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leader",
+      "audioSha256": "5726de7e5356404946c963b2efc129ab59c286d8a361bddfc15f07026ddc2b2b",
+      "recognized": "Pour désigner un responsable depuis une inscription, sélectionne la personne, puis, rendre responsable. Ici, Sarah prend le relais à l'accueil. Vérifie le poste et l'adresse qui recevra le lien, puis confirme. L'e-mail donne accès à la vue de son équipe, pas à l'administration entière. Après rechargement, le badge responsable apparaît sur ses inscriptions du poste concerné.",
+      "expected": "Pour désigner un responsable depuis une inscription, sélectionne la personne puis Rendre responsable. Ici, Sarah prend le relais à l'accueil. Vérifie le poste et l'adresse qui recevra le lien, puis confirme. L'email donne accès à la vue de son équipe, pas à l'administration entière. Après rechargement, le badge Responsable apparaît sur ses inscriptions du poste concerné.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "undo",
+      "audioSha256": "1486ff06f11fec6daef86cbacf0167d452df848b64eb3ebcaa0d4fe401481244",
+      "recognized": "Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription annulée, place libérée, e-mail éventuel et liste d'attente. Après confirmation, une barre laisse dix secondes pour annuler. Le délai attend tant que le pointeur ou le focus est sur cette barre. Nous utilisons Annuler le retrait. La ligne revient, sans annulation enregistrée ni e-mail de retrait envoyé.",
+      "expected": "Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription annulée, place libérée, email éventuel et liste d'attente. Après confirmation, une barre laisse dix secondes pour annuler. Le délai attend tant que le pointeur ou le focus est sur cette barre. Nous utilisons Annuler le retrait : la ligne revient, sans annulation enregistrée ni email de retrait envoyé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "remove",
+      "audioSha256": "e514d781654def09b893707d0217630304bff0401dd24eae698c1645b38062b3",
+      "recognized": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer l'accueil de l'après-midi. Nous refaisons le retrait, puis utilisons Retirer maintenant pour le valider sans attendre. L'inscription disparaît et la place est libérée. Un e-mail informe Camille du créneau retiré. Ouvrons le message réellement reçu dans notre boîte de démonstration. Il ne prouve pas qu'elle l'a lu. Le journal conserve l'action même si la ligne annulée n'apparaît plus ici.",
+      "expected": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer l'accueil de l'après-midi. Nous refaisons le retrait, puis utilisons Retirer maintenant pour le valider sans attendre. L'inscription disparaît et la place est libérée. Un email informe Camille du créneau retiré. Ouvrons le message réellement reçu dans notre boîte de démonstration. Il ne prouve pas qu'elle l'a lu. Le journal conserve l'action, même si la ligne annulée n'apparaît plus ici.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "workload",
+      "audioSha256": "600c115fd10830673674c17acf04ee26f5bd89b51e5b10e778ccc090d9a042a0",
+      "recognized": "Une autre vérification utile, la charge prévue. Noah a le montage, la buvette du matin et celle du soir, avec de vraies pauses entre les horaires. Cela représente dix heures sur la journée. L'alerte charge élevée conseille l'organisateur. Elle ne signifie pas un chevauchement, une présence attestée ou un refus automatique. Discute avec la personne avant de lui proposer davantage.",
+      "expected": "Une autre vérification utile : la charge prévue. Noah a le montage, la buvette du matin et celle du soir, avec de vraies pauses entre les horaires. Cela représente dix heures sur la journée. L'alerte Charge élevée conseille l'organisateur ; elle ne signifie pas un chevauchement, une présence attestée ou un refus automatique. Discute avec la personne avant de lui proposer davantage.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "a63bc6cf04335e92df9a56d664b3f26dc4371ef9e199831cbf3d0bfd4eb7beb5",
+      "recognized": "La liste sert à agir, le journal sert à comprendre ce qui s'est passé. Ouvrons l'action correspondant au retrait dans le journal de l'événement. Vous retrouvez qui a agi et quand. Avant de passer à autre chose, vérifiez les filtres et videz la sélection. Vous repartez avec un planning lisible et des changements dont vous connaissez les conséquences.",
+      "expected": "La liste sert à agir, le journal sert à comprendre ce qui s'est passé. Ouvrons l'action correspondant au retrait dans le journal de l'événement : vous retrouvez qui a agi et quand. Avant de passer à autre chose, vérifiez les filtres et videz la sélection. Vous repartez avec un planning lisible, et des changements dont vous connaissez les conséquences.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

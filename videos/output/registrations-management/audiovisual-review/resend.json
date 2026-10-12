@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:47.893Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "582040ee89b6ba66e2a6db77fe815bacc61cd783072e096c0c37d29e8bad7cf8",
+  "clipSha256": "a1b235bfe7e34f8b94270196f2e2840eb88429f438e6a9b7e559958fcd16c7c7",
+  "scene": "resend",
+  "review": {
+    "heardOpening": "Sélectionnons deux inscriptions confirmées de Camille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Sélectionnons deux inscriptions confirmées de Camille",
+        "visibleSeconds": 0.5,
+        "visible": "Deux inscriptions de Camille Rochat sont cochées dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "puis Renvoyer le lien",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton 'Renvoyer le lien' et ouverture de la boîte modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Le récapitulatif précise qu'un seul email part pour cette personne",
+        "visibleSeconds": 4,
+        "visible": "Affichage du texte explicatif '1 email envoyé : un seul email par personne' dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Confirme seulement après l'avoir lu",
+        "visibleSeconds": 10.2,
+        "visible": "Clic sur le bouton bleu 'Renvoyer' pour valider l'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Nous ouvrons le vrai email reçu",
+        "visibleSeconds": 14.2,
+        "visible": "Affichage de la boîte de réception Mailpit puis ouverture du message reçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Camille y retrouve son lien personnel pour accéder à son récapitulatif",
+        "visibleSeconds": 16.5,
+        "visible": "L'e-mail s'affiche avec le bouton 'Gérer mon inscription'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

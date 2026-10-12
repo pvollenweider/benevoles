@@ -214,6 +214,11 @@ async function main() {
     const morning = shifts.find(s => s.roleName === "Montage" && s.startTime === "07:00")
     const evening = shifts.find(s => s.roleName === "Buvette" && s.startTime === "18:00")
     if (!morning || !evening) throw new Error("Workload fixture needs morning and evening shifts")
+    // The add form also warns about waiting registrations. Keep Camille's waiting
+    // row, but move it outside the 15–18h slot narrated as compatible in this video.
+    const camille = await prisma.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "camille.rochat@example.org" } })
+    const afternoonWait = await prisma.registration.findFirstOrThrow({ where: { eventId: event.id, volunteerId: camille.id, status: "waiting", shift: { roleName: "Buvette", date: evening.date, startTime: { in: ["14:00", "18:00"] } } } })
+    await prisma.registration.update({ where: { id: afternoonWait.id }, data: { shiftId: evening.id } })
     for (const [index, shift] of [morning, evening].entries()) {
       const existing = await prisma.registration.findFirst({ where: { eventId: event.id, volunteerId: noah.id, shiftId: shift.id, status: "active" } })
       if (!existing) await prisma.registration.create({ data: { eventId: event.id, volunteerId: noah.id, shiftId: shift.id, status: "active", source: "admin_manual", comment: "Horaire convenu avec Noah.", ...registrationToken.data(`demo-registration-workload-noah-${index}-0001`) } })

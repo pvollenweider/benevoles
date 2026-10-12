@@ -1,11 +1,14 @@
 {
-  "checkedAt": "2026-10-05T14:27:16.293Z",
+  "checkedAt": "2026-10-12T11:57:17.662Z",
   "initialLiveCount": 80,
-  "filteredAfternoonRows": 6,
+  "filteredAfternoonRows": 3,
   "requestDecisionCancelled": true,
   "duplicateRejected": true,
   "overlapWarningObservedWithoutSubmitting": true,
+  "compatibleShiftWithoutWarning": true,
   "manualAdditionReusesMember": true,
+  "manualConfirmationRealCron": true,
+  "manualNotice": "Un email de confirmation partira à camille.rochat@example.org dans une dizaine de minutes, avec tous les créneaux ajoutés pour cette personne d'ici là.",
   "selectionSurvivesFiltering": true,
   "resend": {
     "done": 1,
@@ -18,13 +21,13 @@
   "removal": {
     "done": 1,
     "cancelledIds": [
-      "cmuvcc5hv007gmna5dutlqhkn"
+      "cmv572cfx00019ra5k9mw7b8y"
     ],
     "skipped": 0,
     "occupiedBefore": 7,
     "occupiedAfter": 6,
-    "cancellationEmailsObserved": 0,
-    "recapEmailPromiseNotMet": true
+    "cancellationEmailsObserved": 1,
+    "recapEmailPromiseNotMet": false
   },
   "realWorkloadWarning": true,
   "finalLiveCount": 80

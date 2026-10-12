@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:32.369Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "084e703bac89dba3fcb5c96681cf90b5d5aa7dedf45e15c4de93d681f9a88147",
+  "clipSha256": "e693eb7f394c6442fb2dc8057f5b4654bf2ac8523f01d6e633701ddba66f49a9",
+  "scene": "manual-identity",
+  "review": {
+    "heardOpening": "Un bénévole vous confirme un nouvel horaire par téléphone ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Cliquez sur Ajouter manuellement.",
+        "visibleSeconds": 4.2,
+        "visible": "Clic sur le bouton Ajouter manuellement et affichage du formulaire Inscription manuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "cherchez Camille par son nom ou son email",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie de l'adresse email de Camille dans le champ de recherche de membre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "puis cliquez sur Chercher.",
+        "visibleSeconds": 10.4,
+        "visible": "Clic sur le bouton Chercher et affichage du profil trouvé avec l'option Choisir.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Cliquez sur Choisir.",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur Choisir et chargement de la section Membre choisi avec ses coordonnées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "Ajoutons une courte note : horaire convenu par téléphone.",
+        "visibleSeconds": 19.5,
+        "visible": "Clic dans le champ Note puis saisie du texte « Horaire convenu par téléphone ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

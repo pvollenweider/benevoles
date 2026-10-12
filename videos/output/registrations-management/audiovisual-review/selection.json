@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:59:43.508Z",
+  "videoSha256": "8aec6f0ad76391a985deefe31963e837bf887f8bf16bc4de5d7e0dea9e1f6c37",
+  "promptSha256": "dc7433bd0f64e1e2fa148373e7a9c111fc2322b2d25402f3a29a13a35418d60a",
+  "clipSha256": "f0fe245392047caaa85c99152b4440cd1e1409f33f07e2339ac9e309564013dc",
+  "scene": "selection",
+  "review": {
+    "heardOpening": "Les cases permettent de sélectionner",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les cases permettent de sélectionner une inscription, ou plusieurs.",
+        "visibleSeconds": 2,
+        "visible": "Sélection d'une case puis affichage du bandeau '1 sélectionnée', suivi d'une seconde sélection.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "La barre propose les actions applicables : présence, responsable, lien personnel ou retrait.",
+        "visibleSeconds": 4.5,
+        "visible": "Bandeau bleu affichant les boutons Marquer présent, Rendre responsable, Renvoyer le lien et Retirer de leur créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Une sélection reste active quand une recherche masque ses lignes",
+        "visibleSeconds": 10,
+        "visible": "Recherche modifiée pour 'Sarah', les lignes masquées n'empêchent pas le maintien de '2 sélectionnées'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Désélectionner remet ce nombre à zéro avant de préparer une autre action.",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur le bouton Désélectionner, entraînant la disparition de la barre d'action.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, naturelle et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
