@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:31:23.088Z",
+  "videoSha256": "6154fe94f585bfee9ff5291058254524c362d5b743f3d4d66aa5a664362c9cee",
+  "promptSha256": "24c2d92cdc3b3f72bcf5c1c882ebf6e9cf0b30e7f20d700e777698387585c353",
+  "clipSha256": "356fb04938169a54be5a104942a46f6af9ddbb9a7b1a01dc206845e72469aa82",
+  "scene": "shifts",
+  "review": {
+    "heardOpening": "Choisissons un premier créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissons un premier créneau, à l’accueil de quinze à dix-huit heures.",
+        "visibleSeconds": 1.8,
+        "visible": "Sélection de la ligne 'sam. 17 oct. - 15h-18h - Accueil' dans le premier menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Cliquez ensuite sur Ajouter un autre créneau.",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le lien '+ Ajouter un autre créneau'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "La ligne Créneau deux, facultatif, apparaît avec son bouton Retirer.",
+        "visibleSeconds": 5.5,
+        "visible": "Apparition du champ 'Créneau 2 (facultatif)' avec le bouton 'Retirer' à droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Choisissons le démontage du lendemain, également de quinze à dix-huit heures.",
+        "visibleSeconds": 13,
+        "visible": "Sélection de 'dim. 18 oct. - 15h-18h - Démontage' dans le deuxième menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,1710 @@
+{
+  "checkedAt": "2026-10-12T11:02:46.782Z",
+  "scenario": "registrations-place-member",
+  "eventName": "Fête du village de Montvert",
+  "recipient": "sarah.jaquet@example.org",
+  "deletedMessages": [
+    {
+      "ID": "7G5wLyJio6I7zG23zCAwvd",
+      "MessageID": "outbox-cmv557fim0001yna5c8jzj2xy@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "sarah.jaquet@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+      "Created": "2026-10-12T11:02:19.098Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3905,
+      "Attachments": 0,
+      "Snippet": "Inscrit·e sur 2 créneaux : Fête du village de Montvert. Hello Sarah, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert, sur 2 créneaux : Accueil, samedi 17 octo..."
+    },
+    {
+      "ID": "2dsL2WBWWH78xAP2fecLki",
+      "MessageID": "outbox-cmv4xcrw2003hmua5vggskieh@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T07:22:30.705Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "57Mqru4R5YxZ25ZW38jDfD",
+      "MessageID": "a5557b3b-71e6-5559-b1be-6cc0e9bd6118@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:22:01.666Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "56NMBWtEzn6SBP5yyNsKN2",
+      "MessageID": "39e07a70-984d-0c87-b6eb-d52bc35f6ec7@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:22:01.661Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "6som5HfByUFGrugsPiV3Be",
+      "MessageID": "8d1d50da-5ad9-f1a3-766e-c0760d0d7eca@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:21:27.6Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "5FumcXW7HK0jsE5O6QEeMV",
+      "MessageID": "a2aa4e87-73af-fba9-a629-45610e2ca154@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:20:54.838Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "63SycvkVwRloMLvcMWlU4z",
+      "MessageID": "outbox-cmv4x8xj0002umua5m6e4kzj7@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T07:19:31.327Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "4D8Z4Lin0g9buYSkGOz9fx",
+      "MessageID": "a552d705-1c4f-2314-29bc-03c0191e9ed3@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:19:19.738Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "4shcJTo2XBmW9qNn7A5CyK",
+      "MessageID": "fbd3473d-9583-ec32-f851-d8c109908900@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:19:19.731Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "4uxdmiaON30SvZVKrVLSFf",
+      "MessageID": "66e4af84-880f-44a5-7abe-c95bda7656bc@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:19:06.467Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "6sNevKgwe7sucxeLYOTSN4",
+      "MessageID": "627a8fb0-e876-d76f-6677-a57aeadf0e0f@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T07:18:52.624Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "0D705S7mK9eau5RYjTEs2V",
+      "MessageID": "outbox-cmv4wvan5001kmua59hux4jkc@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T07:08:55.201Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "2Rz2kV6I4eKcgrTCXvFZ2r",
+      "MessageID": "outbox-cmv4wsukh001bmua5eyk01hna@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T07:07:01.073Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "6PJo9OIwSoFUDg6EMxdnmU",
+      "MessageID": "outbox-cmv4wn9z0000xmua59slfd1d2@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T07:02:41.085Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "659pusulYMENzAyEQXhsOs",
+      "MessageID": "outbox-cmv4wktx6000omua5i42zlpui@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T07:00:46.95Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "3ua48J2quKaYyTpbOfBISI",
+      "MessageID": "outbox-cmv4wjc3l000amua5ri0ruzbe@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T06:59:37.17Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "2iHC43a2Hbx3cgj5SQ2tV5",
+      "MessageID": "outbox-cmv4wis3n0001mua5i0k4zef8@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T06:59:11.318Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "1Dx8IUj9WrOcvnxBBoMgr2",
+      "MessageID": "outbox-cmv4tl9qw0038lva5vcgweiqc@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T05:37:08.613Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "4hFc15Hk94ein19nFnC0wT",
+      "MessageID": "d0977dc0-9eb0-c4a5-be35-b1c288e216dd@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:36:39.626Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "3cd2ek2lBFrAprjt4jsYGd",
+      "MessageID": "6f3db72f-b409-4ac6-da01-a2144b0c6eb8@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:36:39.621Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "4lSQLgPukkZ0a0jQ10g0xI",
+      "MessageID": "7b9692e6-fe46-4410-fec2-943f6f645cce@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:36:05.561Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "3QeQa8ejwn8XXDnH4kAGdz",
+      "MessageID": "060be54c-2544-361d-be41-b128fc2bf8e9@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:35:32.696Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "4vydIw4ZtNM3ovbrwZ2lr0",
+      "MessageID": "outbox-cmv4ti3an002llva5xmzqneo2@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T05:34:40.234Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "5titB0TaQvP9D7s8R5AVhH",
+      "MessageID": "039496c3-1f07-69e0-09ec-717b562fca3e@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:34:28.621Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "0wowVFdWzzflCJEAHnQO56",
+      "MessageID": "e65be5fc-d88c-557f-1e06-4f4f8b25a343@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:34:28.615Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "4vimdTc9FnQp0UWQ5johot",
+      "MessageID": "3f9427ec-7ec2-9c5a-53f7-103ba28e8fdc@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:34:15.835Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "5FeIDx63XFZ3iCe08JaN4P",
+      "MessageID": "20c97cf7-4f39-d1fe-01bd-eaf290ccf40a@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T05:34:02.03Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "7Yro49yC0yunGwVnGRjrsg",
+      "MessageID": "outbox-cmv4snhta000xlva5s6f2mdpo@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T05:10:52.782Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "5GzZ16zNWqxahIWSCaSX0V",
+      "MessageID": "outbox-cmv4sl0oh000olva5719or07r@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T05:08:57.228Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "1yjOmPhhsqvLe1nlU224JB",
+      "MessageID": "outbox-cmv4sjszi000alva5wbq29svs@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T05:08:00.594Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "52d4GaXDs68d8oxsZ6UICh",
+      "MessageID": "outbox-cmv4sj8x50001lva55ux68xhr@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T05:07:34.641Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "77WDbWcBRM1sJLW79uHjnj",
+      "MessageID": "outbox-cmv4p0arl003fnba515dmunwu@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T03:28:51.69Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "6RQJzyFRwZLlDOmdlLca9i",
+      "MessageID": "acfd160c-e9bb-1fe8-b182-e218dad50825@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:28:15.437Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "1kvHLDXBiTXC5SimYp1kIW",
+      "MessageID": "abbd30d6-7971-d576-ab0d-c0473c28c3c4@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:28:15.431Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "4HoqhUnVVXzgjboN2REFSE",
+      "MessageID": "d0bcc7c6-c3e2-a7d3-df93-4e321565a917@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:27:44.929Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "5cX6z1XqGIvdjTbdwkOIBO",
+      "MessageID": "61744ff9-f1e7-c439-11a0-eb98bee97d2e@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:27:08.513Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "1xShexv2Th0seLI8BN62c0",
+      "MessageID": "outbox-cmv4owsae002snba5wdd14tbk@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T03:26:07.741Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4732,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Aline ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Démontage · 18/10/2026 · 15:00–18:00 Lieu : Poin..."
+    },
+    {
+      "ID": "06jwcZMBuzZb8CD9U8EsWT",
+      "MessageID": "2927af96-4f8e-0f3f-3b9e-da03030197a6@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:25:56.132Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4633,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Nicolas ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merci p..."
+    },
+    {
+      "ID": "7cBfdUpv1sRKVbmB5r7WnH",
+      "MessageID": "2bc4f69c-c811-6d7e-74e4-1a16384b6491@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.8@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:25:56.127Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4650,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sébastien ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Merc..."
+    },
+    {
+      "ID": "4pb9tXPMqrbWm3m8hIkRnB",
+      "MessageID": "71bf85ec-356c-a161-e18e-f1e62869b35c@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.membre.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:25:43.317Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4733,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Aline ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! Bonjour A..."
+    },
+    {
+      "ID": "2lfzSakuwp6IYVUaW0miDg",
+      "MessageID": "0948d172-a63d-e926-4fe5-718fba6b205b@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "test.invitation@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête du village de Montvert 🙌",
+      "Created": "2026-10-12T03:25:29.519Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4559,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Prénom ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête du village de Montvert ! [Ceci e..."
+    },
+    {
+      "ID": "0zV4fys6JeijoyTE78aW1u",
+      "MessageID": "outbox-cmv4o1qsb000xnba5zd0zi5zc@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T03:01:59.499Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "5jxdtkMroStOw9FOjwVluN",
+      "MessageID": "outbox-cmv4nz7w0000onba5bs19plzg@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T03:00:01.693Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "4QKAaQaNM33saPy7HBE8Rq",
+      "MessageID": "outbox-cmv4nxyom000anba51t7j7bv1@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "nora.team@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-12T02:59:03.081Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4706,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nora ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Buvette · 18/10/2026 · 10:00–14:00 Lieu : Point de..."
+    },
+    {
+      "ID": "41rRbnbsDk9atcE5zxxHEr",
+      "MessageID": "outbox-cmv4nxeni0001nba51pipkzyh@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "samira.perrin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Montage » — Fête du village de Montvert",
+      "Created": "2026-10-12T02:58:37.18Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3689,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Montage ». Bonjour Samira, Vous avez été désigné·e responsable du poste Montage pour Fête du village de Montvert. Voir qui est inscrit Ce lien..."
+    },
+    {
+      "ID": "2K4inaaXH5H1VCzPgxcahY",
+      "MessageID": "outbox-cmv4e0nsw005ypya5ck5zgrbb@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "alex.martin.video.1791757254072@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-11T22:21:12.753Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4790,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Alex ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Accueil · 17/10/2026 · 15:00–18:00 Lieu : Stand d'..."
+    },
+    {
+      "ID": "0XGkUgbEn49wFp5pJHqOXH",
+      "MessageID": "outbox-cmv4dznc9005kpya5fjzlak17@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "alex.martin.video.1791757217562@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-11T22:20:25.587Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4790,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Alex ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Accueil · 17/10/2026 · 15:00–18:00 Lieu : Stand d'..."
+    },
+    {
+      "ID": "1GS2B2zUbgLlCBY2yVPBJR",
+      "MessageID": "outbox-cmv4afeo4008cbia563y5qryy@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "alex.martin.video.1791751223654@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-11T20:40:42.302Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4790,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Alex ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Accueil · 17/10/2026 · 15:00–18:00 Lieu : Stand d'..."
+    },
+    {
+      "ID": "3ZLzoppyJksWzwCffmjVYd",
+      "MessageID": "outbox-cmv4aee3m007ybia5btle5h8b@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "alex.martin.video.1791751186263@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-11T20:39:54.965Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4790,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Alex ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Accueil · 17/10/2026 · 15:00–18:00 Lieu : Stand d'..."
+    },
+    {
+      "ID": "0pDuLJWOtmF0NIbkmU5CL3",
+      "MessageID": "outbox-cmv4acnk7007kbia5vwomtodi@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "alex.martin.video.1791751098491@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête du village de Montvert 🎉",
+      "Created": "2026-10-11T20:38:33.93Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4790,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Alex ! 🎉 Super, ton inscription pour Fête du village de Montvert est confirmée ! Accueil · 17/10/2026 · 15:00–18:00 Lieu : Stand d'..."
+    }
+  ],
+  "preservedMessageIds": [
+    "4GEXBsr4Zpauo6QYz35mM7",
+    "5ZGcGTn0278jj9RQeswC6C",
+    "6OSaj4qzmBXmLp5SPinYPM",
+    "2JIRshlV3wKatjBLTr9Nsc",
+    "5NvmlNx4VFTDJRuE2WWCZb",
+    "4kJ45ct2qw82WvFm5fshwR",
+    "2BWnfq28pqdAa3iRRFiGlG",
+    "1x3n0RHUNEoT99SONgkZ6M",
+    "1dsZkAgtkQGKO0Co0BWTpd",
+    "18JLR5w2l0lXYl1kItZEtp",
+    "4tFNFO4Chs4XBVgmHovIIe",
+    "6FQ3qHBXNkb2r81DCauSpG",
+    "7exsCJzmVuk2XEdvfVxZxG",
+    "6OdWmHTsm4wuoxU8ZUMyqT",
+    "5Ft1YqlIZA8WhJWKI6XTaV",
+    "39pFibRmcHku6yBFiVyztA",
+    "67K4mCAZziE9xxmBfrvfEj",
+    "4A822hGmDAPwycSY6qH0FE",
+    "4pYpTRH67KUTONzZr3hCZC",
+    "3zHya4HN730SvmtSwXcxQ1",
+    "05lQwJ8M1fVZWp6SZw2iWF",
+    "3248D1iIicgJelopPaERQI",
+    "5WciM0jeoGwzp0wMJDGvQG",
+    "4Z1IrlVeiNhSV4zT5wV3kW",
+    "7JH1j58sPGRQra6aVAxJGL",
+    "0QI02imxAquAanyFkTWJ60",
+    "3BUIyA0pWxB3WkQ0VJuToX",
+    "07iYy0eFxxSjbR0LMt2mwx",
+    "4bNTYXdRdYZO61n3MzykPq",
+    "0DJIIDWp8so5VaKQyVVXPn",
+    "4XgfMrXXBguYVRqBPFNXic",
+    "5DFBnQ8oHjpxDvoaJcTvPf",
+    "0CVOzsBGRaJoFGABgIFyvw",
+    "0rq22pLpi05VJ3d6SONxqe",
+    "4UFroc0EozuRvkbdywUm0m",
+    "3zyAvETlSIyOjVNv0ZtWBt",
+    "7GawWapyPY0kCvKUL7FPs6",
+    "1gK31iftfeCcMl4SR2gOkZ",
+    "5S7UaAYGrXPHR6QwGccEqP",
+    "6wzZcRRLJqyZ4gFTEJrm9F",
+    "3CKicVVNbwZPHF0FxCpyp4",
+    "3OfVOHJOBL4vgPpVXSVEuK",
+    "5IPMjeF76j9J6kg7uHhVAZ",
+    "7O17XUe1NRFzxgA8x2FyN9",
+    "6dQCYuLDHI1ZEZHdtRnQc2",
+    "34Vwx9HoO6aLYb8yZSpGM7",
+    "3AcNhq1uIj93h6kPmcNnI5",
+    "3h5cuVAaj947jHCL8dX5wB",
+    "0zSZd3A6SxdJJKLLpHqouP",
+    "4Z83F9ppaulohVFinplyPy",
+    "1HIRFlyAjbZe2Yx62wms2i",
+    "37BnQavPuQomnJBxcfjC2H",
+    "35z4i4RYRwXQOdqSFBlGwT",
+    "1DXPs0l6NfbOdts0q5tE3E",
+    "1V04H6h3T9ib68XVLFzib1",
+    "4u2G925OZRU8xoNMwyA1GM",
+    "3ysWqjqQSqjeZLmvw9zTkP",
+    "1cFAaJ0u1eHwx5dUogPWi3",
+    "4Uv6nuXgK4akOwKrCFHKXS",
+    "5lP17gDBi6gX5DVLIfDWny",
+    "0XesgUt9PCEANSZP5pNCHg",
+    "6jQqRNlBE6DV4te1QeW9sy",
+    "4Iuvk9FJ2KgDMbgV6R5oCf",
+    "1HqiGlmJstNN5WI8ea9qSO",
+    "484BOVs0LConkSSSrbc7aC",
+    "4T2xPxonnAMYa14KX1cZqI",
+    "49jGoes2KXQPb9DPEl1UqV",
+    "6Y7jq1OOKnJO110PgU1TX7",
+    "78VkBPUvYuermq7ATx8sB0",
+    "7aMqrb492H7dNAGqPaKnP2",
+    "2KAgkev3lhceMvIaRtxBFO",
+    "42JrDsWqnelB1fDkhX6DBa",
+    "0gUNv83CvRN0kS1BNLSIkk",
+    "5UXRmbMKRIv6YcQO6tFqvg",
+    "0ul6X0urfVIX4ggQpy5KnJ",
+    "3aLIINIbXUzwTuoVVLG6Pk",
+    "2aKpJp5Z1qJWWCRSmdDxfr",
+    "2tco1FvHOO3Gaj9QZLbrhL",
+    "1HUkTwvYZxUiM0I2JSemMS",
+    "2RIps6Oj61GQfd0EFJBMdY",
+    "12cIDMHnvUEirJfM5rNany",
+    "0wCNUjx9gf0XtWI8wEtNSK",
+    "3FHuE5HK6JiHgxFaFOR7yp",
+    "4eo2fp774awNKsdBPjN6Wo",
+    "0jQK6nNpiE94RS2mVi5DkU",
+    "0hvO6llEApXH2i0mNsbJ1N",
+    "4A7lMxTkynuXpvytOZkrqY",
+    "1361BSRp8j57Qr5qW2xpqR",
+    "1nB3M2xsJVT6IfHHeAis4n",
+    "4K2foexUion18Tr7J6bdDC",
+    "2uyQFMbN7lMZvYeDN5cIEC",
+    "38QxctovoJmGxj8u2xfw2K",
+    "3q223RHjD5FaF0R1FzhFHp",
+    "7bHbZUSRO2u9ZimBWUmoUW",
+    "3lZDf7lTSqM6m6b5Q0lrcc",
+    "4K9kyFybU5gXnd4mr5sCe2",
+    "0GGqbZYEtuSG5aOa6dCSfb",
+    "1gm6zGo2bsYsk15VuEuoKu",
+    "3b0RGx1oOot1UihYZDNXUs",
+    "2XEMNvee21jcoUag60Ns6r",
+    "1J6EDbuRN3B3ySg60YLAxF",
+    "74YZo2MWOjIWnpySclhFUT",
+    "6l2pJbplrU5W414g0VVUWT",
+    "6HFzOXpWwMmPgrrutCoBf0",
+    "4VgihFZYzts2DBpIWGILhf",
+    "7DNLFsf2vgmw4DgOH2AQh0",
+    "73QX3GnUjP4noxhlL2zcAX",
+    "1Th2Alo4wYrK15dAynZbR9",
+    "2Az6nWlpWHNfaV9J5nS6wa",
+    "4ChxgQkh9S2PcQvEts890B",
+    "1bPUROQpNOn41tK8Emg3JA",
+    "30UeQzhzGJagyZTjpcOWCw",
+    "0GOUiJu7mBKLAbsSmJ7YCy",
+    "6pooxehVikxuLEoqDCBnkH",
+    "4nNKeSKRENtrA37HxmKgON",
+    "1WfaE8sBUOmgLHEp3B4gmg",
+    "5uvVAk0JkFW7HrpsOXvI46",
+    "1fVl7oVn9i1Tfe8fdVMEU0",
+    "2hzsuFy2liVwTrnvqjyneY",
+    "2wy3VVrSCiJPsfPqIhowuA",
+    "5db2bQh79EM0BNmYkZiyVX",
+    "6aSrOMHQF16ZGwZzRquJe7",
+    "0h1ftzSVWBianFKbd2AqjA",
+    "2LfpjiH64YUDvFiewqRZH7",
+    "7dn3kgcaGr766trNWKaThJ",
+    "48LrZiUGjyI9RHdL2P864m",
+    "0eqKC70a9B7STF5PGw2wc9",
+    "4283i8mrnQYgYvoZOvEPlD",
+    "1pPjQQiy2d87hw70v2027K",
+    "5OBAOirbsF0dxZ7alAx71o",
+    "3lsvFkVeBmhNm8fdyxoG86",
+    "3YIknaNyGOZSBI9ogJPiSL",
+    "24SvnhL6uPZ9SktWkaV7up",
+    "5RhDhVPrnkJcprWmSSdSIe",
+    "4T1wIUPSa5KmsvliJRjHxw",
+    "0lumYZ3DMLoRer0Z2VHlqH",
+    "4xOQPE7fsi0FVoRPAQSzXd",
+    "1FveRLmhXU4o8I3ElWcUzc",
+    "4xszuRx5Uz35kQIBE6gMxI",
+    "4QtakRIGo0eMNtkTFMsAxf",
+    "1ERpLzxrwLdXuFCvav9Qka",
+    "0mqUHjMqpsXcWgTzAiLLwv",
+    "1VzD3itaHxVOMsCEUg7IYp",
+    "5pV1HORr4SloI4nG29QPf5",
+    "5PRifIyf5abwpeNpmCROfx",
+    "1s5IBQplvStTUDhtuuGSr6",
+    "6fhyyhKP7wiYYZuUzF4jLi",
+    "3puIPvS95jYUard7aw4oSS",
+    "6ux2q9o6lRo3gPdwdL3Osd",
+    "69Y2y5VzSm7TyJlGwr18xx",
+    "0IqPymERFvXr8Mn0lrWnfI",
+    "44yyfl3A0F0h1ox9DXnEHK",
+    "1rKTb6lSD8iO0MJwiGR8aa",
+    "2EjSsg4EzRlUreKKe1TFri",
+    "03IZwvNHyJNMxDmS7p3nyQ",
+    "1CFVg5BVEhG7djvwsVCshW",
+    "5qfNhnCJT6934Uat94J2k0",
+    "5UlQS5oO1UwIHFSJFXdk0G",
+    "5B7MCqxsftPiHIYXbwA1WH",
+    "1LlOSoZaeZT9P5SdnLncE3",
+    "7PenZ4oO1FcIpyLySdtUkb",
+    "5xiiageMHzAPudZKTUZVRL",
+    "5eqCAJHYmFSnN04nKb1Ewc",
+    "6HROqdIXEvbgcdVLIdK8fq",
+    "0dBkx2V1CaI4KTWgwCjnKR",
+    "0DMdlKMiD9YNUiNIL8Drdu",
+    "75Gh8m1j7Iy042Oz4sBt8R",
+    "212YEN07V7M6dOUuSVO6Tl",
+    "2N4AEuiuJTBZTFXxNnAPeU",
+    "77XtrztOuPRl7nMRY203xe",
+    "69qcD6BUXc9gIFYF0WFB3t",
+    "439Vq6t40lkV1J0KuNJPKg",
+    "02WXewKtikAlZ9JAibeFC7",
+    "06x6cxth4OGVKJPD9cbKlf",
+    "50EhgmLBUesdGl91iOIKCY",
+    "0YwOKKvJMNTgsNKjBVbUF2",
+    "5YYl1eIHZEZR7flT1AaNF9",
+    "1YzEgLyJ32NojrT8tOw9Di",
+    "4WJ8Zr9FawOH6SCNsqrzMS",
+    "3DANkaGVgTKa9uJ7JbFnxq",
+    "1InjzIaH5v8NcajtMD3Rti",
+    "1udqTfZgf1sIOXiYI6T9ws",
+    "6LjOOkYLOR30LbAJem9Z1L",
+    "61vI6xLcxecj0ehUTd94Sy",
+    "2IerkpH8YYAaaXdmzzX560",
+    "5jXSsqa99qRZPSXQmSbOYp",
+    "3SzKZZF1MA7kDyahIKJvhD",
+    "0tYSOTuvKJVOFeDtP1Dvdb",
+    "7jY5s7ALCVuhGluhRHOHuH",
+    "5d9WlUHreMqrazTtoWrZfZ",
+    "70wuRWAK6tPZuS9dXyzh3o",
+    "6tTkBLtWGvdLKpm0tSK0a7",
+    "75R3Ib8VTTy0tzU08iT0dc",
+    "17ZlCXA8KeAJaWZjh4bVjg",
+    "63GH3DjkEgUCSpn4JI5R8B",
+    "4LTmok81hgkNta7gdghvEB",
+    "2AqwOvh4bhszm8CVc2EzLE",
+    "1wqz6uU3Hb1hQhxRgxgiQE",
+    "1OjGAlWDy3IhkzsyzbtDuG",
+    "1fozb7TJ5IAzFdLgEbQUW0",
+    "4sVeltvMIb5s8fCHHz2RNE",
+    "48c1V9RZi3Qkshkwfz5DT1",
+    "7gQzg8RAWQSUzmyrzZLUAQ",
+    "61ApJ0ghoAjBP0GzuMrkVf",
+    "4CEFe6L3C07DrY4hJoJmym",
+    "2M95yRyd1vl92VqbnTYCly",
+    "56njoUnify9qpfdIPO71CZ",
+    "1hBjH5XIA9XUIlkw37fWPg",
+    "3obVqPln6POETXB1uG5OW7",
+    "0uy74L7SwZ23l1xY706BnN",
+    "5EHLfYPIjvIgAhA5dzvKBp",
+    "4o8Bdl9LBm8ZFYcFwoFkH4",
+    "5GBZxJICleM971xqB6g0C1",
+    "76ipumGZkQTFXKBa3bKdEq",
+    "71ih1r0sd4y5PtwBmMnvEv",
+    "2uAdwBkvLE4ze2GO4I4yiQ",
+    "1VLTvaWu68xvZkWgQbirxk",
+    "0se1k9gcJ8qkJSMhTfSEp9",
+    "3t4i3cNlP5fIilrU9uOD8y",
+    "4tQvADpQQHJnE2PtAM0zja",
+    "7BPENkaKMxEsvdssV4sOjU",
+    "5O6SPWSflrErsyn5VwWWsc",
+    "1FBZQBIJ1ufUYGIskltvBr",
+    "3c8XywIzIwfr1EXdyMIOwp",
+    "75GuUpG3JMNKpcL4MKHISc",
+    "6N6vcTsx8OOV2jVh4UL7E5",
+    "1u9t0TP0ilXXRoLT3AIxZJ",
+    "3ZzyiuGY6fLCNevCs9Q5br"
+  ],
+  "deletedPendingIds": [],
+  "remainingPreviousPending": 0
+}

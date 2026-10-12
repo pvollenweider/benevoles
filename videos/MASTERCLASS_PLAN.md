@@ -616,12 +616,27 @@ partageront le même identifiant.
 
 - colonnes, statuts, source et réponses ;
 - filtre poste, créneau, demandes et recherche ;
-- ajout manuel ;
+- ajout manuel depuis un membre choisi, ou une nouvelle personne, avec annonce d’email avant validation ;
+- confirmation regroupée environ dix minutes après le dernier ajout ;
 - sélectionner une ou plusieurs lignes ;
 - renvoyer un lien, désigner un responsable, retirer avec délai d’annulation ;
 - conflits et avertissements de charge.
 
 **Jeu de données :** au moins 80 inscriptions couvrant tous les statuts et toutes les sources.
+
+### Placer un membre sur plusieurs créneaux
+
+**Identifiant :** `REGISTRATIONS_PLACE_MEMBER`.
+
+**Public :** organisateur. **Niveau :** essentiel. **Durée :** environ 90–120 secondes.
+
+- Inscriptions → « + Ajouter manuellement » ;
+- recherche de membre par nom ou email, « Choisir », résumé « Membre choisi » ;
+- premier horaire puis « + Ajouter un autre créneau », deuxième horaire compatible ;
+- lecture de l’annonce d’email, ajout groupé et résultat réel ;
+- « Dix minutes plus tard » : vrai email issu du cron, deux horaires et lien personnel.
+
+**Jeu de données :** Sarah Jaquet, membre fictif avec email, accueil le samedi et démontage le dimanche.
 
 ### 40. Voir précisément où il manque du monde
 
@@ -923,7 +938,8 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 35 — Importer ses membres | Prévisualisation générée | `demo` et fichiers de 40 lignes | Neuf paragraphes contrôlés ; analyse CSV/Excel, erreurs, 38 créations et deux mises à jour vérifiées ; capture, assemblage, durées et planche contrôlés. Réanalyse annulée montrant le risque des fiches sans email. Visionnage audiovisuel intégral restant |
 | 36 — Inviter des membres | Prévisualisation générée | `members-invitations` | Dix paragraphes contrôlés ; 60 fiches. Test, invitations individuelles et groupées, inscription préremplie, poste réservé et fiche sans email réellement capturés. MP4, durées et planche de 30 images contrôlés ; visionnage audiovisuel intégral restant. Adaptation du séparateur des liens locaux consignée |
 | 37 — Relancer sans créneau confirmé | Prévisualisation régénérée | `members-reminders` | Huit paragraphes contrôlés ; relance et message ciblé réellement remis au SMTP local, jeton conservé et compteurs inchangés vérifiés. Capture refaite avec lecture du récapitulatif avant annulation/confirmation ; MP4 et durées validés, planche en cours de renouvellement. Visionnage audiovisuel intégral restant |
-| 39 — Lire et gérer les inscriptions | Prévisualisation générée | `registrations-management` | Quatorze paragraphes recalés et contrôlés indépendamment ; capture, MP4 et durées validés. 80 inscriptions, doublon refusé, avertissement de conflit, ajout compatible, un email pour deux lignes, nomination et badge, retrait annulé sans effet puis place réellement libérée vérifiés. Absence réelle d'email de retrait constatée et annoncée honnêtement. Planche de 42 images contrôlée ; visionnage audiovisuel intégral restant |
+| `REGISTRATIONS_PLACE_MEMBER` — Placer un membre sur plusieurs créneaux | READY local, reprise batch 13 | `registrations-place-member` | 93,840 s ; build e44004c / EEyJJLNfRQviqfGUxjSM7. Narration auditée réutilisée ; ASR source et MP4, neuf repères de phrase, musique 15,2–18,6 LU et effets contrôlés. Nettoyage Mailpit ciblé avant la prise ; navigation par résultat de recherche et identifiants visibles vérifiés. Un seul vrai email groupé pour deux inscriptions ; frames finales de 73 à 93 s relues. Une alerte automatique sur Chercher/Choisir réfutée par frames et clics mesurés. Non publié |
+| 39 — Lire et gérer les inscriptions | NOT READY local, reprise batch 13 | `registrations-management` | 344,320 s ; build e44004c / EEyJJLNfRQviqfGUxjSM7. Anciennes confirmations retirées avant la prise ; listes finales de 1, 2, 3 puis 4 vrais emails de cette prise vérifiées, dont une seule confirmation à 172 s. ASR source/MP4, 31 repères capturés, sous-titres, effets et musique 13,5–19,7 LU passent. Choix compatible tardif confirmé : option choisie 1,921 s après la fin de sa phrase. Source corrigée par at("Choisissons plutôt un horaire compatible") ; aucune nouvelle prise après cette correction de timing, selon la règle du batch. Dates Mailpit anglaises et valeurs brutes du journal signalées ; non publié |
 | 40 — Où manque-t-il du monde | Prévisualisation générée | `staffing-gaps` | Neuf chapitres audio et montage contrôlés ; affectation réelle et diminution du manque vérifiées. Revue audiovisuelle et visionnage intégral restants |
 | 41 — Messages ciblés | Prévisualisation générée | `targeted-messages` | Répétition complète : audiences, déduplication, cinq emails réels, restauration et historique vérifiés. Explication du modèle enrichie pour conserver une frappe lisible ; nouvelle prise unique Puck, douze transcriptions, capture complète et montage contrôlés. Revue audiovisuelle et réception push restants |
 | 42 — Rappels et changements | Prévisualisation recapturée ; revue intégrale restante | `reminders-changes` | Neuf chapitres, montage et 36 images contrôlés ; rappels réels et absence de doublon vérifiés. Transition vers le brouillon et retour au planning recapturés. Sept chapitres sans signalement automatisé ; deux absences de manipulations signalées sont contredites par les images et résultats réels (voir contre-vérifications). Lisibilité et visionnage humain intégral restants |

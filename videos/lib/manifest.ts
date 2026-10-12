@@ -39,6 +39,8 @@ export type VideoManifest = {
   viewer?: ManifestViewerContent
   /** Where videos/tools/posters.ts takes the poster frame (ms); a third of the video otherwise. */
   posterAtMs?: number
+  /** Small per-video music adjustment; the measured 12–20 LU rule still applies. */
+  musicGainDb?: number
 }
 
 export type VideoCatalogEntry = {

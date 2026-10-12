@@ -1,0 +1,61 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T10:36:31.428Z",
+  "revalidatedAt": "2026-10-12T10:36:31.429Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "5aa5f8c184432afdd56013d890273cc3d2aab7c26f6a58cc17ccdd73570da668",
+      "recognized": "Un membre vous a confirmé deux horaires ? Vous pouvez les enregistrer ensemble, sans recopier ses coordonnées. Ouvrons Inscriptions, puis Ajouter manuellement. Le formulaire commence par Membre existant, il cherche dans votre liste de membres.",
+      "expected": "Un membre vous a confirmé deux horaires ? Vous pouvez les enregistrer ensemble, sans recopier ses coordonnées. Ouvrons Inscriptions, puis Ajouter manuellement. Le formulaire commence par Membre existant : il cherche dans votre liste de membres.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "member",
+      "audioSha256": "8d469b90aeabe33130b6f88ded2a535b0ec1ff0dd5c08f0e9c0b1f7901dd9a7d",
+      "recognized": "Cherchons Sarah par son nom, puis cliquons sur Chercher. Le résultat affiche aussi son email pour éviter une confusion. Cliquez sur Choisir. Le résumé Membre choisi reprend ses coordonnées. Changer de personne permet de corriger le choix avant de valider.",
+      "expected": "Cherchons Sarah par son nom, puis cliquons sur Chercher. Le résultat affiche aussi son email pour éviter une confusion. Cliquez sur Choisir. Le résumé Membre choisi reprend ses coordonnées. Changer de personne permet de corriger le choix avant de valider.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "shifts",
+      "audioSha256": "26ac973bcda3cd3debdfdefc4639ae247cdde176ca06c553af003ea0be9dbd5f",
+      "recognized": "Choisissons un premier créneau, à l'accueil, de quinze à dix-huit heures. Cliquez ensuite sur Ajouter un autre créneau. La ligne Créneau deux, facultatif, apparaît avec son bouton Retirer. Choisissons le démontage du lendemain, également de quinze à dix-huit heures. Les deux horaires seront ajoutés ensemble.",
+      "expected": "Choisissons un premier créneau, à l’accueil de quinze à dix-huit heures. Cliquez ensuite sur Ajouter un autre créneau. La ligne Créneau deux, facultatif, apparaît avec son bouton Retirer. Choisissons le démontage du lendemain, également de quinze à dix-huit heures. Les deux horaires seront ajoutés ensemble.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "add",
+      "audioSha256": "3caf63e40e1e0ec24215fc56318f1dbeb496abd8ea87bbd61f573fb3ef87cdb8",
+      "recognized": "Avant de valider, lisez la phrase sous la note. Un email de confirmation partira à Sarah dans une dizaine de minutes avec tous les créneaux ajoutés pour cette personne à cet événement. Cliquez sur Ajouter. Les deux inscriptions apparaissent et le message confirme l'ajout sur les deux créneaux.",
+      "expected": "Avant de valider, lisez la phrase sous la note. Un email de confirmation partira à Sarah dans une dizaine de minutes, avec tous les créneaux ajoutés pour cette personne à cet événement. Cliquez sur Ajouter. Les deux inscriptions apparaissent, et le message confirme l’ajout sur les deux créneaux.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email",
+      "audioSha256": "0be1b5ae2b958d7404d4ffc38ad54d573d5123971c6af05b46bc18c8ba5252ac",
+      "recognized": "Dix minutes plus tard, ouvrons la boîte de démonstration. Le véritable e-mail indique qui a inscrit Sarah et pour quelle organisation. Il liste ses deux créneaux, puis son lien personnel pour consulter ses inscriptions. Plusieurs ajouts pour la même personne et le même événement sont regroupés après le dernier ajout. Sans adresse e-mail, aucun message ne part.",
+      "expected": "Dix minutes plus tard, ouvrons la boîte de démonstration. Le véritable email indique qui a inscrit Sarah et pour quelle organisation. Il liste ses deux créneaux, puis son lien personnel pour consulter ses inscriptions. Plusieurs ajouts pour la même personne et le même événement sont regroupés après le dernier ajout. Sans adresse email, aucun message ne part.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

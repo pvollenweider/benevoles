@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:31:45.259Z",
+  "videoSha256": "6154fe94f585bfee9ff5291058254524c362d5b743f3d4d66aa5a664362c9cee",
+  "promptSha256": "12e9cc89142ac6a7db89b198b495e95a24d61f3924b5741385e37f517f906df0",
+  "clipSha256": "6c9fee13e97d1895f8e804ae526141a98d0841b2daded04dccfb626dc4d2eca6",
+  "scene": "add",
+  "review": {
+    "heardOpening": "Avant de valider, lisez la phrase",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "lisez la phrase sous la note. Un email de confirmation partira à Sarah",
+        "visibleSeconds": 1,
+        "visible": "Texte d'information bien présent sous le champ de note précisant l'envoi de l'e-mail de confirmation à Sarah",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Cliquez sur Ajouter.",
+        "visibleSeconds": 10.1,
+        "visible": "Clic sur le bouton bleu « Ajouter »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.9,
+        "spoken": "Les deux inscriptions apparaissent, et le message confirme l’ajout et l’email prévu.",
+        "visibleSeconds": 11.5,
+        "visible": "Bandeau vert confirmant l'ajout des 2 créneaux et affichage des deux lignes d'inscription pour Sarah Jaquet dans la liste",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:13, le message de confirmation vert confirme l'ajout sur les 2 créneaux mais ne mentionne pas l'e-mail prévu (l'information sur l'e-mail figurait uniquement sur l'écran précédent avant validation)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et fluide, synchronisation naturelle avec l'action."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

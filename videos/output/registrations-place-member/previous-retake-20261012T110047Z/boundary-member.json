@@ -1,0 +1,12 @@
+{
+  "anchor": "Cherchons Sarah par son nom, puis cliquons sur Chercher. Le résultat",
+  "windowStart": 5.257999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 10.87,
+    "wordsHeard": "Cherchons Sarah par son nom, puis cliquons sur Chercher. Le résultat"
+  },
+  "onset": 16.128,
+  "proposedCut": 15.9734375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

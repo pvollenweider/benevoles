@@ -1,0 +1,32 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-10-12T10:26:11.501Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 15397,
+      "generationSha256": "2ada10b080c900a99d92830cad1b004ea3e6a19a8f3d7ef98dda5aa2e3149d7c"
+    },
+    "member": {
+      "file": "audio/member.wav",
+      "durationMs": 15941,
+      "generationSha256": "2ada10b080c900a99d92830cad1b004ea3e6a19a8f3d7ef98dda5aa2e3149d7c"
+    },
+    "shifts": {
+      "file": "audio/shifts.wav",
+      "durationMs": 19003,
+      "generationSha256": "2ada10b080c900a99d92830cad1b004ea3e6a19a8f3d7ef98dda5aa2e3149d7c"
+    },
+    "add": {
+      "file": "audio/add.wav",
+      "durationMs": 16413,
+      "generationSha256": "2ada10b080c900a99d92830cad1b004ea3e6a19a8f3d7ef98dda5aa2e3149d7c"
+    },
+    "email": {
+      "file": "audio/email.wav",
+      "durationMs": 19406,
+      "generationSha256": "2ada10b080c900a99d92830cad1b004ea3e6a19a8f3d7ef98dda5aa2e3149d7c"
+    }
+  }
+}

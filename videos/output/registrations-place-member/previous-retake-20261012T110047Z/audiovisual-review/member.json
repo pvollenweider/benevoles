@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:36:22.825Z",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "promptSha256": "f55ee5482fb036d54bc68d2821a2ef06f9c4f1aa5423a926ada332b69978fdbd",
+  "clipSha256": "2f1e3c01babbf60acfbb76bfa022f4e36e7bb7aac342ef3392faec4228c82e39",
+  "scene": "member",
+  "review": {
+    "heardOpening": "Cherchons Sarah par son nom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cherchons Sarah par son nom",
+        "visibleSeconds": 0.7,
+        "visible": "Saisie de « Sarah » dans le champ de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "puis cliquons sur Chercher",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton Chercher et affichage de Sarah Jaquet avec son email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "Cliquez sur Choisir",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur le bouton Choisir en face du résultat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le résumé Membre choisi reprend ses coordonnées",
+        "visibleSeconds": 10.3,
+        "visible": "Affichage de la section « Membre choisi » avec Sarah Jaquet, son email et son numéro",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Changer de personne permet de corriger le choix",
+        "visibleSeconds": 13.6,
+        "visible": "Bouton « Changer de personne » bien visible sous les coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

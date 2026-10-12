@@ -1,0 +1,9 @@
+{
+  "mp4Sha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "vttSha256": "2c42e203d465ccaf0368d5adf816341401e5c2ba0d9a36d63f6d289d90f95ffc",
+  "chapters": 5,
+  "captions": 21,
+  "sourceTextAndDisplayNormalizationMatch": true,
+  "allCuesReadable": true,
+  "note": "Content/layout/timing generated from verified chapter audio; final MP4 ASR and audiovisual reports independently check spoken content and visible actions."
+}

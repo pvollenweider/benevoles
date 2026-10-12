@@ -6,6 +6,7 @@ summary: Le tableau des inscriptions d'un événement : coordonnées, statut, ac
 related: [presences-le-jour-j, ou-manque-t-il-du-monde, ecrire-aux-benevoles]
 legacy: [admin#suivre-les-inscriptions, admin#ajouter-quelqu-un-a-la-main]
 aliases: []
+updated: 2026-10-12
 ---
 
 # Suivre les inscriptions
@@ -46,7 +47,7 @@ Quand une personne vous répond « ce n'était pas moi » après l'email qui lui
 
 ## Ajouter quelqu'un à la main
 
-**+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle**.
+**+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle**. En vidéo : [placer un membre sur plusieurs créneaux](/videos/REGISTRATIONS_PLACE_MEMBER).
 
 - **Membre existant** : cherchez par nom ou email une personne déjà dans la liste des membres, vous-même compris, puis **Choisir**. Ses coordonnées sont reprises sans rien retaper, même sans email, et l'inscription est rattachée à sa fiche. **Changer de personne** revient à la recherche.
 - Pour une nouvelle personne : prénom et nom (obligatoires), email, téléphone. Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.

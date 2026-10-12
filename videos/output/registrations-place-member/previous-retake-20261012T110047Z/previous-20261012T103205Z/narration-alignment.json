@@ -1,0 +1,31 @@
+{
+  "model": "gemini-3.8-flash",
+  "masterSha256": "d18bb52d064d615dbec0537145e2fd190ec75c14eda32fab23d49e7395aacc99",
+  "segments": [
+    {
+      "id": "welcome",
+      "startSeconds": 0,
+      "firstWordsHeard": "Un membre vous a confirmé"
+    },
+    {
+      "id": "member",
+      "startSeconds": 15.2,
+      "firstWordsHeard": "Cherchons Sarah par son nom"
+    },
+    {
+      "id": "shifts",
+      "startSeconds": 31.8,
+      "firstWordsHeard": "Choisissons un premier créneau"
+    },
+    {
+      "id": "add",
+      "startSeconds": 50.4,
+      "firstWordsHeard": "Avant de valider"
+    },
+    {
+      "id": "email",
+      "startSeconds": 106.9,
+      "firstWordsHeard": "Dix minutes plus tard"
+    }
+  ]
+}

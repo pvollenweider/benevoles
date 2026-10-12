@@ -1,0 +1,7 @@
+{
+  "realCron": true,
+  "actualMail": true,
+  "twoShifts": true,
+  "personalLink": true,
+  "outboxStatus": "sent"
+}

@@ -10,8 +10,8 @@ import type { ProductBuild } from "../lib/product-build"
 import { verifyProductBuild } from "../lib/product-build"
 import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
-const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
-const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
+const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
+const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -155,6 +155,13 @@ async function main() {
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
         await verifyProductBuild("http://localhost:43102")
+        if (["registrations-place-member", "registrations-management"].includes(rest[0])) {
+          await new Promise<void>((resolve, reject) => {
+            const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
+            cleanup.on("error", reject)
+            cleanup.on("exit", code => code === 0 ? resolve() : reject(new Error(`Exact registration mailbox cleanup failed (${code})`)))
+          })
+        }
         // The existing preparation tool checks exact organization identity and synthetic
         // people BEFORE resetting only default. A scenario must never skip that guard.
         await new Promise<void>((resolve, reject) => {

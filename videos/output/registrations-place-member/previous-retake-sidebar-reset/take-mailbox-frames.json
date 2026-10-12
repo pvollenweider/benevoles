@@ -1,0 +1,38 @@
+[
+  {
+    "checkedAt": "2026-10-12T11:05:52.178Z",
+    "onlyThisTake": true,
+    "messages": [
+      {
+        "ID": "0p0vN932lP1FnxojoajgbX",
+        "MessageID": "outbox-cmv55bvf8000dyna5i1byrwzv@video.invalid",
+        "Read": true,
+        "From": {
+          "Name": "Bénévoles vidéo",
+          "Address": "notifications@benevol.app"
+        },
+        "To": [
+          {
+            "Name": "",
+            "Address": "sarah.jaquet@example.org"
+          }
+        ],
+        "Cc": null,
+        "Bcc": null,
+        "ReplyTo": [
+          {
+            "Name": "",
+            "Address": "organisation.montvert@example.org"
+          }
+        ],
+        "Subject": "Tu es inscrit·e : Fête du village de Montvert",
+        "Created": "2026-10-12T11:05:52.148Z",
+        "Username": "video",
+        "Tags": [],
+        "Size": 3905,
+        "Attachments": 0,
+        "Snippet": "Inscrit·e sur 2 créneaux : Fête du village de Montvert. Hello Sarah, Élodie Rochat, de Fêtes de Montvert, t'a inscrit·e à Fête du village de Montvert, sur 2 créneaux : Accueil, samedi 17 octo..."
+      }
+    ]
+  }
+]

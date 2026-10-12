@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:10:46.220Z",
+  "videoSha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "promptSha256": "0cf7937e6d655df5bb2086f8e8c0be826969cc5a894ad4876905e12e3ce59110",
+  "clipSha256": "10d6854f6284239cf925a0689398d1799ea633d86cde380ab61cce46b1c43ca6",
+  "scene": "add",
+  "review": {
+    "heardOpening": "Avant de valider, lisez la phrase sous la note.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "lisez la phrase sous la note.",
+        "visibleSeconds": 0.8,
+        "visible": "La phrase informative est affichée sous le champ de note au-dessus du bouton Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Cliquez sur Ajouter.",
+        "visibleSeconds": 10.5,
+        "visible": "Le clic est effectué et la page d'inscriptions se recharge avec le résultat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Les deux inscriptions apparaissent,",
+        "visibleSeconds": 11.5,
+        "visible": "Les deux lignes d'inscription pour Sarah Jaquet sont visibles en tête du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "et le message confirme l’ajout sur les deux créneaux.",
+        "visibleSeconds": 14.3,
+        "visible": "Bandeau vert confirmant l'ajout de Sarah Jaquet sur les 2 créneaux bien en évidence",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

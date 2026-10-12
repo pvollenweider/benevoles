@@ -1,0 +1,190 @@
+{
+  "video": "registrations-place-member",
+  "source": "/private/tmp/codex-video/videos/output/registrations-place-member/registrations-place-member.mp4",
+  "sourceSha256": "6154fe94f585bfee9ff5291058254524c362d5b743f3d4d66aa5a664362c9cee",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-12T10:30:50.336Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.03896356906292616,
+      "seconds": 0.737,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 3.98675,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 7.06655,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 9.3764,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 13.22615,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9805182154685369,
+      "seconds": 15.236,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.03763643206624012,
+      "seconds": 16.587,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-4.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.25,
+      "seconds": 19.9725,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-25.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.45,
+      "seconds": 23.1609,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-45.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.6,
+      "seconds": 25.552199999999996,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-60.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.85,
+      "seconds": 29.537699999999997,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-85.png"
+    },
+    {
+      "scene": "member",
+      "fraction": 0.9811817839668799,
+      "seconds": 31.629,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/member-end.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.03157230056830141,
+      "seconds": 32.985,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-3.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.25,
+      "seconds": 37.136,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-25.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.45,
+      "seconds": 40.936800000000005,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-45.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.6,
+      "seconds": 43.7874,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-60.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.85,
+      "seconds": 48.5384,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-85.png"
+    },
+    {
+      "scene": "shifts",
+      "fraction": 0.9842138497158492,
+      "seconds": 51.089,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/shifts-end.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.03655193420651843,
+      "seconds": 52.443,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-4.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.25,
+      "seconds": 55.94675,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-25.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.45,
+      "seconds": 59.22975,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-45.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.6,
+      "seconds": 61.692,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-60.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.85,
+      "seconds": 65.79575,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-85.png"
+    },
+    {
+      "scene": "add",
+      "fraction": 0.9817240328967408,
+      "seconds": 67.958,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/add-end.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.030918272699165205,
+      "seconds": 69.311,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-3.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.25,
+      "seconds": 73.5625,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-25.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.45,
+      "seconds": 77.44369999999999,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-45.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.6,
+      "seconds": 80.3546,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-60.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.85,
+      "seconds": 85.2061,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-85.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.9845408636504174,
+      "seconds": 87.817,
+      "file": "/private/tmp/codex-video/videos/output/registrations-place-member/review-frames/email-end.png"
+    }
+  ]
+}

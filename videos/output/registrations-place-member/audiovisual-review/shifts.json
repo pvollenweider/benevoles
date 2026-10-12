@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:10:33.159Z",
+  "videoSha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "promptSha256": "24c2d92cdc3b3f72bcf5c1c882ebf6e9cf0b30e7f20d700e777698387585c353",
+  "clipSha256": "0cc7a2206860d0376e3e330ad7bc9382527a949f1d381e9183b3ef457693db71",
+  "scene": "shifts",
+  "review": {
+    "heardOpening": "Choisissons un premier créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissons un premier créneau, à l’accueil de quinze à dix-huit heures.",
+        "visibleSeconds": 2,
+        "visible": "Sélection du créneau « sam. 17 oct. - 15h-18h - Accueil » dans la liste déroulante.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Cliquez ensuite sur Ajouter un autre créneau.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le bouton « + Ajouter un autre créneau ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "La ligne Créneau deux, facultatif, apparaît avec son bouton Retirer.",
+        "visibleSeconds": 6,
+        "visible": "La ligne « Créneau 2 (facultatif) » s'affiche avec le lien « Retirer ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Choisissons le démontage du lendemain, également de quinze à dix-huit heures.",
+        "visibleSeconds": 15.1,
+        "visible": "Sélection du créneau « dim. 18 oct. - 15h-18h - Démontage ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

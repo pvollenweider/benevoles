@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:10:41.581Z",
+  "videoSha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "promptSha256": "f55ee5482fb036d54bc68d2821a2ef06f9c4f1aa5423a926ada332b69978fdbd",
+  "clipSha256": "2f493712bf654e259d7a9f383c6687d9b2550c0eb02d0c42a655b2fa15c77426",
+  "scene": "member",
+  "review": {
+    "heardOpening": "Cherchons Sarah par son nom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cherchons Sarah par son nom",
+        "visibleSeconds": 1,
+        "visible": "Saisie de « Sarah » dans le champ de recherche de membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "puis cliquons sur Chercher",
+        "visibleSeconds": 8,
+        "visible": "Aucun clic sur Chercher à cet instant ; le résultat s'affiche automatiquement dès 00:02",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Le résultat affiche aussi son email pour éviter une confusion",
+        "visibleSeconds": 2,
+        "visible": "L'email sarah.jaquet@example.org est affiché sous le nom dans la liste de résultats",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Cliquez sur Choisir",
+        "visibleSeconds": 8,
+        "visible": "L'animation de clic cible le bouton « Chercher » au lieu du bouton « Choisir »",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le résumé Membre choisi reprend ses coordonnées",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la section « Membre choisi » avec le nom, l'email et le téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Changer de personne permet de corriger le choix avant de valider",
+        "visibleSeconds": 9,
+        "visible": "Le bouton « Changer de personne » est visible sous les coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02, l'action « cliquons sur Chercher » n'est pas effectuée (le résultat apparaît automatiquement).",
+      "À 00:08, alors que la voix demande « Cliquez sur Choisir », le clic visuel est déclenché sur le bouton « Chercher »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchrone avec le script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

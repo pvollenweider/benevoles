@@ -1,0 +1,21 @@
+STATUS: READY
+ID: REGISTRATIONS_PLACE_MEMBER
+Commit: e44004c0d4d1e9b093609c07b572ad69d00afaaf
+BUILD_ID: EEyJJLNfRQviqfGUxjSM7
+Duration: 93.920 seconds
+Music smallest/largest gap: 15.1 / 18.6 LU; all current music-rule windows pass.
+
+Fresh verified main product build shared by batch 13. No src/ modifications.
+One source-only re-film: corrected result-banner wording and removed immediate filter that cleared the result. First take retained under previous-20261012T103205Z; its review is NOT READY/superseded.
+New catalogue entry is published:false: rendered locally, not uploaded or announced online.
+New continuous Puck narration, continuousPauseTags:false. Four cuts located in real silences and independently audited: all chapters 0% WER. Final MP4 independent ASR also passes every chapter. Source/subtitle/actual audio content agree. No subjective real-time listening available; not used as a blocker.
+
+Rehearsal and narrated capture pass. Existing member Sarah Jaquet selected through Membre existant > Chercher > Choisir; no retyped identity. Two compatible shifts added together; one grouped outbox row. Only the exact fixture row was made due off screen, then authenticated POST /api/cron/outbox delivered the real email. placement-checks.json and placement-mail-proof.json verify linkage, grouping, two shifts, public personal link and sent status. No fake email.
+video:validate passes: 5 chapters, 9 sentence anchors, maximum scene drift a few milliseconds. Five final audiovisual reviews match the MP4 SHA-256, all unflagged. Objective proof in review/objective-proof.json includes before/after full-size MP4 frames per sentence anchor; effects regenerated from actual markers match byte-for-byte (10 clicks, 0 physical key events).
+
+Frame inspection: welcome overlay and manual opening; member-end.png shows current summary and Changer de personne; anchor-05-after.png shows both shift selectors, Retirer, and current email notice; add-end.png shows both real registrations and persistent green announcement; email-60.png shows actual sender, both shifts with French dates and personal-link button. All chapter images and audited checkpoints inspected. No Timeline label, localhost, org-admin@localhost or dev overlay visible. Product dates are French.
+Known issue observed: Mailpit chrome uses English date (Mon, 12 Oct 2026); email body uses French dates. Report-only exception requested by owner. No new product layout bug observed on these screens.
+Posters generated with review/renders-generated.json; videos/renders.json unchanged.
+Global check-captions.ts fails on an unrelated existing ORG_TIMEZONE_CHARTER spelled-number normalization expectation; this video has no such mismatch and its final audio/subtitles pass.
+
+Additional subtitle proof: review/subtitle-proof.json verifies all 21 current VTT blocks, chapter timing and line/duration limits; all pass.

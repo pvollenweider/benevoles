@@ -1,0 +1,20 @@
+STATUS: READY
+ID: REGISTRATIONS_PLACE_MEMBER
+Commit: e44004c0d4d1e9b093609c07b572ad69d00afaaf
+BUILD_ID: EEyJJLNfRQviqfGUxjSM7
+Duration: 93.840 seconds
+Music smallest/largest gap: 15.2 / 18.6 LU; current strict rule passes.
+
+Batch-13 sources and audio preserved; no reset, src/ change, commit, push or publication. Reused the identical audited Puck narration, no TTS regeneration. Source audit revalidated every chapter; independent final-MP4 ASR passes all five chapters (0% word difference). Subjective real-time listening unavailable, not used as a blocker.
+Previous outputs archived under previous-retake-20261012T110047Z. Interrupted rehearsal/capture diagnostics retained separately; the direct-navigation diagnostic MP4 is explicitly NOT READY in previous-retake-sidebar-reset. Its search-reset defect is fixed in the delivered capture.
+
+Before every seed/take, only inspected message IDs addressed entirely to identified common video fixtures and naming the Montvert fixture event are deleted from local Mailpit. Historical fixture addresses are explicitly traced to recorder/seed source; other messages are preserved. mailbox-reset-proof.json verifies exact deletions, all preserved IDs and previous pending confirmations; the final reset removed one previous-take message and preserved 226 unrelated messages. Prior pending organizer confirmations for Sarah and this event are removed even when their event/member IDs were replaced by an earlier seed. None remained for the final take. No DELETE-all/search used.
+Real product addition creates two linked registrations and one grouped outbox row. Only that row is made due; authenticated POST /api/cron/outbox sends the actual two-shift email and personal link. placement-checks.json and placement-mail-proof.json pass.
+
+Mailpit is opened through the event search RESULT LINK, preserving its searched sidebar. take-mailbox-frames.json and take-mailbox-visible-list.json assert actual visible IDs: exactly one current-take confirmation. Final-MP4 frames independently inspected: review/email-sheet-00.jpg covers every integer second 73–93, including the search transition and all email frames. Only this take's one email appears throughout; review/chapter-email-85.png verifies sender, recipient, both French-dated shifts and public personal link at full size. The earlier 84-second duplicate-email defect is absent.
+
+video:validate, posters with --metadata-output review/renders-generated.json, effects provenance and subtitles all pass. videos/renders.json unchanged. review/objective-proof.json records every measured sentence anchor with before/after MP4 frames and hashes; input effects match the actual markers, including the new genuine Mailpit result click. review/subtitle-proof.json verifies all current caption blocks and chapter timings. All five chapters' current UI inspected in review/chapter-sheet.jpg and full-size frames: existing-member search/choice, two shift lines, email notice, two actual rows and green announcement.
+Four audiovisual chapters unflagged. One member-search automated report was counter-checked against actual frames and click markers; both claims are false, see review/counter-review.json. Chercher is clicked at 2.374 s inside its sentence; Choisir is targeted at 8.708 s within its measured 8.234–9.377 s sentence. Original flagged report preserved. No confirmed timing fault remains.
+
+Known report-only issue: Mailpit English chrome dates and global unread badge; email body/product dates are French. No new product layout defect observed. No localhost, org-admin@localhost, dev overlay or Timeline label visible.
+Local retake source changes: exact fixture-mail cleanup before seed, pending-row cleanup across prior fixture generations, event-search result navigation and actual sidebar ID assertions. All prior batch-13 changes retained. 905 targeted tests and video tooling type-check pass. doc-img: unchanged (no product source/UI change).

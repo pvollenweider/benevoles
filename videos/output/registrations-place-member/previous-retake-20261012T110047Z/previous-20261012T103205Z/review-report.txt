@@ -1,0 +1,7 @@
+STATUS: NOT READY
+Initial take, superseded by the one authorized source-only re-film.
+Validation passed; 88.6 s; BUILD_ID EEyJJLNfRQviqfGUxjSM7; music 13.1–18.4 LU.
+Audiovisual add chapter: narration incorrectly says result banner repeats planned email; banner announces only the registrations. Immediate Sarah search also clears banner.
+Source fixes: corrected transcript/script and removed immediate filter. No src/ change.
+Other chapters aligned; real cron email delivered; source and MP4 ASR passed.
+Known Mailpit English date chrome, report-only.

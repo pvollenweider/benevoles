@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T11:10:33.292Z",
+  "videoSha256": "d68b497099409bfe5399bbbebc62be85d022d4a2f6bb95a579be541148c0b140",
+  "promptSha256": "54d0421ee72961a446fb0dd1b7f28b03aa55d7ef83c7b418172f7d06f5e48cb6",
+  "clipSha256": "899c2bb221f3584e15eadbb0b505dda306833aa0038d59e4204e3a92ae6ce169",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un membre vous a confirmé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7,
+        "spoken": "Ouvrons Inscriptions",
+        "visibleSeconds": 2.2,
+        "visible": "La page Inscriptions de l'événement est déjà affichée à l'écran après la disparition du bandeau titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "puis Ajouter manuellement",
+        "visibleSeconds": 7.6,
+        "visible": "Clic sur le bouton '+ Ajouter manuellement'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Le formulaire commence par Membre existant",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la section 'Inscription manuelle' avec le champ 'Membre existant'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

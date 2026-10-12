@@ -41,6 +41,34 @@ async function settle(page: Page) {
   await page.waitForTimeout(500)
 }
 
+async function verifyRegistrationTakeMailbox(page: Page, dir: string) {
+  const reset = JSON.parse(await readFile(path.join(dir, "mailbox-reset-proof.json"), "utf8")) as { preservedMessageIds: string[] }
+  const response = await page.request.get("http://localhost:48026/api/v1/search", { params: { query: 'subject:"Fête du village de Montvert"', limit: 500 } })
+  if (!response.ok()) throw new Error("Take mailbox search unavailable")
+  const result = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[]; messages_count: number }
+  if (!result.messages.length || result.messages.length !== result.messages_count || result.messages.some(m => reset.preservedMessageIds.includes(m.ID))) throw new Error("Mailpit list contains an earlier or unverified email")
+  const file = path.join(dir, "take-mailbox-frames.json")
+  let frames: unknown[] = []
+  try { frames = JSON.parse(await readFile(file, "utf8")) } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+  frames.push({ checkedAt: new Date().toISOString(), onlyThisTake: true, messages: result.messages })
+  await writeFile(file, JSON.stringify(frames, null, 2))
+  return result.messages
+}
+
+async function openRegistrationTakeMailbox(page: Page, dir: string, id: string) {
+  const messages = await verifyRegistrationTakeMailbox(page, dir)
+  await page.goto(`http://localhost:48026/search?q=${encodeURIComponent('subject:"Fête du village de Montvert"')}`); await settle(page)
+  // Preserve Mailpit's in-memory searched list by following its result link.
+  await tap(page, page.locator(`a[href="/view/${id}"]`).first()); await settle(page)
+  const visibleIds = await page.locator('a[href^="/view/"]').evaluateAll(links => links.filter(link => link.textContent?.trim()).map(link => link.getAttribute("href")!.slice("/view/".length)))
+  if (visibleIds.length !== messages.length || visibleIds.some(visibleId => !messages.some(message => message.ID === visibleId))) throw new Error("Visible Mailpit sidebar includes an email outside this take")
+  const file = path.join(dir, "take-mailbox-visible-list.json")
+  let frames: unknown[] = []
+  try { frames = JSON.parse(await readFile(file, "utf8")) } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+  frames.push({ checkedAt: new Date().toISOString(), openedId: id, visibleIds, messages, onlyThisTake: true })
+  await writeFile(file, JSON.stringify(frames, null, 2))
+}
+
 async function ensureTouchMarker(page: Page) {
   await page.evaluate(() => {
     if (document.getElementById("video-touch-marker")) return
@@ -360,11 +388,11 @@ async function main() {
       }
     }
 
-    if (slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
+    if (slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-place-member" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-place-member" || slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     if (slug === "event-activity-log") {
@@ -2667,6 +2695,88 @@ async function main() {
         })
         await writeFile(path.join(dir, "staffing-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
       } finally { await db.$disconnect() }
+    } else if (slug === "registrations-place-member") {
+      if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Placement requires isolated video database")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const member = await db.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "sarah.jaquet@example.org" } })
+      const shiftIds = (await db.shift.findMany({ where: { eventId: featureEventId, OR: [{ roleName: "Accueil", startTime: "15:00" }, { roleName: "Démontage", startTime: "15:00" }] } })).map(s => s.id)
+      const choose = async (name: string, option: RegExp) => {
+        await tap(page, page.getByRole("combobox", { name, exact: true }))
+        await tap(page, page.getByRole("option", { name: option }))
+      }
+      let outboxId = ""
+      let beforeMail = new Set<string>()
+      const inbox = async () => {
+        const r = await page.request.get("http://localhost:48026/api/v1/messages")
+        if (!r.ok()) throw new Error("Demo mailbox unavailable")
+        return await r.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string }[] }
+      }
+      try {
+        await scene("welcome", async at => {
+          await page.screencast.showChapter(manifest.title, { description: "Un membre, deux horaires, une confirmation", duration: 2000 })
+          await at("Ouvrons Inscriptions, puis Ajouter manuellement")
+          await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
+          await page.getByRole("searchbox", { name: "Membre existant", exact: true }).waitFor()
+        })
+        await scene("member", async at => {
+          await at("Cherchons Sarah par son nom")
+          await fillVisibly(page, page.getByRole("searchbox", { name: "Membre existant", exact: true }), "Sarah")
+          await tap(page, page.getByRole("button", { name: "Chercher", exact: true }))
+          await page.getByRole("list", { name: "Membres trouvés" }).getByText("sarah.jaquet@example.org", { exact: false }).waitFor()
+          await at("Cliquez sur Choisir")
+          await tap(page, page.getByRole("button", { name: "Choisir Sarah Jaquet", exact: true }))
+          await page.getByRole("group", { name: "Membre choisi", exact: true }).waitFor()
+        })
+        await scene("shifts", async at => {
+          await at("Choisissons un premier créneau")
+          await choose("Créneau", /de 15h à 18h, Accueil/)
+          await at("Cliquez ensuite sur Ajouter un autre créneau")
+          await tap(page, page.getByRole("button", { name: "+ Ajouter un autre créneau", exact: true }))
+          await page.getByRole("combobox", { name: "Créneau 2 (facultatif)", exact: true }).waitFor()
+          await at("Choisissons le démontage du lendemain")
+          await choose("Créneau 2 (facultatif)", /de 15h à 18h, Démontage/)
+        })
+        await scene("add", async at => {
+          await at("Avant de valider, lisez la phrase sous la note")
+          await page.locator("#add-notice").scrollIntoViewIfNeeded()
+          const notice = await page.locator("#add-notice").innerText()
+          if (!notice.includes("sarah.jaquet@example.org") || !notice.includes("une dizaine de minutes")) throw new Error("Missing genuine confirmation notice")
+          beforeMail = new Set((await inbox()).messages.map(m => m.ID))
+          await at("Cliquez sur Ajouter")
+          const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
+          await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+          if ((await response).status() !== 201) throw new Error("Multi-shift addition failed")
+          await page.getByRole("status").filter({ hasText: "Inscriptions de Sarah Jaquet ajoutées sur 2 créneaux" }).waitFor()
+          const regs = await db.registration.findMany({ where: { eventId: featureEventId, volunteerId: member.id, shiftId: { in: shiftIds }, status: "active" } })
+          if (regs.length !== 2) throw new Error("Both shifts were not linked to the existing member")
+          const pending = await db.notificationOutbox.findMany({ where: { status: "pending", attempts: 0, dedupeKey: { startsWith: `registration_added_by_organizer:${featureEventId}:${member.id}:` } } })
+          if (pending.length !== 1) throw new Error("Expected one grouped pending email")
+          outboxId = pending[0].id
+          await page.getByRole("row").filter({ hasText: "Sarah Jaquet" }).filter({ hasText: "Démontage" }).waitFor()
+          await writeFile(path.join(dir, "placement-checks.json"), JSON.stringify({ linkedExistingMember: true, addedShifts: regs.length, pendingGroupedEmails: pending.length, notice }, null, 2))
+        })
+        await scene("email", async at => {
+          await at("Dix minutes plus tard, ouvrons la boîte de démonstration")
+          if (!process.env.CRON_SECRET) throw new Error("Real cron authentication required")
+          await db.notificationOutbox.update({ where: { id: outboxId }, data: { nextAttemptAt: new Date(Date.now() - 1000) } })
+          const cron = await page.request.post(`${baseUrl}/api/cron/outbox`, { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
+          if (!cron.ok()) throw new Error(`Real outbox cron failed: ${cron.status()}`)
+          let mail: { ID: string } | undefined
+          for (let i = 0; i < 20; i++) {
+            mail = (await inbox()).messages.find(m => !beforeMail.has(m.ID) && m.To.some(t => t.Address === member.email) && m.Subject.includes("inscrit"))
+            if (mail) break
+            await page.waitForTimeout(250)
+          }
+          if (!mail) throw new Error("Actual organizer confirmation not received")
+          const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mail.ID}`)).json() as { HTML: string; Text: string }
+          const content = `${detail.HTML} ${detail.Text}`
+          if (!content.includes("Accueil") || !content.includes("Démontage") || !content.includes("benevol.app/my/")) throw new Error("Real email does not list both shifts and personal link")
+          await openRegistrationTakeMailbox(page, dir, mail.ID)
+          await writeFile(path.join(dir, "placement-mail-proof.json"), JSON.stringify({ realCron: true, actualMail: true, twoShifts: true, personalLink: true, outboxStatus: (await db.notificationOutbox.findUniqueOrThrow({ where: { id: outboxId } })).status }, null, 2))
+        })
+      } finally { await db.$disconnect() }
     } else if (slug === "registrations-management") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Registration checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
@@ -2694,7 +2804,7 @@ async function main() {
           await page.waitForTimeout(250)
         }
         if (!match) throw new Error("New actual email not found")
-        await page.goto(`http://localhost:48026/view/${match.ID}`); await settle(page)
+        await openRegistrationTakeMailbox(page, dir, match.ID)
       }
       const bulkResponse = (action: string) => page.waitForResponse(r => r.url().endsWith("/registrations/bulk") && r.request().method() === "POST" && r.request().postDataJSON().action === action)
       const camille = await db.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "camille.rochat@example.org" } })
@@ -2744,14 +2854,16 @@ async function main() {
           await fillVisibly(page, search(), "")
         })
         await scene("manual-identity", async at => {
-          await at("Clique sur Ajouter manuellement")
+          await at("Cliquez sur Ajouter manuellement")
           await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
-          await at("Nous renseignons Camille Rochat, son")
-          await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Camille")
-          await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Rochat")
-          await typeNaturally(page, page.getByLabel("Email", { exact: true }), "camille.rochat@example.org")
-          await typeNaturally(page, page.getByLabel("Téléphone", { exact: true }), "079 555 10 20")
-          await at("horaire convenu par téléphone"); await typeNaturally(page, page.getByLabel("Note", { exact: true }), "Horaire convenu par téléphone")
+          await at("Dans Membre existant, cherchez Camille")
+          await fillVisibly(page, page.getByRole("searchbox", { name: "Membre existant", exact: true }), "camille.rochat@example.org")
+          await tap(page, page.getByRole("button", { name: "Chercher", exact: true }))
+          await at("Cliquez sur Choisir")
+          await tap(page, page.getByRole("button", { name: "Choisir Camille Rochat", exact: true }))
+          await page.getByRole("group", { name: "Membre choisi", exact: true }).waitFor()
+          await at("horaire convenu par téléphone")
+          await typeNaturally(page, page.getByLabel("Note", { exact: true }), "Horaire convenu par téléphone")
         })
         await scene("manual-check", async at => {
           await chooseShift("Créneau *", /de 9h à 12h, Accueil.*déjà inscrit/)
@@ -2765,19 +2877,42 @@ async function main() {
           await at("Sur la buvette du matin"); await chooseShift("Créneau *", /de 10h à 14h, Buvette.*conflit d'horaire/)
           await page.locator("#add-shift-conflict").waitFor()
           checks.overlapWarningObservedWithoutSubmitting = true
+          await at("Choisissons plutôt un horaire compatible")
+          await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
         })
         await scene("manual-result", async at => {
-          await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
-          await at(0.23) /* mid-sentence */
+          await at("Avant de valider, lisez l'annonce")
+          await page.locator("#add-notice").scrollIntoViewIfNeeded()
+          const notice = await page.locator("#add-notice").innerText()
+          if (!notice.includes("camille.rochat@example.org") || !notice.includes("une dizaine de minutes")) throw new Error("Current email notice missing")
+          const before = new Set((await inbox()).messages.map(m => m.ID))
+          await at("Cliquez sur Ajouter")
           const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
           const result = await response
           if (result.status() !== 201) throw new Error(`Manual compatible addition failed: ${result.status()}`)
-          const data = await result.json()
+          const payload = await result.json()
+          if (!Array.isArray(payload.registrations) || payload.registrations.length !== 1) throw new Error("Expected one registration from current multi-shift form")
+          const data = payload.registrations[0]
           addedId = data.id
           if (data.volunteer.id !== camille.id || data.source !== "admin_manual" || data.comment !== "Horaire convenu par téléphone") throw new Error("Manual addition did not reuse expected member")
           await row("Camille Rochat", "Accueil", "15h–18h").waitFor()
           checks.manualAdditionReusesMember = true
+          const pending = await db.notificationOutbox.findMany({ where: { status: "pending", attempts: 0, dedupeKey: { startsWith: `registration_added_by_organizer:${featureEventId}:${camille.id}:` } } })
+          if (pending.length !== 1 || !process.env.CRON_SECRET) throw new Error("One grouped email and real cron auth required")
+          await at("Dix minutes plus tard, ouvrons le véritable email reçu")
+          await db.notificationOutbox.update({ where: { id: pending[0].id }, data: { nextAttemptAt: new Date(Date.now() - 1000) } })
+          const cron = await page.request.post(`${baseUrl}/api/cron/outbox`, { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
+          if (!cron.ok()) throw new Error(`Actual cron failed: ${cron.status()}`)
+          await openNewMail("camille.rochat@example.org", before)
+          const confirmationText = await page.frameLocator("iframe").locator("body").innerText()
+          if (!confirmationText.includes("Élodie Rochat") || !confirmationText.includes("Accueil") || !confirmationText.includes("15h") || !confirmationText.includes("Voir mes créneaux")) throw new Error("Actual organizer confirmation content differs from expected fixture")
+          const sent = await db.notificationOutbox.findUniqueOrThrow({ where: { id: pending[0].id } })
+          if (sent.status !== "sent") throw new Error("Organizer confirmation was not sent")
+          checks.manualConfirmationRealCron = true
+          checks.manualNotice = notice
+          await at("Nous revenons ensuite à la liste des inscriptions")
+          await page.goto(adminUrl); await settle(page)
         })
         await scene("selection", async at => {
           await fillVisibly(page, search(), "Camille")

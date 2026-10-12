@@ -1,0 +1,164 @@
+{
+  "slug": "registrations-place-member",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T11:09:40.888Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "e44004c0d4d1e9b093609c07b572ad69d00afaaf",
+    "sourceTree": "200d57b4fcc8fa89de26319efdfc2085739d4805",
+    "productSourceSha256": "a1fa1b7c9df0f3e7f41663a7204349404a3452034a5423f45216878d2b13315f",
+    "buildId": "EEyJJLNfRQviqfGUxjSM7",
+    "snapshot": "/tmp/benevoles-video-production.batch13",
+    "builtAt": "2026-10-12T10:25:53.287Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "REGISTRATIONS_PLACE_MEMBER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7949
+    },
+    {
+      "kind": "click",
+      "atMs": 17316
+    },
+    {
+      "kind": "click",
+      "atMs": 18947
+    },
+    {
+      "kind": "click",
+      "atMs": 25281
+    },
+    {
+      "kind": "click",
+      "atMs": 35580
+    },
+    {
+      "kind": "click",
+      "atMs": 36396
+    },
+    {
+      "kind": "click",
+      "atMs": 40313
+    },
+    {
+      "kind": "click",
+      "atMs": 48979
+    },
+    {
+      "kind": "click",
+      "atMs": 49763
+    },
+    {
+      "kind": "click",
+      "atMs": 66379
+    },
+    {
+      "kind": "click",
+      "atMs": 75341
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 148,
+      "endMs": 16122
+    },
+    {
+      "id": "member",
+      "startMs": 16573,
+      "endMs": 34075
+    },
+    {
+      "id": "shifts",
+      "startMs": 34526,
+      "endMs": 54963
+    },
+    {
+      "id": "add",
+      "startMs": 55416,
+      "endMs": 72109
+    },
+    {
+      "id": "email",
+      "startMs": 72561,
+      "endMs": 93399
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons Inscriptions, puis Ajouter manuellement",
+      "startMs": 7332,
+      "endMs": 10421,
+      "cueMs": 7481
+    },
+    {
+      "segmentId": "member",
+      "phrase": "Cherchons Sarah par son nom",
+      "startMs": 244,
+      "endMs": 3798,
+      "cueMs": 16819
+    },
+    {
+      "segmentId": "member",
+      "phrase": "Cliquez sur Choisir",
+      "startMs": 8234,
+      "endMs": 9377,
+      "cueMs": 24808
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Choisissons un premier créneau",
+      "startMs": 562,
+      "endMs": 4442,
+      "cueMs": 35090
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Cliquez ensuite sur Ajouter un autre créneau",
+      "startMs": 5312,
+      "endMs": 7749,
+      "cueMs": 39838
+    },
+    {
+      "segmentId": "shifts",
+      "phrase": "Choisissons le démontage du lendemain",
+      "startMs": 13962,
+      "endMs": 17345,
+      "cueMs": 48490
+    },
+    {
+      "segmentId": "add",
+      "phrase": "Avant de valider, lisez la phrase sous la note",
+      "startMs": 489,
+      "endMs": 2638,
+      "cueMs": 55906
+    },
+    {
+      "segmentId": "add",
+      "phrase": "Cliquez sur Ajouter",
+      "startMs": 10474,
+      "endMs": 11030,
+      "cueMs": 65891
+    },
+    {
+      "segmentId": "email",
+      "phrase": "Dix minutes plus tard, ouvrons la boîte de démonstration",
+      "startMs": 473,
+      "endMs": 3150,
+      "cueMs": 73036
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "locatedAt": "2026-10-12T10:33:17.335Z",
+  "masterSha256": "edadb67e6f4c4275a3edc117e7d841b5c188aa47c8962a33c96dd6747bbb7b77",
+  "totalSeconds": 91.44,
+  "cuts": [
+    {
+      "id": "member",
+      "seconds": 15.9734375
+    },
+    {
+      "id": "shifts",
+      "seconds": 33.475104
+    },
+    {
+      "id": "add",
+      "seconds": 53.9109165
+    },
+    {
+      "id": "email",
+      "seconds": 70.603021
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T10:36:13.142Z",
+  "videoSha256": "b6fcb8ce8a08833df6dc13e0772bc70a82273891b3b6479b911b47e69e147339",
+  "promptSha256": "54d0421ee72961a446fb0dd1b7f28b03aa55d7ef83c7b418172f7d06f5e48cb6",
+  "clipSha256": "7178fa38fe835d30c1e49a18091c7dba7c6600d4b90c7a463ec3eb8633119771",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un membre vous a confirmé deux horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Un membre vous a confirmé deux horaires ?",
+        "visibleSeconds": 0.5,
+        "visible": "Écran Inscriptions avec encart central 'Placer un membre sur plusieurs créneaux'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "puis Ajouter manuellement",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le bouton '+ Ajouter manuellement' qui ouvre le formulaire 'Inscription manuelle'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Le formulaire commence par Membre existant",
+        "visibleSeconds": 8,
+        "visible": "Section 'Membre existant' affichée avec champ 'Nom ou email' et bouton Chercher",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine posée, claire et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
