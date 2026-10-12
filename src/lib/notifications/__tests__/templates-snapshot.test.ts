@@ -431,6 +431,49 @@ const cases: [string, NotificationPayload][] = [
       editToken: "edit-tok",
     },
   }],
+  // #916: placed by an organizer; named, and without a known name (platform operator).
+  ["registration_added_by_organizer", {
+    kind: "registration_added_by_organizer",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      organizationName: "Festival du Rhône",
+      organizerName: "Léa Morel",
+      shifts: [{ roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" }],
+      editToken: "edit-tok",
+    },
+  }],
+  ["registration_added_by_organizer (no organizer name)", {
+    kind: "registration_added_by_organizer",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      organizationName: "Festival du Rhône",
+      organizerName: null,
+      shifts: [{ roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" }],
+      editToken: "edit-tok",
+    },
+  }],
+  ["registration_added_by_organizer (several shifts, grouped)", {
+    kind: "registration_added_by_organizer",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      organizationName: "Festival du Rhône",
+      organizerName: "Léa Morel",
+      shifts: [
+        { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+        { roleName: "Bar", label: "Bar", date: "2026-07-12", startTime: "18:00", endTime: "22:00" },
+      ],
+      editToken: "edit-tok",
+    },
+  }],
   // #703: removed by the organization; one shift, other shifts still live (personal link).
   ["registration_removed", {
     kind: "registration_removed",
@@ -592,6 +635,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_removed: true,
     registration_withdrawn: true,
     registration_restored: true,
+    registration_added_by_organizer: true,
       release_available: true,
       operator_alert: true,
       signup_confirmation: true,

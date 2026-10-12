@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Documents à imprimer vérifiés automatiquement** : le planning par jour, par poste et individuel, la feuille de présence, la liste avec téléphones, la synthèse des réponses, l'export complet et les badges sont analysés à chaque changement par les mêmes tests d'accessibilité que le reste du site. Ces pages, ouvertes dans le navigateur, sont la version accessible des documents ; un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait.
 
 ### Ajouté
+- Une personne inscrite par un organisateur reçoit un email de confirmation : qui l'a inscrite, le créneau, et son lien personnel pour le voir, le modifier ou se désister. Les créneaux ajoutés à la suite pour la même personne sont regroupés en un seul email, envoyé une dizaine de minutes après le dernier ajout. Le formulaire l'annonce avant l'ajout ; pas d'email sans adresse, pour soi-même ou pour un créneau déjà commencé (#916).
 - Inscriptions > Ajouter manuellement : un **membre existant** se cherche par nom ou email et se place sur un créneau sans retaper ses coordonnées, même sans email, sans créer de doublon (#914).
 
 - **Coordonnées reprises d'un événement à l'autre** (#901) : après une inscription, le navigateur garde le prénom, le nom, l'email et le téléphone du bénévole, et les remplit sur le formulaire d'un autre événement. Rien n'est envoyé au serveur ; « Ce n'est pas moi, effacer » et « Quitter la session » les oublient.

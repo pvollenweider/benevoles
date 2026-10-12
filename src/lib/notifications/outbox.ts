@@ -10,6 +10,7 @@ import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
 import { siteDomain } from "@/lib/site"
+import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 
 /**
  * Notification outbox (#293).
@@ -160,16 +161,30 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     if (count === 0) continue // claimed by another delivery meanwhile
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    // A grouped « added by an organizer » email (#916) lists what is still held when it leaves:
+    // nothing left, nothing to tell. A failed read is an ordinary failed attempt, retried.
+    let nothingLeft = false
     const outcome = await Promise.resolve()
-      // The row's organisation (#814) is checked by sendNotification right before this one send,
-      // not when the batch was read: a deactivation during a batch stops the rest of it.
-      .then(() => {
-        const payload = openPayload(claimed.payload)
+      .then(async () => {
+        let payload = openPayload(claimed.payload)
+        if (isAddedByOrganizer(payload)) {
+          const resolved = await resolveAddedByOrganizer(payload)
+          if (!resolved) { nothingLeft = true; return { ok: true as const } }
+          payload = resolved
+        }
+        // The row's organisation (#814) is checked by sendNotification right before this one send,
+        // not when the batch was read: a deactivation during a batch stops the rest of it.
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
       (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
     )
+
+    if (nothingLeft) {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null } })
+      result.cancelled++
+      continue
+    }
 
     if (!outcome.ok && outcome.held) {
       // Over a sending limit (#810): not an attempt, not a failure. Back to pending, tried again

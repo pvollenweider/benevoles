@@ -1,27 +1,43 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 // Placing a member already in the list on a shift (#914): the add form sends the member's id, the
-// server links the registration to that member, email or not, and never creates a new one.
+// server links the registration to that member, email or not, and never creates a new one. The
+// volunteer is then told by email (#916), except without email, for oneself or a past shift.
 const m = vi.hoisted(() => ({
   volunteerFindFirst: vi.fn(),
   volunteerCreate: vi.fn(),
   registrationCreate: vi.fn(),
+  adminFindFirst: vi.fn(),
+  sent: [] as { kind: string; recipient: { email: string }; data: Record<string, unknown>; dedupeKey?: string }[],
+  logEvent: vi.fn(),
+  shiftDate: new Date("2030-07-04T00:00:00Z"),
+  sessionEmail: "lea@org-a.org",
 }))
 
-const shift = { id: "s1", eventId: "evt-1", roleName: "Bar", capacity: 5, registrations: [] }
+const shift = () => ({
+  id: "s1", eventId: "evt-1", roleName: "Bar", label: "Bar", capacity: 5, registrations: [],
+  date: m.shiftDate, startTime: "10:00", endTime: "12:00",
+  event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } },
+})
 
 vi.mock("@/lib/auth-guard", () => ({
-  requireOrgSession: vi.fn(async () => ({
-    organizationId: "org-a",
-    session: { user: { email: "admin@a.org", role: "admin", organizationId: "org-a" } },
-    db: {
-      shift: { findFirst: vi.fn().mockResolvedValue(shift), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+  requireOrgSession: vi.fn(async () => {
+    const db = {
+      shift: { findFirst: vi.fn(async () => shift()), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
       volunteer: { findFirst: m.volunteerFindFirst, create: m.volunteerCreate },
       registration: { findMany: vi.fn().mockResolvedValue([]), create: m.registrationCreate },
-    },
-  })),
+      adminUser: { findFirst: m.adminFindFirst },
+      $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
+    }
+    return { organizationId: "org-a", session: { user: { id: "adm-1", email: m.sessionEmail, role: "admin", organizationId: "org-a" } }, db }
+  }),
 }))
-vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn(), adminActor: () => ({ type: "admin", id: "adm" }) }))
+vi.mock("@/lib/event-log", () => ({ logEvent: m.logEvent, adminActor: () => ({ type: "admin", id: "adm-1" }) }))
+vi.mock("@/lib/notifications/added-by-organizer", () => ({
+  queueAddedByOrganizer: vi.fn(async (_tx: unknown, input: { registrationId: string; recipient: { email: string }; data: Record<string, unknown> }) => {
+    m.sent.push({ kind: "registration_added_by_organizer", recipient: input.recipient, data: input.data, dedupeKey: input.registrationId })
+  }),
+}))
 
 function post(body: Record<string, unknown>) {
   return new Request("http://localhost/api/admin/registrations", {
@@ -31,9 +47,15 @@ function post(body: Record<string, unknown>) {
   })
 }
 
+const loggedEmail = () => m.logEvent.mock.calls[0][0].changes.confirmationEmail.to
+
 describe("POST /api/admin/registrations with a chosen member (#914)", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    m.sent.length = 0
+    m.shiftDate = new Date("2030-07-04T00:00:00Z")
+    m.sessionEmail = "lea@org-a.org"
+    m.adminFindFirst.mockResolvedValue({ name: "Léa Morel" })
     m.registrationCreate.mockImplementation(async ({ data }: { data: { volunteerId: string } }) => ({ id: "r1", volunteerId: data.volunteerId }))
   })
 
@@ -64,10 +86,67 @@ describe("POST /api/admin/registrations with a chosen member (#914)", () => {
   })
 
   it("creates a new person from the typed names, trimmed", async () => {
-    m.volunteerCreate.mockResolvedValue({ id: "mem-new" })
+    m.volunteerCreate.mockResolvedValue({ id: "mem-new", firstName: "Chloé", lastName: "Roy", email: null })
     const { POST } = await import("@/app/api/admin/registrations/route")
     const res = await POST(post({ volunteerId: "", firstName: " Chloé ", lastName: "Roy" }))
     expect(res.status).toBe(201)
     expect(m.volunteerCreate.mock.calls[0][0].data).toMatchObject({ firstName: "Chloé", lastName: "Roy", organizationId: "org-a" })
+  })
+})
+
+describe("POST /api/admin/registrations tells the volunteer (#916)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    m.sent.length = 0
+    m.shiftDate = new Date("2030-07-04T00:00:00Z")
+    m.sessionEmail = "lea@org-a.org"
+    m.adminFindFirst.mockResolvedValue({ name: "Léa Morel" })
+    m.registrationCreate.mockImplementation(async ({ data }: { data: { volunteerId: string } }) => ({ id: "r1", volunteerId: data.volunteerId }))
+  })
+
+  it("queues the grouped email: who placed them, for this registration", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-3", firstName: "Aline", lastName: "Exemple", email: "aline@example.org" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(post({ volunteerId: "mem-3" }))).status).toBe(201)
+    expect(m.sent).toHaveLength(1)
+    expect(m.sent[0]).toMatchObject({
+      recipient: { email: "aline@example.org" },
+      dedupeKey: "r1",
+      data: { organizerName: "Léa Morel", organizationName: "Org A", eventTitle: "Festival", volunteerName: "Aline Exemple" },
+    })
+    expect(loggedEmail()).toBe("prévu, regroupé avec les autres ajouts des prochaines minutes")
+  })
+
+  it("sends nothing without email, and says so in the log", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-2", firstName: "René", lastName: "Meyer", email: null })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(post({ volunteerId: "mem-2" }))).status).toBe(201)
+    expect(m.sent).toHaveLength(0)
+    expect(loggedEmail()).toBe("non envoyé : sans adresse email")
+  })
+
+  it("sends nothing when organizers place themselves", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-9", firstName: "Léa", lastName: "Morel", email: "LEA@org-a.org" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(post({ volunteerId: "mem-9" }))).status).toBe(201)
+    expect(m.sent).toHaveLength(0)
+    expect(loggedEmail()).toBe("non envoyé : inscription de soi-même")
+  })
+
+  it("sends nothing for a shift already over (data entry after the fact)", async () => {
+    m.shiftDate = new Date("2020-07-04T00:00:00Z")
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-3", firstName: "Aline", lastName: "Exemple", email: "aline@example.org" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(post({ volunteerId: "mem-3" }))).status).toBe(201)
+    expect(m.sent).toHaveLength(0)
+    expect(loggedEmail()).toBe("non envoyé : créneau déjà commencé")
+  })
+
+  it("names the organization when the organizer's name is unknown", async () => {
+    m.adminFindFirst.mockResolvedValue(null)
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-3", firstName: "Aline", lastName: "Exemple", email: "aline@example.org" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    await POST(post({ volunteerId: "mem-3" }))
+    expect(m.sent[0].data.organizerName).toBeNull()
   })
 })

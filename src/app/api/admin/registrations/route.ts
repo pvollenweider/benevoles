@@ -11,6 +11,9 @@ import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { roleLimitAdminMessage, roleLimitBreaches, roleLimits } from "@/lib/role-limit"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
+import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
+import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 
 const schema = z.object({
   eventId: z.string(),
@@ -42,7 +45,10 @@ export async function POST(req: Request) {
 
   const shift = await db.shift.findFirst({
     where: { id: shiftId, eventId },
-    include: { registrations: { where: { status: "active" } } },
+    include: {
+      registrations: { where: { status: "active" } },
+      event: { select: { title: true, organization: { select: { name: true, slug: true, timeZone: true } } } },
+    },
   })
 
   if (!shift) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
@@ -82,20 +88,55 @@ export async function POST(req: Request) {
     })
   }
 
+  // The volunteer is always told (#916), except in the three cases manualAddNotice skips.
+  const now = new Date()
+  const notice = manualAddNotice({
+    email: volunteer.email,
+    organizerEmail: guard.session.user?.email,
+    shiftStart: localDateTimeToUtc(shift.date, shift.startTime, orgTimeZone(shift.event.organization)),
+    now,
+  })
+  const organizer = notice.send && guard.session.user?.id
+    ? await db.adminUser.findFirst({ where: { id: guard.session.user.id }, select: { name: true } })
+    : null
+
   let registration
   try {
-    registration = await db.registration.create({
-      data: {
-        eventId,
-        shiftId,
-        volunteerId: volunteer.id,
-        source: "admin_manual",
-        comment,
-        // No charterAcceptedHash/At (#569): an admin adds this registration by hand, so no
-        // volunteer consent to the charter was ever given here.
-        ...registrationToken.data(generateToken()),
-      },
-      include: { volunteer: true, shift: true },
+    const added = volunteer
+    registration = await db.$transaction(async (tx) => {
+      const created = await tx.registration.create({
+        data: {
+          eventId,
+          shiftId,
+          volunteerId: added.id,
+          source: "admin_manual",
+          comment,
+          // No charterAcceptedHash/At (#569): an admin adds this registration by hand, so no
+          // volunteer consent to the charter was ever given here.
+          ...registrationToken.data(generateToken()),
+        },
+        include: { volunteer: true, shift: true },
+      })
+      // Grouped per person and event (#916): 15 shifts added in a row are one email, a few
+      // minutes after the last one, listing what is still held then.
+      if (notice.send) {
+        await queueAddedByOrganizer(tx, {
+          eventId,
+          volunteerId: added.id,
+          registrationId: created.id,
+          organizationId,
+          recipient: { email: notice.email, name: `${added.firstName} ${added.lastName}` },
+          data: {
+            volunteerName: `${added.firstName} ${added.lastName}`,
+            eventTitle: shift.event.title,
+            orgSlug: shift.event.organization.slug,
+            organizationName: shift.event.organization.name,
+            organizerName: organizer?.name?.trim() || null,
+          },
+          now,
+        })
+      }
+      return created
     })
   } catch (e) {
     if (isUniqueViolation(e)) {
@@ -114,7 +155,12 @@ export async function POST(req: Request) {
     action: "registration.created",
     entityType: "Registration",
     entityId: registration.id,
-    changes: { shiftId: { from: null, to: shiftId }, source: { from: null, to: "admin_manual" }, ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}) },
+    changes: {
+      shiftId: { from: null, to: shiftId },
+      source: { from: null, to: "admin_manual" },
+      confirmationEmail: { from: null, to: manualAddNoticeLog(notice) },
+      ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
+    },
   })
 
   return NextResponse.json(registration, { status: 201 })

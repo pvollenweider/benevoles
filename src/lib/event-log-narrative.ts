@@ -55,6 +55,7 @@ const FIELD_LABELS: Record<string, string> = {
   subject: "objet",
   resent: "envois relancés",
   personalLink: "lien personnel",
+  confirmationEmail: "email de confirmation",
 }
 
 /**

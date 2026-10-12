@@ -35,6 +35,7 @@ export type NotificationKind =
   | "registration_removed"
   | "registration_withdrawn"
   | "registration_restored"
+  | "registration_added_by_organizer"
   | "release_available"
   | "addresses_to_verify_summary"
   | "past_event_notice"

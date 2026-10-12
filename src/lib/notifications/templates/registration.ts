@@ -304,6 +304,60 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
   return { subject, html, text }
 }
 
+// ── Inscription ajoutée par l'organisation ──────────────────────────────────
+
+/**
+ * An organizer placed the volunteer by hand (#916): who did it, every shift added, and the personal
+ * link to check, change or withdraw. Always sent when the person has an email (see
+ * src/lib/manual-add-notice.ts for the three cases that skip it), grouped per person and event
+ * (src/lib/notifications/added-by-organizer.ts), so they keep one written trace.
+ */
+export function renderRegistrationAddedByOrganizer(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    orgSlug: string
+    organizationName: string
+    /** The organizer's name, or null when unknown (a platform operator acting for the org). */
+    organizerName: string | null
+    /** Every shift added and still held, read when the email leaves (added-by-organizer.ts). */
+    shifts: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }[]
+    editToken: string
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const lines = d.shifts.map((s) => spokenShift(s))
+  const several = lines.length > 1
+  const who = d.organizerName ? `${d.organizerName}, de ${d.organizationName},` : `L'organisation ${d.organizationName}`
+  const what = `${who} t'a inscrit·e à ${d.eventTitle}${several ? `, sur ${lines.length} créneaux` : ""} :`
+  const linkUrl = myPageUrl(d.orgSlug, d.editToken)
+  const subject = `Tu es inscrit·e : ${d.eventTitle}`
+  const unwanted = several
+    ? "Un créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+    : "Ce créneau ne te convient pas ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    what,
+    ...lines.map((l) => `- ${l}`),
+    ``,
+    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    linkUrl,
+    ``,
+    unwanted,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">${escapeHtml(what)}</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
+  `, several ? `Inscrit·e sur ${lines.length} créneaux : ${d.eventTitle}.` : `Inscrit·e : ${lines[0] ?? d.eventTitle}.`)
+
+  return { subject, html, text }
+}
+
 // ── Notif modification d'un shift ────────────────────────────────────────────
 
 export function renderShiftModified(p: NotificationPayload): RenderedEmail {
