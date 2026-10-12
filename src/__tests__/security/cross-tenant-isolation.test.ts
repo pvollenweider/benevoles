@@ -159,6 +159,14 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       upsert: vi.fn().mockResolvedValue({ id: "dismissal-a" }),
       ...((overrides.duplicateDismissal as object) ?? {}),
     },
+    eventGroupLink: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findFirst: vi.fn().mockResolvedValue(null),
+      create: vi.fn().mockResolvedValue({ id: "link-a", code: "abcd2345", name: "A", roleNames: [], hideFull: false }),
+      update: vi.fn(),
+      delete: vi.fn(),
+      ...((overrides.eventGroupLink as object) ?? {}),
+    },
   }
 }
 
@@ -1177,6 +1185,65 @@ describe("Milestones — cross-tenant isolation", () => {
       makeRequest("/api/admin/events/evt-b/milestones/m-1", "DELETE"),
       { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
     )
+    expect(res.status).toBe(404)
+  })
+})
+
+// ── Share links per group (#947) ─────────────────────────────────────────────
+
+describe("Group links — cross-tenant isolation (#947)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const linkParams = (id: string, linkId: string) => ({ params: Promise.resolve({ id, linkId }) })
+  const ORG_A_EVENT = { id: "evt-a", slug: "fete", organization: { slug: "org-a" } }
+
+  it("GET /api/admin/events/[id]/group-links returns 404 for an org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/group-links/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/group-links"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.eventGroupLink.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/group-links returns 404 for an org-B event and creates nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/group-links/route")
+    const db = setupGuard()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/group-links", "POST", { name: "Amicale", roleNames: ["Bar"] }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.eventGroupLink.create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/group-links/[linkId] returns 404 for an org-B event", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/group-links/[linkId]/route")
+    const db = setupGuard()
+    const res = await PATCH(makeRequest("/api/admin/events/evt-b/group-links/link-b", "PATCH", { name: "X" }), linkParams("evt-b", "link-b"))
+    expect(res.status).toBe(404)
+    expect(db.eventGroupLink.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH and DELETE of an org-B link through an org-A event return 404, read only through the scoped client", async () => {
+    const { PATCH, DELETE } = await import("@/app/api/admin/events/[id]/group-links/[linkId]/route")
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(ORG_A_EVENT) } }) // link lookup → null
+    const patched = await PATCH(makeRequest("/api/admin/events/evt-a/group-links/link-b", "PATCH", { name: "X" }), linkParams("evt-a", "link-b"))
+    const deleted = await DELETE(makeRequest("/api/admin/events/evt-a/group-links/link-b", "DELETE"), linkParams("evt-a", "link-b"))
+    expect(patched.status).toBe(404)
+    expect(deleted.status).toBe(404)
+    expect(db.eventGroupLink.findFirst).toHaveBeenCalledWith({ where: { id: "link-b", eventId: "evt-a" } })
+    expect(db.eventGroupLink.update).not.toHaveBeenCalled()
+    expect(db.eventGroupLink.delete).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id]/group-links/[linkId] returns 404 for an org-B event", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/group-links/[linkId]/route")
+    const db = setupGuard()
+    const res = await DELETE(makeRequest("/api/admin/events/evt-b/group-links/link-b", "DELETE"), linkParams("evt-b", "link-b"))
+    expect(res.status).toBe(404)
+    expect(db.eventGroupLink.delete).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/qr?link= of an org-B link returns 404", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/qr/route")
+    setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ slug: "fete", title: "Fête", organization: { slug: "org-a" } }) } })
+    const res = await GET(makeRequest("/api/admin/events/evt-a/qr?link=link-b"), params("evt-a"))
     expect(res.status).toBe(404)
   })
 })

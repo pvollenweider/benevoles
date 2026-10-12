@@ -135,6 +135,8 @@ export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "
   linkEmailedAt: "keep",
   charterAcceptedHash: "keep",
   charterAcceptedAt: "keep",
+  // The share link per group it came through (#947): the club's link, not the person.
+  groupLinkId: "keep",
   createdAt: "keep",
   updatedAt: "keep",
 }

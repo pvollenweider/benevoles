@@ -24,7 +24,7 @@ Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, 
 |-------|----------|-------|------|
 | `/api/public/events` | GET | public | Événements publiés **et répertoriés** de l'organisation de l'hôte (`x-org-slug`, ou `?org=`) ; 404 sans organisation |
 | `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`), avec la liste de ses pages personnalisées (titre, slug) et ses questions d'inscription actives |
-| `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP |
+| `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP ; `groupCode` facultatif, code du lien par groupe (#947) par lequel la page a été ouverte : retrouvé dans l'événement par le serveur, ignoré s'il est inconnu |
 | `/api/public/registrations/link` | POST | public | « Je n'ai plus mon lien » (#376) : à partir d'un email, renvoie le lien personnel de chaque événement de l'organisation courante où l'adresse a une inscription en cours ; même réponse que l'adresse soit connue ou non. 5 requêtes par heure et par IP, 3 envois par heure et par bénévole |
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | `GET` : inscriptions en cours du bénévole sur l'événement, liste d'attente, offres et demandes comprises (10 requêtes par heure et par IP). `DELETE` : retire une place, une demande en attente de validation, une entrée de liste d'attente ou une offre (5 requêtes par heure et par IP) ; seul le retrait d'une place, d'une demande ou d'une offre libère une place pour la personne suivante |
 | `/api/public/registrations/[token]/availability` | PATCH | public (jeton) | Le bénévole enregistre ses disponibilités générales (`availabilityPeriods`, `availabilityNote` ≤ 140) ; lien actif requis ; 10 requêtes par heure et par IP |
@@ -70,7 +70,9 @@ Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées 
 | `/api/admin/events/[id]/sector-leaders/[leaderId]` | DELETE | Retirer un·e responsable |
 | `/api/admin/events/[id]/milestones` | GET, POST | Lister, créer un jalon (titre, échéance) (#189) |
 | `/api/admin/events/[id]/milestones/[milestoneId]` | PATCH, DELETE | Modifier (dont cocher `done`), supprimer un jalon |
-| `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
+| `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut ; `?link=<id>` pour celui d'un lien par groupe de l'événement (#947) |
+| `/api/admin/events/[id]/group-links` | GET, POST | Liens par groupe (#947) : lister (adresse, postes plus au planning, inscriptions apportées), créer (`name` 60 caractères au plus, `roleNames` au moins un poste au planning, `hideFull`) ; code aléatoire généré par le serveur |
+| `/api/admin/events/[id]/group-links/[linkId]` | PATCH, DELETE | Modifier le nom, les postes ou `hideFull` (jamais le code), supprimer un lien (ses inscriptions restent, sans référence) |
 | `/api/admin/events/[id]/export/archive` | GET | Archive JSON complète de l'événement (#384) : réglages, créneaux, inscriptions, réponses, pages, responsables, jalons, journal ; aucun jeton |
 | `/api/admin/events/[id]/export/badges` | GET | Badges imprimables des bénévoles de l'événement (#190) |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |

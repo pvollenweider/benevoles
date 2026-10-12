@@ -170,6 +170,7 @@ model Event {
   targetedMessages TargetedMessage[]
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
+  groupLinks       EventGroupLink[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -223,6 +224,30 @@ model SectorLeader {
   // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
   // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
   @@unique([eventId, roleName, email])
+  @@index([eventId])
+}
+
+// Share link per group (#947): a club or a team of a festival gets its own link and QR code,
+// `/<event>?groupe=<code>`, showing only the roles it recruits for. Roles have no table of their own
+// (they are the roleName shared by shifts): `roleNames` is kept in step when a role is renamed or
+// deleted (src/app/api/admin/events/[id]/roles/[roleName]/route.ts), and a name no live shift
+// carries any more is simply left out when the page is shown (src/lib/group-links.ts). `code` is
+// random and stable, never the name: renaming the link, the event or a role keeps the URL working.
+// Registrations made through it point to it (Registration.groupLinkId); deleting the link keeps
+// them and only clears that reference.
+model EventGroupLink {
+  id        String   @id @default(cuid())
+  eventId   String
+  code      String   @unique
+  name      String
+  roleNames String[] @default([])
+  hideFull  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+
   @@index([eventId])
 }
 
@@ -562,12 +587,16 @@ model Registration {
   // given there, so nothing is recorded.
   charterAcceptedHash String?
   charterAcceptedAt   DateTime?
+  // The group link (#947) the public sign-up came through, set by the server from the link's code;
+  // null for the main link, an admin addition, or once that group link is deleted.
+  groupLinkId      String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  volunteer Volunteer @relation(fields: [volunteerId], references: [id])
+  event     Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shift     Shift           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer Volunteer       @relation(fields: [volunteerId], references: [id])
+  groupLink EventGroupLink? @relation(fields: [groupLinkId], references: [id], onDelete: SetNull)
 
   // One live registration per volunteer and shift (#264). Partial: cancelled rows are kept for
   // history, and a volunteer may cancel then register again. Backstops the route-level check,
@@ -578,6 +607,7 @@ model Registration {
   @@index([status, reminderDdSent])
   @@index([status, shiftId])
   @@index([waitingPosition, shiftId])
+  @@index([groupLinkId])
 }
 
 model MemberInvite {

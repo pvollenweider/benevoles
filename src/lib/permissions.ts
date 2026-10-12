@@ -46,6 +46,9 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/export/badges": { GET: "organizer" },
   "events/[id]/export/pdf": { GET: "organizer" },
   "events/[id]/export/sheets/[view]": { GET: "organizer" },
+  // Share links per group (#947), like the event's pages: organiser level.
+  "events/[id]/group-links": { GET: "organizer", POST: "organizer" },
+  "events/[id]/group-links/[linkId]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/invitations": { GET: "organizer", POST: "organizer" },
   "events/[id]/invitations/remind": { POST: "organizer" },
   "events/[id]/invitations/test-email": { POST: "organizer" },

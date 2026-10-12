@@ -51,10 +51,14 @@ type Props = {
   answersByVolunteer?: Record<string, { label: string; text: string }[]>
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
   organizerEmail?: string | null
+  /** The event's share links per group (#947), for the « Par lien de groupe » filter. */
+  groupLinks?: { id: string; name: string }[]
+  /** `?lien=`: a link id, or "none" for the sign-ups through no group link. */
+  initialGroupFilter?: string
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "" }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
   const workload = useMemo(
@@ -67,6 +71,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")
   const [showAddForm, setShowAddForm] = useState(false)
   const [requestsOnly, setRequestsOnly] = useState(initialRequestsOnly)
+  const [groupFilter, setGroupFilter] = useState(initialGroupFilter)
   const requestsFilterRef = useRef<HTMLInputElement>(null)
   // Sign-up approval (#484): the request being accepted or refused (the dialog owns the message).
   const [decision, setDecision] = useState<{ reg: Registration; kind: "accept" | "refuse" } | null>(null)
@@ -117,14 +122,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
 
-  const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter, requestsOnly })
+  const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter, requestsOnly, groupLink: groupFilter })
   const requestCount = registrations.filter((r) => r.status === "requested").length
 
   // A filter change is answered with the number of rows left, in the outcome region; an addition or
   // a removal changes the list without a filter change, so it only says its own result (#574).
   // Selects and the checkbox speak at once; the search waits until typing pauses.
   const filteredCount = filtered.length
-  const otherFiltersKey = JSON.stringify([roleFilter, shiftFilter, requestsOnly])
+  const otherFiltersKey = JSON.stringify([roleFilter, shiftFilter, requestsOnly, groupFilter])
   const filtersKey = JSON.stringify([search, otherFiltersKey])
   const announcedFilters = useRef({ all: filtersKey, others: otherFiltersKey })
   useEffect(() => {
@@ -472,6 +477,21 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <option value="">Tous les postes</option>
           {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
+        {groupLinks.length > 0 && (
+          <>
+            <label htmlFor="group-link-filter" className="sr-only">Filtrer par lien de groupe</label>
+            <select
+              id="group-link-filter"
+              value={groupFilter}
+              onChange={(e) => setGroupFilter(e.target.value)}
+              className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Tous les liens de groupe</option>
+              {groupLinks.map((l) => <option key={l.id} value={l.id}>Lien : {l.name}</option>)}
+              <option value="none">Sans lien de groupe</option>
+            </select>
+          </>
+        )}
         {(requestCount > 0 || requestsOnly) && (
           <label className="flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 rounded-xl px-3 py-2 text-sm font-medium cursor-pointer">
             <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-300" />

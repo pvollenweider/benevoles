@@ -117,6 +117,13 @@ async function run() {
     await save(p, "public-registration-birthdate")
   })
 
+  // Share link per group (#947): the demo's « Amicale des pompiers » link (fixed code, seed-demo.ts).
+  await shot("public-group-link", async () => {
+    await p.goto(withOrg(`/${EVENT_SLUG}?groupe=pmpr2345`))
+    await settle(p)
+    await save(p, "public-group-link")
+  })
+
   await shot("public-my-page", async () => {
     await p.goto(withOrg(`/my/${TOKENS.volunteer}`))
     await settle(p)
@@ -149,6 +156,10 @@ async function run() {
 
   await shot("admin-dashboard", async () => { await visit(`${BASE}/admin/dashboard`); await save(a, "admin-dashboard") })
   await shot("admin-event-overview", async () => { await visit(ev()); await save(a, "admin-event-overview") })
+  await shot("admin-group-links", async () => {
+    await visit(ev())
+    await save(a, "admin-group-links", { target: a.getByRole("region", { name: "Partager l'événement" }) })
+  })
   await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
   await shot("admin-shifts", async () => { await visit(ev("/shifts")); await save(a, "admin-shifts") })
   await shot("admin-registrations", async () => { await visit(ev("/registrations")); await save(a, "admin-registrations") })

@@ -5,6 +5,7 @@ import { fold } from "./text-fold"
 
 import { shiftsOverlap } from "./utils"
 import { clockTime } from "./gantt-utils"
+import { matchesGroupFilter, type RegistrationGroupFilter } from "./group-links"
 
 /**
  * Pure logic of the admin registrations list (RegistrationsManager, #291): filtering, conflicts
@@ -19,6 +20,7 @@ export type ShiftRef = {
 
 type ListRegistration = {
   status?: string
+  groupLinkId?: string | null
   shift: ShiftRef
   volunteer: { id: string; firstName: string; lastName: string; email: string | null }
 }
@@ -50,7 +52,7 @@ export function fmtHour(t: string): string {
 /** Rows matching the search text (name or email), role filter and shift filter. */
 export function filterRegistrations<R extends ListRegistration>(
   registrations: R[],
-  filters: { search: string; role: string; shiftId: string; requestsOnly?: boolean },
+  filters: { search: string; role: string; shiftId: string; requestsOnly?: boolean; groupLink?: RegistrationGroupFilter },
 ): R[] {
   const q = fold(filters.search)
   return registrations.filter((r) => {
@@ -60,7 +62,9 @@ export function filterRegistrations<R extends ListRegistration>(
     const matchShift = !filters.shiftId || r.shift.id === filters.shiftId
     // « Demandes à traiter » (#484): only requests waiting for a decision.
     const matchStatus = !filters.requestsOnly || r.status === "requested"
-    return matchSearch && matchRole && matchShift && matchStatus
+    // « Par lien de groupe » (#947): one link, or the sign-ups that came through none.
+    const matchGroup = matchesGroupFilter(r.groupLinkId, filters.groupLink ?? "")
+    return matchSearch && matchRole && matchShift && matchStatus && matchGroup
   })
 }
 

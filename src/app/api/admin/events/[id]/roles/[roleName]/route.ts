@@ -10,6 +10,25 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { capacityPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
+import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
+
+/**
+ * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
+ * of the event that shows the role, so the link keeps its other roles and survives the rename.
+ */
+async function updateGroupLinks(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
+  eventId: string,
+  role: string,
+  next: (roleNames: string[]) => string[],
+) {
+  const links: { id: string; roleNames: string[] }[] = await db.eventGroupLink.findMany({
+    where: { eventId, roleNames: { has: role } },
+    select: { id: true, roleNames: true },
+  })
+  for (const l of links) await db.eventGroupLink.update({ where: { id: l.id }, data: { roleNames: next(l.roleNames) } })
+}
 
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
 // there's no separate Role table. Renaming, recoloring or deleting one therefore means updating
@@ -80,6 +99,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         changes: { roleName: { from: decodedRole, to: newName } },
       })
     }
+    await updateGroupLinks(db, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
   }
 
   if (colorKey !== undefined) {
@@ -180,6 +200,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     notified += result.notified
     unpublished ||= result.unpublished
   }
+  await updateGroupLinks(db, id, decodedRole, (names) => removeRoleFromLink(names, decodedRole))
 
   return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })
 }

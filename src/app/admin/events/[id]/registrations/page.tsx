@@ -21,14 +21,14 @@ export default async function RegistrationsPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ shift?: string; q?: string | string[]; demandes?: string }>
+  searchParams: Promise<{ shift?: string; q?: string | string[]; demandes?: string; lien?: string }>
 }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
 
   const { id } = await params
-  const { shift: initialShiftFilter, q, demandes } = await searchParams
+  const { shift: initialShiftFilter, q, demandes, lien } = await searchParams
   const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
 
   const event = await db.event.findFirst({
@@ -44,6 +44,8 @@ export default async function RegistrationsPage({
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
       sectorLeaders: true,
+      // Share links per group (#947), for the « Par lien de groupe » filter.
+      groupLinks: { orderBy: { createdAt: "asc" }, select: { id: true, name: true } },
       organization: { select: { timeZone: true, volunteerCharter: true } },
       // Answers to the custom questions (#483), shown on each registration row.
       questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
@@ -97,12 +99,15 @@ export default async function RegistrationsPage({
         initialShiftFilter={initialShiftFilter}
         initialSearch={initialSearch}
         initialRequestsOnly={demandes === "1"}
+        groupLinks={event.groupLinks}
+        initialGroupFilter={lien && (lien === "none" || event.groupLinks.some((l) => l.id === lien)) ? lien : ""}
         initialRegistrations={event.registrations.map((r) => ({
           id: r.id,
           status: r.status,
           source: r.source,
           comment: r.comment,
           phone: r.phone,
+          groupLinkId: r.groupLinkId,
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
           checkedInAt: r.checkedInAt?.toISOString() ?? null,

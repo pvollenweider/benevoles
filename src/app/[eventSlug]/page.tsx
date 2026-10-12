@@ -9,6 +9,7 @@ import { publicEventInclude, publicEventPayload } from "@/lib/public-event"
 import { apexBaseUrl, eventPublicUrl } from "@/lib/urls"
 import EventPageClient, { type EventData } from "./EventPageClient"
 import { consentPrivacyHref } from "@/lib/public-signup"
+import { GROUP_PARAM, parseGroupCode, resolveGroupFilter } from "@/lib/group-links"
 
 // Only a published event gives its title and its link preview (#564); unlisted (#414), draft and
 // archived events are noindex. The canonical URL is the event's public one on the organization's
@@ -40,12 +41,18 @@ export async function generateMetadata({ params }: { params: Promise<{ eventSlug
   )
 }
 
-export default async function EventPage({ params }: { params: Promise<{ eventSlug: string }> }) {
+export default async function EventPage({ params, searchParams }: {
+  params: Promise<{ eventSlug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
   const { eventSlug } = await params
   const rawOrgSlug = (await headers()).get("x-org-slug")
   if (!rawOrgSlug) notFound()
 
-  const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}`)
+  // Share link per group (#947): `?groupe=<code>`, kept through a historical organisation address.
+  const rawGroup = (await searchParams)[GROUP_PARAM]
+  const groupCode = parseGroupCode(rawGroup)
+  const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}${groupCode ? `?${GROUP_PARAM}=${groupCode}` : ""}`)
   if (!resolved) notFound()
   if (resolved.redirectUrl) redirect(resolved.redirectUrl)
 
@@ -54,12 +61,19 @@ export default async function EventPage({ params }: { params: Promise<{ eventSlu
   const event = await loadEvent(resolved.org.id, eventSlug)
   if (!event || event.publicStatus !== "published") notFound()
 
+  // The link of this event with that code, if any: an unknown code shows the whole event, no error.
+  const groupLink = groupCode
+    ? await prisma.eventGroupLink.findFirst({ where: { eventId: event.id, code: groupCode }, select: { code: true, name: true, roleNames: true, hideFull: true } })
+    : null
+  const groupFilter = resolveGroupFilter(rawGroup === undefined ? null : (groupCode ?? ""), groupLink, [...new Set(event.shifts.map((s) => s.roleName))])
+
   return (
     <EventPageClient
       privacyHref={consentPrivacyHref()}
       orgSlug={resolved.org.slug}
       eventSlug={eventSlug}
       initialEvent={publicEventPayload(event) as EventData}
+      groupFilter={groupFilter}
     />
   )
 }

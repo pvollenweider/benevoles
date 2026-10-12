@@ -69,7 +69,7 @@ test("a published event has a rich link preview and a copyable link; a draft has
   const section = page.getByRole("region", { name: "Partager l'événement" })
   await expect(section.getByText(canonical!)).toBeVisible()
   await section.getByRole("button", { name: "Copier le lien" }).click()
-  await expect(section.getByRole("status")).toHaveText("Lien copié.")
+  await expect(section.getByRole("status").first()).toHaveText("Lien copié.")
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(canonical)
 
   // The pre-publish page offers the same actions.
