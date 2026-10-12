@@ -30,6 +30,15 @@ describe("video catalogue sources in the Docker image", () => {
     }
   })
 
+  // #910 imported videos/lib from scripts/seed-video-scenario.ts: the PR's type-check passed,
+  // but the image build type-checks only its own context and failed on the missing module.
+  it("keeps every script that imports the video library out of the image too", () => {
+    expect(ignore).toContain("scripts/seed-video-*.ts")
+    const scripts = fs.readdirSync(path.join(root, "scripts")).filter((f) => /\.(ts|mts|mjs|js)$/.test(f))
+    const importing = scripts.filter((f) => /from ["']\.\.\/videos\/(lib|tools|assets)\//.test(read(`scripts/${f}`)))
+    for (const f of importing) expect(f).toMatch(/^seed-video-.*\.ts$/)
+  })
+
   it("copies the four sources into the runtime image", () => {
     expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/catalog\.json .\/videos\/catalog\.json/)
     // Real duration, frame size and posters of the published renders (videos/tools/posters.ts).

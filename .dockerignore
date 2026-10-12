@@ -35,5 +35,7 @@ videos/lib
 videos/tools
 videos/output
 videos/video.env.example
+# The video seeds import videos/lib: they run only on the video database, never in the app.
+scripts/seed-video-*.ts
 !videos/MASTERCLASS_PLAN.md
 !videos/scripts/*.md
