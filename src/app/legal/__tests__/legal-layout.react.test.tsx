@@ -41,8 +41,8 @@ describe("legal pages layout", () => {
     expect(main.contains(footer)).toBe(false)
     expect(main.querySelector("footer")).toBeNull()
     const nav = within(footer).getByRole("navigation", { name: "Liens utiles" })
-    // The site variant: three titled columns, the legal one with privacy, terms, accessibility.
-    expect(within(nav).getAllByRole("group")).toHaveLength(3)
+    // The site variant: four titled columns (« Découvrir » first, #872), the legal one with privacy, terms, accessibility.
+    expect(within(nav).getAllByRole("group")).toHaveLength(4)
     expect(document.getElementById("footer-site-legal")).toHaveTextContent("Informations légales")
     expect(within(nav).getByRole("link", { name: "Confidentialité" })).toHaveAttribute("href", "/legal/privacy")
     expect(within(nav).getByRole("link", { name: "CGU" })).toHaveAttribute("href", "/legal/terms")

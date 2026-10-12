@@ -12,6 +12,14 @@ docker-compose*.yml
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
 !FEATURES.md
 !LOGICIEL-PLANNING-BENEVOLES.md
+!POUR-QUI.md
+!BENEVOLES-FETE-DE-VILLAGE.md
+!BENEVOLES-FESTIVAL.md
+!BENEVOLES-MANIFESTATION-SPORTIVE.md
+!PLANNING-PERMANENCES-BENEVOLES.md
+!TARIFS.md
+# The home's FAQ (#951, LANDING_FAQ_SOURCE in src/lib/landing-seo.ts), read at runtime too.
+!FAQ-ACCUEIL.md
 !ACCESSIBILITE.md
 !ACCORD-SOUS-TRAITANCE.md
 !SOUS-TRAITANTS.md

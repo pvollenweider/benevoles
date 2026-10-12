@@ -73,6 +73,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
 COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 COPY --from=builder --chown=nextjs:nodejs /app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md
+# Pages « Pour qui ? » (#872), tarifs (#950) et questions de l'accueil (#951).
+COPY --from=builder --chown=nextjs:nodejs /app/POUR-QUI.md ./POUR-QUI.md
+COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FETE-DE-VILLAGE.md ./BENEVOLES-FETE-DE-VILLAGE.md
+COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FESTIVAL.md ./BENEVOLES-FESTIVAL.md
+COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-MANIFESTATION-SPORTIVE.md ./BENEVOLES-MANIFESTATION-SPORTIVE.md
+COPY --from=builder --chown=nextjs:nodejs /app/PLANNING-PERMANENCES-BENEVOLES.md ./PLANNING-PERMANENCES-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/TARIFS.md ./TARIFS.md
+COPY --from=builder --chown=nextjs:nodejs /app/FAQ-ACCUEIL.md ./FAQ-ACCUEIL.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md
 COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md

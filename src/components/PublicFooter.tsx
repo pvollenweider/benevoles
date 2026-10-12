@@ -35,11 +35,22 @@ function legalColumn(hosted: boolean = isHostedService()): FooterColumn {
 }
 
 /**
- * The instance's own pages: help, the project (sign-in, code, support), legal. The project column
+ * The instance's own pages: on the hosted service, for whom and at what price (« Pour qui ? » #872,
+ * pricing #950); then help, the project (sign-in, code, support), legal. The project column
  * carries the instance's name, and the support link only when the instance has one (#760).
  */
-export function footerSiteColumns(name: string = siteName(), support: string | null = supportUrl()): readonly FooterColumn[] {
+export function footerSiteColumns(name: string = siteName(), support: string | null = supportUrl(), hosted: boolean = isHostedService()): readonly FooterColumn[] {
   return [
+    ...(hosted
+      ? [{
+          id: "discover",
+          title: "Découvrir",
+          links: [
+            { href: "/pour-qui", label: "Pour qui ?" },
+            { href: "/tarifs", label: "Tarifs" },
+          ],
+        }]
+      : []),
     {
       id: "help",
       title: "Aide",
@@ -109,7 +120,9 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  * are `footer-<variant>-<column>`: unique, one footer per page. Columns
  * side by side from `sm`, two per row on a phone, lists left-aligned. Two variants:
  * - `site`, benevol.app's own pages (home, features, documentation, videos, changelog, legal,
- *   accessibility): Aide, benevol.app (sign-in, code with the version, support), Informations légales;
+ *   accessibility): Découvrir (« Pour qui ? », pricing; hosted service only), Aide,
+ *   benevol.app (sign-in, code with the version, support), Informations légales; four columns
+ *   side by side from `md`, two per row below;
  * - `event` (default), the pages an organisation's audience sees (its events, a registration, a
  *   personal or sector leader link): Aide (volunteers' guide, organisers' sign-in) and
  *   Informations légales, then the name and version of the tool on a small line; no support
@@ -124,7 +137,7 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>
-      <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "site" ? "sm:grid-cols-3" : ""}`}>
+      <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "event" ? "" : columns.length > 3 ? "md:grid-cols-4" : "sm:grid-cols-3"}`}>
         {columns.map((col) => (
           <div key={col.id} role="group" aria-labelledby={`footer-${variant}-${col.id}`} className="min-w-0">
             <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>

@@ -1,9 +1,6 @@
-import ContentShell from "@/components/public/ContentShell"
-import { CONTENT_VIEWPORT } from "@/lib/seo-metadata"
+import { EditorialLayout, EDITORIAL_VIEWPORT } from "@/components/public/EditorialPage"
 
-export const viewport = CONTENT_VIEWPORT
+export const viewport = EDITORIAL_VIEWPORT
 
 // The wide frame (`layout="doc"`): the page draws its own <main> (src/components/public/FeaturesPage.tsx).
-export default function EditorialLayout({ children }: { children: React.ReactNode }) {
-  return <ContentShell layout="doc">{children}</ContentShell>
-}
+export default EditorialLayout

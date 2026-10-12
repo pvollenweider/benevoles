@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 import { PUBLIC_PAGES } from "../doc-pages"
+import { LANDING_FAQ_SOURCE } from "../landing-seo"
 
 // The production image must contain every Markdown source of the public pages: FEATURES.md was
 // copied by the Dockerfile but excluded by .dockerignore, and every deploy failed (ENOENT at
@@ -10,7 +11,8 @@ const root = path.join(__dirname, "..", "..", "..")
 const read = (f: string) => fs.readFileSync(path.join(root, f), "utf-8")
 
 describe("public page sources in the Docker image", () => {
-  const sources = [...new Set(PUBLIC_PAGES.map((p) => p.source).filter((s): s is string => !!s))]
+  // The home's FAQ (#951) is read at runtime like a page's source.
+  const sources = [...new Set([...PUBLIC_PAGES.map((p) => p.source).filter((s): s is string => !!s), LANDING_FAQ_SOURCE])]
 
   it("has sources to check", () => {
     expect(sources).toContain("FEATURES.md")

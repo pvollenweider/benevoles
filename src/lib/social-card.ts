@@ -35,7 +35,8 @@ export function socialCardFor(pagePath: string, units: readonly DocUnit[]): Soci
   const page = PUBLIC_PAGES.find((p) => p.path === pagePath)
   if (page) {
     const title = page.path === "/doc" ? "Toute la documentation" : page.title
-    return { eyebrow: eyebrowOf(page.path), title, detail: page.summary, footer: SOCIAL_CARD_FOOTER }
+    // An audience page (#872) sits under « Pour qui ? », as its breadcrumb says.
+    return { eyebrow: page.audience ? "Pour qui ?" : eyebrowOf(page.path), title, detail: page.summary, footer: SOCIAL_CARD_FOOTER }
   }
   const unit = pagePath.startsWith("/doc/") ? units.find((u) => `/doc/${u.slug}` === pagePath) : undefined
   if (!unit) return null

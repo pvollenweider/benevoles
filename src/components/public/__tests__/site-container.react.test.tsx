@@ -108,7 +108,7 @@ describe("site container (one width for every public page)", () => {
     expectSiteContainer(header)
     expectSiteContainer(screen.getByRole("main"))
     expectSiteContainer(footerWrapper)
-    const nav = screen.getByRole("navigation", { name: "Fonctionnalités, guides et blog" })
+    const nav = screen.getByRole("navigation", { name: "Présentation, guides et blog" })
     for (const [name, href] of [["Fonctionnalités", "/fonctionnalites"], ["Guide administrateur", "/doc/admin"], ["Guide bénévole", "/doc/benevole"], ["Blog", "/blog"]]) {
       expect(within(nav).getByRole("link", { name })).toHaveAttribute("href", href)
     }

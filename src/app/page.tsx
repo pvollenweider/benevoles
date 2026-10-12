@@ -13,7 +13,7 @@ import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
 import { apexBaseUrl, orgBaseUrl } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
-import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
+import { CONTACT_EMAIL, LANDING_FAQ_SOURCE, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 import { loadDocUnits } from "@/lib/doc-units"
 import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
 import LandingStartGuides from "@/components/public/LandingStartGuides"
@@ -22,7 +22,7 @@ import { isHostedService } from "@/lib/site"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { env } from "@/lib/env"
-import { loadHomeSignupVideo } from "@/lib/public-content"
+import { loadHomeSignupVideo, renderFaqSource } from "@/lib/public-content"
 import HomeSignupVideo from "@/components/public/HomeSignupVideo"
 
 export const dynamic = "force-dynamic"
@@ -173,7 +173,7 @@ export default async function HomePage() {
 // ── Apex home ────────────────────────────────────────────────────────────────
 // Everything stated here is shipped (FEATURES.md is the full list, linked below) or stated by the
 // legal pages (free, hosted in France, no tracking cookie). The FAQ text comes from
-// src/lib/landing-seo.ts, which also feeds the FAQPage structured data.
+// FAQ-ACCUEIL.md (#951), which also feeds the FAQPage structured data.
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
 
@@ -264,6 +264,8 @@ function LandingPage() {
   const quickstart = landingQuickstartLink(units)
   // The phone plays the volunteer sign-up video in place (#765) when it can play here.
   const signupVideo = loadHomeSignupVideo(env.VIDEO_MEDIA_BASE_URL)
+  // The FAQ (#951), from its Markdown source: the same questions and answers as its FAQPage data.
+  const faq = renderFaqSource(LANDING_FAQ_SOURCE)
   const phoneStill = (
     <Image
       src="/doc-img/public-timeline-mobile.png"
@@ -281,7 +283,7 @@ function LandingPage() {
   return (
     <>
     <main className="min-h-screen bg-white text-gray-900">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(landingJsonLd(apexBaseUrl())) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(landingJsonLd(apexBaseUrl(), faq.map((q) => ({ question: q.question, answer: q.text })))) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="bg-blue-900 pt-16 pb-0 sm:pt-24 overflow-hidden">
@@ -399,9 +401,13 @@ function LandingPage() {
               </div>
             ))}
           </div>
-          <p className="mt-20 text-center">
+          <p className="mt-20 flex flex-wrap justify-center gap-x-8 gap-y-4 text-center">
             <Link href="/fonctionnalites" className={`text-lg font-semibold text-blue-700 underline underline-offset-4 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
               Voir toutes les fonctionnalités<span aria-hidden="true"> →</span>
+            </Link>
+            {/* The audience pages (#872): a fête de village, a festival, a race, weekly permanences. */}
+            <Link href="/pour-qui" className={`text-lg font-semibold text-blue-700 underline underline-offset-4 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+              Pour qui ? Fêtes, festivals, courses, permanences<span aria-hidden="true"> →</span>
             </Link>
           </p>
         </div>
@@ -418,7 +424,10 @@ function LandingPage() {
               <dt className="text-lg font-semibold">Gratuit et open source</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
                 Il n&apos;y a ni abonnement ni version payante. Le code est public (licence AGPL-3.0)
-                et l&apos;outil évolue avec les retours des associations qui l&apos;utilisent.
+                et l&apos;outil évolue avec les retours des associations qui l&apos;utilisent.{" "}
+                <Link href="/tarifs" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                  Tarifs : pourquoi c&apos;est gratuit
+                </Link>
               </dd>
             </div>
             <div>
@@ -460,29 +469,17 @@ function LandingPage() {
           <div className="max-w-3xl">
             <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
             <div className="mt-10 divide-y divide-gray-200 border-y border-gray-200">
-              {LANDING_FAQ.map((f) => (
-                <details key={f.question} className="group">
+              {faq.map((f) => (
+                <details key={f.id} className="group">
                   <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold rounded [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-blue-700`}>
                     {f.question}
                     <span aria-hidden="true" className="text-2xl font-normal text-blue-700 transition-transform group-open:rotate-45 motion-reduce:transition-none">+</span>
                   </summary>
-                  <div className="pb-6 pr-8 text-base text-gray-600 leading-relaxed">
-                    <p className="max-w-[70ch]">{f.answer}</p>
-                    {f.link && (
-                      <p className="mt-2">
-                        {f.link.href.startsWith("http") ? (
-                          <a href={f.link.href} target="_blank" rel="noopener noreferrer" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
-                            {f.link.label}
-                            <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
-                          </a>
-                        ) : (
-                          <Link href={f.link.href} className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
-                            {f.link.label}
-                          </Link>
-                        )}
-                      </p>
-                    )}
-                  </div>
+                  {/* The answer's HTML, rendered and sanitized from FAQ-ACCUEIL.md (renderFaqSource): its links underlined, with the focus outline of DESIGN.md §4. */}
+                  <div
+                    className={`pb-6 pr-8 text-base text-gray-600 leading-relaxed [&_p]:max-w-[70ch] [&_p+p]:mt-2 [&_a]:text-blue-700 [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-blue-900 [&_a]:rounded [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2 [&_a:focus-visible]:outline-blue-700`}
+                    dangerouslySetInnerHTML={{ __html: f.html }}
+                  />
                 </details>
               ))}
             </div>

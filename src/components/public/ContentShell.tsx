@@ -7,6 +7,7 @@ import DocThemeToggle from "@/app/doc/DocThemeToggle"
 import ContentNav from "@/components/public/ContentNav"
 import SiteBrandLink from "@/components/public/SiteBrandLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
+import { audienceNav } from "@/lib/doc-pages"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
@@ -70,10 +71,11 @@ export default function ContentShell({ children, layout = "article" }: { childre
       <SkipLink />
 
       <header className="border-b border-gray-100 dark:border-gray-800">
-        <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
+        {/* relative: the « Pour qui ? » list of ContentNav opens under the header on a phone. */}
+        <div className={`${SITE_CONTAINER_CLASS} relative py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
           <SiteBrandLink className="text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400" />
           <div className="flex items-center gap-3">
-            <ContentNav />
+            <ContentNav audiences={audienceNav()} />
             <DocThemeToggle />
           </div>
         </div>

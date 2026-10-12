@@ -22,6 +22,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "public-registration-birthdate": ["src/app/[eventSlug]/page.tsx"],
   "public-timeline-mobile": ["src/app/[eventSlug]/page.tsx"],
   "public-group-link": ["src/app/[eventSlug]/page.tsx"],
+  "public-permanences-mobile": ["src/app/[eventSlug]/page.tsx"],
   "public-my-page": ["src/app/my/[token]/page.tsx"],
   "leader-page": ["src/app/leader/[token]/page.tsx"],
   "admin-dashboard": ["src/app/admin/dashboard/page.tsx"],

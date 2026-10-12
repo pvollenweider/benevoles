@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest"
 import { breadcrumbNode, docUnitJsonLd, jsonLdScript, organizationNode, publicPageJsonLd, softwareApplicationNode, websiteNode } from "../structured-data"
 import { docGroup, loadDocUnits, type DocUnit } from "../doc-units"
+import { featuresPageFaq, renderFeaturesPage } from "../public-content"
+import fs from "fs"
+import path from "path"
+
+const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
 
 const BASE = "https://www.benevol.app"
 type Node = Record<string, unknown> & { "@type": string }
@@ -80,6 +85,38 @@ describe("publicPageJsonLd", () => {
       inLanguage: "fr",
       mainEntity: [{ "@type": "Question", name: "Est-ce gratuit ?", acceptedAnswer: { "@type": "Answer", text: "Oui." } }],
     })
+  })
+})
+
+// #872, #950: the audience pages sit under « Pour qui ? »; the pricing page states the free offer.
+describe("the audience and pricing pages", () => {
+  it("draws an audience page's breadcrumb through its index", () => {
+    const crumbs = graphOf(publicPageJsonLd("/benevoles-festival", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
+    expect(crumbs.itemListElement).toEqual([
+      { "@type": "ListItem", position: 1, name: "Accueil", item: `${BASE}/` },
+      { "@type": "ListItem", position: 2, name: "Pour qui ?", item: `${BASE}/pour-qui` },
+      { "@type": "ListItem", position: 3, name: "Festivals" },
+    ])
+    const index = graphOf(publicPageJsonLd("/pour-qui", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
+    expect((index.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Pour qui ?"])
+  })
+
+  it("describes the application on the pricing page, not on an audience page", () => {
+    expect(types(publicPageJsonLd("/tarifs", BASE))).toContain("SoftwareApplication")
+    expect(types(publicPageJsonLd("/benevoles-fete-de-village", BASE))).not.toContain("SoftwareApplication")
+  })
+})
+
+// #951: the features page's FAQPage is the questions it renders, from FEATURES.md.
+describe("the features page's FAQ", () => {
+  it("is the FAQ section of FEATURES.md, word for word", () => {
+    const page = renderFeaturesPage(null)
+    const faq = featuresPageFaq(page)
+    const shown = page.sections.find((s) => s.id === "questions-frequentes")!.faq!
+    expect(faq).toEqual(shown.map((q) => ({ question: q.question, answer: q.text })))
+    const node = graphOf(publicPageJsonLd("/fonctionnalites", BASE, faq)).find((n) => n["@type"] === "FAQPage")!
+    expect((node.mainEntity as { name: string }[]).map((q) => q.name)).toEqual(shown.map((q) => q.question))
+    expect(read("src/app/fonctionnalites/page.tsx")).toContain("featuresPageFaq(page)")
   })
 })
 

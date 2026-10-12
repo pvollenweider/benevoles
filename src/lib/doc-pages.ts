@@ -36,6 +36,11 @@ export type PublicPage = {
    * pages, accessibility statement, marketing), or on other instances only (the operator page).
    */
   availability?: "hosted" | "instance"
+  /**
+   * A page for one kind of association (#872): listed under « Pour qui ? » in the header
+   * navigation and on its index page (AUDIENCE_INDEX_PATH), its breadcrumb under that index.
+   */
+  audience?: boolean
 }
 
 export const PUBLIC_PAGES: readonly PublicPage[] = [
@@ -72,6 +77,84 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     metaDescription: "Le planning de vos bénévoles : postes et créneaux, inscription par lien sans compte ni application, rappels, jour J et heures. Gratuit, hébergé en France.",
     source: "LOGICIEL-PLANNING-BENEVOLES.md",
     priority: 0.8,
+    guide: false,
+    availability: "hosted",
+  },
+  {
+    // The audience pages (#872): one per kind of association, laid out like
+    // /logiciel-planning-benevoles, each with its own situations, guides, videos and FAQ (its
+    // FAQPage structured data). Their index is /pour-qui; the header lists them under « Pour qui ? ».
+    // Slugs from the searches an organiser types: « bénévoles fête de village », « bénévoles
+    // festival », « bénévoles manifestation sportive », « planning permanences bénévoles ».
+    path: "/pour-qui",
+    title: "Pour qui ?",
+    summary: `Les situations pour lesquelles ${SITE_NAME} est fait : fête de village, festival, manifestation sportive et permanences qui reviennent chaque semaine.`,
+    metaTitle: "Pour qui : fêtes, festivals, courses, permanences",
+    metaDescription: `Fête de village, festival, course ou permanences chaque semaine : comment ${SITE_NAME} organise les bénévoles de votre association, situation par situation.`,
+    source: "POUR-QUI.md",
+    priority: 0.7,
+    guide: false,
+    availability: "hosted",
+  },
+  {
+    path: "/benevoles-fete-de-village",
+    title: "Fêtes de village et comités des fêtes",
+    summary: "La buvette, les grillades, le montage et le démontage d'une fête de village, et l'édition de l'an dernier reprise en quelques minutes.",
+    metaTitle: "Planning des bénévoles d'une fête de village",
+    metaDescription: "Le planning des bénévoles d’une fête de village : buvette, grillades, montage et démontage, l’édition précédente reprise, des rappels automatiques.",
+    source: "BENEVOLES-FETE-DE-VILLAGE.md",
+    priority: 0.7,
+    guide: false,
+    availability: "hosted",
+    audience: true,
+  },
+  {
+    path: "/benevoles-festival",
+    title: "Festivals",
+    summary: "Plusieurs jours, des soirées qui finissent après minuit, le montage et le démontage, des responsables par poste et des désistements à remplacer.",
+    metaTitle: "Planning des bénévoles d'un festival",
+    metaDescription: "Le planning des bénévoles d’un festival sur plusieurs jours : montage, soirées, démontage, créneaux de nuit, responsables de poste et remplaçants.",
+    source: "BENEVOLES-FESTIVAL.md",
+    priority: 0.7,
+    guide: false,
+    availability: "hosted",
+    audience: true,
+  },
+  {
+    path: "/benevoles-manifestation-sportive",
+    title: "Manifestations sportives et courses",
+    summary: "Des signaleurs sur le parcours, les dossards et le ravitaillement le matin de la course, chacun avec son point de rendez-vous et un contact sur place.",
+    metaTitle: "Bénévoles d'une manifestation sportive",
+    metaDescription: "Signaleurs, dossards, ravitaillement : le planning des bénévoles d’une course ou d’une manifestation sportive, avec consignes et présences le jour J.",
+    source: "BENEVOLES-MANIFESTATION-SPORTIVE.md",
+    priority: 0.7,
+    guide: false,
+    availability: "hosted",
+    audience: true,
+  },
+  {
+    path: "/planning-permanences-benevoles",
+    title: "Permanences régulières",
+    summary: "Une épicerie participative, une distribution alimentaire, un repair café ou un accueil : des permanences chaque semaine, jours fériés exclus.",
+    metaTitle: "Planning des permanences de bénévoles",
+    metaDescription: "Épicerie participative, distribution alimentaire, repair café : des permanences chaque semaine, jours fériés exclus, réparties entre vos bénévoles.",
+    source: "PLANNING-PERMANENCES-BENEVOLES.md",
+    priority: 0.7,
+    guide: false,
+    availability: "hosted",
+    audience: true,
+  },
+  {
+    // The price of the hosted service (#950): free, why, and what that means. Its wording on the
+    // future of the service is the owner's (monetisation epic #635): nothing is promised beyond
+    // what FEATURES.md and the terms already say.
+    path: "/tarifs",
+    title: "Tarifs",
+    summary: `${SITE_NAME} est gratuit, sans fonction payante ni plafond d'événements ou de bénévoles : pourquoi, et ce que cela implique.`,
+    metaTitle: "Tarifs : logiciel de planning bénévoles gratuit",
+    metaDescription: `${SITE_NAME} est gratuit : pas d’abonnement, pas de fonction payante, pas de plafond d’événements ni de bénévoles. Pourquoi, et ce que cela implique.`,
+    source: "TARIFS.md",
+    priority: 0.7,
     guide: false,
     availability: "hosted",
   },
@@ -211,6 +294,25 @@ export const CONTENT_NAV = [
   ...PUBLIC_PAGES.filter((p) => p.path === "/blog"),
 ]
 
+/** The index of the audience pages (#872): « Toutes les situations » under « Pour qui ? ». */
+export const AUDIENCE_INDEX_PATH = "/pour-qui"
+
+/** The audience pages (#872), in the order of the « Pour qui ? » list. */
+export const AUDIENCE_PAGES = PUBLIC_PAGES.filter((p) => p.audience)
+
+/** A link of the « Pour qui ? » list of the header. */
+export type AudienceNavLink = { path: string; title: string }
+
+/**
+ * The « Pour qui ? » list of the header (#872): the audience pages, then their index. Empty on an
+ * instance that is not the hosted service (#760), where these pages don't exist.
+ */
+export function audienceNav(hosted: boolean = isHostedService()): AudienceNavLink[] {
+  const index = publicPage(AUDIENCE_INDEX_PATH)
+  if (!pageAvailable(index, hosted)) return []
+  return [...AUDIENCE_PAGES.filter((p) => pageAvailable(p, hosted)), index].map((p) => ({ path: p.path, title: p.path === AUDIENCE_INDEX_PATH ? "Toutes les situations" : p.title }))
+}
+
 /** Whether a public page exists on this instance (#760). */
 export function pageAvailable(page: Pick<PublicPage, "availability">, hosted: boolean = isHostedService()): boolean {
   if (page.availability === "hosted") return hosted
@@ -272,11 +374,19 @@ function escapeRegExp(text: string): string {
 /** `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
 const UNIT_LINK_RE = /\]\((?:guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
 
-/** The source's own first-level title (the page's <h1>) and the rest of the document. */
+/**
+ * The source's own first-level title (the page's <h1>) and the rest of the document. HTML comments
+ * before the title (a note to the authors, such as the draft marker of an editorial page) are
+ * dropped with it: never rendered, never mistaken for the title.
+ */
 export function splitTitle(markdown: string): { title: string | null; body: string } {
-  const m = markdown.match(/^# (.+)\n/)
-  return m ? { title: m[1].trim(), body: markdown.slice(m[0].length) } : { title: null, body: markdown }
+  const source = markdown.replace(LEADING_COMMENTS_RE, "")
+  const m = source.match(/^# (.+)\n/)
+  return m ? { title: m[1].trim(), body: source.slice(m[0].length) } : { title: null, body: markdown }
 }
+
+/** Blank lines and HTML comments at the very start of a source. */
+const LEADING_COMMENTS_RE = /^(?:\s*<!--[\s\S]*?-->)*\s*/
 
 /**
  * Sitemap entries of the apex host: the marketing home, every public content page, then the

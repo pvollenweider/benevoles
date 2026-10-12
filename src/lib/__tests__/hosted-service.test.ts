@@ -14,7 +14,7 @@ describe("hosted service pages", () => {
   })
 
   it("keeps legal pages, the statement and the marketing page to the hosted service", () => {
-    const hostedOnly = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/logiciel-planning-benevoles"]
+    const hostedOnly = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/planning-permanences-benevoles", "/tarifs"]
     for (const path of hostedOnly) {
       expect(pageAvailable(publicPage(path), true), path).toBe(true)
       expect(pageAvailable(publicPage(path), false), path).toBe(false)

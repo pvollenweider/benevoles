@@ -26,7 +26,8 @@ export function apexRedirectUrl(host: string, pathAndQuery: string, appUrl: stri
 }
 
 /**
- * The apex site's own pages (#933): the features and editorial pages, the documentation, the blog (#944), the video
+ * The apex site's own pages (#933): the features and editorial pages (the audience pages and the
+ * pricing page among them, #872, #950), the documentation, the blog (#944), the video
  * library, the legal pages and the accessibility statement (src/lib/doc-pages.ts), the sign-up
  * page, the product-updates page and the llms.txt files. An organisation's host answered them in
  * 200 too, and their relative links made crawlers walk the whole public site again on every
@@ -36,6 +37,12 @@ export function apexRedirectUrl(host: string, pathAndQuery: string, appUrl: stri
 export const APEX_ONLY_PATHS: readonly string[] = [
   "/fonctionnalites",
   "/logiciel-planning-benevoles",
+  "/pour-qui",
+  "/benevoles-fete-de-village",
+  "/benevoles-festival",
+  "/benevoles-manifestation-sportive",
+  "/planning-permanences-benevoles",
+  "/tarifs",
   "/nouveautes",
   "/blog",
   "/accessibilite",

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { DOC_ROLE_INFO, docGroup, docGroupHref, type DocUnit } from "@/lib/doc-units"
-import { publicPage } from "@/lib/doc-pages"
+import { AUDIENCE_INDEX_PATH, publicPage } from "@/lib/doc-pages"
 import type { BlogPost } from "@/lib/blog"
 import { SITE_NAME, absoluteUrl, socialImagePath } from "@/lib/seo-metadata"
 import { contactEmail } from "@/lib/site"
@@ -143,16 +143,20 @@ export function jsonLdGraph(nodes: readonly JsonLdNode[]): JsonLdNode {
   return { "@context": "https://schema.org", "@graph": nodes }
 }
 
-/** Where a public page sits under the home: its section (Documentation, legal pages), then itself. */
-function publicPageCrumbs(path: string, title: string): Crumb[] {
+/**
+ * Where a public page sits under the home: its section (Documentation, the « Pour qui ? » index of
+ * an audience page, #872), then itself.
+ */
+function publicPageCrumbs(path: string, title: string, audience = false): Crumb[] {
   const home = { name: "Accueil", path: "/" }
   if (path === "/doc") return [home, { name: "Documentation" }]
   if (path.startsWith("/doc/")) return [home, { name: "Documentation", path: "/doc" }, { name: title }]
+  if (audience) return [home, { name: publicPage(AUDIENCE_INDEX_PATH).title, path: AUDIENCE_INDEX_PATH }, { name: title }]
   return [home, { name: title }]
 }
 
-/** The pages that present the application itself, so their structured data describes it too. */
-const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles"]
+/** The pages that present the application itself, so their structured data describes it too (its price, #950). */
+const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles", "/tarifs"]
 
 /**
  * The structured data of a public content page (src/lib/doc-pages.ts): the page, its breadcrumb,
@@ -163,7 +167,7 @@ export function publicPageJsonLd(path: string, base: string, faq: readonly FaqIt
   const page = publicPage(path)
   const nodes: JsonLdNode[] = [
     webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage" }),
-    breadcrumbNode(base, page.path, publicPageCrumbs(page.path, page.title)),
+    breadcrumbNode(base, page.path, publicPageCrumbs(page.path, page.title, page.audience)),
     websiteNode(base),
     organizationNode(base),
   ]
