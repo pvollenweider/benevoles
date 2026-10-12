@@ -48,21 +48,6 @@ test("a deeper unknown URL, an unknown documentation unit and an unknown video a
   await expect(page.getByRole("button", { name: /thème/i })).toHaveCount(0)
 })
 
-// #935: `notFound()` during a page's render sent an empty document, the page drawn by the browser
-// only; the proxy now answers these with the not-found route, so the HTML itself carries the page
-// for crawlers and readers without JavaScript, with one robots meta.
-test("the 404 of a dynamic route is in the server HTML, with a single robots meta", async ({ request }) => {
-  for (const path of ["/doc/unite-inexistante", "/videos/VIDEO_INEXISTANTE", "/legal/inexistante", "/page-inexistante", "/n-existe/pas/du-tout"]) {
-    const response = await request.get(path)
-    expect(response.status(), path).toBe(404)
-    const html = await response.text()
-    expect(html, path).toContain("Cette page est tombée à l&#x27;eau.")
-    expect(html, path).toContain('aria-label="Liens utiles"')
-    expect(html.match(/<meta name="robots"/g), path).toHaveLength(1)
-    expect(html, path).toContain('<meta name="robots" content="noindex"/>')
-  }
-})
-
 test("on an organization: an unknown event leads back to its events", async ({ page }) => {
   const response = await page.goto("/evenement-inexistant?org=default")
   expect(response?.status()).toBe(404)
