@@ -16,7 +16,6 @@ const BASE = "https://www.benevol.app"
 
 /** The new editorial pages: the audience pages (#872), their index and the pricing page (#950). */
 const EDITORIAL = [AUDIENCE_INDEX_PATH, ...AUDIENCE_PAGES.map((p) => p.path), "/tarifs"]
-const DRAFT_MARKER = "<!-- BROUILLON : texte à relire et réécrire par le propriétaire avant publication -->"
 
 describe("the audience pages (#872)", () => {
   it("are the first four situations, in the order of the « Pour qui ? » list, then their index", () => {
@@ -45,6 +44,30 @@ describe("the audience pages (#872)", () => {
     for (const page of AUDIENCE_PAGES) expect(index, page.path).toContain(`](${page.path})`)
     expect(read("src/app/page.tsx")).toContain('href="/pour-qui"')
     for (const source of ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/pour-qui)")
+  })
+})
+
+// #760: a self-hosted instance has no presentation page; a shared source must not link to a 404.
+describe("links to the presentation pages from a shared source", () => {
+  const md = "[a](TARIFS.md) [b](POUR-QUI.md#une-fete-de-village) [c](LOGICIEL-PLANNING-BENEVOLES.md) [d](guide/rappels.md) [e](GUIDE_ADMIN.md) [f](FEATURES.md) [g](/videos/SHIFT_RECURRENCE) [h](CHANGELOG.md)"
+
+  it("stay relative on the hosted service", () => {
+    expect(linkSourcesToRoutes(md, true)).toBe("[a](/tarifs) [b](/pour-qui#une-fete-de-village) [c](/logiciel-planning-benevoles) [d](/doc/rappels) [e](/doc/admin) [f](/fonctionnalites) [g](/videos/SHIFT_RECURRENCE) [h](/nouveautes)")
+  })
+
+  it("point at the hosted service on another instance; documentation, videos and the instance's own pages stay relative", () => {
+    expect(linkSourcesToRoutes(md, false)).toBe(
+      "[a](https://www.benevol.app/tarifs) [b](https://www.benevol.app/pour-qui#une-fete-de-village) [c](https://www.benevol.app/logiciel-planning-benevoles) [d](/doc/rappels) [e](/doc/admin) [f](/fonctionnalites) [g](/videos/SHIFT_RECURRENCE) [h](/nouveautes)",
+    )
+  })
+
+  it("are rewritten in FEATURES.md as another instance renders it", () => {
+    const site = linkSourcesToRoutes(read("FEATURES.md"), false)
+    for (const page of AUDIENCE_PAGES) expect(site, page.path).toContain(`](https://www.benevol.app${page.path})`)
+    expect(site).toContain("](https://www.benevol.app/tarifs)")
+    expect(site).not.toMatch(/\]\(\/(tarifs|pour-qui|benevoles-|planning-permanences|logiciel-planning)/)
+    expect(site).toContain("](/doc/creer-un-evenement)")
+    for (const page of PUBLIC_PAGES.filter((p) => p.presentation)) expect(page.availability, page.path).toBe("hosted")
   })
 })
 
@@ -83,8 +106,8 @@ describe.each(EDITORIAL)("%s", (pagePath) => {
     expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
   })
 
-  it("starts with the draft marker for the owner, never rendered", () => {
-    expect(source.startsWith(DRAFT_MARKER)).toBe(true)
+  // The draft marker (removed once the owner rewrites the copy, « Draft content » CI job) is never rendered.
+  it("never renders a draft marker", () => {
     expect(splitTitle(source).title).toBe(rendered.title)
     expect(JSON.stringify(rendered)).not.toContain("BROUILLON")
   })
@@ -141,18 +164,17 @@ describe.each(AUDIENCE_PAGES.map((p) => p.path))("audience page %s", (pagePath) 
   })
 })
 
-// #951: FAQ questions never repeat from one page to another (each page answers its own).
+// #951: a question may be answered on several pages (owner's decision). Repeats are reported, for
+// the owner's review, never a failure.
 describe("the FAQs of the editorial pages, the features page and the home", () => {
-  it("never ask the same question twice", () => {
+  it("report the questions asked on several pages", () => {
     const sources = ["FEATURES.md", ...PUBLIC_PAGES.filter((p) => p.path === "/logiciel-planning-benevoles" || EDITORIAL.includes(p.path)).map((p) => p.source!)]
     const questions = [
       ...sources.flatMap((s) => renderFeaturesPage(null, s).sections.flatMap((sec) => sec.faq ?? []).map((q) => q.question)),
       ...renderFaqSource(LANDING_FAQ_SOURCE).map((q) => q.question),
     ]
-    const seen = new Set<string>()
-    for (const q of questions) {
-      expect(seen.has(q), q).toBe(false)
-      seen.add(q)
-    }
+    expect(questions.length).toBeGreaterThan(0)
+    const repeated = [...new Set(questions.filter((q, i) => questions.indexOf(q) !== i))]
+    if (repeated.length > 0) console.info(`FAQ questions asked on several pages (allowed, for review):\n- ${repeated.join("\n- ")}`)
   })
 })

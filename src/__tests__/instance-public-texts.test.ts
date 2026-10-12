@@ -14,7 +14,14 @@ describe("public texts of another instance (#760)", () => {
     const { loadDocUnits } = await import("@/lib/doc-units")
 
     const features = renderFeaturesPage(null)
-    const featuresHtml = JSON.stringify(features)
+    // The one exception (#872, owner's decision): a link to a presentation page this instance
+    // doesn't have (the audience pages, /tarifs) points at it on the hosted service, never a 404.
+    const { PUBLIC_PAGES } = await import("@/lib/doc-pages")
+    const presentation = PUBLIC_PAGES.filter((p) => p.presentation).map((p) => p.path)
+    const hostedLinks = [...JSON.stringify(features).matchAll(/https:\/\/www\.benevol\.app(\/[a-z-]+)/g)].map((m) => m[1])
+    expect(hostedLinks.length).toBeGreaterThan(0)
+    for (const path of hostedLinks) expect(presentation, path).toContain(path)
+    const featuresHtml = JSON.stringify(features).replace(/https:\/\/www\.benevol\.app\/[a-z-]+/g, "")
     expect(featuresHtml).not.toMatch(/benevol\.app/)
     expect(featuresHtml).toContain("Bénévoles du Jura")
 

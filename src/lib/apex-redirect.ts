@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { orgSlugFromHost } from "@/lib/org-subdomain"
+import { APEX_ONLY_PATHS } from "@/lib/reserved-paths"
 
 /**
  * The bare domain (benevol.app) served every page in 200 next to www.benevol.app, the canonical
@@ -25,35 +26,9 @@ export function apexRedirectUrl(host: string, pathAndQuery: string, appUrl: stri
   return `${canonical.origin}${path}`
 }
 
-/**
- * The apex site's own pages (#933): the features and editorial pages (the audience pages and the
- * pricing page among them, #872, #950), the documentation, the blog (#944), the video
- * library, the legal pages and the accessibility statement (src/lib/doc-pages.ts), the sign-up
- * page, the product-updates page and the llms.txt files. An organisation's host answered them in
- * 200 too, and their relative links made crawlers walk the whole public site again on every
- * organisation's host. Everything else stays on that host: its events and their pages, its root,
- * /my, /leader, /waitlist, /admin, /api, robots.txt and its own sitemap.
- */
-export const APEX_ONLY_PATHS: readonly string[] = [
-  "/fonctionnalites",
-  "/logiciel-planning-benevoles",
-  "/pour-qui",
-  "/benevoles-fete-de-village",
-  "/benevoles-festival",
-  "/benevoles-manifestation-sportive",
-  "/planning-permanences-benevoles",
-  "/tarifs",
-  "/nouveautes",
-  "/blog",
-  "/accessibilite",
-  "/legal",
-  "/doc",
-  "/videos",
-  "/inscription",
-  "/product-updates",
-  "/llms.txt",
-  "/llms-full.txt",
-]
+// The apex site's own pages (#933), from the single list of the site's reserved paths, shared
+// with the event slug check (src/lib/reserved-paths.ts).
+export { APEX_ONLY_PATHS } from "@/lib/reserved-paths"
 
 /** Whether a path is one of the apex site's own pages: the path itself or below it, never a longer slug (`/documentation`). */
 export function isApexOnlyPath(pathname: string): boolean {

@@ -3,7 +3,7 @@
 
 import type { Metadata, MetadataRoute } from "next"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
-import { isHostedService } from "@/lib/site"
+import { HOSTED_SERVICE_URL, isHostedService } from "@/lib/site"
 
 export { SITE_NAME }
 
@@ -41,6 +41,13 @@ export type PublicPage = {
    * navigation and on its index page (AUDIENCE_INDEX_PATH), its breadcrumb under that index.
    */
   audience?: boolean
+  /**
+   * A page that presents the hosted service (the editorial, audience and pricing pages): on an
+   * instance where it doesn't exist, a link to its source from a shared Markdown file (FEATURES.md)
+   * points at it on the hosted service (HOSTED_SERVICE_URL) instead of a 404. Documentation,
+   * videos and legal pages are never rewritten: they describe this instance.
+   */
+  presentation?: boolean
 }
 
 export const PUBLIC_PAGES: readonly PublicPage[] = [
@@ -79,6 +86,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.8,
     guide: false,
     availability: "hosted",
+    presentation: true,
   },
   {
     // The audience pages (#872): one per kind of association, laid out like
@@ -95,6 +103,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
   },
   {
     path: "/benevoles-fete-de-village",
@@ -106,6 +115,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
     audience: true,
   },
   {
@@ -118,6 +128,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
     audience: true,
   },
   {
@@ -130,6 +141,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
     audience: true,
   },
   {
@@ -142,21 +154,23 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
     audience: true,
   },
   {
-    // The price of the hosted service (#950): free, why, and what that means. Its wording on the
-    // future of the service is the owner's (monetisation epic #635): nothing is promised beyond
-    // what FEATURES.md and the terms already say.
+    // The price (#950): free software (AGPL, self-hostable) apart from the hosted service, free
+    // today. Its wording on the future of the service is the owner's (monetisation epic #635): no
+    // promise of permanent gratuity, notice period or amount.
     path: "/tarifs",
     title: "Tarifs",
-    summary: `${SITE_NAME} est gratuit, sans fonction payante ni plafond d'événements ou de bénévoles : pourquoi, et ce que cela implique.`,
-    metaTitle: "Tarifs : logiciel de planning bénévoles gratuit",
-    metaDescription: `${SITE_NAME} est gratuit : pas d’abonnement, pas de fonction payante, pas de plafond d’événements ni de bénévoles. Pourquoi, et ce que cela implique.`,
+    summary: `${SITE_NAME} est un logiciel libre, et son hébergement est gratuit aujourd'hui : ce qui est compris, pourquoi, et les seuls garde-fous.`,
+    metaTitle: "Tarifs : logiciel libre, hébergement gratuit",
+    metaDescription: `${SITE_NAME} est un logiciel libre sous licence AGPL, que vous pouvez installer vous-même. Son hébergement est gratuit aujourd’hui, sans fonction payante.`,
     source: "TARIFS.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
+    presentation: true,
   },
   {
     // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
@@ -354,14 +368,18 @@ export function publicPageMetadata(path: string, base: string): Metadata {
  * kept). The same goes for the documentation units (#649, src/lib/doc-units.ts): `](guide/x.md#y)`
  * from a file at the root, or `](x.md#y)` from another unit of guide/, becomes `](/doc/x#y)`; a
  * unit links to a root source with `](../GUIDE_ADMIN.md)`. Only a lower-case file name is a unit
- * (guide/README.md, the index, isn't one).
+ * (guide/README.md, the index, isn't one). On an instance that is not the hosted service, a link
+ * to a presentation page it doesn't have (the audience pages, /tarifs…) becomes an absolute link to
+ * the hosted service; every other link stays relative.
  */
-export function linkSourcesToRoutes(markdown: string): string {
+export function linkSourcesToRoutes(markdown: string, hosted: boolean = isHostedService()): string {
   const pages = PUBLIC_PAGES.reduce((md, p) => {
     const file = p.source
     if (!file) return md
     const source = new RegExp(`\\]\\((?:\\.\\./)?${escapeRegExp(file)}(#[^)\\s]*)?\\)`, "g")
-    return md.replace(source, (_match, anchor: string | undefined) => `](${p.path}${anchor ?? ""})`)
+    // A presentation page this instance doesn't have (#760) is linked on the hosted service.
+    const target = p.presentation && !pageAvailable(p, hosted) ? `${HOSTED_SERVICE_URL}${p.path}` : p.path
+    return md.replace(source, (_match, anchor: string | undefined) => `](${target}${anchor ?? ""})`)
   }, markdown)
   return pages.replace(UNIT_LINK_RE, (_match, slug: string, anchor: string | undefined) => `](/doc/${slug}${anchor ?? ""})`)
 }

@@ -8,6 +8,22 @@ permissions:
   contents: read
 
 jobs:
+  # Agent-written copy carries « <!-- BROUILLON » until the owner rewrites it (#872): this job stays
+  # red until every marker is gone, so a draft is never merged (scripts/check-no-draft-content.mjs).
+  draft-content:
+    name: Draft content
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+
+      - name: No public content source is still a draft
+        run: node scripts/check-no-draft-content.mjs
+
   check:
     name: Type-check, lint & tests
     runs-on: ubuntu-latest

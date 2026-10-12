@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { eventSlugFromTitle } from "@/lib/event-slug"
 import { NextResponse } from "next/server"
 import { civilDateSchema } from "@/lib/civil-date"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
-import { slugify } from "@/lib/utils"
 import { findTemplate, templateToEvent } from "@/lib/event-templates"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -30,7 +30,10 @@ export async function POST(req: Request) {
   if (!template) return NextResponse.json({ error: "Modèle inconnu." }, { status: 400 })
 
   const draft = templateToEvent(template, parsed.data)
-  let slug = slugify(draft.title)
+  // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
+  const slugged = eventSlugFromTitle(draft.title)
+  if ("error" in slugged) return NextResponse.json({ error: slugged.error }, { status: 400 })
+  let slug = slugged.slug
   const existing = await db.event.findFirst({ where: { slug }, select: { id: true } })
   if (existing) slug = `${slug}-${Date.now()}`
 

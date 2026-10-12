@@ -114,6 +114,22 @@ describe("site container (one width for every public page)", () => {
     }
   })
 
+  // #760, #872: « Pour qui ? » in the header and « Découvrir » in the footer on the hosted service only.
+  it("shows « Pour qui ? » and « Découvrir » on the hosted service, neither on another instance", () => {
+    vi.stubEnv("HOSTED_SERVICE", "true")
+    render(<ContentShell><p>Texte</p></ContentShell>)
+    expect(screen.getByRole("button", { name: /^Pour qui \?/ })).toBeInTheDocument()
+    expect(screen.getByText("Découvrir")).toBeInTheDocument()
+    cleanup()
+    vi.stubEnv("HOSTED_SERVICE", "false")
+    render(<ContentShell><p>Texte</p></ContentShell>)
+    expect(screen.queryByRole("button", { name: /^Pour qui \?/ })).toBeNull()
+    expect(screen.queryByRole("link", { name: /^Pour qui \?/ })).toBeNull()
+    expect(screen.queryByText("Découvrir")).toBeNull()
+    expect(screen.queryByRole("link", { name: "Tarifs" })).toBeNull()
+    vi.unstubAllEnvs()
+  })
+
   it("frames the 404 page's main", () => {
     render(<NotFoundPage links={notFoundLinks(null, "benevol.app", "https://benevol.app")} />)
     expectSiteContainer(screen.getByRole("main"))

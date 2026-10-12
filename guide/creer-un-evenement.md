@@ -24,7 +24,7 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 
 | Champ | Description |
 |-------|-------------|
-| Titre | Nom affiché publiquement. L'adresse de la page d'inscription (`festival-2025`) en est tirée automatiquement à la création |
+| Titre | Nom affiché publiquement. L'adresse de la page d'inscription (`festival-2025`) en est tirée automatiquement à la création. Un titre qui donnerait une adresse du site lui-même (`tarifs`, `blog`, `admin`…) est refusé : ajoutez-y un mot, par exemple l'année |
 | Dates | Date de début et de fin de l'événement |
 | Lieu | Affiché sur la page publique |
 | Coordonnées GPS ou lien de carte | Collez un lien OpenStreetMap ou Google Maps, ou une paire « latitude, longitude » : les bénévoles ont alors un lien **Voir sur la carte** (OpenStreetMap, aucune requête vers un service tiers tant qu'ils ne cliquent pas) sur la page d'inscription, dans les emails et sur leur page personnelle. Un créneau peut avoir ses propres coordonnées dans ses infos pratiques ; sinon celles de l'événement sont utilisées |

@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { eventSlugFromTitle } from "@/lib/event-slug"
 import { NextResponse } from "next/server"
 import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { dayContactSchema } from "@/lib/day-contact"
@@ -86,7 +86,10 @@ export async function POST(req: Request) {
   // Always a draft: a new event has no shift yet, and publication is a deliberate later step
   // (PATCH enforces the rule). Any publicStatus in the body is ignored, listed by default.
   const data = parsed.data
-  let slug = slugify(data.title)
+  // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
+  const slugged = eventSlugFromTitle(data.title)
+  if ("error" in slugged) return NextResponse.json({ error: slugged.error }, { status: 400 })
+  let slug = slugged.slug
 
   const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
