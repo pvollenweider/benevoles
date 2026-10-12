@@ -22,7 +22,7 @@ test("opens with the promise and leads to the sign-up page, at the top and at th
     // #810: the self-service sign-up page, no longer an email.
     expect(href).toBe("/inscription")
   }
-  await expect(page.getByText(/Gratuit, open source et hébergé en France/)).toBeVisible()
+  await expect(page.getByText(/gratuit, open source et hébergé en France/)).toBeVisible()
 })
 
 test("« Sur cette page » leads to every section, and « Comment ça marche » has three steps", async ({ page }) => {
