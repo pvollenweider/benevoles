@@ -5,7 +5,7 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
 import { withOrgHeader } from "@/lib/org-subdomain"
-import { apexRedirectUrl } from "@/lib/apex-redirect"
+import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl } from "@/lib/urls"
 
 const { auth } = NextAuth(authConfig)
@@ -17,8 +17,14 @@ export default auth((req) => {
 
   // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
   // the method and body of a POST. ---
-  const apexTarget = apexRedirectUrl(req.headers.get("host") ?? "", `${pathname}${req.nextUrl.search}`, apexBaseUrl())
+  const host = req.headers.get("host") ?? ""
+  const apexTarget = apexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
   if (apexTarget) return NextResponse.redirect(apexTarget, 308)
+
+  // --- The apex site's own pages on an organization's host to the www site (#933): the docs,
+  // videos, legal and features pages answered on every organization's host too. ---
+  const orgHostTarget = orgHostApexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
+  if (orgHostTarget) return NextResponse.redirect(orgHostTarget, 308)
 
   // --- Auth guards ---
   const isSuperAdminPath = pathname.startsWith("/super-admin")
@@ -47,7 +53,7 @@ export default auth((req) => {
   // --- Organization header ---
   // [orgSlug].benevol.app (or ?org= without an org subdomain) → x-org-slug for pages and API
   // routes; a value sent by the client is always dropped first (#541).
-  const requestHeaders = withOrgHeader(req.headers, req.headers.get("host") ?? "", req.nextUrl.searchParams.get("org"))
+  const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
 
   return NextResponse.next({ request: { headers: requestHeaders } })
 })
