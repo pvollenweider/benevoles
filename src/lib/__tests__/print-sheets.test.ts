@@ -202,4 +202,11 @@ describe("volunteersOf identity", () => {
     expect(people.find((p) => p.volunteer.id === "v1")!.volunteer.phone).toBe("079 1")
     expect(people.find((p) => p.volunteer.id === "v2")!.shifts.map((s) => s.id)).toEqual(["x"])
   })
+
+  it("lays the Gantt out over the page width, never wider (#923 regression)", () => {
+    const html = renderSheet("day", data)
+    expect(html).toMatch(/\.gantt-table \{[^}]*table-layout: fixed;[^}]*width: 100%/)
+    expect(html).not.toMatch(/\.slot-th \{[^}]*min-width/)
+    expect(html).toContain("<colgroup>")
+  })
 })

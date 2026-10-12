@@ -176,14 +176,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .center { text-align: center; }
 
     /* ── Gantt ────────────────────────────────────────────────────────── */
-    .gantt-table { table-layout: auto; width: auto; }
-    .th-role  { min-width: 90px; }
-    .th-label { min-width: 100px; }
+    /* Fixed layout over the page width (#923): the colgroup scales the time axis to the page
+       instead of each 15-minute slot claiming a minimum width and pushing the evening off it. */
+    .gantt-table { table-layout: fixed; width: 100%; }
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }
+    /* The hour label sits on the hour line and runs over the next (unlabelled) slots. */
     .slot-th  {
-      min-width: 20px; text-align: center; font-size: 8px;
+      text-align: left; font-size: 8px; padding: 2px 0 2px 2px; overflow: visible;
       color: #374151; border-left: 1px solid #9CA3AF; border-right: 1px solid #9CA3AF;
     }
+    .gantt-table .empty-cell, .gantt-table .show-empty-cell { padding: 0; }
+    .gantt-table .shift-cell, .gantt-table .show-band-cell { padding: 3px 3px; overflow-wrap: anywhere; }
     .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 9px; }
     .hour-mark { border-left: 2px solid #9CA3AF !important; }
 

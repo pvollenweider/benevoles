@@ -34,6 +34,20 @@ function fmtSlot(mins: number) {
   return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`
 }
 
+/**
+ * Column widths of the Gantt, in percent of the table width (#923). The table is laid out with
+ * `table-layout: fixed; width: 100%`, so the time axis is scaled to the page instead of every
+ * 15-minute slot claiming a minimum width: a long day (08:00 to 02:00 is 72 slots) used to push
+ * the table past the right edge of the page and of the screen preview, cutting the evening off.
+ * The role and label columns keep a fixed share; the slots split the rest equally.
+ */
+export function ganttColumnWidths(slotCount: number, hasLabel: boolean): { role: number; label: number | null; slot: number } {
+  const role = hasLabel ? 9 : 11
+  const label = hasLabel ? 10 : null
+  const slot = slotCount > 0 ? Math.floor(((100 - role - (label ?? 0)) / slotCount) * 10000) / 10000 : 0
+  return { role, label, slot }
+}
+
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
 }
@@ -208,9 +222,13 @@ export function buildDayParts(
 
   const slotHeaders = slots.map((s) => `<th scope="col" class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : `<span class="sr-only">${fmtSlot(s)}</span>`}</th>`).join("")
 
+  const widths = ganttColumnWidths(slots.length, hasAnyLabel)
+  const colgroup = `<colgroup><col style="width:${widths.role}%">${widths.label !== null ? `<col style="width:${widths.label}%">` : ""}${slots.length ? `<col span="${slots.length}" style="width:${widths.slot}%">` : ""}</colgroup>`
+
   const ganttHtml = `
     <table class="gantt-table">
       <caption class="sr-only">Frise horaire du ${fmtDate(date)}</caption>
+      ${colgroup}
       <thead>
         <tr>
           <th scope="col" class="th-role">Rôle</th>
