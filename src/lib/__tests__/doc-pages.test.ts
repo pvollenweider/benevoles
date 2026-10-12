@@ -135,6 +135,33 @@ describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduli
   })
 })
 
+// #934: the sign-up page had a title only (« Demander un espace », 18 characters, no site name).
+describe("/inscription, the sign-up page", () => {
+  const page = PUBLIC_PAGES.find((p) => p.path === "/inscription")!
+
+  it("has a branded title of 30 to 65 characters, a canonical on www and its own link preview", () => {
+    const m = publicPageMetadata("/inscription", "https://www.benevol.app")
+    expect(m.title).toEqual({ absolute: "Demander un espace pour votre association | benevol.app" })
+    expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
+    expect(m.alternates?.canonical).toBe("https://www.benevol.app/inscription")
+    expect(m.openGraph).toMatchObject({
+      url: "https://www.benevol.app/inscription",
+      title: "Demander un espace pour votre association | benevol.app",
+      description: page.metaDescription,
+      images: [expect.objectContaining({ url: "https://www.benevol.app/og-image.png/inscription", width: 1200, height: 630 })],
+    })
+    expect(m.robots).toMatchObject({ index: true, follow: true })
+  })
+
+  it("is in the sitemap on every instance, outside the header navigation, and its page uses this metadata", () => {
+    for (const hosted of [true, false]) {
+      expect(apexSitemap("https://x.example", () => null, [], hosted).map((e) => e.url), String(hosted)).toContain("https://x.example/inscription")
+    }
+    expect(CONTENT_NAV.map((p) => p.path)).not.toContain("/inscription")
+    expect(read("src/app/inscription/page.tsx")).toContain('publicPageMetadata("/inscription", apexBaseUrl())')
+  })
+})
+
 describe("linkSourcesToRoutes", () => {
   // GUIDE_BENEVOLE.md is the welcome of /doc/benevole since the split (#649): a link to it leads there.
   it("rewrites links to the root sources, an anchor kept, from the root or from guide/", () => {
@@ -165,7 +192,7 @@ describe("apexSitemap", () => {
     const d = new Date("2026-09-30T10:00:00Z")
     const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "FEATURES.md" ? d : null))
     expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1 })
-    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
+    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/inscription", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })

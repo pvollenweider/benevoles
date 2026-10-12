@@ -76,6 +76,19 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     availability: "hosted",
   },
   {
+    // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
+    // like the other apex pages (#934): it is where an association searching for the service
+    // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
+    path: "/inscription",
+    title: "Demander un espace",
+    summary: "Créer l'espace de votre association : le préparer tout de suite, le publier après une courte vérification.",
+    metaTitle: "Demander un espace pour votre association",
+    metaDescription: `Créez gratuitement l'espace de votre association sur ${SITE_NAME} : préparez votre événement aussitôt, la publication suit une courte vérification.`,
+    source: null,
+    priority: 0.6,
+    guide: false,
+  },
+  {
     // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
     path: "/nouveautes",
     title: "Nouveautés",

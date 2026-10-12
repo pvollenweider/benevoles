@@ -96,6 +96,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **« Adresse de votre espace » dans Paramètres** : l'adresse affichée venait de l'hôte de la requête ; derrière un proxy ou sur une copie locale, elle montrait cette adresse technique (`default.localhost:43102`) au lieu de `benevol.app`. Elle vient désormais de l'adresse configurée de l'instance. Rien ne change sur benevol.app.
 - **Affiche d'une vidéo téléchargée une seule fois** : sur la page d'une vidéo, l'image affichée avant la lecture était préchargée sans le mode CORS du lecteur ; le navigateur ignorait ce préchargement (avertissement dans la console) et téléchargeait l'image une seconde fois. Préchargement et lecteur utilisent maintenant le même mode.
 - **Titres de page plus descriptifs** (#936) : onze pages publiques (déclaration d'accessibilité, documentation, guide bénévole, plusieurs fiches de la documentation et la bibliothèque vidéo) avaient un titre de moins de 30 caractères, trop vague dans un résultat de recherche. Elles ont désormais un titre qui dit de quoi parle la page, et la vérification des titres impose ce minimum.
+- **Page « Demander un espace » complète pour les moteurs de recherche et les aperçus de lien** (#934) : elle n'avait qu'un titre court sans le nom du site. Elle a désormais un titre qui nomme le site, une adresse de référence sur www, un aperçu de lien avec son image, et figure dans le plan du site comme les autres pages publiques.
 
 ## [2.2.0] — 2026-10-08
 
