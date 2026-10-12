@@ -146,7 +146,7 @@ describe("blogAtomFeed", () => {
       else stack.push(m[2])
     }
     expect(stack).toEqual([])
-    const text = xml.replace(/<[^>]+>/g, "")
+    const text = xml.split(/<[^>]*>/).join("")
     expect(text).not.toMatch(/[<>]/)
     expect(text).not.toMatch(/&(?!(amp|lt|gt|quot|apos);)/)
   })

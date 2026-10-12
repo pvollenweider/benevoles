@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import type { BlogPost } from "@/lib/blog"
-import { BLOG_FEED_PATH, releaseAnchor } from "@/lib/blog"
+import { BLOG_FEED_PATH, blogPostPath, releaseAnchor } from "@/lib/blog"
 import { formatReleaseDate } from "@/lib/changelog"
 import { SITE_NAME } from "@/lib/seo-metadata"
 
@@ -64,7 +64,7 @@ export function BlogIndex({ posts }: { posts: readonly BlogPost[] }) {
           {/* The latest post leads, larger: the one people come for. */}
           <li className="flex flex-col pb-10 border-b border-gray-200 dark:border-gray-800">
             <h2 className="mt-3 text-2xl sm:text-3xl font-bold leading-tight tracking-tight [text-wrap:balance] [overflow-wrap:anywhere]">
-              <Link href={`/blog/${latest.slug}`} className={titleLinkClass}>
+              <Link href={blogPostPath(latest)} className={titleLinkClass}>
                 {latest.title}
               </Link>
             </h2>
@@ -75,7 +75,7 @@ export function BlogIndex({ posts }: { posts: readonly BlogPost[] }) {
           {earlier.map((post) => (
             <li key={post.slug} className="flex flex-col py-7 border-b border-gray-200 dark:border-gray-800">
               <h2 className="mt-2 text-xl font-semibold leading-snug tracking-tight [text-wrap:balance] [overflow-wrap:anywhere]">
-                <Link href={`/blog/${post.slug}`} className={titleLinkClass}>
+                <Link href={blogPostPath(post)} className={titleLinkClass}>
                   {post.title}
                 </Link>
               </h2>
@@ -122,13 +122,13 @@ export function BlogPostView({ post, html, releaseAnchors, newer = null, older =
         // Reading on from one post to the next, without going back to the list.
         <nav aria-label="Autres nouvelles" className="not-prose mt-10 grid gap-4 sm:grid-cols-2">
           {older && (
-            <Link href={`/blog/${older.slug}`} className="group block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-blue-600 dark:hover:border-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
+            <Link href={blogPostPath(older)} className="group block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-blue-600 dark:hover:border-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
               <span className="block text-sm text-gray-600 dark:text-gray-400"><span aria-hidden="true">← </span>Précédent<span className="sr-only"> : </span></span>
               <span className="mt-1 block font-semibold text-gray-900 dark:text-gray-100 group-hover:underline underline-offset-4 [overflow-wrap:anywhere]">{older.title}</span>
             </Link>
           )}
           {newer && (
-            <Link href={`/blog/${newer.slug}`} className="group block rounded-xl border border-gray-200 dark:border-gray-800 p-4 sm:col-start-2 sm:text-right hover:border-blue-600 dark:hover:border-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
+            <Link href={blogPostPath(newer)} className="group block rounded-xl border border-gray-200 dark:border-gray-800 p-4 sm:col-start-2 sm:text-right hover:border-blue-600 dark:hover:border-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
               <span className="block text-sm text-gray-600 dark:text-gray-400">Suivant<span aria-hidden="true"> →</span><span className="sr-only"> : </span></span>
               <span className="mt-1 block font-semibold text-gray-900 dark:text-gray-100 group-hover:underline underline-offset-4 [overflow-wrap:anywhere]">{newer.title}</span>
             </Link>

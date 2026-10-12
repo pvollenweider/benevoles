@@ -160,8 +160,9 @@ export function blogNeighbors(slug: string, posts: readonly BlogPost[]): { newer
   return { newer: sorted[i - 1] ?? null, older: sorted[i + 1] ?? null }
 }
 
+/** Encoded although slugs are already [a-z0-9-]: the href never carries raw file-name text. */
 export function blogPostPath(post: Pick<BlogPost, "slug">): string {
-  return `/blog/${post.slug}`
+  return `/blog/${encodeURIComponent(post.slug)}`
 }
 
 /**
