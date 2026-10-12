@@ -32,7 +32,7 @@ Chaque ligne mène là où on agit : les inscriptions filtrées sur le créneau,
 
 Depuis cette page, **Chercher des bénévoles** sur la ligne d'un créneau, ou **Chercher des bénévoles pour plusieurs créneaux** sous la liste.
 
-Après un désistement qui laisse une place vide sans personne sur la liste d'attente, l'email envoyé aux organisateurs contient **Trouver un remplaçant** : il ouvre cette page avec le créneau déjà choisi.
+Après un désistement qui laisse une place vide sans personne sur la liste d'attente, l'email envoyé aux organisateurs contient **Trouver un remplaçant** : il ouvre cette page avec le créneau déjà choisi. Plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email, qui les liste avec un lien par créneau à compléter ; il part environ cinq minutes après le dernier.
 
 Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page pour proposer ce créneau à des membres choisis ; **Chercher des bénévoles pour plusieurs créneaux**, sous la liste, permet d'en proposer plusieurs à la fois. Sur cette page :
 

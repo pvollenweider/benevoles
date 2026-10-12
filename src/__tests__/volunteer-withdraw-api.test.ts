@@ -17,7 +17,8 @@ vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, updateMany
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist }))
 vi.mock("@/lib/event-log", () => ({ logEvent }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
-vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications }))
+// Grouped since #869: the route hands each withdrawal to queueWithdrawalNotifications.
+vi.mock("@/lib/withdrawal-notifications", () => ({ queueWithdrawalNotifications: buildWithdrawalNotifications }))
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
 
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 }
@@ -114,12 +115,6 @@ describe("DELETE /api/public/registrations/[token]", () => {
         waitlistTookSpot: true,
         placesMissing: 0,
       }))
-      expect(enqueueNotifications).toHaveBeenCalledWith(
-        [expect.objectContaining({ dedupeKey: "k1" })],
-        expect.anything(),
-        { organizationId: "org-1" },
-      )
-      expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
     })
 
     it("computes the missing places from the shift's capacity and occupied count", async () => {

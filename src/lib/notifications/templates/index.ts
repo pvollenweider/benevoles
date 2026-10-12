@@ -15,9 +15,10 @@ import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefu
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
-import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
+import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
-import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated } from "./administration"
+import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated } from "./administration"
+import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
 
 export type { RenderedEmail } from "./shared"
 
@@ -49,7 +50,7 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
     case "shift_cancelled":
       return renderShiftCancelled(payload)
     case "registration_cancelled":
-      return renderWithdrawalAdminNotice(payload)
+      return renderWithdrawalAdminDigest(payload)
     case "admin_notification":
       return renderAdminNotification(payload)
     case "admin_invite":
@@ -67,7 +68,7 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
     case "sector_leader_new_signup":
       return renderSectorLeaderNewSignup(payload)
     case "sector_leader_withdrawal":
-      return renderSectorLeaderWithdrawal(payload)
+      return renderSectorLeaderWithdrawalDigest(payload)
     case "product_update":
       return renderProductUpdate(payload)
     case "operator_alert":
