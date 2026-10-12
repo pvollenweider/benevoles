@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:14:08.925Z",
-  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
-  "promptSha256": "dee6e15860eb1b00d04701eea411db08f559759e1cf2cf7c5a573ae8ec40510a",
-  "clipSha256": "89437708e526da7510d78dc82d4bb2acb73c35a4cfd346cc819d5fafe48f0af8",
+  "reviewedAt": "2026-10-12T01:19:17.673Z",
+  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "promptSha256": "ffa00b7b7025333275961a1e959f76247bdb89b12f09d17e0f38b05544422ef0",
+  "clipSha256": "4c0606591d4f81404063780b4ff8e650ea38f61402db1fee17a0d12f499bb157",
   "scene": "publish",
   "review": {
     "heardOpening": "Revenons à la vérification et publions.",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "et publions",
-        "visibleSeconds": 2.8,
-        "visible": "Clic sur le bouton vert Publier sous la section Publication",
+        "spokenSeconds": 0.8,
+        "spoken": "et publions.",
+        "visibleSeconds": 1.1,
+        "visible": "Clic sur le bouton vert 'Publier' puis confirmation 'L'événement est publié' affichée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3,
         "spoken": "La page devient accessible à toute personne qui possède le lien",
-        "visibleSeconds": 3.5,
-        "visible": "Affichage de la mention Événement publié et du lien à partager",
+        "visibleSeconds": 2.5,
+        "visible": "Statut de publication mis à jour en haut de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.4,
+        "spokenSeconds": 10.1,
         "spoken": "il faudra partager le QR code, envoyer des invitations",
-        "visibleSeconds": 11,
-        "visible": "Liens QR code et Inviter des membres visibles sous le lien de partage",
+        "visibleSeconds": 11.4,
+        "visible": "Défilement vers le bas affichant le lien, le bouton QR code et Inviter des membres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et dynamique, bonne intelligibilité."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:11:30.273Z",
+  "videoSha256": "9263e833b5b82a3432b4ec5ccafd1127ff2ffd16e5a3d8667ff11e4156bac7fa",
+  "promptSha256": "86109fd2e7ca6c2f67dc2a01c9c81d5e5735120d24efde2fd1162e1e36db5d56",
+  "clipSha256": "123abb1718503a96ead0cb159ee9d6e570afbdd736bf3e7cccedaadbefcc5178",
+  "scene": "archive",
+  "review": {
+    "heardOpening": "Le bouton Archiver demande une confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le bouton Archiver demande une confirmation claire.",
+        "visibleSeconds": 4.2,
+        "visible": "Clic sur « Archiver » et ouverture de la fenêtre modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Après validation, la page publique disparaît",
+        "visibleSeconds": 5.8,
+        "visible": "Validation de la boîte de dialogue et passage de l'événement à l'état « Archivé »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal.",
+        "visibleSeconds": 7,
+        "visible": "Affichage des boutons et onglets Créneaux, Inscriptions, Rapports et Journal toujours disponibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

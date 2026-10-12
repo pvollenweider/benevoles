@@ -1,0 +1,167 @@
+{
+  "product": {
+    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
+    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
+    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
+    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
+    "snapshot": "/tmp/benevoles-video-production.batch6",
+    "builtAt": "2026-10-11T19:07:45.780Z"
+  },
+  "music": {
+    "voicedWindows": 272,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -32.3,
+    "loudestMusicOnlyLufs": -32.3,
+    "medianVoiceLufs": -16.3
+  },
+  "inputCounts": {
+    "click": 48,
+    "key": 178
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-3.png",
+      "line": "Accueil - démonstration • 14/11/2026 - 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-25.png",
+      "line": "Accueil - démonstration • 14/11/2026 - 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-45.png",
+      "line": "Accueil - démonstration • 14/11/2026 - 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-60.png",
+      "line": "Accueil - démonstration • 14/11/2026 - 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-85.png",
+      "line": "Accueil - démonstration • 14/11/2026 • 10:00-12:00"
+    },
+    {
+      "file": "/private/tmp/codex-video/videos/output/volunteer-confirmation-errors/review-frames/email-end.png",
+      "line": "Accueil - démonstration • 14/11/2026 - 10:00-12:00"
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "validation",
+      "phrase": "choisis une taille, puis tu",
+      "startMs": 9589,
+      "endMs": 11366,
+      "cueMs": 51083,
+      "sentenceAbsoluteMs": 51082,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 51556
+      },
+      "deltaMs": 474
+    },
+    {
+      "segmentId": "capacity",
+      "phrase": "Une place visible quelques minutes",
+      "startMs": 17885,
+      "endMs": 23760,
+      "cueMs": 80643,
+      "sentenceAbsoluteMs": 80640,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "network",
+      "phrase": "le système évite de créer",
+      "startMs": 16199,
+      "endMs": 18452,
+      "cueMs": 105427,
+      "sentenceAbsoluteMs": 105426,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "success",
+      "phrase": "il n’est pas affiché simplement",
+      "startMs": 12630,
+      "endMs": 15619,
+      "cueMs": 122983,
+      "sentenceAbsoluteMs": 122980,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Les informations restent remplies et",
+      "startMs": 17508,
+      "endMs": 21221,
+      "cueMs": 174127,
+      "sentenceAbsoluteMs": 174127,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 174621
+      },
+      "deltaMs": 494
+    },
+    {
+      "segmentId": "overlap",
+      "phrase": "Pour continuer, reviens au planning",
+      "startMs": 25546,
+      "endMs": 29144,
+      "cueMs": 182167,
+      "sentenceAbsoluteMs": 182165,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Le formulaire affiche Connexion interrompue",
+      "startMs": 13444,
+      "endMs": 17862,
+      "cueMs": 201962,
+      "sentenceAbsoluteMs": 201962,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 202453
+      },
+      "deltaMs": 491
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "Le message indique qu'il est",
+      "startMs": 21910,
+      "endMs": 26168,
+      "cueMs": 210430,
+      "sentenceAbsoluteMs": 210428,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 210903
+      },
+      "deltaMs": 475
+    },
+    {
+      "segmentId": "response-loss",
+      "phrase": "une seule ligne de Nicolas",
+      "startMs": 29353,
+      "endMs": 31604,
+      "cueMs": 217874,
+      "sentenceAbsoluteMs": 217871,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "invitation-success",
+      "phrase": "Aline a ensuite reçu une",
+      "startMs": 19504,
+      "endMs": 24470,
+      "cueMs": 245075,
+      "sentenceAbsoluteMs": 245072,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 246772
+      },
+      "deltaMs": 1700
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "EVENT_ARCHIVE_DELETE",
+  "slug": "event-archive-delete",
+  "validatedAt": "2026-10-12T00:10:51.695Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 100440,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14810,
+      "audioMs": 14810,
+      "driftMs": 0
+    },
+    {
+      "id": "prepare",
+      "visualMs": 13529,
+      "audioMs": 13528,
+      "driftMs": 1
+    },
+    {
+      "id": "archive",
+      "visualMs": 14507,
+      "audioMs": 14506,
+      "driftMs": 1
+    },
+    {
+      "id": "delete-open",
+      "visualMs": 13895,
+      "audioMs": 13894,
+      "driftMs": 1
+    },
+    {
+      "id": "backup",
+      "visualMs": 13390,
+      "audioMs": 13388,
+      "driftMs": 2
+    },
+    {
+      "id": "confirm",
+      "visualMs": 13970,
+      "audioMs": 13968,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 12068,
+      "audioMs": 12066,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 3,
+  "music": {
+    "voicedWindows": 94,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

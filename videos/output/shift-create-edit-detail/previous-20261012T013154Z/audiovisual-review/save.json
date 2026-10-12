@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:22:10.721Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "2703b8a6376480bc125c50cfc0e55e1a1a89bcad9c5d8f481a098cfdd79d9704",
+  "clipSha256": "9efd82ab66613fb36ccef117b4a983056ee15728dd4cb188e07386ba76e146d2",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrons le créneau et vérifions sa place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Enregistrons le créneau",
+        "visibleSeconds": 1,
+        "visible": "Clic sur le bouton Ajouter en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "vérifions sa place dans le planning",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la vue planning avec les blocs horaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "la capacité apparaît dans les indicateurs",
+        "visibleSeconds": 8,
+        "visible": "Bascule vers la vue Liste affichant les jauges de capacité (0/3)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "la fiche détaillée rassemble les consignes utiles au jour J",
+        "visibleSeconds": 10,
+        "visible": "Ouverture de la fiche détaillée du créneau avec les consignes pratiques",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

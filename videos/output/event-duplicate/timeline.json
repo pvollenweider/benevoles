@@ -1,200 +1,177 @@
 {
   "slug": "event-duplicate",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T08:47:50.644Z",
+  "recordedAt": "2026-10-12T01:23:04.711Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_DUPLICATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
   "inputAudioVersion": 1,
   "inputEvents": [
     {
-      "kind": "key",
-      "atMs": 16020
+      "kind": "click",
+      "atMs": 13745
     },
     {
       "kind": "click",
-      "atMs": 16546
-    },
-    {
-      "kind": "key",
-      "atMs": 16852
-    },
-    {
-      "kind": "key",
-      "atMs": 17049
-    },
-    {
-      "kind": "key",
-      "atMs": 17146
-    },
-    {
-      "kind": "key",
-      "atMs": 17245
-    },
-    {
-      "kind": "key",
-      "atMs": 17343
-    },
-    {
-      "kind": "key",
-      "atMs": 17440
-    },
-    {
-      "kind": "key",
-      "atMs": 17544
-    },
-    {
-      "kind": "key",
-      "atMs": 17640
-    },
-    {
-      "kind": "key",
-      "atMs": 17739
-    },
-    {
-      "kind": "key",
-      "atMs": 17838
-    },
-    {
-      "kind": "key",
-      "atMs": 17935
-    },
-    {
-      "kind": "key",
-      "atMs": 18033
-    },
-    {
-      "kind": "key",
-      "atMs": 18131
-    },
-    {
-      "kind": "key",
-      "atMs": 18229
-    },
-    {
-      "kind": "key",
-      "atMs": 18326
-    },
-    {
-      "kind": "key",
-      "atMs": 18424
-    },
-    {
-      "kind": "key",
-      "atMs": 18524
-    },
-    {
-      "kind": "key",
-      "atMs": 18624
-    },
-    {
-      "kind": "key",
-      "atMs": 18725
-    },
-    {
-      "kind": "key",
-      "atMs": 18823
-    },
-    {
-      "kind": "key",
-      "atMs": 18921
-    },
-    {
-      "kind": "key",
-      "atMs": 19020
-    },
-    {
-      "kind": "key",
-      "atMs": 19117
-    },
-    {
-      "kind": "key",
-      "atMs": 19215
-    },
-    {
-      "kind": "key",
-      "atMs": 19312
-    },
-    {
-      "kind": "key",
-      "atMs": 19410
-    },
-    {
-      "kind": "key",
-      "atMs": 19511
-    },
-    {
-      "kind": "key",
-      "atMs": 19615
-    },
-    {
-      "kind": "key",
-      "atMs": 19712
-    },
-    {
-      "kind": "key",
-      "atMs": 19811
-    },
-    {
-      "kind": "key",
-      "atMs": 19910
+      "atMs": 14860
     },
     {
       "kind": "click",
-      "atMs": 20696
+      "atMs": 52508
     },
     {
       "kind": "click",
-      "atMs": 50928
-    },
-    {
-      "kind": "click",
-      "atMs": 75011
+      "atMs": 73675
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1116,
-      "endMs": 13190
+      "startMs": 1092,
+      "endMs": 12417
     },
     {
       "id": "identity",
-      "startMs": 13640,
-      "endMs": 26800
+      "startMs": 12869,
+      "endMs": 25852
     },
     {
       "id": "choices",
-      "startMs": 27253,
-      "endMs": 44067
+      "startMs": 26304,
+      "endMs": 43519
     },
     {
       "id": "leaders",
-      "startMs": 44519,
-      "endMs": 58661
+      "startMs": 43972,
+      "endMs": 58147
     },
     {
       "id": "summary",
-      "startMs": 59113,
-      "endMs": 71558
+      "startMs": 58601,
+      "endMs": 72440
     },
     {
       "id": "create",
-      "startMs": 72011,
-      "endMs": 87813
+      "startMs": 72890,
+      "endMs": 88957
     },
     {
       "id": "copied-details",
-      "startMs": 88264,
-      "endMs": 105948
+      "startMs": 89410,
+      "endMs": 107310
     },
     {
       "id": "leader-emails",
-      "startMs": 106402,
-      "endMs": 128954
+      "startMs": 107762,
+      "endMs": 126688
     },
     {
       "id": "result",
-      "startMs": 129406,
-      "endMs": 144863
+      "startMs": 127143,
+      "endMs": 140655
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "identity",
+      "phrase": "Commencez par donner le titre",
+      "startMs": 359,
+      "endMs": 4222,
+      "cueMs": 13230
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Le résumé indique immédiatement de",
+      "startMs": 9222,
+      "endMs": 12602,
+      "cueMs": 22092
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les réglages reprennent les messages",
+      "startMs": 9698,
+      "endMs": 13926,
+      "cueMs": 36004
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les pages personnalisées peuvent aussi",
+      "startMs": 14314,
+      "endMs": 16866,
+      "cueMs": 40618
+    },
+    {
+      "segmentId": "leaders",
+      "phrase": "Activez cette option seulement après",
+      "startMs": 8070,
+      "endMs": 13726,
+      "cueMs": 52045
+    },
+    {
+      "segmentId": "summary",
+      "phrase": "les inscriptions et les jalons.",
+      "startMs": 7357,
+      "endMs": 8365,
+      "cueMs": 65958
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Créons la copie",
+      "startMs": 315,
+      "endMs": 1419,
+      "cueMs": 73207
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Elle s’ouvre dans l’administration",
+      "startMs": 1950,
+      "endMs": 4976,
+      "cueMs": 74843
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Vérifions ses réglages",
+      "startMs": 5568,
+      "endMs": 6758,
+      "cueMs": 78460
+    },
+    {
+      "segmentId": "copied-details",
+      "phrase": "ouvrons leur liste dans cette nouvelle édition",
+      "startMs": 14705,
+      "endMs": 17601,
+      "cueMs": 104116
+    },
+    {
+      "segmentId": "leader-emails",
+      "phrase": "Ouvrons le message réellement arrivé",
+      "startMs": 4941,
+      "endMs": 7824,
+      "cueMs": 112705
+    },
+    {
+      "segmentId": "result",
+      "phrase": "La duplication accélère la préparation",
+      "startMs": 7542,
+      "endMs": 13196,
+      "cueMs": 134687
     }
   ]
 }

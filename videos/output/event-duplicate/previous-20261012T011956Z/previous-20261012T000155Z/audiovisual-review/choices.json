@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:49:23.524Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "d5419d5abf81791d5470c41c8fb3aa9638484ac207bf1c73ec7f10494a561b93",
+  "clipSha256": "148d9e9b3fbb760a3a8b3f7a2a0fa3a3023d6435757e7e47154dcc5ecc0d5b21",
+  "scene": "choices",
+  "review": {
+    "heardOpening": "Choisis ensuite ce qui doit suivre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Les créneaux conservent postes, horaires, capacités et consignes",
+        "visibleSeconds": 0,
+        "visible": "Option 'Les créneaux' cochée affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Les réglages reprennent les messages, questions, téléphone et programme",
+        "visibleSeconds": 0,
+        "visible": "Option 'Les messages et réglages d'inscription' cochée affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Les pages personnalisées peuvent aussi être copiées",
+        "visibleSeconds": 0,
+        "visible": "Option 'Les pages personnalisées' cochée présente à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "ORG_TEAM_PERMISSIONS",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "clicks": 9,
+  "keys": 0,
+  "exactEffects": true,
+  "vttMatchesManifest": true,
+  "finalAudioAudit": true,
+  "checkedAt": "2026-10-11T23:50:10.232Z"
+}

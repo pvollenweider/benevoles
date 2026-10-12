@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:40.729Z",
+  "revalidatedAt": "2026-10-11T17:08:40.731Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "overlap",
+      "audioSha256": "d7fef877607a68a4a98cece4e0e035e1ac7f40b6e7eae7b1d793a41a9f046b40",
+      "recognized": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. Le refus nomme le créneau qui chevauche cette demande. Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée. Ce contrôle évite de compter une personne sur deux postes en même temps. Pour continuer, reviens au planning et choisis un horaire compatible.",
+      "expected": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. Le refus nomme le créneau qui chevauche cette demande. Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée. Ce contrôle évite de compter une personne sur deux postes en même temps. Pour continuer, reviens au planning et choisis un horaire compatible.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

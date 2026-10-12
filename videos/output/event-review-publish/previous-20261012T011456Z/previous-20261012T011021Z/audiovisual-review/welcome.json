@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:01:11.180Z",
+  "videoSha256": "30f550e7ef14dc36432f27fd76b7df4e67d434cf52bb7b8eb59290e0bed30eb6",
+  "promptSha256": "03eb0eb67d25b45eaada2b695d763f523768cd8d43184b5d1cc4224e11c324fe",
+  "clipSha256": "8b5f6b00048066b49da3437bd3a24bdb286de53bf4a49c93267370c5289864e8",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Avant de publier, l'écran de vérification rassemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "l’écran de vérification rassemble ce qui compte vraiment",
+        "visibleSeconds": 2.5,
+        "visible": "L'encart d'introduction disparaît pour afficher la page 'Vérification et publication' avec la liste récapitulative",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il évite d’ouvrir une page vide ou incohérente",
+        "visibleSeconds": 4.1,
+        "visible": "La liste des éléments vérifiés (dates, créneaux, lieu, messages) est visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "et rappelle que tout restera modifiable après la publication",
+        "visibleSeconds": 7,
+        "visible": "Mention sous le titre : 'Tout reste modifiable après la publication.' et liens 'Modifier' en regard de chaque ligne",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et fluide, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

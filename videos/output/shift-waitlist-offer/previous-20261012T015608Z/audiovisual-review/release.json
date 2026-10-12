@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:22.060Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "1cd99ff6dbaeedf1f285dc072397defd40c739c30f2c0c79f6c7e38a417d7c57",
+  "clipSha256": "a82c4aa8223974e3fb6a5b6461f69ea4f5a98fb91805f26e13b8c210dc4a22f2",
+  "scene": "release",
+  "review": {
+    "heardOpening": "Quand une personne confirmée se désinscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Quand une personne confirmée se désinscrit",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur le bouton « Annuler » en face du créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "la place n’est pas attribuée silencieusement",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur « Oui, annuler » dans la boîte de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Une offre est envoyée à la première personne en attente",
+        "visibleSeconds": 6.8,
+        "visible": "Écran de confirmation affichant « Toutes tes inscriptions ont été annulées »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions d'annulation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

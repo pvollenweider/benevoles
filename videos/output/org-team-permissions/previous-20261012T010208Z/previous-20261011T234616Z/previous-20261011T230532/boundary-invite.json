@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son",
+  "windowStart": 24.144999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 9.68,
+    "wordsHeard": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son"
+  },
+  "onset": 33.824999999999996,
+  "proposedCut": 33.6633335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

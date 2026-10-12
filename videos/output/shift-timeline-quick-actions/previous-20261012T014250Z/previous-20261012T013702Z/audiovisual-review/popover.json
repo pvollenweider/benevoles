@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:26:50.299Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "d0f79f11fd9863cfa42ccabc31ca4772191f2d5ea1c40afdb377bc3643d5822b",
+  "clipSha256": "80f8f011dcd085ee27a78860a171d1d779f691ff4370f0a73dbd4b7d30081560",
+  "scene": "popover",
+  "review": {
+    "heardOpening": "Un clic sur la barre ouvre ses actions rapides",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.9,
+        "spoken": "Un clic sur la barre ouvre ses actions rapides.",
+        "visibleSeconds": 1.7,
+        "visible": "Le panneau contextuel des actions rapides du créneau s'ouvre à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "On y retrouve les heures,",
+        "visibleSeconds": 4.1,
+        "visible": "La section 'Horaires' avec les heures de début et fin est affichée dans le volet.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "l’état des inscriptions et les commandes utiles.",
+        "visibleSeconds": 6.8,
+        "visible": "Le défilement révèle le statut 'Inscriptions' ainsi que les boutons 'Dupliquer' et 'Supprimer le créneau'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

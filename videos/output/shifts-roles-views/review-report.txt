@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "SHIFTS_ROLES_VIEWS",
+  "status": "READY",
+  "duration": 86.64,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "problems": "36 images et preuves32.0/44.1/63.0 revues. Liste31.563 vs phrase31.066 ; postes43.676 vs43.181 ; déplacement47.977 vs47.499 ; palette62.574 vs62.082 et couleur64.526 vs64.008. Ordre/couleur sauvegardés, panneau fermé avant conclusion et Frise finale conforme. AV6/6 sans problème (poste nommé Buvette par AV couleur, image montre Accueil ; narration ne nomme pas de poste). Validation,ASR final6/6,VTT,effets,musique passent ; Frise/dates françaises/aucune adresse interdite/overlay ; aucun bug de disposition.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
+  "report": "videos/output/shifts-roles-views/review-report.txt"
+}

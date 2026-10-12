@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:49:36.166Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "3e30945bbe5d51f743be2dc2b80a09f9be9d96e9c10fba47d1641f23c83b4edd",
+  "clipSha256": "8148d3467b7832c15dab9f3911551e271278ad1e10c5932e09f50415f4c5d54c",
+  "scene": "leaders",
+  "review": {
+    "heardOpening": "Les responsables de secteur sont volontairement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "Les responsables de secteur sont volontairement décochés au départ",
+        "visibleSeconds": 0,
+        "visible": "Option 'Les responsables de secteur' affichée non cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "car les reprendre déclenche immédiatement un email",
+        "visibleSeconds": 0,
+        "visible": "Mention textuelle indiquant l'envoi immédiat d'un email sous la case",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.4,
+        "spoken": "Active cette option seulement après avoir vérifié",
+        "visibleSeconds": 8.5,
+        "visible": "La case demeure décochée sans action directe à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

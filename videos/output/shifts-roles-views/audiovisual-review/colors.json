@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:19:41.182Z",
-  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
-  "promptSha256": "659ba0e71aba4cb9f513f2fde1312057a1d915129891936dbef68822d8b6f1c0",
-  "clipSha256": "020a092a0004a3ae2151914b93a8bc33ccbbe1081ed57e1b53948f11de67b48e",
+  "reviewedAt": "2026-10-12T01:31:28.939Z",
+  "videoSha256": "2ec0d4af9534329138b7df74e4bedf68e0a70479a91094dc4aa5a752b6987afc",
+  "promptSha256": "26c99fbf46ec262533997ea8a1fc0aa2e4aceafc9852ecdb2488e460c41df33b",
+  "clipSha256": "42e24c3b53d94a228d1feadea44903f9744fa144621215cafd961495fba7fe1c",
   "scene": "colors",
   "review": {
-    "heardOpening": "La couleur sert à reconnaître une mission",
+    "heardOpening": "La couleur sert à reconnaître une mission d'un coup d'œil",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
         "spoken": "La couleur sert à reconnaître une mission d’un coup d’œil",
-        "visibleSeconds": 0.5,
-        "visible": "Liste des postes avec pastilles de couleur associées affichée",
+        "visibleSeconds": 0.8,
+        "visible": "Fenêtre modale « Gérer les postes » affichant les différents postes et leurs pastilles de couleur",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.2,
         "spoken": "Choisissez-la dans la palette prévue",
-        "visibleSeconds": 4.1,
-        "visible": "Clic sur la pastille et ouverture du nuancier de couleurs",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur la pastille de couleur de Buvette, ouverture de la palette et sélection d'une teinte violette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "lisible pour les bénévoles",
-        "visibleSeconds": 7.3,
-        "visible": "Sélection d'une couleur dans la palette puis fermeture du sélecteur",
+        "spokenSeconds": 9.5,
+        "spoken": "le nom du poste reste toujours l’information principale",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la liste des postes avec leurs intitulés clairement visibles à côté de leur pastille",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation naturelle."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

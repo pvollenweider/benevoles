@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:49:57.718Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "fb72c09c2d3bbad99ea02705317bb629791c4256e3868a5cdc83f61f8034321c",
+  "clipSha256": "0aefc23bfb8315d75f6e262e1f706df89323d3775384b22733923838a59118ce",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une équipe bien réglée évite",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Une équipe bien réglée évite de partager un seul mot de passe",
+        "visibleSeconds": 1,
+        "visible": "Titre d'introduction « Gérer l'équipe et les permissions » sur la page des paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice",
+        "visibleSeconds": 5.5,
+        "visible": "Section Administrateurs affichant 3 membres : deux Propriétaire et une Organisateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "Le badge Vous repère le compte actuellement connecté",
+        "visibleSeconds": 9.6,
+        "visible": "Badge « Vous » visible à côté de Camille Martin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et naturelle, bien synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

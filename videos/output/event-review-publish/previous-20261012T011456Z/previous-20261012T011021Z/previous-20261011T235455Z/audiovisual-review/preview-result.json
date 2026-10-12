@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:13:56.835Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "b8ea2d059b881a622f13ac1bbb852c876a5fa4d880fea209927fe63f5382b322",
+  "clipSha256": "17e4fcf970937d6ab412c8b67268db1eb97579faad970fb7740c15cef5c1180b",
+  "scene": "preview-result",
+  "review": {
+    "heardOpening": "Le bouton de simulation affiche ensuite",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le bouton de simulation affiche ensuite la confirmation",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le bouton et affichage de l'écran Aperçu de la confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "et l’email automatique avec les valeurs de test",
+        "visibleSeconds": 2,
+        "visible": "Section de prévisualisation de l'email avec les données de test",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "C’est ici qu’on repère un message trop vague",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage complet du message et du corps de l'email de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et articulation claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

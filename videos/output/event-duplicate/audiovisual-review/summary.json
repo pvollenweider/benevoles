@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:49:47.592Z",
-  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
-  "promptSha256": "30f7847eb1d795834cdb4f931bb350a44da9a4d806db6a9a98d2938fae534f0e",
-  "clipSha256": "63727db00d66a9ac15a3e6aab1eb9085f02b8934fdb181d6c077f782d18ddaf4",
+  "reviewedAt": "2026-10-12T01:24:12.793Z",
+  "videoSha256": "22900478a697f7eeecdb4aa42ddeb22c69c41fd4b487755fa372fe7a8f3f0c1a",
+  "promptSha256": "252e2656e38b2eab6e8c655a9a1977fbbd9c58dd6fa3213f5b68ee652358242f",
+  "clipSha256": "36f75712a9efb4b8bbac08077a59fb2a5cf0f969f83c91614f4bfcbe27f7b92e",
   "scene": "summary",
   "review": {
     "heardOpening": "Le récapitulatif est la dernière vérification",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le récapitulatif est la dernière vérification",
-        "visibleSeconds": 0.5,
-        "visible": "Page 'Dupliquer l'événement' avec les options cochées",
+        "spokenSeconds": 0.8,
+        "spoken": "Le récapitulatif est la dernière vérification.",
+        "visibleSeconds": 0.8,
+        "visible": "Page 'Dupliquer l'événement' affichant la section 'Ce qui est copié'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "ceux qui ne le sont jamais : les inscriptions et les jalons",
-        "visibleSeconds": 5,
-        "visible": "Défilement vers la section 'Ce que vous allez créer' mentionnant l'exclusion des inscriptions et jalons",
+        "spokenSeconds": 4.2,
+        "spoken": "Il rappelle les éléments copiés, et ceux qui ne le sont jamais : les inscriptions et les jalons.",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement vers le bas révélant la section 'Ce que vous allez créer' précisant que les inscriptions et les jalons ne sont jamais copiés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.2,
-        "spoken": "On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées",
-        "visibleSeconds": 8,
-        "visible": "Section récapitulative affichée en bas de formulaire",
+        "spokenSeconds": 9.4,
+        "spoken": "On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+        "visibleSeconds": 9.4,
+        "visible": "Affichage complet de la synthèse récapitulative et du bouton 'Créer la copie'.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation naturelle."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

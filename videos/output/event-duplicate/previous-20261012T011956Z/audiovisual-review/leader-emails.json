@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:33.655Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "b1ce23756e90b25a2fba015f47ba12e031bb3b7690b9cf0c756e540683fc2dbd",
+  "clipSha256": "ea0cf3c0b3c35041e5f8df55a40de3481f447e607dbfd88b965aa4e8183ce500",
+  "scene": "leader-emails",
+  "review": {
+    "heardOpening": "Les responsables que nous avons conservés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les responsables que nous avons conservés ont chacun reçu une nouvelle invitation.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page de gestion des pages de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ouvrons le message réellement arrivé dans la boîte de formation.",
+        "visibleSeconds": 4.8,
+        "visible": "Transition vers la boîte de réception Mailpit affichant le courriel reçu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Il nomme la nouvelle édition et contient un nouveau lien personnel de responsable.",
+        "visibleSeconds": 8,
+        "visible": "Dans l'e-mail ouvert, présence du titre « Fête du village de Montvert 2027 » et du bouton « Voir qui est inscrit ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Cette vérification permet de distinguer l'invitation de la copie et celle de l'événement d'origine.",
+        "visibleSeconds": 13,
+        "visible": "L'écran reste stable sur l'e-mail dans la boîte de réception pour illustrer la conclusion.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

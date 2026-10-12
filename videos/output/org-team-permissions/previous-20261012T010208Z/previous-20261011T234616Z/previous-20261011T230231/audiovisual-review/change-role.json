@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:05:55.420Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "eaeb1f117016281867a8337cf38e6cc5af87ff51ef6212d97161114ac25657c2",
+  "clipSha256": "95c5e04ad886d2ec35c4925b14d12cbd0eacea7ce5ad0821e65953e1af978e33",
+  "scene": "change-role",
+  "review": {
+    "heardOpening": "Le rôle peut évoluer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "On choisit d’abord Propriétaire dans la liste",
+        "visibleSeconds": 3,
+        "visible": "Sélection de Propriétaire dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis on confirme avec Appliquer",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le bouton Appliquer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "La confirmation indique le nouveau rôle",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la notification confirmant le rôle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

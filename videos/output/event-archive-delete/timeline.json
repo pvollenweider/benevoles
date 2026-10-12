@@ -1,43 +1,144 @@
 {
   "slug": "event-archive-delete",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T07:47:59.025Z",
+  "recordedAt": "2026-10-12T01:27:07.673Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ARCHIVE_DELETE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 26573
+    },
+    {
+      "kind": "click",
+      "atMs": 31475
+    },
+    {
+      "kind": "click",
+      "atMs": 34441
+    },
+    {
+      "kind": "click",
+      "atMs": 51939
+    },
+    {
+      "kind": "click",
+      "atMs": 60672
+    },
+    {
+      "kind": "click",
+      "atMs": 72110
+    },
+    {
+      "kind": "click",
+      "atMs": 81424
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1087,
-      "endMs": 17876
+      "startMs": 1144,
+      "endMs": 15956
     },
     {
       "id": "prepare",
-      "startMs": 18329,
-      "endMs": 31923
+      "startMs": 16408,
+      "endMs": 29937
     },
     {
       "id": "archive",
-      "startMs": 32375,
-      "endMs": 46809
+      "startMs": 30390,
+      "endMs": 44897
     },
     {
       "id": "delete-open",
-      "startMs": 47261,
-      "endMs": 61609
+      "startMs": 45348,
+      "endMs": 59243
     },
     {
       "id": "backup",
-      "startMs": 62061,
-      "endMs": 75496
+      "startMs": 59695,
+      "endMs": 73086
     },
     {
       "id": "confirm",
-      "startMs": 75950,
-      "endMs": 89440
+      "startMs": 73539,
+      "endMs": 87508
     },
     {
       "id": "result",
-      "startMs": 89894,
-      "endMs": 103580
+      "startMs": 87961,
+      "endMs": 100027
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "prepare",
+      "phrase": "Si des bénévoles doivent être",
+      "startMs": 9690,
+      "endMs": 12885,
+      "cueMs": 26100
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le bouton Archiver demande",
+      "startMs": 616,
+      "endMs": 2904,
+      "cueMs": 31009
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Après validation, la page publique disparaît",
+      "startMs": 3578,
+      "endMs": 8688,
+      "cueMs": 33971
+    },
+    {
+      "segmentId": "delete-open",
+      "phrase": "Le récapitulatif indique précisément combien",
+      "startMs": 6118,
+      "endMs": 11139,
+      "cueMs": 51466
+    },
+    {
+      "segmentId": "backup",
+      "phrase": "Avant d’aller plus loin, ouvrez l’export PDF",
+      "startMs": 511,
+      "endMs": 2685,
+      "cueMs": 60207
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Tant qu’il ne correspond pas",
+      "startMs": 4321,
+      "endMs": 6727,
+      "cueMs": 77862
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Une fois la suppression lancée",
+      "startMs": 7411,
+      "endMs": 13616,
+      "cueMs": 80951
     }
   ]
 }

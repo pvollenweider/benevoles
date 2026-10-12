@@ -1,0 +1,104 @@
+{
+  "slug": "shift-waitlist-offer",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T00:28:22.887Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_WAITLIST_OFFER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4697
+    },
+    {
+      "kind": "click",
+      "atMs": 5529
+    },
+    {
+      "kind": "click",
+      "atMs": 11370
+    },
+    {
+      "kind": "click",
+      "atMs": 12152
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1134,
+      "endMs": 3759
+    },
+    {
+      "id": "setup",
+      "startMs": 4215,
+      "endMs": 5911
+    },
+    {
+      "id": "admin",
+      "startMs": 6364,
+      "endMs": 7592
+    },
+    {
+      "id": "release",
+      "startMs": 9756,
+      "endMs": 12459
+    },
+    {
+      "id": "volunteer",
+      "startMs": 12912,
+      "endMs": 14037
+    },
+    {
+      "id": "expiry",
+      "startMs": 14492,
+      "endMs": 14581
+    },
+    {
+      "id": "result",
+      "startMs": 15034,
+      "endMs": 16243
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "admin",
+      "phrase": "On peut ainsi répondre à",
+      "startMs": 12824,
+      "endMs": 22000,
+      "cueMs": 7524
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Refuser conserve une réponse explicite",
+      "startMs": 13928,
+      "endMs": 23000,
+      "cueMs": 14030
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "la promotion passe à la",
+      "startMs": 7581,
+      "endMs": 12078,
+      "cueMs": 14513
+    }
+  ]
+}

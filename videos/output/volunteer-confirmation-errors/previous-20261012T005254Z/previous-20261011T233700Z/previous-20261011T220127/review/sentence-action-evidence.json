@@ -1,0 +1,1488 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 35,
+    "sentences": [
+      {
+        "text": "Une inscription doit rester compréhensible même quand quelque chose se passe mal.",
+        "startMs": 217,
+        "endMs": 4445,
+        "method": "silence",
+        "absoluteStartMs": 252
+      },
+      {
+        "text": "Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau.",
+        "startMs": 4899,
+        "endMs": 10985,
+        "method": "silence",
+        "absoluteStartMs": 4934
+      },
+      {
+        "text": "Les exemples utilisent un événement de démonstration :",
+        "startMs": 11872,
+        "endMs": 14291,
+        "method": "silence",
+        "absoluteStartMs": 11907
+      },
+      {
+        "text": "tu verras les vrais messages du formulaire, puis une confirmation réelle.",
+        "startMs": 14414,
+        "endMs": 17879,
+        "method": "silence",
+        "absoluteStartMs": 14449
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "form",
+    "startMs": 20489,
+    "sentences": [
+      {
+        "text": "Choisis Accueil et continue.",
+        "startMs": 337,
+        "endMs": 2431,
+        "method": "silence",
+        "absoluteStartMs": 20826
+      },
+      {
+        "text": "Nous remplissons le prénom, le nom, l’email et le téléphone, puis acceptons la convention et l’utilisation des données.",
+        "startMs": 3046,
+        "endMs": 9958,
+        "method": "silence",
+        "absoluteStartMs": 23535
+      },
+      {
+        "text": "Avant d’envoyer, relis toujours l’adresse email :",
+        "startMs": 10542,
+        "endMs": 11799,
+        "method": "silence",
+        "absoluteStartMs": 31031
+      },
+      {
+        "text": "une faute peut empêcher le message d’arriver même si l’inscription est enregistrée correctement.",
+        "startMs": 11921,
+        "endMs": 18425,
+        "method": "silence",
+        "absoluteStartMs": 32410
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 20974
+      },
+      {
+        "kind": "click",
+        "atMs": 21791
+      },
+      {
+        "kind": "click",
+        "atMs": 22575
+      },
+      {
+        "kind": "key",
+        "atMs": 22883
+      },
+      {
+        "kind": "key",
+        "atMs": 22995
+      },
+      {
+        "kind": "key",
+        "atMs": 23109
+      },
+      {
+        "kind": "key",
+        "atMs": 23223
+      },
+      {
+        "kind": "click",
+        "atMs": 23807
+      },
+      {
+        "kind": "key",
+        "atMs": 24113
+      },
+      {
+        "kind": "key",
+        "atMs": 24228
+      },
+      {
+        "kind": "key",
+        "atMs": 24343
+      },
+      {
+        "kind": "key",
+        "atMs": 24456
+      },
+      {
+        "kind": "key",
+        "atMs": 24568
+      },
+      {
+        "kind": "key",
+        "atMs": 24687
+      },
+      {
+        "kind": "key",
+        "atMs": 24803
+      },
+      {
+        "kind": "click",
+        "atMs": 25390
+      },
+      {
+        "kind": "key",
+        "atMs": 25697
+      },
+      {
+        "kind": "key",
+        "atMs": 25810
+      },
+      {
+        "kind": "key",
+        "atMs": 25923
+      },
+      {
+        "kind": "key",
+        "atMs": 26036
+      },
+      {
+        "kind": "key",
+        "atMs": 26150
+      },
+      {
+        "kind": "key",
+        "atMs": 26265
+      },
+      {
+        "kind": "key",
+        "atMs": 26378
+      },
+      {
+        "kind": "key",
+        "atMs": 26497
+      },
+      {
+        "kind": "key",
+        "atMs": 26612
+      },
+      {
+        "kind": "key",
+        "atMs": 26730
+      },
+      {
+        "kind": "key",
+        "atMs": 26849
+      },
+      {
+        "kind": "key",
+        "atMs": 26967
+      },
+      {
+        "kind": "key",
+        "atMs": 27081
+      },
+      {
+        "kind": "key",
+        "atMs": 27196
+      },
+      {
+        "kind": "key",
+        "atMs": 27311
+      },
+      {
+        "kind": "key",
+        "atMs": 27427
+      },
+      {
+        "kind": "key",
+        "atMs": 27555
+      },
+      {
+        "kind": "key",
+        "atMs": 27672
+      },
+      {
+        "kind": "key",
+        "atMs": 27790
+      },
+      {
+        "kind": "key",
+        "atMs": 27907
+      },
+      {
+        "kind": "key",
+        "atMs": 28024
+      },
+      {
+        "kind": "key",
+        "atMs": 28144
+      },
+      {
+        "kind": "key",
+        "atMs": 28262
+      },
+      {
+        "kind": "key",
+        "atMs": 28378
+      },
+      {
+        "kind": "key",
+        "atMs": 28493
+      },
+      {
+        "kind": "key",
+        "atMs": 28612
+      },
+      {
+        "kind": "key",
+        "atMs": 28728
+      },
+      {
+        "kind": "key",
+        "atMs": 28845
+      },
+      {
+        "kind": "key",
+        "atMs": 28965
+      },
+      {
+        "kind": "click",
+        "atMs": 29540
+      },
+      {
+        "kind": "key",
+        "atMs": 29846
+      },
+      {
+        "kind": "key",
+        "atMs": 29961
+      },
+      {
+        "kind": "key",
+        "atMs": 30075
+      },
+      {
+        "kind": "key",
+        "atMs": 30188
+      },
+      {
+        "kind": "key",
+        "atMs": 30302
+      },
+      {
+        "kind": "key",
+        "atMs": 30420
+      },
+      {
+        "kind": "key",
+        "atMs": 30538
+      },
+      {
+        "kind": "key",
+        "atMs": 30656
+      },
+      {
+        "kind": "key",
+        "atMs": 30774
+      },
+      {
+        "kind": "key",
+        "atMs": 30892
+      },
+      {
+        "kind": "key",
+        "atMs": 31010
+      },
+      {
+        "kind": "key",
+        "atMs": 31127
+      },
+      {
+        "kind": "key",
+        "atMs": 31247
+      },
+      {
+        "kind": "click",
+        "atMs": 31823
+      },
+      {
+        "kind": "click",
+        "atMs": 32606
+      }
+    ]
+  },
+  {
+    "id": "validation",
+    "startMs": 41493,
+    "sentences": [
+      {
+        "text": "La taille du t-shirt n’a pas été renseignée.",
+        "startMs": 313,
+        "endMs": 2215,
+        "method": "silence",
+        "absoluteStartMs": 41806
+      },
+      {
+        "text": "Confirmer affiche la question à corriger et conserve toutes les autres réponses.",
+        "startMs": 2859,
+        "endMs": 6947,
+        "method": "silence",
+        "absoluteStartMs": 44352
+      },
+      {
+        "text": "Le champ obligatoire est signalé ;",
+        "startMs": 7318,
+        "endMs": 9151,
+        "method": "silence",
+        "absoluteStartMs": 48811
+      },
+      {
+        "text": "choisis une taille, puis tu peux reprendre.",
+        "startMs": 9589,
+        "endMs": 11366,
+        "method": "silence",
+        "absoluteStartMs": 51082
+      },
+      {
+        "text": "Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu’une boîte existe vraiment.",
+        "startMs": 11969,
+        "endMs": 18583,
+        "method": "silence",
+        "absoluteStartMs": 53462
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 41973
+      },
+      {
+        "kind": "click",
+        "atMs": 51556
+      }
+    ]
+  },
+  {
+    "id": "capacity",
+    "startMs": 62755,
+    "sentences": [
+      {
+        "text": "Une place peut être prise pendant que tu remplis le formulaire.",
+        "startMs": 404,
+        "endMs": 3509,
+        "method": "silence",
+        "absoluteStartMs": 63159
+      },
+      {
+        "text": "Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration.",
+        "startMs": 4082,
+        "endMs": 9201,
+        "method": "silence",
+        "absoluteStartMs": 66837
+      },
+      {
+        "text": "La confirmation répond Votre sélection n'est plus disponible.",
+        "startMs": 9533,
+        "endMs": 12637,
+        "method": "silence",
+        "absoluteStartMs": 72288
+      },
+      {
+        "text": "Reviens au planning pour ajuster ton choix ;",
+        "startMs": 13336,
+        "endMs": 15011,
+        "method": "silence",
+        "absoluteStartMs": 76091
+      },
+      {
+        "text": "les informations saisies restent conservées.",
+        "startMs": 15131,
+        "endMs": 17224,
+        "method": "silence",
+        "absoluteStartMs": 77886
+      },
+      {
+        "text": "Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+        "startMs": 17885,
+        "endMs": 23760,
+        "method": "silence",
+        "absoluteStartMs": 80640
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 63289
+      }
+    ]
+  },
+  {
+    "id": "network",
+    "startMs": 89227,
+    "sentences": [
+      {
+        "text": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau.",
+        "startMs": 454,
+        "endMs": 6374,
+        "method": "silence",
+        "absoluteStartMs": 89681
+      },
+      {
+        "text": "Le message dit que l’inscription n’a peut-être pas été reçue.",
+        "startMs": 7155,
+        "endMs": 9811,
+        "method": "silence",
+        "absoluteStartMs": 96382
+      },
+      {
+        "text": "Tes champs sont toujours là.",
+        "startMs": 10035,
+        "endMs": 11289,
+        "method": "silence",
+        "absoluteStartMs": 99262
+      },
+      {
+        "text": "Après retour de la connexion, clique à nouveau sur Confirmer mon inscription :",
+        "startMs": 11638,
+        "endMs": 15670,
+        "method": "silence",
+        "absoluteStartMs": 100865
+      },
+      {
+        "text": "le système évite de créer deux engagements identiques.",
+        "startMs": 16199,
+        "endMs": 18452,
+        "method": "silence",
+        "absoluteStartMs": 105426
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 89753
+      }
+    ]
+  },
+  {
+    "id": "success",
+    "startMs": 110350,
+    "sentences": [
+      {
+        "text": "La connexion est rétablie et l’inscription réussit.",
+        "startMs": 412,
+        "endMs": 3388,
+        "method": "silence",
+        "absoluteStartMs": 110762
+      },
+      {
+        "text": "La page confirme le résultat et indique l’envoi de l’email.",
+        "startMs": 3867,
+        "endMs": 7053,
+        "method": "silence",
+        "absoluteStartMs": 114217
+      },
+      {
+        "text": "Avec un formulaire public ordinaire, le lien de gestion reste dans cet email :",
+        "startMs": 7662,
+        "endMs": 12136,
+        "method": "silence",
+        "absoluteStartMs": 118012
+      },
+      {
+        "text": "il n’est pas affiché simplement parce qu’une adresse a été saisie.",
+        "startMs": 12630,
+        "endMs": 15619,
+        "method": "silence",
+        "absoluteStartMs": 122980
+      },
+      {
+        "text": "Garde le message pour retrouver ton planning ou annuler plus tard.",
+        "startMs": 16470,
+        "endMs": 20101,
+        "method": "silence",
+        "absoluteStartMs": 126820
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 110836
+      }
+    ]
+  },
+  {
+    "id": "email",
+    "startMs": 133432,
+    "sentences": [
+      {
+        "text": "Voici le message réellement reçu dans la boîte de démonstration.",
+        "startMs": 869,
+        "endMs": 3753,
+        "method": "silence",
+        "absoluteStartMs": 134301
+      },
+      {
+        "text": "Il contient le créneau et le lien personnel.",
+        "startMs": 4115,
+        "endMs": 7004,
+        "method": "silence",
+        "absoluteStartMs": 137547
+      },
+      {
+        "text": "Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée.",
+        "startMs": 7296,
+        "endMs": 11182,
+        "method": "silence",
+        "absoluteStartMs": 140728
+      },
+      {
+        "text": "Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ;",
+        "startMs": 11941,
+        "endMs": 15977,
+        "method": "silence",
+        "absoluteStartMs": 145373
+      },
+      {
+        "text": "contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
+        "startMs": 16313,
+        "endMs": 20227,
+        "method": "silence",
+        "absoluteStartMs": 149745
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "overlap",
+    "startMs": 156619,
+    "sentences": [
+      {
+        "text": "Le serveur revérifie aussi tes horaires.",
+        "startMs": 686,
+        "endMs": 3133,
+        "method": "silence",
+        "absoluteStartMs": 157305
+      },
+      {
+        "text": "Aline est déjà inscrite à l'accueil de dix heures à midi.",
+        "startMs": 3551,
+        "endMs": 6558,
+        "method": "silence",
+        "absoluteStartMs": 160170
+      },
+      {
+        "text": "Essayons le vestiaire de onze à treize heures avec sa même adresse.",
+        "startMs": 7364,
+        "endMs": 10518,
+        "method": "silence",
+        "absoluteStartMs": 163983
+      },
+      {
+        "text": "Remplissons le formulaire et confirmons.",
+        "startMs": 11258,
+        "endMs": 12437,
+        "method": "silence",
+        "absoluteStartMs": 167877
+      },
+      {
+        "text": "Le refus nomme le créneau qui chevauche cette demande.",
+        "startMs": 12658,
+        "endMs": 16914,
+        "method": "silence",
+        "absoluteStartMs": 169277
+      },
+      {
+        "text": "Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée.",
+        "startMs": 17508,
+        "endMs": 21221,
+        "method": "silence",
+        "absoluteStartMs": 174127
+      },
+      {
+        "text": "Ce contrôle évite de compter une personne sur deux postes en même temps.",
+        "startMs": 21873,
+        "endMs": 24896,
+        "method": "silence",
+        "absoluteStartMs": 178492
+      },
+      {
+        "text": "Pour continuer, reviens au planning et choisis un horaire compatible.",
+        "startMs": 25546,
+        "endMs": 29144,
+        "method": "silence",
+        "absoluteStartMs": 182165
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 158255
+      },
+      {
+        "kind": "click",
+        "atMs": 159039
+      },
+      {
+        "kind": "click",
+        "atMs": 159822
+      },
+      {
+        "kind": "key",
+        "atMs": 160129
+      },
+      {
+        "kind": "key",
+        "atMs": 160243
+      },
+      {
+        "kind": "key",
+        "atMs": 160356
+      },
+      {
+        "kind": "key",
+        "atMs": 160469
+      },
+      {
+        "kind": "key",
+        "atMs": 160584
+      },
+      {
+        "kind": "click",
+        "atMs": 161171
+      },
+      {
+        "kind": "key",
+        "atMs": 161478
+      },
+      {
+        "kind": "key",
+        "atMs": 161593
+      },
+      {
+        "kind": "key",
+        "atMs": 161707
+      },
+      {
+        "kind": "key",
+        "atMs": 161821
+      },
+      {
+        "kind": "key",
+        "atMs": 161935
+      },
+      {
+        "kind": "key",
+        "atMs": 162052
+      },
+      {
+        "kind": "key",
+        "atMs": 162169
+      },
+      {
+        "kind": "click",
+        "atMs": 162755
+      },
+      {
+        "kind": "key",
+        "atMs": 163062
+      },
+      {
+        "kind": "key",
+        "atMs": 163177
+      },
+      {
+        "kind": "key",
+        "atMs": 163290
+      },
+      {
+        "kind": "key",
+        "atMs": 163402
+      },
+      {
+        "kind": "key",
+        "atMs": 163516
+      },
+      {
+        "kind": "key",
+        "atMs": 163636
+      },
+      {
+        "kind": "key",
+        "atMs": 163752
+      },
+      {
+        "kind": "key",
+        "atMs": 163870
+      },
+      {
+        "kind": "key",
+        "atMs": 163985
+      },
+      {
+        "kind": "key",
+        "atMs": 164099
+      },
+      {
+        "kind": "key",
+        "atMs": 164216
+      },
+      {
+        "kind": "key",
+        "atMs": 164331
+      },
+      {
+        "kind": "key",
+        "atMs": 164447
+      },
+      {
+        "kind": "key",
+        "atMs": 164565
+      },
+      {
+        "kind": "key",
+        "atMs": 164684
+      },
+      {
+        "kind": "key",
+        "atMs": 164799
+      },
+      {
+        "kind": "key",
+        "atMs": 164913
+      },
+      {
+        "kind": "key",
+        "atMs": 165027
+      },
+      {
+        "kind": "key",
+        "atMs": 165143
+      },
+      {
+        "kind": "key",
+        "atMs": 165261
+      },
+      {
+        "kind": "key",
+        "atMs": 165377
+      },
+      {
+        "kind": "key",
+        "atMs": 165495
+      },
+      {
+        "kind": "key",
+        "atMs": 165611
+      },
+      {
+        "kind": "key",
+        "atMs": 165731
+      },
+      {
+        "kind": "key",
+        "atMs": 165848
+      },
+      {
+        "kind": "key",
+        "atMs": 165967
+      },
+      {
+        "kind": "key",
+        "atMs": 166085
+      },
+      {
+        "kind": "key",
+        "atMs": 166202
+      },
+      {
+        "kind": "key",
+        "atMs": 166318
+      },
+      {
+        "kind": "key",
+        "atMs": 166437
+      },
+      {
+        "kind": "click",
+        "atMs": 167021
+      },
+      {
+        "kind": "click",
+        "atMs": 167804
+      },
+      {
+        "kind": "click",
+        "atMs": 168588
+      },
+      {
+        "kind": "click",
+        "atMs": 174621
+      }
+    ]
+  },
+  {
+    "id": "response-loss",
+    "startMs": 188518,
+    "sentences": [
+      {
+        "text": "Une coupure peut arriver après l'enregistrement.",
+        "startMs": 491,
+        "endMs": 2587,
+        "method": "silence",
+        "absoluteStartMs": 189009
+      },
+      {
+        "text": "Nicolas choisit la logistique.",
+        "startMs": 3128,
+        "endMs": 5145,
+        "method": "silence",
+        "absoluteStartMs": 191646
+      },
+      {
+        "text": "Cette fois, la requête arrive réellement au serveur, qui crée son inscription ;",
+        "startMs": 5319,
+        "endMs": 9413,
+        "method": "silence",
+        "absoluteStartMs": 193837
+      },
+      {
+        "text": "nous interrompons volontairement seulement la réponse au navigateur.",
+        "startMs": 9588,
+        "endMs": 12887,
+        "method": "silence",
+        "absoluteStartMs": 198106
+      },
+      {
+        "text": "Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti.",
+        "startMs": 13444,
+        "endMs": 17862,
+        "method": "silence",
+        "absoluteStartMs": 201962
+      },
+      {
+        "text": "Rétablissons la connexion et confirmons à nouveau.",
+        "startMs": 18422,
+        "endMs": 21013,
+        "method": "silence",
+        "absoluteStartMs": 206940
+      },
+      {
+        "text": "Le message indique qu'il est déjà inscrit et que son lien lui a été envoyé par email.",
+        "startMs": 21910,
+        "endMs": 26168,
+        "method": "silence",
+        "absoluteStartMs": 210428
+      },
+      {
+        "text": "Vérifions côté organisation :",
+        "startMs": 27142,
+        "endMs": 28581,
+        "method": "silence",
+        "absoluteStartMs": 215660
+      },
+      {
+        "text": "une seule ligne de Nicolas apparaît sur ce créneau.",
+        "startMs": 29353,
+        "endMs": 31604,
+        "method": "silence",
+        "absoluteStartMs": 217871
+      },
+      {
+        "text": "Le nouvel essai n'a pas créé une deuxième inscription.",
+        "startMs": 32244,
+        "endMs": 34365,
+        "method": "silence",
+        "absoluteStartMs": 220762
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 190137
+      },
+      {
+        "kind": "click",
+        "atMs": 190920
+      },
+      {
+        "kind": "click",
+        "atMs": 191703
+      },
+      {
+        "kind": "key",
+        "atMs": 192008
+      },
+      {
+        "kind": "key",
+        "atMs": 192123
+      },
+      {
+        "kind": "key",
+        "atMs": 192236
+      },
+      {
+        "kind": "key",
+        "atMs": 192351
+      },
+      {
+        "kind": "key",
+        "atMs": 192466
+      },
+      {
+        "kind": "key",
+        "atMs": 192585
+      },
+      {
+        "kind": "key",
+        "atMs": 192703
+      },
+      {
+        "kind": "click",
+        "atMs": 193286
+      },
+      {
+        "kind": "key",
+        "atMs": 193591
+      },
+      {
+        "kind": "key",
+        "atMs": 193705
+      },
+      {
+        "kind": "key",
+        "atMs": 193820
+      },
+      {
+        "kind": "key",
+        "atMs": 193933
+      },
+      {
+        "kind": "key",
+        "atMs": 194046
+      },
+      {
+        "kind": "key",
+        "atMs": 194160
+      },
+      {
+        "kind": "key",
+        "atMs": 194278
+      },
+      {
+        "kind": "click",
+        "atMs": 194870
+      },
+      {
+        "kind": "key",
+        "atMs": 195176
+      },
+      {
+        "kind": "key",
+        "atMs": 195290
+      },
+      {
+        "kind": "key",
+        "atMs": 195404
+      },
+      {
+        "kind": "key",
+        "atMs": 195517
+      },
+      {
+        "kind": "key",
+        "atMs": 195632
+      },
+      {
+        "kind": "key",
+        "atMs": 195749
+      },
+      {
+        "kind": "key",
+        "atMs": 195867
+      },
+      {
+        "kind": "key",
+        "atMs": 195985
+      },
+      {
+        "kind": "key",
+        "atMs": 196101
+      },
+      {
+        "kind": "key",
+        "atMs": 196215
+      },
+      {
+        "kind": "key",
+        "atMs": 196330
+      },
+      {
+        "kind": "key",
+        "atMs": 196446
+      },
+      {
+        "kind": "key",
+        "atMs": 196564
+      },
+      {
+        "kind": "key",
+        "atMs": 196683
+      },
+      {
+        "kind": "key",
+        "atMs": 196799
+      },
+      {
+        "kind": "key",
+        "atMs": 196917
+      },
+      {
+        "kind": "key",
+        "atMs": 197033
+      },
+      {
+        "kind": "key",
+        "atMs": 197148
+      },
+      {
+        "kind": "key",
+        "atMs": 197267
+      },
+      {
+        "kind": "key",
+        "atMs": 197384
+      },
+      {
+        "kind": "key",
+        "atMs": 197502
+      },
+      {
+        "kind": "key",
+        "atMs": 197618
+      },
+      {
+        "kind": "key",
+        "atMs": 197734
+      },
+      {
+        "kind": "key",
+        "atMs": 197855
+      },
+      {
+        "kind": "key",
+        "atMs": 197967
+      },
+      {
+        "kind": "key",
+        "atMs": 198091
+      },
+      {
+        "kind": "key",
+        "atMs": 198208
+      },
+      {
+        "kind": "key",
+        "atMs": 198328
+      },
+      {
+        "kind": "key",
+        "atMs": 198444
+      },
+      {
+        "kind": "key",
+        "atMs": 198563
+      },
+      {
+        "kind": "key",
+        "atMs": 198680
+      },
+      {
+        "kind": "key",
+        "atMs": 198797
+      },
+      {
+        "kind": "click",
+        "atMs": 199386
+      },
+      {
+        "kind": "click",
+        "atMs": 200170
+      },
+      {
+        "kind": "click",
+        "atMs": 200953
+      },
+      {
+        "kind": "click",
+        "atMs": 202453
+      },
+      {
+        "kind": "click",
+        "atMs": 210903
+      }
+    ]
+  },
+  {
+    "id": "invitation-success",
+    "startMs": 225568,
+    "sentences": [
+      {
+        "text": "Comparons maintenant deux confirmations réussies.",
+        "startMs": 442,
+        "endMs": 2741,
+        "method": "silence",
+        "absoluteStartMs": 226010
+      },
+      {
+        "text": "Zoé choisit le vestiaire dans le formulaire public ordinaire.",
+        "startMs": 3468,
+        "endMs": 6947,
+        "method": "silence",
+        "absoluteStartMs": 229036
+      },
+      {
+        "text": "Après ses informations et les consentements, confirmons.",
+        "startMs": 7191,
+        "endMs": 12494,
+        "method": "silence",
+        "absoluteStartMs": 232759
+      },
+      {
+        "text": "La page annonce le succès mais ne montre pas son lien personnel :",
+        "startMs": 12749,
+        "endMs": 16314,
+        "method": "silence",
+        "absoluteStartMs": 238317
+      },
+      {
+        "text": "saisir une adresse ne prouve pas que l'on possède cette boîte.",
+        "startMs": 16448,
+        "endMs": 19139,
+        "method": "silence",
+        "absoluteStartMs": 242016
+      },
+      {
+        "text": "Aline a ensuite reçu une invitation personnelle envoyée par l'organisation.",
+        "startMs": 19504,
+        "endMs": 24470,
+        "method": "silence",
+        "absoluteStartMs": 245072
+      },
+      {
+        "text": "Ouvrons ce lien pour choisir la logistique.",
+        "startMs": 24725,
+        "endMs": 27704,
+        "method": "silence",
+        "absoluteStartMs": 250293
+      },
+      {
+        "text": "Ses informations sont préremplies ;",
+        "startMs": 27955,
+        "endMs": 29694,
+        "method": "silence",
+        "absoluteStartMs": 253523
+      },
+      {
+        "text": "vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements.",
+        "startMs": 30195,
+        "endMs": 35203,
+        "method": "silence",
+        "absoluteStartMs": 255763
+      },
+      {
+        "text": "Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse.",
+        "startMs": 35668,
+        "endMs": 42366,
+        "method": "silence",
+        "absoluteStartMs": 261236
+      },
+      {
+        "text": "Ouvrons ce lien :",
+        "startMs": 42873,
+        "endMs": 43021,
+        "method": "silence",
+        "absoluteStartMs": 268441
+      },
+      {
+        "text": "Aline retrouve ses deux créneaux.",
+        "startMs": 43242,
+        "endMs": 46040,
+        "method": "silence",
+        "absoluteStartMs": 268810
+      },
+      {
+        "text": "Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+        "startMs": 46563,
+        "endMs": 49839,
+        "method": "silence",
+        "absoluteStartMs": 272131
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 227183
+      },
+      {
+        "kind": "click",
+        "atMs": 227965
+      },
+      {
+        "kind": "click",
+        "atMs": 228749
+      },
+      {
+        "kind": "key",
+        "atMs": 229056
+      },
+      {
+        "kind": "key",
+        "atMs": 229170
+      },
+      {
+        "kind": "click",
+        "atMs": 229882
+      },
+      {
+        "kind": "key",
+        "atMs": 230189
+      },
+      {
+        "kind": "key",
+        "atMs": 230303
+      },
+      {
+        "kind": "key",
+        "atMs": 230418
+      },
+      {
+        "kind": "key",
+        "atMs": 230531
+      },
+      {
+        "kind": "key",
+        "atMs": 230645
+      },
+      {
+        "kind": "key",
+        "atMs": 230759
+      },
+      {
+        "kind": "key",
+        "atMs": 230874
+      },
+      {
+        "kind": "click",
+        "atMs": 231482
+      },
+      {
+        "kind": "key",
+        "atMs": 231789
+      },
+      {
+        "kind": "key",
+        "atMs": 231903
+      },
+      {
+        "kind": "key",
+        "atMs": 232017
+      },
+      {
+        "kind": "key",
+        "atMs": 232132
+      },
+      {
+        "kind": "key",
+        "atMs": 232246
+      },
+      {
+        "kind": "key",
+        "atMs": 232361
+      },
+      {
+        "kind": "key",
+        "atMs": 232478
+      },
+      {
+        "kind": "key",
+        "atMs": 232597
+      },
+      {
+        "kind": "key",
+        "atMs": 232716
+      },
+      {
+        "kind": "key",
+        "atMs": 232834
+      },
+      {
+        "kind": "key",
+        "atMs": 232952
+      },
+      {
+        "kind": "key",
+        "atMs": 233071
+      },
+      {
+        "kind": "key",
+        "atMs": 233185
+      },
+      {
+        "kind": "key",
+        "atMs": 233300
+      },
+      {
+        "kind": "key",
+        "atMs": 233415
+      },
+      {
+        "kind": "key",
+        "atMs": 233533
+      },
+      {
+        "kind": "key",
+        "atMs": 233652
+      },
+      {
+        "kind": "key",
+        "atMs": 233770
+      },
+      {
+        "kind": "key",
+        "atMs": 233886
+      },
+      {
+        "kind": "key",
+        "atMs": 234004
+      },
+      {
+        "kind": "key",
+        "atMs": 234120
+      },
+      {
+        "kind": "key",
+        "atMs": 234239
+      },
+      {
+        "kind": "key",
+        "atMs": 234357
+      },
+      {
+        "kind": "key",
+        "atMs": 234475
+      },
+      {
+        "kind": "key",
+        "atMs": 234592
+      },
+      {
+        "kind": "key",
+        "atMs": 234710
+      },
+      {
+        "kind": "key",
+        "atMs": 234834
+      },
+      {
+        "kind": "key",
+        "atMs": 234952
+      },
+      {
+        "kind": "click",
+        "atMs": 235532
+      },
+      {
+        "kind": "click",
+        "atMs": 236316
+      },
+      {
+        "kind": "click",
+        "atMs": 237097
+      },
+      {
+        "kind": "click",
+        "atMs": 237898
+      },
+      {
+        "kind": "click",
+        "atMs": 246772
+      },
+      {
+        "kind": "click",
+        "atMs": 247554
+      },
+      {
+        "kind": "click",
+        "atMs": 248355
+      },
+      {
+        "kind": "click",
+        "atMs": 249136
+      },
+      {
+        "kind": "click",
+        "atMs": 249920
+      },
+      {
+        "kind": "click",
+        "atMs": 250704
+      },
+      {
+        "kind": "click",
+        "atMs": 266171
+      }
+    ]
+  },
+  {
+    "id": "result",
+    "startMs": 277968,
+    "sentences": [
+      {
+        "text": "Revenons côté organisation pour vérifier les inscriptions réellement présentes.",
+        "startMs": 294,
+        "endMs": 5138,
+        "method": "silence",
+        "absoluteStartMs": 278262
+      },
+      {
+        "text": "Une erreur de champ se corrige sur place.",
+        "startMs": 5476,
+        "endMs": 7985,
+        "method": "silence",
+        "absoluteStartMs": 283444
+      },
+      {
+        "text": "Une sélection indisponible se revoit dans le planning.",
+        "startMs": 8428,
+        "endMs": 11489,
+        "method": "silence",
+        "absoluteStartMs": 286396
+      },
+      {
+        "text": "Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription.",
+        "startMs": 11868,
+        "endMs": 18418,
+        "method": "silence",
+        "absoluteStartMs": 289836
+      },
+      {
+        "text": "Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux.",
+        "startMs": 18953,
+        "endMs": 23784,
+        "method": "silence",
+        "absoluteStartMs": 296921
+      },
+      {
+        "text": "Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+        "startMs": 24058,
+        "endMs": 31664,
+        "method": "silence",
+        "absoluteStartMs": 302026
+      }
+    ],
+    "inputs": []
+  }
+]

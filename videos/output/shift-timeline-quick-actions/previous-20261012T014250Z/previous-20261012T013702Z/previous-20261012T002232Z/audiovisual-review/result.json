@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:00:52.439Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "9528b37e1b16bbecbc355eba7f7804f184df04198d281a2dee28ef48a1331a3f",
+  "clipSha256": "59daee30c45163c4ce83fd3fe823cd495f66e257a4ad35ff308e53d01b937699",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Travaille d'abord visuellement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Travaille d’abord visuellement",
+        "visibleSeconds": 0,
+        "visible": "Formulaire statique 'Modifier le créneau' affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "puis relis la Liste pour contrôler les valeurs",
+        "visibleSeconds": 2,
+        "visible": "La liste n'est pas affichée ; l'écran reste figé sur le formulaire",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "résultat précis et compréhensible pour les bénévoles",
+        "visibleSeconds": 5,
+        "visible": "Aucun changement visuel, écran toujours statique",
+        "sync": "uncertain",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 - La liste mentionnée vocalement n'apparaît pas à l'écran, l'image reste fixe sur le formulaire."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, son régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

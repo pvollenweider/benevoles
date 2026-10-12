@@ -1,53 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:53:20.995Z",
-  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
-  "promptSha256": "9d1a465014064894ebc50926d3f273c0cc22a85c5ef54112b501c1d99136e22b",
-  "clipSha256": "77629b9c74824b0d8f03e0612d93da78a8ac3902fd377ae325e50482ba39d751",
+  "reviewedAt": "2026-10-12T01:36:19.868Z",
+  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "promptSha256": "b7cd6ec6f0374632024805dd5b71c6e9d6240cfcc7bd9201cb221daef4382f1c",
+  "clipSha256": "9e273f2fc6d9e26b90b2509937de415ed3b19d328a6bc7e00d49d5819d953a0f",
   "scene": "practical",
   "review": {
-    "heardOpening": "Les informations pratiques peuvent préciser",
+    "heardOpening": "Renseignons d'abord le lieu de rendez-vous",
     "checkpoints": [
       {
-        "spokenSeconds": 3.3,
-        "spoken": "un point de rendez-vous",
-        "visibleSeconds": 2.5,
-        "visible": "Saisie du point de rendez-vous 'Entrée artistes, portail Nord'",
+        "spokenSeconds": 1.2,
+        "spoken": "entrée artistes, portail nord",
+        "visibleSeconds": 1.1,
+        "visible": "Saisie de « Entrée artistes, portail Nord » dans le champ Lieu du rendez-vous",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "une consigne",
-        "visibleSeconds": 7.5,
-        "visible": "Saisie du champ consigne pratique",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 5.5,
-        "spoken": "un contact opérationnel",
-        "visibleSeconds": 5.5,
-        "visible": "Champs personne de contact et téléphone complétés",
+        "spokenSeconds": 5.4,
+        "spoken": "Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées",
+        "visibleSeconds": 5.6,
+        "visible": "Saisie de la consigne « Venir dix minutes avant avec des chaussures fermées » dans le champ Consigne pratique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
-        "spoken": "une position sur la carte",
-        "visibleSeconds": 2.5,
-        "visible": "Coordonnées GPS et lien carte affichés",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 13.5,
+        "spoken": "ici Léa, accueil artistes, et son téléphone de démonstration",
+        "visibleSeconds": 12,
+        "visible": "Champs Personne de contact et Téléphone du contact remplis avec Léa, accueil artistes et 079 000 01 24",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Les coordonnées GPS placent ce rendez-vous sur la carte",
+        "visibleSeconds": 17.5,
+        "visible": "Coordonnées GPS renseignées dans le champ dédié avec lien Vérifier sur la carte",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:04 - Remplissage du champ consigne affiché après l'évocation orale des contacts."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton régulier."
+      "observation": "Voix off posée, articulation nette et rythme parfaitement calé sur l'apparition des données à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

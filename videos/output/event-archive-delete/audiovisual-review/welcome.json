@@ -1,45 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:50:03.758Z",
-  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
-  "promptSha256": "ec77ed92d8e7890317ea017a077dcaead80114125af32d5b3a0c84e4c34b5375",
-  "clipSha256": "035564353af24ec3801225f5e5dda9b9aa5ca41a4255c04798ab0eb01d661ad4",
+  "reviewedAt": "2026-10-12T01:27:54.119Z",
+  "videoSha256": "2d9a500e8a823bb33e2bf33e6d39aafe9dd78888fe625dddc65be145edb74320",
+  "promptSha256": "f9b0dccac5d77e0634ad81f377e6091a16fbb5b26d5f47af34785d399dcfdf50",
+  "clipSha256": "7c0d11a32344c5e3a9f7b94f4a0ae103cbdb0a2cbe2875d48595694599380648",
   "scene": "welcome",
   "review": {
     "heardOpening": "Fermer les inscriptions, archiver et supprimer",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Fermer les inscriptions, archiver et supprimer",
-        "visibleSeconds": 0,
-        "visible": "Encart 'Archiver puis supprimer définitivement' affiché sur la page 'Dupliquer l'événement'",
+        "spoken": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents.",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre « Archiver puis supprimer définitivement » affiché sur la page de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.5,
-        "spoken": "Fermer bloque seulement les nouvelles inscriptions",
-        "visibleSeconds": 5.5,
-        "visible": "Écran 'Dupliquer l'événement' toujours affiché sans action visible",
-        "sync": "uncertain",
-        "severity": "minor"
+        "spoken": "Fermer bloque seulement les nouvelles inscriptions.",
+        "visibleSeconds": 3,
+        "visible": "Page de gestion de l'événement « Fête du village de Montvert » au statut Publié",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Archiver retire l’événement du public",
-        "visibleSeconds": 9,
-        "visible": "Page 'Dupliquer l'événement' toujours visible en arrière-plan",
-        "sync": "uncertain",
-        "severity": "minor"
+        "spokenSeconds": 8,
+        "spoken": "Archiver retire l’événement du public tout en gardant ses données consultables.",
+        "visibleSeconds": 3,
+        "visible": "Barre d'états de l'événement visible avec les étapes Publié, Terminé et Archivé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Supprimer efface définitivement l’édition.",
+        "visibleSeconds": 3,
+        "visible": "Écran stable de l'événement illustrant l'explication conceptuelle générale",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:02 : La page affichée en fond concerne la duplication d'événement plutôt que l'archivage ou la suppression."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation claire, conforme au texte."
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec la présentation du sujet."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

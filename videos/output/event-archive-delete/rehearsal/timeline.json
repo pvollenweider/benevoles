@@ -1,0 +1,144 @@
+{
+  "slug": "event-archive-delete",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T01:25:06.168Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_ARCHIVE_DELETE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 5888
+    },
+    {
+      "kind": "click",
+      "atMs": 7122
+    },
+    {
+      "kind": "click",
+      "atMs": 7904
+    },
+    {
+      "kind": "click",
+      "atMs": 9187
+    },
+    {
+      "kind": "click",
+      "atMs": 10505
+    },
+    {
+      "kind": "click",
+      "atMs": 13779
+    },
+    {
+      "kind": "click",
+      "atMs": 15045
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1160,
+      "endMs": 3785
+    },
+    {
+      "id": "prepare",
+      "startMs": 4239,
+      "endMs": 6196
+    },
+    {
+      "id": "archive",
+      "startMs": 6649,
+      "endMs": 8212
+    },
+    {
+      "id": "delete-open",
+      "startMs": 8665,
+      "endMs": 9535
+    },
+    {
+      "id": "backup",
+      "startMs": 9988,
+      "endMs": 14088
+    },
+    {
+      "id": "confirm",
+      "startMs": 14541,
+      "endMs": 15351
+    },
+    {
+      "id": "result",
+      "startMs": 15803,
+      "endMs": 15809
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "prepare",
+      "phrase": "Si des bénévoles doivent être",
+      "startMs": 16734,
+      "endMs": 24000,
+      "cueMs": 5386
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Le bouton Archiver demande",
+      "startMs": 0,
+      "endMs": 4783,
+      "cueMs": 6649
+    },
+    {
+      "segmentId": "archive",
+      "phrase": "Après validation, la page publique disparaît",
+      "startMs": 4783,
+      "endMs": 16304,
+      "cueMs": 7427
+    },
+    {
+      "segmentId": "delete-open",
+      "phrase": "Le récapitulatif indique précisément combien",
+      "startMs": 10222,
+      "endMs": 20444,
+      "cueMs": 8687
+    },
+    {
+      "segmentId": "backup",
+      "phrase": "Avant d’aller plus loin, ouvrez l’export PDF",
+      "startMs": 0,
+      "endMs": 3756,
+      "cueMs": 10002
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Tant qu’il ne correspond pas",
+      "startMs": 5948,
+      "endMs": 10957,
+      "cueMs": 14559
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Une fois la suppression lancée",
+      "startMs": 10957,
+      "endMs": 24000,
+      "cueMs": 14566
+    }
+  ]
+}

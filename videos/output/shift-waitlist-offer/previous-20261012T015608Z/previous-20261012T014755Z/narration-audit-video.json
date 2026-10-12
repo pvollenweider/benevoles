@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T00:31:08.706Z",
+  "revalidatedAt": "2026-10-12T00:31:08.707Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "42c9b390563bfe67c0b287848012be6186c1addb7dfe35cda25107896d660e9a",
+      "recognized": "Une capacité protège l'organisation contre le sur-effectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d'attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu'une place se libère.",
+      "expected": "Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.",
+      "wordErrorRate": 0.04878048780487805,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "setup",
+      "audioSha256": "5da511a62ae4913687a3608295476e1d68dcd6192d8fc8b724481a3c45e4278d",
+      "recognized": "La liste d'attente s'active sur le créneau. Tant que la capacité n'est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l'attente et voit sa position au lieu de recevoir une fausse confirmation.",
+      "expected": "La liste d’attente s’active sur le créneau. Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin",
+      "audioSha256": "13f516499ced2a9db11b81189320399e54c062a17ded05733dd105d27aad4b1a",
+      "recognized": "Dans l'administration, les inscriptions confirmées et les personnes en attente restent distinctes. L'ordre dépend du moment d'inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes, ni perdre l'historique.",
+      "expected": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "release",
+      "audioSha256": "70c3b9011b8eb70e18391d547c816e5c86f5bde0f29b4d3e2648e5d9bd7df1d0",
+      "recognized": "Quand une personne confirmée se désinscrit, la place n'est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.",
+      "expected": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "volunteer",
+      "audioSha256": "05efa33ddc6b2116c54e0ff486852d095e1df7398f2b65b18a9e9fd983cf58a4",
+      "recognized": "Sur sa page, la personne voit l'offre, son expiration et les actions accepter ou refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.",
+      "expected": "Sur sa page, la personne voit l’offre, son expiration et les actions Accepter ou Refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "expiry",
+      "audioSha256": "ce026076c6c4f0b2e5383aa1f337d126789eb661bd68fc14c9235c67e0ddc9bd",
+      "recognized": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment. La promotion passe à la personne suivante. L'administration montre alors l'offre active et la nouvelle position des autres personnes en attente.",
+      "expected": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "5931d505c84e32367b5a3807c2ebcb9e4717f04840f2b20a989a4faf2e677caf",
+      "recognized": "La liste d'attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l'ordre, l'offre en cours et les délais avant de promettre une place à quelqu'un par un autre canal.",
+      "expected": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

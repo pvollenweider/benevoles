@@ -1,85 +1,106 @@
 WEBVTT
 
-00:00:01.101 --> 00:00:05.541
+00:00:01.108 --> 00:00:05.991
 La Frise n’est pas seulement une vue de
 lecture. Elle permet aussi de construire
 
-00:00:05.541 --> 00:00:09.663
+00:00:05.991 --> 00:00:10.177
 rapidement un planning visuel : dessiner
-une plage libre, ajuster sa durée, copier
+une plage libre, ajuster sa durée,
 
-00:00:09.663 --> 00:00:13.786
-une relève et ouvrir le détail sans
-quitter le contexte de la journée.
+00:00:10.177 --> 00:00:15.060
+dupliquer une relève et ouvrir le détail
+sans quitter le contexte de la journée.
 
-00:00:14.239 --> 00:00:18.881
-Dans une zone vide, clique puis fais
-glisser jusqu’à l’heure de fin souhaitée.
+00:00:15.513 --> 00:00:20.837
+Dans la ligne d’un poste, cliquez dans une
+zone vide puis faites glisser jusqu’à
 
-00:00:18.881 --> 00:00:24.238
-Le formulaire s’ouvre avec la date et les
-heures déjà calculées. Il reste à choisir
+00:00:20.837 --> 00:00:25.781
+l’heure de fin souhaitée. Le créneau est
+créé, et ses actions rapides s’ouvrent
 
-00:00:24.238 --> 00:00:27.452
-le poste, le libellé et la capacité avant
-d’enregistrer.
+00:00:25.781 --> 00:00:30.344
+avec les horaires calculés. Donnez-lui un
+libellé, ajustez les places, puis fermez
 
-00:00:27.905 --> 00:00:32.675
+00:00:30.344 --> 00:00:31.865
+avec Fermer et enregistrer.
+
+00:00:32.415 --> 00:00:37.557
 Pour corriger une durée, attrape le bord
-droit du créneau et déplace-le. La grille
+droit du créneau et déplace-le. Ici, la
 
-00:00:32.675 --> 00:00:36.763
-aide à rester sur des horaires cohérents.
-Une modification rapide doit rester
+00:00:37.557 --> 00:00:41.964
+barre s’allonge de quarante-cinq minutes,
+par pas de quinze minutes. Rouvre ensuite
 
-00:00:36.763 --> 00:00:40.170
-lisible : vérifie toujours les heures
-affichées après le geste.
+00:00:41.964 --> 00:00:47.106
+les actions rapides : l’heure de fin a
+bien changé. Vérifie-la avant de fermer.
 
-00:00:40.623 --> 00:00:45.334
+00:00:47.560 --> 00:00:52.794
 Un clic sur la barre ouvre ses actions
 rapides. On y retrouve les heures, l’état
 
-00:00:45.334 --> 00:00:49.417
+00:00:52.794 --> 00:00:57.330
 des inscriptions et les commandes utiles.
 C’est le bon endroit pour une petite
 
-00:00:49.417 --> 00:00:51.301
+00:00:57.330 --> 00:00:59.423
 correction, sans parcourir tout le
 formulaire.
 
-00:00:51.754 --> 00:00:56.673
-Copier reprend le poste, la durée, la
-capacité et les informations du créneau,
+00:00:59.877 --> 00:01:05.609
+Dupliquer reprend le poste, la durée, la
+capacité et les informations du créneau.
 
-00:00:56.673 --> 00:01:01.971
-puis place la nouvelle plage à l’horaire
-choisi. La copie est indépendante : elle
+00:01:05.609 --> 00:01:11.341
+La nouvelle plage commence juste après
+l’originale. Ouvrez cette copie : elle est
 
-00:01:01.971 --> 00:01:05.377
-peut ensuite recevoir un autre libellé ou
-d’autres consignes.
+00:01:11.341 --> 00:01:16.631
+indépendante. Donne-lui le libellé Relève
+suivante, puis ajustez ses heures. Ici, on
 
-00:01:05.831 --> 00:01:11.091
-Dès qu’une modification concerne le lieu,
-le contact, l’âge minimum ou les règles
+00:01:16.631 --> 00:01:22.804
+la décale de quinze minutes avec le bouton
+Décaler. Fermer et enregistrer conserve le
 
-00:01:11.091 --> 00:01:15.137
-d’inscription, ouvre l’éditeur détaillé.
-Les gestes de Frise accélèrent la
+00:01:22.804 --> 00:01:23.686
+nouveau libellé.
 
-00:01:15.137 --> 00:01:18.779
-construction ; l’éditeur reste la source
-complète avant publication.
+00:01:24.140 --> 00:01:30.154
+Pour ajouter une consigne à cette relève,
+passez en Liste, puis cliquez sur
 
-00:01:19.231 --> 00:01:23.323
-Travaille d’abord visuellement, puis relis
-la Liste pour contrôler les valeurs. Cette
+00:01:30.154 --> 00:01:35.244
+Modifier. L’éditeur détaillé contient
+aussi le lieu, le contact, l’âge minimum
 
-00:01:23.323 --> 00:01:27.757
-combinaison est rapide, mais elle garde un
-résultat précis et compréhensible pour les
+00:01:35.244 --> 00:01:40.333
+et les règles d’inscription. Ici,
+saisissez Venir dix minutes avant dans
 
-00:01:27.757 --> 00:01:28.098
-bénévoles.
+00:01:40.333 --> 00:01:45.422
+Consigne pratique, puis enregistrez. Ce
+conseil appartient à la copie, sans
+
+00:01:45.422 --> 00:01:46.347
+modifier l’original.
+
+00:01:48.754 --> 00:01:53.208
+De retour en Liste, les deux créneaux sont
+bien présents après rechargement.
+
+00:01:53.208 --> 00:01:58.033
+L’original conserve son libellé, et Relève
+suivante a ses propres horaires et trois
+
+00:01:58.033 --> 00:02:02.487
+places. Cette relecture permet de
+contrôler le résultat réel des gestes de
+
+00:02:02.487 --> 00:02:03.600
+Frise avant publication.
 

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:14.106Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "26b22f4c163d1cd7845fe6ccd5dfeb12e9f11897f9fecf55a687a197ab2e68ac",
+  "clipSha256": "566d451fd2c530179cd3b9b5643305c83d250a2a96adae968b036af0e5aa18f8",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "Dans l'administration, les inscriptions confirmées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans l'administration, les inscriptions confirmées et les personnes en attente restent distinctes.",
+        "visibleSeconds": 0.5,
+        "visible": "Tableau des inscriptions avec distinction entre bénévoles confirmés et bénévoles en liste d'attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "L'ordre dépend du moment d'inscription.",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage des numéros d'ordre dans la colonne Statut (Liste d'attente position 1)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "sans déplacer manuellement les lignes ni perdre l'historique.",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement vers le bas montrant les positions suivantes et la section Annulations récentes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec la présentation visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:32.654Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "9f1ac979c72538879495a797f60849db9fc6d6b280991b361b0fa8592f4a382e",
+  "clipSha256": "fcd2003858e151ffaab717b4db1773ad429716b3296c592bb1d856c609ca688d",
+  "scene": "result",
+  "review": {
+    "heardOpening": "La liste d'attente est utile",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La liste d’attente est utile pour les missions demandées",
+        "visibleSeconds": 0.5,
+        "visible": "Page des Inscriptions avec filtre Buvette et affichage des lignes en attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Vérifie la capacité, l’ordre",
+        "visibleSeconds": 4.5,
+        "visible": "Ligne d'Eva Dessingy avec le statut « Liste d'attente position 3 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "l’offre en cours et les délais",
+        "visibleSeconds": 6.2,
+        "visible": "Ligne de Camille Rochat avec le statut « Place proposée »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

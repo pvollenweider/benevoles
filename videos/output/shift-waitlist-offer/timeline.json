@@ -1,42 +1,139 @@
 {
   "slug": "shift-waitlist-offer",
-  "recordedAt": "2026-10-04T17:33:37.198Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T01:58:38.164Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_WAITLIST_OFFER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 15109
+    },
+    {
+      "kind": "click",
+      "atMs": 15942
+    },
+    {
+      "kind": "click",
+      "atMs": 48273
+    },
+    {
+      "kind": "click",
+      "atMs": 51005
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1191,
-      "endMs": 16759
+      "startMs": 1127,
+      "endMs": 14170
     },
     {
       "id": "setup",
-      "startMs": 17210,
-      "endMs": 33104
+      "startMs": 16289,
+      "endMs": 29905
     },
     {
       "id": "admin",
-      "startMs": 33556,
-      "endMs": 47699
+      "startMs": 30359,
+      "endMs": 42442
     },
     {
       "id": "release",
-      "startMs": 49859,
-      "endMs": 63183
+      "startMs": 44605,
+      "endMs": 56024
     },
     {
       "id": "volunteer",
-      "startMs": 63635,
-      "endMs": 78535
+      "startMs": 56476,
+      "endMs": 70861
     },
     {
       "id": "expiry",
-      "startMs": 78987,
-      "endMs": 92387
+      "startMs": 71312,
+      "endMs": 82834
     },
     {
       "id": "result",
-      "startMs": 92840,
-      "endMs": 105459
+      "startMs": 83287,
+      "endMs": 93750
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "setup",
+      "phrase": "La liste d’attente s’active sur le créneau",
+      "startMs": 234,
+      "endMs": 2306,
+      "cueMs": 16524
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Tant que la capacité n’est pas atteinte",
+      "startMs": 3051,
+      "endMs": 6542,
+      "cueMs": 19343
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Une fois le créneau complet",
+      "startMs": 7269,
+      "endMs": 13371,
+      "cueMs": 23559
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "On peut ainsi répondre à",
+      "startMs": 7516,
+      "endMs": 11837,
+      "cueMs": 37875
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Prendre la place confirme immédiatement",
+      "startMs": 6509,
+      "endMs": 8653,
+      "cueMs": 62986
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Refuser la place conserve une réponse explicite",
+      "startMs": 9286,
+      "endMs": 14383,
+      "cueMs": 65764
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "la promotion passe à la",
+      "startMs": 3768,
+      "endMs": 5628,
+      "cueMs": 75082
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "Dans l’administration, on peut suivre l’offre active",
+      "startMs": 5873,
+      "endMs": 11346,
+      "cueMs": 77190
     }
   ]
 }

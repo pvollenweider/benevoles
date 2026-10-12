@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:25.723Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "9590a17b24d84f7b4e533df7555b8300f027b2f40f612a152a72c16014bdcacd",
+  "clipSha256": "0766b27ddbbf28c5219353d1b8cfee839b9a2cd6c4f18e04f0d434cfb21eb4f3",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Créons la copie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créons la copie.",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le bouton bleu « Créer la copie » en bas de page.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Elle s’ouvre dans l’administration avec le statut Brouillon.",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page de l'événement « Fête du village de Montvert 2027 » avec l'étape « 1 Brouillon » cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Vérifions ses réglages : les inscriptions sont fermées.",
+        "visibleSeconds": 9.2,
+        "visible": "Page « Modifier l'événement » affichant le statut Brouillon et la case d'ouverture des inscriptions décochée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire, naturelle et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

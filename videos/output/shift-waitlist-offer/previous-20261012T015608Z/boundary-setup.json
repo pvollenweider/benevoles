@@ -1,0 +1,12 @@
+{
+  "anchor": "La liste d’attente s’active sur le créneau. Tant que la capacité",
+  "windowStart": 0.7210000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 12.8,
+    "wordsHeard": "La liste d’attente s’active sur le créneau. Tant que la capacité"
+  },
+  "onset": 13.521,
+  "proposedCut": 13.042521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,70 @@
+{
+  "id": "ORG_TEAM_PERMISSIONS",
+  "slug": "org-team-permissions",
+  "validatedAt": "2026-10-11T23:08:49.299Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 132120,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12781,
+      "audioMs": 12779,
+      "driftMs": 2
+    },
+    {
+      "id": "roles",
+      "visualMs": 20887,
+      "audioMs": 20884,
+      "driftMs": 3
+    },
+    {
+      "id": "invite",
+      "visualMs": 15402,
+      "audioMs": 15400,
+      "driftMs": 2
+    },
+    {
+      "id": "invite-result",
+      "visualMs": 11416,
+      "audioMs": 11413,
+      "driftMs": 3
+    },
+    {
+      "id": "change-role",
+      "visualMs": 15498,
+      "audioMs": 15498,
+      "driftMs": 0
+    },
+    {
+      "id": "organizer-view",
+      "visualMs": 13541,
+      "audioMs": 13539,
+      "driftMs": 2
+    },
+    {
+      "id": "limits",
+      "visualMs": 21757,
+      "audioMs": 21754,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 11495,
+      "audioMs": 11493,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 6,
+  "music": {
+    "voicedWindows": 118,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

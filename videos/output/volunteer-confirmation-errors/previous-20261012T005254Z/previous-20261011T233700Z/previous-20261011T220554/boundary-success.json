@@ -1,0 +1,12 @@
+{
+  "anchor": "La connexion est rétablie et l’inscription réussit. La page confirme le",
+  "windowStart": 92.152,
+  "result": {
+    "found": true,
+    "startSeconds": 8.84,
+    "wordsHeard": "La connexion est rétablie et l’inscription réussit. La page confirme le"
+  },
+  "onset": 100.992,
+  "proposedCut": 100.772458,
+  "note": "Proposal only; recut then independently audit before capture"
+}

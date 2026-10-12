@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: VOLUNTEER_CONFIRMATION_ERRORS
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 0 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: None / None LU. Effects vs input events: None; counts match: None. OCR flags: None. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: Rehearsal fails at overlap: remembered Alex contact concatenated with Aline, native French validation rejects email and no request is sent. Evidence review/prefill-failure.png. No narrated capture or final MP4; all final delivery checks unavailable. Changed capacity transcript required full continuous TTS; four silence boundaries recut; independent source audit passed all11 chapters before rehearsal. Native validation is now French. Next source changes require a future TTS/audit.
+Local source changes: record-registration-errors.ts now shows remembered-contact notice and uses real Ce n’est pas moi, effacer button before each different public persona. Manifest and script account for that in overlap/response-loss/invitation-success. No re-film after transcript changes.
+Real-time subjective listening unavailable; not used as a failure reason.

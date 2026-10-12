@@ -1,59 +1,61 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:13:45.183Z",
-  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
-  "promptSha256": "8eb8c31d6c1c61f99854ab7f0928edd4ab2ece22cad01eecc47c47d31285ff2a",
-  "clipSha256": "32b96e9152c530b9b0d1a0e560aa4e0de93b8cd1f468e862f2a004ae7da2f8fa",
+  "reviewedAt": "2026-10-12T01:19:20.676Z",
+  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "promptSha256": "6df3ef4529212d94ee95d077b1e7e4d427df9f01e9f1cdef5f6faff70f304c11",
+  "clipSha256": "0918cc485fa7f7f4deec244dc837f1030e3a826dc79cd7e92d33e94623254939",
   "scene": "preview-form",
   "review": {
     "heardOpening": "Sélectionnons un créneau et poursuivons",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Sélectionnons un créneau et poursuivons jusqu’au formulaire",
-        "visibleSeconds": 2.8,
-        "visible": "Clic sur le bouton Continuer et affichage du formulaire",
+        "spokenSeconds": 1,
+        "spoken": "Sélectionnons un créneau et poursuivons jusqu’au formulaire.",
+        "visibleSeconds": 2,
+        "visible": "Sélection du créneau puis affichage de la page du formulaire « Tes informations ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
-        "spoken": "renseignons une identité fictive : Alex Martin",
-        "visibleSeconds": 6.8,
-        "visible": "Saisie de Alex dans Prénom puis Martin dans Nom",
+        "spoken": "Pour ce test, renseignons une identité fictive : Alex Martin.",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie de « Alex » dans le prénom et « Martin » dans le nom.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.5,
-        "spoken": "Ajoutons son adresse email de démonstration et son téléphone fictif",
-        "visibleSeconds": 10.2,
-        "visible": "Saisie de l'adresse email puis du numéro de téléphone",
+        "spoken": "Ajoutons son adresse email de démonstration et son téléphone fictif.",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13.2,
         "spoken": "Choisissons aussi une taille de t-shirt",
-        "visibleSeconds": 17,
-        "visible": "Sélection de la taille M",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 23,
+        "visible": "Aucune taille n'est cochée pendant la phrase ; l'option S n'est sélectionnée qu'à 00:23.",
+        "sync": "late",
+        "severity": "major"
       },
       {
-        "spokenSeconds": 22.5,
+        "spokenSeconds": 23.5,
         "spoken": "Acceptons cette convention, puis l’utilisation des données",
-        "visibleSeconds": 23.5,
-        "visible": "Cochage des deux cases de consentement en bas de formulaire",
+        "visibleSeconds": 24.5,
+        "visible": "Cochage successif des cases pour la convention des bénévoles et l'utilisation des données.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:13, le choix de la taille de t-shirt est annoncé et expliqué, mais la case correspondante n'est cochée qu'à 00:23, créant un décalage d'environ 9 secondes."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et rythme régulier."
+      "observation": "Voix féminine naturelle, calme et chaleureuse, avec un débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

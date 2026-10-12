@@ -1,0 +1,697 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1108,
+    "endMs": 15060,
+    "sentences": [
+      {
+        "text": "La Frise n’est pas seulement une vue de lecture.",
+        "startMs": 224,
+        "endMs": 2256,
+        "method": "silence",
+        "absoluteStartMs": 1332
+      },
+      {
+        "text": "Elle permet aussi de construire rapidement un planning visuel :",
+        "startMs": 2599,
+        "endMs": 5820,
+        "method": "silence",
+        "absoluteStartMs": 3707
+      },
+      {
+        "text": "dessiner une plage libre, ajuster sa durée, dupliquer une relève et ouvrir le détail sans quitter le contexte de la journée.",
+        "startMs": 6503,
+        "endMs": 13610,
+        "method": "silence",
+        "absoluteStartMs": 7611
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "draw",
+    "startMs": 15513,
+    "endMs": 31963,
+    "sentences": [
+      {
+        "text": "Dans la ligne d’un poste, cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée.",
+        "startMs": 346,
+        "endMs": 6126,
+        "method": "silence",
+        "absoluteStartMs": 15859
+      },
+      {
+        "text": "Le créneau est créé, et ses actions rapides s’ouvrent avec les horaires calculés.",
+        "startMs": 6273,
+        "endMs": 11832,
+        "method": "silence",
+        "absoluteStartMs": 21786
+      },
+      {
+        "text": "Donnez-lui un libellé, ajustez les places, puis fermez avec Fermer et enregistrer.",
+        "startMs": 12368,
+        "endMs": 15950,
+        "method": "silence",
+        "absoluteStartMs": 27881
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "draw",
+        "phrase": "Donnez-lui un libellé",
+        "startMs": 12368,
+        "endMs": 15950,
+        "cueMs": 27882
+      },
+      {
+        "segmentId": "draw",
+        "phrase": "Donnez-lui un libellé, ajustez les",
+        "startMs": 12368,
+        "endMs": 15950,
+        "cueMs": 30378
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 17629
+      },
+      {
+        "kind": "click",
+        "atMs": 28373
+      },
+      {
+        "kind": "key",
+        "atMs": 28680
+      },
+      {
+        "kind": "key",
+        "atMs": 28681
+      },
+      {
+        "kind": "key",
+        "atMs": 28684
+      },
+      {
+        "kind": "key",
+        "atMs": 28687
+      },
+      {
+        "kind": "key",
+        "atMs": 28785
+      },
+      {
+        "kind": "key",
+        "atMs": 28884
+      },
+      {
+        "kind": "key",
+        "atMs": 29084
+      },
+      {
+        "kind": "key",
+        "atMs": 29182
+      },
+      {
+        "kind": "key",
+        "atMs": 29281
+      },
+      {
+        "kind": "key",
+        "atMs": 29385
+      },
+      {
+        "kind": "key",
+        "atMs": 29489
+      },
+      {
+        "kind": "key",
+        "atMs": 29593
+      },
+      {
+        "kind": "key",
+        "atMs": 29695
+      },
+      {
+        "kind": "key",
+        "atMs": 29796
+      },
+      {
+        "kind": "key",
+        "atMs": 29896
+      },
+      {
+        "kind": "key",
+        "atMs": 30096
+      },
+      {
+        "kind": "click",
+        "atMs": 30872
+      },
+      {
+        "kind": "click",
+        "atMs": 31656
+      }
+    ]
+  },
+  {
+    "chapter": "resize",
+    "startMs": 32415,
+    "endMs": 47108,
+    "sentences": [
+      {
+        "text": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le.",
+        "startMs": 412,
+        "endMs": 4798,
+        "method": "silence",
+        "absoluteStartMs": 32827
+      },
+      {
+        "text": "Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes.",
+        "startMs": 5310,
+        "endMs": 8905,
+        "method": "silence",
+        "absoluteStartMs": 37725
+      },
+      {
+        "text": "Rouvre ensuite les actions rapides :",
+        "startMs": 9271,
+        "endMs": 11050,
+        "method": "silence",
+        "absoluteStartMs": 41686
+      },
+      {
+        "text": "l’heure de fin a bien changé.",
+        "startMs": 11468,
+        "endMs": 12828,
+        "method": "silence",
+        "absoluteStartMs": 43883
+      },
+      {
+        "text": "Vérifie-la avant de fermer.",
+        "startMs": 12977,
+        "endMs": 14320,
+        "method": "silence",
+        "absoluteStartMs": 45392
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "resize",
+        "phrase": "Rouvre ensuite les actions rapides",
+        "startMs": 9271,
+        "endMs": 11050,
+        "cueMs": 41688
+      },
+      {
+        "segmentId": "resize",
+        "phrase": "Vérifie-la avant de fermer.",
+        "startMs": 12977,
+        "endMs": 14320,
+        "cueMs": 45393
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 34344
+      },
+      {
+        "kind": "click",
+        "atMs": 37705
+      },
+      {
+        "kind": "click",
+        "atMs": 42155
+      },
+      {
+        "kind": "click",
+        "atMs": 45887
+      }
+    ]
+  },
+  {
+    "chapter": "popover",
+    "startMs": 47560,
+    "endMs": 59425,
+    "sentences": [
+      {
+        "text": "Un clic sur la barre ouvre ses actions rapides.",
+        "startMs": 376,
+        "endMs": 3239,
+        "method": "silence",
+        "absoluteStartMs": 47936
+      },
+      {
+        "text": "On y retrouve les heures, l’état des inscriptions et les commandes utiles.",
+        "startMs": 3693,
+        "endMs": 7258,
+        "method": "silence",
+        "absoluteStartMs": 51253
+      },
+      {
+        "text": "C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+        "startMs": 7777,
+        "endMs": 11472,
+        "method": "silence",
+        "absoluteStartMs": 55337
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "popover",
+        "phrase": "C’est le bon endroit pour",
+        "startMs": 7777,
+        "endMs": 11472,
+        "cueMs": 55339
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 49104
+      }
+    ]
+  },
+  {
+    "chapter": "copy",
+    "startMs": 59877,
+    "endMs": 83686,
+    "sentences": [
+      {
+        "text": "Dupliquer reprend le poste, la durée, la capacité et les informations du créneau.",
+        "startMs": 397,
+        "endMs": 6050,
+        "method": "silence",
+        "absoluteStartMs": 60274
+      },
+      {
+        "text": "La nouvelle plage commence juste après l’originale.",
+        "startMs": 6614,
+        "endMs": 8781,
+        "method": "silence",
+        "absoluteStartMs": 66491
+      },
+      {
+        "text": "Ouvrez cette copie :",
+        "startMs": 9563,
+        "endMs": 10297,
+        "method": "silence",
+        "absoluteStartMs": 69440
+      },
+      {
+        "text": "elle est indépendante.",
+        "startMs": 10439,
+        "endMs": 11636,
+        "method": "silence",
+        "absoluteStartMs": 70316
+      },
+      {
+        "text": "Donne-lui le libellé Relève suivante, puis ajustez ses heures.",
+        "startMs": 12335,
+        "endMs": 16095,
+        "method": "silence",
+        "absoluteStartMs": 72212
+      },
+      {
+        "text": "Ici, on la décale de quinze minutes avec le bouton Décaler.",
+        "startMs": 16535,
+        "endMs": 20018,
+        "method": "silence",
+        "absoluteStartMs": 76412
+      },
+      {
+        "text": "Fermer et enregistrer conserve le nouveau libellé.",
+        "startMs": 20594,
+        "endMs": 23373,
+        "method": "silence",
+        "absoluteStartMs": 80471
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "copy",
+        "phrase": "Ouvrez cette copie",
+        "startMs": 9563,
+        "endMs": 10297,
+        "cueMs": 69443
+      },
+      {
+        "segmentId": "copy",
+        "phrase": "Donne-lui le libellé Relève suivante",
+        "startMs": 12335,
+        "endMs": 16095,
+        "cueMs": 72213
+      },
+      {
+        "segmentId": "copy",
+        "phrase": "Ici, on la décale de",
+        "startMs": 16535,
+        "endMs": 20018,
+        "cueMs": 76416
+      },
+      {
+        "segmentId": "copy",
+        "phrase": "Ici, on la décale de",
+        "startMs": 16535,
+        "endMs": 20018,
+        "cueMs": 77995
+      },
+      {
+        "segmentId": "copy",
+        "phrase": "Fermer et enregistrer conserve le",
+        "startMs": 20594,
+        "endMs": 23373,
+        "cueMs": 80471
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 62738
+      },
+      {
+        "kind": "click",
+        "atMs": 63553
+      },
+      {
+        "kind": "click",
+        "atMs": 69904
+      },
+      {
+        "kind": "click",
+        "atMs": 72687
+      },
+      {
+        "kind": "key",
+        "atMs": 72995
+      },
+      {
+        "kind": "key",
+        "atMs": 72995
+      },
+      {
+        "kind": "key",
+        "atMs": 72998
+      },
+      {
+        "kind": "key",
+        "atMs": 73002
+      },
+      {
+        "kind": "key",
+        "atMs": 73099
+      },
+      {
+        "kind": "key",
+        "atMs": 73198
+      },
+      {
+        "kind": "key",
+        "atMs": 73400
+      },
+      {
+        "kind": "key",
+        "atMs": 73498
+      },
+      {
+        "kind": "key",
+        "atMs": 73596
+      },
+      {
+        "kind": "key",
+        "atMs": 73699
+      },
+      {
+        "kind": "key",
+        "atMs": 73803
+      },
+      {
+        "kind": "key",
+        "atMs": 73905
+      },
+      {
+        "kind": "key",
+        "atMs": 74006
+      },
+      {
+        "kind": "key",
+        "atMs": 74108
+      },
+      {
+        "kind": "key",
+        "atMs": 74209
+      },
+      {
+        "kind": "key",
+        "atMs": 74314
+      },
+      {
+        "kind": "key",
+        "atMs": 74415
+      },
+      {
+        "kind": "click",
+        "atMs": 76903
+      },
+      {
+        "kind": "click",
+        "atMs": 77686
+      },
+      {
+        "kind": "click",
+        "atMs": 78487
+      },
+      {
+        "kind": "click",
+        "atMs": 80953
+      }
+    ]
+  },
+  {
+    "chapter": "detail",
+    "startMs": 84140,
+    "endMs": 106350,
+    "sentences": [
+      {
+        "text": "Pour ajouter une consigne à cette relève, passez en Liste, puis cliquez sur Modifier.",
+        "startMs": 436,
+        "endMs": 6026,
+        "method": "silence",
+        "absoluteStartMs": 84576
+      },
+      {
+        "text": "L’éditeur détaillé contient aussi le lieu, le contact, l’âge minimum et les règles d’inscription.",
+        "startMs": 6157,
+        "endMs": 11969,
+        "method": "silence",
+        "absoluteStartMs": 90297
+      },
+      {
+        "text": "Ici, saisissez Venir dix minutes avant dans Consigne pratique, puis enregistrez.",
+        "startMs": 12742,
+        "endMs": 18221,
+        "method": "silence",
+        "absoluteStartMs": 96882
+      },
+      {
+        "text": "Ce conseil appartient à la copie, sans modifier l’original.",
+        "startMs": 18814,
+        "endMs": 21863,
+        "method": "silence",
+        "absoluteStartMs": 102954
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "detail",
+        "phrase": "Pour ajouter une consigne à cette relève",
+        "startMs": 436,
+        "endMs": 6026,
+        "cueMs": 84578
+      },
+      {
+        "segmentId": "detail",
+        "phrase": "Pour ajouter une consigne à cette relève",
+        "startMs": 436,
+        "endMs": 6026,
+        "cueMs": 85417
+      },
+      {
+        "segmentId": "detail",
+        "phrase": "Ici, saisissez Venir dix minutes avant",
+        "startMs": 12742,
+        "endMs": 18221,
+        "cueMs": 96884
+      },
+      {
+        "segmentId": "detail",
+        "phrase": "Ce conseil appartient à la",
+        "startMs": 18814,
+        "endMs": 21863,
+        "cueMs": 102955
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 85070
+      },
+      {
+        "kind": "click",
+        "atMs": 85902
+      },
+      {
+        "kind": "click",
+        "atMs": 97385
+      },
+      {
+        "kind": "key",
+        "atMs": 97693
+      },
+      {
+        "kind": "key",
+        "atMs": 97693
+      },
+      {
+        "kind": "key",
+        "atMs": 97696
+      },
+      {
+        "kind": "key",
+        "atMs": 97699
+      },
+      {
+        "kind": "key",
+        "atMs": 97798
+      },
+      {
+        "kind": "key",
+        "atMs": 97898
+      },
+      {
+        "kind": "key",
+        "atMs": 97996
+      },
+      {
+        "kind": "key",
+        "atMs": 98096
+      },
+      {
+        "kind": "key",
+        "atMs": 98195
+      },
+      {
+        "kind": "key",
+        "atMs": 98296
+      },
+      {
+        "kind": "key",
+        "atMs": 98401
+      },
+      {
+        "kind": "key",
+        "atMs": 98501
+      },
+      {
+        "kind": "key",
+        "atMs": 98602
+      },
+      {
+        "kind": "key",
+        "atMs": 98701
+      },
+      {
+        "kind": "key",
+        "atMs": 98800
+      },
+      {
+        "kind": "key",
+        "atMs": 98903
+      },
+      {
+        "kind": "key",
+        "atMs": 99003
+      },
+      {
+        "kind": "key",
+        "atMs": 99108
+      },
+      {
+        "kind": "key",
+        "atMs": 99210
+      },
+      {
+        "kind": "key",
+        "atMs": 99312
+      },
+      {
+        "kind": "key",
+        "atMs": 99414
+      },
+      {
+        "kind": "key",
+        "atMs": 99515
+      },
+      {
+        "kind": "key",
+        "atMs": 99619
+      },
+      {
+        "kind": "key",
+        "atMs": 99718
+      },
+      {
+        "kind": "key",
+        "atMs": 99818
+      },
+      {
+        "kind": "key",
+        "atMs": 99916
+      },
+      {
+        "kind": "click",
+        "atMs": 103436
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 108754,
+    "endMs": 123602,
+    "sentences": [
+      {
+        "text": "De retour en Liste, les deux créneaux sont bien présents après rechargement.",
+        "startMs": 346,
+        "endMs": 4078,
+        "method": "silence",
+        "absoluteStartMs": 109100
+      },
+      {
+        "text": "L’original conserve son libellé, et Relève suivante a ses propres horaires et trois places.",
+        "startMs": 4758,
+        "endMs": 9826,
+        "method": "silence",
+        "absoluteStartMs": 113512
+      },
+      {
+        "text": "Cette relecture permet de contrôler le résultat réel des gestes de Frise avant publication.",
+        "startMs": 10179,
+        "endMs": 14450,
+        "method": "silence",
+        "absoluteStartMs": 118933
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "L’original conserve son libellé, et",
+        "startMs": 4758,
+        "endMs": 9826,
+        "cueMs": 113512
+      }
+    ],
+    "interactions": []
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:00:12.765Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "b1f9b3367ddda8e7c2b16c09d2a35ae6be8d96d5dce2e032f9ec238a2c90348d",
+  "clipSha256": "5ebb4f1c48becdd4c122305f374d5c7edbe8e88e2635620a8120bca6f12518d9",
+  "scene": "popover",
+  "review": {
+    "heardOpening": "Un clic sur la barre ouvre ses actions rapides",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un clic sur la barre ouvre ses actions rapides",
+        "visibleSeconds": 3,
+        "visible": "Clic sur la barre de créneau et apparition de la fenêtre contextuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "On y retrouve les heures, l’état des inscriptions",
+        "visibleSeconds": 6,
+        "visible": "Affichage des horaires 14h-18h et de la section Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "et les commandes utiles",
+        "visibleSeconds": 6.8,
+        "visible": "Boutons d'action Décaler, Dupliquer et Voir les inscriptions visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

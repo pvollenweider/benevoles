@@ -1,0 +1,43 @@
+{
+  "slug": "event-archive-delete",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T07:47:59.025Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1087,
+      "endMs": 17876
+    },
+    {
+      "id": "prepare",
+      "startMs": 18329,
+      "endMs": 31923
+    },
+    {
+      "id": "archive",
+      "startMs": 32375,
+      "endMs": 46809
+    },
+    {
+      "id": "delete-open",
+      "startMs": 47261,
+      "endMs": 61609
+    },
+    {
+      "id": "backup",
+      "startMs": 62061,
+      "endMs": 75496
+    },
+    {
+      "id": "confirm",
+      "startMs": 75950,
+      "endMs": 89440
+    },
+    {
+      "id": "result",
+      "startMs": 89894,
+      "endMs": 103580
+    }
+  ]
+}

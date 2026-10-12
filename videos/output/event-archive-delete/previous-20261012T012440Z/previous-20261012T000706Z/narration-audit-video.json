@@ -1,0 +1,80 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T07:48:39.453Z",
+  "revalidatedAt": "2026-10-06T07:48:39.454Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "4fa9d7554df6ca6180a8ad5c937622e414f609c5535f41a834fee351f170e2f5",
+      "recognized": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l'événement du public tout en gardant ses données consultables. Supprimer efface définitivement l'édition.",
+      "expected": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l’événement du public tout en gardant ses données consultables. Supprimer efface définitivement l’édition.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "prepare",
+      "audioSha256": "2d42e8aff556bf5e1bd159c810c49beb0ecf6f2f462412437e026b4dd885fc90",
+      "recognized": "Pour cette démonstration, nous travaillons sur une copie jetable de l'ancienne édition. Dans la vraie vie, vérifie d'abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l'archivage.",
+      "expected": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifie d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l’archivage.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "archive",
+      "audioSha256": "c5cf8f49093304b9f446a2d8abd6f4cb86636e6eb6c2e0802a3ac19c2480a8c6",
+      "recognized": "Le bouton archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l'équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l'historique sans laisser croire que l'événement accepte encore du monde.",
+      "expected": "Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "delete-open",
+      "audioSha256": "06cb161ccc8461e140703cf97aeab99a15a992eacb9600caef608dfd35c50c86",
+      "recognized": "La suppression définitive n'apparaît qu'après archivage et seulement pour un propriétaire de l'organisation. Le récapitulatif indique précisément combien de créneaux, d'inscriptions et d'invitations vont disparaître. Les membres du pool, eux, sont conservés.",
+      "expected": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation. Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître. Les membres du pool, eux, sont conservés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "backup",
+      "audioSha256": "65e69f42811990bc88a2ca37864f6b0a5d270141c85cd1eaccaad56c76bd419d",
+      "recognized": "Avant d'aller plus loin, ouvre l'export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l'association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+      "expected": "Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "c94b979aa02377621cb213f55a37c6465f67621f7fe3a6b03361169941936c26",
+      "recognized": "La confirmation renforcée demande de saisir le titre de l'événement. Tant qu'il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l'application.",
+      "expected": "La confirmation renforcée demande de saisir le titre de l’événement. Tant qu’il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "91e1981c7a5a32420a129257f2624e12e7201e3f7ec0ddb8a9a0f542d001416e",
+      "recognized": "L'événement disparaît de la liste après validation. Utilise donc l'archivage comme état normal de fin de vie et réserve la suppression aux éditions de tests, aux erreurs de création ou au cas où la conservation n'a plus de raison d'être.",
+      "expected": "L’événement disparaît de la liste après validation. Utilise donc l’archivage comme état normal de fin de vie, et réserve la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
+      "wordErrorRate": 0.045454545454545456,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

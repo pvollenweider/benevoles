@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:59:24.449Z",
+  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
+  "promptSha256": "a7fd2893fe9db59bee3854aa725437bf573b74e71ad6b1d04f8d17addb5d0a08",
+  "clipSha256": "83427797fca30bcccb4c2a5b3ed50687354f669d92fd6226fc250af90930974d",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une capacité protège l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Une capacité protège l'organisation contre le sureffectif",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre « Capacités, listes d'attente et offre de place » affiché au premier plan",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "mais un créneau complet ne doit pas faire perdre les personnes encore disponibles",
+        "visibleSeconds": 3.2,
+        "visible": "Disparition du titre d'introduction, laissant voir la vue planning des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "La liste d'attente conserve leur intérêt dans un ordre clair",
+        "visibleSeconds": 3.5,
+        "visible": "Vue d'ensemble des créneaux servant de support à l'introduction conceptuelle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,9 +1,9 @@
 {
-  "checkedAt": "2026-10-05T23:36:06.880Z",
+  "checkedAt": "2026-10-12T01:00:42.392Z",
   "actualCapacityRefusal": true,
   "interruptionBeforeCommit": true,
   "publicSuccessDoesNotExposeToken": true,
-  "publicConfirmationMailId": "4QsLNBctPIBPzWfkf9hYRV",
+  "publicConfirmationMailId": "1V04H6h3T9ib68XVLFzib1",
   "actualOverlapRefused": true,
   "responseLostAfterCommit": true,
   "retryCreatedNoDuplicate": true,

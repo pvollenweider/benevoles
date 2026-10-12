@@ -1,0 +1,96 @@
+{
+  "product": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "music": {
+    "voicedWindows": 118,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "inputCounts": {
+    "click": 9,
+    "key": 35
+  },
+  "effectsCountsMatch": true,
+  "ocrFlags": [],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ici, trois personnes sont déjà",
+      "startMs": 5867,
+      "endMs": 7396,
+      "cueMs": 7001,
+      "sentenceAbsoluteMs": 6999,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "L’organisateur prépare les événements, les",
+      "startMs": 4432,
+      "endMs": 10699,
+      "cueMs": 20510,
+      "sentenceAbsoluteMs": 20508,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 21007
+      },
+      "deltaMs": 499
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "désigné pour un événement, il",
+      "startMs": 15972,
+      "endMs": 20575,
+      "cueMs": 32050,
+      "sentenceAbsoluteMs": 32048,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Cliquez sur Envoyer l’invitation ",
+      "startMs": 11848,
+      "endMs": 13249,
+      "cueMs": 50418,
+      "sentenceAbsoluteMs": 50416,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 50883
+      },
+      "deltaMs": 467
+    },
+    {
+      "segmentId": "invite-result",
+      "phrase": "on peut aussi copier ce",
+      "startMs": 5896,
+      "endMs": 8109,
+      "cueMs": 60320,
+      "sentenceAbsoluteMs": 60318,
+      "firstInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 60783
+      },
+      "deltaMs": 465
+    },
+    {
+      "segmentId": "invite-result",
+      "phrase": "Son accès ne devient actif",
+      "startMs": 8758,
+      "endMs": 11127,
+      "cueMs": 63182,
+      "sentenceAbsoluteMs": 63180,
+      "firstInputAfterAnchor": null,
+      "deltaMs": null
+    }
+  ]
+}

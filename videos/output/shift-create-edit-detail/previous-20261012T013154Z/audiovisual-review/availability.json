@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:21:56.885Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "0045e5556f593bd051f6ea028684f39e030a9b54ed6280354a199489d59aba45",
+  "clipSha256": "bff94d87ccc88e8be94f06a6c1e00c23fed7097720b864ab972b25de6886c2a0",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Deux options complètent le fonctionnement du créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Deux options complètent le fonctionnement du créneau",
+        "visibleSeconds": 0,
+        "visible": "Formulaire affichant les options 'Activer la liste d'attente' et 'Sur validation'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "La liste d'attente recueille les volontaires",
+        "visibleSeconds": 3,
+        "visible": "Coche de la case 'Activer la liste d'attente'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le mode Sur validation transforme chaque inscription en demande",
+        "visibleSeconds": 7,
+        "visible": "Coche de la case 'Sur validation'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

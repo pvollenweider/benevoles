@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:50:43.849Z",
-  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
-  "promptSha256": "378a2aa121c3ae1a4d4408dcf0193fa6edb21fedcb45b408068354b360f70d69",
-  "clipSha256": "1b8993c6cdf5e615738ce6a58af09095b9c27c4c150b47c8d8d9b587a19bcba5",
+  "reviewedAt": "2026-10-12T01:28:03.290Z",
+  "videoSha256": "2d9a500e8a823bb33e2bf33e6d39aafe9dd78888fe625dddc65be145edb74320",
+  "promptSha256": "6bec33b828bbf6f84ef168a3f8014608cad1418132786631a5f7e3c6b8de0307",
+  "clipSha256": "316ff4b7305c6b31277e957e6085895ae7668fd623f59262ec8531af8631f979",
   "scene": "delete-open",
   "review": {
-    "heardOpening": "La suppression définitive n'apparaît",
+    "heardOpening": "La suppression définitive n'apparaît qu'après archivage",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "La suppression définitive n'apparaît qu'après archivage",
         "visibleSeconds": 0,
-        "visible": "Section 'Suppression définitive' avec bouton visible en bas de page",
+        "visible": "Section 'Suppression définitive' affichée avec la mention de l'archivage préalable et le bouton d'action",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.2,
-        "spoken": "Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître",
-        "visibleSeconds": 5.5,
-        "visible": "Modale affichant le décompte des créneaux, inscriptions et invitations",
+        "spoken": "Le récapitulatif indique précisément combien de créneaux, d'inscriptions et d'invitations vont disparaître",
+        "visibleSeconds": 6.6,
+        "visible": "Ouverture de la fenêtre modale détaillant les créneaux, inscriptions et invitations impactés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.6,
+        "spokenSeconds": 10.9,
         "spoken": "Les membres du pool, eux, sont conservés",
-        "visibleSeconds": 5.5,
-        "visible": "Mention 'Les membres du pool et l'organisation sont conservés' dans la modale",
+        "visibleSeconds": 7,
+        "visible": "Mention explicite dans la modale indiquant que les membres du pool et l'organisation sont conservés",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et régulière."
+      "observation": "Voix claire, posée et bien synchronisée avec l'apparition de la modale récapitulative."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

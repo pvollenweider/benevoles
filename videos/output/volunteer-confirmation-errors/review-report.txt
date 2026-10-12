@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "status": "READY",
+  "duration": 308.52,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 273,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.8,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.2
+  },
+  "problems": "66 images finales et preuves 164.8/194.1/258.8/171.3 revues ; sélection Aline 164.62 vs phrase164.13, Nicolas193.90 vs193.42, taille invitation258.58 vs258.10. Refus chevauchement visible171.3 pendant sa phrase170.60–174.97 ; cinq inscriptions finales et deux créneaux Aline. Tous chapitres conformes, Frise/dates françaises/aucune adresse interdite/overlay ; aucun bug de disposition produit. Validation, ASR final11/11, VTT, effets exacts48clics/53touches et musique passent. Mailpit dates anglaises : défaut connu seulement.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
+  "report": "videos/output/volunteer-confirmation-errors/review-report.txt"
+}

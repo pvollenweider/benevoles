@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:11:46.412Z",
+  "videoSha256": "9263e833b5b82a3432b4ec5ccafd1127ff2ffd16e5a3d8667ff11e4156bac7fa",
+  "promptSha256": "46ca2a100a1f52b805d8d5997b991faa3817098d87e2b3d2a91a6875fdfec822",
+  "clipSha256": "13b1e0b01d33be05ad6f9c8fece6d06d093cc4ec94df2975f0b710fb5e43527a",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "La confirmation renforcée demande de saisir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "demande de saisir le titre de l'événement",
+        "visibleSeconds": 1.5,
+        "visible": "Fenêtre modale demandant la saisie du titre exact de l'événement pour confirmer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "le bouton reste indisponible",
+        "visibleSeconds": 5.5,
+        "visible": "Le texte est saisi dans le champ et le bouton 'Supprimer définitivement' s'active",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Une fois la suppression lancée",
+        "visibleSeconds": 8,
+        "visible": "Clic sur le bouton rouge 'Supprimer définitivement'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "les données rattachées ne sont pas récupérables depuis l'application",
+        "visibleSeconds": 10.5,
+        "visible": "Retour à la page des événements avec le bandeau vert 'Événement supprimé'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse naturelle, fluide et bien calée sur les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,278 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1122,
+    "endMs": 15376,
+    "sentences": [
+      {
+        "text": "Un poste décrit une mission, par exemple Accueil ou Buvette.",
+        "startMs": 230,
+        "endMs": 3988,
+        "method": "silence",
+        "absoluteStartMs": 1352
+      },
+      {
+        "text": "Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places.",
+        "startMs": 4183,
+        "endMs": 9628,
+        "method": "silence",
+        "absoluteStartMs": 5305
+      },
+      {
+        "text": "Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.",
+        "startMs": 9795,
+        "endMs": 14037,
+        "method": "silence",
+        "absoluteStartMs": 10917
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "timeline",
+    "startMs": 15828,
+    "endMs": 30398,
+    "sentences": [
+      {
+        "text": "La vue Frise répond d’abord à une question visuelle :",
+        "startMs": 219,
+        "endMs": 2860,
+        "method": "silence",
+        "absoluteStartMs": 16047
+      },
+      {
+        "text": "quelles missions faut-il assurer, et quand ?",
+        "startMs": 3222,
+        "endMs": 5088,
+        "method": "silence",
+        "absoluteStartMs": 19050
+      },
+      {
+        "text": "Les barres montrent les horaires des créneaux.",
+        "startMs": 5485,
+        "endMs": 7403,
+        "method": "silence",
+        "absoluteStartMs": 21313
+      },
+      {
+        "text": "Leur longueur permet de repérer les chevauchements, les trous et les périodes chargées.",
+        "startMs": 7732,
+        "endMs": 11839,
+        "method": "silence",
+        "absoluteStartMs": 23560
+      },
+      {
+        "text": "Une couleur peut aider à reconnaître un poste.",
+        "startMs": 12233,
+        "endMs": 14352,
+        "method": "silence",
+        "absoluteStartMs": 28061
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "list",
+    "startMs": 30851,
+    "endMs": 42452,
+    "sentences": [
+      {
+        "text": "La vue Liste présente les mêmes données sous une forme plus compacte.",
+        "startMs": 215,
+        "endMs": 3678,
+        "method": "silence",
+        "absoluteStartMs": 31066
+      },
+      {
+        "text": "Elle est pratique pour relire les libellés, les capacités et les statuts, ou pour parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire.",
+        "startMs": 3808,
+        "endMs": 11379,
+        "method": "silence",
+        "absoluteStartMs": 34659
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "list",
+        "phrase": "La vue Liste présente",
+        "startMs": 215,
+        "endMs": 3678,
+        "cueMs": 31067
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 31563
+      }
+    ]
+  },
+  {
+    "chapter": "roles",
+    "startMs": 42905,
+    "endMs": 58043,
+    "sentences": [
+      {
+        "text": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning.",
+        "startMs": 276,
+        "endMs": 4170,
+        "method": "silence",
+        "absoluteStartMs": 43181
+      },
+      {
+        "text": "Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé.",
+        "startMs": 4594,
+        "endMs": 11076,
+        "method": "silence",
+        "absoluteStartMs": 47499
+      },
+      {
+        "text": "C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.",
+        "startMs": 11426,
+        "endMs": 14905,
+        "method": "silence",
+        "absoluteStartMs": 54331
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "roles",
+        "phrase": "Dans Gérer les postes",
+        "startMs": 276,
+        "endMs": 4170,
+        "cueMs": 43184
+      },
+      {
+        "segmentId": "roles",
+        "phrase": "Les flèches Monter et Descendre",
+        "startMs": 4594,
+        "endMs": 11076,
+        "cueMs": 47502
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 43676
+      },
+      {
+        "kind": "click",
+        "atMs": 47977
+      }
+    ]
+  },
+  {
+    "chapter": "colors",
+    "startMs": 58496,
+    "endMs": 71663,
+    "sentences": [
+      {
+        "text": "La couleur sert à reconnaître une mission d’un coup d’œil.",
+        "startMs": 174,
+        "endMs": 3098,
+        "method": "silence",
+        "absoluteStartMs": 58670
+      },
+      {
+        "text": "Choisissez-la dans la palette prévue :",
+        "startMs": 3586,
+        "endMs": 5311,
+        "method": "silence",
+        "absoluteStartMs": 62082
+      },
+      {
+        "text": "elle reste cohérente dans les vues et lisible pour les bénévoles.",
+        "startMs": 5512,
+        "endMs": 8406,
+        "method": "silence",
+        "absoluteStartMs": 64008
+      },
+      {
+        "text": "La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.",
+        "startMs": 8747,
+        "endMs": 12969,
+        "method": "silence",
+        "absoluteStartMs": 67243
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "colors",
+        "phrase": "Choisissez-la dans la palette prévue",
+        "startMs": 3586,
+        "endMs": 5311,
+        "cueMs": 62084
+      },
+      {
+        "segmentId": "colors",
+        "phrase": "elle reste cohérente dans les",
+        "startMs": 5512,
+        "endMs": 8406,
+        "cueMs": 64011
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 62574
+      },
+      {
+        "kind": "click",
+        "atMs": 64526
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 72913,
+    "endMs": 86195,
+    "sentences": [
+      {
+        "text": "Utilisez la Frise pour construire et équilibrer la journée, puis la Liste pour contrôler le détail.",
+        "startMs": 200,
+        "endMs": 5505,
+        "method": "silence",
+        "absoluteStartMs": 73113
+      },
+      {
+        "text": "Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.",
+        "startMs": 5932,
+        "endMs": 12970,
+        "method": "silence",
+        "absoluteStartMs": 78845
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "Utilisez la Frise pour construire",
+        "startMs": 200,
+        "endMs": 5505,
+        "cueMs": 73116
+      },
+      {
+        "segmentId": "result",
+        "phrase": "Avec des noms courts, un",
+        "startMs": 5932,
+        "endMs": 12970,
+        "cueMs": 78848
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 73592
+      },
+      {
+        "kind": "click",
+        "atMs": 79342
+      },
+      {
+        "kind": "click",
+        "atMs": 83757
+      }
+    ]
+  }
+]

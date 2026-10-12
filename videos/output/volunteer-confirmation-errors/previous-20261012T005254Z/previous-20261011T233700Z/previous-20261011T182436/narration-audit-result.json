@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:43.783Z",
+  "revalidatedAt": "2026-10-11T17:08:43.784Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "1548eba14bda51c6d5045c32029ae426f29cfe842eef8db3a869505c52f9b87d",
+      "recognized": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription. Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux. Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+      "expected": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription. Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux. Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

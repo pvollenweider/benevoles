@@ -1,15 +1,15 @@
 {
   "slug": "global-search",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T18:38:27.389Z",
+  "recordedAt": "2026-10-12T01:09:01.161Z",
   "video": "capture.webm",
   "product": {
-    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
-    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
-    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
-    "buildId": "uqE7YLJo_7r8CbyaqRify",
-    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
-    "builtAt": "2026-10-06T18:15:27.264Z"
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,219 +26,219 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 13745
+      "atMs": 13779
     },
     {
       "kind": "key",
-      "atMs": 17016
+      "atMs": 17020
     },
     {
       "kind": "key",
-      "atMs": 18508
+      "atMs": 19251
     },
     {
       "kind": "key",
-      "atMs": 18508
+      "atMs": 19252
     },
     {
       "kind": "key",
-      "atMs": 23482
+      "atMs": 23487
     },
     {
       "kind": "click",
-      "atMs": 28344
+      "atMs": 28361
     },
     {
       "kind": "click",
-      "atMs": 29159
+      "atMs": 29177
     },
     {
       "kind": "key",
-      "atMs": 29466
+      "atMs": 29482
     },
     {
       "kind": "key",
-      "atMs": 29662
+      "atMs": 29680
     },
     {
       "kind": "key",
-      "atMs": 29761
+      "atMs": 29778
     },
     {
       "kind": "key",
-      "atMs": 29858
+      "atMs": 29876
     },
     {
       "kind": "key",
-      "atMs": 29956
+      "atMs": 29978
     },
     {
       "kind": "key",
-      "atMs": 30054
+      "atMs": 30079
     },
     {
       "kind": "key",
-      "atMs": 30152
+      "atMs": 30182
     },
     {
       "kind": "key",
-      "atMs": 30251
+      "atMs": 30284
     },
     {
       "kind": "key",
-      "atMs": 30536
+      "atMs": 30573
     },
     {
       "kind": "click",
-      "atMs": 33365
+      "atMs": 33549
     },
     {
       "kind": "click",
-      "atMs": 37826
+      "atMs": 37779
     },
     {
       "kind": "key",
-      "atMs": 52112
+      "atMs": 52806
     },
     {
       "kind": "click",
-      "atMs": 52638
+      "atMs": 53315
     },
     {
       "kind": "key",
-      "atMs": 52945
+      "atMs": 53622
     },
     {
       "kind": "key",
-      "atMs": 53043
+      "atMs": 53720
     },
     {
       "kind": "key",
-      "atMs": 53140
+      "atMs": 53818
     },
     {
       "kind": "key",
-      "atMs": 53239
+      "atMs": 53914
     },
     {
       "kind": "key",
-      "atMs": 53336
+      "atMs": 54013
     },
     {
       "kind": "key",
-      "atMs": 53434
+      "atMs": 54116
     },
     {
       "kind": "key",
-      "atMs": 53533
+      "atMs": 54217
     },
     {
       "kind": "key",
-      "atMs": 53630
+      "atMs": 54318
     },
     {
       "kind": "key",
-      "atMs": 53728
+      "atMs": 54420
     },
     {
       "kind": "key",
-      "atMs": 53827
+      "atMs": 54522
     },
     {
       "kind": "key",
-      "atMs": 53925
+      "atMs": 54625
     },
     {
       "kind": "key",
-      "atMs": 54024
+      "atMs": 54725
     },
     {
       "kind": "key",
-      "atMs": 54121
+      "atMs": 54827
     },
     {
       "kind": "key",
-      "atMs": 54220
+      "atMs": 54930
     },
     {
       "kind": "key",
-      "atMs": 54317
+      "atMs": 55032
     },
     {
       "kind": "key",
-      "atMs": 54601
+      "atMs": 55320
     },
     {
       "kind": "click",
-      "atMs": 56573
+      "atMs": 58549
     },
     {
       "kind": "key",
-      "atMs": 68106
+      "atMs": 69345
     },
     {
       "kind": "click",
-      "atMs": 68620
+      "atMs": 69865
     },
     {
       "kind": "key",
-      "atMs": 68926
+      "atMs": 70173
     },
     {
       "kind": "key",
-      "atMs": 69122
+      "atMs": 70368
     },
     {
       "kind": "key",
-      "atMs": 69221
+      "atMs": 70465
     },
     {
       "kind": "key",
-      "atMs": 69319
+      "atMs": 70563
     },
     {
       "kind": "key",
-      "atMs": 69417
+      "atMs": 70660
     },
     {
       "kind": "key",
-      "atMs": 69515
+      "atMs": 70762
     },
     {
       "kind": "key",
-      "atMs": 69613
+      "atMs": 70863
     },
     {
       "kind": "key",
-      "atMs": 69710
+      "atMs": 70963
     },
     {
       "kind": "key",
-      "atMs": 69993
+      "atMs": 71250
     },
     {
       "kind": "key",
-      "atMs": 72197
+      "atMs": 71805
     },
     {
       "kind": "click",
-      "atMs": 72716
+      "atMs": 72323
     },
     {
       "kind": "key",
-      "atMs": 73023
+      "atMs": 72630
     },
     {
       "kind": "key",
-      "atMs": 73121
+      "atMs": 72728
     },
     {
       "kind": "key",
-      "atMs": 73219
+      "atMs": 72826
     },
     {
       "kind": "key",
-      "atMs": 73503
+      "atMs": 73112
     }
   ],
   "cues": [
@@ -249,34 +249,85 @@
     },
     {
       "id": "open",
-      "startMs": 13283,
-      "endMs": 25719
+      "startMs": 13284,
+      "endMs": 25720
     },
     {
       "id": "person",
-      "startMs": 27881,
+      "startMs": 27880,
       "endMs": 44584
     },
     {
       "id": "shift",
-      "startMs": 45034,
-      "endMs": 60407
+      "startMs": 45038,
+      "endMs": 60411
     },
     {
       "id": "limits",
-      "startMs": 60859,
-      "endMs": 76601
+      "startMs": 60864,
+      "endMs": 76607
     },
     {
       "id": "result",
-      "startMs": 77054,
-      "endMs": 89338
+      "startMs": 77059,
+      "endMs": 89343
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "open",
+      "phrase": "le champ s’ouvre et reçoit",
+      "startMs": 5961,
+      "endMs": 8359,
+      "cueMs": 19248
+    },
+    {
+      "segmentId": "person",
+      "phrase": "Ouvrons d’abord sa fiche, puis",
+      "startMs": 5196,
+      "endMs": 7532,
+      "cueMs": 33077
+    },
+    {
+      "segmentId": "person",
+      "phrase": "la liste de l’événement est déjà filtrée sur Léa",
+      "startMs": 8293,
+      "endMs": 10182,
+      "cueMs": 36175
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutons village pour ne garder",
+      "startMs": 7756,
+      "endMs": 12210,
+      "cueMs": 52799
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "la liste des inscriptions est",
+      "startMs": 13033,
+      "endMs": 14992,
+      "cueMs": 58072
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Ajoutez un prénom pour préciser",
+      "startMs": 8472,
+      "endMs": 10167,
+      "cueMs": 69338
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Les accents et la casse",
+      "startMs": 10931,
+      "endMs": 12668,
+      "cueMs": 71797
     }
   ],
   "detailFrames": [
     {
-      "startMs": 13283,
-      "endMs": 23484,
+      "startMs": 13285,
+      "endMs": 23489,
       "x": 640,
       "y": 0,
       "width": 640,

@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "EVENT_REVIEW_PUBLISH",
+  "status": "READY",
+  "duration": 140.6,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 125,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.1,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Une reprise videos-only acceptée sur le build du commit. Première prise : t-shirt65.390 vs phrase62.555, image63.3 téléphone encore en saisie. Reprise : identité55.847 vs55.329, email59.129 vs58.602, M63.028 vs62.556 ; image63.3 prouve M choisi. AV final prétend sélection S à23s du chapitre : écarté par image12.386s et marqueur12.114s, M et non S. 42 images finales revues ; simulation/email/publication100.403 durant phrase98.904–101.565, lien public conformes. Checklist unique sur image directe ; aucun bug de disposition, dates françaises/Frise/aucune adresse interdite/overlay. Validation, ASR final7/7 après réponse API vide relancée, VTT, effets12clics/0touches et musique passent.",
+  "sourceChanges": "record.ts : sélection et Continuer ancrés à Sélectionnons un créneau et poursuivons ; quatre saisies fillVisibly300ms empêchent de dépasser ancre t-shirt. Narration régénérée batch8 réutilisée et acceptée, inchangée. Types et793tests ancres passent.",
+  "report": "videos/output/event-review-publish/review-report.txt"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:07.151Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "60bc633ca1ac1f6b45a5b2b7dc5d8384720994d4b3820b97098b687ccf01412d",
+  "clipSha256": "9905fd9e070d234f693584ae2d395cf8dc60cbdfd1a9f3fed16e02d72818b36a",
+  "scene": "roles",
+  "review": {
+    "heardOpening": "Le propriétaire gère tout",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le propriétaire gère tout, y compris l'équipe et les réglages de l'organisation.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la liste des administrateurs avec leurs rôles respectifs (Propriétaire, Organisateur).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "L'organisateur prépare les événements, les créneaux, les inscriptions",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture du formulaire d'invitation détaillant les autorisations associées au rôle Organisateur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Gardez si possible deux propriétaires actifs.",
+        "visibleSeconds": 11.2,
+        "visible": "La liste inférieure montre deux propriétaires configurés (Camille Martin et Colette Favre).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

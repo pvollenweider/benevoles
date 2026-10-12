@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:59:36.538Z",
+  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
+  "promptSha256": "d87ae0e82defead865e04ee9b4bea88f935c183458fd7a079f8657f78a5a02e9",
+  "clipSha256": "f3720c07e596c8b984bb9ee30ec1a4c117382341a153aa77d31676e7e22987f5",
+  "scene": "expiry",
+  "review": {
+    "heardOpening": "Si l'offre expire sans réponse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page participant avec les règles de la liste d'attente et le délai de réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Dans l'administration, on peut suivre l'offre active",
+        "visibleSeconds": 5.7,
+        "visible": "Transition vers le tableau d'administration avec la mention 'Place proposée' pour Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "et la position des personnes encore en attente",
+        "visibleSeconds": 7.5,
+        "visible": "Statut 'Liste d'attente (position 3)' visible pour Eva Clerc",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

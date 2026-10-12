@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:01:20.491Z",
+  "videoSha256": "30f550e7ef14dc36432f27fd76b7df4e67d434cf52bb7b8eb59290e0bed30eb6",
+  "promptSha256": "0c38dbf2ef794979aa6b067d383a2336ecb65a23662e6d97ea84a44b660c11ab",
+  "clipSha256": "433d6726466a8b782168a930f2e94d4639bea8b55000a5e4565fb91ecc13cd26",
+  "scene": "preview-result",
+  "review": {
+    "heardOpening": "Le bouton de simulation affiche ensuite la confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton de simulation",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le bouton bleu « Voir la confirmation (aperçu) » en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2,
+        "spoken": "affiche ensuite la confirmation",
+        "visibleSeconds": 2.1,
+        "visible": "Affichage de la page « Aperçu de la confirmation (rien n'a été enregistré) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "et l’email automatique avec les valeurs de test",
+        "visibleSeconds": 2.5,
+        "visible": "Aperçu de l'email automatique affiché avec les données fictives (« Hello Alex ! »)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

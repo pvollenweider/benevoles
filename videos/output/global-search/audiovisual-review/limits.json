@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:40:28.938Z",
-  "videoSha256": "a5678b6a18e77e7ecb2489666df876bd539ced6fe6a4ba2d5fc4df91d56e7b9e",
+  "reviewedAt": "2026-10-12T01:09:57.866Z",
+  "videoSha256": "04d27bbd99d2af40e3ff8bc2a6c004a99f87c3e251bd1d2ba30dc4c4594920e6",
   "promptSha256": "88ec303c25929af86d7757c876b096298ada5fa03cf55adbba9fa453ad39496e",
-  "clipSha256": "ba3540155c78927d9a40e660c63083e03fe43f9770324c1b7453faf0738b36ee",
+  "clipSha256": "c434302dd5f0035070c191f7ae28d72fccf57556826d3be590bb66481ba32210",
   "scene": "limits",
   "review": {
-    "heardOpening": "La recherche affiche au maximum 20 résultats par catégorie.",
+    "heardOpening": "La recherche affiche au maximum",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La recherche affiche au maximum 20 résultats par catégorie.",
-        "visibleSeconds": 0.5,
-        "visible": "Liste des résultats pour « Morel » plafonnée aux 20 premiers avec message informatif.",
+        "spokenSeconds": 5.6,
+        "spoken": "le message indique qu’il reste d’autres résultats",
+        "visibleSeconds": 2,
+        "visible": "Mention « Seuls les 20 premiers résultats sont affichés : précisez la recherche pour les autres » visible sous la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.8,
-        "spoken": "Ajoutez un prénom pour préciser la recherche.",
-        "visibleSeconds": 8.5,
-        "visible": "Saisie de « Léa Morel » et affichage des 3 résultats filtrés.",
+        "spokenSeconds": 8,
+        "spoken": "Ajoutez un prénom pour préciser la recherche",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de « Léa Morel » réduisant les résultats à 3 entrées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "écrire zoe permet aussi de retrouver Zoé.",
-        "visibleSeconds": 12.8,
-        "visible": "Recherche sans majuscule ni accent « zoe » renvoyant « Zoé Perrin ».",
+        "spokenSeconds": 12.8,
+        "spoken": "écrire zoe permet aussi de retrouver Zoé",
+        "visibleSeconds": 12.5,
+        "visible": "Saisie de « zoe » en minuscules sans accent affichant le résultat « Zoé Perrin »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction posée et claire, débit adapté aux transitions d'écran."
+      "observation": "Voix claire, naturelle et parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

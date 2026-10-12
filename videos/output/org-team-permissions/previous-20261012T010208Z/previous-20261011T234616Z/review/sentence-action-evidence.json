@@ -1,0 +1,463 @@
+[
+  {
+    "id": "welcome",
+    "startMs": 1132,
+    "sentences": [
+      {
+        "text": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin.",
+        "startMs": 228,
+        "endMs": 5263,
+        "method": "silence",
+        "absoluteStartMs": 1360
+      },
+      {
+        "text": "Ici, trois personnes sont déjà actives :",
+        "startMs": 5867,
+        "endMs": 7396,
+        "method": "silence",
+        "absoluteStartMs": 6999
+      },
+      {
+        "text": "deux propriétaires et une organisatrice.",
+        "startMs": 7801,
+        "endMs": 9474,
+        "method": "silence",
+        "absoluteStartMs": 8933
+      },
+      {
+        "text": "Le badge Vous repère le compte actuellement connecté.",
+        "startMs": 10098,
+        "endMs": 12358,
+        "method": "silence",
+        "absoluteStartMs": 11230
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "roles",
+    "startMs": 16076,
+    "sentences": [
+      {
+        "text": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation.",
+        "startMs": 428,
+        "endMs": 3721,
+        "method": "silence",
+        "absoluteStartMs": 16504
+      },
+      {
+        "text": "L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages.",
+        "startMs": 4432,
+        "endMs": 10699,
+        "method": "silence",
+        "absoluteStartMs": 20508
+      },
+      {
+        "text": "Gardez si possible deux propriétaires actifs.",
+        "startMs": 11382,
+        "endMs": 13312,
+        "method": "silence",
+        "absoluteStartMs": 27458
+      },
+      {
+        "text": "Un responsable de secteur est différent :",
+        "startMs": 14026,
+        "endMs": 15384,
+        "method": "silence",
+        "absoluteStartMs": 30102
+      },
+      {
+        "text": "désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
+        "startMs": 15972,
+        "endMs": 20575,
+        "method": "silence",
+        "absoluteStartMs": 32048
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 21007
+      }
+    ]
+  },
+  {
+    "id": "invite",
+    "startMs": 38568,
+    "sentences": [
+      {
+        "text": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi.",
+        "startMs": 315,
+        "endMs": 5112,
+        "method": "silence",
+        "absoluteStartMs": 38883
+      },
+      {
+        "text": "Prenons Organisateur :",
+        "startMs": 5867,
+        "endMs": 6944,
+        "method": "silence",
+        "absoluteStartMs": 44435
+      },
+      {
+        "text": "c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles.",
+        "startMs": 7386,
+        "endMs": 11306,
+        "method": "silence",
+        "absoluteStartMs": 45954
+      },
+      {
+        "text": "Cliquez sur Envoyer l’invitation ;",
+        "startMs": 11848,
+        "endMs": 13249,
+        "method": "silence",
+        "absoluteStartMs": 50416
+      },
+      {
+        "text": "le message confirme son adresse.",
+        "startMs": 13953,
+        "endMs": 15101,
+        "method": "silence",
+        "absoluteStartMs": 52521
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 40901
+      },
+      {
+        "kind": "click",
+        "atMs": 41716
+      },
+      {
+        "kind": "key",
+        "atMs": 42025
+      },
+      {
+        "kind": "key",
+        "atMs": 42222
+      },
+      {
+        "kind": "key",
+        "atMs": 42321
+      },
+      {
+        "kind": "key",
+        "atMs": 42420
+      },
+      {
+        "kind": "key",
+        "atMs": 42519
+      },
+      {
+        "kind": "key",
+        "atMs": 42616
+      },
+      {
+        "kind": "key",
+        "atMs": 42718
+      },
+      {
+        "kind": "key",
+        "atMs": 42817
+      },
+      {
+        "kind": "key",
+        "atMs": 42920
+      },
+      {
+        "kind": "click",
+        "atMs": 43717
+      },
+      {
+        "kind": "key",
+        "atMs": 44025
+      },
+      {
+        "kind": "key",
+        "atMs": 44123
+      },
+      {
+        "kind": "key",
+        "atMs": 44222
+      },
+      {
+        "kind": "key",
+        "atMs": 44321
+      },
+      {
+        "kind": "key",
+        "atMs": 44420
+      },
+      {
+        "kind": "key",
+        "atMs": 44519
+      },
+      {
+        "kind": "key",
+        "atMs": 44619
+      },
+      {
+        "kind": "key",
+        "atMs": 44730
+      },
+      {
+        "kind": "key",
+        "atMs": 44834
+      },
+      {
+        "kind": "key",
+        "atMs": 44935
+      },
+      {
+        "kind": "key",
+        "atMs": 45033
+      },
+      {
+        "kind": "key",
+        "atMs": 45131
+      },
+      {
+        "kind": "key",
+        "atMs": 45230
+      },
+      {
+        "kind": "key",
+        "atMs": 45329
+      },
+      {
+        "kind": "key",
+        "atMs": 45428
+      },
+      {
+        "kind": "key",
+        "atMs": 45527
+      },
+      {
+        "kind": "key",
+        "atMs": 45625
+      },
+      {
+        "kind": "key",
+        "atMs": 45723
+      },
+      {
+        "kind": "key",
+        "atMs": 45824
+      },
+      {
+        "kind": "key",
+        "atMs": 45927
+      },
+      {
+        "kind": "key",
+        "atMs": 46028
+      },
+      {
+        "kind": "key",
+        "atMs": 46132
+      },
+      {
+        "kind": "key",
+        "atMs": 46229
+      },
+      {
+        "kind": "key",
+        "atMs": 46328
+      },
+      {
+        "kind": "key",
+        "atMs": 46427
+      },
+      {
+        "kind": "key",
+        "atMs": 46525
+      },
+      {
+        "kind": "click",
+        "atMs": 48583
+      },
+      {
+        "kind": "click",
+        "atMs": 50883
+      }
+    ]
+  },
+  {
+    "id": "invite-result",
+    "startMs": 54422,
+    "sentences": [
+      {
+        "text": "Après l’envoi, Léa apparaît avec le statut En attente.",
+        "startMs": 301,
+        "endMs": 2777,
+        "method": "silence",
+        "absoluteStartMs": 54723
+      },
+      {
+        "text": "Un email contient son lien personnel, valable sept jours ;",
+        "startMs": 3147,
+        "endMs": 5498,
+        "method": "silence",
+        "absoluteStartMs": 57569
+      },
+      {
+        "text": "on peut aussi copier ce lien pour le lui transmettre autrement.",
+        "startMs": 5896,
+        "endMs": 8109,
+        "method": "silence",
+        "absoluteStartMs": 60318
+      },
+      {
+        "text": "Son accès ne devient actif qu’après la création de son mot de passe.",
+        "startMs": 8758,
+        "endMs": 11127,
+        "method": "silence",
+        "absoluteStartMs": 63180
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 60783
+      }
+    ]
+  },
+  {
+    "id": "change-role",
+    "startMs": 68007,
+    "sentences": [
+      {
+        "text": "Le rôle peut évoluer.",
+        "startMs": 292,
+        "endMs": 1095,
+        "method": "silence",
+        "absoluteStartMs": 68299
+      },
+      {
+        "text": "On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer :",
+        "startMs": 1536,
+        "endMs": 4649,
+        "method": "silence",
+        "absoluteStartMs": 69543
+      },
+      {
+        "text": "parcourir simplement la liste au clavier ne change donc jamais les droits par accident.",
+        "startMs": 4789,
+        "endMs": 8727,
+        "method": "silence",
+        "absoluteStartMs": 72796
+      },
+      {
+        "text": "La confirmation indique le nouveau rôle.",
+        "startMs": 9276,
+        "endMs": 10644,
+        "method": "silence",
+        "absoluteStartMs": 77283
+      },
+      {
+        "text": "Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.",
+        "startMs": 11156,
+        "endMs": 15179,
+        "method": "silence",
+        "absoluteStartMs": 79163
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 74365
+      }
+    ]
+  },
+  {
+    "id": "organizer-view",
+    "startMs": 83957,
+    "sentences": [
+      {
+        "text": "Vérifions maintenant avec le compte de Samira, qui est organisatrice.",
+        "startMs": 325,
+        "endMs": 3062,
+        "method": "silence",
+        "absoluteStartMs": 84282
+      },
+      {
+        "text": "Elle retrouve les événements et les outils opérationnels.",
+        "startMs": 3586,
+        "endMs": 5542,
+        "method": "silence",
+        "absoluteStartMs": 87543
+      },
+      {
+        "text": "Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.",
+        "startMs": 6005,
+        "endMs": 13262,
+        "method": "silence",
+        "absoluteStartMs": 89962
+      }
+    ],
+    "inputs": [
+      {
+        "kind": "click",
+        "atMs": 85551
+      }
+    ]
+  },
+  {
+    "id": "limits",
+    "startMs": 97951,
+    "sentences": [
+      {
+        "text": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires.",
+        "startMs": 308,
+        "endMs": 6620,
+        "method": "silence",
+        "absoluteStartMs": 98259
+      },
+      {
+        "text": "Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne.",
+        "startMs": 6751,
+        "endMs": 14159,
+        "method": "silence",
+        "absoluteStartMs": 104702
+      },
+      {
+        "text": "Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes :",
+        "startMs": 14877,
+        "endMs": 18388,
+        "method": "silence",
+        "absoluteStartMs": 112828
+      },
+      {
+        "text": "vérifiez donc la personne avant d’appliquer.",
+        "startMs": 18931,
+        "endMs": 21754,
+        "method": "silence",
+        "absoluteStartMs": 116882
+      }
+    ],
+    "inputs": []
+  },
+  {
+    "id": "result",
+    "startMs": 120161,
+    "sentences": [
+      {
+        "text": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde :",
+        "startMs": 147,
+        "endMs": 4431,
+        "method": "silence",
+        "absoluteStartMs": 120308
+      },
+      {
+        "text": "les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.",
+        "startMs": 4597,
+        "endMs": 11056,
+        "method": "silence",
+        "absoluteStartMs": 124758
+      }
+    ],
+    "inputs": []
+  }
+]

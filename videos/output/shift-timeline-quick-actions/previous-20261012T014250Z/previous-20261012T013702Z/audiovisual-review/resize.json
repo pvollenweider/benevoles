@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:26:46.693Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "b264f243f94e3b4da1f7eefdb3d0ef26ceb3ad07845b6c1883f22f4aa82814b9",
+  "clipSha256": "b877250ca0453c37b72b260002e8b2b1f026fe21d5daa1dd89016cb973ebedc2",
+  "scene": "resize",
+  "review": {
+    "heardOpening": "Pour corriger une durée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "attrape le bord droit du créneau et déplace-le",
+        "visibleSeconds": 2.8,
+        "visible": "Le curseur étire l'extrémité droite du créneau Sécurité vers 07h45",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "la barre s’allonge de quarante-cinq minutes",
+        "visibleSeconds": 4,
+        "visible": "Le créneau violet s'est allongé de 45 minutes et la pop-up de détails s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Rouvre ensuite les actions rapides : l’heure de fin a bien changé",
+        "visibleSeconds": 9.2,
+        "visible": "La fenêtre d'actions rapides est visible avec l'heure de fin mise à jour à 07:45",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Vérifie-la avant de fermer",
+        "visibleSeconds": 13.2,
+        "visible": "Clic en dehors pour refermer la fenêtre contextuelle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, bonne synchronisation avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

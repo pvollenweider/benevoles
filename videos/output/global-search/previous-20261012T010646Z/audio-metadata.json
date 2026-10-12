@@ -1,0 +1,37 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "generatedAt": "2026-10-11T23:51:18.387Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 12829,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    },
+    "open": {
+      "file": "audio/open.wav",
+      "durationMs": 12434,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    },
+    "person": {
+      "file": "audio/person.wav",
+      "durationMs": 16702,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    },
+    "shift": {
+      "file": "audio/shift.wav",
+      "durationMs": 15371,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    },
+    "limits": {
+      "file": "audio/limits.wav",
+      "durationMs": 15741,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 12282,
+      "generationSha256": "379e18152eff0001435983ebe7a633db855ed9d76aa9da131f3c1d033222ffb0"
+    }
+  }
+}

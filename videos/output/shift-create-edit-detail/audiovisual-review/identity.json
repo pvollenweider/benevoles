@@ -1,51 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:52:53.898Z",
-  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
-  "promptSha256": "199900937a485c61bd36aa75538998bcddb70374b214f814fe133c7ac1dd608b",
-  "clipSha256": "012c857e4d49c0a59243cc948fa664fc3f469bc7db8a804132a553264ff8cd66",
+  "reviewedAt": "2026-10-12T01:36:10.849Z",
+  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "promptSha256": "533e6007cc4b0cce0a11c31e8ddd86ce18928a3d8819d3cec9e75ac43614570f",
+  "clipSha256": "9f292421800e68e9673c39c717261e34c5bec816cba703f8355035c5c215a348",
   "scene": "identity",
   "review": {
-    "heardOpening": "Choisis d'abord le poste",
+    "heardOpening": "Choisissez d'abord le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 1.6,
-        "spoken": "Choisis d’abord le poste",
-        "visibleSeconds": 2.5,
-        "visible": "Sélection du poste Accueil dans le formulaire",
+        "spokenSeconds": 0.6,
+        "spoken": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis.",
+        "visibleSeconds": 1.5,
+        "visible": "Le poste 'Accueil' est sélectionné et le libellé 'Accueil des artistes' est saisi dans le formulaire Nouveau créneau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.6,
-        "spoken": "un libellé plus précis",
-        "visibleSeconds": 3,
-        "visible": "Saisie de 'Accueil des artistes' dans Libellé",
+        "spokenSeconds": 5,
+        "spoken": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "visibleSeconds": 5.5,
+        "visible": "La date 'samedi 17 octobre', l'heure de début '18:00' et l'heure de fin '21:30' sont successivement renseignées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.6,
-        "spoken": "La date, l’heure de début et l’heure de fin",
-        "visibleSeconds": 6.5,
-        "visible": "Champs date, début (18:00) et fin (21:30) complétés",
+        "spokenSeconds": 10,
+        "spoken": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "visibleSeconds": 10.8,
+        "visible": "Le champ Capacité est modifié pour passer à la valeur 8.",
         "sync": "aligned",
         "severity": "none"
-      },
-      {
-        "spokenSeconds": 9.6,
-        "spoken": "La capacité indique combien de personnes",
-        "visibleSeconds": 7,
-        "visible": "Champ capacité ajusté à 8",
-        "sync": "early",
-        "severity": "minor"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton pédagogique régulier."
+      "observation": "Voix féminine calme, articulée et bien calée sur les saisies à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

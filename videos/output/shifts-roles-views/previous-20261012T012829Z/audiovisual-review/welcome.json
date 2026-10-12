@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:15:09.203Z",
+  "videoSha256": "2ba4c374246bb9d9bed06fdbf8aa4318f53945810e45e7d938e165bed22b163b",
+  "promptSha256": "348646261608e9cf073e44e14b40284316f091f8474a576feddc79b2a060feb1",
+  "clipSha256": "769523c63a8555a86692239ada470fd98f9b0de6e6bf4fc3acdaa0307022d7b0",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un poste décrit une mission",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un poste décrit une mission, par exemple Accueil ou Buvette.",
+        "visibleSeconds": 2.6,
+        "visible": "Disparition de l'encart d'introduction révélant les postes listés à gauche (Buvette, Accueil, Livraison, Rangement).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places.",
+        "visibleSeconds": 2.6,
+        "visible": "Affichage de la vue frise avec la date « samedi 14 novembre » et des blocs de créneaux indiquant les horaires et le nombre de places.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.",
+        "visibleSeconds": 2.6,
+        "visible": "Sur la ligne Buvette, deux créneaux distincts (09h-10h et 12h-14h) sont clairement visibles sur la même journée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, calme et claire, bien synchronisée avec l'illustration du planning."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

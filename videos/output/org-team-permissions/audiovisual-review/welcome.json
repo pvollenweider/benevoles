@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:05:07.588Z",
-  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
-  "promptSha256": "3b8220f4739f2009b0f6a4daa8f7c9efa3e045556d07302c11680f67aa79f070",
-  "clipSha256": "8468d8148eb4a16f13e2fe58482512554dd604703f38bb97ce1d9d1c82459fca",
+  "reviewedAt": "2026-10-12T01:06:09.513Z",
+  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "promptSha256": "fb72c09c2d3bbad99ea02705317bb629791c4256e3868a5cdc83f61f8034321c",
+  "clipSha256": "8828b6d90350bbaa93c11bce4ea6c7f160ebc19ee2fc212ba6c8bb0a4a002e13",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Une équipe bien réglée évite",
+    "heardOpening": "Une équipe bien réglée évite de partager",
     "checkpoints": [
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 5.5,
         "spoken": "Ici, trois personnes sont déjà actives",
-        "visibleSeconds": 6.8,
-        "visible": "Affichage de la liste Administrateurs avec 3 membres",
+        "visibleSeconds": 6,
+        "visible": "Défilement vers la section Administrateurs listant 3 personnes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 7.2,
         "spoken": "deux propriétaires et une organisatrice",
-        "visibleSeconds": 7,
-        "visible": "Rôles affichés dans les menus déroulants pour chaque membre",
+        "visibleSeconds": 6.5,
+        "visible": "Les rôles Propriétaire, Propriétaire et Organisateur apparaissent en face des trois membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 9.8,
         "spoken": "Le badge Vous repère le compte actuellement connecté",
-        "visibleSeconds": 7,
-        "visible": "Badge Vous présent à côté du nom Camille Martin",
+        "visibleSeconds": 6.5,
+        "visible": "Le badge Vous est visible à côté du nom Camille Martin",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien articulée."
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les éléments affichés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

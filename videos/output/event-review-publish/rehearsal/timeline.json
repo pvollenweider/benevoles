@@ -1,0 +1,185 @@
+{
+  "slug": "event-review-publish",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T01:15:27.576Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REVIEW_PUBLISH",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6976
+    },
+    {
+      "kind": "click",
+      "atMs": 8256
+    },
+    {
+      "kind": "click",
+      "atMs": 9056
+    },
+    {
+      "kind": "click",
+      "atMs": 9891
+    },
+    {
+      "kind": "click",
+      "atMs": 11007
+    },
+    {
+      "kind": "click",
+      "atMs": 12123
+    },
+    {
+      "kind": "click",
+      "atMs": 13240
+    },
+    {
+      "kind": "click",
+      "atMs": 14322
+    },
+    {
+      "kind": "click",
+      "atMs": 15105
+    },
+    {
+      "kind": "click",
+      "atMs": 15889
+    },
+    {
+      "kind": "click",
+      "atMs": 17140
+    },
+    {
+      "kind": "click",
+      "atMs": 19593
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1170,
+      "endMs": 3803
+    },
+    {
+      "id": "checks",
+      "startMs": 4256,
+      "endMs": 4308
+    },
+    {
+      "id": "preview-start",
+      "startMs": 6472,
+      "endMs": 7337
+    },
+    {
+      "id": "preview-form",
+      "startMs": 7790,
+      "endMs": 16195
+    },
+    {
+      "id": "preview-result",
+      "startMs": 16649,
+      "endMs": 17471
+    },
+    {
+      "id": "publish",
+      "startMs": 17924,
+      "endMs": 19925
+    },
+    {
+      "id": "result",
+      "startMs": 20379,
+      "endMs": 20458
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "preview-start",
+      "phrase": "On vérifie d’abord l’en-tête, le",
+      "startMs": 9088,
+      "endMs": 23000,
+      "cueMs": 7282
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Sélectionnons un créneau et poursuivons",
+      "startMs": 0,
+      "endMs": 4770,
+      "cueMs": 7791
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Sélectionnons un créneau et poursuivons",
+      "startMs": 0,
+      "endMs": 4770,
+      "cueMs": 8565
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Pour ce test, renseignons une identité fictive",
+      "startMs": 4770,
+      "endMs": 8347,
+      "cueMs": 9375
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Ajoutons son adresse email de",
+      "startMs": 9264,
+      "endMs": 14584,
+      "cueMs": 11619
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Choisissons aussi une taille de t-shirt",
+      "startMs": 14584,
+      "endMs": 17611,
+      "cueMs": 13852
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Acceptons cette convention",
+      "startMs": 28709,
+      "endMs": 36597,
+      "cueMs": 14628
+    },
+    {
+      "segmentId": "preview-result",
+      "phrase": "C’est ici qu’on repère un",
+      "startMs": 10157,
+      "endMs": 23000,
+      "cueMs": 17447
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Revenons à la vérification et publions",
+      "startMs": 0,
+      "endMs": 3767,
+      "cueMs": 19107
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Publier ouvre l’accès ",
+      "startMs": 7800,
+      "endMs": 9600,
+      "cueMs": 20390
+    }
+  ]
+}

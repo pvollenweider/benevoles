@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "ORG_TEAM_PERMISSIONS",
+  "status": "READY",
+  "duration": 132.12,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 118,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "48 images et preuves41.4/55.2/69.9/70.4/92.2 revues. Invitation https://www.benevol.app, espace formation-team.benevol.app. Organisateur44.912 vs phrase44.444 ; Appliquer70.043 vs phrase69.549. AV prétend Appliquer absent et nom Léo : écarté sur images69.9/41.4 et clic enregistré, confirmation persistante normale. Samira sans commandes propriétaire. Tous chapitres conformes ; validation, ASR final8/8, VTT, effets9clics/0touches et musique passent ; aucune adresse interdite/overlay, dates françaises, aucun bug de disposition.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
+  "report": "videos/output/org-team-permissions/review-report.txt"
+}

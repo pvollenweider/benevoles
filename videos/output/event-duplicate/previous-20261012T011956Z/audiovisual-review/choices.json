@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:14.298Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "4ce09f89c392bb067fdf0087b80481651f26752c07a2481b132c5ae059bdd275",
+  "clipSha256": "8c52a9718ea603f5473dc4a1be2ca429b1083ebf92f231bfb236884276c742b1",
+  "scene": "choices",
+  "review": {
+    "heardOpening": "Choisissez ensuite ce qui doit suivre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Choisissez ensuite ce qui doit suivre",
+        "visibleSeconds": 0.8,
+        "visible": "Section « Ce qui est copié » affichant les différentes options à dupliquer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Les créneaux conservent postes, horaires, capacités et consignes",
+        "visibleSeconds": 2.5,
+        "visible": "Option cochée « Les créneaux » avec le détail des éléments conservés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Les réglages reprennent les messages, questions, téléphone et programme",
+        "visibleSeconds": 9.5,
+        "visible": "Option « Les réglages et réglages d’inscription » visible avec le détail des paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Les pages personnalisées peuvent aussi être copiées",
+        "visibleSeconds": 14.2,
+        "visible": "Option cochée « Les pages personnalisées » visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

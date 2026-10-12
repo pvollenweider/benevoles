@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:54:20.748Z",
+  "videoSha256": "df3fea114f348428a33f8617b17a98419c9d073c94a337fbc9fce0dcaadd9313",
+  "promptSha256": "52a0a4c00ce19507ee402e9f2ad80879653b5f481af5d38b15c3b21d0c93cb61",
+  "clipSha256": "09d626944a4f2bf8eaa65d36319fc8f4b899ae3cd820bb9f5ef805225e322fdb",
+  "scene": "person",
+  "review": {
+    "heardOpening": "Cherchons Léa Morel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cherchons Léa Morel.",
+        "visibleSeconds": 1,
+        "visible": "Saisie de Léa Morel dans la barre de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Les résultats distinguent sa fiche de membre et ses inscriptions.",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de la page de recherche avec les sections Bénévoles et Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Ouvrons d’abord sa fiche",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur Léa Morel sous Bénévoles et ouverture de la page Membres filtrée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "puis une inscription : la liste de l’événement est déjà filtrée sur Léa.",
+        "visibleSeconds": 12.5,
+        "visible": "La liste des inscriptions de l'événement n'apparaît qu'après un retour arrière à 00:10 et un clic à 00:11",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Le badge Liste d’attente distingue une demande de place d’une inscription confirmée.",
+        "visibleSeconds": 13,
+        "visible": "Badge Liste d'attente visible sur la deuxième ligne du tableau",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À partir de 00:06, la voix enchaîne sur l'ouverture de l'inscription et décrit la liste filtrée de l'événement alors que l'écran reste sur la page Membres jusqu'à 00:10, retourne en arrière sur la recherche, puis clique sur l'inscription : la page n'apparaît qu'à 00:12 (plus de 5 secondes de décalage)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

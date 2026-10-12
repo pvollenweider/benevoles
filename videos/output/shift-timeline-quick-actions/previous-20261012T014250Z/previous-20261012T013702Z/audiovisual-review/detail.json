@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:27:00.769Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "7926fad2d30b886182dbb4250c75a693a77d4058141160204a4a38172a23e616",
+  "clipSha256": "0743c8dde868a9b7d64e217724eff591b0c4ef2e0bdf49166b885f9d680a7d1b",
+  "scene": "detail",
+  "review": {
+    "heardOpening": "Pour ajouter une consigne à cette relève",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "passez en Liste",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Liste est déjà sélectionné et la vue tabulaire affichée",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "puis cliquez sur Modifier",
+        "visibleSeconds": 3,
+        "visible": "La page Modifier le créneau est déjà ouverte",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "saisissez Venir dix minutes avant dans Consigne pratique",
+        "visibleSeconds": 10,
+        "visible": "Le texte Venir 10 minutes avant est déjà saisi dans le champ Consigne pratique",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "puis enregistrez",
+        "visibleSeconds": 19,
+        "visible": "Enregistrement validé avec retour à la vue Liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Anticipation visuelle à 00:09-00:11 : le texte dans 'Consigne pratique' est saisi avant que la voix ne l'indique à 00:12.",
+      "Faux raccord visuel à 00:20 : retour intempestif d'une seconde sur le formulaire de modification avant de revenir à la liste à 00:21."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

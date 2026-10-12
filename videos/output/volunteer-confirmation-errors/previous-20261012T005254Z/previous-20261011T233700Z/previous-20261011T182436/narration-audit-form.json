@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:34.139Z",
+  "revalidatedAt": "2026-10-11T17:08:34.140Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "form",
+      "audioSha256": "a8f739320cd6a716fcf43fb2773706bfa438419df9daa5d2cea20caddc1cd5f9",
+      "recognized": "Choisis accueil et continue. Nous remplissons le prénom, le nom, l'email et le téléphone, puis acceptons la convention et l'utilisation des données. Avant d'envoyer, relis toujours l'adresse email, une faute peut empêcher le message d'arriver même si l'inscription est enregistrée correctement.",
+      "expected": "Choisis Accueil et continue. Nous remplissons le prénom, le nom, l’email et le téléphone, puis acceptons la convention et l’utilisation des données. Avant d’envoyer, relis toujours l’adresse email : une faute peut empêcher le message d’arriver même si l’inscription est enregistrée correctement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

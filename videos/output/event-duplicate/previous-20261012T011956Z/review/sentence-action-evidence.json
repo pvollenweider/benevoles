@@ -1,0 +1,530 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1107,
+    "endMs": 12433,
+    "sentences": [
+      {
+        "text": "Dupliquer évite de reconstruire chaque année un événement qui garde la même organisation.",
+        "startMs": 191,
+        "endMs": 4424,
+        "method": "silence",
+        "absoluteStartMs": 1298
+      },
+      {
+        "text": "La copie reste un nouveau brouillon :",
+        "startMs": 4787,
+        "endMs": 6921,
+        "method": "silence",
+        "absoluteStartMs": 5894
+      },
+      {
+        "text": "on gagne la structure sans mélanger les bénévoles ni l’historique de deux éditions.",
+        "startMs": 7136,
+        "endMs": 10969,
+        "method": "silence",
+        "absoluteStartMs": 8243
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "identity",
+    "startMs": 12887,
+    "endMs": 25869,
+    "sentences": [
+      {
+        "text": "Commencez par donner le titre de la nouvelle édition et son premier jour.",
+        "startMs": 359,
+        "endMs": 4222,
+        "method": "silence",
+        "absoluteStartMs": 13246
+      },
+      {
+        "text": "Toutes les dates suivent le même décalage :",
+        "startMs": 4697,
+        "endMs": 6385,
+        "method": "silence",
+        "absoluteStartMs": 17584
+      },
+      {
+        "text": "fin de l’événement, créneaux et programme.",
+        "startMs": 6385,
+        "endMs": 8859,
+        "method": "estimate",
+        "absoluteStartMs": 19272
+      },
+      {
+        "text": "Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+        "startMs": 9222,
+        "endMs": 12602,
+        "method": "silence",
+        "absoluteStartMs": 22109
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "identity",
+        "phrase": "Le résumé indique immédiatement de",
+        "startMs": 9222,
+        "endMs": 12602,
+        "cueMs": 22111
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "key",
+        "atMs": 15233
+      },
+      {
+        "kind": "click",
+        "atMs": 15747
+      },
+      {
+        "kind": "key",
+        "atMs": 16055
+      },
+      {
+        "kind": "key",
+        "atMs": 16253
+      },
+      {
+        "kind": "key",
+        "atMs": 16350
+      },
+      {
+        "kind": "key",
+        "atMs": 16449
+      },
+      {
+        "kind": "key",
+        "atMs": 16547
+      },
+      {
+        "kind": "key",
+        "atMs": 16648
+      },
+      {
+        "kind": "key",
+        "atMs": 16751
+      },
+      {
+        "kind": "key",
+        "atMs": 16852
+      },
+      {
+        "kind": "key",
+        "atMs": 16953
+      },
+      {
+        "kind": "key",
+        "atMs": 17055
+      },
+      {
+        "kind": "key",
+        "atMs": 17159
+      },
+      {
+        "kind": "key",
+        "atMs": 17269
+      },
+      {
+        "kind": "key",
+        "atMs": 17370
+      },
+      {
+        "kind": "key",
+        "atMs": 17472
+      },
+      {
+        "kind": "key",
+        "atMs": 17575
+      },
+      {
+        "kind": "key",
+        "atMs": 17678
+      },
+      {
+        "kind": "key",
+        "atMs": 17779
+      },
+      {
+        "kind": "key",
+        "atMs": 17882
+      },
+      {
+        "kind": "key",
+        "atMs": 17983
+      },
+      {
+        "kind": "key",
+        "atMs": 18086
+      },
+      {
+        "kind": "key",
+        "atMs": 18188
+      },
+      {
+        "kind": "key",
+        "atMs": 18291
+      },
+      {
+        "kind": "key",
+        "atMs": 18396
+      },
+      {
+        "kind": "key",
+        "atMs": 18498
+      },
+      {
+        "kind": "key",
+        "atMs": 18601
+      },
+      {
+        "kind": "key",
+        "atMs": 18705
+      },
+      {
+        "kind": "key",
+        "atMs": 18805
+      },
+      {
+        "kind": "key",
+        "atMs": 18905
+      },
+      {
+        "kind": "key",
+        "atMs": 19008
+      },
+      {
+        "kind": "key",
+        "atMs": 19112
+      },
+      {
+        "kind": "key",
+        "atMs": 19215
+      },
+      {
+        "kind": "click",
+        "atMs": 20014
+      }
+    ]
+  },
+  {
+    "chapter": "choices",
+    "startMs": 26322,
+    "endMs": 43538,
+    "sentences": [
+      {
+        "text": "Choisissez ensuite ce qui doit suivre.",
+        "startMs": 356,
+        "endMs": 2467,
+        "method": "silence",
+        "absoluteStartMs": 26678
+      },
+      {
+        "text": "Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription.",
+        "startMs": 2911,
+        "endMs": 9087,
+        "method": "silence",
+        "absoluteStartMs": 29233
+      },
+      {
+        "text": "Les réglages reprennent les messages, questions, téléphone et programme.",
+        "startMs": 9698,
+        "endMs": 13926,
+        "method": "silence",
+        "absoluteStartMs": 36020
+      },
+      {
+        "text": "Les pages personnalisées peuvent aussi être copiées.",
+        "startMs": 14314,
+        "endMs": 16866,
+        "method": "silence",
+        "absoluteStartMs": 40636
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "choices",
+        "phrase": "Les réglages reprennent les messages",
+        "startMs": 9698,
+        "endMs": 13926,
+        "cueMs": 36021
+      },
+      {
+        "segmentId": "choices",
+        "phrase": "Les pages personnalisées peuvent aussi",
+        "startMs": 14314,
+        "endMs": 16866,
+        "cueMs": 40636
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "leaders",
+    "startMs": 43990,
+    "endMs": 58163,
+    "sentences": [
+      {
+        "text": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel.",
+        "startMs": 347,
+        "endMs": 7596,
+        "method": "silence",
+        "absoluteStartMs": 44337
+      },
+      {
+        "text": "Activez cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+        "startMs": 8070,
+        "endMs": 13726,
+        "method": "silence",
+        "absoluteStartMs": 52060
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 50431
+      }
+    ]
+  },
+  {
+    "chapter": "summary",
+    "startMs": 58614,
+    "endMs": 72452,
+    "sentences": [
+      {
+        "text": "Le récapitulatif est la dernière vérification.",
+        "startMs": 458,
+        "endMs": 3542,
+        "method": "silence",
+        "absoluteStartMs": 59072
+      },
+      {
+        "text": "Il rappelle les éléments copiés et ceux qui ne le sont jamais :",
+        "startMs": 3918,
+        "endMs": 7146,
+        "method": "silence",
+        "absoluteStartMs": 62532
+      },
+      {
+        "text": "les inscriptions et les jalons.",
+        "startMs": 7357,
+        "endMs": 8365,
+        "method": "silence",
+        "absoluteStartMs": 65971
+      },
+      {
+        "text": "On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+        "startMs": 8543,
+        "endMs": 13471,
+        "method": "silence",
+        "absoluteStartMs": 67157
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "summary",
+        "phrase": "les inscriptions et les jalons.",
+        "startMs": 7357,
+        "endMs": 8365,
+        "cueMs": 65974
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "create",
+    "startMs": 72905,
+    "endMs": 88970,
+    "sentences": [
+      {
+        "text": "Créons la copie.",
+        "startMs": 315,
+        "endMs": 1419,
+        "method": "silence",
+        "absoluteStartMs": 73220
+      },
+      {
+        "text": "Elle s’ouvre dans l’administration avec le statut Brouillon.",
+        "startMs": 1950,
+        "endMs": 4976,
+        "method": "silence",
+        "absoluteStartMs": 74855
+      },
+      {
+        "text": "Vérifions ses réglages :",
+        "startMs": 5568,
+        "endMs": 6758,
+        "method": "silence",
+        "absoluteStartMs": 78473
+      },
+      {
+        "text": "les inscriptions sont fermées.",
+        "startMs": 7082,
+        "endMs": 8464,
+        "method": "silence",
+        "absoluteStartMs": 79987
+      },
+      {
+        "text": "La nouvelle édition n'est donc pas encore proposée aux bénévoles.",
+        "startMs": 8904,
+        "endMs": 11513,
+        "method": "silence",
+        "absoluteStartMs": 81809
+      },
+      {
+        "text": "Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
+        "startMs": 11752,
+        "endMs": 15647,
+        "method": "silence",
+        "absoluteStartMs": 84657
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "create",
+        "phrase": "les inscriptions sont fermées.",
+        "startMs": 7082,
+        "endMs": 8464,
+        "cueMs": 79988
+      },
+      {
+        "segmentId": "create",
+        "phrase": "La nouvelle édition n'est donc",
+        "startMs": 8904,
+        "endMs": 11513,
+        "cueMs": 81811
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 75945
+      }
+    ]
+  },
+  {
+    "chapter": "copied-details",
+    "startMs": 89423,
+    "endMs": 107321,
+    "sentences": [
+      {
+        "text": "Ouvrons le planning de la nouvelle édition.",
+        "startMs": 418,
+        "endMs": 2364,
+        "method": "silence",
+        "absoluteStartMs": 89841
+      },
+      {
+        "text": "Les dates ont été décalées et les créneaux repartent sans inscription.",
+        "startMs": 3060,
+        "endMs": 6253,
+        "method": "silence",
+        "absoluteStartMs": 92483
+      },
+      {
+        "text": "Nous retrouvons les postes et leurs horaires, mais aucun engagement de l'année précédente.",
+        "startMs": 6801,
+        "endMs": 10954,
+        "method": "silence",
+        "absoluteStartMs": 96224
+      },
+      {
+        "text": "Les pages personnalisées sont également reprises :",
+        "startMs": 11676,
+        "endMs": 14135,
+        "method": "silence",
+        "absoluteStartMs": 101099
+      },
+      {
+        "text": "ouvrons leur liste dans cette nouvelle édition pour vérifier leur présence.",
+        "startMs": 14705,
+        "endMs": 17601,
+        "method": "silence",
+        "absoluteStartMs": 104128
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "leader-emails",
+    "startMs": 107773,
+    "endMs": 126697,
+    "sentences": [
+      {
+        "text": "Les responsables que nous avons conservés ont chacun reçu une nouvelle invitation.",
+        "startMs": 306,
+        "endMs": 4701,
+        "method": "silence",
+        "absoluteStartMs": 108079
+      },
+      {
+        "text": "Ouvrons le message réellement arrivé dans la boîte de formation.",
+        "startMs": 4941,
+        "endMs": 7824,
+        "method": "silence",
+        "absoluteStartMs": 112714
+      },
+      {
+        "text": "Il nomme la nouvelle édition et contient un nouveau lien personnel de responsable.",
+        "startMs": 8534,
+        "endMs": 13290,
+        "method": "silence",
+        "absoluteStartMs": 116307
+      },
+      {
+        "text": "Cette vérification permet de distinguer l'invitation de la copie et celle de l'événement d'origine.",
+        "startMs": 13429,
+        "endMs": 18922,
+        "method": "silence",
+        "absoluteStartMs": 121202
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "leader-emails",
+        "phrase": "Ouvrons le message réellement arrivé",
+        "startMs": 4941,
+        "endMs": 7824,
+        "cueMs": 112716
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "result",
+    "startMs": 127150,
+    "endMs": 140662,
+    "sentences": [
+      {
+        "text": "Avant toute publication, relisez les horaires, adaptez les capacités et les consignes, puis testez le parcours bénévole.",
+        "startMs": 150,
+        "endMs": 6933,
+        "method": "silence",
+        "absoluteStartMs": 127300
+      },
+      {
+        "text": "La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l’ancienne.",
+        "startMs": 7542,
+        "endMs": 13196,
+        "method": "silence",
+        "absoluteStartMs": 134692
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "La duplication accélère la préparation",
+        "startMs": 7542,
+        "endMs": 13196,
+        "cueMs": 134694
+      }
+    ],
+    "interactions": []
+  }
+]

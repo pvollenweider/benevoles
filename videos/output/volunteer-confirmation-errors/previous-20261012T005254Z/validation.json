@@ -1,0 +1,88 @@
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "slug": "volunteer-confirmation-errors",
+  "validatedAt": "2026-10-11T23:45:04.721Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 308520,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 19474,
+      "audioMs": 19472,
+      "driftMs": 2
+    },
+    {
+      "id": "form",
+      "visualMs": 19191,
+      "audioMs": 19190,
+      "driftMs": 1
+    },
+    {
+      "id": "validation",
+      "visualMs": 19774,
+      "audioMs": 19772,
+      "driftMs": 2
+    },
+    {
+      "id": "capacity",
+      "visualMs": 23283,
+      "audioMs": 23281,
+      "driftMs": 2
+    },
+    {
+      "id": "network",
+      "visualMs": 19057,
+      "audioMs": 19057,
+      "driftMs": 0
+    },
+    {
+      "id": "success",
+      "visualMs": 19521,
+      "audioMs": 19517,
+      "driftMs": 4
+    },
+    {
+      "id": "email",
+      "visualMs": 21368,
+      "audioMs": 21365,
+      "driftMs": 3
+    },
+    {
+      "id": "overlap",
+      "visualMs": 30377,
+      "audioMs": 30377,
+      "driftMs": 0
+    },
+    {
+      "id": "response-loss",
+      "visualMs": 38354,
+      "audioMs": 38352,
+      "driftMs": 2
+    },
+    {
+      "id": "invitation-success",
+      "visualMs": 45804,
+      "audioMs": 45801,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 29217,
+      "audioMs": 29215,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 13,
+  "music": {
+    "voicedWindows": 273,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

@@ -1,0 +1,80 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:18:43.869Z",
+  "revalidatedAt": "2026-10-12T00:07:06.979Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "d808af802311085a154903c2b8e3b92fefb6ca5ba8254c36c740bffdeee886e9",
+      "recognized": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l'événement du public tout en gardant ses données consultables. Supprimer efface définitivement l'édition.",
+      "expected": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l’événement du public tout en gardant ses données consultables. Supprimer efface définitivement l’édition.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "prepare",
+      "audioSha256": "1999531fc15684df4c4133c72cad042db4624fe453aed6ea06121d23e647aee6",
+      "recognized": "Pour cette démonstration, nous travaillons sur une copie jetable de l'ancienne édition. Dans la vraie vie, vérifiez d'abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annulez les créneaux avant l'archivage.",
+      "expected": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifiez d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annulez les créneaux avant l’archivage.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "archive",
+      "audioSha256": "fdcf722e43398c291645feb5e506663b3fca263b3cc44b5868f2e4aa88995e37",
+      "recognized": "Le bouton archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l'équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l'historique sans laisser croire que l'événement accepte encore du monde.",
+      "expected": "Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "delete-open",
+      "audioSha256": "bb7377bb4f17f6920c1d2bb683e7a93d77b4314f8360d662f7808837524e5219",
+      "recognized": "La suppression définitive n'apparaît qu'après archivage et seulement pour un propriétaire de l'organisation. Le récapitulatif indique précisément combien de créneaux, d'inscriptions et d'invitations vont disparaître. Les membres du pool, eux, sont conservés.",
+      "expected": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation. Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître. Les membres du pool, eux, sont conservés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "backup",
+      "audioSha256": "6279ddc5bee59a22fb2192618ace6a2b4d12f41c7de1750c3abcd37b1e690642",
+      "recognized": "Avant d'aller plus loin, ouvrez l'export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistrez-le si l'association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+      "expected": "Avant d’aller plus loin, ouvrez l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistrez-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "b994c82282f3351ae5726ca4aa2e4bc1c14324312262ab9056a4d893bff62234",
+      "recognized": "La confirmation renforcée demande de saisir le titre de l'événement. Tant qu'il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner, et les données rattachées ne sont pas récupérables depuis l'application.",
+      "expected": "La confirmation renforcée demande de saisir le titre de l’événement. Tant qu’il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "93ca27c178d98f366929c06b81568ee739ab017db5d7f63e1324c9f632cdd383",
+      "recognized": "L'événement disparaît de la liste après validation. Utilisez donc l'archivage comme état normal de fin de vie et réservez la suppression aux éditions de tests, aux erreurs de création ou au cas où la conservation n'a plus de raison d'être.",
+      "expected": "L’événement disparaît de la liste après validation. Utilisez donc l’archivage comme état normal de fin de vie, et réservez la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
+      "wordErrorRate": 0.045454545454545456,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

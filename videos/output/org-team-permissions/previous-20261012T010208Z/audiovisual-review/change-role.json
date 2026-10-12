@@ -1,0 +1,56 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:37.741Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "20b3bb31cd34b28e48e4cb12124d429ede2e2d2ed4dc2927c10c83dc1291fa62",
+  "clipSha256": "8a36a0bf9f87032b657322a76b9927a1f80f13882dcb669ca933a1011bb51c09",
+  "scene": "change-role",
+  "review": {
+    "heardOpening": "Le rôle peut évoluer. On choisit d’abord",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "On choisit d’abord Propriétaire dans la liste",
+        "visibleSeconds": 1.5,
+        "visible": "Aucune ouverture de liste déroulante ni sélection de rôle n'est effectuée ; le rôle de Léa Martin reste sur Organisateur",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "puis on confirme avec Appliquer",
+        "visibleSeconds": 4,
+        "visible": "Aucun bouton Appliquer n'est visible ni actionné à l'écran",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "La confirmation indique le nouveau rôle",
+        "visibleSeconds": 2,
+        "visible": "Le message de confirmation « Léa Martin : propriétaire. » apparaît dès 00:02 au-dessus du lien d'invitation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Retirer une personne coupe son accès",
+        "visibleSeconds": 11.2,
+        "visible": "Les boutons Retirer sont visibles dans le tableau des administrateurs (explication générale sur écran stable)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:01 - L'action de changer le rôle via la liste déroulante n'est pas démontrée à l'écran : aucun menu ne s'ouvre et le rôle de Léa Martin reste fixé sur « Organisateur ».",
+      "00:03 - Le bouton « Appliquer » mentionné n'apparaît nulle part dans l'interface.",
+      "00:02 - Le bandeau de confirmation « Léa Martin : propriétaire. » s'affiche spontanément bien avant d'être commenté par la voix (00:09) et sans que l'action préalable n'ait été exécutée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, posée et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

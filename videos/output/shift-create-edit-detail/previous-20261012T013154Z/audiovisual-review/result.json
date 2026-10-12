@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:22:23.221Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "7f703cb77397b55afee5e86af762cb85f17463d21d85ff9197deba92bad5557f",
+  "clipSha256": "6feb63f82c42526de949a263db4ae05c6d027e951e113540bdcf2c111892f36b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Un bon créneau reste court à lire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "mission, horaire",
+        "visibleSeconds": 5,
+        "visible": "Formulaire affichant les champs Poste, Libellé et horaires Début/Fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "capacité, lieu et consigne",
+        "visibleSeconds": 7,
+        "visible": "Champs Capacité (3), Lieu de rendez-vous et Consigne pratique visibles dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "moins l’équipe doit répondre aux mêmes questions",
+        "visibleSeconds": 11.5,
+        "visible": "Écran stable montrant la fiche complète de modification de créneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:10 Changement net de voix/locutrice entre la première et la seconde phrase"
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Deux voix distinctes s'enchaînent : une première voix posée jusqu'à 00:09, puis une seconde voix plus aiguë à partir de 00:10."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

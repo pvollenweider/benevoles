@@ -1,0 +1,12 @@
+{
+  "anchor": "Le résultat est un événement publié avec son lien public, son",
+  "windowStart": 96.754,
+  "result": {
+    "found": true,
+    "startSeconds": 12.3,
+    "wordsHeard": "Le résultat est un événement publié avec son lien public, son"
+  },
+  "onset": 109.054,
+  "proposedCut": 109.005375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

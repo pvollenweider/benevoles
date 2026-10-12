@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:14:26.479Z",
+  "videoSha256": "436b6ea9e7b0ded41f8606097d9fbc50ef208243955227c725f92f9b275ec5a5",
+  "promptSha256": "6df3ef4529212d94ee95d077b1e7e4d427df9f01e9f1cdef5f6faff70f304c11",
+  "clipSha256": "2af678f6fd8be49fae4b23b78dab415fef85762a9f1e57f4d4e665a3f6bc64fc",
+  "scene": "preview-form",
+  "review": {
+    "heardOpening": "Sélectionnons un créneau et poursuivons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Sélectionnons un créneau et poursuivons jusqu’au formulaire.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le créneau puis sur Continuer et ouverture du formulaire d'informations.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "renseignons une identité fictive : Alex Martin.",
+        "visibleSeconds": 6.2,
+        "visible": "Saisie de Alex dans le prénom et Martin dans le nom.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Ajoutons son adresse email de démonstration et son téléphone fictif.",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Choisissons aussi une taille de t-shirt",
+        "visibleSeconds": 22.8,
+        "visible": "La case radio M pour la taille de t-shirt n'est sélectionnée qu'à 22,8s.",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Acceptons cette convention, puis l’utilisation des données",
+        "visibleSeconds": 24.5,
+        "visible": "Cochage successif des deux cases d'acceptation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Désynchronisation notable entre 00:13 et 00:23 : la sélection de la taille de t-shirt est annoncée à 00:13 mais n'est cliquée qu'à 00:23, pendant que la voix est déjà passée à l'explication suivante."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

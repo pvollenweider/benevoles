@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:16.489Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "6dd11cfbdd8886e1c6da0453f010705513dd53643fcfbf13e064fb55efd2d7c7",
+  "clipSha256": "799ff44bab9d3266359fa5991d95b38f3ef41dc40b2e8d17d1e76fd1b3268ca2",
+  "scene": "invite",
+  "review": {
+    "heardOpening": "Pour inviter Léa, ouvrez le formulaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "ouvrez le formulaire",
+        "visibleSeconds": 1,
+        "visible": "Clic sur le bouton « + Inviter » et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "saisissez son nom et son adresse",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de Léa Martin puis de l'adresse email dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Prenons Organisateur",
+        "visibleSeconds": 5.8,
+        "visible": "L'option Organisateur est cochée dans les rôles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Cliquez sur Envoyer l'invitation",
+        "visibleSeconds": 12,
+        "visible": "Clic sur le bouton Envoyer l'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "le message confirme son adresse",
+        "visibleSeconds": 13,
+        "visible": "Message vert « Invitation envoyée à video.team.lea@example.org » affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et posée, bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

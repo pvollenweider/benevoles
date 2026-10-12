@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:49:36.166Z",
-  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
-  "promptSha256": "3e30945bbe5d51f743be2dc2b80a09f9be9d96e9c10fba47d1641f23c83b4edd",
-  "clipSha256": "8148d3467b7832c15dab9f3911551e271278ad1e10c5932e09f50415f4c5d54c",
+  "reviewedAt": "2026-10-12T01:24:07.193Z",
+  "videoSha256": "22900478a697f7eeecdb4aa42ddeb22c69c41fd4b487755fa372fe7a8f3f0c1a",
+  "promptSha256": "a646367072c8cd4d178e02b53d1ea24b699b415f1fa8111af8bfbd18a53b15e2",
+  "clipSha256": "ea0138ea8c065206c3b80cf0260e40080c3060383dc456c9697a00fbe5b7ebca",
   "scene": "leaders",
   "review": {
-    "heardOpening": "Les responsables de secteur sont volontairement",
+    "heardOpening": "Les responsables de secteur sont volontairement décochés",
     "checkpoints": [
       {
-        "spokenSeconds": 0.2,
+        "spokenSeconds": 0.6,
         "spoken": "Les responsables de secteur sont volontairement décochés au départ",
         "visibleSeconds": 0,
-        "visible": "Option 'Les responsables de secteur' affichée non cochée",
+        "visible": "La case à cocher 'Les responsables de secteur' est visible et décochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.6,
-        "spoken": "car les reprendre déclenche immédiatement un email",
+        "spokenSeconds": 4.5,
+        "spoken": "car les reprendre déclenche immédiatement un email avec un nouveau lien personnel",
         "visibleSeconds": 0,
-        "visible": "Mention textuelle indiquant l'envoi immédiat d'un email sous la case",
+        "visible": "Sous l'option, la mention indique '2 responsables : chacun reçoit tout de suite un email avec son lien pour la copie'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.4,
-        "spoken": "Active cette option seulement après avoir vérifié",
-        "visibleSeconds": 8.5,
-        "visible": "La case demeure décochée sans action directe à l'écran",
+        "spokenSeconds": 8.5,
+        "spoken": "Activez cette option seulement après avoir vérifié",
+        "visibleSeconds": 11.2,
+        "visible": "Le curseur coche la case 'Les responsables de secteur'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier."
+      "observation": "Voix claire, posée et bien synchronisée avec l'action à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

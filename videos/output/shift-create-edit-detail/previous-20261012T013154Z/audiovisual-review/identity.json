@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:21:59.276Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "533e6007cc4b0cce0a11c31e8ddd86ce18928a3d8819d3cec9e75ac43614570f",
+  "clipSha256": "f5191d3536f83807d23c32b66103cfdc5818dff21b4530daa5564ce806cb11bb",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Choisissez d'abord le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissez d'abord le poste et, si nécessaire, un libellé plus précis.",
+        "visibleSeconds": 1.5,
+        "visible": "Le formulaire Nouveau créneau s'ouvre avec le poste Accueil, puis le libellé Accueil des artistes est renseigné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "La date, l'heure de début et l'heure de fin placent la barre dans le planning.",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de la date (samedi 17 octobre) puis saisie des heures (18:00 à 21:30).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "visibleSeconds": 13,
+        "visible": "Le champ Capacité est incrémenté à 3.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, fluide et très claire, accompagnant naturellement les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

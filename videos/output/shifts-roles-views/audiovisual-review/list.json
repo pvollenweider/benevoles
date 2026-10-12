@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:19:19.189Z",
-  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
-  "promptSha256": "93e9b1c6b1975b9e358b81caab2929989f068d8b73bbb95e8edb829da6b12f11",
-  "clipSha256": "6d590706f6c6534a8c66ec2aced9d167f8bf5d68955699563a5422eb71c0dd6b",
+  "reviewedAt": "2026-10-12T01:31:18.632Z",
+  "videoSha256": "2ec0d4af9534329138b7df74e4bedf68e0a70479a91094dc4aa5a752b6987afc",
+  "promptSha256": "49877f4244f8920be5c4f2b1bc82458f06f085eac54d64e189ffbb7a7a46428e",
+  "clipSha256": "8c175c1a748d5ec5cab14f3244ba02e81b60193406e96b363f3b056a080981c3",
   "scene": "list",
   "review": {
-    "heardOpening": "La vue Liste présente",
+    "heardOpening": "La vue Liste présente les mêmes données",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "La vue Liste présente les mêmes données",
-        "visibleSeconds": 2.5,
-        "visible": "Basculement de l'onglet Frise vers l'onglet Liste",
+        "spoken": "La vue Liste présente les mêmes données sous une forme plus compacte",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage de la vue Liste avec le tableau récapitulatif des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
-        "spoken": "pratique pour relire les libellés",
-        "visibleSeconds": 3,
-        "visible": "Affichage des colonnes Date et horaire ainsi que Poste",
+        "spoken": "relire les libellés, les capacités et les statuts",
+        "visibleSeconds": 4.5,
+        "visible": "Colonnes Poste, Places et Statut bien visibles dans le tableau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "les capacités et les statuts",
-        "visibleSeconds": 3,
-        "visible": "Affichage des colonnes Places et Statut dans le tableau",
+        "spokenSeconds": 8.1,
+        "spoken": "parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire",
+        "visibleSeconds": 8.1,
+        "visible": "Liste séquentielle des créneaux organisée par lignes sans frise chronologique",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme posé, conforme au texte."
+      "observation": "Voix naturelle, posée et parfaitement synchronisée avec l'affichage de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

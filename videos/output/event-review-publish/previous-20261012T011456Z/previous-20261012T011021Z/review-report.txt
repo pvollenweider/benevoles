@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "EVENT_REVIEW_PUBLISH",
+  "status": "NOT READY",
+  "duration": 138.72,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 125,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.2,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "42 images finales et preuves ponctuelles revues. Identité59.11 s après phrase55.33 ; t-shirt67.82 après62.55, AV confirme le retard. Ancres corrigées, sans reprise. Image directe113.9 : checklist unique ; apparence de répétition sur planche composée écartée. Aucun bug de disposition produit. Simulation/email puis partage public conformes ; dates françaises/Frise/aucune adresse interdite/overlay. Validation, ASR final, VTT, effets et musique passent.",
+  "sourceChanges": "record.ts : identité, email, t-shirt, consentements et publication ancrés aux phrases. Cache refusé (ancienne empreinte cb2c… vs4f01…), TTS continu régénéré ; frontières preview-start30.241771/result109.005375 recoupées aux silences, audit indépendant7/7 réussi.",
+  "report": "videos/output/event-review-publish/review-report.txt"
+}

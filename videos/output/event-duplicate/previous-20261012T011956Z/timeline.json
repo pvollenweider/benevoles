@@ -1,0 +1,277 @@
+{
+  "slug": "event-duplicate",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T00:05:20.309Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_DUPLICATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "key",
+      "atMs": 15233
+    },
+    {
+      "kind": "click",
+      "atMs": 15747
+    },
+    {
+      "kind": "key",
+      "atMs": 16055
+    },
+    {
+      "kind": "key",
+      "atMs": 16253
+    },
+    {
+      "kind": "key",
+      "atMs": 16350
+    },
+    {
+      "kind": "key",
+      "atMs": 16449
+    },
+    {
+      "kind": "key",
+      "atMs": 16547
+    },
+    {
+      "kind": "key",
+      "atMs": 16648
+    },
+    {
+      "kind": "key",
+      "atMs": 16751
+    },
+    {
+      "kind": "key",
+      "atMs": 16852
+    },
+    {
+      "kind": "key",
+      "atMs": 16953
+    },
+    {
+      "kind": "key",
+      "atMs": 17055
+    },
+    {
+      "kind": "key",
+      "atMs": 17159
+    },
+    {
+      "kind": "key",
+      "atMs": 17269
+    },
+    {
+      "kind": "key",
+      "atMs": 17370
+    },
+    {
+      "kind": "key",
+      "atMs": 17472
+    },
+    {
+      "kind": "key",
+      "atMs": 17575
+    },
+    {
+      "kind": "key",
+      "atMs": 17678
+    },
+    {
+      "kind": "key",
+      "atMs": 17779
+    },
+    {
+      "kind": "key",
+      "atMs": 17882
+    },
+    {
+      "kind": "key",
+      "atMs": 17983
+    },
+    {
+      "kind": "key",
+      "atMs": 18086
+    },
+    {
+      "kind": "key",
+      "atMs": 18188
+    },
+    {
+      "kind": "key",
+      "atMs": 18291
+    },
+    {
+      "kind": "key",
+      "atMs": 18396
+    },
+    {
+      "kind": "key",
+      "atMs": 18498
+    },
+    {
+      "kind": "key",
+      "atMs": 18601
+    },
+    {
+      "kind": "key",
+      "atMs": 18705
+    },
+    {
+      "kind": "key",
+      "atMs": 18805
+    },
+    {
+      "kind": "key",
+      "atMs": 18905
+    },
+    {
+      "kind": "key",
+      "atMs": 19008
+    },
+    {
+      "kind": "key",
+      "atMs": 19112
+    },
+    {
+      "kind": "key",
+      "atMs": 19215
+    },
+    {
+      "kind": "click",
+      "atMs": 20014
+    },
+    {
+      "kind": "click",
+      "atMs": 50431
+    },
+    {
+      "kind": "click",
+      "atMs": 75945
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1107,
+      "endMs": 12433
+    },
+    {
+      "id": "identity",
+      "startMs": 12887,
+      "endMs": 25869
+    },
+    {
+      "id": "choices",
+      "startMs": 26322,
+      "endMs": 43538
+    },
+    {
+      "id": "leaders",
+      "startMs": 43990,
+      "endMs": 58163
+    },
+    {
+      "id": "summary",
+      "startMs": 58614,
+      "endMs": 72452
+    },
+    {
+      "id": "create",
+      "startMs": 72905,
+      "endMs": 88970
+    },
+    {
+      "id": "copied-details",
+      "startMs": 89423,
+      "endMs": 107321
+    },
+    {
+      "id": "leader-emails",
+      "startMs": 107773,
+      "endMs": 126697
+    },
+    {
+      "id": "result",
+      "startMs": 127150,
+      "endMs": 140662
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "identity",
+      "phrase": "Le résumé indique immédiatement de",
+      "startMs": 9222,
+      "endMs": 12602,
+      "cueMs": 22111
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les réglages reprennent les messages",
+      "startMs": 9698,
+      "endMs": 13926,
+      "cueMs": 36021
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les pages personnalisées peuvent aussi",
+      "startMs": 14314,
+      "endMs": 16866,
+      "cueMs": 40636
+    },
+    {
+      "segmentId": "summary",
+      "phrase": "les inscriptions et les jalons.",
+      "startMs": 7357,
+      "endMs": 8365,
+      "cueMs": 65974
+    },
+    {
+      "segmentId": "create",
+      "phrase": "les inscriptions sont fermées.",
+      "startMs": 7082,
+      "endMs": 8464,
+      "cueMs": 79988
+    },
+    {
+      "segmentId": "create",
+      "phrase": "La nouvelle édition n'est donc",
+      "startMs": 8904,
+      "endMs": 11513,
+      "cueMs": 81811
+    },
+    {
+      "segmentId": "leader-emails",
+      "phrase": "Ouvrons le message réellement arrivé",
+      "startMs": 4941,
+      "endMs": 7824,
+      "cueMs": 112716
+    },
+    {
+      "segmentId": "result",
+      "phrase": "La duplication accélère la préparation",
+      "startMs": 7542,
+      "endMs": 13196,
+      "cueMs": 134694
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:26.894Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "d0f79f11fd9863cfa42ccabc31ca4772191f2d5ea1c40afdb377bc3643d5822b",
+  "clipSha256": "a6feb00678fdaa03dd828d4c8a2b0c597a90debefe97a9758ad2ede884839eda",
+  "scene": "popover",
+  "review": {
+    "heardOpening": "Un clic sur la barre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Un clic sur la barre ouvre ses actions rapides",
+        "visibleSeconds": 2,
+        "visible": "Clic sur le bloc violet et ouverture du volet contextuel d'actions rapides",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "On y retrouve les heures, l'état des inscriptions",
+        "visibleSeconds": 3,
+        "visible": "Affichage des sections Horaires (06:15 - 07:45) et Inscriptions dans le volet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "et les commandes utiles",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement vers le bas révélant les boutons Dupliquer, Voir les inscriptions et Supprimer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et posée, en phase avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:54:27.721Z",
+  "videoSha256": "df3fea114f348428a33f8617b17a98419c9d073c94a337fbc9fce0dcaadd9313",
+  "promptSha256": "e0bcfda989026b8cf7d6c7bdb1f289513fe3635788597b9aaaf77b8ee34f9280",
+  "clipSha256": "8ffb681e88732dc6c879cd56badda11b904219b45361b2bc14ba167d738e0864",
+  "scene": "shift",
+  "review": {
+    "heardOpening": "Avec Buvette, vous retrouvez les créneaux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Recherche avec la requête 'Buvette' affichant deux créneaux d'événements distincts.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Chaque résultat rappelle l’événement, la date et l’horaire.",
+        "visibleSeconds": 4,
+        "visible": "Détails visibles sous chaque créneau avec nom de l'événement, date et plage horaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Ajoutons village pour ne garder que le service qui nous intéresse",
+        "visibleSeconds": 8.5,
+        "visible": "Ajout du mot 'village' dans le champ de recherche réduisant la liste à un unique résultat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "puis ouvrons le résultat :",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur le lien du résultat 'Buvette Midi - village'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "la liste des inscriptions est filtrée sur ce créneau.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage de la page des inscriptions avec le sélecteur positionné sur le créneau choisi.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée et claire, débit régulier et bonne synchronisation avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

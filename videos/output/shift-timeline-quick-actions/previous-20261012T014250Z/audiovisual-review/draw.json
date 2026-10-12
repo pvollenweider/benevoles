@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:19.154Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "b2900dc527cc36a25a384a24d8a97339928fb6a0e61b267119c03c9404161bee",
+  "clipSha256": "4a372d4c2e95618a81b352cac12f87c24871ca654ae0e38b06c1016c1753a7c6",
+  "scene": "draw",
+  "review": {
+    "heardOpening": "Dans la ligne d'un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.9,
+        "spoken": "cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée",
+        "visibleSeconds": 3.7,
+        "visible": "Création du créneau par glisser-déposer sur la ligne Sécurité de 06h15 à 07h00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "ses actions rapides s’ouvrent avec les horaires calculés",
+        "visibleSeconds": 4.2,
+        "visible": "La fenêtre contextuelle des paramètres du créneau s'affiche avec Début 06:15 et Fin 07:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Donnez-lui un libellé",
+        "visibleSeconds": 13.5,
+        "visible": "Le libellé « Relève dessinée » est saisi dans le champ",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "ajustez les places",
+        "visibleSeconds": 15,
+        "visible": "Le nombre de places passe de 2 à 1",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.4,
+        "spoken": "puis fermez avec Fermer et enregistrer",
+        "visibleSeconds": 16,
+        "visible": "L'extrait se termine sans que le bouton « Fermer et enregistrer » ne soit cliqué",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:16 : L'action finale « Fermer et enregistrer » n'est pas exécutée à l'écran avant la coupure de la vidéo."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:01:25.471Z",
+  "videoSha256": "30f550e7ef14dc36432f27fd76b7df4e67d434cf52bb7b8eb59290e0bed30eb6",
+  "promptSha256": "6df3ef4529212d94ee95d077b1e7e4d427df9f01e9f1cdef5f6faff70f304c11",
+  "clipSha256": "85f90260557732b09304ec21600a5a152f344d2cce7125baab4e29c6b6f2f7d3",
+  "scene": "preview-form",
+  "review": {
+    "heardOpening": "Sélectionnons un créneau et poursuivons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Sélectionnons un créneau et poursuivons jusqu’au formulaire.",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection du créneau Accueil puis clic sur le bouton Continuer pour accéder au formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Pour ce test, renseignons une identité fictive : Alex Martin.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie de « Alex » dans le prénom et « Martin » dans le nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Ajoutons son adresse email de démonstration et son téléphone fictif.",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Choisissons aussi une taille de t-shirt",
+        "visibleSeconds": 16,
+        "visible": "Aucune taille de t-shirt n'est cochée, les options restent vides",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 23,
+        "spoken": "Acceptons cette convention, puis l’utilisation des données",
+        "visibleSeconds": 25.5,
+        "visible": "Cochage successif des deux cases d'acceptation en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:13, l'action annoncée « Choisissons aussi une taille de t-shirt » n'est pas effectuée : aucune case d'option n'est sélectionnée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

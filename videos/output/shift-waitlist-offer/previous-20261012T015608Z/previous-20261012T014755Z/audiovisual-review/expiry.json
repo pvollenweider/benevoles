@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:31:40.083Z",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "promptSha256": "acd86c969b33064539f422e9eba6a41c66a97a2542dcc6e8ca048ba2df9fdf45",
+  "clipSha256": "5184ed3e08082b9638da044477db0624234f619817c8d833ebf8b2992a4a85fb",
+  "scene": "expiry",
+  "review": {
+    "heardOpening": "Si l'offre expire sans réponse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment",
+        "visibleSeconds": 0.5,
+        "visible": "Section « Liste d'attente : comment ça marche » affichant la règle 5 (« Si tu ne réponds pas dans les 24 heures... »)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "la promotion passe à la personne suivante.",
+        "visibleSeconds": 4.1,
+        "visible": "Texte explicatif du point 5 toujours visible à l'écran côté participant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.",
+        "visibleSeconds": 6.8,
+        "visible": "L'interface d'administration annoncée n'apparaît pas ; l'écran reste figé sur l'e-mail d'information du participant",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À partir de 00:06, la voix indique ce que montre l'administration (« L’administration montre alors l’offre active et la nouvelle position... »), mais la vue administrateur n'est pas affichée et l'écran reste statique sur la fiche participant."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

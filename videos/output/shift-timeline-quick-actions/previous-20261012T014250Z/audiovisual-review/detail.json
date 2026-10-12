@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:37.102Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "7926fad2d30b886182dbb4250c75a693a77d4058141160204a4a38172a23e616",
+  "clipSha256": "b0495a6f885f69fd72a90d03f544c9ff3ad088e6c28e4ddf8c0d6aca6d2c395e",
+  "scene": "detail",
+  "review": {
+    "heardOpening": "Pour ajouter une consigne à cette relève",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "passez en Liste",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la vue Liste des créneaux",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "puis cliquez sur Modifier",
+        "visibleSeconds": 3,
+        "visible": "Ouverture du formulaire d'édition Modifier le créneau",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "saisissez Venir dix minutes avant dans Consigne pratique",
+        "visibleSeconds": 14,
+        "visible": "Saisie du texte 'Venir 10 minutes avant.' dans le champ Consigne pratique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "puis enregistrez",
+        "visibleSeconds": 18.5,
+        "visible": "Enregistrement validé et retour à la liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:01 et 00:03, le passage en vue Liste puis l'ouverture de la fenêtre de modification s'affichent avec environ une seconde d'avance sur les instructions orales."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

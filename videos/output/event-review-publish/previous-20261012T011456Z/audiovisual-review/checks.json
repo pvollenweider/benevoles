@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:14:14.655Z",
+  "videoSha256": "436b6ea9e7b0ded41f8606097d9fbc50ef208243955227c725f92f9b275ec5a5",
+  "promptSha256": "8d457ae433ba7dcc4f5f35df96548f60adc47f5d8928d129c4436f23ecb3c601",
+  "clipSha256": "5f20b0d11e32a29696158869daa4a6e5fd45196a546cbb722b98e1352e4a39cb",
+  "scene": "checks",
+  "review": {
+    "heardOpening": "Les lignes marquées comme faites",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Les lignes marquées comme faites couvrent le titre, les dates et le planning",
+        "visibleSeconds": 1,
+        "visible": "Page fixe montrant les lignes cochées en vert pour les dates et le planning de créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "bloque le bouton Publier, notamment l’absence totale de créneau actif",
+        "visibleSeconds": 6,
+        "visible": "L'écran reste statique ; le bouton Publier en bas de page n'est pas visible sans défilement",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur",
+        "visibleSeconds": 12,
+        "visible": "Affichage des lignes Lieu, Instructions publiques renseignées et 2 responsables de secteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:07 - Le bouton Publier évoqué par la voix n'apparaît pas à l'écran, la page restant immobile sans défilement vers le bas."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et naturelle, en parfait accord avec le script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

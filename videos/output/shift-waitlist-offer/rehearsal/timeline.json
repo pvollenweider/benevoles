@@ -1,0 +1,139 @@
+{
+  "slug": "shift-waitlist-offer",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T01:56:36.509Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_WAITLIST_OFFER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4701
+    },
+    {
+      "kind": "click",
+      "atMs": 5533
+    },
+    {
+      "kind": "click",
+      "atMs": 11443
+    },
+    {
+      "kind": "click",
+      "atMs": 12227
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1137,
+      "endMs": 3765
+    },
+    {
+      "id": "setup",
+      "startMs": 5882,
+      "endMs": 5952
+    },
+    {
+      "id": "admin",
+      "startMs": 6405,
+      "endMs": 7674
+    },
+    {
+      "id": "release",
+      "startMs": 9841,
+      "endMs": 12533
+    },
+    {
+      "id": "volunteer",
+      "startMs": 12986,
+      "endMs": 14144
+    },
+    {
+      "id": "expiry",
+      "startMs": 14598,
+      "endMs": 15800
+    },
+    {
+      "id": "result",
+      "startMs": 16253,
+      "endMs": 17465
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "setup",
+      "phrase": "La liste d’attente s’active sur le créneau",
+      "startMs": 0,
+      "endMs": 3953,
+      "cueMs": 5882
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Tant que la capacité n’est pas atteinte",
+      "startMs": 3953,
+      "endMs": 12326,
+      "cueMs": 5886
+    },
+    {
+      "segmentId": "setup",
+      "phrase": "Une fois le créneau complet",
+      "startMs": 12326,
+      "endMs": 25000,
+      "cueMs": 5919
+    },
+    {
+      "segmentId": "admin",
+      "phrase": "On peut ainsi répondre à",
+      "startMs": 12824,
+      "endMs": 22000,
+      "cueMs": 7604
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Prendre la place confirme immédiatement",
+      "startMs": 9379,
+      "endMs": 14291,
+      "cueMs": 14136
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Refuser la place conserve une réponse explicite",
+      "startMs": 14291,
+      "endMs": 23000,
+      "cueMs": 14141
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "la promotion passe à la",
+      "startMs": 7710,
+      "endMs": 12284,
+      "cueMs": 14622
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "Dans l’administration, on peut suivre l’offre active",
+      "startMs": 12284,
+      "endMs": 23000,
+      "cueMs": 14653
+    }
+  ]
+}

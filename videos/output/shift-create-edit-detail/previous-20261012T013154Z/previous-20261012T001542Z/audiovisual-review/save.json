@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:53:33.779Z",
+  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+  "promptSha256": "d57b8953046a17552c7c93083a875eef89140af448b5d29dde8bfd7347966069",
+  "clipSha256": "105203a8fd4f66463c47ae0a1b0e1a3c5e45cfa62fa5f84d01c81660208b1d0a",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrons le créneau et vérifions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Enregistrons le créneau et vérifions sa place dans le planning",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la vue planning avec les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Le libellé complète le nom du poste sans le remplacer",
+        "visibleSeconds": 4.5,
+        "visible": "Lignes des postes et blocs de créneaux sur la frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "la capacité apparaît dans les indicateurs",
+        "visibleSeconds": 7.5,
+        "visible": "Pourcentages et jauges visibles sur les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "la fiche détaillée rassemble les consignes utiles au jour J",
+        "visibleSeconds": 10,
+        "visible": "Vue d'ensemble de la frise maintenue sans ouverture de fiche",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:10 - La fiche détaillée mentionnée n'est pas ouverte à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique constant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

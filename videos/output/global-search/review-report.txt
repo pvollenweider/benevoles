@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "GLOBAL_SEARCH",
+  "status": "READY",
+  "duration": 91.16,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 82,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "problems": "36 images et preuve38.3 revues ; fiche33.549 vs phrase33.076, inscription37.779 après ancre36.173 et liste visible38.3 avant phrase badge38.674. AV6/6 sans problème confirme synchronisation. Raccourci/focus, Buvette village, limite20, zoe et retour listes conformes. Dates françaises/aucune adresse interdite/overlay ; aucun bug de disposition. Validation, ASR final6/6,VTT,effets exacts,musique passent.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
+  "report": "videos/output/global-search/review-report.txt"
+}

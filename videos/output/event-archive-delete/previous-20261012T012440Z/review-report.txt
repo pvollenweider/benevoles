@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "EVENT_ARCHIVE_DELETE",
+  "status": "NOT READY",
+  "duration": 100.44,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 94,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "problems": "42 images finales et preuves ponctuelles revues. Archive clic34.90/confirmation35.77 après Après validation33.92 ; PDF clic63.26 après ouvrez60.16 (encore dialogue62.77), suppression83.75 après phrase80.90. Ancres locales corrigées sans reprise. Intro sur duplication peu pertinente, fond corrigé localement. Conseil générique préparation AV ne promet pas une visite de tous les rapports. Export réel et suppression copie réussis ; principal conservé ; dates françaises/aucune adresse interdite/overlay/bug de disposition. Validation, ASR final,VTT,effets,musique passent.",
+  "sourceChanges": "record.ts : retour du PDF rouvre réellement le panneau (répétition corrigée puis première capture narrée acceptée) ; fond intro événement ; archive/PDF/titre/suppression ancrés aux phrases après revue. Audio réutilisé.",
+  "report": "videos/output/event-archive-delete/review-report.txt"
+}

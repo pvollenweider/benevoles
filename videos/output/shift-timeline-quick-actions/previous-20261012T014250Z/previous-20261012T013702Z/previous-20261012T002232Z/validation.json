@@ -1,0 +1,54 @@
+{
+  "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+  "slug": "shift-timeline-quick-actions",
+  "validatedAt": "2026-10-06T15:59:15.271Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 89720,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12685,
+      "audioMs": 12685,
+      "driftMs": 0
+    },
+    {
+      "id": "draw",
+      "visualMs": 13214,
+      "audioMs": 13213,
+      "driftMs": 1
+    },
+    {
+      "id": "resize",
+      "visualMs": 12266,
+      "audioMs": 12265,
+      "driftMs": 1
+    },
+    {
+      "id": "popover",
+      "visualMs": 10680,
+      "audioMs": 10678,
+      "driftMs": 2
+    },
+    {
+      "id": "copy",
+      "visualMs": 13625,
+      "audioMs": 13623,
+      "driftMs": 2
+    },
+    {
+      "id": "detail",
+      "visualMs": 12948,
+      "audioMs": 12948,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 8870,
+      "audioMs": 8867,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:50:28.701Z",
-  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
-  "promptSha256": "10ea1208a159bc6728ce0587a707df022f87608c13748f54c5c59f4291c5ba78",
-  "clipSha256": "f44c77d27035336efa8b39fa56ccf358e0ba8730991f2143c682488c693174ee",
+  "reviewedAt": "2026-10-12T01:27:52.970Z",
+  "videoSha256": "2d9a500e8a823bb33e2bf33e6d39aafe9dd78888fe625dddc65be145edb74320",
+  "promptSha256": "86109fd2e7ca6c2f67dc2a01c9c81d5e5735120d24efde2fd1162e1e36db5d56",
+  "clipSha256": "c1485474649a9075b289d4225c9b49c803560ecd9fa37129568fec807fed6d0d",
   "scene": "archive",
   "review": {
-    "heardOpening": "Le bouton Archiver demande une confirmation",
+    "heardOpening": "Le bouton Archiver demande",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Le bouton Archiver demande une confirmation claire.",
-        "visibleSeconds": 4,
-        "visible": "Clic sur Archiver et affichage de la boîte de confirmation.",
+        "visibleSeconds": 0.8,
+        "visible": "Une boîte de confirmation s'affiche au-dessus du bouton Archiver avec les options Confirmer et Annuler.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
+        "spokenSeconds": 3,
         "spoken": "Après validation, la page publique disparaît",
-        "visibleSeconds": 8.5,
-        "visible": "Clic sur Confirmer et passage de l'événement au statut Archivé.",
-        "sync": "late",
-        "severity": "minor"
+        "visibleSeconds": 3.8,
+        "visible": "Validation effectuée, l'indicateur d'état passe sur Archivé.",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal.",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage des onglets Rapports, Journal et des boutons de gestion.",
+        "spokenSeconds": 6.2,
+        "spoken": "mais l'équipe garde accès au planning, aux inscriptions, aux rapports et au journal.",
+        "visibleSeconds": 6.5,
+        "visible": "Les boutons Gérer les créneaux, Voir les inscriptions, Rapports et Journal restent visibles sur la page.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "Léger décalage : le clic de confirmation à l'écran intervient à 00:08, après l'annonce vocale à 00:04."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide, claire et posée."
+      "observation": "Voix naturelle, posée et bien articulée, parfaitement calée sur les affichages à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

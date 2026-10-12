@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:23.748Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "252e2656e38b2eab6e8c655a9a1977fbbd9c58dd6fa3213f5b68ee652358242f",
+  "clipSha256": "4bd24333e6819bf11e232304669f50106a7ff67c36ab8284a0275a69ed73ad5c",
+  "scene": "summary",
+  "review": {
+    "heardOpening": "Le récapitulatif est la dernière vérification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le récapitulatif est la dernière vérification",
+        "visibleSeconds": 0.8,
+        "visible": "Section récapitulative visible sur le formulaire de duplication d'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Il rappelle les éléments copiés et ceux qui ne le sont jamais",
+        "visibleSeconds": 4,
+        "visible": "Bloc 'Ce qui est copié' et section 'Ce que vous allez créer' détaillant les éléments inclus et exclus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "les inscriptions et les jalons",
+        "visibleSeconds": 7,
+        "visible": "Défilement affichant la mention 'Les inscriptions et les jalons ne sont jamais copiés'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage et le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,64 @@
+{
+  "id": "SHIFT_WAITLIST_OFFER",
+  "slug": "shift-waitlist-offer",
+  "validatedAt": "2026-10-12T01:53:35.895Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 98560,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13045,
+      "audioMs": 13043,
+      "driftMs": 2
+    },
+    {
+      "id": "setup",
+      "visualMs": 13615,
+      "audioMs": 13614,
+      "driftMs": 1
+    },
+    {
+      "id": "admin",
+      "visualMs": 12083,
+      "audioMs": 12081,
+      "driftMs": 2
+    },
+    {
+      "id": "release",
+      "visualMs": 11418,
+      "audioMs": 11416,
+      "driftMs": 2
+    },
+    {
+      "id": "volunteer",
+      "visualMs": 14385,
+      "audioMs": 14383,
+      "driftMs": 2
+    },
+    {
+      "id": "expiry",
+      "visualMs": 11521,
+      "audioMs": 11520,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 10464,
+      "audioMs": 10463,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 5,
+  "music": {
+    "voicedWindows": 87,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": -33.6,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

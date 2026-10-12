@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "GLOBAL_SEARCH",
+  "status": "NOT READY",
+  "duration": 91.16,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 82,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "problems": "36 images finales revues. Inscription de Léa ouverte tard : phrase36.17 s, page Membres encore à38.67, clic40.31 ; AV confirme le retard. Autres chapitres conformes : raccourci/focus, résultats, badge, Buvette village, limite20 et zoe. Dates françaises, aucune adresse interdite ni overlay ; validation, ASR final, VTT, effets exacts et musique passent ; aucun bug de disposition produit.",
+  "sourceChanges": "record.ts : navigation inscription avancée sur ancre la liste de l’événement est déjà filtrée sur Léa. Script corrigé Camille Rochat → Léa Morel. Audio réutilisé ; pas de reprise.",
+  "report": "videos/output/global-search/review-report.txt"
+}

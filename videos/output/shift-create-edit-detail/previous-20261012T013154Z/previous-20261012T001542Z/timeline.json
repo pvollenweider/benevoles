@@ -1,0 +1,43 @@
+{
+  "slug": "shift-create-edit-detail",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T07:50:56.088Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1103,
+      "endMs": 15128
+    },
+    {
+      "id": "identity",
+      "startMs": 15580,
+      "endMs": 29979
+    },
+    {
+      "id": "availability",
+      "startMs": 30431,
+      "endMs": 44887
+    },
+    {
+      "id": "practical",
+      "startMs": 45338,
+      "endMs": 60676
+    },
+    {
+      "id": "save",
+      "startMs": 61127,
+      "endMs": 75567
+    },
+    {
+      "id": "change",
+      "startMs": 76021,
+      "endMs": 93269
+    },
+    {
+      "id": "result",
+      "startMs": 93722,
+      "endMs": 107187
+    }
+  ]
+}

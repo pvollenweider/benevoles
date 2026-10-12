@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:05:44.849Z",
-  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
-  "promptSha256": "e983e5d8ab04f5542c2a175ea931a756315a9f20d58fd0ca007d915c53bc4d1b",
-  "clipSha256": "3f93e0b7ae078e7891100e71f454690efd9f34f9a6d1ff41515537f2305375ce",
+  "reviewedAt": "2026-10-12T01:06:19.043Z",
+  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "promptSha256": "975cc064432826518cd9f3212d6d8e14c1f3d2cd5a3e85f9209e81b04f674ad5",
+  "clipSha256": "346c54664cd054bedea8f29bbdeba6bbf789ccfab2c15b88e0b5850e27152286",
   "scene": "invite-result",
   "review": {
     "heardOpening": "Après l'envoi, Léa apparaît",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 0.8,
         "spoken": "Léa apparaît avec le statut En attente",
-        "visibleSeconds": 0,
-        "visible": "Ligne de Léa Martin visible avec le libellé En attente",
+        "visibleSeconds": 0.5,
+        "visible": "Léa Martin est listée avec le badge 'En attente' surligné dans la section Administrateurs",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "valable sept jours",
-        "visibleSeconds": 0,
-        "visible": "Mention de l'expiration du lien sous 7 jours affichée",
+        "spokenSeconds": 3.2,
+        "spoken": "Un email contient son lien personnel, valable sept jours",
+        "visibleSeconds": 3,
+        "visible": "Encadré du lien d'invitation indiquant 'Un email a été envoyé. Ce lien expire dans 7 jours.'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "copier ce lien pour le lui transmettre",
-        "visibleSeconds": 6.3,
-        "visible": "Clic sur le bouton Copier le lien qui passe à Copié !",
+        "spokenSeconds": 5.8,
+        "spoken": "on peut aussi copier ce lien pour le lui transmettre autrement",
+        "visibleSeconds": 6.2,
+        "visible": "Clic sur le bouton 'Copier le lien', qui passe à l'état 'Copié !' avec confirmation 'Lien d'invitation copié.'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et ton calme conforme au script."
+      "observation": "Voix de synthèse masculine claire, fluide et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

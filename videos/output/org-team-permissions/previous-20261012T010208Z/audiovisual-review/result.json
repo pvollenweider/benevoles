@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:51:01.598Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "ac72762df383568923d36d8fe86130238fd10cf2c96df95b26a6dc270d986a76",
+  "clipSha256": "5f0ef4981687fb9d7e2775f0bbddb073c620c8a5604c9b6ae4f01b5d7fb72e7d",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est une équipe autonome",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde",
+        "visibleSeconds": 0,
+        "visible": "Encart central affichant « Une équipe autonome et maîtrisée / Des comptes nominatifs, des droits adaptés » sur la page Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "les propriétaires protègent le cadre",
+        "visibleSeconds": 4.5,
+        "visible": "Liste des Administrateurs montrant Camille Martin avec la mention « Rôle : Propriétaire »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "les organisateurs font vivre les événements",
+        "visibleSeconds": 6.3,
+        "visible": "Comptes de Colette Favre et Samira Diallo affichés avec la mention « Rôle : Organisateur »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation de conclusion."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

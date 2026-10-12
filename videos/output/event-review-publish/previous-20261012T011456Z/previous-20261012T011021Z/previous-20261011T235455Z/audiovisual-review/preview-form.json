@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:13:45.183Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "8eb8c31d6c1c61f99854ab7f0928edd4ab2ece22cad01eecc47c47d31285ff2a",
+  "clipSha256": "32b96e9152c530b9b0d1a0e560aa4e0de93b8cd1f468e862f2a004ae7da2f8fa",
+  "scene": "preview-form",
+  "review": {
+    "heardOpening": "Sélectionnons un créneau et poursuivons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Sélectionnons un créneau et poursuivons jusqu’au formulaire",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le bouton Continuer et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "renseignons une identité fictive : Alex Martin",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie de Alex dans Prénom puis Martin dans Nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Ajoutons son adresse email de démonstration et son téléphone fictif",
+        "visibleSeconds": 10.2,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "Choisissons aussi une taille de t-shirt",
+        "visibleSeconds": 17,
+        "visible": "Sélection de la taille M",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Acceptons cette convention, puis l’utilisation des données",
+        "visibleSeconds": 23.5,
+        "visible": "Cochage des deux cases de consentement en bas de formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

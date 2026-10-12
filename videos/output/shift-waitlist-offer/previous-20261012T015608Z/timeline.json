@@ -1,0 +1,118 @@
+{
+  "slug": "shift-waitlist-offer",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T01:53:29.354Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_WAITLIST_OFFER",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 15087
+    },
+    {
+      "kind": "click",
+      "atMs": 18637
+    },
+    {
+      "kind": "click",
+      "atMs": 46610
+    },
+    {
+      "kind": "click",
+      "atMs": 49341
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1121,
+      "endMs": 14166
+    },
+    {
+      "id": "setup",
+      "startMs": 14620,
+      "endMs": 28235
+    },
+    {
+      "id": "admin",
+      "startMs": 28687,
+      "endMs": 40770
+    },
+    {
+      "id": "release",
+      "startMs": 42936,
+      "endMs": 54354
+    },
+    {
+      "id": "volunteer",
+      "startMs": 54807,
+      "endMs": 69192
+    },
+    {
+      "id": "expiry",
+      "startMs": 69652,
+      "endMs": 81173
+    },
+    {
+      "id": "result",
+      "startMs": 81626,
+      "endMs": 92090
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "admin",
+      "phrase": "On peut ainsi répondre à",
+      "startMs": 7516,
+      "endMs": 11837,
+      "cueMs": 36206
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Prendre la place confirme immédiatement",
+      "startMs": 6509,
+      "endMs": 8653,
+      "cueMs": 61317
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Refuser la place conserve une réponse explicite",
+      "startMs": 9286,
+      "endMs": 14383,
+      "cueMs": 64095
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "la promotion passe à la",
+      "startMs": 3768,
+      "endMs": 5628,
+      "cueMs": 73422
+    },
+    {
+      "segmentId": "expiry",
+      "phrase": "Dans l’administration, on peut suivre l’offre active",
+      "startMs": 5873,
+      "endMs": 11346,
+      "cueMs": 75527
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:22:07.390Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "b7cd6ec6f0374632024805dd5b71c6e9d6240cfcc7bd9201cb221daef4382f1c",
+  "clipSha256": "52efccd1e3ed7ddde4a28d76de460c9dd8b3a7bfab3469b6c69972028a10ec5b",
+  "scene": "practical",
+  "review": {
+    "heardOpening": "Renseignons d'abord le lieu de rendez-vous",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord.",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de 'entrée artistes, portail nord' dans le champ Lieu de rendez-vous",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées.",
+        "visibleSeconds": 7.2,
+        "visible": "Saisie de la consigne 'venir dix minutes avant avec des chaussures fermées' dans le champ Consigne pratique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "ici Léa, accueil artistes, et son téléphone de démonstration.",
+        "visibleSeconds": 14.1,
+        "visible": "Renseignement du contact 'Léa, accueil artistes' puis du numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Les coordonnées GPS placent ce rendez-vous sur la carte.",
+        "visibleSeconds": 21,
+        "visible": "Renseignement des coordonnées GPS dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les saisies à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

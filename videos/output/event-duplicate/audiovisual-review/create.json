@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:49:58.857Z",
-  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
-  "promptSha256": "347a58caea24a8560124dc5a0190f1b744bd93a07db86ebf475a47163761a646",
-  "clipSha256": "364005e5d6a28d785f05b1f3ada529aa560ab66d136130081596768fc65c44eb",
+  "reviewedAt": "2026-10-12T01:24:20.275Z",
+  "videoSha256": "22900478a697f7eeecdb4aa42ddeb22c69c41fd4b487755fa372fe7a8f3f0c1a",
+  "promptSha256": "9590a17b24d84f7b4e533df7555b8300f027b2f40f612a152a72c16014bdcacd",
+  "clipSha256": "e384aa4054fe5feacafc907f60d188de973a665dc1f8e50b9d49418a02c9c682",
   "scene": "create",
   "review": {
     "heardOpening": "Créons la copie",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Créons la copie",
-        "visibleSeconds": 1.8,
-        "visible": "Clic sur le bouton bleu Créer la copie",
+        "spokenSeconds": 0,
+        "spoken": "Créons la copie.",
+        "visibleSeconds": 0.4,
+        "visible": "Clic sur le bouton bleu « Créer la copie » en bas à gauche de la page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Elle s’ouvre dans l’administration avec le statut Brouillon",
-        "visibleSeconds": 2.8,
-        "visible": "Affichage de la page de gestion avec l'étape Brouillon sélectionnée",
+        "spokenSeconds": 2,
+        "spoken": "Elle s'ouvre dans l'administration avec le statut Brouillon.",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage de la page de l'événement « Fête du village de Montvert 2027 » avec l'étape Brouillon active",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "Vérifions ses réglages : les inscriptions sont fermées",
-        "visibleSeconds": 8.5,
-        "visible": "Accès au formulaire Modifier l'événement et affichage de la section Inscriptions",
+        "spokenSeconds": 5,
+        "spoken": "Vérifions ses réglages : les inscriptions sont fermées.",
+        "visibleSeconds": 6.8,
+        "visible": "Page de réglages affichée montrant la case « Inscriptions ouvertes » décochée",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien articulée."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

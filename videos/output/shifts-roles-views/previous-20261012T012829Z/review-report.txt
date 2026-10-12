@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "SHIFTS_ROLES_VIEWS",
+  "status": "NOT READY",
+  "duration": 86.6,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "problems": "36 images finales et preuves32.0/43.9/62.1 revues. Liste clic35.14 vs phrase31.05 ; panneau postes47.95 vs43.17 (AV confirme) ; palette64.49 vs consigne62.07. Ancres corrigées sans reprise. Vues/déplacement/couleur/sauvegarde et Frise finale réels ; labels actuels et dates françaises/aucune adresse interdite/overlay ; aucun bug de disposition. Validation, ASR final,VTT,effets,musique passent.",
+  "sourceChanges": "record.ts : Liste, ouverture postes, déplacement et palette ancrés aux phrases adaptées. Audio réutilisé.",
+  "report": "videos/output/shifts-roles-views/review-report.txt"
+}

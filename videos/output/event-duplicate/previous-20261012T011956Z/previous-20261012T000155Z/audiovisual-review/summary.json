@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:49:47.592Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "30f7847eb1d795834cdb4f931bb350a44da9a4d806db6a9a98d2938fae534f0e",
+  "clipSha256": "63727db00d66a9ac15a3e6aab1eb9085f02b8934fdb181d6c077f782d18ddaf4",
+  "scene": "summary",
+  "review": {
+    "heardOpening": "Le récapitulatif est la dernière vérification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le récapitulatif est la dernière vérification",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Dupliquer l'événement' avec les options cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ceux qui ne le sont jamais : les inscriptions et les jalons",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers la section 'Ce que vous allez créer' mentionnant l'exclusion des inscriptions et jalons",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées",
+        "visibleSeconds": 8,
+        "visible": "Section récapitulative affichée en bas de formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

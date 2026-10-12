@@ -1,0 +1,76 @@
+{
+  "id": "EVENT_DUPLICATE",
+  "slug": "event-duplicate",
+  "validatedAt": "2026-10-12T00:05:29.180Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 154960,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 11326,
+      "audioMs": 11324,
+      "driftMs": 2
+    },
+    {
+      "id": "identity",
+      "visualMs": 12982,
+      "audioMs": 12980,
+      "driftMs": 2
+    },
+    {
+      "id": "choices",
+      "visualMs": 17216,
+      "audioMs": 17213,
+      "driftMs": 3
+    },
+    {
+      "id": "leaders",
+      "visualMs": 14173,
+      "audioMs": 14173,
+      "driftMs": 0
+    },
+    {
+      "id": "summary",
+      "visualMs": 13838,
+      "audioMs": 13837,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 16065,
+      "audioMs": 16064,
+      "driftMs": 1
+    },
+    {
+      "id": "copied-details",
+      "visualMs": 17898,
+      "audioMs": 17897,
+      "driftMs": 1
+    },
+    {
+      "id": "leader-emails",
+      "visualMs": 18924,
+      "audioMs": 18922,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 13512,
+      "audioMs": 13510,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 8,
+  "music": {
+    "voicedWindows": 138,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -32.6,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

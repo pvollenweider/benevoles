@@ -1,0 +1,58 @@
+{
+  "id": "GLOBAL_SEARCH",
+  "slug": "global-search",
+  "validatedAt": "2026-10-11T23:53:42.398Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Charon",
+  "captureMs": 91160,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12830,
+      "audioMs": 12829,
+      "driftMs": 1
+    },
+    {
+      "id": "open",
+      "visualMs": 12436,
+      "audioMs": 12434,
+      "driftMs": 2
+    },
+    {
+      "id": "person",
+      "visualMs": 16702,
+      "audioMs": 16702,
+      "driftMs": 0
+    },
+    {
+      "id": "shift",
+      "visualMs": 15374,
+      "audioMs": 15371,
+      "driftMs": 3
+    },
+    {
+      "id": "limits",
+      "visualMs": 15743,
+      "audioMs": 15741,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 12285,
+      "audioMs": 12282,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 82,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "issues": []
+}

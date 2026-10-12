@@ -1,0 +1,541 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1155,
+    "endMs": 11636,
+    "sentences": [
+      {
+        "text": "Avant de publier, l’écran de vérification rassemble ce qui compte vraiment.",
+        "startMs": 214,
+        "endMs": 3899,
+        "method": "silence",
+        "absoluteStartMs": 1369
+      },
+      {
+        "text": "Il évite d’ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.",
+        "startMs": 4438,
+        "endMs": 10145,
+        "method": "silence",
+        "absoluteStartMs": 5593
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "checks",
+    "startMs": 12088,
+    "endMs": 31852,
+    "sentences": [
+      {
+        "text": "Les lignes marquées comme faites couvrent le titre, les dates et le planning.",
+        "startMs": 334,
+        "endMs": 5034,
+        "method": "silence",
+        "absoluteStartMs": 12422
+      },
+      {
+        "text": "Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif.",
+        "startMs": 5385,
+        "endMs": 10571,
+        "method": "silence",
+        "absoluteStartMs": 17473
+      },
+      {
+        "text": "Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours mais n’empêchent pas l’ouverture.",
+        "startMs": 11067,
+        "endMs": 19448,
+        "method": "silence",
+        "absoluteStartMs": 23155
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "preview-start",
+    "startMs": 34018,
+    "endMs": 50461,
+    "sentences": [
+      {
+        "text": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence.",
+        "startMs": 329,
+        "endMs": 5825,
+        "method": "silence",
+        "absoluteStartMs": 34347
+      },
+      {
+        "text": "On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.",
+        "startMs": 6560,
+        "endMs": 16104,
+        "method": "silence",
+        "absoluteStartMs": 40578
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "preview-start",
+        "phrase": "On vérifie d’abord l’en-tête, le",
+        "startMs": 6560,
+        "endMs": 16104,
+        "cueMs": 40579
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 34508
+      }
+    ]
+  },
+  {
+    "chapter": "preview-form",
+    "startMs": 50913,
+    "endMs": 83049,
+    "sentences": [
+      {
+        "text": "Sélectionnons un créneau et poursuivons jusqu’au formulaire.",
+        "startMs": 345,
+        "endMs": 3928,
+        "method": "silence",
+        "absoluteStartMs": 51258
+      },
+      {
+        "text": "Pour ce test, renseignons une identité fictive :",
+        "startMs": 4415,
+        "endMs": 5506,
+        "method": "silence",
+        "absoluteStartMs": 55328
+      },
+      {
+        "text": "Alex Martin.",
+        "startMs": 5770,
+        "endMs": 7295,
+        "method": "silence",
+        "absoluteStartMs": 56683
+      },
+      {
+        "text": "Ajoutons son adresse email de démonstration et son téléphone fictif.",
+        "startMs": 7688,
+        "endMs": 11360,
+        "method": "silence",
+        "absoluteStartMs": 58601
+      },
+      {
+        "text": "Choisissons aussi une taille de t-shirt :",
+        "startMs": 11642,
+        "endMs": 13614,
+        "method": "silence",
+        "absoluteStartMs": 62555
+      },
+      {
+        "text": "cette question est obligatoire pour notre événement.",
+        "startMs": 13789,
+        "endMs": 17600,
+        "method": "silence",
+        "absoluteStartMs": 64702
+      },
+      {
+        "text": "Le formulaire permet de relire les informations demandées et la Convention des Bénévoles.",
+        "startMs": 18125,
+        "endMs": 22752,
+        "method": "silence",
+        "absoluteStartMs": 69038
+      },
+      {
+        "text": "Acceptons cette convention, puis l’utilisation des données par l’association pour gérer ses bénévoles.",
+        "startMs": 23436,
+        "endMs": 28312,
+        "method": "silence",
+        "absoluteStartMs": 74349
+      },
+      {
+        "text": "Nous testons le parcours sans créer d’inscription réelle.",
+        "startMs": 28900,
+        "endMs": 31726,
+        "method": "silence",
+        "absoluteStartMs": 79813
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "preview-form",
+        "phrase": "Pour ce test, renseignons une",
+        "startMs": 4415,
+        "endMs": 5506,
+        "cueMs": 55331
+      },
+      {
+        "segmentId": "preview-form",
+        "phrase": "Pour ce test, renseignons une identité fictive",
+        "startMs": 4415,
+        "endMs": 5506,
+        "cueMs": 56123
+      },
+      {
+        "segmentId": "preview-form",
+        "phrase": "Ajoutons son adresse email de",
+        "startMs": 7688,
+        "endMs": 11360,
+        "cueMs": 59124
+      },
+      {
+        "segmentId": "preview-form",
+        "phrase": "Choisissons aussi une taille de t-shirt",
+        "startMs": 11642,
+        "endMs": 13614,
+        "cueMs": 64900
+      },
+      {
+        "segmentId": "preview-form",
+        "phrase": "Acceptons cette convention",
+        "startMs": 23436,
+        "endMs": 28312,
+        "cueMs": 74349
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 51391
+      },
+      {
+        "kind": "click",
+        "atMs": 55807
+      },
+      {
+        "kind": "click",
+        "atMs": 56639
+      },
+      {
+        "kind": "key",
+        "atMs": 56948
+      },
+      {
+        "kind": "key",
+        "atMs": 57047
+      },
+      {
+        "kind": "key",
+        "atMs": 57145
+      },
+      {
+        "kind": "key",
+        "atMs": 57245
+      },
+      {
+        "kind": "click",
+        "atMs": 58040
+      },
+      {
+        "kind": "key",
+        "atMs": 58347
+      },
+      {
+        "kind": "key",
+        "atMs": 58446
+      },
+      {
+        "kind": "key",
+        "atMs": 58545
+      },
+      {
+        "kind": "key",
+        "atMs": 58644
+      },
+      {
+        "kind": "key",
+        "atMs": 58743
+      },
+      {
+        "kind": "key",
+        "atMs": 58842
+      },
+      {
+        "kind": "click",
+        "atMs": 59640
+      },
+      {
+        "kind": "key",
+        "atMs": 59948
+      },
+      {
+        "kind": "key",
+        "atMs": 60046
+      },
+      {
+        "kind": "key",
+        "atMs": 60146
+      },
+      {
+        "kind": "key",
+        "atMs": 60250
+      },
+      {
+        "kind": "key",
+        "atMs": 60350
+      },
+      {
+        "kind": "key",
+        "atMs": 60450
+      },
+      {
+        "kind": "key",
+        "atMs": 60552
+      },
+      {
+        "kind": "key",
+        "atMs": 60656
+      },
+      {
+        "kind": "key",
+        "atMs": 60758
+      },
+      {
+        "kind": "key",
+        "atMs": 60871
+      },
+      {
+        "kind": "key",
+        "atMs": 60973
+      },
+      {
+        "kind": "key",
+        "atMs": 61076
+      },
+      {
+        "kind": "key",
+        "atMs": 61180
+      },
+      {
+        "kind": "key",
+        "atMs": 61282
+      },
+      {
+        "kind": "key",
+        "atMs": 61386
+      },
+      {
+        "kind": "key",
+        "atMs": 61489
+      },
+      {
+        "kind": "key",
+        "atMs": 61590
+      },
+      {
+        "kind": "key",
+        "atMs": 61689
+      },
+      {
+        "kind": "key",
+        "atMs": 61787
+      },
+      {
+        "kind": "key",
+        "atMs": 61886
+      },
+      {
+        "kind": "key",
+        "atMs": 61985
+      },
+      {
+        "kind": "key",
+        "atMs": 62083
+      },
+      {
+        "kind": "key",
+        "atMs": 62185
+      },
+      {
+        "kind": "key",
+        "atMs": 62291
+      },
+      {
+        "kind": "click",
+        "atMs": 63089
+      },
+      {
+        "kind": "key",
+        "atMs": 63397
+      },
+      {
+        "kind": "key",
+        "atMs": 63495
+      },
+      {
+        "kind": "key",
+        "atMs": 63595
+      },
+      {
+        "kind": "key",
+        "atMs": 63694
+      },
+      {
+        "kind": "key",
+        "atMs": 63793
+      },
+      {
+        "kind": "key",
+        "atMs": 63893
+      },
+      {
+        "kind": "key",
+        "atMs": 63994
+      },
+      {
+        "kind": "key",
+        "atMs": 64097
+      },
+      {
+        "kind": "key",
+        "atMs": 64203
+      },
+      {
+        "kind": "key",
+        "atMs": 64306
+      },
+      {
+        "kind": "key",
+        "atMs": 64410
+      },
+      {
+        "kind": "key",
+        "atMs": 64514
+      },
+      {
+        "kind": "key",
+        "atMs": 64615
+      },
+      {
+        "kind": "click",
+        "atMs": 65390
+      },
+      {
+        "kind": "click",
+        "atMs": 74823
+      },
+      {
+        "kind": "click",
+        "atMs": 75605
+      }
+    ]
+  },
+  {
+    "chapter": "preview-result",
+    "startMs": 83501,
+    "endMs": 98254,
+    "sentences": [
+      {
+        "text": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test.",
+        "startMs": 406,
+        "endMs": 6163,
+        "method": "silence",
+        "absoluteStartMs": 83907
+      },
+      {
+        "text": "C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.",
+        "startMs": 6478,
+        "endMs": 14614,
+        "method": "silence",
+        "absoluteStartMs": 89979
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "preview-result",
+        "phrase": "C’est ici qu’on repère un",
+        "startMs": 6478,
+        "endMs": 14614,
+        "cueMs": 89981
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 85156
+      }
+    ]
+  },
+  {
+    "chapter": "publish",
+    "startMs": 98707,
+    "endMs": 114147,
+    "sentences": [
+      {
+        "text": "Revenons à la vérification et publions.",
+        "startMs": 197,
+        "endMs": 2187,
+        "method": "silence",
+        "absoluteStartMs": 98904
+      },
+      {
+        "text": "La page devient accessible à toute personne qui possède le lien, mais aucun email n’est envoyé automatiquement aux membres.",
+        "startMs": 2858,
+        "endMs": 9280,
+        "method": "silence",
+        "absoluteStartMs": 101565
+      },
+      {
+        "text": "Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.",
+        "startMs": 9438,
+        "endMs": 15221,
+        "method": "silence",
+        "absoluteStartMs": 108145
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "publish",
+        "phrase": "Revenons à la vérification et publions",
+        "startMs": 197,
+        "endMs": 2187,
+        "cueMs": 99952
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 100411
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 114598,
+    "endMs": 130593,
+    "sentences": [
+      {
+        "text": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation.",
+        "startMs": 218,
+        "endMs": 6814,
+        "method": "silence",
+        "absoluteStartMs": 114816
+      },
+      {
+        "text": "Publier ouvre l’accès ;",
+        "startMs": 7245,
+        "endMs": 8218,
+        "method": "silence",
+        "absoluteStartMs": 121843
+      },
+      {
+        "text": "cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
+        "startMs": 8415,
+        "endMs": 15729,
+        "method": "silence",
+        "absoluteStartMs": 123013
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "Publier ouvre l’accès ",
+        "startMs": 7245,
+        "endMs": 8218,
+        "cueMs": 121844
+      }
+    ],
+    "interactions": []
+  }
+]

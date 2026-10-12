@@ -1,0 +1,64 @@
+{
+  "id": "SHIFT_CREATE_EDIT_DETAIL",
+  "slug": "shift-create-edit-detail",
+  "validatedAt": "2026-10-12T00:21:15.899Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 135800,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15152,
+      "audioMs": 15152,
+      "driftMs": 0
+    },
+    {
+      "id": "identity",
+      "visualMs": 15346,
+      "audioMs": 15344,
+      "driftMs": 2
+    },
+    {
+      "id": "availability",
+      "visualMs": 14157,
+      "audioMs": 14155,
+      "driftMs": 2
+    },
+    {
+      "id": "practical",
+      "visualMs": 27220,
+      "audioMs": 27217,
+      "driftMs": 3
+    },
+    {
+      "id": "save",
+      "visualMs": 13718,
+      "audioMs": 13716,
+      "driftMs": 2
+    },
+    {
+      "id": "change",
+      "visualMs": 18194,
+      "audioMs": 18192,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 15705,
+      "audioMs": 15705,
+      "driftMs": 0
+    }
+  ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 114,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.3,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:11:34.385Z",
+  "videoSha256": "9263e833b5b82a3432b4ec5ccafd1127ff2ffd16e5a3d8667ff11e4156bac7fa",
+  "promptSha256": "f9b0dccac5d77e0634ad81f377e6091a16fbb5b26d5f47af34785d399dcfdf50",
+  "clipSha256": "cb18143862340cb52d8178d1ca3ad463ce7fcda0b5ff9c6f47644525e59db93e",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Fermer les inscriptions, archiver et supprimer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents",
+        "visibleSeconds": 0.5,
+        "visible": "Carton de chapitre 'Archiver puis supprimer définitivement : Conserver l'historique ou effacer une édition'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Fermer bloque seulement les nouvelles inscriptions",
+        "visibleSeconds": 5.2,
+        "visible": "Page 'Dupliquer l'événement' affichée à l'écran",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Archiver retire l’événement du public tout en gardant ses données consultables",
+        "visibleSeconds": 8,
+        "visible": "Page 'Dupliquer l'événement' toujours présente en arrière-plan",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Supprimer efface définitivement l’édition",
+        "visibleSeconds": 12,
+        "visible": "Page 'Dupliquer l'événement' toujours visible sans options d'archivage ou de suppression",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:03 - La page affichée en fond après la disparition du bandeau de titre est 'Dupliquer l'événement', ce qui ne correspond pas au thème de l'archivage et de la suppression."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, naturelle et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

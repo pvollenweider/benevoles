@@ -1,47 +1,58 @@
 {
   "id": "SHIFTS_ROLES_VIEWS",
   "slug": "shifts-roles-views",
-  "validatedAt": "2026-10-04T17:22:41.284Z",
+  "validatedAt": "2026-10-12T01:30:46.713Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 86040,
+  "captureMs": 86640,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14905,
-      "audioMs": 14901,
-      "driftMs": 4
-    },
-    {
-      "id": "timeline",
-      "visualMs": 14013,
-      "audioMs": 14009,
-      "driftMs": 4
-    },
-    {
-      "id": "list",
-      "visualMs": 12405,
-      "audioMs": 12402,
-      "driftMs": 3
-    },
-    {
-      "id": "roles",
-      "visualMs": 15186,
-      "audioMs": 15184,
+      "visualMs": 14254,
+      "audioMs": 14252,
       "driftMs": 2
     },
     {
+      "id": "timeline",
+      "visualMs": 14570,
+      "audioMs": 14567,
+      "driftMs": 3
+    },
+    {
+      "id": "list",
+      "visualMs": 11601,
+      "audioMs": 11601,
+      "driftMs": 0
+    },
+    {
+      "id": "roles",
+      "visualMs": 15138,
+      "audioMs": 15135,
+      "driftMs": 3
+    },
+    {
       "id": "colors",
-      "visualMs": 13403,
-      "audioMs": 13401,
+      "visualMs": 13167,
+      "audioMs": 13165,
       "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 12267,
-      "audioMs": 12263,
-      "driftMs": 4
+      "visualMs": 13282,
+      "audioMs": 13279,
+      "driftMs": 3
     }
   ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
   "issues": []
 }

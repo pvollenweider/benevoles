@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:34.572Z",
+  "revalidatedAt": "2026-10-11T17:08:34.573Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "validation",
+      "audioSha256": "dda9dc0ecc4d999feee23ece8b2865483fb9ba082f62798682a7a965a6b23afd",
+      "recognized": "La taille du tee-shirt n'a pas été renseignée. Confirmer affiche la question à corriger et conserve toutes les autres réponses. Le champ obligatoire est signalé, choisis une taille puis tu peux reprendre. Une adresse e-mail au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu'une boîte existe vraiment.",
+      "expected": "La taille du t-shirt n’a pas été renseignée. Confirmer affiche la question à corriger et conserve toutes les autres réponses. Le champ obligatoire est signalé ; choisis une taille, puis tu peux reprendre. Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu’une boîte existe vraiment.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

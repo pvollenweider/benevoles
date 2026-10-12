@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:52:41.027Z",
+  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+  "promptSha256": "f90ed495315b1f7b8a8812115fa62fd8b09708c4c037db7f04c252a32213ddc4",
+  "clipSha256": "ba2abd41acedb70aec010d38eedfb976e7d29b640176c44f95cb59a001fab708",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un créneau transforme un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un créneau transforme un poste en besoin concret",
+        "visibleSeconds": 0,
+        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en superposition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Il dit quelle mission doit être assurée",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition de l'encart et affichage de la vue planning des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Prenons le temps de parcourir chaque champ",
+        "visibleSeconds": 9.5,
+        "visible": "Écran de planification général visible, annonce introductive pour la suite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

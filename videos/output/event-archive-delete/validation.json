@@ -1,54 +1,64 @@
 {
   "id": "EVENT_ARCHIVE_DELETE",
   "slug": "event-archive-delete",
-  "validatedAt": "2026-10-06T07:48:39.582Z",
+  "validatedAt": "2026-10-12T01:27:14.466Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 104040,
+  "captureMs": 100480,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 16789,
-      "audioMs": 16788,
-      "driftMs": 1
+      "visualMs": 14812,
+      "audioMs": 14810,
+      "driftMs": 2
     },
     {
       "id": "prepare",
-      "visualMs": 13594,
-      "audioMs": 13583,
-      "driftMs": 11
+      "visualMs": 13529,
+      "audioMs": 13528,
+      "driftMs": 1
     },
     {
       "id": "archive",
-      "visualMs": 14434,
-      "audioMs": 14433,
+      "visualMs": 14507,
+      "audioMs": 14506,
       "driftMs": 1
     },
     {
       "id": "delete-open",
-      "visualMs": 14348,
-      "audioMs": 14347,
+      "visualMs": 13895,
+      "audioMs": 13894,
       "driftMs": 1
     },
     {
       "id": "backup",
-      "visualMs": 13435,
-      "audioMs": 13434,
-      "driftMs": 1
+      "visualMs": 13391,
+      "audioMs": 13388,
+      "driftMs": 3
     },
     {
       "id": "confirm",
-      "visualMs": 13490,
-      "audioMs": 13489,
+      "visualMs": 13969,
+      "audioMs": 13968,
       "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 13686,
-      "audioMs": 13686,
+      "visualMs": 12066,
+      "audioMs": 12066,
       "driftMs": 0
     }
   ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 94,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
   "issues": []
 }

@@ -1,43 +1,185 @@
 {
   "slug": "event-review-publish",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T08:12:16.141Z",
+  "recordedAt": "2026-10-12T01:17:54.242Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REVIEW_PUBLISH",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 34498
+    },
+    {
+      "kind": "click",
+      "atMs": 51747
+    },
+    {
+      "kind": "click",
+      "atMs": 52547
+    },
+    {
+      "kind": "click",
+      "atMs": 55847
+    },
+    {
+      "kind": "click",
+      "atMs": 56963
+    },
+    {
+      "kind": "click",
+      "atMs": 59129
+    },
+    {
+      "kind": "click",
+      "atMs": 60262
+    },
+    {
+      "kind": "click",
+      "atMs": 63028
+    },
+    {
+      "kind": "click",
+      "atMs": 74845
+    },
+    {
+      "kind": "click",
+      "atMs": 75628
+    },
+    {
+      "kind": "click",
+      "atMs": 85177
+    },
+    {
+      "kind": "click",
+      "atMs": 100403
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1150,
-      "endMs": 11693
+      "startMs": 1164,
+      "endMs": 11643
     },
     {
       "id": "checks",
-      "startMs": 12146,
-      "endMs": 30728
+      "startMs": 12096,
+      "endMs": 31860
     },
     {
       "id": "preview-start",
-      "startMs": 32888,
-      "endMs": 47493
+      "startMs": 34020,
+      "endMs": 50462
     },
     {
       "id": "preview-form",
-      "startMs": 47944,
-      "endMs": 79083
+      "startMs": 50914,
+      "endMs": 83048
     },
     {
       "id": "preview-result",
-      "startMs": 79536,
-      "endMs": 93784
+      "startMs": 83502,
+      "endMs": 98253
     },
     {
       "id": "publish",
-      "startMs": 94241,
-      "endMs": 109689
+      "startMs": 98707,
+      "endMs": 114147
     },
     {
       "id": "result",
-      "startMs": 110141,
-      "endMs": 124623
+      "startMs": 114601,
+      "endMs": 130598
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "preview-start",
+      "phrase": "On vérifie d’abord l’en-tête, le",
+      "startMs": 6560,
+      "endMs": 16104,
+      "cueMs": 40582
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Sélectionnons un créneau et poursuivons",
+      "startMs": 345,
+      "endMs": 3928,
+      "cueMs": 51261
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Sélectionnons un créneau et poursuivons",
+      "startMs": 345,
+      "endMs": 3928,
+      "cueMs": 52057
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Pour ce test, renseignons une identité fictive",
+      "startMs": 4415,
+      "endMs": 5506,
+      "cueMs": 55329
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Ajoutons son adresse email de",
+      "startMs": 7688,
+      "endMs": 11360,
+      "cueMs": 58605
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Choisissons aussi une taille de t-shirt",
+      "startMs": 11642,
+      "endMs": 13614,
+      "cueMs": 62559
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Acceptons cette convention",
+      "startMs": 23436,
+      "endMs": 28312,
+      "cueMs": 74351
+    },
+    {
+      "segmentId": "preview-result",
+      "phrase": "C’est ici qu’on repère un",
+      "startMs": 6478,
+      "endMs": 14614,
+      "cueMs": 89980
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Revenons à la vérification et publions",
+      "startMs": 197,
+      "endMs": 2187,
+      "cueMs": 99945
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Publier ouvre l’accès ",
+      "startMs": 7245,
+      "endMs": 8218,
+      "cueMs": 121861
     }
   ]
 }

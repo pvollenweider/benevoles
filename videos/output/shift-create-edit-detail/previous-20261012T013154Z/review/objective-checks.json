@@ -1,0 +1,18 @@
+{
+  "id": "SHIFT_CREATE_EDIT_DETAIL",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "clicks": 19,
+  "keys": 170,
+  "exactEffects": true,
+  "vttMatchesManifest": true,
+  "finalAudioAudit": true,
+  "checkedAt": "2026-10-12T00:22:16.682Z"
+}

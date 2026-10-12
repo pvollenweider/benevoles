@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:53:54.719Z",
-  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
-  "promptSha256": "c0581790e426e08a1ae9673c8d999bcd4a34907120eb77fb1b32d7c1073ee39e",
-  "clipSha256": "c997a048dfe76e45ffc7f2efedb4e451f34f51e99bab34f7334ff15262006527",
+  "reviewedAt": "2026-10-12T01:36:40.826Z",
+  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "promptSha256": "7f703cb77397b55afee5e86af762cb85f17463d21d85ff9197deba92bad5557f",
+  "clipSha256": "d26c7bf45f499dff32a951791ecd1428e656bc373bbc8ec85ee4ed76cc636b5f",
   "scene": "result",
   "review": {
-    "heardOpening": "Un bon créneau reste court à lire",
+    "heardOpening": "Un bon créneau",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 4.5,
         "spoken": "mission, horaire, capacité",
-        "visibleSeconds": 4.1,
-        "visible": "Champs Poste, Horaires et Capacité visibles sur le formulaire",
+        "visibleSeconds": 4.5,
+        "visible": "Champs de poste, libellé, horaires (18:00 - 21:30) et capacité affichés sur le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 7.8,
         "spoken": "lieu et consigne",
-        "visibleSeconds": 6.3,
-        "visible": "Champs Lieu de rendez-vous et Consigne pratique affichés",
+        "visibleSeconds": 7.8,
+        "visible": "Champs 'Lieu de rendez-vous' et 'Consigne pratique' visibles avec leurs indications",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
-        "spoken": "Plus ces informations sont fiables",
-        "visibleSeconds": 8.7,
-        "visible": "Formulaire complet statique à l'écran",
+        "spokenSeconds": 10.5,
+        "spoken": "Plus ces informations sont fiables, moins l'équipe doit répondre aux mêmes questions",
+        "visibleSeconds": 10.5,
+        "visible": "Formulaire complet du créneau affiché de façon stable pour illustrer la recommandation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et fluide."
+      "observation": "Voix claire, fluide et posée, ton pédagogique naturel sans bruit de fond."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

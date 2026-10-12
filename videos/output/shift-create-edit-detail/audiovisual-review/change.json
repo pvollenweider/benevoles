@@ -1,51 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:53:43.497Z",
-  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
-  "promptSha256": "75055a7d23dd8a3fc707bdfaebade93746009b09dabb22ab38acf34614858126",
-  "clipSha256": "e47d9bc3337a694a89112969a5e90ef70f3810fc3d95f7c13dc71eec9082fa50",
+  "reviewedAt": "2026-10-12T01:36:21.502Z",
+  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "promptSha256": "4de31c06277ccc1d9aa5c9c4338a977c084402fbefec120f14360763edc15359",
+  "clipSha256": "477881fbf7feec26e23c499298006f1b23f20f808b263723189ff4b8aeee30c1",
   "scene": "change",
   "review": {
-    "heardOpening": "Dans la liste, le statut indique",
+    "heardOpening": "Dans la liste, le statut",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Dans la liste",
-        "visibleSeconds": 0.8,
-        "visible": "Affichage de la vue en tableau Liste",
+        "spokenSeconds": 0.5,
+        "spoken": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées",
+        "visibleSeconds": 1.8,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Affichage de la vue Liste avec le tableau des créneaux et la colonne Statut (Ouvert, Complet)"
       },
       {
-        "spokenSeconds": 1.2,
-        "spoken": "le statut indique si les inscriptions sont ouvertes",
-        "visibleSeconds": 1,
-        "visible": "Colonne Statut visible avec mentions Ouvert et Complet",
+        "spokenSeconds": 5.8,
+        "spoken": "Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques.",
+        "visibleSeconds": 5.6,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Ouverture du formulaire « Modifier le créneau » affichant les horaires et la section « Infos pratiques pour les bénévoles »"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Rouvrir l’éditeur permet de corriger l’horaire",
-        "visibleSeconds": 5.8,
-        "visible": "Formulaire Modifier le créneau affiché avec champs Début et Fin",
+        "spokenSeconds": 10.5,
+        "spoken": "Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous",
+        "visibleSeconds": 10.5,
         "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 11.2,
-        "spoken": "relis toujours le nouveau jour, les heures et le rendez-vous",
-        "visibleSeconds": 6,
-        "visible": "Champs Date, Début, Fin et Lieu de rendez-vous présents à l'écran",
-        "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Les champs Date, Début, Fin et Lieu de rendez-vous sont visibles dans le formulaire d'édition"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et posée, bien synchronisée avec les changements d'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

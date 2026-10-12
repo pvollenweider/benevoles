@@ -1,0 +1,64 @@
+{
+  "id": "EVENT_REVIEW_PUBLISH",
+  "slug": "event-review-publish",
+  "validatedAt": "2026-10-12T00:00:33.176Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 138720,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 10481,
+      "audioMs": 10479,
+      "driftMs": 2
+    },
+    {
+      "id": "checks",
+      "visualMs": 19762,
+      "audioMs": 19763,
+      "driftMs": -1
+    },
+    {
+      "id": "preview-start",
+      "visualMs": 16444,
+      "audioMs": 16441,
+      "driftMs": 3
+    },
+    {
+      "id": "preview-form",
+      "visualMs": 32135,
+      "audioMs": 32133,
+      "driftMs": 2
+    },
+    {
+      "id": "preview-result",
+      "visualMs": 14751,
+      "audioMs": 14750,
+      "driftMs": 1
+    },
+    {
+      "id": "publish",
+      "visualMs": 15441,
+      "audioMs": 15439,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 15996,
+      "audioMs": 15995,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 5,
+  "music": {
+    "voicedWindows": 125,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.2,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

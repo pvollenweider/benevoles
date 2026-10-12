@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:19:00.575Z",
+  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+  "promptSha256": "7988c367e82d4a91b2a97762401dc4cea95d4c9470e9431181af77fe92542c6a",
+  "clipSha256": "09ccee6560ecef74f3b1d55a80d194f8ac22185e148a09898396e2740fa51274",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un poste décrit une mission",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un poste décrit une mission, par exemple Accueil ou Buvette",
+        "visibleSeconds": 2.5,
+        "visible": "Lignes de postes 'Accueil' et 'Buvette' visibles sous l'encadré puis en plein écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Un créneau est une plage précise de ce poste",
+        "visibleSeconds": 4,
+        "visible": "Blocs horaires positionnés sur la frise chronologique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Le même poste peut donc contenir plusieurs créneaux",
+        "visibleSeconds": 9.8,
+        "visible": "Deux créneaux distincts affichés sur la ligne Accueil",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

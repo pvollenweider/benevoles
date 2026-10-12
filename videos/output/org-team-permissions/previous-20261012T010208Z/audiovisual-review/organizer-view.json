@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:45.345Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "3bdd624544b5a7ff2a96b70a1617100568698a387759e3a09821c1963d312bea",
+  "clipSha256": "14f0090322e21e6a6835d0ca5f92d615edeffb3f2e19cfb0d0f75b4be95b29ef",
+  "scene": "organizer-view",
+  "review": {
+    "heardOpening": "Vérifions maintenant avec le compte de Samira",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vérifions maintenant avec le compte de Samira, qui est organisatrice.",
+        "visibleSeconds": 1.7,
+        "visible": "Connexion au compte de Samira Diallo et affichage de l'interface avec son nom en haut à droite.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Elle retrouve les événements et les outils opérationnels.",
+        "visibleSeconds": 2.2,
+        "visible": "Page Événements affichée avec la liste des étapes et des événements.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace",
+        "visibleSeconds": 6.7,
+        "visible": "Affichage de l'onglet Paramètres avec la section Administrateurs listant les membres.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.7,
+        "spoken": "mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.",
+        "visibleSeconds": 7.5,
+        "visible": "La liste des administrateurs est affichée en lecture seule sans boutons d'action ni menu de modification.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

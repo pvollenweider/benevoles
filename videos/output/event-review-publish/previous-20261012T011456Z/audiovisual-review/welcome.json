@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:14:11.682Z",
+  "videoSha256": "436b6ea9e7b0ded41f8606097d9fbc50ef208243955227c725f92f9b275ec5a5",
+  "promptSha256": "03eb0eb67d25b45eaada2b695d763f523768cd8d43184b5d1cc4224e11c324fe",
+  "clipSha256": "fea0fa70c0d6bfd147cf6bb906343bdf36f68e5c1a364826c746f1cb8622a11c",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Avant de publier, l'écran de vérification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "l'écran de vérification rassemble ce qui compte vraiment",
+        "visibleSeconds": 2.2,
+        "visible": "L'encart de titre disparaît pour afficher l'étape « 3 Vérification et publication » avec la liste récapitulative des éléments",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il évite d'ouvrir une page vide ou incohérente",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage de la liste de contrôle des paramètres de l'événement (dates, créneaux, lieu, responsables)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.7,
+        "spoken": "rappelle que tout restera modifiable après la publication",
+        "visibleSeconds": 6.7,
+        "visible": "La mention sous le titre indique « Tout reste modifiable après la publication » avec des liens « Modifier » en face de chaque section",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

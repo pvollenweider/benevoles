@@ -1,0 +1,177 @@
+{
+  "slug": "event-duplicate",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T01:20:25.008Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_DUPLICATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4764
+    },
+    {
+      "kind": "click",
+      "atMs": 5879
+    },
+    {
+      "kind": "click",
+      "atMs": 8946
+    },
+    {
+      "kind": "click",
+      "atMs": 10712
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1122,
+      "endMs": 3748
+    },
+    {
+      "id": "identity",
+      "startMs": 4201,
+      "endMs": 7360
+    },
+    {
+      "id": "choices",
+      "startMs": 7814,
+      "endMs": 7976
+    },
+    {
+      "id": "leaders",
+      "startMs": 8429,
+      "endMs": 9278
+    },
+    {
+      "id": "summary",
+      "startMs": 9730,
+      "endMs": 9776
+    },
+    {
+      "id": "create",
+      "startMs": 10228,
+      "endMs": 12169
+    },
+    {
+      "id": "copied-details",
+      "startMs": 12622,
+      "endMs": 14865
+    },
+    {
+      "id": "leader-emails",
+      "startMs": 15318,
+      "endMs": 16538
+    },
+    {
+      "id": "result",
+      "startMs": 16991,
+      "endMs": 18140
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "identity",
+      "phrase": "Commencez par donner le titre",
+      "startMs": 0,
+      "endMs": 6839,
+      "cueMs": 4230
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Le résumé indique immédiatement de",
+      "startMs": 14705,
+      "endMs": 22000,
+      "cueMs": 7332
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les réglages reprennent les messages",
+      "startMs": 13528,
+      "endMs": 20130,
+      "cueMs": 7882
+    },
+    {
+      "segmentId": "choices",
+      "phrase": "Les pages personnalisées peuvent aussi",
+      "startMs": 20130,
+      "endMs": 25000,
+      "cueMs": 7927
+    },
+    {
+      "segmentId": "leaders",
+      "phrase": "Activez cette option seulement après",
+      "startMs": 12635,
+      "endMs": 23000,
+      "cueMs": 8444
+    },
+    {
+      "segmentId": "summary",
+      "phrase": "les inscriptions et les jalons.",
+      "startMs": 10328,
+      "endMs": 13311,
+      "cueMs": 9745
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Créons la copie",
+      "startMs": 0,
+      "endMs": 1413,
+      "cueMs": 10253
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Elle s’ouvre dans l’administration",
+      "startMs": 1413,
+      "endMs": 6848,
+      "cueMs": 11021
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Vérifions ses réglages",
+      "startMs": 6848,
+      "endMs": 9022,
+      "cueMs": 11043
+    },
+    {
+      "segmentId": "copied-details",
+      "phrase": "ouvrons leur liste dans cette nouvelle édition",
+      "startMs": 21531,
+      "endMs": 28000,
+      "cueMs": 13749
+    },
+    {
+      "segmentId": "leader-emails",
+      "phrase": "Ouvrons le message réellement arrivé",
+      "startMs": 7127,
+      "endMs": 12625,
+      "cueMs": 15339
+    },
+    {
+      "segmentId": "result",
+      "phrase": "La duplication accélère la préparation",
+      "startMs": 9548,
+      "endMs": 19000,
+      "cueMs": 18134
+    }
+  ]
+}
