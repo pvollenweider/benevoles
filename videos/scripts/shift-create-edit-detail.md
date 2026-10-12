@@ -15,7 +15,7 @@ La narration continue doit être régénérée après ce changement de transcrip
 3. Expliquer ouverture, fermeture et annulation.
 4. Ajouter rendez-vous, consigne, carte et contact.
 5. Enregistrer et vérifier le résultat.
-6. Rouvrir un créneau occupé et montrer l’avertissement avant modification.
+6. Rouvrir le créneau créé et expliquer les précautions de modification pour un créneau déjà occupé.
 
 ## Résultat visible
 

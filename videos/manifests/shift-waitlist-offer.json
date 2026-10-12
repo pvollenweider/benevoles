@@ -50,12 +50,12 @@
     },
     {
       "id": "volunteer",
-      "transcript": "Sur sa page, la personne voit l’offre, son expiration et les actions Accepter ou Refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.",
+      "transcript": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Prendre la place confirme immédiatement le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
       "fallbackDurationMs": 23000
     },
     {
       "id": "expiry",
-      "transcript": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.",
+      "transcript": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. Dans l’administration, on peut suivre l’offre active et la position des personnes encore en attente.",
       "fallbackDurationMs": 23000
     },
     {
