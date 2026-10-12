@@ -680,7 +680,7 @@ async function main() {
         await tap(page, page.locator("#search-volunteers").locator("..").getByRole("link", { name: "Léa Morel", exact: true }))
         await page.waitForURL(/\/admin\/members\?q=/); await settle(page)
         await page.getByRole("row").filter({ hasText: /Léa\s+Morel/ }).first().waitFor()
-        await at("Le badge Liste d’attente distingue")
+        await at("la liste de l’événement est déjà filtrée sur Léa")
         await page.goto(resultsUrl); await settle(page)
         await tap(page, page.locator("#search-registrations").locator("..").getByRole("link", { name: /Léa Morel/ }).first())
         await page.waitForURL(new RegExp(`/admin/events/${featureEventId}/registrations\\?q=`)); await settle(page)
@@ -1118,7 +1118,7 @@ async function main() {
         await page.getByRole("dialog").waitFor()
         createdBar = await newBarAfter(before)
         drawnEnd = await page.getByRole("dialog").getByLabel("Fin", { exact: true }).inputValue()
-        await at(0.43) /* mid-sentence */
+        await at("Donnez-lui un libellé")
         await typeQuickAction(page.getByRole("dialog").getByLabel("Libellé", { exact: true }), drawnLabel)
         await at("Donnez-lui un libellé, ajustez les")
         await tap(page, page.getByRole("dialog").getByLabel("Places", { exact: true }))
@@ -1169,12 +1169,13 @@ async function main() {
         await page.getByText("Créneau dupliqué", { exact: true }).waitFor()
         duplicateBar = await newBarAfter(before)
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
+        await at("Ouvrez cette copie")
         await tap(page, duplicateBar)
         const dialog = page.getByRole("dialog")
         const start = await dialog.getByLabel("Début", { exact: true }).inputValue()
         const end = await dialog.getByLabel("Fin", { exact: true }).inputValue()
         if (start !== drawnEnd) throw new Error("Dupliquer must create the actual next shift immediately after the source")
-        await at("elle est indépendante.")
+        await at("Donne-lui le libellé Relève suivante")
         await typeQuickAction(dialog.getByLabel("Libellé", { exact: true }), duplicateLabel)
         duplicateStart = shiftedTime(start, 15)
         duplicateEnd = shiftedTime(end, 15)
@@ -1183,9 +1184,10 @@ async function main() {
         await dialog.getByLabel("Début", { exact: true }).fill(duplicateStart)
         await tap(page, dialog.getByLabel("Fin", { exact: true }))
         await dialog.getByLabel("Fin", { exact: true }).fill(duplicateEnd)
-        await at("Fermer et enregistrer conserve le")
+        await at("Ici, on la décale de")
         await tap(page, dialog.getByRole("button", { name: "Décaler", exact: true }))
         await dialog.getByText("Horaires enregistrés.", { exact: true }).waitFor()
+        await at("Fermer et enregistrer conserve le")
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
         await duplicateBar.getByText(duplicateLabel, { exact: true }).waitFor()
       })
@@ -1196,25 +1198,27 @@ async function main() {
         await at(0.12) /* mid-sentence */
         await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
-        await at(0.38) /* mid-sentence */
+        await at("Ici, saisissez Venir dix minutes avant")
         const instructions = page.getByLabel("Consigne pratique", { exact: true })
         await instructions.scrollIntoViewIfNeeded()
         await typeQuickAction(instructions, "Venir 10 minutes avant.")
         await at("Ce conseil appartient à la")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
-        // Reopen the actual saved copy and check its persisted instruction, then leave the
-        // editor before the next chapter says "De retour en Liste".
-        await tap(page, page.locator("tbody tr").filter({ hasText: duplicateLabel }).getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
-        if (await page.getByLabel("Consigne pratique", { exact: true }).inputValue() !== "Venir 10 minutes avant.") throw new Error("Detailed instruction did not persist on the actual copied shift")
-        await tap(page, page.getByRole("button", { name: "Annuler", exact: true }))
-        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
+        // Check actual saved values without flashing an unannounced second editor.
+        const persistedResponse = await page.request.get(`${baseUrl}/api/admin/events/${featureEventId}`)
+        if (!persistedResponse.ok()) throw new Error("Cannot verify the saved copied shift")
+        const persisted = await persistedResponse.json() as { shifts: { label: string | null; instructions: string | null }[] }
+        const savedCopies = persisted.shifts.filter(shift => shift.label === duplicateLabel)
+        const savedOriginals = persisted.shifts.filter(shift => shift.label === drawnLabel)
+        if (savedCopies.length !== 1 || savedCopies[0].instructions !== "Venir 10 minutes avant." || savedOriginals.length !== 1 || savedOriginals[0].instructions === "Venir 10 minutes avant.") throw new Error("Detailed instruction must persist on the copy alone")
       })
+      // Reload and restore the List before the narration says « De retour en Liste ».
+      await page.reload(); await settle(page)
+      const savedList = page.getByRole("button", { name: "Liste", exact: true })
+      if (await savedList.getAttribute("aria-pressed") !== "true") await tap(page, savedList)
+      await page.locator("tbody").waitFor()
       await scene("result", async (at) => {
-        await page.reload(); await settle(page)
-        const list = page.getByRole("button", { name: "Liste", exact: true })
-        if (await list.getAttribute("aria-pressed") !== "true") await tap(page, list)
-        await page.locator("tbody").waitFor()
         const original = page.locator("tbody tr").filter({ hasText: drawnLabel })
         const copied = page.locator("tbody tr").filter({ hasText: duplicateLabel })
         if (await original.count() !== 1 || await copied.count() !== 1) throw new Error("Saved List must contain both independent shifts exactly once")
@@ -1412,9 +1416,7 @@ async function main() {
       const enterDetailText = async (field: Locator, value: string) => {
         await field.scrollIntoViewIfNeeded()
         await tap(page, field)
-        await field.press("ControlOrMeta+A")
-        await field.press("Backspace")
-        await field.pressSequentially(value, { delay: 95 })
+        await field.fill(value)
         await page.waitForTimeout(400)
         if (await field.inputValue() !== value) throw new Error("Detailed shift field differs from the demonstrated entry")
       }
@@ -1427,20 +1429,20 @@ async function main() {
         await page.getByRole("heading", { name: "Nouveau créneau" }).waitFor()
         await at(0.08) /* mid-sentence */
         await enterDetailText(page.getByLabel("Poste *"), "Accueil")
-        await at("La date, l’heure de début")
+        await at("Choisissez d’abord le poste")
         await enterDetailText(page.getByLabel("Libellé"), "Accueil des artistes")
         const date = page.getByLabel("Date *")
-        await at(0.43) /* mid-sentence */
+        await at("La date, l’heure de début")
         if (await date.count()) {
           await tap(page, date)
           await date.selectOption({ index: 1 })
           await page.waitForTimeout(500)
         }
-        await at(0.52) /* mid-sentence */
+        await at("La date, l’heure de début")
         await fillVisibly(page, page.getByLabel("Début *"), "18:00", 850)
-        await at("La capacité indique combien de")
+        await at("La date, l’heure de début")
         await fillVisibly(page, page.getByLabel("Fin *"), "21:30", 850)
-        await at(0.79) /* mid-sentence */
+        await at("La capacité indique combien de")
         await enterDetailText(page.getByLabel("Capacité *"), "3")
         if (await page.getByLabel("Début *").inputValue() !== "18:00" || await page.getByLabel("Fin *").inputValue() !== "21:30") throw new Error("Detailed shift hours must match the visible actual form values")
       })
@@ -1457,22 +1459,25 @@ async function main() {
       })
       await scene("practical", async (at) => {
         await page.getByRole("group", { name: "Infos pratiques pour les bénévoles" }).scrollIntoViewIfNeeded()
-        await at("entrée artistes, portail nord.")
-        await typeNaturally(page, page.getByLabel("Lieu de rendez-vous"), "Entrée artistes, portail nord")
-        await typeNaturally(page, page.getByLabel("Consigne pratique"), "Venir dix minutes avant avec des chaussures fermées.")
-        await typeNaturally(page, page.getByLabel("Personne de contact"), "Léa, accueil artistes")
-        await typeNaturally(page, page.getByLabel("Téléphone du contact"), "079 000 01 24")
-        await at("Si un créneau n'a pas")
-        await typeNaturally(page, page.getByLabel("Coordonnées GPS ou lien de carte"), "46.1805734, 6.1228285")
+        await at("Renseignons d’abord le lieu de rendez-vous")
+        await enterDetailText(page.getByLabel("Lieu de rendez-vous"), "Entrée artistes, portail nord")
+        await at("Ajoutons une consigne")
+        await enterDetailText(page.getByLabel("Consigne pratique"), "Venir dix minutes avant avec des chaussures fermées.")
+        await at("Le contact opérationnel indique")
+        await enterDetailText(page.getByLabel("Personne de contact"), "Léa, accueil artistes")
+        await enterDetailText(page.getByLabel("Téléphone du contact"), "079 000 01 24")
+        await at("Les coordonnées GPS placent")
+        await enterDetailText(page.getByLabel("Coordonnées GPS ou lien de carte"), "46.1805734, 6.1228285")
       })
       await scene("save", async (at) => {
         await page.getByRole("button", { name: "Ajouter", exact: true }).scrollIntoViewIfNeeded()
         await at(0.08) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByText("Accueil des artistes", { exact: true }).first().waitFor()
+        await page.getByText("Accueil des artistes", { exact: true }).first().scrollIntoViewIfNeeded()
         await at(0.60) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
-        await tap(page, page.getByRole("row").filter({ hasText: "Accueil des artistes" }).getByRole("button", { name: "Modifier", exact: true }))
+        await tap(page, page.getByRole("row").filter({ hasText: "Accueil des artistes" }).getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByLabel("Consigne pratique").scrollIntoViewIfNeeded()
       })
       await scene("change", async (at) => {
@@ -1483,7 +1488,7 @@ async function main() {
         const row = page.locator("tr").filter({ hasText: "Accueil des artistes" })
         await row.scrollIntoViewIfNeeded()
         await at("Rouvrir l’éditeur permet de corriger")
-        await tap(page, row.getByRole("button", { name: "Modifier" }))
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
         await at(0.70) /* mid-sentence */
         await page.getByLabel("Lieu de rendez-vous").scrollIntoViewIfNeeded()
@@ -1504,27 +1509,27 @@ async function main() {
         await page.getByText("Buvette", { exact: true }).first().scrollIntoViewIfNeeded()
       })
       await scene("list", async (at) => {
-        await at("Elle est pratique pour relire")
+        await at("La vue Liste présente")
         await tap(page, page.getByRole("button", { name: "Liste" }))
         await at(0.58) /* mid-sentence */
         await page.getByText("Accueil", { exact: true }).first().scrollIntoViewIfNeeded()
       })
       await scene("roles", async (at) => {
         await page.getByRole("button", { name: "Gérer les postes" }).scrollIntoViewIfNeeded()
-        await at("Les flèches Monter et Descendre")
+        await at("Dans Gérer les postes")
         await tap(page, page.getByRole("button", { name: "Gérer les postes" }))
         await page.getByRole("heading", { name: "Gérer les postes" }).waitFor()
-        await at(0.58) /* mid-sentence */
+        await at("Les flèches Monter et Descendre")
         const move = page.getByRole("button", { name: /Descendre le poste/ }).filter({ visible: true }).first()
         await tap(page, move)
       })
       await scene("colors", async (at) => {
         const color = page.getByRole("button", { name: /Changer la couleur du poste/ }).first()
         await color.scrollIntoViewIfNeeded()
-        await at("elle reste cohérente dans les")
+        await at("Choisissez-la dans la palette prévue")
         await tap(page, color)
         const palette = page.getByRole("group", { name: /Couleur du poste/ })
-        await at("La couleur aide à se")
+        await at("elle reste cohérente dans les")
         await palette.scrollIntoViewIfNeeded()
         const indigo = palette.getByRole("button", { name: "Indigo", exact: true })
         // Retakes retain their own data. Always demonstrate a real change,
@@ -1616,11 +1621,12 @@ async function main() {
         const offeredCard = page.getByRole("region", { name: "Tous mes créneaux", exact: true }).locator('[id^="registration-"]').filter({ has: page.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }) })
         if (await offeredCard.count() !== 1) throw new Error("Expected a single actual offered registration card")
         await offeredCard.getByText("Une place t'est proposée", { exact: true }).waitFor()
+        await offeredCard.scrollIntoViewIfNeeded()
         await at(0.26) /* mid-sentence */
         await offeredCard.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
-        await at("Refuser conserve une réponse explicite")
+        await at("Prendre la place confirme immédiatement")
         await offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }).focus()
-        await at(0.76) /* mid-sentence */
+        await at("Refuser la place conserve une réponse explicite")
         await offeredCard.getByRole("button", { name: `Refuser la place proposée sur le créneau ${waitlistShift.label}`, exact: true }).focus()
       })
 
@@ -1628,8 +1634,9 @@ async function main() {
         await page.getByRole("heading", { name: "Liste d'attente : comment ça marche" }).scrollIntoViewIfNeeded()
         await at("la promotion passe à la")
         await page.getByText(/Si tu ne réponds pas dans les 24 heures/).scrollIntoViewIfNeeded()
-        await at(0.68) /* mid-sentence */
-        await page.getByText(/la place passe à la personne suivante/).last().scrollIntoViewIfNeeded()
+        await at("Dans l’administration, on peut suivre l’offre active")
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations?shift=${encodeURIComponent(waitlistShift.id)}`); await settle(page)
+        await page.locator("tbody tr").filter({ hasText: "Camille Rochat" }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async (at) => {
@@ -3690,14 +3697,15 @@ async function main() {
       })
     } else if (slug === "event-archive-delete") {
       const disposableTitle = "Ancienne fête de Montvert — copie de démonstration"
-      await page.goto(`${baseUrl}/admin/events/${featureEventId}/duplicate`); await settle(page)
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Conserver l’historique ou effacer une édition", duration: 2_300 })
-        await page.getByRole("heading", { name: "Dupliquer l'événement" }).waitFor()
+        await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
       })
 
       let disposableId = ""
       await scene("prepare", async (at) => {
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/duplicate`); await settle(page)
         const title = page.getByLabel("Titre de la copie")
         await title.fill(disposableTitle)
         await at(0.42) /* mid-sentence */
@@ -3710,10 +3718,10 @@ async function main() {
       })
 
       await scene("archive", async (at) => {
-        await at(0.28) /* mid-sentence */
+        await at("Le bouton Archiver demande")
         await tap(page, page.getByRole("button", { name: "Archiver" }))
         await page.getByRole("alertdialog").waitFor()
-        await at(0.34) /* mid-sentence */
+        await at("Après validation, la page publique disparaît")
         await tap(page, page.getByRole("button", { name: "Confirmer" }))
         await page.getByText("Archivé", { exact: true }).first().waitFor()
       })
@@ -3731,7 +3739,7 @@ async function main() {
         const deletionUrl = page.url()
         const backup = page.getByRole("link", { name: /Ouvrir l'export PDF/ })
         await backup.scrollIntoViewIfNeeded()
-        await at("Il contient le planning, le")
+        await at("Avant d’aller plus loin, ouvrez l’export PDF")
         const ready = page.waitForEvent("popup")
         await tap(page, backup)
         const popup = await ready
@@ -3742,15 +3750,18 @@ async function main() {
         await page.goto(exportedUrl.href); await settle(page)
         await at(0.80) /* mid-sentence */
         await page.goto(deletionUrl); await settle(page)
+        // Navigating to the PDF resets this client-side disclosure on return.
+        await tap(page, page.getByRole("button", { name: "Supprimer l'événement…" }))
+        await page.getByRole("heading", { name: "Supprimer définitivement cet événement ?" }).waitFor()
       })
 
       await scene("confirm", async (at) => {
         const confirm = page.getByLabel(/Pour confirmer, saisissez le titre/)
         await confirm.scrollIntoViewIfNeeded()
-        await at(0.34) /* mid-sentence */
+        await at("Tant qu’il ne correspond pas")
         await confirm.fill(disposableTitle)
         await page.getByText("Le titre correspond. Vous pouvez supprimer.").waitFor()
-        await at(0.70) /* mid-sentence */
+        await at("Une fois la suppression lancée")
         await tap(page, page.getByRole("button", { name: "Supprimer définitivement" }))
         await page.getByRole("heading", { name: "Événements" }).waitFor()
       })
@@ -3958,9 +3969,8 @@ async function main() {
       await scene("identity", async (at) => {
         const title = page.getByLabel("Titre de la copie")
         await title.scrollIntoViewIfNeeded()
-        await at(0.18) /* mid-sentence */
-        await title.fill("")
-        await typeNaturally(page, title, "Fête du village de Montvert 2027")
+        await at("Commencez par donner le titre")
+        await fillVisibly(page, title, "Fête du village de Montvert 2027", 300)
         // Non-ambiguous date makes the day/month order reviewable in the pilot.
         await fillVisibly(page, page.getByLabel("Premier jour de la copie"), "2027-11-28", 1_100)
         await page.getByLabel("Premier jour de la copie").blur()
@@ -3982,7 +3992,7 @@ async function main() {
       await scene("leaders", async (at) => {
         const leaders = page.getByRole("checkbox", { name: "Les responsables de secteur" })
         await leaders.scrollIntoViewIfNeeded()
-        await at(0.42) /* mid-sentence */
+        await at("Activez cette option seulement après")
         await tap(page, leaders)
         await at(0.72) /* mid-sentence */
         await page.getByText(/chacun reçoit tout de suite un email/).scrollIntoViewIfNeeded()
@@ -3999,14 +4009,14 @@ async function main() {
       await scene("create", async (at) => {
         const mailbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string }[] }
         copiedInvitationIds = new Set(mailbox.messages.map(mail => mail.ID))
-        await at(0.16) /* mid-sentence */
+        await at("Créons la copie")
         await tap(page, page.getByRole("button", { name: "Créer la copie" }))
         await page.waitForURL(/\/admin\/events\/[^/]+$/)
         copyId = new URL(page.url()).pathname.split("/").at(-1) ?? ""
         await page.getByRole("heading", { name: "Fête du village de Montvert 2027" }).waitFor()
-        await at("les inscriptions sont fermées.")
+        await at("Elle s’ouvre dans l’administration")
         await page.getByText(/Brouillon/).first().scrollIntoViewIfNeeded()
-        await at("La nouvelle édition n'est donc")
+        await at("Vérifions ses réglages")
         await page.goto(`${baseUrl}/admin/events/${copyId}/edit`); await settle(page)
         await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).isChecked()) throw new Error("Copied event registrations must be closed")
@@ -4015,7 +4025,7 @@ async function main() {
       await scene("copied-details", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${copyId}/shifts`); await settle(page)
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
-        await at(0.66) /* mid-sentence */
+        await at("ouvrons leur liste dans cette nouvelle édition")
         await page.goto(`${baseUrl}/admin/events/${copyId}/pages`); await settle(page)
         await page.getByText("Questions fréquentes", { exact: true }).first().waitFor()
       })
@@ -4158,13 +4168,15 @@ async function main() {
         await at("Pour ce test, renseignons une")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await at("Ajoutons son adresse email de")
+        await at("Pour ce test, renseignons une identité fictive")
         await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
         await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
+        await at("Ajoutons son adresse email de")
         await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.preview@example.org")
         await typeNaturally(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34")
+        await at("Choisissons aussi une taille de t-shirt")
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
-        await at(0.75) /* mid-sentence */
+        await at("Acceptons cette convention")
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
       })
@@ -4180,7 +4192,7 @@ async function main() {
       await scene("publish", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/review`); await settle(page)
         await page.getByRole("heading", { name: "Publication" }).scrollIntoViewIfNeeded()
-        await at(0.20) /* mid-sentence */
+        await at("Revenons à la vérification et publions")
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
         await at(0.76) /* mid-sentence */

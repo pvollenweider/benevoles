@@ -140,3 +140,12 @@ La coupure réseau est explicitement annoncée comme une simulation. La capacit�
 ## Observation produit à évaluer
 
 Le modèle d’email `registration.ts` affiche le message personnalisé tel quel, sans interpoler les variables annoncées dans le formulaire de réglages. Le jeu de données utilise donc un texte sans variable. Ce comportement devra être évalué lors du module consacré aux modèles et variables ; la formation ne doit pas promettre cette interpolation dans l’email sans vérification.
+
+## Appareils des personas — lot 8
+
+Aline, Nicolas et Zoé représentent chacun un bénévole sur un autre appareil.
+Avant chaque nouveau formulaire de persona, le recorder efface uniquement la clé
+locale `benevoles_contact`, puis ouvre le formulaire. Il conserve les cookies
+organisateur nécessaires aux vérifications et le préremplissage de l'invitation
+personnelle d'Aline. Aucune notice « Coordonnées reprises » n'est montrée.
+Le transcript de main reste inchangé.

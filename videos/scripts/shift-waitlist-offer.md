@@ -9,7 +9,8 @@
 3. Libérer une place depuis une inscription confirmée.
 4. Montrer l’offre de vingt-quatre heures.
 5. Ouvrir la page personnelle de la personne promue.
-6. Expliquer acceptation, refus, expiration et passage au suivant.
+6. Montrer « Prendre la place » et « Refuser la place », puis expliquer l’expiration et le passage au suivant.
+7. Revenir réellement dans l’administration pour lire l’offre active et les positions restantes, sans simuler une expiration non exécutée.
 
 ## Résultat visible
 

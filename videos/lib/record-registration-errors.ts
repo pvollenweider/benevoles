@@ -62,15 +62,25 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
       await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
     }
-    const form = async (role: string, name: string, email: string, token?: string) => {
+    const form = async (role: string, name: string, email: string, token?: string, beforeConsent?: () => Promise<void>, beforeSelect?: () => Promise<void>) => {
+      // Autre appareil : chaque persona ouvre son formulaire sans contact mémorisé.
+      // Conserver les cookies organisateur et le préremplissage de l'invitation.
+      await page.goto(`${base}${publicPath}`)
+      await page.evaluate(() => localStorage.removeItem("benevoles_contact"))
       await go(`${publicPath}${token ? `&token=${encodeURIComponent(token)}` : ""}`)
+      await beforeSelect?.()
       await tap(page, page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       if (!token) {
-        await write(page.getByLabel("Prénom *", { exact: true }), name)
-        await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
-        await write(page.getByLabel("Email *", { exact: true }), email)
+        // Les champs restent visiblement remplis, sans consommer les phrases suivantes.
+        for (const [label, value] of [["Prénom *", name], ["Nom *", "Exemple"], ["Email *", email]]) {
+          const field = page.getByLabel(label, { exact: true })
+          await tap(page, field)
+          await field.fill(value)
+        }
       } else assert.equal(await page.getByLabel("Email *", { exact: true }).inputValue(), email)
+      assert.equal(await page.getByText(/Coordonnées reprises/).count(), 0, "Autre appareil : aucun contact repris")
+      await beforeConsent?.()
       await tap(page, page.getByRole("radio", { name: "M", exact: true }))
       await agree()
     }
@@ -132,7 +142,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     })
     await scene("email", async () => { checks.publicConfirmationMailId = await mailFor("video.errors.alex@example.org") })
     await scene("overlap", async at => {
-      await form("Vestiaire", "Aline", "video.errors.aline@example.org")
+      await form("Vestiaire", "Aline", "video.errors.aline@example.org", undefined, undefined, async () => { await at("Essayons le vestiaire") })
       const before = await db.registration.count({ where: { eventId } })
       await at("Remplissons le formulaire et confirmons.")
       const refusal = await post(409)
@@ -149,7 +159,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       checks.actualOverlapRefused = true
     })
     await scene("response-loss", async at => {
-      await form("Logistique", "Nicolas", "video.errors.nicolas@example.org")
+      await form("Logistique", "Nicolas", "video.errors.nicolas@example.org", undefined, undefined, async () => { await at("Nicolas choisit la logistique") })
       let committed = 0
       await page.route("**/api/public/registrations", async route => { const result = await route.fetch(); committed = result.status(); await route.abort("internetdisconnected") })
       await at("Le formulaire affiche Connexion interrompue"); await tap(page, submit)
@@ -169,7 +179,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       checks.responseLostAfterCommit = true; checks.retryCreatedNoDuplicate = true
     })
     await scene("invitation-success", async at => {
-      await form("Vestiaire", "Zoé", "video.errors.zoe@example.org")
+      await form("Vestiaire", "Zoé", "video.errors.zoe@example.org", undefined, async () => { await at("Après ses informations et les consentements") }, async () => { await at("Zoé choisit le vestiaire") })
       assert.equal((await post(201)).editToken, null)
       await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
       assert.equal(await page.getByRole("link", { name: "Accéder à mon inscription" }).count(), 0)
@@ -179,7 +189,8 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       const invitationResult = await response.json()
       assert.equal(invitationResult.emailsSent, 1, "The invitation must actually be sent")
       const invitation = await db.memberInvite.findFirstOrThrow({ where: { eventId, volunteerId: "video-errors-aline" } })
-      await form("Logistique", "Aline", "video.errors.aline@example.org", linkToken.reveal(invitation))
+      await at("Ouvrons ce lien pour choisir la logistique")
+      await form("Logistique", "Aline", "video.errors.aline@example.org", linkToken.reveal(invitation), async () => { await at("vérifions-les, choisissons sa taille") })
       const invited = await post(201)
       assert(typeof invited.editToken === "string" && invited.editToken.length > 0)
       const link = page.getByRole("link", { name: "Accéder à mon inscription" })
