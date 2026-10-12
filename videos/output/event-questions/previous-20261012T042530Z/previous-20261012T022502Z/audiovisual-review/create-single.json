@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:47:54.079Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "b6a37b3409ba7938c2a8cf401ae4150e32a5eb4bea7d2f92fccdcb50416c0f89",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "choisissons Choix unique",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de Choix unique dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 24.8,
+        "visible": "Case Réponse obligatoire cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur Enregistrer et affichage de la question créée dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et dynamique, bon rythme."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

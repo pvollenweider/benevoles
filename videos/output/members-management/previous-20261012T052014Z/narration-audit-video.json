@@ -1,0 +1,111 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T03:16:57.806Z",
+  "revalidatedAt": "2026-10-12T03:16:57.809Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "416bbd17ef764f8c8c6a9e48118559dfb336c9e898fb666570cf58f3f4a72530",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "7051752348ef4d7f5b9dd3bc63a265c284cd2c3e8781016080eac4e115037e86",
+      "recognized": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.",
+      "expected": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement. Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées. Ajouter un membre ne l'inscrit pas automatiquement à une fête. Sa fiche et ses inscriptions sont deux choses différentes. Voyons comment garder cette liste utile et à jour.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "095fe33d6b52900c624380eb1e189027f6e471f0668bd7ea1f6ee15c91cec082",
+      "recognized": "Pour ajouter une personne, cliquez sur nouveau membre. Saisissez son prénom et son nom, puis son e-mail et son téléphone si vous les connaissez. Nous ajoutons Maya Berger avec des coordonnées de démonstration. Prenez le temps de vérifier l'adresse avant de créer la fiche. Une faute de frappe peut empêcher les prochains messages d'arriver. Après la création, Maya apparaît dans la liste.",
+      "expected": "Pour ajouter une personne, cliquez sur Nouveau membre. Saisissez son prénom et son nom, puis son email et son téléphone si vous les connaissez. Nous ajoutons Maya Berger avec des coordonnées de démonstration. Prenez le temps de vérifier l'adresse avant de créer la fiche : une faute de frappe peut empêcher les prochains messages d'arriver. Après la création, Maya apparaît dans la liste.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "edit",
+      "audioSha256": "2b1c2f7ba46a83d2b0f482272f878899f917c3e0af067493a34601dce1ab11f0",
+      "recognized": "Avec éditer, vous pouvez corriger la fiche et ajouter des informations. Les tags, séparés par des virgules, servent à retrouver un groupe comme accueil ou permis B. La note, pour rappeler un détail pratique utile à l'organisation. Garde-la courte et évite les informations personnelles inutiles. Enregistrons puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+      "expected": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations. Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b. La note peut rappeler un détail pratique utile à l'organisation. Garde-la courte et évite les informations personnelles inutiles. Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+      "wordErrorRate": 0.01694915254237288,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "availability",
+      "audioSha256": "bdd7d822319fca21d9e4d60c00da3c7e47e75cd796cf72c044a4d4800d78576b",
+      "recognized": "Les disponibilités donnent une indication générale : matin, après-midi, soir et une courte exception si nécessaire. Elles peuvent aider quand vous proposez un autre horaire. Elles ne réservent aucune place et ne remplacent pas le choix des créneaux. Ici, Maya est disponible le soir, sauf le vendredi. Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste.",
+      "expected": "Les disponibilités donnent une indication générale : matin, après-midi, soir, et une courte exception si nécessaire. Elles peuvent aider quand vous proposez un autre horaire. Elles ne réservent aucune place et ne remplacent pas le choix des créneaux. Ici, Maya est disponible le soir, sauf le vendredi. Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "no-email",
+      "audioSha256": "c35960fc5da0137bfe11bacb6d0e496d48c2693a377c8ea5b4c44484b88bb9e9",
+      "recognized": "Une personne peut avoir une fiche sans adresse email. Nous créons René Aubert avec son téléphone seulement. Vous pouvez ainsi garder un contact et organiser son inscription manuellement. En revanche, le système ne peut pas lui envoyer un email tant que l'adresse manque. Prévoyez avec lui une autre manière de communiquer les horaires et les changements.",
+      "expected": "Une personne peut avoir une fiche sans adresse email. Nous créons René Aubert avec son téléphone seulement. Vous pouvez ainsi garder un contact et organiser son inscription manuellement. En revanche, le système ne peut pas lui envoyer un email tant que l'adresse manque. Prévoyez avec lui une autre manière de communiquer les horaires et les changements.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "search",
+      "audioSha256": "bfb87b463e511c7a8617b880eb8793b9231d172eb393c62adcdfce0145929135",
+      "recognized": "La recherche aide à retrouver une personne par son nom, son e-mail ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes. Ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.",
+      "expected": "La recherchez aide à retrouver une personne par son nom, son email ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes : ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.",
+      "wordErrorRate": 0.015873015873015872,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "filter",
+      "audioSha256": "277b3cf88edd58d4d5335d422fdf98414283d2a17dd424afe8480cf9c190178d",
+      "recognized": "Avec le filtre de tags, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à tous les tags. Les en-têtes permettent aussi de trier la liste. Les heures planifiées additionnent les durées des créneaux passés, confirmés et non annulés. Les heures attestées en sont la part avec une présence enregistrée, pas un chronométrage du travail réel. Ces repères aident à organiser, ils ne classent pas la valeur des bénévoles.",
+      "expected": "Avec le filtre de tags, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Tous les tags. Les en-têtes permettent aussi de trier la liste. Les heures planifiées additionnent les durées des créneaux passés, confirmés et non annulés. Les heures attestées en sont la part avec une présence enregistrée, pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "deactivate",
+      "audioSha256": "6e710401615999bfb5d748692e6f043ac10507b8a73ae8745aa9689f89524225",
+      "recognized": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici, Maya n'a aucune inscription. Nous confirmons sa désactivation, puis elle disparaît de la liste habituelle. Avec Inclure inactifs, nous la retrouvons. Dans Éditer, la case Membre actif permet de la réactiver. Après enregistrement, elle revient parmi les membres affichés normalement.",
+      "expected": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici, Maya n'a aucune inscription : nous confirmons sa désactivation, puis elle disparaît de la liste habituelle. Avec Inclure inactifs, nous la retrouvons. Dans Éditer, la case Membre actif permet de la réactiver. Après enregistrement, elle revient parmi les membres affichés normalement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "activity",
+      "audioSha256": "8836bc7f20240a9754c4bdf58e3d1b444799e6d29eccd0f6337e1cd3f9c8c3e9",
+      "recognized": "Le lien activité ouvre l'historique factuel d'une personne. Pour Camille, la page est déjà renseignée. On peut parcourir les faits enregistrés, leur date et l'événement concerné. Cette vue rassemble notamment les inscriptions et les autres actions disponibles dans son historique. Elle ne donne pas de score. Une inscription n'est pas à elle seule une preuve de présence.",
+      "expected": "Le lien Activité ouvre l'historique factuel d'une personne. Pour Camille, la page est déjà renseignée : on peut parcourir les faits enregistrés, leurs dates et l'événement concerné. Cette vue rassemble notamment les inscriptions et les autres actions disponibles dans son historique. Elle ne donne pas de score. Une inscription n'est pas à elle seule une preuve de présence.",
+      "wordErrorRate": 0.03278688524590164,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "174e39793b6988155da5f79403b85eb35c894c15de788d793aca0763e93a9d9f",
+      "recognized": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories utiles et des informations que l'on comprend. Mets les fiches à jour quand une personne te signale un changement. Utilise les disponibilités pour dialoguer, pas pour décider à sa place. Et garde seulement les notes nécessaires. L'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.",
+      "expected": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories utiles et des informations que l'on comprend. Mets les fiches à jour quand une personne te signale un changement. Utilise les disponibilités pour dialoguer, pas pour décider à sa place. Et garde seulement les notes nécessaires : l'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

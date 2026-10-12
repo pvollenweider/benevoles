@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:42:20.447Z",
+  "videoSha256": "15e4f2dbf2422685676a1803b33e8833a8d517d559910fed01aeb676b9fcaa38",
+  "promptSha256": "e48fa031ec7bed615b7c66eaf2d2c8018aca989778904a168cb4ccaab0b7499d",
+  "clipSha256": "a926606c05aadd57b33ad40d332c31de87bdc4da1fb12506a68ba578b898f19b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ta liste est prête à être utilisée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ta liste est prête à être utilisée",
+        "visibleSeconds": 0,
+        "visible": "Page Membres affichée avec la liste des membres importés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "ajoute-les manuellement",
+        "visibleSeconds": 10.5,
+        "visible": "Bouton '+ Nouveau membre' présent en haut à droite pour l'ajout individuel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "complète leur fiche séparément",
+        "visibleSeconds": 14,
+        "visible": "Liens d'action 'Éditer' visibles sur chaque ligne du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire et encourageante, concluant sur une page stable récapitulative."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

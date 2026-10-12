@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:55.685Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "820d07bffb837d3a20cbd708c646c5f76f6cfd44de13e6f872b7ef3221ef582d",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le lien 'Télécharger la synthèse (CSV)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la page 'Lecture de la synthèse réellement téléchargée' avec colonnes Question, Réponse, Confirmés, En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 6,
+        "visible": "Le tableau affiché présente uniquement les décomptes sans colonne d'identité",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

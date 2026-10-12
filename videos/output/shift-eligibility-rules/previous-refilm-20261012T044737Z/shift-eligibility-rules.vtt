@@ -1,0 +1,116 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:05.973
+Certaines missions demandent une règle
+simple : un âge minimum, un nombre maximum
+
+00:00:05.973 --> 00:00:10.466
+de créneaux, ou l’appartenance à une
+équipe déjà formée. Ces contrôles évitent
+
+00:00:10.466 --> 00:00:14.211
+les affectations impossibles tout en
+expliquant clairement la situation avant
+
+00:00:14.211 --> 00:00:14.585
+l’inscription.
+
+00:00:15.040 --> 00:00:20.367
+Les règles se configurent au bon niveau.
+L’âge minimum appartient au créneau. La
+
+00:00:20.367 --> 00:00:25.693
+limite et les tags réservés appartiennent
+au poste entier, pour rester cohérents sur
+
+00:00:25.693 --> 00:00:31.020
+toutes ses plages horaires. Ici, Buvette
+est limitée à deux créneaux et Sécurité
+
+00:00:31.020 --> 00:00:32.659
+exige le tag sécurité.
+
+00:00:33.113 --> 00:00:37.211
+Sur le planning public, la Buvette du soir
+annonce dix-huit ans minimum avant toute
+
+00:00:37.211 --> 00:00:41.016
+sélection. La date de naissance demandée
+dans le formulaire permet au serveur de
+
+00:00:41.016 --> 00:00:45.699
+vérifier la règle ; modifier le navigateur
+ou masquer le texte ne permet donc pas de
+
+00:00:45.699 --> 00:00:46.284
+la contourner.
+
+00:00:48.451 --> 00:00:52.030
+Camille possède déjà deux engagements de
+Buvette. En revenant au planning depuis
+
+00:00:52.030 --> 00:00:55.608
+son lien personnel, sa session reconnaît
+ces inscriptions : les autres créneaux
+
+00:00:55.608 --> 00:00:59.485
+restent visibles, mais indiquent que la
+limite de deux est atteinte. Elle peut
+
+00:00:59.485 --> 00:01:02.765
+d’abord retirer un engagement si elle
+souhaite en choisir un autre.
+
+00:01:03.221 --> 00:01:07.443
+Sans invitation, le poste Sécurité reste
+visible mais marqué réservé à certains
+
+00:01:07.443 --> 00:01:12.018
+membres. Le message ne révèle pas les tags
+internes : il demande simplement
+
+00:01:12.018 --> 00:01:16.944
+d’utiliser le lien personnel reçu par
+email. Une invitation sans le bon tag ne
+
+00:01:16.944 --> 00:01:18.351
+donne pas davantage accès.
+
+00:01:18.809 --> 00:01:22.744
+Julien possède le tag sécurité. En ouvrant
+son invitation, la même mission devient
+
+00:01:22.744 --> 00:01:26.982
+sélectionnable : le lien prouve quel
+membre a été invité et le serveur contrôle
+
+00:01:26.982 --> 00:01:32.128
+ses tags au moment de l’inscription. Il
+n’y a donc ni compte à créer, ni code à
+
+00:01:32.128 --> 00:01:32.431
+recopier.
+
+00:01:32.885 --> 00:01:37.618
+Ces règles doivent rester compréhensibles.
+Dans les paramètres de l’événement, la
+
+00:01:37.618 --> 00:01:41.490
+description permet d’expliquer les
+critères. Vérifions aussi le téléphone
+
+00:01:41.490 --> 00:01:46.654
+obligatoire si l’équipe doit appeler le
+jour J. Pour corriger un profil,
+
+00:01:46.654 --> 00:01:52.677
+retrouvons Julien dans les membres, puis
+ouvrons Éditer : son tag sécurité est une
+
+00:01:52.677 --> 00:01:57.841
+information interne. Ici, nous vérifions
+la fiche sans la modifier, puis nous
+
+00:01:57.841 --> 00:01:58.271
+annulons.
+

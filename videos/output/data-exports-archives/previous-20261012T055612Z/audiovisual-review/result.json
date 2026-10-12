@@ -1,0 +1,56 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:06:15.035Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "39c228021f54b290aca17011423428cdd980bf1040dd5482a38e53124f2bfb8a",
+  "clipSha256": "384307e9fe095a47b9c59e3ae0e6beda1fc14b2897934a4842ba5f0764fe5b9f",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Pour travailler sur les fiches, prenez le CSV des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "prenez le CSV des membres",
+        "visibleSeconds": 1,
+        "visible": "Page Membres avec le bouton Exporter les membres (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "prenez le CSV du journal",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page Journal d'activité avec le lien Exporter tout le journal (CSV)",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "prenez son archive JSON",
+        "visibleSeconds": 14,
+        "visible": "Écran Résumé de l'événement avec la section Archive de l'événement (JSON)",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "se choisissent dans Rapports",
+        "visibleSeconds": 16,
+        "visible": "Page Rapports stabilisée listant les plannings et feuilles de présence",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:04, la voix mentionne le CSV du journal mais la page Membres reste affichée jusqu'à 00:08.",
+      "À 00:08, la voix aborde l'archive JSON d'un événement alors que l'écran affiche encore le journal d'activité.",
+      "Désynchronisation et alternance désordonnée entre 00:12 et 00:16 : la page Rapports apparaît brièvement à 00:13, coupée à 00:14 par l'archive JSON en retard, avant de revenir à Rapports à 00:16."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix synthétique claire, posée et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

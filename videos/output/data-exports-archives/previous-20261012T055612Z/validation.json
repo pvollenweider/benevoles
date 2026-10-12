@@ -1,0 +1,76 @@
+{
+  "id": "DATA_EXPORTS_ARCHIVES",
+  "slug": "data-exports-archives",
+  "validatedAt": "2026-10-12T04:04:47.244Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 299160,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 23569,
+      "audioMs": 23567,
+      "driftMs": 2
+    },
+    {
+      "id": "members",
+      "visualMs": 25540,
+      "audioMs": 25538,
+      "driftMs": 2
+    },
+    {
+      "id": "columns",
+      "visualMs": 42271,
+      "audioMs": 42270,
+      "driftMs": 1
+    },
+    {
+      "id": "csv",
+      "visualMs": 30793,
+      "audioMs": 30791,
+      "driftMs": 2
+    },
+    {
+      "id": "journal",
+      "visualMs": 31245,
+      "audioMs": 31245,
+      "driftMs": 0
+    },
+    {
+      "id": "archive",
+      "visualMs": 28403,
+      "audioMs": 28401,
+      "driftMs": 2
+    },
+    {
+      "id": "contents",
+      "visualMs": 29525,
+      "audioMs": 29525,
+      "driftMs": 0
+    },
+    {
+      "id": "privacy",
+      "visualMs": 32747,
+      "audioMs": 32747,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 28803,
+      "audioMs": 28797,
+      "driftMs": 6
+    }
+  ],
+  "anchorsChecked": 33,
+  "music": {
+    "voicedWindows": 264,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13.1,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

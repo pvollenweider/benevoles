@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:10:43.553Z",
+  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "promptSha256": "a65d876db883d9fc9d112d2e29d9b497efe40f56d91a5cc7152027a5d4acca4a",
+  "clipSha256": "cd446028f9a3cc9bc8bfd30a7b91a3ad9ac4b1d179f6617a48f9714e7a26f0bb",
+  "scene": "privacy",
+  "review": {
+    "heardOpening": "Une fois téléchargée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "cette copie ne se met pas à jour",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la visionneuse JSON pour les questions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Si une fiche change dans l'application",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la liste des membres dans l'application",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Rangez-le dans un espace protégé",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage de la lecture du fichier CSV des membres exporté",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Consultez les durées de conservation dans le guide",
+        "visibleSeconds": 20,
+        "visible": "Page du guide affichant le tableau des durées de conservation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.1,
+        "spoken": "Il n'y a pas de bouton pour restaurer un événement",
+        "visibleSeconds": 25,
+        "visible": "Retour à la visionneuse JSON montrant l'absence de bouton de restauration",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et diction claire, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+STATUS: NOT READY
+{
+  "id": "SHIFT_ELIGIBILITY_RULES",
+  "status": "NOT READY",
+  "duration": 118.72,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 110,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.7,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "42 images finales et quota-full.png56.5s revus. Défaut produit : la Frise annonce la limite uniquement dans le nom accessible, aucun libellé visible ; Liste sait la montrer. Deux engagements sous le viewport initial. Retour Membres tardif (attente0.56 au lieu phrase12.06s). Validation, ASR7/7,VTT,effets,musique passent ; dates dd.mm.yyyy, Frise, aucune adresse interdite/overlay.",
+  "sourceChanges": "Quota : cadrer Tous mes créneaux puis montrer Liste sur ancre les autres créneaux restent visibles ; retour Membres sur ancre Pour corriger un profil. Aucun re-film ; cache accepté.",
+  "report": "videos/output/shift-eligibility-rules/review-report.txt",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

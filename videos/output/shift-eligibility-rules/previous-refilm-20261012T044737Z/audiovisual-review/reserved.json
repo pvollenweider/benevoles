@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:46:57.362Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "bc748b51f66ceb9be0b0dfe9bb97f0dbc361e35d6f38932dbd6a530912de1a9f",
+  "clipSha256": "fee5f9d60907f75245a8e54185372ea88cd83b59769f622373de01eaf5fb2b41",
+  "scene": "reserved",
+  "review": {
+    "heardOpening": "Sans invitation, le poste Sécurité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres.",
+        "visibleSeconds": 2,
+        "visible": "Défilement vers le bas affichant le créneau « 20h–02h (jusqu'au lendemain) - Sécurité » avec la mention « réservé à certains membres ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Le message ne révèle pas les tags internes : il demande simplement d'utiliser le lien personnel reçu par email.",
+        "visibleSeconds": 9,
+        "visible": "Défilement vers le haut mettant en évidence l'encadré d'information : « Les postes marqués « Réservé » sont réservés à certains membres. Si tu en fais partie, inscris-toi avec le lien personnel reçu par email. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Une invitation sans le bon tag ne donne pas davantage accès.",
+        "visibleSeconds": 13,
+        "visible": "Vue retournant sur la liste des créneaux où les postes réservés restent inaccessibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique claire, fluide et bien synchronisée avec le défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

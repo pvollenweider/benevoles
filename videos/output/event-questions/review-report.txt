@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "EVENT_QUESTIONS",
+  "status": "READY",
+  "duration": 520.64,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 470,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 12.1,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "96 images finales et 5 images précises revues ; 16 chapitres AV, ASR final, validation, ancres, VTT et effets passent. Signalement L présélectionné réfuté : cases vides à 4/9/10.5s, L sélectionné après ancre10.84s (image12s), confirmation18.3s sur phrase17.88s. Synthèse visible pendant explication. Dates françaises, Frise, aucune adresse interdite/overlay. Nit connu : dates anglaises Mailpit.",
+  "sourceChanges": "Aucune ; narration du lot10 acceptée sans régénération, aucun re-film.",
+  "report": "videos/output/event-questions/review-report.txt",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

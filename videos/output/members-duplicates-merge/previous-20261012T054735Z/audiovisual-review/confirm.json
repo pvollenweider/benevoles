@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:52:49.793Z",
+  "videoSha256": "df258f713444d4734d49ed470bac295799d31c9e6b31c6109d85273914e03a23",
+  "promptSha256": "64aab1e687beb3df5d5ca469d447aaa5729535d2a120357d7d7469971fcf810f",
+  "clipSha256": "388f5243f43524ffb9a359bb2a22ea6569c292bff23cc892ab9a310e76a38f8a",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Cette case permet d'envoyer les nouveaux liens",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Dans cette démonstration, on la décoche",
+        "visibleSeconds": 6.3,
+        "visible": "La case « Envoyer les nouveaux liens personnels » est cochée au lieu d'être décochée",
+        "sync": "aligned",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 23.3,
+        "spoken": "Fusionner les deux fiches ouvre une dernière confirmation",
+        "visibleSeconds": 23.8,
+        "visible": "Clic sur « Fusionner les deux fiches » et ouverture de la modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "confirmez la fusion",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur « Confirmer la fusion » et affichage de la page « Fusion effectuée »",
+        "sync": "early",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, la voix indique « on la décoche », mais la case à cocher est cochée à l'écran.",
+      "À 00:14, lapsus de la voix qui prononce « la fuche absorbée » au lieu de « la fiche absorbée »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et fluide malgré un lapsus à 00:14 (« la fuche »)."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

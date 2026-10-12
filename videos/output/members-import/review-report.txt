@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "MEMBERS_IMPORT",
+  "status": "READY",
+  "duration": 220.92,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 215,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "54images revues ; bouton natif Choisir un fichier/Aucun fichier choisi français. AV9/9,ASR9/9,validate,ancres,VTT,effets,musique passent ; 38créations+2misesàjour,64membres,réanalyse39ignorés+1sans-email annulée. Fermeture résultat et Éditer Maya alignés. Dates françaises,aucune adresse interdite/overlay. Nit connu : actions Membres hors1280px.",
+  "sourceChanges": "Aucune ; lancement navigateur/processus français de main fonctionne ; narration réutilisée,aucun re-film.",
+  "report": "videos/output/members-import/review-report.txt",
+  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

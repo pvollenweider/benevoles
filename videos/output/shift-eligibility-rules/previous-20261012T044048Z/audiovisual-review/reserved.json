@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:45:57.727Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "bc748b51f66ceb9be0b0dfe9bb97f0dbc361e35d6f38932dbd6a530912de1a9f",
+  "clipSha256": "080591823c869f13d262e4b10f206c382144b4538d818f7bb25822fc9307e4ba",
+  "scene": "reserved",
+  "review": {
+    "heardOpening": "Sans invitation, le poste Sécurité reste visible",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
+        "visibleSeconds": 1.5,
+        "visible": "La ligne Sécurité apparaît dans la frise chronologique avec la mention et l'icône Réservé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "il demande simplement d’utiliser le lien personnel reçu par email",
+        "visibleSeconds": 6.2,
+        "visible": "Texte explicatif affiché sous le bandeau : « Les postes marqués Réservé sont réservés à certains membres... inscris-toi avec le lien personnel reçu par email »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Une invitation sans le bon tag ne donne pas davantage accès",
+        "visibleSeconds": 11.5,
+        "visible": "Vue d'ensemble de la page d'inscription avec les créneaux verrouillés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, naturelle et parfaitement articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

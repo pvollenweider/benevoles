@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:05:55.845Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "53465209d788219b3af48f2659622b5f8c412ecf14c3e0c16125e36df00e6c09",
+  "clipSha256": "c49066d424abffff0619eed57dfef4e261d7fbfbcaa9d8ff0d94a3c82141117f",
+  "scene": "csv",
+  "review": {
+    "heardOpening": "Les accents sont conservés et les colonnes sont séparées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "les colonnes sont séparées par des points-virgules",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la vue de démonstration du fichier CSV avec ses colonnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Regardez ce numéro qui commence par plus quarante et un : une apostrophe le précède",
+        "visibleSeconds": 5.8,
+        "visible": "Défilement vers la colonne Téléphone montrant les numéros précédés d'une apostrophe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.2,
+        "spoken": "Notre exemple égal un plus un reste une valeur textuelle",
+        "visibleSeconds": 23.2,
+        "visible": "L'exemple '=1+1' n'est pas visible à l'écran, l'affichage étant retourné sur la colonne 'Convention acceptée'",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "00:08 : Changement inopiné de voix, passant d'une voix masculine à une voix féminine.",
+      "00:23 : La valeur mentionnée '=1+1' n'est pas montrée à l'écran car le tableau est resté positionné sur l'extrémité droite.",
+      "00:27 : Nouveau changement de voix, repassant à la voix masculine initiale."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Alternance de voix masculine (00:00-00:08 puis 00:27-00:30) et féminine (00:08-00:27) au sein du même extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

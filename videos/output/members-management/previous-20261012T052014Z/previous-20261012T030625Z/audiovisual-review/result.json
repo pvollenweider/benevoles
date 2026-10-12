@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:25:01.745Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "promptSha256": "88b4ea5f79643a33c2761d68d3660817c219652ddf46b954f1a6232b3806d090",
+  "clipSha256": "d8eeb25576f508be1144e31f3321738704024a3ffb4ba35d38ff01c3f025a9a3",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Une liste bien entretenue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ce sont les bonnes coordonnées",
+        "visibleSeconds": 2,
+        "visible": "Tableau des membres affichant les coordonnées de contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Mets les fiches à jour quand une personne te signale un changement",
+        "visibleSeconds": 7,
+        "visible": "Liste stable affichant les boutons d'action Éditer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "garde seulement les notes nécessaires",
+        "visibleSeconds": 14.5,
+        "visible": "Vue globale de la liste des bénévoles sans manipulation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

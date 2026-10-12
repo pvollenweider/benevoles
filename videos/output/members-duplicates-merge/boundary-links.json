@@ -1,12 +1,12 @@
 {
   "anchor": "Vérifions enfin les liens. L’ancien lien personnel de la fiche absorbée",
-  "windowStart": 141.01700000000002,
+  "windowStart": 154.16299999999998,
   "result": {
     "found": true,
-    "startSeconds": 30.2,
+    "startSeconds": 15.3,
     "wordsHeard": "Vérifions enfin les liens. L’ancien lien personnel de la fiche absorbée"
   },
-  "onset": 171.217,
-  "proposedCut": 171.01718749999998,
+  "onset": 169.463,
+  "proposedCut": 169.16287499999999,
   "note": "Proposal only; recut then independently audit before capture"
 }

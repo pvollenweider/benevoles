@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:18:50.781Z",
-  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
-  "promptSha256": "3b3c77bcf7901e0e4067f97710964010f8b12fc802be8345b5d7551c2c02f6aa",
-  "clipSha256": "19822084989596c459a52aa175b7a70381e54f610f32dc626fd4660ed7a692c1",
+  "reviewedAt": "2026-10-12T04:50:52.232Z",
+  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
+  "promptSha256": "bc748b51f66ceb9be0b0dfe9bb97f0dbc361e35d6f38932dbd6a530912de1a9f",
+  "clipSha256": "d1453f3c5c0812cb58a70029ee5a95eeeb448061e03646e980038b04284401c8",
   "scene": "reserved",
   "review": {
     "heardOpening": "Sans invitation, le poste Sécurité reste visible",
@@ -11,35 +11,33 @@
       {
         "spokenSeconds": 1.2,
         "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
-        "visibleSeconds": 0,
-        "visible": "Ligne Sécurité affichant un créneau rose libellé Réservé",
+        "visibleSeconds": 2,
+        "visible": "Défilement vers le créneau '20h-02h - Sécurité' affichant la mention 'réservé à certains membres'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.1,
-        "spoken": "il demande simplement d'utiliser le lien personnel reçu par email",
-        "visibleSeconds": 0,
-        "visible": "Bandeau informatif visible en haut mentionnant le lien personnel par email",
+        "spoken": "Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email",
+        "visibleSeconds": 8.5,
+        "visible": "Remontée vers le bandeau d'information invitant à utiliser le lien personnel reçu par email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 11.5,
         "spoken": "Une invitation sans le bon tag ne donne pas davantage accès",
-        "visibleSeconds": 12,
-        "visible": "Vue d'ensemble statique inchangée, sans manipulation de compte sans tag",
+        "visibleSeconds": 12.5,
+        "visible": "Vue d'ensemble des créneaux où l'accès aux postes réservés demeure restreint",
         "sync": "aligned",
-        "severity": "minor"
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:00 - Écran statique sans interaction ni pointage du curseur sur les éléments décrits"
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

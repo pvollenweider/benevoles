@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:47:42.027Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:39:22.642Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "129820408457dba3852a0ef23df4ceec775ded82efbe670c63854135b8eba3c2",
-  "clipSha256": "12b1d9887198d8693c535d1472a19e6c2dd799ffc35abe02b1b2b59a7f264ad5",
+  "clipSha256": "3c342de87a06d0d7bd4103b509cb7f13fb871f0079e36eeedd24727bdf7f948b",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un t-shirt à prévoir, du matériel à organiser",
     "checkpoints": [
       {
-        "spokenSeconds": 7,
-        "spoken": "Ouvrons Questions aux bénévoles pour notre événement de formation.",
-        "visibleSeconds": 6.8,
-        "visible": "Affichage de la page 'Questions aux bénévoles'.",
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons Questions aux bénévoles",
+        "visibleSeconds": 7.4,
+        "visible": "Clic sur l'onglet Questions et affichage de la page « Questions aux bénévoles »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.2,
-        "spoken": "On peut ajouter jusqu'à cinq questions.",
-        "visibleSeconds": 7,
-        "visible": "Compteur 'Questions (0/5)' visible à l'écran.",
+        "spoken": "On peut ajouter jusqu'à cinq questions",
+        "visibleSeconds": 11.5,
+        "visible": "Mention « Questions (0/5) » et texte explicatif indiquant la limite de 5 questions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 27.2,
-        "spoken": "Nous allons préparer quatre exemples",
-        "visibleSeconds": 27.2,
-        "visible": "Écran stable présentant la configuration des questions.",
+        "spokenSeconds": 19.3,
+        "spoken": "Pas d'information sensible sur la santé, la religion ou les opinions",
+        "visibleSeconds": 19.5,
+        "visible": "Consigne affichée à l'écran : « Ne demandez que ce qui est nécessaire... et pas d'information sensible (santé, religion, opinions...) »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bonne synchronisation avec l'affichage."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

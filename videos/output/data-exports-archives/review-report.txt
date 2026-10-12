@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "DATA_EXPORTS_ARCHIVES",
+  "status": "READY",
+  "duration": 299.68,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 265,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 13,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.7
+  },
+  "problems": "54images+8images précises revues ; AV9chapitres,signalement créneau absent réfuté par contents-exact19s (Accueil10–12h) puis réponseM19.8s. Passage Rapports9s puis Archive10.5s navigation normale vers section de même page,aucun faux raccord retenu. Ancres/colonnes/formule visibles,CSV/JSON réels et copie figée vérifiés. Bouton natif Choisir un fichier français. ASR9/9,validate,VTT,effets,musique passent,dates françaises UI/CSV et ISO brutes JSON,aucune adresse interdite/overlay. Nit connu : actions Membres hors1280px.",
+  "sourceChanges": "Aucune ; narration lot10 (régénérée lors de ce lot) réutilisée sans nouveau TTS ; navigateur/processus français fonctionne,aucun re-film.",
+  "report": "videos/output/data-exports-archives/review-report.txt",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

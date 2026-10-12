@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:46:50.661Z",
+  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "promptSha256": "31b499c666728ceb9078a128b15d9244bd8950a31ee074e4638f6e29ec066ec7",
+  "clipSha256": "31d1fbdceac3f76bdc7a49b49951f1a5ff47b98d2f2f096206d363679bd936c0",
+  "scene": "errors",
+  "review": {
+    "heardOpening": "Ici, la ligne six n'a pas de prénom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "la ligne six n'a pas de prénom",
+        "visibleSeconds": 0,
+        "visible": "Dans le tableau 'Lignes en erreur, non importées (3)', la ligne 6 indique 'Prénom manquant'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "la ligne sept contient une adresse email invalide",
+        "visibleSeconds": 0,
+        "visible": "La ligne 7 indique 'Email invalide : adresse-incomplete'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "La ligne neuf reprend l'email de la ligne huit",
+        "visibleSeconds": 0,
+        "visible": "La ligne 9 indique 'Même email que la ligne 8'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sur fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

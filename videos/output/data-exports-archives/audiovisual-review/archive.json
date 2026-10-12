@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:10:20.210Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:03:50.748Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "32473ed20414a61b2e53ce4a6e86067ac498893700c3ff6b3035749b8aaef752",
-  "clipSha256": "831a2a081494736b83cf1715576dd2c8160970097efb72954b7314a880b5c806",
+  "clipSha256": "8d5f52a87429abf8f93e73fc5946ce3ed27d605fbe8c5958c08f16936abc713c",
   "scene": "archive",
   "review": {
     "heardOpening": "Pour conserver un événement complet",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "ouvrez Rapports et descendez tout en bas, dans Archive",
-        "visibleSeconds": 3.2,
-        "visible": "Clic sur l'onglet Rapports et défilement jusqu'à la section Archive",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Rapports s'ouvre et affiche la section Archive en bas de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 6.1,
         "spoken": "Le lien Archive de l’événement, JSON, télécharge le fichier",
-        "visibleSeconds": 7.5,
-        "visible": "Curseur placé sur le lien Archive de l'événement (JSON) puis ouverture de la page",
+        "visibleSeconds": 6,
+        "visible": "Le curseur survole et clique sur le lien Archive de l'événement (JSON)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.1,
+        "spokenSeconds": 13.5,
         "spoken": "Le JSON n’est pas une feuille à afficher au stand",
-        "visibleSeconds": 14.8,
-        "visible": "Affichage de la page de visualisation Lecture de l'archive JSON",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page Lecture de l'archive JSON montrant la structure brute des données",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "Il est limité à cet événement",
+        "visibleSeconds": 20.2,
+        "visible": "Sélection de la section « event » dans le menu déroulant Partie du fichier",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+      "observation": "Voix masculine claire, fluide et posée, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

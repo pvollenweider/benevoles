@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T03:52:36.235Z",
+  "videoSha256": "df258f713444d4734d49ed470bac295799d31c9e6b31c6109d85273914e03a23",
+  "promptSha256": "8a4a48ddc874b4ee856f3bf36f5ca2c22b740ad3183ab6645dc2ee97928891de",
+  "clipSha256": "0f0274a3d8b778be6b3c9a2b5125f935e05c7d37fe00a73a88ffa6325f009250",
+  "scene": "compare",
+  "review": {
+    "heardOpening": "Si vous savez que ces deux fiches désignent bien la même personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Fusionner avec un autre membre est réservé au propriétaire de l'organisation",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la page « Fusionner Robin Favre - Choisir la fiche à absorber »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Recherchez précisément l'adresse de la seconde fiche",
+        "visibleSeconds": 13,
+        "visible": "Saisie de l'adresse dans le champ de recherche puis clic sur Chercher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "puis choisissez Fusionner avec cette fiche",
+        "visibleSeconds": 18,
+        "visible": "Clic sur le bouton « Fusionner avec cette fiche » en face du résultat trouvé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "L'aperçu permet maintenant de comparer les informations",
+        "visibleSeconds": 19.8,
+        "visible": "Affichage de l'écran « Aperçu de la fusion avec Robin Favre » avec la comparaison des champs",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

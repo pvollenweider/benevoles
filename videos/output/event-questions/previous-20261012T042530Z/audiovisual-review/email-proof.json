@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:40.724Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "f3cb4fd8d4b53d49030b8840b22871d2f5258fe9e7a1933cf680fcb158e9192f",
+  "clipSha256": "3da520025d638a6d30bf3ae0ad3cd3d9c57d176c60e6b901c0eb5420c69fdc3b",
+  "scene": "email-proof",
+  "review": {
+    "heardOpening": "Aline existait déjà dans la liste des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Aline existait déjà dans la liste des membres.",
+        "visibleSeconds": 0.5,
+        "visible": "Écran de confirmation d'inscription indiquant qu'un email de confirmation a été envoyé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Son lien personnel n'est donc pas affiché directement : il lui est envoyé par email.",
+        "visibleSeconds": 8.7,
+        "visible": "L'écran confirme l'envoi d'un email sans afficher de lien direct",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test.",
+        "visibleSeconds": 14.5,
+        "visible": "Affichage de la boîte de test Mailpit avec le message d'inscription reçu pour Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "avec son lien personnel.",
+        "visibleSeconds": 22.1,
+        "visible": "Bouton d'accès personnel « Gérer mon inscription » visible dans le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec la transition vers la messagerie locale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

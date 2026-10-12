@@ -1,0 +1,2548 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 3398,
+    "endMs": 36076,
+    "sentences": [
+      {
+        "text": "Un t-shirt à prévoir, du matériel à organiser :",
+        "startMs": 380,
+        "endMs": 3583,
+        "method": "silence",
+        "absoluteStartMs": 3778
+      },
+      {
+        "text": "quelques questions bien choisies peuvent vraiment aider.",
+        "startMs": 3892,
+        "endMs": 6516,
+        "method": "silence",
+        "absoluteStartMs": 7290
+      },
+      {
+        "text": "Ouvrons Questions aux bénévoles pour notre événement de formation.",
+        "startMs": 7200,
+        "endMs": 10602,
+        "method": "silence",
+        "absoluteStartMs": 10598
+      },
+      {
+        "text": "On peut ajouter jusqu'à cinq questions.",
+        "startMs": 11323,
+        "endMs": 13354,
+        "method": "silence",
+        "absoluteStartMs": 14721
+      },
+      {
+        "text": "Mais le bon réflexe, c'est d'en demander le moins possible, juste ce qui sert à l'organisation.",
+        "startMs": 13531,
+        "endMs": 18495,
+        "method": "silence",
+        "absoluteStartMs": 16929
+      },
+      {
+        "text": "Pas d'information sensible sur la santé, la religion ou les opinions.",
+        "startMs": 19191,
+        "endMs": 22709,
+        "method": "silence",
+        "absoluteStartMs": 22589
+      },
+      {
+        "text": "Ici, les personnes et leurs réponses sont entièrement fictives.",
+        "startMs": 23672,
+        "endMs": 26494,
+        "method": "silence",
+        "absoluteStartMs": 27070
+      },
+      {
+        "text": "Nous allons préparer quatre exemples, puis suivre ce que voit Aline et ce que retrouve l'organisation.",
+        "startMs": 27079,
+        "endMs": 32081,
+        "method": "silence",
+        "absoluteStartMs": 30477
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "welcome",
+        "phrase": "Ouvrons Questions aux bénévoles pour",
+        "startMs": 7200,
+        "endMs": 10602,
+        "cueMs": 10598
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 11106
+      }
+    ]
+  },
+  {
+    "chapter": "create-single",
+    "startMs": 38340,
+    "endMs": 72758,
+    "sentences": [
+      {
+        "text": "Commençons par la taille du t-shirt.",
+        "startMs": 603,
+        "endMs": 3414,
+        "method": "silence",
+        "absoluteStartMs": 38943
+      },
+      {
+        "text": "Cliquons sur Ajouter une question, puis saisissons son intitulé.",
+        "startMs": 3695,
+        "endMs": 7449,
+        "method": "silence",
+        "absoluteStartMs": 42035
+      },
+      {
+        "text": "Dans Type de réponse, choisissons Choix unique :",
+        "startMs": 7577,
+        "endMs": 10339,
+        "method": "silence",
+        "absoluteStartMs": 45917
+      },
+      {
+        "text": "la personne pourra sélectionner une seule taille.",
+        "startMs": 10807,
+        "endMs": 14518,
+        "method": "silence",
+        "absoluteStartMs": 49147
+      },
+      {
+        "text": "Les choix s'écrivent un par ligne.",
+        "startMs": 14699,
+        "endMs": 16775,
+        "method": "silence",
+        "absoluteStartMs": 53039
+      },
+      {
+        "text": "Voici S, M, L et XL.",
+        "startMs": 17179,
+        "endMs": 17451,
+        "method": "silence",
+        "absoluteStartMs": 55519
+      },
+      {
+        "text": "Il en faut au moins deux, et douze au maximum.",
+        "startMs": 17954,
+        "endMs": 20835,
+        "method": "silence",
+        "absoluteStartMs": 56294
+      },
+      {
+        "text": "Pour notre commande, cette information est nécessaire :",
+        "startMs": 21006,
+        "endMs": 25357,
+        "method": "silence",
+        "absoluteStartMs": 59346
+      },
+      {
+        "text": "cochons Réponse obligatoire.",
+        "startMs": 25776,
+        "endMs": 26199,
+        "method": "silence",
+        "absoluteStartMs": 64116
+      },
+      {
+        "text": "Enregistrons.",
+        "startMs": 26385,
+        "endMs": 27775,
+        "method": "silence",
+        "absoluteStartMs": 64725
+      },
+      {
+        "text": "La question est maintenant dans la liste, avec ses choix et son caractère obligatoire.",
+        "startMs": 28279,
+        "endMs": 34079,
+        "method": "silence",
+        "absoluteStartMs": 66619
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 40531
+      },
+      {
+        "kind": "click",
+        "atMs": 41331
+      },
+      {
+        "kind": "key",
+        "atMs": 41639
+      },
+      {
+        "kind": "key",
+        "atMs": 41639
+      },
+      {
+        "kind": "key",
+        "atMs": 41642
+      },
+      {
+        "kind": "key",
+        "atMs": 41741
+      },
+      {
+        "kind": "key",
+        "atMs": 41839
+      },
+      {
+        "kind": "key",
+        "atMs": 41938
+      },
+      {
+        "kind": "key",
+        "atMs": 42037
+      },
+      {
+        "kind": "key",
+        "atMs": 42137
+      },
+      {
+        "kind": "key",
+        "atMs": 42240
+      },
+      {
+        "kind": "key",
+        "atMs": 42342
+      },
+      {
+        "kind": "key",
+        "atMs": 42443
+      },
+      {
+        "kind": "key",
+        "atMs": 42544
+      },
+      {
+        "kind": "key",
+        "atMs": 42649
+      },
+      {
+        "kind": "key",
+        "atMs": 42749
+      },
+      {
+        "kind": "key",
+        "atMs": 42856
+      },
+      {
+        "kind": "key",
+        "atMs": 42954
+      },
+      {
+        "kind": "key",
+        "atMs": 43055
+      },
+      {
+        "kind": "key",
+        "atMs": 43161
+      },
+      {
+        "kind": "key",
+        "atMs": 43262
+      },
+      {
+        "kind": "click",
+        "atMs": 47080
+      },
+      {
+        "kind": "click",
+        "atMs": 47863
+      },
+      {
+        "kind": "key",
+        "atMs": 48170
+      },
+      {
+        "kind": "key",
+        "atMs": 48171
+      },
+      {
+        "kind": "key",
+        "atMs": 48174
+      },
+      {
+        "kind": "key",
+        "atMs": 48271
+      },
+      {
+        "kind": "key",
+        "atMs": 48370
+      },
+      {
+        "kind": "key",
+        "atMs": 48467
+      },
+      {
+        "kind": "key",
+        "atMs": 48565
+      },
+      {
+        "kind": "key",
+        "atMs": 48665
+      },
+      {
+        "kind": "key",
+        "atMs": 48768
+      },
+      {
+        "kind": "key",
+        "atMs": 48868
+      },
+      {
+        "kind": "click",
+        "atMs": 62897
+      },
+      {
+        "kind": "click",
+        "atMs": 65996
+      }
+    ]
+  },
+  {
+    "chapter": "create-yesno",
+    "startMs": 75018,
+    "endMs": 102904,
+    "sentences": [
+      {
+        "text": "Pour le permis de conduire, une réponse simple suffit.",
+        "startMs": 338,
+        "endMs": 3339,
+        "method": "silence",
+        "absoluteStartMs": 75356
+      },
+      {
+        "text": "Ajoutons une nouvelle question, puis écrivons Permis de conduire.",
+        "startMs": 3948,
+        "endMs": 7357,
+        "method": "silence",
+        "absoluteStartMs": 78966
+      },
+      {
+        "text": "Choisissons Oui ou non dans le type de réponse.",
+        "startMs": 8089,
+        "endMs": 9762,
+        "method": "silence",
+        "absoluteStartMs": 83107
+      },
+      {
+        "text": "Pas de liste à saisir :",
+        "startMs": 9950,
+        "endMs": 10991,
+        "method": "silence",
+        "absoluteStartMs": 84968
+      },
+      {
+        "text": "les deux réponses sont proposées automatiquement.",
+        "startMs": 11522,
+        "endMs": 14777,
+        "method": "silence",
+        "absoluteStartMs": 86540
+      },
+      {
+        "text": "Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons.",
+        "startMs": 15542,
+        "endMs": 18339,
+        "method": "silence",
+        "absoluteStartMs": 90560
+      },
+      {
+        "text": "Attention, demander le permis ici recueille une information :",
+        "startMs": 18597,
+        "endMs": 19433,
+        "method": "silence",
+        "absoluteStartMs": 93615
+      },
+      {
+        "text": "ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
+        "startMs": 20209,
+        "endMs": 27295,
+        "method": "silence",
+        "absoluteStartMs": 95227
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 78412
+      },
+      {
+        "kind": "click",
+        "atMs": 79196
+      },
+      {
+        "kind": "key",
+        "atMs": 79504
+      },
+      {
+        "kind": "key",
+        "atMs": 79505
+      },
+      {
+        "kind": "key",
+        "atMs": 79507
+      },
+      {
+        "kind": "key",
+        "atMs": 79604
+      },
+      {
+        "kind": "key",
+        "atMs": 79702
+      },
+      {
+        "kind": "key",
+        "atMs": 79802
+      },
+      {
+        "kind": "key",
+        "atMs": 79901
+      },
+      {
+        "kind": "key",
+        "atMs": 80002
+      },
+      {
+        "kind": "key",
+        "atMs": 80105
+      },
+      {
+        "kind": "key",
+        "atMs": 80206
+      },
+      {
+        "kind": "key",
+        "atMs": 80308
+      },
+      {
+        "kind": "key",
+        "atMs": 80411
+      },
+      {
+        "kind": "key",
+        "atMs": 80513
+      },
+      {
+        "kind": "key",
+        "atMs": 80618
+      },
+      {
+        "kind": "key",
+        "atMs": 80720
+      },
+      {
+        "kind": "key",
+        "atMs": 80821
+      },
+      {
+        "kind": "key",
+        "atMs": 80924
+      },
+      {
+        "kind": "key",
+        "atMs": 81026
+      },
+      {
+        "kind": "key",
+        "atMs": 81129
+      },
+      {
+        "kind": "key",
+        "atMs": 81232
+      },
+      {
+        "kind": "click",
+        "atMs": 82180
+      },
+      {
+        "kind": "click",
+        "atMs": 90828
+      },
+      {
+        "kind": "click",
+        "atMs": 92778
+      }
+    ]
+  },
+  {
+    "chapter": "create-multiple",
+    "startMs": 105165,
+    "endMs": 136286,
+    "sentences": [
+      {
+        "text": "Passons au matériel de transport.",
+        "startMs": 591,
+        "endMs": 2025,
+        "method": "silence",
+        "absoluteStartMs": 105756
+      },
+      {
+        "text": "Créons la question, puis choisissons Choix multiple.",
+        "startMs": 2348,
+        "endMs": 5664,
+        "method": "silence",
+        "absoluteStartMs": 107513
+      },
+      {
+        "text": "Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne.",
+        "startMs": 6422,
+        "endMs": 9696,
+        "method": "silence",
+        "absoluteStartMs": 111587
+      },
+      {
+        "text": "Cette fois, plusieurs cases pourront être cochées :",
+        "startMs": 10082,
+        "endMs": 14040,
+        "method": "silence",
+        "absoluteStartMs": 115247
+      },
+      {
+        "text": "Aline peut disposer d'un vélo et d'une remorque.",
+        "startMs": 14594,
+        "endMs": 15983,
+        "method": "silence",
+        "absoluteStartMs": 119759
+      },
+      {
+        "text": "Laissons Réponse obligatoire décochée.",
+        "startMs": 16105,
+        "endMs": 19588,
+        "method": "silence",
+        "absoluteStartMs": 121270
+      },
+      {
+        "text": "Une personne sans matériel pourra ne rien renseigner.",
+        "startMs": 20081,
+        "endMs": 22312,
+        "method": "silence",
+        "absoluteStartMs": 125246
+      },
+      {
+        "text": "Enregistrons et vérifions les trois choix dans la liste.",
+        "startMs": 23058,
+        "endMs": 25616,
+        "method": "silence",
+        "absoluteStartMs": 128223
+      },
+      {
+        "text": "Le type choisi doit correspondre à ce que vous voulez réellement savoir.",
+        "startMs": 26320,
+        "endMs": 30307,
+        "method": "silence",
+        "absoluteStartMs": 131485
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 107662
+      },
+      {
+        "kind": "click",
+        "atMs": 108443
+      },
+      {
+        "kind": "key",
+        "atMs": 108750
+      },
+      {
+        "kind": "key",
+        "atMs": 108751
+      },
+      {
+        "kind": "key",
+        "atMs": 108753
+      },
+      {
+        "kind": "key",
+        "atMs": 108851
+      },
+      {
+        "kind": "key",
+        "atMs": 108949
+      },
+      {
+        "kind": "key",
+        "atMs": 109151
+      },
+      {
+        "kind": "key",
+        "atMs": 109250
+      },
+      {
+        "kind": "key",
+        "atMs": 109351
+      },
+      {
+        "kind": "key",
+        "atMs": 109453
+      },
+      {
+        "kind": "key",
+        "atMs": 109555
+      },
+      {
+        "kind": "key",
+        "atMs": 109659
+      },
+      {
+        "kind": "key",
+        "atMs": 109760
+      },
+      {
+        "kind": "key",
+        "atMs": 109861
+      },
+      {
+        "kind": "key",
+        "atMs": 109967
+      },
+      {
+        "kind": "key",
+        "atMs": 110071
+      },
+      {
+        "kind": "key",
+        "atMs": 110173
+      },
+      {
+        "kind": "key",
+        "atMs": 110274
+      },
+      {
+        "kind": "key",
+        "atMs": 110374
+      },
+      {
+        "kind": "key",
+        "atMs": 110475
+      },
+      {
+        "kind": "key",
+        "atMs": 110578
+      },
+      {
+        "kind": "key",
+        "atMs": 110680
+      },
+      {
+        "kind": "key",
+        "atMs": 110782
+      },
+      {
+        "kind": "click",
+        "atMs": 113110
+      },
+      {
+        "kind": "click",
+        "atMs": 113895
+      },
+      {
+        "kind": "key",
+        "atMs": 114202
+      },
+      {
+        "kind": "key",
+        "atMs": 114202
+      },
+      {
+        "kind": "key",
+        "atMs": 114205
+      },
+      {
+        "kind": "key",
+        "atMs": 114399
+      },
+      {
+        "kind": "key",
+        "atMs": 114498
+      },
+      {
+        "kind": "key",
+        "atMs": 114596
+      },
+      {
+        "kind": "key",
+        "atMs": 114697
+      },
+      {
+        "kind": "key",
+        "atMs": 114798
+      },
+      {
+        "kind": "key",
+        "atMs": 114900
+      },
+      {
+        "kind": "key",
+        "atMs": 115000
+      },
+      {
+        "kind": "key",
+        "atMs": 115104
+      },
+      {
+        "kind": "key",
+        "atMs": 115206
+      },
+      {
+        "kind": "key",
+        "atMs": 115306
+      },
+      {
+        "kind": "key",
+        "atMs": 115408
+      },
+      {
+        "kind": "key",
+        "atMs": 115510
+      },
+      {
+        "kind": "key",
+        "atMs": 115613
+      },
+      {
+        "kind": "key",
+        "atMs": 115716
+      },
+      {
+        "kind": "key",
+        "atMs": 115818
+      },
+      {
+        "kind": "key",
+        "atMs": 115923
+      },
+      {
+        "kind": "key",
+        "atMs": 116023
+      },
+      {
+        "kind": "key",
+        "atMs": 116127
+      },
+      {
+        "kind": "key",
+        "atMs": 116231
+      },
+      {
+        "kind": "click",
+        "atMs": 128510
+      }
+    ]
+  },
+  {
+    "chapter": "create-text",
+    "startMs": 138549,
+    "endMs": 168305,
+    "sentences": [
+      {
+        "text": "Pour une préférence de rendez-vous, laissons un peu de liberté.",
+        "startMs": 0,
+        "endMs": 4225,
+        "method": "silence",
+        "absoluteStartMs": 138549
+      },
+      {
+        "text": "Ajoutons Point de rendez-vous préféré.",
+        "startMs": 4849,
+        "endMs": 7139,
+        "method": "silence",
+        "absoluteStartMs": 143398
+      },
+      {
+        "text": "Conservons Texte court :",
+        "startMs": 7837,
+        "endMs": 7839,
+        "method": "silence",
+        "absoluteStartMs": 146386
+      },
+      {
+        "text": "la personne écrira sa réponse plutôt que de choisir dans une liste.",
+        "startMs": 8189,
+        "endMs": 11937,
+        "method": "silence",
+        "absoluteStartMs": 146738
+      },
+      {
+        "text": "Cette question reste facultative.",
+        "startMs": 12093,
+        "endMs": 13671,
+        "method": "silence",
+        "absoluteStartMs": 150642
+      },
+      {
+        "text": "Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous.",
+        "startMs": 14252,
+        "endMs": 21268,
+        "method": "silence",
+        "absoluteStartMs": 152801
+      },
+      {
+        "text": "Enregistrons.",
+        "startMs": 22134,
+        "endMs": 22762,
+        "method": "silence",
+        "absoluteStartMs": 160683
+      },
+      {
+        "text": "Nous avons maintenant nos quatre types de questions, avec deux réponses obligatoires et deux facultatives.",
+        "startMs": 23358,
+        "endMs": 29351,
+        "method": "silence",
+        "absoluteStartMs": 161907
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 141993
+      },
+      {
+        "kind": "click",
+        "atMs": 142777
+      },
+      {
+        "kind": "key",
+        "atMs": 143083
+      },
+      {
+        "kind": "key",
+        "atMs": 143083
+      },
+      {
+        "kind": "key",
+        "atMs": 143086
+      },
+      {
+        "kind": "key",
+        "atMs": 143182
+      },
+      {
+        "kind": "key",
+        "atMs": 143281
+      },
+      {
+        "kind": "key",
+        "atMs": 143380
+      },
+      {
+        "kind": "key",
+        "atMs": 143479
+      },
+      {
+        "kind": "key",
+        "atMs": 143577
+      },
+      {
+        "kind": "key",
+        "atMs": 143675
+      },
+      {
+        "kind": "key",
+        "atMs": 143774
+      },
+      {
+        "kind": "key",
+        "atMs": 143877
+      },
+      {
+        "kind": "key",
+        "atMs": 143974
+      },
+      {
+        "kind": "key",
+        "atMs": 144077
+      },
+      {
+        "kind": "key",
+        "atMs": 144182
+      },
+      {
+        "kind": "key",
+        "atMs": 144285
+      },
+      {
+        "kind": "key",
+        "atMs": 144388
+      },
+      {
+        "kind": "key",
+        "atMs": 144490
+      },
+      {
+        "kind": "key",
+        "atMs": 144593
+      },
+      {
+        "kind": "key",
+        "atMs": 144696
+      },
+      {
+        "kind": "key",
+        "atMs": 144798
+      },
+      {
+        "kind": "key",
+        "atMs": 144902
+      },
+      {
+        "kind": "key",
+        "atMs": 145004
+      },
+      {
+        "kind": "key",
+        "atMs": 145108
+      },
+      {
+        "kind": "key",
+        "atMs": 145209
+      },
+      {
+        "kind": "key",
+        "atMs": 145310
+      },
+      {
+        "kind": "key",
+        "atMs": 145510
+      },
+      {
+        "kind": "key",
+        "atMs": 145710
+      },
+      {
+        "kind": "click",
+        "atMs": 146393
+      },
+      {
+        "kind": "click",
+        "atMs": 160442
+      }
+    ]
+  },
+  {
+    "chapter": "order",
+    "startMs": 170564,
+    "endMs": 196627,
+    "sentences": [
+      {
+        "text": "L'ordre compte aussi pour rendre le formulaire agréable.",
+        "startMs": 340,
+        "endMs": 3903,
+        "method": "silence",
+        "absoluteStartMs": 170904
+      },
+      {
+        "text": "Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis.",
+        "startMs": 4068,
+        "endMs": 9081,
+        "method": "silence",
+        "absoluteStartMs": 174632
+      },
+      {
+        "text": "La question remonte d'une position.",
+        "startMs": 9664,
+        "endMs": 11631,
+        "method": "silence",
+        "absoluteStartMs": 180228
+      },
+      {
+        "text": "Descendre permet le mouvement inverse.",
+        "startMs": 12369,
+        "endMs": 14076,
+        "method": "silence",
+        "absoluteStartMs": 182933
+      },
+      {
+        "text": "Rechargeons la page :",
+        "startMs": 14487,
+        "endMs": 14769,
+        "method": "silence",
+        "absoluteStartMs": 185051
+      },
+      {
+        "text": "le nouvel ordre est conservé.",
+        "startMs": 15085,
+        "endMs": 16066,
+        "method": "silence",
+        "absoluteStartMs": 185649
+      },
+      {
+        "text": "Les bénévoles retrouveront cet ordre dans leur formulaire.",
+        "startMs": 16671,
+        "endMs": 21919,
+        "method": "silence",
+        "absoluteStartMs": 187235
+      },
+      {
+        "text": "Vous n'avez pas besoin de supprimer et recréer une question pour la déplacer.",
+        "startMs": 22417,
+        "endMs": 25601,
+        "method": "silence",
+        "absoluteStartMs": 192981
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "order",
+        "phrase": "Les bénévoles retrouveront cet ordre",
+        "startMs": 16671,
+        "endMs": 21919,
+        "cueMs": 187235
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 176241
+      }
+    ]
+  },
+  {
+    "chapter": "required-validation",
+    "startMs": 198890,
+    "endMs": 228589,
+    "sentences": [
+      {
+        "text": "Voyons maintenant le formulaire public avec Aline.",
+        "startMs": 458,
+        "endMs": 3753,
+        "method": "silence",
+        "absoluteStartMs": 199348
+      },
+      {
+        "text": "Choisissons le premier créneau et continuons.",
+        "startMs": 4009,
+        "endMs": 5875,
+        "method": "silence",
+        "absoluteStartMs": 202899
+      },
+      {
+        "text": "Renseignons son identité et les consentements demandés.",
+        "startMs": 6173,
+        "endMs": 10267,
+        "method": "silence",
+        "absoluteStartMs": 205063
+      },
+      {
+        "text": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "startMs": 10680,
+        "endMs": 14247,
+        "method": "silence",
+        "absoluteStartMs": 209570
+      },
+      {
+        "text": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "startMs": 14911,
+        "endMs": 19098,
+        "method": "silence",
+        "absoluteStartMs": 213801
+      },
+      {
+        "text": "Aucune inscription n'est créée.",
+        "startMs": 19670,
+        "endMs": 19920,
+        "method": "silence",
+        "absoluteStartMs": 218560
+      },
+      {
+        "text": "Les questions facultatives, elles, peuvent rester vides.",
+        "startMs": 20046,
+        "endMs": 23348,
+        "method": "silence",
+        "absoluteStartMs": 218936
+      },
+      {
+        "text": "Cette distinction évite de bloquer une personne pour une information qui n'est pas indispensable.",
+        "startMs": 23503,
+        "endMs": 29387,
+        "method": "silence",
+        "absoluteStartMs": 222393
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "required-validation",
+        "phrase": "Renseignons son identité et les",
+        "startMs": 6173,
+        "endMs": 10267,
+        "cueMs": 205064
+      },
+      {
+        "segmentId": "required-validation",
+        "phrase": "Le formulaire indique ce qui",
+        "startMs": 14911,
+        "endMs": 19098,
+        "cueMs": 215364
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 206741
+      },
+      {
+        "kind": "click",
+        "atMs": 207523
+      },
+      {
+        "kind": "click",
+        "atMs": 208309
+      },
+      {
+        "kind": "key",
+        "atMs": 208615
+      },
+      {
+        "kind": "key",
+        "atMs": 208616
+      },
+      {
+        "kind": "key",
+        "atMs": 208619
+      },
+      {
+        "kind": "key",
+        "atMs": 208697
+      },
+      {
+        "kind": "key",
+        "atMs": 208774
+      },
+      {
+        "kind": "key",
+        "atMs": 208854
+      },
+      {
+        "kind": "key",
+        "atMs": 208933
+      },
+      {
+        "kind": "click",
+        "atMs": 209474
+      },
+      {
+        "kind": "key",
+        "atMs": 209780
+      },
+      {
+        "kind": "key",
+        "atMs": 209780
+      },
+      {
+        "kind": "key",
+        "atMs": 209783
+      },
+      {
+        "kind": "key",
+        "atMs": 209862
+      },
+      {
+        "kind": "key",
+        "atMs": 209942
+      },
+      {
+        "kind": "key",
+        "atMs": 210021
+      },
+      {
+        "kind": "key",
+        "atMs": 210100
+      },
+      {
+        "kind": "key",
+        "atMs": 210179
+      },
+      {
+        "kind": "key",
+        "atMs": 210259
+      },
+      {
+        "kind": "click",
+        "atMs": 210806
+      },
+      {
+        "kind": "key",
+        "atMs": 211114
+      },
+      {
+        "kind": "key",
+        "atMs": 211115
+      },
+      {
+        "kind": "key",
+        "atMs": 211117
+      },
+      {
+        "kind": "key",
+        "atMs": 211197
+      },
+      {
+        "kind": "key",
+        "atMs": 211275
+      },
+      {
+        "kind": "key",
+        "atMs": 211354
+      },
+      {
+        "kind": "key",
+        "atMs": 211433
+      },
+      {
+        "kind": "key",
+        "atMs": 211512
+      },
+      {
+        "kind": "key",
+        "atMs": 211592
+      },
+      {
+        "kind": "key",
+        "atMs": 211671
+      },
+      {
+        "kind": "key",
+        "atMs": 211756
+      },
+      {
+        "kind": "key",
+        "atMs": 211835
+      },
+      {
+        "kind": "key",
+        "atMs": 211920
+      },
+      {
+        "kind": "key",
+        "atMs": 212006
+      },
+      {
+        "kind": "key",
+        "atMs": 212085
+      },
+      {
+        "kind": "key",
+        "atMs": 212164
+      },
+      {
+        "kind": "key",
+        "atMs": 212244
+      },
+      {
+        "kind": "key",
+        "atMs": 212326
+      },
+      {
+        "kind": "key",
+        "atMs": 212409
+      },
+      {
+        "kind": "key",
+        "atMs": 212494
+      },
+      {
+        "kind": "key",
+        "atMs": 212578
+      },
+      {
+        "kind": "key",
+        "atMs": 212657
+      },
+      {
+        "kind": "key",
+        "atMs": 212742
+      },
+      {
+        "kind": "key",
+        "atMs": 212824
+      },
+      {
+        "kind": "key",
+        "atMs": 212905
+      },
+      {
+        "kind": "key",
+        "atMs": 212985
+      },
+      {
+        "kind": "key",
+        "atMs": 213064
+      },
+      {
+        "kind": "key",
+        "atMs": 213145
+      },
+      {
+        "kind": "key",
+        "atMs": 213229
+      },
+      {
+        "kind": "key",
+        "atMs": 213312
+      },
+      {
+        "kind": "key",
+        "atMs": 213395
+      },
+      {
+        "kind": "key",
+        "atMs": 213480
+      },
+      {
+        "kind": "key",
+        "atMs": 213562
+      },
+      {
+        "kind": "key",
+        "atMs": 213646
+      },
+      {
+        "kind": "key",
+        "atMs": 213729
+      },
+      {
+        "kind": "click",
+        "atMs": 214274
+      },
+      {
+        "kind": "click",
+        "atMs": 215057
+      },
+      {
+        "kind": "click",
+        "atMs": 215840
+      }
+    ]
+  },
+  {
+    "chapter": "volunteer-form",
+    "startMs": 230846,
+    "endMs": 261625,
+    "sentences": [
+      {
+        "text": "Répondons maintenant.",
+        "startMs": 322,
+        "endMs": 1364,
+        "method": "silence",
+        "absoluteStartMs": 231168
+      },
+      {
+        "text": "Aline choisit M pour son t-shirt, puis Oui pour le permis.",
+        "startMs": 1927,
+        "endMs": 5185,
+        "method": "silence",
+        "absoluteStartMs": 232773
+      },
+      {
+        "text": "Pour le matériel, elle coche Vélo et Remorque :",
+        "startMs": 5408,
+        "endMs": 9310,
+        "method": "silence",
+        "absoluteStartMs": 236254
+      },
+      {
+        "text": "c'est bien un choix multiple.",
+        "startMs": 9701,
+        "endMs": 10762,
+        "method": "silence",
+        "absoluteStartMs": 240547
+      },
+      {
+        "text": "Dans le texte libre, écrivons Entrée nord.",
+        "startMs": 11366,
+        "endMs": 12617,
+        "method": "silence",
+        "absoluteStartMs": 242212
+      },
+      {
+        "text": "Avant l'envoi, le récapitulatif Transmis à l'organisation montre les informations qui seront partagées.",
+        "startMs": 12831,
+        "endMs": 19006,
+        "method": "silence",
+        "absoluteStartMs": 243677
+      },
+      {
+        "text": "Vérifions, puis confirmons réellement l'inscription.",
+        "startMs": 19309,
+        "endMs": 22931,
+        "method": "silence",
+        "absoluteStartMs": 250155
+      },
+      {
+        "text": "Ces réponses sont enregistrées une fois pour Aline sur cet événement, pas une nouvelle fois pour chaque créneau.",
+        "startMs": 23276,
+        "endMs": 30410,
+        "method": "silence",
+        "absoluteStartMs": 254122
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "volunteer-form",
+        "phrase": "Vérifions, puis confirmons réellement l'inscription.",
+        "startMs": 19309,
+        "endMs": 22931,
+        "cueMs": 250158
+      },
+      {
+        "segmentId": "volunteer-form",
+        "phrase": "Ces réponses sont enregistrées une",
+        "startMs": 23276,
+        "endMs": 30410,
+        "cueMs": 254125
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 233023
+      },
+      {
+        "kind": "click",
+        "atMs": 235005
+      },
+      {
+        "kind": "click",
+        "atMs": 237472
+      },
+      {
+        "kind": "click",
+        "atMs": 239005
+      },
+      {
+        "kind": "click",
+        "atMs": 241805
+      },
+      {
+        "kind": "key",
+        "atMs": 242112
+      },
+      {
+        "kind": "key",
+        "atMs": 242113
+      },
+      {
+        "kind": "key",
+        "atMs": 242115
+      },
+      {
+        "kind": "key",
+        "atMs": 242213
+      },
+      {
+        "kind": "key",
+        "atMs": 242313
+      },
+      {
+        "kind": "key",
+        "atMs": 242412
+      },
+      {
+        "kind": "key",
+        "atMs": 242613
+      },
+      {
+        "kind": "key",
+        "atMs": 242712
+      },
+      {
+        "kind": "key",
+        "atMs": 242814
+      },
+      {
+        "kind": "key",
+        "atMs": 242914
+      },
+      {
+        "kind": "key",
+        "atMs": 243014
+      },
+      {
+        "kind": "key",
+        "atMs": 243117
+      },
+      {
+        "kind": "click",
+        "atMs": 254606
+      }
+    ]
+  },
+  {
+    "chapter": "email-proof",
+    "startMs": 263889,
+    "endMs": 296867,
+    "sentences": [
+      {
+        "text": "Aline existait déjà dans la liste des membres.",
+        "startMs": 372,
+        "endMs": 2821,
+        "method": "silence",
+        "absoluteStartMs": 264261
+      },
+      {
+        "text": "Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran.",
+        "startMs": 3415,
+        "endMs": 8265,
+        "method": "silence",
+        "absoluteStartMs": 267304
+      },
+      {
+        "text": "Son lien personnel n'est donc pas affiché directement :",
+        "startMs": 8787,
+        "endMs": 13492,
+        "method": "silence",
+        "absoluteStartMs": 272676
+      },
+      {
+        "text": "il lui est envoyé par email.",
+        "startMs": 13970,
+        "endMs": 14374,
+        "method": "silence",
+        "absoluteStartMs": 277859
+      },
+      {
+        "text": "Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test.",
+        "startMs": 14602,
+        "endMs": 19374,
+        "method": "silence",
+        "absoluteStartMs": 278491
+      },
+      {
+        "text": "C'est une vraie notification produite par l'application, avec son lien personnel.",
+        "startMs": 19990,
+        "endMs": 24247,
+        "method": "silence",
+        "absoluteStartMs": 283879
+      },
+      {
+        "text": "La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
+        "startMs": 24787,
+        "endMs": 32976,
+        "method": "silence",
+        "absoluteStartMs": 288676
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "email-proof",
+        "phrase": "Ouvrons le nouveau message réellement",
+        "startMs": 14602,
+        "endMs": 19374,
+        "cueMs": 278493
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "admin-read",
+    "startMs": 299135,
+    "endMs": 328564,
+    "sentences": [
+      {
+        "text": "Revenons côté organisation, dans les inscriptions.",
+        "startMs": 138,
+        "endMs": 3067,
+        "method": "silence",
+        "absoluteStartMs": 299273
+      },
+      {
+        "text": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel.",
+        "startMs": 3533,
+        "endMs": 8296,
+        "method": "silence",
+        "absoluteStartMs": 302668
+      },
+      {
+        "text": "Ouvrons ensuite Questions :",
+        "startMs": 8670,
+        "endMs": 9923,
+        "method": "silence",
+        "absoluteStartMs": 307805
+      },
+      {
+        "text": "la Synthèse des réponses compte les choix.",
+        "startMs": 10057,
+        "endMs": 12287,
+        "method": "silence",
+        "absoluteStartMs": 309192
+      },
+      {
+        "text": "Aline est comptée une seule fois parmi les bénévoles confirmés, même si elle prend plusieurs créneaux.",
+        "startMs": 12425,
+        "endMs": 18673,
+        "method": "silence",
+        "absoluteStartMs": 311560
+      },
+      {
+        "text": "Pour un choix multiple, elle apparaît dans plusieurs lignes :",
+        "startMs": 19504,
+        "endMs": 22170,
+        "method": "silence",
+        "absoluteStartMs": 318639
+      },
+      {
+        "text": "les totaux des choix peuvent donc dépasser le nombre de personnes.",
+        "startMs": 22572,
+        "endMs": 25288,
+        "method": "silence",
+        "absoluteStartMs": 321707
+      },
+      {
+        "text": "Les personnes en attente sont distinguées des confirmées.",
+        "startMs": 25902,
+        "endMs": 29186,
+        "method": "silence",
+        "absoluteStartMs": 325037
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "admin-read",
+        "phrase": "la Synthèse des réponses compte",
+        "startMs": 10057,
+        "endMs": 12287,
+        "cueMs": 309195
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "summary-export",
+    "startMs": 330826,
+    "endMs": 359041,
+    "sentences": [
+      {
+        "text": "Pour préparer une commande, téléchargeons la synthèse en CSV.",
+        "startMs": 527,
+        "endMs": 4359,
+        "method": "silence",
+        "absoluteStartMs": 331353
+      },
+      {
+        "text": "Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente.",
+        "startMs": 5018,
+        "endMs": 10966,
+        "method": "silence",
+        "absoluteStartMs": 335844
+      },
+      {
+        "text": "Il ne contient ni noms ni coordonnées :",
+        "startMs": 11447,
+        "endMs": 12934,
+        "method": "silence",
+        "absoluteStartMs": 342273
+      },
+      {
+        "text": "vous pouvez partager ces quantités avec un fournisseur sans lui transmettre la liste des bénévoles.",
+        "startMs": 13075,
+        "endMs": 19102,
+        "method": "silence",
+        "absoluteStartMs": 343901
+      },
+      {
+        "text": "La synthèse décrit l'état actuel ;",
+        "startMs": 19734,
+        "endMs": 21982,
+        "method": "silence",
+        "absoluteStartMs": 350560
+      },
+      {
+        "text": "les inscriptions peuvent encore évoluer.",
+        "startMs": 22230,
+        "endMs": 24004,
+        "method": "silence",
+        "absoluteStartMs": 353056
+      },
+      {
+        "text": "Gardez ce repère en tête avant de lancer une commande définitive.",
+        "startMs": 24243,
+        "endMs": 28081,
+        "method": "silence",
+        "absoluteStartMs": 355069
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "summary-export",
+        "phrase": "Le fichier rassemble les questions",
+        "startMs": 5018,
+        "endMs": 10966,
+        "cueMs": 335845
+      },
+      {
+        "segmentId": "summary-export",
+        "phrase": "Le fichier rassemble les questions",
+        "startMs": 5018,
+        "endMs": 10966,
+        "cueMs": 336647
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 336342
+      }
+    ]
+  },
+  {
+    "chapter": "invited-update",
+    "startMs": 361306,
+    "endMs": 391386,
+    "sentences": [
+      {
+        "text": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
+        "startMs": 151,
+        "endMs": 4930,
+        "method": "silence",
+        "absoluteStartMs": 361457
+      },
+      {
+        "text": "Cette invitation apporte la preuve nécessaire pour modifier ses réponses.",
+        "startMs": 5502,
+        "endMs": 10683,
+        "method": "silence",
+        "absoluteStartMs": 366808
+      },
+      {
+        "text": "Choisissons L au lieu de M.",
+        "startMs": 10840,
+        "endMs": 12126,
+        "method": "silence",
+        "absoluteStartMs": 372146
+      },
+      {
+        "text": "Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides.",
+        "startMs": 12838,
+        "endMs": 17181,
+        "method": "silence",
+        "absoluteStartMs": 374144
+      },
+      {
+        "text": "Confirmons.",
+        "startMs": 17882,
+        "endMs": 18348,
+        "method": "silence",
+        "absoluteStartMs": 379188
+      },
+      {
+        "text": "La nouvelle taille remplace l'ancienne.",
+        "startMs": 18828,
+        "endMs": 21159,
+        "method": "silence",
+        "absoluteStartMs": 380134
+      },
+      {
+        "text": "Les deux réponses facultatives laissées vides sont effacées.",
+        "startMs": 21575,
+        "endMs": 24549,
+        "method": "silence",
+        "absoluteStartMs": 382881
+      },
+      {
+        "text": "Les réponses appartiennent toujours à Aline sur cet événement, indépendamment de ses deux créneaux.",
+        "startMs": 24721,
+        "endMs": 29774,
+        "method": "silence",
+        "absoluteStartMs": 386027
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "invited-update",
+        "phrase": "Choisissons L au lieu de",
+        "startMs": 10840,
+        "endMs": 12126,
+        "cueMs": 372148
+      },
+      {
+        "segmentId": "invited-update",
+        "phrase": "Conservons Oui pour le permis",
+        "startMs": 12838,
+        "endMs": 17181,
+        "cueMs": 374564
+      },
+      {
+        "segmentId": "invited-update",
+        "phrase": "Les deux réponses facultatives laissées",
+        "startMs": 21575,
+        "endMs": 24549,
+        "cueMs": 382882
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 364086
+      },
+      {
+        "kind": "click",
+        "atMs": 364868
+      },
+      {
+        "kind": "click",
+        "atMs": 365668
+      },
+      {
+        "kind": "click",
+        "atMs": 366450
+      },
+      {
+        "kind": "click",
+        "atMs": 372668
+      },
+      {
+        "kind": "click",
+        "atMs": 373450
+      },
+      {
+        "kind": "click",
+        "atMs": 374234
+      },
+      {
+        "kind": "key",
+        "atMs": 374540
+      },
+      {
+        "kind": "key",
+        "atMs": 374541
+      },
+      {
+        "kind": "key",
+        "atMs": 374543
+      },
+      {
+        "kind": "click",
+        "atMs": 383350
+      }
+    ]
+  },
+  {
+    "chapter": "unverified-update",
+    "startMs": 393648,
+    "endMs": 426417,
+    "sentences": [
+      {
+        "text": "Comparons avec une inscription depuis le simple formulaire public, sans invitation.",
+        "startMs": 392,
+        "endMs": 5608,
+        "method": "silence",
+        "absoluteStartMs": 394040
+      },
+      {
+        "text": "Saisissons la même adresse pour un troisième créneau, mais choisissons S.",
+        "startMs": 5729,
+        "endMs": 9808,
+        "method": "silence",
+        "absoluteStartMs": 399377
+      },
+      {
+        "text": "L'inscription peut être créée, pourtant la réponse déjà enregistrée ne sera pas remplacée.",
+        "startMs": 10322,
+        "endMs": 15458,
+        "method": "silence",
+        "absoluteStartMs": 403970
+      },
+      {
+        "text": "L'adresse seule ne prouve pas l'identité de la personne qui la saisit.",
+        "startMs": 15971,
+        "endMs": 19065,
+        "method": "silence",
+        "absoluteStartMs": 409619
+      },
+      {
+        "text": "La taille conservée reste donc L.",
+        "startMs": 19546,
+        "endMs": 21775,
+        "method": "silence",
+        "absoluteStartMs": 413194
+      },
+      {
+        "text": "Depuis ce formulaire, seules les réponses encore manquantes peuvent être ajoutées.",
+        "startMs": 22319,
+        "endMs": 26259,
+        "method": "silence",
+        "absoluteStartMs": 415967
+      },
+      {
+        "text": "Pour corriger une réponse existante, le bénévole doit utiliser le parcours qui prouve son accès.",
+        "startMs": 26677,
+        "endMs": 32768,
+        "method": "silence",
+        "absoluteStartMs": 420325
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 395301
+      },
+      {
+        "kind": "click",
+        "atMs": 396084
+      },
+      {
+        "kind": "click",
+        "atMs": 396867
+      },
+      {
+        "kind": "click",
+        "atMs": 397649
+      },
+      {
+        "kind": "key",
+        "atMs": 397957
+      },
+      {
+        "kind": "key",
+        "atMs": 397957
+      },
+      {
+        "kind": "key",
+        "atMs": 397960
+      },
+      {
+        "kind": "key",
+        "atMs": 398038
+      },
+      {
+        "kind": "key",
+        "atMs": 398118
+      },
+      {
+        "kind": "key",
+        "atMs": 398197
+      },
+      {
+        "kind": "key",
+        "atMs": 398276
+      },
+      {
+        "kind": "click",
+        "atMs": 398817
+      },
+      {
+        "kind": "key",
+        "atMs": 399123
+      },
+      {
+        "kind": "key",
+        "atMs": 399124
+      },
+      {
+        "kind": "key",
+        "atMs": 399126
+      },
+      {
+        "kind": "key",
+        "atMs": 399206
+      },
+      {
+        "kind": "key",
+        "atMs": 399285
+      },
+      {
+        "kind": "key",
+        "atMs": 399364
+      },
+      {
+        "kind": "key",
+        "atMs": 399443
+      },
+      {
+        "kind": "key",
+        "atMs": 399523
+      },
+      {
+        "kind": "key",
+        "atMs": 399602
+      },
+      {
+        "kind": "click",
+        "atMs": 400149
+      },
+      {
+        "kind": "key",
+        "atMs": 400456
+      },
+      {
+        "kind": "key",
+        "atMs": 400456
+      },
+      {
+        "kind": "key",
+        "atMs": 400459
+      },
+      {
+        "kind": "key",
+        "atMs": 400538
+      },
+      {
+        "kind": "key",
+        "atMs": 400618
+      },
+      {
+        "kind": "key",
+        "atMs": 400697
+      },
+      {
+        "kind": "key",
+        "atMs": 400777
+      },
+      {
+        "kind": "key",
+        "atMs": 400856
+      },
+      {
+        "kind": "key",
+        "atMs": 400935
+      },
+      {
+        "kind": "key",
+        "atMs": 401014
+      },
+      {
+        "kind": "key",
+        "atMs": 401096
+      },
+      {
+        "kind": "key",
+        "atMs": 401177
+      },
+      {
+        "kind": "key",
+        "atMs": 401259
+      },
+      {
+        "kind": "key",
+        "atMs": 401346
+      },
+      {
+        "kind": "key",
+        "atMs": 401425
+      },
+      {
+        "kind": "key",
+        "atMs": 401507
+      },
+      {
+        "kind": "key",
+        "atMs": 401590
+      },
+      {
+        "kind": "key",
+        "atMs": 401671
+      },
+      {
+        "kind": "key",
+        "atMs": 401753
+      },
+      {
+        "kind": "key",
+        "atMs": 401835
+      },
+      {
+        "kind": "key",
+        "atMs": 401917
+      },
+      {
+        "kind": "key",
+        "atMs": 401999
+      },
+      {
+        "kind": "key",
+        "atMs": 402081
+      },
+      {
+        "kind": "key",
+        "atMs": 402163
+      },
+      {
+        "kind": "key",
+        "atMs": 402243
+      },
+      {
+        "kind": "key",
+        "atMs": 402324
+      },
+      {
+        "kind": "key",
+        "atMs": 402406
+      },
+      {
+        "kind": "key",
+        "atMs": 402489
+      },
+      {
+        "kind": "key",
+        "atMs": 402572
+      },
+      {
+        "kind": "key",
+        "atMs": 402655
+      },
+      {
+        "kind": "key",
+        "atMs": 402738
+      },
+      {
+        "kind": "key",
+        "atMs": 402820
+      },
+      {
+        "kind": "key",
+        "atMs": 402903
+      },
+      {
+        "kind": "key",
+        "atMs": 402985
+      },
+      {
+        "kind": "key",
+        "atMs": 403065
+      },
+      {
+        "kind": "click",
+        "atMs": 403614
+      },
+      {
+        "kind": "click",
+        "atMs": 404399
+      },
+      {
+        "kind": "click",
+        "atMs": 405182
+      },
+      {
+        "kind": "click",
+        "atMs": 405967
+      },
+      {
+        "kind": "click",
+        "atMs": 406748
+      },
+      {
+        "kind": "key",
+        "atMs": 407054
+      },
+      {
+        "kind": "key",
+        "atMs": 407055
+      },
+      {
+        "kind": "key",
+        "atMs": 407057
+      },
+      {
+        "kind": "click",
+        "atMs": 407533
+      }
+    ]
+  },
+  {
+    "chapter": "answered-lock",
+    "startMs": 428677,
+    "endMs": 458327,
+    "sentences": [
+      {
+        "text": "Le formulaire a maintenant des réponses :",
+        "startMs": 224,
+        "endMs": 1815,
+        "method": "silence",
+        "absoluteStartMs": 428901
+      },
+      {
+        "text": "revenons modifier la taille du t-shirt.",
+        "startMs": 2135,
+        "endMs": 4202,
+        "method": "silence",
+        "absoluteStartMs": 430812
+      },
+      {
+        "text": "Le type est verrouillé.",
+        "startMs": 4857,
+        "endMs": 5747,
+        "method": "silence",
+        "absoluteStartMs": 433534
+      },
+      {
+        "text": "Changer un choix unique en texte libre rendrait les réponses existantes difficiles à interpréter.",
+        "startMs": 6097,
+        "endMs": 11212,
+        "method": "silence",
+        "absoluteStartMs": 434774
+      },
+      {
+        "text": "Essayons aussi de retirer L des choix proposés.",
+        "startMs": 11880,
+        "endMs": 14779,
+        "method": "silence",
+        "absoluteStartMs": 440557
+      },
+      {
+        "text": "L'application refuse, car cette taille a déjà été retenue.",
+        "startMs": 15548,
+        "endMs": 18493,
+        "method": "silence",
+        "absoluteStartMs": 444225
+      },
+      {
+        "text": "Annulons cette modification.",
+        "startMs": 19188,
+        "endMs": 19421,
+        "method": "silence",
+        "absoluteStartMs": 447865
+      },
+      {
+        "text": "La réponse d'Aline reste intacte.",
+        "startMs": 19543,
+        "endMs": 20748,
+        "method": "silence",
+        "absoluteStartMs": 448220
+      },
+      {
+        "text": "Si vous devez changer complètement la question, mieux vaut en créer une nouvelle plutôt que de réinterpréter les réponses passées.",
+        "startMs": 21282,
+        "endMs": 29245,
+        "method": "silence",
+        "absoluteStartMs": 449959
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "answered-lock",
+        "phrase": "Essayons aussi de retirer L",
+        "startMs": 11880,
+        "endMs": 14779,
+        "cueMs": 440559
+      },
+      {
+        "segmentId": "answered-lock",
+        "phrase": "La réponse d'Aline reste intacte.",
+        "startMs": 19543,
+        "endMs": 20748,
+        "cueMs": 448221
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 430315
+      },
+      {
+        "kind": "click",
+        "atMs": 441032
+      },
+      {
+        "kind": "key",
+        "atMs": 441339
+      },
+      {
+        "kind": "key",
+        "atMs": 441340
+      },
+      {
+        "kind": "key",
+        "atMs": 441343
+      },
+      {
+        "kind": "key",
+        "atMs": 441440
+      },
+      {
+        "kind": "key",
+        "atMs": 441539
+      },
+      {
+        "kind": "key",
+        "atMs": 441637
+      },
+      {
+        "kind": "key",
+        "atMs": 441735
+      },
+      {
+        "kind": "key",
+        "atMs": 441836
+      },
+      {
+        "kind": "click",
+        "atMs": 442582
+      },
+      {
+        "kind": "click",
+        "atMs": 448715
+      }
+    ]
+  },
+  {
+    "chapter": "edit-choices",
+    "startMs": 460591,
+    "endMs": 485479,
+    "sentences": [
+      {
+        "text": "On peut cependant enrichir la liste sans perdre ce qui existe.",
+        "startMs": 409,
+        "endMs": 4028,
+        "method": "silence",
+        "absoluteStartMs": 461000
+      },
+      {
+        "text": "Rouvrons la question et ajoutons XXL, tout en gardant S, M, L et XL.",
+        "startMs": 4448,
+        "endMs": 8587,
+        "method": "silence",
+        "absoluteStartMs": 465039
+      },
+      {
+        "text": "Enregistrons.",
+        "startMs": 8714,
+        "endMs": 10307,
+        "method": "silence",
+        "absoluteStartMs": 469305
+      },
+      {
+        "text": "Le nouveau choix apparaît dans la liste ;",
+        "startMs": 10719,
+        "endMs": 11416,
+        "method": "silence",
+        "absoluteStartMs": 471310
+      },
+      {
+        "text": "la taille L d'Aline reste conservée.",
+        "startMs": 11852,
+        "endMs": 13707,
+        "method": "silence",
+        "absoluteStartMs": 472443
+      },
+      {
+        "text": "Ajouter une possibilité et retirer un choix déjà utilisé ne sont pas la même opération.",
+        "startMs": 14091,
+        "endMs": 21298,
+        "method": "silence",
+        "absoluteStartMs": 474682
+      },
+      {
+        "text": "Prenez le temps de relire les choix avant d'enregistrer.",
+        "startMs": 21834,
+        "endMs": 24495,
+        "method": "silence",
+        "absoluteStartMs": 482425
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "edit-choices",
+        "phrase": "Rouvrons la question et ajoutons",
+        "startMs": 4448,
+        "endMs": 8587,
+        "cueMs": 465039
+      },
+      {
+        "segmentId": "edit-choices",
+        "phrase": "la taille L d'Aline reste",
+        "startMs": 11852,
+        "endMs": 13707,
+        "cueMs": 472446
+      },
+      {
+        "segmentId": "edit-choices",
+        "phrase": "Ajouter une possibilité et retirer",
+        "startMs": 14091,
+        "endMs": 21298,
+        "cueMs": 474684
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 465513
+      },
+      {
+        "kind": "click",
+        "atMs": 466296
+      },
+      {
+        "kind": "key",
+        "atMs": 466604
+      },
+      {
+        "kind": "key",
+        "atMs": 466604
+      },
+      {
+        "kind": "key",
+        "atMs": 466607
+      },
+      {
+        "kind": "key",
+        "atMs": 466704
+      },
+      {
+        "kind": "key",
+        "atMs": 466802
+      },
+      {
+        "kind": "key",
+        "atMs": 466901
+      },
+      {
+        "kind": "key",
+        "atMs": 467000
+      },
+      {
+        "kind": "key",
+        "atMs": 467099
+      },
+      {
+        "kind": "key",
+        "atMs": 467201
+      },
+      {
+        "kind": "key",
+        "atMs": 467305
+      },
+      {
+        "kind": "key",
+        "atMs": 467408
+      },
+      {
+        "kind": "key",
+        "atMs": 467511
+      },
+      {
+        "kind": "key",
+        "atMs": 467614
+      },
+      {
+        "kind": "key",
+        "atMs": 467716
+      },
+      {
+        "kind": "click",
+        "atMs": 472913
+      }
+    ]
+  },
+  {
+    "chapter": "retire",
+    "startMs": 487747,
+    "endMs": 520165,
+    "sentences": [
+      {
+        "text": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions.",
+        "startMs": 389,
+        "endMs": 4760,
+        "method": "silence",
+        "absoluteStartMs": 488136
+      },
+      {
+        "text": "Cliquons sur Retirer, puis lisons la confirmation :",
+        "startMs": 4888,
+        "endMs": 7304,
+        "method": "silence",
+        "absoluteStartMs": 492635
+      },
+      {
+        "text": "la question disparaît du formulaire, mais ses réponses restent dans les inscriptions et les exports.",
+        "startMs": 7876,
+        "endMs": 13323,
+        "method": "silence",
+        "absoluteStartMs": 495623
+      },
+      {
+        "text": "Confirmons.",
+        "startMs": 13630,
+        "endMs": 13969,
+        "method": "silence",
+        "absoluteStartMs": 501377
+      },
+      {
+        "text": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
+        "startMs": 14134,
+        "endMs": 19621,
+        "method": "silence",
+        "absoluteStartMs": 501881
+      },
+      {
+        "text": "Ouvrons enfin un autre créneau public :",
+        "startMs": 19744,
+        "endMs": 23048,
+        "method": "silence",
+        "absoluteStartMs": 507491
+      },
+      {
+        "text": "la question n'est plus proposée, les autres le sont toujours.",
+        "startMs": 23382,
+        "endMs": 24976,
+        "method": "silence",
+        "absoluteStartMs": 511129
+      },
+      {
+        "text": "Un formulaire simple, des réponses utiles et une évolution qui préserve l'historique :",
+        "startMs": 25142,
+        "endMs": 30721,
+        "method": "silence",
+        "absoluteStartMs": 512889
+      },
+      {
+        "text": "c'est le bon équilibre.",
+        "startMs": 31089,
+        "endMs": 32086,
+        "method": "silence",
+        "absoluteStartMs": 518836
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "retire",
+        "phrase": "Cliquons sur Retirer, puis lisons",
+        "startMs": 4888,
+        "endMs": 7304,
+        "cueMs": 492635
+      },
+      {
+        "segmentId": "retire",
+        "phrase": "Confirmons.",
+        "startMs": 13630,
+        "endMs": 13969,
+        "cueMs": 501379
+      },
+      {
+        "segmentId": "retire",
+        "phrase": "Ouvrons enfin un autre créneau",
+        "startMs": 19744,
+        "endMs": 23048,
+        "cueMs": 507493
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 493113
+      },
+      {
+        "kind": "click",
+        "atMs": 501863
+      },
+      {
+        "kind": "click",
+        "atMs": 509096
+      },
+      {
+        "kind": "click",
+        "atMs": 509878
+      }
+    ]
+  }
+]

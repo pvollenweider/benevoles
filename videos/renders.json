@@ -18,7 +18,7 @@
     "poster": true
   },
   "data-exports-archives": {
-    "durationMs": 294840,
+    "durationMs": 299680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -72,7 +72,7 @@
     "poster": true
   },
   "event-questions": {
-    "durationMs": 520600,
+    "durationMs": 520640,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -114,13 +114,13 @@
     "poster": true
   },
   "members-duplicates-merge": {
-    "durationMs": 221600,
+    "durationMs": 218760,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-import": {
-    "durationMs": 220760,
+    "durationMs": 220920,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -132,7 +132,7 @@
     "poster": true
   },
   "members-management": {
-    "durationMs": 230080,
+    "durationMs": 230760,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -234,7 +234,7 @@
     "poster": true
   },
   "shift-eligibility-rules": {
-    "durationMs": 115360,
+    "durationMs": 118720,
     "width": 1280,
     "height": 800,
     "poster": true

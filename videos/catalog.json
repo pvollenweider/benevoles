@@ -363,8 +363,8 @@
         "organisateur"
       ],
       "feature": "Questions aux bénévoles",
-      "updatedAt": "2026-10-07",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -591,8 +591,8 @@
         "organisateur"
       ],
       "feature": "Règles d'éligibilité des postes",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -953,8 +953,8 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-07",
-      "revision": 3,
+      "updatedAt": "2026-10-12",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -978,8 +978,8 @@
         "organisateur"
       ],
       "feature": "Exports et archive d'un événement",
-      "updatedAt": "2026-10-07",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -1275,8 +1275,8 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1298,8 +1298,8 @@
         "organisateur"
       ],
       "feature": "Doublons et fusion de membres",
-      "updatedAt": "2026-10-07",
-      "revision": 2,
+      "updatedAt": "2026-10-12",
+      "revision": 3,
       "level": "avance"
     },
     {

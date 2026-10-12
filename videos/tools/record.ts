@@ -1807,7 +1807,8 @@ async function main() {
       await scene("quota", async (at) => {
         await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
-        await page.getByText("Tous mes créneaux", { exact: true }).scrollIntoViewIfNeeded()
+        // Align the cards, not just their heading at the bottom of the viewport.
+        await page.getByRole("region", { name: "Tous mes créneaux", exact: true }).evaluate(element => element.scrollIntoView({ block: "start" }))
         await at("En revenant au planning depuis")
         await page.getByRole("link", { name: "Retour à l'accueil" }).scrollIntoViewIfNeeded()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
@@ -1839,6 +1840,8 @@ async function main() {
       await scene("eligible", async (at) => {
         await clearVolunteerSession()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}&token=demo-invite-julien-security-0001`); await settle(page)
+        // The quota chapter deliberately switched to Liste; its preference persists.
+        await tap(page, page.getByRole("button", { name: "Frise", exact: true }))
         const security = page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first()
         await security.waitFor()
         await security.scrollIntoViewIfNeeded()
@@ -2961,11 +2964,12 @@ async function main() {
         if (!result.ok()) throw new Error("Targeted reminder failed")
         checks.targetedMessage = await result.json()
         await page.getByRole("heading", { name: /^Message envoyé à/ }).waitFor()
-        await at(0.32) /* mid-sentence */
+        await at("Nous ouvrons le vrai message")
         await openMail("Un horaire qui te convient")
-        await at("L'historique aide à savoir ce")
+        // The same sentence announces the email, then the administrative history.
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
         await page.getByText("Un horaire qui te convient", { exact: true }).first().scrollIntoViewIfNeeded()
+        await at("Un email remis au serveur")
       })
       await scene("result", async () => {
         await page.goto(adminUrl); await settle(page)
@@ -3033,10 +3037,11 @@ async function main() {
         await page.goto(adminUrl); await settle(page); await open()
         const tag = dialog().getByRole("combobox", { name: "Filtrer par tag", exact: true })
         await tap(page, tag); await tag.selectOption("accueil")
+        await at("Tout sélectionner ajoute les membres")
         await tap(page, dialog().getByRole("button", { name: "Tout sélectionner", exact: true }))
-        await at(0.54) /* mid-sentence */
+        await at("une personne déjà cochée peut")
         await tap(page, tag); await tag.selectOption("sécurité")
-        await at(0.77) /* mid-sentence */
+        await at("Avec Effacer, repartez")
         await tap(page, dialog().getByRole("button", { name: "Effacer", exact: true }))
         await tag.selectOption("")
       })
@@ -3652,9 +3657,9 @@ async function main() {
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
         await page.evaluate(() => window.scrollTo(0, 0))
-        await at("On peut ainsi retrouver l'équipe")
+        await at("Les liens email et téléphone")
         await page.locator('a[href^="tel:"]').first().scrollIntoViewIfNeeded()
-        await at(0.75) /* mid-sentence */
+        await at("On peut ainsi retrouver l'équipe")
         await page.locator("section").last().scrollIntoViewIfNeeded()
       })
       await scene("scope", async (at) => {
@@ -3680,8 +3685,8 @@ async function main() {
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await at("Avant de confirmer, elle vérifie")
-        await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
-        await at("la page indique que son")
+        await page.getByLabel("Prénom *", { exact: true }).evaluate(element => element.scrollIntoView({ block: "center" }))
+        await at("Nous confirmons maintenant")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
         await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
       })
@@ -5030,6 +5035,7 @@ async function main() {
         const selectCamille = page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).first()
         await tap(page, selectCamille)
         await at(0.42) /* mid-sentence */
+        await tap(page, page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).nth(1))
         await page.getByRole("group", { name: "Actions sur la sélection" }).scrollIntoViewIfNeeded()
         await at(0.78) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "Désélectionner" }))

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "scenario": "members-duplicates-merge",
+  "organizationId": "video-member-merge",
+  "organizationCreatedAt": "2026-10-06T17:30:53.011Z",
+  "preparedAt": "2026-10-06T17:30:53.066Z",
+  "fixtureSchemaSha256": "af1e81027e27cfe9d8e9634a820b1e9305109210e79dd38fb8e12f3145012750",
+  "owned": {
+    "organizationId": "video-member-merge",
+    "name": "Formation — doublons et fusion",
+    "slug": "formation-fusion",
+    "adminIds": [
+      "video-member-merge-owner"
+    ],
+    "memberIds": [
+      "video-member-merge-a",
+      "video-member-merge-b"
+    ],
+    "eventIds": [
+      "video-member-merge-event"
+    ],
+    "shiftIds": [
+      "video-member-merge-shift-main",
+      "video-member-merge-shift-overlap"
+    ],
+    "registrationIds": [
+      "video-member-merge-registration-keep",
+      "video-member-merge-registration-same",
+      "video-member-merge-registration-moved"
+    ],
+    "invitationIds": [
+      "video-member-merge-invite-keep",
+      "video-member-merge-invite-absorb"
+    ],
+    "questionIds": [
+      "video-member-merge-question"
+    ],
+    "answerIds": [
+      "video-member-merge-answer-keep",
+      "video-member-merge-answer-absorb"
+    ],
+    "pushIds": [
+      "video-member-merge-push"
+    ],
+    "version": 1
+  }
+}

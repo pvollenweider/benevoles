@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:05:55.354Z",
+  "videoSha256": "d9c587905659d3008b8dbd3f183f07f2f934162f504a2ecdb6e0a74b8bc42381",
+  "promptSha256": "c5deb1e12c36cfefae6a833e8c621bafd56e778ec4276b4f7528285004334b1a",
+  "clipSha256": "405f408894400aa7b16e1f14ef05e718bc8b954111beab515950f9b93f4563fb",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour garder une copie des actions de l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le journal d'activité dans les paramètres",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur l'onglet Journal d'activité dans les paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Choisissons un type, puis Exporter tout le journal",
+        "visibleSeconds": 8.5,
+        "visible": "Le filtre Organisation est sélectionné, mais le clic sur le lien Exporter tout le journal n'est pas montré",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements",
+        "visibleSeconds": 14,
+        "visible": "Affichage du visualiseur CSV avec les colonnes Date, Acteur, Type d'acteur, Action, Entité, Identifiant et Changements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "Les lignes sont classées de la plus ancienne à la plus récente",
+        "visibleSeconds": 14,
+        "visible": "Sous-titre indiquant 'des plus anciennes aux plus récentes' et lignes chronologiques visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:08, le clic sur le lien 'Exporter tout le journal (CSV)' n'est pas effectué à l'écran avant la transition vers la prévisualisation du fichier."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, posée et bien articulée, sans artefact."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

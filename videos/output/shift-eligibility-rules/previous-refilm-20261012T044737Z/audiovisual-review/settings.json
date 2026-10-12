@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:46:49.970Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "c72a80aeb574bd7a9ab8c871bf73dc70c40ede0fc4ccfc627723bacfe4674113",
+  "clipSha256": "f3d90f00646acfb4d4ebac2d35f5874c583b5357be421c887cab0633486ed3d3",
+  "scene": "settings",
+  "review": {
+    "heardOpening": "Les règles se configurent au bon niveau.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "L'âge minimum appartient au créneau.",
+        "visibleSeconds": 3.8,
+        "visible": "Ouverture des paramètres d'un créneau affichant le champ « Âge minimum (optionnel) ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La limite et les tags réservés appartiennent au poste entier",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture du volet « Gérer les postes » affichant les règles au niveau du poste (Limite, Accès).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Ici, Buvette est limitée à deux créneaux",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la limite fixée à 2 créneaux par personne pour le poste Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "et Sécurité exige le tag sécurité.",
+        "visibleSeconds": 15.2,
+        "visible": "Ouverture de la configuration d'accès du poste Sécurité avec le tag « sécurité » renseigné.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, naturelle et parfaitement synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T02:46:10.706Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 16,
+    "keys": 0
+  },
+  "music": {
+    "voicedWindows": 110,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13.7,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "42 images finales et quota-full.png56.5s revus. Défaut produit : la Frise annonce la limite uniquement dans le nom accessible, aucun libellé visible ; Liste sait la montrer. Deux engagements sous le viewport initial. Retour Membres tardif (attente0.56 au lieu phrase12.06s). Validation, ASR7/7,VTT,effets,musique passent ; dates dd.mm.yyyy, Frise, aucune adresse interdite/overlay.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

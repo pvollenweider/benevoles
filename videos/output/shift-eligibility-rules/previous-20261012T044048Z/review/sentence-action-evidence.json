@@ -1,0 +1,420 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1106,
+    "endMs": 14586,
+    "sentences": [
+      {
+        "text": "Certaines missions demandent une règle simple :",
+        "startMs": 0,
+        "endMs": 2138,
+        "method": "silence",
+        "absoluteStartMs": 1106
+      },
+      {
+        "text": "un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée.",
+        "startMs": 2289,
+        "endMs": 7381,
+        "method": "silence",
+        "absoluteStartMs": 3395
+      },
+      {
+        "text": "Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+        "startMs": 7558,
+        "endMs": 13153,
+        "method": "silence",
+        "absoluteStartMs": 8664
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "settings",
+    "startMs": 15039,
+    "endMs": 32660,
+    "sentences": [
+      {
+        "text": "Les règles se configurent au bon niveau.",
+        "startMs": 329,
+        "endMs": 2559,
+        "method": "silence",
+        "absoluteStartMs": 15368
+      },
+      {
+        "text": "L’âge minimum appartient au créneau.",
+        "startMs": 3111,
+        "endMs": 4684,
+        "method": "silence",
+        "absoluteStartMs": 18150
+      },
+      {
+        "text": "La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires.",
+        "startMs": 5375,
+        "endMs": 13903,
+        "method": "silence",
+        "absoluteStartMs": 20414
+      },
+      {
+        "text": "Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+        "startMs": 14176,
+        "endMs": 17619,
+        "method": "silence",
+        "absoluteStartMs": 29215
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "settings",
+        "phrase": "L’âge minimum appartient au créneau.",
+        "startMs": 3111,
+        "endMs": 4684,
+        "cueMs": 18153
+      },
+      {
+        "segmentId": "settings",
+        "phrase": "La limite et les tags",
+        "startMs": 5375,
+        "endMs": 13903,
+        "cueMs": 20415
+      },
+      {
+        "segmentId": "settings",
+        "phrase": "Ici, Buvette est limitée à",
+        "startMs": 14176,
+        "endMs": 17619,
+        "cueMs": 29217
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 15506
+      },
+      {
+        "kind": "click",
+        "atMs": 18640
+      },
+      {
+        "kind": "click",
+        "atMs": 20890
+      },
+      {
+        "kind": "click",
+        "atMs": 21689
+      },
+      {
+        "kind": "click",
+        "atMs": 23290
+      },
+      {
+        "kind": "click",
+        "atMs": 29690
+      },
+      {
+        "kind": "click",
+        "atMs": 30490
+      }
+    ]
+  },
+  {
+    "chapter": "age",
+    "startMs": 33112,
+    "endMs": 46285,
+    "sentences": [
+      {
+        "text": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection.",
+        "startMs": 143,
+        "endMs": 4391,
+        "method": "silence",
+        "absoluteStartMs": 33255
+      },
+      {
+        "text": "La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ;",
+        "startMs": 4933,
+        "endMs": 8560,
+        "method": "silence",
+        "absoluteStartMs": 38045
+      },
+      {
+        "text": "modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+        "startMs": 8714,
+        "endMs": 13171,
+        "method": "silence",
+        "absoluteStartMs": 41826
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "age",
+        "phrase": "La date de naissance demandée",
+        "startMs": 4933,
+        "endMs": 8560,
+        "cueMs": 38047
+      },
+      {
+        "segmentId": "age",
+        "phrase": "modifier le navigateur ou masquer",
+        "startMs": 8714,
+        "endMs": 13171,
+        "cueMs": 41828
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 38535
+      },
+      {
+        "kind": "click",
+        "atMs": 40034
+      },
+      {
+        "kind": "click",
+        "atMs": 42335
+      }
+    ]
+  },
+  {
+    "chapter": "quota",
+    "startMs": 48450,
+    "endMs": 62779,
+    "sentences": [
+      {
+        "text": "Camille possède déjà deux engagements de Buvette.",
+        "startMs": 149,
+        "endMs": 2374,
+        "method": "silence",
+        "absoluteStartMs": 48599
+      },
+      {
+        "text": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions :",
+        "startMs": 2818,
+        "endMs": 6752,
+        "method": "silence",
+        "absoluteStartMs": 51268
+      },
+      {
+        "text": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
+        "startMs": 7290,
+        "endMs": 10714,
+        "method": "silence",
+        "absoluteStartMs": 55740
+      },
+      {
+        "text": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+        "startMs": 11169,
+        "endMs": 13930,
+        "method": "silence",
+        "absoluteStartMs": 59619
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "quota",
+        "phrase": "En revenant au planning depuis",
+        "startMs": 2818,
+        "endMs": 6752,
+        "cueMs": 51271
+      },
+      {
+        "segmentId": "quota",
+        "phrase": "Elle peut d’abord retirer un",
+        "startMs": 11169,
+        "endMs": 13930,
+        "cueMs": 59621
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "reserved",
+    "startMs": 63230,
+    "endMs": 78362,
+    "sentences": [
+      {
+        "text": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres.",
+        "startMs": 406,
+        "endMs": 5531,
+        "method": "silence",
+        "absoluteStartMs": 63636
+      },
+      {
+        "text": "Le message ne révèle pas les tags internes :",
+        "startMs": 5758,
+        "endMs": 6067,
+        "method": "silence",
+        "absoluteStartMs": 68988
+      },
+      {
+        "text": "il demande simplement d’utiliser le lien personnel reçu par email.",
+        "startMs": 6216,
+        "endMs": 11069,
+        "method": "silence",
+        "absoluteStartMs": 69446
+      },
+      {
+        "text": "Une invitation sans le bon tag ne donne pas davantage accès.",
+        "startMs": 11709,
+        "endMs": 15130,
+        "method": "silence",
+        "absoluteStartMs": 74939
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "reserved",
+        "phrase": "Le message ne révèle pas",
+        "startMs": 5758,
+        "endMs": 6067,
+        "cueMs": 68990
+      },
+      {
+        "segmentId": "reserved",
+        "phrase": "Une invitation sans le bon",
+        "startMs": 11709,
+        "endMs": 15130,
+        "cueMs": 74941
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 64873
+      }
+    ]
+  },
+  {
+    "chapter": "eligible",
+    "startMs": 78814,
+    "endMs": 92438,
+    "sentences": [
+      {
+        "text": "Julien possède le tag sécurité.",
+        "startMs": 124,
+        "endMs": 1702,
+        "method": "silence",
+        "absoluteStartMs": 78938
+      },
+      {
+        "text": "En ouvrant son invitation, la même mission devient sélectionnable :",
+        "startMs": 2047,
+        "endMs": 5645,
+        "method": "silence",
+        "absoluteStartMs": 80861
+      },
+      {
+        "text": "le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription.",
+        "startMs": 5944,
+        "endMs": 10501,
+        "method": "silence",
+        "absoluteStartMs": 84758
+      },
+      {
+        "text": "Il n’y a donc ni compte à créer, ni code à recopier.",
+        "startMs": 10993,
+        "endMs": 13230,
+        "method": "silence",
+        "absoluteStartMs": 89807
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "eligible",
+        "phrase": "le lien prouve quel membre",
+        "startMs": 5944,
+        "endMs": 10501,
+        "cueMs": 84759
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 85230
+      },
+      {
+        "kind": "click",
+        "atMs": 88548
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 92892,
+    "endMs": 118280,
+    "sentences": [
+      {
+        "text": "Ces règles doivent rester compréhensibles.",
+        "startMs": 395,
+        "endMs": 2391,
+        "method": "silence",
+        "absoluteStartMs": 93287
+      },
+      {
+        "text": "Dans les paramètres de l’événement, la description permet d’expliquer les critères.",
+        "startMs": 2634,
+        "endMs": 6114,
+        "method": "silence",
+        "absoluteStartMs": 95526
+      },
+      {
+        "text": "Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J.",
+        "startMs": 6660,
+        "endMs": 10461,
+        "method": "silence",
+        "absoluteStartMs": 99552
+      },
+      {
+        "text": "Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer :",
+        "startMs": 12061,
+        "endMs": 16953,
+        "method": "silence",
+        "absoluteStartMs": 104953
+      },
+      {
+        "text": "son tag sécurité est une information interne.",
+        "startMs": 17711,
+        "endMs": 20907,
+        "method": "silence",
+        "absoluteStartMs": 110603
+      },
+      {
+        "text": "Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+        "startMs": 21189,
+        "endMs": 25091,
+        "method": "silence",
+        "absoluteStartMs": 114081
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "result",
+        "phrase": "Vérifions aussi le téléphone obligatoire",
+        "startMs": 6660,
+        "endMs": 10461,
+        "cueMs": 99554
+      },
+      {
+        "segmentId": "result",
+        "phrase": "Ici, nous vérifions la fiche",
+        "startMs": 21189,
+        "endMs": 25091,
+        "cueMs": 114081
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 108884
+      },
+      {
+        "kind": "click",
+        "atMs": 110516
+      },
+      {
+        "kind": "click",
+        "atMs": 114549
+      }
+    ]
+  }
+]

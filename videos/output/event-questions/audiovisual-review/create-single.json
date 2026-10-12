@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:47:54.079Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:39:21.808Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
-  "clipSha256": "b6a37b3409ba7938c2a8cf401ae4150e32a5eb4bea7d2f92fccdcb50416c0f89",
+  "clipSha256": "42545235949f014b6e3c2574761566fc83af35921a054fb9783b9106a5e90da6",
   "scene": "create-single",
   "review": {
-    "heardOpening": "Commençons par la taille du t-shirt",
+    "heardOpening": "Commençons par la taille du t-shirt.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.7,
         "spoken": "Cliquons sur Ajouter une question",
-        "visibleSeconds": 2.1,
-        "visible": "Clic sur le bouton et affichage du formulaire",
+        "visibleSeconds": 3.7,
+        "visible": "Ouverture du formulaire d'ajout d'une nouvelle question",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
-        "spoken": "choisissons Choix unique",
-        "visibleSeconds": 8.5,
-        "visible": "Sélection de Choix unique dans le menu déroulant",
+        "spokenSeconds": 5.1,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 5.9,
+        "visible": "Saisie de « Taille de t-shirt » dans le champ intitulé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 25,
+        "spokenSeconds": 7.4,
+        "spoken": "Dans Type de réponse, choisissons Choix unique",
+        "visibleSeconds": 8.9,
+        "visible": "Sélection de « Choix unique » dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.1,
         "spoken": "cochons Réponse obligatoire",
-        "visibleSeconds": 24.8,
-        "visible": "Case Réponse obligatoire cochée",
+        "visibleSeconds": 25.4,
+        "visible": "Coche de la case « Réponse obligatoire »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 27,
+        "spokenSeconds": 27.2,
         "spoken": "Enregistrons",
-        "visibleSeconds": 27.5,
-        "visible": "Clic sur Enregistrer et affichage de la question créée dans la liste",
+        "visibleSeconds": 27.1,
+        "visible": "Clic sur le bouton Enregistrer et affichage de la question enregistrée dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et dynamique, bon rythme."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

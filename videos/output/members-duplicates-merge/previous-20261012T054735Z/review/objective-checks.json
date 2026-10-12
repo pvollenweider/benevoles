@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T03:52:57.034Z",
+  "videoSha256": "df258f713444d4734d49ed470bac295799d31c9e6b31c6109d85273914e03a23",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 17,
+    "keys": 29
+  },
+  "music": {
+    "voicedWindows": 195,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.5,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "Décalages : ouverture Doublons +3,85 s, Ignorer +4,89 s, téléphone après sa phrase, notes +6,10 s, retour fiche +5,39 s, ancien lien +3,73 s. Case cochée pendant « on la décoche ». 42 images finales, ASR et contrôles objectifs passent ; aucun email envoyé, fusion/liens réellement vérifiés. Pas de nouveau défaut de disposition. Le contre-contrôle audio seul confirme « fuche » à 14 s de confirm (ASR global 0 % ne détectait pas cette prononciation). Cache conservé, aucun remplacement sonore.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

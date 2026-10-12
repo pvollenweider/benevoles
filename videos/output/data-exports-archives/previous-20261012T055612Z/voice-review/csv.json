@@ -1,0 +1,16 @@
+{
+  "reviewedAt": "2026-10-12T04:07:47.535Z",
+  "model": "gemini-3.8-flash",
+  "source": "two generated WAV excerpts, audio only",
+  "openingSha256": "c304ea24ba2385057fadcef975a89ab66d62519ba6656525cb0273e9033d88ca",
+  "chapterSha256": "f101803a4e5f9764b17f35c600d094ba0fd75940ab022edb57b8d8c42ff26025",
+  "generationSha256": "1af97aa2477c97203ef0ae1c8459c0bbab32f67d86b42099bfc9c58365faf675",
+  "review": {
+    "consistent": true,
+    "warm": true,
+    "observation": "La voix dans le second extrait est parfaitement identique à celle de l'extrait de référence, tant au niveau du timbre que du débit et de la tonalité pédagogique. Aucun changement de locuteur n'est détecté tout au long de l'enregistrement.",
+    "changes": [],
+    "uncertainty": "aucune"
+  },
+  "note": "Automated listening observation; does not replace the original audiovisual report or prove human listening validation"
+}

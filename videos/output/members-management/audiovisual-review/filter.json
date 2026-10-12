@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:24:20.967Z",
-  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "reviewedAt": "2026-10-12T05:26:45.399Z",
+  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
   "promptSha256": "b394b39a795e3bf5c0a46bac33ffc486b62e7cadcf60fe43f190e7e5e6389acd",
-  "clipSha256": "714e0d0f829462d559ac5472e97907e2371632dc5a6e4459469fdcae6fae10be",
+  "clipSha256": "7c58d1f8c988e6c2f81f218345592c840795d12042118d5faf0ddec945b6e08d",
   "scene": "filter",
   "review": {
-    "heardOpening": "Avec le filtre de tags",
+    "heardOpening": "Avec le filtre de tags, vous pouvez",
     "checkpoints": [
       {
-        "spokenSeconds": 1.1,
+        "spokenSeconds": 2.1,
         "spoken": "afficher seulement les personnes d'une catégorie",
-        "visibleSeconds": 2.2,
-        "visible": "Sélection du filtre 'accueil' et affichage des membres correspondants",
+        "visibleSeconds": 3,
+        "visible": "Sélection du tag « accueil » dans le filtre Étiquette et filtrage de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 4.6,
         "spoken": "puis revenir à Tous les tags",
-        "visibleSeconds": 5.4,
-        "visible": "Réinitialisation du filtre sur 'Tous les tags'",
+        "visibleSeconds": 6.1,
+        "visible": "Réinitialisation du filtre sur « Tous les tags » et réaffichage complet",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
         "spoken": "Les en-têtes permettent aussi de trier la liste",
-        "visibleSeconds": 7.3,
-        "visible": "Interaction avec l'en-tête de colonne 'Prénom'",
+        "visibleSeconds": 8.7,
+        "visible": "Mise en évidence et interaction avec l'en-tête de colonne Nom pour trier",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
+        "spokenSeconds": 9.4,
         "spoken": "Les heures planifiées additionnent les durées",
         "visibleSeconds": 10.3,
-        "visible": "Survol de la colonne 'Heures planifiées'",
+        "visible": "Encadrement et mise en valeur de la colonne Heures planifiées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les heures attestées en sont la part",
+        "visibleSeconds": 15.2,
+        "visible": "Encadrement et mise en valeur de la colonne Heures attestées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et élocution nette tout au long de l'extrait."
+      "observation": "Voix claire, posée et bien articulée, synchronisée de manière fluide avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

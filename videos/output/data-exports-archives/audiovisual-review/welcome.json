@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:09:12.599Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:03:35.304Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "4eb42534598c3e5f2746d07385cfba12d420cb16585637a8563827d52987f413",
-  "clipSha256": "93042058552da8ad31efd7100e326a2bf4a0869029d92050594c2f73941c6098",
+  "clipSha256": "f9557e963608e055dbac24d8ef56ac37e3d1ff98da66859e34b003ad253adcb8",
   "scene": "welcome",
   "review": {
     "heardOpening": "Besoin de garder une copie de vos données",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Besoin de garder une copie de vos données ou de les reprendre dans un autre outil ?",
-        "visibleSeconds": 0.5,
-        "visible": "Titre superposé « Exporter ses données et garder une copie utile » sur la page Membres.",
+        "spokenSeconds": 0,
+        "spoken": "Besoin de garder une copie de vos données",
+        "visibleSeconds": 0,
+        "visible": "Encart titre « Exporter ses données et garder une copie utile » affiché au centre de l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 4,
+        "spoken": "Les exports permettent de les télécharger sans demander une intervention.",
+        "visibleSeconds": 3,
+        "visible": "Disparition de l'encart et affichage complet de la liste des membres avec le bouton « Exporter les membres (CSV) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
         "spoken": "Nous allons récupérer les membres, le journal de l'organisation et l'archive d'un événement.",
-        "visibleSeconds": 8.5,
-        "visible": "Page Membres affichée avec le bouton « Exporter les membres (CSV) » en en-tête.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18.5,
-        "spoken": "Nous ouvrirons les vrais fichiers téléchargés, dans un visualiseur de lecture",
-        "visibleSeconds": 18.5,
-        "visible": "Écran stable sur l'annuaire des membres présentant les données fictives.",
+        "visibleSeconds": 7.5,
+        "visible": "Vue d'ensemble stable de l'onglet Membres en support de l'introduction générale",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton didactique régulier."
+      "observation": "Voix claire, posée et naturelle, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

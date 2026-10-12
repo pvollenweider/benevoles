@@ -1,0 +1,23 @@
+STATUS: NOT READY
+{
+  "id": "EVENT_QUESTIONS",
+  "status": "NOT READY",
+  "duration": 520.6,
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "music": {
+    "voicedWindows": 470,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 12.1,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "96 images finales revues. Synthèse sous le viewport dans admin-read. Ouvertures anticipées create-single 2.19 vs phrase3.69, create-text3.44 vs4.85 ; coche obligatoire24.56 vs25.78 ; confirmations tardives invited-update22.04 vs17.88 et edit-choices12.32 vs8.71. Musique initiale11.5–19.0 échouée puis remix12.1–19.6 conforme. Validation, ASR final16/16, VTT et effets exacts passent. Frise, dates françaises, aucune adresse interdite/overlay. Mailpit dates anglaises connues ; aucun autre défaut de disposition produit.",
+  "sourceChanges": "Gain musique0.29 ; quatre ouvertures/obligatoire/enregistrements sur phrases, Confirmons et Enregistrons corrigés ; synthèse défilée en haut. Aucun re-film, cache narration accepté.",
+  "report": "videos/output/event-questions/review-report.txt",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+
+Automated audiovisual review: 16 chapters checked. create-yesno claim of empty type rejected by create-yesno-45.png/60.png (Oui / non visibly selected). edit-choices claims of missing XXL rejected by edit-choices-45.png and persisted data assertion. These false positives do not cancel the independently measured timing and summary framing defects.

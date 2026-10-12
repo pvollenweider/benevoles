@@ -1,0 +1,21 @@
+STATUS: READY
+{
+  "id": "MEMBERS_DUPLICATES_MERGE",
+  "status": "READY",
+  "duration": 218.76,
+  "buildId": "Ro9VdxUayqlTAULEvQpY0",
+  "music": {
+    "voicedWindows": 192,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "42images+5images précises revues ; AV7chapitres. Faux positifs confirm réfutés : case vide5.8s après ancre4.797s,modale encore ouverte26s puis résultat27.5s après ancre26.705s. Aucun email envoyé,fusion et nouveaux/anciens liens vérifiés. Prononciation fiche correcte audit audio seul source ET final. ASR7/7,validate,ancres,VTT,effets,musique passent,dates françaises,aucune adresse interdite/overlay,pas de nouveau défaut disposition.",
+  "sourceChanges": "Narration continue régénérée pour fuche,6frontières recalées/auditées ; transcript déjà correct inchangé. Aucun changement source,aucun re-film.",
+  "report": "videos/output/members-duplicates-merge/review-report.txt",
+  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23"
+}
+Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.

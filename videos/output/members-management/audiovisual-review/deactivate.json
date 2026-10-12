@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:24:36.177Z",
-  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "reviewedAt": "2026-10-12T05:26:48.706Z",
+  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
   "promptSha256": "6afdd050997c464362c1c9db8683ee0de0ea23ec99eac29e76c30933785b7ee1",
-  "clipSha256": "2344cea94440b60863ee1c9c7c30cbbb98e29bc89d0ef703d6b3ac0b348d59e1",
+  "clipSha256": "763d2b6195a3391026d9f242f3e27df6df3c1a0e6791ced00e08f50bb9f40640",
   "scene": "deactivate",
   "review": {
     "heardOpening": "Pour mettre une fiche de côté",
     "checkpoints": [
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 5.5,
         "spoken": "nous confirmons sa désactivation",
-        "visibleSeconds": 5.8,
-        "visible": "Clic sur le bouton rouge Désactiver dans la modale de confirmation",
+        "visibleSeconds": 6.2,
+        "visible": "Clic sur le bouton rouge Désactiver dans la boîte de dialogue de confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.1,
+        "spokenSeconds": 8,
         "spoken": "elle disparaît de la liste habituelle",
-        "visibleSeconds": 6.8,
-        "visible": "La liste devient vide avec la mention Aucun membre ne correspond aux filtres",
+        "visibleSeconds": 7.5,
+        "visible": "Notification de désactivation et affichage du message Aucun membre ne correspond aux filtres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 10.5,
         "spoken": "Avec Inclure inactifs, nous la retrouvons",
-        "visibleSeconds": 10.1,
-        "visible": "Coche de l'option Inclure inactifs et réapparition de Maya Berger avec statut Inactif",
+        "visibleSeconds": 11,
+        "visible": "Coche de l'option Inclure inactifs et réapparition de Maya Berger avec la mention Inactif",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "Dans Éditer, la case Membre actif permet de la réactiver",
-        "visibleSeconds": 15.5,
-        "visible": "Ouverture du formulaire d'édition et coche de la case Membre actif",
+        "spokenSeconds": 14.5,
+        "spoken": "la case Membre actif permet de la réactiver",
+        "visibleSeconds": 16.5,
+        "visible": "Coche de la case Membre actif dans le formulaire Modifier le membre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.3,
+        "spokenSeconds": 17.5,
         "spoken": "Après enregistrement, elle revient parmi les membres affichés normalement",
         "visibleSeconds": 18.5,
-        "visible": "Validation de l'enregistrement et affichage du membre sans filtre inactif",
+        "visible": "Clic sur Enregistrer, Inclure inactifs se décoche et Maya Berger reste affichée comme membre actif",
         "sync": "aligned",
         "severity": "none"
       }

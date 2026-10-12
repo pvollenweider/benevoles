@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:46:09.669Z",
+  "videoSha256": "ae2d4c29c104e0af9d612d606ed1c71564b52eacc8c4508bb23c5dd500c8a499",
+  "promptSha256": "012e91ac10a8ccdddfa24aa64195672dbb676f994b46939337a3636310dffae2",
+  "clipSha256": "580450adcc1634918db2e9fdbff93e73337b94d1a5ea2489c941dd2bb4b19147",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ces règles doivent rester compréhensibles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "la description permet d’expliquer les critères",
+        "visibleSeconds": 2.5,
+        "visible": "Champ Description visible dans le formulaire Modifier l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Vérifions aussi le téléphone obligatoire",
+        "visibleSeconds": 7,
+        "visible": "Option Téléphone obligatoire à l'inscription cochée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "retrouvons Julien dans les membres, puis ouvrons Éditer",
+        "visibleSeconds": 14.5,
+        "visible": "Accès à l'onglet Membres, filtrage sur Julien et clic sur Éditer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.2,
+        "spoken": "puis nous annulons",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur Annuler fermant la modale de modification de Julien Favre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien calée sur les manipulations de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

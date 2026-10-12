@@ -1,42 +1,31 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:23:19.015Z",
-  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "reviewedAt": "2026-10-12T05:26:22.034Z",
+  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
   "promptSha256": "903e61dea3cb7f040bff000c2c160f1271eba76a128ee96eb8e2a2a605d78d18",
-  "clipSha256": "72fb25e302b91401a533fd0768948fcb703d10cfb32d03a48fa96504ebc30af9",
+  "clipSha256": "7114410e23f13dab0105d631ea78578594b961a6beb9f68a776a4b0980d077c7",
   "scene": "edit",
   "review": {
-    "heardOpening": "Avec Éditer, vous pouvez corriger",
+    "heardOpening": "Avec Éditer, vous pouvez corriger la fiche",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Avec Éditer, vous pouvez corriger la fiche",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur Éditer et ouverture de la modale de modification",
+        "spokenSeconds": 0,
+        "spoken": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations.",
+        "visibleSeconds": 0.6,
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.2,
-        "spoken": "comme accueil ou permis b",
-        "visibleSeconds": 6,
-        "visible": "Saisie des tags accueil et permis-b dans le champ dédié",
+        "spokenSeconds": 4.1,
+        "spoken": "Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b.",
+        "visibleSeconds": 3,
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17,
-        "spoken": "Enregistrons",
-        "visibleSeconds": 17.4,
-        "visible": "Clic sur le bouton Enregistrer en bas de la modale",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18.5,
-        "spoken": "puis rouvrons la fiche pour vérifier que les changements sont conservés",
-        "visibleSeconds": 19.1,
-        "visible": "Réouverture de la fiche affichant les données sauvegardées",
+        "spokenSeconds": 16.8,
+        "spoken": "Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+        "visibleSeconds": 17.5,
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +34,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec les manipulations."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

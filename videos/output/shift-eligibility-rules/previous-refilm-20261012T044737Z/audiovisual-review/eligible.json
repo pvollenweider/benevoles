@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:47:00.517Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "04f069a5978150aba85c2a97bfc629a000c80519be85032023364362a30a0d3e",
+  "clipSha256": "1bba81bdfd4ecdd03aa4d0ce98af5252fa9985ecc2e540eb973946a669afb255",
+  "scene": "eligible",
+  "review": {
+    "heardOpening": "Julien possède le tag sécurité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "En ouvrant son invitation, la même mission devient sélectionnable",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de la frise et sélection du créneau rouge '20h-02h +1 Sécurité'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "le serveur contrôle ses tags au moment de l’inscription",
+        "visibleSeconds": 8.6,
+        "visible": "Clic sur 'Continuer (1 nouveau créneau)' pour valider l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Il n’y a donc ni compte à créer, ni code à recopier",
+        "visibleSeconds": 10.5,
+        "visible": "Formulaire 'Tes informations' affiché avec les données de Julien Favre déjà pré-remplies",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement de la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:24:50.880Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "promptSha256": "95d3da6ee32c0191d5bd1ee2715160682f0e65b3796d2de57cf0d3f93c1019ca",
+  "clipSha256": "347a4f5b1f19f7e7870d1b12a6f71675cb67523d2d0292ec0b308fbde731566a",
+  "scene": "activity",
+  "review": {
+    "heardOpening": "Le lien Activité ouvre l'historique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le lien Activité ouvre l'historique factuel d'une personne",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le lien Activité et affichage de la page correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Pour Camille, la page est déjà renseignée",
+        "visibleSeconds": 2.5,
+        "visible": "Page Activité de Camille Rochat chargée avec plusieurs entrées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "on peut parcourir les faits enregistrés, leurs dates et l'événement concerné",
+        "visibleSeconds": 6.5,
+        "visible": "Liste des actions avec dates et libellés d'événements affichée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisation fluide avec l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

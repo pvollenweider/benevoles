@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:10:07.912Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:03:48.910Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "c5deb1e12c36cfefae6a833e8c621bafd56e778ec4276b4f7528285004334b1a",
-  "clipSha256": "4b365f49e71ac64a241369df17e848dee3ad9cd56db26ce972c3f5ac5b219318",
+  "clipSha256": "ebda21caacae448f44e2c1909440a2b2db092607bbb8a4290b61ded036898404",
   "scene": "journal",
   "review": {
-    "heardOpening": "Pour garder une copie des actions",
+    "heardOpening": "Pour garder une copie des actions de l'équipe",
     "checkpoints": [
       {
         "spokenSeconds": 2.5,
         "spoken": "ouvrons le journal d'activité dans les paramètres",
-        "visibleSeconds": 3.8,
-        "visible": "Clic sur le lien Journal d'activité et affichage de la page",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Journal d'activité",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5,
         "spoken": "Choisissons un type",
-        "visibleSeconds": 5.9,
-        "visible": "Sélection de la valeur Organisation dans le filtre de type",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection de 'Organisation' dans le filtre par type",
         "sync": "aligned",
         "severity": "none"
       },
@@ -33,18 +33,10 @@
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "le CSV contient tout le journal de l'organisation",
-        "visibleSeconds": 11.2,
-        "visible": "Affichage de la vue Lecture du CSV téléchargé avec le tableau complet",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 14.2,
+        "spokenSeconds": 13.5,
         "spoken": "Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements",
-        "visibleSeconds": 15.5,
-        "visible": "Affichage des colonnes et défilement horizontal vers les changements",
+        "visibleSeconds": 13.5,
+        "visible": "Visualisation du CSV avec les colonnes Date, Acteur, Type d'acteur, Action, Entité, Identifiant, Changements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien synchronisée avec les actions."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

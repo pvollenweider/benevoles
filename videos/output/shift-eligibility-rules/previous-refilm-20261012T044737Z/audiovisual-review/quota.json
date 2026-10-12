@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T04:46:56.187Z",
+  "videoSha256": "5d89358e85f0ec671edeefcc5df0e062ce85325f4a94092e836860a3d81e0eb4",
+  "promptSha256": "e78ba05abfa9ee482343252cf19ead440ce01334426f974b61e19b57e7ce6d98",
+  "clipSha256": "9108fa64f05b8db952683e247a48bcda34537a03d68682526e6f5b261b5daa64",
+  "scene": "quota",
+  "review": {
+    "heardOpening": "Camille possède déjà deux engagements de Buvette.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Camille possède déjà deux engagements de Buvette.",
+        "visibleSeconds": 0,
+        "visible": "Page « Mes inscriptions » affichant les détails des créneaux de Camille Rochat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions",
+        "visibleSeconds": 2.6,
+        "visible": "Affichage de la page planning « Fête du village de Montvert » connectée au nom de Camille Rochat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
+        "visibleSeconds": 7.4,
+        "visible": "Vue liste affichant la mention « limite de 2 par personne atteinte » sur les créneaux buvette disponibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

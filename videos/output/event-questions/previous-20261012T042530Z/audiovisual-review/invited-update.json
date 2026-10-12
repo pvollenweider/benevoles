@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:53.410Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "3a255672cce7c9b15e3ca5312656b96b066720ed8d79b58f37b6df44e8de0a78",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien d'invitation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
+        "visibleSeconds": 2.2,
+        "visible": "Sélection du créneau 12h-14h sur la frise puis clic sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Choisissons L au lieu de M.",
+        "visibleSeconds": 11.2,
+        "visible": "Sélection de la taille L pour le t-shirt à la place de M",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.4,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 18.1,
+        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.2,
+        "spoken": "La nouvelle taille remplace l'ancienne.",
+        "visibleSeconds": 21.4,
+        "visible": "Affichage de la page de confirmation Inscription confirmée !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, naturelle et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

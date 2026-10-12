@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:04:10.648Z",
-  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
+  "reviewedAt": "2026-10-12T05:55:32.786Z",
+  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
   "promptSha256": "d4d9e0e77e8a922f80de144e8bac3baad1c8f034c93d74f5b79066a94f85d587",
-  "clipSha256": "7bc07a9c11dc35d998739cc59f8bff4e50e54a6fc94b303b30dc3e90e8818385",
+  "clipSha256": "dbac9854a9781fd1a57da9ed77002ea012555922d80570dc5382a2548fca6e32",
   "scene": "links",
   "review": {
-    "heardOpening": "Vérifions enfin les liens",
+    "heardOpening": "Vérifions enfin les liens.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "L’ancien lien personnel de la fiche absorbée ne fonctionne plus",
-        "visibleSeconds": 4,
-        "visible": "Affichage de l'écran d'erreur 'Ce lien ne fonctionne pas'",
+        "spokenSeconds": 2.1,
+        "spoken": "L'ancien lien personnel de la fiche absorbée ne fonctionne plus",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page d'erreur 'Ce lien ne fonctionne pas - Inscription introuvable ou déjà annulée.'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 8,
         "spoken": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée",
-        "visibleSeconds": 9,
-        "visible": "Affichage de la page 'Mes inscriptions' de Robin Favre",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la page 'Mes inscriptions' pour Robin Favre avec l'adresse conservée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Une inscription annulée parce qu’elle faisait doublon ne redevient pas active",
-        "visibleSeconds": 13.5,
-        "visible": "Liste des inscriptions affichée à l'écran",
+        "spokenSeconds": 12.2,
+        "spoken": "Une inscription annulée parce qu'elle faisait doublon ne redevient pas active",
+        "visibleSeconds": 12,
+        "visible": "Vue détaillée des créneaux actifs sur la page 'Mes inscriptions'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Ton fluide, posé et bien articulé."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les transitions d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

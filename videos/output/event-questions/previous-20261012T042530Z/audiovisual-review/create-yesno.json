@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:12.643Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "3b8e98e90e0bb79b66bb3f7ccf16c5af9a2a70130d59c91abf8ca39cad2e1143",
+  "clipSha256": "9c67892ea5446aee13749aeb2109490f47e6d0495e6c2e9408b9740b7637502d",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ajoutons une nouvelle question",
+        "visibleSeconds": 3,
+        "visible": "Affichage du formulaire d'ajout d'une nouvelle question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis écrivons Permis de conduire",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie de « Permis de conduire » dans le champ Question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Choisissons Oui ou non dans le type de réponse",
+        "visibleSeconds": 9,
+        "visible": "Le champ Type de réponse est sélectionné mais le menu ne s'ouvre pas et le choix « Oui ou non » n'apparaît pas dans le champ",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "rendons aussi la réponse obligatoire",
+        "visibleSeconds": 16,
+        "visible": "Coche de la case Réponse obligatoire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 18,
+        "visible": "Clic sur Enregistrer et apparition de la question « Permis de conduire » dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:08 et 00:14, la sélection de l'option « Oui ou non » n'est pas visible : le menu déroulant ne s'affiche pas et le champ reste vide à l'écran avant l'enregistrement."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

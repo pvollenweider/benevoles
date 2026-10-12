@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:19:03.177Z",
-  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
-  "promptSha256": "4dc56af22b8bcc2d96bb7c1356dd648597b757a24e47429af2a63ea69892ef58",
-  "clipSha256": "6d3146ce260b4e65838b0eb1ee7e9c630b2743c8d72ec127b468b03178738aba",
+  "reviewedAt": "2026-10-12T04:50:55.030Z",
+  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
+  "promptSha256": "04f069a5978150aba85c2a97bfc629a000c80519be85032023364362a30a0d3e",
+  "clipSha256": "ebc1361cf430932b58116097c1047cc39b5238ad4be4ed597847c49bf02e5fe7",
   "scene": "eligible",
   "review": {
     "heardOpening": "Julien possède le tag sécurité",
@@ -12,34 +12,32 @@
         "spokenSeconds": 0.5,
         "spoken": "Julien possède le tag sécurité",
         "visibleSeconds": 0.5,
-        "visible": "L'écran affiche toujours la session de Camille Rochat en haut à droite",
-        "sync": "missing",
-        "severity": "major"
+        "visible": "Affichage de la page de l'événement Fête du village de Montvert",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "En ouvrant son invitation, la même mission devient sélectionnable",
-        "visibleSeconds": 6.5,
-        "visible": "Le créneau Sécurité 20h-02h clignote en rouge mais reste bloqué",
-        "sync": "uncertain",
-        "severity": "minor"
+        "spokenSeconds": 3.4,
+        "spoken": "la même mission devient sélectionnable",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la vue frise puis sélection du créneau réservé Sécurité (20h-02h)",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 7,
-        "spoken": "le lien prouve quel membre a été invité et le serveur contrôle ses tags",
-        "visibleSeconds": 7,
-        "visible": "Aucune ouverture d'invitation ni écran de validation n'apparaît",
-        "sync": "missing",
-        "severity": "minor"
+        "spokenSeconds": 10.7,
+        "spoken": "Il n’y a donc ni compte à créer, ni code à recopier",
+        "visibleSeconds": 9.8,
+        "visible": "Formulaire d'inscription directement prérempli au nom de Julien Favre sans étape de connexion",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:01 - L'interface reste connectée au profil de Camille Rochat sans montrer l'invitation ni le profil de Julien"
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et diction claire, ton explicatif régulier."
+      "observation": "Voix off fluide, claire et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,12 @@
+{
+  "anchor": "Si vous savez que ces deux fiches désignent bien la même",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 27.8,
+    "wordsHeard": "Si"
+  },
+  "onset": 27.8,
+  "proposedCut": 27.524875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

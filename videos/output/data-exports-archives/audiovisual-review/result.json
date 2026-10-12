@@ -1,53 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T18:11:00.144Z",
-  "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
+  "reviewedAt": "2026-10-12T06:04:11.947Z",
+  "videoSha256": "658c5d632b679ca89b133cff4ccd9c66a859afa6ea706aadeaadc7df88fe1676",
   "promptSha256": "39c228021f54b290aca17011423428cdd980bf1040dd5482a38e53124f2bfb8a",
-  "clipSha256": "90e64be4d7f6e813a94dd1bc5f4c19e7826e478b280c697c5f9d262f1838d61b",
+  "clipSha256": "c48c87345579cf7a0a172d6c6d3fd1f707ee1d6b343c34c86b3c111ad49f0ca7",
   "scene": "result",
   "review": {
     "heardOpening": "Pour travailler sur les fiches",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
-        "spoken": "prenez le CSV des membres",
+        "spokenSeconds": 0.9,
+        "spoken": "Pour travailler sur les fiches, prenez le CSV des membres.",
         "visibleSeconds": 1,
-        "visible": "Page Membres avec bouton Exporter les membres (CSV)",
+        "visible": "Page Membres affichant le bouton Exporter les membres (CSV)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "prenez le CSV du journal",
-        "visibleSeconds": 5.5,
-        "visible": "Page Journal d'activité avec option Exporter tout le journal (CSV)",
+        "spokenSeconds": 4,
+        "spoken": "Pour relire les actions de l'organisation, prenez le CSV du journal.",
+        "visibleSeconds": 4,
+        "visible": "Page Journal d'activité avec le lien Exporter tout le journal (CSV)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "prenez son archive JSON",
+        "spokenSeconds": 8,
+        "spoken": "Pour conserver un événement et ses données liées, prenez son archive JSON.",
+        "visibleSeconds": 10,
+        "visible": "Page Résumé de l'événement avec la section Archive et le lien Archive de l'événement (JSON)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Les plannings et les listes à remettre sur place se choisissent dans Rapports",
         "visibleSeconds": 13,
-        "visible": "Section Archive affichant le lien Archive de l'événement (JSON)",
+        "visible": "Page Rapports avec les différents documents et plannings à imprimer",
         "sync": "aligned",
         "severity": "none"
-      },
-      {
-        "spokenSeconds": 15,
-        "spoken": "se choisissent dans Rapports",
-        "visibleSeconds": 13,
-        "visible": "La page Rapports est déjà quittée au profit du Résumé de l'événement",
-        "sync": "missing",
-        "severity": "minor"
       }
     ],
     "issues": [
-      "À 00:14, l'explication sur la section Rapports intervient après que l'écran a basculé vers le Résumé de l'événement."
+      "À 00:09, la page Rapports apparaît brièvement pendant une seconde avant de basculer sur la page de l'archive JSON à 00:10, créant un faux raccord de navigation."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, rythme stable."
+      "observation": "Voix masculine calme, claire et bien articulée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

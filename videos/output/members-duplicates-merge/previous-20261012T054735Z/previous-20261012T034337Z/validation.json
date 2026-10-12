@@ -1,0 +1,54 @@
+{
+  "id": "MEMBERS_DUPLICATES_MERGE",
+  "slug": "members-duplicates-merge",
+  "validatedAt": "2026-10-07T02:02:16.879Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 221640,
+  "scenes": [
+    {
+      "id": "duplicates",
+      "visualMs": 27527,
+      "audioMs": 27525,
+      "driftMs": 2
+    },
+    {
+      "id": "compare",
+      "visualMs": 26913,
+      "audioMs": 26912,
+      "driftMs": 1
+    },
+    {
+      "id": "fields",
+      "visualMs": 29688,
+      "audioMs": 29686,
+      "driftMs": 2
+    },
+    {
+      "id": "conflicts",
+      "visualMs": 28630,
+      "audioMs": 28628,
+      "driftMs": 2
+    },
+    {
+      "id": "confirm",
+      "visualMs": 31335,
+      "audioMs": 31332,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 26942,
+      "audioMs": 26935,
+      "driftMs": 7
+    },
+    {
+      "id": "links",
+      "visualMs": 28346,
+      "audioMs": 28343,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

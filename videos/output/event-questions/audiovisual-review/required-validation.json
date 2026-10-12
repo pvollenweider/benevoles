@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:48:54.020Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:39:47.083Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
-  "clipSha256": "c138e8f3465593b0b0aefda49a7a8c530de8cfbaa62efbde9ce4f4030a0fdaf4",
+  "clipSha256": "17dcefcc49ff96b9198e92599d92d71db069000b0b8fbcc0779a317088f68f7a",
   "scene": "required-validation",
   "review": {
     "heardOpening": "Voyons maintenant le formulaire public avec Aline.",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 4.1,
         "spoken": "Choisissons le premier créneau et continuons.",
-        "visibleSeconds": 5.5,
-        "visible": "Sélection du créneau puis affichage du formulaire.",
+        "visibleSeconds": 6.3,
+        "visible": "Sélection du créneau 10h-12h puis clic sur Continuer.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 7.3,
         "spoken": "Renseignons son identité et les consentements demandés.",
-        "visibleSeconds": 7.5,
-        "visible": "Saisie du prénom, nom, courriel et cases de consentement cochées.",
+        "visibleSeconds": 9.4,
+        "visible": "Saisie du prénom Aline, du nom Mercier, de l'email et coche des consentements.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
+        "spokenSeconds": 11.2,
         "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
-        "visibleSeconds": 13.5,
+        "visibleSeconds": 15.9,
         "visible": "Clic sur le bouton Confirmer mon inscription.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15,
+        "spokenSeconds": 15.4,
         "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
-        "visibleSeconds": 14.5,
-        "visible": "Apparition du message d'erreur d'option manquante avec focus.",
+        "visibleSeconds": 16.8,
+        "visible": "Message d'erreur affiché et focus placé sur la question Permis de conduire.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation visuelle adéquate."
+      "observation": "Voix claire, posée et dynamique, synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

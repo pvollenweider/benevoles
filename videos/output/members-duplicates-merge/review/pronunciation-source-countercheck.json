@@ -1,0 +1,11 @@
+{
+  "model": "gemini-3.8-flash",
+  "audioSha256": "cc1c5f68c1cb6817f2fc298b11260e85a7922e7302ee5e38ad3c3446538a7463",
+  "source": "new continuous source narration confirm chapter",
+  "review": {
+    "transcript": "Cette case permet d'envoyer les nouveaux liens personnels à l'adresse conservée. Dans cette démonstration, on la décoche. Aucun e-mail ne sera envoyé. Lisez le résumé avant de confirmer. La fusion est irréversible. La fiche absorbée sera désactivée et vidée de ses informations personnelles. Ses liens, déplacés, seront régénérés et les anciens ne fonctionneront plus. Fusionner les deux fiches ouvre une dernière confirmation. Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+    "pronunciationIssue": false,
+    "observation": "Le mot « fiche » est prononcé de façon parfaitement standard et claire ([fiʃ]). Il n'y a aucune faute, hésitation ou substitution de mot audible.",
+    "uncertainty": "Aucune"
+  }
+}

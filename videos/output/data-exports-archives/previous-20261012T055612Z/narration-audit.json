@@ -1,0 +1,100 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T03:58:14.661Z",
+  "revalidatedAt": "2026-10-12T03:58:14.663Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c304ea24ba2385057fadcef975a89ab66d62519ba6656525cb0273e9033d88ca",
+      "recognized": "Besoin de garder une copie de vos données ou de les reprendre dans un autre outil ? Les exports permettent de les télécharger sans demander une intervention. Nous allons récupérer les membres, le journal de l'organisation et l'archive d'un événement. Chaque fichier a son usage. Les personnes et les informations de cette démonstration sont fictives. Nous ouvrirons les vrais fichiers téléchargés dans un visualiseur de lecture pour comprendre ce qu'ils contiennent et ce qu'ils ne font pas.",
+      "expected": "Besoin de garder une copie de vos données ou de les reprendre dans un autre outil ? Les exports permettent de les télécharger sans demander une intervention. Nous allons récupérer les membres, le journal de l'organisation et l'archive d'un événement. Chaque fichier a son usage. Les personnes et les informations de cette démonstration sont fictives. Nous ouvrirons les vrais fichiers téléchargés, dans un visualiseur de lecture, pour comprendre ce qu'ils contiennent et ce qu'ils ne font pas.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "members",
+      "audioSha256": "4a3a0445036803c547e6c90d64dbbebcc1fdf16ada923d5a970729edbc749e6a",
+      "recognized": "Depuis Membres, Exporter les membres télécharge un fichier CSV. Il contient les membres de l'organisation, y compris les fiches désactivées. Une recherche à l'écran ne transforme pas cet export en liste de quelques personnes. Gardons un filtre visible, téléchargeons, puis comparons le fichier avec la liste complète. On retrouve aussi une personne désactivée. Le téléchargement ne réactive personne, ne change aucune inscription et ne remplace pas une procédure d'import.",
+      "expected": "Depuis Membres, Exporter les membres télécharge un fichier CSV. Il contient les membres de l'organisation, y compris les fiches désactivées. Une recherche à l'écran ne transforme pas cet export en liste de quelques personnes. Gardons un filtre visible, téléchargeons, puis comparons le fichier avec la liste complète. On retrouve aussi une personne désactivée. Le téléchargement ne réactive personne, ne change aucune inscription et ne remplace pas une procédure d'import.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "columns",
+      "audioSha256": "3f956b93967213e3fea25051f5b1710d067c2281a10c4b3b8184ac7ae206f151",
+      "recognized": "Une ligne représente une fiche membre. Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif. En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leurs remarques, les notes internes, le nombre d'inscriptions actives et la date de création de la fiche. Les derniers envois indiquent les résultats des emails de cette personne, avec leur date et la raison connue, sans la réponse brute du serveur. La dernière acceptation de la convention indique quand elle a été acceptée lors d'une inscription. Une case vide n'atteste aucune acceptation. Les notes sont donc dans ce fichier, ce n'est pas seulement un annuaire à distribuer. Le nombre d'inscriptions n'est pas un total d'heures, ni une attestation de présence.",
+      "expected": "Une ligne représente une fiche membre. Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif. En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes, le nombre d'inscriptions actives et la date de création de la fiche. Les derniers envois indiquent les résultats des emails de cette personne, avec leur date et la raison connue, sans la réponse brute du serveur. La dernière acceptation de la Convention indique quand elle a été acceptée lors d'une inscription. Une case vide n'atteste aucune acceptation. Les notes sont donc dans ce fichier. Ce n'est pas seulement un annuaire à distribuer. Le nombre d'inscriptions n'est pas un total d'heures ni une attestation de présence.",
+      "wordErrorRate": 0.015037593984962405,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "csv",
+      "audioSha256": "f101803a4e5f9764b17f35c600d094ba0fd75940ab022edb57b8d8c42ff26025",
+      "recognized": "Les accents sont conservés et les colonnes sont séparées par des points-virgules. Si votre tableur demande un choix, utilisez le texte en UTF-8 et ce séparateur. Regardez ce numéro qui commence par + 41. Une apostrophe le précède. C'est volontaire. Une valeur qui commence par =, +, - ou @ est protégée pour être lue comme du texte, pas exécutée comme une formule. Notre exemple = 1 + 1 reste une valeur textuelle. N'enlevez pas cette protection simplement pour rendre la colonne plus jolie.",
+      "expected": "Les accents sont conservés et les colonnes sont séparées par des points-virgules. Si votre tableur demande un choix, utilisez le texte en UTF huit et ce séparateur. Regardez ce numéro qui commence par plus quarante et un : une apostrophe le précède. C'est volontaire. Une valeur qui commence par égal, plus, moins ou arobase est protégée pour être lue comme du texte, pas exécutée comme une formule. Notre exemple égal un plus un reste une valeur textuelle. N'enlevez pas cette protection simplement pour rendre la colonne plus jolie.",
+      "wordErrorRate": 0.03333333333333333,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "journal",
+      "audioSha256": "15c936c445bb822cd303860ebddb2084ba42d57c7d262891a22aaaa7bb420e1d",
+      "recognized": "Pour garder une copie des actions de l'équipe, ouvrons le journal d'activité dans les paramètres. Choisissons un type, puis exporter tout le journal. Même avec ce filtre, le CSV contient tout le journal de l'organisation. Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements. Les lignes sont classées de la plus ancienne à la plus récente. Ce fichier aide à relire ce qui s'est passé. Il n'est ni une sauvegarde complète, ni une commande pour annuler les actions.",
+      "expected": "Pour garder une copie des actions de l'équipe, ouvrons le journal d'activité dans les paramètres. Choisissons un type, puis Exporter tout le journal. Même avec ce filtre, le CSV contient tout le journal de l'organisation. Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements. Les lignes sont classées de la plus ancienne à la plus récente. Ce fichier aide à relire ce qui s'est passé ; il n'est ni une sauvegarde complète ni une commande pour annuler les actions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "archive",
+      "audioSha256": "d710076e969b3abbb63244ab4a04fe1bd1c036292a0ab3ce3f20022706f6bb30",
+      "recognized": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en bas dans Archives. Le lien Archive de l'événement JSON télécharge le fichier. Faites cette copie avant de quitter l'outil ou de supprimer l'événement. Le JSON n'est pas une feuille à afficher au stand, c'est un format structuré pour conserver ou traiter les données. Il est limité à cet événement sans inclure tous les autres événements ni tout l'annuaire de l'organisation. Le téléchargement ne crée pas une nouvelle édition de la fête.",
+      "expected": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en bas, dans Archive. Le lien Archive de l’événement, JSON, télécharge le fichier. Faites cette copie avant de quitter l’outil ou de supprimer l’événement. Le JSON n’est pas une feuille à afficher au stand : c’est un format structuré pour conserver ou traiter les données. Il est limité à cet événement, sans inclure tous les autres événements ni tout l’annuaire de l’organisation. Le téléchargement ne crée pas une nouvelle édition de la fête.",
+      "wordErrorRate": 0.011235955056179775,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "contents",
+      "audioSha256": "b20c05d930d29f0ac1f1c34b37e6324e8dc3a4fd8690057062f62eb409aed999",
+      "recognized": "Ouvrons les différentes parties du vrai fichier. On retrouve les réglages, les créneaux et les inscriptions avec les données des bénévoles concernés. Les pages, les questions et leurs réponses, les responsables, les jalons et le journal sont également présents. Des nombres récapitulent plusieurs de ces collections. Vérifions un créneau et une réponse de notre exemple. Les jetons d'accès et les liens personnels ne sont pas exportés. Cela ne rend pas le fichier anonyme. Les coordonnées et d'autres informations personnelles restent dans les données.",
+      "expected": "Ouvrons les différentes parties du vrai fichier. On retrouve les réglages, les créneaux et les inscriptions avec les données des bénévoles concernés. Les pages, les questions et leurs réponses, les responsables, les jalons et le journal sont également présents. Des nombres récapitulent plusieurs de ces collections. Vérifions un créneau et une réponse de notre exemple. Les jetons d'accès et les liens personnels ne sont pas exportés. Cela ne rend pas le fichier anonyme : les coordonnées et d'autres informations personnelles restent dans les données.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "privacy",
+      "audioSha256": "5b710b481df05cfac175d5b3a6a3096717b82492c1a05676d3de9688d4a24859",
+      "recognized": "Une fois téléchargée cette copie ne se met pas à jour. Si une fiche change dans l'application, l'ancien fichier reste identique. Rangez-le dans un espace protégé, limitez les destinataires et supprimez les copies devenues inutiles. Archiver un événement dans l'application n'est pas le supprimer. Une suppression efface ses données et son historique. Consultez les durées de conservation dans le guide avant de décider. Il n'y a pas de bouton pour restaurer un événement depuis ce JSON. Ne le présentez pas comme une sauvegarde que l'application saurait réimporter automatiquement.",
+      "expected": "Une fois téléchargée, cette copie ne se met pas à jour. Si une fiche change dans l'application, l'ancien fichier reste identique. Rangez-le dans un espace protégé, limitez les destinataires et supprimez les copies devenues inutiles. Archiver un événement dans l'application n'est pas le supprimer ; une suppression efface ses données et son historique. Consultez les durées de conservation dans le guide avant de décider. Il n'y a pas de bouton pour restaurer un événement depuis ce JSON. Ne le présentez pas comme une sauvegarde que l'application saurait réimporter automatiquement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "07c0ccda7b03dbc3e7637265d1fd627c003afba7abd09c42deedd7dbe2f9783a",
+      "recognized": "Pour travailler sur les fiches, prenez le CSV des membres. Pour relire les actions de l'organisation, prenez le CSV du journal. Pour conserver un événement et ses données liées, prenez son archive JSON. Les plannings et les listes à remettre sur place se choisissent dans Rapports. Ils répondent à un autre besoin. Nous avons téléchargé, ouvert et vérifié chaque type de fichier. Le bon export au bon endroit et pour les bonnes personnes. C'est une manière simple de garder la maîtrise de vos données.",
+      "expected": "Pour travailler sur les fiches, prenez le CSV des membres. Pour relire les actions de l'organisation, prenez le CSV du journal. Pour conserver un événement et ses données liées, prenez son archive JSON. Les plannings et les listes à remettre sur place se choisissent dans Rapports : ils répondent à un autre besoin. Nous avons téléchargé, ouvert et vérifié chaque type de fichier. Le bon export, au bon endroit et pour les bonnes personnes : c'est une manière simple de garder la maîtrise de vos données.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

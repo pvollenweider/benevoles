@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-12T02:39:50.148Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
+  "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 68,
+    "keys": 262
+  },
+  "music": {
+    "voicedWindows": 470,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 12.1,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -34.2,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.4
+  },
+  "readiness": {
+    "status": "NOT READY",
+    "problems": "96 images finales revues. Synthèse sous le viewport dans admin-read. Ouvertures anticipées create-single 2.19 vs phrase3.69, create-text3.44 vs4.85 ; coche obligatoire24.56 vs25.78 ; confirmations tardives invited-update22.04 vs17.88 et edit-choices12.32 vs8.71. Musique initiale11.5–19.0 échouée puis remix12.1–19.6 conforme. Validation, ASR final16/16, VTT et effets exacts passent. Frise, dates françaises, aucune adresse interdite/overlay. Mailpit dates anglaises connues ; aucun autre défaut de disposition produit.",
+    "note": "Validator/ASR checks above pass; complete readiness also requires sentence/action synchronization and the separately recorded visual/audio observations."
+  }
+}

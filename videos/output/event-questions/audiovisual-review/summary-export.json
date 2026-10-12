@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:49:41.268Z",
-  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "reviewedAt": "2026-10-12T04:39:57.821Z",
+  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
   "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
-  "clipSha256": "61f9825b869799a8901d5ed795ad215ca8d4923927a155fbb829f9d3c1c85dc7",
+  "clipSha256": "202cbbcc151dfa63940fd4bd93267ddee0bf5078a2743f719870612eb7fcbe6e",
   "scene": "summary-export",
   "review": {
     "heardOpening": "Pour préparer une commande",
@@ -11,24 +11,32 @@
       {
         "spokenSeconds": 2.5,
         "spoken": "téléchargeons la synthèse en CSV",
-        "visibleSeconds": 3.5,
-        "visible": "Affichage de la synthèse du fichier CSV téléchargé",
+        "visibleSeconds": 4.1,
+        "visible": "Clic sur le lien Télécharger la synthèse (CSV)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 5.4,
         "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
-        "visibleSeconds": 4.5,
-        "visible": "Tableau avec colonnes Question, Réponse, Confirmés et En attente",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la vue du fichier CSV avec les colonnes Question, Réponse et les totaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "avec les confirmés et les personnes en attente",
+        "visibleSeconds": 6.5,
+        "visible": "Colonnes Confirmés et En attente visibles dans le tableau",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.2,
         "spoken": "Il ne contient ni noms ni coordonnées",
-        "visibleSeconds": 11,
-        "visible": "Vue du tableau montrant uniquement des quantités anonymisées",
+        "visibleSeconds": 6.5,
+        "visible": "Tableau anonymisé sans coordonnées, sous-titre confirmant l'absence d'identité",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien articulée."
+      "observation": "Voix claire, posée et parfaitement articulée, en accord complet avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

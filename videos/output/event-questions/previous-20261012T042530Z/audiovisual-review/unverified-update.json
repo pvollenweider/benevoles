@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:42:04.252Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "5ca825430e4d2e0afa73e625c0766295b10b5e781d9ab35c117f211f22f95d7e",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription depuis le simple formulaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "depuis le simple formulaire public, sans invitation.",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage du formulaire d'inscription public « Tes informations »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Saisissons la même adresse pour un troisième créneau, mais choisissons S.",
+        "visibleSeconds": 8.8,
+        "visible": "Saisie des coordonnées d'Aline Mercier et sélection de la taille S",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 13.6,
+        "visible": "Clic sur « Confirmer mon inscription » puis affichage du message « Inscription confirmée ! »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

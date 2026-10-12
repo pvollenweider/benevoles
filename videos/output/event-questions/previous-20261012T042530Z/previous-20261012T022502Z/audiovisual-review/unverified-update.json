@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:50:09.451Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "a3f8ce70ac97de377de8bad7c6a6beedb1b7d6b73d168a559380bbc2ed00d6a4",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Comparons avec une inscription depuis le simple formulaire public",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage de la page du formulaire public d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "mais choisissons S",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de la taille S dans les options du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 13,
+        "visible": "Validation du formulaire et affichage du message Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en",
+  "windowStart": 138.411,
+  "result": {
+    "found": true,
+    "startSeconds": 15.2,
+    "wordsHeard": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en"
+  },
+  "onset": 153.611,
+  "proposedCut": 153.410854,
+  "note": "Proposal only; recut then independently audit before capture"
+}

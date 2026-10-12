@@ -1,0 +1,170 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:07:20.370Z",
+  "revalidatedAt": "2026-10-06T17:07:20.372Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "d8d16ac10777024465d54c6f6b7a50c4f0c3e5e653c36df78dae3fed613107c4",
+      "recognized": "Un tee-shirt à prévoir ? Du matériel à organiser ? Quelques questions bien choisies peuvent vraiment aider. Ouvrons Questions aux bénévoles pour notre évènement de formation. On peut ajouter jusqu'à cinq questions, mais le bon réflexe, c'est d'en demander le moins possible, juste ce qui sert à l'organisation. Pas d'informations sensibles sur la santé, la religion ou les opinions. Ici, les personnes et leurs réponses sont entièrement fictives. Nous allons préparer quatre exemples, puis suivre ce que voit Aline et ce que retrouve l'organisation.",
+      "expected": "Un t-shirt à prévoir, du matériel à organiser : quelques questions bien choisies peuvent vraiment aider. Ouvrons Questions aux bénévoles pour notre événement de formation. On peut ajouter jusqu'à cinq questions. Mais le bon réflexe, c'est d'en demander le moins possible, juste ce qui sert à l'organisation. Pas d'information sensible sur la santé, la religion ou les opinions. Ici, les personnes et leurs réponses sont entièrement fictives. Nous allons préparer quatre exemples, puis suivre ce que voit Aline et ce que retrouve l'organisation.",
+      "wordErrorRate": 0.033707865168539325,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create-single",
+      "audioSha256": "53a98ecf7c99f6545f6dd912b263082b71ebdd1f9c8d1a2dfa6cf38fbc5634fe",
+      "recognized": "Commençons par la taille du T-shirt. Cliquons sur Ajouter une question, puis saisissons son intitulé. Dans Type de réponse, choisissons Choix unique. La personne pourra sélectionner une seule taille. Les choix s'écrivent un par ligne. Voici S, M, L et XL. Il en faut au moins deux et douze au maximum. Pour notre commande, cette information est nécessaire. Cochons Réponse obligatoire. Enregistrons. La question est maintenant dans la liste avec ses choix et son caractère obligatoire.",
+      "expected": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question, puis saisissons son intitulé. Dans Type de réponse, choisissons Choix unique : la personne pourra sélectionner une seule taille. Les choix s'écrivent un par ligne. Voici S, M, L et XL. Il en faut au moins deux, et douze au maximum. Pour notre commande, cette information est nécessaire : cochons Réponse obligatoire. Enregistrons. La question est maintenant dans la liste, avec ses choix et son caractère obligatoire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create-yesno",
+      "audioSha256": "6ff65a4d195fb9d2be08c72348b12b64e754862d3f7a002352c1aed106f9e27d",
+      "recognized": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons permis de conduire. Choisissons oui ou non dans le type de réponse. Pas de liste à saisir, les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information, ce n'est pas à lui seul une règle qui réserve un poste ou vérifie le document.",
+      "expected": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create-multiple",
+      "audioSha256": "1566160279087bae9a2ca264e98fcf5c2fcc4e2e5cd3470eeba776c6420c02b5",
+      "recognized": "Passons au matériel de transport. Créons la question, puis choisissons « choix multiple ». Saisissons « vélo », « remorque » et « voiture ». Toujours un choix par ligne. Cette fois, plusieurs cases pourront être cochées. Aline peut disposer d'un vélo et d'une remorque. Laissons « réponse obligatoire » décochée. Une personne sans matériel pourra ne rien renseigner. Enregistrons et vérifions les trois choix dans la liste. Le type choisi doit correspondre à ce que vous voulez réellement savoir.",
+      "expected": "Passons au matériel de transport. Créons la question, puis choisissons Choix multiple. Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne. Cette fois, plusieurs cases pourront être cochées : Aline peut disposer d'un vélo et d'une remorque. Laissons Réponse obligatoire décochée. Une personne sans matériel pourra ne rien renseigner. Enregistrons et vérifions les trois choix dans la liste. Le type choisi doit correspondre à ce que vous voulez réellement savoir.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create-text",
+      "audioSha256": "41ddbf3ec799174d995ecacabe87bfd6e20258474d254813e98dfe0c72090fe3",
+      "recognized": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons point de rendez-vous préféré. Conservons texte court, la personne écrira sa réponse plutôt que de choisir dans une liste. Cette question reste facultative. Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous. Enregistrons. Nous avons maintenant nos quatre types de questions, avec deux réponses obligatoires et deux facultatives.",
+      "expected": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons Point de rendez-vous préféré. Conservons Texte court : la personne écrira sa réponse plutôt que de choisir dans une liste. Cette question reste facultative. Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous. Enregistrons. Nous avons maintenant nos quatre types de questions, avec deux réponses obligatoires et deux facultatives.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "order",
+      "audioSha256": "bc4b9ac573411e6ce6e3fcd7bd90ab891c279cbffd23650b72ff6398e918b058",
+      "recognized": "L'ordre compte aussi pour rendre le formulaire agréable. Plaçons le permis avant la taille du t-shirt avec monter sur la ligne du permis. La question remonte d'une position. Descendre permet le mouvement inverse. Rechargeons la page. Le nouvel ordre est conservé. Les bénévoles retrouveront cet ordre dans leur formulaire. Vous n'avez pas besoin de supprimer et recréer une question pour la déplacer.",
+      "expected": "L'ordre compte aussi pour rendre le formulaire agréable. Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis. La question remonte d'une position. Descendre permet le mouvement inverse. Rechargeons la page : le nouvel ordre est conservé. Les bénévoles retrouveront cet ordre dans leur formulaire. Vous n'avez pas besoin de supprimer et recréer une question pour la déplacer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "required-validation",
+      "audioSha256": "a160f80c5b9325c8fea329f05cacd6e42df9162de27921ce1f6043fc43d8d476",
+      "recognized": "Voyons maintenant le formulaire public avec Aline. Choisissons le premier créneau et continuons. Renseignons son identité et les consentements demandés. Essayons de confirmer sans répondre à nos deux questions obligatoires. Le formulaire indique ce qui manque et place le focus sur la première réponse attendue. Aucune inscription n'est créée. Les questions facultatives, elles, peuvent rester vides. Cette distinction évite de bloquer une personne pour une information qui n'est pas indispensable.",
+      "expected": "Voyons maintenant le formulaire public avec Aline. Choisissons le premier créneau et continuons. Renseignons son identité et les consentements demandés. Essayons de confirmer sans répondre à nos deux questions obligatoires. Le formulaire indique ce qui manque et place le focus sur la première réponse attendue. Aucune inscription n'est créée. Les questions facultatives, elles, peuvent rester vides. Cette distinction évite de bloquer une personne pour une information qui n'est pas indispensable.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "volunteer-form",
+      "audioSha256": "51066803a3bb20181c7413254f6eaa37d38f61903975c3ec08b0ad782cacfbd1",
+      "recognized": "Répondons maintenant. Aline choisit M pour son t-shirt, puis oui pour le permis. Pour le matériel, elle coche vélo et remorque, c'est bien un choix multiple. Dans le texte libre, écrivons Entrée Nord. Avant l'envoi, le récapitulatif transmis à l'organisation montre les informations qui seront partagées. Vérifions, puis confirmons réellement l'inscription. Ces réponses sont enregistrées une fois pour Aline sur cet événement, pas une nouvelle fois pour chaque créneau.",
+      "expected": "Répondons maintenant. Aline choisit M pour son t-shirt, puis Oui pour le permis. Pour le matériel, elle coche Vélo et Remorque : c'est bien un choix multiple. Dans le texte libre, écrivons Entrée nord. Avant l'envoi, le récapitulatif Transmis à l'organisation montre les informations qui seront partagées. Vérifions, puis confirmons réellement l'inscription. Ces réponses sont enregistrées une fois pour Aline sur cet événement, pas une nouvelle fois pour chaque créneau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "email-proof",
+      "audioSha256": "37e83d4789abaa124100e66e47cd31090d43b42c08205d0fe8087fab9ae05891",
+      "recognized": "Aline existait déjà dans la liste des membres. Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran. Son lien personnel n'est donc pas affiché directement, il lui est envoyé par e-mail. Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test. C'est une vraie notification produite par l'application avec son lien personnel. La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
+      "expected": "Aline existait déjà dans la liste des membres. Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran. Son lien personnel n'est donc pas affiché directement : il lui est envoyé par email. Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test. C'est une vraie notification produite par l'application, avec son lien personnel. La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin-read",
+      "audioSha256": "8efdc4389dd8546efb62bb5ed507324c9072373831f3a5be7e36a08f047599f9",
+      "recognized": "Revenons côté organisation, dans les inscriptions. Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel. Ouvrons ensuite questions, la synthèse des réponses compte les choix. Aline est comptée une seule fois parmi les bénévoles confirmés, même si elle prend plusieurs créneaux. Pour un choix multiple, elle apparaît dans plusieurs lignes. Les totaux des choix peuvent donc dépasser le nombre de personnes. Les personnes en attente sont distinguées des confirmés.",
+      "expected": "Revenons côté organisation, dans les inscriptions. Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel. Ouvrons ensuite Questions : la Synthèse des réponses compte les choix. Aline est comptée une seule fois parmi les bénévoles confirmés, même si elle prend plusieurs créneaux. Pour un choix multiple, elle apparaît dans plusieurs lignes : les totaux des choix peuvent donc dépasser le nombre de personnes. Les personnes en attente sont distinguées des confirmées.",
+      "wordErrorRate": 0.013333333333333334,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "summary-export",
+      "audioSha256": "501ec7b1094b2bead577b29cb57fec158bbfa20d0af34b8ac29c149dd0f38ac4",
+      "recognized": "Pour préparer une commande, téléchargeons la synthèse en CSV. Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente. Il ne contient ni nom ni coordonnées. Vous pouvez partager ces quantités avec un fournisseur sans lui transmettre la liste des bénévoles. La synthèse décrit l'état actuel, les inscriptions peuvent encore évoluer. Gardez ce repère en tête avant de lancer une commande définitive.",
+      "expected": "Pour préparer une commande, téléchargeons la synthèse en CSV. Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente. Il ne contient ni noms ni coordonnées : vous pouvez partager ces quantités avec un fournisseur sans lui transmettre la liste des bénévoles. La synthèse décrit l'état actuel ; les inscriptions peuvent encore évoluer. Gardez ce repère en tête avant de lancer une commande définitive.",
+      "wordErrorRate": 0.014084507042253521,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invited-update",
+      "audioSha256": "0e87106b5e679a1c42cf95094a19f78d0258bf796e8f46a1c2477159b4f8a83d",
+      "recognized": "Aline se réinscrit maintenant depuis son véritable lien d'invitation pour un deuxième créneau. Cette invitation apporte la preuve nécessaire pour modifier ses réponses. Choisissons L au lieu de M. Conservons oui pour le permis, puis laissons le matériel et le rendez-vous vide. Confirmons. La nouvelle taille remplace l'ancienne. Les deux réponses facultatives laissées vides sont effacées. Les réponses appartiennent toujours à Aline sur cet événement, indépendamment de ses deux créneaux.",
+      "expected": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau. Cette invitation apporte la preuve nécessaire pour modifier ses réponses. Choisissons L au lieu de M. Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides. Confirmons. La nouvelle taille remplace l'ancienne. Les deux réponses facultatives laissées vides sont effacées. Les réponses appartiennent toujours à Aline sur cet événement, indépendamment de ses deux créneaux.",
+      "wordErrorRate": 0.0136986301369863,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "unverified-update",
+      "audioSha256": "22fa83b72d9d35cbb4253bfeefe70dd9412a4486553a7821c610057ddf9b2ebf",
+      "recognized": "Comparons avec une inscription depuis le simple formulaire public, sans invitation. Saisissons la même adresse pour un troisième créneau, mais choisissons S. L'inscription peut être créée, pourtant la réponse déjà enregistrée ne sera pas remplacée. L'adresse seule ne prouve pas l'identité de la personne qui l'a saisie. La taille conservée reste donc L. Depuis ce formulaire, seules les réponses encore manquantes peuvent être ajoutées. Pour corriger une réponse existante, le bénévole doit utiliser le parcours qui prouve son accès.",
+      "expected": "Comparons avec une inscription depuis le simple formulaire public, sans invitation. Saisissons la même adresse pour un troisième créneau, mais choisissons S. L'inscription peut être créée, pourtant la réponse déjà enregistrée ne sera pas remplacée. L'adresse seule ne prouve pas l'identité de la personne qui la saisit. La taille conservée reste donc L. Depuis ce formulaire, seules les réponses encore manquantes peuvent être ajoutées. Pour corriger une réponse existante, le bénévole doit utiliser le parcours qui prouve son accès.",
+      "wordErrorRate": 0.036585365853658534,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "answered-lock",
+      "audioSha256": "0045969010d50888c1f7a083a86a26cff40a897748233c0151dbb2ebc6abd544",
+      "recognized": "Le formulaire a maintenant des réponses. Revenons modifier la taille du tee-shirt. Le type est verrouillé. Changer un choix unique en texte libre rendrait les réponses existantes difficiles à interpréter. Essayons aussi de retirer L des choix proposés. L'application refuse car cette taille a déjà été retenue. Annulons cette modification. La réponse d'Aline reste intacte. Si vous devez changer complètement la question, mieux vaut en créer une nouvelle plutôt que de réinterpréter les réponses passées.",
+      "expected": "Le formulaire a maintenant des réponses : revenons modifier la taille du t-shirt. Le type est verrouillé. Changer un choix unique en texte libre rendrait les réponses existantes difficiles à interpréter. Essayons aussi de retirer L des choix proposés. L'application refuse, car cette taille a déjà été retenue. Annulons cette modification. La réponse d'Aline reste intacte. Si vous devez changer complètement la question, mieux vaut en créer une nouvelle plutôt que de réinterpréter les réponses passées.",
+      "wordErrorRate": 0.01282051282051282,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "edit-choices",
+      "audioSha256": "3ee29339685be6f52a27580bdff60e84d1f69499ffc4c0eb7b234991492affac",
+      "recognized": "On peut cependant enrichir la liste sans perdre ce qui existe. Rouvrons la question et ajoutons XXL tout en gardant S, M, L et XL. Enregistrons. Le nouveau choix apparaît dans la liste, la taille L d'Aline reste conservée. Ajouter une possibilité et retirer un choix déjà utilisé ne sont pas la même opération. Prenez le temps de relire les choix avant d'enregistrer.",
+      "expected": "On peut cependant enrichir la liste sans perdre ce qui existe. Rouvrons la question et ajoutons XXL, tout en gardant S, M, L et XL. Enregistrons. Le nouveau choix apparaît dans la liste ; la taille L d'Aline reste conservée. Ajouter une possibilité et retirer un choix déjà utilisé ne sont pas la même opération. Prenez le temps de relire les choix avant d'enregistrer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "retire",
+      "audioSha256": "dbdb422d46c9fecc762036ce3553ebef89d84deb8d1e9675d02549e38a455e70",
+      "recognized": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions. Cliquons sur retirer, puis lisons la confirmation. La question disparaît du formulaire, mais ses réponses restent dans les inscriptions et les exports. Confirmons. Dans l'inscription d'Aline, sa taille, elle, est encore visible avec la mention question retirée. Ouvrons enfin un autre créneau public, la question n'est plus proposée, les autres le sont toujours. Un formulaire simple, des réponses utiles et une évolution qui préserve l'historique, c'est le bon équilibre !",
+      "expected": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions. Cliquons sur Retirer, puis lisons la confirmation : la question disparaît du formulaire, mais ses réponses restent dans les inscriptions et les exports. Confirmons. Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée. Ouvrons enfin un autre créneau public : la question n'est plus proposée, les autres le sont toujours. Un formulaire simple, des réponses utiles et une évolution qui préserve l'historique : c'est le bon équilibre.",
+      "wordErrorRate": 0.011627906976744186,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

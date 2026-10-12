@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T02:41:29.350Z",
+  "videoSha256": "7d3a2935fa0034aa360beed0f18d53bad33b07d6eba7cb406a27f3bd84e83aa7",
+  "promptSha256": "ce74e892aec4fb02ca695945deebb62b619f3f1d6f709912c09025f031a3bfd9",
+  "clipSha256": "89115216ddb1336de7405517846f108eedd6849a4ca1b8294bbc0bcf9ffee4f6",
+  "scene": "create-text",
+  "review": {
+    "heardOpening": "Pour une préférence de rendez-vous",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ajoutons Point de rendez-vous préféré.",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie de « Point de rendez-vous préféré » dans le champ de la question.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Conservons Texte court",
+        "visibleSeconds": 8,
+        "visible": "Le menu déroulant affiche bien le type « Texte court » par défaut.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 21.5,
+        "visible": "Clic sur le bouton Enregistrer sous le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23,
+        "spoken": "Nous avons maintenant nos quatre types de questions",
+        "visibleSeconds": 22.5,
+        "visible": "La liste mise à jour affiche Questions (4/5) avec les quatre questions configurées.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, naturelle et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
