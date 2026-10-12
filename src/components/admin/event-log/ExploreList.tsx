@@ -46,7 +46,7 @@ export default function ExploreList({
               <p className={`text-sm ${baseline ? "text-gray-500 italic" : "text-gray-800"}`}>{describeEntry(entry, shiftLabels)}</p>
               {entry.changes && (
                 <ul className="mt-1.5 space-y-0.5">
-                  {describeChanges(entry.changes, shiftLabels).map((line) => (
+                  {describeChanges(entry.changes, shiftLabels, entry.entityType).map((line) => (
                     <li key={line} className="text-xs text-gray-500 tabular-nums">{line}</li>
                   ))}
                 </ul>

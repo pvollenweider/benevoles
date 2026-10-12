@@ -12,6 +12,7 @@
 import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
 import { listingChangeLabel } from "./event-visibility"
+import { logValueLabel } from "./log-value-labels"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
 
@@ -68,8 +69,11 @@ const FIELD_LABELS: Record<string, string> = {
  * paths (e.g. a cancellation) record it unchanged, purely so `describeEntry`/`narrateChain` can
  * name the shift in their sentence (see `shiftPhrase` below) — it would be misleading to also
  * show it here as if it were a real change.
+ *
+ * Known stored values (statuses, source, publication status) read in French, see
+ * log-value-labels.ts (#929); `entityType` tells a shift's `status` from a registration's.
  */
-export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?: Record<string, ShiftLabel>): string[] {
+export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?: Record<string, ShiftLabel>, entityType?: string): string[] {
   if (!changes) return []
   return Object.entries(changes)
     .filter(([field, { from, to }]) => field !== "shiftId" || from !== to)
@@ -78,7 +82,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
       const fmt = (v: unknown) =>
         field === "shiftId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? v
         : field === "isListed" ? listingChangeLabel(v)
-        : fmtValue(v)
+        : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })
 }
