@@ -175,6 +175,23 @@ export function deactivationDate(noticeAt: Date): Date {
   return new Date(noticeAt.getTime() + DEACTIVATION_DAYS * DAY_MS)
 }
 
+/** Days between an automatic deactivation and the planned erasure (step « erase » minus « deactivate »). */
+export const ERASURE_AFTER_DEACTIVATION_DAYS = 90
+
+/**
+ * When a space deactivated for inactivity would be erased (#811, rollout 3). Shown to the operator
+ * only: the erasure itself is not enabled, it waits for the owner's decision and the matching
+ * change of the privacy policy, which today says such a space is kept while deactivated.
+ */
+export function erasureDate(deactivatedAt: Date): Date {
+  return new Date(deactivatedAt.getTime() + ERASURE_AFTER_DEACTIVATION_DAYS * DAY_MS)
+}
+
+/** Whether that date has passed: the space would already be erased if erasure were enabled. */
+export function erasureDue(deactivatedAt: Date, now: Date): boolean {
+  return erasureDate(deactivatedAt).getTime() <= now.getTime()
+}
+
 export type InactivityEmailStep = "first" | "second" | "last"
 
 export type ProcedureAction =
