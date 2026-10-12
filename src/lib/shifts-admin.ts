@@ -127,8 +127,23 @@ export function spokenPlaces(registered: number, capacity: number): string {
  * The accessible name of a shift's bar on the admin timeline (#587): « Bar, Soir, de 10h30 à 12h,
  * 3 inscrits sur 5, complet, modifier ». It starts with the role, as the bar shows it.
  */
-export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number }, full: boolean): string {
-  return `${spokenShiftName(s)}, ${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${full ? ", complet" : ""}, modifier`
+export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number; minAge?: number | null }, full: boolean): string {
+  const free = s.capacity - s.registrationCount
+  // « 2 libres » as on the bar (#925, 2.5.3): a voice command can use the words it shows.
+  const state = full ? ", complet" : free > 0 ? `, ${free} libre${free > 1 ? "s" : ""}` : ""
+  return `${spokenShiftName(s)}, ${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${state}${s.minAge != null ? `, ${s.minAge} ans minimum` : ""}, modifier`
+}
+
+/**
+ * The places line of a bar on the admin timeline (#925): « 2/4 inscrits · 2 libres », « 3/3 inscrits
+ * · Complet », after « 18 ans min. · » for a shift with a minimum age (first, so that a narrow bar
+ * cuts the figures rather than the rule). « inscrits » says what the figures count, « libres »
+ * agrees with the number as in the list view.
+ */
+export function timelineBarPlaces(s: { registrationCount: number; capacity: number; minAge?: number | null }): string {
+  const free = s.capacity - s.registrationCount
+  const places = `${s.registrationCount}/${s.capacity} inscrit${s.registrationCount > 1 ? "s" : ""} · ${free > 0 ? `${free} libre${free > 1 ? "s" : ""}` : "Complet"}`
+  return s.minAge != null ? `${s.minAge} ans min. · ${places}` : places
 }
 
 /**

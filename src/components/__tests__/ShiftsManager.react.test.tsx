@@ -348,6 +348,17 @@ describe("ShiftsManager timeline hint", () => {
     expect(hint).toHaveClass("text-xs", "text-gray-600")
     expect(hint.textContent).not.toContain("·")
   })
+
+  // #925: the figures on a bar (« 2/4 inscrits · 2 libres ») are explained once, above the days.
+  it("explains the figures shown on a bar, once, in the Frise only", () => {
+    renderManager()
+    const legends = screen.getAllByText(/^Sur chaque créneau, « 2\/4 inscrits » compte les inscriptions confirmées/)
+    expect(legends).toHaveLength(1)
+    expect(legends[0]).toHaveTextContent("l'âge minimum, s'il y en a un, vient en premier")
+    expect(legends[0]).toHaveClass("text-xs", "text-gray-600")
+    fireEvent.click(screen.getByRole("button", { name: "Liste" }))
+    expect(screen.queryByText(/^Sur chaque créneau/)).toBeNull()
+  })
 })
 
 // The wizard header's « Aucun créneau pour l'instant » comes from the server: refreshed when the

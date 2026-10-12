@@ -7,7 +7,7 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
 import { dayLabel } from "@/lib/spoken-time"
-import { deleteShiftRecapFor, timelineBarName } from "@/lib/shifts-admin"
+import { deleteShiftRecapFor, timelineBarName, timelineBarPlaces } from "@/lib/shifts-admin"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
@@ -273,6 +273,9 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
         ref={containerRef} tabIndex={-1}
         role="region" aria-label={`Planning du ${dayLabel(date)}`}
         className="overflow-x-auto select-none rounded-xl border border-gray-100 bg-white"
+        // The sticky role column covers the left of the region: a bar brought into view by focus
+        // stops to its right, not under it (#924).
+        style={{ scrollPaddingLeft: LABEL_W }}
       >
         <div style={{ width: totalW + 24, paddingTop: 10, paddingBottom: 0, paddingLeft: 12, paddingRight: 12 }}>
           <div className="relative" style={{ width: totalW }}>
@@ -298,10 +301,16 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               />
             ))}
 
-            {/* Sticky label column */}
+            {/* Role-name column, sticky (#924): it used to be absolute and scrolled away with the
+                hours, leaving the rows unnamed on a long day. A sticky element can't be absolute,
+                so a full-width absolute layer (no pointer events) holds it; the column sticks to
+                the left edge of the scroll region while the hours scroll under it. A focused bar
+                rises above it (focus:z-20, also when focus comes back by code) and the region's scroll padding keeps it clear. */}
+            <div className="absolute inset-y-0 left-0 z-10 pointer-events-none" style={{ width: totalW }}>
             <div
-              className="absolute top-0 left-0 flex flex-col z-10"
-              style={{ width: LABEL_W, background: "white" }}
+              data-role-labels="1"
+              className="sticky left-0 flex flex-col bg-white pointer-events-auto"
+              style={{ width: LABEL_W }}
             >
               {roles.map(role => (
                 <div
@@ -323,6 +332,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   <span className="text-[9px] text-indigo-800">Spectacles</span>
                 </div>
               )}
+            </div>
             </div>
 
             {/* Role rows */}
@@ -356,7 +366,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                         key={shift.id}
                         id={`shift-bar-${shift.id}`}
                         data-shift-bar="1"
-                        className={`absolute rounded-lg cursor-pointer overflow-hidden
+                        className={`absolute rounded-lg cursor-pointer overflow-hidden focus:z-20
                           flex items-center transition-shadow
                           ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${barCls}`}
                         style={{
@@ -389,11 +399,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                               {shift.label}
                             </span>
                           )}
-                          <span className="text-white text-[8px] leading-none mt-0.5">
-                            {shift.registrationCount}/{shift.capacity}
-                            {shift.capacity - shift.registrationCount > 0
-                              ? ` · ${shift.capacity - shift.registrationCount} libre`
-                              : " · Complet"}
+                          <span className="text-white text-[8px] leading-none truncate mt-0.5">
+                            {timelineBarPlaces(shift)}
                           </span>
                         </div>
 

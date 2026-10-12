@@ -69,6 +69,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
 ### Corrigé
+- Dans la Frise des créneaux, le nom des postes reste visible quand on fait défiler les heures sur le côté (#924).
+- Dans la Frise des créneaux, chaque créneau affiche « 2/4 inscrits · 2 libres » et son âge minimum, et une phrase au-dessus du planning explique ces chiffres (#925).
 - Dans Membres, les actions d'une ligne (Activité, Éditer, Désactiver…) passent à la ligne au lieu de dépasser du tableau sur un écran de 1280 px (#927).
 - Dans « Où manque-t-il du monde ? », le lien « Chercher des bénévoles » d'un créneau est sur sa propre ligne au lieu d'être collé à l'horaire, et le nom du lien d'un créneau sépare le poste de la date (#926).
 - Dans Paramètres > Emails, la case « Prévenir en cas de désistement » est alignée sur les autres cases au lieu d'être décalée par son long texte d'aide (#928).
