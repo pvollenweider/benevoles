@@ -179,6 +179,15 @@ describe("ManualAddForm", () => {
     expect(screen.queryByRole("alert")).toBeNull()
   })
 
+  // #916: what the volunteer will receive is said before submitting, and describes the button.
+  it("says whether a confirmation email will leave, once a shift is chosen", () => {
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, email: "chloe@x.ch" }} />)
+    expect(document.getElementById("add-notice")).toBeNull()
+    cleanup()
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+    expect(screen.getByRole("button", { name: "Ajouter" })).toHaveAccessibleDescription("Pas d'email de confirmation : cette personne n'a pas d'adresse email.")
+  })
+
   it("closes through Annuler", () => {
     const onCancel = vi.fn()
     render(<Harness onCancel={onCancel} />)

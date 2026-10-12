@@ -140,6 +140,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   registration_removed: "Retrait d'un créneau par l'organisation",
   registration_withdrawn: "Confirmation d'un retrait fait depuis le lien personnel",
   registration_restored: "Inscription rétablie par l'organisation",
+  registration_added_by_organizer: "Inscription ajoutée par l'organisation",
   release_available: "Nouvelle version disponible",
   operator_alert: "Alerte à l'opérateur",
   signup_confirmation: "Confirmation d'une demande d'espace",

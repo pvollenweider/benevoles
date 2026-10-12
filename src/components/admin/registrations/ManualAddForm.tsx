@@ -9,6 +9,8 @@ import { workloadMessage, workloadWarnings } from "@/lib/workload"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { addConflictMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
 import type { AddFormValues, Registration } from "./types"
+import { manualAddNotice, manualAddNoticeSentence } from "@/lib/manual-add-notice"
+import { localDateTimeToUtc } from "@/lib/time-zone"
 
 type Props = {
   eventId: string
@@ -17,6 +19,8 @@ type Props = {
   registrations: Registration[]
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
+  organizerEmail?: string | null
   /** The values typed so far: kept by the parent so they survive closing and reopening the form. */
   form: AddFormValues
   onFormChange: Dispatch<SetStateAction<AddFormValues>>
@@ -26,7 +30,7 @@ type Props = {
 }
 
 // ── Manual registration by the organizer ─────────────────────────────────────
-export default function ManualAddForm({ eventId, shifts, registrations, timeZone, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
+export default function ManualAddForm({ eventId, shifts, registrations, timeZone, organizerEmail = null, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
@@ -40,6 +44,15 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     return workloadWarnings([...held.map((r) => r.shift), shift], timeZone).map(workloadMessage).filter((m) => !before.has(m))
   }, [person, addForm.shiftId, shifts, registrations, timeZone])
   const overLimit = overLimitFor === JSON.stringify(addForm)
+  // What the volunteer will receive (#916), said before submitting, once a shift is chosen. The
+  // server decides the same way; « now » is the moment the form opened.
+  const [openedAt] = useState(() => new Date())
+  const notice = useMemo(() => {
+    const shift = shifts.find((s) => s.id === addForm.shiftId)
+    if (!shift) return null
+    const shiftStart = localDateTimeToUtc(new Date(`${shift.date}T00:00:00.000Z`), shift.startTime, timeZone)
+    return manualAddNotice({ email: addForm.email, organizerEmail, shiftStart, now: openedAt })
+  }, [shifts, addForm.shiftId, addForm.email, organizerEmail, timeZone, openedAt])
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
   // The form an error is about: once the organizer changes it (another shift, another person),
@@ -313,8 +326,9 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         </div>
       )}
 
+      {notice && <p id="add-notice" className="text-sm text-gray-700">{manualAddNoticeSentence(notice)}</p>}
       <div className="flex gap-3">
-        <button type="submit" aria-disabled={adding || undefined} aria-describedby={addWarnings.length > 0 ? "add-workload" : undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+        <button type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
           {adding ? "Ajout en cours…" : "Ajouter"}
         </button>
         <button type="button" onClick={onCancel} className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>

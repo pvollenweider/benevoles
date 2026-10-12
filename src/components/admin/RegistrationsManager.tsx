@@ -49,10 +49,12 @@ type Props = {
   timeZone: string
   /** Answers to the event's custom questions (#483), by volunteer. */
   answersByVolunteer?: Record<string, { label: string; text: string }[]>
+  /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
+  organizerEmail?: string | null
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {} }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
   const workload = useMemo(
@@ -512,6 +514,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           shifts={shifts}
           registrations={registrations}
           timeZone={timeZone}
+          organizerEmail={organizerEmail}
           form={addForm}
           onFormChange={setAddForm}
           onAdded={handleAdded}

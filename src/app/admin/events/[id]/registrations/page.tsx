@@ -92,6 +92,7 @@ export default async function RegistrationsPage({
       <RegistrationsManager
         eventId={id}
         timeZone={orgTimeZone(event.organization)}
+        organizerEmail={ctx.session.user?.email ?? null}
         answersByVolunteer={answersByVolunteer(event.questions)}
         initialShiftFilter={initialShiftFilter}
         initialSearch={initialSearch}

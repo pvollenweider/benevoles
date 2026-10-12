@@ -85,12 +85,14 @@ describe("manual addition and the role limit", () => {
   const regCreate = vi.fn()
   const db = {
     shift: {
-      findFirst: vi.fn().mockResolvedValue({ id: "s2", roleName: "Loge", capacity: 5, registrations: [] }),
+      findFirst: vi.fn().mockResolvedValue({ id: "s2", roleName: "Loge", label: "Loge", capacity: 5, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", event: { title: "Festival", organization: { name: "Org A", slug: "a", timeZone: null } } }),
       findMany: vi.fn().mockResolvedValue([{ roleName: "Loge", maxPerVolunteer: 1 }]),
       update: vi.fn(),
     },
     volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "vol-1", firstName: "Alice", lastName: "Martin" }), create: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([{ id: "r-old" }]), create: regCreate },
+    adminUser: { findFirst: vi.fn().mockResolvedValue({ name: "Léa Morel" }) },
+    $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
   }
   beforeEach(() => {
     regCreate.mockReset().mockResolvedValue({ id: "r-new", volunteer: {}, shift: {} })

@@ -11,6 +11,7 @@ import { prisma } from "./prisma"
 
 export const JOBS = {
   reminders: { label: "Rappels", maxAgeHours: 2 },
+  outbox: { label: "Envoi des emails en attente", maxAgeHours: 1 },
   cleanup: { label: "Nettoyage nocturne", maxAgeHours: 26 },
   backup: { label: "Sauvegarde chiffrée", maxAgeHours: 26 },
   "backup-offsite": { label: "Copie hors site", maxAgeHours: 26 },
