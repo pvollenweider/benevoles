@@ -3,6 +3,7 @@ roles: [admin]
 group: aide
 order: 10
 summary: Ouvrir l'aide d'un écran de l'administration, et signaler un problème ou proposer une amélioration par email.
+meta_title: Aide et retours depuis l'administration
 related: [questions-frequentes-organisateurs, premiers-pas]
 legacy: [admin#aide-et-retours, admin#aide-depuis-chaque-ecran, admin#signaler-un-probleme-ou-proposer-une-amelioration]
 aliases: []

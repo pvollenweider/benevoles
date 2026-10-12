@@ -3,6 +3,7 @@ roles: [admin, benevole]
 group: regles
 order: 10
 summary: Quand un créneau est complet, les bénévoles rejoignent une liste d'attente ; une place libérée est proposée à la suite, 24 heures pour répondre.
+meta_title: Liste d'attente des créneaux complets
 related: [inscriptions-sur-validation, ma-page-personnelle]
 legacy: [admin#activer-la-liste-d-attente]
 aliases: []

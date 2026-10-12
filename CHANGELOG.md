@@ -95,6 +95,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Éditeur rapide d'un créneau toujours dans l'écran** : ouvert depuis une barre basse de la frise, il dépassait sous le bas de la fenêtre (jusqu'à 82 px), avec des champs hors de vue. Il s'ouvre désormais au-dessus de la barre quand la place manque en dessous, et reste dans l'écran, avec défilement interne si besoin.
 - **« Adresse de votre espace » dans Paramètres** : l'adresse affichée venait de l'hôte de la requête ; derrière un proxy ou sur une copie locale, elle montrait cette adresse technique (`default.localhost:43102`) au lieu de `benevol.app`. Elle vient désormais de l'adresse configurée de l'instance. Rien ne change sur benevol.app.
 - **Affiche d'une vidéo téléchargée une seule fois** : sur la page d'une vidéo, l'image affichée avant la lecture était préchargée sans le mode CORS du lecteur ; le navigateur ignorait ce préchargement (avertissement dans la console) et téléchargeait l'image une seconde fois. Préchargement et lecteur utilisent maintenant le même mode.
+- **Titres de page plus descriptifs** (#936) : onze pages publiques (déclaration d'accessibilité, documentation, guide bénévole, plusieurs fiches de la documentation et la bibliothèque vidéo) avaient un titre de moins de 30 caractères, trop vague dans un résultat de recherche. Elles ont désormais un titre qui dit de quoi parle la page, et la vérification des titres impose ce minimum.
 
 ## [2.2.0] — 2026-10-08
 

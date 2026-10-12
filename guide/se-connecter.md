@@ -3,6 +3,7 @@ roles: [admin]
 group: demarrer
 order: 10
 summary: Se connecter à l'administration, activer son compte depuis une invitation, changer ou réinitialiser son mot de passe.
+meta_title: Se connecter à l'administration
 related: [premiers-pas, equipe-admin]
 legacy: [admin#se-connecter]
 aliases: []

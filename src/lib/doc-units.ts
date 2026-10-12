@@ -22,6 +22,7 @@ import { parseCalendarDate, type FreshnessDates } from "@/lib/freshness"
  *     group: apres-inscription
  *     order: 10
  *     summary: One sentence of 70 to 160 characters, also the page's meta description.
+ *     meta_title: Optional <title> when the « # » title is too short for search results (#936).
  *     related: [another-unit]
  *     legacy: [benevole#old-anchor]
  *     aliases: [old-slug]
@@ -163,6 +164,14 @@ export const docUnitFrontMatterSchema = z.strictObject({
   related: slugList,
   legacy: z.array(z.string().regex(LEGACY_RE, "legacy: role#anchor, e.g. benevole#confirmation")).default([]),
   aliases: slugList,
+  // The page's <title> when the « # » title alone would be under 30 characters with the site name
+  // (#936): « Se connecter » says little in a search result, « Se connecter à l'administration »
+  // says where. The <h1>, the menus and the breadcrumb keep the short title.
+  meta_title: z
+    .string()
+    .min(1)
+    .refine((t) => !FORBIDDEN_SEPARATORS.test(t), "meta_title: no « · » or em dash")
+    .optional(),
   // « Nouveau » / « Mis à jour » (#763, src/lib/freshness.ts): explicit dates, set when the change
   // is worth pointing out; `new: false` hides the label before it expires.
   added: calendarDate("added").optional(),
@@ -174,6 +183,8 @@ export type DocUnit = {
   slug: string
   /** The file's own « # » title. */
   title: string
+  /** The page's <title> when it differs from `title` (front matter `meta_title`, #936). */
+  metaTitle?: string
   roles: DocRole[]
   group: string
   order: number
@@ -209,9 +220,9 @@ export function parseDocUnit(fileName: string, source: string): DocUnit {
   const { title, body } = splitTitle(parsed.body.replace(/^\n+/, ""))
   if (!title) fail("the first line after the front matter must be the « # » title")
   if (/^# /m.test(body)) fail("one « # » title only (the page's single <h1>)")
-  const { added, updated, new: newFlag, ...data } = result.data!
+  const { added, updated, new: newFlag, meta_title: metaTitle, ...data } = result.data!
   const freshness: FreshnessDates = { ...(added ? { added } : {}), ...(updated ? { updated } : {}), ...(newFlag === "false" ? { hidden: true } : {}) }
-  return { slug, title: title!, ...data, ...(Object.keys(freshness).length > 0 ? { freshness } : {}), body, source: `${DOC_UNITS_DIR}/${fileName}` }
+  return { slug, title: title!, ...(metaTitle ? { metaTitle } : {}), ...data, ...(Object.keys(freshness).length > 0 ? { freshness } : {}), body, source: `${DOC_UNITS_DIR}/${fileName}` }
 }
 
 /**
@@ -238,9 +249,11 @@ export function docUnitProblems(units: readonly DocUnit[], reserved: readonly st
       if (related === unit.slug) problems.push(`${unit.slug}: related to itself`)
       else if (!slugs.has(related)) problems.push(`${unit.slug}: related unit « ${related} » doesn't exist`)
     }
-    const titleOwner = seenTitles.get(unit.title)
-    if (titleOwner) problems.push(`${unit.slug}: same title as ${titleOwner}`)
-    seenTitles.set(unit.title, unit.slug)
+    for (const title of new Set([unit.title, docUnitMetaTitle(unit)])) {
+      const titleOwner = seenTitles.get(title)
+      if (titleOwner) problems.push(`${unit.slug}: same title as ${titleOwner}`)
+      seenTitles.set(title, unit.slug)
+    }
     const summaryOwner = seenSummaries.get(unit.summary)
     if (summaryOwner) problems.push(`${unit.slug}: same summary as ${summaryOwner}`)
     seenSummaries.set(unit.summary, unit.slug)
@@ -257,6 +270,11 @@ export function docUnitProblems(units: readonly DocUnit[], reserved: readonly st
     }
   }
   return problems
+}
+
+/** A unit's <title>, without the site name: its `meta_title` when it has one, else its « # » title. */
+export function docUnitMetaTitle(unit: Pick<DocUnit, "title" | "metaTitle">): string {
+  return unit.metaTitle ?? unit.title
 }
 
 /** Units in reading order: by group (DOC_GROUPS order), then `order`, then slug. */
@@ -379,7 +397,7 @@ export function docUnitMetadata(unit: DocUnit, base: string, modifiedTime?: Date
   return seoMetadata({
     base,
     path: `/doc/${unit.slug}`,
-    title: unit.title,
+    title: docUnitMetaTitle(unit),
     description: unit.summary,
     type: "article",
     imageAlt: `${unit.title}, documentation de ${SITE_NAME}`,
