@@ -31,7 +31,7 @@ Les nouveaux espaces passent aussi une courte vérification avant leur première
 
 ## Pourquoi c'est gratuit
 
-benevol.app est un outil communautaire, pas un produit commercial. Son code est public, sous licence AGPL, et il évolue avec les retours des associations qui l'utilisent. Si l'outil vous rend service, vous pouvez soutenir le projet par un don.
+benevol.app est un outil communautaire, pas un produit commercial. Son code est public, sous licence AGPL, et il évolue avec les retours des associations qui l'utilisent. Le faire vivre a pourtant un coût : le développement, la documentation et les tutoriels, l'hébergement. Aujourd'hui, ces coûts sont portés par le projet et par les dons. Si l'outil vous rend service, vous pouvez le soutenir par un don.
 
 ## Ce que benevol.app ne fait pas
 
@@ -62,7 +62,7 @@ Non. Ils s'inscrivent depuis le lien de l'événement, sans compte et sans frais
 
 ### Le service restera-t-il gratuit ?
 
-Aujourd'hui, le service hébergé est gratuit et n'a aucune fonction payante. Quoi qu'il arrive, vos données s'exportent à tout moment, et le code reste publié sous licence AGPL : vous pouvez l'installer vous-même.
+Aujourd'hui, le service hébergé est gratuit et n'a aucune fonction payante. Si un tarif voit le jour, il servira à couvrir le développement, la documentation et l'hébergement, pas à dégager un profit. Quoi qu'il arrive, vos données s'exportent à tout moment, et le code reste publié sous licence AGPL : vous pouvez l'installer vous-même.
 
 ### Comment soutenir le projet ?
 
