@@ -96,6 +96,14 @@ describe("the base URL is read when it is used, never frozen at import", () => {
     expect(source).not.toMatch(/process\.env\.NEXT_PUBLIC_APP_URL/)
   })
 
+  // The admin invitation link is built at request time; a build-time value showed
+  // « video.invalid » in the invitation sent from Paramètres (ORG_TEAM_PERMISSIONS recording).
+  it("builds the admin invitation link from the runtime app URL", () => {
+    const source = fs.readFileSync(path.join(process.cwd(), "src/app/api/admin/settings/admins/route.ts"), "utf-8").replace(/^\s*(\/\/|\*|\/\*).*$/gm, "")
+    expect(source).not.toMatch(/process\.env\.NEXT_PUBLIC_APP_URL/)
+    expect(source).toMatch(/apexBaseUrl\(\)/)
+  })
+
   it("locally, scopes an organisation's sitemap with ?org=", async () => {
     vi.resetModules()
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "http://localhost:3000")

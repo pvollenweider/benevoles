@@ -14,6 +14,7 @@ import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
+import { apexBaseUrl } from "@/lib/urls"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -73,7 +74,7 @@ export async function POST(req: Request) {
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const dummyHash = await bcrypt.hash(randomBytes(16).toString("hex"), 10)
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
+  const appUrl = apexBaseUrl()
   const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
 
   // The admin account and its invitation email commit together (#352).
