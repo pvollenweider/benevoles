@@ -3,6 +3,8 @@ import fs from "node:fs"
 import path from "node:path"
 import {
   BLOG_DIR,
+  blogNeighbors,
+  loadBlogPosts,
   absoluteLinks,
   blogAtomFeed,
   blogFileName,
@@ -255,5 +257,20 @@ describe("hideLineArrows", () => {
     )
     expect(hideLineArrows("<p>a → b</p>")).toBe("<p>a → b</p>")
     expect(hideLineArrows("<p>▶️ Vidéo</p>")).toBe('<p><span aria-hidden="true">▶️ </span>Vidéo</p>')
+  })
+})
+
+// The « Précédent / Suivant » links of a post page.
+describe("blogNeighbors", () => {
+  it("gives the newer and older posts around one, by date", () => {
+    const posts = loadBlogPosts()
+    const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date))
+    const middle = sorted[1]
+    const { newer, older } = blogNeighbors(middle.slug, posts)
+    expect(newer?.slug).toBe(sorted[0].slug)
+    expect(older?.slug).toBe(sorted[2].slug)
+    expect(blogNeighbors(sorted[0].slug, posts).newer).toBeNull()
+    expect(blogNeighbors(sorted[sorted.length - 1].slug, posts).older).toBeNull()
+    expect(blogNeighbors("inconnu", posts)).toEqual({ newer: null, older: null })
   })
 })

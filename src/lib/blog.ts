@@ -152,6 +152,14 @@ export function findBlogPost(slug: string, posts: readonly BlogPost[]): BlogPost
 }
 
 /** The page of a post. */
+/** The posts around one, for the « précédent / suivant » links of its page (posts newest first). */
+export function blogNeighbors(slug: string, posts: readonly BlogPost[]): { newer: BlogPost | null; older: BlogPost | null } {
+  const sorted = sortBlogPosts(posts)
+  const i = sorted.findIndex((p) => p.slug === slug)
+  if (i < 0) return { newer: null, older: null }
+  return { newer: sorted[i - 1] ?? null, older: sorted[i + 1] ?? null }
+}
+
 export function blogPostPath(post: Pick<BlogPost, "slug">): string {
   return `/blog/${post.slug}`
 }

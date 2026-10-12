@@ -36,7 +36,7 @@ describe("BlogIndex", () => {
   it("links the changelog and the feed, and says so when there is no post yet", () => {
     render(<BlogIndex posts={[]} />)
     expect(screen.getByRole("link", { name: "nouveautés" })).toHaveAttribute("href", "/nouveautes")
-    expect(screen.getByRole("link", { name: "flux Atom" })).toHaveAttribute("href", "/blog/feed.xml")
+    expect(screen.getByRole("link", { name: /^S.abonner au flux Atom/ })).toHaveAttribute("href", "/blog/feed.xml")
     expect(screen.getByText("Aucun article pour le moment.")).toBeInTheDocument()
     expect(screen.queryByRole("list")).toBeNull()
   })
