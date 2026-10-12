@@ -14,6 +14,16 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Ajouté
 
 - **Le blog** (`/blog`) : les newsletters de benevol.app archivées, la plus récente en premier, chacune sur sa page avec sa date et sa version, et un flux Atom pour suivre les prochaines. Lien « Blog » dans l'en-tête et le pied de page des pages publiques.
+- **Délai d'annulation par le bénévole** (#946) : dans les réglages de l'événement, « Annulation par le bénévole » reste par défaut **Jusqu'au début du créneau**, ou passe à **Plus tôt**, un délai en jours et/ou en heures avant le début de chaque créneau, calculé dans le fuseau de l'organisation. Sur la page personnelle, la date limite s'affiche sous le créneau confirmé ; une fois passée, le bouton d'annulation laisse place aux personnes à prévenir (responsable du poste, contact du créneau ou du jour J, adresse de l'organisation). L'email de confirmation et les rappels la mentionnent. Le délai ne concerne que les places confirmées : liste d'attente, place proposée et demande sur validation se quittent jusqu'au début du créneau. L'organisation peut toujours retirer quelqu'un elle-même. Copié lors d'une duplication.
+- **Désistement de dernière minute** (#946) : un désistement moins de 24 heures avant le début du créneau part tout de suite aux administrateurs et aux responsables du poste, sans attendre le regroupement de quelques minutes, avec l'heure de début et, s'il reste une place vide, « Trouver un remplaçant ».
+
+### Modifié
+
+- **Place proposée depuis la liste d'attente** (#946) : les 24 heures pour la prendre s'arrêtent au début du créneau, et une place libérée moins d'une heure avant le début n'est plus proposée.
+
+### Corrigé
+
+- **Plus d'annulation d'un créneau commencé ou terminé** (#946) : le lien personnel permettait d'annuler un créneau déjà commencé, voire terminé, ce qui libérait une place que personne ne pouvait plus prendre, pouvait la proposer à la liste d'attente, et retirait les heures du résumé et de l'export des heures. L'annulation est désormais refusée dès le début du créneau, avec un message clair si la page était restée ouverte, et la page personnelle affiche les personnes à prévenir.
 
 ## [2.3.0] — 2026-10-12
 

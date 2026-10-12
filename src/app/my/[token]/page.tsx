@@ -21,6 +21,7 @@ import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/
 import MissionBriefCard from "@/components/public/MissionBriefCard"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { CANCEL_CONTACTS_INTRO, cancelClosedText, cancelContacts, cancelUntilText, type SelfCancelReason } from "@/lib/cancel-deadline"
 
 type ShiftRef = {
   label: string
@@ -46,6 +47,11 @@ type RegistrationItem = {
   status: string
   waitingPosition?: number | null
   waitingExpiresAt?: string | null
+  /**
+   * Whether the volunteer can still cancel it by themself (#946), as the server saw it when the page
+   * loaded: until the shift starts, or the event's earlier deadline for a confirmed place.
+   */
+  selfCancel?: { allowed: boolean; deadline?: string | null; reason?: SelfCancelReason; /** The server's refusal (409), shown in place of the reason. */ refused?: string }
   shift: ShiftRef
 }
 
@@ -66,6 +72,7 @@ const EMPTY_TITLE_ID = "my-registrations-empty-title"
 const byId = (id: string) => () => document.getElementById(id)
 const triggerId = (editToken: string) => `withdraw-${editToken}`
 const cardId = (regId: string) => `registration-${regId}`
+const closedId = (regId: string) => `cancel-closed-${regId}`
 
 /**
  * Personal page of a volunteer (/my/[token]): their registrations on one event, each withdrawable
@@ -161,19 +168,33 @@ export default function MyRegistrationPage() {
     setCancelling(reg.editToken)
 
     // The page-level error is for the initial load only: a failed withdrawal keeps the page.
-    let failure: { status?: number; network?: boolean } | null = null
+    let failure: { status?: number; network?: boolean; error?: string; reason?: SelfCancelReason } | null = null
     try {
       const res = await fetch(`/api/public/registrations/${reg.editToken}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: withdrawMessage }),
       })
-      if (!res.ok) failure = { status: res.status }
+      if (!res.ok) {
+        const body = res.status === 409 ? await res.json().catch(() => null) : null
+        failure = { status: res.status, error: typeof body?.error === "string" ? body.error : undefined, reason: body?.reason }
+      }
     } catch {
       failure = { network: true }
     }
     setCancelling(null)
     setPendingCancel(null)
+
+    // Too late to cancel online (#946), the page having been loaded earlier: the card switches to
+    // the refusal and the contacts to tell, a group named by the refusal that takes focus, so the
+    // refusal is read on focus and the contacts follow (no alert talking over it).
+    if (failure?.status === 409) {
+      const refused = withdrawFailureMessage(failure)
+      const reason: SelfCancelReason = failure.reason ?? "deadline"
+      setData((d) => d ? { ...d, registrations: d.registrations.map((r) => r.id === reg.id ? { ...r, selfCancel: { allowed: false, reason, refused } } : r) } : d)
+      setFocusRequest({ candidates: [byId(closedId(reg.id)), byId(LIST_TITLE_ID)], regionId: cardId(reg.id) })
+      return
+    }
 
     if (failure) {
       const message = withdrawFailureMessage(failure)
@@ -284,6 +305,8 @@ export default function MyRegistrationPage() {
             const copy = withdrawCopy(reg.status, reg.shift.label)
             const busy = cancelling === reg.editToken
             const withdrawError = withdrawErrors[reg.id]
+            const closed = reg.selfCancel?.allowed === false
+            const contacts = closed && reg.selfCancel?.reason !== "ended" ? cancelContacts(reg.shift, data.contactEmail) : []
             return (
               <div key={reg.id} id={cardId(reg.id)} className="bg-white rounded-xl border border-gray-200 p-4">
                 {/* Stacked below sm: at 320 px a button beside the text would crush it. */}
@@ -299,6 +322,10 @@ export default function MyRegistrationPage() {
                         {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? APP_TIME_ZONE)}{" "}
                         <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
                       </p>
+                    )}
+                    {/* An earlier deadline still ahead (#946): said under a confirmed shift. */}
+                    {!closed && reg.selfCancel?.deadline && (
+                      <p id={`cancel-until-${reg.id}`} className="text-xs text-gray-700 mt-1">{cancelUntilText(new Date(reg.selfCancel.deadline), data.timeZone ?? APP_TIME_ZONE)}</p>
                     )}
                     {reg.status === "requested" && (
                       <p className="text-xs text-amber-900 mt-1">Créneau sur validation : l&apos;organisation va accepter ou refuser ta demande, et te prévient par email. La place t&apos;est réservée d&apos;ici là.</p>
@@ -319,20 +346,45 @@ export default function MyRegistrationPage() {
                     )}
                   </div>
                   {/* Stays mounted while its confirmation is open, and focusable during the request
-                      (aria-disabled): focus comes back here when the confirmation closes. */}
-                  <button
+                      (aria-disabled): focus comes back here when the confirmation closes. Gone once
+                      the volunteer can't cancel online any more (#946): the contacts below instead. */}
+                  {!closed && <button
                     id={triggerId(reg.editToken)}
                     type="button"
                     onClick={() => openConfirm(reg)}
                     aria-label={copy.ariaLabel}
+                    aria-describedby={reg.selfCancel?.deadline ? `cancel-until-${reg.id}` : undefined}
                     aria-expanded={isPending}
                     aria-controls={isPending ? `cancel-${reg.id}` : undefined}
                     aria-disabled={busy || undefined}
                     className="text-xs text-red-700 border border-red-300 rounded-lg px-3 py-1.5 text-left sm:shrink-0 transition-colors hover:text-red-800 hover:bg-red-50 aria-disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
                   >
                     {copy.button}
-                  </button>
+                  </button>}
                 </div>
+
+                {/* Past the deadline or the start (#946): why, and whom to tell instead. A focus
+                    target after a refused withdrawal, never a control. */}
+                {closed && (
+                  <div id={closedId(reg.id)} role="group" aria-labelledby={`${closedId(reg.id)}-title`} tabIndex={-1} className="mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-800 focus:outline-none">
+                    <p id={`${closedId(reg.id)}-title`} className="font-medium">{reg.selfCancel?.refused ?? cancelClosedText(reg.selfCancel?.reason ?? "deadline")}</p>
+                    {contacts.length > 0 && (
+                      <>
+                        <p className="mt-1">{CANCEL_CONTACTS_INTRO}</p>
+                        <ul className="mt-1 space-y-0.5">
+                          {contacts.map((c) => (
+                            <li key={c.label}>
+                              {c.label} :{" "}
+                              {c.href
+                                ? <a href={c.href} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{c.text}</a>
+                                : <span className="font-medium">{c.text}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 {/* Always mounted, so that its text is voiced when it arrives. Not referenced by the
                     trigger's aria-describedby: it would be read a second time with the trigger. */}

@@ -9,6 +9,8 @@ import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-cap
 import { registrationToken } from "./token-vault"
 import { orgTimeZone } from "./time-zone"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
+import { shiftStartsAt } from "./cancel-deadline"
+import { waitlistOfferExpiry } from "./waitlist-offer"
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -18,8 +20,7 @@ import { deliverAfterResponse, enqueueNotifications } from "./notifications/outb
  * (a cancellation, most often) so narrative mode can tell "X cancelled, which let Y move up
  * the waitlist" as one causal chain instead of two coincidentally-timed entries.
  */
-export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: string): Promise<boolean> {
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
+export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: string, now: Date = new Date()): Promise<boolean> {
 
   // Under a lock on the shift (#264): two cancellations freeing two spots at once must offer
   // them to two different people, and a spot is only offered if one is actually free — callers
@@ -29,9 +30,13 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     await lockShifts(tx, [shiftId])
     const shift = await tx.shift.findUnique({
       where: { id: shiftId },
-      select: { capacity: true, status: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true } } },
+      select: { capacity: true, status: true, date: true, startTime: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
     })
     if (!shift) return null
+    // The answer window never runs past the shift's start, and a shift starting within the hour
+    // is not offered at all (#946): see waitlistOfferExpiry.
+    const expiresAt = waitlistOfferExpiry(now, shiftStartsAt(shift, orgTimeZone(shift.event?.organization)))
+    if (!expiresAt) return null
     // Registrations closed (#463): a freed spot is not offered; offers already made stay valid.
     if (shift.event && !acceptsRegistrations(shift.event)) return null
     const occupied = await tx.registration.count({ where: { shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
@@ -49,7 +54,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
       where: { id: candidate.id },
       data: {
         status: "offered",
-        waitingOfferedAt: new Date(),
+        waitingOfferedAt: now,
         waitingExpiresAt: expiresAt,
       },
     })

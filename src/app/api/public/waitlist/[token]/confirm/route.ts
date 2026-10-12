@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { cancelPolicySentence } from "@/lib/cancel-deadline"
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
@@ -81,6 +82,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
         shifts: [{ ...shift, ...pickShiftInfo(reg.shift, reg.event) }],
         editToken: token,
         orgSlug: reg.event.organization.slug,
+        cancelNotice: cancelPolicySentence(reg.event),
       },
     }], tx)
   })

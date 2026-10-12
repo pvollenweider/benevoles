@@ -134,7 +134,9 @@ export function withdrawDoneMessage(status: string, s: ShiftWhen): string {
  * The card's alert when a withdrawal fails. Each one says that nothing was withdrawn, since the
  * card stays; a 404 means the registration is already gone, so reloading is the way forward.
  */
-export function withdrawFailureMessage(i: { status?: number; network?: boolean }): string {
+export function withdrawFailureMessage(i: { status?: number; network?: boolean; error?: string }): string {
+  // Past the self-cancellation deadline or the shift's start (#946): the server says which.
+  if (i.status === 409) return i.error?.trim() || "Ce créneau ne peut plus être annulé en ligne : rien n'a été annulé. Préviens directement l'organisation."
   if (i.network) return "La connexion a échoué : l'annulation n'a peut-être pas été enregistrée. Recharge la page pour vérifier."
   if (i.status === 404) return "Ce créneau était déjà annulé ou n'existe plus. Recharge la page pour voir tes inscriptions à jour."
   if (i.status === 429) return "Trop de tentatives : rien n'a été annulé. Réessaie dans une heure."

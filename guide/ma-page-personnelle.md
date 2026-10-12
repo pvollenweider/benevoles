@@ -49,6 +49,12 @@ Chaque annulation, retrait de demande, sortie de liste d'attente ou refus d'une 
 
 Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous le créneau dit ce qui s'est passé et le créneau reste affiché ; recharge la page pour vérifier avant de réessayer.
 
+### Jusqu'à quand annuler
+
+Tu peux annuler toi-même jusqu'au début du créneau, jamais après. L'organisation peut fixer un délai plus tôt, par exemple 2 jours avant : la date limite s'affiche alors sous le créneau (« Tu peux annuler toi-même jusqu'au … »), et l'email de confirmation comme les rappels la mentionnent. Une fois le créneau commencé, ou le délai passé, le bouton **Annuler** disparaît : à sa place, la page dit pourquoi et qui prévenir directement (le responsable du poste, le contact du créneau ou le contact le jour J avec son téléphone, l'adresse de l'organisation).
+
+Le délai ne vaut que pour une place confirmée : tu peux quitter une liste d'attente, refuser une place proposée ou retirer une demande jusqu'au début du créneau. Si ta page était ouverte depuis un moment et que le délai est passé entre-temps, l'annulation est refusée avec un message, rien n'est annulé, et le créneau affiche les personnes à prévenir.
+
 Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, retourne sur la page de l'événement et choisis tes créneaux.
 
 ## Changer de créneau

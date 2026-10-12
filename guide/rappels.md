@@ -16,7 +16,7 @@ Chaque bénévole confirmé d'un événement publié reçoit des rappels par ema
 
 ## Côté bénévole
 
-Les rappels arrivent dans ta boîte email, avec tes créneaux du jour, leurs infos pratiques et la personne à contacter : environ 2 jours avant, la veille, puis 2 à 4 heures avant ton premier créneau du jour. Avec plusieurs créneaux le même jour pour le même événement, un seul email les regroupe à chaque fois. Si un horaire change ou si un créneau est annulé, un email te prévient ; pense alors à mettre à jour ton calendrier (voir [Ma page personnelle](ma-page-personnelle.md#ajouter-mes-creneaux-a-mon-calendrier)).
+Les rappels arrivent dans ta boîte email, avec tes créneaux du jour, leurs infos pratiques et la personne à contacter : environ 2 jours avant, la veille, puis 2 à 4 heures avant ton premier créneau du jour. Avec plusieurs créneaux le même jour pour le même événement, un seul email les regroupe à chaque fois. Quand l'organisation a fixé un délai d'annulation plus tôt que le début du créneau, le rappel donne la date limite, ou dit qu'elle est passée et qu'il faut prévenir l'organisation directement. Si un horaire change ou si un créneau est annulé, un email te prévient ; pense alors à mettre à jour ton calendrier (voir [Ma page personnelle](ma-page-personnelle.md#ajouter-mes-creneaux-a-mon-calendrier)).
 
 ### Recevoir les rappels sur ton téléphone
 

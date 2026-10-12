@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { cancelPolicySentence } from "./cancel-deadline"
 import { z } from "zod"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
@@ -76,6 +77,7 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
           editToken: registrationToken.reveal(reg),
           orgSlug: reg.event.organization.slug,
           confirmationMessage: reg.event.confirmationMessage ?? undefined,
+          cancelNotice: cancelPolicySentence(reg.event),
         },
       })
       await notifySectorLeadersOfSignup({

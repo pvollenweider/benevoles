@@ -14,6 +14,7 @@ import type { NotificationPayload } from "./notifications"
 import { collectNotifications } from "./notifications/outbox"
 import { notifySectorLeadersOfSignup } from "./sector-leaders"
 import { pickShiftInfo, type ShiftInfo } from "./shift-info"
+import { cancelPolicySentence, type CancelDeadlineSetting } from "./cancel-deadline"
 
 export type SignupShift = ShiftInfo & {
   id: string
@@ -24,7 +25,7 @@ export type SignupShift = ShiftInfo & {
   endTime: string
 }
 
-export type SignupEvent = {
+export type SignupEvent = CancelDeadlineSetting & {
   id: string
   title: string
   organizationId: string
@@ -82,6 +83,7 @@ export async function buildSignupNotifications(
       editToken,
       orgSlug: event.organization.slug,
       confirmationMessage: event.confirmationMessage ?? undefined,
+      cancelNotice: cancelPolicySentence(event),
       volunteerId,
       organizationId: event.organizationId,
     }, outbox.send)

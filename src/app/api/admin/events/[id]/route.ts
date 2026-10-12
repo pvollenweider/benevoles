@@ -16,6 +16,7 @@ import { validationError } from "@/lib/api-error"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 import { isPublishing, publishBlocker } from "@/lib/event-publish"
 import { dayContactSchema } from "@/lib/day-contact"
+import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
 
 const showSchema = z.object({
   name: z.string(),
@@ -49,6 +50,8 @@ const schema = z.object({
   longitude: z.number().min(-180).max(180).nullable().optional(),
   /** Day-of contact (#560), for registered volunteers only. Not in the event log: a phone number. */
   ...dayContactSchema,
+  /** Volunteer self-cancellation deadline (#946): days and hours before each shift, null = until the start. */
+  ...cancelDeadlineSchema,
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -85,7 +88,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true, publicationApprovedAt: true } } },
+    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, cancelDeadlineDays: true, cancelDeadlineHours: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true, publicationApprovedAt: true } } },
   })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -129,6 +132,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       "publicInstructions",
       "remindersEnabled",
       "requirePhone",
+      "cancelDeadlineDays",
+      "cancelDeadlineHours",
       "isListed",
       "registrationsOpen",
       "registrationOpensAt",

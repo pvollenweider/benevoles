@@ -27,13 +27,15 @@ function spokenDay(date: string): string {
 // ── Inscription confirmée ────────────────────────────────────────────────────
 
 export function renderConfirmation(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage } = p.data as {
+  const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage, cancelNotice } = p.data as {
     volunteerName: string
     eventTitle: string
     shifts: ({ label: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
     editToken: string
     orgSlug?: string
     confirmationMessage?: string
+    /** The event's earlier self-cancellation deadline in one sentence (#946); absent = until the start. */
+    cancelNotice?: string | null
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
@@ -55,6 +57,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     ...(message ? [message, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
+    ...(cancelNotice ? [cancelNotice] : []),
     ``,
     `Un grand M E R C I et à très vite !`,
   ].join("\n")
@@ -72,7 +75,8 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
         </div>`).join("")}
     </div>
     ${message ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${renderMarkdown(message)}</div>` : ""}
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>${cancelNotice ? `
+    <p style="color:#555;font-size:0.9em">${escapeHtml(cancelNotice)}</p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)
 

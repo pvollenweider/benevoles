@@ -30,6 +30,8 @@ export type MyRegistration = {
   endTime: string
   /** The registration's status (active, requested, waiting, offered): the withdrawal words depend on it. */
   status: string
+  /** False once the volunteer can't cancel it online any more (#946): started, or past the event's deadline. */
+  cancellable: boolean
 }
 
 export type SignupForm = {
@@ -117,6 +119,7 @@ export function validateSignup(input: {
 type ApiRegistration = {
   editToken: string
   status: string
+  selfCancel?: { allowed: boolean }
   shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string }
 }
 
@@ -130,6 +133,7 @@ export function toMyRegistrations(registrations: ApiRegistration[]): MyRegistrat
     startTime: r.shift.startTime,
     endTime: r.shift.endTime,
     status: r.status,
+    cancellable: r.selfCancel?.allowed !== false,
   }))
 }
 

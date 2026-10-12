@@ -13,6 +13,7 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
+import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -43,6 +44,8 @@ type EventFormData = {
   /** Day-of contact (#560): shown only to registered volunteers, never on the public page. */
   dayContactName: string
   dayContactPhone: string
+  /** Volunteer self-cancellation (#946): until the start, or days and/or hours before each shift. */
+  cancelDeadline: CancelDeadlineForm
 }
 
 type Props = {
@@ -75,6 +78,16 @@ const defaultData: EventFormData = {
   registrationClosesAt: "",
   dayContactName: "",
   dayContactPhone: "",
+  cancelDeadline: { mode: "start", days: "", hours: "" },
+}
+
+/**
+ * The body sent for the form: the deadline as two numbers, left out while its fields are invalid
+ * (the rest still saves; the errors are shown under the fields).
+ */
+function eventBody(form: EventFormData) {
+  const { cancelDeadline, ...rest } = form
+  return { ...rest, ...(cancelDeadlinePayload(cancelDeadline) ?? {}) }
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -86,6 +99,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
   const [form, setForm]       = useState<EventFormData>({ ...defaultData, ...initialData })
   const windowOrderBad = localWindowOrderInvalid(form.registrationOpensAt, form.registrationClosesAt)
+  const cancelErrors = cancelDeadlineFormErrors(form.cancelDeadline)
   const [shows, setShows]     = useState<Show[]>(initialData?.showSchedule ?? [])
   const [newShow, setNewShow] = useState<Show>(emptyShow)
   const [addingShow, setAddingShow] = useState(false)
@@ -127,7 +141,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       const res = await fetch(`/api/admin/events/${initialData.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formRef.current, showSchedule: showsRef.current }),
+        body: JSON.stringify({ ...eventBody(formRef.current), showSchedule: showsRef.current }),
       })
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
@@ -186,6 +200,15 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
     })
   }
 
+  function setCancelDeadline(next: Partial<CancelDeadlineForm>) {
+    setForm((f) => {
+      const merged = { ...f.cancelDeadline, ...next }
+      // Choosing « Plus tôt » with nothing typed yet starts from one day, a valid value.
+      if (next.mode === "before" && !merged.days.trim() && !merged.hours.trim()) merged.days = "1"
+      return { ...f, cancelDeadline: merged }
+    })
+  }
+
   function setShow(field: keyof Show, value: string) {
     setNewShow((s) => {
       const next = { ...s, [field]: value }
@@ -229,6 +252,12 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // Create mode: manual submit
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
+    // An invalid deadline is never dropped silently (#946): said, and focus on the field to fix.
+    if (Object.keys(cancelErrors).length > 0) {
+      setError(CANCEL_DEADLINE_CREATE_ERROR)
+      document.getElementById(cancelErrors.hours && !cancelErrors.days && !cancelErrors.total ? "event-cancel-hours" : "event-cancel-days")?.focus()
+      return
+    }
     setSaving(true)
     setError(null)
     try {
@@ -236,7 +265,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       const res = await fetch("/api/admin/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, publicStatus: "draft", showSchedule: shows }),
+        body: JSON.stringify({ ...eventBody(form), publicStatus: "draft", showSchedule: shows }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) { setError(typeof data?.error === "string" ? data.error : "Erreur lors de la création."); return }
@@ -465,6 +494,82 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             </p>
           </div>
         </div>
+
+
+        {/* Volunteer self-cancellation (#946): until the start by default, or an earlier deadline. */}
+        <fieldset id="event-cancel-deadline" aria-describedby="event-cancel-deadline-hint">
+          <legend className="text-sm font-medium text-gray-700 mb-1">Annulation par le bénévole</legend>
+          <p id="event-cancel-deadline-hint" className="text-xs text-gray-600 mb-2">
+            Jusqu&apos;à quand un bénévole confirmé peut annuler lui-même son créneau, depuis son lien personnel. Passé ce moment, il voit les personnes à prévenir au lieu du bouton d&apos;annulation. Vous pouvez toujours retirer quelqu&apos;un vous-même.
+          </p>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2">
+              <input
+                id="event-cancel-start"
+                type="radio"
+                name="event-cancel-deadline"
+                checked={form.cancelDeadline.mode === "start"}
+                onChange={() => setCancelDeadline({ mode: "start" })}
+                className="mt-0.5 h-4 w-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              />
+              <label htmlFor="event-cancel-start" className="text-sm text-gray-700">Jusqu&apos;au début du créneau</label>
+            </div>
+            <div className="flex items-start gap-2">
+              <input
+                id="event-cancel-before"
+                type="radio"
+                name="event-cancel-deadline"
+                checked={form.cancelDeadline.mode === "before"}
+                onChange={() => setCancelDeadline({ mode: "before" })}
+                className="mt-0.5 h-4 w-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              />
+              <label htmlFor="event-cancel-before" className="text-sm text-gray-700">Plus tôt : un délai avant le début de chaque créneau</label>
+            </div>
+          </div>
+          {form.cancelDeadline.mode === "before" && (
+            <div className="mt-3 pl-6">
+              <div className="grid grid-cols-2 gap-3 max-w-xs">
+                <div>
+                  <label htmlFor="event-cancel-days" className="block text-sm font-medium text-gray-700 mb-1">Jours</label>
+                  <input
+                    id="event-cancel-days"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={form.cancelDeadline.days}
+                    onChange={(e) => setCancelDeadline({ days: e.target.value })}
+                    aria-invalid={cancelErrors.days || cancelErrors.total ? true : undefined}
+                    aria-describedby={[cancelErrors.days && "event-cancel-days-error", cancelErrors.total && "event-cancel-total-error", "event-cancel-zone"].filter(Boolean).join(" ")}
+                    className={`${inputCls}${cancelErrors.days || cancelErrors.total ? " !border-red-600" : ""}`}
+                  />
+                  {/* Always mounted: an error that appears while typing is voiced (polite). */}
+                  <div aria-live="polite">{cancelErrors.days && <p id="event-cancel-days-error" className="text-xs text-red-700 mt-1">{cancelErrors.days}</p>}</div>
+                </div>
+                <div>
+                  <label htmlFor="event-cancel-hours" className="block text-sm font-medium text-gray-700 mb-1">Heures</label>
+                  <input
+                    id="event-cancel-hours"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={form.cancelDeadline.hours}
+                    onChange={(e) => setCancelDeadline({ hours: e.target.value })}
+                    aria-invalid={cancelErrors.hours || cancelErrors.total ? true : undefined}
+                    aria-describedby={[cancelErrors.hours && "event-cancel-hours-error", cancelErrors.total && "event-cancel-total-error", "event-cancel-zone"].filter(Boolean).join(" ")}
+                    className={`${inputCls}${cancelErrors.hours || cancelErrors.total ? " !border-red-600" : ""}`}
+                  />
+                  <div aria-live="polite">{cancelErrors.hours && <p id="event-cancel-hours-error" className="text-xs text-red-700 mt-1">{cancelErrors.hours}</p>}</div>
+                </div>
+              </div>
+              <div aria-live="polite">{cancelErrors.total && <p id="event-cancel-total-error" className="text-xs text-red-700 mt-1">{cancelErrors.total}</p>}</div>
+              <p id="event-cancel-zone" className="text-xs text-gray-600 mt-1">
+                Avant le début de chaque créneau, à l&apos;heure du fuseau de l&apos;organisation ({timeZone}). Ne concerne que les places confirmées : une personne en liste d&apos;attente ou en attente de validation peut se retirer jusqu&apos;au début du créneau.
+              </p>
+            </div>
+          )}
+        </fieldset>
 
         <div>
           <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>

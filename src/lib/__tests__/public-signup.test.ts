@@ -102,7 +102,11 @@ describe("validateSignup", () => {
 describe("toMyRegistrations / prefillContact", () => {
   it("maps the API registrations", () => {
     expect(toMyRegistrations([{ editToken: "t", status: "active", shift: { id: "s", label: "Bar", startTime: "10:00", endTime: "12:00" } }]))
-      .toEqual([{ shiftId: "s", token: "t", label: "Bar", roleName: "", startTime: "10:00", endTime: "12:00", status: "active" }])
+      .toEqual([{ shiftId: "s", token: "t", label: "Bar", roleName: "", startTime: "10:00", endTime: "12:00", status: "active", cancellable: true }])
+  })
+
+  it("marks a registration the volunteer can't cancel online any more (#946)", () => {
+    expect(toMyRegistrations([{ editToken: "t", status: "active", selfCancel: { allowed: false }, shift: { id: "s", label: "Bar", startTime: "10:00", endTime: "12:00" } }])[0].cancellable).toBe(false)
   })
 
   it("keeps each registration's status, for the withdrawal words", () => {

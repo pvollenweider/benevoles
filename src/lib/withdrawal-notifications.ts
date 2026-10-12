@@ -15,9 +15,11 @@
 import { prisma } from "./prisma"
 import { parseNotificationSettings } from "./notification-settings"
 import type { NotificationPayload } from "./notifications"
-import { collectNotifications } from "./notifications/outbox"
+import { collectNotifications, enqueueNotifications } from "./notifications/outbox"
 import { digestDelayMs, queueDigestItem } from "./notifications/digest"
 import { linkToken } from "./token-vault"
+import { deadlineMoment } from "./cancel-deadline"
+import { APP_TIME_ZONE, localDateTimeToUtc } from "./time-zone"
 
 export type WithdrawalNotificationInput = {
   registrationId: string
@@ -30,6 +32,13 @@ export type WithdrawalNotificationInput = {
   waitlistTookSpot: boolean
   /** How many places are missing on the shift once this withdrawal (and any promotion) settled. */
   placesMissing: number
+  /**
+   * Less than 24 hours before the shift's start (#946, `isLateWithdrawal`): sent at once, never
+   * grouped, worded « Désistement de dernière minute » with the shift's start.
+   */
+  late?: boolean
+  /** The organisation's zone, for the start of a late withdrawal's shift. */
+  timeZone?: string
 }
 
 /**
@@ -59,6 +68,7 @@ export async function buildWithdrawalNotifications(
     placesMissing: input.placesMissing,
     waitlistTookSpot: input.waitlistTookSpot,
     message: input.message,
+    ...(input.late ? { late: true, startsAt: deadlineMoment(startInstant(shift, input.timeZone), input.timeZone ?? APP_TIME_ZONE) } : {}),
   }
 
   const admins = await prisma.adminUser.findMany({
@@ -103,6 +113,11 @@ export async function buildWithdrawalNotifications(
   }))
 }
 
+/** The shift's start as an instant, for the « commence le … » of a late withdrawal. */
+function startInstant(shift: WithdrawalNotificationInput["shift"], timeZone: string | undefined): Date {
+  return localDateTimeToUtc(shift.date, shift.startTime, timeZone ?? APP_TIME_ZONE)
+}
+
 /** How long a withdrawal email waits for others of the same event (#869): one email for several. */
 export const WITHDRAWAL_DIGEST_DELAY_MS = 5 * 60 * 1000
 
@@ -114,9 +129,16 @@ const ITEM_KEYS = ["volunteerName", "shiftId", "shiftLabel", "roleName", "shiftD
  * minutes reach each organiser and sector leader as one email listing them, instead of one each.
  */
 export async function queueWithdrawalNotifications(input: WithdrawalNotificationInput, now: Date = new Date()): Promise<string[]> {
+  const payloads = await buildWithdrawalNotifications(input)
+  // A last-minute withdrawal (#946) skips the grouping: due now, one email per withdrawal, so a
+  // replacement can be found while there is still time. Its own key: never merged into a digest.
+  if (input.late) {
+    if (payloads.length === 0) return []
+    return enqueueNotifications(payloads.map((p) => ({ ...p, dedupeKey: `${p.kind}:late:${input.registrationId}:${(p.recipient.email ?? "").toLowerCase()}` })))
+  }
   const delayMs = digestDelayMs(WITHDRAWAL_DIGEST_DELAY_MS)
   const dueIds: string[] = []
-  for (const payload of await buildWithdrawalNotifications(input)) {
+  for (const payload of payloads) {
     const data = payload.data as Record<string, unknown>
     const item = Object.fromEntries(ITEM_KEYS.map((k) => [k, data[k]]))
     const base = Object.fromEntries(Object.entries(data).filter(([k]) => !(ITEM_KEYS as readonly string[]).includes(k)))

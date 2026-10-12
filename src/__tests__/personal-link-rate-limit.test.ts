@@ -22,7 +22,8 @@ const valid = { id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", statu
 const withdrawable = {
   ...valid,
   volunteer: { firstName: "A", lastName: "B", email: "a@b.c" },
-  shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 },
+  // A shift years ahead: a withdrawal is refused once the shift has started (#946).
+  shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2031-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 },
   event: { id: "e1", title: "T", organizationId: "o1", organization: { slug: "o", timeZone: "Europe/Zurich" } },
 }
 const page = {
@@ -95,7 +96,7 @@ describe("personal-link API rate limits", () => {
   it("a lost race on a valid link (already withdrawn meanwhile) is not counted as a failed lookup", async () => {
     const { DELETE, GET } = await routes()
     const ip = freshIp()
-    findFirst.mockResolvedValue(valid)
+    findFirst.mockResolvedValue(withdrawable)
     updateMany.mockResolvedValue({ count: 0 })
     for (let i = 0; i < 25; i++) expect((await DELETE(request("DELETE", ip), params(`race-${i}`))).status).toBe(404)
     findFirst.mockResolvedValue(page)

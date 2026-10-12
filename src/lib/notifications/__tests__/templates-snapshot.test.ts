@@ -83,6 +83,14 @@ const cases: [string, NotificationPayload][] = [
       confirmationMessage: "Rendez-vous à l'entrée B.\nMerci !",
     },
   }],
+  ["registration_confirmation (earlier cancellation deadline, #946)", {
+    kind: "registration_confirmation",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin", eventTitle: "Festival du Rhône", shifts: [shift], editToken: "edit-tok", orgSlug: "rhone",
+      cancelNotice: "Tu peux annuler toi-même jusqu'à 2 jours avant le début de chaque créneau. Passé ce délai, préviens l'organisation.",
+    },
+  }],
   ["registration_confirmation (one shift, no message, no org)", {
     kind: "registration_confirmation",
     recipient,
@@ -125,6 +133,16 @@ const cases: [string, NotificationPayload][] = [
     data: { ...reminder, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null, contactName: null, contactPhone: null, instructions: null }], orgSlug: undefined },
   }],
   ["reminder_j2 (group of 3, same day)", { kind: "reminder_j2", recipient, data: reminderGroup3 }],
+  ["reminder_j2 (earlier cancellation deadline, #946)", {
+    kind: "reminder_j2",
+    recipient,
+    data: { ...reminder, cancelNotice: "Tu peux annuler toi-même jusqu'au jeudi 10 juillet à 09:00. Passé ce délai, préviens l'organisation." },
+  }],
+  ["reminder_j2 (cancellation deadline passed, #946)", {
+    kind: "reminder_j2",
+    recipient,
+    data: { ...reminder, cancelNotice: "Le délai pour annuler toi-même est passé : en cas d'empêchement, préviens directement l'organisation.", cancelClosed: true },
+  }],
   ["reminder_j2 (group with a night shift)", { kind: "reminder_j2", recipient, data: reminderGroupNight }],
   ["reminder_j1", { kind: "reminder_j1", recipient, data: reminder }],
   ["reminder_j1 (no location, no extras)", {
@@ -201,6 +219,15 @@ const cases: [string, NotificationPayload][] = [
       placesMissing: 1,
       waitlistTookSpot: false,
       message: tricky,
+    },
+  }],
+  ["registration_cancelled (last minute, #946)", {
+    kind: "registration_cancelled",
+    recipient,
+    data: {
+      eventId: "evt-1", eventTitle: "Festival du Rhône", volunteerName: "Julie Martin", shiftId: "s-1", shiftLabel: "Accueil matin", roleName: "Accueil",
+      shiftDate: "samedi 12 juillet", startTime: "09:00", endTime: "12:30", placesMissing: 1, waitlistTookSpot: false, message: null,
+      late: true, startsAt: "samedi 12 juillet à 09:00",
     },
   }],
   ["registration_cancelled (waitlist took it, no message)", {
@@ -318,6 +345,15 @@ const cases: [string, NotificationPayload][] = [
       message: tricky,
       orgSlug: "rhone",
       token: "lead-tok",
+    },
+  }],
+  ["sector_leader_withdrawal (last minute, #946)", {
+    kind: "sector_leader_withdrawal",
+    recipient,
+    data: {
+      leaderName: "Marc Dupont", roleName: "Accueil", eventTitle: "Festival du Rhône", volunteerName: "Julie Martin", shiftLabel: "Accueil matin",
+      shiftDate: "samedi 12 juillet", startTime: "09:00", endTime: "12:30", placesMissing: 1, waitlistTookSpot: false, message: null,
+      orgSlug: "rhone", token: "lead-tok", late: true, startsAt: "samedi 12 juillet à 09:00",
     },
   }],
   ["product_update", {

@@ -5,6 +5,7 @@
 
 import { fmt } from "@/lib/gantt-utils"
 import { withdrawCopy } from "@/lib/volunteer-withdraw"
+import { CANCEL_CLOSED_LINK, CANCEL_CLOSED_SHORT } from "@/lib/cancel-deadline"
 
 /** What a selected-shift row shows of a shift. */
 export type ShiftRowShift = {
@@ -30,6 +31,13 @@ type Props = {
    * the cancel button is named after what it withdraws.
    */
   status?: string
+  /**
+   * Held shift the volunteer can still cancel online (#946). False once it has started or is past
+   * the event's deadline: no ✕, a sentence pointing to the personal page's contacts instead.
+   */
+  cancellable?: boolean
+  /** The volunteer's personal page, linked from the sentence of a shift that can't be cancelled online. */
+  personalHref?: string
   /** In the current selection (blue row). */
   selected: boolean
   /** Held shift: asks to cancel; gets the button, to find its list and give focus back to it. */
@@ -42,7 +50,7 @@ type Props = {
  * A selected or held shift on the public sign-up page, in the mobile summary card and the desktop
  * sidebar.
  */
-export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", selected, onCancel, onRemove }: Props) {
+export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, selected, onCancel, onRemove }: Props) {
   const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
   const name = s.label && s.label !== s.roleName ? s.label : s.roleName
   return (
@@ -59,12 +67,20 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
         {isWaitlistPending && (
           <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
         )}
+        {isReg && !cancellable && (
+          <p className="text-xs text-gray-700 mt-0.5">
+            {CANCEL_CLOSED_SHORT}{" "}
+            {personalHref
+              ? <a href={personalHref} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700">{CANCEL_CLOSED_LINK}</a>
+              : CANCEL_CLOSED_LINK}.
+          </p>
+        )}
         {!isReg && !isWaitlistPending && s.requiresApproval && (
           <p className="text-xs text-amber-800 mt-0.5 font-medium">Sur validation · demande à accepter par l&apos;organisation</p>
         )}
       </div>
       {/* Icon-only ✕: at least 24 × 24 px (2.5.8), the icon at least 3:1 against its row (1.4.11). */}
-      {isReg ? (
+      {isReg && !cancellable ? null : isReg ? (
         <button
           type="button"
           data-withdraw-trigger={s.id}

@@ -1,9 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 // Withdrawing from the personal page (DELETE /api/public/registrations/[token]): every live
 // registration can be withdrawn, the waitlist included. Regression: a waiting or offered entry
 // answered « Inscription introuvable ou déjà annulée. » although /my showed it an « Annuler ».
 // #559: a withdrawal of a held spot (active, requested) also notifies the organization.
+// #946: never once the shift has started, nor past the event's earlier deadline for a confirmed place.
 
 const findFirst = vi.hoisted(() => vi.fn())
 const updateMany = vi.hoisted(() => vi.fn())
@@ -32,8 +33,8 @@ const del = (body?: unknown) =>
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
   })
 
-async function withdraw(status: string, body?: unknown) {
-  findFirst.mockResolvedValue({ id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status, shift, event, volunteer })
+async function withdraw(status: string, body?: unknown, eventOverride: Record<string, unknown> = {}) {
+  findFirst.mockResolvedValue({ id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status, shift, event: { ...event, ...eventOverride }, volunteer })
   const { DELETE } = await import("@/app/api/public/registrations/[token]/route")
   return DELETE(del(body), { params: Promise.resolve({ token: "tok" }) })
 }
@@ -41,12 +42,19 @@ async function withdraw(status: string, body?: unknown) {
 describe("DELETE /api/public/registrations/[token]", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // A month before the shift (Sat 4 July 2026, 10:00 in Zurich = 08:00 UTC).
+    vi.useFakeTimers({ toFake: ["Date"] })
+    vi.setSystemTime(new Date("2026-06-04T08:00:00Z"))
     updateMany.mockResolvedValue({ count: 1 })
     logEvent.mockResolvedValue("log-1")
     promoteNextInWaitlist.mockResolvedValue(true)
     count.mockResolvedValue(2)
     buildWithdrawalNotifications.mockResolvedValue([{ kind: "registration_cancelled", recipient: { email: "a@org.ch" }, data: {}, dedupeKey: "k1" }])
     enqueueNotifications.mockResolvedValue(["n1"])
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it("looks the token up among every live status", async () => {
@@ -114,21 +122,21 @@ describe("DELETE /api/public/registrations/[token]", () => {
         message: null,
         waitlistTookSpot: true,
         placesMissing: 0,
-      }))
+      }), expect.any(Date))
     })
 
     it("computes the missing places from the shift's capacity and occupied count", async () => {
       count.mockResolvedValue(1) // one spot occupied out of 2: one missing
       await withdraw(status)
-      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ placesMissing: 1 }))
+      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ placesMissing: 1 }), expect.any(Date))
     })
 
     it("sends the trimmed optional message, dropping an empty one", async () => {
       await withdraw(status, { message: "  Paul peut me remplacer  " })
-      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ message: "Paul peut me remplacer" }))
+      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ message: "Paul peut me remplacer" }), expect.any(Date))
 
       await withdraw(status, { message: "   " })
-      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ message: null }))
+      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ message: null }), expect.any(Date))
     })
 
     it("never writes the message to the registration update or the event log", async () => {
@@ -206,5 +214,75 @@ describe("DELETE /api/public/registrations/[token]", () => {
     expect(first.status).toBe(200)
     expect(second.status).toBe(404)
     expect(buildWithdrawalNotifications).toHaveBeenCalledTimes(1)
+  })
+
+  // ── Self-cancellation deadline (#946) ──────────────────────────────────────
+
+  describe("until when the volunteer can cancel", () => {
+    const at = (iso: string) => vi.setSystemTime(new Date(iso))
+
+    it.each(["active", "requested", "waiting", "offered"])("refuses a %s registration once the shift has started, with nothing changed", async (status) => {
+      at("2026-07-04T08:30:00Z") // 10:30 in Zurich, the shift runs 10:00 to 12:00
+      const res = await withdraw(status)
+      expect(res.status).toBe(409)
+      expect(await res.json()).toMatchObject({ code: "cancel_closed", reason: "started", error: expect.stringContaining("a déjà commencé") })
+      expect(updateMany).not.toHaveBeenCalled()
+      expect(logEvent).not.toHaveBeenCalled()
+      expect(promoteNextInWaitlist).not.toHaveBeenCalled()
+      expect(enqueueNotifications).not.toHaveBeenCalled()
+    })
+
+    it("refuses an ended shift (regression: it freed a past place and removed hours)", async () => {
+      at("2026-07-05T08:00:00Z")
+      const res = await withdraw("active")
+      expect(res.status).toBe(409)
+      expect((await res.json()).reason).toBe("ended")
+      expect(updateMany).not.toHaveBeenCalled()
+    })
+
+    it("refuses exactly at the start", async () => {
+      at("2026-07-04T08:00:00Z")
+      expect((await withdraw("active")).status).toBe(409)
+    })
+
+    it("accepts a minute before the start without an earlier deadline", async () => {
+      at("2026-07-04T07:59:00Z")
+      expect((await withdraw("active")).status).toBe(200)
+    })
+
+    it("refuses a confirmed place past the event's deadline, with a clear French error", async () => {
+      at("2026-07-02T09:00:00Z") // 11:00 on 2 July: past « 2 jours avant » (10:00 on 2 July)
+      const res = await withdraw("active", undefined, { cancelDeadlineDays: 2, cancelDeadlineHours: null })
+      expect(res.status).toBe(409)
+      expect(await res.json()).toMatchObject({ reason: "deadline", error: expect.stringContaining("Le délai pour annuler toi-même ce créneau est passé") })
+      expect(updateMany).not.toHaveBeenCalled()
+    })
+
+    it("accepts a confirmed place before the event's deadline", async () => {
+      at("2026-07-02T07:59:00Z")
+      const res = await withdraw("active", undefined, { cancelDeadlineDays: 2, cancelDeadlineHours: null })
+      expect(res.status).toBe(200)
+      expect(updateMany).toHaveBeenCalled()
+    })
+
+    it.each(["waiting", "requested", "offered"])("lets a %s registration go past the deadline, until the start", async (status) => {
+      at("2026-07-03T08:00:00Z")
+      const res = await withdraw(status, undefined, { cancelDeadlineDays: 2, cancelDeadlineHours: null })
+      expect(res.status).toBe(200)
+    })
+  })
+
+  describe("last-minute withdrawals (#946)", () => {
+    it("flags a withdrawal less than 24 hours before the start, with the organisation's zone", async () => {
+      vi.setSystemTime(new Date("2026-07-03T09:00:00Z")) // 23 hours before
+      await withdraw("active")
+      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ late: true, timeZone: "Europe/Zurich" }), expect.any(Date))
+    })
+
+    it("keeps the grouping for an earlier withdrawal", async () => {
+      vi.setSystemTime(new Date("2026-07-03T07:00:00Z")) // 25 hours before
+      await withdraw("active")
+      expect(buildWithdrawalNotifications).toHaveBeenCalledWith(expect.objectContaining({ late: false }), expect.any(Date))
+    })
   })
 })

@@ -89,6 +89,9 @@ export type DuplicableEvent = {
   /** Day-of contact (#560): copied with the settings, like the other messages. */
   dayContactName?: string | null
   dayContactPhone?: string | null
+  /** Volunteer self-cancellation deadline (#946): copied with the settings. */
+  cancelDeadlineDays?: number | null
+  cancelDeadlineHours?: number | null
   showSchedule: unknown
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
@@ -179,6 +182,8 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       accentColorKey: copy.settings ? source.accentColorKey : null,
       dayContactName: copy.settings ? source.dayContactName ?? null : null,
       dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,
+      cancelDeadlineDays: copy.settings ? source.cancelDeadlineDays ?? null : null,
+      cancelDeadlineHours: copy.settings ? source.cancelDeadlineHours ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
     },
     // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
