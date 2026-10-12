@@ -977,6 +977,17 @@ describe("Registrations — cross-tenant isolation", () => {
     expect(prismaMock.registration.create).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/registrations returns 404 for an org-B member chosen by id (#914)", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const db = setupGuard({ shift: { findFirst: vi.fn().mockResolvedValue({ id: "shift-a", roleName: "Bar", capacity: 5, registrations: [] }) } })
+
+    const res = await POST(makeRequest("/api/admin/registrations", "POST", { eventId: "evt-a", shiftId: "shift-a", volunteerId: "mem-b" }))
+    expect(res.status).toBe(404)
+    expect(db.volunteer.findFirst).toHaveBeenCalledWith({ where: { id: "mem-b", organizationId: ORG_A } })
+    expect(db.volunteer.create).not.toHaveBeenCalled()
+    expect(prismaMock.registration.create).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/events/[id]/registrations/bulk returns 404 for an org-B event", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     setupGuard() // event.findFirst → null (org-B event not visible to org-A)

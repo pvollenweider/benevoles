@@ -15,13 +15,18 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 const schema = z.object({
   eventId: z.string(),
   shiftId: z.string(),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
+  /** A member already in the organization's list (#914): placed without retyping, email or not. */
+  volunteerId: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
   phone: z.string().optional(),
   comment: z.string().optional(),
   /** The admin saw the role-limit warning and adds anyway (#466). */
   allowOverLimit: z.boolean().optional(),
+}).refine((d) => d.volunteerId || (d.firstName?.trim() && d.lastName?.trim()), {
+  message: "Prénom et nom requis pour une nouvelle personne.",
+  path: ["firstName"],
 })
 
 export async function POST(req: Request) {
@@ -33,7 +38,7 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
+  const { eventId, shiftId, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
 
   const shift = await db.shift.findFirst({
     where: { id: shiftId, eventId },
@@ -43,9 +48,15 @@ export async function POST(req: Request) {
   if (!shift) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
 
   const usedEmail = email || null
-  let volunteer = usedEmail
-    ? await db.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
-    : null
+  let volunteer = volunteerId
+    ? await db.volunteer.findFirst({ where: { id: volunteerId, organizationId } })
+    : usedEmail
+      ? await db.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
+      : null
+  // Another organization's member, or one deleted since the search: never created in its place.
+  if (volunteerId && !volunteer) {
+    return NextResponse.json({ error: "Ce membre n'existe plus. Cherchez-le à nouveau." }, { status: 404 })
+  }
 
   // Shifts per volunteer for the role (#466): the organiser may go over it, but knowingly.
   if (volunteer && !allowOverLimit) {
@@ -67,7 +78,7 @@ export async function POST(req: Request) {
 
   if (!volunteer) {
     volunteer = await db.volunteer.create({
-      data: { firstName, lastName, email: usedEmail, phone: phone || null, organizationId },
+      data: { firstName: firstName!.trim(), lastName: lastName!.trim(), email: usedEmail, phone: phone || null, organizationId },
     })
   }
 
