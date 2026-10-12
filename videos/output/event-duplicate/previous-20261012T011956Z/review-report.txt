@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "EVENT_DUPLICATE",
+  "status": "NOT READY",
+  "duration": 154.96,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 138,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -32.6,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "54 images finales et preuves ponctuelles revues. Réglages fermés narrés79.99 s mais encore fiche générale ; ouverture après81.81. Activation responsables50.43 vs52.06 ; copie75.94 vs73.22 ; pages ouvertes avant leur consigne104.13. Ancres corrigées sans reprise. Faux signalement AV date écarté :28.11.2027 bien visible dans identity/date-locale-check. Copie brouillon/0 inscription/pages/email réel conformes. Mailpit dates anglaises notées ; aucun bug de disposition. Validation, ASR final,VTT,effets,musique passent.",
+  "sourceChanges": "record.ts : titre rempli visiblement ; création, responsables, Brouillon, réglages et pages ancrés aux phrases. Audio réutilisé.",
+  "report": "videos/output/event-duplicate/review-report.txt"
+}

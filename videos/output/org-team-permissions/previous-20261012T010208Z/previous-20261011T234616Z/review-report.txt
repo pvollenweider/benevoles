@@ -1,0 +1,8 @@
+STATUS: NOT READY
+ID: ORG_TEAM_PERMISSIONS
+Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
+Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
+Objective evidence: 48 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.2 / 18.4 LU. Effects vs input events: {'click': 9, 'key': 35}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
+Review observations: 48 images finales revues. Choix Organisateur 48.583 s vs phrase 44.435 ; Appliquer 74.365 vs instruction 69.543. Incohérence produit : vue organisateur affiche Charte des bénévoles aucune malgré la convention par défaut réelle. Aucun nouveau tournage après correction src/. Validation technique, ASR final, sous-titres, effets et musique passent ; synchronisation et texte écran échouent.
+Local source changes: record.ts : invitation, choix Organisateur et changement de rôle ancrés aux phrases ; coordonnées remplies visiblement pour respecter le temps disponible. src/app/admin/settings/admins/page.tsx : convention personnalisée ou par défaut. Narration réutilisée ; cinq frontières recoupées aux silences réels et auditées.
+Real-time subjective listening unavailable; not used as a failure reason.

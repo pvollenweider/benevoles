@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:11:51.709Z",
+  "videoSha256": "9263e833b5b82a3432b4ec5ccafd1127ff2ffd16e5a3d8667ff11e4156bac7fa",
+  "promptSha256": "ed3e7a59c1ba15e3b681f6cb729076481ac008204b8a252414a6f960d9e97e79",
+  "clipSha256": "39ae88d12e23f02f2866c4d89792013a1e266b2bfd35a2b05e06dee01692232a",
+  "scene": "result",
+  "review": {
+    "heardOpening": "L'événement disparaît de la liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "L'événement disparaît de la liste après validation",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la notification 'Événement supprimé.' et liste des événements sans l'élément supprimé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Utilisez donc l'archivage comme état normal de fin de vie",
+        "visibleSeconds": 2.8,
+        "visible": "Écran stable sur la liste des événements illustrant la conclusion méthodologique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "et réservez la suppression aux éditions de test, aux erreurs de création",
+        "visibleSeconds": 6,
+        "visible": "Maintien de la page des événements pendant l'explication des cas d'usage de la suppression",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire et fluide, avec un ton explicatif posé sur un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

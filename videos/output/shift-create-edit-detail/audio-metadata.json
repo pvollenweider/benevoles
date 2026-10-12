@@ -1,7 +1,7 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-06T17:18:43.963Z",
+  "generatedAt": "2026-10-12T01:31:54.961Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",

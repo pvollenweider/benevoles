@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:49:00.267Z",
-  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
-  "promptSha256": "3313cd01e6d113fca9d59efe7be51ce94163ae6ba62a65d8852c1ed3a3f71729",
-  "clipSha256": "2b1bab74c49e5146638fa3d5bfdf28bae3e1a8e5e11545959bb9e2db3da837c3",
+  "reviewedAt": "2026-10-12T01:23:59.222Z",
+  "videoSha256": "22900478a697f7eeecdb4aa42ddeb22c69c41fd4b487755fa372fe7a8f3f0c1a",
+  "promptSha256": "92cde6278979a00a50e7e7e694b630f93d52ef83d2bdef5a143b8e474cce9ffd",
+  "clipSha256": "432928989e9a5ac51fb4a664aa677b478353285203f76758aa9e23cea17575a3",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Dupliquer évite de reconstruire",
+    "heardOpening": "Dupliquer évite de reconstruire chaque année un événement",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Dupliquer évite de reconstruire chaque année un événement",
         "visibleSeconds": 0,
-        "visible": "Titre et encart sur la duplication d'événement affichés à l'écran",
+        "visible": "Encart titre : 'Dupliquer l'événement de l'année précédente'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 4.7,
         "spoken": "La copie reste un nouveau brouillon",
-        "visibleSeconds": 3,
-        "visible": "Formulaire affichant le champ Titre de la copie",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage en plein écran du formulaire 'Dupliquer l'événement'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "sans mélanger les bénévoles ni l'historique",
-        "visibleSeconds": 3,
-        "visible": "Mention indiquant que les inscriptions ne sont jamais copiées",
+        "spokenSeconds": 6.7,
+        "spoken": "on gagne la structure sans mélanger les bénévoles",
+        "visibleSeconds": 6.7,
+        "visible": "Formulaire affichant les options 'Ce qui est copié' (créneaux, messages, etc.)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et dynamique."
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

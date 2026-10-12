@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:26:42.704Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "0f464da687e8a1d7e44863c56c7ef119b4b5dd65553db9652b8aeffc73e36e63",
+  "clipSha256": "b81419209179efd36eeff65c3b174a259c6363f167546d4d4419178e9c5bc141",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "La Frise n'est pas seulement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La Frise n’est pas seulement une vue de lecture.",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition de l'encart titre pour afficher la vue Frise des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Elle permet aussi de construire rapidement un planning visuel",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la frise chronologique avec les créneaux par poste sur la journée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "dessiner une plage libre, ajuster sa durée, dupliquer une relève",
+        "visibleSeconds": 7,
+        "visible": "Vue d'ensemble de la Frise stable illustrant les possibilités présentées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

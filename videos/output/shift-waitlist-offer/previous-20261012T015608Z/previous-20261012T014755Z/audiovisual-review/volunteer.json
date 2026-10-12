@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:31:39.542Z",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "promptSha256": "6cb1d824a42f98da29ee9e1c5b87b9c6de375a2e556e2bd8b88d1b6dbbba4a38",
+  "clipSha256": "f6a5d8ff5f891f60c1bf2d3271a1936d48a9480a158d54c9183adf882502bfa4",
+  "scene": "volunteer",
+  "review": {
+    "heardOpening": "Sur sa page, la personne voit l'offre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Sur sa page, la personne voit l'offre, son expiration",
+        "visibleSeconds": 2.8,
+        "visible": "Défilement vers la proposition de créneau Buvette avec sa date et heure d'expiration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Accepter confirme immédiatement le créneau",
+        "visibleSeconds": 8.3,
+        "visible": "Mise en valeur visuelle du lien « Prendre la place » (intitulé différent de « Accepter »)",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Refuser conserve une réponse explicite",
+        "visibleSeconds": 9.2,
+        "visible": "Encadré rouge sur le bouton « Refuser la place »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:08, l'encadré autour de l'action d'acceptation (« Prendre la place ») apparaît en retard, au moment où la voix aborde déjà le bouton Refuser.",
+      "L'interface indique « Prendre la place » et « Refuser la place » au lieu des termes exacts « Accepter » et « Refuser » mentionnés par la voix."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

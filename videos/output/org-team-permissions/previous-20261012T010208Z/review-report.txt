@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "ORG_TEAM_PERMISSIONS",
+  "status": "NOT READY",
+  "duration": 132.16,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 119,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "48 images finales revues ; nouvelle Charte par défaut et adresse formation-team.benevol.app conformes. Organisateur 44.959 s vs phrase44.492 ; Appliquer70.091 vs69.596 ; confirmation issue de cette action réelle (signalement AV contraire écarté sur preuves). Lien invitation http://video.invalid visible : configuration figée au build, défaut produit corrigé localement. Validation, ASR final, VTT, effets exacts et musique passent. Aucun défaut de disposition constaté ; pas de reprise après src/.",
+  "sourceChanges": "Route API invitations : apexBaseUrl() lit la configuration runtime. Cues et fill du lot7 déjà sur main ; audio réutilisé. Tests URL/activité12 réussis et lint propre. doc-img: unchanged (aucun écran ni disposition modifié, correction de génération URL).",
+  "report": "videos/output/org-team-permissions/review-report.txt"
+}

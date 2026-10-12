@@ -1,0 +1,64 @@
+{
+  "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+  "slug": "shift-timeline-quick-actions",
+  "validatedAt": "2026-10-12T00:25:54.403Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 122000,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13953,
+      "audioMs": 13952,
+      "driftMs": 1
+    },
+    {
+      "id": "draw",
+      "visualMs": 16354,
+      "audioMs": 16352,
+      "driftMs": 2
+    },
+    {
+      "id": "resize",
+      "visualMs": 14694,
+      "audioMs": 14691,
+      "driftMs": 3
+    },
+    {
+      "id": "popover",
+      "visualMs": 11863,
+      "audioMs": 11863,
+      "driftMs": 0
+    },
+    {
+      "id": "copy",
+      "visualMs": 23811,
+      "audioMs": 23809,
+      "driftMs": 2
+    },
+    {
+      "id": "detail",
+      "visualMs": 22209,
+      "audioMs": 22207,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 14848,
+      "audioMs": 14846,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 9,
+  "music": {
+    "voicedWindows": 114,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

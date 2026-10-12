@@ -1,0 +1,416 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1111,
+    "endMs": 16264,
+    "sentences": [
+      {
+        "text": "Un créneau transforme un poste en besoin concret.",
+        "startMs": 0,
+        "endMs": 3100,
+        "method": "silence",
+        "absoluteStartMs": 1111
+      },
+      {
+        "text": "Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques.",
+        "startMs": 3316,
+        "endMs": 9972,
+        "method": "silence",
+        "absoluteStartMs": 4427
+      },
+      {
+        "text": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
+        "startMs": 10306,
+        "endMs": 14962,
+        "method": "silence",
+        "absoluteStartMs": 11417
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "identity",
+    "startMs": 18525,
+    "endMs": 33870,
+    "sentences": [
+      {
+        "text": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis.",
+        "startMs": 189,
+        "endMs": 4602,
+        "method": "silence",
+        "absoluteStartMs": 18714
+      },
+      {
+        "text": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "startMs": 4898,
+        "endMs": 9526,
+        "method": "silence",
+        "absoluteStartMs": 23423
+      },
+      {
+        "text": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "startMs": 9867,
+        "endMs": 15196,
+        "method": "silence",
+        "absoluteStartMs": 28392
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "identity",
+        "phrase": "Choisissez d’abord le poste",
+        "startMs": 189,
+        "endMs": 4602,
+        "cueMs": 21037
+      },
+      {
+        "segmentId": "identity",
+        "phrase": "La date, l’heure de début",
+        "startMs": 4898,
+        "endMs": 9526,
+        "cueMs": 23425
+      },
+      {
+        "segmentId": "identity",
+        "phrase": "La date, l’heure de début",
+        "startMs": 4898,
+        "endMs": 9526,
+        "cueMs": 24701
+      },
+      {
+        "segmentId": "identity",
+        "phrase": "La date, l’heure de début",
+        "startMs": 4898,
+        "endMs": 9526,
+        "cueMs": 26383
+      },
+      {
+        "segmentId": "identity",
+        "phrase": "La capacité indique combien de",
+        "startMs": 9867,
+        "endMs": 15196,
+        "cueMs": 28392
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 19022
+      },
+      {
+        "kind": "click",
+        "atMs": 20271
+      },
+      {
+        "kind": "click",
+        "atMs": 21538
+      },
+      {
+        "kind": "click",
+        "atMs": 23889
+      },
+      {
+        "kind": "click",
+        "atMs": 25222
+      },
+      {
+        "kind": "click",
+        "atMs": 26904
+      },
+      {
+        "kind": "click",
+        "atMs": 28888
+      }
+    ]
+  },
+  {
+    "chapter": "availability",
+    "startMs": 36130,
+    "endMs": 50287,
+    "sentences": [
+      {
+        "text": "Deux options complètent le fonctionnement du créneau.",
+        "startMs": 197,
+        "endMs": 3650,
+        "method": "silence",
+        "absoluteStartMs": 36327
+      },
+      {
+        "text": "La liste d’attente recueille les volontaires quand toutes les places sont prises.",
+        "startMs": 3808,
+        "endMs": 8426,
+        "method": "silence",
+        "absoluteStartMs": 39938
+      },
+      {
+        "text": "Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.",
+        "startMs": 8569,
+        "endMs": 13983,
+        "method": "silence",
+        "absoluteStartMs": 44699
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "availability",
+        "phrase": "La liste d’attente recueille les",
+        "startMs": 3808,
+        "endMs": 8426,
+        "cueMs": 39940
+      },
+      {
+        "segmentId": "availability",
+        "phrase": "Le mode Sur validation transforme",
+        "startMs": 8569,
+        "endMs": 13983,
+        "cueMs": 44702
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 40404
+      },
+      {
+        "kind": "click",
+        "atMs": 45221
+      }
+    ]
+  },
+  {
+    "chapter": "practical",
+    "startMs": 52548,
+    "endMs": 79767,
+    "sentences": [
+      {
+        "text": "Renseignons d'abord le lieu de rendez-vous :",
+        "startMs": 293,
+        "endMs": 3344,
+        "method": "silence",
+        "absoluteStartMs": 52841
+      },
+      {
+        "text": "entrée artistes, portail nord.",
+        "startMs": 3529,
+        "endMs": 4649,
+        "method": "silence",
+        "absoluteStartMs": 56077
+      },
+      {
+        "text": "Ajoutons une consigne :",
+        "startMs": 5248,
+        "endMs": 6139,
+        "method": "silence",
+        "absoluteStartMs": 57796
+      },
+      {
+        "text": "venir dix minutes avant avec des chaussures fermées.",
+        "startMs": 6694,
+        "endMs": 9120,
+        "method": "silence",
+        "absoluteStartMs": 59242
+      },
+      {
+        "text": "Le contact opérationnel indique qui appeler sur place :",
+        "startMs": 9694,
+        "endMs": 12978,
+        "method": "silence",
+        "absoluteStartMs": 62242
+      },
+      {
+        "text": "ici Léa, accueil artistes, et son téléphone de démonstration.",
+        "startMs": 13340,
+        "endMs": 15875,
+        "method": "silence",
+        "absoluteStartMs": 65888
+      },
+      {
+        "text": "Les coordonnées GPS placent ce rendez-vous sur la carte.",
+        "startMs": 16134,
+        "endMs": 20831,
+        "method": "silence",
+        "absoluteStartMs": 68682
+      },
+      {
+        "text": "Si un créneau n'a pas de lieu propre, il reprend celui de l'événement.",
+        "startMs": 21006,
+        "endMs": 24317,
+        "method": "silence",
+        "absoluteStartMs": 73554
+      },
+      {
+        "text": "Ces détails seront visibles aux personnes inscrites.",
+        "startMs": 24690,
+        "endMs": 26989,
+        "method": "silence",
+        "absoluteStartMs": 77238
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "practical",
+        "phrase": "Renseignons d’abord le lieu de rendez-vous",
+        "startMs": 293,
+        "endMs": 3344,
+        "cueMs": 52842
+      },
+      {
+        "segmentId": "practical",
+        "phrase": "Ajoutons une consigne",
+        "startMs": 5248,
+        "endMs": 6139,
+        "cueMs": 57798
+      },
+      {
+        "segmentId": "practical",
+        "phrase": "Le contact opérationnel indique",
+        "startMs": 9694,
+        "endMs": 12978,
+        "cueMs": 62244
+      },
+      {
+        "segmentId": "practical",
+        "phrase": "Les coordonnées GPS placent",
+        "startMs": 16134,
+        "endMs": 20831,
+        "cueMs": 68685
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 53337
+      },
+      {
+        "kind": "click",
+        "atMs": 58320
+      },
+      {
+        "kind": "click",
+        "atMs": 62752
+      },
+      {
+        "kind": "click",
+        "atMs": 63971
+      },
+      {
+        "kind": "click",
+        "atMs": 69187
+      }
+    ]
+  },
+  {
+    "chapter": "save",
+    "startMs": 82032,
+    "endMs": 95752,
+    "sentences": [
+      {
+        "text": "Enregistrons le créneau et vérifions sa place dans le planning.",
+        "startMs": 241,
+        "endMs": 3887,
+        "method": "silence",
+        "absoluteStartMs": 82273
+      },
+      {
+        "text": "Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
+        "startMs": 4336,
+        "endMs": 13483,
+        "method": "silence",
+        "absoluteStartMs": 86368
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 83603
+      },
+      {
+        "kind": "click",
+        "atMs": 90736
+      },
+      {
+        "kind": "click",
+        "atMs": 91536
+      }
+    ]
+  },
+  {
+    "chapter": "change",
+    "startMs": 98011,
+    "endMs": 116206,
+    "sentences": [
+      {
+        "text": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé.",
+        "startMs": 341,
+        "endMs": 5288,
+        "method": "silence",
+        "absoluteStartMs": 98352
+      },
+      {
+        "text": "Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques.",
+        "startMs": 5806,
+        "endMs": 9996,
+        "method": "silence",
+        "absoluteStartMs": 103817
+      },
+      {
+        "text": "Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
+        "startMs": 10502,
+        "endMs": 17865,
+        "method": "silence",
+        "absoluteStartMs": 108513
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "change",
+        "phrase": "Rouvrir l’éditeur permet de corriger",
+        "startMs": 5806,
+        "endMs": 9996,
+        "cueMs": 103819
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 99615
+      },
+      {
+        "kind": "click",
+        "atMs": 104297
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 118469,
+    "endMs": 134178,
+    "sentences": [
+      {
+        "text": "Un bon créneau reste court à lire mais complet pour agir :",
+        "startMs": 327,
+        "endMs": 4352,
+        "method": "silence",
+        "absoluteStartMs": 118796
+      },
+      {
+        "text": "mission, horaire, capacité, lieu et consigne.",
+        "startMs": 4902,
+        "endMs": 7499,
+        "method": "silence",
+        "absoluteStartMs": 123371
+      },
+      {
+        "text": "Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.",
+        "startMs": 8121,
+        "endMs": 15493,
+        "method": "silence",
+        "absoluteStartMs": 126590
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

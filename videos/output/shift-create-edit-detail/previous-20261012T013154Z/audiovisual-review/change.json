@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:22:10.445Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "4de31c06277ccc1d9aa5c9c4338a977c084402fbefec120f14360763edc15359",
+  "clipSha256": "0288b1899df2885df78b0a35b77ef0abafe2a8788403ce82dd257c8f1d5f8cc0",
+  "scene": "change",
+  "review": {
+    "heardOpening": "Dans la liste, le statut indique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées",
+        "visibleSeconds": 1.8,
+        "visible": "Affichage de la vue Liste avec le tableau détaillant la colonne Statut (Ouvert)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques.",
+        "visibleSeconds": 5.8,
+        "visible": "Ouverture du formulaire « Modifier le créneau » affichant les horaires et les informations pratiques",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous",
+        "visibleSeconds": 11.5,
+        "visible": "Écran fixe sur le formulaire de modification détaillant la date, les heures et le lieu de rendez-vous",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

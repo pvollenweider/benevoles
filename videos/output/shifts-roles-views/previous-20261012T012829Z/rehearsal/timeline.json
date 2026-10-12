@@ -1,0 +1,140 @@
+{
+  "slug": "shifts-roles-views",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T00:12:45.086Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-planning",
+    "scenario": "SHIFTS_ROLES_VIEWS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 5153
+    },
+    {
+      "kind": "click",
+      "atMs": 6469
+    },
+    {
+      "kind": "click",
+      "atMs": 7254
+    },
+    {
+      "kind": "click",
+      "atMs": 8519
+    },
+    {
+      "kind": "click",
+      "atMs": 9335
+    },
+    {
+      "kind": "click",
+      "atMs": 10568
+    },
+    {
+      "kind": "click",
+      "atMs": 11384
+    },
+    {
+      "kind": "click",
+      "atMs": 12168
+    },
+    {
+      "kind": "click",
+      "atMs": 12951
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1099,
+      "endMs": 3724
+    },
+    {
+      "id": "timeline",
+      "startMs": 4176,
+      "endMs": 4236
+    },
+    {
+      "id": "list",
+      "startMs": 4689,
+      "endMs": 5499
+    },
+    {
+      "id": "roles",
+      "startMs": 5952,
+      "endMs": 7562
+    },
+    {
+      "id": "colors",
+      "startMs": 8015,
+      "endMs": 9642
+    },
+    {
+      "id": "result",
+      "startMs": 10875,
+      "endMs": 13259
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "list",
+      "phrase": "Elle est pratique pour relire",
+      "startMs": 6435,
+      "endMs": 21000,
+      "cueMs": 4691
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "Les flèches Monter et Descendre",
+      "startMs": 6432,
+      "endMs": 18932,
+      "cueMs": 5966
+    },
+    {
+      "segmentId": "colors",
+      "phrase": "elle reste cohérente dans les",
+      "startMs": 8196,
+      "endMs": 14020,
+      "cueMs": 8033
+    },
+    {
+      "segmentId": "colors",
+      "phrase": "La couleur aide à se",
+      "startMs": 14020,
+      "endMs": 22000,
+      "cueMs": 8824
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Utilisez la Frise pour construire",
+      "startMs": 0,
+      "endMs": 8454,
+      "cueMs": 10900
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Avec des noms courts, un",
+      "startMs": 8454,
+      "endMs": 20000,
+      "cueMs": 11693
+    }
+  ]
+}

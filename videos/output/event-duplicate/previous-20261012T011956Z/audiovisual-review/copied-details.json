@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:33.600Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "85c50f079a86d8588fe57b7b567e9fe3889496bd7c0ae18e661f5aa1ca8bb2a4",
+  "clipSha256": "31ff8880d3acce3b28fe3bd5a57d744c2045468ff4e797219d9fbf712495bc98",
+  "scene": "copied-details",
+  "review": {
+    "heardOpening": "Ouvrons le planning de la nouvelle édition.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrons le planning de la nouvelle édition.",
+        "visibleSeconds": 0,
+        "visible": "L'écran des créneaux du planning 2027 est déjà affiché dès le début de l'extrait sans action d'ouverture.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Les dates ont été décalées et les créneaux repartent sans inscription.",
+        "visibleSeconds": 3,
+        "visible": "Affichage des dates (dimanche 28 novembre) et des blocs de créneaux sans inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "ouvrons leur liste dans cette nouvelle édition pour vérifier leur présence.",
+        "visibleSeconds": 11.5,
+        "visible": "La liste des pages personnalisées est déjà affichée à l'écran avant l'annonce d'ouverture.",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:00, le planning est déjà ouvert à l'écran alors que la voix dit « Ouvrons le planning de la nouvelle édition ».",
+      "À 00:11, la page des « Pages » s'affiche par coupure directe avant que la voix ne dise à 00:14 « ouvrons leur liste dans cette nouvelle édition »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, bien posée et chaleureuse."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

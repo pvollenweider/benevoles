@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T15:59:30.407Z",
-  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
-  "promptSha256": "c3799c4b52067727e87318e554c9a11445000d78c0b8f498704f56aa67b147c7",
-  "clipSha256": "37711e2f433954bc4ac86cb02ce50a62e63e4b1cb9ff8e0458744e398ebc22ff",
+  "reviewedAt": "2026-10-12T01:47:02.057Z",
+  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "promptSha256": "0f464da687e8a1d7e44863c56c7ef119b4b5dd65553db9652b8aeffc73e36e63",
+  "clipSha256": "6338c82c5fda5fb2dc203afcd6d89b6c922cc66ccb69b8e8e3d33cc4814a9b49",
   "scene": "welcome",
   "review": {
     "heardOpening": "La Frise n'est pas seulement une vue de lecture",
     "checkpoints": [
       {
-        "spokenSeconds": 0.1,
-        "spoken": "La Frise n'est pas seulement une vue de lecture",
+        "spokenSeconds": 0,
+        "spoken": "La Frise n’est pas seulement une vue de lecture.",
         "visibleSeconds": 0,
-        "visible": "Titre du chapitre superposé sur la vue Frise",
+        "visible": "Titre du chapitre au centre de l'écran : « Créer, dupliquer et redimensionner depuis la Frise »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.3,
-        "spoken": "construire rapidement un planning visuel",
-        "visibleSeconds": 2.8,
-        "visible": "Disparition du bandeau d'introduction et affichage de la frise des créneaux",
+        "spokenSeconds": 3,
+        "spoken": "Elle permet aussi de construire rapidement un planning visuel",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la vue Frise des créneaux sur la journée du samedi 17 octobre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "dessiner une plage libre, ajuster sa durée",
-        "visibleSeconds": 5.8,
-        "visible": "Vue statique du planning de la journée sans manipulation",
+        "spokenSeconds": 6.5,
+        "spoken": "dessiner une plage libre, ajuster sa durée, dupliquer une relève",
+        "visibleSeconds": 6.5,
+        "visible": "Écran stable sur la vue Frise illustrant l'introduction générale des fonctionnalités à venir",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix synthétique posée, débit régulier et bonne intelligibilité."
+      "observation": "Voix féminine claire, posée et bien articulée, sans bruit de fond."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

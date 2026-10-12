@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:17.549Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "aeffff877fda377c5c3a3f85ce9575067d888a4298ac46e262755ac1d5104779",
+  "clipSha256": "ab0fb3041b6025339a281d0c8c858deded46868f79f07316a28d20ecd882c073",
+  "scene": "setup",
+  "review": {
+    "heardOpening": "La liste d'attente s'active",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La liste d’attente s’active sur le créneau",
+        "visibleSeconds": 9.5,
+        "visible": "L'option 'Activer la liste d'attente' apparaît dans le formulaire mais reste décochée",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Tant que la capacité n’est pas atteinte",
+        "visibleSeconds": 4.5,
+        "visible": "Le formulaire 'Modifier le créneau' affiche le champ Capacité défini à 4",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "le prochain bénévole rejoint l’attente et voit sa position",
+        "visibleSeconds": 10,
+        "visible": "L'écran reste sur l'interface organisateur de modification du créneau sans montrer l'expérience bénévole",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:09, la case à cocher 'Activer la liste d'attente' est visible mais n'est jamais activée par un clic."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, bonne intelligibilité sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

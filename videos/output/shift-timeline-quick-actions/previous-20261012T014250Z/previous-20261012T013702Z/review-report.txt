@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+  "status": "NOT READY",
+  "duration": 122.0,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 114,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "42 images finales et preuves24/65/69.34/94/107.1 revues. Libellé dessin23.04 avant27.88 ; copie ouverte64.25 avant69.34 ; consigne93.0 avant96.79 (AV confirme). Réouverture de vérification brève et Frise au début du résultat : source corrigée. Dessin/45min par pas15/duplication/décalage15/3places/consigne persistée et valeurs rechargées conformes. Popover scrollable placé correctement, aucun bug de disposition ; Frise/dates françaises/aucune adresse interdite/overlay. Validation, ASR final,VTT,effets,musique passent.",
+  "sourceChanges": "record.ts : libellé, ouverture/nom copie, Décaler/fermeture et consigne ancrés ; relecture API des valeurs sauvegardées remplace flash éditeur ; Liste rechargée avant conclusion. Audio réutilisé ; pas de reprise.",
+  "report": "videos/output/shift-timeline-quick-actions/review-report.txt"
+}

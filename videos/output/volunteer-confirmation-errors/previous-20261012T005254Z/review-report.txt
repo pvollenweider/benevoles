@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "status": "NOT READY",
+  "duration": 308.52,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 273,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.2
+  },
+  "problems": "66 images finales revues ; personas sans Coordonnées reprises et invitation préremplie conformes. Sélection Aline 159.23 s avant Essayons 164.12 ; Nicolas 191.88 avant 193.41 ; invitation Aline déjà confirmée à 255.94 avant vérification 258.09. Ancres locales corrigées, sans reprise. Validation, ASR final, VTT, effets exacts 48 clics/178 touches et musique passent. Dates anglaises Mailpit notées seulement ; aucun défaut de disposition produit constaté.",
+  "sourceChanges": "record-registration-errors.ts : autre appareil par effacement du seul benevoles_contact ; ancres de sélection et consentement des personas ; saisie visible raccourcie. Notes du script ; transcript et audio de main inchangés.",
+  "report": "videos/output/volunteer-confirmation-errors/review-report.txt"
+}

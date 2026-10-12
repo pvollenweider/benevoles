@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:31:21.148Z",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "promptSha256": "a7fd2893fe9db59bee3854aa725437bf573b74e71ad6b1d04f8d17addb5d0a08",
+  "clipSha256": "9a33eb8479347025ca47b569f922638614991afbe221462869e364c0876fb55f",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une capacité protège l'organisation contre le sureffectif",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une capacité protège l'organisation contre le sureffectif",
+        "visibleSeconds": 0,
+        "visible": "Titre du chapitre « Capacités, listes d'attente et offre de place » affiché en encadré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "mais un créneau complet ne doit pas faire perdre les personnes encore disponibles",
+        "visibleSeconds": 3.2,
+        "visible": "Planning des créneaux affiché avec des mentions de saturation (100 % et 116 %)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "La liste d'attente conserve leur intérêt dans un ordre clair",
+        "visibleSeconds": 7.9,
+        "visible": "Écran stable de la frise des créneaux illustrant l'introduction théorique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et fluide, parfaitement synchronisée avec l'introduction du thème."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

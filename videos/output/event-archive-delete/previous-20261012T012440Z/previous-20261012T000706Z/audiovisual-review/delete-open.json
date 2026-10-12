@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:50:43.849Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "378a2aa121c3ae1a4d4408dcf0193fa6edb21fedcb45b408068354b360f70d69",
+  "clipSha256": "1b8993c6cdf5e615738ce6a58af09095b9c27c4c150b47c8d8d9b587a19bcba5",
+  "scene": "delete-open",
+  "review": {
+    "heardOpening": "La suppression définitive n'apparaît",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La suppression définitive n'apparaît qu'après archivage",
+        "visibleSeconds": 0,
+        "visible": "Section 'Suppression définitive' avec bouton visible en bas de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître",
+        "visibleSeconds": 5.5,
+        "visible": "Modale affichant le décompte des créneaux, inscriptions et invitations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.6,
+        "spoken": "Les membres du pool, eux, sont conservés",
+        "visibleSeconds": 5.5,
+        "visible": "Mention 'Les membres du pool et l'organisation sont conservés' dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

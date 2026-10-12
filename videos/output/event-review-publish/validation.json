@@ -1,54 +1,64 @@
 {
   "id": "EVENT_REVIEW_PUBLISH",
   "slug": "event-review-publish",
-  "validatedAt": "2026-10-06T08:12:56.445Z",
+  "validatedAt": "2026-10-12T01:18:02.882Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 132760,
+  "captureMs": 140600,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 10543,
-      "audioMs": 10541,
-      "driftMs": 2
-    },
-    {
-      "id": "checks",
-      "visualMs": 18582,
-      "audioMs": 18582,
+      "visualMs": 10479,
+      "audioMs": 10479,
       "driftMs": 0
     },
     {
+      "id": "checks",
+      "visualMs": 19764,
+      "audioMs": 19763,
+      "driftMs": 1
+    },
+    {
       "id": "preview-start",
-      "visualMs": 14605,
-      "audioMs": 14604,
+      "visualMs": 16442,
+      "audioMs": 16441,
       "driftMs": 1
     },
     {
       "id": "preview-form",
-      "visualMs": 31139,
-      "audioMs": 31138,
+      "visualMs": 32134,
+      "audioMs": 32133,
       "driftMs": 1
     },
     {
       "id": "preview-result",
-      "visualMs": 14248,
-      "audioMs": 14246,
-      "driftMs": 2
+      "visualMs": 14751,
+      "audioMs": 14750,
+      "driftMs": 1
     },
     {
       "id": "publish",
-      "visualMs": 15448,
-      "audioMs": 15448,
-      "driftMs": 0
+      "visualMs": 15440,
+      "audioMs": 15439,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 14482,
-      "audioMs": 14480,
+      "visualMs": 15997,
+      "audioMs": 15995,
       "driftMs": 2
     }
   ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 125,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.1,
+    "medianVoiceLufs": -16.3
+  },
   "issues": []
 }

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:53:04.540Z",
+  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+  "promptSha256": "1fdcb3ed27c9ceee5378adb846bd2e8fbd36a277f448b5028e9896871746f053",
+  "clipSha256": "02f01b4f2510c85df52a05123fb6af0c4ea1a53ba5fdb5acd04af7c465f23b91",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Deux options complètent le fonctionnement du créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Deux options complètent le fonctionnement du créneau",
+        "visibleSeconds": 1,
+        "visible": "Affichage du formulaire avec les deux cases à cocher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "La liste d’attente recueille les volontaires",
+        "visibleSeconds": 6,
+        "visible": "Coche de la case Activer la liste d'attente",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Le mode Sur validation transforme chaque inscription",
+        "visibleSeconds": 8.5,
+        "visible": "Coche de la case Sur validation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:06 : Léger retard d'activation de la case liste d'attente par rapport à sa mention vocale"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

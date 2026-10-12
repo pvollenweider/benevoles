@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:15.831Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "0ed6995f37e8e1eee08d6321c62c0d7cdc33e15efe9922cc372082b3746a728a",
+  "clipSha256": "8ddee7da13ef80a79cf0c5750500fdc59fc159a9e68024cfa2690c612f8502ab",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Commencez par donner le titre de la nouvelle édition",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "donner le titre de la nouvelle édition",
+        "visibleSeconds": 2.5,
+        "visible": "Le champ 'Titre de la copie' est modifié pour saisir 'Fête du village de Montvert 2027'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "et son premier jour.",
+        "visibleSeconds": 7,
+        "visible": "Le champ 'Premier jour de la copie' est sélectionné mais aucune date n'est saisie",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+        "visibleSeconds": 9.5,
+        "visible": "Le texte d'information sous le champ reste générique ('sont décalées d'autant de jours') sans décompte précis de jours affiché",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:02, une valeur '17. 10. 2026' apparaît brièvement dans le champ du premier jour avant de disparaître à 00:03.",
+      "La date du premier jour n'est jamais renseignée dans le champ dédié malgré son annonce orale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, bien posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

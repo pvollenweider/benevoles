@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:21.934Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "b264f243f94e3b4da1f7eefdb3d0ef26ceb3ad07845b6c1883f22f4aa82814b9",
+  "clipSha256": "feaa8e5ca6a72cb11aab1bdc2f4a3f575f96eb74da7a8ae2ff5528643715931b",
+  "scene": "resize",
+  "review": {
+    "heardOpening": "Pour corriger une durée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "attrape le bord droit du créneau et déplace-le",
+        "visibleSeconds": 3.5,
+        "visible": "L'action de saisir le bord droit et d'étirer le créneau n'est pas montrée ; la fenêtre des actions rapides s'affiche directement avec le créneau déjà agrandi",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes",
+        "visibleSeconds": 4,
+        "visible": "Aucun allongement par paliers n'est visible à l'écran, le créneau est déjà modifié",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Rouvre ensuite les actions rapides : l’heure de fin a bien changé",
+        "visibleSeconds": 9.2,
+        "visible": "Le panneau des actions rapides est déjà affiché depuis 00:03 avec l'heure de fin à 07:45",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Vérifie-la avant de fermer",
+        "visibleSeconds": 13.5,
+        "visible": "Le panneau des actions rapides se ferme",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:03 : La manipulation pour étirer le créneau au curseur n'est pas montrée, le pop-up s'ouvre directement avec la durée déjà modifiée.",
+      "00:09 : La voix demande de rouvrir les actions rapides alors que la fenêtre était déjà ouverte depuis 00:03."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, calme et claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

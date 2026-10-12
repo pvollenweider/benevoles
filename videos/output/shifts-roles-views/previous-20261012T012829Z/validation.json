@@ -1,0 +1,58 @@
+{
+  "id": "SHIFTS_ROLES_VIEWS",
+  "slug": "shifts-roles-views",
+  "validatedAt": "2026-10-12T00:14:37.001Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 86600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14254,
+      "audioMs": 14252,
+      "driftMs": 2
+    },
+    {
+      "id": "timeline",
+      "visualMs": 14568,
+      "audioMs": 14567,
+      "driftMs": 1
+    },
+    {
+      "id": "list",
+      "visualMs": 11602,
+      "audioMs": 11601,
+      "driftMs": 1
+    },
+    {
+      "id": "roles",
+      "visualMs": 15138,
+      "audioMs": 15135,
+      "driftMs": 3
+    },
+    {
+      "id": "colors",
+      "visualMs": 13166,
+      "audioMs": 13165,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 13282,
+      "audioMs": 13279,
+      "driftMs": 3
+    }
+  ],
+  "anchorsChecked": 6,
+  "music": {
+    "voicedWindows": 81,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13,
+    "largestGapLu": 18.4,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

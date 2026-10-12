@@ -1,46 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:00:27.566Z",
-  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
-  "promptSha256": "db0843f53a17d34a8e5d49d3dfe044b0b1d88456814df485839f0b153ddc0a22",
-  "clipSha256": "d948f8188cba27b4c637d270b4b430ede9eb4a71b1b7e4a367d6c24a8a9b0c06",
+  "reviewedAt": "2026-10-12T01:47:16.516Z",
+  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "promptSha256": "6ee1cac52b8af4694159db54f248121cc01d7cc66dc7a41145a2eeed556171f9",
+  "clipSha256": "3e186af87ec97a91d0d630e836ac5f7c8fa456bb1cf3990a6926857f70a328da",
   "scene": "copy",
   "review": {
-    "heardOpening": "Copier reprend le poste",
+    "heardOpening": "Dupliquer reprend le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Copier reprend le poste, la durée, la capacité",
-        "visibleSeconds": 0.5,
-        "visible": "Menu contextuel affichant l'option Dupliquer",
+        "spokenSeconds": 1,
+        "spoken": "Dupliquer reprend le poste, la durée, la capacité",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur l'action Dupliquer et création du nouveau créneau consécutif",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "place la nouvelle plage à l’horaire choisi",
-        "visibleSeconds": 5.2,
-        "visible": "Clic sur Dupliquer et notification de succès, sans sélection d'horaire",
-        "sync": "missing",
-        "severity": "minor"
+        "spokenSeconds": 9.1,
+        "spoken": "Ouvrez cette copie : elle est indépendante.",
+        "visibleSeconds": 9.7,
+        "visible": "Ouverture du volet d'édition du créneau dupliqué",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "recevoir un autre libellé ou d’autres consignes",
-        "visibleSeconds": 9.5,
-        "visible": "Écran figé, aucune édition de libellé ou de consignes montrée",
-        "sync": "missing",
-        "severity": "minor"
+        "spokenSeconds": 12.3,
+        "spoken": "Donne-lui le libellé Relève suivante",
+        "visibleSeconds": 13.5,
+        "visible": "Saisie de « Relève suivante » dans le champ Libellé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.6,
+        "spoken": "on la décale de quinze minutes avec le bouton Décaler",
+        "visibleSeconds": 17.8,
+        "visible": "Clic sur Décaler et mise à jour des horaires (08:00 - 09:30)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.4,
+        "spoken": "Fermer et enregistrer conserve le nouveau libellé.",
+        "visibleSeconds": 20.8,
+        "visible": "Fermeture du volet et affichage du créneau avec le nouveau libellé",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "Divergence lexicale : la voix mentionne « Copier » alors que le bouton indique « Dupliquer » (00:01)",
-      "L'ajustement de l'horaire et l'édition des consignes ne sont pas illustrés à l'écran (00:06 - 00:13)"
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide, claire et posée."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

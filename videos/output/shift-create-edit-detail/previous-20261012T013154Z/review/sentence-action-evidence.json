@@ -1,0 +1,1061 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1109,
+    "endMs": 16261,
+    "sentences": [
+      {
+        "text": "Un créneau transforme un poste en besoin concret.",
+        "startMs": 0,
+        "endMs": 3100,
+        "method": "silence",
+        "absoluteStartMs": 1109
+      },
+      {
+        "text": "Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques.",
+        "startMs": 3316,
+        "endMs": 9972,
+        "method": "silence",
+        "absoluteStartMs": 4425
+      },
+      {
+        "text": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
+        "startMs": 10306,
+        "endMs": 14962,
+        "method": "silence",
+        "absoluteStartMs": 11415
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "identity",
+    "startMs": 18521,
+    "endMs": 33867,
+    "sentences": [
+      {
+        "text": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis.",
+        "startMs": 189,
+        "endMs": 4602,
+        "method": "silence",
+        "absoluteStartMs": 18710
+      },
+      {
+        "text": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "startMs": 4898,
+        "endMs": 9526,
+        "method": "silence",
+        "absoluteStartMs": 23419
+      },
+      {
+        "text": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "startMs": 9867,
+        "endMs": 15196,
+        "method": "silence",
+        "absoluteStartMs": 28388
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "identity",
+        "phrase": "La date, l’heure de début",
+        "startMs": 4898,
+        "endMs": 9526,
+        "cueMs": 23421
+      },
+      {
+        "segmentId": "identity",
+        "phrase": "La capacité indique combien de",
+        "startMs": 9867,
+        "endMs": 15196,
+        "cueMs": 29640
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 19028
+      },
+      {
+        "kind": "click",
+        "atMs": 20277
+      },
+      {
+        "kind": "key",
+        "atMs": 20585
+      },
+      {
+        "kind": "key",
+        "atMs": 20586
+      },
+      {
+        "kind": "key",
+        "atMs": 20589
+      },
+      {
+        "kind": "key",
+        "atMs": 20592
+      },
+      {
+        "kind": "key",
+        "atMs": 20693
+      },
+      {
+        "kind": "key",
+        "atMs": 20792
+      },
+      {
+        "kind": "key",
+        "atMs": 20890
+      },
+      {
+        "kind": "key",
+        "atMs": 20990
+      },
+      {
+        "kind": "key",
+        "atMs": 21088
+      },
+      {
+        "kind": "key",
+        "atMs": 21188
+      },
+      {
+        "kind": "click",
+        "atMs": 23943
+      },
+      {
+        "kind": "key",
+        "atMs": 24250
+      },
+      {
+        "kind": "key",
+        "atMs": 24250
+      },
+      {
+        "kind": "key",
+        "atMs": 24253
+      },
+      {
+        "kind": "key",
+        "atMs": 24255
+      },
+      {
+        "kind": "key",
+        "atMs": 24353
+      },
+      {
+        "kind": "key",
+        "atMs": 24453
+      },
+      {
+        "kind": "key",
+        "atMs": 24551
+      },
+      {
+        "kind": "key",
+        "atMs": 24655
+      },
+      {
+        "kind": "key",
+        "atMs": 24754
+      },
+      {
+        "kind": "key",
+        "atMs": 24852
+      },
+      {
+        "kind": "key",
+        "atMs": 24955
+      },
+      {
+        "kind": "key",
+        "atMs": 25053
+      },
+      {
+        "kind": "key",
+        "atMs": 25157
+      },
+      {
+        "kind": "key",
+        "atMs": 25258
+      },
+      {
+        "kind": "key",
+        "atMs": 25361
+      },
+      {
+        "kind": "key",
+        "atMs": 25464
+      },
+      {
+        "kind": "key",
+        "atMs": 25566
+      },
+      {
+        "kind": "key",
+        "atMs": 25667
+      },
+      {
+        "kind": "key",
+        "atMs": 25766
+      },
+      {
+        "kind": "key",
+        "atMs": 25865
+      },
+      {
+        "kind": "key",
+        "atMs": 25964
+      },
+      {
+        "kind": "key",
+        "atMs": 26062
+      },
+      {
+        "kind": "key",
+        "atMs": 26163
+      },
+      {
+        "kind": "click",
+        "atMs": 27143
+      },
+      {
+        "kind": "click",
+        "atMs": 28478
+      },
+      {
+        "kind": "click",
+        "atMs": 30144
+      },
+      {
+        "kind": "click",
+        "atMs": 31811
+      },
+      {
+        "kind": "key",
+        "atMs": 32118
+      },
+      {
+        "kind": "key",
+        "atMs": 32118
+      },
+      {
+        "kind": "key",
+        "atMs": 32121
+      },
+      {
+        "kind": "key",
+        "atMs": 32125
+      }
+    ]
+  },
+  {
+    "chapter": "availability",
+    "startMs": 36126,
+    "endMs": 50283,
+    "sentences": [
+      {
+        "text": "Deux options complètent le fonctionnement du créneau.",
+        "startMs": 197,
+        "endMs": 3650,
+        "method": "silence",
+        "absoluteStartMs": 36323
+      },
+      {
+        "text": "La liste d’attente recueille les volontaires quand toutes les places sont prises.",
+        "startMs": 3808,
+        "endMs": 8426,
+        "method": "silence",
+        "absoluteStartMs": 39934
+      },
+      {
+        "text": "Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.",
+        "startMs": 8569,
+        "endMs": 13983,
+        "method": "silence",
+        "absoluteStartMs": 44695
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "availability",
+        "phrase": "La liste d’attente recueille les",
+        "startMs": 3808,
+        "endMs": 8426,
+        "cueMs": 39934
+      },
+      {
+        "segmentId": "availability",
+        "phrase": "Le mode Sur validation transforme",
+        "startMs": 8569,
+        "endMs": 13983,
+        "cueMs": 44697
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 40426
+      },
+      {
+        "kind": "click",
+        "atMs": 45193
+      }
+    ]
+  },
+  {
+    "chapter": "practical",
+    "startMs": 52542,
+    "endMs": 79762,
+    "sentences": [
+      {
+        "text": "Renseignons d'abord le lieu de rendez-vous :",
+        "startMs": 293,
+        "endMs": 3344,
+        "method": "silence",
+        "absoluteStartMs": 52835
+      },
+      {
+        "text": "entrée artistes, portail nord.",
+        "startMs": 3529,
+        "endMs": 4649,
+        "method": "silence",
+        "absoluteStartMs": 56071
+      },
+      {
+        "text": "Ajoutons une consigne :",
+        "startMs": 5248,
+        "endMs": 6139,
+        "method": "silence",
+        "absoluteStartMs": 57790
+      },
+      {
+        "text": "venir dix minutes avant avec des chaussures fermées.",
+        "startMs": 6694,
+        "endMs": 9120,
+        "method": "silence",
+        "absoluteStartMs": 59236
+      },
+      {
+        "text": "Le contact opérationnel indique qui appeler sur place :",
+        "startMs": 9694,
+        "endMs": 12978,
+        "method": "silence",
+        "absoluteStartMs": 62236
+      },
+      {
+        "text": "ici Léa, accueil artistes, et son téléphone de démonstration.",
+        "startMs": 13340,
+        "endMs": 15875,
+        "method": "silence",
+        "absoluteStartMs": 65882
+      },
+      {
+        "text": "Les coordonnées GPS placent ce rendez-vous sur la carte.",
+        "startMs": 16134,
+        "endMs": 20831,
+        "method": "silence",
+        "absoluteStartMs": 68676
+      },
+      {
+        "text": "Si un créneau n'a pas de lieu propre, il reprend celui de l'événement.",
+        "startMs": 21006,
+        "endMs": 24317,
+        "method": "silence",
+        "absoluteStartMs": 73548
+      },
+      {
+        "text": "Ces détails seront visibles aux personnes inscrites.",
+        "startMs": 24690,
+        "endMs": 26989,
+        "method": "silence",
+        "absoluteStartMs": 77232
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "practical",
+        "phrase": "entrée artistes, portail nord.",
+        "startMs": 3529,
+        "endMs": 4649,
+        "cueMs": 56073
+      },
+      {
+        "segmentId": "practical",
+        "phrase": "Si un créneau n'a pas",
+        "startMs": 21006,
+        "endMs": 24317,
+        "cueMs": 73551
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 56591
+      },
+      {
+        "kind": "key",
+        "atMs": 56899
+      },
+      {
+        "kind": "key",
+        "atMs": 56998
+      },
+      {
+        "kind": "key",
+        "atMs": 57096
+      },
+      {
+        "kind": "key",
+        "atMs": 57196
+      },
+      {
+        "kind": "key",
+        "atMs": 57406
+      },
+      {
+        "kind": "key",
+        "atMs": 57504
+      },
+      {
+        "kind": "key",
+        "atMs": 57601
+      },
+      {
+        "kind": "key",
+        "atMs": 57702
+      },
+      {
+        "kind": "key",
+        "atMs": 57804
+      },
+      {
+        "kind": "key",
+        "atMs": 57907
+      },
+      {
+        "kind": "key",
+        "atMs": 58009
+      },
+      {
+        "kind": "key",
+        "atMs": 58112
+      },
+      {
+        "kind": "key",
+        "atMs": 58215
+      },
+      {
+        "kind": "key",
+        "atMs": 58319
+      },
+      {
+        "kind": "key",
+        "atMs": 58421
+      },
+      {
+        "kind": "key",
+        "atMs": 58520
+      },
+      {
+        "kind": "key",
+        "atMs": 58625
+      },
+      {
+        "kind": "key",
+        "atMs": 58729
+      },
+      {
+        "kind": "key",
+        "atMs": 58829
+      },
+      {
+        "kind": "key",
+        "atMs": 58934
+      },
+      {
+        "kind": "key",
+        "atMs": 59035
+      },
+      {
+        "kind": "key",
+        "atMs": 59134
+      },
+      {
+        "kind": "key",
+        "atMs": 59234
+      },
+      {
+        "kind": "key",
+        "atMs": 59332
+      },
+      {
+        "kind": "key",
+        "atMs": 59431
+      },
+      {
+        "kind": "key",
+        "atMs": 59529
+      },
+      {
+        "kind": "key",
+        "atMs": 59634
+      },
+      {
+        "kind": "key",
+        "atMs": 59734
+      },
+      {
+        "kind": "click",
+        "atMs": 60541
+      },
+      {
+        "kind": "key",
+        "atMs": 60849
+      },
+      {
+        "kind": "key",
+        "atMs": 60949
+      },
+      {
+        "kind": "key",
+        "atMs": 61047
+      },
+      {
+        "kind": "key",
+        "atMs": 61146
+      },
+      {
+        "kind": "key",
+        "atMs": 61245
+      },
+      {
+        "kind": "key",
+        "atMs": 61344
+      },
+      {
+        "kind": "key",
+        "atMs": 61443
+      },
+      {
+        "kind": "key",
+        "atMs": 61540
+      },
+      {
+        "kind": "key",
+        "atMs": 61639
+      },
+      {
+        "kind": "key",
+        "atMs": 61737
+      },
+      {
+        "kind": "key",
+        "atMs": 61835
+      },
+      {
+        "kind": "key",
+        "atMs": 61935
+      },
+      {
+        "kind": "key",
+        "atMs": 62036
+      },
+      {
+        "kind": "key",
+        "atMs": 62137
+      },
+      {
+        "kind": "key",
+        "atMs": 62240
+      },
+      {
+        "kind": "key",
+        "atMs": 62342
+      },
+      {
+        "kind": "key",
+        "atMs": 62443
+      },
+      {
+        "kind": "key",
+        "atMs": 62548
+      },
+      {
+        "kind": "key",
+        "atMs": 62649
+      },
+      {
+        "kind": "key",
+        "atMs": 62750
+      },
+      {
+        "kind": "key",
+        "atMs": 62849
+      },
+      {
+        "kind": "key",
+        "atMs": 62952
+      },
+      {
+        "kind": "key",
+        "atMs": 63053
+      },
+      {
+        "kind": "key",
+        "atMs": 63154
+      },
+      {
+        "kind": "key",
+        "atMs": 63271
+      },
+      {
+        "kind": "key",
+        "atMs": 63371
+      },
+      {
+        "kind": "key",
+        "atMs": 63476
+      },
+      {
+        "kind": "key",
+        "atMs": 63579
+      },
+      {
+        "kind": "key",
+        "atMs": 63681
+      },
+      {
+        "kind": "key",
+        "atMs": 63784
+      },
+      {
+        "kind": "key",
+        "atMs": 63884
+      },
+      {
+        "kind": "key",
+        "atMs": 63987
+      },
+      {
+        "kind": "key",
+        "atMs": 64089
+      },
+      {
+        "kind": "key",
+        "atMs": 64188
+      },
+      {
+        "kind": "key",
+        "atMs": 64290
+      },
+      {
+        "kind": "key",
+        "atMs": 64392
+      },
+      {
+        "kind": "key",
+        "atMs": 64495
+      },
+      {
+        "kind": "key",
+        "atMs": 64597
+      },
+      {
+        "kind": "key",
+        "atMs": 64697
+      },
+      {
+        "kind": "key",
+        "atMs": 64799
+      },
+      {
+        "kind": "key",
+        "atMs": 64902
+      },
+      {
+        "kind": "key",
+        "atMs": 65008
+      },
+      {
+        "kind": "key",
+        "atMs": 65108
+      },
+      {
+        "kind": "key",
+        "atMs": 65210
+      },
+      {
+        "kind": "key",
+        "atMs": 65311
+      },
+      {
+        "kind": "key",
+        "atMs": 65413
+      },
+      {
+        "kind": "key",
+        "atMs": 65515
+      },
+      {
+        "kind": "key",
+        "atMs": 65617
+      },
+      {
+        "kind": "key",
+        "atMs": 65819
+      },
+      {
+        "kind": "key",
+        "atMs": 65918
+      },
+      {
+        "kind": "key",
+        "atMs": 66019
+      },
+      {
+        "kind": "click",
+        "atMs": 66826
+      },
+      {
+        "kind": "key",
+        "atMs": 67133
+      },
+      {
+        "kind": "key",
+        "atMs": 67329
+      },
+      {
+        "kind": "key",
+        "atMs": 67427
+      },
+      {
+        "kind": "key",
+        "atMs": 67527
+      },
+      {
+        "kind": "key",
+        "atMs": 67625
+      },
+      {
+        "kind": "key",
+        "atMs": 67725
+      },
+      {
+        "kind": "key",
+        "atMs": 67829
+      },
+      {
+        "kind": "key",
+        "atMs": 67928
+      },
+      {
+        "kind": "key",
+        "atMs": 68031
+      },
+      {
+        "kind": "key",
+        "atMs": 68130
+      },
+      {
+        "kind": "key",
+        "atMs": 68228
+      },
+      {
+        "kind": "key",
+        "atMs": 68327
+      },
+      {
+        "kind": "key",
+        "atMs": 68432
+      },
+      {
+        "kind": "key",
+        "atMs": 68533
+      },
+      {
+        "kind": "key",
+        "atMs": 68637
+      },
+      {
+        "kind": "key",
+        "atMs": 68739
+      },
+      {
+        "kind": "key",
+        "atMs": 68836
+      },
+      {
+        "kind": "key",
+        "atMs": 68939
+      },
+      {
+        "kind": "key",
+        "atMs": 69042
+      },
+      {
+        "kind": "key",
+        "atMs": 69145
+      },
+      {
+        "kind": "click",
+        "atMs": 69943
+      },
+      {
+        "kind": "key",
+        "atMs": 70248
+      },
+      {
+        "kind": "key",
+        "atMs": 70348
+      },
+      {
+        "kind": "key",
+        "atMs": 70446
+      },
+      {
+        "kind": "key",
+        "atMs": 70544
+      },
+      {
+        "kind": "key",
+        "atMs": 70644
+      },
+      {
+        "kind": "key",
+        "atMs": 70742
+      },
+      {
+        "kind": "key",
+        "atMs": 70841
+      },
+      {
+        "kind": "key",
+        "atMs": 70942
+      },
+      {
+        "kind": "key",
+        "atMs": 71044
+      },
+      {
+        "kind": "key",
+        "atMs": 71144
+      },
+      {
+        "kind": "key",
+        "atMs": 71248
+      },
+      {
+        "kind": "key",
+        "atMs": 71348
+      },
+      {
+        "kind": "key",
+        "atMs": 71453
+      },
+      {
+        "kind": "click",
+        "atMs": 74058
+      },
+      {
+        "kind": "key",
+        "atMs": 74366
+      },
+      {
+        "kind": "key",
+        "atMs": 74465
+      },
+      {
+        "kind": "key",
+        "atMs": 74563
+      },
+      {
+        "kind": "key",
+        "atMs": 74662
+      },
+      {
+        "kind": "key",
+        "atMs": 74761
+      },
+      {
+        "kind": "key",
+        "atMs": 74860
+      },
+      {
+        "kind": "key",
+        "atMs": 74959
+      },
+      {
+        "kind": "key",
+        "atMs": 75062
+      },
+      {
+        "kind": "key",
+        "atMs": 75165
+      },
+      {
+        "kind": "key",
+        "atMs": 75267
+      },
+      {
+        "kind": "key",
+        "atMs": 75369
+      },
+      {
+        "kind": "key",
+        "atMs": 75469
+      },
+      {
+        "kind": "key",
+        "atMs": 75570
+      },
+      {
+        "kind": "key",
+        "atMs": 75674
+      },
+      {
+        "kind": "key",
+        "atMs": 75776
+      },
+      {
+        "kind": "key",
+        "atMs": 75879
+      },
+      {
+        "kind": "key",
+        "atMs": 75980
+      },
+      {
+        "kind": "key",
+        "atMs": 76080
+      },
+      {
+        "kind": "key",
+        "atMs": 76183
+      },
+      {
+        "kind": "key",
+        "atMs": 76286
+      },
+      {
+        "kind": "key",
+        "atMs": 76386
+      }
+    ]
+  },
+  {
+    "chapter": "save",
+    "startMs": 82027,
+    "endMs": 95745,
+    "sentences": [
+      {
+        "text": "Enregistrons le créneau et vérifions sa place dans le planning.",
+        "startMs": 241,
+        "endMs": 3887,
+        "method": "silence",
+        "absoluteStartMs": 82268
+      },
+      {
+        "text": "Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
+        "startMs": 4336,
+        "endMs": 13483,
+        "method": "silence",
+        "absoluteStartMs": 86363
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 83591
+      },
+      {
+        "kind": "click",
+        "atMs": 90725
+      },
+      {
+        "kind": "click",
+        "atMs": 91524
+      }
+    ]
+  },
+  {
+    "chapter": "change",
+    "startMs": 98003,
+    "endMs": 116197,
+    "sentences": [
+      {
+        "text": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé.",
+        "startMs": 341,
+        "endMs": 5288,
+        "method": "silence",
+        "absoluteStartMs": 98344
+      },
+      {
+        "text": "Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques.",
+        "startMs": 5806,
+        "endMs": 9996,
+        "method": "silence",
+        "absoluteStartMs": 103809
+      },
+      {
+        "text": "Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
+        "startMs": 10502,
+        "endMs": 17865,
+        "method": "silence",
+        "absoluteStartMs": 108505
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "change",
+        "phrase": "Rouvrir l’éditeur permet de corriger",
+        "startMs": 5806,
+        "endMs": 9996,
+        "cueMs": 103811
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 99639
+      },
+      {
+        "kind": "click",
+        "atMs": 104289
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 118458,
+    "endMs": 134163,
+    "sentences": [
+      {
+        "text": "Un bon créneau reste court à lire mais complet pour agir :",
+        "startMs": 327,
+        "endMs": 4352,
+        "method": "silence",
+        "absoluteStartMs": 118785
+      },
+      {
+        "text": "mission, horaire, capacité, lieu et consigne.",
+        "startMs": 4902,
+        "endMs": 7499,
+        "method": "silence",
+        "absoluteStartMs": 123360
+      },
+      {
+        "text": "Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.",
+        "startMs": 8121,
+        "endMs": 15493,
+        "method": "silence",
+        "absoluteStartMs": 126579
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

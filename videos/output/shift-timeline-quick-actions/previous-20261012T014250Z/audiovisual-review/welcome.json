@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:16.975Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "0f464da687e8a1d7e44863c56c7ef119b4b5dd65553db9652b8aeffc73e36e63",
+  "clipSha256": "b8b20e2e0914a94dac2a2e3055f5ac8127c40fb6ff1b3f8c158cac867b955616",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "La Frise n'est pas seulement une vue de lecture",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La Frise n’est pas seulement une vue de lecture",
+        "visibleSeconds": 0.5,
+        "visible": "Titre d'introduction 'Créer, dupliquer et redimensionner depuis la Frise' affiché en superposition sur la vue Frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "construire rapidement un planning visuel",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage complet de la vue Frise avec les différents créneaux et postes planifiés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "dessiner une plage libre, ajuster sa durée",
+        "visibleSeconds": 6.3,
+        "visible": "Vue d'ensemble de la Frise chronologique du samedi 17 octobre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "dupliquer une relève et ouvrir le détail sans quitter le contexte de la journée",
+        "visibleSeconds": 9.2,
+        "visible": "Écran stable de la journée sur la Frise présentant les créneaux existants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et rythmée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

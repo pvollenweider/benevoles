@@ -1,0 +1,298 @@
+{
+  "video": "org-team-permissions",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/org-team-permissions.mp4",
+  "sourceSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-06T03:04:58.108Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.03997601439136518,
+      "seconds": 1.726,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.87825,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 7.88005,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 10.1314,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 13.88365,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9800119928043174,
+      "seconds": 15.835,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.025737817433081674,
+      "seconds": 18.897,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-3.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.25,
+      "seconds": 24.125,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-25.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.45,
+      "seconds": 28.7874,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-45.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.6,
+      "seconds": 32.2842,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-60.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.85,
+      "seconds": 38.112199999999994,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-85.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.9871310912834592,
+      "seconds": 41.309,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/roles-end.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.0335946248600224,
+      "seconds": 43.809,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-3.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.25,
+      "seconds": 47.674,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-25.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.45,
+      "seconds": 51.246,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-45.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.6,
+      "seconds": 53.925,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-60.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.85,
+      "seconds": 58.39,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-85.png"
+    },
+    {
+      "scene": "invite",
+      "fraction": 0.9832026875699889,
+      "seconds": 60.769,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-end.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.04467277194549922,
+      "seconds": 62.123,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-4.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.25,
+      "seconds": 64.88075,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-25.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.45,
+      "seconds": 67.56694999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-45.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.6,
+      "seconds": 69.58160000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-60.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.85,
+      "seconds": 72.93935,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-85.png"
+    },
+    {
+      "scene": "invite-result",
+      "fraction": 0.9776636140272504,
+      "seconds": 74.654,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/invite-result-end.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.034266133637921185,
+      "seconds": 77.722,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-3.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.25,
+      "seconds": 81.4995,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-25.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.45,
+      "seconds": 85.0015,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-45.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.6,
+      "seconds": 87.628,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-60.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.85,
+      "seconds": 92.0055,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-85.png"
+    },
+    {
+      "scene": "change-role",
+      "fraction": 0.9828669331810395,
+      "seconds": 94.332,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/change-role-end.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.03654748126941585,
+      "seconds": 95.684,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-4.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.25,
+      "seconds": 99.18825,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-25.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.45,
+      "seconds": 102.47165,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-45.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.6,
+      "seconds": 104.9342,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-60.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.85,
+      "seconds": 109.03845,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-85.png"
+    },
+    {
+      "scene": "organizer-view",
+      "fraction": 0.9817262593652921,
+      "seconds": 111.201,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/organizer-view-end.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.029245466952622343,
+      "seconds": 112.554,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-3.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.25,
+      "seconds": 117.083,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-25.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.45,
+      "seconds": 121.1862,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-45.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.6,
+      "seconds": 124.26360000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-60.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.85,
+      "seconds": 129.39260000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-85.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.9853772665236888,
+      "seconds": 132.17,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/limits-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.05245213742460005,
+      "seconds": 133.522,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-5.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 135.78175,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 138.06955,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 139.78539999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 142.64515,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9737739312877,
+      "seconds": 144.061,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/org-team-permissions/review-frames/result-end.png"
+    }
+  ]
+}

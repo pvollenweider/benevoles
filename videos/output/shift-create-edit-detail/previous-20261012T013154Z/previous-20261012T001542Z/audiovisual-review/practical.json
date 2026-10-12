@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:53:20.995Z",
+  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+  "promptSha256": "9d1a465014064894ebc50926d3f273c0cc22a85c5ef54112b501c1d99136e22b",
+  "clipSha256": "77629b9c74824b0d8f03e0612d93da78a8ac3902fd377ae325e50482ba39d751",
+  "scene": "practical",
+  "review": {
+    "heardOpening": "Les informations pratiques peuvent préciser",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "un point de rendez-vous",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie du point de rendez-vous 'Entrée artistes, portail Nord'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "une consigne",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du champ consigne pratique",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "un contact opérationnel",
+        "visibleSeconds": 5.5,
+        "visible": "Champs personne de contact et téléphone complétés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "une position sur la carte",
+        "visibleSeconds": 2.5,
+        "visible": "Coordonnées GPS et lien carte affichés",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:04 - Remplissage du champ consigne affiché après l'évocation orale des contacts."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

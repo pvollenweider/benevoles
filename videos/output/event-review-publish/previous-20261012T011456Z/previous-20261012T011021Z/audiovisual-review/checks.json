@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:01:13.458Z",
+  "videoSha256": "30f550e7ef14dc36432f27fd76b7df4e67d434cf52bb7b8eb59290e0bed30eb6",
+  "promptSha256": "8d457ae433ba7dcc4f5f35df96548f60adc47f5d8928d129c4436f23ecb3c601",
+  "clipSha256": "49934598e55c5e980a6a732da4386f4be203cb6cef7c7b54b62851c400bca4c3",
+  "scene": "checks",
+  "review": {
+    "heardOpening": "Les lignes marquées comme faites",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les lignes marquées comme faites couvrent le titre, les dates et le planning",
+        "visibleSeconds": 0,
+        "visible": "Page de vérification affichant les lignes validées avec une coche verte (dates, créneaux)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif",
+        "visibleSeconds": 5.5,
+        "visible": "Écran stable de vérification listant les points de contrôle et avertissements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur",
+        "visibleSeconds": 11.2,
+        "visible": "Lignes 'Lieu', 'Instructions publiques renseignées' et '2 responsables de secteur' visibles dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et professionnelle, parfaitement intelligible sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

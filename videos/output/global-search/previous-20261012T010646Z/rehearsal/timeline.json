@@ -1,0 +1,337 @@
+{
+  "slug": "global-search",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-11T23:51:54.532Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-recherche",
+    "scenario": "GLOBAL_SEARCH",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 3568
+    },
+    {
+      "kind": "key",
+      "atMs": 3876
+    },
+    {
+      "kind": "key",
+      "atMs": 3879
+    },
+    {
+      "kind": "key",
+      "atMs": 3880
+    },
+    {
+      "kind": "key",
+      "atMs": 3887
+    },
+    {
+      "kind": "click",
+      "atMs": 6516
+    },
+    {
+      "kind": "click",
+      "atMs": 7334
+    },
+    {
+      "kind": "key",
+      "atMs": 7641
+    },
+    {
+      "kind": "key",
+      "atMs": 7833
+    },
+    {
+      "kind": "key",
+      "atMs": 7932
+    },
+    {
+      "kind": "key",
+      "atMs": 8030
+    },
+    {
+      "kind": "key",
+      "atMs": 8128
+    },
+    {
+      "kind": "key",
+      "atMs": 8230
+    },
+    {
+      "kind": "key",
+      "atMs": 8335
+    },
+    {
+      "kind": "key",
+      "atMs": 8433
+    },
+    {
+      "kind": "key",
+      "atMs": 8725
+    },
+    {
+      "kind": "click",
+      "atMs": 9320
+    },
+    {
+      "kind": "click",
+      "atMs": 11997
+    },
+    {
+      "kind": "key",
+      "atMs": 14453
+    },
+    {
+      "kind": "click",
+      "atMs": 14965
+    },
+    {
+      "kind": "key",
+      "atMs": 15272
+    },
+    {
+      "kind": "key",
+      "atMs": 15371
+    },
+    {
+      "kind": "key",
+      "atMs": 15470
+    },
+    {
+      "kind": "key",
+      "atMs": 15568
+    },
+    {
+      "kind": "key",
+      "atMs": 15667
+    },
+    {
+      "kind": "key",
+      "atMs": 15765
+    },
+    {
+      "kind": "key",
+      "atMs": 15864
+    },
+    {
+      "kind": "key",
+      "atMs": 15961
+    },
+    {
+      "kind": "key",
+      "atMs": 16060
+    },
+    {
+      "kind": "key",
+      "atMs": 16163
+    },
+    {
+      "kind": "key",
+      "atMs": 16265
+    },
+    {
+      "kind": "key",
+      "atMs": 16368
+    },
+    {
+      "kind": "key",
+      "atMs": 16470
+    },
+    {
+      "kind": "key",
+      "atMs": 16572
+    },
+    {
+      "kind": "key",
+      "atMs": 16671
+    },
+    {
+      "kind": "key",
+      "atMs": 16959
+    },
+    {
+      "kind": "click",
+      "atMs": 17549
+    },
+    {
+      "kind": "key",
+      "atMs": 20215
+    },
+    {
+      "kind": "click",
+      "atMs": 20731
+    },
+    {
+      "kind": "key",
+      "atMs": 21038
+    },
+    {
+      "kind": "key",
+      "atMs": 21233
+    },
+    {
+      "kind": "key",
+      "atMs": 21331
+    },
+    {
+      "kind": "key",
+      "atMs": 21430
+    },
+    {
+      "kind": "key",
+      "atMs": 21527
+    },
+    {
+      "kind": "key",
+      "atMs": 21624
+    },
+    {
+      "kind": "key",
+      "atMs": 21723
+    },
+    {
+      "kind": "key",
+      "atMs": 21823
+    },
+    {
+      "kind": "key",
+      "atMs": 22111
+    },
+    {
+      "kind": "key",
+      "atMs": 22181
+    },
+    {
+      "kind": "click",
+      "atMs": 22697
+    },
+    {
+      "kind": "key",
+      "atMs": 23004
+    },
+    {
+      "kind": "key",
+      "atMs": 23102
+    },
+    {
+      "kind": "key",
+      "atMs": 23200
+    },
+    {
+      "kind": "key",
+      "atMs": 23483
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 2624
+    },
+    {
+      "id": "open",
+      "startMs": 3075,
+      "endMs": 3888
+    },
+    {
+      "id": "person",
+      "startMs": 6050,
+      "endMs": 12828
+    },
+    {
+      "id": "shift",
+      "startMs": 13281,
+      "endMs": 18629
+    },
+    {
+      "id": "limits",
+      "startMs": 19080,
+      "endMs": 23587
+    },
+    {
+      "id": "result",
+      "startMs": 24040,
+      "endMs": 26408
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "open",
+      "phrase": "le champ s’ouvre et reçoit",
+      "startMs": 7545,
+      "endMs": 11652,
+      "cueMs": 3879
+    },
+    {
+      "segmentId": "person",
+      "phrase": "Ouvrons d’abord sa fiche, puis",
+      "startMs": 6598,
+      "endMs": 10080,
+      "cueMs": 8802
+    },
+    {
+      "segmentId": "person",
+      "phrase": "Le badge Liste d’attente distingue",
+      "startMs": 13653,
+      "endMs": 20068,
+      "cueMs": 10421
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "Ajoutons village pour ne garder",
+      "startMs": 9750,
+      "endMs": 16875,
+      "cueMs": 14448
+    },
+    {
+      "segmentId": "shift",
+      "phrase": "la liste des inscriptions est",
+      "startMs": 16875,
+      "endMs": 21000,
+      "cueMs": 17029
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Ajoutez un prénom pour préciser",
+      "startMs": 12780,
+      "endMs": 16488,
+      "cueMs": 20212
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Les accents et la casse",
+      "startMs": 16488,
+      "endMs": 20683,
+      "cueMs": 22177
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 3075,
+      "endMs": 3888,
+      "x": 640,
+      "y": 0,
+      "width": 640,
+      "height": 400
+    }
+  ]
+}

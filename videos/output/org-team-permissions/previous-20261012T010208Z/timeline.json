@@ -1,0 +1,178 @@
+{
+  "slug": "org-team-permissions",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-11T23:49:08.399Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "860bf0c0049ec59c16eb44ca30f1f0bc8918ee3b",
+    "sourceTree": "b17e03762fafe0acb6c566e052eadc1817019289",
+    "productSourceSha256": "3697f9302c3a88b99fc756ade46dded9508c9e9715d6076d6278a9d67a5ab04b",
+    "buildId": "mtPclc-gCx8H2TSlgMPwq",
+    "snapshot": "/tmp/benevoles-video-production.batch8",
+    "builtAt": "2026-10-11T23:37:30.189Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-team",
+    "scenario": "ORG_TEAM_PERMISSIONS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 21009
+    },
+    {
+      "kind": "click",
+      "atMs": 39444
+    },
+    {
+      "kind": "click",
+      "atMs": 40277
+    },
+    {
+      "kind": "click",
+      "atMs": 41958
+    },
+    {
+      "kind": "click",
+      "atMs": 44959
+    },
+    {
+      "kind": "click",
+      "atMs": 50943
+    },
+    {
+      "kind": "click",
+      "atMs": 60842
+    },
+    {
+      "kind": "click",
+      "atMs": 70091
+    },
+    {
+      "kind": "click",
+      "atMs": 85600
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1136,
+      "endMs": 13917
+    },
+    {
+      "id": "roles",
+      "startMs": 16081,
+      "endMs": 36966
+    },
+    {
+      "id": "invite",
+      "startMs": 38625,
+      "endMs": 54026
+    },
+    {
+      "id": "invite-result",
+      "startMs": 54480,
+      "endMs": 65896
+    },
+    {
+      "id": "change-role",
+      "startMs": 68060,
+      "endMs": 83558
+    },
+    {
+      "id": "organizer-view",
+      "startMs": 84011,
+      "endMs": 97552
+    },
+    {
+      "id": "limits",
+      "startMs": 98005,
+      "endMs": 119760
+    },
+    {
+      "id": "result",
+      "startMs": 120226,
+      "endMs": 131721
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ici, trois personnes sont déjà",
+      "startMs": 5867,
+      "endMs": 7396,
+      "cueMs": 7004
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "L’organisateur prépare les événements, les",
+      "startMs": 4432,
+      "endMs": 10699,
+      "cueMs": 20514
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "désigné pour un événement, il",
+      "startMs": 15972,
+      "endMs": 20575,
+      "cueMs": 32056
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Pour inviter Léa, ouvrez le",
+      "startMs": 315,
+      "endMs": 5112,
+      "cueMs": 38942
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Prenons Organisateur",
+      "startMs": 5867,
+      "endMs": 6944,
+      "cueMs": 44496
+    },
+    {
+      "segmentId": "invite",
+      "phrase": "Cliquez sur Envoyer l’invitation ",
+      "startMs": 11848,
+      "endMs": 13249,
+      "cueMs": 50474
+    },
+    {
+      "segmentId": "invite-result",
+      "phrase": "on peut aussi copier ce",
+      "startMs": 5896,
+      "endMs": 8109,
+      "cueMs": 60379
+    },
+    {
+      "segmentId": "invite-result",
+      "phrase": "Son accès ne devient actif",
+      "startMs": 8758,
+      "endMs": 11127,
+      "cueMs": 63241
+    },
+    {
+      "segmentId": "change-role",
+      "phrase": "On choisit d’abord Propriétaire dans",
+      "startMs": 1536,
+      "endMs": 4649,
+      "cueMs": 69598
+    },
+    {
+      "segmentId": "change-role",
+      "phrase": "On choisit d’abord Propriétaire dans",
+      "startMs": 1536,
+      "endMs": 4649,
+      "cueMs": 69606
+    }
+  ]
+}

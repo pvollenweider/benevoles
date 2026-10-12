@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "SHIFT_WAITLIST_OFFER",
+  "status": "NOT READY",
+  "duration": 107.16,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 89,
+    "musicOnlyWindows": 7,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "42 images finales et preuves62.67/66.11/77.66/81 revues. Voix Accepter/Refuser vs UI Prendre la place/Refuser la place ; focus acceptation pendant phrase Refuser ; administration annoncée77.66 mais aide bénévole encore81s (AV confirme). Offre réelle après désinscription, positions et expiration mardi13octobre françaises ; aucun bug de disposition/overlay/adresse interdite. Validation+ASR final+VTT+effets+musique du rendu initial passent. Après correction du transcript, validate refuse justement ancienne empreinte : narration à régénérer lors du prochain rendu.",
+  "sourceChanges": "Manifest et script : noms exacts des actions et suivi réel de l’offre, sans promettre une expiration simulée. record.ts : offre mise à vue, focus des actions et navigation admin ancrés. Audio réutilisé pour cette prise ; transcript corrigé ensuite, aucune régénération ni reprise après revue.",
+  "report": "videos/output/shift-waitlist-offer/review-report.txt"
+}

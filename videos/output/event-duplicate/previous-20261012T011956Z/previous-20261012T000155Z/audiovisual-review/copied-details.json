@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:50:13.464Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "23ba605d3b8fc390aef5116eebaa94c35221ad68152edeffa3cdd2f6c3b3e5f4",
+  "clipSha256": "987dea315f0a6e1a4c98fd9bd57fa8201727e25c4666c1fed5937dfdb7bef758",
+  "scene": "copied-details",
+  "review": {
+    "heardOpening": "Ouvrons le planning de la nouvelle édition",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons le planning de la nouvelle édition",
+        "visibleSeconds": 0,
+        "visible": "Page des créneaux de l'édition 2027 déjà affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "les créneaux repartent sans inscription",
+        "visibleSeconds": 4.5,
+        "visible": "Planning avec créneaux et jauges d'inscriptions à zéro",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "ouvrons leur liste dans cette nouvelle édition",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la page des pages personnalisées",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:11 - Changement vers la page des pages personnalisées avant l'invitation vocale à l'ouvrir prononcée à 00:14"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, rythme fluide et posé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

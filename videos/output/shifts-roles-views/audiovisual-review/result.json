@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:19:50.412Z",
-  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
-  "promptSha256": "79cf53c74bb3bd7967a7ac618d962a104ba83a566f483a86993352e7c49befa2",
-  "clipSha256": "74efc47f4fe762f70e79c356aa4fdfc56d73f380066f19abcd635bbc53ad6fff",
+  "reviewedAt": "2026-10-12T01:31:33.359Z",
+  "videoSha256": "2ec0d4af9534329138b7df74e4bedf68e0a70479a91094dc4aa5a752b6987afc",
+  "promptSha256": "e60747203f19959590a0c51a38301df252b8cfc1e34f53d9b6364234d045a1bc",
+  "clipSha256": "5e69519f2235595f64d9cdf799c0a14da9db520494f20b0616a93a6625984554",
   "scene": "result",
   "review": {
-    "heardOpening": "Utilisez la Frise pour construire",
+    "heardOpening": "Utilisez la frise pour construire",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
-        "spoken": "Utilisez la Frise pour construire et équilibrer la journée",
+        "spoken": "Utilisez la frise pour construire et équilibrer la journée",
         "visibleSeconds": 1,
-        "visible": "Affichage de la vue Frise",
+        "visible": "Affichage de la vue Frise avec les blocs horaires colorés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "puis la Liste pour contrôler le détail",
+        "spokenSeconds": 3.7,
+        "spoken": "puis la liste pour contrôler le détail",
         "visibleSeconds": 5.5,
-        "visible": "Basculement vers la vue Liste",
+        "visible": "Bascule sur l'onglet Liste affichant les détails des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "le planning reste compréhensible même lorsqu’il couvre plusieurs jours",
-        "visibleSeconds": 10.5,
-        "visible": "Retour à la vue Frise",
+        "spokenSeconds": 8,
+        "spoken": "des couleurs stables, le planning reste compréhensible",
+        "visibleSeconds": 9.5,
+        "visible": "Retour à la vue Frise montrant l'organisation globale et les couleurs des postes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée et claire, ton pédagogique régulier."
+      "observation": "Voix off fluide, claire et bien articulée, parfaitement en rythme avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

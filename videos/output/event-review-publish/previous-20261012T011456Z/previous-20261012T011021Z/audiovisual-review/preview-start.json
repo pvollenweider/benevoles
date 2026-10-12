@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:01:10.986Z",
+  "videoSha256": "30f550e7ef14dc36432f27fd76b7df4e67d434cf52bb7b8eb59290e0bed30eb6",
+  "promptSha256": "b7db8747e50e80d36d5c635e2191c990aee7447c5a76951f3f80e756f2fa98da",
+  "clipSha256": "09b9d61c3a399d722c7e8e809e49f8a94d34a41aa82bcae78ceb065068bbcaf4",
+  "scene": "preview-start",
+  "review": {
+    "heardOpening": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription",
+        "visibleSeconds": 0.5,
+        "visible": "Clic sur le lien de prévisualisation et affichage de la page d'aperçu bénévole",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "On vérifie d’abord l’en-tête, le lieu, les instructions",
+        "visibleSeconds": 6.4,
+        "visible": "En-tête « Fête du village de Montvert », mention du lieu et message d'instructions visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "le programme et les créneaux",
+        "visibleSeconds": 10.6,
+        "visible": "Frise horaire des créneaux de bénévolat et encadré récapitulatif du programme affichés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et fluide, synchronisée avec l'affichage de la page de prévisualisation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

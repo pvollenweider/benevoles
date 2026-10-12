@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:52:41.027Z",
-  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
-  "promptSha256": "f90ed495315b1f7b8a8812115fa62fd8b09708c4c037db7f04c252a32213ddc4",
-  "clipSha256": "ba2abd41acedb70aec010d38eedfb976e7d29b640176c44f95cb59a001fab708",
+  "reviewedAt": "2026-10-12T01:36:09.998Z",
+  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "promptSha256": "de7aa6d347bd51845521732da68d915ead2fd994da8f8a7493ac25ea1751f589",
+  "clipSha256": "e633b2366755ade62649059b30646f04fa7c34180eac2b3e37e626d698347079",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un créneau transforme un poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Un créneau transforme un poste en besoin concret",
+        "spokenSeconds": 0.6,
+        "spoken": "Un créneau transforme un poste en besoin concret.",
         "visibleSeconds": 0,
-        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en superposition",
+        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en superposition sur la page de gestion des créneaux.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
-        "spoken": "Il dit quelle mission doit être assurée",
-        "visibleSeconds": 2.5,
-        "visible": "Disparition de l'encart et affichage de la vue planning des créneaux",
+        "spokenSeconds": 3.4,
+        "spoken": "Il dit quelle mission doit être assurée, quand, par combien de personnes",
+        "visibleSeconds": 3.4,
+        "visible": "Affichage de la frise des créneaux avec les missions, plages horaires et jauges de bénévoles.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Prenons le temps de parcourir chaque champ",
-        "visibleSeconds": 9.5,
-        "visible": "Écran de planification général visible, annonce introductive pour la suite",
+        "spokenSeconds": 10.9,
+        "spoken": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
+        "visibleSeconds": 11,
+        "visible": "Vue d'ensemble stable de la frise des créneaux en attendant le début du parcours détaillé.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide, claire et bien articulée."
+      "observation": "Voix féminine naturelle, claire, posée et de bonne qualité audio."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

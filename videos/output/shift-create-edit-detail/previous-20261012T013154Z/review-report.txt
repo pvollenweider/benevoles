@@ -1,0 +1,19 @@
+STATUS: NOT READY
+{
+  "id": "SHIFT_CREATE_EDIT_DETAIL",
+  "status": "NOT READY",
+  "duration": 135.8,
+  "buildId": "mtPclc-gCx8H2TSlgMPwq",
+  "music": {
+    "voicedWindows": 114,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.3,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "42 images finales et preuves23.42/28.39/68.68/86.36 revues. Libellé saisi pendant phrase date ; capacité31.81 vs28.39 ; GPS74.06 vs68.68. Créneau18h hors portion Frise visible après sauvegarde86.36 (source défile désormais vers sa barre). Informations persistées et éditeur réellement rouvert ; labels actuels, dates françaises/aucune adresse interdite/overlay ; pas de bug de disposition produit. Validation, ASR final,VTT,effets,musique passent. AV signale une variation subjective de timbre dans result à10s ; consignée, non utilisée comme motif objectif de refus.",
+  "sourceChanges": "record.ts : sélecteurs Modifier précisés avant première capture ; identité et infos pratiques remplies visiblement et ancrées ; barre créée mise à vue. Script précise réouverture du créneau créé, conseil occupé générique. Audio réutilisé ; aucune reprise narrée.",
+  "report": "videos/output/shift-create-edit-detail/review-report.txt"
+}

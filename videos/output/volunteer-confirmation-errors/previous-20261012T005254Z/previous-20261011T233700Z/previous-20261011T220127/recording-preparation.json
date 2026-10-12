@@ -1,0 +1,8 @@
+{
+  "preparedAt": "2026-10-11T20:11:47.080Z",
+  "organizationId": "video-errors",
+  "eventId": "video-errors-event",
+  "removedSyntheticPeople": 4,
+  "removedSyntheticOutboxRows": 8,
+  "resetPerformed": true
+}

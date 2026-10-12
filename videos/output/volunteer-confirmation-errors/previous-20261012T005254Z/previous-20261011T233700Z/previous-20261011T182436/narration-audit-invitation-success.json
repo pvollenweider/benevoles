@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:42.246Z",
+  "revalidatedAt": "2026-10-11T17:08:42.247Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "invitation-success",
+      "audioSha256": "5ecf9bb24de9068f0ad5fd20adfa80f142b8cd871e019981ee08278b92c5cb15",
+      "recognized": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page annonce le succès mais ne montre pas son lien personnel. Saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont pré-remplies. Vérifions-les. Choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher « Accéder à mon inscription », car l'invitation apporte la preuve d'adresse. Ouvrons ce lien. Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "expected": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page annonce le succès mais ne montre pas son lien personnel : saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse. Ouvrons ce lien : Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

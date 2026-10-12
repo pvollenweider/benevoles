@@ -1,0 +1,226 @@
+{
+  "video": "shifts-roles-views",
+  "source": "/private/tmp/codex-video/videos/output/shifts-roles-views/shifts-roles-views.mp4",
+  "sourceSha256": "2ba4c374246bb9d9bed06fdbf8aa4318f53945810e45e7d938e165bed22b163b",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-12T00:14:40.248Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.04209344745334643,
+      "seconds": 1.708,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.6715,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 7.5223,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 9.6604,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 13.2239,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9789532762733267,
+      "seconds": 15.062,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.04118616144975288,
+      "seconds": 16.416,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-4.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.25,
+      "seconds": 19.458,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-25.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.45,
+      "seconds": 22.371599999999997,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-45.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.6,
+      "seconds": 24.5568,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-60.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.85,
+      "seconds": 28.1988,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-85.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.9794069192751236,
+      "seconds": 30.084,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/timeline-end.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.05171522151353215,
+      "seconds": 31.437,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-5.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.25,
+      "seconds": 33.7375,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-25.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.45,
+      "seconds": 36.057900000000004,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-45.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.6,
+      "seconds": 37.798199999999994,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-60.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.85,
+      "seconds": 40.698699999999995,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-85.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.9741423892432339,
+      "seconds": 42.139,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/list-end.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.03963535473642489,
+      "seconds": 43.492,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-4.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.25,
+      "seconds": 46.6765,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-25.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.45,
+      "seconds": 49.7041,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-45.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.6,
+      "seconds": 51.9748,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-60.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.85,
+      "seconds": 55.7593,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-85.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.9801823226317875,
+      "seconds": 57.73,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/roles-end.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.0455719276925414,
+      "seconds": 59.081,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-5.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.25,
+      "seconds": 61.7725,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-25.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.45,
+      "seconds": 64.4057,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-45.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.6,
+      "seconds": 66.3806,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-60.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.85,
+      "seconds": 69.6721,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-85.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.9772140361537293,
+      "seconds": 71.347,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/colors-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.04517391959042313,
+      "seconds": 73.476,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-5.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 76.1965,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 78.85289999999999,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 80.84519999999999,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 84.1657,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9774130402047885,
+      "seconds": 85.858,
+      "file": "/private/tmp/codex-video/videos/output/shifts-roles-views/review-frames/result-end.png"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "slug": "shift-waitlist-offer",
+  "recordedAt": "2026-10-04T17:33:37.198Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1191,
+      "endMs": 16759
+    },
+    {
+      "id": "setup",
+      "startMs": 17210,
+      "endMs": 33104
+    },
+    {
+      "id": "admin",
+      "startMs": 33556,
+      "endMs": 47699
+    },
+    {
+      "id": "release",
+      "startMs": 49859,
+      "endMs": 63183
+    },
+    {
+      "id": "volunteer",
+      "startMs": 63635,
+      "endMs": 78535
+    },
+    {
+      "id": "expiry",
+      "startMs": 78987,
+      "endMs": 92387
+    },
+    {
+      "id": "result",
+      "startMs": 92840,
+      "endMs": 105459
+    }
+  ]
+}

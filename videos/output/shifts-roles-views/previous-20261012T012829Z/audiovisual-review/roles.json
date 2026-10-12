@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:15:20.304Z",
+  "videoSha256": "2ba4c374246bb9d9bed06fdbf8aa4318f53945810e45e7d938e165bed22b163b",
+  "promptSha256": "1637af3baab5980948f1159136b386abbd08ad7bae66ff58556269779009b8b4",
+  "clipSha256": "21132b44602ffa409d42b8ba56500392dc9e05834a3734622095f29536feb9fb",
+  "scene": "roles",
+  "review": {
+    "heardOpening": "Dans Gérer les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning.",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture de la fenêtre modale « Gérer les postes » affichant la liste des postes.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer",
+        "visibleSeconds": 7.6,
+        "visible": "Clic sur la flèche pour intervertir l'ordre des postes (Accueil passe en première position).",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "et gardent le focus sur le poste déplacé.",
+        "visibleSeconds": 8.5,
+        "visible": "Le poste déplacé reste sélectionné/affiché avec son ordre actualisé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage statique des boutons « Renommer » et des paramètres de règles (« Limite », « Accès ») dans la fenêtre.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:00, la voix commence à décrire le contenu de « Gérer les postes », mais la fenêtre modale ne s'ouvre qu'à 00:04.5 (plus de 3 secondes de décalage)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

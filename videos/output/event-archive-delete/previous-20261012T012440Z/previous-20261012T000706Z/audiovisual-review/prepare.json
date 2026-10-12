@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:50:15.893Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "58edd3274fc1b8b5ef5710be378ae8a536a9a79bf923dfef1f76d75de81dfeda",
+  "clipSha256": "26fae85778d7a65215fc1e5a089e25f997da39d809a1dbb6a5fcb5a563c21f9c",
+  "scene": "prepare",
+  "review": {
+    "heardOpening": "Pour cette démonstration, nous travaillons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "nous travaillons sur une copie jetable de l'ancienne édition",
+        "visibleSeconds": 0.5,
+        "visible": "Champ titre affichant 'Ancienne fête de Montvert — copie de démonstration'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "vérifie d'abord les inscriptions, les invitations, le journal et les rapports",
+        "visibleSeconds": 9.5,
+        "visible": "Page de l'événement affichant les boutons et onglets Inscriptions, Invitations, Journal et Rapports",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.1,
+        "spoken": "annule les créneaux avant l'archivage",
+        "visibleSeconds": 10,
+        "visible": "Boutons 'Gérer les créneaux' et 'Archiver' visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:25.119Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "975cc064432826518cd9f3212d6d8e14c1f3d2cd5a3e85f9209e81b04f674ad5",
+  "clipSha256": "764a564a36d458b063379e3b1d4f4d388f1508d6a8fbdcf05152c7f0c50ff336",
+  "scene": "invite-result",
+  "review": {
+    "heardOpening": "Après l'envoi, Léa apparaît",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Léa apparaît avec le statut En attente",
+        "visibleSeconds": 0,
+        "visible": "Léa Martin est affichée dans la liste des administrateurs avec le badge jaune En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Un email contient son lien personnel, valable sept jours",
+        "visibleSeconds": 0,
+        "visible": "Encadré Lien d'invitation créé avec la mention Un e-mail a été envoyé. Ce lien expire dans 7 jours.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "on peut aussi copier ce lien pour le lui transmettre autrement",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le bouton Copier le lien, dont le libellé passe temporairement à Copié !",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Son accès ne devient actif qu'après la création de son mot de passe",
+        "visibleSeconds": 8.5,
+        "visible": "Écran stable montrant le compte en attente",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les éléments de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

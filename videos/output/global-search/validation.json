@@ -1,11 +1,11 @@
 {
   "id": "GLOBAL_SEARCH",
   "slug": "global-search",
-  "validatedAt": "2026-10-06T18:38:34.130Z",
+  "validatedAt": "2026-10-12T01:09:07.335Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Charon",
-  "captureMs": 91560,
+  "captureMs": 91160,
   "scenes": [
     {
       "id": "welcome",
@@ -21,9 +21,9 @@
     },
     {
       "id": "person",
-      "visualMs": 16703,
+      "visualMs": 16704,
       "audioMs": 16702,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "shift",
@@ -33,9 +33,9 @@
     },
     {
       "id": "limits",
-      "visualMs": 15742,
+      "visualMs": 15743,
       "audioMs": 15741,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "result",
@@ -44,5 +44,15 @@
       "driftMs": 2
     }
   ],
+  "anchorsChecked": 7,
+  "music": {
+    "voicedWindows": 82,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
   "issues": []
 }

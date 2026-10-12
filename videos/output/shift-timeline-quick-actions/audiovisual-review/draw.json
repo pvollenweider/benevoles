@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T15:59:47.482Z",
-  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
-  "promptSha256": "63ba42a1f89b88a98eb15f84e7747ac32de0a091152eeedfb4112d68a2753605",
-  "clipSha256": "5b8abd32fda7137ea8923422781320470780f1a63275b5bc278a99cc6ff428cb",
+  "reviewedAt": "2026-10-12T01:47:06.164Z",
+  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "promptSha256": "b2900dc527cc36a25a384a24d8a97339928fb6a0e61b267119c03c9404161bee",
+  "clipSha256": "dd5e549df421ee00141fe2c61f97cd38bcf7cccfb19755f94d20a82d623c1a13",
   "scene": "draw",
   "review": {
-    "heardOpening": "Dans une zone vide",
+    "heardOpening": "Dans la ligne d'un poste",
     "checkpoints": [
       {
-        "spokenSeconds": 1.8,
-        "spoken": "clique puis fais glisser jusqu’à l’heure de fin souhaitée",
-        "visibleSeconds": 2.8,
-        "visible": "Glissement du curseur sur la frise chronologique",
+        "spokenSeconds": 2.1,
+        "spoken": "cliquez dans une zone vide puis faites glisser jusqu'à l'heure de fin souhaitée",
+        "visibleSeconds": 2.5,
+        "visible": "Clic et glissement dans la ligne « Sécurité » de 06h15 à 07h00",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "Le formulaire s’ouvre avec la date et les heures déjà calculées",
-        "visibleSeconds": 4.5,
-        "visible": "Affichage de la fenêtre contextuelle avec les horaires préremplis",
+        "spokenSeconds": 6.8,
+        "spoken": "ses actions rapides s'ouvrent avec les horaires calculés",
+        "visibleSeconds": 4.2,
+        "visible": "Ouverture de la fenêtre modale du créneau avec les horaires 06h15-07h00",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.2,
-        "spoken": "Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer",
-        "visibleSeconds": 5,
-        "visible": "Champs de saisie affichés dans le formulaire",
+        "spokenSeconds": 10.5,
+        "spoken": "Donnez-lui un libellé, ajustez les places",
+        "visibleSeconds": 12.2,
+        "visible": "Saisie du libellé « Relève dessinée » puis passage du nombre de places à 3",
         "sync": "aligned",
         "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "puis fermez avec Fermer et enregistrer",
+        "visibleSeconds": 15.5,
+        "visible": "La vidéo se termine sans que la fermeture via « Fermer et enregistrer » ne soit effectuée",
+        "sync": "missing",
+        "severity": "minor"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:15 - L'action de fermeture (« Fermer et enregistrer ») n'est pas montrée avant la fin de l'extrait vidéo."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien synchronisée."
+      "observation": "Voix féminine claire, fluide et naturelle, bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

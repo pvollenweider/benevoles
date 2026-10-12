@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:38.330Z",
+  "revalidatedAt": "2026-10-11T17:08:38.331Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "capacity",
+      "audioSha256": "eea681b620af6c338b1dd3f8ed623dcd9aeb42b916b443c4c2e832890fa82be3",
+      "recognized": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond : votre sélection n'est plus disponible. Reviens au planning pour ajuster ton choix, les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "expected": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond Votre sélection n'est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

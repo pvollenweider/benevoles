@@ -1,53 +1,64 @@
 {
   "id": "SHIFT_WAITLIST_OFFER",
   "slug": "shift-waitlist-offer",
-  "validatedAt": "2026-10-04T17:33:44.907Z",
+  "validatedAt": "2026-10-12T01:58:45.034Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 106360,
+  "captureMs": 100200,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 15568,
-      "audioMs": 15568,
+      "visualMs": 13043,
+      "audioMs": 13043,
       "driftMs": 0
     },
     {
       "id": "setup",
-      "visualMs": 15894,
-      "audioMs": 15893,
-      "driftMs": 1
+      "visualMs": 13616,
+      "audioMs": 13614,
+      "driftMs": 2
     },
     {
       "id": "admin",
-      "visualMs": 14143,
-      "audioMs": 14142,
-      "driftMs": 1
+      "visualMs": 12083,
+      "audioMs": 12081,
+      "driftMs": 2
     },
     {
       "id": "release",
-      "visualMs": 13324,
-      "audioMs": 13321,
+      "visualMs": 11419,
+      "audioMs": 11416,
       "driftMs": 3
     },
     {
       "id": "volunteer",
-      "visualMs": 14900,
-      "audioMs": 14899,
-      "driftMs": 1
+      "visualMs": 14385,
+      "audioMs": 14383,
+      "driftMs": 2
     },
     {
       "id": "expiry",
-      "visualMs": 13400,
-      "audioMs": 13400,
-      "driftMs": 0
+      "visualMs": 11522,
+      "audioMs": 11520,
+      "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 12619,
-      "audioMs": 12617,
-      "driftMs": 2
+      "visualMs": 10463,
+      "audioMs": 10463,
+      "driftMs": 0
     }
   ],
+  "anchorsChecked": 8,
+  "music": {
+    "voicedWindows": 86,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18.2,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -33.5,
+    "medianVoiceLufs": -16.4
+  },
   "issues": []
 }

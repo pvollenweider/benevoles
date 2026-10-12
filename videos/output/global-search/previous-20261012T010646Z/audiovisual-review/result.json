@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:54:29.401Z",
+  "videoSha256": "df3fea114f348428a33f8617b17a98419c9d073c94a337fbc9fce0dcaadd9313",
+  "promptSha256": "711281caff47f8c23d60e7eb4275db1ada7a501d0ae9375fbd885dea5a1a1bbb",
+  "clipSha256": "7c7a4cd415fa610177d9911c5ebba7e5ee5979d16cae79d1c417ac2f28a35a28",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Vous arrivez à la bonne fiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous arrivez à la bonne fiche ou à la bonne liste, sans envoi de message.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Recherche affichant le résultat unique pour « zoe » (Zoé Perrin)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Utilisez la recherche pour un besoin précis.",
+        "visibleSeconds": 4.1,
+        "visible": "Page de recherche ciblée toujours affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "revenez aux listes de membres",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage de la page de gestion des Membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "et d’inscriptions avec leurs filtres.",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la page Inscriptions avec ses filtres par poste et créneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, parfaitement synchronisée avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

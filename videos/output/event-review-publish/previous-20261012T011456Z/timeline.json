@@ -1,0 +1,366 @@
+{
+  "slug": "event-review-publish",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T01:13:21.767Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REVIEW_PUBLISH",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 34508
+    },
+    {
+      "kind": "click",
+      "atMs": 51391
+    },
+    {
+      "kind": "click",
+      "atMs": 55807
+    },
+    {
+      "kind": "click",
+      "atMs": 56639
+    },
+    {
+      "kind": "key",
+      "atMs": 56948
+    },
+    {
+      "kind": "key",
+      "atMs": 57047
+    },
+    {
+      "kind": "key",
+      "atMs": 57145
+    },
+    {
+      "kind": "key",
+      "atMs": 57245
+    },
+    {
+      "kind": "click",
+      "atMs": 58040
+    },
+    {
+      "kind": "key",
+      "atMs": 58347
+    },
+    {
+      "kind": "key",
+      "atMs": 58446
+    },
+    {
+      "kind": "key",
+      "atMs": 58545
+    },
+    {
+      "kind": "key",
+      "atMs": 58644
+    },
+    {
+      "kind": "key",
+      "atMs": 58743
+    },
+    {
+      "kind": "key",
+      "atMs": 58842
+    },
+    {
+      "kind": "click",
+      "atMs": 59640
+    },
+    {
+      "kind": "key",
+      "atMs": 59948
+    },
+    {
+      "kind": "key",
+      "atMs": 60046
+    },
+    {
+      "kind": "key",
+      "atMs": 60146
+    },
+    {
+      "kind": "key",
+      "atMs": 60250
+    },
+    {
+      "kind": "key",
+      "atMs": 60350
+    },
+    {
+      "kind": "key",
+      "atMs": 60450
+    },
+    {
+      "kind": "key",
+      "atMs": 60552
+    },
+    {
+      "kind": "key",
+      "atMs": 60656
+    },
+    {
+      "kind": "key",
+      "atMs": 60758
+    },
+    {
+      "kind": "key",
+      "atMs": 60871
+    },
+    {
+      "kind": "key",
+      "atMs": 60973
+    },
+    {
+      "kind": "key",
+      "atMs": 61076
+    },
+    {
+      "kind": "key",
+      "atMs": 61180
+    },
+    {
+      "kind": "key",
+      "atMs": 61282
+    },
+    {
+      "kind": "key",
+      "atMs": 61386
+    },
+    {
+      "kind": "key",
+      "atMs": 61489
+    },
+    {
+      "kind": "key",
+      "atMs": 61590
+    },
+    {
+      "kind": "key",
+      "atMs": 61689
+    },
+    {
+      "kind": "key",
+      "atMs": 61787
+    },
+    {
+      "kind": "key",
+      "atMs": 61886
+    },
+    {
+      "kind": "key",
+      "atMs": 61985
+    },
+    {
+      "kind": "key",
+      "atMs": 62083
+    },
+    {
+      "kind": "key",
+      "atMs": 62185
+    },
+    {
+      "kind": "key",
+      "atMs": 62291
+    },
+    {
+      "kind": "click",
+      "atMs": 63089
+    },
+    {
+      "kind": "key",
+      "atMs": 63397
+    },
+    {
+      "kind": "key",
+      "atMs": 63495
+    },
+    {
+      "kind": "key",
+      "atMs": 63595
+    },
+    {
+      "kind": "key",
+      "atMs": 63694
+    },
+    {
+      "kind": "key",
+      "atMs": 63793
+    },
+    {
+      "kind": "key",
+      "atMs": 63893
+    },
+    {
+      "kind": "key",
+      "atMs": 63994
+    },
+    {
+      "kind": "key",
+      "atMs": 64097
+    },
+    {
+      "kind": "key",
+      "atMs": 64203
+    },
+    {
+      "kind": "key",
+      "atMs": 64306
+    },
+    {
+      "kind": "key",
+      "atMs": 64410
+    },
+    {
+      "kind": "key",
+      "atMs": 64514
+    },
+    {
+      "kind": "key",
+      "atMs": 64615
+    },
+    {
+      "kind": "click",
+      "atMs": 65390
+    },
+    {
+      "kind": "click",
+      "atMs": 74823
+    },
+    {
+      "kind": "click",
+      "atMs": 75605
+    },
+    {
+      "kind": "click",
+      "atMs": 85156
+    },
+    {
+      "kind": "click",
+      "atMs": 100411
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1155,
+      "endMs": 11636
+    },
+    {
+      "id": "checks",
+      "startMs": 12088,
+      "endMs": 31852
+    },
+    {
+      "id": "preview-start",
+      "startMs": 34018,
+      "endMs": 50461
+    },
+    {
+      "id": "preview-form",
+      "startMs": 50913,
+      "endMs": 83049
+    },
+    {
+      "id": "preview-result",
+      "startMs": 83501,
+      "endMs": 98254
+    },
+    {
+      "id": "publish",
+      "startMs": 98707,
+      "endMs": 114147
+    },
+    {
+      "id": "result",
+      "startMs": 114598,
+      "endMs": 130593
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "preview-start",
+      "phrase": "On vérifie d’abord l’en-tête, le",
+      "startMs": 6560,
+      "endMs": 16104,
+      "cueMs": 40579
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Pour ce test, renseignons une",
+      "startMs": 4415,
+      "endMs": 5506,
+      "cueMs": 55331
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Pour ce test, renseignons une identité fictive",
+      "startMs": 4415,
+      "endMs": 5506,
+      "cueMs": 56123
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Ajoutons son adresse email de",
+      "startMs": 7688,
+      "endMs": 11360,
+      "cueMs": 59124
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Choisissons aussi une taille de t-shirt",
+      "startMs": 11642,
+      "endMs": 13614,
+      "cueMs": 64900
+    },
+    {
+      "segmentId": "preview-form",
+      "phrase": "Acceptons cette convention",
+      "startMs": 23436,
+      "endMs": 28312,
+      "cueMs": 74349
+    },
+    {
+      "segmentId": "preview-result",
+      "phrase": "C’est ici qu’on repère un",
+      "startMs": 6478,
+      "endMs": 14614,
+      "cueMs": 89981
+    },
+    {
+      "segmentId": "publish",
+      "phrase": "Revenons à la vérification et publions",
+      "startMs": 197,
+      "endMs": 2187,
+      "cueMs": 99952
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Publier ouvre l’accès ",
+      "startMs": 7245,
+      "endMs": 8218,
+      "cueMs": 121844
+    }
+  ]
+}

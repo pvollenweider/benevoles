@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:38.156Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "2fe291ae7dfe618fa1f7acb3e4565994942e34006d42d095331b629cff43aa51",
+  "clipSha256": "a0a1dbc24fa8f1a39a96b01b645303cbbd11136793c9377e777f6dab0a26b86f",
+  "scene": "result",
+  "review": {
+    "heardOpening": "De retour en Liste, les deux créneaux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "De retour en Liste, les deux créneaux sont bien présents après rechargement",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Liste est affiché avec le tableau des créneaux réactualisé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "L’original conserve son libellé",
+        "visibleSeconds": 0,
+        "visible": "Le créneau initial de Sécurité (06:15-07:45) conserve son libellé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Relève suivante a ses propres horaires et trois places",
+        "visibleSeconds": 0,
+        "visible": "La ligne Sécurité 'Relève suivante' affiche 08:00-09:30 et 0/3 places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "Cette relecture permet de contrôler le résultat réel des gestes de Frise avant publication",
+        "visibleSeconds": 0,
+        "visible": "Vue d'ensemble stable de la liste des créneaux validant les modifications",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix pédagogique, claire et posée, parfaitement synchronisée avec la présentation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

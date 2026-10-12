@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T03:19:31.018Z",
-  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
-  "promptSha256": "6280c990fb12c6d88935ec9e131865e5183186bf82125695e72bd183a0d9b102",
-  "clipSha256": "9654e96a4a4d9d3cba4723caef5b6ca8222b0a80a79ede12e49c55e28c28122b",
+  "reviewedAt": "2026-10-12T01:31:30.181Z",
+  "videoSha256": "2ec0d4af9534329138b7df74e4bedf68e0a70479a91094dc4aa5a752b6987afc",
+  "promptSha256": "1637af3baab5980948f1159136b386abbd08ad7bae66ff58556269779009b8b4",
+  "clipSha256": "74fce15b500ca3844d89010e427a492fbd4e16a863ed0798cd65f94e7ea05a0b",
   "scene": "roles",
   "review": {
     "heardOpening": "Dans Gérer les postes",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.6,
         "spoken": "Dans Gérer les postes",
-        "visibleSeconds": 3.2,
-        "visible": "Ouverture de la fenêtre modale Gérer les postes",
+        "visibleSeconds": 0.7,
+        "visible": "Ouverture de la fenêtre modale Gérer les postes affichant la liste ordonnée des postes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
-        "spoken": "Les flèches Monter et Descendre",
-        "visibleSeconds": 8.3,
-        "visible": "Clic sur la flèche pour déplacer Buvette vers le haut",
+        "spokenSeconds": 4.6,
+        "spoken": "Les flèches Monter et Descendre offrent une alternative claire",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur la flèche de réorganisation : le poste Accueil passe en tête devant Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "C'est aussi ici qu'on renomme un poste et qu'on ouvre ses règles",
-        "visibleSeconds": 12,
-        "visible": "Options Renommer et paramètres de règles visibles dans la liste",
+        "spokenSeconds": 11.3,
+        "spoken": "C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles",
+        "visibleSeconds": 11.5,
+        "visible": "Présentation des actions disponibles pour chaque poste avec les boutons Limite, Accès, Renommer et Supprimer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton didactique homogène."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

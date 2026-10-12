@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:28.634Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "d87ae0e82defead865e04ee9b4bea88f935c183458fd7a079f8657f78a5a02e9",
+  "clipSha256": "0e3b44e99a07a57c385c071dc03d4b6b2da0da2a1b5cb4476e7d74f1adfc882d",
+  "scene": "expiry",
+  "review": {
+    "heardOpening": "Si l'offre expire sans réponse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment",
+        "visibleSeconds": 0,
+        "visible": "Page explicative de la liste d'attente précisant le délai et la réattribution de la place",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Dans l'administration, on peut suivre l'offre active",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la vue d'administration des inscriptions avec le statut 'Place proposée' pour Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "et la position des personnes encore en attente",
+        "visibleSeconds": 7.5,
+        "visible": "Ligne du tableau indiquant le statut 'Liste d'attente : position 2' pour Eva Clerc-Despont",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

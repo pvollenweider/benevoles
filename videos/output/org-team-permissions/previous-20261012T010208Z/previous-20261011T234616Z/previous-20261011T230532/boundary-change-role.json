@@ -1,0 +1,12 @@
+{
+  "anchor": "Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste,",
+  "windowStart": 42.494,
+  "result": {
+    "found": true,
+    "startSeconds": 17.84,
+    "wordsHeard": "Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste"
+  },
+  "onset": 60.334,
+  "proposedCut": 60.476292,
+  "note": "Proposal only; recut then independently audit before capture"
+}

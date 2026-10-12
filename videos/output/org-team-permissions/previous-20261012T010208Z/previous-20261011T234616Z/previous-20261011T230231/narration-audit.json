@@ -1,0 +1,89 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T02:50:45.535Z",
+  "revalidatedAt": "2026-10-06T02:50:45.536Z",
+  "source": "generated narration WAV",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "bab720710cd39fce0ebc417ce2ac7de26daa73fdecc2ee5cde77caac72f40f5a",
+      "recognized": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge vous repère le compte actuellement connecté.",
+      "expected": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge Vous repère le compte actuellement connecté.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roles",
+      "audioSha256": "300667d562c088d06e356f13b13cfc6cbd59df34b18ce910d4ad62c5daf979b6",
+      "recognized": "Le propriétaire gère tout, y compris l'équipe et les réglages de l'organisation. L'organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l'équipe ni ses réglages. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent. Désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d'administration.",
+      "expected": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
+      "wordErrorRate": 0.015151515151515152,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invite",
+      "audioSha256": "0c9f343e47e37b857e010402fe13746487766a7c52b91f198d6c59277904ed83",
+      "recognized": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l'envoi. Prenons organisateur, c'est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles. Cliquez sur envoyer l'invitation, le message confirme son adresse.",
+      "expected": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles. Cliquez sur Envoyer l’invitation ; le message confirme son adresse.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invite-result",
+      "audioSha256": "13f16cdefef3c0ea74dd40f8852db442a8675afa8091c3cf2f998412423cd8fe",
+      "recognized": "Après l'envoi, Léa apparaît avec le statut en attente. Un e-mail contient son lien personnel, valable sept jours. On peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu'après la création de son mot de passe.",
+      "expected": "Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "change-role",
+      "audioSha256": "22db31008804539f0e88e2d14df294ce64e052ea0dd2b96abd9e4aa20f7e5cc9",
+      "recognized": "Le rôle peut évoluer. On choisit d'abord propriétaire dans la liste, puis on confirme avec Appliquer. Parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l'historique des actions déjà réalisées.",
+      "expected": "Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer : parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "organizer-view",
+      "audioSha256": "9cbfe0755082dee3c65015d56b6e59f8161185bef2316ccf127052bdf799e8a7",
+      "recognized": "Vérifions maintenant avec le compte de Samira qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l'équipe, la liste reste visible pour comprendre qui administre l'espace, mais les commandes d'invitation, de retrait et de changement de rôle ont disparu.",
+      "expected": "Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limits",
+      "audioSha256": "3b83bbf81d6bf758018af887352adf2b8ee1a25cb50e6b40bf39e48b4550a41a",
+      "recognized": "La suppression définitive d'un événement et les réglages de l'organisation restent réservés au propriétaire. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s'applique aussitôt, y compris aux sessions déjà ouvertes. Vérifiez donc la personne avant d'appliquer.",
+      "expected": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes : vérifiez donc la personne avant d’appliquer.",
+      "wordErrorRate": 0.037037037037037035,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "62517a937163c8f5658a3564f5a0e84221bb60081388d557e4df93503111ca17",
+      "recognized": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde. Les propriétaires protègent le cadre, les organisateurs font vivre les événements et chaque action reste liée à la bonne personne.",
+      "expected": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde : les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

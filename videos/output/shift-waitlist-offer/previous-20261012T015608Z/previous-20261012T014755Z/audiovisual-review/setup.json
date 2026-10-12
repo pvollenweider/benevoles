@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:31:25.236Z",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "promptSha256": "aeffff877fda377c5c3a3f85ce9575067d888a4298ac46e262755ac1d5104779",
+  "clipSha256": "66193927f587fe1f5889378b2b3c937acdd605d42146003891de63142300e612",
+  "scene": "setup",
+  "review": {
+    "heardOpening": "La liste d'attente s'active",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La liste d’attente s’active sur le créneau.",
+        "visibleSeconds": 3.5,
+        "visible": "Ouverture du formulaire « Modifier le créneau » après passage en vue liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement.",
+        "visibleSeconds": 4.5,
+        "visible": "Le champ « Capacité » avec la valeur 4 est bien visible sur le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "le prochain bénévole rejoint l’attente et voit sa position",
+        "visibleSeconds": 11,
+        "visible": "Défilement vers l'option cochée « Activer la liste d'attente », mais l'écran côté bénévole avec sa position n'est pas affiché.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, avec un débit régulier et sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

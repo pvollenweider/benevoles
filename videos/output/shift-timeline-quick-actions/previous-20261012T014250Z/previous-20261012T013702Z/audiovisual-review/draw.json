@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:26:42.610Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "b2900dc527cc36a25a384a24d8a97339928fb6a0e61b267119c03c9404161bee",
+  "clipSha256": "7c1a74e6bc20b9da194343b74e148b44edb07797102e3bb8836b992defb6760a",
+  "scene": "draw",
+  "review": {
+    "heardOpening": "Dans la ligne d'un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée",
+        "visibleSeconds": 3.4,
+        "visible": "Clic et glissement sur la ligne du poste Sécurité pour définir la plage horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "ses actions rapides s’ouvrent avec les horaires calculés",
+        "visibleSeconds": 5.2,
+        "visible": "Le panneau d'actions rapides du créneau s'affiche avec les horaires calculés (06:15 - 07:00)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Donnez-lui un libellé",
+        "visibleSeconds": 8.6,
+        "visible": "Saisie d'un libellé dans le champ correspondant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "ajustez les places",
+        "visibleSeconds": 12,
+        "visible": "Le nombre de places est modifié à 3",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "puis fermez avec Fermer et enregistrer",
+        "visibleSeconds": 13.7,
+        "visible": "Clic sur le bouton « Fermer et enregistrer », fermeture de la fenêtre et notification de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

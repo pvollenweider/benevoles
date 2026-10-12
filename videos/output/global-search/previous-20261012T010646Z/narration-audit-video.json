@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T23:54:07.312Z",
+  "revalidatedAt": "2026-10-11T23:54:07.314Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "df3fea114f348428a33f8617b17a98419c9d073c94a337fbc9fce0dcaadd9313",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e834195e67385285030792e78e77eeb306dfdaea8565cef942b44404bea8d047",
+      "recognized": "Quand une association compte plusieurs événements et beaucoup de bénévoles, ouvrir chaque planning prend vite du temps. La recherche globale sert à retrouver une personne, son inscription, un événement ou un poste depuis n'importe quel écran de l'administration.",
+      "expected": "Quand une association compte plusieurs événements et beaucoup de bénévoles, ouvrir chaque planning prend vite du temps. La recherche globale sert à retrouver une personne, son inscription, un événement ou un poste depuis n’importe quel écran de l’administration.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "open",
+      "audioSha256": "1288384f99fee8a45f357f9b870b766226296f48c53d846d4a35d87d52aaef55",
+      "recognized": "Ouvrez la loupe dans la barre du haut. Vous pouvez aussi utiliser Contrôle K ou Commande K sur Mac. Le champ s'ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.",
+      "expected": "Ouvrez la loupe dans la barre du haut. Vous pouvez aussi utiliser Contrôle K, ou Commande K sur Mac : le champ s’ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "person",
+      "audioSha256": "c0b136a8dda00518dd2cc9b8d344b9bd77c05df148c6bacf02dbda3a687cad2d",
+      "recognized": "Cherchons Léa Morel. Les résultats distinguent sa fiche de membre et ses inscriptions. Ouvrons d'abord sa fiche, puis une inscription. La liste de l'évènement est déjà filtrée sur Léa. Le badge liste d'attente distingue une demande de place d'une inscription confirmée. La recherche elle-même ne modifie rien.",
+      "expected": "Cherchons Léa Morel. Les résultats distinguent sa fiche de membre et ses inscriptions. Ouvrons d’abord sa fiche, puis une inscription : la liste de l’événement est déjà filtrée sur Léa. Le badge Liste d’attente distingue une demande de place d’une inscription confirmée. La recherche elle-même ne modifie rien.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "shift",
+      "audioSha256": "33266a4218fb5246e9ee0b39927b5211c319fae1d44971047216e0a18c5c3c7b",
+      "recognized": "Avec buvette, vous retrouvez les créneaux de plusieurs événements. Chaque résultat rappelle l'événement, la date et l'horaire. Ajoutons village pour ne garder que le service qui nous intéresse, puis ouvrons le résultat. La liste des inscriptions est filtrée sur ce créneau.",
+      "expected": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements. Chaque résultat rappelle l’événement, la date et l’horaire. Ajoutons village pour ne garder que le service qui nous intéresse, puis ouvrons le résultat : la liste des inscriptions est filtrée sur ce créneau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limits",
+      "audioSha256": "8b6e9687118fc3e05ae02931f32c9227c8c65aed47a3463c3a3993d4e5e0c5cc",
+      "recognized": "La recherche affiche au maximum vingt résultats par catégorie. Ici, beaucoup de membres portent le nom Morel. Le message indique qu'il reste d'autres résultats. Ajoutez un prénom pour préciser la recherche. Les accents et la casse ne bloquent pas la recherche. Écrire Zoé permet aussi de retrouver Zoé.",
+      "expected": "La recherche affiche au maximum vingt résultats par catégorie. Ici, beaucoup de membres portent le nom Morel : le message indique qu’il reste d’autres résultats. Ajoutez un prénom pour préciser la recherche. Les accents et la casse ne bloquent pas la recherche : écrire zoe permet aussi de retrouver Zoé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "f16d653622ebb58d43fc96da6928c11e166fc20d5a2610d12c89a2a2a56b6a5d",
+      "recognized": "Vous arrivez à la bonne fiche ou à la bonne liste, sans envoi de message. Utilisez la recherche pour un besoin précis. Pour examiner toutes les personnes ou effectuer des actions groupées, revenez aux listes de membres et d'inscriptions, avec leurs filtres.",
+      "expected": "Vous arrivez à la bonne fiche ou à la bonne liste, sans envoi de message. Utilisez la recherche pour un besoin précis. Pour examiner toutes les personnes ou effectuer des actions groupées, revenez aux listes de membres et d’inscriptions avec leurs filtres.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

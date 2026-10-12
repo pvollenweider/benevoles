@@ -1,0 +1,504 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 0,
+    "endMs": 12831,
+    "sentences": [
+      {
+        "text": "Quand une association compte plusieurs événements et beaucoup de bénévoles, ouvrir chaque planning prend vite du temps.",
+        "startMs": 286,
+        "endMs": 5058,
+        "method": "silence",
+        "absoluteStartMs": 286
+      },
+      {
+        "text": "La recherche globale sert à retrouver une personne, son inscription, un événement ou un poste depuis n’importe quel écran de l’administration.",
+        "startMs": 5716,
+        "endMs": 12410,
+        "method": "silence",
+        "absoluteStartMs": 5716
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "open",
+    "startMs": 13284,
+    "endMs": 25720,
+    "sentences": [
+      {
+        "text": "Ouvrez la loupe dans la barre du haut.",
+        "startMs": 424,
+        "endMs": 1712,
+        "method": "silence",
+        "absoluteStartMs": 13708
+      },
+      {
+        "text": "Vous pouvez aussi utiliser Contrôle K, ou Commande K sur Mac :",
+        "startMs": 2452,
+        "endMs": 5376,
+        "method": "silence",
+        "absoluteStartMs": 15736
+      },
+      {
+        "text": "le champ s’ouvre et reçoit immédiatement le curseur.",
+        "startMs": 5961,
+        "endMs": 8359,
+        "method": "silence",
+        "absoluteStartMs": 19245
+      },
+      {
+        "text": "Échap le referme sans lancer de recherche et rend le focus au bouton.",
+        "startMs": 9202,
+        "endMs": 11987,
+        "method": "silence",
+        "absoluteStartMs": 22486
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "open",
+        "phrase": "le champ s’ouvre et reçoit",
+        "startMs": 5961,
+        "endMs": 8359,
+        "cueMs": 19248
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 13779
+      },
+      {
+        "kind": "key",
+        "atMs": 17020
+      },
+      {
+        "kind": "key",
+        "atMs": 19251
+      },
+      {
+        "kind": "key",
+        "atMs": 19252
+      },
+      {
+        "kind": "key",
+        "atMs": 23487
+      }
+    ]
+  },
+  {
+    "chapter": "person",
+    "startMs": 27880,
+    "endMs": 44584,
+    "sentences": [
+      {
+        "text": "Cherchons Léa Morel.",
+        "startMs": 459,
+        "endMs": 1433,
+        "method": "silence",
+        "absoluteStartMs": 28339
+      },
+      {
+        "text": "Les résultats distinguent sa fiche de membre et ses inscriptions.",
+        "startMs": 2155,
+        "endMs": 4522,
+        "method": "silence",
+        "absoluteStartMs": 30035
+      },
+      {
+        "text": "Ouvrons d’abord sa fiche, puis une inscription :",
+        "startMs": 5196,
+        "endMs": 7532,
+        "method": "silence",
+        "absoluteStartMs": 33076
+      },
+      {
+        "text": "la liste de l’événement est déjà filtrée sur Léa.",
+        "startMs": 8293,
+        "endMs": 10182,
+        "method": "silence",
+        "absoluteStartMs": 36173
+      },
+      {
+        "text": "Le badge Liste d’attente distingue une demande de place d’une inscription confirmée.",
+        "startMs": 10794,
+        "endMs": 14326,
+        "method": "silence",
+        "absoluteStartMs": 38674
+      },
+      {
+        "text": "La recherche elle-même ne modifie rien.",
+        "startMs": 15008,
+        "endMs": 16301,
+        "method": "silence",
+        "absoluteStartMs": 42888
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "person",
+        "phrase": "Ouvrons d’abord sa fiche, puis",
+        "startMs": 5196,
+        "endMs": 7532,
+        "cueMs": 33077
+      },
+      {
+        "segmentId": "person",
+        "phrase": "la liste de l’événement est déjà filtrée sur Léa",
+        "startMs": 8293,
+        "endMs": 10182,
+        "cueMs": 36175
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 28361
+      },
+      {
+        "kind": "click",
+        "atMs": 29177
+      },
+      {
+        "kind": "key",
+        "atMs": 29482
+      },
+      {
+        "kind": "key",
+        "atMs": 29680
+      },
+      {
+        "kind": "key",
+        "atMs": 29778
+      },
+      {
+        "kind": "key",
+        "atMs": 29876
+      },
+      {
+        "kind": "key",
+        "atMs": 29978
+      },
+      {
+        "kind": "key",
+        "atMs": 30079
+      },
+      {
+        "kind": "key",
+        "atMs": 30182
+      },
+      {
+        "kind": "key",
+        "atMs": 30284
+      },
+      {
+        "kind": "key",
+        "atMs": 30573
+      },
+      {
+        "kind": "click",
+        "atMs": 33549
+      },
+      {
+        "kind": "click",
+        "atMs": 37779
+      }
+    ]
+  },
+  {
+    "chapter": "shift",
+    "startMs": 45038,
+    "endMs": 60411,
+    "sentences": [
+      {
+        "text": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements.",
+        "startMs": 414,
+        "endMs": 3411,
+        "method": "silence",
+        "absoluteStartMs": 45452
+      },
+      {
+        "text": "Chaque résultat rappelle l’événement, la date et l’horaire.",
+        "startMs": 4219,
+        "endMs": 6948,
+        "method": "silence",
+        "absoluteStartMs": 49257
+      },
+      {
+        "text": "Ajoutons village pour ne garder que le service qui nous intéresse, puis ouvrons le résultat :",
+        "startMs": 7756,
+        "endMs": 12210,
+        "method": "silence",
+        "absoluteStartMs": 52794
+      },
+      {
+        "text": "la liste des inscriptions est filtrée sur ce créneau.",
+        "startMs": 13033,
+        "endMs": 14992,
+        "method": "silence",
+        "absoluteStartMs": 58071
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "shift",
+        "phrase": "Ajoutons village pour ne garder",
+        "startMs": 7756,
+        "endMs": 12210,
+        "cueMs": 52799
+      },
+      {
+        "segmentId": "shift",
+        "phrase": "la liste des inscriptions est",
+        "startMs": 13033,
+        "endMs": 14992,
+        "cueMs": 58072
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "key",
+        "atMs": 52806
+      },
+      {
+        "kind": "click",
+        "atMs": 53315
+      },
+      {
+        "kind": "key",
+        "atMs": 53622
+      },
+      {
+        "kind": "key",
+        "atMs": 53720
+      },
+      {
+        "kind": "key",
+        "atMs": 53818
+      },
+      {
+        "kind": "key",
+        "atMs": 53914
+      },
+      {
+        "kind": "key",
+        "atMs": 54013
+      },
+      {
+        "kind": "key",
+        "atMs": 54116
+      },
+      {
+        "kind": "key",
+        "atMs": 54217
+      },
+      {
+        "kind": "key",
+        "atMs": 54318
+      },
+      {
+        "kind": "key",
+        "atMs": 54420
+      },
+      {
+        "kind": "key",
+        "atMs": 54522
+      },
+      {
+        "kind": "key",
+        "atMs": 54625
+      },
+      {
+        "kind": "key",
+        "atMs": 54725
+      },
+      {
+        "kind": "key",
+        "atMs": 54827
+      },
+      {
+        "kind": "key",
+        "atMs": 54930
+      },
+      {
+        "kind": "key",
+        "atMs": 55032
+      },
+      {
+        "kind": "key",
+        "atMs": 55320
+      },
+      {
+        "kind": "click",
+        "atMs": 58549
+      }
+    ]
+  },
+  {
+    "chapter": "limits",
+    "startMs": 60864,
+    "endMs": 76607,
+    "sentences": [
+      {
+        "text": "La recherche affiche au maximum vingt résultats par catégorie.",
+        "startMs": 380,
+        "endMs": 2693,
+        "method": "silence",
+        "absoluteStartMs": 61244
+      },
+      {
+        "text": "Ici, beaucoup de membres portent le nom Morel :",
+        "startMs": 3488,
+        "endMs": 5663,
+        "method": "silence",
+        "absoluteStartMs": 64352
+      },
+      {
+        "text": "le message indique qu’il reste d’autres résultats.",
+        "startMs": 6032,
+        "endMs": 7729,
+        "method": "silence",
+        "absoluteStartMs": 66896
+      },
+      {
+        "text": "Ajoutez un prénom pour préciser la recherche.",
+        "startMs": 8472,
+        "endMs": 10167,
+        "method": "silence",
+        "absoluteStartMs": 69336
+      },
+      {
+        "text": "Les accents et la casse ne bloquent pas la recherche :",
+        "startMs": 10931,
+        "endMs": 12668,
+        "method": "silence",
+        "absoluteStartMs": 71795
+      },
+      {
+        "text": "écrire zoe permet aussi de retrouver Zoé.",
+        "startMs": 13294,
+        "endMs": 15324,
+        "method": "silence",
+        "absoluteStartMs": 74158
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "limits",
+        "phrase": "Ajoutez un prénom pour préciser",
+        "startMs": 8472,
+        "endMs": 10167,
+        "cueMs": 69338
+      },
+      {
+        "segmentId": "limits",
+        "phrase": "Les accents et la casse",
+        "startMs": 10931,
+        "endMs": 12668,
+        "cueMs": 71797
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "key",
+        "atMs": 69345
+      },
+      {
+        "kind": "click",
+        "atMs": 69865
+      },
+      {
+        "kind": "key",
+        "atMs": 70173
+      },
+      {
+        "kind": "key",
+        "atMs": 70368
+      },
+      {
+        "kind": "key",
+        "atMs": 70465
+      },
+      {
+        "kind": "key",
+        "atMs": 70563
+      },
+      {
+        "kind": "key",
+        "atMs": 70660
+      },
+      {
+        "kind": "key",
+        "atMs": 70762
+      },
+      {
+        "kind": "key",
+        "atMs": 70863
+      },
+      {
+        "kind": "key",
+        "atMs": 70963
+      },
+      {
+        "kind": "key",
+        "atMs": 71250
+      },
+      {
+        "kind": "key",
+        "atMs": 71805
+      },
+      {
+        "kind": "click",
+        "atMs": 72323
+      },
+      {
+        "kind": "key",
+        "atMs": 72630
+      },
+      {
+        "kind": "key",
+        "atMs": 72728
+      },
+      {
+        "kind": "key",
+        "atMs": 72826
+      },
+      {
+        "kind": "key",
+        "atMs": 73112
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 77059,
+    "endMs": 89343,
+    "sentences": [
+      {
+        "text": "Vous arrivez à la bonne fiche ou à la bonne liste, sans envoi de message.",
+        "startMs": 426,
+        "endMs": 3589,
+        "method": "silence",
+        "absoluteStartMs": 77485
+      },
+      {
+        "text": "Utilisez la recherche pour un besoin précis.",
+        "startMs": 4366,
+        "endMs": 6002,
+        "method": "silence",
+        "absoluteStartMs": 81425
+      },
+      {
+        "text": "Pour examiner toutes les personnes ou effectuer des actions groupées, revenez aux listes de membres et d’inscriptions avec leurs filtres.",
+        "startMs": 6680,
+        "endMs": 12036,
+        "method": "silence",
+        "absoluteStartMs": 83739
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

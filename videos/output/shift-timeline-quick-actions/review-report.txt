@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+  "status": "READY",
+  "duration": 124.04,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 113,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18.7,
+    "quietestMusicOnlyLufs": -31.8,
+    "loudestMusicOnlyLufs": -31.8,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Une reprise videos-only acceptée. Première prise : popover ouvert automatiquement au relâchement redimensionnement avant Rouvre ensuite. Reprise : vraie fermeture37.705 ; image39.0 fermé ; réouverture42.155 après phrase41.683,image42.7. Preuves31.9 fermé avant fin chapitre,35.0 fin7h15,35.8 fin7h30,36.7 fin7h45 prouvent glissement réel ; AV prétend geste absent/fermeture manquante, contredit par images et marqueurs. Liste85.070 et Modifier85.902 après début phrase84.575, même phrase composite (AV compare des mots ultérieurs, pas début de phrase). Copie69.9 après phrase69.44, consigne97.38 après96.88. 42 images finales revues ;45min,duplication,décalage15min,3places,valeursAPI et Liste rechargée conformes. Popover placé dans fenêtre et scrollable. Validation,ASR final7/7,VTT,effets,musique passent. Frise/dates françaises/aucune adresse interdite/overlay. Défaut disposition connu observé ici aussi : noms postes Frise horschamp horizontal. Ouverture automatique après resize signalée, pas masquée : fermeture réelle filmée.",
+  "sourceChanges": "record.ts : fermer visiblement le popover ouvert par le produit après resize puis rouvrir sur ancre existante ; Liste/Modifier sur Pour ajouter une consigne à cette relève. Audio batch8 inchangé accepté. Types et795tests ancres passent.",
+  "report": "videos/output/shift-timeline-quick-actions/review-report.txt"
+}

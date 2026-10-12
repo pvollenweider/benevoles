@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent",
+  "windowStart": 18.833,
+  "result": {
+    "found": true,
+    "startSeconds": 8.2,
+    "wordsHeard": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent"
+  },
+  "onset": 27.032999999999998,
+  "proposedCut": 26.656937499999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

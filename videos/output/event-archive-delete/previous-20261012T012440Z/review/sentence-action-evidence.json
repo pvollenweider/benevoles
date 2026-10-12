@@ -1,0 +1,269 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1098,
+    "endMs": 15908,
+    "sentences": [
+      {
+        "text": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents.",
+        "startMs": 294,
+        "endMs": 4776,
+        "method": "silence",
+        "absoluteStartMs": 1392
+      },
+      {
+        "text": "Fermer bloque seulement les nouvelles inscriptions.",
+        "startMs": 5541,
+        "endMs": 7440,
+        "method": "silence",
+        "absoluteStartMs": 6639
+      },
+      {
+        "text": "Archiver retire l’événement du public tout en gardant ses données consultables.",
+        "startMs": 8151,
+        "endMs": 11485,
+        "method": "silence",
+        "absoluteStartMs": 9249
+      },
+      {
+        "text": "Supprimer efface définitivement l’édition.",
+        "startMs": 12165,
+        "endMs": 14171,
+        "method": "silence",
+        "absoluteStartMs": 13263
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "prepare",
+    "startMs": 16360,
+    "endMs": 29889,
+    "sentences": [
+      {
+        "text": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition.",
+        "startMs": 645,
+        "endMs": 4955,
+        "method": "silence",
+        "absoluteStartMs": 17005
+      },
+      {
+        "text": "Dans la vraie vie, vérifiez d’abord les inscriptions, les invitations, le journal et les rapports.",
+        "startMs": 5161,
+        "endMs": 9055,
+        "method": "silence",
+        "absoluteStartMs": 21521
+      },
+      {
+        "text": "Si des bénévoles doivent être prévenus, annulez les créneaux avant l’archivage.",
+        "startMs": 9690,
+        "endMs": 12885,
+        "method": "silence",
+        "absoluteStartMs": 26050
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "prepare",
+        "phrase": "Si des bénévoles doivent être",
+        "startMs": 9690,
+        "endMs": 12885,
+        "cueMs": 26053
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 26515
+      }
+    ]
+  },
+  {
+    "chapter": "archive",
+    "startMs": 30343,
+    "endMs": 44850,
+    "sentences": [
+      {
+        "text": "Le bouton Archiver demande une confirmation claire.",
+        "startMs": 616,
+        "endMs": 2904,
+        "method": "silence",
+        "absoluteStartMs": 30959
+      },
+      {
+        "text": "Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal.",
+        "startMs": 3578,
+        "endMs": 8688,
+        "method": "silence",
+        "absoluteStartMs": 33921
+      },
+      {
+        "text": "On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.",
+        "startMs": 9053,
+        "endMs": 14071,
+        "method": "silence",
+        "absoluteStartMs": 39396
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 34898
+      },
+      {
+        "kind": "click",
+        "atMs": 35766
+      }
+    ]
+  },
+  {
+    "chapter": "delete-open",
+    "startMs": 45302,
+    "endMs": 59197,
+    "sentences": [
+      {
+        "text": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation.",
+        "startMs": 447,
+        "endMs": 5329,
+        "method": "silence",
+        "absoluteStartMs": 45749
+      },
+      {
+        "text": "Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître.",
+        "startMs": 6118,
+        "endMs": 11139,
+        "method": "silence",
+        "absoluteStartMs": 51420
+      },
+      {
+        "text": "Les membres du pool, eux, sont conservés.",
+        "startMs": 11657,
+        "endMs": 13408,
+        "method": "silence",
+        "absoluteStartMs": 56959
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "delete-open",
+        "phrase": "Le récapitulatif indique précisément combien",
+        "startMs": 6118,
+        "endMs": 11139,
+        "cueMs": 51421
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 51913
+      }
+    ]
+  },
+  {
+    "chapter": "backup",
+    "startMs": 59648,
+    "endMs": 73038,
+    "sentences": [
+      {
+        "text": "Avant d’aller plus loin, ouvrez l’export PDF.",
+        "startMs": 511,
+        "endMs": 2685,
+        "method": "silence",
+        "absoluteStartMs": 60159
+      },
+      {
+        "text": "Il contient le planning, le récapitulatif par poste et la liste des bénévoles.",
+        "startMs": 3126,
+        "endMs": 6936,
+        "method": "silence",
+        "absoluteStartMs": 62774
+      },
+      {
+        "text": "Enregistrez-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+        "startMs": 7644,
+        "endMs": 12984,
+        "method": "silence",
+        "absoluteStartMs": 67292
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "backup",
+        "phrase": "Il contient le planning, le",
+        "startMs": 3126,
+        "endMs": 6936,
+        "cueMs": 62776
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 63262
+      },
+      {
+        "kind": "click",
+        "atMs": 72048
+      }
+    ]
+  },
+  {
+    "chapter": "confirm",
+    "startMs": 73490,
+    "endMs": 87460,
+    "sentences": [
+      {
+        "text": "La confirmation renforcée demande de saisir le titre de l’événement.",
+        "startMs": 419,
+        "endMs": 3499,
+        "method": "silence",
+        "absoluteStartMs": 73909
+      },
+      {
+        "text": "Tant qu’il ne correspond pas, le bouton reste indisponible.",
+        "startMs": 4321,
+        "endMs": 6727,
+        "method": "silence",
+        "absoluteStartMs": 77811
+      },
+      {
+        "text": "Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.",
+        "startMs": 7411,
+        "endMs": 13616,
+        "method": "silence",
+        "absoluteStartMs": 80901
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 83745
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 87912,
+    "endMs": 99980,
+    "sentences": [
+      {
+        "text": "L’événement disparaît de la liste après validation.",
+        "startMs": 367,
+        "endMs": 2226,
+        "method": "silence",
+        "absoluteStartMs": 88279
+      },
+      {
+        "text": "Utilisez donc l’archivage comme état normal de fin de vie, et réservez la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
+        "startMs": 2882,
+        "endMs": 11818,
+        "method": "silence",
+        "absoluteStartMs": 90794
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

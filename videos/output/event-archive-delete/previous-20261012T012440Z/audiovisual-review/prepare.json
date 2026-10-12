@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:11:32.868Z",
+  "videoSha256": "9263e833b5b82a3432b4ec5ccafd1127ff2ffd16e5a3d8667ff11e4156bac7fa",
+  "promptSha256": "8ab865ba5dbaefe65c69595a1ef7a6c23ff53124de3f528aec74d81a3a5b73bf",
+  "clipSha256": "adde5b57821d3d1ffee0df88cb3c8118b5c86b450d20e01f171eb30fcb319062",
+  "scene": "prepare",
+  "review": {
+    "heardOpening": "Pour cette démonstration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "nous travaillons sur une copie jetable de l’ancienne édition",
+        "visibleSeconds": 0,
+        "visible": "Page 'Dupliquer l'événement' avec le champ prérempli 'Ancienne fête de Montvert – copie de démonstration'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "vérifiez d’abord les inscriptions, les invitations, le journal et les rapports",
+        "visibleSeconds": 9.8,
+        "visible": "Affichage du tableau de bord de l'événement contenant 'Voir les inscriptions', 'Journal' et 'Rapports'",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "annulez les créneaux avant l’archivage",
+        "visibleSeconds": 10,
+        "visible": "Présence des boutons 'Gérer les créneaux' et 'Archiver' sur le tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:05 : Évocation des inscriptions, invitations, journal et rapports alors que la page les contenant ne s'affiche qu'à 00:09."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et naturelle, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

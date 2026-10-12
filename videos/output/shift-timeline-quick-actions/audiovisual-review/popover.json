@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T16:00:12.765Z",
-  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
-  "promptSha256": "b1f9b3367ddda8e7c2b16c09d2a35ae6be8d96d5dce2e032f9ec238a2c90348d",
-  "clipSha256": "5ebb4f1c48becdd4c122305f374d5c7edbe8e88e2635620a8120bca6f12518d9",
+  "reviewedAt": "2026-10-12T01:47:11.849Z",
+  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "promptSha256": "d0f79f11fd9863cfa42ccabc31ca4772191f2d5ea1c40afdb377bc3643d5822b",
+  "clipSha256": "0ec04130724a4c08e17467be0c5060632b0e61405e36e846d98e4fd02bf630d0",
   "scene": "popover",
   "review": {
-    "heardOpening": "Un clic sur la barre ouvre ses actions rapides",
+    "heardOpening": "Un clic sur la barre ouvre",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Un clic sur la barre ouvre ses actions rapides",
-        "visibleSeconds": 3,
-        "visible": "Clic sur la barre de créneau et apparition de la fenêtre contextuelle",
+        "spokenSeconds": 1,
+        "spoken": "Un clic sur la barre ouvre ses actions rapides.",
+        "visibleSeconds": 1.4,
+        "visible": "Clic sur le créneau violet et ouverture du panneau flottant d'actions rapides.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
-        "spoken": "On y retrouve les heures, l’état des inscriptions",
-        "visibleSeconds": 6,
-        "visible": "Affichage des horaires 14h-18h et de la section Inscriptions",
+        "spokenSeconds": 3.8,
+        "spoken": "On y retrouve les heures,",
+        "visibleSeconds": 3.5,
+        "visible": "Les champs Horaires avec début (06:15) et fin (07:45) sont affichés dans la fenêtre.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "et les commandes utiles",
+        "spokenSeconds": 5.2,
+        "spoken": "l'état des inscriptions et les commandes utiles.",
         "visibleSeconds": 6.8,
-        "visible": "Boutons d'action Décaler, Dupliquer et Voir les inscriptions visibles",
+        "visible": "Le menu déroule pour afficher la section Inscriptions 'Ouvertes' ainsi que les options Dupliquer et Supprimer.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et rythme régulier."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:49:00.267Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "3313cd01e6d113fca9d59efe7be51ce94163ae6ba62a65d8852c1ed3a3f71729",
+  "clipSha256": "2b1bab74c49e5146638fa3d5bfdf28bae3e1a8e5e11545959bb9e2db3da837c3",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Dupliquer évite de reconstruire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dupliquer évite de reconstruire chaque année un événement",
+        "visibleSeconds": 0,
+        "visible": "Titre et encart sur la duplication d'événement affichés à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "La copie reste un nouveau brouillon",
+        "visibleSeconds": 3,
+        "visible": "Formulaire affichant le champ Titre de la copie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "sans mélanger les bénévoles ni l'historique",
+        "visibleSeconds": 3,
+        "visible": "Mention indiquant que les inscriptions ne sont jamais copiées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et dynamique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

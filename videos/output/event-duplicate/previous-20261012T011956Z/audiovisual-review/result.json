@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:33.982Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "6df5fc768516867ed7e31a4024d16d626502ced2b89085a36f9d8db78523a2d9",
+  "clipSha256": "0e2116646e4a895a707bf706c88423e0ba1cc8ff36b867cd499f005319f13afe",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Avant toute publication, relisez les horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.4,
+        "spoken": "relisez les horaires",
+        "visibleSeconds": 1.4,
+        "visible": "Vue frise des créneaux avec les plages horaires affichées par poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "adaptez les capacités et les consignes",
+        "visibleSeconds": 3.2,
+        "visible": "Blocs de créneaux affichant les jauges de bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "La duplication accélère la préparation",
+        "visibleSeconds": 7.3,
+        "visible": "Écran récapitulatif des créneaux dupliqués pour l'édition 2027",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, concluant le chapitre sur un écran récapitulatif stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

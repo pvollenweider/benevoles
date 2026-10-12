@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-11T23:50:53.662Z",
+  "videoSha256": "c12c29a9a2daed8bbdf107f31a38960c06fec9085a95322877d14cae6a5a0906",
+  "promptSha256": "3f3f3a578750b9e2bf2af5a6124f46e4350a7c303020ece254d55cd2dcdf6219",
+  "clipSha256": "9eddc6e52fd59e86b1101b62078247b96df5c1d6e28ca71d1d111081c94e63a4",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "La suppression définitive d'un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires.",
+        "visibleSeconds": 0,
+        "visible": "Page Paramètres affichant les détails de l'organisation et la liste des administrateurs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles",
+        "visibleSeconds": 6.8,
+        "visible": "Section des administrateurs montrant les rôles attribués (Propriétaire, Organisateur).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes",
+        "visibleSeconds": 15.2,
+        "visible": "Écran stable récapitulatif des paramètres d'administration.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée avec un ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

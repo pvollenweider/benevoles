@@ -8,8 +8,8 @@ Dans l’administration, les inscriptions confirmées et les personnes en attent
 
 Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.
 
-Sur sa page, la personne voit l’offre, son expiration et les actions Accepter ou Refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.
+Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Prendre la place confirme immédiatement le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.
 
-Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.
+Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. Dans l’administration, on peut suivre l’offre active et la position des personnes encore en attente.
 
 La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.

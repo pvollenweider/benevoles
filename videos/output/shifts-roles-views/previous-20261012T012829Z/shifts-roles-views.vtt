@@ -1,0 +1,83 @@
+WEBVTT
+
+00:00:01.108 --> 00:00:05.859
+Un poste décrit une mission, par exemple
+Accueil ou Buvette. Un créneau est une
+
+00:00:05.859 --> 00:00:11.627
+plage précise de ce poste, avec une date,
+des heures et un nombre de places. Le même
+
+00:00:11.627 --> 00:00:15.360
+poste peut donc contenir plusieurs
+créneaux, sur un ou plusieurs jours.
+
+00:00:15.816 --> 00:00:20.024
+La vue Frise répond d’abord à une question
+visuelle : quelles missions faut-il
+
+00:00:20.024 --> 00:00:24.232
+assurer, et quand ? Les barres montrent
+les horaires des créneaux. Leur longueur
+
+00:00:24.232 --> 00:00:28.117
+permet de repérer les chevauchements, les
+trous et les périodes chargées. Une
+
+00:00:28.117 --> 00:00:30.383
+couleur peut aider à reconnaître un poste.
+
+00:00:30.837 --> 00:00:35.227
+La vue Liste présente les mêmes données
+sous une forme plus compacte. Elle est
+
+00:00:35.227 --> 00:00:38.989
+pratique pour relire les libellés, les
+capacités et les statuts, ou pour
+
+00:00:38.989 --> 00:00:42.438
+parcourir rapidement un grand nombre de
+créneaux sans suivre l’axe horaire.
+
+00:00:42.892 --> 00:00:47.322
+Dans Gérer les postes, l’ordre choisi
+devient l’ordre du planning. Les flèches
+
+00:00:47.322 --> 00:00:51.013
+Monter et Descendre offrent une
+alternative claire au glisser-déposer et
+
+00:00:51.013 --> 00:00:56.550
+gardent le focus sur le poste déplacé.
+C’est aussi ici qu’on renomme un poste et
+
+00:00:56.550 --> 00:00:58.027
+qu’on ouvre ses règles.
+
+00:00:58.481 --> 00:01:02.556
+La couleur sert à reconnaître une mission
+d’un coup d’œil. Choisissez-la dans la
+
+00:01:02.556 --> 00:01:07.258
+palette prévue : elle reste cohérente dans
+les vues et lisible pour les bénévoles. La
+
+00:01:07.258 --> 00:01:11.333
+couleur aide à se repérer, mais le nom du
+poste reste toujours l’information
+
+00:01:11.333 --> 00:01:11.646
+principale.
+
+00:01:12.876 --> 00:01:17.671
+Utilisez la Frise pour construire et
+équilibrer la journée, puis la Liste pour
+
+00:01:17.671 --> 00:01:22.835
+contrôler le détail. Avec des noms courts,
+un ordre logique et des couleurs stables,
+
+00:01:22.835 --> 00:01:26.155
+le planning reste compréhensible même
+lorsqu’il couvre plusieurs jours.
+

@@ -1,0 +1,254 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 1121,
+    "endMs": 14166,
+    "sentences": [
+      {
+        "text": "Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles.",
+        "startMs": 215,
+        "endMs": 7007,
+        "method": "silence",
+        "absoluteStartMs": 1336
+      },
+      {
+        "text": "La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.",
+        "startMs": 7480,
+        "endMs": 12873,
+        "method": "silence",
+        "absoluteStartMs": 8601
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "setup",
+    "startMs": 14620,
+    "endMs": 28235,
+    "sentences": [
+      {
+        "text": "La liste d’attente s’active sur le créneau.",
+        "startMs": 234,
+        "endMs": 2306,
+        "method": "silence",
+        "absoluteStartMs": 14854
+      },
+      {
+        "text": "Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement.",
+        "startMs": 3051,
+        "endMs": 6542,
+        "method": "silence",
+        "absoluteStartMs": 17671
+      },
+      {
+        "text": "Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.",
+        "startMs": 7269,
+        "endMs": 13371,
+        "method": "silence",
+        "absoluteStartMs": 21889
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 15087
+      },
+      {
+        "kind": "click",
+        "atMs": 18637
+      }
+    ]
+  },
+  {
+    "chapter": "admin",
+    "startMs": 28687,
+    "endMs": 40770,
+    "sentences": [
+      {
+        "text": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes.",
+        "startMs": 245,
+        "endMs": 5104,
+        "method": "silence",
+        "absoluteStartMs": 28932
+      },
+      {
+        "text": "L’ordre dépend du moment d’inscription.",
+        "startMs": 5396,
+        "endMs": 6854,
+        "method": "silence",
+        "absoluteStartMs": 34083
+      },
+      {
+        "text": "On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
+        "startMs": 7516,
+        "endMs": 11837,
+        "method": "silence",
+        "absoluteStartMs": 36203
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "admin",
+        "phrase": "On peut ainsi répondre à",
+        "startMs": 7516,
+        "endMs": 11837,
+        "cueMs": 36206
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "release",
+    "startMs": 42936,
+    "endMs": 54354,
+    "sentences": [
+      {
+        "text": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement.",
+        "startMs": 136,
+        "endMs": 4558,
+        "method": "silence",
+        "absoluteStartMs": 43072
+      },
+      {
+        "text": "Une offre est envoyée à la première personne en attente.",
+        "startMs": 5204,
+        "endMs": 7295,
+        "method": "silence",
+        "absoluteStartMs": 48140
+      },
+      {
+        "text": "Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.",
+        "startMs": 7813,
+        "endMs": 11292,
+        "method": "silence",
+        "absoluteStartMs": 50749
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 46610
+      },
+      {
+        "kind": "click",
+        "atMs": 49341
+      }
+    ]
+  },
+  {
+    "chapter": "volunteer",
+    "startMs": 54807,
+    "endMs": 69192,
+    "sentences": [
+      {
+        "text": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place.",
+        "startMs": 173,
+        "endMs": 5986,
+        "method": "silence",
+        "absoluteStartMs": 54980
+      },
+      {
+        "text": "Prendre la place confirme immédiatement le créneau.",
+        "startMs": 6509,
+        "endMs": 8653,
+        "method": "silence",
+        "absoluteStartMs": 61316
+      },
+      {
+        "text": "Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
+        "startMs": 9286,
+        "endMs": 14383,
+        "method": "silence",
+        "absoluteStartMs": 64093
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "volunteer",
+        "phrase": "Prendre la place confirme immédiatement",
+        "startMs": 6509,
+        "endMs": 8653,
+        "cueMs": 61317
+      },
+      {
+        "segmentId": "volunteer",
+        "phrase": "Refuser la place conserve une réponse explicite",
+        "startMs": 9286,
+        "endMs": 14383,
+        "cueMs": 64095
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "expiry",
+    "startMs": 69652,
+    "endMs": 81173,
+    "sentences": [
+      {
+        "text": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment :",
+        "startMs": 191,
+        "endMs": 3192,
+        "method": "silence",
+        "absoluteStartMs": 69843
+      },
+      {
+        "text": "la promotion passe à la personne suivante.",
+        "startMs": 3768,
+        "endMs": 5628,
+        "method": "silence",
+        "absoluteStartMs": 73420
+      },
+      {
+        "text": "Dans l’administration, on peut suivre l’offre active et la position des personnes encore en attente.",
+        "startMs": 5873,
+        "endMs": 11346,
+        "method": "silence",
+        "absoluteStartMs": 75525
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "expiry",
+        "phrase": "la promotion passe à la",
+        "startMs": 3768,
+        "endMs": 5628,
+        "cueMs": 73422
+      },
+      {
+        "segmentId": "expiry",
+        "phrase": "Dans l’administration, on peut suivre l’offre active",
+        "startMs": 5873,
+        "endMs": 11346,
+        "cueMs": 75527
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "result",
+    "startMs": 81626,
+    "endMs": 92090,
+    "sentences": [
+      {
+        "text": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible.",
+        "startMs": 196,
+        "endMs": 3900,
+        "method": "silence",
+        "absoluteStartMs": 81822
+      },
+      {
+        "text": "Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
+        "startMs": 4492,
+        "endMs": 10112,
+        "method": "silence",
+        "absoluteStartMs": 86118
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T00:06:02.651Z",
+  "revalidatedAt": "2026-10-12T00:06:02.654Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c65dd8082b92649bcf616246b714fa442aacfcb09e4e937744bbacb127e72c84",
+      "recognized": "Dupliquer évite de reconstruire chaque année un événement qui garde la même organisation. La copie reste un nouveau brouillon. On gagne la structure sans mélanger les bénévoles, ni l'historique de deux éditions.",
+      "expected": "Dupliquer évite de reconstruire chaque année un événement qui garde la même organisation. La copie reste un nouveau brouillon : on gagne la structure sans mélanger les bénévoles ni l’historique de deux éditions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "identity",
+      "audioSha256": "acde3f6f15b04e27ba7a9794e2ae0f24ca1e941482ab0e497b6f18a449cf0b91",
+      "recognized": "Commencez par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage, fin de l'événement, créneau et programme. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+      "expected": "Commencez par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage : fin de l’événement, créneaux et programme. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+      "wordErrorRate": 0.02631578947368421,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "choices",
+      "audioSha256": "caa674bb193e0f6739b50269838c21c609b3808b85e4ae94212339ed9d59be01",
+      "recognized": "Choisissez ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programmes. Les pages personnalisées peuvent aussi être copiées.",
+      "expected": "Choisissez ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
+      "wordErrorRate": 0.027777777777777776,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leaders",
+      "audioSha256": "c0169c5a0b038aedf731b310f716ba0590f5113a5dc9b87988e1e3ab819f59f2",
+      "recognized": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Activez cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+      "expected": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Activez cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "summary",
+      "audioSha256": "e357c91a979f0f0d7c044376559f29b9a0daa0ad1ce8433903b6eb9a7c547bc3",
+      "recognized": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés et ceux qui ne le seront jamais : les inscriptions et les jalons. On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+      "expected": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés et ceux qui ne le sont jamais : les inscriptions et les jalons. On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+      "wordErrorRate": 0.027777777777777776,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "b8e9cd0d8675cc24cbf0d9642971160334e2e13ec661e05dff19e237eca68be9",
+      "recognized": "Créons la copie. Elle s'ouvre dans l'administration avec le statut brouillon. Vérifions ses réglages. Les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
+      "expected": "Créons la copie. Elle s’ouvre dans l’administration avec le statut Brouillon. Vérifions ses réglages : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "copied-details",
+      "audioSha256": "9f46256f7d8420851822c37a6ffd3668d0f6a6b0225e471ee8df00ec0fce97cb",
+      "recognized": "Ouvrons le planning de la nouvelle édition. Les dates ont été décalées et les créneaux repartent sans inscription. Nous retrouvons les postes et leurs horaires, mais aucun engagement de l'année précédente. Les pages personnalisées sont également reprises, ouvrons leur liste dans cette nouvelle édition pour vérifier leur présence.",
+      "expected": "Ouvrons le planning de la nouvelle édition. Les dates ont été décalées et les créneaux repartent sans inscription. Nous retrouvons les postes et leurs horaires, mais aucun engagement de l'année précédente. Les pages personnalisées sont également reprises : ouvrons leur liste dans cette nouvelle édition pour vérifier leur présence.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leader-emails",
+      "audioSha256": "91b10058ca607952c76ee5c50e01ccad36bcd13b1e77cbec6171822e783d5714",
+      "recognized": "Les responsables que nous avons conservés ont chacun reçu une nouvelle invitation. Ouvrons le message réellement arrivé dans la boîte de formation. Il nomme la nouvelle édition et contient un nouveau lien personnel de responsable. Cette vérification permet de distinguer l'invitation de la copie et celle de l'événement d'origine.",
+      "expected": "Les responsables que nous avons conservés ont chacun reçu une nouvelle invitation. Ouvrons le message réellement arrivé dans la boîte de formation. Il nomme la nouvelle édition et contient un nouveau lien personnel de responsable. Cette vérification permet de distinguer l'invitation de la copie et celle de l'événement d'origine.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "4a57564b1a227c8a5cd54e090cda38de99e2794b5feb37b7f72543c6d4c09f91",
+      "recognized": "Avant toute publication, relisez les horaires, adaptez les capacités et les consignes, puis testez le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l'ancienne.",
+      "expected": "Avant toute publication, relisez les horaires, adaptez les capacités et les consignes, puis testez le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l’ancienne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

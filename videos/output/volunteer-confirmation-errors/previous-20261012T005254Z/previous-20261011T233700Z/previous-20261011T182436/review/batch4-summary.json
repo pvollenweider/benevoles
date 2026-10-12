@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "—",
+  "music": {},
+  "problems": "Rehearsal capacity refusal returns real HTTP 409, then fails on stale Votre sélection n’est plus disponible title; current product says Ta sélection n’est plus disponible. No final MP4. All 11 source chapters independently audited (0–1.8% difference); repeated empty network ASR replies resolved with isolated chapter audits and verified aggregation. No audio regenerated.",
+  "sourceChanges": "videos/lib/record-registration-errors.ts: use current Ta sélection title. No refilm."
+}

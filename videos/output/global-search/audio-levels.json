@@ -1,0 +1,622 @@
+{
+  "rule": {
+    "minGapLu": 12,
+    "maxGapLu": 20,
+    "musicOnlyFloorLufs": -36,
+    "musicOnlyUnderVoiceLu": 12,
+    "speechThresholdLufs": -35,
+    "windowS": 3,
+    "stepS": 1,
+    "frameS": 0.1,
+    "voicedShare": 0.5
+  },
+  "loop": {
+    "startS": 0.5,
+    "endS": 95,
+    "crossfadeS": 2
+  },
+  "mix": {
+    "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+    "volume": 0.31
+  },
+  "narration": {
+    "segmentTargetLufs": -18,
+    "maxSegmentGainDb": 12,
+    "compressor": "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+    "segmentGainsDb": {
+      "welcome": 0.5,
+      "open": 1.3,
+      "person": 0.2,
+      "shift": 1.3,
+      "limits": 0.5,
+      "result": 0.3
+    }
+  },
+  "videoSha256": "04d27bbd99d2af40e3ff8bc2a6c004a99f87c3e251bd1d2ba30dc4c4594920e6",
+  "summary": {
+    "voicedWindows": 82,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14,
+    "largestGapLu": 17.6,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "issues": [],
+  "windows": [
+    {
+      "startS": 1.5,
+      "kind": "voiced",
+      "voiceLufs": -16,
+      "musicLufs": -33.6,
+      "gapLu": 17.5
+    },
+    {
+      "startS": 2.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -33.2,
+      "gapLu": 16.3
+    },
+    {
+      "startS": 3.5,
+      "kind": "voiced",
+      "voiceLufs": -16.6,
+      "musicLufs": -33.5,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 4.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -32.7,
+      "gapLu": 15.9
+    },
+    {
+      "startS": 5.5,
+      "kind": "voiced",
+      "voiceLufs": -17.5,
+      "musicLufs": -32.8,
+      "gapLu": 15.4
+    },
+    {
+      "startS": 6.5,
+      "kind": "voiced",
+      "voiceLufs": -18.5,
+      "musicLufs": -32.5,
+      "gapLu": 14
+    },
+    {
+      "startS": 7.5,
+      "kind": "voiced",
+      "voiceLufs": -17.6,
+      "musicLufs": -32.8,
+      "gapLu": 15.3
+    },
+    {
+      "startS": 8.5,
+      "kind": "voiced",
+      "voiceLufs": -16.7,
+      "musicLufs": -33.1,
+      "gapLu": 16.4
+    },
+    {
+      "startS": 9.5,
+      "kind": "voiced",
+      "voiceLufs": -16.3,
+      "musicLufs": -33.6,
+      "gapLu": 17.3
+    },
+    {
+      "startS": 10.5,
+      "kind": "voiced",
+      "voiceLufs": -17.5,
+      "musicLufs": -33.6,
+      "gapLu": 16.1
+    },
+    {
+      "startS": 11.5,
+      "kind": "voiced",
+      "voiceLufs": -17.1,
+      "musicLufs": -33.6,
+      "gapLu": 16.5
+    },
+    {
+      "startS": 12.5,
+      "kind": "voiced",
+      "voiceLufs": -17.4,
+      "musicLufs": -32.8,
+      "gapLu": 15.4
+    },
+    {
+      "startS": 13.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -32.5,
+      "gapLu": 15.6
+    },
+    {
+      "startS": 14.5,
+      "kind": "voiced",
+      "voiceLufs": -17.4,
+      "musicLufs": -32.4,
+      "gapLu": 15
+    },
+    {
+      "startS": 15.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -32.9,
+      "gapLu": 15.9
+    },
+    {
+      "startS": 16.5,
+      "kind": "voiced",
+      "voiceLufs": -17.4,
+      "musicLufs": -33.2,
+      "gapLu": 15.8
+    },
+    {
+      "startS": 17.5,
+      "kind": "voiced",
+      "voiceLufs": -17.2,
+      "musicLufs": -33.4,
+      "gapLu": 16.2
+    },
+    {
+      "startS": 18.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33.4,
+      "gapLu": 16.6
+    },
+    {
+      "startS": 19.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -33.8,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 20.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -33.3,
+      "gapLu": 16.3
+    },
+    {
+      "startS": 21.5,
+      "kind": "voiced",
+      "voiceLufs": -17.4,
+      "musicLufs": -33,
+      "gapLu": 15.6
+    },
+    {
+      "startS": 22.5,
+      "kind": "voiced",
+      "voiceLufs": -17.3,
+      "musicLufs": -32.8,
+      "gapLu": 15.5
+    },
+    {
+      "startS": 23.5,
+      "kind": "voiced",
+      "voiceLufs": -18,
+      "musicLufs": -33.2,
+      "gapLu": 15.2
+    },
+    {
+      "startS": 27.5,
+      "kind": "voiced",
+      "voiceLufs": -15.7,
+      "musicLufs": -33.3,
+      "gapLu": 17.6
+    },
+    {
+      "startS": 28.5,
+      "kind": "voiced",
+      "voiceLufs": -16.1,
+      "musicLufs": -32.9,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 29.5,
+      "kind": "voiced",
+      "voiceLufs": -17.7,
+      "musicLufs": -32.1,
+      "gapLu": 14.4
+    },
+    {
+      "startS": 30.5,
+      "kind": "voiced",
+      "voiceLufs": -17.3,
+      "musicLufs": -32.1,
+      "gapLu": 14.8
+    },
+    {
+      "startS": 31.5,
+      "kind": "voiced",
+      "voiceLufs": -17.3,
+      "musicLufs": -32.3,
+      "gapLu": 15
+    },
+    {
+      "startS": 32.5,
+      "kind": "voiced",
+      "voiceLufs": -17.8,
+      "musicLufs": -33.3,
+      "gapLu": 15.5
+    },
+    {
+      "startS": 33.5,
+      "kind": "voiced",
+      "voiceLufs": -18.3,
+      "musicLufs": -33.2,
+      "gapLu": 15
+    },
+    {
+      "startS": 34.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -33.5,
+      "gapLu": 16.6
+    },
+    {
+      "startS": 35.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -33.1,
+      "gapLu": 16.1
+    },
+    {
+      "startS": 36.5,
+      "kind": "voiced",
+      "voiceLufs": -16.4,
+      "musicLufs": -33.2,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 37.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -32.5,
+      "gapLu": 15.6
+    },
+    {
+      "startS": 38.5,
+      "kind": "voiced",
+      "voiceLufs": -15.9,
+      "musicLufs": -32.8,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 39.5,
+      "kind": "voiced",
+      "voiceLufs": -16.4,
+      "musicLufs": -32.7,
+      "gapLu": 16.3
+    },
+    {
+      "startS": 40.5,
+      "kind": "voiced",
+      "voiceLufs": -16.2,
+      "musicLufs": -33.5,
+      "gapLu": 17.3
+    },
+    {
+      "startS": 41.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33,
+      "gapLu": 16.2
+    },
+    {
+      "startS": 42.5,
+      "kind": "voiced",
+      "voiceLufs": -16.4,
+      "musicLufs": -33.2,
+      "gapLu": 16.8
+    },
+    {
+      "startS": 43.5,
+      "kind": "voiced",
+      "voiceLufs": -17.9,
+      "musicLufs": -32.6,
+      "gapLu": 14.7
+    },
+    {
+      "startS": 44.5,
+      "kind": "voiced",
+      "voiceLufs": -18.1,
+      "musicLufs": -32.5,
+      "gapLu": 14.4
+    },
+    {
+      "startS": 45.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -32.3,
+      "gapLu": 15.3
+    },
+    {
+      "startS": 46.5,
+      "kind": "voiced",
+      "voiceLufs": -16.5,
+      "musicLufs": -32.5,
+      "gapLu": 16
+    },
+    {
+      "startS": 47.5,
+      "kind": "voiced",
+      "voiceLufs": -16.4,
+      "musicLufs": -32.5,
+      "gapLu": 16.1
+    },
+    {
+      "startS": 48.5,
+      "kind": "voiced",
+      "voiceLufs": -17.5,
+      "musicLufs": -33.3,
+      "gapLu": 15.8
+    },
+    {
+      "startS": 49.5,
+      "kind": "voiced",
+      "voiceLufs": -17.9,
+      "musicLufs": -33.2,
+      "gapLu": 15.3
+    },
+    {
+      "startS": 50.5,
+      "kind": "voiced",
+      "voiceLufs": -18.7,
+      "musicLufs": -33.4,
+      "gapLu": 14.7
+    },
+    {
+      "startS": 51.5,
+      "kind": "voiced",
+      "voiceLufs": -18,
+      "musicLufs": -32.6,
+      "gapLu": 14.6
+    },
+    {
+      "startS": 52.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -32.8,
+      "gapLu": 16
+    },
+    {
+      "startS": 53.5,
+      "kind": "voiced",
+      "voiceLufs": -17.2,
+      "musicLufs": -32.5,
+      "gapLu": 15.3
+    },
+    {
+      "startS": 54.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33.2,
+      "gapLu": 16.4
+    },
+    {
+      "startS": 55.5,
+      "kind": "voiced",
+      "voiceLufs": -17.6,
+      "musicLufs": -33.2,
+      "gapLu": 15.6
+    },
+    {
+      "startS": 56.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33.8,
+      "gapLu": 17
+    },
+    {
+      "startS": 57.5,
+      "kind": "voiced",
+      "voiceLufs": -18.1,
+      "musicLufs": -33.2,
+      "gapLu": 15.1
+    },
+    {
+      "startS": 58.5,
+      "kind": "voiced",
+      "voiceLufs": -18,
+      "musicLufs": -33.3,
+      "gapLu": 15.4
+    },
+    {
+      "startS": 59.5,
+      "kind": "voiced",
+      "voiceLufs": -16.7,
+      "musicLufs": -32.4,
+      "gapLu": 15.8
+    },
+    {
+      "startS": 60.5,
+      "kind": "voiced",
+      "voiceLufs": -16.4,
+      "musicLufs": -32.3,
+      "gapLu": 15.9
+    },
+    {
+      "startS": 61.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -32.2,
+      "gapLu": 15.3
+    },
+    {
+      "startS": 62.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -32.5,
+      "gapLu": 15.5
+    },
+    {
+      "startS": 63.5,
+      "kind": "voiced",
+      "voiceLufs": -16.6,
+      "musicLufs": -32.8,
+      "gapLu": 16.2
+    },
+    {
+      "startS": 64.5,
+      "kind": "voiced",
+      "voiceLufs": -16,
+      "musicLufs": -33,
+      "gapLu": 17
+    },
+    {
+      "startS": 65.5,
+      "kind": "voiced",
+      "voiceLufs": -17.1,
+      "musicLufs": -32.7,
+      "gapLu": 15.7
+    },
+    {
+      "startS": 66.5,
+      "kind": "voiced",
+      "voiceLufs": -18.2,
+      "musicLufs": -33.1,
+      "gapLu": 14.9
+    },
+    {
+      "startS": 67.5,
+      "kind": "voiced",
+      "voiceLufs": -18.3,
+      "musicLufs": -32.9,
+      "gapLu": 14.6
+    },
+    {
+      "startS": 68.5,
+      "kind": "voiced",
+      "voiceLufs": -18.5,
+      "musicLufs": -32.8,
+      "gapLu": 14.4
+    },
+    {
+      "startS": 69.5,
+      "kind": "voiced",
+      "voiceLufs": -17,
+      "musicLufs": -32.5,
+      "gapLu": 15.5
+    },
+    {
+      "startS": 70.5,
+      "kind": "voiced",
+      "voiceLufs": -16.5,
+      "musicLufs": -32.8,
+      "gapLu": 16.3
+    },
+    {
+      "startS": 71.5,
+      "kind": "voiced",
+      "voiceLufs": -16.7,
+      "musicLufs": -33.1,
+      "gapLu": 16.4
+    },
+    {
+      "startS": 72.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33.4,
+      "gapLu": 16.5
+    },
+    {
+      "startS": 73.5,
+      "kind": "voiced",
+      "voiceLufs": -17.5,
+      "musicLufs": -33,
+      "gapLu": 15.5
+    },
+    {
+      "startS": 74.5,
+      "kind": "voiced",
+      "voiceLufs": -16.9,
+      "musicLufs": -32.8,
+      "gapLu": 15.9
+    },
+    {
+      "startS": 75.5,
+      "kind": "voiced",
+      "voiceLufs": -16.1,
+      "musicLufs": -32.1,
+      "gapLu": 16
+    },
+    {
+      "startS": 76.5,
+      "kind": "voiced",
+      "voiceLufs": -15.2,
+      "musicLufs": -32.1,
+      "gapLu": 16.9
+    },
+    {
+      "startS": 77.5,
+      "kind": "voiced",
+      "voiceLufs": -15.1,
+      "musicLufs": -32.3,
+      "gapLu": 17.3
+    },
+    {
+      "startS": 78.5,
+      "kind": "voiced",
+      "voiceLufs": -15.9,
+      "musicLufs": -32.7,
+      "gapLu": 16.9
+    },
+    {
+      "startS": 79.5,
+      "kind": "voiced",
+      "voiceLufs": -15.9,
+      "musicLufs": -33.3,
+      "gapLu": 17.4
+    },
+    {
+      "startS": 80.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -33.7,
+      "gapLu": 16.9
+    },
+    {
+      "startS": 81.5,
+      "kind": "voiced",
+      "voiceLufs": -16.1,
+      "musicLufs": -33.4,
+      "gapLu": 17.3
+    },
+    {
+      "startS": 82.5,
+      "kind": "voiced",
+      "voiceLufs": -16.7,
+      "musicLufs": -32.9,
+      "gapLu": 16.2
+    },
+    {
+      "startS": 83.5,
+      "kind": "voiced",
+      "voiceLufs": -16.8,
+      "musicLufs": -32.6,
+      "gapLu": 15.8
+    },
+    {
+      "startS": 84.5,
+      "kind": "voiced",
+      "voiceLufs": -16.7,
+      "musicLufs": -32.4,
+      "gapLu": 15.7
+    },
+    {
+      "startS": 85.5,
+      "kind": "voiced",
+      "voiceLufs": -17.1,
+      "musicLufs": -32.8,
+      "gapLu": 15.6
+    }
+  ]
+}

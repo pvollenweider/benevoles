@@ -1,0 +1,1149 @@
+[
+  {
+    "chapter": "welcome",
+    "startMs": 42,
+    "endMs": 19515,
+    "sentences": [
+      {
+        "text": "Une inscription doit rester compréhensible même quand quelque chose se passe mal.",
+        "startMs": 294,
+        "endMs": 4356,
+        "method": "silence",
+        "absoluteStartMs": 336
+      },
+      {
+        "text": "Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau.",
+        "startMs": 5037,
+        "endMs": 11655,
+        "method": "silence",
+        "absoluteStartMs": 5079
+      },
+      {
+        "text": "Les exemples utilisent un événement de démonstration :",
+        "startMs": 12390,
+        "endMs": 14786,
+        "method": "silence",
+        "absoluteStartMs": 12432
+      },
+      {
+        "text": "tu verras les vrais messages du formulaire, puis une confirmation réelle.",
+        "startMs": 15307,
+        "endMs": 18933,
+        "method": "silence",
+        "absoluteStartMs": 15349
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "form",
+    "startMs": 21776,
+    "endMs": 40968,
+    "sentences": [
+      {
+        "text": "Choisis Accueil et continue.",
+        "startMs": 540,
+        "endMs": 2150,
+        "method": "silence",
+        "absoluteStartMs": 22316
+      },
+      {
+        "text": "Nous remplissons le prénom, le nom, l’email et le téléphone, puis acceptons la convention et l’utilisation des données.",
+        "startMs": 3062,
+        "endMs": 10206,
+        "method": "silence",
+        "absoluteStartMs": 24838
+      },
+      {
+        "text": "Avant d’envoyer, relis toujours l’adresse email :",
+        "startMs": 11121,
+        "endMs": 13738,
+        "method": "silence",
+        "absoluteStartMs": 32897
+      },
+      {
+        "text": "une faute peut empêcher le message d’arriver même si l’inscription est enregistrée correctement.",
+        "startMs": 14076,
+        "endMs": 18641,
+        "method": "silence",
+        "absoluteStartMs": 35852
+      }
+    ],
+    "anchors": [],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 22272
+      },
+      {
+        "kind": "click",
+        "atMs": 23072
+      },
+      {
+        "kind": "click",
+        "atMs": 23855
+      },
+      {
+        "kind": "key",
+        "atMs": 24163
+      },
+      {
+        "kind": "key",
+        "atMs": 24278
+      },
+      {
+        "kind": "key",
+        "atMs": 24393
+      },
+      {
+        "kind": "key",
+        "atMs": 24507
+      },
+      {
+        "kind": "click",
+        "atMs": 25089
+      },
+      {
+        "kind": "key",
+        "atMs": 25395
+      },
+      {
+        "kind": "key",
+        "atMs": 25509
+      },
+      {
+        "kind": "key",
+        "atMs": 25622
+      },
+      {
+        "kind": "key",
+        "atMs": 25736
+      },
+      {
+        "kind": "key",
+        "atMs": 25849
+      },
+      {
+        "kind": "key",
+        "atMs": 25964
+      },
+      {
+        "kind": "key",
+        "atMs": 26080
+      },
+      {
+        "kind": "click",
+        "atMs": 26655
+      },
+      {
+        "kind": "key",
+        "atMs": 26962
+      },
+      {
+        "kind": "key",
+        "atMs": 27076
+      },
+      {
+        "kind": "key",
+        "atMs": 27191
+      },
+      {
+        "kind": "key",
+        "atMs": 27306
+      },
+      {
+        "kind": "key",
+        "atMs": 27424
+      },
+      {
+        "kind": "key",
+        "atMs": 27542
+      },
+      {
+        "kind": "key",
+        "atMs": 27660
+      },
+      {
+        "kind": "key",
+        "atMs": 27777
+      },
+      {
+        "kind": "key",
+        "atMs": 27895
+      },
+      {
+        "kind": "key",
+        "atMs": 28016
+      },
+      {
+        "kind": "key",
+        "atMs": 28129
+      },
+      {
+        "kind": "key",
+        "atMs": 28248
+      },
+      {
+        "kind": "key",
+        "atMs": 28366
+      },
+      {
+        "kind": "key",
+        "atMs": 28479
+      },
+      {
+        "kind": "key",
+        "atMs": 28598
+      },
+      {
+        "kind": "key",
+        "atMs": 28716
+      },
+      {
+        "kind": "key",
+        "atMs": 28834
+      },
+      {
+        "kind": "key",
+        "atMs": 28954
+      },
+      {
+        "kind": "key",
+        "atMs": 29072
+      },
+      {
+        "kind": "key",
+        "atMs": 29191
+      },
+      {
+        "kind": "key",
+        "atMs": 29309
+      },
+      {
+        "kind": "key",
+        "atMs": 29429
+      },
+      {
+        "kind": "key",
+        "atMs": 29548
+      },
+      {
+        "kind": "key",
+        "atMs": 29664
+      },
+      {
+        "kind": "key",
+        "atMs": 29783
+      },
+      {
+        "kind": "key",
+        "atMs": 29902
+      },
+      {
+        "kind": "key",
+        "atMs": 30022
+      },
+      {
+        "kind": "key",
+        "atMs": 30135
+      },
+      {
+        "kind": "key",
+        "atMs": 30256
+      },
+      {
+        "kind": "click",
+        "atMs": 30838
+      },
+      {
+        "kind": "key",
+        "atMs": 31145
+      },
+      {
+        "kind": "key",
+        "atMs": 31259
+      },
+      {
+        "kind": "key",
+        "atMs": 31374
+      },
+      {
+        "kind": "key",
+        "atMs": 31488
+      },
+      {
+        "kind": "key",
+        "atMs": 31602
+      },
+      {
+        "kind": "key",
+        "atMs": 31717
+      },
+      {
+        "kind": "key",
+        "atMs": 31832
+      },
+      {
+        "kind": "key",
+        "atMs": 31946
+      },
+      {
+        "kind": "key",
+        "atMs": 32063
+      },
+      {
+        "kind": "key",
+        "atMs": 32191
+      },
+      {
+        "kind": "key",
+        "atMs": 32312
+      },
+      {
+        "kind": "key",
+        "atMs": 32431
+      },
+      {
+        "kind": "key",
+        "atMs": 32549
+      },
+      {
+        "kind": "click",
+        "atMs": 33154
+      },
+      {
+        "kind": "click",
+        "atMs": 33937
+      }
+    ]
+  },
+  {
+    "chapter": "validation",
+    "startMs": 43232,
+    "endMs": 63005,
+    "sentences": [
+      {
+        "text": "La taille du t-shirt n’a pas été renseignée.",
+        "startMs": 551,
+        "endMs": 2380,
+        "method": "silence",
+        "absoluteStartMs": 43783
+      },
+      {
+        "text": "Confirmer affiche la question à corriger et conserve toutes les autres réponses.",
+        "startMs": 3089,
+        "endMs": 7377,
+        "method": "silence",
+        "absoluteStartMs": 46321
+      },
+      {
+        "text": "Le champ obligatoire est signalé ;",
+        "startMs": 8250,
+        "endMs": 9664,
+        "method": "silence",
+        "absoluteStartMs": 51482
+      },
+      {
+        "text": "choisis une taille, puis tu peux reprendre.",
+        "startMs": 10187,
+        "endMs": 12176,
+        "method": "silence",
+        "absoluteStartMs": 53419
+      },
+      {
+        "text": "Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu’une boîte existe vraiment.",
+        "startMs": 12904,
+        "endMs": 19327,
+        "method": "silence",
+        "absoluteStartMs": 56136
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "validation",
+        "phrase": "Confirmer affiche la question à",
+        "startMs": 3089,
+        "endMs": 7377,
+        "cueMs": 46323
+      },
+      {
+        "segmentId": "validation",
+        "phrase": "choisis une taille, puis tu",
+        "startMs": 10187,
+        "endMs": 12176,
+        "cueMs": 53420
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 46788
+      },
+      {
+        "kind": "click",
+        "atMs": 53905
+      }
+    ]
+  },
+  {
+    "chapter": "capacity",
+    "startMs": 65268,
+    "endMs": 88553,
+    "sentences": [
+      {
+        "text": "Une place peut être prise pendant que tu remplis le formulaire.",
+        "startMs": 446,
+        "endMs": 3566,
+        "method": "silence",
+        "absoluteStartMs": 65714
+      },
+      {
+        "text": "Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration.",
+        "startMs": 3822,
+        "endMs": 8754,
+        "method": "silence",
+        "absoluteStartMs": 69090
+      },
+      {
+        "text": "La confirmation répond Ta sélection n'est plus disponible.",
+        "startMs": 9424,
+        "endMs": 12424,
+        "method": "silence",
+        "absoluteStartMs": 74692
+      },
+      {
+        "text": "Reviens au planning pour ajuster ton choix ;",
+        "startMs": 12857,
+        "endMs": 14681,
+        "method": "silence",
+        "absoluteStartMs": 78125
+      },
+      {
+        "text": "les informations saisies restent conservées.",
+        "startMs": 15220,
+        "endMs": 16960,
+        "method": "silence",
+        "absoluteStartMs": 80488
+      },
+      {
+        "text": "Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+        "startMs": 17265,
+        "endMs": 22861,
+        "method": "silence",
+        "absoluteStartMs": 82533
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "capacity",
+        "phrase": "La confirmation répond Ta sélection",
+        "startMs": 9424,
+        "endMs": 12424,
+        "cueMs": 74695
+      },
+      {
+        "segmentId": "capacity",
+        "phrase": "Une place visible quelques minutes",
+        "startMs": 17265,
+        "endMs": 22861,
+        "cueMs": 82535
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 75170
+      }
+    ]
+  },
+  {
+    "chapter": "network",
+    "startMs": 90815,
+    "endMs": 109875,
+    "sentences": [
+      {
+        "text": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau.",
+        "startMs": 421,
+        "endMs": 5774,
+        "method": "silence",
+        "absoluteStartMs": 91236
+      },
+      {
+        "text": "Le message dit que l’inscription n’a peut-être pas été reçue.",
+        "startMs": 6585,
+        "endMs": 9187,
+        "method": "silence",
+        "absoluteStartMs": 97400
+      },
+      {
+        "text": "Tes champs sont toujours là.",
+        "startMs": 9870,
+        "endMs": 10916,
+        "method": "silence",
+        "absoluteStartMs": 100685
+      },
+      {
+        "text": "Après retour de la connexion, clique à nouveau sur Confirmer mon inscription :",
+        "startMs": 11663,
+        "endMs": 15589,
+        "method": "silence",
+        "absoluteStartMs": 102478
+      },
+      {
+        "text": "le système évite de créer deux engagements identiques.",
+        "startMs": 16308,
+        "endMs": 18650,
+        "method": "silence",
+        "absoluteStartMs": 107123
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "network",
+        "phrase": "Après retour de la connexion,",
+        "startMs": 11663,
+        "endMs": 15589,
+        "cueMs": 102480
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 91352
+      },
+      {
+        "kind": "click",
+        "atMs": 102952
+      }
+    ]
+  },
+  {
+    "chapter": "success",
+    "startMs": 112138,
+    "endMs": 131656,
+    "sentences": [
+      {
+        "text": "La connexion est rétablie et l’inscription réussit.",
+        "startMs": 410,
+        "endMs": 2819,
+        "method": "silence",
+        "absoluteStartMs": 112548
+      },
+      {
+        "text": "La page confirme le résultat et indique l’envoi de l’email.",
+        "startMs": 3506,
+        "endMs": 6080,
+        "method": "silence",
+        "absoluteStartMs": 115644
+      },
+      {
+        "text": "Avec un formulaire public ordinaire, le lien de gestion reste dans cet email :",
+        "startMs": 6689,
+        "endMs": 11316,
+        "method": "silence",
+        "absoluteStartMs": 118827
+      },
+      {
+        "text": "il n’est pas affiché simplement parce qu’une adresse a été saisie.",
+        "startMs": 11779,
+        "endMs": 14734,
+        "method": "silence",
+        "absoluteStartMs": 123917
+      },
+      {
+        "text": "Garde le message pour retrouver ton planning ou annuler plus tard.",
+        "startMs": 15480,
+        "endMs": 19293,
+        "method": "silence",
+        "absoluteStartMs": 127618
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "success",
+        "phrase": "il n’est pas affiché simplement",
+        "startMs": 11779,
+        "endMs": 14734,
+        "cueMs": 123917
+      }
+    ],
+    "interactions": []
+  },
+  {
+    "chapter": "email",
+    "startMs": 133916,
+    "endMs": 155283,
+    "sentences": [
+      {
+        "text": "Voici le message réellement reçu dans la boîte de démonstration.",
+        "startMs": 256,
+        "endMs": 3307,
+        "method": "silence",
+        "absoluteStartMs": 134172
+      },
+      {
+        "text": "Il contient le créneau et le lien personnel.",
+        "startMs": 3885,
+        "endMs": 6684,
+        "method": "silence",
+        "absoluteStartMs": 137801
+      },
+      {
+        "text": "Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée.",
+        "startMs": 7338,
+        "endMs": 11781,
+        "method": "silence",
+        "absoluteStartMs": 141254
+      },
+      {
+        "text": "Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ;",
+        "startMs": 11905,
+        "endMs": 16464,
+        "method": "silence",
+        "absoluteStartMs": 145821
+      },
+      {
+        "text": "contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
+        "startMs": 16861,
+        "endMs": 21206,
+        "method": "silence",
+        "absoluteStartMs": 150777
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  },
+  {
+    "chapter": "overlap",
+    "startMs": 157548,
+    "endMs": 187926,
+    "sentences": [
+      {
+        "text": "Le serveur revérifie aussi tes horaires.",
+        "startMs": 336,
+        "endMs": 2720,
+        "method": "silence",
+        "absoluteStartMs": 157884
+      },
+      {
+        "text": "Aline est déjà inscrite à l'accueil de dix heures à midi.",
+        "startMs": 3067,
+        "endMs": 5896,
+        "method": "silence",
+        "absoluteStartMs": 160615
+      },
+      {
+        "text": "Essayons le vestiaire de onze à treize heures avec sa même adresse.",
+        "startMs": 6580,
+        "endMs": 10095,
+        "method": "silence",
+        "absoluteStartMs": 164128
+      },
+      {
+        "text": "Remplissons le formulaire et confirmons.",
+        "startMs": 10509,
+        "endMs": 12594,
+        "method": "silence",
+        "absoluteStartMs": 168057
+      },
+      {
+        "text": "Le refus nomme le créneau qui chevauche cette demande.",
+        "startMs": 13049,
+        "endMs": 16812,
+        "method": "silence",
+        "absoluteStartMs": 170597
+      },
+      {
+        "text": "Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée.",
+        "startMs": 17420,
+        "endMs": 21454,
+        "method": "silence",
+        "absoluteStartMs": 174968
+      },
+      {
+        "text": "Ce contrôle évite de compter une personne sur deux postes en même temps.",
+        "startMs": 21791,
+        "endMs": 25150,
+        "method": "silence",
+        "absoluteStartMs": 179339
+      },
+      {
+        "text": "Pour continuer, reviens au planning et choisis un horaire compatible.",
+        "startMs": 25579,
+        "endMs": 29950,
+        "method": "silence",
+        "absoluteStartMs": 183127
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "overlap",
+        "phrase": "Essayons le vestiaire",
+        "startMs": 6580,
+        "endMs": 10095,
+        "cueMs": 164130
+      },
+      {
+        "segmentId": "overlap",
+        "phrase": "Remplissons le formulaire et confirmons.",
+        "startMs": 10509,
+        "endMs": 12594,
+        "cueMs": 170436
+      },
+      {
+        "segmentId": "overlap",
+        "phrase": "Pour continuer, reviens au planning",
+        "startMs": 25579,
+        "endMs": 29950,
+        "cueMs": 183129
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 164618
+      },
+      {
+        "kind": "click",
+        "atMs": 165401
+      },
+      {
+        "kind": "click",
+        "atMs": 166183
+      },
+      {
+        "kind": "click",
+        "atMs": 166967
+      },
+      {
+        "kind": "click",
+        "atMs": 167751
+      },
+      {
+        "kind": "click",
+        "atMs": 168534
+      },
+      {
+        "kind": "click",
+        "atMs": 169315
+      },
+      {
+        "kind": "click",
+        "atMs": 170100
+      },
+      {
+        "kind": "click",
+        "atMs": 170916
+      }
+    ]
+  },
+  {
+    "chapter": "response-loss",
+    "startMs": 190189,
+    "endMs": 228543,
+    "sentences": [
+      {
+        "text": "Une coupure peut arriver après l'enregistrement.",
+        "startMs": 427,
+        "endMs": 2717,
+        "method": "silence",
+        "absoluteStartMs": 190616
+      },
+      {
+        "text": "Nicolas choisit la logistique.",
+        "startMs": 3229,
+        "endMs": 5996,
+        "method": "silence",
+        "absoluteStartMs": 193418
+      },
+      {
+        "text": "Cette fois, la requête arrive réellement au serveur, qui crée son inscription ;",
+        "startMs": 6120,
+        "endMs": 9871,
+        "method": "silence",
+        "absoluteStartMs": 196309
+      },
+      {
+        "text": "nous interrompons volontairement seulement la réponse au navigateur.",
+        "startMs": 10224,
+        "endMs": 15280,
+        "method": "silence",
+        "absoluteStartMs": 200413
+      },
+      {
+        "text": "Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti.",
+        "startMs": 15585,
+        "endMs": 20970,
+        "method": "silence",
+        "absoluteStartMs": 205774
+      },
+      {
+        "text": "Rétablissons la connexion et confirmons à nouveau.",
+        "startMs": 21126,
+        "endMs": 22696,
+        "method": "silence",
+        "absoluteStartMs": 211315
+      },
+      {
+        "text": "Le message indique qu'il est déjà inscrit et que son lien lui a été envoyé par email.",
+        "startMs": 23308,
+        "endMs": 28483,
+        "method": "silence",
+        "absoluteStartMs": 213497
+      },
+      {
+        "text": "Vérifions côté organisation :",
+        "startMs": 28916,
+        "endMs": 31203,
+        "method": "silence",
+        "absoluteStartMs": 219105
+      },
+      {
+        "text": "une seule ligne de Nicolas apparaît sur ce créneau.",
+        "startMs": 31423,
+        "endMs": 33717,
+        "method": "silence",
+        "absoluteStartMs": 221612
+      },
+      {
+        "text": "Le nouvel essai n'a pas créé une deuxième inscription.",
+        "startMs": 34300,
+        "endMs": 38217,
+        "method": "silence",
+        "absoluteStartMs": 224489
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "response-loss",
+        "phrase": "Nicolas choisit la logistique",
+        "startMs": 3229,
+        "endMs": 5996,
+        "cueMs": 193419
+      },
+      {
+        "segmentId": "response-loss",
+        "phrase": "Le formulaire affiche Connexion interrompue",
+        "startMs": 15585,
+        "endMs": 20970,
+        "cueMs": 205775
+      },
+      {
+        "segmentId": "response-loss",
+        "phrase": "Rétablissons la connexion et confirmons",
+        "startMs": 21126,
+        "endMs": 22696,
+        "cueMs": 211316
+      },
+      {
+        "segmentId": "response-loss",
+        "phrase": "Vérifions côté organisation",
+        "startMs": 28916,
+        "endMs": 31203,
+        "cueMs": 219106
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 193900
+      },
+      {
+        "kind": "click",
+        "atMs": 194682
+      },
+      {
+        "kind": "click",
+        "atMs": 195465
+      },
+      {
+        "kind": "click",
+        "atMs": 196248
+      },
+      {
+        "kind": "click",
+        "atMs": 197033
+      },
+      {
+        "kind": "click",
+        "atMs": 197831
+      },
+      {
+        "kind": "click",
+        "atMs": 198615
+      },
+      {
+        "kind": "click",
+        "atMs": 199399
+      },
+      {
+        "kind": "click",
+        "atMs": 206265
+      },
+      {
+        "kind": "click",
+        "atMs": 211780
+      }
+    ]
+  },
+  {
+    "chapter": "invitation-success",
+    "startMs": 230808,
+    "endMs": 276612,
+    "sentences": [
+      {
+        "text": "Comparons maintenant deux confirmations réussies.",
+        "startMs": 188,
+        "endMs": 3037,
+        "method": "silence",
+        "absoluteStartMs": 230996
+      },
+      {
+        "text": "Zoé choisit le vestiaire dans le formulaire public ordinaire.",
+        "startMs": 3413,
+        "endMs": 6211,
+        "method": "silence",
+        "absoluteStartMs": 234221
+      },
+      {
+        "text": "Après ses informations et les consentements, confirmons.",
+        "startMs": 6646,
+        "endMs": 10509,
+        "method": "silence",
+        "absoluteStartMs": 237454
+      },
+      {
+        "text": "La page annonce le succès mais ne montre pas son lien personnel :",
+        "startMs": 10969,
+        "endMs": 14615,
+        "method": "silence",
+        "absoluteStartMs": 241777
+      },
+      {
+        "text": "saisir une adresse ne prouve pas que l'on possède cette boîte.",
+        "startMs": 14858,
+        "endMs": 18008,
+        "method": "silence",
+        "absoluteStartMs": 245666
+      },
+      {
+        "text": "Aline a ensuite reçu une invitation personnelle envoyée par l'organisation.",
+        "startMs": 18194,
+        "endMs": 22094,
+        "method": "silence",
+        "absoluteStartMs": 249002
+      },
+      {
+        "text": "Ouvrons ce lien pour choisir la logistique.",
+        "startMs": 22452,
+        "endMs": 24727,
+        "method": "silence",
+        "absoluteStartMs": 253260
+      },
+      {
+        "text": "Ses informations sont préremplies ;",
+        "startMs": 25138,
+        "endMs": 26979,
+        "method": "silence",
+        "absoluteStartMs": 255946
+      },
+      {
+        "text": "vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements.",
+        "startMs": 27292,
+        "endMs": 31681,
+        "method": "silence",
+        "absoluteStartMs": 258100
+      },
+      {
+        "text": "Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse.",
+        "startMs": 32213,
+        "endMs": 38253,
+        "method": "silence",
+        "absoluteStartMs": 263021
+      },
+      {
+        "text": "Ouvrons ce lien :",
+        "startMs": 38798,
+        "endMs": 39568,
+        "method": "silence",
+        "absoluteStartMs": 269606
+      },
+      {
+        "text": "Aline retrouve ses deux créneaux.",
+        "startMs": 39932,
+        "endMs": 41632,
+        "method": "silence",
+        "absoluteStartMs": 270740
+      },
+      {
+        "text": "Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+        "startMs": 42153,
+        "endMs": 45292,
+        "method": "silence",
+        "absoluteStartMs": 272961
+      }
+    ],
+    "anchors": [
+      {
+        "segmentId": "invitation-success",
+        "phrase": "Zoé choisit le vestiaire",
+        "startMs": 3413,
+        "endMs": 6211,
+        "cueMs": 234224
+      },
+      {
+        "segmentId": "invitation-success",
+        "phrase": "Après ses informations et les consentements",
+        "startMs": 6646,
+        "endMs": 10509,
+        "cueMs": 238157
+      },
+      {
+        "segmentId": "invitation-success",
+        "phrase": "Aline a ensuite reçu une",
+        "startMs": 18194,
+        "endMs": 22094,
+        "cueMs": 249004
+      },
+      {
+        "segmentId": "invitation-success",
+        "phrase": "Ouvrons ce lien pour choisir la logistique",
+        "startMs": 22452,
+        "endMs": 24727,
+        "cueMs": 253261
+      },
+      {
+        "segmentId": "invitation-success",
+        "phrase": "vérifions-les, choisissons sa taille",
+        "startMs": 27292,
+        "endMs": 31681,
+        "cueMs": 258102
+      },
+      {
+        "segmentId": "invitation-success",
+        "phrase": "Aline retrouve ses deux créneaux",
+        "startMs": 39932,
+        "endMs": 41632,
+        "cueMs": 270741
+      }
+    ],
+    "interactions": [
+      {
+        "kind": "click",
+        "atMs": 234714
+      },
+      {
+        "kind": "click",
+        "atMs": 235496
+      },
+      {
+        "kind": "click",
+        "atMs": 236281
+      },
+      {
+        "kind": "click",
+        "atMs": 237064
+      },
+      {
+        "kind": "click",
+        "atMs": 237847
+      },
+      {
+        "kind": "click",
+        "atMs": 238646
+      },
+      {
+        "kind": "click",
+        "atMs": 239430
+      },
+      {
+        "kind": "click",
+        "atMs": 240213
+      },
+      {
+        "kind": "click",
+        "atMs": 240998
+      },
+      {
+        "kind": "click",
+        "atMs": 254964
+      },
+      {
+        "kind": "click",
+        "atMs": 255747
+      },
+      {
+        "kind": "click",
+        "atMs": 258580
+      },
+      {
+        "kind": "click",
+        "atMs": 259362
+      },
+      {
+        "kind": "click",
+        "atMs": 260146
+      },
+      {
+        "kind": "click",
+        "atMs": 260946
+      },
+      {
+        "kind": "click",
+        "atMs": 271219
+      }
+    ]
+  },
+  {
+    "chapter": "result",
+    "startMs": 278875,
+    "endMs": 308093,
+    "sentences": [
+      {
+        "text": "Revenons côté organisation pour vérifier les inscriptions réellement présentes.",
+        "startMs": 292,
+        "endMs": 4781,
+        "method": "silence",
+        "absoluteStartMs": 279167
+      },
+      {
+        "text": "Une erreur de champ se corrige sur place.",
+        "startMs": 5037,
+        "endMs": 7106,
+        "method": "silence",
+        "absoluteStartMs": 283912
+      },
+      {
+        "text": "Une sélection indisponible se revoit dans le planning.",
+        "startMs": 7585,
+        "endMs": 10313,
+        "method": "silence",
+        "absoluteStartMs": 286460
+      },
+      {
+        "text": "Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription.",
+        "startMs": 10450,
+        "endMs": 16481,
+        "method": "silence",
+        "absoluteStartMs": 289325
+      },
+      {
+        "text": "Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux.",
+        "startMs": 17368,
+        "endMs": 21473,
+        "method": "silence",
+        "absoluteStartMs": 296243
+      },
+      {
+        "text": "Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+        "startMs": 21920,
+        "endMs": 28937,
+        "method": "silence",
+        "absoluteStartMs": 300795
+      }
+    ],
+    "anchors": [],
+    "interactions": []
+  }
+]

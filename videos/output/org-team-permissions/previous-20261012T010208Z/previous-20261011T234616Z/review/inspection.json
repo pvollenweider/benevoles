@@ -1,0 +1,1398 @@
+{
+  "duration": 132.12,
+  "videoSha256": "9edcfe123834ac8c497400c7d42304520d65963d1758dee0976c695b57cb40df",
+  "build": {
+    "commit": "42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9",
+    "sourceTree": "588beaf8d80cc59d1a3e68cd23f25a309c64af8b",
+    "productSourceSha256": "e4e0ebadcce277108908d6389055fc753b5bc9e829a2b534812be587cea7d5b3",
+    "buildId": "y5HTtrg_9cOS9PQo5uo57",
+    "snapshot": "/tmp/benevoles-video-production.batch7",
+    "builtAt": "2026-10-11T21:29:41.103Z"
+  },
+  "effects": {
+    "exactBytes": true,
+    "actualSha256": "a0093a4201ba9455cccedb6301e33ffacbdd63d3047ffd872deb6041377246af",
+    "expectedSha256": "a0093a4201ba9455cccedb6301e33ffacbdd63d3047ffd872deb6041377246af",
+    "clicks": 9,
+    "keys": 35
+  },
+  "levels": {
+    "rule": {
+      "minGapLu": 12,
+      "maxGapLu": 20,
+      "musicOnlyFloorLufs": -36,
+      "musicOnlyUnderVoiceLu": 12,
+      "speechThresholdLufs": -35,
+      "windowS": 3,
+      "stepS": 1,
+      "frameS": 0.1,
+      "voicedShare": 0.5
+    },
+    "loop": {
+      "startS": 0.5,
+      "endS": 95,
+      "crossfadeS": 2
+    },
+    "mix": {
+      "compressor": "threshold=0.1:ratio=4:attack=50:release=500",
+      "volume": 0.31
+    },
+    "narration": {
+      "segmentTargetLufs": -18,
+      "maxSegmentGainDb": 12,
+      "compressor": "threshold=0.125:ratio=3:attack=15:release=300:makeup=1",
+      "segmentGainsDb": {
+        "welcome": 1.8,
+        "roles": 1.5,
+        "invite": 0.1,
+        "invite-result": 0.4,
+        "change-role": 0.4,
+        "organizer-view": 1.1,
+        "limits": 1.7,
+        "result": 2.3
+      }
+    },
+    "videoSha256": "9edcfe123834ac8c497400c7d42304520d65963d1758dee0976c695b57cb40df",
+    "summary": {
+      "voicedWindows": 118,
+      "musicOnlyWindows": 0,
+      "smallestGapLu": 14.2,
+      "largestGapLu": 18.4,
+      "quietestMusicOnlyLufs": null,
+      "loudestMusicOnlyLufs": null,
+      "medianVoiceLufs": -16.4
+    },
+    "issues": [],
+    "windows": [
+      {
+        "startS": 1.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -33.6,
+        "gapLu": 18.4
+      },
+      {
+        "startS": 2.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.3,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 3.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -33.7,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 4.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.2,
+        "gapLu": 17
+      },
+      {
+        "startS": 5.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 6.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -32.7,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 7.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.9,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 8.5,
+        "kind": "voiced",
+        "voiceLufs": -18.4,
+        "musicLufs": -33.1,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 9.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -33.5,
+        "gapLu": 16
+      },
+      {
+        "startS": 10.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -33.6,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 11.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.8,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 15.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.3,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 16.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.4,
+        "gapLu": 17
+      },
+      {
+        "startS": 17.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 18.5,
+        "kind": "voiced",
+        "voiceLufs": -16.7,
+        "musicLufs": -33.6,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 19.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33.7,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 20.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 21.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 22.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 23.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.1,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 24.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.3,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 25.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.3,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 26.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 27.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.2,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 28.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.9,
+        "gapLu": 17
+      },
+      {
+        "startS": 29.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 30.5,
+        "kind": "voiced",
+        "voiceLufs": -15.6,
+        "musicLufs": -32.2,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 31.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.4,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 32.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 33.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.1,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 34.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.2,
+        "gapLu": 16
+      },
+      {
+        "startS": 37.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -32.2,
+        "gapLu": 17
+      },
+      {
+        "startS": 38.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -32.7,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 39.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.7,
+        "gapLu": 17
+      },
+      {
+        "startS": 40.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.5,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 41.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33.3,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 42.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -33.8,
+        "gapLu": 18.1
+      },
+      {
+        "startS": 43.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.1,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 44.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.8,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 45.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.3,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 46.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.6,
+        "gapLu": 17.5
+      },
+      {
+        "startS": 47.5,
+        "kind": "voiced",
+        "voiceLufs": -15.1,
+        "musicLufs": -32.8,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 48.5,
+        "kind": "voiced",
+        "voiceLufs": -15.2,
+        "musicLufs": -33.6,
+        "gapLu": 18.4
+      },
+      {
+        "startS": 49.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.5,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 50.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 51.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -32.9,
+        "gapLu": 15
+      },
+      {
+        "startS": 52.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.9,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 53.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.6,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 54.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.1,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 55.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 56.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -33.6,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 57.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -33.2,
+        "gapLu": 16.2
+      },
+      {
+        "startS": 58.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -33.7,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 59.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.9,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 60.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.8,
+        "gapLu": 15.5
+      },
+      {
+        "startS": 61.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.1,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 62.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -32.4,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 63.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.5,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 67.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.3,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 68.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -32.9,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 69.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.4,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 70.5,
+        "kind": "voiced",
+        "voiceLufs": -17.4,
+        "musicLufs": -32.6,
+        "gapLu": 15.2
+      },
+      {
+        "startS": 71.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.8,
+        "gapLu": 15.6
+      },
+      {
+        "startS": 72.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -33.2,
+        "gapLu": 17
+      },
+      {
+        "startS": 73.5,
+        "kind": "voiced",
+        "voiceLufs": -15.3,
+        "musicLufs": -32.9,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 74.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.1,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 75.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 76.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -32.5,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 77.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.4,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 78.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.8,
+        "gapLu": 16.9
+      },
+      {
+        "startS": 79.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -33.2,
+        "gapLu": 17.8
+      },
+      {
+        "startS": 80.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.5,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 81.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.5,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 82.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -32.9,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 83.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.6,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 84.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.5,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 85.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 86.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.6,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 87.5,
+        "kind": "voiced",
+        "voiceLufs": -17.2,
+        "musicLufs": -33.1,
+        "gapLu": 15.9
+      },
+      {
+        "startS": 88.5,
+        "kind": "voiced",
+        "voiceLufs": -16.9,
+        "musicLufs": -32.7,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 89.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.1,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 90.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -32.7,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 91.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 92.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -33,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 93.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.5,
+        "gapLu": 17.6
+      },
+      {
+        "startS": 94.5,
+        "kind": "voiced",
+        "voiceLufs": -15.9,
+        "musicLufs": -33.3,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 95.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.9,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 96.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.9,
+        "gapLu": 17
+      },
+      {
+        "startS": 97.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.8,
+        "gapLu": 17.4
+      },
+      {
+        "startS": 98.5,
+        "kind": "voiced",
+        "voiceLufs": -15.4,
+        "musicLufs": -32.5,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 99.5,
+        "kind": "voiced",
+        "voiceLufs": -15.8,
+        "musicLufs": -32.9,
+        "gapLu": 17.1
+      },
+      {
+        "startS": 100.5,
+        "kind": "voiced",
+        "voiceLufs": -16.6,
+        "musicLufs": -32.7,
+        "gapLu": 16.1
+      },
+      {
+        "startS": 101.5,
+        "kind": "voiced",
+        "voiceLufs": -17.6,
+        "musicLufs": -33.3,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 102.5,
+        "kind": "voiced",
+        "voiceLufs": -17.7,
+        "musicLufs": -32.8,
+        "gapLu": 15.1
+      },
+      {
+        "startS": 103.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.7,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 104.5,
+        "kind": "voiced",
+        "voiceLufs": -16.3,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 105.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.1,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 106.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -32.3,
+        "gapLu": 15
+      },
+      {
+        "startS": 107.5,
+        "kind": "voiced",
+        "voiceLufs": -17,
+        "musicLufs": -32.7,
+        "gapLu": 15.7
+      },
+      {
+        "startS": 108.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -32.8,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 109.5,
+        "kind": "voiced",
+        "voiceLufs": -17.1,
+        "musicLufs": -33.8,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 110.5,
+        "kind": "voiced",
+        "voiceLufs": -16.5,
+        "musicLufs": -33.3,
+        "gapLu": 16.8
+      },
+      {
+        "startS": 111.5,
+        "kind": "voiced",
+        "voiceLufs": -16.1,
+        "musicLufs": -34.2,
+        "gapLu": 18.2
+      },
+      {
+        "startS": 112.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.2,
+        "gapLu": 17.7
+      },
+      {
+        "startS": 113.5,
+        "kind": "voiced",
+        "voiceLufs": -15.5,
+        "musicLufs": -33.4,
+        "gapLu": 17.9
+      },
+      {
+        "startS": 114.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -32.7,
+        "gapLu": 16.7
+      },
+      {
+        "startS": 115.5,
+        "kind": "voiced",
+        "voiceLufs": -16,
+        "musicLufs": -33.3,
+        "gapLu": 17.3
+      },
+      {
+        "startS": 116.5,
+        "kind": "voiced",
+        "voiceLufs": -17.5,
+        "musicLufs": -33.2,
+        "gapLu": 15.8
+      },
+      {
+        "startS": 117.5,
+        "kind": "voiced",
+        "voiceLufs": -18.3,
+        "musicLufs": -33.7,
+        "gapLu": 15.4
+      },
+      {
+        "startS": 118.5,
+        "kind": "voiced",
+        "voiceLufs": -18.6,
+        "musicLufs": -33,
+        "gapLu": 14.4
+      },
+      {
+        "startS": 119.5,
+        "kind": "voiced",
+        "voiceLufs": -17.3,
+        "musicLufs": -33.6,
+        "gapLu": 16.3
+      },
+      {
+        "startS": 120.5,
+        "kind": "voiced",
+        "voiceLufs": -15.7,
+        "musicLufs": -32.9,
+        "gapLu": 17.2
+      },
+      {
+        "startS": 121.5,
+        "kind": "voiced",
+        "voiceLufs": -16.2,
+        "musicLufs": -32.8,
+        "gapLu": 16.6
+      },
+      {
+        "startS": 122.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -32.1,
+        "gapLu": 15.3
+      },
+      {
+        "startS": 123.5,
+        "kind": "voiced",
+        "voiceLufs": -18.3,
+        "musicLufs": -32.5,
+        "gapLu": 14.2
+      },
+      {
+        "startS": 124.5,
+        "kind": "voiced",
+        "voiceLufs": -17.9,
+        "musicLufs": -32.7,
+        "gapLu": 14.7
+      },
+      {
+        "startS": 125.5,
+        "kind": "voiced",
+        "voiceLufs": -16.8,
+        "musicLufs": -33.3,
+        "gapLu": 16.5
+      },
+      {
+        "startS": 126.5,
+        "kind": "voiced",
+        "voiceLufs": -16.4,
+        "musicLufs": -33.2,
+        "gapLu": 16.8
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "welcome",
+      "startMs": 1132,
+      "endMs": 13913,
+      "sentences": [
+        {
+          "text": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin.",
+          "startMs": 228,
+          "endMs": 5263,
+          "method": "silence",
+          "absoluteStartS": 1.36,
+          "absoluteEndS": 6.395
+        },
+        {
+          "text": "Ici, trois personnes sont déjà actives :",
+          "startMs": 5867,
+          "endMs": 7396,
+          "method": "silence",
+          "absoluteStartS": 6.999,
+          "absoluteEndS": 8.528
+        },
+        {
+          "text": "deux propriétaires et une organisatrice.",
+          "startMs": 7801,
+          "endMs": 9474,
+          "method": "silence",
+          "absoluteStartS": 8.933,
+          "absoluteEndS": 10.606
+        },
+        {
+          "text": "Le badge Vous repère le compte actuellement connecté.",
+          "startMs": 10098,
+          "endMs": 12358,
+          "method": "silence",
+          "absoluteStartS": 11.23,
+          "absoluteEndS": 13.49
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "roles",
+      "startMs": 16076,
+      "endMs": 36963,
+      "sentences": [
+        {
+          "text": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation.",
+          "startMs": 428,
+          "endMs": 3721,
+          "method": "silence",
+          "absoluteStartS": 16.504,
+          "absoluteEndS": 19.797
+        },
+        {
+          "text": "L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages.",
+          "startMs": 4432,
+          "endMs": 10699,
+          "method": "silence",
+          "absoluteStartS": 20.508,
+          "absoluteEndS": 26.775
+        },
+        {
+          "text": "Gardez si possible deux propriétaires actifs.",
+          "startMs": 11382,
+          "endMs": 13312,
+          "method": "silence",
+          "absoluteStartS": 27.458,
+          "absoluteEndS": 29.388
+        },
+        {
+          "text": "Un responsable de secteur est différent :",
+          "startMs": 14026,
+          "endMs": 15384,
+          "method": "silence",
+          "absoluteStartS": 30.102,
+          "absoluteEndS": 31.46
+        },
+        {
+          "text": "désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
+          "startMs": 15972,
+          "endMs": 20575,
+          "method": "silence",
+          "absoluteStartS": 32.048,
+          "absoluteEndS": 36.651
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 21007
+        }
+      ]
+    },
+    {
+      "id": "invite",
+      "startMs": 38568,
+      "endMs": 53970,
+      "sentences": [
+        {
+          "text": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi.",
+          "startMs": 315,
+          "endMs": 5112,
+          "method": "silence",
+          "absoluteStartS": 38.883,
+          "absoluteEndS": 43.68
+        },
+        {
+          "text": "Prenons Organisateur :",
+          "startMs": 5867,
+          "endMs": 6944,
+          "method": "silence",
+          "absoluteStartS": 44.435,
+          "absoluteEndS": 45.512
+        },
+        {
+          "text": "c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles.",
+          "startMs": 7386,
+          "endMs": 11306,
+          "method": "silence",
+          "absoluteStartS": 45.954,
+          "absoluteEndS": 49.874
+        },
+        {
+          "text": "Cliquez sur Envoyer l’invitation ;",
+          "startMs": 11848,
+          "endMs": 13249,
+          "method": "silence",
+          "absoluteStartS": 50.416,
+          "absoluteEndS": 51.817
+        },
+        {
+          "text": "le message confirme son adresse.",
+          "startMs": 13953,
+          "endMs": 15101,
+          "method": "silence",
+          "absoluteStartS": 52.521,
+          "absoluteEndS": 53.669
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 40901
+        },
+        {
+          "kind": "click",
+          "atMs": 41716
+        },
+        {
+          "kind": "key",
+          "atMs": 42025
+        },
+        {
+          "kind": "key",
+          "atMs": 42222
+        },
+        {
+          "kind": "key",
+          "atMs": 42321
+        },
+        {
+          "kind": "key",
+          "atMs": 42420
+        },
+        {
+          "kind": "key",
+          "atMs": 42519
+        },
+        {
+          "kind": "key",
+          "atMs": 42616
+        },
+        {
+          "kind": "key",
+          "atMs": 42718
+        },
+        {
+          "kind": "key",
+          "atMs": 42817
+        },
+        {
+          "kind": "key",
+          "atMs": 42920
+        },
+        {
+          "kind": "click",
+          "atMs": 43717
+        },
+        {
+          "kind": "key",
+          "atMs": 44025
+        },
+        {
+          "kind": "key",
+          "atMs": 44123
+        },
+        {
+          "kind": "key",
+          "atMs": 44222
+        },
+        {
+          "kind": "key",
+          "atMs": 44321
+        },
+        {
+          "kind": "key",
+          "atMs": 44420
+        },
+        {
+          "kind": "key",
+          "atMs": 44519
+        },
+        {
+          "kind": "key",
+          "atMs": 44619
+        },
+        {
+          "kind": "key",
+          "atMs": 44730
+        },
+        {
+          "kind": "key",
+          "atMs": 44834
+        },
+        {
+          "kind": "key",
+          "atMs": 44935
+        },
+        {
+          "kind": "key",
+          "atMs": 45033
+        },
+        {
+          "kind": "key",
+          "atMs": 45131
+        },
+        {
+          "kind": "key",
+          "atMs": 45230
+        },
+        {
+          "kind": "key",
+          "atMs": 45329
+        },
+        {
+          "kind": "key",
+          "atMs": 45428
+        },
+        {
+          "kind": "key",
+          "atMs": 45527
+        },
+        {
+          "kind": "key",
+          "atMs": 45625
+        },
+        {
+          "kind": "key",
+          "atMs": 45723
+        },
+        {
+          "kind": "key",
+          "atMs": 45824
+        },
+        {
+          "kind": "key",
+          "atMs": 45927
+        },
+        {
+          "kind": "key",
+          "atMs": 46028
+        },
+        {
+          "kind": "key",
+          "atMs": 46132
+        },
+        {
+          "kind": "key",
+          "atMs": 46229
+        },
+        {
+          "kind": "key",
+          "atMs": 46328
+        },
+        {
+          "kind": "key",
+          "atMs": 46427
+        },
+        {
+          "kind": "key",
+          "atMs": 46525
+        },
+        {
+          "kind": "click",
+          "atMs": 48583
+        },
+        {
+          "kind": "click",
+          "atMs": 50883
+        }
+      ]
+    },
+    {
+      "id": "invite-result",
+      "startMs": 54422,
+      "endMs": 65838,
+      "sentences": [
+        {
+          "text": "Après l’envoi, Léa apparaît avec le statut En attente.",
+          "startMs": 301,
+          "endMs": 2777,
+          "method": "silence",
+          "absoluteStartS": 54.723,
+          "absoluteEndS": 57.199
+        },
+        {
+          "text": "Un email contient son lien personnel, valable sept jours ;",
+          "startMs": 3147,
+          "endMs": 5498,
+          "method": "silence",
+          "absoluteStartS": 57.569,
+          "absoluteEndS": 59.92
+        },
+        {
+          "text": "on peut aussi copier ce lien pour le lui transmettre autrement.",
+          "startMs": 5896,
+          "endMs": 8109,
+          "method": "silence",
+          "absoluteStartS": 60.318,
+          "absoluteEndS": 62.531
+        },
+        {
+          "text": "Son accès ne devient actif qu’après la création de son mot de passe.",
+          "startMs": 8758,
+          "endMs": 11127,
+          "method": "silence",
+          "absoluteStartS": 63.18,
+          "absoluteEndS": 65.549
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 60783
+        }
+      ]
+    },
+    {
+      "id": "change-role",
+      "startMs": 68007,
+      "endMs": 83505,
+      "sentences": [
+        {
+          "text": "Le rôle peut évoluer.",
+          "startMs": 292,
+          "endMs": 1095,
+          "method": "silence",
+          "absoluteStartS": 68.299,
+          "absoluteEndS": 69.102
+        },
+        {
+          "text": "On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer :",
+          "startMs": 1536,
+          "endMs": 4649,
+          "method": "silence",
+          "absoluteStartS": 69.543,
+          "absoluteEndS": 72.656
+        },
+        {
+          "text": "parcourir simplement la liste au clavier ne change donc jamais les droits par accident.",
+          "startMs": 4789,
+          "endMs": 8727,
+          "method": "silence",
+          "absoluteStartS": 72.796,
+          "absoluteEndS": 76.734
+        },
+        {
+          "text": "La confirmation indique le nouveau rôle.",
+          "startMs": 9276,
+          "endMs": 10644,
+          "method": "silence",
+          "absoluteStartS": 77.283,
+          "absoluteEndS": 78.651
+        },
+        {
+          "text": "Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.",
+          "startMs": 11156,
+          "endMs": 15179,
+          "method": "silence",
+          "absoluteStartS": 79.163,
+          "absoluteEndS": 83.186
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 74365
+        }
+      ]
+    },
+    {
+      "id": "organizer-view",
+      "startMs": 83957,
+      "endMs": 97498,
+      "sentences": [
+        {
+          "text": "Vérifions maintenant avec le compte de Samira, qui est organisatrice.",
+          "startMs": 325,
+          "endMs": 3062,
+          "method": "silence",
+          "absoluteStartS": 84.282,
+          "absoluteEndS": 87.019
+        },
+        {
+          "text": "Elle retrouve les événements et les outils opérationnels.",
+          "startMs": 3586,
+          "endMs": 5542,
+          "method": "silence",
+          "absoluteStartS": 87.543,
+          "absoluteEndS": 89.499
+        },
+        {
+          "text": "Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.",
+          "startMs": 6005,
+          "endMs": 13262,
+          "method": "silence",
+          "absoluteStartS": 89.962,
+          "absoluteEndS": 97.219
+        }
+      ],
+      "markers": [
+        {
+          "kind": "click",
+          "atMs": 85551
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "startMs": 97951,
+      "endMs": 119708,
+      "sentences": [
+        {
+          "text": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires.",
+          "startMs": 308,
+          "endMs": 6620,
+          "method": "silence",
+          "absoluteStartS": 98.259,
+          "absoluteEndS": 104.571
+        },
+        {
+          "text": "Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne.",
+          "startMs": 6751,
+          "endMs": 14159,
+          "method": "silence",
+          "absoluteStartS": 104.702,
+          "absoluteEndS": 112.11
+        },
+        {
+          "text": "Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes :",
+          "startMs": 14877,
+          "endMs": 18388,
+          "method": "silence",
+          "absoluteStartS": 112.828,
+          "absoluteEndS": 116.339
+        },
+        {
+          "text": "vérifiez donc la personne avant d’appliquer.",
+          "startMs": 18931,
+          "endMs": 21754,
+          "method": "silence",
+          "absoluteStartS": 116.882,
+          "absoluteEndS": 119.705
+        }
+      ],
+      "markers": []
+    },
+    {
+      "id": "result",
+      "startMs": 120161,
+      "endMs": 131656,
+      "sentences": [
+        {
+          "text": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde :",
+          "startMs": 147,
+          "endMs": 4431,
+          "method": "silence",
+          "absoluteStartS": 120.308,
+          "absoluteEndS": 124.592
+        },
+        {
+          "text": "les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.",
+          "startMs": 4597,
+          "endMs": 11056,
+          "method": "silence",
+          "absoluteStartS": 124.758,
+          "absoluteEndS": 131.217
+        }
+      ],
+      "markers": []
+    }
+  ]
+}

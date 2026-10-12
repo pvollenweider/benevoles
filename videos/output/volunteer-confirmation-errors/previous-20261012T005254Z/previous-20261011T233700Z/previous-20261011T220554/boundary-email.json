@@ -1,0 +1,12 @@
+{
+  "anchor": "Voici le message réellement reçu dans la boîte de démonstration. Il",
+  "windowStart": 110.568,
+  "result": {
+    "found": true,
+    "startSeconds": 9.68,
+    "wordsHeard": "Voici le message réellement reçu dans la boîte de démonstration. Il"
+  },
+  "onset": 120.24799999999999,
+  "proposedCut": 120.2892295,
+  "note": "Proposal only; recut then independently audit before capture"
+}

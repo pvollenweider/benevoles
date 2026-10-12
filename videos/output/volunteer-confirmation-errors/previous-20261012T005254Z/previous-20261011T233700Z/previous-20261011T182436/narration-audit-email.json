@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:08:39.277Z",
+  "revalidatedAt": "2026-10-11T17:08:39.278Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "email",
+      "audioSha256": "2563d445f2ca2725dfbba64b05e557240f56e47265278d2b31304b7886b5aa31",
+      "recognized": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l'adresse donnée. Une page de succès ne prouve pas qu'un fournisseur e-mail a accepté le message. Contacte l'association si la boîte n'existe pas ou si tu as fait une faute.",
+      "expected": "Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée. Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ; contacte l’association si la boîte n’existe pas ou si tu as fait une faute.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "EVENT_ARCHIVE_DELETE",
+  "status": "READY",
+  "duration": 100.48,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 94,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "problems": "42 images et preuves62.8/81.7 revues. Archiver31.475 vs phrase31.006, Confirmer34.441 vs33.968 ; PDF60.672 vs60.206, export visible62.8 ; suppression81.424 vs80.950, copie disparue et principal conservé81.7. AV7/7 sans problème. Validation,ASR final7/7,VTT,effets,musique passent. Dates françaises/aucune adresse interdite/overlay. Défaut de disposition produit signalé : aperçu HTML export PDF, Gantt largeur auto avec cases min20px, déborde horizontalement à1280px ; fin de journée après18h hors champ sur image62.8, pas de région de défilement dédiée. Aucune donnée ni faux résultat masqué ; export réel.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté. Défaut de disposition export signalé, non corrigé dans ce lot de tournage.",
+  "report": "videos/output/event-archive-delete/review-report.txt"
+}

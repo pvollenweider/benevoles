@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:54:24.413Z",
+  "videoSha256": "c05b9810ec705e369d53d79b26f6718e9d209d2a55fd52276582b2057368150a",
+  "promptSha256": "75003b6967f8e9717af2fdd86aa8a2ca63cb2be0a2ad11dbda3bc044859cb20d",
+  "clipSha256": "43e8ba49635674068afce94c515ceab62c41cabc88b86cc0670d41b5c18932ec",
+  "scene": "volunteer",
+  "review": {
+    "heardOpening": "Sur sa page, la personne voit l'offre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.4,
+        "spoken": "la personne voit l'offre, son expiration",
+        "visibleSeconds": 1.2,
+        "visible": "L'encadré 'Une place vous est proposée' s'affiche avec la date limite d'expiration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "et les actions Prendre la place ou Refuser la place",
+        "visibleSeconds": 2.5,
+        "visible": "Le lien 'Prendre la place' et le bouton 'Refuser la place' sont affichés à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Prendre la place confirme immédiatement le créneau",
+        "visibleSeconds": 6.5,
+        "visible": "Un encadrement d'accentuation entoure le lien 'Prendre la place'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Refuser la place conserve une réponse explicite",
+        "visibleSeconds": 9,
+        "visible": "Le bouton 'Refuser la place' reste clairement visible dans l'offre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

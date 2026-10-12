@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi",
+  "windowStart": 66.715,
+  "result": {
+    "found": true,
+    "startSeconds": 15.3,
+    "wordsHeard": "Nous rétablissons maintenant la place"
+  },
+  "onset": 82.015,
+  "proposedCut": 81.7145835,
+  "note": "Proposal only; recut then independently audit before capture"
+}

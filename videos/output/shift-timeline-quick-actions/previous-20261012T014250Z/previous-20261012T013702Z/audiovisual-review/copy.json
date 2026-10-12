@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:26:54.212Z",
+  "videoSha256": "9be771429d6e23a99ac961b1c3058c28aa9a22009e527ca0a4ff4ff503e3b7fa",
+  "promptSha256": "6ee1cac52b8af4694159db54f248121cc01d7cc66dc7a41145a2eeed556171f9",
+  "clipSha256": "ea1d554d1d58d06bfd5617028434cc80277ecee655a0fc052465ff6c7c0f7fcd",
+  "scene": "copy",
+  "review": {
+    "heardOpening": "Dupliquer reprend le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Dupliquer reprend le poste, la durée, la capacité",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur l'option Dupliquer et apparition du nouveau créneau dupliqué",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Ouvrez cette copie : elle est indépendante.",
+        "visibleSeconds": 5.2,
+        "visible": "La fenêtre de détails du créneau dupliqué s'ouvre",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "Donne-lui le libellé Relève suivante",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie du texte « Relève suivante » dans le champ Libellé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "on la décale de quinze minutes avec le bouton Décaler",
+        "visibleSeconds": 17.4,
+        "visible": "Clic sur le bouton Décaler et ajustement des horaires de 07:45-09:15 à 08:00-09:30",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.4,
+        "spoken": "Fermer et enregistrer conserve le nouveau libellé.",
+        "visibleSeconds": 21.3,
+        "visible": "Fermeture du volet et affichage du créneau avec son nouveau libellé et confirmation Enregistré",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

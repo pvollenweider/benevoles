@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:53:43.497Z",
+  "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+  "promptSha256": "75055a7d23dd8a3fc707bdfaebade93746009b09dabb22ab38acf34614858126",
+  "clipSha256": "e47d9bc3337a694a89112969a5e90ef70f3810fc3d95f7c13dc71eec9082fa50",
+  "scene": "change",
+  "review": {
+    "heardOpening": "Dans la liste, le statut indique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Dans la liste",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage de la vue en tableau Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le statut indique si les inscriptions sont ouvertes",
+        "visibleSeconds": 1,
+        "visible": "Colonne Statut visible avec mentions Ouvert et Complet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Rouvrir l’éditeur permet de corriger l’horaire",
+        "visibleSeconds": 5.8,
+        "visible": "Formulaire Modifier le créneau affiché avec champs Début et Fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "relis toujours le nouveau jour, les heures et le rendez-vous",
+        "visibleSeconds": 6,
+        "visible": "Champs Date, Début, Fin et Lieu de rendez-vous présents à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et posée, bien synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

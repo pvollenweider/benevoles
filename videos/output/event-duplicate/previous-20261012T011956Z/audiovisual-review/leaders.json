@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:06:20.746Z",
+  "videoSha256": "8bd818d2a58c92d019014ca22df0023a2d96b37d98f63ba96016441318a936c4",
+  "promptSha256": "a646367072c8cd4d178e02b53d1ea24b699b415f1fa8111af8bfbd18a53b15e2",
+  "clipSha256": "2ce95768c5c031fbb9d5513d72707727214c95c6f0af7103b31e154d5151b487",
+  "scene": "leaders",
+  "review": {
+    "heardOpening": "Les responsables de secteur sont volontairement décochés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les responsables de secteur sont volontairement décochés au départ",
+        "visibleSeconds": 1,
+        "visible": "La case « Les responsables de secteur » apparaît décochée dans la liste des éléments à copier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "car les reprendre déclenche immédiatement un email",
+        "visibleSeconds": 3.5,
+        "visible": "La mention explicative sous la case indique « 2 responsables : chacun reçoit tout de suite un email avec son lien pour la copie »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Activez cette option seulement après avoir vérifié",
+        "visibleSeconds": 7.5,
+        "visible": "Le curseur clique sur la case « Les responsables de secteur », qui se coche en bleu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée, parfaitement audible et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

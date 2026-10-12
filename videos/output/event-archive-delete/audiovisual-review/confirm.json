@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:51:12.638Z",
-  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
-  "promptSha256": "19567e89ece249bdb85a2d3ea93061e0307e881f094c7d87797aada84c782676",
-  "clipSha256": "10fda2612bc4762ffcd354ff7606154f40820dcf51a2cf64949bea15f3e1e96a",
+  "reviewedAt": "2026-10-12T01:28:05.546Z",
+  "videoSha256": "2d9a500e8a823bb33e2bf33e6d39aafe9dd78888fe625dddc65be145edb74320",
+  "promptSha256": "46ca2a100a1f52b805d8d5997b991faa3817098d87e2b3d2a91a6875fdfec822",
+  "clipSha256": "0875c42a605c48ebfbf1e98999c86755a629bed9e8681b002278bdd9d8aca873",
   "scene": "confirm",
   "review": {
     "heardOpening": "La confirmation renforcée demande",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "demande de saisir le titre de l’événement",
-        "visibleSeconds": 4.5,
-        "visible": "Champ de saisie complété avec le titre requis",
+        "spokenSeconds": 0.5,
+        "spoken": "La confirmation renforcée demande de saisir le titre de l'événement.",
+        "visibleSeconds": 0.5,
+        "visible": "Boîte de dialogue de suppression affichant la consigne de saisie du titre et le champ texte en cours de remplissage.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.2,
-        "spoken": "le bouton reste indisponible",
-        "visibleSeconds": 5,
-        "visible": "Validation de correspondance affichée et bouton de suppression activé",
+        "spokenSeconds": 3.8,
+        "spoken": "Tant qu'il ne correspond pas, le bouton reste indisponible.",
+        "visibleSeconds": 4.2,
+        "visible": "Le texte complet est saisi, le message de validation s'affiche et le bouton rouge « Supprimer définitivement » devient actif.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.1,
-        "spoken": "Une fois la suppression lancée",
-        "visibleSeconds": 9.2,
-        "visible": "Clic sur le bouton et redirection vers la liste avec notification de suppression",
+        "spokenSeconds": 6.8,
+        "spoken": "Une fois la suppression lancée,",
+        "visibleSeconds": 6.6,
+        "visible": "Clic sur le bouton de suppression définitive et redirection vers la liste des événements avec l'alerte « Événement supprimé. ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l'application.",
+        "visibleSeconds": 8,
+        "visible": "Affichage stable de la page des événements après validation de la suppression.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide, claire et posée."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

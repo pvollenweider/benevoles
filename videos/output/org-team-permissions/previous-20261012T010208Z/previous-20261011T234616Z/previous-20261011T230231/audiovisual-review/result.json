@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:06:26.927Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "4a39b09943038b661927b87eb3d3854b64fa712b29451986f8c14b43fad6786d",
+  "clipSha256": "b588b71bf76cd1e0b171c19f825ca2f482e22706e0f370533576b67720a6f86e",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est une équipe autonome",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde",
+        "visibleSeconds": 0,
+        "visible": "Bandeau central « Une équipe autonome et maîtrisée » affiché sur la page Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "les propriétaires protègent le cadre",
+        "visibleSeconds": 4.5,
+        "visible": "Section Administrateurs visible montrant le rôle Propriétaire pour Camille Martin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "les organisateurs font vivre les événements",
+        "visibleSeconds": 6.3,
+        "visible": "Affichage des membres avec le rôle Organisateur dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

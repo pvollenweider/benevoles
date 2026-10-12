@@ -1,31 +1,31 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:14:23.069Z",
-  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
-  "promptSha256": "3b156e5291f169ed0081bfbd990f1bec35337e52a4c01774a8848564f4f187bd",
-  "clipSha256": "7c318c8d1419e6ee37555ba08506dd8f25af6612f5f0b0c22b1c949953e7c1d9",
+  "reviewedAt": "2026-10-12T01:19:20.911Z",
+  "videoSha256": "b2715a7186f7e2d6b978fec2014a0be2bbc049d492366d8febad8904066b04df",
+  "promptSha256": "9f045e4d54b74f272f4c51fdc0c20225496e10cdf06b108ad25157cee98fcc2f",
+  "clipSha256": "a76e3754f5b8179a781d67e30a87df2a800061278ed9032ca866b6b212ae7485",
   "scene": "result",
   "review": {
-    "heardOpening": "Le résultat est un événement publié",
+    "heardOpening": "Le résultat",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le résultat est un événement publié avec son lien public",
+        "spokenSeconds": 3,
+        "spoken": "avec son lien public",
         "visibleSeconds": 0,
-        "visible": "Section Publication affichée avec l'URL à partager",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 3.5,
-        "spoken": "son QR code",
-        "visibleSeconds": 0,
-        "visible": "Option QR code visible sous l'encadré Publication",
+        "visible": "Lien à partager affiché sous la section Publication",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
+        "spoken": "son QR code",
+        "visibleSeconds": 0,
+        "visible": "Lien cliquable QR code affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
         "spoken": "ses outils d’invitation",
         "visibleSeconds": 0,
         "visible": "Lien Inviter des membres affiché",
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et conforme au texte."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran récapitulatif fixe."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

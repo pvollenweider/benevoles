@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:00:27.566Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "db0843f53a17d34a8e5d49d3dfe044b0b1d88456814df485839f0b153ddc0a22",
+  "clipSha256": "d948f8188cba27b4c637d270b4b430ede9eb4a71b1b7e4a367d6c24a8a9b0c06",
+  "scene": "copy",
+  "review": {
+    "heardOpening": "Copier reprend le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Copier reprend le poste, la durée, la capacité",
+        "visibleSeconds": 0.5,
+        "visible": "Menu contextuel affichant l'option Dupliquer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "place la nouvelle plage à l’horaire choisi",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur Dupliquer et notification de succès, sans sélection d'horaire",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "recevoir un autre libellé ou d’autres consignes",
+        "visibleSeconds": 9.5,
+        "visible": "Écran figé, aucune édition de libellé ou de consignes montrée",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Divergence lexicale : la voix mentionne « Copier » alors que le bouton indique « Dupliquer » (00:01)",
+      "L'ajustement de l'horaire et l'édition des consignes ne sont pas illustrés à l'écran (00:06 - 00:13)"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

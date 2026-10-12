@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T01:41:05.575Z",
+  "revalidatedAt": "2026-10-12T01:41:05.576Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "f14d1eedc7756e9ced629d13c3e37f94e5fc277ca9f5b8eb184f78df32723b57",
+      "recognized": "La frise n'est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel. Dessiner une plage libre, ajuster sa durée, dupliquer une relève et ouvrir le détail sans quitter le contexte de la journée.",
+      "expected": "La Frise n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, dupliquer une relève et ouvrir le détail sans quitter le contexte de la journée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "draw",
+      "audioSha256": "a02de1ae516bb074cb4524bb9eb719fb94f67bc87600c45413d44aa05573eee0",
+      "recognized": "Dans la ligne d'un poste, cliquez dans une zone vide puis faites glisser jusqu'à l'heure de fin souhaitée. Le créneau est créé et ses actions rapides s'ouvrent avec les horaires calculés. Donnez-lui un libellé, ajustez les places, puis fermez avec Fermer et enregistrer.",
+      "expected": "Dans la ligne d’un poste, cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée. Le créneau est créé, et ses actions rapides s’ouvrent avec les horaires calculés. Donnez-lui un libellé, ajustez les places, puis fermez avec Fermer et enregistrer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "resize",
+      "audioSha256": "04bac18dad846f2412d3e88644365c83b36fecd26ef5e44f815b6d47c54cc106",
+      "recognized": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. Ici, la barre s'allonge de quarante-cinq minutes par pas de quinze minutes. Rouvre ensuite les actions rapides, l'heure de fin a bien changé. Vérifie-la avant de fermer.",
+      "expected": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvre ensuite les actions rapides : l’heure de fin a bien changé. Vérifie-la avant de fermer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "popover",
+      "audioSha256": "7f266388ce90313e7ee88a6713d4065c4dee7eabf0bb8b6c005b3fedf7a2f58f",
+      "recognized": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l'état des inscriptions et les commandes utiles. C'est le bon endroit pour une petite correction sans parcourir tout le formulaire.",
+      "expected": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "copy",
+      "audioSha256": "180dd5a109a9ec37678c7901aead49129e2fb252d18805637b7e8c2148220178",
+      "recognized": "Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l'original. Ouvrez cette copie, elle est indépendante. Donnez-lui le libellé relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.",
+      "expected": "Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donne-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.",
+      "wordErrorRate": 0.03636363636363636,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "detail",
+      "audioSha256": "37f10839a826eadcce19e5b619b5cd66a7765870bca836f9dbcf360a20288eab",
+      "recognized": "Pour ajouter une consigne à cette relève, passez en liste, puis cliquez sur Modifier. L'éditeur détaillé contient aussi le lieu, le contact, l'âge minimum et les règles d'inscription. Ici, saisissez « venir dix minutes avant » dans « Consignes pratiques », puis enregistrez. Ce conseil appartient à la copie, sans modifier l'original.",
+      "expected": "Pour ajouter une consigne à cette relève, passez en Liste, puis cliquez sur Modifier. L’éditeur détaillé contient aussi le lieu, le contact, l’âge minimum et les règles d’inscription. Ici, saisissez Venir dix minutes avant dans Consigne pratique, puis enregistrez. Ce conseil appartient à la copie, sans modifier l’original.",
+      "wordErrorRate": 0.038461538461538464,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "929bb95b622a5de2047fc9a78d417a3ac6a2d8d19796d2b68473627ddd7ffeaa",
+      "recognized": "De retour en liste, les deux créneaux sont bien présents après rechargement. L'original conserve son libellé et relève suivante a ses propres horaires et trois places. Cette relecture permet de contrôler le résultat réel des gestes de freeze avant publication.",
+      "expected": "De retour en Liste, les deux créneaux sont bien présents après rechargement. L’original conserve son libellé, et Relève suivante a ses propres horaires et trois places. Cette relecture permet de contrôler le résultat réel des gestes de Frise avant publication.",
+      "wordErrorRate": 0.024390243902439025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

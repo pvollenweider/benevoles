@@ -1,0 +1,19 @@
+STATUS: READY
+{
+  "id": "EVENT_DUPLICATE",
+  "status": "READY",
+  "duration": 154.96,
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "music": {
+    "voicedWindows": 138,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -32.6,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "54 images et preuves80.2/105.5 revues. Responsables52.508 vs phrase52.042 ; copie73.675 vs73.205 ; réglages ouverts sur ancre78.458, inscriptions décochées80.2 durant phrase79.972 ; pages105.5 après ancre104.115. Date28.11.2027 réellement affichée (AV décrit17.10.2027, erreur visuelle écartée sur identity/date-locale-check). Brouillon,12créneaux,0inscription,pages et email réel nouvelle édition conformes. AV9/9 sans problème bloquant. Validation,ASR final9/9,VTT,effets,musique passent. Frise/dates françaises/aucune adresse interdite/overlay/bug de disposition. Mailpit dates anglaises signalées seulement.",
+  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
+  "report": "videos/output/event-duplicate/review-report.txt"
+}

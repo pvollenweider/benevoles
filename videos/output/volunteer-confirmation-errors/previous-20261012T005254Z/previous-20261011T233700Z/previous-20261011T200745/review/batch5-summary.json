@@ -1,0 +1,9 @@
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "status": "NOT READY",
+  "duration": "—",
+  "buildId": "Ur_-usFFdKv05dBCDAbrt",
+  "music": {},
+  "problems": "Response-loss rehearsal failed: current duplicate-registration message is Tu as déjà une inscription…, recorder expects déjà inscrit. Earlier error/success/email/overlap rehearsal stages passed; no narrated final MP4.",
+  "sourceChanges": "record-registration-errors.ts: assert current duplicate text and wait/scroll actual alert before admin-list proof; no re-film."
+}

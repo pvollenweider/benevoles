@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:05:21.052Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "1e07bb430cac767be9c628e4eac0e65f42395b539521afaeb6580ebdef2cd000",
+  "clipSha256": "370db7866052126072f1f631b83c024eff4859632fda22568b3d08e85240e612",
+  "scene": "roles",
+  "review": {
+    "heardOpening": "Le propriétaire gère tout",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Le propriétaire gère tout, y compris l'équipe",
+        "visibleSeconds": 0,
+        "visible": "Section Administrateurs affichant les rôles Propriétaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "L'organisateur prépare les événements",
+        "visibleSeconds": 3,
+        "visible": "Formulaire d'invitation avec rôle Organisateur coché et descriptif détaillé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Gardez si possible deux propriétaires actifs",
+        "visibleSeconds": 13.5,
+        "visible": "Liste montrant Camille Martin et Colette Favre comme propriétaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Un responsable de secteur est différent",
+        "visibleSeconds": 16.5,
+        "visible": "Écran d'administration inchangé sans option visible de responsable de secteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide et posée, bonne intelligibilité d'ensemble."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:41:29.775Z",
+  "videoSha256": "b21947dc83d92a39ee449f024ab0822254f3e33b646bc26c0d8041241f1d889c",
+  "promptSha256": "6ee1cac52b8af4694159db54f248121cc01d7cc66dc7a41145a2eeed556171f9",
+  "clipSha256": "a76e7524c4202e72d542474c2036ad6ae6b8a26e98d1c4039ff8f6fa09a45555",
+  "scene": "copy",
+  "review": {
+    "heardOpening": "Dupliquer, reprend le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Dupliquer reprend le poste",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur l'option Dupliquer dans le menu du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Ouvrez cette copie",
+        "visibleSeconds": 9.5,
+        "visible": "Ouverture de la fenêtre de modification de la nouvelle plage dupliquée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Donne-lui le libellé Relève suivante",
+        "visibleSeconds": 12.8,
+        "visible": "Saisie de « Relève suivante » dans le champ Libellé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.7,
+        "spoken": "on la décale de quinze minutes avec le bouton Décaler",
+        "visibleSeconds": 18,
+        "visible": "Clic sur le bouton Décaler et ajustement des horaires à 08:00 - 09:30",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

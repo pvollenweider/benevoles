@@ -1146,6 +1146,12 @@ async function main() {
         await page.getByText("Horaires mis à jour", { exact: true }).waitFor()
         const after = await createdBar.boundingBox()
         if (!after || after.width - before.width < 90) throw new Error("Actual shift bar did not visibly grow during resize")
+        // Releasing the actual resize handle also opens the product popover.
+        // Close it visibly before the narrated instruction to reopen it.
+        if (await page.getByRole("dialog").isVisible()) {
+          await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
+          await page.getByRole("dialog").waitFor({ state: "hidden" })
+        }
         await at("Rouvre ensuite les actions rapides")
         await tap(page, createdBar)
         const actualEnd = await page.getByRole("dialog").getByLabel("Fin", { exact: true }).inputValue()
@@ -1192,10 +1198,11 @@ async function main() {
         await duplicateBar.getByText(duplicateLabel, { exact: true }).waitFor()
       })
       await scene("detail", async (at) => {
+        await at("Pour ajouter une consigne à cette relève")
         await tap(page, page.getByRole("button", { name: "Liste" }))
         const row = page.locator("tbody tr").filter({ hasText: duplicateLabel })
         await row.scrollIntoViewIfNeeded()
-        await at(0.12) /* mid-sentence */
+        await at("Pour ajouter une consigne à cette relève")
         await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
         await at("Ici, saisissez Venir dix minutes avant")
@@ -1572,21 +1579,26 @@ async function main() {
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
       })
 
+      // Prepare the real editor between chapters so its already-enabled option
+      // is visible on the first sentence, rather than late after the capacity.
+      await tap(page, page.getByRole("button", { name: "Liste" }))
+      const waitlistRow = page.locator("tr").filter({ hasText: "Buvette" }).filter({ hasText: "14:00–18:00" }).first()
+      await waitlistRow.scrollIntoViewIfNeeded()
+      await tap(page, waitlistRow.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
+      await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
+      const waitlistOption = page.getByRole("checkbox", { name: /Activer la liste d'attente/ })
+      if (!(await waitlistOption.isChecked())) throw new Error("Waitlist must be enabled in the demo data")
+      await waitlistOption.scrollIntoViewIfNeeded()
       await scene("setup", async (at) => {
-        await tap(page, page.getByRole("button", { name: "Liste" }))
-        const row = page.locator("tr").filter({ hasText: "Buvette" }).filter({ hasText: "14:00–18:00" }).first()
-        await row.scrollIntoViewIfNeeded()
-        await at(0.26) /* mid-sentence */
-        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
-        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
-        await at(0.58) /* mid-sentence */
+        await at("La liste d’attente s’active sur le créneau")
+        await waitlistOption.focus()
+        await at("Tant que la capacité n’est pas atteinte")
         const capacity = page.getByLabel(/^Capacité(?: \*)?$/)
         await capacity.scrollIntoViewIfNeeded()
         await capacity.focus()
-        await at(0.76) /* mid-sentence */
-        const waitlist = page.getByRole("checkbox", { name: /Activer la liste d'attente/ })
-        if (!(await waitlist.isChecked())) throw new Error("Waitlist must be enabled in the demo data")
-        await waitlist.scrollIntoViewIfNeeded()
+        await at("Une fois le créneau complet")
+        await waitlistOption.scrollIntoViewIfNeeded()
+        await waitlistOption.focus()
       })
 
       await scene("admin", async (at) => {
@@ -4164,16 +4176,17 @@ async function main() {
       })
 
       await scene("preview-form", async (at) => {
+        await at("Sélectionnons un créneau et poursuivons")
         await tap(page, page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : sélectionner/ }))
-        await at("Pour ce test, renseignons une")
+        await at("Sélectionnons un créneau et poursuivons")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
         await at("Pour ce test, renseignons une identité fictive")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
+        await fillVisibly(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex", 300)
+        await fillVisibly(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin", 300)
         await at("Ajoutons son adresse email de")
-        await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.preview@example.org")
-        await typeNaturally(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34")
+        await fillVisibly(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.preview@example.org", 300)
+        await fillVisibly(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34", 300)
         await at("Choisissons aussi une taille de t-shirt")
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await at("Acceptons cette convention")

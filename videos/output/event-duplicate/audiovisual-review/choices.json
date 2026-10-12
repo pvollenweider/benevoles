@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T08:49:23.524Z",
-  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
-  "promptSha256": "d5419d5abf81791d5470c41c8fb3aa9638484ac207bf1c73ec7f10494a561b93",
-  "clipSha256": "148d9e9b3fbb760a3a8b3f7a2a0fa3a3023d6435757e7e47154dcc5ecc0d5b21",
+  "reviewedAt": "2026-10-12T01:24:05.511Z",
+  "videoSha256": "22900478a697f7eeecdb4aa42ddeb22c69c41fd4b487755fa372fe7a8f3f0c1a",
+  "promptSha256": "4ce09f89c392bb067fdf0087b80481651f26752c07a2481b132c5ae059bdd275",
+  "clipSha256": "aa8268fe02cfc12bb80016d738a12e07188ecb18e2f46cefee4b467d3e5b3e80",
   "scene": "choices",
   "review": {
-    "heardOpening": "Choisis ensuite ce qui doit suivre",
+    "heardOpening": "Choisissez ensuite ce qui doit suivre",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Les créneaux conservent postes, horaires, capacités et consignes",
-        "visibleSeconds": 0,
-        "visible": "Option 'Les créneaux' cochée affichée à l'écran",
+        "spokenSeconds": 0.8,
+        "spoken": "Choisissez ensuite ce qui doit suivre.",
+        "visibleSeconds": 1,
+        "visible": "Section « Ce qui est copié » affichée avec la liste des éléments sélectionnables.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Les réglages reprennent les messages, questions, téléphone et programme",
-        "visibleSeconds": 0,
-        "visible": "Option 'Les messages et réglages d'inscription' cochée affichée",
+        "spokenSeconds": 2.7,
+        "spoken": "Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription.",
+        "visibleSeconds": 2.8,
+        "visible": "Option cochée « Les créneaux » avec sa description explicative visible à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Les pages personnalisées peuvent aussi être copiées",
-        "visibleSeconds": 0,
-        "visible": "Option 'Les pages personnalisées' cochée présente à l'écran",
+        "spokenSeconds": 9.7,
+        "spoken": "Les réglages reprennent les messages, questions, téléphone et programme.",
+        "visibleSeconds": 9.8,
+        "visible": "Option « Les messages et réglages d'inscription » visible dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Les pages personnalisées peuvent aussi être copiées.",
+        "visibleSeconds": 13.7,
+        "visible": "Option cochée « Les pages personnalisées » visible dans la liste.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
+      "observation": "Voix off féminine claire, posée et bien articulée, sur fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

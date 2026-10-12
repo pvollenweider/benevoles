@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:21:59.190Z",
+  "videoSha256": "2c50fdb1700125ff913460f628c680456403850ca663414b3a21a7d84a74710f",
+  "promptSha256": "de7aa6d347bd51845521732da68d915ead2fd994da8f8a7493ac25ea1751f589",
+  "clipSha256": "79125cc24dcdb6844cc96ad2ba394eac063e2820c759566a0ca6031a8174c919",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un créneau transforme un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un créneau transforme un poste en besoin concret.",
+        "visibleSeconds": 0.5,
+        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché au centre de la page Événements / Créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Il dit quelle mission doit être assurée, quand, par combien de personnes",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition du bandeau de titre pour révéler la vue frise des créneaux par poste (Montage, Accueil, Buvette, Sécurité).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
+        "visibleSeconds": 11,
+        "visible": "Écran stable sur la frise des créneaux servant d'introduction avant le détail des champs.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

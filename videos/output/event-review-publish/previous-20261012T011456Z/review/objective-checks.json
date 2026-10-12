@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-12T01:14:35.733Z",
+  "videoSha256": "436b6ea9e7b0ded41f8606097d9fbc50ef208243955227c725f92f9b275ec5a5",
+  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+  "checks": {
+    "provenance": true,
+    "validation": true,
+    "music": true,
+    "effects": true,
+    "finalNarration": true,
+    "vttMatchesTranscriptDisplay": true
+  },
+  "effects": {
+    "clicks": 12,
+    "keys": 47
+  },
+  "music": {
+    "voicedWindows": 125,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 18.5,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.2,
+    "medianVoiceLufs": -16.3
+  }
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:50:15.893Z",
-  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
-  "promptSha256": "58edd3274fc1b8b5ef5710be378ae8a536a9a79bf923dfef1f76d75de81dfeda",
-  "clipSha256": "26fae85778d7a65215fc1e5a089e25f997da39d809a1dbb6a5fcb5a563c21f9c",
+  "reviewedAt": "2026-10-12T01:27:54.415Z",
+  "videoSha256": "2d9a500e8a823bb33e2bf33e6d39aafe9dd78888fe625dddc65be145edb74320",
+  "promptSha256": "8ab865ba5dbaefe65c69595a1ef7a6c23ff53124de3f528aec74d81a3a5b73bf",
+  "clipSha256": "4a5abb01b2c4c10312167ff60751971d75c543019c4cc98c5abb77ff3bec8780",
   "scene": "prepare",
   "review": {
-    "heardOpening": "Pour cette démonstration, nous travaillons",
+    "heardOpening": "Pour cette démonstration, nous travaillons sur une copie jetable",
     "checkpoints": [
       {
         "spokenSeconds": 1.2,
         "spoken": "nous travaillons sur une copie jetable de l'ancienne édition",
-        "visibleSeconds": 0.5,
-        "visible": "Champ titre affichant 'Ancienne fête de Montvert — copie de démonstration'",
+        "visibleSeconds": 1,
+        "visible": "Le champ Titre de la copie est renommé en Ancienne fête de Montvert – copie de démonstration",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "vérifie d'abord les inscriptions, les invitations, le journal et les rapports",
-        "visibleSeconds": 9.5,
-        "visible": "Page de l'événement affichant les boutons et onglets Inscriptions, Invitations, Journal et Rapports",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 4.8,
+        "spoken": "vérifiez d'abord les inscriptions, les invitations, le journal et les rapports",
+        "visibleSeconds": 9.8,
+        "visible": "Affichage du tableau de bord de l'événement présentant les boutons Voir les inscriptions, Inviter des membres, Journal et Rapports",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 11.1,
-        "spoken": "annule les créneaux avant l'archivage",
+        "spokenSeconds": 10.9,
+        "spoken": "annulez les créneaux avant l'archivage",
         "visibleSeconds": 10,
-        "visible": "Boutons 'Gérer les créneaux' et 'Archiver' visibles à l'écran",
+        "visible": "Boutons Gérer les créneaux et Archiver visibles sur la fiche de l'événement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation claire."
+      "observation": "Voix pédagogique, claire et bien articulée, synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

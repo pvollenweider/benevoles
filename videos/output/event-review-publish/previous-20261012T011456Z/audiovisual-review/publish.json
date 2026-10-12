@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T01:14:24.048Z",
+  "videoSha256": "436b6ea9e7b0ded41f8606097d9fbc50ef208243955227c725f92f9b275ec5a5",
+  "promptSha256": "ffa00b7b7025333275961a1e959f76247bdb89b12f09d17e0f38b05544422ef0",
+  "clipSha256": "77a1aed70d8ba61fb3c879583b94bd6ccb2be99d103ff41f8e309f98f1219db2",
+  "scene": "publish",
+  "review": {
+    "heardOpening": "Revenons à la vérification et publions.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "et publions.",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le bouton vert 'Publier' puis affichage du message 'L'événement est publié : les bénévoles peuvent s'inscrire.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "La page devient accessible à toute personne qui possède le lien",
+        "visibleSeconds": 2.2,
+        "visible": "Notification confirmant que l'événement est publié et accessible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "il faudra partager le QR code, envoyer des invitations",
+        "visibleSeconds": 11.2,
+        "visible": "Défilement vers la section Publication montrant le lien, 'QR code' et 'Inviter des membres'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:13:18.147Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "1cd2f0265298140fa3f7342dbfde1c93baffbdb4f0d98331c258e13eed79920d",
+  "clipSha256": "60d97587f3890596037b3625da557f5dc05b85c34220a59344a8b056fd1b8a40",
+  "scene": "checks",
+  "review": {
+    "heardOpening": "Les lignes marquées comme faites",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "couvrent le titre, les dates et le planning",
+        "visibleSeconds": 0.5,
+        "visible": "Lignes de vérification avec coches vertes affichées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "bloque le bouton Publier",
+        "visibleSeconds": 6,
+        "visible": "Bouton Publier non visible dans la zone affichée",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "comme le lieu, les instructions ou un responsable",
+        "visibleSeconds": 1,
+        "visible": "Options facultatives listées avec coches vertes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:06 - Le bouton Publier mentionné n'est pas cadré à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée et claire, élocution fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

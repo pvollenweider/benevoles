@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:13:08.276Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "b1dfab9923de449e8ee4e46f630a4b85e8a5dc65175b5d48b8e6e2bb31acc358",
+  "clipSha256": "f3e835ea1c997f21f97568da2a268d7de6e874aaebb3e06b2dee501dce332e34",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Avant de publier, l'écran de vérification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "l'écran de vérification rassemble ce qui compte vraiment",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition de l'encart titre et affichage complet de la liste récapitulative de vérification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Il évite d’ouvrir une page vide ou incohérente",
+        "visibleSeconds": 4,
+        "visible": "Liste des points de contrôle (dates, créneaux, lieu, messages)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "rappelle que tout restera modifiable après la publication",
+        "visibleSeconds": 6.8,
+        "visible": "Sous-titre visible : 'Tout reste modifiable après la publication'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00:00.039 --> 00:00:05.011
+Une inscription doit rester compréhensible
+même quand quelque chose se passe mal.
+
+00:00:05.011 --> 00:00:09.154
+Nous allons corriger une réponse
+manquante, voir une place devenue
+
+00:00:09.154 --> 00:00:13.297
+indisponible et simuler une coupure
+réseau. Les exemples utilisent un
+
+00:00:13.297 --> 00:00:18.682
+événement de démonstration : tu verras les
+vrais messages du formulaire, puis une
+
+00:00:18.682 --> 00:00:19.511
+confirmation réelle.
+
+00:00:21.772 --> 00:00:27.255
+Choisis Accueil et continue. Nous
+remplissons le prénom, le nom, l’email et
+
+00:00:27.255 --> 00:00:32.281
+le téléphone, puis acceptons la convention
+et l’utilisation des données. Avant
+
+00:00:32.281 --> 00:00:37.764
+d’envoyer, relis toujours l’adresse email
+: une faute peut empêcher le message
+
+00:00:37.764 --> 00:00:40.962
+d’arriver même si l’inscription est
+enregistrée correctement.
+
+00:00:43.224 --> 00:00:47.538
+La taille du t-shirt n’a pas été
+renseignée. Confirmer affiche la question
+
+00:00:47.538 --> 00:00:52.211
+à corriger et conserve toutes les autres
+réponses. Le champ obligatoire est signalé
+
+00:00:52.211 --> 00:00:56.885
+; choisis une taille, puis tu peux
+reprendre. Une adresse email au mauvais
+
+00:00:56.885 --> 00:01:01.558
+format est également refusée par le
+navigateur, mais il ne sait pas vérifier
+
+00:01:01.558 --> 00:01:02.996
+qu’une boîte existe vraiment.
+
+00:01:05.255 --> 00:01:10.546
+Une place peut être prise pendant que tu
+remplis le formulaire. Nous rendons ici le
+
+00:01:10.546 --> 00:01:14.426
+créneau complet par une modification
+réelle de sa capacité dans la
+
+00:01:14.426 --> 00:01:17.954
+démonstration. La confirmation répond Ta
+sélection n'est plus disponible. Reviens
+
+00:01:17.954 --> 00:01:22.187
+au planning pour ajuster ton choix ; les
+informations saisies restent conservées.
+
+00:01:22.187 --> 00:01:26.772
+Une place visible quelques minutes plus
+tôt n'est pas une réservation tant que
+
+00:01:26.772 --> 00:01:28.536
+l'inscription n'a pas été confirmée.
+
+00:01:30.799 --> 00:01:34.464
+Nous rétablissons maintenant la place,
+puis coupons volontairement la requête
+
+00:01:34.464 --> 00:01:38.495
+d’envoi pour montrer une interruption
+réseau. Le message dit que l’inscription
+
+00:01:38.495 --> 00:01:43.626
+n’a peut-être pas été reçue. Tes champs
+sont toujours là. Après retour de la
+
+00:01:43.626 --> 00:01:48.390
+connexion, clique à nouveau sur Confirmer
+mon inscription : le système évite de
+
+00:01:48.390 --> 00:01:49.856
+créer deux engagements identiques.
+
+00:01:52.117 --> 00:01:56.904
+La connexion est rétablie et l’inscription
+réussit. La page confirme le résultat et
+
+00:01:56.904 --> 00:02:01.323
+indique l’envoi de l’email. Avec un
+formulaire public ordinaire, le lien de
+
+00:02:01.323 --> 00:02:06.110
+gestion reste dans cet email : il n’est
+pas affiché simplement parce qu’une
+
+00:02:06.110 --> 00:02:10.898
+adresse a été saisie. Garde le message
+pour retrouver ton planning ou annuler
+
+00:02:10.898 --> 00:02:11.634
+plus tard.
+
+00:02:13.901 --> 00:02:18.530
+Voici le message réellement reçu dans la
+boîte de démonstration. Il contient le
+
+00:02:18.530 --> 00:02:23.871
+créneau et le lien personnel. Si tu ne le
+trouves pas, regarde les indésirables et
+
+00:02:23.871 --> 00:02:28.144
+vérifie l’adresse donnée. Une page de
+succès ne prouve pas qu’un fournisseur
+
+00:02:28.144 --> 00:02:33.130
+email a accepté le message ; contacte
+l’association si la boîte n’existe pas ou
+
+00:02:33.130 --> 00:02:35.266
+si tu as fait une faute.
+
+00:02:37.541 --> 00:02:43.064
+Le serveur revérifie aussi tes horaires.
+Aline est déjà inscrite à l'accueil de dix
+
+00:02:43.064 --> 00:02:48.982
+heures à midi. Essayons le vestiaire de
+onze à 13 h avec sa même adresse.
+
+00:02:48.982 --> 00:02:53.716
+Remplissons le formulaire et confirmons.
+Le refus nomme le créneau qui chevauche
+
+00:02:53.716 --> 00:02:57.661
+cette demande. Les informations restent
+remplies et aucune nouvelle inscription
+
+00:02:57.661 --> 00:03:03.184
+n'a été ajoutée. Ce contrôle évite de
+compter une personne sur deux postes en
+
+00:03:03.184 --> 00:03:07.918
+même temps. Pour continuer, reviens au
+planning et choisis un horaire compatible.
+
+00:03:10.181 --> 00:03:13.974
+Une coupure peut arriver après
+l'enregistrement. Nicolas choisit la
+
+00:03:13.974 --> 00:03:19.031
+logistique. Cette fois, la requête arrive
+réellement au serveur, qui crée son
+
+00:03:19.031 --> 00:03:22.825
+inscription ; nous interrompons
+volontairement seulement la réponse au
+
+00:03:22.825 --> 00:03:27.039
+navigateur. Le formulaire affiche
+Connexion interrompue parce qu'il ne sait
+
+00:03:27.039 --> 00:03:32.518
+pas si l'envoi a abouti. Rétablissons la
+connexion et confirmons à nouveau. Le
+
+00:03:32.518 --> 00:03:39.261
+message indique qu'il est déjà inscrit et
+que son lien lui a été envoyé par email.
+
+00:03:39.261 --> 00:03:44.740
+Vérifions côté organisation : une seule
+ligne de Nicolas apparaît sur ce créneau.
+
+00:03:44.740 --> 00:03:48.533
+Le nouvel essai n'a pas créé une deuxième
+inscription.
+
+00:03:50.797 --> 00:03:55.377
+Comparons maintenant deux confirmations
+réussies. Zoé choisit le vestiaire dans le
+
+00:03:55.377 --> 00:03:59.124
+formulaire public ordinaire. Après ses
+informations et les consentements,
+
+00:03:59.124 --> 00:04:05.370
+confirmons. La page annonce le succès mais
+ne montre pas son lien personnel : saisir
+
+00:04:05.370 --> 00:04:11.616
+une adresse ne prouve pas que l'on possède
+cette boîte. Aline a ensuite reçu une
+
+00:04:11.616 --> 00:04:15.363
+invitation personnelle envoyée par
+l'organisation. Ouvrons ce lien pour
+
+00:04:15.363 --> 00:04:19.110
+choisir la logistique. Ses informations
+sont préremplies ; vérifions-les,
+
+00:04:19.110 --> 00:04:23.274
+choisissons sa taille de t-shirt et
+confirmons les consentements. Cette
+
+00:04:23.274 --> 00:04:27.854
+confirmation peut afficher Accéder à mon
+inscription, car l'invitation apporte la
+
+00:04:27.854 --> 00:04:33.683
+preuve d'adresse. Ouvrons ce lien : Aline
+retrouve ses deux créneaux. Ce lien reste
+
+00:04:33.683 --> 00:04:36.598
+privé et permet aussi d'annuler ses
+inscriptions.
+
+00:04:38.864 --> 00:04:42.812
+Revenons côté organisation pour vérifier
+les inscriptions réellement présentes. Une
+
+00:04:42.812 --> 00:04:48.339
+erreur de champ se corrige sur place. Une
+sélection indisponible se revoit dans le
+
+00:04:48.339 --> 00:04:52.287
+planning. Une interruption réseau se
+retente après vérification de la
+
+00:04:52.287 --> 00:04:56.630
+connexion, sans inventer une deuxième
+inscription. Lis le message jusqu'au bout
+
+00:04:56.630 --> 00:05:00.973
+et conserve ton email personnel pour
+retrouver tes créneaux. Dans cette
+
+00:05:00.973 --> 00:05:04.526
+démonstration, les personnes sont
+fictives, mais les refus, les
+
+00:05:04.526 --> 00:05:08.079
+confirmations et les résultats sont bien
+ceux de l'application.
+

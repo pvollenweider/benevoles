@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T17:05:21.082Z",
+  "revalidatedAt": "2026-10-11T17:08:34.214Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "network",
+      "audioSha256": "34bca41aa03b38818ed497ebe10875d773beb4fe81efeb848b7d71aa0fd441a0",
+      "recognized": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d'envoi pour montrer une interruption réseau. Le message dit que l'inscription n'a peut-être pas été reçue. Tes chances sont toujours là. Après retour de la connexion, clique à nouveau sur confirmer mon inscription. Le système évite de créer deux engagements identiques.",
+      "expected": "Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau. Le message dit que l’inscription n’a peut-être pas été reçue. Tes champs sont toujours là. Après retour de la connexion, clique à nouveau sur Confirmer mon inscription : le système évite de créer deux engagements identiques.",
+      "wordErrorRate": 0.01818181818181818,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

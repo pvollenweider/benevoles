@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T00:31:42.476Z",
+  "videoSha256": "2a5e879eebda10b8a7a73ec89a1885f9b5ce1ccc1a28f18d48e7279e4ea172bd",
+  "promptSha256": "9f1ac979c72538879495a797f60849db9fc6d6b280991b361b0fa8592f4a382e",
+  "clipSha256": "dca5396c42bdbce83e10c6be8f248f050042b09eafa5ac5eb23e08c8b7c764f2",
+  "scene": "result",
+  "review": {
+    "heardOpening": "La liste d'attente est utile",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La liste d'attente est utile pour les missions demandées",
+        "visibleSeconds": 0.8,
+        "visible": "Page des inscriptions affichant le récapitulatif '3 en liste d'attente' et la ligne d'Eva Garcia en 'Liste d'attente position 3'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Vérifie la capacité, l'ordre, l'offre en cours",
+        "visibleSeconds": 5.1,
+        "visible": "Affichage des statuts 'Place proposée' pour Camille Rochat et 'Liste d'attente position 3'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "avant de promettre une place à quelqu'un par un autre canal",
+        "visibleSeconds": 7.7,
+        "visible": "Tableau des inscriptions et demandes à traiter affiché de façon stable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

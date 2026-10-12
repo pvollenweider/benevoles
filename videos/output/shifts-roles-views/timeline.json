@@ -1,38 +1,147 @@
 {
   "slug": "shifts-roles-views",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T03:18:17.658Z",
+  "recordedAt": "2026-10-12T01:30:40.766Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
+    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
+    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
+    "buildId": "RnrUED_grQJ_YgINLz6Tf",
+    "snapshot": "/tmp/benevoles-video-production.batch9",
+    "builtAt": "2026-10-12T00:53:50.007Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-planning",
+    "scenario": "SHIFTS_ROLES_VIEWS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 31563
+    },
+    {
+      "kind": "click",
+      "atMs": 43676
+    },
+    {
+      "kind": "click",
+      "atMs": 47977
+    },
+    {
+      "kind": "click",
+      "atMs": 62574
+    },
+    {
+      "kind": "click",
+      "atMs": 64526
+    },
+    {
+      "kind": "click",
+      "atMs": 72607
+    },
+    {
+      "kind": "click",
+      "atMs": 73592
+    },
+    {
+      "kind": "click",
+      "atMs": 79342
+    },
+    {
+      "kind": "click",
+      "atMs": 83757
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1101,
-      "endMs": 15356
+      "startMs": 1122,
+      "endMs": 15376
     },
     {
       "id": "timeline",
-      "startMs": 15807,
-      "endMs": 30377
+      "startMs": 15828,
+      "endMs": 30398
     },
     {
       "id": "list",
-      "startMs": 30832,
-      "endMs": 42434
+      "startMs": 30851,
+      "endMs": 42452
     },
     {
       "id": "roles",
-      "startMs": 42887,
-      "endMs": 58023
+      "startMs": 42905,
+      "endMs": 58043
     },
     {
       "id": "colors",
-      "startMs": 58473,
-      "endMs": 71642
+      "startMs": 58496,
+      "endMs": 71663
     },
     {
       "id": "result",
-      "startMs": 72875,
-      "endMs": 86153
+      "startMs": 72913,
+      "endMs": 86195
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "list",
+      "phrase": "La vue Liste présente",
+      "startMs": 215,
+      "endMs": 3678,
+      "cueMs": 31067
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "Dans Gérer les postes",
+      "startMs": 276,
+      "endMs": 4170,
+      "cueMs": 43184
+    },
+    {
+      "segmentId": "roles",
+      "phrase": "Les flèches Monter et Descendre",
+      "startMs": 4594,
+      "endMs": 11076,
+      "cueMs": 47502
+    },
+    {
+      "segmentId": "colors",
+      "phrase": "Choisissez-la dans la palette prévue",
+      "startMs": 3586,
+      "endMs": 5311,
+      "cueMs": 62084
+    },
+    {
+      "segmentId": "colors",
+      "phrase": "elle reste cohérente dans les",
+      "startMs": 5512,
+      "endMs": 8406,
+      "cueMs": 64011
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Utilisez la Frise pour construire",
+      "startMs": 200,
+      "endMs": 5505,
+      "cueMs": 73116
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Avec des noms courts, un",
+      "startMs": 5932,
+      "endMs": 12970,
+      "cueMs": 78848
     }
   ]
 }

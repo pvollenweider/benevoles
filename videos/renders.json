@@ -36,7 +36,7 @@
     "poster": true
   },
   "event-archive-delete": {
-    "durationMs": 104040,
+    "durationMs": 100480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -54,7 +54,7 @@
     "poster": true
   },
   "event-duplicate": {
-    "durationMs": 161120,
+    "durationMs": 154960,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -84,7 +84,7 @@
     "poster": true
   },
   "event-review-publish": {
-    "durationMs": 132760,
+    "durationMs": 140600,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -96,7 +96,7 @@
     "poster": true
   },
   "global-search": {
-    "durationMs": 91560,
+    "durationMs": 91160,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -156,7 +156,7 @@
     "poster": true
   },
   "org-team-permissions": {
-    "durationMs": 144800,
+    "durationMs": 132120,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -222,7 +222,7 @@
     "poster": true
   },
   "shift-create-edit-detail": {
-    "durationMs": 108840,
+    "durationMs": 135800,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -252,19 +252,19 @@
     "poster": true
   },
   "shift-timeline-quick-actions": {
-    "durationMs": 89720,
+    "durationMs": 124040,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-waitlist-offer": {
-    "durationMs": 106360,
+    "durationMs": 100200,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shifts-roles-views": {
-    "durationMs": 86600,
+    "durationMs": 86640,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -300,7 +300,7 @@
     "poster": true
   },
   "volunteer-confirmation-errors": {
-    "durationMs": 157600,
+    "durationMs": 308520,
     "width": 1280,
     "height": 800,
     "poster": true
