@@ -20,7 +20,7 @@ const exec = promisify(execFile)
 const reference = process.argv[2]
 const selected = process.argv.slice(3).find(arg => !arg.startsWith("--"))
 const force = process.argv.includes("--force")
-const commonDemoVideos = ["SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
+const commonDemoVideos = ["REGISTRATION_MONITOR_FOLLOWUP", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
 const memberDemoVideos = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 type Member = Parameters<typeof ownsRecordedNoEmailMember>[0]
 type Ownership = Parameters<typeof ownsRecordedNoEmailMember>[1]
@@ -78,7 +78,7 @@ async function main() {
     } else if (manifest.id === "EVENT_QUESTIONS") {
       await (await import("../lib/event-questions-fixture")).assertQuestionsReviewFixture(db)
     } else if (manifest.id === "MEMBERS_DUPLICATES_MERGE") {
-      const { assertMergeReviewFixture } = await import("../lib/member-merge-v5-fixture")
+      const { assertMergeReviewFixture } = await import("../lib/member-merge-fixture")
       await assertMergeReviewFixture(db, process.env.DATABASE_URL!)
     } else if (manifest.id === "ATTENDANCE_CHECK_IN") {
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")

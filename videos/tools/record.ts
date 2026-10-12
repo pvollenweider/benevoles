@@ -174,7 +174,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors"].includes(slug) && process.platform === "darwin"
+  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug) && process.platform === "darwin"
   if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
@@ -1807,14 +1807,18 @@ async function main() {
       await scene("quota", async (at) => {
         await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
+        await page.getByText("Tous mes créneaux", { exact: true }).scrollIntoViewIfNeeded()
         await at("En revenant au planning depuis")
         await page.getByRole("link", { name: "Retour à l'accueil" }).scrollIntoViewIfNeeded()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         const limited = page.getByRole("button", { name: /Buvette.*limite de 2 par personne atteinte/ }).first()
         await limited.waitFor()
-        await limited.scrollIntoViewIfNeeded()
-        await at(0.34) /* mid-sentence */
-        if (!(await limited.getAttribute("aria-label"))?.includes("limite de 2 par personne atteinte")) throw new Error("Actual quota-reached notice is missing")
+        await at("les autres créneaux restent visibles")
+        // The Frise currently exposes the quota in its accessible name only.
+        // Show the existing visible explanation in Liste, preserving that product defect in the report.
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        await page.getByText(/Limite de 2 par personne atteinte/).first().scrollIntoViewIfNeeded()
+        if (!(await page.getByText(/Limite de 2 par personne atteinte/).first().isVisible())) throw new Error("Actual visible quota-reached notice is missing")
         await at("Elle peut d’abord retirer un")
       })
 
@@ -1854,7 +1858,7 @@ async function main() {
         await phone.scrollIntoViewIfNeeded()
         if (!(await phone.isChecked())) throw new Error("Phone requirement must be enabled in the demo data")
         await page.getByText(/Les bénévoles devront indiquer un numéro/).scrollIntoViewIfNeeded()
-        await at(0.56) /* mid-sentence */
+        await at("Pour corriger un profil, retrouvons")
         await page.goto(`${baseUrl}/admin/members`); await settle(page)
         await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Julien Favre")
         await tap(page, page.getByRole("button", { name: "Éditer Julien Favre", exact: true }))
@@ -2895,7 +2899,7 @@ async function main() {
         await fillVisibly(page, search, "Anna")
         await page.getByRole("row").filter({ hasText: "Anna" }).waitFor()
         await at(0.26) /* mid-sentence */; await fillVisibly(page, search, "Tom")
-        await at("Une autre a déjà une"); await fillVisibly(page, search, "Lucas")
+        await at(0.42) /* mid-sentence */; await fillVisibly(page, search, "Lucas")
         await page.getByRole("row").filter({ hasText: "Lucas" }).getByText("Demande à traiter", { exact: true }).first().waitFor()
         await at("Une autre a déjà une"); await fillVisibly(page, search, "Camille")
       })
@@ -2903,10 +2907,10 @@ async function main() {
         await page.goto(adminUrl); await settle(page)
         const button = page.getByRole("button", { name: /^Relancer .*sans créneau/ })
         await tap(page, button)
-        await at("Pour cette démonstration, nous confirmons")
+        await at("Vous pouvez encore annuler.")
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Annuler", exact: true }))
         await at("Pour cette démonstration, nous confirmons"); await tap(page, button)
-        await at("Les membres déjà inscrits ne")
+        await at("Pour cette démonstration, nous confirmons")
         const response = page.waitForResponse(r => r.url().endsWith("/invitations/remind") && r.request().method() === "POST")
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Relancer", exact: true }))
         const result = await response
@@ -2916,7 +2920,7 @@ async function main() {
         await page.getByText(`${sent.sent} relances envoyées`, { exact: true }).waitFor()
       })
       await scene("link", async at => {
-        await at("Il propose à nouveau le")
+        await at("Ouvrons l'email reçu dans")
         await openMail("On a besoin de toi", "anna.buhler@example.org")
         const href = await page.frameLocator("iframe").getByRole("link", { name: /Voir les missions/ }).getAttribute("href")
         if (!href) throw new Error("Reminder has no real invitation link")
@@ -2935,7 +2939,7 @@ async function main() {
         if (!await page.getByRole("radio", { name: "Les invités sans créneau confirmé", exact: true }).isChecked()) throw new Error("Wrong prefilled message audience")
         await typeNaturally(page, page.getByLabel("Objet *", { exact: true }), "Un horaire qui te convient")
         await typeNaturally(page, page.getByLabel("Message *", { exact: true }), "Tu peux choisir un horaire si tu le souhaites. Merci !")
-        await at("L'aperçu permet de vérifier à")
+        await at("Avant d'envoyer, prévisualisez")
         await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
         await page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).waitFor()
       })
@@ -2944,12 +2948,12 @@ async function main() {
         await tap(page, page.getByRole("dialog").getByRole("button", { name: "Retour au message", exact: true }))
         await page.getByText(/dont .*en liste d'attente/).scrollIntoViewIfNeeded()
         await at("Vous pouvez rappeler qu'elles n'ont")
-        await typeNaturally(page, page.getByLabel("Message *", { exact: true }), "Tu peux choisir un horaire si tu le souhaites. Si tu es en attente, ta demande reste enregistrée. Merci !")
+        await fillVisibly(page, page.getByLabel("Message *", { exact: true }), "Tu peux choisir un horaire si tu le souhaites. Si tu es en attente, ta demande reste enregistrée. Merci !")
         await at("c'est vous qui choisissez le")
         await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
       })
       await scene("send", async at => {
-        await at("Nous ouvrons le vrai message")
+        await at("Une fois le groupe et")
         await tap(page, page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).getByRole("button", { name: /^Envoyer à/ }))
         const response = page.waitForResponse(r => r.url().endsWith(`/events/${featureEventId}/message`) && r.request().method() === "POST" && !r.request().postDataJSON().dryRun)
         await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi", exact: true }).getByRole("button", { name: "Confirmer l'envoi", exact: true }))
@@ -3012,7 +3016,7 @@ async function main() {
         await typeNaturally(page, page.getByPlaceholder("votre@email.com"), "test.invitation@example.org")
         await tap(page, page.getByRole("button", { name: "Envoyer le test", exact: true }))
         await page.getByText("Envoyé.", { exact: true }).waitFor()
-        await at("Cela permet de regarder la")
+        await at("Nous ouvrons ici le message")
         await mail("test.invitation@example.org")
         await page.frameLocator("iframe").getByText(/les liens sont fictifs/).waitFor()
       })
@@ -3021,7 +3025,7 @@ async function main() {
         await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Aline")
         await tap(page, dialog().getByRole("checkbox", { name: "Inviter Aline Mercier", exact: true }))
         await typeNaturally(page, dialog().getByLabel("Message (optionnel)", { exact: true }), "Bonjour Aline, nous serions ravis de te retrouver à l'accueil.")
-        await at("La personne apparaît ensuite dans")
+        await at("Vérifiez le destinataire, puis envoyez")
         checks.individual = await send(1)
         await page.getByRole("row").filter({ hasText: "Aline Mercier" }).waitFor()
       })
@@ -3048,7 +3052,7 @@ async function main() {
       })
       await scene("personal-link", async at => {
         alineLink = await mail("video.membre.3@example.org")
-        await at("Elle peut regarder les horaires")
+        await at("Ouvrons le lien reçu par")
         await page.goto(alineLink); await settle(page)
         // Spoken "regarder les horaires, choisir un créneau" begins near 6.5s.
         // Keep the actual planning visible until that explanation, not the recap.
@@ -3061,7 +3065,7 @@ async function main() {
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
-        await at("il ne faut pas le")
+        await at("Nous faisons une vraie inscription")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
         await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
       })
@@ -3072,6 +3076,8 @@ async function main() {
           await tap(page, quit)
           await quit.waitFor({ state: "hidden" })
         }
+        // A different volunteer represents another device; clear only contact memory.
+        await page.evaluate(() => localStorage.removeItem("benevoles_contact"))
         await at("Avec son invitation valide, il")
         await page.goto(nicolasLink); await settle(page)
         await tap(page, page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first())
@@ -3096,7 +3102,7 @@ async function main() {
         await open()
         const hideInvited = dialog().getByLabel("Cacher déjà invités", { exact: true })
         if (!await hideInvited.isChecked()) throw new Error("Expected default hide-already-invited selection")
-        await at("Un nouvel envoi à une")
+        await at("Décochez-la si vous voulez")
         await tap(page, hideInvited)
         if (await hideInvited.isChecked()) throw new Error("Already-invited members were not actually revealed")
         await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Aline")
@@ -3208,9 +3214,10 @@ async function main() {
         await writeFile(path.join(dir, "owned-import-members-v2.json"), ownershipJson)
         checks.confirmed = body
         await form().getByText(/Import terminé/).waitFor()
-        await at(0.36) /* mid-sentence */
+        await at("Ferme la fenêtre et recherchez")
         await tap(page, form().getByRole("button", { name: "Fermer", exact: true }).last())
         await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Maya")
+        await at("Ouvrez sa fiche pour vérifier")
         await tap(page, page.getByRole("button", { name: "Éditer Maya Perret", exact: true }))
         const edit = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
         if (!(await edit.getByLabel("Tags (séparés par des virgules)", { exact: true }).inputValue()).includes("permis-b")) throw new Error("Imported tags missing")
@@ -3341,12 +3348,12 @@ async function main() {
       } finally { await db.$disconnect(); await unregister() }
     } else if (slug === "members-duplicates-merge") {
       const { loadCurrentVideoPrisma } = await import("../lib/current-product-prisma")
-      const { memberMergeReaders } = await import("../lib/member-merge-v5-fixture")
+      const { memberMergeReaders } = await import("../lib/member-merge-fixture")
       const { recordMemberMerge } = await import("../lib/record-member-merge")
       const databaseUrl = process.env.DATABASE_URL ?? ""
-      const { db, tokens, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
+      const { db, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
       try {
-        const evidence = await recordMemberMerge({ page, baseUrl, scene, settle, tap, ...memberMergeReaders(db, databaseUrl, baseUrl, tokens) })
+        const evidence = await recordMemberMerge({ page, baseUrl, scene, settle, tap, ...memberMergeReaders(db, databaseUrl, baseUrl) })
         await writeFile(path.join(dir, "member-merge-evidence.json"), JSON.stringify({ recordedAt: new Date().toISOString(), ...evidence }, null, 2))
       } finally { await db.$disconnect(); await unregister() }
     } else if (slug === "members-management") {
@@ -3402,7 +3409,7 @@ async function main() {
         await at("Ici, Maya est disponible le")
         await tap(page, form.getByLabel("Soir", { exact: true }))
         await typeNaturally(page, form.getByLabel(/Sauf \/ à savoir/), "Pas le vendredi")
-        await at(0.86) /* mid-sentence */
+        await at("Après enregistrement, cette indication apparaît")
         await save()
         await mayaRow().getByText(/Soir.*Pas le vendredi/).waitFor()
       })
@@ -3469,13 +3476,13 @@ async function main() {
         await page.getByRole("button", { name: "Éditer Maya Berger", exact: true }).waitFor({ state: "hidden" })
         await at("Avec Inclure inactifs, nous la")
         await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
-        await at("Après enregistrement, elle revient parmi")
+        await at("Dans Éditer, la case Membre")
         await editMaya()
         const active = page.getByRole("dialog", { name: "Modifier le membre", exact: true }).getByLabel("Membre actif", { exact: true })
         if (await active.isChecked()) throw new Error("Inactive member unexpectedly remains active")
         await tap(page, active)
         if (!await active.isChecked()) throw new Error("Actual reactivation checkbox did not change")
-        await at(0.84) /* mid-sentence */
+        await at("Après enregistrement, elle revient parmi")
         await save()
         await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
         await page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }).waitFor()
@@ -3700,10 +3707,10 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Retirer Élodie Rochat des responsables de Buvette", exact: true }))
         const dialog = page.getByRole("alertdialog")
         await dialog.waitFor()
-        await at(0.28) /* mid-sentence */
+        await at("Quand la responsabilité change, retirez")
         await tap(page, dialog.getByRole("button", { name: "Retirer", exact: true }))
         await dialog.waitFor({ state: "hidden" })
-        await at(0.43) /* mid-sentence */
+        await at("Son ancien lien ne donne")
         await page.goto(rosterUrl); await settle(page)
         await page.getByRole("heading", { name: "Lien introuvable", exact: true }).waitFor()
       })
@@ -5014,10 +5021,10 @@ async function main() {
         await at(0.42) /* mid-sentence */
         const registrationSearch = page.locator("#reg-search")
         await fillVisibly(page, registrationSearch, "Camille")
-        await at(0.72) /* mid-sentence */
-        await registrationSearch.fill("")
-        await page.getByLabel("Filtrer par poste").selectOption("")
+        await at("En quelques secondes, tu isoles")
       })
+      await page.locator("#reg-search").fill("")
+      await page.getByLabel("Filtrer par poste").selectOption("")
 
       await scene("actions", async (at) => {
         const selectCamille = page.getByLabel(/Sélectionner l'inscription de Camille Rochat/).first()
@@ -5050,10 +5057,11 @@ async function main() {
         await page.getByLabel("Partir d'un modèle").selectOption({ label: "Point de rendez-vous" })
         await tap(page, page.getByRole("button", { name: "Utiliser ce modèle" }))
         await at("Avant d’envoyer quoi que ce")
-        await page.getByLabel("Objet *").scrollIntoViewIfNeeded()
+        await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
+        await page.getByRole("heading", { name: "Aperçu de l'email" }).waitFor()
         await at("tu contrôles le rendu exact")
-        await page.getByLabel("Message *").scrollIntoViewIfNeeded()
       })
+      await tap(page, page.getByRole("button", { name: "Retour au message" }))
 
       await scene("channels", async (at) => {
         await at("Pour une information urgente, tu")

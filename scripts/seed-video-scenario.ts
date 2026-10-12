@@ -9,6 +9,8 @@ import { workloadWarnings } from "../src/lib/workload"
 import { staffingSummary } from "../src/lib/staffing"
 import { selectRecipients, selectInvitedWithoutShift } from "../src/lib/targeted-message"
 import { localDateTimeToUtc } from "../src/lib/time-zone"
+import { mkdir, writeFile } from "node:fs/promises"
+import { expectedMemberV2, createSeedProofV2 } from "../videos/lib/member-fixture-v2"
 
 const scenario = process.argv[2]
 if (!scenario) throw new Error("Usage: seed-video-scenario.ts <scenario>")
@@ -231,21 +233,13 @@ async function main() {
     // substantial list, including two distinct homonyms and a contact without email.
     for (let index = 0; index < 36; index++) {
       const id = `video-member-management-${index}`
-      const homonym = index < 2
-      const data = {
-        organizationId: "default",
-        firstName: homonym ? "Stéphane" : ["Aline", "Émilie", "Sébastien", "Anaïs", "Nicolas", "Léon"][index % 6],
-        lastName: homonym ? "Favre" : `Morel ${index + 1}`,
-        email: index === 2 ? null : `video.membre.${index}@example.org`,
-        phone: `079 000 ${String(index).padStart(2, "0")} 00`,
-        active: index !== 35,
-        tags: index % 2 ? ["accueil"] : ["logistique", "permis-b"],
-        notes: index === 2 ? "Contact à joindre par téléphone pour les horaires." : null,
-        availabilityPeriods: index % 2 ? ["morning"] : ["evening"],
-        availabilityNote: index === 3 ? "Pas le dimanche" : null,
-      }
+      const { id: _id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
       await prisma.volunteer.upsert({ where: { id }, create: { id, ...data }, update: data })
     }
+    const seededMembers = await prisma.volunteer.findMany({ where: { id: { in: Array.from({ length: 36 }, (_, index) => `video-member-management-${index}`) }, organizationId: "default" } })
+    const seedProof = createSeedProofV2(seededMembers, "actual-seed-write", new Date().toISOString())
+    await mkdir("videos/output/member-fixture-v2", { recursive: true })
+    await writeFile("videos/output/member-fixture-v2/seed-proof.json", JSON.stringify(seedProof, null, 2))
     const count = await prisma.volunteer.count({ where: { organizationId: "default" } })
     if (count !== 60) throw new Error(`Members scenario expects 60 members after demo seed, got ${count}`)
     if (scenario === "members-reminders") {
@@ -262,7 +256,7 @@ async function main() {
     if (scenario === "members-invitations") {
       await prisma.volunteer.update({ where: { id: "video-member-management-3" }, data: { firstName: "Aline", lastName: "Mercier", tags: ["accueil"] } })
       await prisma.volunteer.update({ where: { id: "video-member-management-4" }, data: { firstName: "Nicolas", lastName: "Renaud", tags: ["sécurité", "permis-b"] } })
-      await prisma.volunteer.update({ where: { id: "video-member-management-2" }, data: { firstName: "René", lastName: "Sansmail", tags: ["accueil"] } })
+      await prisma.volunteer.update({ where: { id: "video-member-management-2" }, data: { firstName: "René", lastName: "Meyer", tags: ["accueil"] } })
       console.log("✓ Invitation scenario: 60 fictional members, two new invitees and a no-email contact; existing invitation statuses supplied by demo")
       return
     }

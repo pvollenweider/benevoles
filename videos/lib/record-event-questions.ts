@@ -101,7 +101,12 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
       // Anchors checked against the current continuous Kore recording. Keep
       // the form opening, required toggle and save separate: one generic
       // fraction made several actions precede their spoken instruction.
-      const timing = { single: { open: 0.05, required: 0.70, save: 0.79 }, yesno: { open: 0.105, required: 0.55, save: 0.62 }, multiple: { open: 0.065, required: 0.55, save: 0.735 }, text: { open: 0.10, required: 0.45, save: 0.72 } }[question.type]
+      const timing = {
+        single: { open: "Cliquons sur Ajouter une question", required: "cochons Réponse obligatoire", save: "Enregistrons." },
+        yesno: { open: "Ajoutons une nouvelle question", required: "Dans cet exemple, rendons aussi", save: "Dans cet exemple, rendons aussi" },
+        multiple: { open: "Créons la question, puis choisissons", required: "Laissons Réponse obligatoire décochée", save: "Enregistrons et vérifions" },
+        text: { open: "Ajoutons Point de rendez-vous préféré", required: "Cette question reste facultative", save: "Enregistrons." },
+      }[question.type]
       await at(timing.open)
       await tap(page, page.getByRole("button", { name: "Ajouter une question", exact: true }))
       const form = questionForm(); await form.waitFor()
@@ -249,7 +254,9 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await page.getByText(/Taille de t-shirt.*M/).first().scrollIntoViewIfNeeded()
     await at("la Synthèse des réponses compte")
     await go(`${admin}/questions`)
-    await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).waitFor()
+    const summary = page.getByRole("heading", { name: "Synthèse des réponses", exact: true })
+    await summary.waitFor()
+    await summary.evaluate(element => element.scrollIntoView({ block: "start" }))
     assert.equal((await read()).confirmedRegistrationCount, 1)
     await evidence("admin-read", { actualAnswersAndSummary: true })
   })
@@ -281,7 +288,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert(await chosen.isChecked())
     await chosen.scrollIntoViewIfNeeded()
     await at("Conservons Oui pour le permis")
-    await at("Les deux réponses facultatives laissées")
+    await at("Confirmons.")
     await submit()
     const snapshot = await read(); assertAnswer(snapshot, "Taille de t-shirt", "L")
     assert.equal(snapshot.confirmedRegistrationCount, 2)
@@ -315,7 +322,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     const form = questionForm()
     await write(form.getByLabel("Choix proposés *", { exact: true }), "S\nM\nL\nXL\nXXL")
     const questionId = (await read()).questions.find(q => q.label === "Taille de t-shirt")!.id
-    await at("la taille L d'Aline reste")
+    await at("Enregistrons.")
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${questionId}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })))
     await form.waitFor({ state: "hidden" })
     assert.deepEqual((await read()).questions.find(q => q.id === questionId)?.options, ["S", "M", "L", "XL", "XXL"])
