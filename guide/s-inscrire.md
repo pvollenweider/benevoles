@@ -3,6 +3,7 @@ roles: [benevole]
 group: inscription
 order: 30
 summary: Remplir le formulaire, relire le récapitulatif de tes créneaux, recevoir ta confirmation par email, et quoi faire si elle n'arrive pas.
+meta_title: S'inscrire à un créneau de bénévole
 related: [choisir-ses-creneaux, ma-page-personnelle, lien-personnel]
 legacy: [benevole#s-inscrire, benevole#infos-pratiques-d-un-creneau, benevole#confirmation]
 aliases: []

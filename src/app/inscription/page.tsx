@@ -9,14 +9,15 @@ import SignupForm from "@/components/public/signup/SignupForm"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { signupClosedMessage } from "@/lib/signup"
 import { contactEmail, privacyHref } from "@/lib/site"
-import { SITE_NAME } from "@/lib/seo-metadata"
+import { publicPageMetadata } from "@/lib/doc-pages"
+import { apexBaseUrl } from "@/lib/urls"
 
 export const dynamic = "force-dynamic"
 
-// The target of every « Demander un espace » (#810, part 4d).
-export const metadata: Metadata = {
-  title: "Demander un espace",
-  description: `Créez l'espace de votre association sur ${SITE_NAME} : préparez votre événement tout de suite, la publication suit une courte vérification.`,
+// The target of every « Demander un espace » (#810, part 4d). Its title, description, canonical
+// on the apex host and link preview come from its entry in src/lib/doc-pages.ts (#934).
+export function generateMetadata(): Metadata {
+  return publicPageMetadata("/inscription", apexBaseUrl())
 }
 
 export default async function SignupPage() {

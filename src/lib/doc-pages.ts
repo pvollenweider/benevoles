@@ -76,6 +76,19 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     availability: "hosted",
   },
   {
+    // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
+    // like the other apex pages (#934): it is where an association searching for the service
+    // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
+    path: "/inscription",
+    title: "Demander un espace",
+    summary: "Créer l'espace de votre association : le préparer tout de suite, le publier après une courte vérification.",
+    metaTitle: "Demander un espace pour votre association",
+    metaDescription: `Créez gratuitement l'espace de votre association sur ${SITE_NAME} : préparez votre événement aussitôt, la publication suit une courte vérification.`,
+    source: null,
+    priority: 0.6,
+    guide: false,
+  },
+  {
     // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
     path: "/nouveautes",
     title: "Nouveautés",
@@ -90,7 +103,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     path: "/accessibilite",
     title: "Accessibilité",
     summary: "Ce qui a été vérifié pour l'accessibilité, comment, et les limites connues.",
-    metaTitle: "Accessibilité",
+    metaTitle: "Déclaration d'accessibilité",
     metaDescription: `Déclaration d'accessibilité de ${SITE_NAME} : niveau visé (WCAG 2.2 AA), méthode de vérification, limites connues et comment signaler un problème.`,
     source: "ACCESSIBILITE.md",
     priority: 0.3,
@@ -145,7 +158,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     path: "/doc",
     title: "Documentation",
     summary: "Le point d'entrée des guides.",
-    metaTitle: "Documentation",
+    metaTitle: "Documentation pour organisateurs et bénévoles",
     metaDescription: `Guides de ${SITE_NAME} pour les organisateurs qui préparent un événement et ses créneaux, et pour les bénévoles qui s'inscrivent à un planning.`,
     source: null,
     priority: 0.6,
@@ -165,7 +178,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     path: "/doc/benevole",
     title: "Guide bénévole",
     summary: "S'inscrire à un créneau, recevoir sa confirmation, gérer son inscription.",
-    metaTitle: "Guide bénévole",
+    metaTitle: "Guide bénévole : s'inscrire et gérer ses créneaux",
     metaDescription: `S'inscrire à un créneau sans créer de compte, recevoir sa confirmation, retrouver son planning et modifier ou annuler son inscription sur ${SITE_NAME}.`,
     // Split into units (#649): GUIDE_BENEVOLE.md is the welcome above their index.
     source: "GUIDE_BENEVOLE.md",

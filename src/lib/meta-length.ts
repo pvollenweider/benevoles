@@ -4,7 +4,8 @@
 /**
  * Length limits of the public pages' <title> and meta description. Search engines cut a snippet
  * around 160 characters and a title around 65; under 70 characters a description says too little
- * to be shown as is.
+ * to be shown as is, and under 30 characters a title (site name included) says too little about
+ * the page (#936).
  *
  * SEO audit tools (AIOSEO among them) do not count characters: they count the bytes of the
  * attribute as served, after HTML escaping (React writes `'` as `&#x27;`, six bytes) and in
@@ -13,6 +14,7 @@
  * passes both.
  */
 
+export const META_TITLE_MIN = 30
 export const META_TITLE_MAX = 65
 export const META_DESCRIPTION_MIN = 70
 export const META_DESCRIPTION_MAX = 160
@@ -30,6 +32,7 @@ export function auditedLength(text: string): number {
 /** What is wrong with a page's title and description, empty when both fit. */
 export function metaLengthProblems(title: string, description: string): string[] {
   const problems: string[] = []
+  if (title.length < META_TITLE_MIN) problems.push(`title: ${title.length} characters (min ${META_TITLE_MIN})`)
   if (title.length > META_TITLE_MAX) problems.push(`title: ${title.length} characters (max ${META_TITLE_MAX})`)
   if (description.length < META_DESCRIPTION_MIN) problems.push(`description: ${description.length} characters (min ${META_DESCRIPTION_MIN})`)
   if (description.length > META_DESCRIPTION_MAX) problems.push(`description: ${description.length} characters (max ${META_DESCRIPTION_MAX})`)

@@ -21,7 +21,7 @@ import { siteName } from "@/lib/site"
 export const VIDEO_SITE_NAME = siteName()
 export const VIDEO_LIBRARY_PATH = "/videos"
 export const VIDEO_LIBRARY_NAME = "Bibliothèque vidéo"
-export const VIDEO_LIBRARY_TITLE = `Tutoriels vidéo | ${VIDEO_SITE_NAME}`
+export const VIDEO_LIBRARY_TITLE = `Tutoriels vidéo pour organiser vos bénévoles | ${VIDEO_SITE_NAME}`
 export const VIDEO_LIBRARY_OG_IMAGE_PATH = "/videos/og-image.png"
 export const VIDEO_LIBRARY_OG_IMAGE_ALT = `Tutoriels vidéo ${VIDEO_SITE_NAME}`
 /** The site's default social card (src/app/og-image.png/route.tsx), when a video has no poster yet. */

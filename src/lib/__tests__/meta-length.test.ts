@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import type { Metadata } from "next"
-import { auditedLength, metaLengthProblems } from "../meta-length"
+import { auditedLength, META_TITLE_MIN, metaLengthProblems } from "../meta-length"
 import { landingMetadata } from "../landing-seo"
 import { PUBLIC_PAGES, publicPageMetadata } from "../doc-pages"
 import { docUnitMetadata, readDocUnits } from "../doc-units"
@@ -44,12 +44,20 @@ describe("auditedLength", () => {
     const old = "Organisez vos bénévoles par postes et créneaux. Ils s'inscrivent depuis leur téléphone, sans créer de compte. Rappels automatiques, feuilles du jour J. Gratuit."
     expect(old.length).toBe(160)
     expect(auditedLength(old)).toBe(171)
-    expect(metaLengthProblems("Titre", old)).toEqual([expect.stringMatching(/171 as audited/)])
+    expect(metaLengthProblems("Un titre assez long pour passer", old)).toEqual([expect.stringMatching(/171 as audited/)])
   })
 
   it("flags a title over 65 characters and a description under 70", () => {
     expect(metaLengthProblems("x".repeat(66), "Trop court.")).toHaveLength(2)
     expect(metaLengthProblems("x".repeat(65), "x".repeat(70))).toEqual([])
+  })
+
+  // #936: « Documentation | benevol.app » (27) says too little about the page.
+  it("flags a title under 30 characters, site name included", () => {
+    expect(META_TITLE_MIN).toBe(30)
+    expect(metaLengthProblems("Documentation | benevol.app", "x".repeat(70))).toEqual(["title: 27 characters (min 30)"])
+    expect(metaLengthProblems("x".repeat(29), "x".repeat(70))).toEqual(["title: 29 characters (min 30)"])
+    expect(metaLengthProblems("x".repeat(30), "x".repeat(70))).toEqual([])
   })
 })
 
@@ -65,7 +73,7 @@ describe("public pages: title and description lengths", () => {
     expect(new Set(paths).size).toBe(paths.length)
   })
 
-  it("keeps every title within 65 characters and every description within 70 to 160, as audited too", () => {
+  it("keeps every title within 30 to 65 characters and every description within 70 to 160, as audited too", () => {
     const problems = pages.flatMap(([path, m]) => {
       expect(typeof m.description, path).toBe("string")
       return metaLengthProblems(titleOf(m), m.description as string).map((p) => `${path}: ${p}`)
@@ -74,7 +82,7 @@ describe("public pages: title and description lengths", () => {
   })
 
   it("keeps the video library description within limits whatever the count", () => {
-    for (const n of [0, 1, 2, 99, 999]) expect(metaLengthProblems("t", videoLibraryDescription(n)), String(n)).toEqual([])
+    for (const n of [0, 1, 2, 99, 999]) expect(metaLengthProblems("Tutoriels vidéo | benevol.app, bis", videoLibraryDescription(n)), String(n)).toEqual([])
   })
 })
 

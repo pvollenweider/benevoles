@@ -3,6 +3,7 @@ roles: [admin]
 group: demarrer
 order: 40
 summary: Retrouver en une recherche les bénévoles, leurs inscriptions, les événements et les créneaux de toute l'organisation.
+meta_title: Rechercher bénévoles, inscriptions et créneaux
 related: [gerer-les-membres, suivre-les-inscriptions]
 legacy: [admin#rechercher]
 aliases: []

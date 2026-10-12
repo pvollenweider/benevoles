@@ -3,6 +3,7 @@ roles: [admin]
 group: demarrer
 order: 30
 summary: Le tableau de bord liste ce qui demande votre attention, du plus urgent au moins urgent, puis les chiffres clés de l'organisation.
+meta_title: Tableau de bord de l'organisation
 related: [ou-manque-t-il-du-monde, rechercher]
 legacy: [admin#tableau-de-bord]
 aliases: []

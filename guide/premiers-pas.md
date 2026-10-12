@@ -3,6 +3,7 @@ roles: [admin]
 group: demarrer
 order: 20
 summary: La liste Premiers pas guide la mise en place d'une nouvelle organisation, de la page publique à une inscription de test.
+meta_title: Premiers pas d'une nouvelle organisation
 related: [personnaliser-l-organisation, creer-un-evenement, publier-un-evenement]
 legacy: [admin#premiers-pas]
 aliases: []

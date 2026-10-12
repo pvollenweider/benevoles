@@ -134,6 +134,13 @@ describe("parseDocUnit", () => {
     expect(() => parseDocUnit("Ma_Page.md", source(validFront))).toThrow(/file name/)
   })
 
+  // #936: « Se connecter | benevol.app » is too short for a search result; the <h1> keeps it.
+  it("reads the optional meta_title, absent by default, without « · » or em dash", () => {
+    expect(parseDocUnit("p.md", source(`${validFront}\nmeta_title: Se connecter à l'administration`)).metaTitle).toBe("Se connecter à l'administration")
+    expect(parseDocUnit("p.md", source(validFront))).not.toHaveProperty("metaTitle")
+    expect(() => parseDocUnit("p.md", source(`${validFront}\nmeta_title: Se connecter — admin`))).toThrow(/meta_title/)
+  })
+
   it("needs the « # » title right after the front matter, and only one", () => {
     expect(() => parseDocUnit("p.md", source(validFront, "Texte sans titre.\n"))).toThrow(/title/)
     expect(() => parseDocUnit("p.md", source(validFront, "# Un\n\n# Deux\n"))).toThrow(/one « # » title only/)
@@ -141,6 +148,11 @@ describe("parseDocUnit", () => {
 })
 
 describe("docUnitProblems", () => {
+  it("flags a meta_title that is another unit's title or meta_title (#936)", () => {
+    expect(docUnitProblems([unit({ slug: "a", title: "Un" }), unit({ slug: "b", title: "Deux", metaTitle: "Un" })])).toEqual(["b: same title as a"])
+    expect(docUnitProblems([unit({ slug: "a", metaTitle: "Pareil" }), unit({ slug: "b", metaTitle: "Pareil" })])).toEqual(["b: same title as a"])
+  })
+
   it("is empty for a coherent set", () => {
     expect(docUnitProblems([unit({ slug: "a", related: ["b"] }), unit({ slug: "b", aliases: ["ancien-b"] })])).toEqual([])
   })
@@ -286,6 +298,13 @@ describe("docUnitMetadata", () => {
     expect(m.alternates?.canonical).toBe("https://www.benevol.app/doc/a")
     expect(m.openGraph).toMatchObject({ type: "article", url: "https://www.benevol.app/doc/a", siteName: "benevol.app", locale: "fr_CH", section: expect.any(String) })
     expect(m.robots).toMatchObject({ index: true, follow: true })
+  })
+
+  it("uses the meta_title for the <title> and the link previews, the « # » title elsewhere (#936)", () => {
+    const m = docUnitMetadata(unit({ slug: "a", title: "Ma page", metaTitle: "Ma page plus descriptive" }), "https://www.benevol.app")
+    expect(m.title).toEqual({ absolute: "Ma page plus descriptive | benevol.app" })
+    expect(m.openGraph).toMatchObject({ title: "Ma page plus descriptive | benevol.app" })
+    expect(m.twitter).toMatchObject({ title: "Ma page plus descriptive | benevol.app" })
   })
 
   it("is an article of its group, with its own social card, the large Twitter card and its last change when known", () => {
