@@ -181,6 +181,7 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 | `FEATURES.md`, `GUIDE_ADMIN.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
 | `GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `guide/`, dont `/doc/benevole` est l'index |
 | `guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
+| `blog/*.md` | Articles du blog (#944), un par fichier `AAAA-MM-JJ-slug.md`, rendus à `/blog/<slug>`, listés sur `/blog` et dans le flux `/blog/feed.xml` (voir « Ajouter un article au blog ») |
 | `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
 | `docs/accessibilite.md` | Vérifications d'accessibilité, à dater |
@@ -202,6 +203,10 @@ Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, pages de
 - **La vidéo par son identifiant** : quand une vidéo de la bibliothèque montre cette tâche, ajouter sous le titre, sur sa propre ligne entourée de lignes vides, `<!-- video: ID -->` avec l'identifiant stable de `videos/catalog.json` (jamais son titre, sa durée ni son adresse : ils viennent du catalogue). La page publique en fait un encadré « Voir la vidéo : titre (durée) » si la vidéo est publiée et son film en ligne, et rien sinon : dans une fiche, un bouton qui ouvre le lecteur sur place ; dans un guide, un lien vers la bibliothèque ; GitHub n'affiche rien. Une vidéo au plus par section, et une seule fois par fichier. Un identifiant inconnu ou mal écrit fait échouer `src/lib/__tests__/doc-video-references.test.ts`.
 - **L'état actuel seulement** : décrire ce que fait le produit aujourd'hui, jamais « depuis la version X » ni « nouveau » ; l'historique va dans `CHANGELOG.md`.
 - **Un seul registre par page**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur et les pages pour les organisateurs ; « tu » dans les pages pour les bénévoles, comme dans le produit, ses emails et ses vidéos ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vous) et « Côté bénévole » (tu).
+
+### Ajouter un article au blog
+
+Un article est un fichier Markdown de `blog/`, nommé `AAAA-MM-JJ-slug.md` (la date d'envoi, puis l'adresse de l'article : `/blog/slug`). Il commence par un en-tête `---` : `title` (l'objet de la newsletter tel qu'envoyé, emoji compris), `date` (`AAAA-MM-JJ`, la même que dans le nom du fichier), `summary` (une ou deux phrases de 70 à 160 caractères, tirées de l'ouverture de l'article, aussi la description de la page), et au besoin `version` (`2.3`, qui affiche le badge et renvoie vers ses notes sur `/nouveautes`) et `image` (une image PNG de 1200 x 630 servie par le site, sinon la carte du site). Le texte suit, sans titre `#` (la page affiche `title` en titre) ; les liens vers le site sont relatifs (`/doc/s-inscrire`, `/videos/ID`). L'index, la page, le plan du site et le flux Atom suivent sans autre changement ; `src/lib/__tests__/blog.test.ts` vérifie chaque fichier et chaque lien interne.
 
 ### Le CHANGELOG et la page Nouveautés
 

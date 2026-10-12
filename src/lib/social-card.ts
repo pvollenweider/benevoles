@@ -26,6 +26,7 @@ function eyebrowOf(path: string): string {
   if (path === "/doc") return "Aide"
   if (path.startsWith("/doc/")) return "Documentation"
   if (path.startsWith("/legal/") || path === "/accessibilite") return "Informations légales"
+  if (path === "/blog") return "Blog"
   return "Présentation"
 }
 

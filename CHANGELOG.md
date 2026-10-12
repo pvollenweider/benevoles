@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Le blog** (`/blog`) : les newsletters de benevol.app archivées, la plus récente en premier, chacune sur sa page avec sa date et sa version, et un flux Atom pour suivre les prochaines. Lien « Blog » dans l'en-tête et le pied de page des pages publiques.
+
 ## [2.3.0] — 2026-10-12
 
 ### En bref

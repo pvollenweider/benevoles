@@ -47,6 +47,7 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
         { href: "/doc", label: "Documentation" },
         { href: "/videos", label: "Tutoriels vidéo" },
         { href: "/nouveautes", label: "Nouveautés" },
+        { href: "/blog", label: "Blog" },
       ],
     },
     {

@@ -48,7 +48,7 @@ describe("PublicFooter", () => {
       render(<PublicFooter variant="site" />)
       expect(columns()).toEqual({
         // #757 (changelog) and the public video library stay one click away from every page.
-        "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"]],
+        "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"]],
         "benevol.app": [
           ["Espace organisateur", "/admin/login"],
           [`Code source v${pkg.version} sur GitHub (ouvre dans un nouvel onglet)`, GITHUB],

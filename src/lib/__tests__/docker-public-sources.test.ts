@@ -30,6 +30,14 @@ describe("public page sources in the Docker image", () => {
     expect(fs.readdirSync(path.join(root, "guide")).filter((f) => f.endsWith(".md")).length).toBeGreaterThan(1)
   })
 
+  // The blog posts (#944): the whole folder, read by src/lib/blog.ts at runtime.
+  it("blog/*.md is re-included by .dockerignore and the folder copied into the runtime image", () => {
+    const ignore = read(".dockerignore").split("\n").map((l) => l.trim())
+    expect(ignore).toContain("!blog/*.md")
+    expect(read("Dockerfile")).toMatch(/COPY --from=builder .*\/app\/blog \.\/blog\n/)
+    expect(fs.readdirSync(path.join(root, "blog")).filter((f) => f.endsWith(".md")).length).toBeGreaterThan(0)
+  })
+
   // Their last commit dates (scripts/doc-lastmod.mjs, run by deploy.yml): the sitemap's lastmod.
   it("doc-lastmod.json is written before the image build, re-included and copied into the runtime image", () => {
     const ignore = read(".dockerignore").split("\n").map((l) => l.trim())
