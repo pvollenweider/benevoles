@@ -50,10 +50,12 @@ Quand une personne vous répond « ce n'était pas moi » après l'email qui lui
 
 - **Membre existant** : cherchez par nom ou email une personne déjà dans la liste des membres, vous-même compris, puis **Choisir**. Ses coordonnées sont reprises sans rien retaper, même sans email, et l'inscription est rattachée à sa fiche. **Changer de personne** revient à la recherche.
 - Pour une nouvelle personne : prénom et nom (obligatoires), email, téléphone. Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.
-- Puis le créneau (obligatoire) et une note (par exemple « Inscrit par téléphone »).
+- Puis le créneau (obligatoire). **+ Ajouter un autre créneau** ajoute une ligne « Créneau 2 », « Créneau 3 »… pour placer la même personne sur plusieurs créneaux d'un coup ; **Retirer** enlève une ligne. Une ligne laissée vide est ignorée. Tous les créneaux sont ajoutés ensemble, ou aucun si l'un pose problème.
+- Une note facultative (par exemple « Inscrit par téléphone »).
 
 - L'inscription est confirmée directement, même sur un créneau sur validation : pas de demande à traiter.
 - Les conditions du formulaire public ne s'appliquent pas : inscriptions fermées, téléphone obligatoire, âge minimum, accès réservé.
 - Pour une personne déjà inscrite à l'événement (membre choisi, ou même email), le formulaire signale qu'elle a déjà un créneau sur la même plage horaire, et si ce créneau lui donnerait une charge élevée ; l'ajout reste possible. Une seconde inscription de la même personne sur le même créneau est refusée.
-- Si la personne a déjà atteint la limite de créneaux par personne du poste, l'ajout est refusé avec la raison et le bouton **Ajouter quand même** ; l'ajout au-delà de la limite est noté dans le journal.
+- Deux créneaux choisis qui se chevauchent sont signalés sous la ligne concernée ; l'ajout reste possible.
+- Si la personne a déjà atteint la limite de créneaux par personne du poste (en comptant les créneaux ajoutés ensemble), l'ajout est refusé avec la raison et le bouton **Ajouter quand même** ; l'ajout au-delà de la limite est noté dans le journal.
 - La personne reçoit un email de confirmation : qui l'a inscrite, ses créneaux, et son lien personnel pour les voir, les modifier ou se désister. L'email part une dizaine de minutes après le dernier ajout pour cette personne : plusieurs créneaux ajoutés à la suite font un seul email, et un créneau retiré entre-temps n'y figure pas. Le formulaire l'annonce sous le bouton avant l'ajout. Aucun email ne part si la personne n'a pas d'adresse, si vous vous inscrivez vous-même, ou si le créneau a déjà commencé (saisie après coup) ; le journal de l'événement note l'envoi ou sa raison. Pour lui renvoyer son lien plus tard, sélectionnez sa ligne puis **Renvoyer le lien**.

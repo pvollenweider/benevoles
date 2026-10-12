@@ -27,10 +27,12 @@ export type Registration = {
 }
 
 /** The fields of the manual addition form. `volunteerId` is the member chosen from the list (#914),
- * "" for a new person typed by hand. */
-export type AddFormValues = { volunteerId: string; firstName: string; lastName: string; email: string; phone: string; shiftId: string; comment: string }
+ * "" for a new person typed by hand. `shiftId` is the first shift, required. */
+export type AddFormValues = { volunteerId: string; firstName: string; lastName: string; email: string; phone: string; shiftId: string; comment: string
+  /** The shifts chosen after the first one (#918); "" for a line not chosen yet. */
+  extraShiftIds: string[] }
 
-export const EMPTY_ADD_FORM: AddFormValues = { volunteerId: "", firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" }
+export const EMPTY_ADD_FORM: AddFormValues = { volunteerId: "", firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "", extraShiftIds: [] }
 
 /** « Bar, Soir »: commas, not the « · » screen readers read « point » (#582). */
 export const shiftName = (r: Registration) => spokenShiftName(r.shift)

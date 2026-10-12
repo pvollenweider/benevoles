@@ -11,9 +11,9 @@ import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
 
-function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {}, registrations = [] }: { initial?: AddFormValues; onAdded?: (r: Registration) => void; onCancel?: () => void; registrations?: Registration[] }) {
+function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {}, registrations = [], shifts = [shift] }: { initial?: AddFormValues; onAdded?: (r: Registration[]) => void; shifts?: typeof shift[]; onCancel?: () => void; registrations?: Registration[] }) {
   const [form, setForm] = useState(initial)
-  return <ManualAddForm eventId="evt-1" shifts={[shift]} registrations={registrations} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
+  return <ManualAddForm eventId="evt-1" shifts={shifts} registrations={registrations} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
 }
 
 const combo = () => screen.getByRole("combobox", { name: "Créneau" })
@@ -32,11 +32,11 @@ describe("ManualAddForm", () => {
   it("posts the typed values and hands the created registration back", async () => {
     fetchMock.mockResolvedValue({
       ok: true, status: 201,
-      json: async () => ({
+      json: async () => ({ registrations: [{
         id: "r9", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z",
         volunteer: { id: "v9", firstName: "Chloé", lastName: "Roy", email: null, phone: null },
         shift: { ...shift, date: "2026-07-04T00:00:00.000Z" },
-      }),
+      }] }),
     })
     const onAdded = vi.fn()
     render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} onAdded={onAdded} />)
@@ -48,8 +48,8 @@ describe("ManualAddForm", () => {
     await waitFor(() => expect(onAdded).toHaveBeenCalled())
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("/api/admin/registrations")
-    expect(JSON.parse(init.body)).toEqual({ eventId: "evt-1", volunteerId: "", firstName: "Chloé", lastName: "Roy", email: "", phone: "", shiftId: "s1", comment: "" })
-    const reg = onAdded.mock.calls[0][0] as Registration
+    expect(JSON.parse(init.body)).toEqual({ eventId: "evt-1", volunteerId: "", firstName: "Chloé", lastName: "Roy", email: "", phone: "", comment: "", shiftIds: ["s1"] })
+    const [reg] = onAdded.mock.calls[0][0] as Registration[]
     expect(reg).toMatchObject({ id: "r9", isLeader: false, waitingPosition: null })
     expect(reg.shift).toMatchObject({ id: "s1", date: "2026-07-04", capacity: 3, registrationCount: 2 })
   })
@@ -149,7 +149,7 @@ describe("ManualAddForm", () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Cette personne est déjà inscrite sur ce créneau." }) })
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
     await screen.findByRole("alert")
-    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ volunteerId: "mem-2", firstName: "René", lastName: "Meyer", email: "", shiftId: "s1" })
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ volunteerId: "mem-2", firstName: "René", lastName: "Meyer", email: "", shiftIds: ["s1"] })
   })
 
   it("goes back to the search through Changer de personne", async () => {
@@ -186,6 +186,35 @@ describe("ManualAddForm", () => {
     cleanup()
     render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
     expect(screen.getByRole("button", { name: "Ajouter" })).toHaveAccessibleDescription("Pas d'email de confirmation : cette personne n'a pas d'adresse email.")
+  })
+
+  // #918: several shifts for the same person, in one submit.
+  it("adds a second shift line, sends both shifts, and removes a line", async () => {
+    const bar2 = { ...shift, id: "s2", roleName: "Vestiaire", label: "Vestiaire", startTime: "14:00", endTime: "16:00" }
+    fetchMock.mockReturnValue(new Promise(() => {}))
+    render(<Harness shifts={[shift, bar2]} initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter un autre créneau" }))
+    const second = screen.getByRole("combobox", { name: "Créneau 2 (facultatif)" })
+    await waitFor(() => expect(second).toHaveFocus())
+    fireEvent.keyDown(second, { key: "ArrowDown" })
+    // The first line's shift is not offered again.
+    expect(within(screen.getByRole("listbox", { name: "Créneau 2 (facultatif)" })).queryByText(/^Bar/)).toBeNull()
+    fireEvent.keyDown(second, { key: "Enter" })
+    expect(second).toHaveTextContent("Vestiaire")
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).shiftIds).toEqual(["s1", "s2"])
+
+    fireEvent.click(screen.getByRole("button", { name: /^Retirer\s*le créneau 2$/ }))
+    expect(screen.queryByRole("combobox", { name: "Créneau 2 (facultatif)" })).toBeNull()
+    await waitFor(() => expect(screen.getByRole("button", { name: "+ Ajouter un autre créneau" })).toHaveFocus())
+  })
+
+  it("warns when two chosen shifts overlap, without making them invalid", () => {
+    const overlap = { ...shift, id: "s2", roleName: "Vestiaire", label: "Vestiaire", startTime: "11:00", endTime: "13:00" }
+    render(<Harness shifts={[shift, overlap]} initial={{ ...EMPTY_ADD_FORM, shiftId: "s1", extraShiftIds: ["s2"] }} />)
+    const second = screen.getByRole("combobox", { name: "Créneau 2 (facultatif)" })
+    expect(second).toHaveAccessibleDescription("Ce créneau chevauche un autre créneau choisi dans ce formulaire.")
+    expect(second).not.toHaveAttribute("aria-invalid")
   })
 
   it("closes through Annuler", () => {
@@ -266,11 +295,11 @@ describe("RegistrationsManager — focus and announcement around the manual add"
   it("returns the focus and announces the registration after a successful add, chosen with the keyboard", async () => {
     fetchMock.mockResolvedValue({
       ok: true, status: 201,
-      json: async () => ({
+      json: async () => ({ registrations: [{
         id: "r9", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z",
         volunteer: { id: "v9", firstName: "Chloé", lastName: "Roy", email: null, phone: null },
         shift: { ...shift, date: "2026-07-04T00:00:00.000Z" },
-      }),
+      }] }),
     })
     const open = await renderManager()
     fireEvent.click(open)
@@ -283,7 +312,7 @@ describe("RegistrationsManager — focus and announcement around the manual add"
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
 
     await waitFor(() => expect(screen.queryByRole("heading", { name: "Inscription manuelle" })).toBeNull())
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ shiftId: "s1" })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ shiftIds: ["s1"] })
     expect(open).toHaveFocus()
     const result = "Inscription de Chloé Roy ajoutée : Bar, sam. 4 juil., de 10h à 12h."
     await waitFor(() => expect(screen.getByText(result)).toBeInTheDocument())

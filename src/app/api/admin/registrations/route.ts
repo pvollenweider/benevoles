@@ -15,9 +15,15 @@ import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
 import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 
+/** Shifts at most in one submit (#918): a person's whole programme, not a bulk import. */
+const MAX_SHIFTS = 30
+
 const schema = z.object({
   eventId: z.string(),
-  shiftId: z.string(),
+  /** One shift: the original API, still answered with the registration itself. */
+  shiftId: z.string().optional(),
+  /** Several shifts for the same person in one submit (#918), all or nothing. */
+  shiftIds: z.array(z.string()).max(MAX_SHIFTS).optional(),
   /** A member already in the organization's list (#914): placed without retyping, email or not. */
   volunteerId: z.string().optional(),
   firstName: z.string().optional(),
@@ -30,6 +36,9 @@ const schema = z.object({
 }).refine((d) => d.volunteerId || (d.firstName?.trim() && d.lastName?.trim()), {
   message: "Prénom et nom requis pour une nouvelle personne.",
   path: ["firstName"],
+}).refine((d) => d.shiftId || (d.shiftIds?.length ?? 0) > 0, {
+  message: "Choisissez au moins un créneau.",
+  path: ["shiftIds"],
 })
 
 export async function POST(req: Request) {
@@ -41,17 +50,18 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
+  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
+  const ids = [...new Set([...(shiftIds ?? []), ...(shiftId ? [shiftId] : [])])]
 
-  const shift = await db.shift.findFirst({
-    where: { id: shiftId, eventId },
+  const found = await Promise.all(ids.map((id) => db.shift.findFirst({
+    where: { id, eventId },
     include: {
       registrations: { where: { status: "active" } },
       event: { select: { title: true, organization: { select: { name: true, slug: true, timeZone: true } } } },
     },
-  })
-
-  if (!shift) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
+  })))
+  const shifts = found.filter((s): s is NonNullable<typeof s> => s !== null)
+  if (shifts.length !== ids.length) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
 
   const usedEmail = email || null
   let volunteer = volunteerId
@@ -64,18 +74,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Ce membre n'existe plus. Cherchez-le à nouveau." }, { status: 404 })
   }
 
-  // Shifts per volunteer for the role (#466): the organiser may go over it, but knowingly.
+  // Shifts per volunteer for the role (#466): the organiser may go over it, but knowingly. The
+  // shifts added together count too (#918).
   if (volunteer && !allowOverLimit) {
+    const roleNames = [...new Set(shifts.map((s) => s.roleName))]
     const limits = roleLimits(await db.shift.findMany({
-      where: { eventId, roleName: shift.roleName, maxPerVolunteer: { not: null } },
+      where: { eventId, roleName: { in: roleNames }, maxPerVolunteer: { not: null } },
       select: { roleName: true, maxPerVolunteer: true },
     }))
     if (limits.size > 0) {
       const held = await db.registration.findMany({
-        where: { volunteerId: volunteer.id, eventId, status: { in: [...LIVE_STATUSES] }, shift: { roleName: shift.roleName } },
-        select: { id: true },
+        where: { volunteerId: volunteer.id, eventId, status: { in: [...LIVE_STATUSES] }, shift: { roleName: { in: roleNames } } },
+        select: { shift: { select: { roleName: true } } },
       })
-      const [breach] = roleLimitBreaches([shift], held.map(() => ({ roleName: shift.roleName })), limits)
+      const [breach] = roleLimitBreaches(shifts, held.map((h) => ({ roleName: h.shift.roleName })), limits)
       if (breach) {
         return NextResponse.json({ error: roleLimitAdminMessage(breach, `${volunteer.firstName} ${volunteer.lastName}`), code: "role_limit" }, { status: 409 })
       }
@@ -88,80 +100,95 @@ export async function POST(req: Request) {
     })
   }
 
-  // The volunteer is always told (#916), except in the three cases manualAddNotice skips.
+  // The volunteer is always told (#916), except in the three cases manualAddNotice skips; decided
+  // per shift, so a shift already over among several is recorded without being announced.
   const now = new Date()
-  const notice = manualAddNotice({
+  const notices = new Map(shifts.map((s) => [s.id, manualAddNotice({
     email: volunteer.email,
     organizerEmail: guard.session.user?.email,
-    shiftStart: localDateTimeToUtc(shift.date, shift.startTime, orgTimeZone(shift.event.organization)),
+    shiftStart: localDateTimeToUtc(s.date, s.startTime, orgTimeZone(s.event.organization)),
     now,
-  })
-  const organizer = notice.send && guard.session.user?.id
+  })]))
+  const organizer = [...notices.values()].some((n) => n.send) && guard.session.user?.id
     ? await db.adminUser.findFirst({ where: { id: guard.session.user.id }, select: { name: true } })
     : null
 
-  let registration
+  let registrations
   try {
     const added = volunteer
-    registration = await db.$transaction(async (tx) => {
-      const created = await tx.registration.create({
-        data: {
-          eventId,
-          shiftId,
-          volunteerId: added.id,
-          source: "admin_manual",
-          comment,
-          // No charterAcceptedHash/At (#569): an admin adds this registration by hand, so no
-          // volunteer consent to the charter was ever given here.
-          ...registrationToken.data(generateToken()),
-        },
-        include: { volunteer: true, shift: true },
-      })
-      // Grouped per person and event (#916): 15 shifts added in a row are one email, a few
-      // minutes after the last one, listing what is still held then.
-      if (notice.send) {
-        await queueAddedByOrganizer(tx, {
-          eventId,
-          volunteerId: added.id,
-          registrationId: created.id,
-          organizationId,
-          recipient: { email: notice.email, name: `${added.firstName} ${added.lastName}` },
+    registrations = await db.$transaction(async (tx) => {
+      const created = []
+      for (const shift of shifts) {
+        const registration = await tx.registration.create({
           data: {
-            volunteerName: `${added.firstName} ${added.lastName}`,
-            eventTitle: shift.event.title,
-            orgSlug: shift.event.organization.slug,
-            organizationName: shift.event.organization.name,
-            organizerName: organizer?.name?.trim() || null,
+            eventId,
+            shiftId: shift.id,
+            volunteerId: added.id,
+            source: "admin_manual",
+            comment,
+            // No charterAcceptedHash/At (#569): an admin adds this registration by hand, so no
+            // volunteer consent to the charter was ever given here.
+            ...registrationToken.data(generateToken()),
           },
-          now,
+          include: { volunteer: true, shift: true },
         })
+        const notice = notices.get(shift.id)!
+        // Grouped per person and event (#916): shifts added together or in a row are one email,
+        // a few minutes after the last one, listing what is still held then.
+        if (notice.send) {
+          await queueAddedByOrganizer(tx, {
+            eventId,
+            volunteerId: added.id,
+            registrationId: registration.id,
+            organizationId,
+            recipient: { email: notice.email, name: `${added.firstName} ${added.lastName}` },
+            data: {
+              volunteerName: `${added.firstName} ${added.lastName}`,
+              eventTitle: shift.event.title,
+              orgSlug: shift.event.organization.slug,
+              organizationName: shift.event.organization.name,
+              organizerName: organizer?.name?.trim() || null,
+            },
+            now,
+          })
+        }
+        created.push({ registration, shiftId: shift.id })
       }
       return created
     })
   } catch (e) {
     if (isUniqueViolation(e)) {
-      return NextResponse.json({ error: "Cette personne est déjà inscrite sur ce créneau." }, { status: 409 })
+      const message = shifts.length > 1
+        ? "Cette personne est déjà inscrite sur l'un de ces créneaux : rien n'a été ajouté."
+        : "Cette personne est déjà inscrite sur ce créneau."
+      return NextResponse.json({ error: message }, { status: 409 })
     }
     throw e
   }
 
-  if (shift.registrations.length + 1 >= shift.capacity) {
-    await db.shift.update({ where: { id: shiftId }, data: { status: "full" } })
+  for (const shift of shifts) {
+    if (shift.registrations.length + 1 >= shift.capacity) {
+      await db.shift.update({ where: { id: shift.id }, data: { status: "full" } })
+    }
   }
 
-  await logEvent({
-    eventId,
-    actor: adminActor(guard.session),
-    action: "registration.created",
-    entityType: "Registration",
-    entityId: registration.id,
-    changes: {
-      shiftId: { from: null, to: shiftId },
-      source: { from: null, to: "admin_manual" },
-      confirmationEmail: { from: null, to: manualAddNoticeLog(notice) },
-      ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
-    },
-  })
+  for (const { registration, shiftId: addedShiftId } of registrations) {
+    await logEvent({
+      eventId,
+      actor: adminActor(guard.session),
+      action: "registration.created",
+      entityType: "Registration",
+      entityId: registration.id,
+      changes: {
+        shiftId: { from: null, to: addedShiftId },
+        source: { from: null, to: "admin_manual" },
+        confirmationEmail: { from: null, to: manualAddNoticeLog(notices.get(addedShiftId)!) },
+        ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
+      },
+    })
+  }
 
-  return NextResponse.json(registration, { status: 201 })
+  // `shiftIds` (#918): every registration; the original single `shiftId`: the registration itself.
+  const created = registrations.map((r) => r.registration)
+  return shiftIds ? NextResponse.json({ registrations: created }, { status: 201 }) : NextResponse.json(created[0], { status: 201 })
 }

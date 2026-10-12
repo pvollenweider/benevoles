@@ -188,7 +188,7 @@ export default function ShiftSelect({
         aria-required={required || undefined}
         aria-invalid={invalid || undefined}
         aria-describedby={describedBy}
-        className={`flex items-center justify-between gap-2 w-full border ${invalid ? "border-red-600" : "border-gray-300"} rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]`}
+        className={`flex items-center justify-between gap-2 w-full border ${invalid ? "border-red-600" : "border-gray-300"} rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-11 sm:min-h-[38px]`}
       >
         {selected ? (
           <span className="text-left min-w-0 wrap-break-word sm:truncate text-gray-800">
