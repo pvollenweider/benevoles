@@ -14,6 +14,8 @@ aliases: []
 
 Une fois tes créneaux choisis, clique sur **Continuer**.
 
+Si l'organisation t'a écrit pour un créneau précis, le lien **Je prends ce créneau** de son email ouvre la page avec ce créneau proposé en haut : un clic sur **Je prends ce créneau** le choisit (ou **Rejoindre la liste d'attente** s'il est complet), puis tu continues comme d'habitude. Si la place a été prise entre-temps, la page le dit et tu vois les autres créneaux encore ouverts.
+
 Renseigne :
 - **Prénom** et **Nom** (obligatoires) ;
 - **Email** (obligatoire : tu y recevras la confirmation) ;

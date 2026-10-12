@@ -151,3 +151,34 @@ export function prefillContact(form: SignupForm, source: Contact, prefer: "sourc
     phone: pick(form.phone, source.phone),
   }
 }
+
+/**
+ * A shift proposed to this visitor by an organizer's email (« Je prends ce créneau », #869):
+ * offer: free, one click selects it; waitlist: full, its waitlist is open; selected: already in
+ * the selection; held: already registered; unavailable: closed, cancelled, full without waitlist,
+ * reserved to others, out of the registration window, or unknown. The usual sign-up then applies.
+ */
+export type ProposedShiftState = "offer" | "waitlist" | "selected" | "selected_waitlist" | "held" | "unavailable"
+
+export function proposedShiftState(
+  shift: SignupShift | undefined,
+  ctx: { myShiftIds: Set<string>; selected: Set<string>; reservedIds: Set<string>; accepting: boolean },
+): ProposedShiftState {
+  if (!shift) return "unavailable"
+  if (ctx.myShiftIds.has(shift.id)) return "held"
+  if (ctx.selected.has(shift.id)) return shift.status === "full" ? "selected_waitlist" : "selected"
+  if (!ctx.accepting || ctx.reservedIds.has(shift.id) || !isShiftSelectable(shift, ctx.myShiftIds)) return "unavailable"
+  return shift.status === "full" ? "waitlist" : "offer"
+}
+
+/** What the banner says for that state; `name` is the spoken shift (« Bar, samedi 4 juillet, de 10 h à 12 h »). */
+export function proposedShiftText(state: ProposedShiftState, name: string): string {
+  switch (state) {
+    case "offer": return `On te propose ce créneau : ${name}.`
+    case "waitlist": return `Plus de place libre sur ce créneau : ${name}. Tu peux rejoindre sa liste d'attente.`
+    case "selected": return `Créneau choisi : ${name}. Continue pour confirmer ton inscription.`
+    case "selected_waitlist": return `Liste d'attente choisie : ${name}. Continue pour confirmer ton inscription sur la liste d'attente.`
+    case "held": return `Tu es déjà inscrit·e sur ce créneau : ${name}.`
+    case "unavailable": return "Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous."
+  }
+}
