@@ -22,6 +22,8 @@ Organisation et événement dédiés à cette vidéo. Identités `example.org`, 
 
 Les données et changements restent strictement locaux. Ne pas altérer le jeu de la vidéo 49 pendant sa capture. Aucun upload audiovisuel externe sans garde-fou fictif propre à ce scénario. L'inspection des fichiers suit le workflow tableur en lecture seule ; aucun classeur ni conversion artificielle.
 
+Le seed est désormais réservé à la création d’une fixture absente : il refuse une organisation, un propriétaire ou des identités déjà présents. Les identifiants réservés des créneaux et inscriptions initiales sont vérifiés libres avant création et correspondent aux gardes du scénario. Pour reprendre une capture, utiliser le précontrôle idempotent : il remet uniquement le téléphone démonstratif à sa valeur initiale et conserve les vraies acceptations, envois et preuves. Ne jamais reconstruire cette fixture enrichie.
+
 ## État
 
 Révision suivante, non générée : les deux colonnes ajoutées au produit sont désormais expliquées dans le texte. La prise sur main `1937bcc4` conserve ses preuves séparées dans `evidence-before-14-column-explanation` : ASR neuf chapitres conforme, contrôle audiovisuel huit chapitres sans signalement et un recalage requis dans le résultat. Le recorder revient maintenant réellement au titre Rapports pendant cette explication. Le MP4 existant ne valide pas ce nouveau texte : nouvelle voix continue, fixture enrichie par actions réelles, prise et contrôles complets restent nécessaires. Aucun statut final ni publication.

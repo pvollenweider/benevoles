@@ -122,7 +122,7 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     await page.goto(`${baseUrl}/admin/members`); await settle(page)
     const duplicates = page.getByRole("link", { name: /^Doublons possibles \(/ })
     await duplicates.waitFor()
-    await at("Les raisons du rapprochement sont"); await tap(page, duplicates)
+    await at("Dans Membres, ouvrez Doublons possibles."); await tap(page, duplicates)
     await page.getByRole("heading", { name: "Doublons possibles", exact: true }).waitFor()
     const pair = page.locator("li").filter({ has: page.locator(`a[href="/admin/members/${before.keep.id}/merge?with=${before.absorb.id}"]`) }).filter({ hasText: `${name} et ${absorbedName}` })
     // Only the outer pair list item has this link. Do not take an unrelated namesake.
@@ -130,9 +130,9 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     await pair.scrollIntoViewIfNeeded()
     await at("Comparer et fusionner ouvre un"); await tap(page, pair.getByRole("link", { name: /^Comparer et fusionner/ }))
     await page.getByRole("heading", { name: `Aperçu de la fusion avec ${absorbedName}`, exact: true }).waitFor()
-    await at("Ignorer retire simplement la paire"); await page.goBack(); await settle(page)
+    await at("Revenons aux suggestions."); await page.goBack(); await settle(page)
     await page.getByRole("heading", { name: "Doublons possibles", exact: true }).waitFor()
-    await at("Les deux fiches existent toujours"); await tap(page, pair.getByRole("button", { name: /^Ignorer la paire/ }))
+    await at("Ignorer retire simplement la paire"); await tap(page, pair.getByRole("button", { name: /^Ignorer la paire/ }))
     await page.getByText("Aucune paire possible en double pour l'instant.", { exact: true }).waitFor()
     // Dismissing a suggestion is not a merge: read the actual fixture again to prove both
     // records and their personal links still exist unchanged before the next entry point.
@@ -147,7 +147,7 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     // Bind the action to this precise retained member, not another namesake link.
     const manualMerge = page.getByRole("link", { name: "Fusionner avec un autre membre (doublon confirmé)", exact: true })
     check(await manualMerge.getAttribute("href") === `/admin/members/${before.keep.id}/merge`, "manual merge entry must retain the expected member")
-    await at("Recherchez précisément l’adresse de la"); await tap(page, manualMerge)
+    await at("Fusionner avec un autre membre"); await tap(page, manualMerge)
     await page.getByRole("heading", { name: `Fusionner ${name}`, exact: true }).waitFor()
     const search = page.getByLabel("Rechercher un membre par nom ou email", { exact: true })
     await at("Recherchez précisément l’adresse de la"); await tap(page, search)
@@ -169,14 +169,15 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
   }
   await scene("fields", async at => {
     const email = page.getByRole("group", { name: "Email", exact: true })
-    await at("Ici, on conserve la bonne"); await tap(page, email.getByRole("radio", { name: `Garder « ${before.keep.email} » (${name})`, exact: true }))
-    await waitPreview()
+    await at("Ici, on conserve la bonne")
+    const keepEmail = email.getByRole("radio", { name: `Garder « ${before.keep.email} » (${name})`, exact: true })
+    if (!(await keepEmail.isChecked())) { await tap(page, keepEmail); await waitPreview() }
     if (before.keep.phone !== before.absorb.phone) {
-      await at("Les notes internes peuvent aussi")
+      await at("Ici, on conserve la bonne")
       await tap(page, page.getByRole("group", { name: "Téléphone", exact: true }).getByRole("radio", { name: `Prendre « ${before.absorb.phone ?? "(vide)"} » (${absorbedName})`, exact: true }))
       await waitPreview()
     }
-    await at("pratique pour ne rien oublier."); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
+    await at("Les notes internes peuvent aussi"); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
     await waitPreview()
     await at("Le tableau récapitule les inscriptions"); await page.getByRole("table", { name: "Nombre de lignes concernées par la fusion, par type", exact: true }).scrollIntoViewIfNeeded()
   })
@@ -204,13 +205,13 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     const sendLinks = page.getByRole("checkbox", { name: "Envoyer les nouveaux liens personnels à l'adresse conservée", exact: true })
     await sendLinks.scrollIntoViewIfNeeded()
     // Show the real option without claiming an email was sent; this demonstration sends none.
-    await at("Dans cette démonstration, on la"); await tap(page, sendLinks)
+    await at("Cette case permet d’envoyer les"); await tap(page, sendLinks)
     check(await sendLinks.isChecked(), "new-link email option did not turn on")
     await waitPreview()
-    await at("aucun email ne sera envoyé."); await tap(page, sendLinks)
+    await at("Dans cette démonstration, on la"); await tap(page, sendLinks)
     check(!(await sendLinks.isChecked()), "demonstration must not send email unexpectedly")
     await waitPreview()
-    await at("la fiche absorbée sera désactivée"); await page.getByRole("heading", { name: "Résumé avant confirmation", exact: true }).scrollIntoViewIfNeeded()
+    await at("Lisez le résumé avant de"); await page.getByRole("heading", { name: "Résumé avant confirmation", exact: true }).scrollIntoViewIfNeeded()
     await at("Fusionner les deux fiches ouvre"); await tap(page, page.getByRole("button", { name: "Fusionner les deux fiches", exact: true }))
     const confirmation = page.getByRole("alertdialog", { name: "Confirmer la fusion", exact: true })
     await confirmation.waitFor()
@@ -221,9 +222,9 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
   const links = validateMemberMergeAfter(before, after, baseUrl)
   await scene("result", async at => {
     await page.getByRole("heading", { name: "Fusion effectuée", exact: true }).scrollIntoViewIfNeeded()
-    await at("Dans la liste des membres"); await tap(page, page.getByRole("link", { name: `Retour à la fiche de ${name}`, exact: true }))
+    await at("Retournez à la fiche conservée"); await tap(page, page.getByRole("link", { name: `Retour à la fiche de ${name}`, exact: true }))
     await settle(page)
-    await at(0.37) /* mid-sentence */; await page.goto(`${baseUrl}/admin/members?q=${encodeURIComponent(before.keep.email!)}`); await settle(page)
+    await at("Dans la liste des membres"); await page.goto(`${baseUrl}/admin/members?q=${encodeURIComponent(before.keep.email!)}`); await settle(page)
     check(await page.locator("tbody tr").filter({ hasText: before.keep.email! }).count() === 1, "retained member not unique in the real members list")
     await at("les faits enregistrés sous l’ancienne"); await page.goto(`${baseUrl}/admin/members/${before.keep.id}`); await settle(page)
     await page.getByRole("heading", { name: `Activité de ${name}`, exact: true }).waitFor()
@@ -245,7 +246,7 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     }
     const oldRegistration = before.oldMovedLinks.find(link => link.kind === "registration" && (link.expectedAfterStatus ?? 200) === 200)!
     const token = validateMergeLink(oldRegistration, baseUrl).pathname.split("/").at(-1)!
-    await at("c’est normal, il a été"); await page.goto(`${baseUrl}/my/${token}`); await settle(page)
+    await at("L’ancien lien personnel de la"); await page.goto(`${baseUrl}/my/${token}`); await settle(page)
     await page.getByRole("heading", { name: "Ce lien ne fonctionne pas", exact: true }).waitFor()
     const newRegistration = after.newMovedLinks.find(link => link.entityId === oldRegistration.entityId && link.kind === "registration")!
     const newToken = validateMergeLink(newRegistration, baseUrl).pathname.split("/").at(-1)!

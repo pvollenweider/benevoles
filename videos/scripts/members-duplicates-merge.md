@@ -16,6 +16,8 @@ La narration s’adresse aux organisateurs avec « vous », dans un ton souriant
 
 ## Préparation et reprise
 
+La fixture originale réutilisable sert aussi aux reprises sur le produit actuel. Après migration des noms, le reset garde l’organisation et sa date de création, ainsi que le registre de migration. Il reconstruit uniquement les enfants dont le garde-fou a vérifié les identifiants, les relations et les journaux, avec les mêmes noms naturels. Les générations séparées v2 à v5 ne sont pas modifiées.
+
 Le préparateur refuse tout écrasement implicite. Une prise complète fusionne réellement les deux fiches de formation. Pour une nouvelle prise, la commande explicite `videos/tools/local-production.ts run videos/tools/prepare-member-merge.ts --reset-owned` vérifie les identifiants exacts, les données fictives, tous les objets dépendants et le journal de fusion, puis reconstruit seulement cette organisation dans une transaction. Le registre `ownership.json` et son empreinte `ownership.sha256` lient le scénario à sa génération. Un état partiel ou inconnu est refusé ; la récupération sans registre n’accepte que l’état initial complet exact. Le hash du mot de passe propriétaire est conservé et l’organisation par défaut n’est jamais modifiée.
 
 `record-member-merge.ts` reçoit les lecteurs de base réels de `member-merge-fixture.ts`. Ces lecteurs ne modifient rien. Toute mutation du parcours est effectuée par l’interface du produit compilé depuis `main`.

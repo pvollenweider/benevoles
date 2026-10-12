@@ -8,7 +8,7 @@ import { createHash } from "node:crypto"
 import { mkdir, writeFile, readFile } from "node:fs/promises"
 import path from "node:path"
 import { MERGE_ORG, MERGE_SLUG, MERGE_OWNER, MERGE_KEEP, MERGE_ABSORB, MERGE_EVENT, MERGE_MOVED_REGISTRATION, MERGE_MOVED_INVITE, MERGE_QUESTION, assertMergeDatabase, assertMergeReviewFixture } from "../lib/member-merge-fixture"
-import { readPrivateIdentityVersion } from "../lib/private-identity-version"
+import { readPrivateIdentityVersion, privateIdentities } from "../lib/private-identity-version"
 import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
@@ -16,7 +16,7 @@ async function main() {
   assertMergeDatabase(databaseUrl)
   const args = process.argv.slice(2)
   assert(args.length === 0 || (args.length === 1 && args[0] === "--reset-owned"), "Only explicit --reset-owned is accepted")
-  assert(!await readPrivateIdentityVersion("merge"), "Migrated merge identities must not be reconstructed by the legacy reset; preserve current records and ledger")
+  const identityV2 = await readPrivateIdentityVersion("merge")
   const directory = path.resolve("videos/output/members-duplicates-merge")
   const ledgerPath = path.join(directory, "ownership.json")
   let ledger: MergeOwnershipLedger | null = null
@@ -28,6 +28,7 @@ async function main() {
     const date = new Date("2026-11-28T00:00:00Z")
     await db.$transaction(async tx => {
       const existing = await tx.organization.count({ where: { OR: [{ id: MERGE_ORG }, { slug: MERGE_SLUG }] } })
+      assert(!identityV2 || existing === 1, "A migrated identity ledger requires its existing owned organization")
       let passwordHash = source.passwordHash
       if (existing) {
         assert(args[0] === "--reset-owned", "Merge fixture already exists: explicit owned reset required")
@@ -42,12 +43,16 @@ async function main() {
         await tx.volunteer.delete({ where: { id: MERGE_ABSORB } })
         await tx.volunteer.delete({ where: { id: MERGE_KEEP } })
         await tx.adminUser.delete({ where: { id: `${MERGE_ORG}-owner` } })
-        await tx.organization.delete({ where: { id: MERGE_ORG } })
+        // Preserve the organization and its creation date: the identity-migration
+        // ledger remains bound to this exact generation. The reset guard above
+        // verified every dismissal and audit row before these scoped deletions.
+        await tx.duplicateDismissal.deleteMany({ where: { organizationId: MERGE_ORG } })
+        await tx.orgLog.deleteMany({ where: { organizationId: MERGE_ORG } })
       }
-      await tx.organization.create({ data: { id: MERGE_ORG, slug: MERGE_SLUG, name: "Formation — doublons et fusion", timeZone: "Europe/Zurich", active: true, replyToEmail: MERGE_OWNER } })
-      await tx.adminUser.create({ data: { id: `${MERGE_ORG}-owner`, organizationId: MERGE_ORG, name: "Élodie Exemple", email: MERGE_OWNER, passwordHash, role: "admin", isActive: true } })
-      await tx.volunteer.create({ data: { id: MERGE_KEEP, organizationId: MERGE_ORG, firstName: "Robin", lastName: "Exemple", email: "video.merge.robin@example.org", phone: "0790000100", notes: "Disponible le matin.", birthDate: new Date("1990-01-15T00:00:00Z"), tags: ["accueil"], availabilityPeriods: ["morning"], availabilityNote: "Disponible le samedi." } })
-      await tx.volunteer.create({ data: { id: MERGE_ABSORB, organizationId: MERGE_ORG, firstName: "Robin", lastName: "Exemple", email: "video.merge.robim@example.org", phone: "0790000101", notes: "Connaît l'entrée nord.", birthDate: new Date("1991-01-15T00:00:00Z"), tags: ["buvette"], availabilityPeriods: ["afternoon"], availabilityNote: "Préférence pour l'accueil." } })
+      if (!existing) await tx.organization.create({ data: { id: MERGE_ORG, slug: MERGE_SLUG, name: "Formation — doublons et fusion", timeZone: "Europe/Zurich", active: true, replyToEmail: MERGE_OWNER } })
+      await tx.adminUser.create({ data: { id: `${MERGE_ORG}-owner`, organizationId: MERGE_ORG, name: identityV2 ? privateIdentities.merge.owner : "Élodie Exemple", email: MERGE_OWNER, passwordHash, role: "admin", isActive: true } })
+      await tx.volunteer.create({ data: { id: MERGE_KEEP, organizationId: MERGE_ORG, firstName: "Robin", lastName: identityV2 ? "Favre" : "Exemple", email: "video.merge.robin@example.org", phone: "0790000100", notes: "Disponible le matin.", birthDate: new Date("1990-01-15T00:00:00Z"), tags: ["accueil"], availabilityPeriods: ["morning"], availabilityNote: "Disponible le samedi." } })
+      await tx.volunteer.create({ data: { id: MERGE_ABSORB, organizationId: MERGE_ORG, firstName: "Robin", lastName: identityV2 ? "Favre" : "Exemple", email: "video.merge.robim@example.org", phone: "0790000101", notes: "Connaît l'entrée nord.", birthDate: new Date("1991-01-15T00:00:00Z"), tags: ["buvette"], availabilityPeriods: ["afternoon"], availabilityNote: "Préférence pour l'accueil." } })
       await tx.event.create({ data: { id: MERGE_EVENT, organizationId: MERGE_ORG, slug: "atelier-fusion", title: "Fusion de fiches — démonstration", description: "Données fictives de formation uniquement.", startDate: date, endDate: date, publicStatus: "published", isListed: false, remindersEnabled: false } })
       await tx.shift.create({ data: { id: `${MERGE_ORG}-shift-main`, eventId: MERGE_EVENT, roleName: "Accueil", label: "Accueil entrée principale", date, startTime: "10:00", endTime: "12:00", capacity: 5, maxPerVolunteer: 1 } })
       await tx.shift.create({ data: { id: `${MERGE_ORG}-shift-overlap`, eventId: MERGE_EVENT, roleName: "Accueil", label: "Relève entrée nord", date, startTime: "11:00", endTime: "13:00", capacity: 5, maxPerVolunteer: 1, minAge: 60, reservedTags: ["permis-b"] } })
@@ -69,7 +74,7 @@ async function main() {
     await writeFile(path.join(directory, "ownership.sha256"), createHash("sha256").update(ownershipJson).digest("hex") + "  ownership.json\n")
     await assertMergeReviewFixture(db, databaseUrl)
     await writeFile(path.join(directory, "preparation.json"), JSON.stringify({ preparedAt: new Date().toISOString(), organizationId: MERGE_ORG, eventId: MERGE_EVENT, members: 2, registrations: 3, invitations: 2, answerConflict: true, invitationConflict: true, otherWarnings: ["same_shift", "overlap", "role_limit", "min_age", "reserved_role"], emailsSent: false }, null, 2))
-    console.log("✓ Separate fictional merge fixture created once: two members, three registrations, two invitations, real blocking conflicts and review warnings. No email sent.")
+    console.log("✓ Separate fictional merge fixture prepared with exact ownership guards: two members, three registrations, two invitations, real blocking conflicts and review warnings. No email sent.")
   } finally { await db.$disconnect(); await unregister() }
 }
 main().catch(error => { console.error(error instanceof Error ? error.message : "Merge preparation failed"); process.exitCode = 1 })
