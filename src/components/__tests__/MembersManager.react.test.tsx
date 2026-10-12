@@ -247,3 +247,34 @@ describe("MembersManager — ?deleted= from the member page (#667)", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
   })
 })
+
+// #927: at 1280 px the row actions ran past the table's edge (min-w 64rem, nowrap cell). The
+// table now fits the admin column and the actions wrap in a flex row, each keeping its target size.
+describe("MembersManager — row actions wrap instead of overflowing", () => {
+  it("lays the actions out in a wrapping flex row, in a table of 56rem minimum", () => {
+    render(
+      <MembersManager
+        initialMembers={[member({ id: "a", addressStatus: { kind: "to_verify", since: "2026-03-01T00:00:00.000Z" } })]}
+        allTags={[]}
+        defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }}
+      />,
+    )
+    const table = screen.getByRole("table", { name: "Liste des membres" })
+    expect(table).toHaveClass("min-w-[56rem]")
+    expect(table).not.toHaveClass("min-w-[64rem]")
+    const edit = screen.getByRole("button", { name: "Éditer Alice Martin" })
+    const row = edit.parentElement!
+    expect(row).toHaveClass("flex", "flex-wrap", "gap-1")
+    expect(row.closest("td")).not.toHaveClass("whitespace-nowrap")
+    const actions = [
+      screen.getByRole("link", { name: "Activité de Alice Martin" }),
+      edit,
+      screen.getByRole("button", { name: "Doublon ? Voir les doublons possibles de Alice Martin" }),
+      screen.getByRole("button", { name: "Désactiver Alice Martin" }),
+    ]
+    for (const a of actions) {
+      expect(a.parentElement).toBe(row)
+      expect(a).toHaveClass("min-h-11", "sm:min-h-6")
+    }
+  })
+})

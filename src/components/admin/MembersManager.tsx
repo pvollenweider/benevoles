@@ -489,13 +489,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       ) : (
         <>
         <div role="status" aria-live="polite" className="sr-only">{sortAnnouncement}</div>
-        {/* overflow-x-auto, not overflow-hidden (#557): two more columns made the table wider than
-            some viewports; scrolling keeps every control on one line instead of squeezing them
-            into wrapped, overlapping hit areas. tabIndex/role/aria-label: the scroll region itself
-            is reachable and named for keyboard and screen-reader users (same pattern as the
-            outbox table, settings/notifications). */}
+        {/* overflow-x-auto, not overflow-hidden (#557): on a narrow screen the table scrolls in its
+            own region, never the page. tabIndex/role/aria-label: the scroll region itself is
+            reachable and named for keyboard and screen-reader users (same pattern as the outbox
+            table, settings/notifications). min-w-[56rem], not 64rem (#927): the table fits the
+            admin column at 1280 px, its row actions wrapping instead of running past the edge. */}
         <div role="region" aria-label="Liste des membres" tabIndex={0} className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          <table aria-label="Liste des membres" className="w-full text-sm min-w-[64rem]">
+          <table aria-label="Liste des membres" className="w-full text-sm min-w-[56rem]">
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
@@ -563,53 +563,55 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                       <span className="text-gray-500">—</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-right space-x-1 whitespace-nowrap">
-                    {/* min-h-6 (24px, #557 axe target-size): the hit area meets the minimum regardless of the small label text. whitespace-nowrap on the cell (the table now scrolls, see above) keeps the three controls on one line instead of wrapping into overlapping hit areas. */}
-                    <Link
-                      href={`/admin/members/${m.id}`}
-                      className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                      Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
-                    </Link>
-                    <button
-                      data-edit-trigger={m.id}
-                      onClick={() => startEditing(m)}
-                      aria-label={`Éditer ${m.firstName} ${m.lastName}`}
-                      className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
-                    >
-                      Éditer
-                    </button>
-                    {m.addressStatus.kind === "to_verify" && (
-                      <button
-                        onClick={() => searchForDuplicate(m.id)}
-                        aria-label={`Doublon ? Voir les doublons possibles de ${m.firstName} ${m.lastName}`}
-                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
+                  <td className="px-4 py-3">
+                    {/* min-h-11 sm:min-h-6 (44 px on a phone, 24 px from sm, #557 axe target-size): the hit area meets the minimum regardless of the small label text. A wrapping flex row with a gap (#927), not nowrap inline text: the actions may take two lines when the table is narrow, each keeping its own box, never overlapping. */}
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <Link
+                        href={`/admin/members/${m.id}`}
+                        className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                       >
-                        Doublon ?
-                      </button>
-                    )}
-                    {m.active && (
+                        Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
+                      </Link>
                       <button
-                        onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
-                        aria-label={`Désactiver ${m.firstName} ${m.lastName}`}
-                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-red-600"
+                        data-edit-trigger={m.id}
+                        onClick={() => startEditing(m)}
+                        aria-label={`Éditer ${m.firstName} ${m.lastName}`}
+                        className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                       >
-                        Désactiver
+                        Éditer
                       </button>
-                    )}
-                    {/* Only for an eligible record (#667): inactive, no registration at all, not a
-                        merged tombstone — never a dead button for the others. */}
-                    {m.deletion.eligible && (
-                      <button
-                        onClick={() => askDelete(m.id, `${m.firstName} ${m.lastName}`)}
-                        aria-label={`Supprimer ${m.firstName} ${m.lastName}`}
-                        // DESIGN.md « Texte (danger) » (#b91c1c, pas de fond, pas de bord) : cette
-                        // action est permanente, à la différence de « Désactiver » juste au-dessus.
-                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs font-medium text-red-700 hover:text-red-900"
-                      >
-                        Supprimer
-                      </button>
-                    )}
+                      {m.addressStatus.kind === "to_verify" && (
+                        <button
+                          onClick={() => searchForDuplicate(m.id)}
+                          aria-label={`Doublon ? Voir les doublons possibles de ${m.firstName} ${m.lastName}`}
+                          className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
+                        >
+                          Doublon ?
+                        </button>
+                      )}
+                      {m.active && (
+                        <button
+                          onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
+                          aria-label={`Désactiver ${m.firstName} ${m.lastName}`}
+                          className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-500 hover:text-red-600"
+                        >
+                          Désactiver
+                        </button>
+                      )}
+                      {/* Only for an eligible record (#667): inactive, no registration at all, not a
+                          merged tombstone — never a dead button for the others. */}
+                      {m.deletion.eligible && (
+                        <button
+                          onClick={() => askDelete(m.id, `${m.firstName} ${m.lastName}`)}
+                          aria-label={`Supprimer ${m.firstName} ${m.lastName}`}
+                          // DESIGN.md « Texte (danger) » (#b91c1c, pas de fond, pas de bord) : cette
+                          // action est permanente, à la différence de « Désactiver » juste au-dessus.
+                          className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs font-medium text-red-700 hover:text-red-900"
+                        >
+                          Supprimer
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
