@@ -9,7 +9,7 @@ Navigateur ──► Traefik (ingress) ──► Next.js (server.js, port 3000) 
                                           ├──► Service push (Web Push, VAPID)
                                           └──► Sentry (navigateur via le tunnel /monitoring)
 
-CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/cleanup (02:00 UTC)
+CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/outbox (toutes les 5 min), /api/cron/cleanup (02:00 UTC)
 CronJobs de sauvegarde ──► pg_dump chiffré (01:00 UTC), copie hors site (01:30 UTC) ──► /api/cron/heartbeat
 Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaque déploiement, avant la mise à jour de l'application
 ```
