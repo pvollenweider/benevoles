@@ -64,6 +64,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 - Dans l'assistant de création d'événement, la page Créneaux n'affiche plus « Aucun créneau pour l'instant : la publication attendra » une fois le premier créneau ajouté.
+- Le lien d'invitation d'un nouvel administrateur, envoyé depuis Paramètres, utilise l'adresse du site configurée sur le serveur au lieu d'une valeur figée à la compilation.
 - Dans Paramètres, un organisateur voit « Charte des bénévoles : par défaut » quand l'organisation garde le texte par défaut, et non plus « aucune » alors que les bénévoles l'acceptent bien.
 - La liste des spectacles du formulaire d'événement affiche leur date au format jour.mois.année au lieu de l'année en premier.
 - Le formulaire « Nouvelle organisation » de l'administration de la plateforme annonçait un mot de passe temporaire affiché une seule fois ; il indique maintenant que le premier administrateur reçoit un lien d'invitation pour choisir son mot de passe.
