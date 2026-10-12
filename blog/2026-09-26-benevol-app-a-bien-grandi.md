@@ -12,7 +12,7 @@ Avant d'aller plus loin : merci. Chaque bug remonté, chaque "ça serait bien si
 
 ## Ce qui a changé cet été
 
-- **Liste d'attente** visible directement sur le planning public. Un créneau complet mais ouvert à la liste d'attente se voit, se sélectionne, se suit. Plus besoin de deviner, et l'annulation d'une inscription (public ou admin) propose automatiquement la place à la personne suivante.
+- **Liste d'attente** visible directement sur le planning public. Un créneau complet mais ouvert à la liste d'attente apparaît sur le planning : on peut le choisir, puis suivre sa place. Plus besoin de deviner, et l'annulation d'une inscription (public ou admin) propose automatiquement la place à la personne suivante.
 
 - **Pages personnalisées** par événement. Règlement, FAQ, plan d'accès, écrivez-en autant que vous voulez, dans l'ordre que vous voulez, en Markdown.
 
@@ -36,7 +36,7 @@ Avant d'aller plus loin : merci. Chaque bug remonté, chaque "ça serait bien si
 
 - **Page membres.** Les colonnes Prénom et Nom se trient chacune séparément.
 
-- **Exports PDF et Excel.** Le PDF est restructuré en 3 sections claires (planning, récap par poste, liste des bénévoles) et corrige plusieurs bugs d'affichage. L'export Excel, lui, a disparu : peu utilisé, mal maintenu, le PDF fait tout aussi bien.
+- **Exports PDF et Excel.** Le PDF est réorganisé en 3 sections (planning, récap par poste, liste des bénévoles) et corrige plusieurs bugs d'affichage. L'export Excel, lui, a disparu : peu utilisé, mal maintenu, le PDF fait tout aussi bien.
 
 - **Documentation.** `/doc` s'affiche correctement sur mobile, propose un thème sombre, et les guides ne racontent plus que ce qui existe aujourd'hui. Le composeur que vous lisez là-même accepte maintenant le Markdown complet (tableaux, citations, listes de tâches...).
 

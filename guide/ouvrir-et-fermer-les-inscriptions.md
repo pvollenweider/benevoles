@@ -18,6 +18,6 @@ Publier rend le planning visible. Les inscriptions, elles, se règlent à part, 
 - **Ouverture programmée** (facultatif) : avant cette date et heure, la page annonce « Les inscriptions ouvrent le… » et refuse les inscriptions.
 - **Fermeture programmée** (facultatif) : à partir de cette date et heure, les inscriptions sont terminées. Tant qu'elles sont ouvertes, la page publique indique jusqu'à quand.
 
-Les heures sont celles du fuseau de l'organisation. La case décochée l'emporte sur les dates. Une fois les inscriptions fermées, la liste d'attente ne propose plus de place ; une place déjà proposée reste confirmable pendant son délai. Les bénévoles déjà inscrits gardent leur lien personnel pour consulter, modifier ou annuler.
+Les heures sont celles du fuseau de l'organisation. Quand la case **Inscriptions ouvertes** est décochée, elle l'emporte sur les dates. Une fois les inscriptions fermées, la liste d'attente ne propose plus de place ; une place déjà proposée reste confirmable pendant son délai. Les bénévoles déjà inscrits gardent leur lien personnel pour consulter, modifier ou annuler.
 
-Une copie d'événement ou un événement créé depuis un modèle démarre avec les inscriptions fermées : ouvrez-les quand le planning est prêt.
+Une copie d'événement ou un événement créé depuis un modèle démarre avec les inscriptions fermées. Ouvrez-les quand le planning est prêt.

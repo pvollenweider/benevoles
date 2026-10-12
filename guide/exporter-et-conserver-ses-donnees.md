@@ -74,7 +74,7 @@ Pour ne pas garder sans fin des espaces dont personne n'a plus besoin, l'opérat
 
 ### Mon espace va-t-il être désactivé si je ne l'utilise qu'une fois par an ?
 
-Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même ensuite, vous êtes prévenu trois fois, et un clic garde l'espace.
+Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même après ce délai, vous recevez trois messages avant toute désactivation, et un clic suffit pour garder l'espace.
 
 ## Supprimer une organisation
 
