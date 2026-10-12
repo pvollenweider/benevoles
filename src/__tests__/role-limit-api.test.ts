@@ -90,7 +90,7 @@ describe("manual addition and the role limit", () => {
       update: vi.fn(),
     },
     volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "vol-1", firstName: "Alice", lastName: "Martin" }), create: vi.fn() },
-    registration: { findMany: vi.fn().mockResolvedValue([{ id: "r-old" }]), create: regCreate },
+    registration: { findMany: vi.fn().mockResolvedValue([{ shift: { roleName: "Loge" } }]), create: regCreate },
     adminUser: { findFirst: vi.fn().mockResolvedValue({ name: "Léa Morel" }) },
     $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
   }

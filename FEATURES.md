@@ -101,7 +101,7 @@ En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.
 <!-- image: MEMBERS_MANAGEMENT | La fiche d'un membre : prénom, nom, email, téléphone, étiquettes, notes et disponibilités générales. -->
 
 - **Vos membres au même endroit** : fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel.
-- **Placer un membre sur un créneau** depuis les inscriptions : cherchez-le par nom ou email, sans retaper ses coordonnées, puis envoyez-lui son lien.
+- **Placer un membre sur un ou plusieurs créneaux** depuis les inscriptions : cherchez-le par nom ou email, sans retaper ses coordonnées ; il reçoit un seul email de confirmation avec son lien.
 - **Les doublons repérés**, jamais fusionnés sans vous : vous choisissez champ par champ, sans perdre d'inscription.
 - **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
 - **L'effacement sur demande** : les données personnelles d'un membre s'effacent en une action, ses inscriptions restent sans identité pour que les chiffres restent justes.

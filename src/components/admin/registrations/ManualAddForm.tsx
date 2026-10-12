@@ -7,8 +7,9 @@ import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "r
 import ShiftSelect from "./ShiftSelect"
 import { workloadMessage, workloadWarnings } from "@/lib/workload"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
-import { addConflictMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
+import { addConflictMessage, chosenOverlapMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
 import type { AddFormValues, Registration } from "./types"
+import { spokenShiftName } from "@/lib/spoken-time"
 import { manualAddNotice, manualAddNoticeSentence } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc } from "@/lib/time-zone"
 
@@ -24,8 +25,8 @@ type Props = {
   /** The values typed so far: kept by the parent so they survive closing and reopening the form. */
   form: AddFormValues
   onFormChange: Dispatch<SetStateAction<AddFormValues>>
-  /** The registration the server created. */
-  onAdded: (reg: Registration) => void
+  /** The registrations the server created, one per shift chosen (#918). */
+  onAdded: (regs: Registration[]) => void
   onCancel: () => void
 }
 
@@ -35,24 +36,27 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
   const person = useMemo(() => ({ volunteerId: addForm.volunteerId, email: addForm.email }), [addForm.volunteerId, addForm.email])
+  // Every shift chosen in the form (#918): the first one, then the « Créneau 2, 3… » lines; an
+  // empty line is simply left out.
+  const chosenIds = useMemo(() => [...new Set([addForm.shiftId, ...addForm.extraShiftIds].filter(Boolean))], [addForm.shiftId, addForm.extraShiftIds])
+  const chosenShifts = useMemo(() => chosenIds.flatMap((id) => shifts.filter((s) => s.id === id)), [chosenIds, shifts])
   const addWarnings = useMemo(() => {
-    const shift = shifts.find((s) => s.id === addForm.shiftId)
-    if (!shift) return []
-    const held = registrations.filter((r) => r.status === "active" && isAddFormPerson(r.volunteer, person) && r.shift.id !== shift.id)
-    if (held.length === 0) return []
+    if (chosenShifts.length === 0) return []
+    const held = registrations.filter((r) => r.status === "active" && isAddFormPerson(r.volunteer, person) && !chosenIds.includes(r.shift.id))
+    if (held.length === 0 && chosenShifts.length === 1) return []
     const before = new Set(workloadWarnings(held.map((r) => r.shift), timeZone).map(workloadMessage))
-    return workloadWarnings([...held.map((r) => r.shift), shift], timeZone).map(workloadMessage).filter((m) => !before.has(m))
-  }, [person, addForm.shiftId, shifts, registrations, timeZone])
+    return workloadWarnings([...held.map((r) => r.shift), ...chosenShifts], timeZone).map(workloadMessage).filter((m) => !before.has(m))
+  }, [person, chosenIds, chosenShifts, registrations, timeZone])
   const overLimit = overLimitFor === JSON.stringify(addForm)
   // What the volunteer will receive (#916), said before submitting, once a shift is chosen. The
   // server decides the same way; « now » is the moment the form opened.
   const [openedAt] = useState(() => new Date())
   const notice = useMemo(() => {
-    const shift = shifts.find((s) => s.id === addForm.shiftId)
-    if (!shift) return null
-    const shiftStart = localDateTimeToUtc(new Date(`${shift.date}T00:00:00.000Z`), shift.startTime, timeZone)
+    if (chosenShifts.length === 0) return null
+    // Several shifts: an email leaves as soon as one of them is still to come.
+    const shiftStart = new Date(Math.max(...chosenShifts.map((s) => localDateTimeToUtc(new Date(`${s.date}T00:00:00.000Z`), s.startTime, timeZone).getTime())))
     return manualAddNotice({ email: addForm.email, organizerEmail, shiftStart, now: openedAt })
-  }, [shifts, addForm.shiftId, addForm.email, organizerEmail, timeZone, openedAt])
+  }, [chosenShifts, addForm.email, organizerEmail, timeZone, openedAt])
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
   // The form an error is about: once the organizer changes it (another shift, another person),
@@ -126,10 +130,44 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     [addForm.shiftId, shifts]
   )
 
-  const conflictMessage = useMemo(
-    () => addConflictMessage(selectedShiftObj, volunteerShifts),
-    [selectedShiftObj, volunteerShifts]
-  )
+  // A chosen shift that the person already holds or that overlaps one of theirs, else one that
+  // overlaps another shift chosen in this form. A warning: the add stays possible.
+  function conflictOf(shiftId: string): string | null {
+    const selected = shifts.find((s) => s.id === shiftId) ?? null
+    return addConflictMessage(selected, volunteerShifts) ?? chosenOverlapMessage(selected, chosenShifts)
+  }
+  const conflictMessage = selectedShiftObj ? conflictOf(selectedShiftObj.id) : null
+  // The shifts a line offers: not those already chosen on another line.
+  const offeredFor = (shiftId: string) => shifts.filter((s) => s.id === shiftId || !chosenIds.includes(s.id))
+
+  const addAnotherRef = useRef<HTMLButtonElement>(null)
+  function addShiftLine() {
+    const n = addForm.extraShiftIds.length + 2
+    setAddForm((f) => ({ ...f, extraShiftIds: [...f.extraShiftIds, ""] }))
+    requestAnimationFrame(() => document.getElementById(`add-shift-${n}`)?.focus())
+  }
+  // Said once, through the form's status: cleared first so the same sentence twice is still read.
+  function say(sentence: string) {
+    setAnnouncement("")
+    requestAnimationFrame(() => setAnnouncement(sentence))
+  }
+  // A shift just chosen that overlaps: its warning describes the field, but a description that
+  // appears on the focused field is not read again, so it is also said once.
+  function chooseShift(apply: (f: AddFormValues) => AddFormValues, id: string) {
+    setAddForm(apply)
+    const warning = id ? conflictOf(id) : null
+    if (warning) say(warning)
+  }
+  function setShiftLine(index: number, id: string) {
+    chooseShift((f) => ({ ...f, extraShiftIds: f.extraShiftIds.map((v, i) => (i === index ? id : v)) }), id)
+  }
+  function removeShiftLine(index: number) {
+    const removed = shifts.find((s) => s.id === addForm.extraShiftIds[index])
+    const renumbered = index < addForm.extraShiftIds.length - 1
+    setAddForm((f) => ({ ...f, extraShiftIds: f.extraShiftIds.filter((_, i) => i !== index) }))
+    say(`Créneau ${index + 2}${removed ? ` (${spokenShiftName(removed)})` : ""} retiré.${renumbered ? " Les créneaux suivants sont renumérotés." : ""}`)
+    requestAnimationFrame(() => addAnotherRef.current?.focus())
+  }
 
   async function handleAdd(e: React.FormEvent | null, allowOverLimit = false) {
     e?.preventDefault()
@@ -151,7 +189,17 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     const res = await fetch("/api/admin/registrations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ eventId, ...addForm, ...(allowOverLimit ? { allowOverLimit: true } : {}) }),
+      body: JSON.stringify({
+        eventId,
+        volunteerId: addForm.volunteerId,
+        firstName: addForm.firstName,
+        lastName: addForm.lastName,
+        email: addForm.email,
+        phone: addForm.phone,
+        comment: addForm.comment,
+        shiftIds: chosenIds,
+        ...(allowOverLimit ? { allowOverLimit: true } : {}),
+      }),
     })
 
     const data = await res.json()
@@ -164,32 +212,38 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     setAddError(null)
     setErrorFor(null)
 
-    const shiftRef = shifts.find(s => s.id === addForm.shiftId)
-    const newReg: Registration = {
-      id: data.id,
-      status: data.status,
-      source: data.source,
-      comment: data.comment,
-      createdAt: data.createdAt,
-      waitingPosition: data.waitingPosition ?? null,
-      volunteer: data.volunteer,
-      // A registration just created client-side can't already be flagged as a sector leader —
-      // that comes from a server-side join against SectorLeader the manual-add response doesn't
-      // carry, and "just registered" is never simultaneously "registered a while ago and later
-      // made a leader" (see registrations/page.tsx's initial computation of this field).
-      isLeader: false,
-      shift: {
-        id: data.shift.id,
-        roleName: data.shift.roleName,
-        label: data.shift.label,
-        date: data.shift.date.split("T")[0],
-        startTime: data.shift.startTime,
-        endTime: data.shift.endTime,
-        capacity: shiftRef?.capacity ?? data.shift.capacity ?? 0,
-        registrationCount: (shiftRef?.registrationCount ?? 0) + 1,
-      },
-    }
-    onAdded(newReg)
+    const created = data.registrations as {
+      id: string; status: string; source: string; comment: string | null; createdAt: string; waitingPosition?: number | null
+      volunteer: Registration["volunteer"]
+      shift: { id: string; roleName: string; label: string; date: string; startTime: string; endTime: string; capacity?: number }
+    }[]
+    onAdded(created.map((reg) => {
+      const shiftRef = shifts.find((s) => s.id === reg.shift.id)
+      return {
+        id: reg.id,
+        status: reg.status,
+        source: reg.source,
+        comment: reg.comment,
+        createdAt: reg.createdAt,
+        waitingPosition: reg.waitingPosition ?? null,
+        volunteer: reg.volunteer,
+        // A registration just created client-side can't already be flagged as a sector leader —
+        // that comes from a server-side join against SectorLeader the manual-add response doesn't
+        // carry, and "just registered" is never simultaneously "registered a while ago and later
+        // made a leader" (see registrations/page.tsx's initial computation of this field).
+        isLeader: false,
+        shift: {
+          id: reg.shift.id,
+          roleName: reg.shift.roleName,
+          label: reg.shift.label,
+          date: reg.shift.date.split("T")[0],
+          startTime: reg.shift.startTime,
+          endTime: reg.shift.endTime,
+          capacity: shiftRef?.capacity ?? reg.shift.capacity ?? 0,
+          registrationCount: (shiftRef?.registrationCount ?? 0) + 1,
+        },
+      }
+    }))
   }
 
   return (
@@ -288,9 +342,9 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           invalid={shiftInvalid}
           // The conflict is a warning, not an error: it describes the field without making it invalid.
           describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict"].filter(Boolean).join(" ") || undefined}
-          shifts={shifts}
+          shifts={offeredFor(addForm.shiftId)}
           value={addForm.shiftId}
-          onChange={(id) => setAddForm((f) => ({ ...f, shiftId: id }))}
+          onChange={(id) => chooseShift((f) => ({ ...f, shiftId: id }), id)}
           placeholder="Sélectionner un créneau…"
           existingShifts={volunteerShifts}
         />
@@ -299,6 +353,37 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           <p id="add-shift-conflict" className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
         )}
       </div>
+      {/* More shifts for the same person (#918): one line each, all added together. */}
+      {addForm.extraShiftIds.map((id, index) => {
+        const n = index + 2
+        const lineConflict = id ? conflictOf(id) : null
+        return (
+          <div key={index}>
+            <div className="flex items-center justify-between gap-3 mb-1">
+              <p id={`add-shift-${n}-label`} className="block text-xs font-medium text-gray-600">Créneau {n} (facultatif)</p>
+              <button type="button" onClick={() => removeShiftLine(index)} className="min-h-11 sm:min-h-6 text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                Retirer<span className="sr-only"> le créneau {n}</span>
+              </button>
+            </div>
+            <ShiftSelect
+              id={`add-shift-${n}`}
+              labelledBy={`add-shift-${n}-label`}
+              describedBy={lineConflict ? `add-shift-${n}-conflict` : undefined}
+              shifts={offeredFor(id)}
+              value={id}
+              onChange={(value) => setShiftLine(index, value)}
+              placeholder="Sélectionner un créneau…"
+              existingShifts={volunteerShifts}
+            />
+            {lineConflict && <p id={`add-shift-${n}-conflict`} className="text-xs text-orange-800 mt-1 ml-0.5">{lineConflict}</p>}
+          </div>
+        )
+      })}
+      {addForm.extraShiftIds.length < 29 && (
+        <button ref={addAnotherRef} type="button" onClick={addShiftLine} className="min-h-11 sm:min-h-6 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          + Ajouter un autre créneau
+        </button>
+      )}
       <div>
         <label htmlFor="add-comment" className="block text-xs font-medium text-gray-600 mb-1">Note</label>
         <input id="add-comment" type="text" value={addForm.comment} onChange={(e) => setAddForm((f) => ({ ...f, comment: e.target.value }))} className="input" placeholder="ex. Inscrit par téléphone" />
@@ -308,7 +393,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       <div id="add-workload" role="status" className={addWarnings.length > 0 ? "" : "sr-only"}>
         {addWarnings.length > 0 && (
           <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm text-amber-950">
-            <p className="font-medium">Si vous ajoutez ce créneau, cette personne aura :</p>
+            <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
             <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1">L&apos;ajout reste possible.</p>
           </div>
@@ -319,7 +404,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           <p id="add-error">{addError}</p>
           {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
           {overLimit && (
-            <button type="button" onClick={() => { if (!adding) handleAdd(null, true) }} aria-disabled={adding || undefined} aria-describedby="add-error" className={`mt-2 text-sm font-medium text-red-800 underline underline-offset-2 hover:text-red-950 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+            <button type="button" onClick={() => { if (!adding) handleAdd(null, true) }} aria-disabled={adding || undefined} aria-describedby="add-error" className={`mt-2 min-h-11 sm:min-h-6 text-sm font-medium text-red-800 underline underline-offset-2 hover:text-red-950 ${adding ? "opacity-60 cursor-wait" : ""}`}>
               {adding ? "Ajout en cours…" : "Ajouter quand même"}
             </button>
           )}
@@ -328,10 +413,10 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
 
       {notice && <p id="add-notice" className="text-sm text-gray-700">{manualAddNoticeSentence(notice)}</p>}
       <div className="flex gap-3">
-        <button type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+        <button type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`min-h-11 sm:min-h-6 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
           {adding ? "Ajout en cours…" : "Ajouter"}
         </button>
-        <button type="button" onClick={onCancel} className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
+        <button type="button" onClick={onCancel} className="min-h-11 sm:min-h-6 text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
       </div>
     </form>
   )

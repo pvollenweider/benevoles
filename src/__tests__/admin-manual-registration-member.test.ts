@@ -12,6 +12,8 @@ const m = vi.hoisted(() => ({
   logEvent: vi.fn(),
   shiftDate: new Date("2030-07-04T00:00:00Z"),
   sessionEmail: "lea@org-a.org",
+  limits: [] as { roleName: string; maxPerVolunteer: number }[],
+  held: [] as { shift: { roleName: string } }[],
 }))
 
 const shift = () => ({
@@ -23,9 +25,13 @@ const shift = () => ({
 vi.mock("@/lib/auth-guard", () => ({
   requireOrgSession: vi.fn(async () => {
     const db = {
-      shift: { findFirst: vi.fn(async () => shift()), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+      shift: {
+        findFirst: vi.fn(async ({ where }: { where: { id: string } }) => (where.id === "gone" ? null : { ...shift(), id: where.id, roleName: where.id === "s3" ? "Loge" : "Bar" })),
+        findMany: vi.fn(async () => m.limits),
+        update: vi.fn(),
+      },
       volunteer: { findFirst: m.volunteerFindFirst, create: m.volunteerCreate },
-      registration: { findMany: vi.fn().mockResolvedValue([]), create: m.registrationCreate },
+      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate },
       adminUser: { findFirst: m.adminFindFirst },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     }
@@ -148,5 +154,50 @@ describe("POST /api/admin/registrations tells the volunteer (#916)", () => {
     const { POST } = await import("@/app/api/admin/registrations/route")
     await POST(post({ volunteerId: "mem-3" }))
     expect(m.sent[0].data.organizerName).toBeNull()
+  })
+})
+
+describe("POST /api/admin/registrations with several shifts (#918)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    m.sent.length = 0
+    m.limits = []
+    m.held = []
+    m.shiftDate = new Date("2030-07-04T00:00:00Z")
+    m.adminFindFirst.mockResolvedValue({ name: "Léa Morel" })
+    let n = 0
+    m.registrationCreate.mockImplementation(async ({ data }: { data: { volunteerId: string; shiftId: string } }) => ({ id: `r${++n}`, ...data }))
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-3", firstName: "Aline", lastName: "Exemple", email: "aline@example.org" })
+  })
+
+  it("adds every shift for the person, logs each, and queues each in the grouped email", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ shiftId: undefined, shiftIds: ["s1", "s2", "s1"], volunteerId: "mem-3" }))
+    expect(res.status).toBe(201)
+    const { registrations } = await res.json()
+    expect(registrations.map((r: { shiftId: string }) => r.shiftId)).toEqual(["s1", "s2"])
+    expect(m.logEvent).toHaveBeenCalledTimes(2)
+    expect(m.sent.map((x) => x.dedupeKey)).toEqual(["r1", "r2"])
+  })
+
+  it("adds nothing when one shift is unknown", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(post({ shiftIds: ["s1", "gone"], volunteerId: "mem-3" }))).status).toBe(404)
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it("counts the shifts added together against the role limit", async () => {
+    m.limits = [{ roleName: "Bar", maxPerVolunteer: 2 }]
+    m.held = [{ shift: { roleName: "Bar" } }]
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ shiftIds: ["s1", "s2"], volunteerId: "mem-3" }))
+    expect(res.status).toBe(409)
+    expect(await res.json()).toMatchObject({ code: "role_limit" })
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it("refuses a submit without any shift", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    expect((await POST(new Request("http://localhost/api/admin/registrations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ eventId: "evt-1", shiftIds: [], volunteerId: "mem-3" }) }))).status).toBe(400)
   })
 })

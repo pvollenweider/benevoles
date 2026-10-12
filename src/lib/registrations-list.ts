@@ -159,6 +159,21 @@ export function manualAddAnnouncement(person: string, shift: Pick<ShiftRef, "rol
   return `Inscription de ${person} ajoutée : ${name}, ${fmtShortDate(shift.date)}, de ${fmtHour(shift.startTime)} à ${fmtHour(shift.endTime)}.`
 }
 
+/** Several shifts added at once (#918): one sentence naming each of them. */
+export function manualAddManyAnnouncement(person: string, shifts: Pick<ShiftRef, "roleName" | "label" | "date" | "startTime" | "endTime">[]): string {
+  if (shifts.length === 1) return manualAddAnnouncement(person, shifts[0])
+  const names = shifts.map((s) => `${s.label !== s.roleName ? `${s.roleName}, ${s.label}` : s.roleName}, ${fmtShortDate(s.date)}, de ${fmtHour(s.startTime)} à ${fmtHour(s.endTime)}`)
+  return `Inscriptions de ${person} ajoutées sur ${shifts.length} créneaux : ${names.join(" ; ")}.`
+}
+
+/** A shift chosen in the add form that overlaps another one chosen in the same form (#918). */
+export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: ShiftRef[]): string | null {
+  if (!selected) return null
+  return otherChosen.some((o) => o.id !== selected.id && shiftsOverlap(selected, o))
+    ? "Ce créneau chevauche un autre créneau choisi dans ce formulaire."
+    : null
+}
+
 /** A volunteer just made sector leader of a role (« responsable » is the same for everyone). */
 export function leaderDesignatedAnnouncement(name: string, role: string): string {
   return `${name} est maintenant responsable de « ${role} », invitation envoyée par email.`

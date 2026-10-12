@@ -28,7 +28,7 @@ import {
   leaderDesignatedAnnouncement,
   leaderRoleOptions,
   listCountAnnouncement,
-  manualAddAnnouncement,
+  manualAddManyAnnouncement,
   resendAnnouncement,
   type ShiftRef,
 } from "@/lib/registrations-list"
@@ -381,14 +381,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setActionStatus(resendAnnouncement(succeeded, failed))
   }
 
-  function handleAdded(newReg: Registration) {
-    setRegistrations((prev) => [newReg, ...prev])
+  function handleAdded(newRegs: Registration[]) {
+    setRegistrations((prev) => [...newRegs, ...prev])
     setAddForm(EMPTY_ADD_FORM)
     setShowAddForm(false)
     addButtonRef.current?.focus()
     // No journal link: the one left from an earlier action would not be about this addition.
     setLastLogLink(null)
-    announce(setActionStatus, manualAddAnnouncement(personName(newReg), newReg.shift))
+    announce(setActionStatus, manualAddManyAnnouncement(personName(newRegs[0]), newRegs.map((r) => r.shift)))
   }
 
   function handleAddCancel() {

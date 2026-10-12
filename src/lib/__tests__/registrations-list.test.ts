@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  isAddFormPerson, shiftsOfAddFormPerson, memberChoiceLabel, memberResultsSentence, MEMBER_CHOICES_SHOWN,
+  isAddFormPerson, shiftsOfAddFormPerson, manualAddManyAnnouncement, chosenOverlapMessage, memberChoiceLabel, memberResultsSentence, MEMBER_CHOICES_SHOWN,
   addConflictMessage,
   charterAcceptanceLabel,
   cancelAnnouncement, heldAnnouncement, undoneAnnouncement,
@@ -200,5 +200,22 @@ describe("add form person (#914)", () => {
     expect(memberResultsSentence(1)).toBe("1 membre trouvé.")
     expect(memberResultsSentence(3)).toBe("3 membres trouvés.")
     expect(memberResultsSentence(MEMBER_CHOICES_SHOWN + 4)).toBe(`${MEMBER_CHOICES_SHOWN + 4} membres trouvés, les ${MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.`)
+  })
+})
+
+describe("several shifts in the add form (#918)", () => {
+  const a = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 0 }
+  const b = { ...a, id: "s2", roleName: "Vestiaire", label: "Vestiaire", startTime: "11:00", endTime: "13:00" }
+  const c = { ...a, id: "s3", startTime: "14:00", endTime: "16:00" }
+
+  it("announces one or several shifts", () => {
+    expect(manualAddManyAnnouncement("Chloé Roy", [a])).toBe(manualAddAnnouncement("Chloé Roy", a))
+    expect(manualAddManyAnnouncement("Chloé Roy", [a, c])).toMatch(/^Inscriptions de Chloé Roy ajoutées sur 2 créneaux : Bar, .+, de 10h à 12h ; Bar, .+, de 14h à 16h\.$/)
+  })
+
+  it("flags a chosen shift overlapping another chosen one, not itself", () => {
+    expect(chosenOverlapMessage(b, [a, b])).toBe("Ce créneau chevauche un autre créneau choisi dans ce formulaire.")
+    expect(chosenOverlapMessage(c, [a, c])).toBeNull()
+    expect(chosenOverlapMessage(null, [a])).toBeNull()
   })
 })
