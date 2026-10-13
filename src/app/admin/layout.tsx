@@ -33,18 +33,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // The super admin's menu says how many spaces wait for a validation (#810), here as elsewhere.
   const pendingSpaces = session.user?.role === "super_admin" ? await prisma.organization.count({ where: PENDING_ORG_WHERE }) : 0
 
+  // Printed admin pages (the certificate, #965) hold only their content: no navigation, banner or
+  // grey page background on paper.
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 print:min-h-0 print:bg-white">
       <SkipLink />
       <AdminNav userName={session.user?.name ?? "Admin"} role={session.user?.role} orgName={orgName} pendingSpaces={pendingSpaces} />
       {pending && (
-        <section aria-label="Espace en attente de validation" className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+        <section aria-label="Espace en attente de validation" className="bg-amber-50 border-b border-amber-200 px-4 py-3 print:hidden">
           <p className="max-w-5xl mx-auto text-sm text-amber-950">
             Votre espace est en attente de validation. Vous pouvez tout préparer dès maintenant ; la publication de vos événements et les emails à vos bénévoles seront possibles dès qu&apos;il sera activé. Vous recevrez un email.
           </p>
         </section>
       )}
-      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none">{children}</main>
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none print:max-w-none print:p-0">{children}</main>
     </div>
   )
 }

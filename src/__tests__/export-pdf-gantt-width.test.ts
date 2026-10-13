@@ -23,3 +23,19 @@ describe("GET /api/admin/events/[id]/export/pdf: the Frise fits the page (#923)"
     expect(html).toContain('<col span="72"')
   })
 })
+
+describe("GET /api/admin/events/[id]/export/pdf: page breaks (#966)", () => {
+  it("lets a day's Frise break between rows and keeps each heading with what follows", async () => {
+    findFirst.mockResolvedValue({
+      title: "Fête", organization: { timeZone: "Europe/Zurich" }, showSchedule: null,
+      shifts: [shift("1", "Accueil", "08:00", "10:00")],
+    })
+    const { GET } = await import("@/app/api/admin/events/[id]/export/pdf/route")
+    const html = await (await GET(new Request("http://localhost/x"), { params: Promise.resolve({ id: "e1" }) })).text()
+    // Before #966: `.day-block { page-break-inside: avoid }` moved a Frise taller than the space left
+    // under « Planning » to page 2, leaving the heading alone on page 1.
+    expect(html).not.toMatch(/\.day-block\s*\{[^}]*break-inside:\s*avoid/)
+    expect(html).toMatch(/\.section-title, \.day-sub-title \{[^}]*break-after: avoid/)
+    expect(html).toMatch(/thead \{ display: table-header-group; \}/)
+  })
+})
