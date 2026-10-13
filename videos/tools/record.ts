@@ -5092,7 +5092,7 @@ async function main() {
         await page.getByRole("heading", { name: "Pages" }).waitFor()
         await at(0.20) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "+ Ajouter une page" }))
-        await at("Donnez un titre, rédigez le")
+        await at("Donne un titre, rédige le")
         await fillVisibly(page, page.getByLabel("Titre *"), "Accès et parking")
         await at(0.52) /* mid-sentence */
         await fillVisibly(page, page.getByLabel(/Contenu/), "## Venir sur place\n\n- Parking au nord\n- Entrée bénévoles côté scène")
@@ -5106,7 +5106,7 @@ async function main() {
         await at("Les modèles réutilisables acceptent des")
         await page.goto(`${baseUrl}/admin/settings/message-templates`); await settle(page)
         await page.getByRole("heading", { name: "Modèles de messages" }).waitFor()
-        await at("Vous prévisualisez toujours le résultat")
+        await at("Tu prévisualises toujours le résultat")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
         const preview = page.getByText(/aperçu/i).first()
         if (await preview.isVisible()) await preview.scrollIntoViewIfNeeded()
