@@ -7,6 +7,10 @@ const normalized = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, ""
 export function narrationWords(text: string): string[] {
   return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
     .replace(/\be-mail\b/g, "email")
+    // The unchanged demo address is spoken with « tiret »; ASR may split Montvert
+    // and write the homophones « fête(s) » / « bénévole ». Normalize only this address.
+    .replace(/\bfetes?-de-montvert\b|\bfetes? tiret de mont ?vert\b/g, "fetes de montvert")
+    .replace(/\bbenevole? point app\b/g, "benevol point app")
     .replace(/\butf[-\s]?8\b/g, "utf huit")
     .replace(/\+41\b/g, "plus quarante et un")
     .replace(/=\s*1\s*\+\s*1\b/g, "egal un plus un")

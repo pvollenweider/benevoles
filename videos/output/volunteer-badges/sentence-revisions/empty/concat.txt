@@ -1,0 +1,5 @@
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/empty/0.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/empty/1.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/empty/2.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/empty/3.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/empty/4.wav'

@@ -1,0 +1,50 @@
+[
+  {
+    "to": "all",
+    "atSeconds": 23.2023,
+    "gapMs": 2266,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-all.png"
+  },
+  {
+    "to": "role",
+    "atSeconds": 49.8621,
+    "gapMs": 2262,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-role.png"
+  },
+  {
+    "to": "individual",
+    "atSeconds": 74.21539999999999,
+    "gapMs": 2268,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-individual.png"
+  },
+  {
+    "to": "empty",
+    "atSeconds": 100.576,
+    "gapMs": 2260,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-empty.png"
+  },
+  {
+    "to": "colors",
+    "atSeconds": 123.46664999999999,
+    "gapMs": 2263,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-colors.png"
+  },
+  {
+    "to": "fields",
+    "atSeconds": 146.478,
+    "gapMs": 2280,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-fields.png"
+  },
+  {
+    "to": "print",
+    "atSeconds": 172.16775,
+    "gapMs": 2265,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-print.png"
+  },
+  {
+    "to": "result",
+    "atSeconds": 209.9027,
+    "gapMs": 7054,
+    "file": "/tmp/codex-video/videos/output/volunteer-badges/review/transition-result.png"
+  }
+]

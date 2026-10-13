@@ -4787,7 +4787,7 @@ async function main() {
       })
 
       await scene("basics", async (at) => {
-        await at("Donne-lui un nom clair")
+        await at("Donnez-lui un nom clair")
         await fillVisibly(page, page.getByLabel("Titre *"), "Fête des voisins", 200)
         await fillVisibly(page, page.getByLabel("Description"), "Une journée conviviale organisée par le quartier.", 200)
         await fillVisibly(page, page.getByLabel("Lieu"), "Place du village, Montvert", 200)
@@ -4860,7 +4860,7 @@ async function main() {
         await page.waitForURL(/\/preview$/)
         await page.getByText(/Aperçu : la page telle que la verront les bénévoles/).waitFor()
         const previewShift = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
-        await at("Choisis un créneau")
+        await at("Choisissez un créneau")
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
@@ -4930,7 +4930,7 @@ async function main() {
       await scene("invite", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${organizerEventId}/invitations`)
         await tap(page, page.getByRole("button", { name: "+ Inviter des membres" }))
-        await at("Filtre les membres par tag")
+        await at("Filtrez les membres par tag")
         await page.getByLabel("Filtrer par tag").selectOption("caisse")
         await tap(page, page.getByLabel("Inviter Sophie Roch"))
         await typeNaturally(page, page.getByLabel("Message (optionnel)"), "Bonjour Sophie, peux-tu nous aider à la caisse ?")
@@ -5196,7 +5196,7 @@ async function main() {
         await at(0.42) /* mid-sentence */
         const registrationSearch = page.locator("#reg-search")
         await fillVisibly(page, registrationSearch, "Camille")
-        await at("En quelques secondes, tu isoles")
+        await at("En quelques secondes, vous isolez")
       })
       await page.locator("#reg-search").fill("")
       await page.getByLabel("Filtrer par poste").selectOption("")
@@ -5235,12 +5235,12 @@ async function main() {
         await at("Avant d’envoyer quoi que ce")
         await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
         await page.getByRole("heading", { name: "Aperçu de l'email" }).waitFor()
-        await at("tu contrôles le rendu exact")
+        await at("vous contrôlez le rendu exact")
       })
       await tap(page, page.getByRole("button", { name: "Retour au message" }))
 
       await scene("channels", async (at) => {
-        await at("Pour une information urgente, tu")
+        await at("Pour une information urgente, vous")
         const push = page.getByLabel("Envoyer aussi une notification (téléphone ou ordinateur)")
         await tap(page, push)
         await at(0.42) /* mid-sentence */
@@ -5273,7 +5273,7 @@ async function main() {
         await page.getByRole("heading", { name: "À afficher ou à remettre aux bénévoles" }).scrollIntoViewIfNeeded()
         await at(0.46) /* mid-sentence */
         await page.getByRole("heading", { name: "Pour les organisateurs seulement" }).scrollIntoViewIfNeeded()
-        await at("Tu génères seulement les documents")
+        await at("Vous générez seulement les documents")
         await page.getByRole("heading", { name: "Badges" }).scrollIntoViewIfNeeded()
       })
 

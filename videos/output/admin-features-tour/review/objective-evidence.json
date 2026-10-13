@@ -1,185 +1,25 @@
 {
-  "product": {
-    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
-    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
-    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
-    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
-    "snapshot": "/tmp/benevoles-video-production.batch6",
-    "builtAt": "2026-10-11T19:07:45.780Z"
-  },
+  "mp4Sha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "BUILD_ID": "pNdKfvSuEWlaFsKM4WH1j",
+  "commit": "3a2ee752986f41652560ed5f7a1f80bb3a02a57c",
+  "effectCountsMatch": true,
+  "clicks": 18,
+  "keys": 8,
+  "effectHashMatches": true,
+  "timelineHashMatches": true,
+  "videoMixHashMatches": true,
+  "musicHashMatches": true,
+  "registerHashMatches": true,
   "music": {
-    "voicedWindows": 242,
-    "musicOnlyWindows": 10,
-    "smallestGapLu": 13.6,
-    "largestGapLu": 18.3,
-    "quietestMusicOnlyLufs": -33.5,
-    "loudestMusicOnlyLufs": -32.1,
-    "medianVoiceLufs": -16.3
+    "voicedWindows": 239,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.2
   },
-  "inputCounts": {
-    "click": 18,
-    "key": 8
-  },
-  "effectsCountsMatch": true,
-  "ocrFlags": [],
-  "anchors": [
-    {
-      "segmentId": "team",
-      "phrase": "Les responsables de secteur reçoivent",
-      "startMs": 9329,
-      "endMs": 18457,
-      "cueMs": 41850,
-      "sentenceAbsoluteMs": 41848,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "lifecycle",
-      "phrase": "Même publié, il peut rester",
-      "startMs": 9221,
-      "endMs": 13380,
-      "cueMs": 64372,
-      "sentenceAbsoluteMs": 64371,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "lifecycle",
-      "phrase": "Les inscriptions peuvent être immédiates",
-      "startMs": 13811,
-      "endMs": 18777,
-      "cueMs": 68963,
-      "sentenceAbsoluteMs": 68961,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "appearance",
-      "phrase": "Le lieu peut recevoir des",
-      "startMs": 7869,
-      "endMs": 9393,
-      "cueMs": 82639,
-      "sentenceAbsoluteMs": 82633,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "shift-methods",
-      "phrase": "ajouter un créneau depuis la",
-      "startMs": 3908,
-      "endMs": 11381,
-      "cueMs": 110844,
-      "sentenceAbsoluteMs": 110841,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 111337
-      },
-      "deltaMs": 496
-    },
-    {
-      "segmentId": "shift-methods",
-      "phrase": "ajouter un créneau depuis la",
-      "startMs": 3908,
-      "endMs": 11381,
-      "cueMs": 111646,
-      "sentenceAbsoluteMs": 110841,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 112137
-      },
-      "deltaMs": 1296
-    },
-    {
-      "segmentId": "shift-methods",
-      "phrase": "Pour des horaires répétitifs, la",
-      "startMs": 11846,
-      "endMs": 17186,
-      "cueMs": 119469,
-      "sentenceAbsoluteMs": 118779,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 119953
-      },
-      "deltaMs": 1174
-    },
-    {
-      "segmentId": "shift-fields",
-      "phrase": "La liste d’attente et l’inscription",
-      "startMs": 13253,
-      "endMs": 17638,
-      "cueMs": 137829,
-      "sentenceAbsoluteMs": 137827,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "questions",
-      "phrase": "taille de t-shirt, régime alimentaire",
-      "startMs": 2826,
-      "endMs": 9284,
-      "cueMs": 183136,
-      "sentenceAbsoluteMs": 183134,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 183604
-      },
-      "deltaMs": 470
-    },
-    {
-      "segmentId": "pages",
-      "phrase": "Donne un titre, rédige le",
-      "startMs": 6635,
-      "endMs": 10226,
-      "cueMs": 202763,
-      "sentenceAbsoluteMs": 202761,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 203276
-      },
-      "deltaMs": 515
-    },
-    {
-      "segmentId": "messages",
-      "phrase": "Les modèles réutilisables acceptent des",
-      "startMs": 7101,
-      "endMs": 13671,
-      "cueMs": 220289,
-      "sentenceAbsoluteMs": 220288,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "messages",
-      "phrase": "Tu prévisualises toujours le résultat",
-      "startMs": 14380,
-      "endMs": 17511,
-      "cueMs": 227569,
-      "sentenceAbsoluteMs": 227567,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "reports",
-      "phrase": "Les badges se génèrent en",
-      "startMs": 11496,
-      "endMs": 16744,
-      "cueMs": 258936,
-      "sentenceAbsoluteMs": 258934,
-      "firstInputAfterAnchor": null,
-      "deltaMs": null
-    },
-    {
-      "segmentId": "activity",
-      "phrase": "La recherche globale permet ensuite",
-      "startMs": 13748,
-      "endMs": 17700,
-      "cueMs": 281536,
-      "sentenceAbsoluteMs": 281535,
-      "firstInputAfterAnchor": {
-        "kind": "click",
-        "atMs": 282009
-      },
-      "deltaMs": 474
-    }
-  ]
+  "anchorsChecked": 14,
+  "issues": [],
+  "passed": true
 }

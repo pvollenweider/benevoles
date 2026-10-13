@@ -1,0 +1,150 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-11T15:27:33.301Z",
+  "revalidatedAt": "2026-10-11T21:43:46.836Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "overview",
+      "audioSha256": "03501304ae35c0981c3b3af2a3d6609a11d3067ae408fbda040314336a6a96e2",
+      "recognized": "Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt avec ses postes et ses horaires, ou partir d'une page blanche. Ici, on va tout créer depuis le début.",
+      "expected": "Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "basics",
+      "audioSha256": "e8be94611fea743e86d610c5cb9486799cfa6d73497b6a0d573d0d02af1315d5",
+      "recognized": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L'événement reste en brouillon, rien n'est visible tant que tu n'as pas terminé ton planning.",
+      "expected": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que tu n’as pas terminé ton planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "series",
+      "audioSha256": "0554afcf046d2581a6fd1ce84db5431f70a55b526a8915222429328ad2096b84",
+      "recognized": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite. Pour l'accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+      "expected": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "delivery",
+      "audioSha256": "c0794b9b14dd56d91dbef6b2f0170afb2a892b26ee79595774b3ecf98ba18331",
+      "recognized": "Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles avec la consigne précisant que le véhicule est fourni.",
+      "expected": "Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "cash",
+      "audioSha256": "221557f3ed1254a6583dba0445531b7a720193afe2d9d309f9c7364ad67bea6d",
+      "recognized": "Pour un poste sensible, comme la caisse, active l'inscription sur validation. Chaque personne peut proposer son aide, mais l'organisateur accepte ou refuse la demande avant de la confirmer.",
+      "expected": "Pour un poste sensible comme la Caisse, active l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "registration",
+      "audioSha256": "a14b1a190d948a6d378249b98c63430bd851394405b6f03079f6d6e3c48d2a6d",
+      "recognized": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d'ouverture, elles seront disponibles dès la publication.",
+      "expected": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "review",
+      "audioSha256": "d3b3fa41bf1e6abe6316718ff81fc2efaa3578f15cd9970ba4c993df5cc20a91",
+      "recognized": "L'écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+      "expected": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "b358f1d2eb83c05317758b0504373ec5ece841f52371b4ace950fc4f35d02270",
+      "recognized": "Avant de publier, ouvre l'aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu'il verra sans créer de véritable inscription.",
+      "expected": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview-result",
+      "audioSha256": "cac33836d73d5fd618200af21afb69161cf920c3de7cbb6198193c166c539517",
+      "recognized": "L'aperçu montre aussi le message affiché après l'inscription et l'e-mail automatique qui serait envoyé avec son objet, son contenu et son lien personnel. Rien n'est réellement enregistré ni expédié pendant ce test.",
+      "expected": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "publish",
+      "audioSha256": "f8aa3332e8388c705f68fc25d47caeede41865f19da136bc48296cf69f6ef120",
+      "recognized": "Quand tout est prêt, publie le planning. La page d'inscription devient accessible, mais aucun message n'est envoyé automatiquement. Tu gardes la main sur sa diffusion.",
+      "expected": "Quand tout est prêt, publie le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : tu gardes la main sur sa diffusion.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "qr",
+      "audioSha256": "80fd4813be6f08fef07ad9d3659d3395bc2ff83f36d1f6ec94752f2612f0fe5c",
+      "recognized": "pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG ou imprimer directement cette fiche prête à être scannée.",
+      "expected": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "import",
+      "audioSha256": "a7bbeffefe1320c58e368a001e0b36c3ae8c7bafd838072e1ca453213262bfb2",
+      "recognized": "Si c'est la première fois que tu utilises l'application, l'import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L'application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+      "expected": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "invite",
+      "audioSha256": "b899a1df2cba9a94d919c6394233df3cac3f6c5693cdc951937dd8607c414dad",
+      "recognized": "Retourne ensuite dans les invitations de l'événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot ou inviter une seule personne individuellement si tu le souhaites avec un petit mot personnalisé.",
+      "expected": "Retourne ensuite dans les invitations de l’événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "public",
+      "audioSha256": "623a89004d85cc5753ad9a3f083cc5b2346ebc2f0e5940a07ca6ec055a7a5356",
+      "recognized": "Et voilà le résultat côté bénévole. Plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation.",
+      "expected": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !",
+      "wordErrorRate": 0.03225806451612903,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

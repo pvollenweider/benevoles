@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:46:57.674Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "cf43ae78225f83d39ffcda55ad3938e61b7f9acb2d75599aa9cc057f9e6cf396",
+  "clipSha256": "f97a2af35ddeab50ae7b186a1d0f735cf3a5c758082361f17b6aee50b8a3e1c6",
+  "scene": "intro",
+  "review": {
+    "heardOpening": "Voici une visite complète de l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Voici une visite complète de l'administration",
+        "visibleSeconds": 0,
+        "visible": "Interface d'administration (page Événements) visible derrière l'encart d'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "préparer votre organisation, construire un événement",
+        "visibleSeconds": 2.8,
+        "visible": "L'encart titre disparaît, laissant visible la page d'administration des événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "accueillir les bénévoles, communiquer, puis préparer le jour J",
+        "visibleSeconds": 2.8,
+        "visible": "Écran stable sur la liste des événements pour cette annonce générale des étapes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:05 : Rupture vocale majeure avec changement d'intervenant (voix masculine sans musique de 00:00 à 00:05, puis voix féminine avec musique de fond dès 00:05)."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Incohérence majeure de narration : une voix d'homme démarre la phrase d'introduction, puis une voix de femme prend le relais en milieu de phrase avec l'apparition d'un fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

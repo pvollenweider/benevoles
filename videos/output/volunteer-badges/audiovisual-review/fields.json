@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:15:02.299Z",
-  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
-  "promptSha256": "5d851bac9bacc59f340c91ff05c084c83a3c2aad6f937ed6abe1bcf1fa6aba56",
-  "clipSha256": "8e4345aff45538aeb3867ececb5b5f073a5baa08ea0e3a60b2c553007e74a5fb",
+  "reviewedAt": "2026-10-13T17:17:27.270Z",
+  "videoSha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
+  "promptSha256": "e060c0a94916d0cc1d1dc330353d01baaeb1f076f25f19bed1e9ec31bdd0d41a",
+  "clipSha256": "dfa5c52f85b40c6e9d3ab01672588eb8b7febe5c39823df37a8cdb52262239e2",
   "scene": "fields",
   "review": {
-    "heardOpening": "Tu peux alléger le badge",
+    "heardOpening": "Vous pouvez alléger le badge",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "en retirant le nom de famille ou les créneaux.",
-        "visibleSeconds": 0.8,
-        "visible": "Défilement vers la section Badges montrant les cases 'Nom de famille' et 'Créneaux'",
+        "spokenSeconds": 4.1,
+        "spoken": "Décochons les deux cases",
+        "visibleSeconds": 4.5,
+        "visible": "Les cases Nom de famille et Créneaux sont décochées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Décochons les deux cases, générons",
-        "visibleSeconds": 3.7,
-        "visible": "Les cases Nom de famille et Créneaux sont décochées et le bouton Ouvrir les badges est cliqué",
+        "spokenSeconds": 5.4,
+        "spoken": "générons et regardons ce qui disparaît : le prénom reste",
+        "visibleSeconds": 7,
+        "visible": "Affichage du badge généré où seul le prénom Léa apparaît",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "le prénom reste.",
-        "visibleSeconds": 6.5,
-        "visible": "Affichage du badge allégé avec uniquement le prénom Léa",
+        "spokenSeconds": 8.9,
+        "spoken": "Remettons-les ensuite",
+        "visibleSeconds": 12.3,
+        "visible": "Retour sur l'onglet de configuration et recochage des deux cases",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.4,
-        "spoken": "Remettons-les ensuite.",
-        "visibleSeconds": 10.9,
-        "visible": "Retour à la page et réactivation des deux cases cochées",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12,
-        "spoken": "Le badge montre au plus quatre lignes puis indique les autres créneaux.",
-        "visibleSeconds": 13.7,
-        "visible": "Ouverture du badge complet de Léa avec 4 lignes de créneaux et la mention '+ 1 autre'",
+        "spokenSeconds": 12.5,
+        "spoken": "le badge montre au plus quatre lignes puis indique les autres créneaux",
+        "visibleSeconds": 14.1,
+        "visible": "Affichage du badge avec 4 lignes de créneaux suivies de la mention '+ 1 autre'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix synthétique claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la manipulation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

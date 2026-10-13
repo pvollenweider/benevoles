@@ -1,0 +1,3 @@
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/duplicate/0.wav'
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/duplicate/1.wav'
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/duplicate/2.wav'

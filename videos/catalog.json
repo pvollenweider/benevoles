@@ -836,8 +836,8 @@
         "organisateur"
       ],
       "feature": "Créer et publier un planning",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-13",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -882,7 +882,7 @@
       ],
       "feature": "Suivi des inscriptions et relances",
       "updatedAt": "2026-10-13",
-      "revision": 2,
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1101,7 +1101,7 @@
       ],
       "feature": "Badges des bénévoles",
       "updatedAt": "2026-10-13",
-      "revision": 2,
+      "revision": 3,
       "level": "essentiel"
     },
     {

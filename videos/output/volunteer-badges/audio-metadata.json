@@ -1,52 +1,293 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Puck",
-  "generatedAt": "2026-10-13T04:54:05.473Z",
+  "generatedAt": "2026-10-13T16:48:56.871Z",
+  "sentenceRevision": {
+    "version": 1,
+    "unit": "sentence",
+    "baseline": {
+      "id": "VOLUNTEER_BADGES",
+      "slug": "volunteer-badges",
+      "title": "Des badges lisibles pour accueillir son équipe",
+      "description": "Générer une série de badges, filtrer un poste et réimprimer une personne, puis vérifier les feuilles avant découpe.",
+      "language": "fr-CH",
+      "voice": "Puck",
+      "continuousNarration": true,
+      "continuousPauseTags": false,
+      "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "deviceScaleFactor": 1
+      },
+      "chapterTitles": {
+        "all": "Une série pour les inscrits",
+        "role": "Les badges d'un poste",
+        "individual": "Réimprimer la bonne personne",
+        "empty": "Corriger une sélection vide",
+        "colors": "Choisir le bandeau",
+        "fields": "Alléger le badge",
+        "print": "Vérifier les feuilles",
+        "result": "Un badge n'est pas un droit d'accès"
+      },
+      "segments": [
+        {
+          "id": "welcome",
+          "transcript": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapports, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
+          "fallbackDurationMs": 33000
+        },
+        {
+          "id": "all",
+          "transcript": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires : elle n'a qu'un badge. Regardons la première feuille puis la suivante. Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
+          "fallbackDurationMs": 42000
+        },
+        {
+          "id": "role",
+          "transcript": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce poste. Les personnes retenues ont une inscription confirmée à la buvette. Comparons le badge de Léa avec sa version complète : ses autres postes ne figurent plus dans cette version filtrée. Le filtre change le contenu généré, pas ses inscriptions. Si tu veux son badge pour toute la fête, reviens à Tous les postes avant de le refaire.",
+          "fallbackDurationMs": 40000
+        },
+        {
+          "id": "individual",
+          "transcript": "Un badge perdu ? Choisis une personne dans Bénévole, réimpression. Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
+          "fallbackDurationMs": 43000
+        },
+        {
+          "id": "empty",
+          "transcript": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge. Voici le vrai message de l'application. Ce n'est pas un problème d'imprimante à contourner. Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document. Le résultat doit correspondre à la personne choisie et à ses confirmations, pas simplement à un nom ressemblant.",
+          "fallbackDurationMs": 38000
+        },
+        {
+          "id": "colors",
+          "transcript": "Le bandeau peut prendre la couleur du poste, celle de l'événement ou rester noir et blanc. Générons les trois versions pour les comparer. Avec plusieurs postes, le bandeau ne devient pas multicolore : une couleur de poste est retenue, avec la couleur d'événement comme solution de repli. Pour une impression simple, le noir et blanc est pratique. Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
+          "fallbackDurationMs": 43000
+        },
+        {
+          "id": "fields",
+          "transcript": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux. Décochons les deux cases, générons et regardons ce qui disparaît : le prénom reste. Remettons-les ensuite. Léa a cinq créneaux : le badge montre au plus quatre lignes puis indique les autres créneaux. Il ne remplace donc pas son planning individuel. Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
+          "fallbackDurationMs": 44000
+        },
+        {
+          "id": "print",
+          "transcript": "Avant d'imprimer en quantité, regarde la première feuille et la dernière. Voici le document imprimable : deux colonnes, cinq rangées et les repères de découpe. Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs. La boîte d'impression du navigateur n'est pas filmée ici. Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle ; tu peux aussi enregistrer en PDF. Regardons le vrai PDF obtenu, avec sa première puis sa dernière page. Cet aperçu sert à contrôler le fichier, ce n'est pas une boîte d'impression simulée. Une première feuille d'essai coûte moins cher qu'une série à refaire.",
+          "fallbackDurationMs": 57000
+        },
+        {
+          "id": "result",
+          "transcript": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+          "fallbackDurationMs": 37000
+        }
+      ],
+      "viewer": {
+        "summary": "Dans cette vidéo, vous générez depuis Rapports une série de badges pour l'équipe, filtrez un poste, réimprimez le badge d'une personne et contrôlez les feuilles avant de les découper.",
+        "steps": [
+          "Dans Rapports, ouvrez les options des badges et générez la série pour tous les postes et tous les bénévoles.",
+          "Choisissez un poste pour ne préparer que les badges de cette équipe.",
+          "Pour un badge perdu, choisissez la personne à réimprimer, en vous aidant de l'adresse email affichée pour distinguer les homonymes.",
+          "Choisissez la couleur du bandeau : celle du poste, celle de l'événement, ou noir et blanc.",
+          "Retirez si besoin le nom de famille ou les créneaux du badge.",
+          "Contrôlez la première et la dernière feuille, puis imprimez en A4 ou enregistrez en PDF."
+        ],
+        "remember": [
+          "Un badge par personne confirmée, pas par inscription : les demandes et la liste d'attente n'en ont pas.",
+          "Le filtre de poste reste actif pour une réimpression individuelle : revenez à « Tous les postes » si nécessaire.",
+          "Le badge affiche au plus quatre créneaux et ne remplace pas le planning individuel.",
+          "Sans photo ni QR code, le badge n'est pas une autorisation d'accès."
+        ]
+      }
+    },
+    "baseGenerationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1",
+    "chapters": {
+      "welcome": {
+        "sourceAudioSha256": "ab6460e0041ec0fe772a9dd5526c722442909091eeb6f56710a97ff19f3d28b1",
+        "sentences": []
+      },
+      "all": {
+        "sourceAudioSha256": "98926f4b3d3b3908756f826998d66eab926d976fb688410f1c5b1a3e22f677dc",
+        "sentences": []
+      },
+      "role": {
+        "sourceAudioSha256": "bfa183a7990fe37b8d4fdbed68fc714dd609f5ca2ff97bb062ad6d085b20229d",
+        "sentences": [
+          {
+            "index": 4,
+            "transcript": "Si vous voulez son badge pour toute la fête, revenez à Tous les postes avant de le refaire.",
+            "generationSha256": "855654c3b683522a8f9776158404dc0c7d8737586805ae8119f7442259fc4fd2",
+            "audioSha256": "085fbf622ea6edef74c31acef41fc35b6414757c821a8149e16fd4766b90e42f"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          4611.5,
+          8140.5,
+          14139,
+          17492,
+          22086.666999999998
+        ]
+      },
+      "individual": {
+        "sourceAudioSha256": "cfb207ae67572f9ef2f5ceb9e817c45420bdc6c45f456f4c9e703ea6f97637aa",
+        "sentences": [
+          {
+            "index": 1,
+            "transcript": "Choisissez une personne dans Bénévole, réimpression.",
+            "generationSha256": "5773d2ac4715255d6a2474ae3ee1e4ebb276b8d695e6d7a31ed5b48739c1fc3d",
+            "audioSha256": "9dad6b6aec94721c7a4884c43d97c144706a5b98d62bf80b4815827e6af427c3"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          1470.5,
+          4693,
+          9526.5,
+          11366.5,
+          16331,
+          19688.5,
+          23957.166999999998
+        ]
+      },
+      "empty": {
+        "sourceAudioSha256": "fa783e1569859c66d2bb82a152e81d1a6f86ace1ef0277b8e36f17f3a9b62d71",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Si vous combinez un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+            "generationSha256": "462d307d8dfa040bd5a955c98c7586a9d5ba780f577b751eb375c4a81b1843dc",
+            "audioSha256": "271e5981e779dd792e5b17c37a07e381db7a46618854019f4baa00abac3fb37e"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          4769.5,
+          6852,
+          9209.5,
+          14113.5,
+          19914.25
+        ]
+      },
+      "colors": {
+        "sourceAudioSha256": "aaf785c3845eb2f9e4110c780c7de09888568fb0d6dd2547a58966499d4cf919",
+        "sentences": []
+      },
+      "fields": {
+        "sourceAudioSha256": "67fc7d461b4b196d6d470b3a7bc3c59119f87de8f75ab91a2be03686db94a0fa",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Vous pouvez alléger le badge en retirant le nom de famille ou les créneaux.",
+            "generationSha256": "0d41e0feabf0d300311d56fc4ed9865d1b63c528dd35fad1ed0d82afa7891b7c",
+            "audioSha256": "43e1cfb9f7644c08cb3ccc46a20c3af1a02fcadca560a5e3aeef6a79668f54cf"
+          },
+          {
+            "index": 5,
+            "transcript": "Pour le détail de tous ses horaires et de ses consignes, utilisez le planning plutôt que d'essayer de tout faire tenir ici.",
+            "generationSha256": "2c8941f5fc1637a2bd8ef0d51646ad98b398b9d99d51740c1a8ce4220d3693c5",
+            "audioSha256": "45e95b998a261eb6ff76c112722f455884d1be727adfe04fafd016912d69d67a"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          3207.5,
+          8053.5,
+          9631.5,
+          14782,
+          17243,
+          22822.708
+        ]
+      },
+      "print": {
+        "sourceAudioSha256": "822798825a0f10a1d8387fe65719add3915186e2102f2959dd71b7c775140fea",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Avant d'imprimer en quantité, regardez la première feuille et la dernière.",
+            "generationSha256": "93c587b56559d98a3cdb8ecb321aa87276b523524d354d5c3fe30d0baf0affd1",
+            "audioSha256": "26bfd1b62af45ffabc79e125c52747a543c263f1ac02257ab42e43b1759d2902"
+          },
+          {
+            "index": 4,
+            "transcript": "Quand vous l'ouvrez, choisissez un format A4 et vérifiez l'échelle ; vous pouvez aussi enregistrer en PDF.",
+            "generationSha256": "7e6d5ed812e8d90be73928ff34d1a88b8f7828019e63299e781dbe74fb6f2f02",
+            "audioSha256": "2f3492034cd0278b18f490aa2ee76910e78911196541b918869c512e70d50861"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          4074,
+          8915,
+          12648,
+          15718.5,
+          21269,
+          23221,
+          28990,
+          32043.708000000002
+        ]
+      },
+      "result": {
+        "sourceAudioSha256": "454927f4a9a47d3afacdd28d3ade0a4e6b8b8e5e54c664c2c607d1fb6bdef7ba",
+        "sentences": [
+          {
+            "index": 2,
+            "transcript": "Quelqu'un peut perdre ou faire photographier son badge : ne le traitez pas comme une autorisation d'accès automatique.",
+            "generationSha256": "cdaab06cdf158f276541950ba9f608b81e6c4890028a71aa640564d3a150fd77",
+            "audioSha256": "db13843ef2a17c164c94bb8efe9722170b4ac2491c997c8ab850048627b29298"
+          }
+        ],
+        "boundariesMs": [
+          0,
+          2151.5,
+          6641,
+          11434,
+          19153,
+          23469.833000000002
+        ]
+      }
+    }
+  },
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
       "durationMs": 20815,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "all": {
       "file": "audio/all.wav",
       "durationMs": 24394,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "role": {
       "file": "audio/role.wav",
-      "durationMs": 22087,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 22086,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "individual": {
       "file": "audio/individual.wav",
-      "durationMs": 23957,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 24094,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "empty": {
       "file": "audio/empty.wav",
-      "durationMs": 19914,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 20628,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "colors": {
       "file": "audio/colors.wav",
       "durationMs": 20736,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "fields": {
       "file": "audio/fields.wav",
-      "durationMs": 22823,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 23417,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "print": {
       "file": "audio/print.wav",
-      "durationMs": 32044,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 32834,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 23470,
-      "generationSha256": "21f4ffa4c4704195556ab3083bffc35eb9291bce33bc24bca67467d56a3aa3f1"
+      "durationMs": 24283,
+      "generationSha256": "83f4a86b82e0c30496d1a411bfd835079ccd3018c393af3557dafc33b923614c"
     }
   }
 }

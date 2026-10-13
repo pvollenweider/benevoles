@@ -1,17 +1,18 @@
 {
   "id": "REGISTRATION_MONITOR_FOLLOWUP",
   "slug": "organizer-monitor-followup",
-  "validatedAt": "2026-10-13T09:01:10.314Z",
-  "continuousNarration": true,
+  "validatedAt": "2026-10-13T17:04:35.266Z",
+  "continuousNarration": false,
+  "sentenceRevision": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 191840,
+  "captureMs": 192040,
   "scenes": [
     {
       "id": "overview",
-      "visualMs": 11851,
-      "audioMs": 11849,
-      "driftMs": 2
+      "visualMs": 11843,
+      "audioMs": 11839,
+      "driftMs": 4
     },
     {
       "id": "coverage",
@@ -27,74 +28,74 @@
     },
     {
       "id": "requests",
-      "visualMs": 14235,
-      "audioMs": 14234,
+      "visualMs": 14250,
+      "audioMs": 14249,
       "driftMs": 1
     },
     {
       "id": "filters",
-      "visualMs": 11850,
-      "audioMs": 11849,
+      "visualMs": 11883,
+      "audioMs": 11882,
       "driftMs": 1
     },
     {
       "id": "actions",
-      "visualMs": 12801,
-      "audioMs": 12798,
-      "driftMs": 3
+      "visualMs": 12806,
+      "audioMs": 12805,
+      "driftMs": 1
     },
     {
       "id": "audience",
-      "visualMs": 14088,
-      "audioMs": 14086,
+      "visualMs": 14093,
+      "audioMs": 14091,
       "driftMs": 2
     },
     {
       "id": "message",
-      "visualMs": 13227,
-      "audioMs": 13224,
-      "driftMs": 3
+      "visualMs": 13222,
+      "audioMs": 13220,
+      "driftMs": 2
     },
     {
       "id": "channels",
-      "visualMs": 12592,
-      "audioMs": 12591,
-      "driftMs": 1
+      "visualMs": 12606,
+      "audioMs": 12604,
+      "driftMs": 2
     },
     {
       "id": "reminders",
-      "visualMs": 10881,
-      "audioMs": 10880,
-      "driftMs": 1
+      "visualMs": 10887,
+      "audioMs": 10885,
+      "driftMs": 2
     },
     {
       "id": "reports",
-      "visualMs": 9810,
-      "audioMs": 9809,
-      "driftMs": 1
+      "visualMs": 9972,
+      "audioMs": 9970,
+      "driftMs": 2
     },
     {
       "id": "history",
-      "visualMs": 15316,
-      "audioMs": 15316,
+      "visualMs": 15331,
+      "audioMs": 15331,
       "driftMs": 0
     },
     {
       "id": "done",
-      "visualMs": 11961,
-      "audioMs": 11961,
-      "driftMs": 0
+      "visualMs": 11975,
+      "audioMs": 11974,
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 14,
   "music": {
     "voicedWindows": 163,
-    "musicOnlyWindows": 2,
-    "smallestGapLu": 15.4,
-    "largestGapLu": 19.4,
-    "quietestMusicOnlyLufs": -33.6,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -33.2,
     "loudestMusicOnlyLufs": -33.2,
-    "medianVoiceLufs": -16.3
+    "medianVoiceLufs": -16.2
   },
   "issues": []
 }

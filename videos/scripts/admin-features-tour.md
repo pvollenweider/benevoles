@@ -1,5 +1,7 @@
 # Organiser ses bénévoles, du premier réglage au jour J
 
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 ## Objectif
 
 Présenter l’administration dans un ordre métier complet : identité de l’organisation, équipe et responsabilités, cycle de vie d’un événement, construction détaillée des créneaux, bénévoles, communication, terrain et traçabilité.
@@ -26,4 +28,4 @@ Souriant, sympathique et concret. La narration ressemble à une visite faite par
 14. Rapports, listes et badges.
 15. Journal d’activité et recherche globale.
 
-Toutes les données montrées sont fictives et locales. La voix reste souriante et stable grâce à une génération en une seule prise.
+Toutes les données montrées sont fictives et locales. La voix de la prise d’origine est conservée pour les phrases révisées.

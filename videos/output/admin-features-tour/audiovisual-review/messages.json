@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:45.232Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "6eddd3aab558d4b58fbc77df99fc5d834424b3f0184d30ea9891f2c98bf250f2",
+  "clipSha256": "61fe60e8f1dd146060b54e6bf3bcbb0e17f8dfa20be3af9c31f62f79dff74179",
+  "scene": "messages",
+  "review": {
+    "heardOpening": "Les messages ciblent tous les inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau",
+        "visibleSeconds": 0.5,
+        "visible": "Page Écrire aux bénévoles avec la liste des options sous Destinataires (tous les inscrits, poste, créneau, liste d'attente, sans créneau)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Les modèles réutilisables acceptent des variables",
+        "visibleSeconds": 6.8,
+        "visible": "Transition vers l'écran Paramètres > Modèles de messages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Vous prévisualisez toujours le résultat avant l'envoi",
+        "visibleSeconds": 13.7,
+        "visible": "Affichage du bas du formulaire avec le bouton bleu « Voir l'aperçu et envoyer »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec le défilement des interfaces."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

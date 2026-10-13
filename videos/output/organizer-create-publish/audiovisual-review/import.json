@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:57:03.158Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "fdbd1e07e1f8dfa0819be96643a0d93ef2568d74029f8a98c67a5c3c4dec053a",
+  "clipSha256": "6018f3868ccd5481bdd2972e764d44895f3bbfbfb25bf652b2e2cacdfbc5c532",
+  "scene": "import",
+  "review": {
+    "heardOpening": "Si c'est la première fois que vous utilisez l'application",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre modale « Importer des membres » avec un fichier CSV sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "L’application analyse les colonnes, les tags et les doublons",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur « Analyser le fichier » et affichage du compte rendu de détection des colonnes et tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "puis montre exactement ce qui sera créé avant confirmation",
+        "visibleSeconds": 12,
+        "visible": "Tableau prévisionnel listant les 12 membres à créer avec le bouton « Importer 12 membres »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

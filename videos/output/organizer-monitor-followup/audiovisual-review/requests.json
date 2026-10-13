@@ -1,43 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:32.616Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "fde51c61f8baea07baf1d3f10eb3eb7b3c701997dc705bc76373173129038c25",
-  "clipSha256": "0b67564d414fc53e47781cfc47a86b4bfbc77128cff8c1f7ea0d997b7ab5696c",
+  "reviewedAt": "2026-10-13T17:04:58.951Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "6c1276ec01c925a7e74e8d7868ca288f102bc519b500a60d207485bbc56ca494",
+  "clipSha256": "578c71bf20985b2a699447bacdf2a9066b95fc6cd8a0482cfdd8e308f1c9d4bc",
   "scene": "requests",
   "review": {
     "heardOpening": "Les postes sur validation sont clairement signalés",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Les postes sur validation sont clairement signalés.",
-        "visibleSeconds": 0,
-        "visible": "Tableau des inscriptions filtré sur Demandes à traiter avec mentions en jaune et boutons d'action",
+        "spokenSeconds": 0.5,
+        "spoken": "Les postes sur validation sont clairement signalés",
+        "visibleSeconds": 0.5,
+        "visible": "Liste des inscriptions filtrée avec deux demandes signalées par le badge orange Demande à traiter",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.2,
-        "spoken": "Ouvre une demande pour vérifier la personne, le créneau et ses réponses",
+        "spoken": "Ouvrez une demande pour vérifier la personne, le créneau et ses réponses",
         "visibleSeconds": 4.5,
-        "visible": "Clic sur le bouton Accepter ouvrant la boîte modale de validation pour Lucas Girard",
+        "visible": "Apparition de la fenêtre modale Accepter la demande de Lucas Girard ?",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.2,
         "spoken": "Ici, on referme simplement la fenêtre",
-        "visibleSeconds": 9.8,
-        "visible": "Clic sur Annuler et fermeture de la modale sans validation",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 13,
+        "visible": "La fenêtre modale reste affichée à l'écran et n'est pas refermée",
+        "sync": "missing",
+        "severity": "major"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:09, la voix indique « Ici, on referme simplement la fenêtre », mais la boîte de dialogue reste ouverte jusqu'à la fin de l'extrait."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix off féminine claire, fluide et naturelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

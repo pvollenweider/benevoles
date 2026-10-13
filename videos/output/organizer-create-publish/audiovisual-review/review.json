@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:42.616Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "6b0a0832ee31f3cd1d4f806b73ea4a232884ed7ce4ed21788788e55d76afae13",
+  "clipSha256": "fb4bcd1d461af8b9b3805accdba8720728c34eda8201764c04b67987d5f59ffa",
+  "scene": "review",
+  "review": {
+    "heardOpening": "L'écran de vérification résume maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L’écran de vérification résume maintenant",
+        "visibleSeconds": 0,
+        "visible": "Page '3 Vérification et publication' affichant la liste récapitulative des éléments de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "les trois postes, les quatre créneaux et toutes les places",
+        "visibleSeconds": 0,
+        "visible": "Ligne de synthèse indiquant '4 créneaux, 3 postes, 8 places'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne",
+        "visibleSeconds": 0,
+        "visible": "Liens 'Modifier' et 'Ajouter' disponibles en regard de chaque section",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée, parfaitement synchronisée avec la vue d'ensemble affichée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

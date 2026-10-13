@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:14:43.591Z",
-  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "reviewedAt": "2026-10-13T17:17:04.565Z",
+  "videoSha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
   "promptSha256": "166262b30c4791580cea87cfa50713167f31c0ee3c6828bfe5c4e48a3575539f",
-  "clipSha256": "f6a01a724d13ef77ec78f8d2d83c945b0d25faff40fc89b6af5173f9be6ad911",
+  "clipSha256": "b37f9c6ab6ce2138616a7da4b04f26730b3b0390130bd6b0cd53f8785b5c434a",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un prénom visible et le bon poste",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Un prénom visible et le bon poste : un badge peut suffire",
+        "spoken": "Un prénom visible et le bon poste",
         "visibleSeconds": 0,
-        "visible": "Titre 'Des badges lisibles pour accueillir son équipe' affiché sur la page Rapports",
+        "visible": "Page Rapports avec bandeau de titre « Des badges lisibles pour accueillir son équipe »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
-        "spoken": "Depuis Rapports, ouvrons les options des badges",
+        "spokenSeconds": 6.8,
+        "spoken": "ouvrons les options des badges",
         "visibleSeconds": 6,
-        "visible": "Affichage de la section Badges avec ses options de filtrage et de mise en page",
+        "visible": "Affichage de la page de paramétrage des badges avec les menus déroulants et options",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.4,
-        "spoken": "Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence",
-        "visibleSeconds": 15,
-        "visible": "Écran stable sur le formulaire de configuration des badges",
+        "spokenSeconds": 15.5,
+        "spoken": "Ce badge identifie un membre de l'équipe",
+        "visibleSeconds": 15.5,
+        "visible": "Écran stable présentant la configuration des badges et le résumé de l'événement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+      "observation": "Voix posée, claire et dynamique, accompagnée d'un fond musical discret bien dosé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

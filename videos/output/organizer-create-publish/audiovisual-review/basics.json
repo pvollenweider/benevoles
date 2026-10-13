@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:19.841Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "0b565981a6f5d1ea5204d003a4d8d2df6df3240655f1d1942d9e586359a1db6b",
+  "clipSha256": "c32817be43d09de13eed986aa52fcdc20b4bafad9504644093b0db0563bec0df",
+  "scene": "basics",
+  "review": {
+    "heardOpening": "Donnez-lui un nom clair",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Donnez-lui un nom clair",
+        "visibleSeconds": 0.9,
+        "visible": "Le champ Titre se remplit avec « Fête des voisins »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "ajoutez une courte description",
+        "visibleSeconds": 2,
+        "visible": "Le champ Description est renseigné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "le lieu et les dates",
+        "visibleSeconds": 3.1,
+        "visible": "Saisie du lieu puis sélection des dates de début et de fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "L'événement reste en brouillon",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur Créer l'événement puis affichage de l'étape Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, bien posée et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

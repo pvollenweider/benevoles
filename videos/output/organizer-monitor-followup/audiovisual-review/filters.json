@@ -1,61 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:41.128Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "15273e20b4bdb3b207ce5c5e9b717753ae687be70b355d42b7736ad97ff3948f",
-  "clipSha256": "c1ee17de3609219728d06fd32206a2e3f4d6c33be51be440e246c517910377b2",
+  "reviewedAt": "2026-10-13T17:05:02.942Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "7015e58eb2be6000ebc3b24d911106caaafc90e1aa26584284be32acb6f04369",
+  "clipSha256": "2697c2d49dbf0e315a7b7b339d88ebfd15165b8197aa60f4b01e5ceeb35973cb",
   "scene": "filters",
   "review": {
-    "heardOpening": "Quand la liste grandit, filtre par poste",
+    "heardOpening": "Quand la liste grandit",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "filtre par poste",
-        "visibleSeconds": 1.1,
-        "visible": "Le menu des créneaux est ouvert à la place du filtre par poste (qui était déjà sur Buvette)",
-        "sync": "missing",
-        "severity": "minor"
+        "spokenSeconds": 1.3,
+        "spoken": "filtrez par poste",
+        "visibleSeconds": 1,
+        "visible": "Le filtre par poste est visible (Buvette) et le menu déroulant des créneaux est ouvert",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.3,
         "spoken": "par créneau",
-        "visibleSeconds": 1.8,
-        "visible": "Sélection du créneau sam. 17 oct. 10h-14h dans la liste déroulante",
+        "visibleSeconds": 2,
+        "visible": "Sélection du créneau sam. 17 oct. 10h-14h dans la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.3,
+        "spokenSeconds": 3.5,
         "spoken": "ou par statut",
-        "visibleSeconds": 3.8,
-        "visible": "Activation du filtre Demandes à traiter (2)",
+        "visibleSeconds": 4,
+        "visible": "Activation du filtre Demandes à traiter (2) affichant les demandes en attente",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
-        "spoken": "puis utilise la recherche pour retrouver un nom ou une adresse",
-        "visibleSeconds": 5.5,
-        "visible": "Saisie du prénom Camille dans le champ de recherche",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8.9,
-        "spoken": "tu isoles exactement le groupe qui t’intéresse",
-        "visibleSeconds": 8,
-        "visible": "Affichage de la liste restreinte aux inscriptions de Camille",
+        "spokenSeconds": 5,
+        "spoken": "utilisez la recherche pour retrouver un nom",
+        "visibleSeconds": 5,
+        "visible": "Saisie de « Camille » dans la barre de recherche filtrant instantanément la liste",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:01, lors de l'annonce 'filtre par poste', l'action montre l'ouverture du filtre des créneaux (le filtre par poste étant déjà prérempli sur Buvette)."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, naturelle et bien articulée, synchronisation globale fluide."
+      "observation": "Voix féminine calme, claire et dynamique, parfaitement synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

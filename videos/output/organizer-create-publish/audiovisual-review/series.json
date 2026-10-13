@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:17.916Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "296d0b5d8ea8e7239340ad4d39c3268e31d62c46446d8812a81d7ca3deeaa909",
+  "clipSha256": "07f45000a36f4ad9e82b96035255b333877c269332cec8f10d77d03bd5659db6",
+  "scene": "series",
+  "review": {
+    "heardOpening": "Les postes et leurs créneaux peuvent",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "la création en série va plus vite",
+        "visibleSeconds": 5,
+        "visible": "Clic sur le bouton « Créer une série » et ouverture du formulaire dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "pour l'accueil",
+        "visibleSeconds": 7,
+        "visible": "Saisie de « Accueil » dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "indiquez la plage horaire",
+        "visibleSeconds": 9.5,
+        "visible": "Renseignement des heures de début (10:00) et de fin (14:00)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "les créneaux sont préparés automatiquement",
+        "visibleSeconds": 12.5,
+        "visible": "Validation du formulaire et apparition des deux créneaux générés sur la frise chronologique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,827 +1,1554 @@
-[
-  {
-    "id": "overview",
-    "startMs": 0,
-    "sentences": [
-      {
-        "text": "Voici comment préparer et partager un planning bénévole.",
-        "startMs": 141,
-        "endMs": 3520,
-        "method": "silence",
-        "absoluteStartMs": 141
-      },
-      {
-        "text": "Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche.",
-        "startMs": 3708,
-        "endMs": 9913,
-        "method": "silence",
-        "absoluteStartMs": 3708
-      },
-      {
-        "text": "Ici, on va tout créer depuis le début.",
-        "startMs": 10497,
-        "endMs": 12508,
-        "method": "silence",
-        "absoluteStartMs": 10497
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 3089
-      },
-      {
-        "kind": "click",
-        "atMs": 5088
-      }
-    ]
-  },
-  {
-    "id": "basics",
-    "startMs": 13430,
-    "sentences": [
-      {
-        "text": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates.",
-        "startMs": 472,
-        "endMs": 4611,
-        "method": "silence",
-        "absoluteStartMs": 13902
-      },
-      {
-        "text": "L’événement reste en brouillon :",
-        "startMs": 4772,
-        "endMs": 4774,
-        "method": "silence",
-        "absoluteStartMs": 18202
-      },
-      {
-        "text": "rien n’est visible tant que tu n’as pas terminé ton planning.",
-        "startMs": 5411,
-        "endMs": 8907,
-        "method": "silence",
-        "absoluteStartMs": 18841
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 14405
-      },
-      {
-        "kind": "click",
-        "atMs": 15422
-      },
-      {
-        "kind": "click",
-        "atMs": 16438
-      },
-      {
-        "kind": "click",
-        "atMs": 17455
-      },
-      {
-        "kind": "click",
-        "atMs": 18471
-      },
-      {
-        "kind": "click",
-        "atMs": 19488
-      }
-    ]
-  },
-  {
-    "id": "series",
-    "startMs": 23307,
-    "sentences": [
-      {
-        "text": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement.",
-        "startMs": 569,
-        "endMs": 3957,
-        "method": "silence",
-        "absoluteStartMs": 23876
-      },
-      {
-        "text": "Quand les horaires se répètent, la création en série va plus vite :",
-        "startMs": 4762,
-        "endMs": 7589,
-        "method": "silence",
-        "absoluteStartMs": 28069
-      },
-      {
-        "text": "pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
-        "startMs": 8332,
-        "endMs": 14506,
-        "method": "silence",
-        "absoluteStartMs": 31639
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 28554
-      },
-      {
-        "kind": "click",
-        "atMs": 29389
-      },
-      {
-        "kind": "key",
-        "atMs": 29696
-      },
-      {
-        "kind": "key",
-        "atMs": 29794
-      },
-      {
-        "kind": "key",
-        "atMs": 29892
-      },
-      {
-        "kind": "key",
-        "atMs": 29992
-      },
-      {
-        "kind": "key",
-        "atMs": 30091
-      },
-      {
-        "kind": "key",
-        "atMs": 30190
-      },
-      {
-        "kind": "key",
-        "atMs": 30291
-      },
-      {
-        "kind": "click",
-        "atMs": 31103
-      },
-      {
-        "kind": "click",
-        "atMs": 33020
-      },
-      {
-        "kind": "click",
-        "atMs": 35920
-      }
-    ]
-  },
-  {
-    "id": "delivery",
-    "startMs": 38846,
-    "sentences": [
-      {
-        "text": "Ajoute ensuite manuellement un poste Livraison.",
-        "startMs": 581,
-        "endMs": 2911,
-        "method": "silence",
-        "absoluteStartMs": 39427
-      },
-      {
-        "text": "Il faut avoir au moins dix-huit ans et posséder un permis B valide.",
-        "startMs": 3652,
-        "endMs": 6843,
-        "method": "silence",
-        "absoluteStartMs": 42498
-      },
-      {
-        "text": "Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
-        "startMs": 7821,
-        "endMs": 12250,
-        "method": "silence",
-        "absoluteStartMs": 46667
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 39320
-      },
-      {
-        "kind": "click",
-        "atMs": 40137
-      },
-      {
-        "kind": "key",
-        "atMs": 40446
-      },
-      {
-        "kind": "key",
-        "atMs": 40544
-      },
-      {
-        "kind": "key",
-        "atMs": 40643
-      },
-      {
-        "kind": "key",
-        "atMs": 40742
-      },
-      {
-        "kind": "key",
-        "atMs": 40841
-      },
-      {
-        "kind": "key",
-        "atMs": 40940
-      },
-      {
-        "kind": "key",
-        "atMs": 41039
-      },
-      {
-        "kind": "key",
-        "atMs": 41138
-      },
-      {
-        "kind": "key",
-        "atMs": 41236
-      },
-      {
-        "kind": "click",
-        "atMs": 42036
-      },
-      {
-        "kind": "click",
-        "atMs": 43270
-      },
-      {
-        "kind": "click",
-        "atMs": 44504
-      },
-      {
-        "kind": "click",
-        "atMs": 45720
-      },
-      {
-        "kind": "click",
-        "atMs": 46936
-      },
-      {
-        "kind": "click",
-        "atMs": 48154
-      },
-      {
-        "kind": "click",
-        "atMs": 49338
-      }
-    ]
-  },
-  {
-    "id": "cash",
-    "startMs": 52130,
-    "sentences": [
-      {
-        "text": "Pour un poste sensible comme la Caisse, active l’inscription sur validation.",
-        "startMs": 594,
-        "endMs": 5072,
-        "method": "silence",
-        "absoluteStartMs": 52724
-      },
-      {
-        "text": "Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
-        "startMs": 5939,
-        "endMs": 11344,
-        "method": "silence",
-        "absoluteStartMs": 58069
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 52603
-      },
-      {
-        "kind": "click",
-        "atMs": 53421
-      },
-      {
-        "kind": "key",
-        "atMs": 53731
-      },
-      {
-        "kind": "key",
-        "atMs": 53827
-      },
-      {
-        "kind": "key",
-        "atMs": 53927
-      },
-      {
-        "kind": "key",
-        "atMs": 54026
-      },
-      {
-        "kind": "key",
-        "atMs": 54124
-      },
-      {
-        "kind": "key",
-        "atMs": 54223
-      },
-      {
-        "kind": "click",
-        "atMs": 55002
-      },
-      {
-        "kind": "click",
-        "atMs": 55786
-      }
-    ]
-  },
-  {
-    "id": "registration",
-    "startMs": 64390,
-    "sentences": [
-      {
-        "text": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation.",
-        "startMs": 470,
-        "endMs": 6407,
-        "method": "silence",
-        "absoluteStartMs": 64860
-      },
-      {
-        "text": "Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
-        "startMs": 7148,
-        "endMs": 11163,
-        "method": "silence",
-        "absoluteStartMs": 71538
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 66050
-      },
-      {
-        "kind": "click",
-        "atMs": 67866
-      }
-    ]
-  },
-  {
-    "id": "review",
-    "startMs": 76545,
-    "sentences": [
-      {
-        "text": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places.",
-        "startMs": 544,
-        "endMs": 5514,
-        "method": "silence",
-        "absoluteStartMs": 77089
-      },
-      {
-        "text": "Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
-        "startMs": 6109,
-        "endMs": 9640,
-        "method": "silence",
-        "absoluteStartMs": 82654
-      }
-    ],
-    "inputs": []
-  },
-  {
-    "id": "preview",
-    "startMs": 87098,
-    "sentences": [
-      {
-        "text": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription.",
-        "startMs": 462,
-        "endMs": 5478,
-        "method": "silence",
-        "absoluteStartMs": 87560
-      },
-      {
-        "text": "Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix.",
-        "startMs": 6281,
-        "endMs": 10478,
-        "method": "silence",
-        "absoluteStartMs": 93379
-      },
-      {
-        "text": "Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
-        "startMs": 11391,
-        "endMs": 16586,
-        "method": "silence",
-        "absoluteStartMs": 98489
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 87578
-      },
-      {
-        "kind": "click",
-        "atMs": 93844
-      },
-      {
-        "kind": "click",
-        "atMs": 94627
-      },
-      {
-        "kind": "click",
-        "atMs": 95459
-      },
-      {
-        "kind": "click",
-        "atMs": 96443
-      },
-      {
-        "kind": "click",
-        "atMs": 97427
-      },
-      {
-        "kind": "click",
-        "atMs": 98376
-      },
-      {
-        "kind": "click",
-        "atMs": 99160
-      },
-      {
-        "kind": "click",
-        "atMs": 99943
-      }
-    ]
-  },
-  {
-    "id": "preview-result",
-    "startMs": 104139,
-    "sentences": [
-      {
-        "text": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel.",
-        "startMs": 183,
-        "endMs": 8852,
-        "method": "silence",
-        "absoluteStartMs": 104322
-      },
-      {
-        "text": "Rien n’est réellement enregistré ni expédié pendant ce test.",
-        "startMs": 9483,
-        "endMs": 12237,
-        "method": "silence",
-        "absoluteStartMs": 113622
-      }
-    ],
-    "inputs": []
-  },
-  {
-    "id": "publish",
-    "startMs": 117110,
-    "sentences": [
-      {
-        "text": "Quand tout est prêt, publie le planning.",
-        "startMs": 280,
-        "endMs": 2493,
-        "method": "silence",
-        "absoluteStartMs": 117390
-      },
-      {
-        "text": "La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement :",
-        "startMs": 2805,
-        "endMs": 7484,
-        "method": "silence",
-        "absoluteStartMs": 119915
-      },
-      {
-        "text": "tu gardes la main sur sa diffusion.",
-        "startMs": 7838,
-        "endMs": 10572,
-        "method": "silence",
-        "absoluteStartMs": 124948
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 117596
-      }
-    ]
-  },
-  {
-    "id": "qr",
-    "startMs": 128134,
-    "sentences": [
-      {
-        "text": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code.",
-        "startMs": 197,
-        "endMs": 4266,
-        "method": "silence",
-        "absoluteStartMs": 128331
-      },
-      {
-        "text": "Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
-        "startMs": 4865,
-        "endMs": 10254,
-        "method": "silence",
-        "absoluteStartMs": 132999
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 128612
-      }
-    ]
-  },
-  {
-    "id": "import",
-    "startMs": 139266,
-    "sentences": [
-      {
-        "text": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel.",
-        "startMs": 425,
-        "endMs": 8801,
-        "method": "silence",
-        "absoluteStartMs": 139691
-      },
-      {
-        "text": "L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
-        "startMs": 9266,
-        "endMs": 16943,
-        "method": "silence",
-        "absoluteStartMs": 148532
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 139896
-      },
-      {
-        "kind": "click",
-        "atMs": 149012
-      },
-      {
-        "kind": "click",
-        "atMs": 154461
-      },
-      {
-        "kind": "click",
-        "atMs": 155243
-      }
-    ]
-  },
-  {
-    "id": "invite",
-    "startMs": 156815,
-    "sentences": [
-      {
-        "text": "Retourne ensuite dans les invitations de l’événement.",
-        "startMs": 170,
-        "endMs": 2157,
-        "method": "silence",
-        "absoluteStartMs": 156985
-      },
-      {
-        "text": "Filtre les membres par tag et sélectionne les personnes concernées.",
-        "startMs": 2844,
-        "endMs": 6661,
-        "method": "silence",
-        "absoluteStartMs": 159659
-      },
-      {
-        "text": "Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
-        "startMs": 6841,
-        "endMs": 14311,
-        "method": "silence",
-        "absoluteStartMs": 163656
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 157395
-      },
-      {
-        "kind": "click",
-        "atMs": 160145
-      },
-      {
-        "kind": "click",
-        "atMs": 160961
-      },
-      {
-        "kind": "key",
-        "atMs": 161268
-      },
-      {
-        "kind": "key",
-        "atMs": 161367
-      },
-      {
-        "kind": "key",
-        "atMs": 161465
-      },
-      {
-        "kind": "key",
-        "atMs": 161563
-      },
-      {
-        "kind": "key",
-        "atMs": 161662
-      },
-      {
-        "kind": "key",
-        "atMs": 161761
-      },
-      {
-        "kind": "key",
-        "atMs": 161863
-      },
-      {
-        "kind": "key",
-        "atMs": 161964
-      },
-      {
-        "kind": "key",
-        "atMs": 162065
-      },
-      {
-        "kind": "key",
-        "atMs": 162168
-      },
-      {
-        "kind": "key",
-        "atMs": 162271
-      },
-      {
-        "kind": "key",
-        "atMs": 162371
-      },
-      {
-        "kind": "key",
-        "atMs": 162475
-      },
-      {
-        "kind": "key",
-        "atMs": 162576
-      },
-      {
-        "kind": "key",
-        "atMs": 162681
-      },
-      {
-        "kind": "key",
-        "atMs": 162781
-      },
-      {
-        "kind": "key",
-        "atMs": 162884
-      },
-      {
-        "kind": "key",
-        "atMs": 162986
-      },
-      {
-        "kind": "key",
-        "atMs": 163089
-      },
-      {
-        "kind": "key",
-        "atMs": 163190
-      },
-      {
-        "kind": "key",
-        "atMs": 163293
-      },
-      {
-        "kind": "key",
-        "atMs": 163397
-      },
-      {
-        "kind": "key",
-        "atMs": 163497
-      },
-      {
-        "kind": "key",
-        "atMs": 163600
-      },
-      {
-        "kind": "key",
-        "atMs": 163706
-      },
-      {
-        "kind": "key",
-        "atMs": 163807
-      },
-      {
-        "kind": "key",
-        "atMs": 163908
-      },
-      {
-        "kind": "key",
-        "atMs": 164009
-      },
-      {
-        "kind": "key",
-        "atMs": 164108
-      },
-      {
-        "kind": "key",
-        "atMs": 164207
-      },
-      {
-        "kind": "key",
-        "atMs": 164307
-      },
-      {
-        "kind": "key",
-        "atMs": 164407
-      },
-      {
-        "kind": "key",
-        "atMs": 164512
-      },
-      {
-        "kind": "key",
-        "atMs": 164611
-      },
-      {
-        "kind": "key",
-        "atMs": 164714
-      },
-      {
-        "kind": "key",
-        "atMs": 164916
-      },
-      {
-        "kind": "key",
-        "atMs": 165015
-      },
-      {
-        "kind": "key",
-        "atMs": 165117
-      },
-      {
-        "kind": "key",
-        "atMs": 165216
-      },
-      {
-        "kind": "key",
-        "atMs": 165322
-      },
-      {
-        "kind": "key",
-        "atMs": 165421
-      },
-      {
-        "kind": "key",
-        "atMs": 165524
-      },
-      {
-        "kind": "key",
-        "atMs": 165628
-      },
-      {
-        "kind": "key",
-        "atMs": 165729
-      },
-      {
-        "kind": "key",
-        "atMs": 165833
-      },
-      {
-        "kind": "key",
-        "atMs": 165937
-      },
-      {
-        "kind": "key",
-        "atMs": 166040
-      },
-      {
-        "kind": "click",
-        "atMs": 166812
-      }
-    ]
-  },
-  {
-    "id": "public",
-    "startMs": 171700,
-    "sentences": [
-      {
-        "text": "Et voilà le résultat côté bénévoles :",
-        "startMs": 160,
-        "endMs": 1878,
-        "method": "silence",
-        "absoluteStartMs": 171860
-      },
-      {
-        "text": "plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation.",
-        "startMs": 2460,
-        "endMs": 7236,
-        "method": "silence",
-        "absoluteStartMs": 174160
-      },
-      {
-        "text": "Le planning est prêt à circuler par lien, QR code ou invitation !",
-        "startMs": 8090,
-        "endMs": 11789,
-        "method": "silence",
-        "absoluteStartMs": 179790
-      }
-    ],
-    "inputs": []
-  }
-]
+{
+  "mp4Sha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "chapters": [
+    {
+      "chapter": "overview",
+      "startSeconds": 0,
+      "endSeconds": 12.992,
+      "sentences": [
+        {
+          "text": "Voici comment préparer et partager un planning bénévole.",
+          "startMs": 141,
+          "endMs": 3520,
+          "method": "silence",
+          "videoSeconds": 0.141
+        },
+        {
+          "text": "Pour démarrer, vous pouvez choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche.",
+          "startMs": 3843,
+          "endMs": 9871,
+          "method": "silence",
+          "videoSeconds": 3.843
+        },
+        {
+          "text": "Ici, on va tout créer depuis le début.",
+          "startMs": 10510,
+          "endMs": 12521,
+          "method": "silence",
+          "videoSeconds": 10.51
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 3125,
+          "relativeSeconds": 3.125
+        },
+        {
+          "kind": "click",
+          "atMs": 5155,
+          "relativeSeconds": 5.155
+        }
+      ],
+      "frames": [
+        {
+          "scene": "overview",
+          "fraction": 0.046182266009852216,
+          "seconds": 0.6,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-5.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.25,
+          "seconds": 3.248,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-25.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.45,
+          "seconds": 5.846400000000001,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-45.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.6,
+          "seconds": 7.7951999999999995,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-60.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.85,
+          "seconds": 11.043199999999999,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-85.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.9769088669950738,
+          "seconds": 12.692,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/overview-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "basics",
+      "startSeconds": 13.445,
+      "endSeconds": 22.898,
+      "sentences": [
+        {
+          "text": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates.",
+          "startMs": 267,
+          "endMs": 4456,
+          "method": "silence",
+          "videoSeconds": 13.712
+        },
+        {
+          "text": "L’événement reste en brouillon :",
+          "startMs": 4962,
+          "endMs": 6179,
+          "method": "silence",
+          "videoSeconds": 18.407
+        },
+        {
+          "text": "rien n’est visible tant que vous n’avez pas terminé votre planning.",
+          "startMs": 6601,
+          "endMs": 9211,
+          "method": "silence",
+          "videoSeconds": 20.046
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "basics",
+          "phrase": "Donnez-lui un nom clair",
+          "startMs": 267,
+          "endMs": 4456,
+          "cueMs": 13714
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 14221,
+          "relativeSeconds": 0.776
+        },
+        {
+          "kind": "click",
+          "atMs": 15237,
+          "relativeSeconds": 1.792
+        },
+        {
+          "kind": "click",
+          "atMs": 16253,
+          "relativeSeconds": 2.808
+        },
+        {
+          "kind": "click",
+          "atMs": 17270,
+          "relativeSeconds": 3.825
+        },
+        {
+          "kind": "click",
+          "atMs": 18286,
+          "relativeSeconds": 4.841
+        },
+        {
+          "kind": "click",
+          "atMs": 19304,
+          "relativeSeconds": 5.859
+        }
+      ],
+      "frames": [
+        {
+          "scene": "basics",
+          "fraction": 0.06347191367819739,
+          "seconds": 14.045,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-6.png"
+        },
+        {
+          "scene": "basics",
+          "fraction": 0.25,
+          "seconds": 15.80825,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-25.png"
+        },
+        {
+          "scene": "basics",
+          "fraction": 0.45,
+          "seconds": 17.69885,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-45.png"
+        },
+        {
+          "scene": "basics",
+          "fraction": 0.6,
+          "seconds": 19.116799999999998,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-60.png"
+        },
+        {
+          "scene": "basics",
+          "fraction": 0.85,
+          "seconds": 21.48005,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-85.png"
+        },
+        {
+          "scene": "basics",
+          "fraction": 0.9682640431609013,
+          "seconds": 22.598,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/basics-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "series",
+      "startSeconds": 23.35,
+      "endSeconds": 38.419,
+      "sentences": [
+        {
+          "text": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement.",
+          "startMs": 569,
+          "endMs": 3957,
+          "method": "silence",
+          "videoSeconds": 23.919
+        },
+        {
+          "text": "Quand les horaires se répètent, la création en série va plus vite :",
+          "startMs": 4602,
+          "endMs": 7748,
+          "method": "silence",
+          "videoSeconds": 27.952
+        },
+        {
+          "text": "pour l’accueil, indiquez la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+          "startMs": 7955,
+          "endMs": 14740,
+          "method": "silence",
+          "videoSeconds": 31.305
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "series",
+          "phrase": "Quand les horaires se répètent",
+          "startMs": 4602,
+          "endMs": 7748,
+          "cueMs": 27954
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 28420,
+          "relativeSeconds": 5.07
+        },
+        {
+          "kind": "click",
+          "atMs": 29270,
+          "relativeSeconds": 5.92
+        },
+        {
+          "kind": "key",
+          "atMs": 29578,
+          "relativeSeconds": 6.228
+        },
+        {
+          "kind": "key",
+          "atMs": 29676,
+          "relativeSeconds": 6.326
+        },
+        {
+          "kind": "key",
+          "atMs": 29775,
+          "relativeSeconds": 6.425
+        },
+        {
+          "kind": "key",
+          "atMs": 29874,
+          "relativeSeconds": 6.524
+        },
+        {
+          "kind": "key",
+          "atMs": 29973,
+          "relativeSeconds": 6.623
+        },
+        {
+          "kind": "key",
+          "atMs": 30072,
+          "relativeSeconds": 6.722
+        },
+        {
+          "kind": "key",
+          "atMs": 30171,
+          "relativeSeconds": 6.821
+        },
+        {
+          "kind": "click",
+          "atMs": 30953,
+          "relativeSeconds": 7.603
+        },
+        {
+          "kind": "click",
+          "atMs": 32868,
+          "relativeSeconds": 9.518
+        },
+        {
+          "kind": "click",
+          "atMs": 35770,
+          "relativeSeconds": 12.42
+        }
+      ],
+      "frames": [
+        {
+          "scene": "series",
+          "fraction": 0.039816842524387816,
+          "seconds": 23.95,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-4.png"
+        },
+        {
+          "scene": "series",
+          "fraction": 0.25,
+          "seconds": 27.11725,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-25.png"
+        },
+        {
+          "scene": "series",
+          "fraction": 0.45,
+          "seconds": 30.13105,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-45.png"
+        },
+        {
+          "scene": "series",
+          "fraction": 0.6,
+          "seconds": 32.391400000000004,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-60.png"
+        },
+        {
+          "scene": "series",
+          "fraction": 0.85,
+          "seconds": 36.15865,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-85.png"
+        },
+        {
+          "scene": "series",
+          "fraction": 0.9800915787378061,
+          "seconds": 38.119,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/series-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "delivery",
+      "startSeconds": 38.872,
+      "endSeconds": 51.708,
+      "sentences": [
+        {
+          "text": "Ajoutez ensuite manuellement un poste Livraison.",
+          "startMs": 252,
+          "endMs": 2926,
+          "method": "silence",
+          "videoSeconds": 39.124
+        },
+        {
+          "text": "Il faut avoir au moins dix-huit ans et posséder un permis B valide.",
+          "startMs": 3656,
+          "endMs": 6847,
+          "method": "silence",
+          "videoSeconds": 42.528
+        },
+        {
+          "text": "Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+          "startMs": 7826,
+          "endMs": 12254,
+          "method": "silence",
+          "videoSeconds": 46.698
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 39336,
+          "relativeSeconds": 0.464
+        },
+        {
+          "kind": "click",
+          "atMs": 40152,
+          "relativeSeconds": 1.28
+        },
+        {
+          "kind": "key",
+          "atMs": 40460,
+          "relativeSeconds": 1.588
+        },
+        {
+          "kind": "key",
+          "atMs": 40559,
+          "relativeSeconds": 1.687
+        },
+        {
+          "kind": "key",
+          "atMs": 40657,
+          "relativeSeconds": 1.785
+        },
+        {
+          "kind": "key",
+          "atMs": 40757,
+          "relativeSeconds": 1.885
+        },
+        {
+          "kind": "key",
+          "atMs": 40856,
+          "relativeSeconds": 1.984
+        },
+        {
+          "kind": "key",
+          "atMs": 40955,
+          "relativeSeconds": 2.083
+        },
+        {
+          "kind": "key",
+          "atMs": 41054,
+          "relativeSeconds": 2.182
+        },
+        {
+          "kind": "key",
+          "atMs": 41153,
+          "relativeSeconds": 2.281
+        },
+        {
+          "kind": "key",
+          "atMs": 41252,
+          "relativeSeconds": 2.38
+        },
+        {
+          "kind": "click",
+          "atMs": 42052,
+          "relativeSeconds": 3.18
+        },
+        {
+          "kind": "click",
+          "atMs": 43286,
+          "relativeSeconds": 4.414
+        },
+        {
+          "kind": "click",
+          "atMs": 44517,
+          "relativeSeconds": 5.645
+        },
+        {
+          "kind": "click",
+          "atMs": 45736,
+          "relativeSeconds": 6.864
+        },
+        {
+          "kind": "click",
+          "atMs": 46952,
+          "relativeSeconds": 8.08
+        },
+        {
+          "kind": "click",
+          "atMs": 48168,
+          "relativeSeconds": 9.296
+        },
+        {
+          "kind": "click",
+          "atMs": 49352,
+          "relativeSeconds": 10.48
+        }
+      ],
+      "frames": [
+        {
+          "scene": "delivery",
+          "fraction": 0.046743533811156125,
+          "seconds": 39.472,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-5.png"
+        },
+        {
+          "scene": "delivery",
+          "fraction": 0.25,
+          "seconds": 42.081,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-25.png"
+        },
+        {
+          "scene": "delivery",
+          "fraction": 0.45,
+          "seconds": 44.648199999999996,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-45.png"
+        },
+        {
+          "scene": "delivery",
+          "fraction": 0.6,
+          "seconds": 46.5736,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-60.png"
+        },
+        {
+          "scene": "delivery",
+          "fraction": 0.85,
+          "seconds": 49.782599999999995,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-85.png"
+        },
+        {
+          "scene": "delivery",
+          "fraction": 0.9766282330944219,
+          "seconds": 51.408,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/delivery-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "cash",
+      "startSeconds": 52.16,
+      "endSeconds": 63.95,
+      "sentences": [
+        {
+          "text": "Pour un poste sensible comme la Caisse, activez l’inscription sur validation.",
+          "startMs": 167,
+          "endMs": 5153,
+          "method": "silence",
+          "videoSeconds": 52.327
+        },
+        {
+          "text": "Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+          "startMs": 5921,
+          "endMs": 11326,
+          "method": "silence",
+          "videoSeconds": 58.081
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 52635,
+          "relativeSeconds": 0.475
+        },
+        {
+          "kind": "click",
+          "atMs": 53452,
+          "relativeSeconds": 1.292
+        },
+        {
+          "kind": "key",
+          "atMs": 53759,
+          "relativeSeconds": 1.599
+        },
+        {
+          "kind": "key",
+          "atMs": 53859,
+          "relativeSeconds": 1.699
+        },
+        {
+          "kind": "key",
+          "atMs": 53958,
+          "relativeSeconds": 1.798
+        },
+        {
+          "kind": "key",
+          "atMs": 54057,
+          "relativeSeconds": 1.897
+        },
+        {
+          "kind": "key",
+          "atMs": 54155,
+          "relativeSeconds": 1.995
+        },
+        {
+          "kind": "key",
+          "atMs": 54254,
+          "relativeSeconds": 2.094
+        },
+        {
+          "kind": "click",
+          "atMs": 55035,
+          "relativeSeconds": 2.875
+        },
+        {
+          "kind": "click",
+          "atMs": 55819,
+          "relativeSeconds": 3.659
+        }
+      ],
+      "frames": [
+        {
+          "scene": "cash",
+          "fraction": 0.05089058524173028,
+          "seconds": 52.76,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-5.png"
+        },
+        {
+          "scene": "cash",
+          "fraction": 0.25,
+          "seconds": 55.1075,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-25.png"
+        },
+        {
+          "scene": "cash",
+          "fraction": 0.45,
+          "seconds": 57.4655,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-45.png"
+        },
+        {
+          "scene": "cash",
+          "fraction": 0.6,
+          "seconds": 59.234,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-60.png"
+        },
+        {
+          "scene": "cash",
+          "fraction": 0.85,
+          "seconds": 62.1815,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-85.png"
+        },
+        {
+          "scene": "cash",
+          "fraction": 0.9745547073791349,
+          "seconds": 63.65,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/cash-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "registration",
+      "startSeconds": 64.403,
+      "endSeconds": 76.078,
+      "sentences": [
+        {
+          "text": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de votre organisation.",
+          "startMs": 273,
+          "endMs": 6434,
+          "method": "silence",
+          "videoSeconds": 64.676
+        },
+        {
+          "text": "Si vous ne programmez pas de date d’ouverture, elles seront disponibles dès la publication.",
+          "startMs": 7056,
+          "endMs": 11343,
+          "method": "silence",
+          "videoSeconds": 71.459
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 66080,
+          "relativeSeconds": 1.677
+        },
+        {
+          "kind": "click",
+          "atMs": 67897,
+          "relativeSeconds": 3.494
+        }
+      ],
+      "frames": [
+        {
+          "scene": "registration",
+          "fraction": 0.05139186295503212,
+          "seconds": 65.003,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-5.png"
+        },
+        {
+          "scene": "registration",
+          "fraction": 0.25,
+          "seconds": 67.32175,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-25.png"
+        },
+        {
+          "scene": "registration",
+          "fraction": 0.45,
+          "seconds": 69.65675,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-45.png"
+        },
+        {
+          "scene": "registration",
+          "fraction": 0.6,
+          "seconds": 71.408,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-60.png"
+        },
+        {
+          "scene": "registration",
+          "fraction": 0.85,
+          "seconds": 74.32675,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-85.png"
+        },
+        {
+          "scene": "registration",
+          "fraction": 0.974304068522484,
+          "seconds": 75.778,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/registration-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "review",
+      "startSeconds": 76.531,
+      "endSeconds": 86.651,
+      "sentences": [
+        {
+          "text": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places.",
+          "startMs": 544,
+          "endMs": 5514,
+          "method": "silence",
+          "videoSeconds": 77.075
+        },
+        {
+          "text": "Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne.",
+          "startMs": 5899,
+          "endMs": 9766,
+          "method": "silence",
+          "videoSeconds": 82.43
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "review",
+          "fraction": 0.05928853754940711,
+          "seconds": 77.131,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-6.png"
+        },
+        {
+          "scene": "review",
+          "fraction": 0.25,
+          "seconds": 79.061,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-25.png"
+        },
+        {
+          "scene": "review",
+          "fraction": 0.45,
+          "seconds": 81.085,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-45.png"
+        },
+        {
+          "scene": "review",
+          "fraction": 0.6,
+          "seconds": 82.603,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-60.png"
+        },
+        {
+          "scene": "review",
+          "fraction": 0.85,
+          "seconds": 85.133,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-85.png"
+        },
+        {
+          "scene": "review",
+          "fraction": 0.9703557312252964,
+          "seconds": 86.351,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/review-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "preview",
+      "startSeconds": 87.104,
+      "endSeconds": 103.682,
+      "sentences": [
+        {
+          "text": "Avant de publier, ouvrez l’aperçu bénévole et simulez une vraie inscription.",
+          "startMs": 315,
+          "endMs": 5450,
+          "method": "silence",
+          "videoSeconds": 87.419
+        },
+        {
+          "text": "Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix.",
+          "startMs": 6069,
+          "endMs": 10514,
+          "method": "silence",
+          "videoSeconds": 93.173
+        },
+        {
+          "text": "Vous pouvez ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+          "startMs": 11048,
+          "endMs": 16171,
+          "method": "silence",
+          "videoSeconds": 98.152
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "preview",
+          "phrase": "Choisissez un créneau",
+          "startMs": 6069,
+          "endMs": 10514,
+          "cueMs": 93175
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 87572,
+          "relativeSeconds": 0.468
+        },
+        {
+          "kind": "click",
+          "atMs": 93655,
+          "relativeSeconds": 6.551
+        },
+        {
+          "kind": "click",
+          "atMs": 94455,
+          "relativeSeconds": 7.351
+        },
+        {
+          "kind": "click",
+          "atMs": 95287,
+          "relativeSeconds": 8.183
+        },
+        {
+          "kind": "click",
+          "atMs": 96271,
+          "relativeSeconds": 9.167
+        },
+        {
+          "kind": "click",
+          "atMs": 97254,
+          "relativeSeconds": 10.15
+        },
+        {
+          "kind": "click",
+          "atMs": 98238,
+          "relativeSeconds": 11.134
+        },
+        {
+          "kind": "click",
+          "atMs": 99021,
+          "relativeSeconds": 11.917
+        },
+        {
+          "kind": "click",
+          "atMs": 99804,
+          "relativeSeconds": 12.7
+        }
+      ],
+      "frames": [
+        {
+          "scene": "preview",
+          "fraction": 0.036192544335866814,
+          "seconds": 87.704,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-4.png"
+        },
+        {
+          "scene": "preview",
+          "fraction": 0.25,
+          "seconds": 91.2485,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-25.png"
+        },
+        {
+          "scene": "preview",
+          "fraction": 0.45,
+          "seconds": 94.56410000000001,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-45.png"
+        },
+        {
+          "scene": "preview",
+          "fraction": 0.6,
+          "seconds": 97.05080000000001,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-60.png"
+        },
+        {
+          "scene": "preview",
+          "fraction": 0.85,
+          "seconds": 101.1953,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-85.png"
+        },
+        {
+          "scene": "preview",
+          "fraction": 0.9819037278320666,
+          "seconds": 103.382,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "preview-result",
+      "startSeconds": 104.135,
+      "endSeconds": 116.653,
+      "sentences": [
+        {
+          "text": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel.",
+          "startMs": 183,
+          "endMs": 8852,
+          "method": "silence",
+          "videoSeconds": 104.318
+        },
+        {
+          "text": "Rien n’est réellement enregistré ni expédié pendant ce test.",
+          "startMs": 9483,
+          "endMs": 12237,
+          "method": "silence",
+          "videoSeconds": 113.618
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "preview-result",
+          "phrase": "Rien n’est réellement enregistré",
+          "startMs": 9483,
+          "endMs": 12237,
+          "cueMs": 113622
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "preview-result",
+          "fraction": 0.047930979389678864,
+          "seconds": 104.735,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-5.png"
+        },
+        {
+          "scene": "preview-result",
+          "fraction": 0.25,
+          "seconds": 107.2645,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-25.png"
+        },
+        {
+          "scene": "preview-result",
+          "fraction": 0.45,
+          "seconds": 109.7681,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-45.png"
+        },
+        {
+          "scene": "preview-result",
+          "fraction": 0.6,
+          "seconds": 111.64580000000001,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-60.png"
+        },
+        {
+          "scene": "preview-result",
+          "fraction": 0.85,
+          "seconds": 114.7753,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-85.png"
+        },
+        {
+          "scene": "preview-result",
+          "fraction": 0.9760345103051605,
+          "seconds": 116.353,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/preview-result-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "publish",
+      "startSeconds": 117.107,
+      "endSeconds": 127.672,
+      "sentences": [
+        {
+          "text": "Quand tout est prêt, publiez le planning.",
+          "startMs": 316,
+          "endMs": 2331,
+          "method": "silence",
+          "videoSeconds": 117.423
+        },
+        {
+          "text": "La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement :",
+          "startMs": 2958,
+          "endMs": 8082,
+          "method": "silence",
+          "videoSeconds": 120.065
+        },
+        {
+          "text": "vous gardez la main sur sa diffusion.",
+          "startMs": 8486,
+          "endMs": 10156,
+          "method": "silence",
+          "videoSeconds": 125.593
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 117594,
+          "relativeSeconds": 0.487
+        }
+      ],
+      "frames": [
+        {
+          "scene": "publish",
+          "fraction": 0.05679129200189304,
+          "seconds": 117.707,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-6.png"
+        },
+        {
+          "scene": "publish",
+          "fraction": 0.25,
+          "seconds": 119.74825,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-25.png"
+        },
+        {
+          "scene": "publish",
+          "fraction": 0.45,
+          "seconds": 121.86125,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-45.png"
+        },
+        {
+          "scene": "publish",
+          "fraction": 0.6,
+          "seconds": 123.446,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-60.png"
+        },
+        {
+          "scene": "publish",
+          "fraction": 0.85,
+          "seconds": 126.08725,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-85.png"
+        },
+        {
+          "scene": "publish",
+          "fraction": 0.9716043539990534,
+          "seconds": 127.372,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/publish-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "qr",
+      "startSeconds": 128.125,
+      "endSeconds": 138.818,
+      "sentences": [
+        {
+          "text": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code.",
+          "startMs": 230,
+          "endMs": 4190,
+          "method": "silence",
+          "videoSeconds": 128.355
+        },
+        {
+          "text": "Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+          "startMs": 4891,
+          "endMs": 10497,
+          "method": "silence",
+          "videoSeconds": 133.016
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 128592,
+          "relativeSeconds": 0.467
+        }
+      ],
+      "frames": [
+        {
+          "scene": "qr",
+          "fraction": 0.0561114747965959,
+          "seconds": 128.725,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-6.png"
+        },
+        {
+          "scene": "qr",
+          "fraction": 0.25,
+          "seconds": 130.79825,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-25.png"
+        },
+        {
+          "scene": "qr",
+          "fraction": 0.45,
+          "seconds": 132.93685,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-45.png"
+        },
+        {
+          "scene": "qr",
+          "fraction": 0.6,
+          "seconds": 134.5408,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-60.png"
+        },
+        {
+          "scene": "qr",
+          "fraction": 0.85,
+          "seconds": 137.21405,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-85.png"
+        },
+        {
+          "scene": "qr",
+          "fraction": 0.9719442626017021,
+          "seconds": 138.518,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/qr-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "import",
+      "startSeconds": 139.269,
+      "endSeconds": 156.366,
+      "sentences": [
+        {
+          "text": "Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel.",
+          "startMs": 312,
+          "endMs": 8583,
+          "method": "silence",
+          "videoSeconds": 139.581
+        },
+        {
+          "text": "L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+          "startMs": 9269,
+          "endMs": 16946,
+          "method": "silence",
+          "videoSeconds": 148.538
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "import",
+          "phrase": "L’application analyse les colonnes",
+          "startMs": 9269,
+          "endMs": 16946,
+          "cueMs": 148540
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 139886,
+          "relativeSeconds": 0.617
+        },
+        {
+          "kind": "click",
+          "atMs": 149019,
+          "relativeSeconds": 9.75
+        },
+        {
+          "kind": "click",
+          "atMs": 154436,
+          "relativeSeconds": 15.167
+        },
+        {
+          "kind": "click",
+          "atMs": 155219,
+          "relativeSeconds": 15.95
+        }
+      ],
+      "frames": [
+        {
+          "scene": "import",
+          "fraction": 0.0350938761186173,
+          "seconds": 139.869,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-4.png"
+        },
+        {
+          "scene": "import",
+          "fraction": 0.25,
+          "seconds": 143.54325,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-25.png"
+        },
+        {
+          "scene": "import",
+          "fraction": 0.45,
+          "seconds": 146.96265,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-45.png"
+        },
+        {
+          "scene": "import",
+          "fraction": 0.6,
+          "seconds": 149.52720000000002,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-60.png"
+        },
+        {
+          "scene": "import",
+          "fraction": 0.85,
+          "seconds": 153.80145000000002,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-85.png"
+        },
+        {
+          "scene": "import",
+          "fraction": 0.9824530619406914,
+          "seconds": 156.066,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/import-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "invite",
+      "startSeconds": 156.819,
+      "endSeconds": 171.264,
+      "sentences": [
+        {
+          "text": "Retournez ensuite dans les invitations de l’événement.",
+          "startMs": 254,
+          "endMs": 2254,
+          "method": "silence",
+          "videoSeconds": 157.073
+        },
+        {
+          "text": "Filtrez les membres par tag et sélectionnez les personnes concernées.",
+          "startMs": 2757,
+          "endMs": 6384,
+          "method": "silence",
+          "videoSeconds": 159.576
+        },
+        {
+          "text": "Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
+          "startMs": 6949,
+          "endMs": 14092,
+          "method": "silence",
+          "videoSeconds": 163.768
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "invite",
+          "phrase": "Filtrez les membres par tag",
+          "startMs": 2757,
+          "endMs": 6384,
+          "cueMs": 159577
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 157375,
+          "relativeSeconds": 0.556
+        },
+        {
+          "kind": "click",
+          "atMs": 160058,
+          "relativeSeconds": 3.239
+        },
+        {
+          "kind": "click",
+          "atMs": 160875,
+          "relativeSeconds": 4.056
+        },
+        {
+          "kind": "key",
+          "atMs": 161180,
+          "relativeSeconds": 4.361
+        },
+        {
+          "kind": "key",
+          "atMs": 161278,
+          "relativeSeconds": 4.459
+        },
+        {
+          "kind": "key",
+          "atMs": 161377,
+          "relativeSeconds": 4.558
+        },
+        {
+          "kind": "key",
+          "atMs": 161475,
+          "relativeSeconds": 4.656
+        },
+        {
+          "kind": "key",
+          "atMs": 161574,
+          "relativeSeconds": 4.755
+        },
+        {
+          "kind": "key",
+          "atMs": 161673,
+          "relativeSeconds": 4.854
+        },
+        {
+          "kind": "key",
+          "atMs": 161772,
+          "relativeSeconds": 4.953
+        },
+        {
+          "kind": "key",
+          "atMs": 161874,
+          "relativeSeconds": 5.055
+        },
+        {
+          "kind": "key",
+          "atMs": 161975,
+          "relativeSeconds": 5.156
+        },
+        {
+          "kind": "key",
+          "atMs": 162090,
+          "relativeSeconds": 5.271
+        },
+        {
+          "kind": "key",
+          "atMs": 162194,
+          "relativeSeconds": 5.375
+        },
+        {
+          "kind": "key",
+          "atMs": 162295,
+          "relativeSeconds": 5.476
+        },
+        {
+          "kind": "key",
+          "atMs": 162399,
+          "relativeSeconds": 5.58
+        },
+        {
+          "kind": "key",
+          "atMs": 162501,
+          "relativeSeconds": 5.682
+        },
+        {
+          "kind": "key",
+          "atMs": 162603,
+          "relativeSeconds": 5.784
+        },
+        {
+          "kind": "key",
+          "atMs": 162708,
+          "relativeSeconds": 5.889
+        },
+        {
+          "kind": "key",
+          "atMs": 162810,
+          "relativeSeconds": 5.991
+        },
+        {
+          "kind": "key",
+          "atMs": 162913,
+          "relativeSeconds": 6.094
+        },
+        {
+          "kind": "key",
+          "atMs": 163018,
+          "relativeSeconds": 6.199
+        },
+        {
+          "kind": "key",
+          "atMs": 163122,
+          "relativeSeconds": 6.303
+        },
+        {
+          "kind": "key",
+          "atMs": 163225,
+          "relativeSeconds": 6.406
+        },
+        {
+          "kind": "key",
+          "atMs": 163323,
+          "relativeSeconds": 6.504
+        },
+        {
+          "kind": "key",
+          "atMs": 163422,
+          "relativeSeconds": 6.603
+        },
+        {
+          "kind": "key",
+          "atMs": 163519,
+          "relativeSeconds": 6.7
+        },
+        {
+          "kind": "key",
+          "atMs": 163617,
+          "relativeSeconds": 6.798
+        },
+        {
+          "kind": "key",
+          "atMs": 163721,
+          "relativeSeconds": 6.902
+        },
+        {
+          "kind": "key",
+          "atMs": 163823,
+          "relativeSeconds": 7.004
+        },
+        {
+          "kind": "key",
+          "atMs": 163929,
+          "relativeSeconds": 7.11
+        },
+        {
+          "kind": "key",
+          "atMs": 164027,
+          "relativeSeconds": 7.208
+        },
+        {
+          "kind": "key",
+          "atMs": 164126,
+          "relativeSeconds": 7.307
+        },
+        {
+          "kind": "key",
+          "atMs": 164227,
+          "relativeSeconds": 7.408
+        },
+        {
+          "kind": "key",
+          "atMs": 164327,
+          "relativeSeconds": 7.508
+        },
+        {
+          "kind": "key",
+          "atMs": 164425,
+          "relativeSeconds": 7.606
+        },
+        {
+          "kind": "key",
+          "atMs": 164521,
+          "relativeSeconds": 7.702
+        },
+        {
+          "kind": "key",
+          "atMs": 164619,
+          "relativeSeconds": 7.8
+        },
+        {
+          "kind": "key",
+          "atMs": 164820,
+          "relativeSeconds": 8.001
+        },
+        {
+          "kind": "key",
+          "atMs": 164919,
+          "relativeSeconds": 8.1
+        },
+        {
+          "kind": "key",
+          "atMs": 165023,
+          "relativeSeconds": 8.204
+        },
+        {
+          "kind": "key",
+          "atMs": 165123,
+          "relativeSeconds": 8.304
+        },
+        {
+          "kind": "key",
+          "atMs": 165227,
+          "relativeSeconds": 8.408
+        },
+        {
+          "kind": "key",
+          "atMs": 165327,
+          "relativeSeconds": 8.508
+        },
+        {
+          "kind": "key",
+          "atMs": 165425,
+          "relativeSeconds": 8.606
+        },
+        {
+          "kind": "key",
+          "atMs": 165522,
+          "relativeSeconds": 8.703
+        },
+        {
+          "kind": "key",
+          "atMs": 165624,
+          "relativeSeconds": 8.805
+        },
+        {
+          "kind": "key",
+          "atMs": 165730,
+          "relativeSeconds": 8.911
+        },
+        {
+          "kind": "key",
+          "atMs": 165832,
+          "relativeSeconds": 9.013
+        },
+        {
+          "kind": "key",
+          "atMs": 165938,
+          "relativeSeconds": 9.119
+        },
+        {
+          "kind": "click",
+          "atMs": 166690,
+          "relativeSeconds": 9.871
+        }
+      ],
+      "frames": [
+        {
+          "scene": "invite",
+          "fraction": 0.04153686396677051,
+          "seconds": 157.419,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-4.png"
+        },
+        {
+          "scene": "invite",
+          "fraction": 0.25,
+          "seconds": 160.43025,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-25.png"
+        },
+        {
+          "scene": "invite",
+          "fraction": 0.45,
+          "seconds": 163.31925,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-45.png"
+        },
+        {
+          "scene": "invite",
+          "fraction": 0.6,
+          "seconds": 165.486,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-60.png"
+        },
+        {
+          "scene": "invite",
+          "fraction": 0.85,
+          "seconds": 169.09725,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-85.png"
+        },
+        {
+          "scene": "invite",
+          "fraction": 0.9792315680166147,
+          "seconds": 170.964,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/invite-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "public",
+      "startSeconds": 171.721,
+      "endSeconds": 183.77,
+      "sentences": [
+        {
+          "text": "Et voilà le résultat côté bénévoles :",
+          "startMs": 160,
+          "endMs": 1878,
+          "method": "silence",
+          "videoSeconds": 171.881
+        },
+        {
+          "text": "plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation.",
+          "startMs": 2460,
+          "endMs": 7236,
+          "method": "silence",
+          "videoSeconds": 174.181
+        },
+        {
+          "text": "Le planning est prêt à circuler par lien, QR code ou invitation !",
+          "startMs": 8090,
+          "endMs": 11789,
+          "method": "silence",
+          "videoSeconds": 179.811
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "public",
+          "fraction": 0.04979666362353722,
+          "seconds": 172.321,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-5.png"
+        },
+        {
+          "scene": "public",
+          "fraction": 0.25,
+          "seconds": 174.73325,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-25.png"
+        },
+        {
+          "scene": "public",
+          "fraction": 0.45,
+          "seconds": 177.14305,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-45.png"
+        },
+        {
+          "scene": "public",
+          "fraction": 0.6,
+          "seconds": 178.9504,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-60.png"
+        },
+        {
+          "scene": "public",
+          "fraction": 0.85,
+          "seconds": 181.96265,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-85.png"
+        },
+        {
+          "scene": "public",
+          "fraction": 0.9751016681882314,
+          "seconds": 183.47,
+          "file": "/private/tmp/codex-video/videos/output/organizer-create-publish/review-frames/public-end.png"
+        }
+      ]
+    }
+  ]
+}

@@ -1,59 +1,60 @@
 {
   "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
   "slug": "organizer-create-publish",
-  "validatedAt": "2026-10-11T21:48:24.043Z",
-  "continuousNarration": true,
+  "validatedAt": "2026-10-13T16:56:06.700Z",
+  "continuousNarration": false,
+  "sentenceRevision": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 187280,
+  "captureMs": 187400,
   "scenes": [
     {
       "id": "overview",
-      "visualMs": 12977,
-      "audioMs": 12976,
-      "driftMs": 1
+      "visualMs": 12992,
+      "audioMs": 12989,
+      "driftMs": 3
     },
     {
       "id": "basics",
-      "visualMs": 9423,
-      "audioMs": 9421,
+      "visualMs": 9453,
+      "audioMs": 9451,
       "driftMs": 2
     },
     {
       "id": "series",
-      "visualMs": 15085,
-      "audioMs": 15084,
-      "driftMs": 1
+      "visualMs": 15069,
+      "audioMs": 15066,
+      "driftMs": 3
     },
     {
       "id": "delivery",
-      "visualMs": 12831,
-      "audioMs": 12829,
-      "driftMs": 2
+      "visualMs": 12836,
+      "audioMs": 12833,
+      "driftMs": 3
     },
     {
       "id": "cash",
-      "visualMs": 11806,
-      "audioMs": 11806,
-      "driftMs": 0
+      "visualMs": 11790,
+      "audioMs": 11788,
+      "driftMs": 2
     },
     {
       "id": "registration",
-      "visualMs": 11702,
-      "audioMs": 11701,
-      "driftMs": 1
+      "visualMs": 11675,
+      "audioMs": 11675,
+      "driftMs": 0
     },
     {
       "id": "review",
-      "visualMs": 10101,
-      "audioMs": 10100,
-      "driftMs": 1
+      "visualMs": 10120,
+      "audioMs": 10118,
+      "driftMs": 2
     },
     {
       "id": "preview",
-      "visualMs": 16588,
-      "audioMs": 16586,
-      "driftMs": 2
+      "visualMs": 16578,
+      "audioMs": 16578,
+      "driftMs": 0
     },
     {
       "id": "preview-result",
@@ -63,44 +64,44 @@
     },
     {
       "id": "publish",
-      "visualMs": 10573,
-      "audioMs": 10572,
-      "driftMs": 1
-    },
-    {
-      "id": "qr",
-      "visualMs": 10679,
-      "audioMs": 10677,
+      "visualMs": 10565,
+      "audioMs": 10563,
       "driftMs": 2
     },
     {
+      "id": "qr",
+      "visualMs": 10693,
+      "audioMs": 10693,
+      "driftMs": 0
+    },
+    {
       "id": "import",
-      "visualMs": 17095,
-      "audioMs": 17092,
-      "driftMs": 3
+      "visualMs": 17097,
+      "audioMs": 17095,
+      "driftMs": 2
     },
     {
       "id": "invite",
-      "visualMs": 14434,
-      "audioMs": 14433,
-      "driftMs": 1
+      "visualMs": 14445,
+      "audioMs": 14442,
+      "driftMs": 3
     },
     {
       "id": "public",
-      "visualMs": 12051,
+      "visualMs": 12049,
       "audioMs": 12048,
-      "driftMs": 3
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 6,
   "music": {
     "voicedWindows": 181,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 14.7,
-    "largestGapLu": 18.9,
+    "smallestGapLu": 13.8,
+    "largestGapLu": 19.3,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.2
+    "medianVoiceLufs": -16.1
   },
   "issues": []
 }

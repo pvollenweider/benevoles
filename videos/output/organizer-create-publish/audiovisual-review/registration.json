@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:31.615Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "09300dad9020a10c8968662d09839052c201c0f010ebc14f511cbf87f6e8c426",
+  "clipSha256": "6dd58778d583e7b5f7f7f0047c6394665380d49e3487f95ca017f81a672712ed",
+  "scene": "registration",
+  "review": {
+    "heardOpening": "Vous pouvez aussi décider",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "quand les inscriptions commenceront",
+        "visibleSeconds": 1,
+        "visible": "Affichage du champ « Ouverture programmée (facultatif) » avec la date renseignée 01.05.2031 09:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "et quand elles se termineront",
+        "visibleSeconds": 3.2,
+        "visible": "Saisie de la date et heure dans le champ « Fermeture programmée (facultatif) » (08.06.2031 18:00)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "dans le fuseau horaire de votre organisation",
+        "visibleSeconds": 4,
+        "visible": "Mention textuelle visible sous les champs : « Heures du fuseau de l'organisation (Europe/Zurich) »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et posée, bien synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

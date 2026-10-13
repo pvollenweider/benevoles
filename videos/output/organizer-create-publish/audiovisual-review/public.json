@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:57:07.361Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "647b20cd1b704264aa02461cbc1d42fd8c5995b4c1466c6413a9c3a819208188",
+  "clipSha256": "ab7608ce74741093ca5d24db222a42dac0c41607205f6df648826095bb8c518e",
+  "scene": "public",
+  "review": {
+    "heardOpening": "Et voilà le résultat côté bénévoles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Et voilà le résultat côté bénévoles",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la vue publique/bénévoles avec le titre 'Fête des voisins' et le planning sous forme de frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation",
+        "visibleSeconds": 2.5,
+        "visible": "Créneaux visibles pour Accueil, Buvette et Caisse, avec la mention 'sur validation' sur le créneau caisse 12h-16h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Le planning est prêt à circuler par lien, QR code ou invitation",
+        "visibleSeconds": 7.8,
+        "visible": "Vue d'ensemble du planning finalisé prêt au partage",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, dynamique et bien rythmée, parfaitement calée sur l'affichage récapitulatif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

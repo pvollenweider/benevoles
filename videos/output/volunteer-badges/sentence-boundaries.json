@@ -1,0 +1,26 @@
+{
+  "individual": {
+    "sourceAudioSha256": "cfb207ae67572f9ef2f5ceb9e817c45420bdc6c45f456f4c9e703ea6f97637aa",
+    "boundariesMs": [
+      0,
+      1470.5,
+      4693,
+      9526.5,
+      11366.5,
+      16331,
+      19688.5,
+      23957.166999999998
+    ]
+  },
+  "result": {
+    "sourceAudioSha256": "454927f4a9a47d3afacdd28d3ade0a4e6b8b8e5e54c664c2c607d1fb6bdef7ba",
+    "boundariesMs": [
+      0,
+      2151.5,
+      6641,
+      11434,
+      19153,
+      23469.833000000002
+    ]
+  }
+}

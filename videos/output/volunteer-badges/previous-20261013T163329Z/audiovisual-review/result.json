@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:15:12.827Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "bcf24701f4d401c0a0609b2fd255750646b0a24a3429f15b78923da64a308d86",
+  "clipSha256": "eaba7a122ca5289b6dc561bb5565f5bb19b9b7d021816cc8a96659f0dbd0b267",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le badge choisi est prêt pour l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le badge choisi est prêt pour l'accueil",
+        "visibleSeconds": 0,
+        "visible": "Aperçu du badge individuel de Léa Girood sur la page 'documents terrain'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Il n'a ni photo, ni QR code personnel",
+        "visibleSeconds": 2,
+        "visible": "Le badge affiché ne comporte effectivement aucune photo ni QR code, uniquement du texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "reconnaître la personne, retrouver son équipe",
+        "visibleSeconds": 13,
+        "visible": "Affichage de l'identité 'Léa GIROOD' et des pôles associés 'Accueil · Buvette · Loge'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, calme et bienveillante, parfaitement audible et en accord avec le texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

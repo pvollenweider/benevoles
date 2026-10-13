@@ -1,0 +1,66 @@
+[
+  {
+    "chapter": "intro",
+    "exitCode": 1
+  },
+  {
+    "chapter": "organization",
+    "exitCode": 0
+  },
+  {
+    "chapter": "team",
+    "exitCode": 0
+  },
+  {
+    "chapter": "lifecycle",
+    "exitCode": 0
+  },
+  {
+    "chapter": "appearance",
+    "exitCode": 0
+  },
+  {
+    "chapter": "duplicate",
+    "exitCode": 0
+  },
+  {
+    "chapter": "shift-methods",
+    "exitCode": 0
+  },
+  {
+    "chapter": "shift-fields",
+    "exitCode": 0
+  },
+  {
+    "chapter": "registrations",
+    "exitCode": 0
+  },
+  {
+    "chapter": "members",
+    "exitCode": 0
+  },
+  {
+    "chapter": "questions",
+    "exitCode": 1
+  },
+  {
+    "chapter": "pages",
+    "exitCode": 1
+  },
+  {
+    "chapter": "messages",
+    "exitCode": 0
+  },
+  {
+    "chapter": "reminders",
+    "exitCode": 0
+  },
+  {
+    "chapter": "reports",
+    "exitCode": 0
+  },
+  {
+    "chapter": "activity",
+    "exitCode": 0
+  }
+]

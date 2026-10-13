@@ -1,5 +1,7 @@
 # Préparer, publier et partager un planning bénévole
 
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 ## Objectif
 
 Montrer un parcours organisateur réaliste : choisir entre un modèle et une page blanche, créer un événement depuis zéro, configurer plusieurs types de postes, programmer les inscriptions, prévisualiser et publier le planning, diffuser un QR code, importer un premier vivier de membres et envoyer des invitations.
@@ -50,4 +52,4 @@ L’application ne vérifie pas administrativement la validité d’un permis. L
 - Utiliser uniquement la base locale E2E et des données fictives.
 - Ne montrer aucun mot de passe : la connexion est effectuée avant la capture.
 - L’événement reste en brouillon jusqu’à la scène de publication.
-- La narration est générée en une seule prise pour conserver la même voix et la même humeur.
+- La narration conserve la voix de la prise d’origine lors du remplacement des phrases révisées.

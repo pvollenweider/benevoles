@@ -1,5 +1,7 @@
 # Des badges lisibles pour accueillir son équipe
 
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 45. Prévisualisation narrée avec une seule voix Puck souriante. Le badge est un outil d'identification sur place, pas un contrôle d'accès ni un justificatif de présence.
 
 État courant au 5 octobre 2026 : nouvelle capture complète et montage contrôlés, après enrichissement de l'explication d'impression et neuf transcriptions indépendantes réussies. Les deux homonymes sont sélectionnés successivement, leurs emails restent hors du badge. La comparaison de Léa montre deux images inchangées des vrais badges générés pendant cette prise, dans une vue de lecture explicitement distincte de l'application. Les premières et dernières pages du vrai PDF sont montrées ; la voix dit que la boîte native d'impression n'est pas filmée. Les champs allégés et le badge final apparaissent plus tôt. La revue audiovisuelle de cette prise est en cours ; un signalement de changement de timbre sur une prise précédente reste une observation automatique, pas une validation humaine. Rien n'est publié. Les étapes anciennes ci-dessous sont conservées comme historique.

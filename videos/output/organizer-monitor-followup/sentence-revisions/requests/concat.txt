@@ -1,0 +1,3 @@
+file '/private/tmp/codex-video/videos/output/organizer-monitor-followup/sentence-revisions/requests/0.wav'
+file '/private/tmp/codex-video/videos/output/organizer-monitor-followup/sentence-revisions/requests/1.wav'
+file '/private/tmp/codex-video/videos/output/organizer-monitor-followup/sentence-revisions/requests/2.wav'

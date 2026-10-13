@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:15:00.105Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "4ffabb620d415d5b20d383a55cbb3fe0b5f3ddfabaccaf2c77860815cae51d95",
+  "clipSha256": "72d06898b0607a997f68a3a66ac6d65b7e42951699f70001623af997fcae9b29",
+  "scene": "colors",
+  "review": {
+    "heardOpening": "Le bandeau peut prendre la couleur du poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "celle de l'événement",
+        "visibleSeconds": 3.7,
+        "visible": "Sélection de l'option « celle de l'événement » dans le champ « Couleur du bandeau »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Générons les trois versions pour les comparer.",
+        "visibleSeconds": 5.1,
+        "visible": "Affichage de la page de badges avec les bandeaux bleus de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.7,
+        "spoken": "Pour une impression simple, le noir et blanc est pratique.",
+        "visibleSeconds": 15.4,
+        "visible": "Sélection de l'option « Noir et blanc » puis affichage des badges avec bandeau noir",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les démonstrations successives des trois styles de bandeau."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:47.926Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "badbab8fbf6b337d5cf5e6f376f1dc9f5d9f85e40ff6bc5d8807d1aa09daebd4",
-  "clipSha256": "2900d26d92a83be56e31eaf9b7b978a968d3875f6fafd30748d66b44de367f0c",
+  "reviewedAt": "2026-10-13T17:05:12.723Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "74ffbbb8c585e1c5bddb0a659e141c74b12a0f5c637adbc8def6626eff94dd5d",
+  "clipSha256": "aadff1e7e6dcdf363a928394caf159d26a24a9a7edc95e2da87f26dc7ccb23f5",
   "scene": "message",
   "review": {
-    "heardOpening": "Tu peux partir d'un modèle",
+    "heardOpening": "Vous pouvez partir d'un modèle",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Tu peux partir d'un modèle",
-        "visibleSeconds": 0.2,
-        "visible": "Menu déroulant 'Partir d'un modèle' avec le modèle sélectionné",
+        "spokenSeconds": 0.5,
+        "spoken": "Vous pouvez partir d'un modèle",
+        "visibleSeconds": 1.2,
+        "visible": "Un modèle est sélectionné dans la liste et le bouton « Utiliser ce modèle » est cliqué",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.5,
-        "spoken": "adapter l’objet et le texte",
-        "visibleSeconds": 2,
-        "visible": "Champs Objet et Message affichés avec les variables correspondantes",
+        "spokenSeconds": 2.5,
+        "spoken": "adapter l'objet et le texte, puis utiliser des variables comme le prénom ou les créneaux",
+        "visibleSeconds": 3,
+        "visible": "L'objet et le corps du message s'affichent avec les balises de variables {prenom} et {creneau}",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.8,
-        "spoken": "ouvre l'aperçu",
+        "spokenSeconds": 7,
+        "spoken": "ouvrez l'aperçu",
         "visibleSeconds": 7.5,
-        "visible": "Clic sur 'Voir l'aperçu et envoyer' ouvrant la modale 'Aperçu de l'email'",
+        "visible": "Clic sur le bouton « Voir l'aperçu et envoyer », ouvrant la fenêtre modale « Aperçu de l'email »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.5,
-        "spoken": "tu contrôles le rendu exact et le nombre de destinataires",
-        "visibleSeconds": 8.5,
-        "visible": "Visualisation de l'aperçu du message et du bouton d'envoi indiquant 3 personnes",
+        "spoken": "vous contrôlez le rendu exact et le nombre de destinataires",
+        "visibleSeconds": 9.5,
+        "visible": "L'aperçu montre le rendu personnalisé (« Hello Camille ! ») et la mention d'envoi à 3 personnes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le déroulement de la démonstration."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

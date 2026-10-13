@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:55.722Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "b8e70e778962cab7948f38a1b6021429ced36b6ad714f57121172f9bb8d6df47",
-  "clipSha256": "281de04881446c5823d0dba64bca4f51c553c7db20899a91fb99dd9c4c243b98",
+  "reviewedAt": "2026-10-13T17:05:22.651Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "6bf7dbdc43f2bd1f9c12a65b5a5f3e8c4f680bb646090544954f98eac4667698",
+  "clipSha256": "2e038b1b25e9b9181b6e0b5501989ad4433b22d854f50a2c65ada06b5f76e737",
   "scene": "reminders",
   "review": {
     "heardOpening": "Les rappels automatiques prennent ensuite le relais",
     "checkpoints": [
       {
-        "spokenSeconds": 0.7,
+        "spokenSeconds": 0.5,
         "spoken": "Les rappels automatiques prennent ensuite le relais avant les créneaux.",
-        "visibleSeconds": 0,
-        "visible": "Section « Rappels automatiques aux bénévoles inscrits » affichée sur la page Paramètres > Emails.",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'Rappels automatiques aux bénévoles inscrits' affichée à l'écran sous Réglages des emails.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.4,
-        "spoken": "Tu choisis lesquels sont actifs",
+        "spoken": "Vous choisissez lesquels sont actifs,",
         "visibleSeconds": 3.4,
-        "visible": "Cases à cocher pour Rappel J-2, Rappel J-1 et Rappel du jour visibles à l'écran sans manipulation directe.",
+        "visible": "Options cochées 'Rappel J-4', 'Rappel J-1' et 'Rappel du jour' bien visibles.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "et l’application utilise les horaires locaux de l’organisation",
-        "visibleSeconds": 5.8,
-        "visible": "Écran stable présentant la configuration des rappels et notifications par email.",
+        "spokenSeconds": 5.4,
+        "spoken": "et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
+        "visibleSeconds": 5.4,
+        "visible": "Écran stable présentant la configuration des rappels d'email.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la présentation de la page."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran d'explication."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

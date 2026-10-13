@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:30.192Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "93ad545a199134e1772391baaede3999c7a292153db3470353f8872be07306ac",
+  "clipSha256": "a217a50d00d7f47ab5a380ff990ce2fbcb231625e4e32d224d60d9a50e4a4549",
+  "scene": "cash",
+  "review": {
+    "heardOpening": "Pour un poste sensible comme la Caisse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Pour un poste sensible comme la Caisse",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du formulaire Nouveau créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "activez l'inscription sur validation",
+        "visibleSeconds": 2.9,
+        "visible": "Cochage de la case Sur validation puis clic sur Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "l'organisateur accepte ou refuse la demande avant de la confirmer",
+        "visibleSeconds": 7.3,
+        "visible": "Affichage du planning des créneaux enregistré",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

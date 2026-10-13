@@ -1,0 +1,91 @@
+{
+  "source": "videos/output/volunteer-badges/previous-20261013T163329Z/audio-original/result.wav",
+  "sourceAudioSha256": "454927f4a9a47d3afacdd28d3ade0a4e6b8b8e5e54c664c2c607d1fb6bdef7ba",
+  "result": {
+    "starts": [
+      0,
+      2.18,
+      6.6,
+      11.2,
+      19.16
+    ],
+    "heard": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main."
+  },
+  "gaps": [
+    {
+      "startMs": 1956,
+      "endMs": 2347
+    },
+    {
+      "startMs": 4383,
+      "endMs": 4720
+    },
+    {
+      "startMs": 6411,
+      "endMs": 6871
+    },
+    {
+      "startMs": 8765,
+      "endMs": 9171
+    },
+    {
+      "startMs": 11196,
+      "endMs": 11672
+    },
+    {
+      "startMs": 12935,
+      "endMs": 13319
+    },
+    {
+      "startMs": 14628,
+      "endMs": 15159
+    },
+    {
+      "startMs": 16353,
+      "endMs": 16714
+    },
+    {
+      "startMs": 17515,
+      "endMs": 17656
+    },
+    {
+      "startMs": 18490,
+      "endMs": 18910
+    },
+    {
+      "startMs": 19053,
+      "endMs": 19253
+    },
+    {
+      "startMs": 21419,
+      "endMs": 21766
+    }
+  ],
+  "selected": [
+    {
+      "startMs": 1956,
+      "endMs": 2347
+    },
+    {
+      "startMs": 6411,
+      "endMs": 6871
+    },
+    {
+      "startMs": 11196,
+      "endMs": 11672
+    },
+    {
+      "startMs": 19053,
+      "endMs": 19253
+    }
+  ],
+  "boundariesMs": [
+    0,
+    2151.5,
+    6641,
+    11434,
+    19153,
+    23469.833000000002
+  ],
+  "note": "Model locations are proposals only, snapped to measured real silences. Rebuilt full-chapter independent ASR and register review required before capture."
+}

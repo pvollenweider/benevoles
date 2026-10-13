@@ -54,12 +54,9 @@ async function main() {
   const narrationAudit = await json<{ promptVersion?: number; segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
   if (narrationAudit.promptVersion !== 2) throw new Error("Multilingual narration audit required: recheck for spoken stage directions before assembling")
   if (audio.model !== "gemini-3.8-flash-tts" || audio.voice !== manifest.voice) throw new Error("Current Gemini 3.8 narration and manifest voice required")
-  if (manifest.continuousNarration && new Set(manifest.segments.map(segment => audio.segments[segment.id]?.generationSha256)).size !== 1) throw new Error("Continuous narration requires a single voice generation for the whole video")
   if (manifest.continuousNarration) {
-    if (manifest.continuousPauseTags === true) throw new Error("Inline pause tags are prohibited in new tutorial narration")
-    const transcript = manifest.segments.map(segment => segment.transcript).join("\n\n")
-    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript, style: manifest.voiceStyle, model: audio.model, voice: audio.voice, promptVersion: 3 })).digest("hex")
-    if (manifest.segments.some(segment => audio.segments[segment.id]?.generationSha256 !== expectedGeneration)) throw new Error("Narration instructions changed since generation; regenerate and audit before assembling")
+    const { assertNarrationGeneration } = await import("../lib/narration-generation")
+    assertNarrationGeneration(manifest, audio)
   }
   for (const segment of manifest.segments) {
     const generated = audio.segments[segment.id]

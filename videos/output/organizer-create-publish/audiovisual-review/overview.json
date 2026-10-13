@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:18.796Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "7f9867fb50e337c199799559e05ea75da84645b2b8e740db1b4fef4d7efbdf34",
+  "clipSha256": "cd0ad4ff5ae49e55c3c0cafbb3d8d2e69773e85f0c0b7b7d58ea185a00deed68",
+  "scene": "overview",
+  "review": {
+    "heardOpening": "Voici comment préparer et partager",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Voici comment préparer et partager un planning bénévole.",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction affiché : « Préparer, publier et partager un planning bénévole »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "vous pouvez choisir un modèle déjà prêt, avec ses postes et ses horaires",
+        "visibleSeconds": 3,
+        "visible": "Écran « Nouvel événement » affichant la liste des modèles (Buvette, Festival, etc.)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "ou partir d’une page blanche.",
+        "visibleSeconds": 3,
+        "visible": "Option « Page blanche » visible et cochée par défaut en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Ici, on va tout créer depuis le début.",
+        "visibleSeconds": 10,
+        "visible": "L'option « Page blanche » reste sélectionnée pour commencer la création",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire, fluide et chaleureuse."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

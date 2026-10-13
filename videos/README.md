@@ -208,6 +208,27 @@ retire les balises et conserve une seule prise avec des paragraphes naturels. Il
 recaler les frontières et refaire le contrôle indépendant ; un faible taux d'erreur n'autorise
 pas à garder des mots ajoutés ou une première phrase déplacée dans le chapitre précédent.
 
+Pour une correction éditoriale limitée aux phrases modifiées, archiver d'abord le manifeste
+original sous `source-manifest.json`, les WAV sous `audio-original/` et leurs métadonnées et
+audit dans le dossier `previous-…` de cette vidéo, puis utiliser :
+
+```bash
+node --env-file=.env.video.local --import tsx videos/tools/revise-narration-sentences.ts VIDEO_ID videos/output/<slug>/previous-<timestamp>
+```
+
+Cette reprise garde les phrases inchangées de la prise continue vérifiée et génère seulement
+les phrases modifiées avec la même voix et les mêmes consignes, sans balises de pause.
+`continuousPauseTags` doit être `false`. Les identifiants et frontières des phrases restent
+identiques. Une correction modérée de tempo rapproche les durées de celles d'origine.
+Les métadonnées distinguent cette reprise d'une nouvelle prise continue et gardent les
+empreintes du texte initial, des WAV sources et de chaque remplacement. Un nouvel audit
+indépendant des chapitres remontés, une capture et une revue complète du MP4 sont obligatoires ;
+le choix de la même voix ne prouve pas à lui seul l'uniformité audible.
+Une proposition de frontières dans `sentence-boundaries.json` doit nommer l'empreinte du
+WAV original et des bornes croissantes, de zéro à sa durée réelle. Les repères proposés par
+un modèle se rapprochent d'abord de silences réellement mesurés ; ils ne deviennent une
+preuve de découpage qu'après l'ASR indépendant du chapitre remonté, sans mot ajouté ou perdu.
+
 ### Contrôler les paroles avant la capture
 
 ```bash

@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-13T16:58:39.751Z",
+  "organizationId": "default",
+  "deleted": [
+    {
+      "ID": "2RoiqbsIc6enu24cl3GxEf",
+      "MessageID": "e562f98c-4ff3-2086-dcc3-2051d88094da@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "sophie.roch@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "[Fêtes de Montvert] On a besoin de toi — Fête des voisins 🙌",
+      "Created": "2026-10-13T16:54:30.771Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4609,
+      "Attachments": 0,
+      "Snippet": "Fêtes de Montvert t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Sophie ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête des voisins ! Bonjour Sophie, peu..."
+    }
+  ],
+  "preservedIds": []
+}

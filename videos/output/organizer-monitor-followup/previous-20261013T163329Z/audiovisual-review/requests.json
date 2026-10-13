@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T09:01:32.616Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
+  "promptSha256": "fde51c61f8baea07baf1d3f10eb3eb7b3c701997dc705bc76373173129038c25",
+  "clipSha256": "0b67564d414fc53e47781cfc47a86b4bfbc77128cff8c1f7ea0d997b7ab5696c",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les postes sur validation sont clairement signalés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les postes sur validation sont clairement signalés.",
+        "visibleSeconds": 0,
+        "visible": "Tableau des inscriptions filtré sur Demandes à traiter avec mentions en jaune et boutons d'action",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Ouvre une demande pour vérifier la personne, le créneau et ses réponses",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton Accepter ouvrant la boîte modale de validation pour Lucas Girard",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Ici, on referme simplement la fenêtre",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur Annuler et fermeture de la modale sans validation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

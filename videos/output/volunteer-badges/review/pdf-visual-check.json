@@ -1,0 +1,89 @@
+{
+  "inspectedAt": "2026-10-13T17:15:35.340596+00:00",
+  "source": "Actual current-product PDFs made by verify-badges.ts for this take, rendered with Poppler at 100 dpi; no PDF edits or re-authoring.",
+  "pagesReviewed": 34,
+  "results": [
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/all.pdf",
+      "sha256": "20fe3279537c49015f4330614f9dbf25f6683502b3b8b11e25abe904fdeee395",
+      "pages": 8,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/black-white.pdf",
+      "sha256": "d70d812dd0d759ae76d4030c26524ec9a25b36f6cb08d1dfee8562d883392b89",
+      "pages": 8,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/buvette.pdf",
+      "sha256": "9a292cc0e70b112d24ed236385775cf98b82fba5b4ace4bdbfc55f0fc01694ef",
+      "pages": 3,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/camille-second.pdf",
+      "sha256": "5b818ffa30c3018a37e8e2fd9fa9cd1753a63d0f1500b71ef725592a21b0347f",
+      "pages": 1,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/empty-combined.pdf",
+      "sha256": "6534dd855bb05464ee6281b88bb6ad9d34c191a4b62e8e0ab30a128bc9d9605b",
+      "pages": 1,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/event-color.pdf",
+      "sha256": "2818c4806392e169aacea8f5b368f8d6f5c24b11c3efa2d59ff5cbc23a4e5857",
+      "pages": 8,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/lea-five-shifts.pdf",
+      "sha256": "34626506817d1ada7899ac33e4e11c1978a123085aadcb400ca0864712723796",
+      "pages": 1,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/loge-fallback.pdf",
+      "sha256": "568f5fd647dfe20b08f36ba00119e9cd1da1f871859e655b209b223edd173cad",
+      "pages": 3,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    },
+    {
+      "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/minimal.pdf",
+      "sha256": "613cc835d906c8ac3e42d2d9f3da96b35fa95e40fc3fa663674412971779dc56",
+      "pages": 1,
+      "allPagesVisuallyInspected": true,
+      "emailsOrUrlsPrinted": false,
+      "adminNavigationPrinted": false,
+      "notes": "Names, cut guides, two columns/five rows, colours and page endings visually inspected. Header title intentionally ellipsized; no missing person name. Empty selection PDF correctly contains explanation only."
+    }
+  ],
+  "passed": true
+}

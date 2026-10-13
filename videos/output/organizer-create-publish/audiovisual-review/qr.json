@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:56.390Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "9bff7e29a31dccfa023d9f49a02086b5e6f2392966492460e68846fde3c02fe7",
+  "clipSha256": "939af378b1fef8fe3cb53283de1b68b1c761fed96363f2e57822a2cee6dec8d3",
+  "scene": "qr",
+  "review": {
+    "heardOpening": "Pour une affiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "ouvrez le QR code",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page dédiée au QR code pour l'événement Fête des voisins",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "télécharger en PNG ou en SVG",
+        "visibleSeconds": 1,
+        "visible": "Options 'Télécharger PNG' et 'Télécharger SVG' visibles en haut à droite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "imprimer directement cette fiche prête à être scannée",
+        "visibleSeconds": 1,
+        "visible": "Bouton 'Imprimer' affiché en haut à droite avec la fiche imprimable au centre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et engageante, accompagnée d'un fond sonore discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
