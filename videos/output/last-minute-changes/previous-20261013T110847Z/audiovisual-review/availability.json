@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:48:08.549Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "promptSha256": "d5090e8ed8f467fcea7df97a27fcab3d3573abe57d11fdae22942937362eede2",
+  "clipSha256": "fa1a9787880a10674001165e2f73e0eb29bd0c5ea3e048df9d48098bd5c3bf14",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "regardons les disponibilités générales dans les membres",
+        "visibleSeconds": 2,
+        "visible": "Filtrage sur Zoé affichant sa disponibilité et sa remarque sous ses coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Zoé a indiqué le matin avec une remarque",
+        "visibleSeconds": 6,
+        "visible": "Mention 'Matin · Peut aussi aider en début d'après-midi après confirmation' visible sur la ligne du membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur 'Activité' et affichage de la page 'Activité de Zoé Exemple' avec son inscription du 17 octobre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -29,7 +29,7 @@
   },
   {
     "chapter": "cancel",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "journal",

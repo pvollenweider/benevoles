@@ -1,0 +1,42 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "withdrawal",
+    "exitCode": 0
+  },
+  {
+    "chapter": "offer",
+    "exitCode": 0
+  },
+  {
+    "chapter": "coverage",
+    "exitCode": 0
+  },
+  {
+    "chapter": "availability",
+    "exitCode": 0
+  },
+  {
+    "chapter": "message",
+    "exitCode": 0
+  },
+  {
+    "chapter": "schedule",
+    "exitCode": 0
+  },
+  {
+    "chapter": "cancel",
+    "exitCode": 1
+  },
+  {
+    "chapter": "journal",
+    "exitCode": 0
+  },
+  {
+    "chapter": "result",
+    "exitCode": 1
+  }
+]

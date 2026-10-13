@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T08:48:08.549Z",
-  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "reviewedAt": "2026-10-13T11:19:59.417Z",
+  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "promptSha256": "d5090e8ed8f467fcea7df97a27fcab3d3573abe57d11fdae22942937362eede2",
-  "clipSha256": "fa1a9787880a10674001165e2f73e0eb29bd0c5ea3e048df9d48098bd5c3bf14",
+  "clipSha256": "4153a5dd32108483f0411d6843be8384edb4338c4973c4b9bac8a8046fe00b7a",
   "scene": "availability",
   "review": {
-    "heardOpening": "Pour chercher de l'aide, regardons",
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
+        "spokenSeconds": 1.2,
         "spoken": "regardons les disponibilités générales dans les membres",
-        "visibleSeconds": 2,
-        "visible": "Filtrage sur Zoé affichant sa disponibilité et sa remarque sous ses coordonnées",
+        "visibleSeconds": 2.1,
+        "visible": "Recherche de 'Zoé' dans la liste des membres avec affichage de la mention de disponibilité",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 5.1,
         "spoken": "Zoé a indiqué le matin avec une remarque",
-        "visibleSeconds": 6,
-        "visible": "Mention 'Matin · Peut aussi aider en début d'après-midi après confirmation' visible sur la ligne du membre",
+        "visibleSeconds": 10.9,
+        "visible": "Ouverture du formulaire 'Modifier le membre' affichant la case 'Matin' cochée et le texte d'information",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 15.6,
         "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
-        "visibleSeconds": 18.5,
-        "visible": "Clic sur 'Activité' et affichage de la page 'Activité de Zoé Exemple' avec son inscription du 17 octobre",
+        "visibleSeconds": 18.6,
+        "visible": "Ouverture de la page 'Activité de Zoé Exemple' détaillant son inscription au 17 octobre",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
+      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

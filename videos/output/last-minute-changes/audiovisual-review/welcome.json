@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T08:47:56.721Z",
-  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "reviewedAt": "2026-10-13T11:19:41.689Z",
+  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
-  "clipSha256": "152d65a4edf79b2d19f95cfb67bdee6f2d9f767b92b8544f5af9d8344490b0b7",
+  "clipSha256": "1073b383955914deab42cfd288ae9e43a584fe00ec0be7d22052c002f51b7ea9",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Un désistement, un horaire qui bouge",
+    "heardOpening": "Un désistement, un horaire",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
-        "visibleSeconds": 0.5,
-        "visible": "Bandeau central affichant le titre 'Gérer un imprévu sans perdre le fil' et le sous-titre 'Vérifier, prévenir, contrôler le résultat'",
+        "spokenSeconds": 0,
+        "spoken": "Un désistement, un horaire qui bouge",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre affiché : Gérer un imprévu sans perdre le fil",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
-        "visibleSeconds": 11.5,
-        "visible": "Le bandeau titre s'efface, laissant apparaître la page de gestion 'Fête des imprévus – démonstration'",
+        "spokenSeconds": 9.3,
+        "spoken": "Le plus important, c'est de vérifier les faits",
+        "visibleSeconds": 11.2,
+        "visible": "Disparition du bandeau d'introduction et affichage de la page Fête des imprévus — démonstration",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
-        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide",
-        "visibleSeconds": 16,
-        "visible": "Écran stable de l'événement de démonstration servant de support à l'annonce du sommaire",
+        "spokenSeconds": 15.6,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 15.6,
+        "visible": "Vue d'ensemble de l'événement de démonstration en attente des actions annoncées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, avec un débit régulier adapté à une introduction pédagogique."
+      "observation": "Voix off féminine claire, fluide et bien articulée, avec un débit régulier et adapté à une introduction."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

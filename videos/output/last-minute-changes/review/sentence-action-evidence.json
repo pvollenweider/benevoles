@@ -1,52 +1,52 @@
 {
-  "mp4Sha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "mp4Sha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "chapters": [
     {
       "chapter": "welcome",
-      "startSeconds": 1.347,
-      "endSeconds": 32.006,
+      "startSeconds": 1.285,
+      "endSeconds": 31.947,
       "sentences": [
         {
           "text": "Un désistement, un horaire qui bouge, une mission devenue inutile :",
           "startMs": 430,
           "endMs": 4107,
           "method": "silence",
-          "videoSeconds": 1.777
+          "videoSeconds": 1.715
         },
         {
           "text": "les imprévus arrivent, même avec un bon planning.",
           "startMs": 4258,
           "endMs": 8122,
           "method": "silence",
-          "videoSeconds": 5.605
+          "videoSeconds": 5.543
         },
         {
           "text": "Le plus important, c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat.",
           "startMs": 8430,
           "endMs": 12877,
           "method": "silence",
-          "videoSeconds": 9.777
+          "videoSeconds": 9.715
         },
         {
           "text": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un.",
           "startMs": 13361,
           "endMs": 21393,
           "method": "silence",
-          "videoSeconds": 14.708
+          "videoSeconds": 14.646
         },
         {
           "text": "Les personnes et les messages de démonstration sont fictifs.",
           "startMs": 21579,
           "endMs": 25750,
           "method": "silence",
-          "videoSeconds": 22.926
+          "videoSeconds": 22.864
         },
         {
           "text": "Chaque changement sera réellement enregistré dans notre environnement de formation.",
           "startMs": 26041,
           "endMs": 30315,
           "method": "silence",
-          "videoSeconds": 27.388
+          "videoSeconds": 27.326
         }
       ],
       "anchors": [],
@@ -54,116 +54,116 @@
       "frames": [
         {
           "scene": "welcome",
-          "fraction": 0.019570109918784044,
-          "seconds": 1.947,
+          "fraction": 0.019568195160133063,
+          "seconds": 1.885,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-2.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.25,
-          "seconds": 9.01175,
+          "seconds": 8.9505,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-25.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.45,
-          "seconds": 15.143550000000001,
+          "seconds": 15.0829,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-45.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.6,
-          "seconds": 19.742399999999996,
+          "seconds": 19.6822,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-60.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.85,
-          "seconds": 27.407149999999998,
+          "seconds": 27.3477,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-85.png"
         },
         {
           "scene": "welcome",
-          "fraction": 0.990214945040608,
-          "seconds": 31.706,
+          "fraction": 0.9902159024199335,
+          "seconds": 31.647,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/welcome-end.png"
         }
       ]
     },
     {
       "chapter": "withdrawal",
-      "startSeconds": 34.265,
-      "endSeconds": 65.548,
+      "startSeconds": 34.215,
+      "endSeconds": 65.498,
       "sentences": [
         {
           "text": "Aline ne peut plus venir à l'accueil.",
           "startMs": 517,
           "endMs": 2246,
           "method": "silence",
-          "videoSeconds": 34.782
+          "videoSeconds": 34.732
         },
         {
           "text": "Depuis son lien personnel, elle annule son inscription.",
           "startMs": 2758,
           "endMs": 5724,
           "method": "silence",
-          "videoSeconds": 37.023
+          "videoSeconds": 36.973
         },
         {
           "text": "C'est un retrait individuel :",
           "startMs": 6387,
           "endMs": 9192,
           "method": "silence",
-          "videoSeconds": 40.652
+          "videoSeconds": 40.602
         },
         {
           "text": "le créneau existe toujours.",
           "startMs": 9332,
           "endMs": 9334,
           "method": "silence",
-          "videoSeconds": 43.597
+          "videoSeconds": 43.547
         },
         {
           "text": "Revenons dans les inscriptions côté organisation.",
           "startMs": 9545,
           "endMs": 12574,
           "method": "silence",
-          "videoSeconds": 43.81
+          "videoSeconds": 43.76
         },
         {
           "text": "Son inscription n'est plus une confirmation active.",
           "startMs": 13077,
           "endMs": 15699,
           "method": "silence",
-          "videoSeconds": 47.342
+          "videoSeconds": 47.292
         },
         {
           "text": "Comme une personne attendait cette place, l'application lui propose de la prendre.",
           "startMs": 16046,
           "endMs": 20470,
           "method": "silence",
-          "videoSeconds": 50.311
+          "videoSeconds": 50.261
         },
         {
           "text": "Ouvrons le vrai email reçu par Nicolas.",
           "startMs": 21157,
           "endMs": 23729,
           "method": "silence",
-          "videoSeconds": 55.422
+          "videoSeconds": 55.372
         },
         {
           "text": "On y retrouve le créneau et un délai de réponse.",
           "startMs": 24293,
           "endMs": 25379,
           "method": "silence",
-          "videoSeconds": 58.558
+          "videoSeconds": 58.508
         },
         {
           "text": "Ne partage pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
           "startMs": 25623,
           "endMs": 31043,
           "method": "silence",
-          "videoSeconds": 59.888
+          "videoSeconds": 59.838
         }
       ],
       "anchors": [
@@ -172,134 +172,134 @@
           "phrase": "Depuis son lien personnel",
           "startMs": 2758,
           "endMs": 5724,
-          "cueMs": 37024
+          "cueMs": 36974
         },
         {
           "segmentId": "withdrawal",
           "phrase": "C'est un retrait individuel",
           "startMs": 6387,
           "endMs": 9192,
-          "cueMs": 40653
+          "cueMs": 40603
         },
         {
           "segmentId": "withdrawal",
           "phrase": "Revenons dans les inscriptions côté",
           "startMs": 9545,
           "endMs": 12574,
-          "cueMs": 43811
+          "cueMs": 43761
         },
         {
           "segmentId": "withdrawal",
           "phrase": "Ouvrons le vrai email reçu",
           "startMs": 21157,
           "endMs": 23729,
-          "cueMs": 55424
+          "cueMs": 55374
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 37503,
-          "relativeSeconds": 3.238
+          "atMs": 37456,
+          "relativeSeconds": 3.241
         },
         {
           "kind": "click",
-          "atMs": 41119,
-          "relativeSeconds": 6.854
+          "atMs": 41073,
+          "relativeSeconds": 6.858
         }
       ],
       "frames": [
         {
           "scene": "withdrawal",
           "fraction": 0.019179746188025443,
-          "seconds": 34.865,
+          "seconds": 34.815,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-2.png"
         },
         {
           "scene": "withdrawal",
           "fraction": 0.25,
-          "seconds": 42.08575,
+          "seconds": 42.03575,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-25.png"
         },
         {
           "scene": "withdrawal",
           "fraction": 0.45,
-          "seconds": 48.342349999999996,
+          "seconds": 48.29235,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-45.png"
         },
         {
           "scene": "withdrawal",
           "fraction": 0.6,
-          "seconds": 53.034800000000004,
+          "seconds": 52.9848,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-60.png"
         },
         {
           "scene": "withdrawal",
           "fraction": 0.85,
-          "seconds": 60.85555,
+          "seconds": 60.805550000000004,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-85.png"
         },
         {
           "scene": "withdrawal",
           "fraction": 0.9904101269059873,
-          "seconds": 65.248,
+          "seconds": 65.198,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/withdrawal-end.png"
         }
       ]
     },
     {
       "chapter": "offer",
-      "startSeconds": 67.814,
-      "endSeconds": 94.343,
+      "startSeconds": 67.761,
+      "endSeconds": 94.29,
       "sentences": [
         {
           "text": "Une place proposée n'est pas encore une personne confirmée.",
           "startMs": 253,
           "endMs": 3858,
           "method": "silence",
-          "videoSeconds": 68.067
+          "videoSeconds": 68.014
         },
         {
           "text": "Nicolas doit répondre dans le délai de son offre.",
           "startMs": 4141,
           "endMs": 6731,
           "method": "silence",
-          "videoSeconds": 71.955
+          "videoSeconds": 71.902
         },
         {
           "text": "Ouvrons son lien et acceptons la place dans cet exemple.",
           "startMs": 7173,
           "endMs": 10262,
           "method": "silence",
-          "videoSeconds": 74.987
+          "videoSeconds": 74.934
         },
         {
           "text": "Puis vérifions le statut dans les inscriptions.",
           "startMs": 10851,
           "endMs": 13025,
           "method": "silence",
-          "videoSeconds": 78.665
+          "videoSeconds": 78.612
         },
         {
           "text": "Maintenant seulement, sa participation est confirmée.",
           "startMs": 13765,
           "endMs": 16273,
           "method": "silence",
-          "videoSeconds": 81.579
+          "videoSeconds": 81.526
         },
         {
           "text": "Si une personne ne répond pas ou refuse, ne pars pas du principe qu'elle sera là.",
           "startMs": 16734,
           "endMs": 20826,
           "method": "silence",
-          "videoSeconds": 84.548
+          "videoSeconds": 84.495
         },
         {
           "text": "Les états de la liste d'attente permettent de distinguer ce qui est proposé de ce qui est vraiment accepté.",
           "startMs": 21118,
           "endMs": 26213,
           "method": "silence",
-          "videoSeconds": 88.932
+          "videoSeconds": 88.879
         }
       ],
       "anchors": [
@@ -308,115 +308,115 @@
           "phrase": "Ouvrons son lien et acceptons",
           "startMs": 7173,
           "endMs": 10262,
-          "cueMs": 74989
+          "cueMs": 74934
         },
         {
           "segmentId": "offer",
           "phrase": "Maintenant seulement, sa participation est",
           "startMs": 13765,
           "endMs": 16273,
-          "cueMs": 81580
+          "cueMs": 81527
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 75459,
-          "relativeSeconds": 7.645
+          "atMs": 75407,
+          "relativeSeconds": 7.646
         }
       ],
       "frames": [
         {
           "scene": "offer",
           "fraction": 0.02261675901843266,
-          "seconds": 68.414,
+          "seconds": 68.361,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-2.png"
         },
         {
           "scene": "offer",
           "fraction": 0.25,
-          "seconds": 74.44625,
+          "seconds": 74.39325,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-25.png"
         },
         {
           "scene": "offer",
           "fraction": 0.45,
-          "seconds": 79.75205,
+          "seconds": 79.69905,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-45.png"
         },
         {
           "scene": "offer",
           "fraction": 0.6,
-          "seconds": 83.7314,
+          "seconds": 83.6784,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-60.png"
         },
         {
           "scene": "offer",
           "fraction": 0.85,
-          "seconds": 90.36364999999999,
+          "seconds": 90.31065,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-85.png"
         },
         {
           "scene": "offer",
           "fraction": 0.9886916204907836,
-          "seconds": 94.043,
+          "seconds": 93.99,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/offer-end.png"
         }
       ]
     },
     {
       "chapter": "coverage",
-      "startSeconds": 96.605,
-      "endSeconds": 126.655,
+      "startSeconds": 96.552,
+      "endSeconds": 126.603,
       "sentences": [
         {
           "text": "Où manque-t-il encore du monde ?",
           "startMs": 315,
           "endMs": 2264,
           "method": "silence",
-          "videoSeconds": 96.92
+          "videoSeconds": 96.867
         },
         {
           "text": "Ouvrons la vue de couverture de l'événement.",
           "startMs": 2750,
           "endMs": 4616,
           "method": "silence",
-          "videoSeconds": 99.355
+          "videoSeconds": 99.302
         },
         {
           "text": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
           "startMs": 5443,
           "endMs": 9630,
           "method": "silence",
-          "videoSeconds": 102.048
+          "videoSeconds": 101.995
         },
         {
           "text": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
           "startMs": 10114,
           "endMs": 13577,
           "method": "silence",
-          "videoSeconds": 106.719
+          "videoSeconds": 106.666
         },
         {
           "text": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
           "startMs": 13705,
           "endMs": 18155,
           "method": "silence",
-          "videoSeconds": 110.31
+          "videoSeconds": 110.257
         },
         {
           "text": "Un total de personnes inscrites ne suffit donc pas pour comprendre le besoin.",
           "startMs": 18394,
           "endMs": 23880,
           "method": "silence",
-          "videoSeconds": 114.999
+          "videoSeconds": 114.946
         },
         {
           "text": "Partons du créneau précis et de ses états, plutôt que d'envoyer une relance à toute l'organisation.",
           "startMs": 24479,
           "endMs": 29853,
           "method": "silence",
-          "videoSeconds": 121.084
+          "videoSeconds": 121.031
         }
       ],
       "anchors": [
@@ -425,109 +425,109 @@
           "phrase": "Lisons le poste, la date",
           "startMs": 10114,
           "endMs": 13577,
-          "cueMs": 106721
+          "cueMs": 106667
         },
         {
           "segmentId": "coverage",
           "phrase": "Un total de personnes inscrites",
           "startMs": 18394,
           "endMs": 23880,
-          "cueMs": 114999
+          "cueMs": 114947
         }
       ],
       "interactions": [],
       "frames": [
         {
           "scene": "coverage",
-          "fraction": 0.019966722129783693,
-          "seconds": 97.205,
+          "fraction": 0.019966057701906757,
+          "seconds": 97.152,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-2.png"
         },
         {
           "scene": "coverage",
           "fraction": 0.25,
-          "seconds": 104.1175,
+          "seconds": 104.06475,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-25.png"
         },
         {
           "scene": "coverage",
           "fraction": 0.45,
-          "seconds": 110.1275,
+          "seconds": 110.07495,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-45.png"
         },
         {
           "scene": "coverage",
           "fraction": 0.6,
-          "seconds": 114.635,
+          "seconds": 114.5826,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-60.png"
         },
         {
           "scene": "coverage",
           "fraction": 0.85,
-          "seconds": 122.1475,
+          "seconds": 122.09535000000001,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-85.png"
         },
         {
           "scene": "coverage",
-          "fraction": 0.9900166389351082,
-          "seconds": 126.355,
+          "fraction": 0.9900169711490466,
+          "seconds": 126.303,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/coverage-end.png"
         }
       ]
     },
     {
       "chapter": "availability",
-      "startSeconds": 128.916,
-      "endSeconds": 158.369,
+      "startSeconds": 128.866,
+      "endSeconds": 158.322,
       "sentences": [
         {
           "text": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres.",
           "startMs": 200,
           "endMs": 4574,
           "method": "silence",
-          "videoSeconds": 129.116
+          "videoSeconds": 129.066
         },
         {
           "text": "Zoé a indiqué le matin avec une remarque.",
           "startMs": 5252,
           "endMs": 7790,
           "method": "silence",
-          "videoSeconds": 134.168
+          "videoSeconds": 134.118
         },
         {
           "text": "Ce renseignement aide à lui proposer un créneau ;",
           "startMs": 8088,
           "endMs": 10473,
           "method": "silence",
-          "videoSeconds": 137.004
+          "videoSeconds": 136.954
         },
         {
           "text": "il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là.",
           "startMs": 10955,
           "endMs": 14801,
           "method": "silence",
-          "videoSeconds": 139.871
+          "videoSeconds": 139.821
         },
         {
           "text": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
           "startMs": 15295,
           "endMs": 18664,
           "method": "silence",
-          "videoSeconds": 144.211
+          "videoSeconds": 144.161
         },
         {
           "text": "Si la mission demande un âge ou une compétence particulière, vérifie ces conditions et échange avec la personne.",
           "startMs": 19202,
           "endMs": 25434,
           "method": "silence",
-          "videoSeconds": 148.118
+          "videoSeconds": 148.068
         },
         {
           "text": "Une disponibilité n'est pas un consentement à être déplacée.",
           "startMs": 26148,
           "endMs": 29212,
           "method": "silence",
-          "videoSeconds": 155.064
+          "videoSeconds": 155.014
         }
       ],
       "anchors": [
@@ -536,229 +536,229 @@
           "phrase": "Ce renseignement aide à lui",
           "startMs": 8088,
           "endMs": 10473,
-          "cueMs": 137005
+          "cueMs": 136956
         },
         {
           "segmentId": "availability",
           "phrase": "il ne l'inscrit pas automatiquement",
           "startMs": 10955,
           "endMs": 14801,
-          "cueMs": 139872
+          "cueMs": 139823
         },
         {
           "segmentId": "availability",
           "phrase": "Regardons aussi ses inscriptions pour",
           "startMs": 15295,
           "endMs": 18664,
-          "cueMs": 144212
+          "cueMs": 144163
         },
         {
           "segmentId": "availability",
           "phrase": "Si la mission demande un",
           "startMs": 19202,
           "endMs": 25434,
-          "cueMs": 148119
+          "cueMs": 148075
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 130640,
-          "relativeSeconds": 1.724
+          "atMs": 130587,
+          "relativeSeconds": 1.721
         },
         {
           "kind": "key",
-          "atMs": 130949,
+          "atMs": 130895,
+          "relativeSeconds": 2.029
+        },
+        {
+          "kind": "key",
+          "atMs": 130896,
+          "relativeSeconds": 2.03
+        },
+        {
+          "kind": "key",
+          "atMs": 130899,
           "relativeSeconds": 2.033
         },
         {
           "kind": "key",
-          "atMs": 130950,
-          "relativeSeconds": 2.034
-        },
-        {
-          "kind": "key",
-          "atMs": 130952,
-          "relativeSeconds": 2.036
-        },
-        {
-          "kind": "key",
-          "atMs": 131066,
-          "relativeSeconds": 2.15
+          "atMs": 131011,
+          "relativeSeconds": 2.145
         },
         {
           "kind": "click",
-          "atMs": 140339,
-          "relativeSeconds": 11.423
+          "atMs": 140286,
+          "relativeSeconds": 11.42
         },
         {
           "kind": "click",
-          "atMs": 144673,
-          "relativeSeconds": 15.757
+          "atMs": 144636,
+          "relativeSeconds": 15.77
         }
       ],
       "frames": [
         {
           "scene": "availability",
-          "fraction": 0.02037143924218246,
-          "seconds": 129.516,
+          "fraction": 0.020369364475828353,
+          "seconds": 129.466,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-2.png"
         },
         {
           "scene": "availability",
           "fraction": 0.25,
-          "seconds": 136.27925,
+          "seconds": 136.23,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-25.png"
         },
         {
           "scene": "availability",
           "fraction": 0.45,
-          "seconds": 142.16985,
+          "seconds": 142.12120000000002,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-45.png"
         },
         {
           "scene": "availability",
           "fraction": 0.6,
-          "seconds": 146.5878,
+          "seconds": 146.5396,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-60.png"
         },
         {
           "scene": "availability",
           "fraction": 0.85,
-          "seconds": 153.95104999999998,
+          "seconds": 153.9036,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-85.png"
         },
         {
           "scene": "availability",
-          "fraction": 0.9898142803789087,
-          "seconds": 158.069,
+          "fraction": 0.9898153177620859,
+          "seconds": 158.022,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/availability-end.png"
         }
       ]
     },
     {
       "chapter": "message",
-      "startSeconds": 160.63,
-      "endSeconds": 221.527,
+      "startSeconds": 160.588,
+      "endSeconds": 221.485,
       "sentences": [
         {
           "text": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis Installation du matériel.",
           "startMs": 239,
           "endMs": 6540,
           "method": "silence",
-          "videoSeconds": 160.869
+          "videoSeconds": 160.827
         },
         {
           "text": "Emma y est déjà inscrite :",
           "startMs": 7136,
           "endMs": 8658,
           "method": "silence",
-          "videoSeconds": 167.766
+          "videoSeconds": 167.724
         },
         {
           "text": "ce message lui sera adressé, pas à toute l'organisation.",
           "startMs": 8832,
           "endMs": 11480,
           "method": "silence",
-          "videoSeconds": 169.462
+          "videoSeconds": 169.42
         },
         {
           "text": "Écrivons un objet clair et une courte demande.",
           "startMs": 12022,
           "endMs": 14899,
           "method": "silence",
-          "videoSeconds": 172.652
+          "videoSeconds": 172.61
         },
         {
           "text": "Il reste une place de midi à quatorze heures ;",
           "startMs": 15515,
           "endMs": 17812,
           "method": "silence",
-          "videoSeconds": 176.145
+          "videoSeconds": 176.103
         },
         {
           "text": "connaît-elle quelqu'un qui pourrait aider ?",
           "startMs": 18079,
           "endMs": 19583,
           "method": "silence",
-          "videoSeconds": 178.709
+          "videoSeconds": 178.667
         },
         {
           "text": "Le poste, l'horaire et la manière de répondre doivent être compréhensibles.",
           "startMs": 20319,
           "endMs": 25067,
           "method": "silence",
-          "videoSeconds": 180.949
+          "videoSeconds": 180.907
         },
         {
           "text": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
           "startMs": 25194,
           "endMs": 28576,
           "method": "silence",
-          "videoSeconds": 185.824
+          "videoSeconds": 185.782
         },
         {
           "text": "Ouvrons le vrai email reçu.",
           "startMs": 29489,
           "endMs": 31072,
           "method": "silence",
-          "videoSeconds": 190.119
+          "videoSeconds": 190.077
         },
         {
           "text": "Ce message ne crée aucune inscription.",
           "startMs": 31746,
           "endMs": 33575,
           "method": "silence",
-          "videoSeconds": 192.376
+          "videoSeconds": 192.334
         },
         {
           "text": "Pour la suite de la démonstration, supposons que Zoé a donné son accord.",
           "startMs": 34273,
           "endMs": 37694,
           "method": "silence",
-          "videoSeconds": 194.903
+          "videoSeconds": 194.861
         },
         {
           "text": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
           "startMs": 38308,
           "endMs": 41215,
           "method": "silence",
-          "videoSeconds": 198.938
+          "videoSeconds": 198.896
         },
         {
           "text": "Saisissons son prénom, son nom et la même adresse email que sa fiche membre.",
           "startMs": 41815,
           "endMs": 46039,
           "method": "silence",
-          "videoSeconds": 202.445
+          "videoSeconds": 202.403
         },
         {
           "text": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
           "startMs": 46454,
           "endMs": 51440,
           "method": "silence",
-          "videoSeconds": 207.084
+          "videoSeconds": 207.042
         },
         {
           "text": "Enfin, revenons à la couverture :",
           "startMs": 51990,
           "endMs": 54088,
           "method": "silence",
-          "videoSeconds": 212.62
+          "videoSeconds": 212.578
         },
         {
           "text": "le poste est rempli.",
           "startMs": 54433,
           "endMs": 55581,
           "method": "silence",
-          "videoSeconds": 215.063
+          "videoSeconds": 215.021
         },
         {
           "text": "Nous avons vérifié une nouvelle inscription, pas seulement envoyé une demande d'aide.",
           "startMs": 56486,
           "endMs": 60500,
           "method": "silence",
-          "videoSeconds": 217.116
+          "videoSeconds": 217.074
         }
       ],
       "anchors": [
@@ -767,1080 +767,1080 @@
           "phrase": "Vérifions l'aperçu et le destinataire",
           "startMs": 25194,
           "endMs": 28576,
-          "cueMs": 185826
+          "cueMs": 185783
         },
         {
           "segmentId": "message",
           "phrase": "Ouvrons le vrai email reçu.",
           "startMs": 29489,
           "endMs": 31072,
-          "cueMs": 190121
+          "cueMs": 190079
         },
         {
           "segmentId": "message",
           "phrase": "Ce message ne crée aucune",
           "startMs": 31746,
           "endMs": 33575,
-          "cueMs": 192377
+          "cueMs": 192338
         },
         {
           "segmentId": "message",
           "phrase": "Revenons aux inscriptions et ouvrons",
           "startMs": 38308,
           "endMs": 41215,
-          "cueMs": 198939
+          "cueMs": 198897
         },
         {
           "segmentId": "message",
           "phrase": "Choisissons le créneau de logistique",
           "startMs": 46454,
           "endMs": 51440,
-          "cueMs": 208817
+          "cueMs": 208824
         },
         {
           "segmentId": "message",
           "phrase": "Enfin, revenons à la couverture",
           "startMs": 51990,
           "endMs": 54088,
-          "cueMs": 212622
+          "cueMs": 212579
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 162263,
-          "relativeSeconds": 1.633
+          "atMs": 162286,
+          "relativeSeconds": 1.698
         },
         {
           "kind": "click",
-          "atMs": 163063,
-          "relativeSeconds": 2.433
+          "atMs": 163085,
+          "relativeSeconds": 2.497
         },
         {
           "kind": "key",
-          "atMs": 163371,
-          "relativeSeconds": 2.741
+          "atMs": 163393,
+          "relativeSeconds": 2.805
         },
         {
           "kind": "key",
-          "atMs": 163371,
-          "relativeSeconds": 2.741
+          "atMs": 163393,
+          "relativeSeconds": 2.805
         },
         {
           "kind": "key",
-          "atMs": 163374,
-          "relativeSeconds": 2.744
+          "atMs": 163396,
+          "relativeSeconds": 2.808
         },
         {
           "kind": "key",
-          "atMs": 163486,
-          "relativeSeconds": 2.856
+          "atMs": 163509,
+          "relativeSeconds": 2.921
         },
         {
           "kind": "key",
-          "atMs": 163598,
-          "relativeSeconds": 2.968
+          "atMs": 163620,
+          "relativeSeconds": 3.032
         },
         {
           "kind": "key",
-          "atMs": 163712,
-          "relativeSeconds": 3.082
+          "atMs": 163733,
+          "relativeSeconds": 3.145
         },
         {
           "kind": "key",
-          "atMs": 163824,
-          "relativeSeconds": 3.194
+          "atMs": 163847,
+          "relativeSeconds": 3.259
         },
         {
           "kind": "key",
-          "atMs": 163938,
-          "relativeSeconds": 3.308
+          "atMs": 163963,
+          "relativeSeconds": 3.375
         },
         {
           "kind": "key",
-          "atMs": 164051,
-          "relativeSeconds": 3.421
+          "atMs": 164076,
+          "relativeSeconds": 3.488
         },
         {
           "kind": "key",
-          "atMs": 164164,
-          "relativeSeconds": 3.534
+          "atMs": 164189,
+          "relativeSeconds": 3.601
         },
         {
           "kind": "key",
-          "atMs": 164278,
-          "relativeSeconds": 3.648
+          "atMs": 164301,
+          "relativeSeconds": 3.713
         },
         {
           "kind": "key",
-          "atMs": 164393,
-          "relativeSeconds": 3.763
+          "atMs": 164419,
+          "relativeSeconds": 3.831
         },
         {
           "kind": "key",
-          "atMs": 164510,
-          "relativeSeconds": 3.88
+          "atMs": 164537,
+          "relativeSeconds": 3.949
         },
         {
           "kind": "key",
-          "atMs": 164626,
-          "relativeSeconds": 3.996
+          "atMs": 164654,
+          "relativeSeconds": 4.066
         },
         {
           "kind": "key",
-          "atMs": 164740,
-          "relativeSeconds": 4.11
+          "atMs": 164770,
+          "relativeSeconds": 4.182
         },
         {
           "kind": "key",
-          "atMs": 164856,
-          "relativeSeconds": 4.226
+          "atMs": 164888,
+          "relativeSeconds": 4.3
         },
         {
           "kind": "key",
-          "atMs": 164972,
-          "relativeSeconds": 4.342
+          "atMs": 165000,
+          "relativeSeconds": 4.412
         },
         {
           "kind": "key",
-          "atMs": 165090,
-          "relativeSeconds": 4.46
+          "atMs": 165112,
+          "relativeSeconds": 4.524
         },
         {
           "kind": "key",
-          "atMs": 165205,
-          "relativeSeconds": 4.575
+          "atMs": 165230,
+          "relativeSeconds": 4.642
         },
         {
           "kind": "key",
-          "atMs": 165322,
-          "relativeSeconds": 4.692
+          "atMs": 165349,
+          "relativeSeconds": 4.761
         },
         {
           "kind": "key",
-          "atMs": 165442,
-          "relativeSeconds": 4.812
+          "atMs": 165465,
+          "relativeSeconds": 4.877
         },
         {
           "kind": "key",
-          "atMs": 165559,
-          "relativeSeconds": 4.929
+          "atMs": 165583,
+          "relativeSeconds": 4.995
         },
         {
           "kind": "key",
-          "atMs": 165675,
-          "relativeSeconds": 5.045
+          "atMs": 165702,
+          "relativeSeconds": 5.114
         },
         {
           "kind": "key",
-          "atMs": 165792,
-          "relativeSeconds": 5.162
+          "atMs": 165814,
+          "relativeSeconds": 5.226
         },
         {
           "kind": "key",
-          "atMs": 165908,
-          "relativeSeconds": 5.278
+          "atMs": 165930,
+          "relativeSeconds": 5.342
         },
         {
           "kind": "key",
-          "atMs": 166023,
-          "relativeSeconds": 5.393
+          "atMs": 166051,
+          "relativeSeconds": 5.463
         },
         {
           "kind": "key",
-          "atMs": 166140,
-          "relativeSeconds": 5.51
+          "atMs": 166167,
+          "relativeSeconds": 5.579
         },
         {
           "kind": "key",
-          "atMs": 166255,
-          "relativeSeconds": 5.625
+          "atMs": 166285,
+          "relativeSeconds": 5.697
         },
         {
           "kind": "key",
-          "atMs": 166372,
-          "relativeSeconds": 5.742
+          "atMs": 166402,
+          "relativeSeconds": 5.814
         },
         {
           "kind": "key",
-          "atMs": 166484,
-          "relativeSeconds": 5.854
+          "atMs": 166519,
+          "relativeSeconds": 5.931
         },
         {
           "kind": "key",
-          "atMs": 166597,
-          "relativeSeconds": 5.967
+          "atMs": 166635,
+          "relativeSeconds": 6.047
         },
         {
           "kind": "key",
-          "atMs": 166710,
-          "relativeSeconds": 6.08
+          "atMs": 166752,
+          "relativeSeconds": 6.164
         },
         {
           "kind": "key",
-          "atMs": 166822,
-          "relativeSeconds": 6.192
+          "atMs": 166870,
+          "relativeSeconds": 6.282
         },
         {
           "kind": "key",
-          "atMs": 166935,
-          "relativeSeconds": 6.305
+          "atMs": 166982,
+          "relativeSeconds": 6.394
         },
         {
           "kind": "key",
-          "atMs": 167048,
-          "relativeSeconds": 6.418
+          "atMs": 167094,
+          "relativeSeconds": 6.506
         },
         {
           "kind": "key",
-          "atMs": 167166,
-          "relativeSeconds": 6.536
+          "atMs": 167207,
+          "relativeSeconds": 6.619
         },
         {
           "kind": "key",
-          "atMs": 167280,
-          "relativeSeconds": 6.65
+          "atMs": 167319,
+          "relativeSeconds": 6.731
         },
         {
           "kind": "key",
-          "atMs": 167395,
-          "relativeSeconds": 6.765
+          "atMs": 167435,
+          "relativeSeconds": 6.847
         },
         {
           "kind": "click",
-          "atMs": 167979,
-          "relativeSeconds": 7.349
+          "atMs": 168017,
+          "relativeSeconds": 7.429
         },
         {
           "kind": "key",
-          "atMs": 168285,
-          "relativeSeconds": 7.655
+          "atMs": 168323,
+          "relativeSeconds": 7.735
         },
         {
           "kind": "key",
-          "atMs": 168286,
-          "relativeSeconds": 7.656
+          "atMs": 168324,
+          "relativeSeconds": 7.736
         },
         {
           "kind": "key",
-          "atMs": 168289,
-          "relativeSeconds": 7.659
+          "atMs": 168326,
+          "relativeSeconds": 7.738
         },
         {
           "kind": "key",
-          "atMs": 168402,
-          "relativeSeconds": 7.772
+          "atMs": 168440,
+          "relativeSeconds": 7.852
         },
         {
           "kind": "key",
-          "atMs": 168515,
-          "relativeSeconds": 7.885
+          "atMs": 168553,
+          "relativeSeconds": 7.965
         },
         {
           "kind": "key",
-          "atMs": 168628,
-          "relativeSeconds": 7.998
+          "atMs": 168665,
+          "relativeSeconds": 8.077
         },
         {
           "kind": "key",
-          "atMs": 168740,
-          "relativeSeconds": 8.11
+          "atMs": 168779,
+          "relativeSeconds": 8.191
         },
         {
           "kind": "key",
-          "atMs": 168853,
-          "relativeSeconds": 8.223
+          "atMs": 168896,
+          "relativeSeconds": 8.308
         },
         {
           "kind": "key",
-          "atMs": 168967,
-          "relativeSeconds": 8.337
+          "atMs": 169011,
+          "relativeSeconds": 8.423
         },
         {
           "kind": "key",
-          "atMs": 169083,
-          "relativeSeconds": 8.453
+          "atMs": 169123,
+          "relativeSeconds": 8.535
         },
         {
           "kind": "key",
-          "atMs": 169196,
-          "relativeSeconds": 8.566
+          "atMs": 169235,
+          "relativeSeconds": 8.647
         },
         {
           "kind": "key",
-          "atMs": 169308,
-          "relativeSeconds": 8.678
+          "atMs": 169349,
+          "relativeSeconds": 8.761
         },
         {
           "kind": "key",
-          "atMs": 169425,
-          "relativeSeconds": 8.795
+          "atMs": 169462,
+          "relativeSeconds": 8.874
         },
         {
           "kind": "key",
-          "atMs": 169541,
-          "relativeSeconds": 8.911
+          "atMs": 169575,
+          "relativeSeconds": 8.987
         },
         {
           "kind": "key",
-          "atMs": 169658,
-          "relativeSeconds": 9.028
+          "atMs": 169688,
+          "relativeSeconds": 9.1
         },
         {
           "kind": "key",
-          "atMs": 169772,
-          "relativeSeconds": 9.142
+          "atMs": 169799,
+          "relativeSeconds": 9.211
         },
         {
           "kind": "key",
-          "atMs": 169890,
-          "relativeSeconds": 9.26
+          "atMs": 169913,
+          "relativeSeconds": 9.325
         },
         {
           "kind": "key",
-          "atMs": 170005,
-          "relativeSeconds": 9.375
+          "atMs": 170026,
+          "relativeSeconds": 9.438
         },
         {
           "kind": "key",
-          "atMs": 170121,
-          "relativeSeconds": 9.491
+          "atMs": 170138,
+          "relativeSeconds": 9.55
         },
         {
           "kind": "key",
-          "atMs": 170238,
-          "relativeSeconds": 9.608
+          "atMs": 170251,
+          "relativeSeconds": 9.663
         },
         {
           "kind": "key",
-          "atMs": 170357,
-          "relativeSeconds": 9.727
+          "atMs": 170364,
+          "relativeSeconds": 9.776
         },
         {
           "kind": "key",
-          "atMs": 170474,
-          "relativeSeconds": 9.844
+          "atMs": 170478,
+          "relativeSeconds": 9.89
         },
         {
           "kind": "key",
-          "atMs": 170593,
-          "relativeSeconds": 9.963
+          "atMs": 170590,
+          "relativeSeconds": 10.002
         },
         {
           "kind": "key",
-          "atMs": 170709,
-          "relativeSeconds": 10.079
+          "atMs": 170702,
+          "relativeSeconds": 10.114
         },
         {
           "kind": "key",
-          "atMs": 170824,
-          "relativeSeconds": 10.194
+          "atMs": 170815,
+          "relativeSeconds": 10.227
         },
         {
           "kind": "key",
-          "atMs": 170940,
-          "relativeSeconds": 10.31
+          "atMs": 170927,
+          "relativeSeconds": 10.339
         },
         {
           "kind": "key",
-          "atMs": 171056,
-          "relativeSeconds": 10.426
+          "atMs": 171040,
+          "relativeSeconds": 10.452
         },
         {
           "kind": "key",
-          "atMs": 171172,
-          "relativeSeconds": 10.542
+          "atMs": 171154,
+          "relativeSeconds": 10.566
         },
         {
           "kind": "key",
-          "atMs": 171405,
-          "relativeSeconds": 10.775
+          "atMs": 171378,
+          "relativeSeconds": 10.79
         },
         {
           "kind": "key",
-          "atMs": 171518,
-          "relativeSeconds": 10.888
+          "atMs": 171491,
+          "relativeSeconds": 10.903
         },
         {
           "kind": "key",
-          "atMs": 171635,
-          "relativeSeconds": 11.005
+          "atMs": 171604,
+          "relativeSeconds": 11.016
         },
         {
           "kind": "key",
-          "atMs": 171756,
-          "relativeSeconds": 11.126
+          "atMs": 171716,
+          "relativeSeconds": 11.128
         },
         {
           "kind": "key",
-          "atMs": 171872,
-          "relativeSeconds": 11.242
+          "atMs": 171833,
+          "relativeSeconds": 11.245
         },
         {
           "kind": "key",
-          "atMs": 171986,
-          "relativeSeconds": 11.356
+          "atMs": 171948,
+          "relativeSeconds": 11.36
         },
         {
           "kind": "key",
-          "atMs": 172100,
-          "relativeSeconds": 11.47
+          "atMs": 172066,
+          "relativeSeconds": 11.478
         },
         {
           "kind": "key",
-          "atMs": 172215,
-          "relativeSeconds": 11.585
+          "atMs": 172183,
+          "relativeSeconds": 11.595
         },
         {
           "kind": "key",
-          "atMs": 172330,
-          "relativeSeconds": 11.7
+          "atMs": 172301,
+          "relativeSeconds": 11.713
         },
         {
           "kind": "key",
-          "atMs": 172449,
-          "relativeSeconds": 11.819
+          "atMs": 172419,
+          "relativeSeconds": 11.831
         },
         {
           "kind": "key",
-          "atMs": 172566,
-          "relativeSeconds": 11.936
+          "atMs": 172535,
+          "relativeSeconds": 11.947
         },
         {
           "kind": "key",
-          "atMs": 172683,
-          "relativeSeconds": 12.053
+          "atMs": 172653,
+          "relativeSeconds": 12.065
         },
         {
           "kind": "key",
-          "atMs": 172796,
-          "relativeSeconds": 12.166
+          "atMs": 172770,
+          "relativeSeconds": 12.182
         },
         {
           "kind": "key",
-          "atMs": 172913,
-          "relativeSeconds": 12.283
+          "atMs": 172887,
+          "relativeSeconds": 12.299
         },
         {
           "kind": "key",
-          "atMs": 173028,
-          "relativeSeconds": 12.398
+          "atMs": 173002,
+          "relativeSeconds": 12.414
         },
         {
           "kind": "key",
-          "atMs": 173143,
-          "relativeSeconds": 12.513
+          "atMs": 173120,
+          "relativeSeconds": 12.532
         },
         {
           "kind": "key",
-          "atMs": 173260,
-          "relativeSeconds": 12.63
+          "atMs": 173237,
+          "relativeSeconds": 12.649
         },
         {
           "kind": "key",
-          "atMs": 173375,
-          "relativeSeconds": 12.745
+          "atMs": 173352,
+          "relativeSeconds": 12.764
         },
         {
           "kind": "key",
-          "atMs": 173489,
-          "relativeSeconds": 12.859
+          "atMs": 173470,
+          "relativeSeconds": 12.882
         },
         {
           "kind": "key",
-          "atMs": 173605,
-          "relativeSeconds": 12.975
+          "atMs": 173586,
+          "relativeSeconds": 12.998
         },
         {
           "kind": "key",
-          "atMs": 173720,
-          "relativeSeconds": 13.09
+          "atMs": 173702,
+          "relativeSeconds": 13.114
         },
         {
           "kind": "key",
-          "atMs": 173836,
-          "relativeSeconds": 13.206
+          "atMs": 173815,
+          "relativeSeconds": 13.227
         },
         {
           "kind": "key",
-          "atMs": 173953,
-          "relativeSeconds": 13.323
+          "atMs": 173928,
+          "relativeSeconds": 13.34
         },
         {
           "kind": "key",
-          "atMs": 174066,
-          "relativeSeconds": 13.436
+          "atMs": 174040,
+          "relativeSeconds": 13.452
         },
         {
           "kind": "key",
-          "atMs": 174186,
-          "relativeSeconds": 13.556
+          "atMs": 174153,
+          "relativeSeconds": 13.565
         },
         {
           "kind": "key",
-          "atMs": 174298,
-          "relativeSeconds": 13.668
+          "atMs": 174266,
+          "relativeSeconds": 13.678
         },
         {
           "kind": "key",
-          "atMs": 174415,
-          "relativeSeconds": 13.785
+          "atMs": 174378,
+          "relativeSeconds": 13.79
         },
         {
           "kind": "key",
-          "atMs": 174530,
-          "relativeSeconds": 13.9
+          "atMs": 174491,
+          "relativeSeconds": 13.903
         },
         {
           "kind": "key",
-          "atMs": 174645,
+          "atMs": 174603,
           "relativeSeconds": 14.015
         },
         {
           "kind": "key",
-          "atMs": 174761,
-          "relativeSeconds": 14.131
+          "atMs": 174721,
+          "relativeSeconds": 14.133
         },
         {
           "kind": "key",
-          "atMs": 174877,
-          "relativeSeconds": 14.247
+          "atMs": 174833,
+          "relativeSeconds": 14.245
         },
         {
           "kind": "key",
-          "atMs": 174993,
-          "relativeSeconds": 14.363
+          "atMs": 174946,
+          "relativeSeconds": 14.358
         },
         {
           "kind": "key",
-          "atMs": 175108,
-          "relativeSeconds": 14.478
+          "atMs": 175059,
+          "relativeSeconds": 14.471
         },
         {
           "kind": "key",
-          "atMs": 175224,
-          "relativeSeconds": 14.594
+          "atMs": 175171,
+          "relativeSeconds": 14.583
         },
         {
           "kind": "key",
-          "atMs": 175341,
-          "relativeSeconds": 14.711
+          "atMs": 175288,
+          "relativeSeconds": 14.7
         },
         {
           "kind": "key",
-          "atMs": 175458,
-          "relativeSeconds": 14.828
+          "atMs": 175406,
+          "relativeSeconds": 14.818
         },
         {
           "kind": "key",
-          "atMs": 175573,
-          "relativeSeconds": 14.943
+          "atMs": 175524,
+          "relativeSeconds": 14.936
         },
         {
           "kind": "key",
-          "atMs": 175688,
-          "relativeSeconds": 15.058
+          "atMs": 175639,
+          "relativeSeconds": 15.051
         },
         {
           "kind": "key",
-          "atMs": 175805,
-          "relativeSeconds": 15.175
+          "atMs": 175757,
+          "relativeSeconds": 15.169
         },
         {
           "kind": "key",
-          "atMs": 175920,
-          "relativeSeconds": 15.29
+          "atMs": 175868,
+          "relativeSeconds": 15.28
         },
         {
           "kind": "key",
-          "atMs": 176035,
-          "relativeSeconds": 15.405
+          "atMs": 175988,
+          "relativeSeconds": 15.4
         },
         {
           "kind": "key",
-          "atMs": 176152,
-          "relativeSeconds": 15.522
+          "atMs": 176105,
+          "relativeSeconds": 15.517
         },
         {
           "kind": "key",
-          "atMs": 176267,
-          "relativeSeconds": 15.637
+          "atMs": 176221,
+          "relativeSeconds": 15.633
         },
         {
           "kind": "key",
-          "atMs": 176383,
-          "relativeSeconds": 15.753
+          "atMs": 176340,
+          "relativeSeconds": 15.752
         },
         {
           "kind": "key",
-          "atMs": 176501,
-          "relativeSeconds": 15.871
+          "atMs": 176454,
+          "relativeSeconds": 15.866
         },
         {
           "kind": "key",
-          "atMs": 176615,
-          "relativeSeconds": 15.985
+          "atMs": 176571,
+          "relativeSeconds": 15.983
         },
         {
           "kind": "key",
-          "atMs": 176733,
-          "relativeSeconds": 16.103
+          "atMs": 176688,
+          "relativeSeconds": 16.1
         },
         {
           "kind": "key",
-          "atMs": 176850,
-          "relativeSeconds": 16.22
+          "atMs": 176803,
+          "relativeSeconds": 16.215
         },
         {
           "kind": "key",
-          "atMs": 176966,
-          "relativeSeconds": 16.336
+          "atMs": 176915,
+          "relativeSeconds": 16.327
         },
         {
           "kind": "key",
-          "atMs": 177081,
-          "relativeSeconds": 16.451
+          "atMs": 177031,
+          "relativeSeconds": 16.443
         },
         {
           "kind": "key",
-          "atMs": 177204,
-          "relativeSeconds": 16.574
+          "atMs": 177144,
+          "relativeSeconds": 16.556
         },
         {
           "kind": "key",
-          "atMs": 177312,
-          "relativeSeconds": 16.682
+          "atMs": 177257,
+          "relativeSeconds": 16.669
         },
         {
           "kind": "key",
-          "atMs": 177429,
-          "relativeSeconds": 16.799
+          "atMs": 177370,
+          "relativeSeconds": 16.782
         },
         {
           "kind": "key",
-          "atMs": 177544,
-          "relativeSeconds": 16.914
+          "atMs": 177483,
+          "relativeSeconds": 16.895
         },
         {
           "kind": "key",
-          "atMs": 177658,
-          "relativeSeconds": 17.028
-        },
-        {
-          "kind": "click",
-          "atMs": 186295,
-          "relativeSeconds": 25.665
+          "atMs": 177597,
+          "relativeSeconds": 17.009
         },
         {
           "kind": "click",
-          "atMs": 190612,
-          "relativeSeconds": 29.982
+          "atMs": 186251,
+          "relativeSeconds": 25.663
         },
         {
           "kind": "click",
-          "atMs": 191395,
-          "relativeSeconds": 30.765
+          "atMs": 190550,
+          "relativeSeconds": 29.962
         },
         {
           "kind": "click",
-          "atMs": 200602,
-          "relativeSeconds": 39.972
+          "atMs": 191333,
+          "relativeSeconds": 30.745
         },
         {
           "kind": "click",
-          "atMs": 201384,
-          "relativeSeconds": 40.754
-        },
-        {
-          "kind": "key",
-          "atMs": 201691,
-          "relativeSeconds": 41.061
-        },
-        {
-          "kind": "key",
-          "atMs": 201691,
-          "relativeSeconds": 41.061
-        },
-        {
-          "kind": "key",
-          "atMs": 201694,
-          "relativeSeconds": 41.064
-        },
-        {
-          "kind": "key",
-          "atMs": 201807,
-          "relativeSeconds": 41.177
+          "atMs": 200579,
+          "relativeSeconds": 39.991
         },
         {
           "kind": "click",
-          "atMs": 202517,
-          "relativeSeconds": 41.887
+          "atMs": 201362,
+          "relativeSeconds": 40.774
         },
         {
           "kind": "key",
-          "atMs": 202824,
-          "relativeSeconds": 42.194
+          "atMs": 201669,
+          "relativeSeconds": 41.081
         },
         {
           "kind": "key",
-          "atMs": 202824,
-          "relativeSeconds": 42.194
+          "atMs": 201670,
+          "relativeSeconds": 41.082
         },
         {
           "kind": "key",
-          "atMs": 202827,
-          "relativeSeconds": 42.197
+          "atMs": 201674,
+          "relativeSeconds": 41.086
         },
         {
           "kind": "key",
-          "atMs": 202940,
-          "relativeSeconds": 42.31
-        },
-        {
-          "kind": "key",
-          "atMs": 203053,
-          "relativeSeconds": 42.423
-        },
-        {
-          "kind": "key",
-          "atMs": 203166,
-          "relativeSeconds": 42.536
-        },
-        {
-          "kind": "key",
-          "atMs": 203281,
-          "relativeSeconds": 42.651
-        },
-        {
-          "kind": "key",
-          "atMs": 203399,
-          "relativeSeconds": 42.769
-        },
-        {
-          "kind": "key",
-          "atMs": 203517,
-          "relativeSeconds": 42.887
+          "atMs": 201788,
+          "relativeSeconds": 41.2
         },
         {
           "kind": "click",
-          "atMs": 204119,
-          "relativeSeconds": 43.489
+          "atMs": 202495,
+          "relativeSeconds": 41.907
         },
         {
           "kind": "key",
-          "atMs": 204426,
-          "relativeSeconds": 43.796
+          "atMs": 202801,
+          "relativeSeconds": 42.213
         },
         {
           "kind": "key",
-          "atMs": 204426,
-          "relativeSeconds": 43.796
+          "atMs": 202802,
+          "relativeSeconds": 42.214
         },
         {
           "kind": "key",
-          "atMs": 204429,
-          "relativeSeconds": 43.799
+          "atMs": 202804,
+          "relativeSeconds": 42.216
         },
         {
           "kind": "key",
-          "atMs": 204542,
-          "relativeSeconds": 43.912
+          "atMs": 202917,
+          "relativeSeconds": 42.329
         },
         {
           "kind": "key",
-          "atMs": 204655,
-          "relativeSeconds": 44.025
+          "atMs": 203030,
+          "relativeSeconds": 42.442
         },
         {
           "kind": "key",
-          "atMs": 204768,
-          "relativeSeconds": 44.138
+          "atMs": 203144,
+          "relativeSeconds": 42.556
         },
         {
           "kind": "key",
-          "atMs": 204882,
-          "relativeSeconds": 44.252
+          "atMs": 203258,
+          "relativeSeconds": 42.67
         },
         {
           "kind": "key",
-          "atMs": 204996,
-          "relativeSeconds": 44.366
+          "atMs": 203372,
+          "relativeSeconds": 42.784
         },
         {
           "kind": "key",
-          "atMs": 205110,
-          "relativeSeconds": 44.48
-        },
-        {
-          "kind": "key",
-          "atMs": 205224,
-          "relativeSeconds": 44.594
-        },
-        {
-          "kind": "key",
-          "atMs": 205338,
-          "relativeSeconds": 44.708
-        },
-        {
-          "kind": "key",
-          "atMs": 205452,
-          "relativeSeconds": 44.822
-        },
-        {
-          "kind": "key",
-          "atMs": 205565,
-          "relativeSeconds": 44.935
-        },
-        {
-          "kind": "key",
-          "atMs": 205679,
-          "relativeSeconds": 45.049
-        },
-        {
-          "kind": "key",
-          "atMs": 205793,
-          "relativeSeconds": 45.163
-        },
-        {
-          "kind": "key",
-          "atMs": 205907,
-          "relativeSeconds": 45.277
-        },
-        {
-          "kind": "key",
-          "atMs": 206023,
-          "relativeSeconds": 45.393
-        },
-        {
-          "kind": "key",
-          "atMs": 206141,
-          "relativeSeconds": 45.511
-        },
-        {
-          "kind": "key",
-          "atMs": 206259,
-          "relativeSeconds": 45.629
-        },
-        {
-          "kind": "key",
-          "atMs": 206375,
-          "relativeSeconds": 45.745
-        },
-        {
-          "kind": "key",
-          "atMs": 206492,
-          "relativeSeconds": 45.862
-        },
-        {
-          "kind": "key",
-          "atMs": 206611,
-          "relativeSeconds": 45.981
-        },
-        {
-          "kind": "key",
-          "atMs": 206730,
-          "relativeSeconds": 46.1
-        },
-        {
-          "kind": "key",
-          "atMs": 206848,
-          "relativeSeconds": 46.218
-        },
-        {
-          "kind": "key",
-          "atMs": 206966,
-          "relativeSeconds": 46.336
-        },
-        {
-          "kind": "key",
-          "atMs": 207081,
-          "relativeSeconds": 46.451
-        },
-        {
-          "kind": "key",
-          "atMs": 207196,
-          "relativeSeconds": 46.566
-        },
-        {
-          "kind": "key",
-          "atMs": 207310,
-          "relativeSeconds": 46.68
-        },
-        {
-          "kind": "key",
-          "atMs": 207423,
-          "relativeSeconds": 46.793
-        },
-        {
-          "kind": "key",
-          "atMs": 207542,
-          "relativeSeconds": 46.912
-        },
-        {
-          "kind": "key",
-          "atMs": 207663,
-          "relativeSeconds": 47.033
-        },
-        {
-          "kind": "key",
-          "atMs": 207781,
-          "relativeSeconds": 47.151
-        },
-        {
-          "kind": "key",
-          "atMs": 207897,
-          "relativeSeconds": 47.267
-        },
-        {
-          "kind": "key",
-          "atMs": 208017,
-          "relativeSeconds": 47.387
-        },
-        {
-          "kind": "key",
-          "atMs": 208130,
-          "relativeSeconds": 47.5
-        },
-        {
-          "kind": "key",
-          "atMs": 208243,
-          "relativeSeconds": 47.613
-        },
-        {
-          "kind": "key",
-          "atMs": 208356,
-          "relativeSeconds": 47.726
-        },
-        {
-          "kind": "key",
-          "atMs": 208469,
-          "relativeSeconds": 47.839
-        },
-        {
-          "kind": "key",
-          "atMs": 208582,
-          "relativeSeconds": 47.952
-        },
-        {
-          "kind": "key",
-          "atMs": 208699,
-          "relativeSeconds": 48.069
+          "atMs": 203489,
+          "relativeSeconds": 42.901
         },
         {
           "kind": "click",
-          "atMs": 209283,
-          "relativeSeconds": 48.653
+          "atMs": 204095,
+          "relativeSeconds": 43.507
+        },
+        {
+          "kind": "key",
+          "atMs": 204402,
+          "relativeSeconds": 43.814
+        },
+        {
+          "kind": "key",
+          "atMs": 204402,
+          "relativeSeconds": 43.814
+        },
+        {
+          "kind": "key",
+          "atMs": 204406,
+          "relativeSeconds": 43.818
+        },
+        {
+          "kind": "key",
+          "atMs": 204518,
+          "relativeSeconds": 43.93
+        },
+        {
+          "kind": "key",
+          "atMs": 204633,
+          "relativeSeconds": 44.045
+        },
+        {
+          "kind": "key",
+          "atMs": 204746,
+          "relativeSeconds": 44.158
+        },
+        {
+          "kind": "key",
+          "atMs": 204860,
+          "relativeSeconds": 44.272
+        },
+        {
+          "kind": "key",
+          "atMs": 204973,
+          "relativeSeconds": 44.385
+        },
+        {
+          "kind": "key",
+          "atMs": 205088,
+          "relativeSeconds": 44.5
+        },
+        {
+          "kind": "key",
+          "atMs": 205214,
+          "relativeSeconds": 44.626
+        },
+        {
+          "kind": "key",
+          "atMs": 205327,
+          "relativeSeconds": 44.739
+        },
+        {
+          "kind": "key",
+          "atMs": 205441,
+          "relativeSeconds": 44.853
+        },
+        {
+          "kind": "key",
+          "atMs": 205556,
+          "relativeSeconds": 44.968
+        },
+        {
+          "kind": "key",
+          "atMs": 205669,
+          "relativeSeconds": 45.081
+        },
+        {
+          "kind": "key",
+          "atMs": 205783,
+          "relativeSeconds": 45.195
+        },
+        {
+          "kind": "key",
+          "atMs": 205900,
+          "relativeSeconds": 45.312
+        },
+        {
+          "kind": "key",
+          "atMs": 206018,
+          "relativeSeconds": 45.43
+        },
+        {
+          "kind": "key",
+          "atMs": 206134,
+          "relativeSeconds": 45.546
+        },
+        {
+          "kind": "key",
+          "atMs": 206252,
+          "relativeSeconds": 45.664
+        },
+        {
+          "kind": "key",
+          "atMs": 206367,
+          "relativeSeconds": 45.779
+        },
+        {
+          "kind": "key",
+          "atMs": 206485,
+          "relativeSeconds": 45.897
+        },
+        {
+          "kind": "key",
+          "atMs": 206602,
+          "relativeSeconds": 46.014
+        },
+        {
+          "kind": "key",
+          "atMs": 206720,
+          "relativeSeconds": 46.132
+        },
+        {
+          "kind": "key",
+          "atMs": 206838,
+          "relativeSeconds": 46.25
+        },
+        {
+          "kind": "key",
+          "atMs": 206962,
+          "relativeSeconds": 46.374
+        },
+        {
+          "kind": "key",
+          "atMs": 207075,
+          "relativeSeconds": 46.487
+        },
+        {
+          "kind": "key",
+          "atMs": 207189,
+          "relativeSeconds": 46.601
+        },
+        {
+          "kind": "key",
+          "atMs": 207302,
+          "relativeSeconds": 46.714
+        },
+        {
+          "kind": "key",
+          "atMs": 207415,
+          "relativeSeconds": 46.827
+        },
+        {
+          "kind": "key",
+          "atMs": 207531,
+          "relativeSeconds": 46.943
+        },
+        {
+          "kind": "key",
+          "atMs": 207652,
+          "relativeSeconds": 47.064
+        },
+        {
+          "kind": "key",
+          "atMs": 207768,
+          "relativeSeconds": 47.18
+        },
+        {
+          "kind": "key",
+          "atMs": 207886,
+          "relativeSeconds": 47.298
+        },
+        {
+          "kind": "key",
+          "atMs": 208004,
+          "relativeSeconds": 47.416
+        },
+        {
+          "kind": "key",
+          "atMs": 208123,
+          "relativeSeconds": 47.535
+        },
+        {
+          "kind": "key",
+          "atMs": 208240,
+          "relativeSeconds": 47.652
+        },
+        {
+          "kind": "key",
+          "atMs": 208357,
+          "relativeSeconds": 47.769
+        },
+        {
+          "kind": "key",
+          "atMs": 208475,
+          "relativeSeconds": 47.887
+        },
+        {
+          "kind": "key",
+          "atMs": 208590,
+          "relativeSeconds": 48.002
+        },
+        {
+          "kind": "key",
+          "atMs": 208709,
+          "relativeSeconds": 48.121
         },
         {
           "kind": "click",
-          "atMs": 210068,
-          "relativeSeconds": 49.438
+          "atMs": 209295,
+          "relativeSeconds": 48.707
         },
         {
           "kind": "click",
-          "atMs": 210884,
-          "relativeSeconds": 50.254
+          "atMs": 210079,
+          "relativeSeconds": 49.491
+        },
+        {
+          "kind": "click",
+          "atMs": 210866,
+          "relativeSeconds": 50.278
         }
       ],
       "frames": [
         {
           "scene": "message",
           "fraction": 0.0098527021035519,
-          "seconds": 161.23,
+          "seconds": 161.188,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-1.png"
         },
         {
           "scene": "message",
           "fraction": 0.25,
-          "seconds": 175.85425,
+          "seconds": 175.81225,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-25.png"
         },
         {
           "scene": "message",
           "fraction": 0.45,
-          "seconds": 188.03365,
+          "seconds": 187.99165,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-45.png"
         },
         {
           "scene": "message",
           "fraction": 0.6,
-          "seconds": 197.1682,
+          "seconds": 197.1262,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-60.png"
         },
         {
           "scene": "message",
           "fraction": 0.85,
-          "seconds": 212.39245000000003,
+          "seconds": 212.35045000000002,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-85.png"
         },
         {
           "scene": "message",
           "fraction": 0.995073648948224,
-          "seconds": 221.227,
+          "seconds": 221.185,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/message-end.png"
         }
       ]
     },
     {
       "chapter": "schedule",
-      "startSeconds": 223.791,
-      "endSeconds": 254.275,
+      "startSeconds": 223.748,
+      "endSeconds": 254.236,
       "sentences": [
         {
           "text": "Le matériel arrive plus tard :",
           "startMs": 410,
           "endMs": 1730,
           "method": "silence",
-          "videoSeconds": 224.201
+          "videoSeconds": 224.158
         },
         {
           "text": "nous devons décaler un horaire.",
           "startMs": 2086,
           "endMs": 4028,
           "method": "silence",
-          "videoSeconds": 225.877
+          "videoSeconds": 225.834
         },
         {
           "text": "Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier.",
           "startMs": 4229,
           "endMs": 9264,
           "method": "silence",
-          "videoSeconds": 228.02
+          "videoSeconds": 227.977
         },
         {
           "text": "Décalons les deux heures, puis enregistrons.",
           "startMs": 10054,
           "endMs": 11634,
           "method": "silence",
-          "videoSeconds": 233.845
+          "videoSeconds": 233.802
         },
         {
           "text": "L'application prévient les personnes déjà confirmées par un email de changement.",
           "startMs": 11785,
           "endMs": 16920,
           "method": "silence",
-          "videoSeconds": 235.576
+          "videoSeconds": 235.533
         },
         {
           "text": "Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning.",
           "startMs": 17276,
           "endMs": 22302,
           "method": "silence",
-          "videoSeconds": 241.067
+          "videoSeconds": 241.024
         },
         {
           "text": "Un email envoyé ne prouve pas que tout le monde l'a lu.",
           "startMs": 22860,
           "endMs": 25590,
           "method": "silence",
-          "videoSeconds": 246.651
+          "videoSeconds": 246.608
         },
         {
           "text": "Si le changement est urgent, contacte aussi les personnes directement.",
           "startMs": 25881,
           "endMs": 29707,
           "method": "silence",
-          "videoSeconds": 249.672
+          "videoSeconds": 249.629
         }
       ],
       "anchors": [
@@ -1849,374 +1849,374 @@
           "phrase": "Ouvrons le créneau concerné et",
           "startMs": 4229,
           "endMs": 9264,
-          "cueMs": 228021
+          "cueMs": 227978
         },
         {
           "segmentId": "schedule",
           "phrase": "Décalons les deux heures, puis",
           "startMs": 10054,
           "endMs": 11634,
-          "cueMs": 233846
+          "cueMs": 233802
         },
         {
           "segmentId": "schedule",
           "phrase": "L'application prévient les personnes déjà",
           "startMs": 11785,
           "endMs": 16920,
-          "cueMs": 235578
+          "cueMs": 235534
         },
         {
           "segmentId": "schedule",
           "phrase": "Lisons l'ancien et le nouvel",
           "startMs": 17276,
           "endMs": 22302,
-          "cueMs": 241069
+          "cueMs": 241025
         },
         {
           "segmentId": "schedule",
           "phrase": "Un email envoyé ne prouve",
           "startMs": 22860,
           "endMs": 25590,
-          "cueMs": 246652
+          "cueMs": 246611
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 225453,
-          "relativeSeconds": 1.662
+          "atMs": 225382,
+          "relativeSeconds": 1.634
         },
         {
           "kind": "click",
-          "atMs": 226246,
-          "relativeSeconds": 2.455
+          "atMs": 226164,
+          "relativeSeconds": 2.416
         },
         {
           "kind": "click",
-          "atMs": 228513,
-          "relativeSeconds": 4.722
+          "atMs": 228448,
+          "relativeSeconds": 4.7
         },
         {
           "kind": "key",
-          "atMs": 228821,
-          "relativeSeconds": 5.03
+          "atMs": 228755,
+          "relativeSeconds": 5.007
         },
         {
           "kind": "key",
-          "atMs": 228822,
-          "relativeSeconds": 5.031
+          "atMs": 228755,
+          "relativeSeconds": 5.007
         },
         {
           "kind": "key",
-          "atMs": 228824,
-          "relativeSeconds": 5.033
+          "atMs": 228757,
+          "relativeSeconds": 5.009
         },
         {
           "kind": "key",
-          "atMs": 228938,
-          "relativeSeconds": 5.147
+          "atMs": 228871,
+          "relativeSeconds": 5.123
         },
         {
           "kind": "key",
-          "atMs": 229050,
-          "relativeSeconds": 5.259
+          "atMs": 228983,
+          "relativeSeconds": 5.235
         },
         {
           "kind": "key",
-          "atMs": 229165,
-          "relativeSeconds": 5.374
+          "atMs": 229096,
+          "relativeSeconds": 5.348
         },
         {
           "kind": "key",
-          "atMs": 229277,
-          "relativeSeconds": 5.486
+          "atMs": 229209,
+          "relativeSeconds": 5.461
         },
         {
           "kind": "click",
-          "atMs": 234313,
-          "relativeSeconds": 10.522
+          "atMs": 234264,
+          "relativeSeconds": 10.516
         },
         {
           "kind": "key",
-          "atMs": 234620,
-          "relativeSeconds": 10.829
+          "atMs": 234572,
+          "relativeSeconds": 10.824
         },
         {
           "kind": "key",
-          "atMs": 234620,
-          "relativeSeconds": 10.829
+          "atMs": 234573,
+          "relativeSeconds": 10.825
         },
         {
           "kind": "key",
-          "atMs": 234623,
-          "relativeSeconds": 10.832
+          "atMs": 234576,
+          "relativeSeconds": 10.828
         },
         {
           "kind": "key",
-          "atMs": 234734,
-          "relativeSeconds": 10.943
+          "atMs": 234688,
+          "relativeSeconds": 10.94
         },
         {
           "kind": "key",
-          "atMs": 234847,
-          "relativeSeconds": 11.056
+          "atMs": 234801,
+          "relativeSeconds": 11.053
         },
         {
           "kind": "key",
-          "atMs": 234959,
-          "relativeSeconds": 11.168
+          "atMs": 234913,
+          "relativeSeconds": 11.165
         },
         {
           "kind": "key",
-          "atMs": 235072,
-          "relativeSeconds": 11.281
+          "atMs": 235026,
+          "relativeSeconds": 11.278
         },
         {
           "kind": "click",
-          "atMs": 236045,
-          "relativeSeconds": 12.254
+          "atMs": 236014,
+          "relativeSeconds": 12.266
         },
         {
           "kind": "click",
-          "atMs": 248333,
-          "relativeSeconds": 24.542
+          "atMs": 248273,
+          "relativeSeconds": 24.525
         }
       ],
       "frames": [
         {
           "scene": "schedule",
-          "fraction": 0.019682456370555046,
-          "seconds": 224.391,
+          "fraction": 0.019679874048806088,
+          "seconds": 224.348,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-2.png"
         },
         {
           "scene": "schedule",
           "fraction": 0.25,
-          "seconds": 231.412,
+          "seconds": 231.37,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-25.png"
         },
         {
           "scene": "schedule",
           "fraction": 0.45,
-          "seconds": 237.50879999999998,
+          "seconds": 237.4676,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-45.png"
         },
         {
           "scene": "schedule",
           "fraction": 0.6,
-          "seconds": 242.0814,
+          "seconds": 242.0408,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-60.png"
         },
         {
           "scene": "schedule",
           "fraction": 0.85,
-          "seconds": 249.70239999999998,
+          "seconds": 249.66279999999998,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-85.png"
         },
         {
           "scene": "schedule",
-          "fraction": 0.9901587718147224,
-          "seconds": 253.975,
+          "fraction": 0.990160062975597,
+          "seconds": 253.936,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/schedule-end.png"
         }
       ]
     },
     {
       "chapter": "cancel",
-      "startSeconds": 256.539,
-      "endSeconds": 289.815,
+      "startSeconds": 256.498,
+      "endSeconds": 289.773,
       "sentences": [
         {
           "text": "Une mission n'a plus lieu :",
           "startMs": 784,
           "endMs": 2013,
           "method": "silence",
-          "videoSeconds": 257.323
+          "videoSeconds": 257.282
         },
         {
           "text": "cette fois, on annule le créneau entier, pas une seule personne.",
           "startMs": 2482,
           "endMs": 5674,
           "method": "silence",
-          "videoSeconds": 259.021
+          "videoSeconds": 258.98
         },
         {
           "text": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
           "startMs": 6144,
           "endMs": 10217,
           "method": "silence",
-          "videoSeconds": 262.683
+          "videoSeconds": 262.642
         },
         {
           "text": "Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues.",
           "startMs": 10877,
           "endMs": 15892,
           "method": "silence",
-          "videoSeconds": 267.416
+          "videoSeconds": 267.375
         },
         {
           "text": "Une demande en attente de validation est aussi concernée.",
           "startMs": 16451,
           "endMs": 19695,
           "method": "silence",
-          "videoSeconds": 272.99
+          "videoSeconds": 272.949
         },
         {
           "text": "Vérifions le statut, puis le vrai email reçu.",
           "startMs": 20365,
           "endMs": 21640,
           "method": "silence",
-          "videoSeconds": 276.904
+          "videoSeconds": 276.863
         },
         {
           "text": "Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées pour arranger le planning.",
           "startMs": 21801,
           "endMs": 28969,
           "method": "silence",
-          "videoSeconds": 278.34
+          "videoSeconds": 278.299
         },
         {
           "text": "Annuler n'est pas simplement fermer les nouvelles inscriptions.",
           "startMs": 29381,
           "endMs": 32816,
           "method": "silence",
-          "videoSeconds": 285.92
+          "videoSeconds": 285.879
         }
       ],
       "anchors": [
         {
           "segmentId": "cancel",
-          "phrase": "Après confirmation, les inscriptions concernées",
-          "startMs": 10877,
-          "endMs": 15892,
-          "cueMs": 267417
+          "phrase": "Ouvrons la confirmation et prenons",
+          "startMs": 6144,
+          "endMs": 10217,
+          "cueMs": 262644
         },
         {
           "segmentId": "cancel",
           "phrase": "Une demande en attente de",
           "startMs": 16451,
           "endMs": 19695,
-          "cueMs": 272991
+          "cueMs": 272951
         },
         {
           "segmentId": "cancel",
           "phrase": "Si des présences ont déjà",
           "startMs": 21801,
           "endMs": 28969,
-          "cueMs": 278341
+          "cueMs": 278300
         },
         {
           "segmentId": "cancel",
           "phrase": "Annuler n'est pas simplement fermer",
           "startMs": 29381,
           "endMs": 32816,
-          "cueMs": 285922
+          "cueMs": 285880
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 267914,
-          "relativeSeconds": 11.375
+          "atMs": 263122,
+          "relativeSeconds": 6.624
         },
         {
           "kind": "click",
-          "atMs": 269331,
-          "relativeSeconds": 12.792
+          "atMs": 269287,
+          "relativeSeconds": 12.789
         }
       ],
       "frames": [
         {
           "scene": "cancel",
-          "fraction": 0.018031013342949875,
-          "seconds": 257.139,
+          "fraction": 0.018031555221637866,
+          "seconds": 257.098,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-2.png"
         },
         {
           "scene": "cancel",
           "fraction": 0.25,
-          "seconds": 264.858,
+          "seconds": 264.81675,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-25.png"
         },
         {
           "scene": "cancel",
           "fraction": 0.45,
-          "seconds": 271.5132,
+          "seconds": 271.47175,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-45.png"
         },
         {
           "scene": "cancel",
           "fraction": 0.6,
-          "seconds": 276.5046,
+          "seconds": 276.463,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-60.png"
         },
         {
           "scene": "cancel",
           "fraction": 0.85,
-          "seconds": 284.8236,
+          "seconds": 284.78175,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-85.png"
         },
         {
           "scene": "cancel",
-          "fraction": 0.990984493328525,
-          "seconds": 289.515,
+          "fraction": 0.990984222389181,
+          "seconds": 289.473,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/cancel-end.png"
         }
       ]
     },
     {
       "chapter": "journal",
-      "startSeconds": 292.082,
-      "endSeconds": 321.265,
+      "startSeconds": 292.043,
+      "endSeconds": 321.226,
       "sentences": [
         {
           "text": "Pour comprendre l'imprévu après coup, ouvrons le journal de l'événement.",
           "startMs": 467,
           "endMs": 4110,
           "method": "silence",
-          "videoSeconds": 292.549
+          "videoSeconds": 292.51
         },
         {
           "text": "Retrouvons le retrait, l'offre et son acceptation, puis le changement d'horaire et l'annulation.",
           "startMs": 4686,
           "endMs": 10294,
           "method": "silence",
-          "videoSeconds": 296.768
+          "videoSeconds": 296.729
         },
         {
           "text": "Le mode Récit peut montrer les conséquences reliées à une action.",
           "startMs": 10922,
           "endMs": 14282,
           "method": "silence",
-          "videoSeconds": 303.004
+          "videoSeconds": 302.965
         },
         {
           "text": "Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause.",
           "startMs": 15010,
           "endMs": 18439,
           "method": "silence",
-          "videoSeconds": 307.092
+          "videoSeconds": 307.053
         },
         {
           "text": "Le journal aide l'équipe à se coordonner ;",
           "startMs": 19080,
           "endMs": 21298,
           "method": "silence",
-          "videoSeconds": 311.162
+          "videoSeconds": 311.123
         },
         {
           "text": "il ne restaure pas un ancien planning.",
           "startMs": 21735,
           "endMs": 23258,
           "method": "silence",
-          "videoSeconds": 313.817
+          "videoSeconds": 313.778
         },
         {
           "text": "Et lire les coordonnées utiles se fait dans les vues prévues, pas en diffusant des captures d'historique.",
           "startMs": 23705,
           "endMs": 28807,
           "method": "silence",
-          "videoSeconds": 315.787
+          "videoSeconds": 315.748
         }
       ],
       "anchors": [
@@ -2225,120 +2225,120 @@
           "phrase": "Le mode Récit peut montrer",
           "startMs": 10922,
           "endMs": 14282,
-          "cueMs": 303006
+          "cueMs": 302966
         },
         {
           "segmentId": "journal",
           "phrase": "Deux lignes proches dans le",
           "startMs": 15010,
           "endMs": 18439,
-          "cueMs": 307093
+          "cueMs": 307054
         },
         {
           "segmentId": "journal",
           "phrase": "Le journal aide l'équipe à",
           "startMs": 19080,
           "endMs": 21298,
-          "cueMs": 311163
+          "cueMs": 311123
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 307562,
-          "relativeSeconds": 15.48
+          "atMs": 307522,
+          "relativeSeconds": 15.479
         },
         {
           "kind": "click",
-          "atMs": 311627,
-          "relativeSeconds": 19.545
+          "atMs": 311587,
+          "relativeSeconds": 19.544
         }
       ],
       "frames": [
         {
           "scene": "journal",
           "fraction": 0.02055991501901792,
-          "seconds": 292.682,
+          "seconds": 292.643,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-2.png"
         },
         {
           "scene": "journal",
           "fraction": 0.25,
-          "seconds": 299.37775,
+          "seconds": 299.33875,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-25.png"
         },
         {
           "scene": "journal",
           "fraction": 0.45,
-          "seconds": 305.21434999999997,
+          "seconds": 305.17535,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-45.png"
         },
         {
           "scene": "journal",
           "fraction": 0.6,
-          "seconds": 309.5918,
+          "seconds": 309.5528,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-60.png"
         },
         {
           "scene": "journal",
           "fraction": 0.85,
-          "seconds": 316.88755,
+          "seconds": 316.84855,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-85.png"
         },
         {
           "scene": "journal",
           "fraction": 0.9897200424904911,
-          "seconds": 320.965,
+          "seconds": 320.926,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/journal-end.png"
         }
       ]
     },
     {
       "chapter": "result",
-      "startSeconds": 323.528,
-      "endSeconds": 351.567,
+      "startSeconds": 323.486,
+      "endSeconds": 351.525,
       "sentences": [
         {
           "text": "Terminons dans la vue de couverture et les inscriptions à jour.",
           "startMs": 376,
           "endMs": 3651,
           "method": "silence",
-          "videoSeconds": 323.904
+          "videoSeconds": 323.862
         },
         {
           "text": "Nicolas a accepté sa place, Zoé est sur le créneau convenu, le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
           "startMs": 4031,
           "endMs": 12030,
           "method": "silence",
-          "videoSeconds": 327.559
+          "videoSeconds": 327.517
         },
         {
           "text": "Nous avons vérifié les résultats, pas seulement cliqué sur des boutons.",
           "startMs": 12183,
           "endMs": 15873,
           "method": "silence",
-          "videoSeconds": 335.711
+          "videoSeconds": 335.669
         },
         {
           "text": "En cas d'imprévu :",
           "startMs": 16340,
           "endMs": 17550,
           "method": "silence",
-          "videoSeconds": 339.868
+          "videoSeconds": 339.826
         },
         {
           "text": "un besoin précis, une proposition claire, l'accord des personnes et un dernier contrôle du planning.",
           "startMs": 18147,
           "endMs": 23754,
           "method": "silence",
-          "videoSeconds": 341.675
+          "videoSeconds": 341.633
         },
         {
           "text": "Cela laisse de la place aux changements, sans perdre les bénévoles en route.",
           "startMs": 24097,
           "endMs": 27724,
           "method": "silence",
-          "videoSeconds": 347.625
+          "videoSeconds": 347.583
         }
       ],
       "anchors": [
@@ -2347,65 +2347,65 @@
           "phrase": "Nicolas a accepté sa place",
           "startMs": 4031,
           "endMs": 12030,
-          "cueMs": 327560
+          "cueMs": 327518
         },
         {
           "segmentId": "result",
           "phrase": "Nous avons vérifié les résultats",
           "startMs": 12183,
           "endMs": 15873,
-          "cueMs": 335713
+          "cueMs": 335669
         },
         {
           "segmentId": "result",
           "phrase": "En cas d'imprévu ",
           "startMs": 16340,
           "endMs": 17550,
-          "cueMs": 339869
+          "cueMs": 339827
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 337313,
-          "relativeSeconds": 13.785
+          "atMs": 337278,
+          "relativeSeconds": 13.792
         }
       ],
       "frames": [
         {
           "scene": "result",
           "fraction": 0.021398766004493742,
-          "seconds": 324.128,
+          "seconds": 324.086,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-2.png"
         },
         {
           "scene": "result",
           "fraction": 0.25,
-          "seconds": 330.53775,
+          "seconds": 330.49575,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-25.png"
         },
         {
           "scene": "result",
           "fraction": 0.45,
-          "seconds": 336.14555,
+          "seconds": 336.10355,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-45.png"
         },
         {
           "scene": "result",
           "fraction": 0.6,
-          "seconds": 340.3514,
+          "seconds": 340.30940000000004,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-60.png"
         },
         {
           "scene": "result",
           "fraction": 0.85,
-          "seconds": 347.36115,
+          "seconds": 347.31915000000004,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-85.png"
         },
         {
           "scene": "result",
           "fraction": 0.9893006169977532,
-          "seconds": 351.267,
+          "seconds": 351.225,
           "file": "/private/tmp/codex-video/videos/output/last-minute-changes/review-frames/result-end.png"
         }
       ]

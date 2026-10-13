@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:47:54.993Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "promptSha256": "3f4e789b7e93e56fc87fe20107c5c6251010a11b3fa45a6455fdfde06ff89ef5",
+  "clipSha256": "c4eca91a11c76ab2462c27932a11000a688a33913cc8de2fce9b68c4cc4c3f86",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Aline ne peut plus venir à l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "elle annule son inscription",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur « Oui, annuler » dans la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Revenons dans les inscriptions côté organisation",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage du tableau de gestion des inscriptions côté organisateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "l'application lui propose de la prendre",
+        "visibleSeconds": 17.5,
+        "visible": "Ligne de Nicolas Exemple avec le statut « Place proposée »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas",
+        "visibleSeconds": 21,
+        "visible": "Ouverture de la boîte de réception affichant le courriel destiné à Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
