@@ -304,6 +304,8 @@ Distribué sous licence [GNU Affero General Public License v3.0](LICENSE).
 
 Les contributions restent la propriété de leurs auteurs respectifs, et les composants tiers restent soumis à leurs propres licences (voir [NOTICE](NOTICE)).
 
+La licence porte sur le code seulement : le nom et la marque « benevol.app », son logo, le domaine benevol.app et les données du service hébergé n'en font pas partie. Une version modifiée ou hébergée ailleurs prend son propre nom et son propre logo.
+
 ## Licence
 
 [GNU Affero General Public License v3.0](LICENSE)
