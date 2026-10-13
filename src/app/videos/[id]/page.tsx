@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
+import type { ReactNode } from "react"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import { preload } from "react-dom"
@@ -86,50 +87,19 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         <Link href="/videos" className="text-sm text-blue-600 hover:underline">← Bibliothèque vidéo</Link>
       </div>
 
-      <div>
+      {/* The player comes right under the title (watch page): Google indexed these pages with the
+          video as « contenu complémentaire » while the description and the text sections came first
+          or around it. The text stays on the page, after the video or in disclosures. */}
+      <div className="space-y-4">
         <h1 className="text-xl font-bold text-gray-900">{video.title}</h1>
-        <FreshnessNote dates={video.freshness} subject="Vidéo" className="mt-2" />
-        <p className="mt-2 max-w-[70ch] text-sm text-gray-600 leading-relaxed">{video.description}</p>
+        <VideoPlayer title={video.title} mediaUrls={mediaUrls} frame={videoFrame(video)} />
+        <div>
+          <p className="max-w-[70ch] text-sm text-gray-600 leading-relaxed">{video.description}</p>
+          <FreshnessNote dates={video.freshness} subject="Vidéo" className="mt-2" />
+        </div>
       </div>
-
-      <VideoPlayer title={video.title} mediaUrls={mediaUrls} frame={videoFrame(video)} />
 
       <VideoFeedback videoId={video.id} revision={video.revision} audience={video.audience} context={fromDoc ? "documentation" : "masterclass"} />
-
-      <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-        <div>
-          <dt className="text-xs font-medium text-gray-500">Durée</dt>
-          <dd className="text-gray-800">{formatDuration(video.durationMs)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gray-500">Niveau</dt>
-          <dd className="text-gray-800">{LEVEL_LABELS[video.level]}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gray-500">Public</dt>
-          <dd className="text-gray-800">{video.audience.map((a) => AUDIENCE_LABELS[a]).join(", ")}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gray-500">Fonctionnalité liée</dt>
-          <dd className="text-gray-800">{video.feature}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gray-500">Mise à jour</dt>
-          <dd className="text-gray-800">{updatedAtLabel}</dd>
-        </div>
-      </dl>
-
-      <div className="flex flex-wrap gap-1.5">
-        {video.themes.map((t) => (
-          <span key={t} className="inline-flex items-center rounded-full bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5">{themeLabel(t)}</span>
-        ))}
-        {video.tags.map((t) => (
-          <span key={t} className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5">{t}</span>
-        ))}
-        {!video.published && (
-          <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5">À venir</span>
-        )}
-      </div>
 
       {/* Viewer-facing content (#644 owner feedback): what the video explains, written from its
           narration — never the internal editorial script (Utilité/Démonstration/Résultat
@@ -139,41 +109,72 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         <p className="max-w-[70ch] text-sm text-gray-600 leading-relaxed">{viewer.summary}</p>
       </section>
 
-      <section aria-labelledby="video-steps-heading" className="space-y-2">
-        <h2 id="video-steps-heading" className="text-sm font-semibold text-gray-900">Les étapes</h2>
-        <ol className="max-w-[70ch] list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
-          {viewer.steps.map((step) => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-      </section>
-
-      <section aria-labelledby="video-remember-heading" className="space-y-2">
-        <h2 id="video-remember-heading" className="text-sm font-semibold text-gray-900">À retenir</h2>
-        <ul className="max-w-[70ch] list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
-          {viewer.remember.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </section>
-
-      {/* No separate « Transcription » heading: the summary below already names it, and two
-          near-identical labels in a row were read one after the other. */}
-      <section aria-label="Transcription complète">
-        {/* Closed by default (#644 accessibility review): still in the DOM, reachable by keyboard
-            and screen reader. From the manifest's segments, committed to the repo — never fetched
-            at build/ISR. */}
-        <details className="group">
-          <summary className="cursor-pointer list-none text-sm font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90 motion-reduce:transition-none mr-1">▸</span>
-            Transcription complète
-          </summary>
+      {/* One visible heading for the group, plain-text summaries (accessibility review): a heading
+          inside <summary> is dropped by some screen readers, and a heading above each summary would
+          read the same label twice. Closed by default, still in the DOM, reachable by keyboard and
+          screen reader. The transcript comes from the manifest's segments, committed to the repo. */}
+      <section aria-labelledby="video-more-heading" className="space-y-3">
+        <h2 id="video-more-heading" className="text-sm font-semibold text-gray-900">Pour aller plus loin</h2>
+        <Disclosure label={`Les étapes (${viewer.steps.length})`}>
+          <ol className="mt-3 max-w-[70ch] list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+            {viewer.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </Disclosure>
+        <Disclosure label={`À retenir (${viewer.remember.length})`}>
+          <ul className="mt-3 max-w-[70ch] list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+            {viewer.remember.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </Disclosure>
+        <Disclosure label="Transcription complète">
           <div className="mt-3 max-w-[70ch] text-sm text-gray-600 leading-relaxed space-y-3">
             {video.manifest.segments.map((segment) => (
               <p key={segment.id}>{segment.transcript}</p>
             ))}
           </div>
-        </details>
+        </Disclosure>
+      </section>
+
+      {/* Named for heading navigation, so these details don't read as part of « Pour aller plus loin ». */}
+      <section aria-labelledby="video-about-heading" className="space-y-4">
+        <h2 id="video-about-heading" className="sr-only">À propos de cette vidéo</h2>
+        <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+          <div>
+            <dt className="text-xs font-medium text-gray-500">Durée</dt>
+            <dd className="text-gray-800">{formatDuration(video.durationMs)}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium text-gray-500">Niveau</dt>
+            <dd className="text-gray-800">{LEVEL_LABELS[video.level]}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium text-gray-500">Public</dt>
+            <dd className="text-gray-800">{video.audience.map((a) => AUDIENCE_LABELS[a]).join(", ")}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium text-gray-500">Fonctionnalité liée</dt>
+            <dd className="text-gray-800">{video.feature}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium text-gray-500">Mise à jour</dt>
+            <dd className="text-gray-800">{updatedAtLabel}</dd>
+          </div>
+        </dl>
+
+        <div className="flex flex-wrap gap-1.5">
+          {video.themes.map((t) => (
+            <span key={t} className="inline-flex items-center rounded-full bg-gray-100 text-gray-700 text-xs font-medium px-2 py-0.5">{themeLabel(t)}</span>
+          ))}
+          {video.tags.map((t) => (
+            <span key={t} className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5">{t}</span>
+          ))}
+          {!video.published && (
+            <span className="inline-flex items-center rounded-full bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5">À venir</span>
+          )}
+        </div>
       </section>
 
       {related.length > 0 && (
@@ -192,5 +193,19 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         </section>
       )}
     </div>
+  )
+}
+
+// A closed-by-default disclosure: the native <details> exposes its state, the ▸ marker is decorative,
+// and Safari's own triangle is hidden (list-none alone doesn't remove it).
+function Disclosure({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <details className="group">
+      <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden text-sm font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <span aria-hidden="true" className="inline-block mr-1 transition-transform group-open:rotate-90 motion-reduce:transition-none">▸</span>
+        {label}
+      </summary>
+      {children}
+    </details>
   )
 }
