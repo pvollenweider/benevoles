@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:46:58.860Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "promptSha256": "1e51c240ed50598c78d73f43af506c473062e2f4a3b5602a03991aba476c7667",
+  "clipSha256": "f8cdec3353a2228009905b6e7a7facff2845a461ef26ff10cc7f262706495b24",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Nicolas et Léa arrivent ensemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Sélectionnons leurs deux lignes et vérifions le nombre",
+        "visibleSeconds": 4.1,
+        "visible": "Les cases de Léa et Nicolas sont cochées et la barre affiche 2 sélectionnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "avant de cliquer sur Marquer présents",
+        "visibleSeconds": 6.3,
+        "visible": "Clic sur le bouton Marquer présents (2)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Voici les deux marques",
+        "visibleSeconds": 8.1,
+        "visible": "La mention Présent avec une coche verte apparaît à côté des deux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Une demande en attente de validation n'est pas une inscription confirmée à pointer",
+        "visibleSeconds": 15.6,
+        "visible": "Défilement vers le bas affichant la ligne de Lucas avec le statut Demande à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

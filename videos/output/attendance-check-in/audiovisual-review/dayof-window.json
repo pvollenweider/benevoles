@@ -1,53 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:47:29.630Z",
-  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "reviewedAt": "2026-10-13T09:23:17.473Z",
+  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "promptSha256": "12a5f118e65299a15d2023b07784b70390379ed802261a99c8271bdb843dac6d",
-  "clipSha256": "3a812b90c418257d017325fad79d72a1db3df58d57e0442fa9cf8a3e427f240d",
+  "clipSha256": "507733ff00499b55149a5b725354477db3c67b6a688cd367c0588a76d4501ad9",
   "scene": "dayof-window",
   "review": {
-    "heardOpening": "La page Jour J se concentre",
+    "heardOpening": "La page Jour J se concentre sur les personnes attendues",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La page Jour J se concentre sur les personnes attendues maintenant",
-        "visibleSeconds": 0,
-        "visible": "En-tête de la page 'Jour J' affiché à l'écran",
+        "spokenSeconds": 0.8,
+        "spoken": "La page Jour J se concentre sur les personnes attendues maintenant.",
+        "visibleSeconds": 0.8,
+        "visible": "Titre 'Jour J' affiché avec le statut et les bénévoles attendus.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.2,
-        "spoken": "La vue En cours regroupe les créneaux qui ont commencé",
-        "visibleSeconds": 4.2,
-        "visible": "Section 'En cours' visible avec le créneau 'Veille commencée hier'",
+        "spokenSeconds": 4.5,
+        "spoken": "La vue En cours regroupe les créneaux qui ont commencé,",
+        "visibleSeconds": 4.5,
+        "visible": "Section 'En cours' affichée à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
-        "spoken": "Dans les trois prochaines heures montre les prochaines relèves",
+        "spokenSeconds": 7.9,
+        "spoken": "y compris une veille commencée hier et pas encore terminée.",
+        "visibleSeconds": 7.9,
+        "visible": "Créneau 'Veille, Veille commencée hier' bien visible sous 'En cours'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Dans les trois prochaines heures montre les prochaines relèves.",
+        "visibleSeconds": 11.2,
+        "visible": "Défilement vers la section 'Dans les 3 prochaines heures'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Plus tôt aujourd'hui permet de retrouver les créneaux terminés,",
         "visibleSeconds": 15,
-        "visible": "Défilement vers le bas faisant apparaître la section 'Dans les trois prochaines heures'",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 15,
-        "spoken": "Plus tôt aujourd'hui permet de retrouver les créneaux terminés",
-        "visibleSeconds": 16.5,
-        "visible": "Section 'Plus tôt aujourd'hui' visible avec '1 créneau terminé'",
+        "visible": "Section 'Plus tôt aujourd'hui' dépliée montrant le créneau terminé.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:11, la voix aborde la section 'Dans les trois prochaines heures' qui n'apparaît à l'écran qu'à 00:15 après le défilement de la page."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement intelligible."
+      "observation": "Voix claire, posée et bien synchronisée avec le défilement et les interactions sur l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:39:26.586Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "e293fef0557479348b1eaa49a4f6242030cf9669ccd9b06b8d771e85ef1f9d37",
+  "clipSha256": "4f0373c999c683e2fdc8c9f1082847d5c0e0e351641cda3a3c141bdbe9c34970",
+  "scene": "schedule",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tard",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier.",
+        "visibleSeconds": 2,
+        "visible": "Le formulaire Modifier le créneau est ouvert, affichant la date du 17 octobre et les horaires 14:00 - 16:00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Décalons les deux heures, puis enregistrons.",
+        "visibleSeconds": 10.5,
+        "visible": "L'heure de fin passe à 16:30 (après le début à 14:30), puis la modification est enregistrée avec retour à la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu",
+        "visibleSeconds": 16.8,
+        "visible": "L'e-mail de notification est affiché dans Mailpit avec l'ancien horaire barré et le nouveau (14:30 – 16:30).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "puis revenons au planning.",
+        "visibleSeconds": 22.2,
+        "visible": "L'affichage bascule à nouveau vers le planning des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

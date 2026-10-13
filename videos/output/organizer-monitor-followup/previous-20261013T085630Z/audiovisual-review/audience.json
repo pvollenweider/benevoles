@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:50.609Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "9b0101d3b6113ef945e220d266e0155c303402a503af0dcaaf0ff546e3654777",
+  "clipSha256": "9b9f1d7ef85aba94fff13471ed87cbbb27a73e3a93399253247c5f8d006034f1",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "tous les inscrits",
+        "visibleSeconds": 3.7,
+        "visible": "L'option « Tous les bénévoles inscrits » est sélectionnée avec la mention de 21 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.9,
+        "spoken": "un poste",
+        "visibleSeconds": 4.8,
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » (Buvette) recalculant à 13 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "la liste d’attente",
+        "visibleSeconds": 6.1,
+        "visible": "Sélection de « Les personnes en liste d'attente » recalculant à 3 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "les invités qui n'ont encore aucun créneau confirmé",
+        "visibleSeconds": 7.3,
+        "visible": "Sélection de « Les invités sans créneau confirmé » recalculant à 1 personne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Le nombre de personnes est recalculé avant l'envoi",
+        "visibleSeconds": 12.3,
+        "visible": "Le compteur de destinataires se réactualise sous les options au fil des sélections",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

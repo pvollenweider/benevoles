@@ -1,23 +1,23 @@
 STATUS: NOT READY
 ID: LAST_MINUTE_CHANGES
-Duration: 354.12
-BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
-Commit: 7e0069bba916e06d82b7009efff283aeface6afc
-Music: {'voicedWindows': 321, 'musicOnlyWindows': 1, 'smallestGapLu': 13.9, 'largestGapLu': 19.6, 'quietestMusicOnlyLufs': -33, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.3}
-Problems: Withdrawal admin navigation 5 s late; schedule return 4.5 s late. Final-MP4 ASR repeatedly returned empty schedule response. Seven emails verified; withdrawal receipt/acceptance confirmation suppressed by local recipient limit. Result Nicolas transiently off screen; Mailpit English dates nit.
-Source changes: Withdrawal dialog/confirm/admin navigation moved to their respective sentence anchors; planning return anchored to Un email envoyé ne prouve. Mail evidence guard supports real organiser digest and explicitly records suppressed notifications. No re-film after review; no src changes.
+Duration: 354.08
+BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
+Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
+Music: {'voicedWindows': 321, 'musicOnlyWindows': 1, 'smallestGapLu': 14, 'largestGapLu': 19.6, 'quietestMusicOnlyLufs': -33, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.3}
+Problems: All technical, narration, music and SMTP checks pass (nine delivered messages). Schedule ASR diagnosed as transient service failure and now passes. Withdrawal, schedule return and replacement cues aligned. Cancellation dialog remains about 4.7 s late; corrected to Ouvrons la confirmation sentence anchor after the single re-film, no third take. Nicolas missing flag disproved by exact frames 328.0, 329.0, 330.0 showing his row. Mailpit English dates nit.
+Source changes: Replacement selection/addition and coverage sentence anchors; remaining cancellation-dialog cue anchored to Ouvrons la confirmation. Empty-ASR bounded retry. No src changes.
 Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
 Real-time subjective listening unavailable; never used as a NOT READY reason.
-Subtitles match manifest text exactly: False
-MP4 frame evidence SHA256: 3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf
+Subtitles preserve manifest text with intended French numeric display formatting: True (review/caption-check.json; quatorze heures becomes 14 h).
+MP4 frame evidence SHA256: 14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3
 All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 1.335–31.995 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-withdrawal: 34.256–65.539 s; review/withdrawal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ["00:10 - 00:15 : La voix annonce le retour aux inscriptions côté organisation et commente le statut de confirmation active dès 00:13, mais l'ancien écran reste affiché jusqu'à 00:15.6 (retard supérieur à 2 secondes)."]
-offer: 67.812–94.342 s; review/offer-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-coverage: 96.604–126.656 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-availability: 128.92–158.372 s; review/availability-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-message: 160.636–221.535 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 7; reported issues []
-schedule: 223.803–254.288 s; review/schedule-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:21, la voix demande de revenir au planning, mais l'écran de messagerie reste affiché jusqu'à 00:25,5 avant la transition."]
-cancel: 256.551–289.827 s; review/cancel-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-journal: 292.097–321.278 s; review/journal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-result: 323.54–351.582 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ["À 00:05, lors de la mention de Nicolas ayant accepté sa place, son nom n'apparaît pas dans la portion visible de la liste des inscriptions."]
+welcome: 1.347–32.006 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+withdrawal: 34.265–65.548 s; review/withdrawal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+offer: 67.814–94.343 s; review/offer-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+coverage: 96.605–126.655 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+availability: 128.916–158.369 s; review/availability-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+message: 160.63–221.527 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 8; reported issues []
+schedule: 223.791–254.275 s; review/schedule-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+cancel: 256.539–289.815 s; review/cancel-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["00:06 - 00:10 : L'ouverture de la modale de confirmation intervient avec environ 3 à 4 secondes de décalage par rapport à l'annonce vocale."]
+journal: 292.082–321.265 s; review/journal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 323.528–351.567 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues ['À 00:04, la voix cite Nicolas comme ayant accepté sa place, mais la liste filtrée sous « Inscriptions » ne montre que Zoé, Sarah, Emma et Lucas.']

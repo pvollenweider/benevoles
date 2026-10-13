@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:39:09.707Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "d5090e8ed8f467fcea7df97a27fcab3d3573abe57d11fdae22942937362eede2",
+  "clipSha256": "067c25c88659aa1f421ec6e75781219373f4cdc37d9b814748e9b2fe6bd725eb",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités générales",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "regardons les disponibilités générales dans les membres",
+        "visibleSeconds": 2.1,
+        "visible": "Saisie de 'Zoé' dans la recherche et affichage de la fiche correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Zoé a indiqué le matin avec une remarque",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la mention 'Matin - Peut aussi aider en début d'après-midi après confirmation' dans la colonne Contact puis ouverture de la modale de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur 'Activité' et affichage de la page 'Activité de Zoé Exemple' avec l'inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, fluide et posée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

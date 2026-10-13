@@ -1,0 +1,298 @@
+{
+  "video": "volunteer-hours-certificate",
+  "source": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/volunteer-hours-certificate.mp4",
+  "sourceSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-13T07:57:04.986Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "hours-list",
+      "fraction": 0.021228417775261816,
+      "seconds": 4.055,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-2.png"
+    },
+    {
+      "scene": "hours-list",
+      "fraction": 0.25,
+      "seconds": 10.521,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-25.png"
+    },
+    {
+      "scene": "hours-list",
+      "fraction": 0.45,
+      "seconds": 16.1738,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-45.png"
+    },
+    {
+      "scene": "hours-list",
+      "fraction": 0.6,
+      "seconds": 20.4134,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-60.png"
+    },
+    {
+      "scene": "hours-list",
+      "fraction": 0.85,
+      "seconds": 27.4794,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-85.png"
+    },
+    {
+      "scene": "hours-list",
+      "fraction": 0.9893857911123691,
+      "seconds": 31.419,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-end.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.018429782528566162,
+      "seconds": 34.583,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-2.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.25,
+      "seconds": 42.122,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-25.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.45,
+      "seconds": 48.633199999999995,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-45.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.6,
+      "seconds": 53.5166,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-60.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.85,
+      "seconds": 61.6556,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-85.png"
+    },
+    {
+      "scene": "last-participation",
+      "fraction": 0.9907851087357169,
+      "seconds": 66.239,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-end.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.024965672200724005,
+      "seconds": 69.401,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-2.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.25,
+      "seconds": 74.80925,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-25.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.45,
+      "seconds": 79.61585000000001,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-45.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.6,
+      "seconds": 83.2208,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-60.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.85,
+      "seconds": 89.22905,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-85.png"
+    },
+    {
+      "scene": "activity",
+      "fraction": 0.987517163899638,
+      "seconds": 92.534,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-end.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.016488046166529265,
+      "seconds": 95.694,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-2.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.25,
+      "seconds": 104.1915,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-25.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.45,
+      "seconds": 111.4695,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-45.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.6,
+      "seconds": 116.928,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-60.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.85,
+      "seconds": 126.0255,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-85.png"
+    },
+    {
+      "scene": "period-export",
+      "fraction": 0.9917559769167353,
+      "seconds": 131.184,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-end.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.014871362712536558,
+      "seconds": 134.345,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-1.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.25,
+      "seconds": 143.8315,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-25.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.45,
+      "seconds": 151.9007,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-45.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.6,
+      "seconds": 157.95260000000002,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-60.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.85,
+      "seconds": 168.03910000000002,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-85.png"
+    },
+    {
+      "scene": "certificate-settings",
+      "fraction": 0.9925643186437317,
+      "seconds": 173.791,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-end.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.021078517477604076,
+      "seconds": 176.953,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-2.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.25,
+      "seconds": 183.46925,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-25.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.45,
+      "seconds": 189.16225,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-45.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.6,
+      "seconds": 193.432,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-60.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.85,
+      "seconds": 200.54825,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-85.png"
+    },
+    {
+      "scene": "certificate-presence",
+      "fraction": 0.989460741261198,
+      "seconds": 204.518,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-end.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.017595823924455262,
+      "seconds": 207.687,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-2.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.25,
+      "seconds": 215.61175,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-25.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.45,
+      "seconds": 222.43155,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-45.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.6,
+      "seconds": 227.5464,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-60.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.85,
+      "seconds": 236.07115,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-85.png"
+    },
+    {
+      "scene": "certificate-pdf",
+      "fraction": 0.9912020880377723,
+      "seconds": 240.886,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-end.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.017807324746245624,
+      "seconds": 244.066,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-2.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.25,
+      "seconds": 251.8895,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-25.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.45,
+      "seconds": 258.62829999999997,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-45.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.6,
+      "seconds": 263.68240000000003,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-60.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.85,
+      "seconds": 272.1059,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-85.png"
+    },
+    {
+      "scene": "event-summary",
+      "fraction": 0.9910963376268772,
+      "seconds": 276.86,
+      "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-end.png"
+    }
+  ]
+}

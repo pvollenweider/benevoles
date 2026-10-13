@@ -1,0 +1,41 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:34.612Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "fde51c61f8baea07baf1d3f10eb3eb7b3c701997dc705bc76373173129038c25",
+  "clipSha256": "377c84baaa1fe6633249ce4237201da0d4eb8ada0aa6e6358260df5f66215514",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les postes sur validation sont clairement signalés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les postes sur validation sont clairement signalés",
+        "visibleSeconds": 0.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Ouvre une demande pour vérifier la personne",
+        "visibleSeconds": 4.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Ici, on referme simplement la fenêtre",
+        "visibleSeconds": 10,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

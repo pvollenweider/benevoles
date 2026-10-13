@@ -1,229 +1,229 @@
 WEBVTT
 
-00:00:03.455 --> 00:00:07.441
+00:00:03.470 --> 00:00:07.456
 Reconnaître l'engagement, c'est aussi
 disposer d'un bilan clair. Dans la liste
 
-00:00:07.441 --> 00:00:11.427
+00:00:07.456 --> 00:00:11.442
 des membres, regardons les heures
 planifiées et les heures attestées. Pour
 
-00:00:11.427 --> 00:00:15.775
+00:00:11.442 --> 00:00:15.790
 Aline, 8 h étaient prévues sur ses
 créneaux confirmés passés, et six
 
-00:00:15.775 --> 00:00:21.211
+00:00:15.790 --> 00:00:21.226
 correspondent à une présence saisie. Ces 6
 h font partie des huit : elles ne
 
-00:00:21.211 --> 00:00:25.559
+00:00:21.226 --> 00:00:25.574
 s'ajoutent pas. Les créneaux à venir, les
 inscriptions annulées et les créneaux
 
-00:00:25.559 --> 00:00:30.632
+00:00:25.574 --> 00:00:30.647
 annulés ne gonflent pas ce bilan. Toutes
 les personnes et les données de cette
 
-00:00:30.632 --> 00:00:31.719
+00:00:30.647 --> 00:00:31.734
 démonstration sont fictives.
 
-00:00:33.983 --> 00:00:38.848
+00:00:33.998 --> 00:00:38.863
 La dernière participation apporte un autre
 repère. Pour Aline, la date du dernier
 
-00:00:38.848 --> 00:00:42.964
+00:00:38.863 --> 00:00:42.979
 créneau confirmé apparaît au-dessus de
 celle de sa dernière présence enregistrée.
 
-00:00:42.964 --> 00:00:47.828
+00:00:42.979 --> 00:00:47.843
 Pour Benoît, aucune présence n'a été
 saisie : ce n'est pas une preuve
 
-00:00:47.828 --> 00:00:52.693
+00:00:47.843 --> 00:00:52.708
 d'absence. Vous pouvez aussi trier les
 heures attestées. Un clic les classe par
 
-00:00:52.693 --> 00:00:57.557
+00:00:52.708 --> 00:00:57.572
 ordre croissant, un deuxième inverse cet
 ordre, et le troisième rétablit la liste
 
-00:00:57.557 --> 00:01:01.673
+00:00:57.572 --> 00:01:01.688
 initiale. Cliquons enfin sur Dernière
 participation pour trier cette date. Aucun
 
-00:01:01.673 --> 00:01:06.164
+00:01:01.688 --> 00:01:06.179
 de ces repères ne désactive
 automatiquement un membre : vous gardez la
 
-00:01:06.164 --> 00:01:06.538
+00:01:06.179 --> 00:01:06.553
 décision.
 
-00:01:08.801 --> 00:01:12.868
+00:01:08.814 --> 00:01:12.881
 Ouvrons l'activité d'Aline. Vous retrouvez
 les faits enregistrés, leur date et
 
-00:01:12.868 --> 00:01:17.305
+00:01:12.881 --> 00:01:17.318
 l'événement concerné. C'est utile pour
 comprendre son parcours et vérifier ce qui
 
-00:01:17.305 --> 00:01:22.481
+00:01:17.318 --> 00:01:22.494
 s'est passé. Ce journal ne mesure pas le
 temps réellement travaillé : les heures
 
-00:01:22.481 --> 00:01:27.658
+00:01:22.494 --> 00:01:27.671
 attestées reposent sur une présence saisie
 et sur la durée du créneau. L'absence de
 
-00:01:27.658 --> 00:01:32.464
+00:01:27.671 --> 00:01:32.477
 présence saisie ne permet pas, à elle
 seule, de conclure qu'une personne était
 
-00:01:32.464 --> 00:01:32.834
+00:01:32.477 --> 00:01:32.847
 absente.
 
-00:01:35.094 --> 00:01:39.789
+00:01:35.102 --> 00:01:39.797
 Pour préparer un bilan, revenons aux
 membres et ouvrons Heures par bénévole,
 
-00:01:39.789 --> 00:01:44.485
+00:01:39.797 --> 00:01:44.493
 pour une période. Choisissons le premier
 et le trente septembre. Téléchargeons le
 
-00:01:44.485 --> 00:01:49.963
+00:01:44.493 --> 00:01:49.971
 CSV. Il compte les créneaux confirmés non
 annulés de cette période, avec les heures
 
-00:01:49.963 --> 00:01:53.876
+00:01:49.971 --> 00:01:53.884
 planifiées et attestées séparées. Cochons
 maintenant l'option pour inclure les
 
-00:01:53.876 --> 00:01:58.180
+00:01:53.884 --> 00:01:58.188
 membres sans créneau confirmé, puis
 téléchargeons à nouveau. Dans ce vrai
 
-00:01:58.180 --> 00:02:03.267
+00:01:58.188 --> 00:02:03.275
 fichier, Clara apparaît avec des zéros. Le
 total indique 6 h planifiées, dont
 
-00:02:03.267 --> 00:02:08.354
+00:02:03.275 --> 00:02:08.362
 deux attestées. La période choisie
 détermine le bilan : si elle contient des
 
-00:02:08.354 --> 00:02:11.484
+00:02:08.362 --> 00:02:11.492
 dates futures, ces créneaux peuvent aussi
 y figurer.
 
-00:02:13.745 --> 00:02:17.948
+00:02:13.751 --> 00:02:17.954
 Préparons maintenant une attestation pour
 Aline. Depuis son activité, ouvrons
 
-00:02:17.948 --> 00:02:22.570
+00:02:17.954 --> 00:02:22.576
 Attestation de bénévolat. Choisissons une
 période du premier mai au trente
 
-00:02:22.570 --> 00:02:27.193
+00:02:22.576 --> 00:02:27.199
 septembre. Vous pouvez ajouter une
 remarque facultative : écrivons Accueil du
 
-00:02:27.193 --> 00:02:32.656
+00:02:27.199 --> 00:02:32.662
 public et rangement du matériel. L'aperçu
 reprend le nom du bénévole, celui de
 
-00:02:32.656 --> 00:02:38.120
+00:02:32.662 --> 00:02:38.126
 l'organisation, les dates et le détail par
 événement. Le logo enregistré dans les
 
-00:02:38.120 --> 00:02:43.583
+00:02:38.126 --> 00:02:43.589
 réglages de l'organisation apparaît aussi.
 Il est imprimé en gris pour garder un
 
-00:02:43.583 --> 00:02:49.887
+00:02:43.589 --> 00:02:49.893
 document adapté au noir et blanc. Prenez
 le temps de vérifier que cette période et
 
-00:02:49.887 --> 00:02:54.089
+00:02:49.893 --> 00:02:54.095
 ce commentaire correspondent bien au
 document que vous voulez remettre.
 
-00:02:56.353 --> 00:03:00.732
+00:02:56.357 --> 00:03:00.736
 Par défaut, l'attestation met en avant les
 heures attestées. Regardons cette colonne,
 
-00:03:00.732 --> 00:03:05.111
+00:03:00.736 --> 00:03:05.115
 puis cochons Inclure les heures planifiées
 sans présence saisie. Attention à la
 
-00:03:05.111 --> 00:03:09.856
+00:03:05.115 --> 00:03:09.860
 lecture : cette nouvelle colonne est le
 complément, pas le total des heures
 
-00:03:09.856 --> 00:03:14.235
+00:03:09.860 --> 00:03:14.239
 planifiées de la liste des membres. Pour
 Aline, nous retrouvons 6 h
 
-00:03:14.235 --> 00:03:18.614
+00:03:14.239 --> 00:03:18.618
 attestées et 2 h planifiées sans présence.
 Ce document ne prétend pas
 
-00:03:18.614 --> 00:03:23.723
+00:03:18.618 --> 00:03:23.727
 mesurer un temps de travail chronométré.
 Une présence non saisie n'est pas non plus
 
-00:03:23.723 --> 00:03:24.818
+00:03:23.727 --> 00:03:24.822
 une preuve d'absence.
 
-00:03:27.087 --> 00:03:31.775
+00:03:27.080 --> 00:03:31.768
 Quand le contenu vous convient, cliquons
 sur Générer et imprimer l'attestation.
 
-00:03:31.775 --> 00:03:36.037
+00:03:31.768 --> 00:03:36.030
 L'application lance l'impression du
 navigateur : vous pouvez l'enregistrer en
 
-00:03:36.037 --> 00:03:41.577
+00:03:36.030 --> 00:03:41.570
 PDF. Pour cette démonstration, nous
 ouvrons le vrai PDF produit par le moteur
 
-00:03:41.577 --> 00:03:46.265
+00:03:41.570 --> 00:03:46.258
 d'impression local du navigateur, pas un
 téléchargement proposé par le serveur.
 
-00:03:46.265 --> 00:03:51.806
+00:03:46.258 --> 00:03:51.799
 Relisons le nom, la période, les deux
 colonnes et la remarque. Les zones
 
-00:03:51.806 --> 00:03:57.346
+00:03:51.799 --> 00:03:57.339
 Signature et Nom du signataire restent à
 compléter. Vérifiez le document avant de
 
-00:03:57.346 --> 00:04:01.182
+00:03:57.339 --> 00:04:01.175
 le signer et de le remettre à la personne.
 
-00:04:03.466 --> 00:04:08.559
+00:04:03.439 --> 00:04:08.532
 Enfin, ouvrons les rapports de la Fête de
 septembre. Le résumé distingue les
 
-00:04:08.559 --> 00:04:12.477
+00:04:08.532 --> 00:04:12.450
 personnes et les inscriptions. Ici, deux
 bénévoles occupent trois créneaux
 
-00:04:12.477 --> 00:04:17.962
+00:04:12.450 --> 00:04:17.935
 confirmés : une personne participe pour la
 première fois, l'autre est de retour. Les
 
-00:04:17.962 --> 00:04:23.839
+00:04:17.935 --> 00:04:23.812
 présences n'ont été saisies que pour un
 créneau. Le bilan le signale : les autres
 
-00:04:23.839 --> 00:04:28.149
+00:04:23.812 --> 00:04:28.122
 ne sont pas déclarés absents. Nous
 retrouvons 6 h planifiées, dont
 
-00:04:28.149 --> 00:04:33.242
+00:04:28.122 --> 00:04:33.215
 deux attestées, puis le remplissage par
 poste. Ces repères vous aident à préparer
 
-00:04:33.242 --> 00:04:37.160
+00:04:33.215 --> 00:04:37.133
 la prochaine édition, sans confondre
 inscription, présence et durée prévue.
 

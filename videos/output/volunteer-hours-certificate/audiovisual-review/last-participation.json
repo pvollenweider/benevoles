@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:58:27.722Z",
-  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "reviewedAt": "2026-10-13T09:32:45.352Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
   "promptSha256": "13b5f76c321f1436f78c212f278851f78a617092bc3a5310c86caf595fb96099",
-  "clipSha256": "bb1147c6b0871e1553f0c6e2f06862586f0e8ad703bdd81cb4aeb88344e591ed",
+  "clipSha256": "81a1a1ae4e58b1f8a07eae50a6c9b8b90d3c97449381cffcb41e2aa034c3165b",
   "scene": "last-participation",
   "review": {
-    "heardOpening": "La dernière participation apporte un autre repère.",
+    "heardOpening": "La dernière participation apporte un autre repère",
     "checkpoints": [
       {
-        "spokenSeconds": 3.7,
-        "spoken": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus",
-        "visibleSeconds": 3.7,
-        "visible": "Dans la colonne Dernière participation pour Aline Mercier, la date du créneau s'affiche au-dessus de la présence enregistrée",
+        "spokenSeconds": 4.1,
+        "spoken": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée",
+        "visibleSeconds": 4.1,
+        "visible": "Dans la ligne Aline Mercier, la colonne Dernière participation affiche '12 septembre 2026' au-dessus de 'Présence le 12 septembre 2026'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.1,
+        "spokenSeconds": 9.9,
+        "spoken": "Pour Benoît, aucune présence n'a été saisie",
+        "visibleSeconds": 9.9,
+        "visible": "Dans la ligne Benoît Faure, la mention 'Aucune présence saisie' est visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.3,
         "spoken": "Un clic les classe par ordre croissant",
         "visibleSeconds": 16.8,
-        "visible": "Clic sur la colonne Heures attestées et réorganisation du tableau",
+        "visible": "Clic sur l'en-tête de colonne 'Heures attestées' et tri du tableau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 24.1,
+        "spokenSeconds": 23.5,
         "spoken": "Cliquons enfin sur Dernière participation pour trier cette date",
         "visibleSeconds": 26.6,
-        "visible": "Clic de la souris sur l'en-tête de colonne Dernière participation",
+        "visible": "Le curseur clique sur l'en-tête de colonne 'Dernière participation'",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "Entre 00:19 et 00:23, l'inversion de l'ordre par un deuxième clic n'est pas montrée à l'écran : le tableau revient brusquement à l'état initial sans afficher l'étape intermédiaire."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions sur l'interface."
+      "observation": "Voix off féminine claire, posée et parfaitement audible tout au long de l'extrait."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

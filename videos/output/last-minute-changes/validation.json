@@ -1,17 +1,17 @@
 {
   "id": "LAST_MINUTE_CHANGES",
   "slug": "last-minute-changes",
-  "validatedAt": "2026-10-13T06:35:00.177Z",
+  "validatedAt": "2026-10-13T08:47:38.092Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 354120,
+  "captureMs": 354080,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 30660,
+      "visualMs": 30659,
       "audioMs": 30658,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "withdrawal",
@@ -21,33 +21,33 @@
     },
     {
       "id": "offer",
-      "visualMs": 26530,
+      "visualMs": 26529,
       "audioMs": 26528,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "coverage",
-      "visualMs": 30052,
+      "visualMs": 30050,
       "audioMs": 30049,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "availability",
-      "visualMs": 29452,
+      "visualMs": 29453,
       "audioMs": 29452,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "message",
-      "visualMs": 60899,
+      "visualMs": 60897,
       "audioMs": 60895,
-      "driftMs": 4
+      "driftMs": 2
     },
     {
       "id": "schedule",
-      "visualMs": 30485,
+      "visualMs": 30484,
       "audioMs": 30484,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "cancel",
@@ -57,22 +57,22 @@
     },
     {
       "id": "journal",
-      "visualMs": 29181,
+      "visualMs": 29183,
       "audioMs": 29181,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 28042,
+      "visualMs": 28039,
       "audioMs": 28038,
-      "driftMs": 4
+      "driftMs": 1
     }
   ],
-  "anchorsChecked": 32,
+  "anchorsChecked": 33,
   "music": {
     "voicedWindows": 321,
     "musicOnlyWindows": 1,
-    "smallestGapLu": 13.9,
+    "smallestGapLu": 14,
     "largestGapLu": 19.6,
     "quietestMusicOnlyLufs": -33,
     "loudestMusicOnlyLufs": -33,

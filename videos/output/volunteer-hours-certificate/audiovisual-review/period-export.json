@@ -1,66 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:58:41.592Z",
-  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "reviewedAt": "2026-10-13T09:32:55.047Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
   "promptSha256": "3e6c557c067317dc668d15b6b51c3174285d665dd756bcee0e107e7a670a72cb",
-  "clipSha256": "c14818809c9f89f0f94ef2a3b6a50492cd90460102ba9521b4dca581d9538bf4",
+  "clipSha256": "41b76142e1dbb9d28a86dc124a16917011a5d110e42d1322df6ea92217623034",
   "scene": "period-export",
   "review": {
-    "heardOpening": "Pour préparer un bilan, revenons aux membres et ouvrons",
+    "heardOpening": "Pour préparer un bilan",
     "checkpoints": [
       {
-        "spokenSeconds": 2.7,
+        "spokenSeconds": 2.5,
         "spoken": "ouvrons Heures par bénévole, pour une période",
-        "visibleSeconds": 1.7,
-        "visible": "Dépliage de la section Heures par bénévole, pour une période (CSV) affichant les champs de dates",
+        "visibleSeconds": 1.8,
+        "visible": "Dépliement de la section Heures par bénévole, pour une période [CSV]",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
+        "spokenSeconds": 5.5,
         "spoken": "Choisissons le premier et le trente septembre",
         "visibleSeconds": 4.5,
-        "visible": "Saisie des dates 01/09/2026 et 30/09/2026 dans les champs Du et Au",
+        "visible": "Renseignement des dates du 01/09/2026 au 30/09/2026",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
-        "spoken": "Téléchargeons le CSV",
-        "visibleSeconds": 7.8,
-        "visible": "Clic sur le bouton Télécharger (CSV)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17.5,
+        "spokenSeconds": 17,
         "spoken": "Cochons maintenant l'option pour inclure les membres sans créneau confirmé",
-        "visibleSeconds": 19,
-        "visible": "Coche de la case Inclure les membres sans créneau confirmé sur la période",
+        "visibleSeconds": 17.2,
+        "visible": "Sélection de la case Inclure les membres sans créneau confirmé sur la période",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "puis téléchargeons à nouveau",
-        "visibleSeconds": 21.2,
-        "visible": "Nouveau clic sur Télécharger (CSV)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 23.4,
+        "spokenSeconds": 23.5,
         "spoken": "Dans ce vrai fichier, Clara apparaît avec des zéros",
         "visibleSeconds": 25.5,
-        "visible": "Affichage du tableau récapitulatif du CSV où Clara Besson a 0 événement, 0 créneau, 0 heure planifiée et 0 heure attestée",
+        "visible": "Affichage de la vue du CSV avec Clara Besson et des zéros pour chaque colonne",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.6,
+        "spokenSeconds": 26.5,
         "spoken": "Le total indique six heures planifiées, dont deux attestées",
         "visibleSeconds": 26,
-        "visible": "Ligne Total visible avec 6 heures planifiées et 2 heures attestées",
+        "visible": "Ligne Total affichant 6 heures planifiées et 2 heures attestées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -69,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement articulée, en bonne synchronisation avec les manipulations à l'écran."
+      "observation": "Voix posée, claire et dynamique, parfaitement en rythme avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

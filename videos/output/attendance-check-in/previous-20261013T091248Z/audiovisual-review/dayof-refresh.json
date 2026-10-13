@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:47:50.021Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
+  "clipSha256": "2b73ebd6b54c57409db86d071cbacbd0cb46feb5808e75c7667db52c1f37e5dc",
+  "scene": "dayof-refresh",
+  "review": {
+    "heardOpening": "Avec Actualiser, vous récupérez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Avec Actualiser, vous récupérez les informations",
+        "visibleSeconds": 1,
+        "visible": "Bouton 'Actualiser' affiché en haut de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "La page indique l'heure de sa mise à jour",
+        "visibleSeconds": 5.5,
+        "visible": "Mention 'Mis à jour à 9h43.' visible en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Dans cette démonstration, nous actualisons réellement la page",
+        "visibleSeconds": 12.1,
+        "visible": "Clic sur le bouton 'Actualiser', l'heure passe à 'Mis à jour à 9h44.'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et fluide, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

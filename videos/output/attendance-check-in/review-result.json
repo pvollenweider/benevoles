@@ -1,17 +1,17 @@
 {
   "id": "ATTENDANCE_CHECK_IN",
-  "status": "NOT READY",
-  "duration": 403.04,
-  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "status": "READY",
+  "duration": 398.84,
+  "buildId": "RPQR_7CtwLDa6m9DyYOBY",
   "music": {
     "voicedWindows": 350,
-    "musicOnlyWindows": 9,
+    "musicOnlyWindows": 7,
     "smallestGapLu": 13.6,
     "largestGapLu": 19.2,
     "quietestMusicOnlyLufs": -34,
-    "loudestMusicOnlyLufs": -32.9,
-    "medianVoiceLufs": -16.3
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.2
   },
-  "problems": "Original single-arrival reload fixed. Correction selection/undo/repoint and mobile role search still late; upcoming-section presentation late; undo early. Reload actually executed despite automated missing flag. Technical/final narration/music/CSV checks pass; subjective phone timbre flag not a blocker.",
-  "sourceChanges": "Correction cues moved to selection/repoint sentences; mobile temporal sections, role search, undo and reload now anchored to their describing sentences. No third take."
+  "problems": "All objective checks pass. Desktop correction, mobile sections/search and undo now aligned. CSV: five active inscriptions/four people, three pointed/two unpointed, Sarah excluded after cancellation with prior pointage retained. Automated undo-reload flag rejected: successful recorder unconditionally executes page.reload at sentence anchor (374.678 s), then verifies null pointage and active registration in current database; stable redraw does not require clicking Actualiser. Exact frames review/undo-*.png and dayof-undo-observations.json retained.",
+  "sourceChanges": "None; batch 14 sentence anchors retained. No re-film needed."
 }

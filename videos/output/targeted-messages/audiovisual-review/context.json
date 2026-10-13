@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:28:00.687Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:12:03.198Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "41a9d7f68d35eea1b4b99147ef12a1791d58721a8028b59f3c752df09d48e6b0",
-  "clipSha256": "7c1bbd9a02e377745cab9badab7fe43f4b80e6ec4b8fef0df9724fd098feab1a",
+  "clipSha256": "a2dcd99676d16b5cc347dd862e0dec0c658e74532401aa3738134c191318bb1f",
   "scene": "context",
   "review": {
-    "heardOpening": "Un modèle contenant créneau ne convient pas",
+    "heardOpening": "Un modèle contenant créneau",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Un modèle contenant créneau ne convient pas à toute l'équipe",
-        "visibleSeconds": 1,
-        "visible": "Option 'Tous les bénévoles inscrits' sélectionnée avec le modèle contenant la variable créneau en erreur",
+        "spokenSeconds": 5.4,
+        "spoken": "Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir.",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage des champs avec bordure rouge d'erreur sous l'option 22 personnes sélectionnées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "l'erreur explique pourquoi le texte n'est pas prêt à partir",
-        "visibleSeconds": 6.5,
-        "visible": "Affichage des messages d'erreur et encadrements rouges sur les champs Objet et Message",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 10,
-        "spoken": "Revenons à un seul créneau",
+        "spokenSeconds": 10.1,
+        "spoken": "Revenons à un seul créneau.",
         "visibleSeconds": 11.5,
-        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' avec sélection d'un créneau spécifique",
+        "visible": "Retour en haut du formulaire avec l'option 'Les bénévoles d'un créneau' sélectionnée pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Pour écrire à tout le monde, vous pouvez aussi adapter le modèle",
+        "visibleSeconds": 12.5,
+        "visible": "Vue du formulaire avec les options destinataires et les modèles disponibles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

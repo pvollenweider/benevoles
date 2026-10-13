@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:28:00.687Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "41a9d7f68d35eea1b4b99147ef12a1791d58721a8028b59f3c752df09d48e6b0",
+  "clipSha256": "7c1bbd9a02e377745cab9badab7fe43f4b80e6ec4b8fef0df9724fd098feab1a",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Un modèle contenant créneau ne convient pas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un modèle contenant créneau ne convient pas à toute l'équipe",
+        "visibleSeconds": 1,
+        "visible": "Option 'Tous les bénévoles inscrits' sélectionnée avec le modèle contenant la variable créneau en erreur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "l'erreur explique pourquoi le texte n'est pas prêt à partir",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage des messages d'erreur et encadrements rouges sur les champs Objet et Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Revenons à un seul créneau",
+        "visibleSeconds": 11.5,
+        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' avec sélection d'un créneau spécifique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

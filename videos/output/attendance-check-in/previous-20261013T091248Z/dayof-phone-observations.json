@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-13T07:43:19.977Z",
+  "chapter": "dayof-phone",
+  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "observed": {
+    "actualTelephoneLink": true,
+    "callPlaced": false
+  },
+  "finalValidation": false
+}

@@ -1,0 +1,141 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T06:46:44.609Z",
+  "revalidatedAt": "2026-10-13T06:46:44.610Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "overview",
+      "audioSha256": "ee48ac1e1170f0560f43a2f21f975011e849e9bda556dddfb257dded388e2c29",
+      "recognized": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l'événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.",
+      "expected": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "coverage",
+      "audioSha256": "32c2d8f7843fca82ed8a3f1516be98e6c11c0c8029c71f5c379f0d18d3f03ed8",
+      "recognized": "Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places et les personnes placées en liste d'attente. Tu sais ainsi où concentrer tes efforts.",
+      "expected": "Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Tu sais ainsi où concentrer tes efforts.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "registrations",
+      "audioSha256": "b5e8218da14f8a47c346a783a8465761068a82dfca083f796ff1ffd8266445fa",
+      "recognized": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions comme la taille du t-shirt ou le régime alimentaire restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
+      "expected": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "requests",
+      "audioSha256": "5eb60071d87d6212a4d0c2283b3d5a581c24fc8ee293d9b1337d67901ea93fbf",
+      "recognized": "Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre, aucune décision n'est prise pendant la démonstration.",
+      "expected": "Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "filters",
+      "audioSha256": "f6421939cb486de8c9f231f094ecedcfb96bb5c909342084bca52a4ec1675f68",
+      "recognized": "Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t'intéresse.",
+      "expected": "Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t’intéresse.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "actions",
+      "audioSha256": "de13aaa091ee61ba1112b59217da08898bfeaaf77b52da75a78760a2655a96d8",
+      "recognized": "Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels. Le bénévole peut consulter ou modifier ses choix sans créer de compte.",
+      "expected": "Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "audience",
+      "audioSha256": "99e9f0dc5d87dccba15478af24fce1ac955c9843b6ecf7210831acdf2f9265b3",
+      "recognized": "Pour une relance, choisis précisément les destinataires, tous les inscrits, un poste, un créneau, la liste d'attente ou les invités qui n'ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l'envoi.",
+      "expected": "Pour une relance, choisis précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "message",
+      "audioSha256": "3c590e78a8662f770eb5d009ded900b7cb43c3500326d1cb2f2a286e2dec3518",
+      "recognized": "Tu peux partir d'un modèle, adapter l'objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d'envoyer quoi que ce soit, ouvre l'aperçu, tu contrôles le rendu exact et le nombre de destinataires.",
+      "expected": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvre l’aperçu : tu contrôles le rendu exact et le nombre de destinataires.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "channels",
+      "audioSha256": "a63f793bfb6582beb2c936405fe4880feadcc4055d235d4d1d336919d395c006",
+      "recognized": "L'email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur. Elle ne touche que les bénévoles qui l'ont activée. La confirmation finale évite les envois involontaires.",
+      "expected": "L’email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reminders",
+      "audioSha256": "1bc33763574ddaac41cd7e83126eca09a0a1423e0b05c8649cdc20515829b332",
+      "recognized": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs et l'application utilise les horaires locaux de l'organisation pour envoyer les bonnes informations au bon moment.",
+      "expected": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reports",
+      "audioSha256": "a5f0d309b36f4d8f0c237a92ca98fbbeacddbf561620c1d9c9c2c7216fec527f",
+      "recognized": "À l'approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.",
+      "expected": "À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "history",
+      "audioSha256": "354d4c17eb60d335a6b0309310246c8cc3ffb260dc5099ec95b7df4b32010c98",
+      "recognized": "Enfin, le journal d'activité permet de comprendre ce qui a changé. Publication, nouvelle inscription, désinscription, modification d'un créneau ou ajout manuel. Chaque action est datée avec son origine. Tu gardes ainsi le fil même à plusieurs organisateurs.",
+      "expected": "Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Tu gardes ainsi le fil, même à plusieurs organisateurs.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "done",
+      "audioSha256": "6681bea8b245055a5eb99437a8874faeeb709bd97ffb82444d2ecaa987cdab65",
+      "recognized": "Le résultat, c'est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l'historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu'au jour de l'événement.",
+      "expected": "Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu’au jour de l’événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

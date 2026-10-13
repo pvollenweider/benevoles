@@ -1,0 +1,406 @@
+{
+  "slug": "volunteer-hours-certificate",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-13T07:56:44.480Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
+    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
+    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+    "snapshot": "/tmp/benevoles-video-production.batch14resume",
+    "builtAt": "2026-10-13T04:30:00.658Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-heures",
+    "scenario": "VOLUNTEER_HOURS_CERTIFICATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 48845
+    },
+    {
+      "kind": "click",
+      "atMs": 51210
+    },
+    {
+      "kind": "click",
+      "atMs": 57910
+    },
+    {
+      "kind": "click",
+      "atMs": 61643
+    },
+    {
+      "kind": "click",
+      "atMs": 69288
+    },
+    {
+      "kind": "click",
+      "atMs": 96793
+    },
+    {
+      "kind": "click",
+      "atMs": 97608
+    },
+    {
+      "kind": "click",
+      "atMs": 99425
+    },
+    {
+      "kind": "click",
+      "atMs": 101209
+    },
+    {
+      "kind": "click",
+      "atMs": 112591
+    },
+    {
+      "kind": "click",
+      "atMs": 113375
+    },
+    {
+      "kind": "click",
+      "atMs": 137864
+    },
+    {
+      "kind": "click",
+      "atMs": 141757
+    },
+    {
+      "kind": "click",
+      "atMs": 143589
+    },
+    {
+      "kind": "click",
+      "atMs": 145707
+    },
+    {
+      "kind": "key",
+      "atMs": 146015
+    },
+    {
+      "kind": "key",
+      "atMs": 146095
+    },
+    {
+      "kind": "key",
+      "atMs": 146173
+    },
+    {
+      "kind": "key",
+      "atMs": 146252
+    },
+    {
+      "kind": "key",
+      "atMs": 146331
+    },
+    {
+      "kind": "key",
+      "atMs": 146409
+    },
+    {
+      "kind": "key",
+      "atMs": 146487
+    },
+    {
+      "kind": "key",
+      "atMs": 146565
+    },
+    {
+      "kind": "key",
+      "atMs": 146643
+    },
+    {
+      "kind": "key",
+      "atMs": 146721
+    },
+    {
+      "kind": "key",
+      "atMs": 146803
+    },
+    {
+      "kind": "key",
+      "atMs": 146883
+    },
+    {
+      "kind": "key",
+      "atMs": 146967
+    },
+    {
+      "kind": "key",
+      "atMs": 147048
+    },
+    {
+      "kind": "key",
+      "atMs": 147132
+    },
+    {
+      "kind": "key",
+      "atMs": 147216
+    },
+    {
+      "kind": "key",
+      "atMs": 147299
+    },
+    {
+      "kind": "key",
+      "atMs": 147377
+    },
+    {
+      "kind": "key",
+      "atMs": 147458
+    },
+    {
+      "kind": "key",
+      "atMs": 147543
+    },
+    {
+      "kind": "key",
+      "atMs": 147624
+    },
+    {
+      "kind": "key",
+      "atMs": 147710
+    },
+    {
+      "kind": "key",
+      "atMs": 147791
+    },
+    {
+      "kind": "key",
+      "atMs": 147875
+    },
+    {
+      "kind": "key",
+      "atMs": 147955
+    },
+    {
+      "kind": "key",
+      "atMs": 148038
+    },
+    {
+      "kind": "key",
+      "atMs": 148118
+    },
+    {
+      "kind": "key",
+      "atMs": 148202
+    },
+    {
+      "kind": "key",
+      "atMs": 148285
+    },
+    {
+      "kind": "key",
+      "atMs": 148369
+    },
+    {
+      "kind": "key",
+      "atMs": 148450
+    },
+    {
+      "kind": "key",
+      "atMs": 148531
+    },
+    {
+      "kind": "key",
+      "atMs": 148610
+    },
+    {
+      "kind": "key",
+      "atMs": 148688
+    },
+    {
+      "kind": "key",
+      "atMs": 148767
+    },
+    {
+      "kind": "key",
+      "atMs": 148847
+    },
+    {
+      "kind": "key",
+      "atMs": 148928
+    },
+    {
+      "kind": "key",
+      "atMs": 149089
+    },
+    {
+      "kind": "key",
+      "atMs": 149166
+    },
+    {
+      "kind": "key",
+      "atMs": 149244
+    },
+    {
+      "kind": "key",
+      "atMs": 149325
+    },
+    {
+      "kind": "key",
+      "atMs": 149409
+    },
+    {
+      "kind": "click",
+      "atMs": 180588
+    },
+    {
+      "kind": "click",
+      "atMs": 207921
+    }
+  ],
+  "cues": [
+    {
+      "id": "hours-list",
+      "startMs": 3455,
+      "endMs": 31719
+    },
+    {
+      "id": "last-participation",
+      "startMs": 33983,
+      "endMs": 66539
+    },
+    {
+      "id": "activity",
+      "startMs": 68801,
+      "endMs": 92834
+    },
+    {
+      "id": "period-export",
+      "startMs": 95094,
+      "endMs": 131484
+    },
+    {
+      "id": "certificate-settings",
+      "startMs": 133745,
+      "endMs": 174091
+    },
+    {
+      "id": "certificate-presence",
+      "startMs": 176353,
+      "endMs": 204818
+    },
+    {
+      "id": "certificate-pdf",
+      "startMs": 207087,
+      "endMs": 241186
+    },
+    {
+      "id": "event-summary",
+      "startMs": 243466,
+      "endMs": 277160
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "last-participation",
+      "phrase": "Pour Benoît, aucune présence n'a",
+      "startMs": 9940,
+      "endMs": 12066,
+      "cueMs": 43924
+    },
+    {
+      "segmentId": "last-participation",
+      "phrase": "Vous pouvez aussi trier les",
+      "startMs": 14391,
+      "endMs": 16253,
+      "cueMs": 48376
+    },
+    {
+      "segmentId": "last-participation",
+      "phrase": "Un clic les classe par",
+      "startMs": 16760,
+      "endMs": 22961,
+      "cueMs": 50746
+    },
+    {
+      "segmentId": "last-participation",
+      "phrase": "Cliquons enfin sur Dernière participation",
+      "startMs": 23464,
+      "endMs": 26569,
+      "cueMs": 57448
+    },
+    {
+      "segmentId": "last-participation",
+      "phrase": "Aucun de ces repères ne",
+      "startMs": 27176,
+      "endMs": 30778,
+      "cueMs": 61160
+    },
+    {
+      "segmentId": "period-export",
+      "phrase": "Cochons maintenant l'option pour inclure",
+      "startMs": 17017,
+      "endMs": 22189,
+      "cueMs": 112116
+    },
+    {
+      "segmentId": "period-export",
+      "phrase": "Le total indique six heures",
+      "startMs": 25861,
+      "endMs": 29137,
+      "cueMs": 120956
+    },
+    {
+      "segmentId": "certificate-settings",
+      "phrase": "Depuis son activité, ouvrons Attestation de bénévolat",
+      "startMs": 3620,
+      "endMs": 6845,
+      "cueMs": 137367
+    },
+    {
+      "segmentId": "certificate-settings",
+      "phrase": "Choisissons une période du premier mai",
+      "startMs": 7483,
+      "endMs": 11046,
+      "cueMs": 141230
+    },
+    {
+      "segmentId": "certificate-settings",
+      "phrase": "Vous pouvez ajouter une remarque facultative",
+      "startMs": 11461,
+      "endMs": 13899,
+      "cueMs": 145208
+    },
+    {
+      "segmentId": "certificate-settings",
+      "phrase": "L'aperçu reprend le nom du bénévole",
+      "startMs": 18383,
+      "endMs": 23428,
+      "cueMs": 152130
+    },
+    {
+      "segmentId": "certificate-presence",
+      "phrase": "Regardons cette colonne, puis cochons",
+      "startMs": 3774,
+      "endMs": 8326,
+      "cueMs": 180128
+    },
+    {
+      "segmentId": "certificate-presence",
+      "phrase": "Pour Aline, nous retrouvons six heures",
+      "startMs": 16076,
+      "endMs": 20595,
+      "cueMs": 192430
+    },
+    {
+      "segmentId": "certificate-pdf",
+      "phrase": "Quand le contenu vous convient",
+      "startMs": 336,
+      "endMs": 5204,
+      "cueMs": 207423
+    }
+  ]
+}

@@ -1,25 +1,25 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:27:47.110Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:11:57.476Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "9fbb2c01ab7a78f80b2c7a61608076414cb6fdd7947a7ee1a3ba0b97cb1a7391",
-  "clipSha256": "0ee6e728599f1902f776ee83569ae9543dafd7801c68ca2474b6da5db25c1455",
+  "clipSha256": "cf869f8fec72669dfe9684c4d8ffd3a32b8ed8a077a5f7866c229c21ee0204fc",
   "scene": "template-create",
   "review": {
     "heardOpening": "Pour une consigne que vous réutilisez",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 4.5,
         "spoken": "puis Nouveau modèle",
         "visibleSeconds": 1.5,
-        "visible": "Clic sur le lien « Nouveau modèle » et affichage du formulaire",
-        "sync": "early",
+        "visible": "Clic sur Nouveau modèle et ouverture du formulaire d'ajout",
+        "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
+        "spokenSeconds": 10.8,
         "spoken": "Prenons Briefing avant le créneau",
-        "visibleSeconds": 12,
+        "visibleSeconds": 11.5,
         "visible": "Saisie de « Briefing avant le créneau » dans le champ Nom du modèle",
         "sync": "aligned",
         "severity": "none"
@@ -27,16 +27,16 @@
       {
         "spokenSeconds": 16,
         "spoken": "L'objet annonce le sujet de l'email",
-        "visibleSeconds": 17.5,
-        "visible": "Saisie de l'objet « Ton briefing pour {poste} » puis du corps du message",
+        "visibleSeconds": 17,
+        "visible": "Saisie de l'objet avec variable dans le champ Objet",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 29.1,
+        "spokenSeconds": 29.2,
         "spoken": "Enregistrons",
-        "visibleSeconds": 29.8,
-        "visible": "Clic sur Enregistrer et confirmation « Modèle « Briefing avant le créneau » créé »",
+        "visibleSeconds": 30,
+        "visible": "Enregistrement du modèle et message de confirmation affiché",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les démonstrations à l'écran."
+      "observation": "Voix naturelle, chaleureuse et parfaitement intelligible, débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

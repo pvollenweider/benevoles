@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:47:34.846Z",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "promptSha256": "8c15d3068db5ed88469590a5cc56b77d2556be244e2beba7018aa3e77898eb3e",
+  "clipSha256": "1f06fffe14ee02a9d3cc88c081e7a808befe248e28640bf4bc9f1c8e40d57843",
+  "scene": "history",
+  "review": {
+    "heardOpening": "Enfin, le journal d'activité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "le journal d'activité permet de comprendre ce qui a changé",
+        "visibleSeconds": 0,
+        "visible": "Page Journal affichée avec l'historique des actions et les filtres de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "publication, nouvelle inscription, désinscription, modification d'un créneau ou ajout manuel",
+        "visibleSeconds": 4,
+        "visible": "Liste des événements récents affichant les modifications, annulations et inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Chaque action est datée, avec son origine",
+        "visibleSeconds": 9.8,
+        "visible": "Défilement de la liste montrant les dates détaillées, les auteurs et les origines (formulaire, manuel)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et posée, bien accordée au défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:27:50.390Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "f902ceaad790ef125d23a7bb94d9ac6756a3e2df76ae6d48d562116498ec9af2",
+  "clipSha256": "dc67432e0fc53bd665aa429db4d6072412d40289a6b6095996b67b473e68598a",
+  "scene": "variables",
+  "review": {
+    "heardOpening": "Les mots entre accolades sont remplacés pour chaque destinataire.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les mots entre accolades sont remplacés pour chaque destinataire.",
+        "visibleSeconds": 0.5,
+        "visible": "Ouverture du formulaire d'édition du modèle de message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue.",
+        "visibleSeconds": 13.5,
+        "visible": "Saisie de {lieu} dans le champ Objet et apparition de l'alerte rouge variable inconnue.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Corrigeons le texte.",
+        "visibleSeconds": 16.5,
+        "visible": "Remplacement de {lieu} par {poste} puis clic sur Enregistrer déjà terminés à l'écran.",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:19, la consigne « Corrigeons le texte » est prononcée après que la correction et l'enregistrement ont déjà été effectués à l'écran (vers 00:17-00:18)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

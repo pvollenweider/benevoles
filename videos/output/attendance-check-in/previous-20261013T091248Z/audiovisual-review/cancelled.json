@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:47:23.044Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "promptSha256": "e651907690a81f7056a6247d5530f3d2b527df1e9dfbc41e2cb80c531b8bc478",
+  "clipSha256": "565bb7994faaade8335559e7e3632aedbab321efcc98ab7109a1d5ab5fc6845b",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Un cas à regarder de près :",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Enregistrons d'abord sa présence",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection de Sarah Exemple puis clic sur Marquer présent dans la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "puis ouvrons son créneau dans la liste",
+        "visibleSeconds": 10.9,
+        "visible": "Basculement vers la vue Liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Lisons le récapitulatif et confirmons la suppression",
+        "visibleSeconds": 13.5,
+        "visible": "Boîte de dialogue de confirmation affichée puis clic sur le bouton Supprimer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "Revenons aux inscriptions : sa ligne a disparu",
+        "visibleSeconds": 15,
+        "visible": "Retour à la page Inscriptions où la ligne de Sarah Exemple n'apparaît plus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.3,
+        "spoken": "Téléchargeons le fichier pour vérifier le bilan",
+        "visibleSeconds": 18.7,
+        "visible": "Clic sur le lien Exporter les présences (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.1,
+        "spoken": "Sarah n'y figure pas",
+        "visibleSeconds": 21,
+        "visible": "Affichage du tableau CSV téléchargé sans Sarah dans les lignes de présence",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "stage": "assemble",
+    "exitCode": 0
+  },
+  {
+    "stage": "posters",
+    "exitCode": 0
+  },
+  {
+    "stage": "frames",
+    "exitCode": 0
+  },
+  {
+    "stage": "final-audio",
+    "exitCode": 1
+  },
+  {
+    "stage": "validate",
+    "exitCode": 0
+  },
+  {
+    "stage": "final-audio-event-summary-recheck",
+    "exitCode": 0,
+    "evidence": "narration-audit-video-event-summary.json"
+  }
+]

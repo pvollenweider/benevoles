@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "cues": 86,
+  "note": "Actual VTT equals current caption display formatter output, preserving narration meaning with French numeric dates and hours."
+}

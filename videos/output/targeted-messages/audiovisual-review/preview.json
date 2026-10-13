@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:28:03.776Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:12:10.902Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "74746a8a3eb5ce5604af305f47f24c2922451ebc6022c8bef0f62e1b0c04e3c9",
-  "clipSha256": "ce5aa141027c1bc55599b6e8d41a105266d0b14ef045a40ddada7d95c43ba828",
+  "clipSha256": "11a4ef0b83bbeebbd7b816e6cd21feed4dea13481a04df5fe9d4000f5fffa1a6",
   "scene": "preview",
   "review": {
     "heardOpening": "Ouvrons maintenant l'aperçu",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Ouvrons maintenant l'aperçu",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur le bouton 'Voir l'aperçu et envoyer' et affichage de la fenêtre 'Aperçu de l'email'",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre modale « Aperçu de l'email »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 3.8,
         "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte",
-        "visibleSeconds": 2,
-        "visible": "Le texte de l'aperçu montre le prénom Léa, l'événement Fête du village de Montvert, le poste Buvette et l'horaire samedi 17 octobre 10:00-14:00",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage des données variables : « Léa », « Fête du village de Montvert », « Buvette » et « samedi 17 octobre, 10:00–14:00 »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
+        "spokenSeconds": 15.4,
         "spoken": "retournez au message",
-        "visibleSeconds": 14.7,
-        "visible": "Clic sur le lien 'Retour au message' qui ferme la modale et réaffiche le formulaire d'édition",
+        "visibleSeconds": 14.8,
+        "visible": "Clic sur « Retour au message » et fermeture de l'aperçu pour revenir au formulaire",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et parfaitement synchronisée avec les interactions visuelles."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

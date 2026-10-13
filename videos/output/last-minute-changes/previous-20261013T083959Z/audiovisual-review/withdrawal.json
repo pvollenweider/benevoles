@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:38:54.177Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "3f4e789b7e93e56fc87fe20107c5c6251010a11b3fa45a6455fdfde06ff89ef5",
+  "clipSha256": "c38a85db052c38f702ad1ffb35622b2643e3424a21ca96a66ea9fcb478e1372e",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Aline ne peut plus venir à l'accueil.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "elle annule son inscription",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur 'Oui, annuler' dans la boîte de dialogue de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "Revenons dans les inscriptions côté organisation.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la vue d'administration des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.3,
+        "spoken": "l'application lui propose de la prendre",
+        "visibleSeconds": 18.5,
+        "visible": "Ligne de Nicolas Exemple avec le statut 'Place proposée'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.2,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas.",
+        "visibleSeconds": 21,
+        "visible": "Affichage de la boîte mail avec le message 'Hello Nicolas !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "On y retrouve le créneau et un délai de réponse.",
+        "visibleSeconds": 24.5,
+        "visible": "Mention de l'horaire et date d'expiration du lien dans le corps de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

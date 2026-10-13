@@ -13,7 +13,7 @@
   },
   {
     "stage": "final-audio",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "stage": "validate",

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:47:16.086Z",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "promptSha256": "badbab8fbf6b337d5cf5e6f376f1dc9f5d9f85e40ff6bc5d8807d1aa09daebd4",
+  "clipSha256": "2398deb55aaccea63c63285e805911fddbcd94f879b52e21c621bb0e229a757b",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Tu peux partir d'un modèle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "partir d'un modèle",
+        "visibleSeconds": 1.7,
+        "visible": "Clic sur le bouton Utiliser ce modèle et chargement des champs Objet et Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "variables comme le prénom ou les créneaux",
+        "visibleSeconds": 5.5,
+        "visible": "Défilement révélant le champ Message avec les variables prénom et créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "ouvre l'aperçu",
+        "visibleSeconds": 7.6,
+        "visible": "Clic sur Voir l'aperçu et envoyer et affichage de la fenêtre Aperçu de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "le nombre de destinataires",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la mention Envoyer l'email à 3 personnes dans la fenêtre d'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et dynamique, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

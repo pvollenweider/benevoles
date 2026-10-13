@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:47:27.188Z",
-  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "reviewedAt": "2026-10-13T09:01:55.722Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
   "promptSha256": "b8e70e778962cab7948f38a1b6021429ced36b6ad714f57121172f9bb8d6df47",
-  "clipSha256": "c8f587c5774e099d748b075042af209dd32de8e9b7eeff9e9a965ff74f6cdeee",
+  "clipSha256": "281de04881446c5823d0dba64bca4f51c553c7db20899a91fb99dd9c4c243b98",
   "scene": "reminders",
   "review": {
-    "heardOpening": "Les rappels automatiques prennent ensuite",
+    "heardOpening": "Les rappels automatiques prennent ensuite le relais",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Les rappels automatiques prennent ensuite le relais",
-        "visibleSeconds": 0.8,
-        "visible": "Section « Rappels automatiques aux bénévoles inscrits » visible dans les paramètres d'emails",
+        "spokenSeconds": 0.7,
+        "spoken": "Les rappels automatiques prennent ensuite le relais avant les créneaux.",
+        "visibleSeconds": 0,
+        "visible": "Section « Rappels automatiques aux bénévoles inscrits » affichée sur la page Paramètres > Emails.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.3,
+        "spokenSeconds": 3.4,
         "spoken": "Tu choisis lesquels sont actifs",
-        "visibleSeconds": 3.3,
-        "visible": "Options cochables « Rappel J-2 », « Rappel J-1 » et « Rappel du jour » affichées à l'écran",
+        "visibleSeconds": 3.4,
+        "visible": "Cases à cocher pour Rappel J-2, Rappel J-1 et Rappel du jour visibles à l'écran sans manipulation directe.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.8,
-        "spoken": "l'application utilise les horaires locaux de l'organisation",
+        "spoken": "et l’application utilise les horaires locaux de l’organisation",
         "visibleSeconds": 5.8,
-        "visible": "Écran stable présentant la configuration des rappels et notifications",
+        "visible": "Écran stable présentant la configuration des rappels et notifications par email.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, chaleureuse et fluide avec fond musical discret."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la présentation de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

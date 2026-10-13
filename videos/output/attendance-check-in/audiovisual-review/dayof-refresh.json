@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:47:50.021Z",
-  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "reviewedAt": "2026-10-13T09:23:37.315Z",
+  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
-  "clipSha256": "2b73ebd6b54c57409db86d071cbacbd0cb46feb5808e75c7667db52c1f37e5dc",
+  "clipSha256": "ca04c5b99fb8ed723f75d0df49fc1328d7ef02b9b6594b6e063425a286078b8c",
   "scene": "dayof-refresh",
   "review": {
     "heardOpening": "Avec Actualiser, vous récupérez",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Avec Actualiser, vous récupérez les informations",
+        "spokenSeconds": 0.9,
+        "spoken": "Avec Actualiser, vous récupérez les informations enregistrées sur le serveur.",
         "visibleSeconds": 1,
-        "visible": "Bouton 'Actualiser' affiché en haut de page",
+        "visible": "Le bouton Actualiser est présent en haut à gauche de la page.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "La page indique l'heure de sa mise à jour",
-        "visibleSeconds": 5.5,
-        "visible": "Mention 'Mis à jour à 9h43.' visible en haut à gauche",
+        "spokenSeconds": 5.8,
+        "spoken": "La page indique l'heure de sa mise à jour.",
+        "visibleSeconds": 6,
+        "visible": "L'indication « Mis à jour à 11h18 » est affichée à côté du bouton Actualiser.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
+        "spokenSeconds": 12.8,
         "spoken": "Dans cette démonstration, nous actualisons réellement la page",
-        "visibleSeconds": 12.1,
-        "visible": "Clic sur le bouton 'Actualiser', l'heure passe à 'Mis à jour à 9h44.'",
+        "visibleSeconds": 12.5,
+        "visible": "Clic sur le bouton Actualiser, l'horodatage passe à « Mis à jour à 11h20 ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "Relisez les noms et les compteurs avant d'agir",
+        "visibleSeconds": 20.5,
+        "visible": "Les cartes affichent les noms des bénévoles et les compteurs de présences.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et fluide, sans bruits parasites."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:38:29.591Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "89dc6c86291ffd8cdcb0702a76030c16dac146dc0f864111bb9017553e41b290",
+  "clipSha256": "ed36f9e82fd1abd7dc660b7168a90423eb68eaee7909c1496dfb8847c3b5c54e",
+  "scene": "coverage",
+  "review": {
+    "heardOpening": "Où manque-t-il encore du monde ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture de l'événement.",
+        "visibleSeconds": 0,
+        "visible": "La vue de couverture de l'événement intitulée « Où manque-t-il du monde ? » est affichée à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
+        "visibleSeconds": 1,
+        "visible": "La section « Créneaux complets » présente les créneaux d'accueil, tandis que la section « Créneaux à compléter » liste les besoins restants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
+        "visibleSeconds": 1,
+        "visible": "Les lignes de créneaux détaillent l'activité, la date, les horaires et la mention « manque 1 ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.8,
+        "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
+        "visibleSeconds": 1,
+        "visible": "L'indication « 1 demande à traiter » apparaît sur la jauge du créneau de préparation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

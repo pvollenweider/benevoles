@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:28:15.980Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:12:23.318Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "e015d3ebd8f9ffc3d9a5bb3ebec41cc89a4f230512f2050a199f08bfd9c1153a",
-  "clipSha256": "c34b4fa2edafc7dfc70704f936053fa8f0b9ed85ab812377c2410bda78b28aff",
+  "clipSha256": "ab5566970da029452394d958fdfe231e6e6e0eb643ffb6143d0b15349b522439",
   "scene": "result",
   "review": {
-    "heardOpening": "L'application affiche le résultat de l'envoi.",
+    "heardOpening": "L'application affiche le résultat de l'envoi",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.6,
         "spoken": "L'application affiche le résultat de l'envoi.",
         "visibleSeconds": 0,
-        "visible": "Page avec confirmation 'Message envoyé à 5 personnes' et section 'Messages envoyés'",
+        "visible": "Page avec confirmation « Message envoyé à 5 personnes » et récapitulatif du message.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "Dans notre boîte de test, ouvrons les emails de deux bénévoles",
-        "visibleSeconds": 5.5,
-        "visible": "Basculement vers l'interface Mailpit avec le courriel de Léa",
+        "spokenSeconds": 3.8,
+        "spoken": "Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom",
+        "visibleSeconds": 5.4,
+        "visible": "Affichage de la boîte Mailpit avec le premier email personnalisé « Hello Léa ! ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
+        "spokenSeconds": 10.1,
         "spoken": "La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne.",
         "visibleSeconds": 12,
-        "visible": "Ouverture du message destiné à Théo dans la boîte de test",
+        "visible": "Affichage du second email personnalisé pour Noah (« Hello Noah ! »).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.3,
+        "spokenSeconds": 14.1,
         "spoken": "L'historique conserve ensuite le message et son audience.",
-        "visibleSeconds": 14.5,
-        "visible": "Retour à la page de l'événement et défilement sur l'historique des 'Messages envoyés'",
+        "visibleSeconds": 15,
+        "visible": "Retour à la plateforme avec la section « Messages envoyés » listant les campagnes précédentes.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien articulée et sans artefact sonore."
+      "observation": "Voix off masculine claire, fluide et bien calée sur le déroulement de la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

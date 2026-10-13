@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:46:55.320Z",
-  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "reviewedAt": "2026-10-13T09:01:20.242Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
   "promptSha256": "644bca6723e2cdc5af9af2609208594199643070bf4f101442ab713ce09b92d9",
-  "clipSha256": "181d17fb28dcbda183c928330b09a032d7ec262623814b204bcc4ab454bfa752",
+  "clipSha256": "9d978cb30b2d82b89b77358f1b6405133623dbaf43919d042a188446f8a41fc3",
   "scene": "overview",
   "review": {
-    "heardOpening": "Une fois le planning publié, voici comment suivre",
+    "heardOpening": "Une fois le planning publié, voici comment suivre les inscriptions",
     "checkpoints": [
       {
-        "spokenSeconds": 1.4,
-        "spoken": "voici comment suivre les inscriptions et relancer au bon moment.",
+        "spokenSeconds": 0.5,
+        "spoken": "voici comment suivre les inscriptions et relancer au bon moment",
         "visibleSeconds": 0.5,
-        "visible": "Bannière d'introduction « Suivre les inscriptions et relancer au bon moment » affichée sur la page de l'événement.",
+        "visible": "Écran de titre : Suivre les inscriptions et relancer au bon moment",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.7,
-        "spoken": "Depuis l’événement, tu retrouves tout de suite son état",
-        "visibleSeconds": 4,
-        "visible": "Statut de l'événement (« Publié » coché dans la barre d'étapes) visible sur la fiche.",
+        "spokenSeconds": 5.5,
+        "spoken": "tu retrouves tout de suite son état",
+        "visibleSeconds": 3,
+        "visible": "Statut « Publié » bien visible sur la fiche de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.6,
-        "spoken": "les prochaines étapes et les accès utiles pour garder une vue claire.",
-        "visibleSeconds": 6.8,
-        "visible": "Défilement vers le bas affichant les boutons d'accès (« Gérer les créneaux », « Voir les inscriptions ») et la section « Jalons ».",
+        "spokenSeconds": 7.5,
+        "spoken": "les prochaines étapes",
+        "visibleSeconds": 6.5,
+        "visible": "Défilement vers la section « Jalons » affichant les étapes calendaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "les accès utiles pour garder une vue claire",
+        "visibleSeconds": 6.5,
+        "visible": "Boutons d'accès rapide « Gérer les créneaux », « Voir les inscriptions » et onglets associés",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide, chaleureuse et bien synchronisée avec le visuel."
+      "observation": "Voix off fluide, claire et bien articulée, parfaitement synchronisée avec les éléments affichés."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

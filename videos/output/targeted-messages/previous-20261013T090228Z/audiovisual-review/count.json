@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:27:37.432Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "d755128be59b9fda0e88911458a262e8d3f363eb8bd3f8e6961abe17df548639",
+  "clipSha256": "129808d2242cb597673e344bc2a30a071dacd4b63883fa3788c27f8933c2c560",
+  "scene": "count",
+  "review": {
+    "heardOpening": "Le nombre affiché",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le nombre affiché compte les personnes à qui un e-mail peut être adressé",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions affichant la liste des inscriptions avec champ de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Une bénévole inscrite sur deux horaires reçoit un seul message",
+        "visibleSeconds": 2.5,
+        "visible": "Filtrage sur Léa Giroud montrant deux créneaux horaires distincts pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Une demande à valider n'est pas encore une confirmation",
+        "visibleSeconds": 13,
+        "visible": "Affichage de l'écran Écrire aux bénévoles avec le ciblage par destinataires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette",
+        "visibleSeconds": 15.5,
+        "visible": "Sélection du poste Buvette indiquant que 14 personnes recevront ce message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les exemples à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

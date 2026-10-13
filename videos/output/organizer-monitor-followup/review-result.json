@@ -1,17 +1,17 @@
 {
   "id": "REGISTRATION_MONITOR_FOLLOWUP",
-  "status": "NOT READY",
-  "duration": 191.28,
-  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "status": "READY",
+  "duration": 191.84,
+  "buildId": "RPQR_7CtwLDa6m9DyYOBY",
   "music": {
-    "voicedWindows": 161,
-    "musicOnlyWindows": 3,
-    "smallestGapLu": 14.9,
-    "largestGapLu": 19.3,
-    "quietestMusicOnlyLufs": -33.9,
+    "voicedWindows": 163,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.4,
+    "quietestMusicOnlyLufs": -33.6,
     "loudestMusicOnlyLufs": -33.2,
     "medianVoiceLufs": -16.3
   },
-  "problems": "Shift/status filters now demonstrated. Audience waitlist click ~2 s late; invited-audience click ~3.5 s late. All technical, final narration, music and other chapter checks pass.",
-  "sourceChanges": "Visible-option selector repaired during rehearsal. Remaining audience cues converted to sentence anchors; no third narrated take."
+  "problems": "All objective checks pass. Audience selections aligned; channel preview held through the final explanation after one re-film. Filter flag disproved: exact frames at chapter 0.1 and 0.5 s show Tous les postes changing to Buvette before shift selection, a slight preparatory lead. All thirteen chapter reviews and final frames inspected.",
+  "sourceChanges": "Hold channel preview until chapter end; no other per-video source change."
 }

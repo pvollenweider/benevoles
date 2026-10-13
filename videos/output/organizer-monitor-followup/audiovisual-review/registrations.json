@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:46:59.023Z",
-  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "reviewedAt": "2026-10-13T09:01:24.063Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
   "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
-  "clipSha256": "dc4758496812eef466e83eb696ad89547f7256d469b5645ca7a89bbbdea74e74",
+  "clipSha256": "ec180b083b0b89c89a336792e90bc4f3fe32875702173f592f061c86f12a2ca6",
   "scene": "registrations",
   "review": {
     "heardOpening": "Dans les inscriptions, chaque ligne rassemble",
     "checkpoints": [
       {
-        "spokenSeconds": 0.9,
-        "spoken": "chaque ligne rassemble la personne, son créneau, son statut",
+        "spokenSeconds": 0.5,
+        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles.",
         "visibleSeconds": 0,
-        "visible": "Tableau des inscriptions affichant les colonnes Bénévole, Créneau, Source et Statut",
+        "visible": "Page Inscriptions affichant un tableau avec les colonnes Bénévole, Créneau, Source et Statut.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.3,
-        "spoken": "comme la taille du t-shirt ou le régime alimentaire",
-        "visibleSeconds": 0,
-        "visible": "Mentions « Taille de t-shirt : M » et « Végétarien : O » visibles sous l'identité de Camille Rochat",
+        "spoken": "Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire",
+        "visibleSeconds": 7.3,
+        "visible": "Mentions « Taille de t-shirt : M » et « Régime : Végétarien » visibles sous les coordonnées du bénévole Camille Rochat.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers",
-        "visibleSeconds": 0,
-        "visible": "Vue d'ensemble centralisée où chaque fiche récapitule l'ensemble des réponses directement dans la ligne",
+        "spokenSeconds": 11.2,
+        "spoken": "restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
+        "visibleSeconds": 11.2,
+        "visible": "Vue d'ensemble centralisée dans la liste sans navigation externe requise.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et naturelle, en parfait accord avec la présentation générale de l'écran."
+      "observation": "Voix off posée, claire et parfaitement audible, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:24.818Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "644bca6723e2cdc5af9af2609208594199643070bf4f101442ab713ce09b92d9",
+  "clipSha256": "fc1c4419903094aa03b86f9a20248673ddf85f0ebd8d9221c0cdcc7145155d89",
+  "scene": "overview",
+  "review": {
+    "heardOpening": "Une fois le planning publié",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment.",
+        "visibleSeconds": 0,
+        "visible": "Bandeau titre 'Suivre les inscriptions et relancer au bon moment' affiché par-dessus la fiche de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Depuis l’événement, tu retrouves tout de suite son état",
+        "visibleSeconds": 3,
+        "visible": "Page de l'événement affichant le statut actuel coché sur 'Publié' avec les étapes du cycle de vie.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "les prochaines étapes et les accès utiles pour garder une vue claire.",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement vers le bas révélant les raccourcis d'action ('Voir les inscriptions', etc.) et la section 'Jalons' avec les dates clés.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, fluide et dynamique, parfaitement synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,21 @@
+STATUS: NOT READY
+ID: VOLUNTEER_HOURS_CERTIFICATE
+Duration: 310.64
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 252, 'musicOnlyWindows': 30, 'smallestGapLu': 12.5, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': -34.7, 'loudestMusicOnlyLufs': -32.9, 'medianVoiceLufs': -16.4}
+Problems: Settings preview remains below viewport after print-media restoration. Presence/print cues aligned; totals/CSV/PDF/music/validation pass. Final event-summary ASR recheck passed. Product bug: attestation-aline.pdf page 1 prints admin navigation; exact MP4 frame certificate-pdf-45.png at 222.432 s.
+Source changes: Added real preview scroll after print-media restoration. Pass 1 anchors retained. No third take or src change.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: False
+MP4 frame evidence SHA256: 0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+hours-list: 3.455–31.719 s; review/hours-list-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+last-participation: 33.983–66.539 s; review/last-participation-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+activity: 68.801–92.834 s; review/activity-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+period-export: 95.094–131.484 s; review/period-export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 7; reported issues []
+certificate-settings: 133.745–174.091 s; review/certificate-settings-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À partir de 00:19, la voix décrit le contenu de l'aperçu (nom, organisation, dates, événements, logo), mais la page ne défile pas vers le bas et l'attestation reste masquée sous la ligne de flottaison."]
+certificate-presence: 176.353–204.818 s; review/certificate-presence-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+certificate-pdf: 207.087–241.186 s; review/certificate-pdf-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+event-summary: 243.466–277.16 s; review/event-summary-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

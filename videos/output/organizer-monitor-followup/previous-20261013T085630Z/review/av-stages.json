@@ -1,0 +1,54 @@
+[
+  {
+    "chapter": "overview",
+    "exitCode": 0
+  },
+  {
+    "chapter": "coverage",
+    "exitCode": 0
+  },
+  {
+    "chapter": "registrations",
+    "exitCode": 0
+  },
+  {
+    "chapter": "requests",
+    "exitCode": 0
+  },
+  {
+    "chapter": "filters",
+    "exitCode": 1
+  },
+  {
+    "chapter": "actions",
+    "exitCode": 0
+  },
+  {
+    "chapter": "audience",
+    "exitCode": 0
+  },
+  {
+    "chapter": "message",
+    "exitCode": 0
+  },
+  {
+    "chapter": "channels",
+    "exitCode": 1
+  },
+  {
+    "chapter": "reminders",
+    "exitCode": 0
+  },
+  {
+    "chapter": "reports",
+    "exitCode": 0
+  },
+  {
+    "chapter": "history",
+    "exitCode": 0
+  },
+  {
+    "chapter": "done",
+    "exitCode": 0
+  }
+]

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:47:21.252Z",
-  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "reviewedAt": "2026-10-13T09:01:51.245Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
   "promptSha256": "237a804804755d3993290513ca4b22f69c056a5264de986421027c9849f692af",
-  "clipSha256": "238b53fa25c70850b147730274b3ee8ae9e9d9438b54b06a876c169389975bd8",
+  "clipSha256": "566316a37976a09b061fb58dd19b3c4c989a4991e72aa941af3d767cf37b9ecc",
   "scene": "channels",
   "review": {
-    "heardOpening": "L'email part à toutes les personnes ciblées.",
+    "heardOpening": "L'email part à toutes les personnes ciblées",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "tu peux ajouter une notification sur téléphone ou ordinateur",
-        "visibleSeconds": 2.8,
-        "visible": "Coche de la case « Envoyer aussi une notification (téléphone ou ordinateur) »",
+        "spokenSeconds": 0,
+        "spoken": "L'email part à toutes les personnes ciblées",
+        "visibleSeconds": 0,
+        "visible": "Formulaire de rédaction du message affiché à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "elle ne touche que les bénévoles qui l’ont activée",
-        "visibleSeconds": 5.8,
-        "visible": "Clic sur le bouton bleu « Voir l'aperçu et envoyer » et ouverture de la fenêtre modale d'aperçu",
+        "spokenSeconds": 3.4,
+        "spoken": "tu peux ajouter une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 2.9,
+        "visible": "Cochage de la case 'Envoyer aussi une notification (téléphone ou ordinateur)'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.2,
         "spoken": "La confirmation finale évite les envois involontaires",
-        "visibleSeconds": 6.5,
-        "visible": "Affichage de la modale d'aperçu avec le bouton de confirmation « Envoyer à 3 personnes »",
+        "visibleSeconds": 6.2,
+        "visible": "Ouverture de la fenêtre d'aperçu de l'email avec le bouton de confirmation d'envoi",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off fluide, claire et bien synchronisée avec les manipulations à l'écran."
+      "observation": "Voix claire, naturelle et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

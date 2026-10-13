@@ -103,13 +103,13 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await write(page.getByLabel("Prénom *", { exact: true }), "Zoé")
       await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
       await write(page.getByLabel("Email", { exact: true }), "video.last-minute.person.2@example.org")
-      await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
+      await at("Choisissons le créneau de logistique"); await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
       await tap(page, page.getByRole("option", { name: /de 12h à 14h, Logistique/ }))
       const addition = page.waitForResponse(response => response.url().endsWith("/api/admin/registrations") && response.request().method() === "POST")
-      await at("Nous avons vérifié une nouvelle"); await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+      await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
       if (!(await addition).ok()) throw new Error("Actual manual add request failed")
       if (await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Actual manual add failed")
-      await coverage(); checks.logisticsFilled = true
+      await at("Enfin, revenons à la couverture"); await coverage(); checks.logisticsFilled = true
     })
     await scene("schedule", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))
@@ -125,7 +125,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
     })
     await scene("cancel", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))
-      await at("Après confirmation, les inscriptions concernées")
+      await at("Ouvrons la confirmation et prenons")
       await tap(page, page.getByRole("row").filter({ hasText: "Caisse de la petite scène" }).getByRole("button", { name: /^Supprimer le créneau / }))
       if ((await reg(5)).status !== "active" || (await reg(6)).status !== "requested") throw new Error("Actual confirmed and requested registrations required for the explanatory caption")
       await page.evaluate(() => {

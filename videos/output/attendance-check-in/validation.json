@@ -1,29 +1,29 @@
 {
   "id": "ATTENDANCE_CHECK_IN",
   "slug": "attendance-check-in",
-  "validatedAt": "2026-10-13T07:46:47.015Z",
+  "validatedAt": "2026-10-13T09:22:29.643Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 403040,
+  "captureMs": 398840,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 24387,
+      "visualMs": 24386,
       "audioMs": 24386,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "one",
-      "visualMs": 24668,
+      "visualMs": 24667,
       "audioMs": 24667,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "group",
-      "visualMs": 23329,
+      "visualMs": 23330,
       "audioMs": 23328,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "correction",
@@ -45,62 +45,62 @@
     },
     {
       "id": "cancelled",
-      "visualMs": 37910,
+      "visualMs": 37911,
       "audioMs": 37909,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "export",
-      "visualMs": 24064,
+      "visualMs": 24065,
       "audioMs": 24064,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "dayof-window",
-      "visualMs": 28642,
+      "visualMs": 28643,
       "audioMs": 28642,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "dayof-search",
-      "visualMs": 23323,
+      "visualMs": 23324,
       "audioMs": 23322,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "dayof-phone",
-      "visualMs": 26118,
+      "visualMs": 26120,
       "audioMs": 26117,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "dayof-checkin",
-      "visualMs": 25050,
+      "visualMs": 25048,
       "audioMs": 25048,
-      "driftMs": 2
+      "driftMs": 0
     },
     {
       "id": "dayof-refresh",
-      "visualMs": 25144,
+      "visualMs": 25143,
       "audioMs": 25142,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "dayof-undo",
-      "visualMs": 26945,
+      "visualMs": 26944,
       "audioMs": 26944,
-      "driftMs": 1
+      "driftMs": 0
     }
   ],
-  "anchorsChecked": 26,
+  "anchorsChecked": 28,
   "music": {
     "voicedWindows": 350,
-    "musicOnlyWindows": 9,
+    "musicOnlyWindows": 7,
     "smallestGapLu": 13.6,
     "largestGapLu": 19.2,
     "quietestMusicOnlyLufs": -34,
-    "loudestMusicOnlyLufs": -32.9,
-    "medianVoiceLufs": -16.3
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.2
   },
   "issues": []
 }

@@ -1,18 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:58:45.778Z",
-  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "reviewedAt": "2026-10-13T09:32:54.358Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
   "promptSha256": "8208097e3fa2859f185446b87b082b67a02c4558bcccbf19d6ab1c1607603dfc",
-  "clipSha256": "c98f6c67a4e62ee23ff8305dacedf73bcd5f3518167dfe62453a1bec6f55558b",
+  "clipSha256": "68b6d1a0e32c6a461e7f221e9190a6854343a278886a6b5d32d2917672fa2371",
   "scene": "certificate-settings",
   "review": {
     "heardOpening": "Préparons maintenant une attestation pour Aline",
     "checkpoints": [
       {
-        "spokenSeconds": 3.5,
+        "spokenSeconds": 0.5,
+        "spoken": "Préparons maintenant une attestation pour Aline",
+        "visibleSeconds": 0,
+        "visible": "Page 'Activité de Aline Mercier' affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
         "spoken": "ouvrons Attestation de bénévolat",
-        "visibleSeconds": 3.5,
-        "visible": "Clic sur « Attestation de bénévolat » et ouverture de la page des réglages de l'attestation",
+        "visibleSeconds": 4,
+        "visible": "Ouverture du formulaire 'Réglages de l'attestation'",
         "sync": "aligned",
         "severity": "none"
       },
@@ -20,34 +28,32 @@
         "spokenSeconds": 7.5,
         "spoken": "Choisissons une période du premier mai au trente septembre",
         "visibleSeconds": 8,
-        "visible": "Renseignement des dates du 01/05/2026 au 30/09/2026 dans les champs de période",
+        "visible": "Renseignement des dates du 01/05/2026 au 30/09/2026",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
+        "spokenSeconds": 13.5,
         "spoken": "écrivons Accueil du public et rangement du matériel",
-        "visibleSeconds": 14.5,
-        "visible": "Saisie du texte dans le champ « Texte libre (facultatif) »",
+        "visibleSeconds": 14,
+        "visible": "Saisie de la remarque dans le champ 'Texte libre'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19,
-        "spoken": "L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement",
-        "visibleSeconds": 20,
-        "visible": "L'écran reste fixe sur le formulaire de saisie : aucun défilement vers le bas pour afficher l'aperçu décrit et son contenu",
-        "sync": "missing",
-        "severity": "major"
+        "spokenSeconds": 18.5,
+        "spoken": "L'aperçu reprend le nom du bénévole, celui de l'organisation",
+        "visibleSeconds": 18,
+        "visible": "Défilement vers l'aperçu de l'attestation de bénévolat avec les détails",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "À partir de 00:19, la voix décrit le contenu de l'aperçu (nom, organisation, dates, événements, logo), mais la page ne défile pas vers le bas et l'attestation reste masquée sous la ligne de flottaison."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, avec un débit régulier."
+      "observation": "Voix féminine calme, claire et bien articulée, synchronisée avec les actions à l'écran, accompagnée d'un léger fond musical."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

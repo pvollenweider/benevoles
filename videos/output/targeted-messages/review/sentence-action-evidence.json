@@ -1,45 +1,45 @@
 {
-  "mp4Sha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "mp4Sha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "chapters": [
     {
       "chapter": "welcome",
-      "startSeconds": 0.246,
-      "endSeconds": 23.156,
+      "startSeconds": 0.28,
+      "endSeconds": 23.189,
       "sentences": [
         {
           "text": "Une consigne pour toute l'équipe, un briefing pour la buvette ou une proposition aux personnes qui attendent une place :",
           "startMs": 360,
           "endMs": 6438,
           "method": "silence",
-          "videoSeconds": 0.606
+          "videoSeconds": 0.64
         },
         {
           "text": "le bon message ne va pas forcément à tout le monde.",
           "startMs": 7003,
           "endMs": 9079,
           "method": "silence",
-          "videoSeconds": 7.249
+          "videoSeconds": 7.283
         },
         {
           "text": "Depuis votre événement, ouvrez la page des messages.",
           "startMs": 9739,
           "endMs": 12273,
           "method": "silence",
-          "videoSeconds": 9.985
+          "videoSeconds": 10.019
         },
         {
           "text": "Nous allons choisir les destinataires, préparer un texte qui leur parle, vérifier l'aperçu, puis suivre un véritable envoi.",
           "startMs": 12999,
           "endMs": 19966,
           "method": "silence",
-          "videoSeconds": 13.245
+          "videoSeconds": 13.279
         },
         {
           "text": "Pas besoin d'écrire séparément à chaque personne.",
           "startMs": 20675,
           "endMs": 22450,
           "method": "silence",
-          "videoSeconds": 20.921
+          "videoSeconds": 20.955
         }
       ],
       "anchors": [],
@@ -47,203 +47,203 @@
       "frames": [
         {
           "scene": "welcome",
-          "fraction": 0.026189436927106065,
-          "seconds": 0.846,
+          "fraction": 0.02619058012134969,
+          "seconds": 0.88,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-3.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.25,
-          "seconds": 5.9735,
+          "seconds": 6.00725,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-25.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.45,
-          "seconds": 10.5555,
+          "seconds": 10.58905,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-45.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.6,
-          "seconds": 13.992,
+          "seconds": 14.0254,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-60.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.85,
-          "seconds": 19.7195,
+          "seconds": 19.75265,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-85.png"
         },
         {
           "scene": "welcome",
-          "fraction": 0.986905281536447,
-          "seconds": 22.856,
+          "fraction": 0.9869047099393251,
+          "seconds": 22.889,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/welcome-end.png"
         }
       ]
     },
     {
       "chapter": "audiences",
-      "startSeconds": 25.415,
-      "endSeconds": 50.693,
+      "startSeconds": 25.449,
+      "endSeconds": 50.736,
       "sentences": [
         {
           "text": "Commence par le public.",
           "startMs": 464,
           "endMs": 1422,
           "method": "silence",
-          "videoSeconds": 25.879
+          "videoSeconds": 25.913
         },
         {
           "text": "Tous les bénévoles inscrits vise les inscriptions confirmées.",
           "startMs": 2125,
           "endMs": 4700,
           "method": "silence",
-          "videoSeconds": 27.54
+          "videoSeconds": 27.574
         },
         {
           "text": "Pour un poste, choisis par exemple la buvette ;",
           "startMs": 5433,
           "endMs": 7649,
           "method": "silence",
-          "videoSeconds": 30.848
+          "videoSeconds": 30.882
         },
         {
           "text": "pour un créneau, précise aussi la date et l'horaire.",
           "startMs": 8288,
           "endMs": 10361,
           "method": "silence",
-          "videoSeconds": 33.703
+          "videoSeconds": 33.737
         },
         {
           "text": "La liste d'attente vise les personnes qui attendent une place, y compris celles qui ont une offre en cours.",
           "startMs": 10492,
           "endMs": 15949,
           "method": "silence",
-          "videoSeconds": 35.907
+          "videoSeconds": 35.941
         },
         {
           "text": "Enfin, les invités sans créneau confirmé permettent de reprendre contact avec ceux qui n'ont pas encore de confirmation.",
           "startMs": 16917,
           "endMs": 22850,
           "method": "silence",
-          "videoSeconds": 42.332
+          "videoSeconds": 42.366
         },
         {
           "text": "Regarde le compteur après chaque choix.",
           "startMs": 23533,
           "endMs": 24903,
           "method": "silence",
-          "videoSeconds": 48.948
+          "videoSeconds": 48.982
         }
       ],
       "anchors": [],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 25922,
-          "relativeSeconds": 0.507
+          "atMs": 25943,
+          "relativeSeconds": 0.494
         },
         {
           "kind": "click",
-          "atMs": 30438,
-          "relativeSeconds": 5.023
+          "atMs": 30474,
+          "relativeSeconds": 5.025
         },
         {
           "kind": "click",
-          "atMs": 35006,
-          "relativeSeconds": 9.591
+          "atMs": 35025,
+          "relativeSeconds": 9.576
         },
         {
           "kind": "click",
-          "atMs": 39538,
-          "relativeSeconds": 14.123
+          "atMs": 39594,
+          "relativeSeconds": 14.145
         },
         {
           "kind": "click",
-          "atMs": 44088,
-          "relativeSeconds": 18.673
+          "atMs": 44140,
+          "relativeSeconds": 18.691
         }
       ],
       "frames": [
         {
           "scene": "audiences",
-          "fraction": 0.023736055067647758,
-          "seconds": 26.015,
+          "fraction": 0.023727607070826908,
+          "seconds": 26.049,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-2.png"
         },
         {
           "scene": "audiences",
           "fraction": 0.25,
-          "seconds": 31.7345,
+          "seconds": 31.77075,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-25.png"
         },
         {
           "scene": "audiences",
           "fraction": 0.45,
-          "seconds": 36.790099999999995,
+          "seconds": 36.82815,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-45.png"
         },
         {
           "scene": "audiences",
           "fraction": 0.6,
-          "seconds": 40.5818,
+          "seconds": 40.621199999999995,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-60.png"
         },
         {
           "scene": "audiences",
           "fraction": 0.85,
-          "seconds": 46.901300000000006,
+          "seconds": 46.942949999999996,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-85.png"
         },
         {
           "scene": "audiences",
-          "fraction": 0.9881319724661761,
-          "seconds": 50.393,
+          "fraction": 0.9881361964645865,
+          "seconds": 50.436,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/audiences-end.png"
         }
       ]
     },
     {
       "chapter": "count",
-      "startSeconds": 52.953,
-      "endSeconds": 74.868,
+      "startSeconds": 52.997,
+      "endSeconds": 74.91,
       "sentences": [
         {
           "text": "Le nombre affiché compte les personnes à qui un email peut être adressé, pas leurs inscriptions.",
           "startMs": 376,
           "endMs": 4657,
           "method": "silence",
-          "videoSeconds": 53.329
+          "videoSeconds": 53.373
         },
         {
           "text": "Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience.",
           "startMs": 5511,
           "endMs": 8996,
           "method": "silence",
-          "videoSeconds": 58.464
+          "videoSeconds": 58.508
         },
         {
           "text": "Sans adresse email, une personne ne fait pas partie de cet envoi.",
           "startMs": 9656,
           "endMs": 12477,
           "method": "silence",
-          "videoSeconds": 62.609
+          "videoSeconds": 62.653
         },
         {
           "text": "Une demande à valider n'est pas encore une confirmation.",
           "startMs": 13141,
           "endMs": 15519,
           "method": "silence",
-          "videoSeconds": 66.094
+          "videoSeconds": 66.138
         },
         {
           "text": "Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette à toute la fête par erreur.",
           "startMs": 16469,
           "endMs": 21480,
           "method": "silence",
-          "videoSeconds": 69.422
+          "videoSeconds": 69.466
         }
       ],
       "anchors": [
@@ -252,186 +252,186 @@
           "phrase": "Une demande à valider n'est",
           "startMs": 13141,
           "endMs": 15519,
-          "cueMs": 66094
+          "cueMs": 66137
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 54697,
-          "relativeSeconds": 1.744
+          "atMs": 54710,
+          "relativeSeconds": 1.713
         },
         {
           "kind": "key",
-          "atMs": 55004,
-          "relativeSeconds": 2.051
+          "atMs": 55018,
+          "relativeSeconds": 2.021
         },
         {
           "kind": "key",
-          "atMs": 55209,
-          "relativeSeconds": 2.256
+          "atMs": 55221,
+          "relativeSeconds": 2.224
         },
         {
           "kind": "key",
-          "atMs": 55309,
-          "relativeSeconds": 2.356
+          "atMs": 55321,
+          "relativeSeconds": 2.324
         },
         {
           "kind": "key",
-          "atMs": 55407,
-          "relativeSeconds": 2.454
+          "atMs": 55420,
+          "relativeSeconds": 2.423
         },
         {
           "kind": "key",
-          "atMs": 55506,
-          "relativeSeconds": 2.553
+          "atMs": 55519,
+          "relativeSeconds": 2.522
         },
         {
           "kind": "key",
-          "atMs": 55604,
-          "relativeSeconds": 2.651
+          "atMs": 55616,
+          "relativeSeconds": 2.619
         },
         {
           "kind": "key",
-          "atMs": 55703,
-          "relativeSeconds": 2.75
+          "atMs": 55715,
+          "relativeSeconds": 2.718
         },
         {
           "kind": "key",
-          "atMs": 55801,
-          "relativeSeconds": 2.848
+          "atMs": 55812,
+          "relativeSeconds": 2.815
         },
         {
           "kind": "key",
-          "atMs": 55899,
-          "relativeSeconds": 2.946
+          "atMs": 55910,
+          "relativeSeconds": 2.913
         },
         {
           "kind": "click",
-          "atMs": 67730,
-          "relativeSeconds": 14.777
+          "atMs": 67763,
+          "relativeSeconds": 14.766
         }
       ],
       "frames": [
         {
           "scene": "count",
-          "fraction": 0.02737850787132101,
-          "seconds": 53.553,
+          "fraction": 0.027381006708346645,
+          "seconds": 53.597,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-3.png"
         },
         {
           "scene": "count",
           "fraction": 0.25,
-          "seconds": 58.43175,
+          "seconds": 58.47525,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-25.png"
         },
         {
           "scene": "count",
           "fraction": 0.45,
-          "seconds": 62.81475,
+          "seconds": 62.85785,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-45.png"
         },
         {
           "scene": "count",
           "fraction": 0.6,
-          "seconds": 66.102,
+          "seconds": 66.1448,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-60.png"
         },
         {
           "scene": "count",
           "fraction": 0.85,
-          "seconds": 71.58075,
+          "seconds": 71.62305,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-85.png"
         },
         {
           "scene": "count",
-          "fraction": 0.9863107460643394,
-          "seconds": 74.568,
+          "fraction": 0.9863094966458267,
+          "seconds": 74.61,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/count-end.png"
         }
       ]
     },
     {
       "chapter": "template-create",
-      "startSeconds": 77.151,
-      "endSeconds": 113.034,
+      "startSeconds": 77.173,
+      "endSeconds": 113.057,
       "sentences": [
         {
           "text": "Pour une consigne que vous réutilisez, ouvrez les modèles de messages de l'organisation, puis Nouveau modèle.",
           "startMs": 432,
           "endMs": 5750,
           "method": "silence",
-          "videoSeconds": 77.583
+          "videoSeconds": 77.605
         },
         {
           "text": "Son nom sert à le retrouver dans l'administration :",
           "startMs": 6637,
           "endMs": 8490,
           "method": "silence",
-          "videoSeconds": 83.788
+          "videoSeconds": 83.81
         },
         {
           "text": "les bénévoles ne le voient pas.",
           "startMs": 8844,
           "endMs": 10684,
           "method": "silence",
-          "videoSeconds": 85.995
+          "videoSeconds": 86.017
         },
         {
           "text": "Prenons Briefing avant le créneau :",
           "startMs": 11133,
           "endMs": 12137,
           "method": "silence",
-          "videoSeconds": 88.284
+          "videoSeconds": 88.306
         },
         {
           "text": "un nom précis aide les autres organisateurs à retrouver le bon texte.",
           "startMs": 12754,
           "endMs": 15464,
           "method": "silence",
-          "videoSeconds": 89.905
+          "videoSeconds": 89.927
         },
         {
           "text": "L'objet annonce le sujet de l'email.",
           "startMs": 16190,
           "endMs": 17891,
           "method": "silence",
-          "videoSeconds": 93.341
+          "videoSeconds": 93.363
         },
         {
           "text": "Dans le message, une salutation, le rendez-vous et les consignes suffisent :",
           "startMs": 18372,
           "endMs": 22711,
           "method": "silence",
-          "videoSeconds": 95.523
+          "videoSeconds": 95.545
         },
         {
           "text": "les bénévoles n'ont pas besoin d'un long roman.",
           "startMs": 23072,
           "endMs": 24597,
           "method": "silence",
-          "videoSeconds": 100.223
+          "videoSeconds": 100.245
         },
         {
           "text": "Donnons-lui un objet court et un message accueillant, avec une consigne concrète.",
           "startMs": 25193,
           "endMs": 28926,
           "method": "silence",
-          "videoSeconds": 102.344
+          "videoSeconds": 102.366
         },
         {
           "text": "Enregistrons.",
           "startMs": 29687,
           "endMs": 30163,
           "method": "silence",
-          "videoSeconds": 106.838
+          "videoSeconds": 106.86
         },
         {
           "text": "Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
           "startMs": 30932,
           "endMs": 35623,
           "method": "silence",
-          "videoSeconds": 108.083
+          "videoSeconds": 108.105
         }
       ],
       "anchors": [
@@ -440,1326 +440,1326 @@
           "phrase": "Prenons Briefing avant le créneau",
           "startMs": 11133,
           "endMs": 12137,
-          "cueMs": 88291
+          "cueMs": 88307
         },
         {
           "segmentId": "template-create",
           "phrase": "L'objet annonce le sujet de l'email",
           "startMs": 16190,
           "endMs": 17891,
-          "cueMs": 93343
+          "cueMs": 93365
         },
         {
           "segmentId": "template-create",
           "phrase": "Dans le message, une salutation",
           "startMs": 18372,
           "endMs": 22711,
-          "cueMs": 96755
+          "cueMs": 96808
         },
         {
           "segmentId": "template-create",
           "phrase": "Enregistrons.",
           "startMs": 29687,
           "endMs": 30163,
-          "cueMs": 106839
+          "cueMs": 106862
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 78803,
-          "relativeSeconds": 1.652
+          "atMs": 78794,
+          "relativeSeconds": 1.621
         },
         {
           "kind": "click",
-          "atMs": 88786,
-          "relativeSeconds": 11.635
+          "atMs": 88794,
+          "relativeSeconds": 11.621
         },
         {
           "kind": "key",
-          "atMs": 89093,
-          "relativeSeconds": 11.942
+          "atMs": 89101,
+          "relativeSeconds": 11.928
         },
         {
           "kind": "key",
-          "atMs": 89094,
-          "relativeSeconds": 11.943
+          "atMs": 89101,
+          "relativeSeconds": 11.928
         },
         {
           "kind": "key",
-          "atMs": 89097,
-          "relativeSeconds": 11.946
+          "atMs": 89105,
+          "relativeSeconds": 11.932
         },
         {
           "kind": "key",
-          "atMs": 89194,
-          "relativeSeconds": 12.043
+          "atMs": 89202,
+          "relativeSeconds": 12.029
         },
         {
           "kind": "key",
-          "atMs": 89292,
-          "relativeSeconds": 12.141
+          "atMs": 89300,
+          "relativeSeconds": 12.127
         },
         {
           "kind": "key",
-          "atMs": 89390,
-          "relativeSeconds": 12.239
+          "atMs": 89398,
+          "relativeSeconds": 12.225
         },
         {
           "kind": "key",
-          "atMs": 89489,
-          "relativeSeconds": 12.338
+          "atMs": 89496,
+          "relativeSeconds": 12.323
         },
         {
           "kind": "key",
-          "atMs": 89586,
-          "relativeSeconds": 12.435
+          "atMs": 89594,
+          "relativeSeconds": 12.421
         },
         {
           "kind": "key",
-          "atMs": 89685,
-          "relativeSeconds": 12.534
+          "atMs": 89691,
+          "relativeSeconds": 12.518
         },
         {
           "kind": "key",
-          "atMs": 89783,
-          "relativeSeconds": 12.632
+          "atMs": 89789,
+          "relativeSeconds": 12.616
         },
         {
           "kind": "key",
-          "atMs": 89880,
-          "relativeSeconds": 12.729
+          "atMs": 89887,
+          "relativeSeconds": 12.714
         },
         {
           "kind": "key",
-          "atMs": 89978,
-          "relativeSeconds": 12.827
+          "atMs": 89985,
+          "relativeSeconds": 12.812
         },
         {
           "kind": "key",
-          "atMs": 90075,
-          "relativeSeconds": 12.924
+          "atMs": 90082,
+          "relativeSeconds": 12.909
         },
         {
           "kind": "key",
-          "atMs": 90172,
-          "relativeSeconds": 13.021
+          "atMs": 90180,
+          "relativeSeconds": 13.007
         },
         {
           "kind": "key",
-          "atMs": 90270,
-          "relativeSeconds": 13.119
+          "atMs": 90278,
+          "relativeSeconds": 13.105
         },
         {
           "kind": "key",
-          "atMs": 90367,
-          "relativeSeconds": 13.216
+          "atMs": 90375,
+          "relativeSeconds": 13.202
         },
         {
           "kind": "key",
-          "atMs": 90466,
-          "relativeSeconds": 13.315
+          "atMs": 90473,
+          "relativeSeconds": 13.3
         },
         {
           "kind": "key",
-          "atMs": 90568,
-          "relativeSeconds": 13.417
+          "atMs": 90571,
+          "relativeSeconds": 13.398
         },
         {
           "kind": "key",
-          "atMs": 90670,
-          "relativeSeconds": 13.519
+          "atMs": 90675,
+          "relativeSeconds": 13.502
         },
         {
           "kind": "key",
-          "atMs": 90772,
-          "relativeSeconds": 13.621
+          "atMs": 90775,
+          "relativeSeconds": 13.602
         },
         {
           "kind": "key",
-          "atMs": 90874,
-          "relativeSeconds": 13.723
+          "atMs": 90877,
+          "relativeSeconds": 13.704
         },
         {
           "kind": "key",
-          "atMs": 90970,
-          "relativeSeconds": 13.819
+          "atMs": 90976,
+          "relativeSeconds": 13.803
         },
         {
           "kind": "key",
-          "atMs": 91166,
-          "relativeSeconds": 14.015
+          "atMs": 91175,
+          "relativeSeconds": 14.002
         },
         {
           "kind": "key",
-          "atMs": 91264,
-          "relativeSeconds": 14.113
+          "atMs": 91273,
+          "relativeSeconds": 14.1
         },
         {
           "kind": "key",
-          "atMs": 91361,
-          "relativeSeconds": 14.21
+          "atMs": 91370,
+          "relativeSeconds": 14.197
         },
         {
           "kind": "key",
-          "atMs": 91459,
-          "relativeSeconds": 14.308
+          "atMs": 91472,
+          "relativeSeconds": 14.299
         },
         {
           "kind": "click",
-          "atMs": 93801,
-          "relativeSeconds": 16.65
+          "atMs": 93826,
+          "relativeSeconds": 16.653
         },
         {
           "kind": "key",
-          "atMs": 94108,
-          "relativeSeconds": 16.957
+          "atMs": 94132,
+          "relativeSeconds": 16.959
         },
         {
           "kind": "key",
-          "atMs": 94108,
-          "relativeSeconds": 16.957
-        },
-        {
-          "kind": "key",
-          "atMs": 94111,
+          "atMs": 94133,
           "relativeSeconds": 16.96
         },
         {
           "kind": "key",
-          "atMs": 94208,
-          "relativeSeconds": 17.057
+          "atMs": 94136,
+          "relativeSeconds": 16.963
         },
         {
           "kind": "key",
-          "atMs": 94305,
-          "relativeSeconds": 17.154
+          "atMs": 94232,
+          "relativeSeconds": 17.059
         },
         {
           "kind": "key",
-          "atMs": 94404,
-          "relativeSeconds": 17.253
+          "atMs": 94330,
+          "relativeSeconds": 17.157
         },
         {
           "kind": "key",
-          "atMs": 94502,
-          "relativeSeconds": 17.351
+          "atMs": 94427,
+          "relativeSeconds": 17.254
         },
         {
           "kind": "key",
-          "atMs": 94599,
-          "relativeSeconds": 17.448
+          "atMs": 94525,
+          "relativeSeconds": 17.352
         },
         {
           "kind": "key",
-          "atMs": 94696,
-          "relativeSeconds": 17.545
+          "atMs": 94623,
+          "relativeSeconds": 17.45
         },
         {
           "kind": "key",
-          "atMs": 94796,
-          "relativeSeconds": 17.645
+          "atMs": 94720,
+          "relativeSeconds": 17.547
         },
         {
           "kind": "key",
-          "atMs": 94897,
-          "relativeSeconds": 17.746
+          "atMs": 94819,
+          "relativeSeconds": 17.646
         },
         {
           "kind": "key",
-          "atMs": 94994,
-          "relativeSeconds": 17.843
+          "atMs": 94920,
+          "relativeSeconds": 17.747
         },
         {
           "kind": "key",
-          "atMs": 95092,
-          "relativeSeconds": 17.941
+          "atMs": 95020,
+          "relativeSeconds": 17.847
         },
         {
           "kind": "key",
-          "atMs": 95207,
-          "relativeSeconds": 18.056
+          "atMs": 95119,
+          "relativeSeconds": 17.946
         },
         {
           "kind": "key",
-          "atMs": 95305,
-          "relativeSeconds": 18.154
+          "atMs": 95217,
+          "relativeSeconds": 18.044
         },
         {
           "kind": "key",
-          "atMs": 95402,
-          "relativeSeconds": 18.251
+          "atMs": 95316,
+          "relativeSeconds": 18.143
         },
         {
           "kind": "key",
-          "atMs": 95500,
-          "relativeSeconds": 18.349
+          "atMs": 95418,
+          "relativeSeconds": 18.245
         },
         {
           "kind": "key",
-          "atMs": 95597,
-          "relativeSeconds": 18.446
+          "atMs": 95517,
+          "relativeSeconds": 18.344
         },
         {
           "kind": "key",
-          "atMs": 95694,
-          "relativeSeconds": 18.543
+          "atMs": 95622,
+          "relativeSeconds": 18.449
         },
         {
           "kind": "key",
-          "atMs": 95792,
-          "relativeSeconds": 18.641
+          "atMs": 95728,
+          "relativeSeconds": 18.555
         },
         {
           "kind": "key",
-          "atMs": 95890,
-          "relativeSeconds": 18.739
+          "atMs": 95827,
+          "relativeSeconds": 18.654
         },
         {
           "kind": "key",
-          "atMs": 95988,
-          "relativeSeconds": 18.837
+          "atMs": 95926,
+          "relativeSeconds": 18.753
         },
         {
           "kind": "key",
-          "atMs": 96086,
-          "relativeSeconds": 18.935
+          "atMs": 96026,
+          "relativeSeconds": 18.853
         },
         {
           "kind": "key",
-          "atMs": 96183,
-          "relativeSeconds": 19.032
+          "atMs": 96126,
+          "relativeSeconds": 18.953
         },
         {
           "kind": "key",
-          "atMs": 96281,
-          "relativeSeconds": 19.13
+          "atMs": 96229,
+          "relativeSeconds": 19.056
         },
         {
           "kind": "key",
-          "atMs": 96378,
-          "relativeSeconds": 19.227
+          "atMs": 96332,
+          "relativeSeconds": 19.159
         },
         {
           "kind": "key",
-          "atMs": 96475,
-          "relativeSeconds": 19.324
+          "atMs": 96428,
+          "relativeSeconds": 19.255
+        },
+        {
+          "kind": "key",
+          "atMs": 96530,
+          "relativeSeconds": 19.357
         },
         {
           "kind": "click",
-          "atMs": 97218,
-          "relativeSeconds": 20.067
+          "atMs": 97276,
+          "relativeSeconds": 20.103
         },
         {
           "kind": "key",
-          "atMs": 97526,
-          "relativeSeconds": 20.375
+          "atMs": 97582,
+          "relativeSeconds": 20.409
         },
         {
           "kind": "key",
-          "atMs": 97526,
-          "relativeSeconds": 20.375
+          "atMs": 97582,
+          "relativeSeconds": 20.409
         },
         {
           "kind": "key",
-          "atMs": 97529,
-          "relativeSeconds": 20.378
+          "atMs": 97585,
+          "relativeSeconds": 20.412
         },
         {
           "kind": "key",
-          "atMs": 97577,
-          "relativeSeconds": 20.426
+          "atMs": 97631,
+          "relativeSeconds": 20.458
         },
         {
           "kind": "key",
-          "atMs": 97623,
-          "relativeSeconds": 20.472
+          "atMs": 97679,
+          "relativeSeconds": 20.506
         },
         {
           "kind": "key",
-          "atMs": 97671,
-          "relativeSeconds": 20.52
+          "atMs": 97726,
+          "relativeSeconds": 20.553
         },
         {
           "kind": "key",
-          "atMs": 97719,
-          "relativeSeconds": 20.568
+          "atMs": 97774,
+          "relativeSeconds": 20.601
         },
         {
           "kind": "key",
-          "atMs": 97767,
-          "relativeSeconds": 20.616
+          "atMs": 97822,
+          "relativeSeconds": 20.649
         },
         {
           "kind": "key",
-          "atMs": 97815,
-          "relativeSeconds": 20.664
+          "atMs": 97869,
+          "relativeSeconds": 20.696
         },
         {
           "kind": "key",
-          "atMs": 97861,
-          "relativeSeconds": 20.71
+          "atMs": 97916,
+          "relativeSeconds": 20.743
         },
         {
           "kind": "key",
-          "atMs": 97910,
-          "relativeSeconds": 20.759
+          "atMs": 97963,
+          "relativeSeconds": 20.79
         },
         {
           "kind": "key",
-          "atMs": 97957,
-          "relativeSeconds": 20.806
+          "atMs": 98011,
+          "relativeSeconds": 20.838
         },
         {
           "kind": "key",
-          "atMs": 98004,
-          "relativeSeconds": 20.853
+          "atMs": 98059,
+          "relativeSeconds": 20.886
         },
         {
           "kind": "key",
-          "atMs": 98100,
-          "relativeSeconds": 20.949
+          "atMs": 98154,
+          "relativeSeconds": 20.981
         },
         {
           "kind": "key",
-          "atMs": 98147,
-          "relativeSeconds": 20.996
+          "atMs": 98202,
+          "relativeSeconds": 21.029
         },
         {
           "kind": "key",
-          "atMs": 98195,
-          "relativeSeconds": 21.044
+          "atMs": 98250,
+          "relativeSeconds": 21.077
         },
         {
           "kind": "key",
-          "atMs": 98242,
-          "relativeSeconds": 21.091
+          "atMs": 98297,
+          "relativeSeconds": 21.124
         },
         {
           "kind": "key",
-          "atMs": 98290,
-          "relativeSeconds": 21.139
+          "atMs": 98345,
+          "relativeSeconds": 21.172
         },
         {
           "kind": "key",
-          "atMs": 98336,
-          "relativeSeconds": 21.185
+          "atMs": 98393,
+          "relativeSeconds": 21.22
         },
         {
           "kind": "key",
-          "atMs": 98383,
-          "relativeSeconds": 21.232
+          "atMs": 98441,
+          "relativeSeconds": 21.268
         },
         {
           "kind": "key",
-          "atMs": 98430,
-          "relativeSeconds": 21.279
+          "atMs": 98488,
+          "relativeSeconds": 21.315
         },
         {
           "kind": "key",
-          "atMs": 98477,
-          "relativeSeconds": 21.326
+          "atMs": 98536,
+          "relativeSeconds": 21.363
         },
         {
           "kind": "key",
-          "atMs": 98524,
-          "relativeSeconds": 21.373
+          "atMs": 98584,
+          "relativeSeconds": 21.411
         },
         {
           "kind": "key",
-          "atMs": 98572,
-          "relativeSeconds": 21.421
+          "atMs": 98631,
+          "relativeSeconds": 21.458
         },
         {
           "kind": "key",
-          "atMs": 98619,
-          "relativeSeconds": 21.468
+          "atMs": 98678,
+          "relativeSeconds": 21.505
         },
         {
           "kind": "key",
-          "atMs": 98667,
-          "relativeSeconds": 21.516
+          "atMs": 98725,
+          "relativeSeconds": 21.552
         },
         {
           "kind": "key",
-          "atMs": 98761,
-          "relativeSeconds": 21.61
+          "atMs": 98821,
+          "relativeSeconds": 21.648
         },
         {
           "kind": "key",
-          "atMs": 98857,
-          "relativeSeconds": 21.706
+          "atMs": 98916,
+          "relativeSeconds": 21.743
         },
         {
           "kind": "key",
-          "atMs": 98904,
-          "relativeSeconds": 21.753
+          "atMs": 98964,
+          "relativeSeconds": 21.791
         },
         {
           "kind": "key",
-          "atMs": 98951,
-          "relativeSeconds": 21.8
+          "atMs": 99011,
+          "relativeSeconds": 21.838
         },
         {
           "kind": "key",
-          "atMs": 98999,
-          "relativeSeconds": 21.848
+          "atMs": 99060,
+          "relativeSeconds": 21.887
         },
         {
           "kind": "key",
-          "atMs": 99046,
-          "relativeSeconds": 21.895
+          "atMs": 99108,
+          "relativeSeconds": 21.935
         },
         {
           "kind": "key",
-          "atMs": 99094,
-          "relativeSeconds": 21.943
+          "atMs": 99156,
+          "relativeSeconds": 21.983
         },
         {
           "kind": "key",
-          "atMs": 99141,
-          "relativeSeconds": 21.99
+          "atMs": 99204,
+          "relativeSeconds": 22.031
         },
         {
           "kind": "key",
-          "atMs": 99190,
-          "relativeSeconds": 22.039
+          "atMs": 99251,
+          "relativeSeconds": 22.078
         },
         {
           "kind": "key",
-          "atMs": 99237,
-          "relativeSeconds": 22.086
+          "atMs": 99299,
+          "relativeSeconds": 22.126
         },
         {
           "kind": "key",
-          "atMs": 99285,
-          "relativeSeconds": 22.134
+          "atMs": 99347,
+          "relativeSeconds": 22.174
         },
         {
           "kind": "key",
-          "atMs": 99333,
-          "relativeSeconds": 22.182
+          "atMs": 99395,
+          "relativeSeconds": 22.222
         },
         {
           "kind": "key",
-          "atMs": 99380,
-          "relativeSeconds": 22.229
+          "atMs": 99443,
+          "relativeSeconds": 22.27
         },
         {
           "kind": "key",
-          "atMs": 99430,
-          "relativeSeconds": 22.279
+          "atMs": 99491,
+          "relativeSeconds": 22.318
         },
         {
           "kind": "key",
-          "atMs": 99478,
-          "relativeSeconds": 22.327
+          "atMs": 99538,
+          "relativeSeconds": 22.365
         },
         {
           "kind": "key",
-          "atMs": 99526,
-          "relativeSeconds": 22.375
+          "atMs": 99586,
+          "relativeSeconds": 22.413
         },
         {
           "kind": "key",
-          "atMs": 99573,
-          "relativeSeconds": 22.422
+          "atMs": 99634,
+          "relativeSeconds": 22.461
         },
         {
           "kind": "key",
-          "atMs": 99620,
-          "relativeSeconds": 22.469
+          "atMs": 99682,
+          "relativeSeconds": 22.509
         },
         {
           "kind": "key",
-          "atMs": 99668,
-          "relativeSeconds": 22.517
+          "atMs": 99730,
+          "relativeSeconds": 22.557
         },
         {
           "kind": "key",
-          "atMs": 99715,
-          "relativeSeconds": 22.564
+          "atMs": 99777,
+          "relativeSeconds": 22.604
         },
         {
           "kind": "key",
-          "atMs": 99762,
-          "relativeSeconds": 22.611
+          "atMs": 99824,
+          "relativeSeconds": 22.651
         },
         {
           "kind": "key",
-          "atMs": 99810,
-          "relativeSeconds": 22.659
+          "atMs": 99871,
+          "relativeSeconds": 22.698
         },
         {
           "kind": "key",
-          "atMs": 99857,
-          "relativeSeconds": 22.706
+          "atMs": 99918,
+          "relativeSeconds": 22.745
         },
         {
           "kind": "key",
-          "atMs": 99905,
-          "relativeSeconds": 22.754
+          "atMs": 99966,
+          "relativeSeconds": 22.793
         },
         {
           "kind": "key",
-          "atMs": 99953,
-          "relativeSeconds": 22.802
+          "atMs": 100014,
+          "relativeSeconds": 22.841
         },
         {
           "kind": "key",
-          "atMs": 100000,
-          "relativeSeconds": 22.849
+          "atMs": 100061,
+          "relativeSeconds": 22.888
         },
         {
           "kind": "key",
-          "atMs": 100048,
-          "relativeSeconds": 22.897
+          "atMs": 100108,
+          "relativeSeconds": 22.935
         },
         {
           "kind": "key",
-          "atMs": 100095,
-          "relativeSeconds": 22.944
+          "atMs": 100156,
+          "relativeSeconds": 22.983
         },
         {
           "kind": "key",
-          "atMs": 100141,
-          "relativeSeconds": 22.99
+          "atMs": 100204,
+          "relativeSeconds": 23.031
         },
         {
           "kind": "key",
-          "atMs": 100189,
-          "relativeSeconds": 23.038
+          "atMs": 100251,
+          "relativeSeconds": 23.078
         },
         {
           "kind": "key",
-          "atMs": 100237,
-          "relativeSeconds": 23.086
+          "atMs": 100298,
+          "relativeSeconds": 23.125
         },
         {
           "kind": "key",
-          "atMs": 100285,
-          "relativeSeconds": 23.134
+          "atMs": 100344,
+          "relativeSeconds": 23.171
         },
         {
           "kind": "key",
-          "atMs": 100333,
-          "relativeSeconds": 23.182
+          "atMs": 100391,
+          "relativeSeconds": 23.218
         },
         {
           "kind": "key",
-          "atMs": 100380,
-          "relativeSeconds": 23.229
+          "atMs": 100439,
+          "relativeSeconds": 23.266
         },
         {
           "kind": "key",
-          "atMs": 100428,
-          "relativeSeconds": 23.277
+          "atMs": 100487,
+          "relativeSeconds": 23.314
         },
         {
           "kind": "key",
-          "atMs": 100476,
-          "relativeSeconds": 23.325
+          "atMs": 100535,
+          "relativeSeconds": 23.362
         },
         {
           "kind": "key",
-          "atMs": 100523,
-          "relativeSeconds": 23.372
+          "atMs": 100582,
+          "relativeSeconds": 23.409
         },
         {
           "kind": "key",
-          "atMs": 100571,
-          "relativeSeconds": 23.42
+          "atMs": 100629,
+          "relativeSeconds": 23.456
         },
         {
           "kind": "key",
-          "atMs": 100618,
-          "relativeSeconds": 23.467
+          "atMs": 100676,
+          "relativeSeconds": 23.503
         },
         {
           "kind": "key",
-          "atMs": 100665,
-          "relativeSeconds": 23.514
+          "atMs": 100723,
+          "relativeSeconds": 23.55
         },
         {
           "kind": "key",
-          "atMs": 100712,
-          "relativeSeconds": 23.561
+          "atMs": 100770,
+          "relativeSeconds": 23.597
         },
         {
           "kind": "key",
-          "atMs": 100759,
-          "relativeSeconds": 23.608
+          "atMs": 100818,
+          "relativeSeconds": 23.645
         },
         {
           "kind": "key",
-          "atMs": 100806,
-          "relativeSeconds": 23.655
+          "atMs": 100866,
+          "relativeSeconds": 23.693
         },
         {
           "kind": "key",
-          "atMs": 100853,
-          "relativeSeconds": 23.702
+          "atMs": 100914,
+          "relativeSeconds": 23.741
         },
         {
           "kind": "key",
-          "atMs": 100900,
-          "relativeSeconds": 23.749
+          "atMs": 100961,
+          "relativeSeconds": 23.788
         },
         {
           "kind": "key",
-          "atMs": 100948,
-          "relativeSeconds": 23.797
+          "atMs": 101008,
+          "relativeSeconds": 23.835
         },
         {
           "kind": "key",
-          "atMs": 100995,
-          "relativeSeconds": 23.844
+          "atMs": 101055,
+          "relativeSeconds": 23.882
         },
         {
           "kind": "key",
-          "atMs": 101042,
-          "relativeSeconds": 23.891
+          "atMs": 101103,
+          "relativeSeconds": 23.93
         },
         {
           "kind": "key",
-          "atMs": 101136,
-          "relativeSeconds": 23.985
+          "atMs": 101198,
+          "relativeSeconds": 24.025
         },
         {
           "kind": "key",
-          "atMs": 101183,
-          "relativeSeconds": 24.032
+          "atMs": 101245,
+          "relativeSeconds": 24.072
         },
         {
           "kind": "key",
-          "atMs": 101231,
-          "relativeSeconds": 24.08
+          "atMs": 101292,
+          "relativeSeconds": 24.119
         },
         {
           "kind": "key",
-          "atMs": 101278,
-          "relativeSeconds": 24.127
+          "atMs": 101340,
+          "relativeSeconds": 24.167
         },
         {
           "kind": "key",
-          "atMs": 101325,
-          "relativeSeconds": 24.174
+          "atMs": 101388,
+          "relativeSeconds": 24.215
         },
         {
           "kind": "key",
-          "atMs": 101373,
-          "relativeSeconds": 24.222
+          "atMs": 101435,
+          "relativeSeconds": 24.262
         },
         {
           "kind": "key",
-          "atMs": 101421,
-          "relativeSeconds": 24.27
+          "atMs": 101483,
+          "relativeSeconds": 24.31
         },
         {
           "kind": "key",
-          "atMs": 101469,
-          "relativeSeconds": 24.318
+          "atMs": 101530,
+          "relativeSeconds": 24.357
         },
         {
           "kind": "key",
-          "atMs": 101517,
-          "relativeSeconds": 24.366
+          "atMs": 101577,
+          "relativeSeconds": 24.404
         },
         {
           "kind": "key",
-          "atMs": 101564,
-          "relativeSeconds": 24.413
+          "atMs": 101624,
+          "relativeSeconds": 24.451
         },
         {
           "kind": "key",
-          "atMs": 101611,
-          "relativeSeconds": 24.46
+          "atMs": 101671,
+          "relativeSeconds": 24.498
         },
         {
           "kind": "key",
-          "atMs": 101659,
-          "relativeSeconds": 24.508
+          "atMs": 101719,
+          "relativeSeconds": 24.546
         },
         {
           "kind": "key",
-          "atMs": 101707,
-          "relativeSeconds": 24.556
+          "atMs": 101766,
+          "relativeSeconds": 24.593
         },
         {
           "kind": "key",
-          "atMs": 101754,
-          "relativeSeconds": 24.603
+          "atMs": 101814,
+          "relativeSeconds": 24.641
         },
         {
           "kind": "key",
-          "atMs": 101801,
-          "relativeSeconds": 24.65
+          "atMs": 101861,
+          "relativeSeconds": 24.688
         },
         {
           "kind": "key",
-          "atMs": 101849,
-          "relativeSeconds": 24.698
+          "atMs": 101909,
+          "relativeSeconds": 24.736
         },
         {
           "kind": "key",
-          "atMs": 101897,
-          "relativeSeconds": 24.746
+          "atMs": 101956,
+          "relativeSeconds": 24.783
         },
         {
           "kind": "key",
-          "atMs": 101944,
-          "relativeSeconds": 24.793
+          "atMs": 102004,
+          "relativeSeconds": 24.831
         },
         {
           "kind": "key",
-          "atMs": 101991,
-          "relativeSeconds": 24.84
+          "atMs": 102051,
+          "relativeSeconds": 24.878
         },
         {
           "kind": "key",
-          "atMs": 102038,
-          "relativeSeconds": 24.887
+          "atMs": 102098,
+          "relativeSeconds": 24.925
         },
         {
           "kind": "key",
-          "atMs": 102086,
-          "relativeSeconds": 24.935
+          "atMs": 102146,
+          "relativeSeconds": 24.973
         },
         {
           "kind": "key",
-          "atMs": 102133,
-          "relativeSeconds": 24.982
+          "atMs": 102193,
+          "relativeSeconds": 25.02
         },
         {
           "kind": "key",
-          "atMs": 102180,
-          "relativeSeconds": 25.029
+          "atMs": 102240,
+          "relativeSeconds": 25.067
         },
         {
           "kind": "key",
-          "atMs": 102227,
-          "relativeSeconds": 25.076
+          "atMs": 102287,
+          "relativeSeconds": 25.114
         },
         {
           "kind": "key",
-          "atMs": 102275,
-          "relativeSeconds": 25.124
+          "atMs": 102335,
+          "relativeSeconds": 25.162
         },
         {
           "kind": "key",
-          "atMs": 102322,
-          "relativeSeconds": 25.171
+          "atMs": 102383,
+          "relativeSeconds": 25.21
         },
         {
           "kind": "key",
-          "atMs": 102370,
-          "relativeSeconds": 25.219
+          "atMs": 102431,
+          "relativeSeconds": 25.258
         },
         {
           "kind": "key",
-          "atMs": 102417,
-          "relativeSeconds": 25.266
+          "atMs": 102479,
+          "relativeSeconds": 25.306
         },
         {
           "kind": "key",
-          "atMs": 102465,
-          "relativeSeconds": 25.314
+          "atMs": 102527,
+          "relativeSeconds": 25.354
         },
         {
           "kind": "key",
-          "atMs": 102513,
-          "relativeSeconds": 25.362
+          "atMs": 102574,
+          "relativeSeconds": 25.401
         },
         {
           "kind": "key",
-          "atMs": 102561,
-          "relativeSeconds": 25.41
+          "atMs": 102622,
+          "relativeSeconds": 25.449
         },
         {
           "kind": "key",
-          "atMs": 102609,
-          "relativeSeconds": 25.458
+          "atMs": 102671,
+          "relativeSeconds": 25.498
         },
         {
           "kind": "key",
-          "atMs": 102656,
-          "relativeSeconds": 25.505
+          "atMs": 102719,
+          "relativeSeconds": 25.546
         },
         {
           "kind": "key",
-          "atMs": 102704,
-          "relativeSeconds": 25.553
+          "atMs": 102767,
+          "relativeSeconds": 25.594
         },
         {
           "kind": "key",
-          "atMs": 102751,
-          "relativeSeconds": 25.6
+          "atMs": 102815,
+          "relativeSeconds": 25.642
         },
         {
           "kind": "key",
-          "atMs": 102799,
-          "relativeSeconds": 25.648
+          "atMs": 102863,
+          "relativeSeconds": 25.69
         },
         {
           "kind": "key",
-          "atMs": 102846,
-          "relativeSeconds": 25.695
+          "atMs": 102911,
+          "relativeSeconds": 25.738
         },
         {
           "kind": "key",
-          "atMs": 102894,
-          "relativeSeconds": 25.743
+          "atMs": 102959,
+          "relativeSeconds": 25.786
         },
         {
           "kind": "key",
-          "atMs": 102942,
-          "relativeSeconds": 25.791
+          "atMs": 103006,
+          "relativeSeconds": 25.833
         },
         {
           "kind": "key",
-          "atMs": 102989,
-          "relativeSeconds": 25.838
+          "atMs": 103054,
+          "relativeSeconds": 25.881
         },
         {
           "kind": "key",
-          "atMs": 103084,
-          "relativeSeconds": 25.933
+          "atMs": 103149,
+          "relativeSeconds": 25.976
         },
         {
           "kind": "key",
-          "atMs": 103132,
-          "relativeSeconds": 25.981
+          "atMs": 103197,
+          "relativeSeconds": 26.024
         },
         {
           "kind": "key",
-          "atMs": 103179,
-          "relativeSeconds": 26.028
+          "atMs": 103244,
+          "relativeSeconds": 26.071
         },
         {
           "kind": "key",
-          "atMs": 103227,
-          "relativeSeconds": 26.076
+          "atMs": 103292,
+          "relativeSeconds": 26.119
         },
         {
           "kind": "key",
-          "atMs": 103274,
-          "relativeSeconds": 26.123
+          "atMs": 103338,
+          "relativeSeconds": 26.165
         },
         {
           "kind": "key",
-          "atMs": 103321,
-          "relativeSeconds": 26.17
+          "atMs": 103385,
+          "relativeSeconds": 26.212
         },
         {
           "kind": "key",
-          "atMs": 103369,
-          "relativeSeconds": 26.218
+          "atMs": 103432,
+          "relativeSeconds": 26.259
         },
         {
           "kind": "key",
-          "atMs": 103415,
-          "relativeSeconds": 26.264
+          "atMs": 103478,
+          "relativeSeconds": 26.305
         },
         {
           "kind": "key",
-          "atMs": 103463,
-          "relativeSeconds": 26.312
+          "atMs": 103525,
+          "relativeSeconds": 26.352
         },
         {
           "kind": "key",
-          "atMs": 103557,
-          "relativeSeconds": 26.406
+          "atMs": 103620,
+          "relativeSeconds": 26.447
         },
         {
           "kind": "key",
-          "atMs": 103605,
-          "relativeSeconds": 26.454
+          "atMs": 103668,
+          "relativeSeconds": 26.495
         },
         {
           "kind": "key",
-          "atMs": 103652,
-          "relativeSeconds": 26.501
+          "atMs": 103716,
+          "relativeSeconds": 26.543
         },
         {
           "kind": "key",
-          "atMs": 103699,
-          "relativeSeconds": 26.548
+          "atMs": 103763,
+          "relativeSeconds": 26.59
         },
         {
           "kind": "key",
-          "atMs": 103746,
-          "relativeSeconds": 26.595
+          "atMs": 103810,
+          "relativeSeconds": 26.637
         },
         {
           "kind": "key",
-          "atMs": 103793,
-          "relativeSeconds": 26.642
+          "atMs": 103858,
+          "relativeSeconds": 26.685
         },
         {
           "kind": "key",
-          "atMs": 103840,
-          "relativeSeconds": 26.689
+          "atMs": 103906,
+          "relativeSeconds": 26.733
         },
         {
           "kind": "key",
-          "atMs": 103936,
-          "relativeSeconds": 26.785
+          "atMs": 104001,
+          "relativeSeconds": 26.828
         },
         {
           "kind": "key",
-          "atMs": 103983,
-          "relativeSeconds": 26.832
+          "atMs": 104048,
+          "relativeSeconds": 26.875
         },
         {
           "kind": "key",
-          "atMs": 104031,
-          "relativeSeconds": 26.88
+          "atMs": 104095,
+          "relativeSeconds": 26.922
         },
         {
           "kind": "key",
-          "atMs": 104079,
-          "relativeSeconds": 26.928
+          "atMs": 104143,
+          "relativeSeconds": 26.97
         },
         {
           "kind": "key",
-          "atMs": 104125,
-          "relativeSeconds": 26.974
+          "atMs": 104190,
+          "relativeSeconds": 27.017
         },
         {
           "kind": "key",
-          "atMs": 104173,
-          "relativeSeconds": 27.022
+          "atMs": 104238,
+          "relativeSeconds": 27.065
         },
         {
           "kind": "key",
-          "atMs": 104220,
-          "relativeSeconds": 27.069
+          "atMs": 104286,
+          "relativeSeconds": 27.113
         },
         {
           "kind": "key",
-          "atMs": 104268,
-          "relativeSeconds": 27.117
+          "atMs": 104333,
+          "relativeSeconds": 27.16
         },
         {
           "kind": "key",
-          "atMs": 104314,
-          "relativeSeconds": 27.163
+          "atMs": 104380,
+          "relativeSeconds": 27.207
         },
         {
           "kind": "key",
-          "atMs": 104361,
-          "relativeSeconds": 27.21
+          "atMs": 104427,
+          "relativeSeconds": 27.254
         },
         {
           "kind": "key",
-          "atMs": 104408,
-          "relativeSeconds": 27.257
+          "atMs": 104474,
+          "relativeSeconds": 27.301
         },
         {
           "kind": "key",
-          "atMs": 104456,
-          "relativeSeconds": 27.305
+          "atMs": 104520,
+          "relativeSeconds": 27.347
         },
         {
           "kind": "key",
-          "atMs": 104504,
-          "relativeSeconds": 27.353
+          "atMs": 104567,
+          "relativeSeconds": 27.394
         },
         {
           "kind": "key",
-          "atMs": 104551,
-          "relativeSeconds": 27.4
+          "atMs": 104615,
+          "relativeSeconds": 27.442
         },
         {
           "kind": "key",
-          "atMs": 104598,
-          "relativeSeconds": 27.447
+          "atMs": 104663,
+          "relativeSeconds": 27.49
         },
         {
           "kind": "key",
-          "atMs": 104646,
-          "relativeSeconds": 27.495
+          "atMs": 104710,
+          "relativeSeconds": 27.537
         },
         {
           "kind": "key",
-          "atMs": 104693,
-          "relativeSeconds": 27.542
+          "atMs": 104758,
+          "relativeSeconds": 27.585
         },
         {
           "kind": "key",
-          "atMs": 104741,
-          "relativeSeconds": 27.59
+          "atMs": 104806,
+          "relativeSeconds": 27.633
         },
         {
           "kind": "key",
-          "atMs": 104789,
-          "relativeSeconds": 27.638
+          "atMs": 104854,
+          "relativeSeconds": 27.681
         },
         {
           "kind": "key",
-          "atMs": 104838,
-          "relativeSeconds": 27.687
+          "atMs": 104901,
+          "relativeSeconds": 27.728
         },
         {
           "kind": "key",
-          "atMs": 104885,
-          "relativeSeconds": 27.734
+          "atMs": 104949,
+          "relativeSeconds": 27.776
         },
         {
           "kind": "key",
-          "atMs": 104934,
-          "relativeSeconds": 27.783
+          "atMs": 104997,
+          "relativeSeconds": 27.824
         },
         {
           "kind": "key",
-          "atMs": 104983,
-          "relativeSeconds": 27.832
+          "atMs": 105045,
+          "relativeSeconds": 27.872
         },
         {
           "kind": "key",
-          "atMs": 105030,
-          "relativeSeconds": 27.879
+          "atMs": 105092,
+          "relativeSeconds": 27.919
         },
         {
           "kind": "key",
-          "atMs": 105078,
-          "relativeSeconds": 27.927
+          "atMs": 105139,
+          "relativeSeconds": 27.966
         },
         {
           "kind": "key",
-          "atMs": 105126,
-          "relativeSeconds": 27.975
+          "atMs": 105187,
+          "relativeSeconds": 28.014
         },
         {
           "kind": "key",
-          "atMs": 105174,
-          "relativeSeconds": 28.023
+          "atMs": 105235,
+          "relativeSeconds": 28.062
         },
         {
           "kind": "key",
-          "atMs": 105222,
-          "relativeSeconds": 28.071
+          "atMs": 105282,
+          "relativeSeconds": 28.109
         },
         {
           "kind": "key",
-          "atMs": 105270,
-          "relativeSeconds": 28.119
+          "atMs": 105329,
+          "relativeSeconds": 28.156
         },
         {
           "kind": "key",
-          "atMs": 105317,
-          "relativeSeconds": 28.166
+          "atMs": 105376,
+          "relativeSeconds": 28.203
         },
         {
           "kind": "key",
-          "atMs": 105364,
-          "relativeSeconds": 28.213
+          "atMs": 105423,
+          "relativeSeconds": 28.25
         },
         {
           "kind": "key",
-          "atMs": 105412,
-          "relativeSeconds": 28.261
+          "atMs": 105470,
+          "relativeSeconds": 28.297
         },
         {
           "kind": "key",
-          "atMs": 105460,
-          "relativeSeconds": 28.309
+          "atMs": 105518,
+          "relativeSeconds": 28.345
         },
         {
           "kind": "key",
-          "atMs": 105507,
-          "relativeSeconds": 28.356
+          "atMs": 105565,
+          "relativeSeconds": 28.392
         },
         {
           "kind": "key",
-          "atMs": 105556,
-          "relativeSeconds": 28.405
+          "atMs": 105612,
+          "relativeSeconds": 28.439
         },
         {
           "kind": "key",
-          "atMs": 105602,
-          "relativeSeconds": 28.451
+          "atMs": 105659,
+          "relativeSeconds": 28.486
         },
         {
           "kind": "key",
-          "atMs": 105649,
-          "relativeSeconds": 28.498
+          "atMs": 105706,
+          "relativeSeconds": 28.533
         },
         {
           "kind": "key",
-          "atMs": 105697,
-          "relativeSeconds": 28.546
+          "atMs": 105754,
+          "relativeSeconds": 28.581
         },
         {
           "kind": "key",
-          "atMs": 105743,
-          "relativeSeconds": 28.592
+          "atMs": 105802,
+          "relativeSeconds": 28.629
         },
         {
           "kind": "key",
-          "atMs": 105791,
-          "relativeSeconds": 28.64
+          "atMs": 105849,
+          "relativeSeconds": 28.676
         },
         {
           "kind": "key",
-          "atMs": 105887,
-          "relativeSeconds": 28.736
+          "atMs": 105944,
+          "relativeSeconds": 28.771
         },
         {
           "kind": "key",
-          "atMs": 105934,
-          "relativeSeconds": 28.783
+          "atMs": 105990,
+          "relativeSeconds": 28.817
         },
         {
           "kind": "key",
-          "atMs": 105981,
-          "relativeSeconds": 28.83
+          "atMs": 106038,
+          "relativeSeconds": 28.865
         },
         {
           "kind": "key",
-          "atMs": 106077,
-          "relativeSeconds": 28.926
+          "atMs": 106133,
+          "relativeSeconds": 28.96
         },
         {
           "kind": "key",
-          "atMs": 106124,
-          "relativeSeconds": 28.973
+          "atMs": 106180,
+          "relativeSeconds": 29.007
         },
         {
           "kind": "key",
-          "atMs": 106172,
-          "relativeSeconds": 29.021
+          "atMs": 106228,
+          "relativeSeconds": 29.055
         },
         {
           "kind": "key",
-          "atMs": 106219,
-          "relativeSeconds": 29.068
+          "atMs": 106275,
+          "relativeSeconds": 29.102
         },
         {
           "kind": "key",
-          "atMs": 106267,
-          "relativeSeconds": 29.116
+          "atMs": 106322,
+          "relativeSeconds": 29.149
         },
         {
           "kind": "key",
-          "atMs": 106314,
-          "relativeSeconds": 29.163
+          "atMs": 106370,
+          "relativeSeconds": 29.197
         },
         {
           "kind": "key",
-          "atMs": 106360,
-          "relativeSeconds": 29.209
+          "atMs": 106418,
+          "relativeSeconds": 29.245
         },
         {
           "kind": "key",
-          "atMs": 106408,
-          "relativeSeconds": 29.257
+          "atMs": 106465,
+          "relativeSeconds": 29.292
         },
         {
           "kind": "click",
-          "atMs": 107302,
-          "relativeSeconds": 30.151
+          "atMs": 107326,
+          "relativeSeconds": 30.153
         }
       ],
       "frames": [
         {
           "scene": "template-create",
-          "fraction": 0.016721009949000918,
-          "seconds": 77.751,
+          "fraction": 0.016720543975030654,
+          "seconds": 77.773,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-2.png"
         },
         {
           "scene": "template-create",
           "fraction": 0.25,
-          "seconds": 86.12175,
+          "seconds": 86.144,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-25.png"
         },
         {
           "scene": "template-create",
           "fraction": 0.45,
-          "seconds": 93.29835,
+          "seconds": 93.3208,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-45.png"
         },
         {
           "scene": "template-create",
           "fraction": 0.6,
-          "seconds": 98.6808,
+          "seconds": 98.70339999999999,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-60.png"
         },
         {
           "scene": "template-create",
           "fraction": 0.85,
-          "seconds": 107.65155,
+          "seconds": 107.67439999999999,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-85.png"
         },
         {
           "scene": "template-create",
-          "fraction": 0.9916394950254995,
-          "seconds": 112.734,
+          "fraction": 0.9916397280124847,
+          "seconds": 112.757,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/template-create-end.png"
         }
       ]
     },
     {
       "chapter": "variables",
-      "startSeconds": 115.295,
-      "endSeconds": 139.591,
+      "startSeconds": 115.315,
+      "endSeconds": 139.611,
       "sentences": [
         {
           "text": "Les mots entre accolades sont remplacés pour chaque destinataire.",
           "startMs": 260,
           "endMs": 3167,
           "method": "silence",
-          "videoSeconds": 115.555
+          "videoSeconds": 115.575
         },
         {
           "text": "Prénom donne son prénom et événement donne le nom de la fête.",
           "startMs": 3595,
           "endMs": 6903,
           "method": "silence",
-          "videoSeconds": 118.89
+          "videoSeconds": 118.91
         },
         {
           "text": "Poste demande une audience poste ou créneau.",
           "startMs": 7270,
           "endMs": 9586,
           "method": "silence",
-          "videoSeconds": 122.565
+          "videoSeconds": 122.585
         },
         {
           "text": "Créneau demande un horaire précis.",
           "startMs": 10190,
           "endMs": 11580,
           "method": "silence",
-          "videoSeconds": 125.485
+          "videoSeconds": 125.505
         },
         {
           "text": "Ce n'est pas une liste de variables libres :",
           "startMs": 12412,
           "endMs": 15088,
           "method": "silence",
-          "videoSeconds": 127.707
+          "videoSeconds": 127.727
         },
         {
           "text": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue.",
           "startMs": 15246,
           "endMs": 18479,
           "method": "silence",
-          "videoSeconds": 130.541
+          "videoSeconds": 130.561
         },
         {
           "text": "Corrigeons le texte.",
           "startMs": 18725,
           "endMs": 18725,
           "method": "silence",
-          "videoSeconds": 134.02
+          "videoSeconds": 134.04
         },
         {
           "text": "Et même une variable connue peut être refusée si l'audience ne lui donne pas de sens.",
           "startMs": 19072,
           "endMs": 23865,
           "method": "silence",
-          "videoSeconds": 134.367
+          "videoSeconds": 134.387
         }
       ],
       "anchors": [
@@ -1768,381 +1768,388 @@
           "phrase": "Créneau demande un horaire précis.",
           "startMs": 10190,
           "endMs": 11580,
-          "cueMs": 125487
+          "cueMs": 125506
+        },
+        {
+          "segmentId": "variables",
+          "phrase": "Corrigeons le texte.",
+          "startMs": 18725,
+          "endMs": 18725,
+          "cueMs": 134041
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 115801,
-          "relativeSeconds": 0.506
+          "atMs": 115792,
+          "relativeSeconds": 0.477
         },
         {
           "kind": "click",
-          "atMs": 125950,
-          "relativeSeconds": 10.655
+          "atMs": 125975,
+          "relativeSeconds": 10.66
         },
         {
           "kind": "key",
-          "atMs": 126257,
-          "relativeSeconds": 10.962
+          "atMs": 126282,
+          "relativeSeconds": 10.967
         },
         {
           "kind": "key",
-          "atMs": 126258,
-          "relativeSeconds": 10.963
+          "atMs": 126283,
+          "relativeSeconds": 10.968
         },
         {
           "kind": "key",
-          "atMs": 126260,
-          "relativeSeconds": 10.965
+          "atMs": 126286,
+          "relativeSeconds": 10.971
         },
         {
           "kind": "key",
-          "atMs": 126357,
-          "relativeSeconds": 11.062
+          "atMs": 126383,
+          "relativeSeconds": 11.068
         },
         {
           "kind": "key",
-          "atMs": 126454,
-          "relativeSeconds": 11.159
+          "atMs": 126481,
+          "relativeSeconds": 11.166
         },
         {
           "kind": "key",
-          "atMs": 126552,
-          "relativeSeconds": 11.257
+          "atMs": 126579,
+          "relativeSeconds": 11.264
         },
         {
           "kind": "key",
-          "atMs": 126649,
-          "relativeSeconds": 11.354
+          "atMs": 126676,
+          "relativeSeconds": 11.361
         },
         {
           "kind": "key",
-          "atMs": 126746,
-          "relativeSeconds": 11.451
+          "atMs": 126775,
+          "relativeSeconds": 11.46
         },
         {
           "kind": "key",
-          "atMs": 126857,
-          "relativeSeconds": 11.562
+          "atMs": 126873,
+          "relativeSeconds": 11.558
         },
         {
           "kind": "key",
-          "atMs": 126954,
-          "relativeSeconds": 11.659
+          "atMs": 126970,
+          "relativeSeconds": 11.655
         },
         {
           "kind": "key",
-          "atMs": 127054,
-          "relativeSeconds": 11.759
+          "atMs": 127067,
+          "relativeSeconds": 11.752
         },
         {
           "kind": "key",
-          "atMs": 127152,
-          "relativeSeconds": 11.857
+          "atMs": 127164,
+          "relativeSeconds": 11.849
         },
         {
           "kind": "key",
-          "atMs": 127249,
-          "relativeSeconds": 11.954
+          "atMs": 127264,
+          "relativeSeconds": 11.949
         },
         {
           "kind": "key",
-          "atMs": 127347,
-          "relativeSeconds": 12.052
+          "atMs": 127362,
+          "relativeSeconds": 12.047
         },
         {
           "kind": "key",
-          "atMs": 127446,
-          "relativeSeconds": 12.151
+          "atMs": 127459,
+          "relativeSeconds": 12.144
         },
         {
           "kind": "key",
-          "atMs": 127543,
-          "relativeSeconds": 12.248
+          "atMs": 127557,
+          "relativeSeconds": 12.242
         },
         {
           "kind": "key",
-          "atMs": 127641,
-          "relativeSeconds": 12.346
+          "atMs": 127657,
+          "relativeSeconds": 12.342
         },
         {
           "kind": "key",
-          "atMs": 127738,
-          "relativeSeconds": 12.443
+          "atMs": 127756,
+          "relativeSeconds": 12.441
         },
         {
           "kind": "key",
-          "atMs": 127835,
-          "relativeSeconds": 12.54
+          "atMs": 127859,
+          "relativeSeconds": 12.544
         },
         {
           "kind": "key",
-          "atMs": 127932,
-          "relativeSeconds": 12.637
+          "atMs": 127960,
+          "relativeSeconds": 12.645
         },
         {
           "kind": "key",
-          "atMs": 128033,
-          "relativeSeconds": 12.738
+          "atMs": 128057,
+          "relativeSeconds": 12.742
         },
         {
           "kind": "key",
-          "atMs": 128131,
-          "relativeSeconds": 12.836
+          "atMs": 128155,
+          "relativeSeconds": 12.84
         },
         {
           "kind": "key",
-          "atMs": 128228,
-          "relativeSeconds": 12.933
+          "atMs": 128252,
+          "relativeSeconds": 12.937
         },
         {
           "kind": "key",
-          "atMs": 128327,
-          "relativeSeconds": 13.032
+          "atMs": 128350,
+          "relativeSeconds": 13.035
         },
         {
           "kind": "key",
-          "atMs": 128424,
-          "relativeSeconds": 13.129
+          "atMs": 128447,
+          "relativeSeconds": 13.132
         },
         {
           "kind": "key",
-          "atMs": 128521,
-          "relativeSeconds": 13.226
+          "atMs": 128545,
+          "relativeSeconds": 13.23
         },
         {
           "kind": "click",
-          "atMs": 130817,
-          "relativeSeconds": 15.522
+          "atMs": 134524,
+          "relativeSeconds": 19.209
         },
         {
           "kind": "key",
-          "atMs": 131123,
-          "relativeSeconds": 15.828
+          "atMs": 134830,
+          "relativeSeconds": 19.515
         },
         {
           "kind": "key",
-          "atMs": 131124,
-          "relativeSeconds": 15.829
+          "atMs": 134831,
+          "relativeSeconds": 19.516
         },
         {
           "kind": "key",
-          "atMs": 131127,
-          "relativeSeconds": 15.832
+          "atMs": 134834,
+          "relativeSeconds": 19.519
         },
         {
           "kind": "key",
-          "atMs": 131223,
-          "relativeSeconds": 15.928
+          "atMs": 134930,
+          "relativeSeconds": 19.615
         },
         {
           "kind": "key",
-          "atMs": 131320,
-          "relativeSeconds": 16.025
+          "atMs": 135027,
+          "relativeSeconds": 19.712
         },
         {
           "kind": "key",
-          "atMs": 131417,
-          "relativeSeconds": 16.122
+          "atMs": 135124,
+          "relativeSeconds": 19.809
         },
         {
           "kind": "key",
-          "atMs": 131515,
-          "relativeSeconds": 16.22
+          "atMs": 135221,
+          "relativeSeconds": 19.906
         },
         {
           "kind": "key",
-          "atMs": 131613,
-          "relativeSeconds": 16.318
+          "atMs": 135318,
+          "relativeSeconds": 20.003
         },
         {
           "kind": "key",
-          "atMs": 131710,
-          "relativeSeconds": 16.415
+          "atMs": 135415,
+          "relativeSeconds": 20.1
         },
         {
           "kind": "key",
-          "atMs": 131807,
-          "relativeSeconds": 16.512
+          "atMs": 135513,
+          "relativeSeconds": 20.198
         },
         {
           "kind": "key",
-          "atMs": 131908,
-          "relativeSeconds": 16.613
+          "atMs": 135614,
+          "relativeSeconds": 20.299
         },
         {
           "kind": "key",
-          "atMs": 132011,
-          "relativeSeconds": 16.716
+          "atMs": 135715,
+          "relativeSeconds": 20.4
         },
         {
           "kind": "key",
-          "atMs": 132109,
-          "relativeSeconds": 16.814
+          "atMs": 135815,
+          "relativeSeconds": 20.5
         },
         {
           "kind": "key",
-          "atMs": 132207,
-          "relativeSeconds": 16.912
+          "atMs": 135916,
+          "relativeSeconds": 20.601
         },
         {
           "kind": "key",
-          "atMs": 132304,
-          "relativeSeconds": 17.009
+          "atMs": 136021,
+          "relativeSeconds": 20.706
         },
         {
           "kind": "key",
-          "atMs": 132402,
-          "relativeSeconds": 17.107
+          "atMs": 136117,
+          "relativeSeconds": 20.802
         },
         {
           "kind": "key",
-          "atMs": 132499,
-          "relativeSeconds": 17.204
+          "atMs": 136215,
+          "relativeSeconds": 20.9
         },
         {
           "kind": "key",
-          "atMs": 132597,
-          "relativeSeconds": 17.302
+          "atMs": 136314,
+          "relativeSeconds": 20.999
         },
         {
           "kind": "key",
-          "atMs": 132697,
-          "relativeSeconds": 17.402
+          "atMs": 136412,
+          "relativeSeconds": 21.097
         },
         {
           "kind": "key",
-          "atMs": 132797,
-          "relativeSeconds": 17.502
+          "atMs": 136514,
+          "relativeSeconds": 21.199
         },
         {
           "kind": "key",
-          "atMs": 132898,
-          "relativeSeconds": 17.603
+          "atMs": 136612,
+          "relativeSeconds": 21.297
         },
         {
           "kind": "key",
-          "atMs": 132999,
-          "relativeSeconds": 17.704
+          "atMs": 136714,
+          "relativeSeconds": 21.399
         },
         {
           "kind": "key",
-          "atMs": 133097,
-          "relativeSeconds": 17.802
+          "atMs": 136823,
+          "relativeSeconds": 21.508
         },
         {
           "kind": "key",
-          "atMs": 133196,
-          "relativeSeconds": 17.901
+          "atMs": 136921,
+          "relativeSeconds": 21.606
         },
         {
           "kind": "key",
-          "atMs": 133293,
-          "relativeSeconds": 17.998
+          "atMs": 137019,
+          "relativeSeconds": 21.704
         },
         {
           "kind": "key",
-          "atMs": 133391,
-          "relativeSeconds": 18.096
+          "atMs": 137117,
+          "relativeSeconds": 21.802
         },
         {
           "kind": "key",
-          "atMs": 133490,
-          "relativeSeconds": 18.195
+          "atMs": 137214,
+          "relativeSeconds": 21.899
         },
         {
           "kind": "click",
-          "atMs": 134236,
-          "relativeSeconds": 18.941
+          "atMs": 137958,
+          "relativeSeconds": 22.643
         }
       ],
       "frames": [
         {
           "scene": "variables",
           "fraction": 0.024695423114916036,
-          "seconds": 115.895,
+          "seconds": 115.915,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-2.png"
         },
         {
           "scene": "variables",
           "fraction": 0.25,
-          "seconds": 121.369,
+          "seconds": 121.389,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-25.png"
         },
         {
           "scene": "variables",
           "fraction": 0.45,
-          "seconds": 126.2282,
+          "seconds": 126.2482,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-45.png"
         },
         {
           "scene": "variables",
           "fraction": 0.6,
-          "seconds": 129.8726,
+          "seconds": 129.89260000000002,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-60.png"
         },
         {
           "scene": "variables",
           "fraction": 0.85,
-          "seconds": 135.94660000000002,
+          "seconds": 135.9666,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-85.png"
         },
         {
           "scene": "variables",
           "fraction": 0.9876522884425419,
-          "seconds": 139.291,
+          "seconds": 139.311,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/variables-end.png"
         }
       ]
     },
     {
       "chapter": "apply",
-      "startSeconds": 141.848,
-      "endSeconds": 163.89,
+      "startSeconds": 141.872,
+      "endSeconds": 163.915,
       "sentences": [
         {
           "text": "De retour dans le message, voici une première version écrite à la main.",
           "startMs": 429,
           "endMs": 3646,
           "method": "silence",
-          "videoSeconds": 142.277
+          "videoSeconds": 142.301
         },
         {
           "text": "Choisir un modèle dans la liste ne la remplace pas encore :",
           "startMs": 4266,
           "endMs": 7398,
           "method": "silence",
-          "videoSeconds": 146.114
+          "videoSeconds": 146.138
         },
         {
           "text": "il faut cliquer sur Utiliser ce modèle.",
           "startMs": 7631,
           "endMs": 8558,
           "method": "silence",
-          "videoSeconds": 149.479
+          "videoSeconds": 149.503
         },
         {
           "text": "L'objet et le texte changent alors ensemble.",
           "startMs": 8994,
           "endMs": 11251,
           "method": "silence",
-          "videoSeconds": 150.842
+          "videoSeconds": 150.866
         },
         {
           "text": "Si ce n'est pas ce que vous vouliez, Rétablir le texte précédent récupère votre version.",
           "startMs": 11957,
           "endMs": 15638,
           "method": "silence",
-          "videoSeconds": 153.805
+          "videoSeconds": 153.829
         },
         {
           "text": "Appliquons de nouveau notre briefing, puis choisissons un créneau pour que toutes ses variables puissent être remplacées.",
           "startMs": 16321,
           "endMs": 21701,
           "method": "silence",
-          "videoSeconds": 158.169
+          "videoSeconds": 158.193
         }
       ],
       "anchors": [
@@ -2151,525 +2158,525 @@
           "phrase": "L'objet et le texte changent",
           "startMs": 8994,
           "endMs": 11251,
-          "cueMs": 150843
+          "cueMs": 150867
         },
         {
           "segmentId": "apply",
           "phrase": "Si ce n'est pas ce",
           "startMs": 11957,
           "endMs": 15638,
-          "cueMs": 153809
+          "cueMs": 153832
         },
         {
           "segmentId": "apply",
           "phrase": "Appliquons de nouveau notre briefing",
           "startMs": 16321,
           "endMs": 21701,
-          "cueMs": 158169
+          "cueMs": 158194
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 143496,
-          "relativeSeconds": 1.648
+          "atMs": 143500,
+          "relativeSeconds": 1.628
         },
         {
           "kind": "key",
-          "atMs": 143804,
-          "relativeSeconds": 1.956
-        },
-        {
-          "kind": "key",
-          "atMs": 143804,
-          "relativeSeconds": 1.956
+          "atMs": 143806,
+          "relativeSeconds": 1.934
         },
         {
           "kind": "key",
           "atMs": 143807,
-          "relativeSeconds": 1.959
+          "relativeSeconds": 1.935
         },
         {
           "kind": "key",
-          "atMs": 143904,
-          "relativeSeconds": 2.056
+          "atMs": 143810,
+          "relativeSeconds": 1.938
         },
         {
           "kind": "key",
-          "atMs": 144002,
-          "relativeSeconds": 2.154
+          "atMs": 143907,
+          "relativeSeconds": 2.035
         },
         {
           "kind": "key",
-          "atMs": 144100,
-          "relativeSeconds": 2.252
+          "atMs": 144004,
+          "relativeSeconds": 2.132
         },
         {
           "kind": "key",
-          "atMs": 144198,
-          "relativeSeconds": 2.35
+          "atMs": 144103,
+          "relativeSeconds": 2.231
         },
         {
           "kind": "key",
-          "atMs": 144296,
-          "relativeSeconds": 2.448
+          "atMs": 144200,
+          "relativeSeconds": 2.328
         },
         {
           "kind": "key",
-          "atMs": 144395,
-          "relativeSeconds": 2.547
+          "atMs": 144297,
+          "relativeSeconds": 2.425
         },
         {
           "kind": "key",
-          "atMs": 144492,
-          "relativeSeconds": 2.644
+          "atMs": 144394,
+          "relativeSeconds": 2.522
+        },
+        {
+          "kind": "key",
+          "atMs": 144493,
+          "relativeSeconds": 2.621
         },
         {
           "kind": "key",
           "atMs": 144590,
-          "relativeSeconds": 2.742
+          "relativeSeconds": 2.718
         },
         {
           "kind": "key",
-          "atMs": 144688,
-          "relativeSeconds": 2.84
+          "atMs": 144687,
+          "relativeSeconds": 2.815
         },
         {
           "kind": "key",
           "atMs": 144785,
-          "relativeSeconds": 2.937
+          "relativeSeconds": 2.913
         },
         {
           "kind": "key",
-          "atMs": 144883,
-          "relativeSeconds": 3.035
+          "atMs": 144885,
+          "relativeSeconds": 3.013
         },
         {
           "kind": "key",
           "atMs": 144984,
-          "relativeSeconds": 3.136
+          "relativeSeconds": 3.112
         },
         {
           "kind": "key",
-          "atMs": 145081,
-          "relativeSeconds": 3.233
+          "atMs": 145082,
+          "relativeSeconds": 3.21
         },
         {
           "kind": "key",
-          "atMs": 145179,
-          "relativeSeconds": 3.331
+          "atMs": 145178,
+          "relativeSeconds": 3.306
         },
         {
           "kind": "key",
-          "atMs": 145277,
-          "relativeSeconds": 3.429
+          "atMs": 145276,
+          "relativeSeconds": 3.404
         },
         {
           "kind": "key",
           "atMs": 145375,
-          "relativeSeconds": 3.527
+          "relativeSeconds": 3.503
         },
         {
           "kind": "key",
-          "atMs": 145472,
-          "relativeSeconds": 3.624
+          "atMs": 145473,
+          "relativeSeconds": 3.601
         },
         {
           "kind": "key",
-          "atMs": 145568,
-          "relativeSeconds": 3.72
+          "atMs": 145570,
+          "relativeSeconds": 3.698
         },
         {
           "kind": "click",
-          "atMs": 146312,
-          "relativeSeconds": 4.464
+          "atMs": 146315,
+          "relativeSeconds": 4.443
         },
         {
           "kind": "key",
-          "atMs": 146620,
-          "relativeSeconds": 4.772
+          "atMs": 146623,
+          "relativeSeconds": 4.751
         },
         {
           "kind": "key",
-          "atMs": 146620,
-          "relativeSeconds": 4.772
+          "atMs": 146624,
+          "relativeSeconds": 4.752
         },
         {
           "kind": "key",
-          "atMs": 146626,
-          "relativeSeconds": 4.778
+          "atMs": 146627,
+          "relativeSeconds": 4.755
         },
         {
           "kind": "key",
           "atMs": 146723,
-          "relativeSeconds": 4.875
+          "relativeSeconds": 4.851
         },
         {
           "kind": "key",
-          "atMs": 146821,
-          "relativeSeconds": 4.973
+          "atMs": 146822,
+          "relativeSeconds": 4.95
         },
         {
           "kind": "key",
           "atMs": 146919,
-          "relativeSeconds": 5.071
+          "relativeSeconds": 5.047
         },
         {
           "kind": "key",
           "atMs": 147016,
-          "relativeSeconds": 5.168
+          "relativeSeconds": 5.144
         },
         {
           "kind": "key",
-          "atMs": 147127,
-          "relativeSeconds": 5.279
+          "atMs": 147114,
+          "relativeSeconds": 5.242
         },
         {
           "kind": "key",
-          "atMs": 147223,
-          "relativeSeconds": 5.375
+          "atMs": 147211,
+          "relativeSeconds": 5.339
         },
         {
           "kind": "key",
-          "atMs": 147321,
-          "relativeSeconds": 5.473
+          "atMs": 147309,
+          "relativeSeconds": 5.437
         },
         {
           "kind": "key",
-          "atMs": 147419,
-          "relativeSeconds": 5.571
+          "atMs": 147407,
+          "relativeSeconds": 5.535
         },
         {
           "kind": "key",
-          "atMs": 147517,
-          "relativeSeconds": 5.669
+          "atMs": 147505,
+          "relativeSeconds": 5.633
         },
         {
           "kind": "key",
-          "atMs": 147615,
-          "relativeSeconds": 5.767
+          "atMs": 147602,
+          "relativeSeconds": 5.73
         },
         {
           "kind": "key",
-          "atMs": 147713,
-          "relativeSeconds": 5.865
+          "atMs": 147700,
+          "relativeSeconds": 5.828
         },
         {
           "kind": "key",
-          "atMs": 147811,
-          "relativeSeconds": 5.963
+          "atMs": 147797,
+          "relativeSeconds": 5.925
         },
         {
           "kind": "key",
-          "atMs": 147908,
-          "relativeSeconds": 6.06
+          "atMs": 147895,
+          "relativeSeconds": 6.023
         },
         {
           "kind": "key",
-          "atMs": 148007,
-          "relativeSeconds": 6.159
+          "atMs": 147992,
+          "relativeSeconds": 6.12
         },
         {
           "kind": "key",
-          "atMs": 148105,
-          "relativeSeconds": 6.257
+          "atMs": 148091,
+          "relativeSeconds": 6.219
         },
         {
           "kind": "key",
-          "atMs": 148201,
-          "relativeSeconds": 6.353
+          "atMs": 148189,
+          "relativeSeconds": 6.317
         },
         {
           "kind": "key",
-          "atMs": 148299,
-          "relativeSeconds": 6.451
+          "atMs": 148287,
+          "relativeSeconds": 6.415
         },
         {
           "kind": "key",
-          "atMs": 148397,
-          "relativeSeconds": 6.549
+          "atMs": 148384,
+          "relativeSeconds": 6.512
         },
         {
           "kind": "key",
-          "atMs": 148494,
-          "relativeSeconds": 6.646
+          "atMs": 148483,
+          "relativeSeconds": 6.611
         },
         {
           "kind": "key",
-          "atMs": 148592,
-          "relativeSeconds": 6.744
+          "atMs": 148581,
+          "relativeSeconds": 6.709
         },
         {
           "kind": "key",
-          "atMs": 148690,
-          "relativeSeconds": 6.842
+          "atMs": 148679,
+          "relativeSeconds": 6.807
         },
         {
           "kind": "key",
-          "atMs": 148789,
-          "relativeSeconds": 6.941
+          "atMs": 148777,
+          "relativeSeconds": 6.905
         },
         {
           "kind": "key",
-          "atMs": 148887,
-          "relativeSeconds": 7.039
+          "atMs": 148875,
+          "relativeSeconds": 7.003
         },
         {
           "kind": "key",
-          "atMs": 148986,
-          "relativeSeconds": 7.138
+          "atMs": 148973,
+          "relativeSeconds": 7.101
         },
         {
           "kind": "key",
-          "atMs": 149083,
-          "relativeSeconds": 7.235
+          "atMs": 149071,
+          "relativeSeconds": 7.199
         },
         {
           "kind": "key",
-          "atMs": 149180,
-          "relativeSeconds": 7.332
+          "atMs": 149168,
+          "relativeSeconds": 7.296
         },
         {
           "kind": "key",
-          "atMs": 149278,
-          "relativeSeconds": 7.43
+          "atMs": 149266,
+          "relativeSeconds": 7.394
         },
         {
           "kind": "key",
-          "atMs": 149376,
-          "relativeSeconds": 7.528
+          "atMs": 149364,
+          "relativeSeconds": 7.492
         },
         {
           "kind": "key",
-          "atMs": 149474,
-          "relativeSeconds": 7.626
+          "atMs": 149462,
+          "relativeSeconds": 7.59
         },
         {
           "kind": "key",
-          "atMs": 149572,
-          "relativeSeconds": 7.724
+          "atMs": 149560,
+          "relativeSeconds": 7.688
         },
         {
           "kind": "key",
-          "atMs": 149670,
-          "relativeSeconds": 7.822
+          "atMs": 149658,
+          "relativeSeconds": 7.786
         },
         {
           "kind": "key",
-          "atMs": 149768,
-          "relativeSeconds": 7.92
+          "atMs": 149755,
+          "relativeSeconds": 7.883
         },
         {
           "kind": "key",
-          "atMs": 149866,
-          "relativeSeconds": 8.018
+          "atMs": 149853,
+          "relativeSeconds": 7.981
         },
         {
           "kind": "click",
-          "atMs": 151312,
-          "relativeSeconds": 9.464
+          "atMs": 151332,
+          "relativeSeconds": 9.46
         },
         {
           "kind": "click",
-          "atMs": 154297,
-          "relativeSeconds": 12.449
+          "atMs": 154298,
+          "relativeSeconds": 12.426
         },
         {
           "kind": "click",
-          "atMs": 158629,
-          "relativeSeconds": 16.781
+          "atMs": 158665,
+          "relativeSeconds": 16.793
         },
         {
           "kind": "click",
-          "atMs": 159412,
-          "relativeSeconds": 17.564
+          "atMs": 159448,
+          "relativeSeconds": 17.576
         }
       ],
       "frames": [
         {
           "scene": "apply",
-          "fraction": 0.027220760366572908,
-          "seconds": 142.448,
+          "fraction": 0.027219525472939255,
+          "seconds": 142.472,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-3.png"
         },
         {
           "scene": "apply",
           "fraction": 0.25,
-          "seconds": 147.3585,
+          "seconds": 147.38275,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-25.png"
         },
         {
           "scene": "apply",
           "fraction": 0.45,
-          "seconds": 151.7669,
+          "seconds": 151.79135,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-45.png"
         },
         {
           "scene": "apply",
           "fraction": 0.6,
-          "seconds": 155.0732,
+          "seconds": 155.09779999999998,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-60.png"
         },
         {
           "scene": "apply",
           "fraction": 0.85,
-          "seconds": 160.58370000000002,
+          "seconds": 160.60854999999998,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-85.png"
         },
         {
           "scene": "apply",
-          "fraction": 0.9863896198167136,
-          "seconds": 163.59,
+          "fraction": 0.9863902372635304,
+          "seconds": 163.615,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/apply-end.png"
         }
       ]
     },
     {
       "chapter": "context",
-      "startSeconds": 166.151,
-      "endSeconds": 187.757,
+      "startSeconds": 166.18,
+      "endSeconds": 187.788,
       "sentences": [
         {
           "text": "Un modèle contenant créneau ne convient pas à toute l'équipe :",
           "startMs": 329,
           "endMs": 3362,
           "method": "silence",
-          "videoSeconds": 166.48
+          "videoSeconds": 166.509
         },
         {
           "text": "chacun peut avoir un horaire différent.",
           "startMs": 3645,
           "endMs": 5020,
           "method": "silence",
-          "videoSeconds": 169.796
+          "videoSeconds": 169.825
         },
         {
           "text": "Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir.",
           "startMs": 5515,
           "endMs": 9544,
           "method": "silence",
-          "videoSeconds": 171.666
+          "videoSeconds": 171.695
         },
         {
           "text": "Revenons à un seul créneau.",
           "startMs": 10417,
           "endMs": 11335,
           "method": "silence",
-          "videoSeconds": 176.568
+          "videoSeconds": 176.597
         },
         {
           "text": "Pour écrire à tout le monde, vous pouvez aussi adapter le modèle avec une consigne générale et garder seulement prénom et événement.",
           "startMs": 11844,
           "endMs": 17599,
           "method": "silence",
-          "videoSeconds": 177.995
+          "videoSeconds": 178.024
         },
         {
           "text": "L'idée est de personnaliser juste, pas de remplir les accolades au hasard.",
           "startMs": 18309,
           "endMs": 21218,
           "method": "silence",
-          "videoSeconds": 184.46
+          "videoSeconds": 184.489
         }
       ],
       "anchors": [],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 166628,
-          "relativeSeconds": 0.477
+          "atMs": 166664,
+          "relativeSeconds": 0.484
         },
         {
           "kind": "click",
-          "atMs": 178961,
-          "relativeSeconds": 12.81
+          "atMs": 178964,
+          "relativeSeconds": 12.784
         }
       ],
       "frames": [
         {
           "scene": "context",
-          "fraction": 0.027770063871146902,
-          "seconds": 166.751,
+          "fraction": 0.027767493520918177,
+          "seconds": 166.78,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-3.png"
         },
         {
           "scene": "context",
           "fraction": 0.25,
-          "seconds": 171.5525,
+          "seconds": 171.582,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-25.png"
         },
         {
           "scene": "context",
           "fraction": 0.45,
-          "seconds": 175.8737,
+          "seconds": 175.9036,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-45.png"
         },
         {
           "scene": "context",
           "fraction": 0.6,
-          "seconds": 179.1146,
+          "seconds": 179.14479999999998,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-60.png"
         },
         {
           "scene": "context",
           "fraction": 0.85,
-          "seconds": 184.5161,
+          "seconds": 184.5468,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-85.png"
         },
         {
           "scene": "context",
-          "fraction": 0.9861149680644266,
-          "seconds": 187.457,
+          "fraction": 0.9861162532395409,
+          "seconds": 187.488,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/context-end.png"
         }
       ]
     },
     {
       "chapter": "preview",
-      "startSeconds": 190.013,
-      "endSeconds": 209.835,
+      "startSeconds": 190.049,
+      "endSeconds": 209.871,
       "sentences": [
         {
           "text": "Ouvrons maintenant l'aperçu.",
           "startMs": 391,
           "endMs": 1598,
           "method": "silence",
-          "videoSeconds": 190.404
+          "videoSeconds": 190.44
         },
         {
           "text": "C'est l'email préparé pour le premier destinataire :",
           "startMs": 1970,
           "endMs": 4041,
           "method": "silence",
-          "videoSeconds": 191.983
+          "videoSeconds": 192.019
         },
         {
           "text": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte.",
           "startMs": 4374,
           "endMs": 8420,
           "method": "silence",
-          "videoSeconds": 194.387
+          "videoSeconds": 194.423
         },
         {
           "text": "Prenez le temps de le lire comme si vous le receviez.",
           "startMs": 8828,
           "endMs": 11349,
           "method": "silence",
-          "videoSeconds": 198.841
+          "videoSeconds": 198.877
         },
         {
           "text": "Ce n'est pas un aperçu de toutes les personnes à la fois.",
           "startMs": 11860,
           "endMs": 13924,
           "method": "silence",
-          "videoSeconds": 201.873
+          "videoSeconds": 201.909
         },
         {
           "text": "Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
           "startMs": 14566,
           "endMs": 19505,
           "method": "silence",
-          "videoSeconds": 204.579
+          "videoSeconds": 204.615
         }
       ],
       "anchors": [
@@ -2678,251 +2685,251 @@
           "phrase": "Si une phrase manque de",
           "startMs": 14566,
           "endMs": 19505,
-          "cueMs": 204580
+          "cueMs": 204615
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 190494,
+          "atMs": 190530,
           "relativeSeconds": 0.481
         },
         {
           "kind": "click",
-          "atMs": 205060,
-          "relativeSeconds": 15.047
+          "atMs": 205080,
+          "relativeSeconds": 15.031
         },
         {
           "kind": "click",
-          "atMs": 205843,
-          "relativeSeconds": 15.83
+          "atMs": 205863,
+          "relativeSeconds": 15.814
         },
         {
           "kind": "key",
-          "atMs": 206150,
-          "relativeSeconds": 16.137
+          "atMs": 206170,
+          "relativeSeconds": 16.121
         },
         {
           "kind": "key",
-          "atMs": 206150,
-          "relativeSeconds": 16.137
+          "atMs": 206171,
+          "relativeSeconds": 16.122
         },
         {
           "kind": "key",
-          "atMs": 206154,
-          "relativeSeconds": 16.141
+          "atMs": 206174,
+          "relativeSeconds": 16.125
         },
         {
           "kind": "key",
-          "atMs": 206156,
-          "relativeSeconds": 16.143
+          "atMs": 206177,
+          "relativeSeconds": 16.128
         },
         {
           "kind": "key",
-          "atMs": 206253,
-          "relativeSeconds": 16.24
+          "atMs": 206274,
+          "relativeSeconds": 16.225
         },
         {
           "kind": "key",
-          "atMs": 206351,
-          "relativeSeconds": 16.338
+          "atMs": 206372,
+          "relativeSeconds": 16.323
         },
         {
           "kind": "key",
-          "atMs": 206449,
-          "relativeSeconds": 16.436
+          "atMs": 206470,
+          "relativeSeconds": 16.421
         },
         {
           "kind": "key",
-          "atMs": 206549,
-          "relativeSeconds": 16.536
+          "atMs": 206568,
+          "relativeSeconds": 16.519
         },
         {
           "kind": "key",
-          "atMs": 206647,
-          "relativeSeconds": 16.634
+          "atMs": 206666,
+          "relativeSeconds": 16.617
         },
         {
           "kind": "key",
-          "atMs": 206745,
-          "relativeSeconds": 16.732
+          "atMs": 206764,
+          "relativeSeconds": 16.715
         },
         {
           "kind": "key",
-          "atMs": 206843,
-          "relativeSeconds": 16.83
+          "atMs": 206862,
+          "relativeSeconds": 16.813
         },
         {
           "kind": "key",
-          "atMs": 206942,
-          "relativeSeconds": 16.929
+          "atMs": 206960,
+          "relativeSeconds": 16.911
         },
         {
           "kind": "key",
-          "atMs": 207039,
-          "relativeSeconds": 17.026
+          "atMs": 207058,
+          "relativeSeconds": 17.009
         },
         {
           "kind": "key",
-          "atMs": 207137,
-          "relativeSeconds": 17.124
+          "atMs": 207156,
+          "relativeSeconds": 17.107
         },
         {
           "kind": "key",
-          "atMs": 207235,
-          "relativeSeconds": 17.222
+          "atMs": 207255,
+          "relativeSeconds": 17.206
         },
         {
           "kind": "key",
-          "atMs": 207333,
-          "relativeSeconds": 17.32
+          "atMs": 207353,
+          "relativeSeconds": 17.304
         },
         {
           "kind": "key",
-          "atMs": 207432,
-          "relativeSeconds": 17.419
+          "atMs": 207451,
+          "relativeSeconds": 17.402
         },
         {
           "kind": "key",
-          "atMs": 207529,
-          "relativeSeconds": 17.516
+          "atMs": 207549,
+          "relativeSeconds": 17.5
         },
         {
           "kind": "key",
-          "atMs": 207628,
-          "relativeSeconds": 17.615
+          "atMs": 207646,
+          "relativeSeconds": 17.597
         },
         {
           "kind": "key",
-          "atMs": 207726,
-          "relativeSeconds": 17.713
+          "atMs": 207744,
+          "relativeSeconds": 17.695
         },
         {
           "kind": "key",
-          "atMs": 207823,
-          "relativeSeconds": 17.81
+          "atMs": 207841,
+          "relativeSeconds": 17.792
         },
         {
           "kind": "key",
-          "atMs": 207921,
-          "relativeSeconds": 17.908
+          "atMs": 207940,
+          "relativeSeconds": 17.891
         },
         {
           "kind": "key",
-          "atMs": 208019,
-          "relativeSeconds": 18.006
+          "atMs": 208038,
+          "relativeSeconds": 17.989
         },
         {
           "kind": "key",
-          "atMs": 208117,
-          "relativeSeconds": 18.104
+          "atMs": 208136,
+          "relativeSeconds": 18.087
         },
         {
           "kind": "key",
-          "atMs": 208215,
-          "relativeSeconds": 18.202
+          "atMs": 208234,
+          "relativeSeconds": 18.185
         },
         {
           "kind": "key",
-          "atMs": 208313,
-          "relativeSeconds": 18.3
+          "atMs": 208331,
+          "relativeSeconds": 18.282
         },
         {
           "kind": "key",
-          "atMs": 208411,
-          "relativeSeconds": 18.398
+          "atMs": 208430,
+          "relativeSeconds": 18.381
         },
         {
           "kind": "key",
-          "atMs": 208509,
-          "relativeSeconds": 18.496
+          "atMs": 208527,
+          "relativeSeconds": 18.478
         }
       ],
       "frames": [
         {
           "scene": "preview",
           "fraction": 0.030269397638986985,
-          "seconds": 190.613,
+          "seconds": 190.649,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-3.png"
         },
         {
           "scene": "preview",
           "fraction": 0.25,
-          "seconds": 194.9685,
+          "seconds": 195.0045,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-25.png"
         },
         {
           "scene": "preview",
           "fraction": 0.45,
-          "seconds": 198.9329,
+          "seconds": 198.9689,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-45.png"
         },
         {
           "scene": "preview",
           "fraction": 0.6,
-          "seconds": 201.9062,
+          "seconds": 201.9422,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-60.png"
         },
         {
           "scene": "preview",
           "fraction": 0.85,
-          "seconds": 206.8617,
+          "seconds": 206.89770000000001,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-85.png"
         },
         {
           "scene": "preview",
           "fraction": 0.9848653011805065,
-          "seconds": 209.535,
+          "seconds": 209.571,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/preview-end.png"
         }
       ]
     },
     {
       "chapter": "push",
-      "startSeconds": 212.092,
-      "endSeconds": 236.322,
+      "startSeconds": 212.129,
+      "endSeconds": 236.36,
       "sentences": [
         {
           "text": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur.",
           "startMs": 315,
           "endMs": 3238,
           "method": "silence",
-          "videoSeconds": 212.407
+          "videoSeconds": 212.444
         },
         {
           "text": "Elle concerne seulement les appareils réellement abonnés aux notifications ;",
           "startMs": 3714,
           "endMs": 8655,
           "method": "silence",
-          "videoSeconds": 215.806
+          "videoSeconds": 215.843
         },
         {
           "text": "elle ne remplace pas l'email et n'atteint pas tous les téléphones par magie.",
           "startMs": 8777,
           "endMs": 11722,
           "method": "silence",
-          "videoSeconds": 220.869
+          "videoSeconds": 220.906
         },
         {
           "text": "L'objet sert de titre, et la première ligne non vide du message sert de texte court.",
           "startMs": 12065,
           "endMs": 16139,
           "method": "silence",
-          "videoSeconds": 224.157
+          "videoSeconds": 224.194
         },
         {
           "text": "Le nombre d'appareils n'est donc pas le nombre de personnes.",
           "startMs": 16325,
           "endMs": 19055,
           "method": "silence",
-          "videoSeconds": 228.417
+          "videoSeconds": 228.454
         },
         {
           "text": "Gardez les informations utiles au début et vérifiez ce qui sera envoyé.",
           "startMs": 19656,
           "endMs": 23538,
           "method": "silence",
-          "videoSeconds": 231.748
+          "videoSeconds": 231.785
         }
       ],
       "anchors": [
@@ -2931,120 +2938,120 @@
           "phrase": "Vous pouvez aussi demander une notification",
           "startMs": 315,
           "endMs": 3238,
-          "cueMs": 212407
+          "cueMs": 212445
         },
         {
           "segmentId": "push",
           "phrase": "Le nombre d'appareils n'est donc",
           "startMs": 16325,
           "endMs": 19055,
-          "cueMs": 228418
+          "cueMs": 228456
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 212876,
+          "atMs": 212913,
           "relativeSeconds": 0.784
         },
         {
           "kind": "click",
-          "atMs": 228892,
+          "atMs": 228929,
           "relativeSeconds": 16.8
         }
       ],
       "frames": [
         {
           "scene": "push",
-          "fraction": 0.024762690879075525,
-          "seconds": 212.692,
+          "fraction": 0.02476166893648632,
+          "seconds": 212.729,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-2.png"
         },
         {
           "scene": "push",
           "fraction": 0.25,
-          "seconds": 218.1495,
+          "seconds": 218.18675,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-25.png"
         },
         {
           "scene": "push",
           "fraction": 0.45,
-          "seconds": 222.9955,
+          "seconds": 223.03295,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-45.png"
         },
         {
           "scene": "push",
           "fraction": 0.6,
-          "seconds": 226.63,
+          "seconds": 226.6676,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-60.png"
         },
         {
           "scene": "push",
           "fraction": 0.85,
-          "seconds": 232.6875,
+          "seconds": 232.72535,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-85.png"
         },
         {
           "scene": "push",
-          "fraction": 0.9876186545604623,
-          "seconds": 236.022,
+          "fraction": 0.9876191655317569,
+          "seconds": 236.06,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/push-end.png"
         }
       ]
     },
     {
       "chapter": "confirm",
-      "startSeconds": 238.581,
-      "endSeconds": 262.529,
+      "startSeconds": 238.619,
+      "endSeconds": 262.568,
       "sentences": [
         {
           "text": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation.",
           "startMs": 202,
           "endMs": 4057,
           "method": "silence",
-          "videoSeconds": 238.783
+          "videoSeconds": 238.821
         },
         {
           "text": "Relisez le public et le nombre de destinataires avant de valider.",
           "startMs": 4921,
           "endMs": 7987,
           "method": "silence",
-          "videoSeconds": 243.502
+          "videoSeconds": 243.54
         },
         {
           "text": "Nous annulons une première fois :",
           "startMs": 8960,
           "endMs": 8963,
           "method": "silence",
-          "videoSeconds": 247.541
+          "videoSeconds": 247.579
         },
         {
           "text": "aucun message n'est parti.",
           "startMs": 9151,
           "endMs": 10363,
           "method": "silence",
-          "videoSeconds": 247.732
+          "videoSeconds": 247.77
         },
         {
           "text": "Reprenons ensuite le parcours et confirmons réellement notre briefing.",
           "startMs": 11073,
           "endMs": 15651,
           "method": "silence",
-          "videoSeconds": 249.654
+          "videoSeconds": 249.692
         },
         {
           "text": "Ces étapes servent à éviter le clic trop rapide, surtout quand vous écrivez à beaucoup de monde.",
           "startMs": 16103,
           "endMs": 20123,
           "method": "silence",
-          "videoSeconds": 254.684
+          "videoSeconds": 254.722
         },
         {
           "text": "Attendez le résultat plutôt que de relancer l'envoi immédiatement.",
           "startMs": 20797,
           "endMs": 23380,
           "method": "silence",
-          "videoSeconds": 259.378
+          "videoSeconds": 259.416
         }
       ],
       "anchors": [
@@ -3053,147 +3060,147 @@
           "phrase": "Relisez le public et le",
           "startMs": 4921,
           "endMs": 7987,
-          "cueMs": 243503
+          "cueMs": 243541
         },
         {
           "segmentId": "confirm",
           "phrase": "aucun message n'est parti.",
           "startMs": 9151,
           "endMs": 10363,
-          "cueMs": 247732
+          "cueMs": 247774
         },
         {
           "segmentId": "confirm",
           "phrase": "Reprenons ensuite le parcours et",
           "startMs": 11073,
           "endMs": 15651,
-          "cueMs": 249654
+          "cueMs": 249693
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 239058,
-          "relativeSeconds": 0.477
+          "atMs": 239095,
+          "relativeSeconds": 0.476
         },
         {
           "kind": "click",
-          "atMs": 243992,
-          "relativeSeconds": 5.411
+          "atMs": 244029,
+          "relativeSeconds": 5.41
         },
         {
           "kind": "click",
-          "atMs": 248191,
-          "relativeSeconds": 9.61
+          "atMs": 248244,
+          "relativeSeconds": 9.625
         },
         {
           "kind": "click",
-          "atMs": 250168,
-          "relativeSeconds": 11.587
+          "atMs": 250161,
+          "relativeSeconds": 11.542
         },
         {
           "kind": "click",
-          "atMs": 250958,
-          "relativeSeconds": 12.377
+          "atMs": 250960,
+          "relativeSeconds": 12.341
         },
         {
           "kind": "click",
-          "atMs": 255808,
-          "relativeSeconds": 17.227
+          "atMs": 255861,
+          "relativeSeconds": 17.242
         }
       ],
       "frames": [
         {
           "scene": "confirm",
-          "fraction": 0.025054284282612325,
-          "seconds": 239.181,
+          "fraction": 0.025053238131028437,
+          "seconds": 239.219,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-3.png"
         },
         {
           "scene": "confirm",
           "fraction": 0.25,
-          "seconds": 244.568,
+          "seconds": 244.60625,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-25.png"
         },
         {
           "scene": "confirm",
           "fraction": 0.45,
-          "seconds": 249.35760000000002,
+          "seconds": 249.39605,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-45.png"
         },
         {
           "scene": "confirm",
           "fraction": 0.6,
-          "seconds": 252.94979999999998,
+          "seconds": 252.98839999999998,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-60.png"
         },
         {
           "scene": "confirm",
           "fraction": 0.85,
-          "seconds": 258.9368,
+          "seconds": 258.97565,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-85.png"
         },
         {
           "scene": "confirm",
-          "fraction": 0.9874728578586939,
-          "seconds": 262.229,
+          "fraction": 0.9874733809344858,
+          "seconds": 262.268,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/confirm-end.png"
         }
       ]
     },
     {
       "chapter": "result",
-      "startSeconds": 264.791,
-      "endSeconds": 288.493,
+      "startSeconds": 264.828,
+      "endSeconds": 288.531,
       "sentences": [
         {
           "text": "L'application affiche le résultat de l'envoi.",
           "startMs": 569,
           "endMs": 2558,
           "method": "silence",
-          "videoSeconds": 265.36
+          "videoSeconds": 265.397
         },
         {
           "text": "Dans notre boîte de test, ouvrons les emails de deux bénévoles :",
           "startMs": 2747,
           "endMs": 5884,
           "method": "silence",
-          "videoSeconds": 267.538
+          "videoSeconds": 267.575
         },
         {
           "text": "chacun a son prénom, les mêmes consignes et le bon créneau.",
           "startMs": 6169,
           "endMs": 8859,
           "method": "silence",
-          "videoSeconds": 270.96
+          "videoSeconds": 270.997
         },
         {
           "text": "La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne.",
           "startMs": 9017,
           "endMs": 13582,
           "method": "silence",
-          "videoSeconds": 273.808
+          "videoSeconds": 273.845
         },
         {
           "text": "L'historique conserve ensuite le message et son audience.",
           "startMs": 14472,
           "endMs": 16880,
           "method": "silence",
-          "videoSeconds": 279.263
+          "videoSeconds": 279.3
         },
         {
           "text": "Un envoi réussi ne prouve pas que la personne l'a lu ;",
           "startMs": 17481,
           "endMs": 19624,
           "method": "silence",
-          "videoSeconds": 282.272
+          "videoSeconds": 282.309
         },
         {
           "text": "pour une information urgente, prévoyez aussi votre relais sur le terrain.",
           "startMs": 20025,
           "endMs": 22978,
           "method": "silence",
-          "videoSeconds": 284.816
+          "videoSeconds": 284.853
         }
       ],
       "anchors": [
@@ -3202,109 +3209,109 @@
           "phrase": "L'historique conserve ensuite le message et son audience",
           "startMs": 14472,
           "endMs": 16880,
-          "cueMs": 279263
+          "cueMs": 279304
         }
       ],
       "interactions": [],
       "frames": [
         {
           "scene": "result",
-          "fraction": 0.02531431946671167,
-          "seconds": 265.391,
+          "fraction": 0.025313251487153524,
+          "seconds": 265.428,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-3.png"
         },
         {
           "scene": "result",
           "fraction": 0.25,
-          "seconds": 270.7165,
+          "seconds": 270.75375,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-25.png"
         },
         {
           "scene": "result",
           "fraction": 0.45,
-          "seconds": 275.4569,
+          "seconds": 275.49435,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-45.png"
         },
         {
           "scene": "result",
           "fraction": 0.6,
-          "seconds": 279.0122,
+          "seconds": 279.0498,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-60.png"
         },
         {
           "scene": "result",
           "fraction": 0.85,
-          "seconds": 284.9377,
+          "seconds": 284.97555,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-85.png"
         },
         {
           "scene": "result",
-          "fraction": 0.9873428402666442,
-          "seconds": 288.193,
+          "fraction": 0.9873433742564233,
+          "seconds": 288.231,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/result-end.png"
         }
       ]
     },
     {
       "chapter": "maintain",
-      "startSeconds": 290.754,
-      "endSeconds": 317.616,
+      "startSeconds": 290.794,
+      "endSeconds": 317.656,
       "sentences": [
         {
           "text": "Les modèles peuvent évoluer avec votre organisation.",
           "startMs": 728,
           "endMs": 2762,
           "method": "silence",
-          "videoSeconds": 291.482
+          "videoSeconds": 291.522
         },
         {
           "text": "Ouvrez Modifier, ajustez le nom ou le texte et enregistrez.",
           "startMs": 3334,
           "endMs": 6925,
           "method": "silence",
-          "videoSeconds": 294.088
+          "videoSeconds": 294.128
         },
         {
           "text": "La suppression demande une confirmation :",
           "startMs": 7604,
           "endMs": 9205,
           "method": "silence",
-          "videoSeconds": 298.358
+          "videoSeconds": 298.398
         },
         {
           "text": "vous pouvez encore annuler.",
           "startMs": 9427,
           "endMs": 10281,
           "method": "silence",
-          "videoSeconds": 300.181
+          "videoSeconds": 300.221
         },
         {
           "text": "Un modèle n'est pas l'historique d'un message déjà envoyé.",
           "startMs": 11031,
           "endMs": 13185,
           "method": "silence",
-          "videoSeconds": 301.785
+          "videoSeconds": 301.825
         },
         {
           "text": "Pour chaque nouveau briefing, gardez le même réflexe :",
           "startMs": 13587,
           "endMs": 16318,
           "method": "silence",
-          "videoSeconds": 304.341
+          "videoSeconds": 304.381
         },
         {
           "text": "choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat.",
           "startMs": 16663,
           "endMs": 22034,
           "method": "silence",
-          "videoSeconds": 307.417
+          "videoSeconds": 307.457
         },
         {
           "text": "Des consignes simples et un petit merci, ça aide aussi l'équipe à se sentir accueillie.",
           "startMs": 22849,
           "endMs": 26572,
           "method": "silence",
-          "videoSeconds": 313.603
+          "videoSeconds": 313.643
         }
       ],
       "anchors": [
@@ -3313,267 +3320,267 @@
           "phrase": "La suppression demande une confirmation",
           "startMs": 7604,
           "endMs": 9205,
-          "cueMs": 298360
+          "cueMs": 298399
         },
         {
           "segmentId": "maintain",
           "phrase": "Pour chaque nouveau briefing, gardez",
           "startMs": 13587,
           "endMs": 16318,
-          "cueMs": 304346
+          "cueMs": 304384
         },
         {
           "segmentId": "maintain",
           "phrase": "choisir les bonnes personnes, vérifier",
           "startMs": 16663,
           "endMs": 22034,
-          "cueMs": 307418
+          "cueMs": 307458
         },
         {
           "segmentId": "maintain",
           "phrase": "Des consignes simples et un",
           "startMs": 22849,
           "endMs": 26572,
-          "cueMs": 313605
+          "cueMs": 313643
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 292354,
-          "relativeSeconds": 1.6
+          "atMs": 292414,
+          "relativeSeconds": 1.62
         },
         {
           "kind": "click",
-          "atMs": 293136,
-          "relativeSeconds": 2.382
+          "atMs": 293196,
+          "relativeSeconds": 2.402
         },
         {
           "kind": "key",
-          "atMs": 293442,
-          "relativeSeconds": 2.688
+          "atMs": 293503,
+          "relativeSeconds": 2.709
         },
         {
           "kind": "key",
-          "atMs": 293443,
-          "relativeSeconds": 2.689
+          "atMs": 293504,
+          "relativeSeconds": 2.71
         },
         {
           "kind": "key",
-          "atMs": 293446,
-          "relativeSeconds": 2.692
+          "atMs": 293506,
+          "relativeSeconds": 2.712
         },
         {
           "kind": "key",
-          "atMs": 293544,
-          "relativeSeconds": 2.79
+          "atMs": 293603,
+          "relativeSeconds": 2.809
         },
         {
           "kind": "key",
-          "atMs": 293642,
-          "relativeSeconds": 2.888
+          "atMs": 293701,
+          "relativeSeconds": 2.907
         },
         {
           "kind": "key",
-          "atMs": 293739,
-          "relativeSeconds": 2.985
+          "atMs": 293798,
+          "relativeSeconds": 3.004
         },
         {
           "kind": "key",
-          "atMs": 293837,
-          "relativeSeconds": 3.083
+          "atMs": 293896,
+          "relativeSeconds": 3.102
         },
         {
           "kind": "key",
-          "atMs": 293934,
-          "relativeSeconds": 3.18
+          "atMs": 293995,
+          "relativeSeconds": 3.201
         },
         {
           "kind": "key",
-          "atMs": 294033,
-          "relativeSeconds": 3.279
+          "atMs": 294092,
+          "relativeSeconds": 3.298
         },
         {
           "kind": "key",
-          "atMs": 294130,
-          "relativeSeconds": 3.376
+          "atMs": 294190,
+          "relativeSeconds": 3.396
         },
         {
           "kind": "key",
-          "atMs": 294227,
-          "relativeSeconds": 3.473
+          "atMs": 294288,
+          "relativeSeconds": 3.494
         },
         {
           "kind": "key",
-          "atMs": 294325,
-          "relativeSeconds": 3.571
+          "atMs": 294386,
+          "relativeSeconds": 3.592
         },
         {
           "kind": "key",
-          "atMs": 294422,
-          "relativeSeconds": 3.668
+          "atMs": 294483,
+          "relativeSeconds": 3.689
         },
         {
           "kind": "key",
-          "atMs": 294521,
-          "relativeSeconds": 3.767
+          "atMs": 294584,
+          "relativeSeconds": 3.79
         },
         {
           "kind": "key",
-          "atMs": 294619,
-          "relativeSeconds": 3.865
+          "atMs": 294684,
+          "relativeSeconds": 3.89
         },
         {
           "kind": "key",
-          "atMs": 294728,
-          "relativeSeconds": 3.974
+          "atMs": 294785,
+          "relativeSeconds": 3.991
         },
         {
           "kind": "key",
-          "atMs": 294825,
-          "relativeSeconds": 4.071
+          "atMs": 294881,
+          "relativeSeconds": 4.087
         },
         {
           "kind": "key",
-          "atMs": 294924,
-          "relativeSeconds": 4.17
+          "atMs": 294983,
+          "relativeSeconds": 4.189
         },
         {
           "kind": "key",
-          "atMs": 295021,
-          "relativeSeconds": 4.267
+          "atMs": 295081,
+          "relativeSeconds": 4.287
         },
         {
           "kind": "key",
-          "atMs": 295122,
-          "relativeSeconds": 4.368
+          "atMs": 295181,
+          "relativeSeconds": 4.387
         },
         {
           "kind": "key",
-          "atMs": 295224,
-          "relativeSeconds": 4.47
+          "atMs": 295278,
+          "relativeSeconds": 4.484
         },
         {
           "kind": "key",
-          "atMs": 295321,
-          "relativeSeconds": 4.567
+          "atMs": 295379,
+          "relativeSeconds": 4.585
         },
         {
           "kind": "key",
-          "atMs": 295518,
-          "relativeSeconds": 4.764
+          "atMs": 295578,
+          "relativeSeconds": 4.784
         },
         {
           "kind": "key",
-          "atMs": 295616,
-          "relativeSeconds": 4.862
+          "atMs": 295674,
+          "relativeSeconds": 4.88
         },
         {
           "kind": "key",
-          "atMs": 295715,
-          "relativeSeconds": 4.961
+          "atMs": 295772,
+          "relativeSeconds": 4.978
         },
         {
           "kind": "key",
-          "atMs": 295812,
-          "relativeSeconds": 5.058
+          "atMs": 295875,
+          "relativeSeconds": 5.081
         },
         {
           "kind": "key",
-          "atMs": 295909,
-          "relativeSeconds": 5.155
+          "atMs": 295974,
+          "relativeSeconds": 5.18
         },
         {
           "kind": "key",
-          "atMs": 296107,
-          "relativeSeconds": 5.353
+          "atMs": 296167,
+          "relativeSeconds": 5.373
         },
         {
           "kind": "key",
-          "atMs": 296303,
-          "relativeSeconds": 5.549
+          "atMs": 296362,
+          "relativeSeconds": 5.568
         },
         {
           "kind": "key",
-          "atMs": 296400,
-          "relativeSeconds": 5.646
+          "atMs": 296460,
+          "relativeSeconds": 5.666
         },
         {
           "kind": "key",
-          "atMs": 296497,
-          "relativeSeconds": 5.743
+          "atMs": 296557,
+          "relativeSeconds": 5.763
         },
         {
           "kind": "key",
-          "atMs": 296599,
-          "relativeSeconds": 5.845
+          "atMs": 296662,
+          "relativeSeconds": 5.868
         },
         {
           "kind": "key",
-          "atMs": 296703,
-          "relativeSeconds": 5.949
+          "atMs": 296765,
+          "relativeSeconds": 5.971
         },
         {
           "kind": "click",
-          "atMs": 297452,
-          "relativeSeconds": 6.698
+          "atMs": 297512,
+          "relativeSeconds": 6.718
         },
         {
           "kind": "click",
-          "atMs": 298819,
-          "relativeSeconds": 8.065
+          "atMs": 298862,
+          "relativeSeconds": 8.068
         },
         {
           "kind": "click",
-          "atMs": 304818,
-          "relativeSeconds": 14.064
+          "atMs": 304846,
+          "relativeSeconds": 14.052
         },
         {
           "kind": "click",
-          "atMs": 307885,
-          "relativeSeconds": 17.131
+          "atMs": 307929,
+          "relativeSeconds": 17.135
         },
         {
           "kind": "click",
-          "atMs": 308668,
-          "relativeSeconds": 17.914
+          "atMs": 308711,
+          "relativeSeconds": 17.917
         }
       ],
       "frames": [
         {
           "scene": "maintain",
           "fraction": 0.02233638597274961,
-          "seconds": 291.354,
+          "seconds": 291.394,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-2.png"
         },
         {
           "scene": "maintain",
           "fraction": 0.25,
-          "seconds": 297.4695,
+          "seconds": 297.5095,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-25.png"
         },
         {
           "scene": "maintain",
           "fraction": 0.45,
-          "seconds": 302.8419,
+          "seconds": 302.88190000000003,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-45.png"
         },
         {
           "scene": "maintain",
           "fraction": 0.6,
-          "seconds": 306.8712,
+          "seconds": 306.9112,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-60.png"
         },
         {
           "scene": "maintain",
           "fraction": 0.85,
-          "seconds": 313.5867,
+          "seconds": 313.6267,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-85.png"
         },
         {
           "scene": "maintain",
           "fraction": 0.9888318070136252,
-          "seconds": 317.316,
+          "seconds": 317.356,
           "file": "/private/tmp/codex-video/videos/output/targeted-messages/review-frames/maintain-end.png"
         }
       ]

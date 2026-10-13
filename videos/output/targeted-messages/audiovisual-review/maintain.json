@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:28:21.110Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:12:25.047Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "95ed5c2ec31ba24a7744499fdd6f172f1cf60cedb1dc074daabaec6f63be3cca",
-  "clipSha256": "f610a29a60b1b2718bcf44cf82864c217074989874ca3ee28134b5339a772213",
+  "clipSha256": "c13c680673cc6f4c613eef75da5bebb7ad6eb14907bd61ca7f46e588d9c214a0",
   "scene": "maintain",
   "review": {
-    "heardOpening": "Les modèles peuvent évoluer avec votre organisation.",
+    "heardOpening": "Les modèles peuvent évoluer avec votre organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3,
         "spoken": "Ouvrez Modifier",
-        "visibleSeconds": 1.8,
-        "visible": "Clic sur le lien Modifier en face du modèle Briefing avant le créneau et ouverture du formulaire",
-        "sync": "early",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur Modifier et ouverture du formulaire d'édition du modèle",
+        "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 5,
         "spoken": "ajustez le nom ou le texte et enregistrez",
-        "visibleSeconds": 6.1,
-        "visible": "Modification du champ Nom du modèle suivie du clic sur le bouton Enregistrer",
+        "visibleSeconds": 6.3,
+        "visible": "Ajout de « — équipe » dans le nom puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.3,
-        "spoken": "La suppression demande une confirmation : vous pouvez encore annuler",
-        "visibleSeconds": 8,
-        "visible": "Clic sur Supprimer et ouverture de la fenêtre modale de confirmation avec les boutons Annuler et Supprimer",
+        "spoken": "La suppression demande une confirmation",
+        "visibleSeconds": 7.7,
+        "visible": "Ouverture de la modale de confirmation « Supprimer le modèle »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "consulter le résultat",
-        "visibleSeconds": 24.2,
-        "visible": "Arrivée sur la section Messages envoyés affichant l'historique",
+        "spokenSeconds": 20.9,
+        "spoken": "puis consulter le résultat",
+        "visibleSeconds": 23.5,
+        "visible": "Affichage de la page de rédaction avec l'historique des « Messages envoyés »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les étapes."
+      "observation": "Voix masculine claire, fluide, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

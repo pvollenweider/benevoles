@@ -1,66 +1,74 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:38:39.043Z",
-  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "reviewedAt": "2026-10-13T08:48:09.231Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
   "promptSha256": "0ab1fef9018dc9ebf48cbce3c2af803be558dd4ccd80d5ab235c8797cdd0c511",
-  "clipSha256": "866dc383f0f5084cf48c81db122ddd90f7e130348cb7c76bcc61e1a8038c9ba9",
+  "clipSha256": "6b72a68edfbc124d4dab0638a8988acf9fd0ea93781ebfdae0f752915ca3400e",
   "scene": "message",
   "review": {
     "heardOpening": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 1.7,
         "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel.",
-        "visibleSeconds": 2.5,
-        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' puis choix de 'Logistique - Installation du matériel'.",
+        "visibleSeconds": 1.6,
+        "visible": "Sélection du bouton radio 'Les bénévoles d'un créneau' puis menu déroulant 'Logistique - Installation du matériel' sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 24.5,
+        "spokenSeconds": 12.2,
+        "spoken": "Écrivons un objet clair et une courte demande.",
+        "visibleSeconds": 2.8,
+        "visible": "Saisie de l'objet 'Un coup de main pour la logistique ?' et message tapé",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 24.7,
         "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
-        "visibleSeconds": 25.8,
-        "visible": "Clic sur 'Voir l'aperçu et envoyer', affichage de la modale d'aperçu puis confirmation de l'envoi.",
+        "visibleSeconds": 25.3,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer', modale avec aperçu pour Emma, puis clic 'Envoyer à 1 personne' et confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 29.3,
         "spoken": "Ouvrons le vrai email reçu.",
-        "visibleSeconds": 31.2,
-        "visible": "Affichage de la boîte de réception Mailpit avec le courriel reçu.",
+        "visibleSeconds": 31.5,
+        "visible": "Affichage du client webmail Mailpit avec le mail reçu ouvert",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 37.3,
+        "spokenSeconds": 37.5,
         "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
-        "visibleSeconds": 38.5,
-        "visible": "Retour à l'écran des Inscriptions puis clic sur '+ Ajouter manuellement' qui ouvre le formulaire.",
+        "visibleSeconds": 38,
+        "visible": "Retour sur la liste Inscriptions puis clic sur '+ Ajouter manuellement'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 41.6,
+        "spokenSeconds": 41.2,
         "spoken": "Saisissons son prénom, son nom et la même adresse email que sa fiche membre.",
-        "visibleSeconds": 42,
-        "visible": "Saisie de Zoé, Exemple et de son adresse email dans les champs dédiés.",
+        "visibleSeconds": 41.5,
+        "visible": "Saisie de Zoé Exemple et de son adresse email dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 46.8,
+        "spokenSeconds": 46.5,
         "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
-        "visibleSeconds": 49.5,
-        "visible": "Sélection du créneau de logistique 12h-14h dans la liste déroulante.",
+        "visibleSeconds": 48.7,
+        "visible": "Sélection du créneau 'sam. 17 oct., 12h-14h - Logistique - Installation du matériel' puis validation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 52.8,
+        "spokenSeconds": 52.1,
         "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
-        "visibleSeconds": 56.4,
-        "visible": "Navigation vers la page de couverture 'Où manque-t-il du monde ?'.",
+        "visibleSeconds": 52.3,
+        "visible": "Page 'Où manque-t-il du monde ?' affichée",
         "sync": "aligned",
         "severity": "none"
       }
@@ -69,7 +77,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien articulée et synchronisée avec le déroulement de la démonstration."
+      "observation": "Voix off fluide, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

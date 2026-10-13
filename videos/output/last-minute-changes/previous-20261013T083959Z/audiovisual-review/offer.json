@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:38:55.766Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "aa98864be2a6cee3720a475690bff3cd5579af6ab6c5d9d8ac317e66d6550292",
+  "clipSha256": "55b5ea9bd0dc4dab420b4a707a7bd826bad16c6a2ff087aa6310577ccae01794",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 7,
+        "visible": "Clic sur « Prendre la place » puis affichage de l'écran « Place confirmée ! »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage du tableau des inscriptions de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 14.5,
+        "visible": "Nicolas Exemple apparaît bien dans la liste, mais la colonne « Statut » est vide et aucun badge de confirmation n'est visible pour lui",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:14, lors de l'annonce de la confirmation de Nicolas, la colonne « Statut » reste vide en face de sa ligne dans le tableau des inscriptions."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les étapes."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

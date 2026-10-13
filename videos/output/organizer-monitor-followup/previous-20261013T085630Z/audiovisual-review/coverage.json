@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:24.579Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "c216151cb196f43f367031042589ea45590055522fedb525761766011f65a283",
+  "clipSha256": "cc0f67a14977d85520650a6427842937df10e629321033ec503370eb657fb54b",
+  "scene": "coverage",
+  "review": {
+    "heardOpening": "Commence par regarder la couverture du planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commence par regarder la couverture du planning.",
+        "visibleSeconds": 0,
+        "visible": "Page « Où manque-t-il du monde ? » avec la vue d'ensemble « 30 places pourvues sur 44 » et les créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places",
+        "visibleSeconds": 3.2,
+        "visible": "Liste des créneaux à compléter avec barres de progression et mentions des places manquantes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "et les personnes placées en liste d’attente.",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement de la page vers la section « Personnes en liste d'attente ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec le défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

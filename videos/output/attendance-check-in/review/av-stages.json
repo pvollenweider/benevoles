@@ -13,7 +13,7 @@
   },
   {
     "chapter": "correction",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "multiple",
@@ -33,15 +33,15 @@
   },
   {
     "chapter": "dayof-window",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "dayof-search",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "dayof-phone",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "dayof-checkin",

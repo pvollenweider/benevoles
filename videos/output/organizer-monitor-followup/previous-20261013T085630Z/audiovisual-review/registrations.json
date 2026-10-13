@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:26.294Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
+  "clipSha256": "4a6da187cb190a501caa6cd7f83f6ca3518b2dd2e88d7a0f437414150e66bc88",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "Dans les inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions affichant la liste des bénévoles avec leurs coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "son créneau, son statut et les informations utiles",
+        "visibleSeconds": 0,
+        "visible": "Colonnes « Créneau » et « Statut » présentes sur chaque ligne du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "la taille du t-shirt ou le régime alimentaire",
+        "visibleSeconds": 0,
+        "visible": "Détails « Taille de t-shirt » et régimes alimentaires (« Végétarien(ne) », « Sans gluten ») visibles sous l'identité des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée, accompagnant adéquatement l'écran descriptif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
