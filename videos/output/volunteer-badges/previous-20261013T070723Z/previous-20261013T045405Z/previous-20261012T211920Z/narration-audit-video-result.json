@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T18:55:53.764Z",
+  "revalidatedAt": "2026-10-05T18:55:53.765Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "result",
+      "audioSha256": "e38ee7694a0dbf7ff7c4be101f08dfe5128a2db0aac02c8aa6b41839e990d601",
+      "recognized": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge. Ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+      "expected": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:53:57.767Z",
-  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
-  "promptSha256": "fc3f640473a329ddb194adc988f8dfe7291cc0450dda42e1bb031fa5dfe5549f",
-  "clipSha256": "39afb7196cd78fbb3ccd3aa012b0efe2c32a338a8279bc7c6bf8809341f32f66",
+  "reviewedAt": "2026-10-13T07:15:00.105Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "4ffabb620d415d5b20d383a55cbb3fe0b5f3ddfabaccaf2c77860815cae51d95",
+  "clipSha256": "72d06898b0607a997f68a3a66ac6d65b7e42951699f70001623af997fcae9b29",
   "scene": "colors",
   "review": {
-    "heardOpening": "Le bandeau peut prendre",
+    "heardOpening": "Le bandeau peut prendre la couleur du poste",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Générons les trois versions pour les comparer",
-        "visibleSeconds": 4.8,
-        "visible": "Génération et affichage des badges selon la couleur du poste",
+        "spokenSeconds": 1.1,
+        "spoken": "celle de l'événement",
+        "visibleSeconds": 3.7,
+        "visible": "Sélection de l'option « celle de l'événement » dans le champ « Couleur du bandeau »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "couleur d'événement comme solution de repli",
-        "visibleSeconds": 11,
-        "visible": "Affichage des badges avec bandeau à la couleur de l'événement",
+        "spokenSeconds": 5,
+        "spoken": "Générons les trois versions pour les comparer.",
+        "visibleSeconds": 5.1,
+        "visible": "Affichage de la page de badges avec les bandeaux bleus de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
-        "spoken": "Pour une impression simple, le noir et blanc est pratique",
-        "visibleSeconds": 16.5,
-        "visible": "Choix de l'option noir et blanc et affichage des badges correspondants",
+        "spokenSeconds": 14.7,
+        "spoken": "Pour une impression simple, le noir et blanc est pratique.",
+        "visibleSeconds": 15.4,
+        "visible": "Sélection de l'option « Noir et blanc » puis affichage des badges avec bandeau noir",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction claire et articulation fluide, rythme bien synchronisé avec la démonstration."
+      "observation": "Voix claire, posée et bien synchronisée avec les démonstrations successives des trois styles de bandeau."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

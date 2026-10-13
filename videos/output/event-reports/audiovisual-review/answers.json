@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:09:58.169Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "751f8c069c073792819f68e85c9340f568c051ebc0ac7de1617e409b5a0da927",
-  "clipSha256": "0d286b36a8db105c651be5fdc6ca7aa451afc08f0ab3e28ac979fe7ea9f985c2",
+  "reviewedAt": "2026-10-13T07:06:34.790Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "2ad908a465f15e43360f62e9bf7fed6bbf5f01d4826e4f9d14b6179169364b7c",
+  "clipSha256": "a7c3feb97dcd5c7a83513e3b50a472499d58a7791027cdde30350dc8318850ca",
   "scene": "answers",
   "review": {
-    "heardOpening": "Les réponses aux questions se retrouvent",
+    "heardOpening": "Pour préparer les t-shirts et les repas",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Voici une taille de t-shirt et un régime alimentaire réellement renseignés.",
-        "visibleSeconds": 2.5,
-        "visible": "Fiche de Léa Giroud affichant la taille de t-shirt S et le régime alimentaire.",
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrez Questions aux bénévoles, puis la Synthèse des réponses",
+        "visibleSeconds": 2,
+        "visible": "Page 'Questions aux bénévoles' affichée avec la section 'Synthèse des réponses'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.2,
-        "spoken": "Téléchargeons l'export des présences",
-        "visibleSeconds": 10.3,
-        "visible": "Transition vers la page de visualisation du CSV téléchargé.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 20,
-        "spoken": "Léa a cinq créneaux, donc sa réponse apparaît cinq fois.",
+        "spokenSeconds": 20.3,
+        "spoken": "télécharger cette synthèse en CSV pour travailler avec les chiffres, ou ouvrir sa version imprimable",
         "visibleSeconds": 21,
-        "visible": "Filtre appliqué sur Léa Giroud affichant 5 lignes répétées.",
+        "visible": "Liens 'Télécharger la synthèse (CSV)' et 'Imprimer la synthèse' visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.1,
+        "spoken": "Regardons ce vrai document",
+        "visibleSeconds": 26.5,
+        "visible": "Affichage de la version imprimable de la synthèse des réponses",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée et claire, débit régulier sans rupture."
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

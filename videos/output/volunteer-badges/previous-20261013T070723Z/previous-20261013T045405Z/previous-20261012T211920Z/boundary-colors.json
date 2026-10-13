@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bandeau peut prendre la couleur du poste, celle de l'événement",
+  "windowStart": 96.16799999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.04,
+    "wordsHeard": "Le"
+  },
+  "onset": 111.208,
+  "proposedCut": 111.16779199999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

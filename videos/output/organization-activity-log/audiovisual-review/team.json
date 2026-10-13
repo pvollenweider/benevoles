@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:55:34.371Z",
+  "videoSha256": "475ca0d8e812ba018e34867fd4f1346406eb2dc8ed5577a391ea41682a092416",
+  "promptSha256": "6f4b172632e8e024cfa5bba9e82915b62d6eb0a78b399642a145ebbdd81c64ff",
+  "clipSha256": "ca9e2a9ac2b4d733e67c4a0679bbec65ccd0e1cab93e73f9aa3191b6fd822ec5",
+  "scene": "team",
+  "review": {
+    "heardOpening": "Les invitations de comptes admin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Retrouvons une invitation",
+        "visibleSeconds": 3,
+        "visible": "Filtrage sur « Comptes admin » affichant la ligne « Colette Exemple a invité un admin »",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "puis un changement de rôle",
+        "visibleSeconds": 3,
+        "visible": "Ligne « Colette Exemple a changé le rôle d'un admin » présente dans la liste filtrée",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "On peut aussi retrouver un changement des réglages de notification",
+        "visibleSeconds": 20,
+        "visible": "Sélection du filtre « Organisation » et affichage de « Colette Exemple a modifié les réglages de notification »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec une intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

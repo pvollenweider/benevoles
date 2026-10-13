@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:24.221Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "b7a88ac84b06e113d1653e646392e3a78e367fb97a79ee77020a400a12ccc6ac",
+  "clipSha256": "798239b369de47e3078f75e7e9eea19a80be15cc9bdade8b0c3433e76a0e90e5",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Pour Léa, le planning individuel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+        "visibleSeconds": 0,
+        "visible": "Section Léa Giroud visible avec ses créneaux et postes, puis zoom pleine page à 00:05.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "On retrouve ensuite le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés.",
+        "visibleSeconds": 9,
+        "visible": "Défilement vers le bas révélant les encarts détaillés (Lieu, Contact, Responsable de poste, À savoir).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "passons à la suivante pour lire le dernier poste.",
+        "visibleSeconds": 18,
+        "visible": "Affichage de la page suivante du PDF réel de Léa avec les créneaux suivants jusqu'au dernier poste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et parfaitement synchronisée avec la navigation dans le document PDF."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "En attente d'envoi signifie que l'email est dans la file :",
+  "windowStart": 2.4939999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 34.87,
+    "wordsHeard": "En attente d'envoi signifie que l'email est dans la file"
+  },
+  "onset": 37.364,
+  "proposedCut": 37.4398955,
+  "note": "Proposal only; recut then independently audit before capture"
+}

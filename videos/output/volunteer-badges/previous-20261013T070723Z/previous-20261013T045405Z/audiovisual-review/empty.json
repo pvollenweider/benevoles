@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:27:56.925Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "4b49eb5265ad6801557415babdf5734653929b973809c373682673a43bb38e5e",
+  "clipSha256": "420bf3598a8d90a344280ac13fce78f5ad671e8c7fedebff5d3c0ccd102a5ac5",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Si tu combines un poste et une personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Voici le vrai message de l'application.",
+        "visibleSeconds": 7.3,
+        "visible": "Affichage de la page avec le message d'alerte indiquant que Camille Berger n'est inscrit sur aucun créneau du poste Loge.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "choisissons Tous les postes",
+        "visibleSeconds": 11.5,
+        "visible": "L'option « Tous les postes » n'est pas sélectionnée à l'écran : le curseur passe directement au lien d'ouverture sans modifier le champ Poste.",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "puis ouvrons à nouveau le document.",
+        "visibleSeconds": 12,
+        "visible": "Clic sur « Ouvrir les badges » puis ouverture du document avec le badge généré.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Le résultat doit correspondre à la personne choisie et à ses confirmations",
+        "visibleSeconds": 13.5,
+        "visible": "Visualisation du badge au nom de Camille BERGER avec le créneau Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:10 et 00:12, la voix annonce « choisissons Tous les postes », mais aucune interaction n'a lieu avec le menu déroulant du poste."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse masculine claire, bien posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

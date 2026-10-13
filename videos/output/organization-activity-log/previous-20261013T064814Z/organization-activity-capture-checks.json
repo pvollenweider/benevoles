@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-13T04:42:57.051Z",
+  "scope": "actual local interactions and read-only CSV; not full audiovisual validation",
+  "realAuthors": [
+    "Colette Exemple",
+    "Samira Exemple"
+  ],
+  "memberActivityNotEmpty": true,
+  "actualInvitationRoleAndSetting": true,
+  "actualTypeFilters": true,
+  "pagination": {
+    "before": 50,
+    "after": 61,
+    "emptyEmailFilterVerified": true
+  },
+  "csv": {
+    "rows": 61,
+    "columns": [
+      "Date",
+      "Acteur",
+      "Type d'acteur",
+      "Action",
+      "Entité",
+      "Identifiant",
+      "Changements"
+    ],
+    "sha256": "b5b97217ff7f9ef26562d3014873dcc66931386a863f662b3bd398fde11fb1b1",
+    "downloadedWhileFiltered": true,
+    "unmodified": true
+  },
+  "noRestoreOrProofOfReadingClaim": true
+}

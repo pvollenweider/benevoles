@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:26.627Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "432afdda0cd4adfd9a5f035a23ee9c71e4794eb5ef43bb8d6b7309cb1dd234f6",
+  "clipSha256": "b0a2abb34e042a821915405b1f6c3abf691e6233f242ce7e93f2e1e118caa84c",
+  "scene": "contacts",
+  "review": {
+    "heardOpening": "La liste avec téléphones est réservée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La liste avec téléphones est réservée à l'organisation",
+        "visibleSeconds": 3.6,
+        "visible": "Affichage de la page des rapports avec la section Pour les organisateurs seulement et le lien Liste avec téléphones",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Elle permet de retrouver une personne, son email, son téléphone et ses créneaux",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture du document Liste avec téléphones affichant les colonnes Nom, Prénom, Téléphone, Email et Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "regardons celui retenu dans le document",
+        "visibleSeconds": 16.5,
+        "visible": "Encadrement bleu mettant en évidence le numéro de téléphone de la ligne Giroud Lola",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et dynamique, parfaitement intelligible avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -15,7 +15,8 @@ async function main() {
     const proof = JSON.parse(await readFile(`${directory}/functional-checks.json`, "utf8"))
     if (!proof.priorAttendancePreserved || !proof.actualCausalJournal) throw new Error("Functional proof missing")
     const rows = await db.notificationOutbox.findMany({ where: { organizationId: "video-last-minute" }, orderBy: { createdAt: "asc" } })
-    if (!rows.length || rows.some(row => row.status !== "sent")) throw new Error("All actual notifications must have been sent")
+    if (!rows.length || rows.some(row => row.status !== "sent" && !(row.status === "cancelled" && row.lastError === "limit:recipient_per_hour"))) throw new Error("Unexpected undelivered notification")
+    const suppressed = rows.filter(row => row.status !== "sent").map(row => ({ id: row.id, status: row.status, reason: row.lastError, kind: openPayload(row.payload).kind }))
     const payloads = rows.map(row => ({ row, payload: openPayload(row.payload) }))
     const expected = [
       { kind: "waitlist_offered", email: "video.last-minute.person.1@example.org" },
@@ -23,18 +24,18 @@ async function main() {
       { kind: "shift_cancelled", email: "video.last-minute.person.0@example.org" },
       { kind: "shift_cancelled", email: "video.last-minute.person.5@example.org" },
     ]
-    for (const item of expected) if (payloads.filter(({ payload }) => payload.kind === item.kind && payload.recipient.email === item.email).length !== 1) throw new Error(`Expected actual notification ${item.kind} missing`)
+    for (const item of expected) if (payloads.filter(({ row, payload }) => row.status === "sent" && payload.kind === item.kind && payload.recipient.email === item.email).length !== 1) throw new Error(`Expected actual notification ${item.kind} missing`)
     if (payloads.some(({ payload }) => payload.kind === "shift_modified" && payload.recipient.email !== "video.last-minute.person.4@example.org")) throw new Error("Pending request incorrectly notified of a schedule change")
     const inboxResponse = await http.get("http://localhost:48026/api/v1/messages?limit=1000")
     if (!inboxResponse.ok()) throw new Error("Local inbox unavailable")
     const inbox = await inboxResponse.json() as { messages: { ID: string; To: { Address: string }[]; Created: string; Subject: string }[] }
     const actualMail: { kind: string; mailId: string; recipient: string }[] = []
-    for (const { row, payload } of payloads) {
+    for (const { row, payload } of payloads.filter(item => item.row.status === "sent")) {
       if (!payload.recipient.email) throw new Error("Demonstrated notification has no email recipient")
       const candidates = inbox.messages.filter(mail => mail.To.some(to => to.Address === payload.recipient.email) && Date.parse(mail.Created) >= row.createdAt.getTime() - 1000)
       let match: string | undefined
       for (const mail of candidates) {
-        const correctSubject = payload.kind === "registration_confirmation" ? mail.Subject.startsWith("Inscription confirmée") : payload.kind === "targeted_message" ? mail.Subject.startsWith("Un coup de main pour la logistique ?") : payload.kind === "waitlist_offered" ? mail.Subject.includes("Une place s'est libérée") : payload.kind === "shift_modified" ? mail.Subject.includes("changement d'horaire") : payload.kind === "shift_cancelled" ? mail.Subject.includes("créneau annulé") : false
+        const correctSubject = payload.kind === "registration_added_by_organizer" ? mail.Subject.startsWith("Tu es inscrit·e :") : payload.kind === "registration_withdrawn" ? mail.Subject.startsWith("Ton inscription a été annulée :") : payload.kind === "registration_cancelled" ? /Désistement|désistements/.test(mail.Subject) : payload.kind === "registration_confirmation" ? mail.Subject.startsWith("Inscription confirmée") : payload.kind === "targeted_message" ? mail.Subject.startsWith("Un coup de main pour la logistique ?") : payload.kind === "waitlist_offered" ? mail.Subject.includes("Une place s'est libérée") : payload.kind === "shift_modified" ? mail.Subject.includes("changement d'horaire") : payload.kind === "shift_cancelled" ? mail.Subject.includes("créneau annulé") : false
         if (!correctSubject) continue
         const response = await http.get(`http://localhost:48026/api/v1/message/${mail.ID}`)
         const detail = await response.json() as { Text: string }
@@ -45,7 +46,7 @@ async function main() {
       if (actualMail.some(mail => mail.mailId === match)) throw new Error("The same mailbox message cannot prove two different notifications")
       actualMail.push({ kind: payload.kind, mailId: match, recipient: payload.recipient.email })
     }
-    await writeFile(`${directory}/mail-checks.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation", messages: actualMail, schedulePendingExcluded: true, activeAndRequestedCancellationDelivered: true }, null, 2))
+    await writeFile(`${directory}/mail-checks.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation", messages: actualMail, suppressed, allNotificationsDelivered: suppressed.length === 0, schedulePendingExcluded: true, activeAndRequestedCancellationDelivered: true }, null, 2))
     console.log(`✓ ${actualMail.length} actual received notifications verified; pending schedule request excluded`)
   } finally { await http.dispose(); await db.$disconnect() }
 }

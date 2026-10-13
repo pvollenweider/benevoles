@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:28.538Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "9db8a8715801af29cf60a50b97995d0a0f0d64040dc6591d5dc49b10d74ac603",
+  "clipSha256": "b587385151a3a153e33a8006914102c5a3767297b061bdcb2ea0b66f58323df4",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "Le journal ne doit pas devenir une collection",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "des noms d'auteurs peuvent rester visibles",
+        "visibleSeconds": 0,
+        "visible": "Tableau de visualisation du CSV affichant la colonne Acteur avec Colette Exemple et Samira Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Gardons le fichier pour les personnes qui en ont besoin",
+        "visibleSeconds": 9.5,
+        "visible": "Retour sur la page web des Paramètres affichant le Journal d'activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.3,
+        "spoken": "Le CSV n'est pas une sauvegarde complète de l'organisation",
+        "visibleSeconds": 14,
+        "visible": "Page du Journal d'activité avec le lien Exporter tout le journal (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:26:11.837Z",
-  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
+  "reviewedAt": "2026-10-13T06:04:59.213Z",
+  "videoSha256": "52afb2df03a76906c093d60412ba84c9d62704e905be18a7149155e30c7a0ba9",
   "promptSha256": "4d78f13854aff474e3d9ea8c8c140d2112c0d02024a4dc8d3d1baffc648619c0",
-  "clipSha256": "45b5cb7780a7181657a371a34b87cfc2fdf2089729d264db46d614c58c8ea974",
+  "clipSha256": "2126863c6148ab9ef695c8f8bfad370c29ae378aeb2258538666211b10680b86",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Vous avez envoyé un message",
+    "heardOpening": "Vous avez envoyé un message, mais une personne ne le retrouve pas.",
     "checkpoints": [
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email",
+        "spokenSeconds": 8.1,
+        "spoken": "Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison.",
         "visibleSeconds": 8,
-        "visible": "Tableau des emails envoyés affichant type, destinataire, date et statut",
+        "visible": "Tableau des emails envoyés affichant la date, le type d'email, le destinataire et l'état de livraison.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21,
-        "spoken": "Connectons-nous maintenant avec Marc, notre organisateur de démonstration",
-        "visibleSeconds": 21.5,
-        "visible": "Écran de connexion et saisie de l'identifiant organisateur",
+        "spokenSeconds": 21.3,
+        "spoken": "Connectons-nous maintenant avec Marc, notre organisateur de démonstration.",
+        "visibleSeconds": 24.5,
+        "visible": "Affichage du formulaire de connexion et saisie de l'identifiant organisateur.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 28,
-        "spoken": "les réglages restent réservés au propriétaire. Le message de la page le précise",
-        "visibleSeconds": 28.5,
-        "visible": "Affichage du compte Marc Dupont avec mention des réglages réservés",
+        "spokenSeconds": 28.5,
+        "spoken": "mais les réglages restent réservés au propriétaire. Le message de la page le précise.",
+        "visibleSeconds": 31,
+        "visible": "Compte Marc Dupont connecté, mention précisant que les réglages sont réservés aux propriétaires.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier bien calé sur l'affichage."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

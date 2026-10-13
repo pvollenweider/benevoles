@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:55.556Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:46:58.495Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "885a5592f6ea00c9911cd540f5d7724bc6c35e22765271aad052d12f1d925cbc",
-  "clipSha256": "de83fdafd5fc156c93cf8e77bb39d90c8cf59da283fe2d8a8600c67b299a3198",
+  "clipSha256": "59a91bcd734e08db1361ccf85c62a4108f9da79a099ea7dd34c3f3099da27340",
   "scene": "one",
   "review": {
-    "heardOpening": "Aline vient d'arriver.",
+    "heardOpening": "Aline vient d'arriver",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
+        "spokenSeconds": 2.2,
         "spoken": "Sélectionnons uniquement sa ligne",
-        "visibleSeconds": 3.5,
-        "visible": "Sélection de la case à cocher d'Aline Exemple",
+        "visibleSeconds": 3.4,
+        "visible": "La case à cocher sur la ligne d'Aline Exemple est cochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 4.5,
         "spoken": "avant de marquer sa présence",
         "visibleSeconds": 6.8,
-        "visible": "Clic sur le bouton Marquer présent (1)",
+        "visible": "Clic sur le bouton « Marquer présent (1) »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
+        "spokenSeconds": 7.7,
         "spoken": "La marque apparaît sur son inscription",
         "visibleSeconds": 8.5,
-        "visible": "Apparition du badge Présent sur la ligne d'Aline",
+        "visible": "La mention « Présent » s'affiche à côté du prénom d'Aline",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Rechargeons la page : elle est toujours là",
-        "visibleSeconds": 10.5,
-        "visible": "Rafraîchissement de la page avec maintien de la mention",
+        "spokenSeconds": 9.9,
+        "spoken": "Rechargeons la page : elle est toujours là.",
+        "visibleSeconds": 10.3,
+        "visible": "La page est rechargée et le statut présent reste enregistré",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

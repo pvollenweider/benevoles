@@ -1,0 +1,22 @@
+STATUS: NOT READY
+ID: STAFFING_GAPS
+Duration: 225.88
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 212, 'musicOnlyWindows': 0, 'smallestGapLu': 14.5, 'largestGapLu': 19.1, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.3}
+Problems: Final addition uses manual identity fields instead of the announced email lookup; selection/save late and new row not held visibly. Full chapter countdown flag unsupported by independent source and MP4 recognition; return to report in empty chapter is a relevant stable screen. All technical/music checks pass.
+Source changes: Only requested four verbs changed; entire continuous TTS regenerated because tooling rejects mixed chapter generations, boundaries aligned and audited. Action now uses real member email search with sentence anchors for lookup, shift/save and visible new row. No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 0.166–27.368 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+overview: 27.824–50.656 s; review/overview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+empty: 51.109–74.767 s; review/empty-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:20, coupure visuelle avec retour soudain à l'écran précédent ('Où manque-t-il du monde ?') pendant l'explication finale."]
+needs: 75.221–101.636 s; review/needs-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+requests: 103.253–127.131 s; review/requests-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+waiting: 127.582–151.643 s; review/waiting-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+leaders: 152.097–175.942 s; review/leaders-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+full: 176.396–200.131 s; review/full-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ['00:00 Décompte résiduel (« trois ») audible juste avant le début de la voix off.']
+action: 200.585–225.417 s; review/action-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ["À 00:08, la voix annonce que l'email retrouve la fiche alors que les champs Prénom, Nom et Email sont tous remplis manuellement.", "Décalage important : le choix de l'horaire et l'enregistrement sont annoncés vers 00:10-00:12 mais ne sont exécutés à l'écran qu'à 00:14-00:15.", "À 00:13, l'apparition de la nouvelle inscription est annoncée mais jamais montrée : l'écran passe directement au rapport après validation."]

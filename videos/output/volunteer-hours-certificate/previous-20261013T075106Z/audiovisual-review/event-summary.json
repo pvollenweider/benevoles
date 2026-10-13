@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:46:31.290Z",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "promptSha256": "7ceef71bca6d6b3d5c711480b7f87a8f27aab267e08b1d2d6811074058e11542",
+  "clipSha256": "c24e12eeb5406a09f247dc7a5d545ce9f002dbb1614b5ff775961c13487b0ced",
+  "scene": "event-summary",
+  "review": {
+    "heardOpening": "Enfin, ouvrons les rapports de la Fête de septembre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "ouvrons les rapports de la Fête de septembre",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page des rapports et défilement vers le Résumé de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "deux bénévoles occupent trois créneaux confirmés",
+        "visibleSeconds": 1.2,
+        "visible": "Ligne Bénévoles affichant 2 bénévoles distincts avec un créneau confirmé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les présences n'ont été saisies que pour un créneau",
+        "visibleSeconds": 1.2,
+        "visible": "Ligne Présences indiquant les présences saisies pour 1 sur 3 créneaux confirmés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "six heures planifiées, dont deux attestées",
+        "visibleSeconds": 1.2,
+        "visible": "Ligne Heures indiquant 6 h planifiées, dont 2 h attestées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

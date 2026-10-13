@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:45.579Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "95ed5c2ec31ba24a7744499fdd6f172f1cf60cedb1dc074daabaec6f63be3cca",
+  "clipSha256": "0386c96f59e389755d164ba6b192a64694b094d251a5ad7fcef2201eef1763ff",
+  "scene": "maintain",
+  "review": {
+    "heardOpening": "Les modèles peuvent évoluer avec votre organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvrez Modifier",
+        "visibleSeconds": 2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ajustez le nom ou le texte et enregistrez",
+        "visibleSeconds": 6.3,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "La suppression demande une confirmation : vous pouvez encore annuler",
+        "visibleSeconds": 8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Pour chaque nouveau briefing, gardez le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat",
+        "visibleSeconds": 22.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

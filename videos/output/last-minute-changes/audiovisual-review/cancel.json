@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:24:41.709Z",
-  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
-  "promptSha256": "d8e86cde1deac919f1899546fd471e0dec133e8c8d02102c8dfd9d7dfe6a7156",
-  "clipSha256": "9969efbbb376c14de6f3419135e13281ad001dd0d85e387931e7ae612024a399",
+  "reviewedAt": "2026-10-13T06:38:48.797Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
+  "clipSha256": "dae9d765851056decb45d727ab646b45a19b1c8b04c744e274f65e70796c9bc1",
   "scene": "cancel",
   "review": {
     "heardOpening": "Une mission n'a plus lieu",
     "checkpoints": [
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 6.5,
         "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
-        "visibleSeconds": 6.8,
-        "visible": "Affichage de la modale de confirmation de suppression du créneau.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la modale de confirmation détaillant l'annulation et l'envoi de l'email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 11.5,
         "spoken": "Après confirmation, les inscriptions concernées sont annulées",
-        "visibleSeconds": 12,
-        "visible": "Clic sur le bouton Supprimer puis redirection vers la liste mise à jour.",
+        "visibleSeconds": 12.5,
+        "visible": "Validation de la suppression et retrait du créneau de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "puis le vrai email reçu.",
-        "visibleSeconds": 22.4,
-        "visible": "Affichage de la boîte Mailpit avec le courriel d'annulation envoyé.",
+        "spokenSeconds": 20,
+        "spoken": "Vérifions le statut, puis le vrai email reçu.",
+        "visibleSeconds": 21.5,
+        "visible": "Affichage dans Mailpit de l'email informant de l'annulation du créneau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée."
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

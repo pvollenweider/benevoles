@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous avez pointé Léa par erreur ? Sélectionnons sa ligne et",
+  "windowStart": 41.547,
+  "result": {
+    "found": true,
+    "startSeconds": 30.85,
+    "wordsHeard": "Vous"
+  },
+  "onset": 72.39699999999999,
+  "proposedCut": 72.380896,
+  "note": "Proposal only; recut then independently audit before capture"
+}

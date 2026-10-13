@@ -1,0 +1,12 @@
+{
+  "anchor": "Commence par regarder la couverture du planning. Les capacités et les",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 12.2,
+    "wordsHeard": "Commence par regarder la couverture du planning. Les capacités et les"
+  },
+  "onset": 12.2,
+  "proposedCut": 11.849250000000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

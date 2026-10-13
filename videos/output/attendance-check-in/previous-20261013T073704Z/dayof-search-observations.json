@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-13T05:30:28.464Z",
+  "chapter": "dayof-search",
+  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "observed": {
+    "actualAccentAndRoleSearches": true,
+    "cleared": true
+  },
+  "finalValidation": false
+}

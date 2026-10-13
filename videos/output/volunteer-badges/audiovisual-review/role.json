@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:53:32.847Z",
-  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
-  "promptSha256": "4e759d0d7a029180ce7815d04300d325ab81708da64c28ec5100c15307475aad",
-  "clipSha256": "aaaf614f1cb0105d8f88a51ec4895fed702f19434f89cc367c4c485bbd676e5d",
+  "reviewedAt": "2026-10-13T07:14:40.682Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "9f5249ed2a32021b1fc8d14cbd193e7ff003c0f29e673d448a5cacab00756553",
+  "clipSha256": "a68d787eecd8c315e4d1284b143dde85af25a423d52a6b9636615ed41005c45e",
   "scene": "role",
   "review": {
     "heardOpening": "Pour préparer seulement la buvette",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 0.5,
         "spoken": "revenons au formulaire et choisissons ce poste",
-        "visibleSeconds": 3.7,
-        "visible": "Sélection de 'Buvette' dans la liste déroulante des badges",
+        "visibleSeconds": 1.8,
+        "visible": "Défilement vers la section Badges et sélection du poste Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 5,
         "spoken": "Les personnes retenues ont une inscription confirmée à la buvette",
         "visibleSeconds": 6.8,
-        "visible": "Affichage de la page de badges filtrés pour la buvette",
+        "visible": "Clic sur 'Ouvrir les badges' puis affichage de la planche de badges filtrés sur la buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8.7,
         "spoken": "Comparons le badge de Léa avec sa version complète",
-        "visibleSeconds": 8.8,
-        "visible": "Écran comparatif montrant le badge de Léa 'tous les postes' et 'filtre Buvette'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18,
-        "spoken": "reviens à Tous les postes avant de le refaire",
-        "visibleSeconds": 18.5,
-        "visible": "L'écran comparatif reste affiché sans retour effectif au formulaire",
+        "visibleSeconds": 11.2,
+        "visible": "Écran comparatif affichant 'Léa — tous les postes' et 'Léa — filtre Buvette'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec la démonstration."
+      "observation": "Voix off masculine claire, posée et bien synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

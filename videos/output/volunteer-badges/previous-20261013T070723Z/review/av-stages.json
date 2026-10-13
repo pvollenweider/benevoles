@@ -1,0 +1,38 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "all",
+    "exitCode": 0
+  },
+  {
+    "chapter": "role",
+    "exitCode": 0
+  },
+  {
+    "chapter": "individual",
+    "exitCode": 0
+  },
+  {
+    "chapter": "empty",
+    "exitCode": 1
+  },
+  {
+    "chapter": "colors",
+    "exitCode": 0
+  },
+  {
+    "chapter": "fields",
+    "exitCode": 0
+  },
+  {
+    "chapter": "print",
+    "exitCode": 1
+  },
+  {
+    "chapter": "result",
+    "exitCode": 0
+  }
+]

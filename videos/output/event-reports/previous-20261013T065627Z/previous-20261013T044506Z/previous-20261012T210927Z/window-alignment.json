@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-06T17:15:49.646Z",
+  "masterSha256": "24f574f5c5587523fcd154a338452d472242f0876345c575b220b6d829064bfc",
+  "totalSeconds": 273.96,
+  "cuts": [
+    {
+      "id": "complete",
+      "seconds": 21.8205205
+    },
+    {
+      "id": "day",
+      "seconds": 48.5541875
+    },
+    {
+      "id": "role",
+      "seconds": 73.66539549999999
+    },
+    {
+      "id": "individual",
+      "seconds": 99.3341875
+    },
+    {
+      "id": "attendance",
+      "seconds": 129.53887500000002
+    },
+    {
+      "id": "contacts",
+      "seconds": 157.823375
+    },
+    {
+      "id": "answers",
+      "seconds": 184.5877295
+    },
+    {
+      "id": "print",
+      "seconds": 216.8224795
+    },
+    {
+      "id": "result",
+      "seconds": 246.2175
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

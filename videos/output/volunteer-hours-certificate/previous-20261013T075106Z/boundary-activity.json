@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et",
+  "windowStart": 30.819000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 30.28,
+    "wordsHeard": "Ouvrons"
+  },
+  "onset": 61.099000000000004,
+  "proposedCut": 60.819208,
+  "note": "Proposal only; recut then independently audit before capture"
+}

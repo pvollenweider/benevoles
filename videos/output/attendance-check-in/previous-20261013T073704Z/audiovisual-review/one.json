@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:21.339Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "885a5592f6ea00c9911cd540f5d7724bc6c35e22765271aad052d12f1d925cbc",
+  "clipSha256": "9723482c750ae5279ec288823e4a36a65b104ee12ca683abc76db08b515f0ddc",
+  "scene": "one",
+  "review": {
+    "heardOpening": "Aline vient d'arriver.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sélectionnons uniquement sa ligne",
+        "visibleSeconds": 3.8,
+        "visible": "La case en face d'Aline Exemple est cochée et la barre d'action affiche 1 sélectionnée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "avant de marquer sa présence. La marque apparaît sur son inscription.",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur Marquer présent (1) puis la mention Présent s'affiche sur la ligne d'Aline.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Rechargeons la page : elle est toujours là.",
+        "visibleSeconds": 17.2,
+        "visible": "Le rafraîchissement de la page intervient tardivement, le bandeau de notification disparaissant à ce moment.",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Le nombre d'inscriptions affichées décrit la liste filtrée",
+        "visibleSeconds": 18,
+        "visible": "L'en-tête de liste affiche « 1 présent sur 6 inscrits ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Désynchronisation à 00:10 : le rechargement de la page est annoncé et commenté comme déjà effectif, mais le rafraîchissement visuel n'a lieu qu'à 00:17 (près de 7 secondes de retard)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

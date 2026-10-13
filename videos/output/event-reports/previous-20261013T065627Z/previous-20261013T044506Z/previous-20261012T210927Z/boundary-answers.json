@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour préparer les t-shirts et les repas, ouvrez Questions aux bénévoles,",
+  "windowStart": 157.013,
+  "result": {
+    "found": true,
+    "startSeconds": 27.7,
+    "wordsHeard": "Pour"
+  },
+  "onset": 184.713,
+  "proposedCut": 184.5877295,
+  "note": "Proposal only; recut then independently audit before capture"
+}

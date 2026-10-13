@@ -1,0 +1,17 @@
+{
+  "id": "EVENT_REPORTS",
+  "status": "NOT READY",
+  "duration": 311.24,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 268,
+    "musicOnlyWindows": 12,
+    "smallestGapLu": 14.1,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -32.7,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Answer-summary CSV download and printable-view opening occur early. Product layout bug: Export complet PDF page 1 has only Planning heading; timeline begins page 2. #922 null not reproduced. All validation/final transcript/music checks pass; subjective voice flag is not a blocker.",
+  "sourceChanges": "Retained WIP morning-report anchor; CSV cue now at(\"Vous pouvez t\u00e9l\u00e9charger cette synth\u00e8se\"), printable cue at(\"Regardons ce vrai document\"). No re-film or product edit."
+}

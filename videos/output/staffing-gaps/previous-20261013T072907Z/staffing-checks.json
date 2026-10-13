@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-13T05:20:32.295Z",
+  "initialTotals": {
+    "shifts": 14,
+    "capacity": 53,
+    "active": 30,
+    "missing": 19,
+    "waiting": 3,
+    "requested": 2
+  },
+  "closedShiftExcludedFromMissing": true,
+  "messageAudiencePrefilled": true,
+  "requestsHoldPlacesWithoutConfirmations": true,
+  "realWaitingPositions": [
+    1,
+    2,
+    3
+  ],
+  "existingLeadersVisible": true,
+  "finalTotals": {
+    "shifts": 14,
+    "capacity": 53,
+    "active": 31,
+    "missing": 18,
+    "waiting": 3,
+    "requested": 2
+  },
+  "photoRoleNoLongerEntirelyEmpty": true
+}

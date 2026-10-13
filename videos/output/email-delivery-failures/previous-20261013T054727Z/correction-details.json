@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-05T22:16:15.533Z",
+  "actualUiPreviewAndConfirmedCampaign": true,
+  "eventId": "video-delivery-event",
+  "historyId": "cmuvt761o002enaa5uwir6p15",
+  "outboxId": "cmuvt761q002fnaa56jkdirfo",
+  "recipient": "video.delivery.corrected@example.org",
+  "actualMailId": "33HWqoHUmdEyhHk5iflNdT",
+  "recipientCount": 1,
+  "delivered": true,
+  "note": "Actual new message, not a retry of the old payload; no partial SMTP failure claimed"
+}

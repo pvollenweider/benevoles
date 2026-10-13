@@ -1,0 +1,38 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "read",
+    "exitCode": 1
+  },
+  {
+    "chapter": "members",
+    "exitCode": 0
+  },
+  {
+    "chapter": "team",
+    "exitCode": 0
+  },
+  {
+    "chapter": "filters",
+    "exitCode": 0
+  },
+  {
+    "chapter": "pages",
+    "exitCode": 0
+  },
+  {
+    "chapter": "export",
+    "exitCode": 0
+  },
+  {
+    "chapter": "limits",
+    "exitCode": 0
+  },
+  {
+    "chapter": "result",
+    "exitCode": 0
+  }
+]

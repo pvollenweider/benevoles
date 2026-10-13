@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:40:28.387Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
+  "clipSha256": "1905ae6e324a14d67381fe32a23649eea13fab5b29400ce91da3f075946bd662",
+  "scene": "dayof-refresh",
+  "review": {
+    "heardOpening": "Avec Actualiser, vous récupérez les informations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "La page indique l'heure de sa mise à jour",
+        "visibleSeconds": 0,
+        "visible": "Mention « Mis à jour à 19h34 » affichée en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "nous actualisons réellement la page",
+        "visibleSeconds": 12,
+        "visible": "Clic sur « Actualiser » et passage à 19h35",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Relisez les noms et les compteurs avant d'agir",
+        "visibleSeconds": 20,
+        "visible": "Noms des bénévoles et compteurs de présence visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:15 : Rupture de voix nette, changement de timbre au milieu du propos."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Passage d'une première voix à une seconde voix distincte à 00:15."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

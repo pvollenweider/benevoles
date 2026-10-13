@@ -1,53 +1,53 @@
 {
   "id": "LAST_MINUTE_CHANGES",
   "slug": "last-minute-changes",
-  "validatedAt": "2026-10-05T22:29:48.713Z",
+  "validatedAt": "2026-10-13T06:35:00.177Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 338720,
+  "captureMs": 354120,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 30666,
+      "visualMs": 30660,
       "audioMs": 30658,
-      "driftMs": 8
+      "driftMs": 2
     },
     {
       "id": "withdrawal",
-      "visualMs": 31285,
+      "visualMs": 31283,
       "audioMs": 31282,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "offer",
-      "visualMs": 26531,
+      "visualMs": 26530,
       "audioMs": 26528,
-      "driftMs": 3
+      "driftMs": 2
     },
     {
       "id": "coverage",
-      "visualMs": 30051,
+      "visualMs": 30052,
       "audioMs": 30049,
-      "driftMs": 2
+      "driftMs": 3
     },
     {
       "id": "availability",
-      "visualMs": 29454,
+      "visualMs": 29452,
       "audioMs": 29452,
-      "driftMs": 2
+      "driftMs": 0
     },
     {
       "id": "message",
-      "visualMs": 60897,
+      "visualMs": 60899,
       "audioMs": 60895,
-      "driftMs": 2
+      "driftMs": 4
     },
     {
       "id": "schedule",
-      "visualMs": 30486,
+      "visualMs": 30485,
       "audioMs": 30484,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "cancel",
@@ -58,15 +58,25 @@
     {
       "id": "journal",
       "visualMs": 29181,
-      "audioMs": 29180,
-      "driftMs": 1
+      "audioMs": 29181,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 28040,
+      "visualMs": 28042,
       "audioMs": 28038,
-      "driftMs": 2
+      "driftMs": 4
     }
   ],
+  "anchorsChecked": 32,
+  "music": {
+    "voicedWindows": 321,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.3
+  },
   "issues": []
 }

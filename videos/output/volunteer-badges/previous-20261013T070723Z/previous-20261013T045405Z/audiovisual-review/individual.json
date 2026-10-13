@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:27:45.261Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "5ddf3ec6469706f9288da9b058b6af5719f61a62d9df43c0fa51b11e19c6d26b",
+  "clipSha256": "3649a5f4b53c8d73bee31bd64e8a76ecadaa2c17ddae61bb685b2ba0c784fc6c",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Un badge perdu ? Choisis une personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Choisis une personne dans Bénévole, réimpression.",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection d'un profil Camille Berger dans le menu déroulant Bénévole (réimpression)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Attention au filtre de poste encore actif",
+        "visibleSeconds": 11.5,
+        "visible": "Le champ Poste est positionné sur Buvette au-dessus de la sélection",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "puis générons sa feuille.",
+        "visibleSeconds": 18.7,
+        "visible": "Clic sur Ouvrir les badges puis affichage du badge généré pour Camille Berger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

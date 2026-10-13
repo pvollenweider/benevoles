@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:47.866Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "12a5f118e65299a15d2023b07784b70390379ed802261a99c8271bdb843dac6d",
+  "clipSha256": "0916355076d995d21547da7d345117e5b220e4fd3222d60f74f5a3826605f613",
+  "scene": "dayof-window",
+  "review": {
+    "heardOpening": "La page Jour J se concentre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La page Jour J se concentre sur les personnes attendues maintenant",
+        "visibleSeconds": 0,
+        "visible": "En-tête de page 'Jour J' affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "La vue En cours regroupe les créneaux qui ont commencé",
+        "visibleSeconds": 4,
+        "visible": "Section 'En cours' visible avec le créneau 'Veille, Veille commencée hier'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Dans les trois prochaines heures montre les prochaines relèves",
+        "visibleSeconds": 12,
+        "visible": "Défilement vers la section 'Dans les 3 prochaines heures' affichant la relève buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Plus tôt aujourd'hui permet de retrouver les créneaux terminés",
+        "visibleSeconds": 15.5,
+        "visible": "Section 'Plus tôt aujourd'hui' visible avec '1 créneau terminé'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et parfaitement synchronisée avec le défilement de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

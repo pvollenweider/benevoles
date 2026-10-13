@@ -154,12 +154,15 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
   })
   await scene("certificate-settings", async at => {
     await go(`/admin/members/${HOURS_MEMBER}`)
+    await at("Depuis son activité, ouvrons Attestation de bénévolat")
     await tap(page, page.getByRole("link", { name: "Attestation de bénévolat", exact: true }))
+    await at("Choisissons une période du premier mai")
     await setFrenchDate(page, page.getByLabel("Du", { exact: true }), "2026-05-01")
     await setFrenchDate(page, page.getByLabel("Au", { exact: true }), "2026-09-30")
     const note = page.getByLabel("Texte libre (facultatif)", { exact: true })
-    await at("L'aperçu reprend le nom du"); await tap(page, note); await note.pressSequentially("Accueil du public et rangement du matériel.", { delay: 75 })
-    await page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).scrollIntoViewIfNeeded()
+    await at("Vous pouvez ajouter une remarque facultative"); await tap(page, note); await note.pressSequentially("Accueil du public et rangement du matériel.", { delay: 75 })
+    await at("L'aperçu reprend le nom du bénévole")
+    await page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).evaluate(element => element.scrollIntoView({ block: "start" }))
     const logo = page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).locator("img")
     assert.equal(await logo.count(), 1)
     assert(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth === 240 && image.naturalHeight === 80))
@@ -168,6 +171,8 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     // Restore the browser default, not an explicit screen override: page.pdf()
     // must subsequently apply real print styles rather than print the admin form.
     finally { await page.emulateMedia({ media: null }) }
+    // Restoring print media resets the viewport; keep the real preview visible.
+    await page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).evaluate(element => element.scrollIntoView({ block: "start" }))
     await evidence("certificate-settings", { actualLivePreview: true, period: "MayToSeptember2026", actualNoteEntered: true, actualLogoLoaded: true, actualPrintGrayscaleComputed: true })
   })
   await scene("certificate-presence", async at => {
@@ -176,14 +181,17 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const table = page.getByRole("table")
     assert.equal(await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).count(), 0)
     await table.getByRole("columnheader", { name: "Heures attestées", exact: true }).scrollIntoViewIfNeeded()
-    await at(0.45) /* mid-sentence */; await tap(page, include)
+    await at("Regardons cette colonne, puis cochons"); await tap(page, include)
     await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).waitFor()
     const total = table.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Total", exact: true }) })
     assert.match((await total.innerText()).replace(/\s+/g, " "), /6\s*h.*2\s*h/)
+    await at("Pour Aline, nous retrouvons six heures")
+    await total.scrollIntoViewIfNeeded()
     await evidence("certificate-presence", { attestedHours: 6, additionalPlannedWithoutPresenceHours: 2, notEightPlusSix: true, noClockedWorkedHoursClaim: true })
   })
-  await scene("certificate-pdf", async () => {
+  await scene("certificate-pdf", async at => {
     const finishPrint = await preparePrintedPdf(page)
+    await at("Quand le contenu vous convient")
     const posted = page.waitForResponse(response => response.request().method() === "POST" && new URL(response.url()).pathname === `/api/admin/members/${HOURS_MEMBER}/certificate`)
     await tap(page, page.getByRole("button", { name: "Générer et imprimer l'attestation", exact: true }))
     const response = await posted; assert(response.ok())

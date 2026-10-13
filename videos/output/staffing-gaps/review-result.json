@@ -1,0 +1,17 @@
+{
+  "id": "STAFFING_GAPS",
+  "status": "READY",
+  "duration": 227.28,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 216,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "All objective checks pass. Real member-email lookup, Julien added row and reduced Photos need visible and aligned; corrected vous narration retained.",
+  "sourceChanges": "Pass 1 member lookup/result anchors retained. Reused fresh audited TTS; no new audio or source change in pass2."
+}

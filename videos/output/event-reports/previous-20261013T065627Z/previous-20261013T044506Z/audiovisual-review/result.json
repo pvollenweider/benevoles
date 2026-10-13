@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:42.352Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "e00985a8b590da6e92e9901c82716311f48b215aba0fe9e4c15b090d950d624e",
+  "clipSha256": "a80876ff24eebb4e705f8e1b75d921885f868eff1c98cb83e2de14e6a1e8b7c6",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel",
+        "visibleSeconds": 1,
+        "visible": "Page Rapports avec les rubriques Planning par jour, Planning par poste et Planning individuel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "et une liste de contacts réservée à l'organisation",
+        "visibleSeconds": 6,
+        "visible": "Section Pour les organisateurs seulement listant notamment la Liste avec téléphones",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "générez une nouvelle version et remplacez les anciennes copies",
+        "visibleSeconds": 13,
+        "visible": "Conseil de gestion sur écran récapitulatif stable de la liste des rapports",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, adaptée à une conclusion de module."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu peux agir sur une inscription, par exemple renvoyer son lien",
+  "windowStart": 33.955999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 34.3,
+    "wordsHeard": "Tu peux agir sur une inscription, par exemple renvoyer son lien"
+  },
+  "onset": 68.256,
+  "proposedCut": 68.0152085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:54:21.607Z",
-  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
-  "promptSha256": "abb2c2f1c72b6ee79bc32a1c1c3428d36d46726a9c31441d259ae9a9beac7b2f",
-  "clipSha256": "1c619ad4a108883fca1aa63f8393dbd8f7ad00e386631e08bd94dd52203eab0a",
+  "reviewedAt": "2026-10-13T07:15:12.827Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "bcf24701f4d401c0a0609b2fd255750646b0a24a3429f15b78923da64a308d86",
+  "clipSha256": "eaba7a122ca5289b6dc561bb5565f5bb19b9b7d021816cc8a96659f0dbd0b267",
   "scene": "result",
   "review": {
     "heardOpening": "Le badge choisi est prêt pour l'accueil",
@@ -11,43 +11,33 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Le badge choisi est prêt pour l'accueil",
-        "visibleSeconds": 0.5,
-        "visible": "Aperçu du badge imprimable pour Léa Giroud affiché à l'écran",
+        "visibleSeconds": 0,
+        "visible": "Aperçu du badge individuel de Léa Girood sur la page 'documents terrain'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "Il n'a ni photo, ni QR code personnel",
-        "visibleSeconds": 2.5,
-        "visible": "Modèle de badge textuel affiché sans emplacement photo ni QR code",
+        "visibleSeconds": 2,
+        "visible": "Le badge affiché ne comporte effectivement aucune photo ni QR code, uniquement du texte",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "ne le traite pas comme une autorisation d'accès automatique",
-        "visibleSeconds": 1,
-        "visible": "Encart 'Un badge n'est pas un droit d'accès' visible puis masqué",
-        "sync": "early",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 20,
-        "spoken": "l'organisateur garde la main",
-        "visibleSeconds": 21,
-        "visible": "Page des documents terrain toujours affichée sans changement",
+        "spokenSeconds": 13,
+        "spoken": "reconnaître la personne, retrouver son équipe",
+        "visibleSeconds": 13,
+        "visible": "Affichage de l'identité 'Léa GIROOD' et des pôles associés 'Accueil · Buvette · Loge'",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:22 - Phrase finale interrompue avant la fin du mot 'main'."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, coupure audio abrupte en toute fin d'extrait."
+      "observation": "Voix masculine claire, calme et bienveillante, parfaitement audible et en accord avec le texte."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

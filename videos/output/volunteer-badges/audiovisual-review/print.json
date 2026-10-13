@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:54:13.261Z",
-  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
-  "promptSha256": "ae3a8c7bc1305728f52984e0decac2a97fecb6522d4739ea985467fa29091d99",
-  "clipSha256": "dc9e452ac1b2dcde09694b85ffb9be022ac3f257171a5f3bb736784eb99c165c",
+  "reviewedAt": "2026-10-13T07:15:09.164Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "f67566bf77596f145ea43fbe660aff675de099087aaf923e786bd59785e8c33b",
+  "clipSha256": "733586d486110c419da5f821811f6817a974ef37d68801ed600d6b5c378b7032",
   "scene": "print",
   "review": {
-    "heardOpening": "Avant d'imprimer en quantité, regarde la première feuille",
+    "heardOpening": "Avant d'imprimer en quantité",
     "checkpoints": [
       {
-        "spokenSeconds": 4,
+        "spokenSeconds": 4.5,
         "spoken": "Voici le document imprimable : deux colonnes, cinq rangées et les repères de découpe.",
-        "visibleSeconds": 4.7,
-        "visible": "Affichage de la planche de badges avec deux colonnes et repères de découpe.",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la planche de badges HTML avec 2 colonnes, 5 rangées et les repères pointillés de découpe.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Vérifions aussi Jean-Baptiste et Marie-Charlotte",
+        "spokenSeconds": 8.8,
+        "spoken": "Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs.",
         "visibleSeconds": 9.5,
-        "visible": "Badges de Jean-Baptiste et Marie-Charlotte visibles à l'écran.",
+        "visible": "Défilement montrant les badges de Jean-Baptiste puis de Marie-Charlotte (Vollenweider-Lachenal).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.5,
-        "spoken": "Regardons le vrai PDF obtenu, avec sa première",
-        "visibleSeconds": 21,
-        "visible": "Affichage du PDF réel page 1 sur 8.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 23.7,
-        "spoken": "puis sa dernière page.",
-        "visibleSeconds": 25,
-        "visible": "Affichage de la page 8 sur 8 du document PDF.",
+        "spokenSeconds": 21.2,
+        "spoken": "Regardons le vrai PDF obtenu, avec sa première puis sa dernière page.",
+        "visibleSeconds": 21.5,
+        "visible": "Affichage de la page 1 sur 8 du PDF réel, basculant ensuite à 00:23 sur la page 8 sur 8.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien synchronisée avec les transitions visuelles."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-06T18:51:58.357Z",
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
+  },
+  "hours-list": {
+    "plannedHours": 8,
+    "attestedHours": 6,
+    "futureAndCancelledExcluded": true,
+    "attestedIsSubsetNotAdditional": true
+  },
+  "last-participation": {
+    "confirmedDateAndPresenceDateShownSeparately": true,
+    "noPresenceNotAbsence": true,
+    "actualAttestedSortCycleVerified": true,
+    "actualLastParticipationSortVerified": true
+  },
+  "activity": {
+    "realFactualChronologyShown": true,
+    "hoursColumnsAreOnMembersListNotThisPage": true
+  },
+  "period-export": {
+    "actualDownloads": 2,
+    "firstFileChecked": true,
+    "includeZeroMemberVerified": true,
+    "plannedHours": 6,
+    "attestedHours": 2,
+    "period": "September2026"
+  },
+  "certificate-settings": {
+    "actualLivePreview": true,
+    "period": "MayToSeptember2026",
+    "actualNoteEntered": true,
+    "actualLogoLoaded": true,
+    "actualPrintGrayscaleComputed": true
+  },
+  "certificate-presence": {
+    "attestedHours": 6,
+    "additionalPlannedWithoutPresenceHours": 2,
+    "notEightPlusSix": true,
+    "noClockedWorkedHoursClaim": true
+  },
+  "certificate-pdf": {
+    "actualPdfSha256": "eccb8e9b694556905b02718d2a532c530d0a8f023ccd56278233f4246d5d47c6",
+    "actualPdfPages": 2,
+    "method": "browser-print-engine",
+    "realProductPrintActionLogged": true,
+    "serverPdfDownloadFeature": false,
+    "stillRequiresHumanReviewAndSignature": true
+  },
+  "event-summary": {
+    "distinctPeopleNotRegistrations": true,
+    "partialCheckInNotAbsenceClaim": true,
+    "plannedHours": 6,
+    "attestedHours": 2,
+    "currentRealReportsSummary": true
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:20.033Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "9b0101d3b6113ef945e220d266e0155c303402a503af0dcaaf0ff546e3654777",
+  "clipSha256": "3b0dcda7053346cf394a70bd9dc7dcdd92a4abef81b284bcf8d7b91329ec9994",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance, choisis précisément les destinataires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "choisis précisément les destinataires : tous les inscrits",
+        "visibleSeconds": 1,
+        "visible": "Page 'Écrire aux bénévoles' avec l'option 'Tous les bénévoles inscrits' cochée par défaut (21 personnes)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "un poste",
+        "visibleSeconds": 4.2,
+        "visible": "Sélection du bouton radio 'Les bénévoles d'un poste' avec choix du poste Buvette (13 personnes)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "la liste d’attente",
+        "visibleSeconds": 8,
+        "visible": "Sélection de l'option 'Les personnes en liste d'attente' (3 personnes)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "les invités qui n’ont encore aucun créneau confirmé",
+        "visibleSeconds": 10.8,
+        "visible": "Sélection de l'option 'Les invités sans créneau confirmé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.1,
+        "spoken": "Le nombre de personnes est recalculé avant l’envoi",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage dynamique du compteur recalculé (1 personne recevra ce message)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:21.002Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "9fbb2c01ab7a78f80b2c7a61608076414cb6fdd7947a7ee1a3ba0b97cb1a7391",
+  "clipSha256": "1dc05079228f651540e9502ac4c763b0eaf3b40ef93a047d018b479650cda232",
+  "scene": "template-create",
+  "review": {
+    "heardOpening": "Pour une consigne que vous réutilisez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis Nouveau modèle",
+        "visibleSeconds": 2,
+        "visible": "Ouverture du formulaire Nouveau modèle",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Prenons Briefing avant le créneau",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie de « Briefing avant le créneau » dans le champ Nom du modèle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "L'objet annonce le sujet de l'email",
+        "visibleSeconds": 17,
+        "visible": "Saisie dans le champ Objet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 29.5,
+        "visible": "Clic sur Enregistrer et affichage du message de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

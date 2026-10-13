@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:01:21.649Z",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "promptSha256": "9f5249ed2a32021b1fc8d14cbd193e7ff003c0f29e673d448a5cacab00756553",
+  "clipSha256": "f7f5c9da4afd7374f44d1e5d2f534d1f6a647939c58b25fb8506bf6f1bf20734",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Pour préparer seulement la buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "revenons au formulaire et choisissons ce poste",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection du poste « Buvette » dans le formulaire des badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Les personnes retenues ont une inscription confirmée à la buvette",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur « Ouvrir les badges » et affichage des planches de badges filtrées sur la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Comparons le badge de Léa avec sa version complète",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la vue comparative entre le badge complet et le badge filtré de Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "ses autres postes ne figurent plus dans cette version filtrée",
+        "visibleSeconds": 12,
+        "visible": "Détail visible du badge filtré ne mentionnant que les créneaux buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine fluide, dynamique et bien articulée, synchronisée avec les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

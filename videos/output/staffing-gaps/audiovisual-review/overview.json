@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:34:44.755Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "849604bbd8b5b6a0dd93d54fffd27eb98c0d6f12f462d264e3781792d6a61415",
+  "clipSha256": "41f26d8a7a12c5131c6069462a27d57b224268fb0c5130d3150b8716d5bcd745",
+  "scene": "overview",
+  "review": {
+    "heardOpening": "En haut, les places pourvues",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "En haut, les places pourvues sont les inscriptions confirmées",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage en haut de la section '30 places pourvues sur 53 - 14 créneaux'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "La phrase de besoin et la barre donnent un aperçu",
+        "visibleSeconds": 13,
+        "visible": "Barre de progression bleue et phrase explicative 'Il manque encore 19 personnes sur 53 places'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "mais lisez aussi les attentes et les demandes",
+        "visibleSeconds": 16.2,
+        "visible": "Mentions '3 personnes en liste d'attente' et '2 demandes à traiter' visibles dans le texte explicatif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et bien articulée, sur fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

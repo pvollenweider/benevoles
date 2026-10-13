@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu peux alléger le badge en retirant le nom de famille",
+  "windowStart": 116.904,
+  "result": {
+    "found": true,
+    "startSeconds": 14.97,
+    "wordsHeard": "Tu peux alléger le badge en retirant le nom de famille"
+  },
+  "onset": 131.874,
+  "proposedCut": 131.903729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

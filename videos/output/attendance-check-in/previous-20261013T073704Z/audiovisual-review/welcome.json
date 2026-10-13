@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:17.330Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "ab27ebac66a3bb5c502e1f539746d78767d3dd9a7ac5e33e589c34e02b5af730",
+  "clipSha256": "e7849d9d89162945c36a9284e0ddb9a85260b4b14b8058f286b11fca02706394",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour J, savoir qui est arrivé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6,
+        "spoken": "choisissons l'accueil du matin avec les filtres",
+        "visibleSeconds": 7.5,
+        "visible": "Sélection du filtre de poste 'Accueil' puis du créneau 'dim. 11 oct., 08h - 10h - Accueil - Accueil du matin'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Chaque ligne correspond à une inscription sur un créneau",
+        "visibleSeconds": 13,
+        "visible": "Affichage du tableau filtré avec les lignes de bénévoles associées au créneau d'accueil",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel",
+        "visibleSeconds": 19.5,
+        "visible": "Tableau des inscriptions prêt pour les actions annoncées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous cherchez Zoé ? Tapez son prénom sans accent : sa",
+  "windowStart": 209.94299999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 26.6,
+    "wordsHeard": "Vous"
+  },
+  "onset": 236.54299999999998,
+  "proposedCut": 236.06825,
+  "note": "Proposal only; recut then independently audit before capture"
+}

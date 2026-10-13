@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:54:05.828Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "de375eae18175fc9bdab4076ec49964847f15d4b8545339efbb9491a7350d638",
+  "clipSha256": "df9bc49425d17575e586452c318e8435c56bfcd7269b416c3ab2b1734afceb54",
+  "scene": "fields",
+  "review": {
+    "heardOpening": "Tu peux alléger le badge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Décochons les deux cases",
+        "visibleSeconds": 3.6,
+        "visible": "Décochage des options Nom de famille et Créneaux dans les paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "le prénom reste",
+        "visibleSeconds": 6.5,
+        "visible": "Aperçu du badge affichant uniquement le prénom Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Remettons-les ensuite",
+        "visibleSeconds": 9.2,
+        "visible": "Retour aux options, réactivation des cases et génération du badge",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "le badge montre au plus quatre lignes puis indique les autres créneaux",
+        "visibleSeconds": 12.2,
+        "visible": "Badge affichant quatre créneaux détaillés et la mention + 1 autre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,84 +1,94 @@
 {
   "id": "TARGETED_MESSAGES",
   "slug": "targeted-messages",
-  "validatedAt": "2026-10-05T18:36:17.325Z",
+  "validatedAt": "2026-10-13T07:27:22.789Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 302440,
+  "captureMs": 318600,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 21735,
-      "audioMs": 21734,
-      "driftMs": 1
+      "visualMs": 22910,
+      "audioMs": 22908,
+      "driftMs": 2
     },
     {
       "id": "audiences",
-      "visualMs": 25419,
-      "audioMs": 25418,
+      "visualMs": 25278,
+      "audioMs": 25277,
       "driftMs": 1
     },
     {
       "id": "count",
-      "visualMs": 22727,
-      "audioMs": 22724,
-      "driftMs": 3
-    },
-    {
-      "id": "template-create",
-      "visualMs": 37170,
-      "audioMs": 37167,
-      "driftMs": 3
-    },
-    {
-      "id": "variables",
-      "visualMs": 25999,
-      "audioMs": 25997,
+      "visualMs": 21915,
+      "audioMs": 21913,
       "driftMs": 2
     },
     {
+      "id": "template-create",
+      "visualMs": 35883,
+      "audioMs": 35882,
+      "driftMs": 1
+    },
+    {
+      "id": "variables",
+      "visualMs": 24296,
+      "audioMs": 24295,
+      "driftMs": 1
+    },
+    {
       "id": "apply",
-      "visualMs": 21825,
-      "audioMs": 21823,
+      "visualMs": 22042,
+      "audioMs": 22040,
       "driftMs": 2
     },
     {
       "id": "context",
-      "visualMs": 21977,
-      "audioMs": 21975,
-      "driftMs": 2
+      "visualMs": 21606,
+      "audioMs": 21606,
+      "driftMs": 0
     },
     {
       "id": "preview",
-      "visualMs": 20673,
-      "audioMs": 20671,
-      "driftMs": 2
+      "visualMs": 19822,
+      "audioMs": 19822,
+      "driftMs": 0
     },
     {
       "id": "push",
-      "visualMs": 22785,
-      "audioMs": 22784,
-      "driftMs": 1
+      "visualMs": 24230,
+      "audioMs": 24230,
+      "driftMs": 0
     },
     {
       "id": "confirm",
-      "visualMs": 24094,
-      "audioMs": 24092,
-      "driftMs": 2
+      "visualMs": 23948,
+      "audioMs": 23948,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 24232,
-      "audioMs": 24230,
-      "driftMs": 2
+      "visualMs": 23702,
+      "audioMs": 23701,
+      "driftMs": 1
     },
     {
       "id": "maintain",
-      "visualMs": 27626,
-      "audioMs": 27624,
+      "visualMs": 26862,
+      "audioMs": 26860,
       "driftMs": 2
     }
   ],
+  "anchorsChecked": 20,
+  "music": {
+    "voicedWindows": 280,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.7
+  },
   "issues": []
 }

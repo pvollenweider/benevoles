@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-13T05:15:41.228Z",
+  "masterSha256": "08409ce0e6d81413ea51dd54c8677abef442778cdefeb9e3931849f4675225b9",
+  "totalSeconds": 220.44,
+  "cuts": [
+    {
+      "id": "overview",
+      "seconds": 27.199542
+    },
+    {
+      "id": "empty",
+      "seconds": 50.029666500000005
+    },
+    {
+      "id": "needs",
+      "seconds": 73.68629150000001
+    },
+    {
+      "id": "requests",
+      "seconds": 100.1004375
+    },
+    {
+      "id": "waiting",
+      "seconds": 123.97535400000001
+    },
+    {
+      "id": "leaders",
+      "seconds": 148.032875
+    },
+    {
+      "id": "full",
+      "seconds": 171.8744795
+    },
+    {
+      "id": "action",
+      "seconds": 195.6087915
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

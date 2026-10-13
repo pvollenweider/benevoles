@@ -1,0 +1,25 @@
+STATUS: NOT READY
+ID: TARGETED_MESSAGES
+Duration: 318.56
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 280, 'musicOnlyWindows': 0, 'smallestGapLu': 14.1, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.6}
+Problems: Notification checkbox clicked about 4 seconds late; Mailpit sidebar still contains prior journal invitations. Known nit: Mailpit English dates. All validation and final transcript/music checks pass.
+Source changes: Push cue converted from 25% to at("Vous pouvez aussi demander une notification"). Added guarded prepare-catalogue-mailbox.ts to clear identified fixture messages across prior takes. Existing continuous audio reused after boundary realignment and independent audit; no new TTS. No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 0.201–23.11 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+audiences: 25.37–50.649 s; review/audiences-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+count: 52.913–74.827 s; review/count-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+template-create: 77.091–112.974 s; review/template-create-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+variables: 115.24–139.537 s; review/variables-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+apply: 141.801–163.846 s; review/apply-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+context: 166.113–187.719 s; review/context-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+preview: 189.983–209.807 s; review/preview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+push: 212.064–236.296 s; review/push-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:01, l'activation de la notification est annoncée, mais le clic sur la case à cocher n'intervient qu'à 00:06 (environ 4 secondes de retard)."]
+confirm: 238.56–262.51 s; review/confirm-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 264.773–288.477 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+maintain: 290.743–317.605 s; review/maintain-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

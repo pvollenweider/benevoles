@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:34:44.304Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "0f8a0df57da5a9f1135fb14d8acf804f19c3d2cfa5ab19e99d853aa9886b553d",
+  "clipSha256": "74ced132b8695d56dc49eae23080573fd7e024efdf5301886a4a86d1c0d8856e",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Postes sans personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Ici, Photos comporte deux créneaux et six places à pourvoir.",
+        "visibleSeconds": 5.2,
+        "visible": "Section 'Postes sans personne' avec le bouton 'Photos' et la mention '2 créneaux · 6 places à pourvoir'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Cliquez sur le poste pour retrouver le planning",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la page des créneaux avec le planning et la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Avant de recruter, assurez-vous que la demande est claire",
+        "visibleSeconds": 19.8,
+        "visible": "Retour à la page récapitulative 'Où manque-t-il du monde ?'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

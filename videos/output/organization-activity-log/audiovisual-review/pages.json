@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:55:35.695Z",
+  "videoSha256": "475ca0d8e812ba018e34867fd4f1346406eb2dc8ed5577a391ea41682a092416",
+  "promptSha256": "50d6ecf3b6d45c2ab028431d74ece6fc7bb3e9a77bb4b0e5b7fe11b7181a7413",
+  "clipSha256": "b81a50ef308463bfb02bf93ad71a13aac6bba8cda5cd536c827909279f025a00",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Si l'historique dépasse la première page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Descendons, utilisons le bouton et retrouvons les nouvelles lignes.",
+        "visibleSeconds": 5.2,
+        "visible": "Défilement vers le bas de la liste et clic sur le bouton Charger plus, chargeant de nouvelles entrées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "essayons Tous les types avant de conclure qu'il n'y a aucun historique.",
+        "visibleSeconds": 18.5,
+        "visible": "Filtrage temporaire sur Emails affichant un résultat vide, puis retour sur Tous les types restaurant les lignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "pour corriger une fiche ou un rôle, il faut retourner dans la page qui permet réellement cette modification.",
+        "visibleSeconds": 24.5,
+        "visible": "Écran stable sur le journal d'activité illustrant l'explication conceptuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

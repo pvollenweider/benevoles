@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T17:42:44.959Z",
+  "revalidatedAt": "2026-10-05T17:42:44.961Z",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "group",
+      "audioSha256": "c706dea042705197149da7024c71aa9e9ef464694beefdb04d1584750e6a50f9",
+      "recognized": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présent. Voici les deux marques tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan. Traite d'abord sa demande selon les règles de l'événement.Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présent. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan. Traite d'abord sa demande selon les règles de l'événement.",
+      "expected": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan : traite d'abord sa demande selon les règles de l'événement.",
+      "wordErrorRate": 1.0144927536231885,
+      "needsReview": true,
+      "unexpectedInstructions": []
+    }
+  ]
+}

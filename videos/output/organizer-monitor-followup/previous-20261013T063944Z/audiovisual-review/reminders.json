@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:30.679Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "b8e70e778962cab7948f38a1b6021429ced36b6ad714f57121172f9bb8d6df47",
+  "clipSha256": "1b5eabff2e388c0a48b91917a10883ae37d8ab466fc47869cb7215b895bf82bd",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Les rappels automatiques prennent ensuite le relais",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Les rappels automatiques prennent ensuite le relais avant les créneaux.",
+        "visibleSeconds": 0.8,
+        "visible": "Section 'Rappels automatiques aux bénévoles inscrits' affichée à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Tu choisis lesquels sont actifs,",
+        "visibleSeconds": 3.4,
+        "visible": "Options cochables 'Rappel J-2', 'Rappel J-1' et 'Rappel du jour' bien visibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
+        "visibleSeconds": 5.2,
+        "visible": "Écran stable des réglages d'e-mails illustrant l'explication générale.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

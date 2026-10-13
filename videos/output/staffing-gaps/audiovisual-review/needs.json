@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:34:54.471Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "cc547c639dbcd4a6513f971af678af548de3186277bc7b1714a9ec9f3884369c",
+  "clipSha256": "b82295daefda4b537dbcfe3f83caed4bc7d4a3fc4f3d893e746d2e4e6f23dcef",
+  "scene": "needs",
+  "review": {
+    "heardOpening": "Créneaux à compléter va du plus dégarni",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Chaque ligne indique la date, l'horaire, les places confirmées et le nombre manquant.",
+        "visibleSeconds": 5,
+        "visible": "Tableau des créneaux à compléter affichant dates, plages horaires, barres de progression et mentions de places manquantes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Cliquons sur la buvette du soir : la liste des inscriptions s'ouvre déjà filtrée.",
+        "visibleSeconds": 14,
+        "visible": "Affichage de la page Inscriptions filtrée sur Buvette, sam. 17 oct. 18h-22h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "Le lien Écrire à ce créneau prépare ensuite un message pour les personnes de cet horaire",
+        "visibleSeconds": 19,
+        "visible": "Page 'Écrire aux bénévoles' ouverte avec option 'Les bénévoles d'un créneau' présélectionnée sur la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et en parfaite adéquation avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

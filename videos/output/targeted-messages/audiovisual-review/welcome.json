@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:27:34.559Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "8d19f48f6a04e7a3969fa64d2bd68c2080cb9b5bca4381c9489024725cbb647b",
+  "clipSha256": "fd7ede97f5036ab76d9f1d571f2f52768107d651bca284e6cbfa9bfcad5756f3",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une consigne pour toute l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une consigne pour toute l'équipe, un briefing pour la buvette",
+        "visibleSeconds": 2.5,
+        "visible": "L'encart de titre introductif disparaît pour afficher la page « Écrire aux bénévoles »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "ouvrez la page des messages",
+        "visibleSeconds": 11.5,
+        "visible": "La page « Écrire aux bénévoles » est déjà affichée à l'écran sans navigation active",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Nous allons choisir les destinataires",
+        "visibleSeconds": 14,
+        "visible": "La section « Destinataires » avec les options de ciblage est visible sur le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, fluide et posée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Les demandes à traiter gardent leur place pendant la décision. À",
+  "windowStart": 70.10000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.24,
+    "wordsHeard": "Les demandes à traiter gardent leur place pendant la décision. À"
+  },
+  "onset": 100.34,
+  "proposedCut": 100.1004375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

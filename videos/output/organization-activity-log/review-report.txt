@@ -1,0 +1,22 @@
+STATUS: READY
+ID: ORGANIZATION_ACTIVITY_LOG
+Duration: 290.92
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 256, 'musicOnlyWindows': 6, 'smallestGapLu': 14.9, 'largestGapLu': 19.5, 'quietestMusicOnlyLufs': -33.8, 'loudestMusicOnlyLufs': -33.1, 'medianVoiceLufs': -16.3}
+Problems: All objective checks pass. Result navigation anchored at 276.638 s (chapter 22.956 s). Automated static-read flag rejected: Colette and Samira actions visibly readable throughout read; no highlight promised. Native file-input English labels cosmetic only.
+Source changes: Pass 1 anchors retained; no additional per-video source changes and no third take.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 475ca0d8e812ba018e34867fd4f1346406eb2dc8ed5577a391ea41682a092416
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.133–29.721 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+read: 31.984–59.69 s; review/read-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["00:05 : L'action annoncée (« Lisons deux actions réalisées par des personnes différentes ») n'est pas exécutée : aucune ligne n'est lue à voix haute ni mise en valeur à l'écran, la vidéo restant totalement figée."]
+members: 61.948–90.147 s; review/members-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+team: 92.418–120.31 s; review/team-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+filters: 122.569–152.179 s; review/filters-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+pages: 154.448–184.417 s; review/pages-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+export: 189.112–222.187 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+limits: 224.449–251.419 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+result: 253.682–283.399 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

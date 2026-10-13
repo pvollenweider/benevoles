@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:47:38.678Z",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "promptSha256": "67249a53090f1ba24c16e2770966dc43f1111b065616ae6dd817cf824b00608a",
+  "clipSha256": "59570166ee5fe163848f7a6dabe43eed20f33299834e4cb37253b39b8a16fd46",
+  "scene": "done",
+  "review": {
+    "heardOpening": "Le résultat, c'est un suivi simple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le résultat, c'est un suivi simple",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre « Un suivi clair jusqu'au jour J - Voir, cibler, préparer » affiché au centre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "retrouver l'historique sans jongler entre plusieurs outils",
+        "visibleSeconds": 2.7,
+        "visible": "L'encart disparaît pour révéler le journal chronologique complet des actions et inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Ton planning reste lisible jusqu'au jour de l'événement",
+        "visibleSeconds": 9.2,
+        "visible": "Vue d'ensemble stable du flux d'activité et des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec l'animation visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

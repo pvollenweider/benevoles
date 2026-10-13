@@ -1,0 +1,12 @@
+{
+  "anchor": "La dernière participation apporte un autre repère. Pour Aline, la date",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 28.3,
+    "wordsHeard": "La dernière participation apporte un autre repère. Pour Aline, la date"
+  },
+  "onset": 28.3,
+  "proposedCut": 28.264125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

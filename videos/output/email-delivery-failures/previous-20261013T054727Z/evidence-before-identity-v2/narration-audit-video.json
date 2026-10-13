@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:36:32.637Z",
+  "revalidatedAt": "2026-10-06T17:36:32.638Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "38d50422501402ee7fcef6606906bf76a1339afdf7c5864720c1c869ba0a32b6",
+      "recognized": "Vous avez envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé. Dans Paramètres, puis E-mail, les lignes récentes montrent le type d'e-mail, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur sur des personnes et des e-mails fictifs.",
+      "expected": "Vous avez envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
+      "wordErrorRate": 0.02830188679245283,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "states",
+      "audioSha256": "ec7429d09e4c8537d3348bd595121783f8495b312f2fbed3b94ac411a2c9c64c",
+      "recognized": "En attente d'envoi signifie que l'e-mail est dans la file. Jules n'a pas encore eu de tentative. Pour Sarah, nouvel essai prévu indique un échec temporaire. Regardez l'échéance et le nombre d'essais. Nicolas est marqué envoyé, remis au serveur, pas lu par le bénévole. Emma a atteint six essais après une panne temporaire persistante. Léa a reçu un refus définitif. L'application s'arrête dès le premier essai sans attendre six tentatives. Dans cette formation, les délais des essais temporaires ont été accélérés, mais les échanges SMTP ont réellement eu lieu. Lisons le détail avant de choisir une action.",
+      "expected": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative. Pour Sarah, Nouvel essai prévu indique un échec temporaire : regardez l'échéance et le nombre d'essais. Nicolas est marqué Envoyé : remis au serveur, pas lu par le bénévole. Emma a atteint six essais après une panne temporaire persistante. Léa a reçu un refus définitif : l'application s'arrête dès le premier essai, sans attendre six tentatives. Dans cette formation, les délais des essais temporaires ont été accélérés, mais les échanges SMTP ont réellement eu lieu. Lisons le détail avant de choisir une action.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reason",
+      "audioSha256": "21a28ca33eb4388f161754501d4679115f7f8df68c6ff07d74c53c79db82d315",
+      "recognized": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi, boîte aux lettres introuvable, adresse à vérifier. Pour Sarah, le problème est temporaire et un nouvel essai est prévu. Les détails techniques bruts ne sont pas affichés. Cette page ne connaît pas forcément les rejets arrivant plus tard après l'acceptation par le serveur. Envoyé ne prouve ni l'arrivée dans la boîte de réception ni la lecture. Si l'information est urgente, contactez aussi la personne directement.",
+      "expected": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi, boîte aux lettres introuvable, adresse à vérifier. Pour Sarah, le problème est temporaire et un nouvel essai est prévu. Les détails techniques bruts ne sont pas affichés. Cette page ne connaît pas forcément les rejets arrivant plus tard après l'acceptation par le serveur. Envoyé ne prouve ni l'arrivée dans la boîte de réception, ni la lecture. Si l'information est urgente, contactez aussi la personne directement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "retry",
+      "audioSha256": "e2f17b6813a84918bd8fffd1ce41e8586c5270f3e3f5801cd75996bec701cb00",
+      "recognized": "Pour Emma, le refus de notre serveur de test est maintenant levé. Sur l'échec définitif, renvoyer remet le même e-mail dans la file. Ce n'est pas un nouvel envoi à tout le monde. Attendons le résultat et rechargeons le suivi. La ligne passe à envoyé avec une heure. Ouvrons ensuite l'e-mail réellement reçu dans la boîte locale. Si le problème n'était pas corrigé, cliquer de nouveau ne suffirait pas à le faire disparaître.",
+      "expected": "Pour Emma, le refus de notre serveur de test est maintenant levé. Sur l'échec définitif, Renvoyer remet le même email dans la file. Ce n'est pas un nouvel envoi à tout le monde. Attendons le résultat et rechargeons le suivi. La ligne passe à Envoyé avec une heure. Ouvrons ensuite l'email réellement reçu dans la boîte locale. Si le problème n'était pas corrigé, cliquer de nouveau ne suffirait pas à le faire disparaître.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "address",
+      "audioSha256": "e9ca6ff4f5181d19200596d08561d75ba6c132c23e25e894da3563aab25ed37c",
+      "recognized": "Une adresse erronée demande une autre attention. Ouvrons les membres puis la fiche de Léa. Corrigeons son email et enregistrons. Revenons au suivi. L'ancien email en échec garde toujours son ancien destinataire. Le bouton Renvoyer ne reconstruit pas ce message à partir de la fiche corrigée. Pour écrire à la nouvelle adresse, préparons donc un nouvel envoi. Dans notre événement de formation, Léa et Emma sont inscrites. Ce message partira à toutes les deux. Choisissons un objet clair, puis écrivons notre consigne. La variable prénom personnalise le texte pour chacune. Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation. Cet envoi crée un nouveau message, pas une réparation de l'ancien. Ouvrons maintenant celui réellement reçu par Léa. L'adresse corrigée apparaît dans le destinataire. Correction de la fiche et renvoi d'un ancien email sont bien deux choses différentes.",
+      "expected": "Une adresse erronée demande une autre attention. Ouvrons les membres, puis la fiche de Léa. Corrigeons son email et enregistrons. Revenons au suivi : l'ancien email en échec garde toujours son ancien destinataire. Le bouton Renvoyer ne reconstruit pas ce message à partir de la fiche corrigée. Pour écrire à la nouvelle adresse, préparons donc un nouvel envoi. Dans notre événement de formation, Léa et Emma sont inscrites : ce message partira à toutes les deux. Choisissons un objet clair, puis écrivons notre consigne. La variable prénom personnalise le texte pour chacune. Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation. Cet envoi crée un nouveau message, pas une réparation de l'ancien. Ouvrons maintenant celui réellement reçu par Léa : l'adresse corrigée apparaît dans le destinataire. Correction de la fiche et renvoi d'un ancien email sont bien deux choses différentes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "campaign",
+      "audioSha256": "2c994dcdddd09452703083268b9198a75dfccf9035b87bd280f4e3f337133e3a",
+      "recognized": "Préparons un autre message pour ces deux personnes. Notre serveur de démonstration refuse définitivement Emma, mais accepte Léa. Un seul essai suffit pour cet échec permanent. Ouvrons Messages envoyés sous le formulaire. L'historique conserve l'objet, le public, l'auteur et le résultat. Un envoyé, un en échec. Voir le texte envoyé permet de relire la consigne originale et sa variable. Le refus de test est maintenant levé. Cliquons sur Renvoyer l'email en échec. Seule Emma repart dans la file, pas Léa. Le bouton devient Remis en file. Une autre demande ne renvoie rien de plus. Rechargeons enfin le suivi pour voir les deux remises réussies. Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
+      "expected": "Préparons un autre message pour ces deux personnes. Notre serveur de démonstration refuse définitivement Emma, mais accepte Léa. Un seul essai suffit pour cet échec permanent. Ouvrons Messages envoyés sous le formulaire. L'historique conserve l'objet, le public, l'auteur et le résultat : un envoyé, un en échec. Voir le texte envoyé permet de relire la consigne originale et sa variable. Le refus de test est maintenant levé. Cliquons sur Renvoyer l'email en échec : seule Emma repart dans la file, pas Léa. Le bouton devient Remis en file. Une autre demande ne renvoie rien de plus. Rechargeons enfin le suivi pour voir les deux remises réussies. Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "retention",
+      "audioSha256": "014b7a844f5977413372b1db9874ef9ef1d73a59875c2af28e3b021e19514dd7",
+      "recognized": "Le suivi de la file est volontairement récent. Les emails envoyés sont supprimés par le nettoyage nocturne et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne comptez donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consultez-le au bon moment, sans conserver inutilement des données personnelles.",
+      "expected": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne comptez donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consultez-le au bon moment, sans conserver inutilement des données personnelles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "af978264fce010ac7a72dcf5a60fff01ed9069adce57e2f1daafaa0b3a296d1b",
+      "recognized": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même e-mail après une panne ou préparer un nouvel envoi quand l'adresse a changé, ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, vous aidez l'équipe à retrouver l'information sans l'inonder de messages.",
+      "expected": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé : ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, vous aidez l'équipe à retrouver l'information sans l'inonder de messages.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:24:58.582Z",
-  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
-  "promptSha256": "797e08f0dfd99a4d321948cf0f27f8632a19e7d5fddcfbbf3c8c36af7ad8e2a7",
-  "clipSha256": "eca0f183b97d8939d2af8276a39a2e5961fe6a874c9f4f689b5a45eb27620da5",
+  "reviewedAt": "2026-10-13T06:38:56.008Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
+  "clipSha256": "5a96ddfe3df8e7490a9ae125e0c49e47b93f218150076bf58b3887449aa9ead0",
   "scene": "journal",
   "review": {
     "heardOpening": "Pour comprendre l'imprévu après coup",
@@ -11,33 +11,41 @@
       {
         "spokenSeconds": 2.5,
         "spoken": "ouvrons le journal de l'événement",
-        "visibleSeconds": 2,
-        "visible": "Affichage de la vue Journal sous l'onglet Événements",
+        "visibleSeconds": 2.5,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "La vue Journal de l'événement est affichée avec la liste chronologique des actions"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 5,
         "spoken": "Retrouvons le retrait, l'offre et son acceptation",
-        "visibleSeconds": 5,
-        "visible": "Défilement de la liste des entrées d'historique",
+        "visibleSeconds": 9.5,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Défilement vers les entrées montrant la libération d'une place et l'acceptation par Nicolas Exemple"
       },
       {
-        "spokenSeconds": 11,
+        "spokenSeconds": 11.2,
         "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
-        "visibleSeconds": 12.5,
-        "visible": "Sélection de l'onglet Récit et ouverture d'un fil d'événements",
+        "visibleSeconds": 15.5,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Clic sur l'onglet Récit qui affiche la sélection des enchaînements"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Le journal aide l'équipe à se coordonner",
+        "visibleSeconds": 19.8,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Sélection du récit d'Aline Exemple et affichage de l'enchaînement des événements reliés"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton régulier adapté à la démonstration."
+      "observation": "Voix féminine naturelle, posée et claire, parfaitement audible sur toute la séquence."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

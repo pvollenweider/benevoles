@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:35:12.191Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "1e3ac7a4b840f648d8c88a40778df37b6356b2776a21c7982d6c388b7c0642a8",
+  "clipSha256": "7627e4e63a12a7cbe8b6fdfa91dd9a7a97bcb445a3293239f58b5aaae220afbe",
+  "scene": "full",
+  "review": {
+    "heardOpening": "Créneaux complets rassemble les horaires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créneaux complets rassemble les horaires sans besoin supplémentaire",
+        "visibleSeconds": 0,
+        "visible": "Section 'Créneaux complets 3' affichée en bas de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "L'accueil de midi est rempli par des inscriptions confirmées",
+        "visibleSeconds": 5.5,
+        "visible": "Ligne 'Accueil, sam. 17 oct. : 12:00-15:00' avec ratio 3/3 visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "La navette, elle, reste complète grâce aux demandes qui gardent leur place",
+        "visibleSeconds": 9.2,
+        "visible": "Ligne 'Navette, Chauffeur navette' avec la mention '0/2 : 2 demandes à traiter' affichée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine calme, claire et bien articulée sur un fond sonore très discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

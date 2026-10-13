@@ -1,0 +1,66 @@
+{
+  "id": "ORGANIZATION_ACTIVITY_LOG",
+  "slug": "organization-activity-log",
+  "validatedAt": "2026-10-05T19:16:04.811Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 271440,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 29927,
+      "audioMs": 29926,
+      "driftMs": 1
+    },
+    {
+      "id": "read",
+      "visualMs": 26741,
+      "audioMs": 26740,
+      "driftMs": 1
+    },
+    {
+      "id": "members",
+      "visualMs": 26341,
+      "audioMs": 26336,
+      "driftMs": 5
+    },
+    {
+      "id": "team",
+      "visualMs": 26379,
+      "audioMs": 26378,
+      "driftMs": 1
+    },
+    {
+      "id": "filters",
+      "visualMs": 28079,
+      "audioMs": 28076,
+      "driftMs": 3
+    },
+    {
+      "id": "pages",
+      "visualMs": 29715,
+      "audioMs": 29713,
+      "driftMs": 2
+    },
+    {
+      "id": "export",
+      "visualMs": 36544,
+      "audioMs": 36543,
+      "driftMs": 1
+    },
+    {
+      "id": "limits",
+      "visualMs": 27514,
+      "audioMs": 27512,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 31619,
+      "audioMs": 31617,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

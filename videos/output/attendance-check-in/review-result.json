@@ -1,0 +1,17 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "status": "NOT READY",
+  "duration": 403.04,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 350,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 13.6,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Original single-arrival reload fixed. Correction selection/undo/repoint and mobile role search still late; upcoming-section presentation late; undo early. Reload actually executed despite automated missing flag. Technical/final narration/music/CSV checks pass; subjective phone timbre flag not a blocker.",
+  "sourceChanges": "Correction cues moved to selection/repoint sentences; mobile temporal sections, role search, undo and reload now anchored to their describing sentences. No third take."
+}

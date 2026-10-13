@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:19.940Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "50d6ecf3b6d45c2ab028431d74ece6fc7bb3e9a77bb4b0e5b7fe11b7181a7413",
+  "clipSha256": "073cde303d7bfa740326789d69b218480f7a79558d1969a7297208c670dff4c2",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Si l'historique dépasse la première page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.9,
+        "spoken": "Descendons, utilisons le bouton et retrouvons les nouvelles lignes",
+        "visibleSeconds": 5.4,
+        "visible": "Défilement vers le bas de page affichant le bouton Charger plus, mais aucun clic n'est effectué et aucune ligne supplémentaire n'est chargée",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Si une sélection ne donne aucune ligne",
+        "visibleSeconds": 18,
+        "visible": "Sélection du filtre Emails affichant Aucune activité pour l'instant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "essayons Tous les types",
+        "visibleSeconds": 19.8,
+        "visible": "Rétablissement du filtre sur Tous les types réaffichant la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 00:06 et 00:10, l'action annoncée (« utilisons le bouton et retrouvons les nouvelles lignes ») n'est pas exécutée : le curseur ne clique pas sur « Charger plus » et aucune nouvelle entrée n'apparaît."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

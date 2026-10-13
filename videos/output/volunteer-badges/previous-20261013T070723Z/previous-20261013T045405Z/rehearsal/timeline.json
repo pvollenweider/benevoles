@@ -1,0 +1,336 @@
+{
+  "slug": "volunteer-badges",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T21:21:22.899Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "274c0b66f5a583975236f973e8062871910769d4",
+    "sourceTree": "7036ab2266cf08883e3e8472728766ef3e499946",
+    "productSourceSha256": "2aa0fc8a56d378a9804f53492e7db1b146eaefa3adaf312ddc9f66b161229c7e",
+    "buildId": "QnaleWUIippKmUvaMUEKT",
+    "snapshot": "/tmp/benevoles-video-production.fnLPuNgC",
+    "builtAt": "2026-10-12T20:53:06.047Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "VOLUNTEER_BADGES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6718
+    },
+    {
+      "kind": "click",
+      "atMs": 12357
+    },
+    {
+      "kind": "click",
+      "atMs": 13789
+    },
+    {
+      "kind": "click",
+      "atMs": 19505
+    },
+    {
+      "kind": "click",
+      "atMs": 20943
+    },
+    {
+      "kind": "click",
+      "atMs": 22371
+    },
+    {
+      "kind": "click",
+      "atMs": 23820
+    },
+    {
+      "kind": "click",
+      "atMs": 25252
+    },
+    {
+      "kind": "click",
+      "atMs": 30788
+    },
+    {
+      "kind": "click",
+      "atMs": 32220
+    },
+    {
+      "kind": "click",
+      "atMs": 33655
+    },
+    {
+      "kind": "click",
+      "atMs": 36927
+    },
+    {
+      "kind": "click",
+      "atMs": 38359
+    },
+    {
+      "kind": "click",
+      "atMs": 43871
+    },
+    {
+      "kind": "click",
+      "atMs": 45320
+    },
+    {
+      "kind": "click",
+      "atMs": 48559
+    },
+    {
+      "kind": "click",
+      "atMs": 49992
+    },
+    {
+      "kind": "click",
+      "atMs": 53211
+    },
+    {
+      "kind": "click",
+      "atMs": 54643
+    },
+    {
+      "kind": "click",
+      "atMs": 60164
+    },
+    {
+      "kind": "click",
+      "atMs": 61597
+    },
+    {
+      "kind": "click",
+      "atMs": 62380
+    },
+    {
+      "kind": "click",
+      "atMs": 63162
+    },
+    {
+      "kind": "click",
+      "atMs": 66413
+    },
+    {
+      "kind": "click",
+      "atMs": 67846
+    },
+    {
+      "kind": "click",
+      "atMs": 73353
+    },
+    {
+      "kind": "click",
+      "atMs": 77234
+    },
+    {
+      "kind": "click",
+      "atMs": 78667
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1191,
+      "endMs": 3950
+    },
+    {
+      "id": "all",
+      "startMs": 6210,
+      "endMs": 8456
+    },
+    {
+      "id": "role",
+      "startMs": 10720,
+      "endMs": 15538
+    },
+    {
+      "id": "individual",
+      "startMs": 17811,
+      "endMs": 26886
+    },
+    {
+      "id": "empty",
+      "startMs": 29147,
+      "endMs": 39994
+    },
+    {
+      "id": "colors",
+      "startMs": 42258,
+      "endMs": 56276
+    },
+    {
+      "id": "fields",
+      "startMs": 58540,
+      "endMs": 69463
+    },
+    {
+      "id": "print",
+      "startMs": 71728,
+      "endMs": 75128
+    },
+    {
+      "id": "result",
+      "startMs": 82094,
+      "endMs": 82096
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Depuis Rapports, ouvrons les options",
+      "startMs": 9620,
+      "endMs": 14095,
+      "cueMs": 3917
+    },
+    {
+      "segmentId": "all",
+      "phrase": "La série comporte un badge",
+      "startMs": 6940,
+      "endMs": 14838,
+      "cueMs": 6210
+    },
+    {
+      "segmentId": "all",
+      "phrase": "Léa est sur plusieurs horaires",
+      "startMs": 14838,
+      "endMs": 17949,
+      "cueMs": 8337
+    },
+    {
+      "segmentId": "all",
+      "phrase": "Le format prévoit dix badges",
+      "startMs": 24530,
+      "endMs": 31709,
+      "cueMs": 8425
+    },
+    {
+      "segmentId": "role",
+      "phrase": "Les personnes retenues ont une",
+      "startMs": 8358,
+      "endMs": 15045,
+      "cueMs": 11861
+    },
+    {
+      "segmentId": "role",
+      "phrase": "Comparons le badge de Léa",
+      "startMs": 15045,
+      "endMs": 20060,
+      "cueMs": 15430
+    },
+    {
+      "segmentId": "role",
+      "phrase": "ses autres postes ne figurent",
+      "startMs": 20060,
+      "endMs": 26269,
+      "cueMs": 15518
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Nous avons deux Camille Berger",
+      "startMs": 6379,
+      "endMs": 9451,
+      "cueMs": 20468
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Elle n'est pas imprimée sur",
+      "startMs": 15593,
+      "endMs": 19019,
+      "cueMs": 21902
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Sélectionnons la bonne Camille, puis",
+      "startMs": 28824,
+      "endMs": 34495,
+      "cueMs": 23331
+    },
+    {
+      "segmentId": "empty",
+      "phrase": "Voici le vrai message de",
+      "startMs": 9440,
+      "endMs": 13264,
+      "cueMs": 31749
+    },
+    {
+      "segmentId": "empty",
+      "phrase": "Voici le vrai message de",
+      "startMs": 9440,
+      "endMs": 13264,
+      "cueMs": 33181
+    },
+    {
+      "segmentId": "empty",
+      "phrase": "Revenons aux filtres et choisissons",
+      "startMs": 18164,
+      "endMs": 26887,
+      "cueMs": 35270
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Décochons les deux cases, générons",
+      "startMs": 7045,
+      "endMs": 13719,
+      "cueMs": 61126
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Décochons les deux cases, générons",
+      "startMs": 7045,
+      "endMs": 13719,
+      "cueMs": 61902
+    },
+    {
+      "segmentId": "fields",
+      "phrase": "Léa a cinq créneaux ",
+      "startMs": 17674,
+      "endMs": 19652,
+      "cueMs": 64780
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Voici le document imprimable ",
+      "startMs": 6909,
+      "endMs": 9788,
+      "cueMs": 72870
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Vérifions aussi Jean-Baptiste et Marie-Charlotte",
+      "startMs": 14855,
+      "endMs": 22455,
+      "cueMs": 74986
+    },
+    {
+      "segmentId": "print",
+      "phrase": "La boîte d'impression du navigateur n'est pas filmée ici",
+      "startMs": 22455,
+      "endMs": 27752,
+      "cueMs": 75004
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Regardons le vrai PDF obtenu",
+      "startMs": 36388,
+      "endMs": 42836,
+      "cueMs": 75037
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Une première feuille d'essai coûte",
+      "startMs": 50552,
+      "endMs": 57000,
+      "cueMs": 75085
+    }
+  ]
+}

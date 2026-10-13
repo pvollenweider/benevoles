@@ -19,7 +19,8 @@ async function main() {
   const commit = pinnedCommit ?? revision.trim()
   if (pinnedCommit) {
     const { stdout: head } = await exec("git", ["rev-parse", "HEAD"])
-    if (head.trim() !== pinnedCommit || revision.trim() !== pinnedCommit) throw new Error("Pinned build must match both checkout HEAD and local origin/main")
+    if (revision.trim() !== pinnedCommit) throw new Error("Pinned build must match local origin/main")
+    await exec("git", ["merge-base", "--is-ancestor", pinnedCommit, head.trim()])
   } else {
     const { stdout: remote } = await exec("git", ["ls-remote", "origin", "refs/heads/main"])
     if (remote.split(/\s/)[0] !== commit) throw new Error("Remote main advanced; refresh the target before building")
@@ -32,6 +33,8 @@ async function main() {
   const sourceDigest = createHash("sha256")
   for (const item of selected) {
     const bytes = await readFile(path.join(snapshot, item.file))
+    const checkoutBytes = await readFile(path.resolve(item.file))
+    if (!bytes.equals(checkoutBytes)) throw new Error(`Checkout product input differs from pinned main: ${item.file}`)
     const blob = createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex")
     if (blob !== item.hash) throw new Error(`Snapshot differs from main: ${item.file}`)
     sourceDigest.update(item.file).update("\0").update(bytes)

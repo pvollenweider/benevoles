@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:35:59.617Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
+  "clipSha256": "9dc422bc9cf36c9fe02fc4e59466904624466f0f5e9a142774e24aa0a3c4b2ab",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "Dans les inscriptions, chaque ligne rassemble la personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles.",
+        "visibleSeconds": 0.8,
+        "visible": "Page Inscriptions affichant le tableau avec les colonnes Bénévole, Créneau, Source et Statut.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "comme la taille du t-shirt ou le régime alimentaire",
+        "visibleSeconds": 8.3,
+        "visible": "Sous le nom de chaque bénévole (ex. Camille Rochat), la taille de t-shirt (M, S) et les régimes (Pas de gluten, Végétarien) sont directement lisibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
+        "visibleSeconds": 11.5,
+        "visible": "Toutes les informations associées aux bénévoles sont regroupées et visibles sur le tableau à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

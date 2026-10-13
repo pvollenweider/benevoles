@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:42.200Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "0a19b0f6ba2a2e13d97068c778d9e6a037b15772ab183b12a1cf2cdb468f2755",
+  "clipSha256": "435fb0097770768a4c2dff7bea611fdc69617808a42d52dc7f00f9279d0ccf92",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton d'envoi dans l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur « Envoyer à 5 personnes » et apparition de la fenêtre modale « Confirmer l'envoi ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Nous annulons une première fois : aucun message n'est parti.",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur « Annuler », la modale se ferme et ramène sur le formulaire d'envoi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Reprenons ensuite le parcours et confirmons réellement notre briefing.",
+        "visibleSeconds": 15.6,
+        "visible": "Réouverture du parcours et clic sur « Confirmer l'envoi », affichant la confirmation « Message envoyé à 5 personnes ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

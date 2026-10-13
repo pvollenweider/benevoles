@@ -1,0 +1,242 @@
+{
+  "checkedAt": "2026-10-06T18:38:02.484Z",
+  "organizationId": "video-delivery",
+  "ids": {
+    "pending": "cmux0uedo0000vja590fu8grt",
+    "retrying": "cmux0uedt0001vja5rhoqptzr",
+    "recoverable": "cmux0ueep0003vja5tgikqwaz",
+    "wrong": "cmux0uegi000avja551p0de2a",
+    "sent": "cmux0uegt000cvja5tvx6un7b"
+  },
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "importedSourcePaths": [
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/prisma.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/outbox.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/outbox-view.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/generated/prisma/client.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/generated/prisma/internal/class.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/generated/prisma/internal/prismaNamespace.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/generated/prisma/enums.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/report-error.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/index.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/channels/email.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/env.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/index.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/shared.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/urls.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/shift-info.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/map-link.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/org-logo.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/registration.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/message-variables.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/gantt-utils.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/markdown.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/spoken-time.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/registrations-list.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/text-fold.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/utils.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/invitations.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/reminders.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/waitlist.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/waitlist-copy.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/open-shifts.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/availability.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/role-reservation.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/templates/administration.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/smtp-outcome.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/notifications/types.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/token-vault.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879",
+    "/private/tmp/benevoles-video-production.KsjGwn/src/lib/token-hash.ts?namespace=delivery-c5b089a9-2853-4eb6-afd5-0d37076ec879"
+  ],
+  "clock": "Supported current-main deliverOutbox clock advanced to real due times; 451 temporary retries only; 550 permanent rejection stops after one attempt",
+  "actualSmtpAttempts": [
+    {
+      "recipient": "video.delivery.retrying@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.344Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.363Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.378Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.387Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.395Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.403Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 451,
+      "timestamp": "2026-10-06T18:38:02.413Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "responseCode": 550,
+      "timestamp": "2026-10-06T18:38:02.425Z"
+    },
+    {
+      "recipient": "video.delivery.sent@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-06T18:38:02.436Z"
+    }
+  ],
+  "workerSnapshots": [
+    {
+      "id": "cmux0uedt0001vja5rhoqptzr",
+      "recipient": "video.delivery.retrying@example.org",
+      "now": "2026-10-06T18:38:02.325Z",
+      "status": "pending",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-06T18:43:02.325Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T18:38:02.357Z",
+      "status": "pending",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-06T18:43:02.357Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T18:43:02.358Z",
+      "status": "pending",
+      "attempts": 2,
+      "nextAttemptAt": "2026-10-06T18:53:02.358Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T18:53:02.359Z",
+      "status": "pending",
+      "attempts": 3,
+      "nextAttemptAt": "2026-10-06T19:13:02.359Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T19:13:02.360Z",
+      "status": "pending",
+      "attempts": 4,
+      "nextAttemptAt": "2026-10-06T19:53:02.360Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T19:53:02.361Z",
+      "status": "pending",
+      "attempts": 5,
+      "nextAttemptAt": "2026-10-06T21:13:02.361Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmux0ueep0003vja5tgikqwaz",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T21:13:02.362Z",
+      "status": "failed",
+      "attempts": 6,
+      "nextAttemptAt": "2026-10-06T23:53:02.362Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 1
+      }
+    },
+    {
+      "id": "cmux0uegi000avja551p0de2a",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-06T18:38:02.421Z",
+      "status": "failed",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-06T18:43:02.421Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 1
+      }
+    },
+    {
+      "id": "cmux0uegt000cvja5tvx6un7b",
+      "recipient": "video.delivery.sent@example.org",
+      "now": "2026-10-06T18:38:02.432Z",
+      "status": "sent",
+      "attempts": 0,
+      "nextAttemptAt": "2026-10-06T18:38:02.429Z",
+      "outcome": {
+        "sent": 1,
+        "retried": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "pendingWithoutAttempt": true,
+  "actualDeliveredMailId": "4aBaI4E3Tqu1Z5E3OuvVT0",
+  "controlledErrorLogsCount": 2,
+  "note": "Real worker/SMTP evidence; UI retry, address correction and campaign still to film"
+}

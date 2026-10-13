@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:29.918Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "74746a8a3eb5ce5604af305f47f24c2922451ebc6022c8bef0f62e1b0c04e3c9",
+  "clipSha256": "35ddb2a83279018d1d0694d382673ed3d112509dd444ee2c8519c027e14c897d",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Ouvrons maintenant l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons maintenant l'aperçu",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture de la fenêtre modale Aperçu de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte",
+        "visibleSeconds": 4,
+        "visible": "Aperçu affichant Théo, Fête du village de Montvert, Buvette et l'horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "retournez au message, corrigez-la",
+        "visibleSeconds": 14.6,
+        "visible": "Fermeture de l'aperçu et retour au formulaire de rédaction du message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

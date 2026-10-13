@@ -1,0 +1,12 @@
+{
+  "anchor": "Créneaux à compléter va du plus dégarni au plus proche du",
+  "windowStart": 43.68600000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.12,
+    "wordsHeard": "Créneaux"
+  },
+  "onset": 73.80600000000001,
+  "proposedCut": 73.68629150000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

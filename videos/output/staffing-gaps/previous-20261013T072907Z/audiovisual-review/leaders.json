@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:22:01.108Z",
+  "videoSha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "promptSha256": "fd6c12468ae4b82b1c8fac0816dc4d404b8416d31c7001d5b083da0603e5b8e4",
+  "clipSha256": "542e975a61ae7d0caed3d6427101cab26da5b0d51baf6e376674550d300c5c84",
+  "scene": "leaders",
+  "review": {
+    "heardOpening": "Postes sans responsable de secteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Postes sans responsable de secteur est un autre besoin",
+        "visibleSeconds": 0,
+        "visible": "Section « Postes sans responsable de secteur » affichée sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Le lien ouvre la gestion des responsables",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la page « Responsables de secteur »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles",
+        "visibleSeconds": 13,
+        "visible": "Lignes Accueil (Manon Aebi) et Buvette (Élodie Rochat) visibles dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

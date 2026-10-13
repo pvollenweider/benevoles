@@ -1,53 +1,293 @@
 {
   "slug": "organization-activity-log",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-05T19:14:50.478Z",
+  "recordedAt": "2026-10-13T06:53:59.085Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
+    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
+    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+    "snapshot": "/tmp/benevoles-video-production.batch14resume",
+    "builtAt": "2026-10-13T04:30:00.658Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ORGANIZATION_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 13001
+    },
+    {
+      "kind": "click",
+      "atMs": 64132
+    },
+    {
+      "kind": "click",
+      "atMs": 95133
+    },
+    {
+      "kind": "click",
+      "atMs": 111882
+    },
+    {
+      "kind": "click",
+      "atMs": 130564
+    },
+    {
+      "kind": "click",
+      "atMs": 131864
+    },
+    {
+      "kind": "click",
+      "atMs": 136147
+    },
+    {
+      "kind": "click",
+      "atMs": 160063
+    },
+    {
+      "kind": "click",
+      "atMs": 172595
+    },
+    {
+      "kind": "click",
+      "atMs": 173879
+    },
+    {
+      "kind": "click",
+      "atMs": 186484
+    },
+    {
+      "kind": "click",
+      "atMs": 193884
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1195,
-      "endMs": 31122
+      "startMs": 1133,
+      "endMs": 29721
     },
     {
       "id": "read",
-      "startMs": 31575,
-      "endMs": 58316
+      "startMs": 31984,
+      "endMs": 59690
     },
     {
       "id": "members",
-      "startMs": 58768,
-      "endMs": 85109
+      "startMs": 61948,
+      "endMs": 90147
     },
     {
       "id": "team",
-      "startMs": 85562,
-      "endMs": 111941
+      "startMs": 92418,
+      "endMs": 120310
     },
     {
       "id": "filters",
-      "startMs": 112393,
-      "endMs": 140472
+      "startMs": 122569,
+      "endMs": 152179
     },
     {
       "id": "pages",
-      "startMs": 140923,
-      "endMs": 170638
+      "startMs": 154448,
+      "endMs": 184417
     },
     {
       "id": "export",
-      "startMs": 173876,
-      "endMs": 210420
+      "startMs": 189112,
+      "endMs": 222187
     },
     {
       "id": "limits",
-      "startMs": 210874,
-      "endMs": 238388
+      "startMs": 224449,
+      "endMs": 251419
     },
     {
       "id": "result",
-      "startMs": 238840,
-      "endMs": 270459
+      "startMs": 253682,
+      "endMs": 283399
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons Journal d'activité depuis les paramètres",
+      "startMs": 11370,
+      "endMs": 13999,
+      "cueMs": 12507
+    },
+    {
+      "segmentId": "read",
+      "phrase": "Lisons deux actions réalisées par",
+      "startMs": 3355,
+      "endMs": 8208,
+      "cueMs": 35342
+    },
+    {
+      "segmentId": "read",
+      "phrase": "Le nom affiché vient du",
+      "startMs": 12698,
+      "endMs": 14895,
+      "cueMs": 44683
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Ce sont des actions sur",
+      "startMs": 4742,
+      "endMs": 11146,
+      "cueMs": 66691
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Pour comprendre ses inscriptions, ouvrons",
+      "startMs": 11545,
+      "endMs": 15369,
+      "cueMs": 73495
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Nous pouvons ensuite revenir au",
+      "startMs": 16121,
+      "endMs": 18032,
+      "cueMs": 78070
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Cette distinction évite de prendre",
+      "startMs": 18602,
+      "endMs": 23480,
+      "cueMs": 80552
+    },
+    {
+      "segmentId": "team",
+      "phrase": "Retrouvons une invitation puis un",
+      "startMs": 6476,
+      "endMs": 9814,
+      "cueMs": 98895
+    },
+    {
+      "segmentId": "team",
+      "phrase": "il n'accorde pas le droit",
+      "startMs": 11252,
+      "endMs": 15439,
+      "cueMs": 103672
+    },
+    {
+      "segmentId": "team",
+      "phrase": "On peut aussi retrouver un",
+      "startMs": 19001,
+      "endMs": 22432,
+      "cueMs": 111419
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Choisissons Membres, puis Comptes admin",
+      "startMs": 7524,
+      "endMs": 12413,
+      "cueMs": 130094
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Choisissons Membres, puis Comptes admin",
+      "startMs": 7524,
+      "endMs": 12413,
+      "cueMs": 131380
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Revenons ensuite à Tous les",
+      "startMs": 13093,
+      "endMs": 15069,
+      "cueMs": 135663
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Descendons, utilisons le bouton et",
+      "startMs": 5114,
+      "endMs": 9446,
+      "cueMs": 159563
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Descendons, utilisons le bouton et",
+      "startMs": 5114,
+      "endMs": 9446,
+      "cueMs": 159582
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Si une sélection ne donne",
+      "startMs": 15019,
+      "endMs": 21553,
+      "cueMs": 169467
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "essayons Tous les types avant",
+      "startMs": 15019,
+      "endMs": 21553,
+      "cueMs": 173415
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Le mot tout est important",
+      "startMs": 4301,
+      "endMs": 5203,
+      "cueMs": 193416
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Ouvrons le vrai fichier téléchargé",
+      "startMs": 12918,
+      "endMs": 14625,
+      "cueMs": 202031
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Il contient la date, l'acteur",
+      "startMs": 15139,
+      "endMs": 21921,
+      "cueMs": 204254
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Les entrées vont des plus",
+      "startMs": 22086,
+      "endMs": 28080,
+      "cueMs": 211199
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Ce fichier est une copie",
+      "startMs": 28658,
+      "endMs": 30698,
+      "cueMs": 217772
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Gardons le fichier pour les",
+      "startMs": 9972,
+      "endMs": 13736,
+      "cueMs": 234422
+    },
+    {
+      "segmentId": "result",
+      "phrase": "Une fois le point compris",
+      "startMs": 22956,
+      "endMs": 29347,
+      "cueMs": 276638
     }
   ]
 }

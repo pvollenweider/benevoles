@@ -1,0 +1,17 @@
+{
+  "id": "ORGANIZATION_ACTIVITY_LOG",
+  "status": "READY",
+  "duration": 290.92,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 256,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "All objective checks pass. Result navigation anchored at 276.638 s (chapter 22.956 s). Automated static-read flag rejected: Colette and Samira actions visibly readable throughout read; no highlight promised. Native file-input English labels cosmetic only.",
+  "sourceChanges": "Pass 1 anchors retained; no additional per-video source changes and no third take."
+}

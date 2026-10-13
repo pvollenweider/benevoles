@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:34.329Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "5a1d835f4631fd7802c94b6d65878f78f78bc8f0c492e41de514cdc12c12d1b3",
+  "clipSha256": "3072f976157ecbebcfcf0512a1a1a74a97ccdbde9f929f4f75531d8fb50049c9",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Exporter tout le journal télécharge un fichier CSV",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Exporter tout le journal télécharge un fichier CSV",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le lien « Exporter tout le journal (CSV) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Ouvrons le vrai fichier téléchargé",
+        "visibleSeconds": 12.7,
+        "visible": "Affichage de la vue « Lecture du CSV téléchargé » avec le tableau des données",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés",
+        "visibleSeconds": 15.5,
+        "visible": "Défilement horizontal montrant les colonnes du tableau jusqu'à « Changements »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.8,
+        "spoken": "Les entrées vont des plus anciennes aux plus récentes",
+        "visibleSeconds": 25.5,
+        "visible": "Retour du défilement vers la gauche montrant les dates et acteurs",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -48,8 +48,8 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
     }
     await scene("one", async at => {
       await go(); await at(0.15) /* mid-sentence */; await select(0)
-      await at("Rechargeons la page "); await apply([find(0).id], true)
-      await at("Le nombre d'inscriptions affichées décrit"); await page.reload(); await settle(page)
+      await at("La marque apparaît sur son inscription"); await apply([find(0).id], true)
+      await at("Rechargeons la page"); await page.reload(); await settle(page)
       if (!(await db.registration.findUniqueOrThrow({ where: { id: find(0).id } })).checkedInAt) throw new Error("Presence not persistent")
       await page.getByRole("row").filter({ hasText: "video.attendance.0@example.org" }).getByText("Présent", { exact: false }).waitFor()
     })
@@ -60,10 +60,10 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
       await at("Ne la transformez pas en"); await page.getByRole("row").filter({ hasText: "video.attendance.5@example.org" }).scrollIntoViewIfNeeded()
     })
     await scene("correction", async at => {
-      await go(); await at("La marque disparaît, mais son"); await select(2)
-      await at("La marque disparaît, mais son"); await apply([find(2).id], false)
+      await go(); await at("Sélectionnons sa ligne et annulons"); await select(2)
+      await at("Sélectionnons sa ligne et annulons"); await apply([find(2).id], false)
       // The real manager clears its selection after every presence action.
-      await at("Relisez le nom et l'horaire"); await go(); await select(2); await apply([find(2).id], true)
+      await at("Quand la bonne personne arrive"); await go(); await select(2); await apply([find(2).id], true)
     })
     await scene("multiple", async at => {
       await go(); await at("Recherchons Léa pour retrouver ses")

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:08:58.539Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "06f996a8687a07c7b20a69d7c6129dfbcbb43fcaf1ff520dcc21813124b82c32",
-  "clipSha256": "090132c200c37063446dca1ad2e749e145dc38d41d9b472d9c79fac2a587c317",
+  "reviewedAt": "2026-10-13T07:06:13.625Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "107b077444b0f19dc60fe8eaded97cebf28ef03b5872b53258003845b8123a03",
+  "clipSha256": "deacedc11407bfbdb1c1bc735fa10965977082f1787fd479da9207952f9f6076",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Au stand d'accueil",
+    "heardOpening": "Au stand d’accueil",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Au stand d'accueil, un document clair fait gagner du temps",
-        "visibleSeconds": 0,
-        "visible": "Page d'accueil de l'événement avec bandeau d'introduction",
+        "spokenSeconds": 4.1,
+        "spoken": "Ouvrons Rapports.",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le bouton Rapports et chargement de la page correspondante",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
-        "spoken": "Ouvrons Rapports",
-        "visibleSeconds": 9.5,
-        "visible": "Ouverture de la section Rapports",
+        "spokenSeconds": 6.8,
+        "spoken": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier.",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage de la section « À afficher ou à remettre aux bénévoles » en haut de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "choisissons les documents selon leur usage",
-        "visibleSeconds": 10,
-        "visible": "Affichage des catégories de documents à imprimer ou exporter",
+        "spokenSeconds": 10.3,
+        "spoken": "Les documents réservés à l’organisation viennent ensuite, puis les badges",
+        "visibleSeconds": 11.2,
+        "visible": "Défilement dévoilant les sections « Pour les organisateurs seulement » et « Badges »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.4,
+        "spoken": "le résumé de l’événement et l’archive.",
+        "visibleSeconds": 14.8,
+        "visible": "Sections « Résumé de l'événement » et « Archive » visibles en bas de page",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, fluide et posée."
+      "observation": "Voix naturelle, claire et posée, bien synchronisée avec le défilement des rubriques."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

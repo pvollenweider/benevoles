@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:21:44.799Z",
+  "videoSha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "promptSha256": "0f8a0df57da5a9f1135fb14d8acf804f19c3d2cfa5ab19e99d853aa9886b553d",
+  "clipSha256": "58b45a7c1d7d544ffb997d67479a3d5f8afc9903556f6d52a2074bfdf901f168",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Postes sans personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Ici, Photos comporte deux créneaux et six places à pourvoir.",
+        "visibleSeconds": 5,
+        "visible": "Encadré 'Postes sans personne' affichant le bouton 'Photos' avec la mention '2 créneaux - 6 places à pourvoir'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Cliquez sur le poste pour retrouver le planning",
+        "visibleSeconds": 10,
+        "visible": "Navigation vers la vue des créneaux et planning de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "et vérifier les dates, les horaires et la mission.",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la liste des créneaux avec les colonnes date, horaires et intitulé du poste (notamment Photos).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:20, coupure visuelle avec retour soudain à l'écran précédent ('Où manque-t-il du monde ?') pendant l'explication finale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, en phase avec les manipulations montrées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

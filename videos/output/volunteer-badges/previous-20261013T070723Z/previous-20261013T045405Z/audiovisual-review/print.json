@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:28:02.945Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "f67566bf77596f145ea43fbe660aff675de099087aaf923e786bd59785e8c33b",
+  "clipSha256": "7f8ea08f181d87982234f5dddd30ebcf8f636e96ca3190270efce85a5dd304b3",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer en quantité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Voici le document imprimable : deux colonnes, cinq rangées et les repères de découpe.",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la planche de badges imprimables organisée en deux colonnes avec repères de découpe.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs.",
+        "visibleSeconds": 9.5,
+        "visible": "Défilement vers le bas révélant le badge de Marie-Charlotte Vollenweider-Lachenal.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.2,
+        "spoken": "Regardons le vrai PDF obtenu, avec sa première puis sa dernière page.",
+        "visibleSeconds": 21.8,
+        "visible": "Affichage de la lecture du PDF réel page 1 sur 8, suivi du passage à la page 8 sur 8 à 00:28.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien synchronisée avec le déroulement visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

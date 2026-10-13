@@ -67,10 +67,10 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     await scene("dayof-window", async at => {
       await section("En cours").locator(`#dayof-shift-${f.runningShiftId}`).waitFor()
       await section("En cours").locator(`#dayof-shift-${f.nightShiftId}`).waitFor()
-      await at("Dans les trois prochaines heures"); await card(f.runningShiftId).scrollIntoViewIfNeeded()
+      await at("La vue En cours regroupe"); await card(f.runningShiftId).scrollIntoViewIfNeeded()
       assert(/présent.*attendu/i.test(await card(f.runningShiftId).innerText()), "Actual presence/expected counter required")
-      await at(0.55) /* mid-sentence */; await section("Dans les 3 prochaines heures").locator(`#dayof-shift-${f.upcomingShiftId}`).scrollIntoViewIfNeeded()
-      await at("Ici, nous montrons cette page"); await tap(page, section("Plus tôt aujourd'hui").locator("summary"))
+      await at("Dans les trois prochaines heures"); await section("Dans les 3 prochaines heures").locator(`#dayof-shift-${f.upcomingShiftId}`).scrollIntoViewIfNeeded()
+      await at("Plus tôt aujourd'hui permet"); await tap(page, section("Plus tôt aujourd'hui").locator("summary"))
       await card(f.earlierShiftId).waitFor({ state: "visible" })
       await evidence("dayof-window", { actualServerTime: true, fourTemporalCasesVisible: true, mobileViewportSimulationOnly: true })
     })
@@ -78,7 +78,7 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
     await scene("dayof-search", async at => {
       await typeNaturally(page, search(), f.accentSearch)
       await page.getByText(f.expectedAccentName, { exact: true }).first().waitFor()
-      await at("Les personnes de ce poste"); await replaceSearch(f.roleSearch)
+      await at("Vous pouvez aussi chercher un poste"); await replaceSearch(f.roleSearch)
       await page.locator('[id^="dayof-shift-"]').filter({ hasText: f.roleSearch }).first().waitFor({ state: "visible" })
       await at("Effaçons la recherche pour retrouver"); await replaceSearch("")
       await card(f.runningShiftId).waitFor({ state: "visible" })
@@ -110,8 +110,8 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
       await evidence("dayof-refresh", { actualRefresh: true, otherDeviceMutationDemonstrated: false })
     })
     await scene("dayof-undo", async at => {
-      await card(f.runningShiftId).scrollIntoViewIfNeeded(); await toggle(false)
-      await at("Zoé conserve sa place, et")
+      await card(f.runningShiftId).scrollIntoViewIfNeeded(); await at("Annuler la présence retire la marque"); await toggle(false)
+      await at("Vérifions après rechargement")
       await page.reload({ waitUntil: "domcontentloaded" }); await settle(page)
       await card(f.runningShiftId).scrollIntoViewIfNeeded()
       const after = await options.verifyFixture()

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:09.357Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "d755128be59b9fda0e88911458a262e8d3f363eb8bd3f8e6961abe17df548639",
+  "clipSha256": "b2e437936a57603fc5df474d321bd6bd8dbef4fa54fe51089f8caac4d71f8ad8",
+  "scene": "count",
+  "review": {
+    "heardOpening": "Le nombre affiché compte les personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le nombre affiché compte les personnes à qui un e-mail peut être adressé, pas leurs inscriptions.",
+        "visibleSeconds": 1.8,
+        "visible": "Filtrage sur « Léa Giroud » affichant deux lignes d'inscription pour la même personne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience.",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage des deux créneaux Buvette de Léa Giroud avec la même adresse e-mail",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Une demande à valider n'est pas encore une confirmation.",
+        "visibleSeconds": 13,
+        "visible": "Page « Écrire aux bénévoles » avec le décompte initial de 22 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette à toute la fête par erreur.",
+        "visibleSeconds": 15,
+        "visible": "Sélection du filtre « Les bénévoles d'un poste » avec le poste « Buvette » et actualisation à 14 personnes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les exemples concrets montrés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

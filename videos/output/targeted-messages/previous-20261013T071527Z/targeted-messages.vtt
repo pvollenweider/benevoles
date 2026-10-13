@@ -1,0 +1,293 @@
+WEBVTT
+
+00:00:00.201 --> 00:00:04.496
+Une consigne pour toute l'équipe, un
+briefing pour la buvette ou une
+
+00:00:04.496 --> 00:00:09.507
+proposition aux personnes qui attendent
+une place : le bon message ne va pas
+
+00:00:09.507 --> 00:00:14.161
+forcément à tout le monde. Depuis votre
+événement, ouvrez la page des messages.
+
+00:00:14.161 --> 00:00:18.456
+Nous allons choisir les destinataires,
+préparer un texte qui leur parle, vérifier
+
+00:00:18.456 --> 00:00:22.751
+l'aperçu, puis suivre un véritable envoi.
+Pas besoin d'écrire séparément à chaque
+
+00:00:22.751 --> 00:00:23.109
+personne.
+
+00:00:25.370 --> 00:00:29.525
+Commence par le public. Tous les bénévoles
+inscrits vise les inscriptions confirmées.
+
+00:00:29.525 --> 00:00:34.373
+Pour un poste, choisis par exemple la
+buvette ; pour un créneau, précise aussi
+
+00:00:34.373 --> 00:00:38.874
+la date et l'horaire. La liste d'attente
+vise les personnes qui attendent une
+
+00:00:38.874 --> 00:00:44.068
+place, y compris celles qui ont une offre
+en cours. Enfin, les invités sans créneau
+
+00:00:44.068 --> 00:00:48.223
+confirmé permettent de reprendre contact
+avec ceux qui n'ont pas encore de
+
+00:00:48.223 --> 00:00:50.647
+confirmation. Regarde le compteur après
+chaque choix.
+
+00:00:52.913 --> 00:00:57.609
+Le nombre affiché compte les personnes à
+qui un email peut être adressé, pas leurs
+
+00:00:57.609 --> 00:01:01.365
+inscriptions. Une bénévole inscrite sur
+deux horaires reçoit un seul message pour
+
+00:01:01.365 --> 00:01:05.748
+cette audience. Sans adresse email, une
+personne ne fait pas partie de cet envoi.
+
+00:01:05.748 --> 00:01:10.130
+Une demande à valider n'est pas encore une
+confirmation. Vérifier ce chiffre et le
+
+00:01:10.130 --> 00:01:14.513
+public choisi, c'est éviter d'envoyer une
+consigne de buvette à toute la fête par
+
+00:01:14.513 --> 00:01:14.826
+erreur.
+
+00:01:17.091 --> 00:01:21.192
+Pour une consigne que vous réutilisez,
+ouvrez les modèles de messages de
+
+00:01:21.192 --> 00:01:24.951
+l'organisation, puis Nouveau modèle. Son
+nom sert à le retrouver dans
+
+00:01:24.951 --> 00:01:29.052
+l'administration : les bénévoles ne le
+voient pas. Prenons Briefing avant le
+
+00:01:29.052 --> 00:01:33.836
+créneau : un nom précis aide les autres
+organisateurs à retrouver le bon texte.
+
+00:01:33.836 --> 00:01:38.278
+L'objet annonce le sujet de l'email. Dans
+le message, une salutation, le rendez-vous
+
+00:01:38.278 --> 00:01:42.721
+et les consignes suffisent : les bénévoles
+n'ont pas besoin d'un long roman.
+
+00:01:42.721 --> 00:01:46.822
+Donnons-lui un objet court et un message
+accueillant, avec une consigne concrète.
+
+00:01:46.822 --> 00:01:50.581
+Enregistrons. Le modèle est maintenant
+disponible pour préparer un autre envoi,
+
+00:01:50.581 --> 00:01:52.973
+mais sa création n'a envoyé aucun email.
+
+00:01:55.240 --> 00:01:59.289
+Les mots entre accolades sont remplacés
+pour chaque destinataire. Prénom donne son
+
+00:01:59.289 --> 00:02:04.351
+prénom et événement donne le nom de la
+fête. Poste demande une audience poste ou
+
+00:02:04.351 --> 00:02:08.400
+créneau. Créneau demande un horaire
+précis. Ce n'est pas une liste de
+
+00:02:08.400 --> 00:02:12.449
+variables libres : si nous écrivons lieu
+entre accolades, l'application signale une
+
+00:02:12.449 --> 00:02:16.836
+variable inconnue. Corrigeons le texte. Et
+même une variable connue peut être refusée
+
+00:02:16.836 --> 00:02:19.535
+si l'audience ne lui donne pas de sens.
+
+00:02:21.801 --> 00:02:26.147
+De retour dans le message, voici une
+première version écrite à la main. Choisir
+
+00:02:26.147 --> 00:02:31.424
+un modèle dans la liste ne la remplace pas
+encore : il faut cliquer sur Utiliser ce
+
+00:02:31.424 --> 00:02:36.080
+modèle. L'objet et le texte changent alors
+ensemble. Si ce n'est pas ce que vous
+
+00:02:36.080 --> 00:02:39.185
+vouliez, Rétablir le texte précédent
+récupère votre version. Appliquons de
+
+00:02:39.185 --> 00:02:42.910
+nouveau notre briefing, puis choisissons
+un créneau pour que toutes ses variables
+
+00:02:42.910 --> 00:02:43.841
+puissent être remplacées.
+
+00:02:46.113 --> 00:02:50.373
+Un modèle contenant créneau ne convient
+pas à toute l'équipe : chacun peut avoir
+
+00:02:50.373 --> 00:02:54.025
+un horaire différent. Si nous choisissons
+ce public, l'erreur explique pourquoi le
+
+00:02:54.025 --> 00:02:58.894
+texte n'est pas prêt à partir. Revenons à
+un seul créneau. Pour écrire à tout le
+
+00:02:58.894 --> 00:03:02.850
+monde, vous pouvez aussi adapter le modèle
+avec une consigne générale et garder
+
+00:03:02.850 --> 00:03:06.806
+seulement prénom et événement. L'idée est
+de personnaliser juste, pas de remplir les
+
+00:03:06.806 --> 00:03:07.719
+accolades au hasard.
+
+00:03:09.983 --> 00:03:13.430
+Ouvrons maintenant l'aperçu. C'est l'email
+préparé pour le premier destinataire : son
+
+00:03:13.430 --> 00:03:18.027
+prénom, le nom de l'événement, le poste et
+le bon horaire sont déjà dans le texte.
+
+00:03:18.027 --> 00:03:22.910
+Prenez le temps de le lire comme si vous
+le receviez. Ce n'est pas un aperçu de
+
+00:03:22.910 --> 00:03:26.932
+toutes les personnes à la fois. Si une
+phrase manque de clarté, retournez au
+
+00:03:26.932 --> 00:03:29.805
+message, corrigez-la et ouvrez de nouveau
+l'aperçu avant de poursuivre.
+
+00:03:32.064 --> 00:03:35.477
+Vous pouvez aussi demander une
+notification sur téléphone ou ordinateur.
+
+00:03:35.477 --> 00:03:38.889
+Elle concerne seulement les appareils
+réellement abonnés aux notifications ;
+
+00:03:38.889 --> 00:03:43.667
+elle ne remplace pas l'email et n'atteint
+pas tous les téléphones par magie. L'objet
+
+00:03:43.667 --> 00:03:49.127
+sert de titre, et la première ligne non
+vide du message sert de texte court. Le
+
+00:03:49.127 --> 00:03:52.881
+nombre d'appareils n'est donc pas le
+nombre de personnes. Gardez les
+
+00:03:52.881 --> 00:03:56.294
+informations utiles au début et vérifiez
+ce qui sera envoyé.
+
+00:03:58.560 --> 00:04:03.350
+Le bouton d'envoi dans l'aperçu ouvre une
+seconde confirmation. Relisez le public et
+
+00:04:03.350 --> 00:04:08.139
+le nombre de destinataires avant de
+valider. Nous annulons une première fois :
+
+00:04:08.139 --> 00:04:11.824
+aucun message n'est parti. Reprenons
+ensuite le parcours et confirmons
+
+00:04:11.824 --> 00:04:16.245
+réellement notre briefing. Ces étapes
+servent à éviter le clic trop rapide,
+
+00:04:16.245 --> 00:04:21.403
+surtout quand vous écrivez à beaucoup de
+monde. Attendez le résultat plutôt que de
+
+00:04:21.403 --> 00:04:22.508
+relancer l'envoi immédiatement.
+
+00:04:24.773 --> 00:04:28.723
+L'application affiche le résultat de
+l'envoi. Dans notre boîte de test, ouvrons
+
+00:04:28.723 --> 00:04:33.990
+les emails de deux bénévoles : chacun a
+son prénom, les mêmes consignes et le bon
+
+00:04:33.990 --> 00:04:37.940
+créneau. La personne inscrite plusieurs
+fois ne reçoit qu'une copie pour cette
+
+00:04:37.940 --> 00:04:41.890
+campagne. L'historique conserve ensuite le
+message et son audience. Un envoi réussi
+
+00:04:41.890 --> 00:04:46.499
+ne prouve pas que la personne l'a lu ;
+pour une information urgente, prévoyez
+
+00:04:46.499 --> 00:04:48.474
+aussi votre relais sur le terrain.
+
+00:04:50.743 --> 00:04:54.790
+Les modèles peuvent évoluer avec votre
+organisation. Ouvrez Modifier, ajustez le
+
+00:04:54.790 --> 00:04:59.206
+nom ou le texte et enregistrez. La
+suppression demande une confirmation :
+
+00:04:59.206 --> 00:05:03.621
+vous pouvez encore annuler. Un modèle
+n'est pas l'historique d'un message déjà
+
+00:05:03.621 --> 00:05:08.036
+envoyé. Pour chaque nouveau briefing,
+gardez le même réflexe : choisir les
+
+00:05:08.036 --> 00:05:11.716
+bonnes personnes, vérifier le texte
+personnalisé, confirmer, puis consulter le
+
+00:05:11.716 --> 00:05:16.867
+résultat. Des consignes simples et un
+petit merci, ça aide aussi l'équipe à se
+
+00:05:16.867 --> 00:05:17.603
+sentir accueillie.
+

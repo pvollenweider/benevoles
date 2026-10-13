@@ -1,0 +1,26 @@
+STATUS: NOT READY
+ID: REGISTRATION_MONITOR_FOLLOWUP
+Duration: 190.7 seconds
+BUILD_ID: QnaleWUIippKmUvaMUEKT
+Commit: 274c0b66f5a583975236f973e8062871910769d4
+Music smallest/largest gap: 15.2 / 19.3 LU
+All technical stages passed; independent source and final-MP4 narration audits passed. VTT text matches manifest exactly. Mix: 16 clicks, 1 key, current timeline and MP4 fingerprints.
+Problem: requests chapter closes the dialog at 61.472 s, while the sentence announcing closure begins at 58.979 s. Frame requests-close-announced-59.4.png still shows the dialog; requests-closed-62.2.png shows it closed.
+Source change: record.ts closure cue changed from at("aucune décision n’est prise pendant") to at("Ici, on referme simplement la fenêtre"). No re-film as requested.
+Product layout countercheck: individual frame review-frames/overview-45.png has one navigation block; apparent duplication was the seam between chapter-sheet samples. No product defect confirmed.
+Narration regenerated: previous generation fingerprint was rejected (39ad673… versus ed942aa…). Boundaries recut using measured silences and independently re-audited.
+Visual review: every chapter sheet inspected; coverage links now on own line; email checkbox alignment current; journal status values are French. Visible dates French, no localhost or old admin identity, no dev overlay observed. No Frise view in this take; reports text says frise. Real-time subjective listening unavailable, not used as a failure reason.
+Evidence: review/sentence-action-evidence.json and per-chapter sheets; review-frames/index.json ties frames to MP4 SHA256.
+overview: 1.164–13.014 s; reviewed overview-sheet.png; expected screen/action present, sentence context reconciled
+coverage: 16.378–30.101 s; reviewed coverage-sheet.png; expected screen/action present, sentence context reconciled
+registrations: 31.766–48.128 s; reviewed registrations-sheet.png; expected screen/action present, sentence context reconciled
+requests: 49.749–63.984 s; reviewed requests-sheet.png; closure delay above
+filters: 65.613–77.465 s; reviewed filters-sheet.png; expected screen/action present, sentence context reconciled
+actions: 77.947–90.748 s; reviewed actions-sheet.png; expected screen/action present, sentence context reconciled
+audience: 94.082–108.169 s; reviewed audience-sheet.png; expected screen/action present, sentence context reconciled
+message: 108.623–121.847 s; reviewed message-sheet.png; expected screen/action present, sentence context reconciled
+channels: 123.072–135.664 s; reviewed channels-sheet.png; expected screen/action present, sentence context reconciled
+reminders: 137.287–148.17 s; reviewed reminders-sheet.png; expected screen/action present, sentence context reconciled
+reports: 151.502–161.316 s; reviewed reports-sheet.png; expected screen/action present, sentence context reconciled
+history: 162.949–178.266 s; reviewed history-sheet.png; expected screen/action present, sentence context reconciled
+done: 178.72–190.685 s; reviewed done-sheet.png; expected screen/action present, sentence context reconciled

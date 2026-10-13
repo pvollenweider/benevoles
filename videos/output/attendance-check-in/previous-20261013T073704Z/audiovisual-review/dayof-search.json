@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:49.840Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "db531a1f232c05674f5b8608a889555acb3d95aa293ee4e884c8a8fa931a9eb7",
+  "clipSha256": "8c4ecf2135cd374cc479ca5a5d0b9b9e4ef1bce85b7f1728d001bee3578ad67e",
+  "scene": "dayof-search",
+  "review": {
+    "heardOpening": "Vous cherchez Zoé ? Tapez son prénom",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "Tapez son prénom sans accent : sa ligne reste facile à retrouver.",
+        "visibleSeconds": 1,
+        "visible": "Le texte « zoe » est saisi dans la barre de recherche et la ligne de Zoé Exemple s'affiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Vous pouvez aussi chercher un poste, comme Accueil.",
+        "visibleSeconds": 10.6,
+        "visible": "Le terme « Accueil » est saisi dans la barre de recherche et filtre les résultats",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Effaçons la recherche pour retrouver le planning du moment.",
+        "visibleSeconds": 13.8,
+        "visible": "Le champ de recherche est vidé et la liste complète du planning réapparaît",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les démonstrations de recherche à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

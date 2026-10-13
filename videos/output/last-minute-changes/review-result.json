@@ -1,0 +1,17 @@
+{
+  "id": "LAST_MINUTE_CHANGES",
+  "status": "NOT READY",
+  "duration": 354.12,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 321,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 19.6,
+    "quietestMusicOnlyLufs": -33,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Withdrawal admin navigation 5 s late; schedule return 4.5 s late. Final-MP4 ASR repeatedly returned empty schedule response. Seven emails verified; withdrawal receipt/acceptance confirmation suppressed by local recipient limit. Result Nicolas transiently off screen; Mailpit English dates nit.",
+  "sourceChanges": "Withdrawal dialog/confirm/admin navigation moved to their respective sentence anchors; planning return anchored to Un email envoy\u00e9 ne prouve. Mail evidence guard supports real organiser digest and explicitly records suppressed notifications. No re-film after review; no src changes."
+}

@@ -1,0 +1,64 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:22:13.092Z",
+  "videoSha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "promptSha256": "8cb795ab12e4512dc1dda5f1976964a92bdc0c99454f896140e859b2dc94870d",
+  "clipSha256": "10db606b2009a770c38d4636ae5999ad55ea1513a97e044196f131ae7239b827",
+  "scene": "action",
+  "review": {
+    "heardOpening": "Pour terminer, Julien nous a confirmé qu'il pouvait aider",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Nous ouvrons le créneau concerné, puis Ajouter manuellement.",
+        "visibleSeconds": 4.8,
+        "visible": "Ouverture du créneau Photos du samedi 17 octobre puis clic sur le bouton Ajouter manuellement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Son email retrouve sa fiche",
+        "visibleSeconds": 8.5,
+        "visible": "Les champs Prénom, Nom et Email sont saisis manuellement dans le formulaire sans utiliser la recherche de fiche.",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "nous choisissons le bon horaire et enregistrons.",
+        "visibleSeconds": 14.5,
+        "visible": "Sélection du créneau dans la liste déroulante puis clic sur Enregistrer.",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "La nouvelle inscription apparaît.",
+        "visibleSeconds": 15.5,
+        "visible": "L'écran des inscriptions n'affiche pas la nouvelle inscription et bascule directement vers le rapport.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "En revenant au rapport, le besoin diminue d'une place",
+        "visibleSeconds": 16,
+        "visible": "Affichage du rapport où le besoin pour Photos passe à 1/3 (manque 2).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:08, la voix annonce que l'email retrouve la fiche alors que les champs Prénom, Nom et Email sont tous remplis manuellement.",
+      "Décalage important : le choix de l'horaire et l'enregistrement sont annoncés vers 00:10-00:12 mais ne sont exécutés à l'écran qu'à 00:14-00:15.",
+      "À 00:13, l'apparition de la nouvelle inscription est annoncée mais jamais montrée : l'écran passe directement au rapport après validation."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

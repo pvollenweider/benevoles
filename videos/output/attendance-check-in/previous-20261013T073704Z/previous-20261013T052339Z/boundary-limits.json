@@ -1,0 +1,12 @@
+{
+  "anchor": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de",
+  "windowStart": 93.267,
+  "result": {
+    "found": true,
+    "startSeconds": 27.7,
+    "wordsHeard": "Le"
+  },
+  "onset": 120.967,
+  "proposedCut": 121.0749165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,22 @@
+STATUS: NOT READY
+ID: ORGANIZATION_ACTIVITY_LOG
+Duration: 296.08
+BUILD_ID: QnaleWUIippKmUvaMUEKT
+Commit: 274c0b66f5a583975236f973e8062871910769d4
+Music: {'voicedWindows': 256, 'musicOnlyWindows': 11, 'smallestGapLu': 14.9, 'largestGapLu': 19.4, 'quietestMusicOnlyLufs': -34.6, 'loudestMusicOnlyLufs': -33.1, 'medianVoiceLufs': -16.3}
+Problems: Return to journal: sentence at 78.081s, cue at 80.581s, page arrives later; wrong order of two sentence anchors. All types restored about 6s after essayons Tous les types; AV pages checkpoint and frame at 174s corroborate. Technical checks, source/final narration, music pass. CSV raw action identifiers are the real export, not stale UI labels. No product layout defect or forbidden identity/host seen.
+Source changes: record-org-activity.ts: put return to journal before Cette distinction; restore All types at essayons Tous les types avant. No re-film. Narration reused.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.141–29.729 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+read: 31.993–59.698 s; review/read-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+members: 61.96–90.161 s; review/members-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+team: 92.435–120.329 s; review/team-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+filters: 122.588–152.199 s; review/filters-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+pages: 154.46–184.43 s; review/pages-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+export: 189.152–222.228 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+limits: 224.489–251.46 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 253.724–283.442 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

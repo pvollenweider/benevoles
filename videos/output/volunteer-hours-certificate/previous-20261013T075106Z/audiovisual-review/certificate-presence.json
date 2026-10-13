@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:46:17.502Z",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "promptSha256": "8ff5fc319cdc1f59ac94e7ba0c460929c91b9e1f665a2675807b9bd19c6c7a07",
+  "clipSha256": "5dc807e0688309b2575404b0b2f0077b9d01c5e96ab2df3f3947ec9eba0f95c4",
+  "scene": "certificate-presence",
+  "review": {
+    "heardOpening": "Par défaut, l'attestation met en avant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "l'attestation met en avant les heures attestées",
+        "visibleSeconds": 1,
+        "visible": "Colonne Heures attestées affichée dans le tableau de l'attestation de bénévolat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis cochons Inclure les heures planifiées sans présence saisie",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement tardif vers les réglages où la case apparaît déjà cochée sans clic visible",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "nous retrouvons six heures attestées et deux heures planifiées sans présence",
+        "visibleSeconds": 18,
+        "visible": "Le tableau de l'attestation reste coupé hors champ en bas d'écran, les valeurs annoncées ne sont pas visibles",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:05, la voix demande de cocher l'option 'Inclure les heures planifiées sans présence saisie', mais l'écran ne défile vers les réglages qu'à 00:12 où la case est déjà cochée sans action de clic.",
+      "À partir de 00:16, les six heures attestées et deux heures planifiées annoncées sont invisibles car le bas de page contenant le tableau de l'attestation n'est pas affiché à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire et posée avec fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

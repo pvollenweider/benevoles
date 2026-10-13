@@ -1,0 +1,2186 @@
+{
+  "mp4Sha256": "52afb2df03a76906c093d60412ba84c9d62704e905be18a7149155e30c7a0ba9",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "startSeconds": 2.492,
+      "endSeconds": 39.932,
+      "sentences": [
+        {
+          "text": "Vous avez envoyé un message, mais une personne ne le retrouve pas.",
+          "startMs": 268,
+          "endMs": 3677,
+          "method": "silence",
+          "videoSeconds": 2.76
+        },
+        {
+          "text": "Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé.",
+          "startMs": 4427,
+          "endMs": 7324,
+          "method": "silence",
+          "videoSeconds": 6.919
+        },
+        {
+          "text": "Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison.",
+          "startMs": 8140,
+          "endMs": 14124,
+          "method": "silence",
+          "videoSeconds": 10.632
+        },
+        {
+          "text": "Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages.",
+          "startMs": 14443,
+          "endMs": 18711,
+          "method": "silence",
+          "videoSeconds": 16.935
+        },
+        {
+          "text": "Connectons-nous maintenant avec Marc, notre organisateur de démonstration.",
+          "startMs": 18858,
+          "endMs": 24308,
+          "method": "silence",
+          "videoSeconds": 21.35
+        },
+        {
+          "text": "Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire.",
+          "startMs": 25067,
+          "endMs": 29909,
+          "method": "silence",
+          "videoSeconds": 27.559
+        },
+        {
+          "text": "Le message de la page le précise.",
+          "startMs": 30603,
+          "endMs": 32089,
+          "method": "silence",
+          "videoSeconds": 33.095
+        },
+        {
+          "text": "Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
+          "startMs": 32986,
+          "endMs": 37022,
+          "method": "silence",
+          "videoSeconds": 35.478
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Dans Paramètres, puis Emails, les",
+          "startMs": 8140,
+          "endMs": 14124,
+          "cueMs": 10634
+        },
+        {
+          "segmentId": "welcome",
+          "phrase": "Il retrouve le suivi et",
+          "startMs": 25067,
+          "endMs": 29909,
+          "cueMs": 27560
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 28108,
+          "relativeSeconds": 25.616
+        },
+        {
+          "kind": "key",
+          "atMs": 28415,
+          "relativeSeconds": 25.923
+        },
+        {
+          "kind": "key",
+          "atMs": 28526,
+          "relativeSeconds": 26.034
+        },
+        {
+          "kind": "key",
+          "atMs": 28641,
+          "relativeSeconds": 26.149
+        },
+        {
+          "kind": "key",
+          "atMs": 28754,
+          "relativeSeconds": 26.262
+        },
+        {
+          "kind": "key",
+          "atMs": 28868,
+          "relativeSeconds": 26.376
+        },
+        {
+          "kind": "key",
+          "atMs": 28981,
+          "relativeSeconds": 26.489
+        },
+        {
+          "kind": "key",
+          "atMs": 29099,
+          "relativeSeconds": 26.607
+        },
+        {
+          "kind": "key",
+          "atMs": 29216,
+          "relativeSeconds": 26.724
+        },
+        {
+          "kind": "key",
+          "atMs": 29331,
+          "relativeSeconds": 26.839
+        },
+        {
+          "kind": "key",
+          "atMs": 29445,
+          "relativeSeconds": 26.953
+        },
+        {
+          "kind": "key",
+          "atMs": 29563,
+          "relativeSeconds": 27.071
+        },
+        {
+          "kind": "key",
+          "atMs": 29680,
+          "relativeSeconds": 27.188
+        },
+        {
+          "kind": "key",
+          "atMs": 29797,
+          "relativeSeconds": 27.305
+        },
+        {
+          "kind": "key",
+          "atMs": 29916,
+          "relativeSeconds": 27.424
+        },
+        {
+          "kind": "key",
+          "atMs": 30033,
+          "relativeSeconds": 27.541
+        },
+        {
+          "kind": "key",
+          "atMs": 30150,
+          "relativeSeconds": 27.658
+        },
+        {
+          "kind": "key",
+          "atMs": 30265,
+          "relativeSeconds": 27.773
+        },
+        {
+          "kind": "key",
+          "atMs": 30383,
+          "relativeSeconds": 27.891
+        },
+        {
+          "kind": "key",
+          "atMs": 30497,
+          "relativeSeconds": 28.005
+        },
+        {
+          "kind": "key",
+          "atMs": 30614,
+          "relativeSeconds": 28.122
+        },
+        {
+          "kind": "key",
+          "atMs": 30731,
+          "relativeSeconds": 28.239
+        },
+        {
+          "kind": "key",
+          "atMs": 30847,
+          "relativeSeconds": 28.355
+        },
+        {
+          "kind": "key",
+          "atMs": 30960,
+          "relativeSeconds": 28.468
+        },
+        {
+          "kind": "key",
+          "atMs": 31077,
+          "relativeSeconds": 28.585
+        },
+        {
+          "kind": "key",
+          "atMs": 31195,
+          "relativeSeconds": 28.703
+        },
+        {
+          "kind": "key",
+          "atMs": 31313,
+          "relativeSeconds": 28.821
+        },
+        {
+          "kind": "key",
+          "atMs": 31428,
+          "relativeSeconds": 28.936
+        },
+        {
+          "kind": "key",
+          "atMs": 31545,
+          "relativeSeconds": 29.053
+        },
+        {
+          "kind": "key",
+          "atMs": 31661,
+          "relativeSeconds": 29.169
+        },
+        {
+          "kind": "key",
+          "atMs": 31782,
+          "relativeSeconds": 29.29
+        },
+        {
+          "kind": "key",
+          "atMs": 31900,
+          "relativeSeconds": 29.408
+        },
+        {
+          "kind": "key",
+          "atMs": 32017,
+          "relativeSeconds": 29.525
+        },
+        {
+          "kind": "key",
+          "atMs": 32132,
+          "relativeSeconds": 29.64
+        },
+        {
+          "kind": "key",
+          "atMs": 32248,
+          "relativeSeconds": 29.756
+        },
+        {
+          "kind": "key",
+          "atMs": 32367,
+          "relativeSeconds": 29.875
+        },
+        {
+          "kind": "key",
+          "atMs": 32485,
+          "relativeSeconds": 29.993
+        },
+        {
+          "kind": "click",
+          "atMs": 33090,
+          "relativeSeconds": 30.598
+        }
+      ],
+      "frames": [
+        {
+          "scene": "welcome",
+          "fraction": 0.016025641025641024,
+          "seconds": 3.092,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-2.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.25,
+          "seconds": 11.852,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-25.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.45,
+          "seconds": 19.34,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-45.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.6,
+          "seconds": 24.956,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-60.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.85,
+          "seconds": 34.316,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-85.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.9919871794871795,
+          "seconds": 39.632,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/welcome-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "states",
+      "startSeconds": 42.196,
+      "endSeconds": 78.274,
+      "sentences": [
+        {
+          "text": "En attente d'envoi signifie que l'email est dans la file :",
+          "startMs": 426,
+          "endMs": 3330,
+          "method": "silence",
+          "videoSeconds": 42.622
+        },
+        {
+          "text": "Jules n'a pas encore eu de tentative.",
+          "startMs": 3868,
+          "endMs": 5279,
+          "method": "silence",
+          "videoSeconds": 46.064
+        },
+        {
+          "text": "Pour Sarah, Nouvel essai prévu indique un échec temporaire :",
+          "startMs": 6181,
+          "endMs": 9466,
+          "method": "silence",
+          "videoSeconds": 48.377
+        },
+        {
+          "text": "regardez l'échéance et le nombre d'essais.",
+          "startMs": 9980,
+          "endMs": 11900,
+          "method": "silence",
+          "videoSeconds": 52.176
+        },
+        {
+          "text": "Nicolas est marqué Envoyé :",
+          "startMs": 12693,
+          "endMs": 13462,
+          "method": "silence",
+          "videoSeconds": 54.889
+        },
+        {
+          "text": "remis au serveur, pas lu par le bénévole.",
+          "startMs": 13672,
+          "endMs": 15460,
+          "method": "silence",
+          "videoSeconds": 55.868
+        },
+        {
+          "text": "Emma a atteint six essais après une panne temporaire persistante.",
+          "startMs": 15774,
+          "endMs": 18802,
+          "method": "silence",
+          "videoSeconds": 57.97
+        },
+        {
+          "text": "Léa a reçu un refus définitif :",
+          "startMs": 18938,
+          "endMs": 20656,
+          "method": "silence",
+          "videoSeconds": 61.134
+        },
+        {
+          "text": "l'application s'arrête dès le premier essai, sans attendre six tentatives.",
+          "startMs": 21388,
+          "endMs": 26670,
+          "method": "silence",
+          "videoSeconds": 63.584
+        },
+        {
+          "text": "Dans cette formation, les délais des essais temporaires ont été accélérés, mais les échanges SMTP ont réellement eu lieu.",
+          "startMs": 27457,
+          "endMs": 32962,
+          "method": "silence",
+          "videoSeconds": 69.653
+        },
+        {
+          "text": "Lisons le détail avant de choisir une action.",
+          "startMs": 33805,
+          "endMs": 36076,
+          "method": "silence",
+          "videoSeconds": 76.001
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "states",
+          "phrase": "Lisons le détail avant de",
+          "startMs": 33805,
+          "endMs": 36076,
+          "cueMs": 76002
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "states",
+          "fraction": 0.016630633627141195,
+          "seconds": 42.796,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-2.png"
+        },
+        {
+          "scene": "states",
+          "fraction": 0.25,
+          "seconds": 51.2155,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-25.png"
+        },
+        {
+          "scene": "states",
+          "fraction": 0.45,
+          "seconds": 58.4311,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-45.png"
+        },
+        {
+          "scene": "states",
+          "fraction": 0.6,
+          "seconds": 63.842800000000004,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-60.png"
+        },
+        {
+          "scene": "states",
+          "fraction": 0.85,
+          "seconds": 72.8623,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-85.png"
+        },
+        {
+          "scene": "states",
+          "fraction": 0.9916846831864294,
+          "seconds": 77.974,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/states-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "reason",
+      "startSeconds": 80.538,
+      "endSeconds": 106.867,
+      "sentences": [
+        {
+          "text": "Pour Léa, la cause est indiquée en français :",
+          "startMs": 0,
+          "endMs": 2778,
+          "method": "silence",
+          "videoSeconds": 80.538
+        },
+        {
+          "text": "refus définitif du serveur d'envoi, boîte aux lettres introuvable, adresse à vérifier.",
+          "startMs": 3306,
+          "endMs": 6293,
+          "method": "silence",
+          "videoSeconds": 83.844
+        },
+        {
+          "text": "Pour Sarah, le problème est temporaire et un nouvel essai est prévu.",
+          "startMs": 6562,
+          "endMs": 11050,
+          "method": "silence",
+          "videoSeconds": 87.1
+        },
+        {
+          "text": "Les détails techniques bruts ne sont pas affichés.",
+          "startMs": 11893,
+          "endMs": 13613,
+          "method": "silence",
+          "videoSeconds": 92.431
+        },
+        {
+          "text": "Cette page ne connaît pas forcément les rejets arrivant plus tard après l'acceptation par le serveur.",
+          "startMs": 14307,
+          "endMs": 18355,
+          "method": "silence",
+          "videoSeconds": 94.845
+        },
+        {
+          "text": "Envoyé ne prouve ni l'arrivée dans la boîte de réception, ni la lecture.",
+          "startMs": 18862,
+          "endMs": 21594,
+          "method": "silence",
+          "videoSeconds": 99.4
+        },
+        {
+          "text": "Si l'information est urgente, contactez aussi la personne directement.",
+          "startMs": 21911,
+          "endMs": 25949,
+          "method": "silence",
+          "videoSeconds": 102.449
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "reason",
+          "fraction": 0.02278856014280831,
+          "seconds": 81.138,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-2.png"
+        },
+        {
+          "scene": "reason",
+          "fraction": 0.25,
+          "seconds": 87.12025,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-25.png"
+        },
+        {
+          "scene": "reason",
+          "fraction": 0.45,
+          "seconds": 92.38605,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-45.png"
+        },
+        {
+          "scene": "reason",
+          "fraction": 0.6,
+          "seconds": 96.33539999999999,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-60.png"
+        },
+        {
+          "scene": "reason",
+          "fraction": 0.85,
+          "seconds": 102.91765,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-85.png"
+        },
+        {
+          "scene": "reason",
+          "fraction": 0.9886057199285958,
+          "seconds": 106.567,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/reason-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "retry",
+      "startSeconds": 109.13,
+      "endSeconds": 134.618,
+      "sentences": [
+        {
+          "text": "Pour Emma, le refus de notre serveur de test est maintenant levé.",
+          "startMs": 379,
+          "endMs": 3106,
+          "method": "silence",
+          "videoSeconds": 109.509
+        },
+        {
+          "text": "Sur l'échec définitif, Renvoyer remet le même email dans la file.",
+          "startMs": 4062,
+          "endMs": 7354,
+          "method": "silence",
+          "videoSeconds": 113.192
+        },
+        {
+          "text": "Ce n'est pas un nouvel envoi à tout le monde.",
+          "startMs": 7835,
+          "endMs": 9310,
+          "method": "silence",
+          "videoSeconds": 116.965
+        },
+        {
+          "text": "Attendons le résultat et rechargeons le suivi.",
+          "startMs": 9987,
+          "endMs": 12412,
+          "method": "silence",
+          "videoSeconds": 119.117
+        },
+        {
+          "text": "La ligne passe à Envoyé avec une heure.",
+          "startMs": 13484,
+          "endMs": 15262,
+          "method": "silence",
+          "videoSeconds": 122.614
+        },
+        {
+          "text": "Ouvrons ensuite l'email réellement reçu dans la boîte locale.",
+          "startMs": 15456,
+          "endMs": 19765,
+          "method": "silence",
+          "videoSeconds": 124.586
+        },
+        {
+          "text": "Si le problème n'était pas corrigé, cliquer de nouveau ne suffirait pas à le faire disparaître.",
+          "startMs": 20732,
+          "endMs": 25011,
+          "method": "silence",
+          "videoSeconds": 129.862
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "retry",
+          "phrase": "Sur l'échec définitif, Renvoyer remet",
+          "startMs": 4062,
+          "endMs": 7354,
+          "cueMs": 113194
+        },
+        {
+          "segmentId": "retry",
+          "phrase": "La ligne passe à Envoyé",
+          "startMs": 13484,
+          "endMs": 15262,
+          "cueMs": 122615
+        },
+        {
+          "segmentId": "retry",
+          "phrase": "Ouvrons ensuite l'email réellement reçu",
+          "startMs": 15456,
+          "endMs": 19765,
+          "cueMs": 124587
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 113685,
+          "relativeSeconds": 4.555
+        }
+      ],
+      "frames": [
+        {
+          "scene": "retry",
+          "fraction": 0.023540489642184557,
+          "seconds": 109.73,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-2.png"
+        },
+        {
+          "scene": "retry",
+          "fraction": 0.25,
+          "seconds": 115.502,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-25.png"
+        },
+        {
+          "scene": "retry",
+          "fraction": 0.45,
+          "seconds": 120.59960000000001,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-45.png"
+        },
+        {
+          "scene": "retry",
+          "fraction": 0.6,
+          "seconds": 124.42280000000001,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-60.png"
+        },
+        {
+          "scene": "retry",
+          "fraction": 0.85,
+          "seconds": 130.7948,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-85.png"
+        },
+        {
+          "scene": "retry",
+          "fraction": 0.9882297551789078,
+          "seconds": 134.318,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retry-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "address",
+      "startSeconds": 136.935,
+      "endSeconds": 191.933,
+      "sentences": [
+        {
+          "text": "Une adresse erronée demande une autre attention.",
+          "startMs": 478,
+          "endMs": 2520,
+          "method": "silence",
+          "videoSeconds": 137.413
+        },
+        {
+          "text": "Ouvrons les membres, puis la fiche de Léa.",
+          "startMs": 3424,
+          "endMs": 5500,
+          "method": "silence",
+          "videoSeconds": 140.359
+        },
+        {
+          "text": "Corrigeons son email et enregistrons.",
+          "startMs": 6537,
+          "endMs": 7497,
+          "method": "silence",
+          "videoSeconds": 143.472
+        },
+        {
+          "text": "Revenons au suivi :",
+          "startMs": 7816,
+          "endMs": 8593,
+          "method": "silence",
+          "videoSeconds": 144.751
+        },
+        {
+          "text": "l'ancien email en échec garde toujours son ancien destinataire.",
+          "startMs": 9615,
+          "endMs": 14164,
+          "method": "silence",
+          "videoSeconds": 146.55
+        },
+        {
+          "text": "Le bouton Renvoyer ne reconstruit pas ce message à partir de la fiche corrigée.",
+          "startMs": 14941,
+          "endMs": 18334,
+          "method": "silence",
+          "videoSeconds": 151.876
+        },
+        {
+          "text": "Pour écrire à la nouvelle adresse, préparons donc un nouvel envoi.",
+          "startMs": 18953,
+          "endMs": 21996,
+          "method": "silence",
+          "videoSeconds": 155.888
+        },
+        {
+          "text": "Dans notre événement de formation, Léa et Emma sont inscrites :",
+          "startMs": 22657,
+          "endMs": 25661,
+          "method": "silence",
+          "videoSeconds": 159.592
+        },
+        {
+          "text": "ce message partira à toutes les deux.",
+          "startMs": 25971,
+          "endMs": 27566,
+          "method": "silence",
+          "videoSeconds": 162.906
+        },
+        {
+          "text": "Choisissons un objet clair, puis écrivons notre consigne.",
+          "startMs": 28409,
+          "endMs": 31332,
+          "method": "silence",
+          "videoSeconds": 165.344
+        },
+        {
+          "text": "La variable prénom personnalise le texte pour chacune.",
+          "startMs": 32069,
+          "endMs": 34946,
+          "method": "silence",
+          "videoSeconds": 169.004
+        },
+        {
+          "text": "Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation.",
+          "startMs": 35865,
+          "endMs": 39020,
+          "method": "silence",
+          "videoSeconds": 172.8
+        },
+        {
+          "text": "Cet envoi crée un nouveau message, pas une réparation de l'ancien.",
+          "startMs": 39428,
+          "endMs": 42633,
+          "method": "silence",
+          "videoSeconds": 176.363
+        },
+        {
+          "text": "Ouvrons maintenant celui réellement reçu par Léa :",
+          "startMs": 42830,
+          "endMs": 47217,
+          "method": "silence",
+          "videoSeconds": 179.765
+        },
+        {
+          "text": "l'adresse corrigée apparaît dans le destinataire.",
+          "startMs": 47887,
+          "endMs": 49964,
+          "method": "silence",
+          "videoSeconds": 184.822
+        },
+        {
+          "text": "Correction de la fiche et renvoi d'un ancien email sont bien deux choses différentes.",
+          "startMs": 50704,
+          "endMs": 54566,
+          "method": "silence",
+          "videoSeconds": 187.639
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "address",
+          "phrase": "Corrigeons son email et enregistrons.",
+          "startMs": 6537,
+          "endMs": 7497,
+          "cueMs": 143472
+        },
+        {
+          "segmentId": "address",
+          "phrase": "l'ancien email en échec garde",
+          "startMs": 9615,
+          "endMs": 14164,
+          "cueMs": 150053
+        },
+        {
+          "segmentId": "address",
+          "phrase": "ce message partira à toutes",
+          "startMs": 25971,
+          "endMs": 27566,
+          "cueMs": 162908
+        },
+        {
+          "segmentId": "address",
+          "phrase": "Cet envoi crée un nouveau",
+          "startMs": 39428,
+          "endMs": 42633,
+          "cueMs": 176364
+        },
+        {
+          "segmentId": "address",
+          "phrase": "l'adresse corrigée apparaît dans le",
+          "startMs": 47887,
+          "endMs": 49964,
+          "cueMs": 184825
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 143950,
+          "relativeSeconds": 7.015
+        },
+        {
+          "kind": "click",
+          "atMs": 144734,
+          "relativeSeconds": 7.799
+        },
+        {
+          "kind": "key",
+          "atMs": 145042,
+          "relativeSeconds": 8.107
+        },
+        {
+          "kind": "key",
+          "atMs": 145043,
+          "relativeSeconds": 8.108
+        },
+        {
+          "kind": "key",
+          "atMs": 145046,
+          "relativeSeconds": 8.111
+        },
+        {
+          "kind": "key",
+          "atMs": 145159,
+          "relativeSeconds": 8.224
+        },
+        {
+          "kind": "key",
+          "atMs": 145272,
+          "relativeSeconds": 8.337
+        },
+        {
+          "kind": "key",
+          "atMs": 145386,
+          "relativeSeconds": 8.451
+        },
+        {
+          "kind": "key",
+          "atMs": 145500,
+          "relativeSeconds": 8.565
+        },
+        {
+          "kind": "key",
+          "atMs": 145614,
+          "relativeSeconds": 8.679
+        },
+        {
+          "kind": "key",
+          "atMs": 145728,
+          "relativeSeconds": 8.793
+        },
+        {
+          "kind": "key",
+          "atMs": 145842,
+          "relativeSeconds": 8.907
+        },
+        {
+          "kind": "key",
+          "atMs": 145954,
+          "relativeSeconds": 9.019
+        },
+        {
+          "kind": "key",
+          "atMs": 146071,
+          "relativeSeconds": 9.136
+        },
+        {
+          "kind": "key",
+          "atMs": 146187,
+          "relativeSeconds": 9.252
+        },
+        {
+          "kind": "key",
+          "atMs": 146307,
+          "relativeSeconds": 9.372
+        },
+        {
+          "kind": "key",
+          "atMs": 146426,
+          "relativeSeconds": 9.491
+        },
+        {
+          "kind": "key",
+          "atMs": 146542,
+          "relativeSeconds": 9.607
+        },
+        {
+          "kind": "key",
+          "atMs": 146661,
+          "relativeSeconds": 9.726
+        },
+        {
+          "kind": "key",
+          "atMs": 146776,
+          "relativeSeconds": 9.841
+        },
+        {
+          "kind": "key",
+          "atMs": 146896,
+          "relativeSeconds": 9.961
+        },
+        {
+          "kind": "key",
+          "atMs": 147011,
+          "relativeSeconds": 10.076
+        },
+        {
+          "kind": "key",
+          "atMs": 147128,
+          "relativeSeconds": 10.193
+        },
+        {
+          "kind": "key",
+          "atMs": 147245,
+          "relativeSeconds": 10.31
+        },
+        {
+          "kind": "key",
+          "atMs": 147362,
+          "relativeSeconds": 10.427
+        },
+        {
+          "kind": "key",
+          "atMs": 147480,
+          "relativeSeconds": 10.545
+        },
+        {
+          "kind": "key",
+          "atMs": 147598,
+          "relativeSeconds": 10.663
+        },
+        {
+          "kind": "key",
+          "atMs": 147713,
+          "relativeSeconds": 10.778
+        },
+        {
+          "kind": "key",
+          "atMs": 147829,
+          "relativeSeconds": 10.894
+        },
+        {
+          "kind": "key",
+          "atMs": 147947,
+          "relativeSeconds": 11.012
+        },
+        {
+          "kind": "key",
+          "atMs": 148063,
+          "relativeSeconds": 11.128
+        },
+        {
+          "kind": "key",
+          "atMs": 148177,
+          "relativeSeconds": 11.242
+        },
+        {
+          "kind": "key",
+          "atMs": 148294,
+          "relativeSeconds": 11.359
+        },
+        {
+          "kind": "key",
+          "atMs": 148411,
+          "relativeSeconds": 11.476
+        },
+        {
+          "kind": "key",
+          "atMs": 148529,
+          "relativeSeconds": 11.594
+        },
+        {
+          "kind": "key",
+          "atMs": 148643,
+          "relativeSeconds": 11.708
+        },
+        {
+          "kind": "key",
+          "atMs": 148756,
+          "relativeSeconds": 11.821
+        },
+        {
+          "kind": "key",
+          "atMs": 148873,
+          "relativeSeconds": 11.938
+        },
+        {
+          "kind": "key",
+          "atMs": 148993,
+          "relativeSeconds": 12.058
+        },
+        {
+          "kind": "key",
+          "atMs": 149110,
+          "relativeSeconds": 12.175
+        },
+        {
+          "kind": "click",
+          "atMs": 149716,
+          "relativeSeconds": 12.781
+        },
+        {
+          "kind": "click",
+          "atMs": 164527,
+          "relativeSeconds": 27.592
+        },
+        {
+          "kind": "key",
+          "atMs": 164834,
+          "relativeSeconds": 27.899
+        },
+        {
+          "kind": "key",
+          "atMs": 164835,
+          "relativeSeconds": 27.9
+        },
+        {
+          "kind": "key",
+          "atMs": 164838,
+          "relativeSeconds": 27.903
+        },
+        {
+          "kind": "key",
+          "atMs": 164950,
+          "relativeSeconds": 28.015
+        },
+        {
+          "kind": "key",
+          "atMs": 165063,
+          "relativeSeconds": 28.128
+        },
+        {
+          "kind": "key",
+          "atMs": 165176,
+          "relativeSeconds": 28.241
+        },
+        {
+          "kind": "key",
+          "atMs": 165293,
+          "relativeSeconds": 28.358
+        },
+        {
+          "kind": "key",
+          "atMs": 165409,
+          "relativeSeconds": 28.474
+        },
+        {
+          "kind": "key",
+          "atMs": 165529,
+          "relativeSeconds": 28.594
+        },
+        {
+          "kind": "key",
+          "atMs": 165647,
+          "relativeSeconds": 28.712
+        },
+        {
+          "kind": "key",
+          "atMs": 165764,
+          "relativeSeconds": 28.829
+        },
+        {
+          "kind": "key",
+          "atMs": 165884,
+          "relativeSeconds": 28.949
+        },
+        {
+          "kind": "key",
+          "atMs": 166116,
+          "relativeSeconds": 29.181
+        },
+        {
+          "kind": "key",
+          "atMs": 166237,
+          "relativeSeconds": 29.302
+        },
+        {
+          "kind": "key",
+          "atMs": 166355,
+          "relativeSeconds": 29.42
+        },
+        {
+          "kind": "key",
+          "atMs": 166472,
+          "relativeSeconds": 29.537
+        },
+        {
+          "kind": "key",
+          "atMs": 166588,
+          "relativeSeconds": 29.653
+        },
+        {
+          "kind": "key",
+          "atMs": 166706,
+          "relativeSeconds": 29.771
+        },
+        {
+          "kind": "key",
+          "atMs": 166823,
+          "relativeSeconds": 29.888
+        },
+        {
+          "kind": "key",
+          "atMs": 166942,
+          "relativeSeconds": 30.007
+        },
+        {
+          "kind": "key",
+          "atMs": 167059,
+          "relativeSeconds": 30.124
+        },
+        {
+          "kind": "key",
+          "atMs": 167176,
+          "relativeSeconds": 30.241
+        },
+        {
+          "kind": "key",
+          "atMs": 167291,
+          "relativeSeconds": 30.356
+        },
+        {
+          "kind": "key",
+          "atMs": 167407,
+          "relativeSeconds": 30.472
+        },
+        {
+          "kind": "key",
+          "atMs": 167525,
+          "relativeSeconds": 30.59
+        },
+        {
+          "kind": "key",
+          "atMs": 167644,
+          "relativeSeconds": 30.709
+        },
+        {
+          "kind": "key",
+          "atMs": 167761,
+          "relativeSeconds": 30.826
+        },
+        {
+          "kind": "key",
+          "atMs": 167993,
+          "relativeSeconds": 31.058
+        },
+        {
+          "kind": "click",
+          "atMs": 168577,
+          "relativeSeconds": 31.642
+        },
+        {
+          "kind": "key",
+          "atMs": 168884,
+          "relativeSeconds": 31.949
+        },
+        {
+          "kind": "key",
+          "atMs": 168885,
+          "relativeSeconds": 31.95
+        },
+        {
+          "kind": "key",
+          "atMs": 168887,
+          "relativeSeconds": 31.952
+        },
+        {
+          "kind": "key",
+          "atMs": 169000,
+          "relativeSeconds": 32.065
+        },
+        {
+          "kind": "key",
+          "atMs": 169113,
+          "relativeSeconds": 32.178
+        },
+        {
+          "kind": "key",
+          "atMs": 169227,
+          "relativeSeconds": 32.292
+        },
+        {
+          "kind": "key",
+          "atMs": 169340,
+          "relativeSeconds": 32.405
+        },
+        {
+          "kind": "key",
+          "atMs": 169453,
+          "relativeSeconds": 32.518
+        },
+        {
+          "kind": "key",
+          "atMs": 169569,
+          "relativeSeconds": 32.634
+        },
+        {
+          "kind": "key",
+          "atMs": 169683,
+          "relativeSeconds": 32.748
+        },
+        {
+          "kind": "key",
+          "atMs": 169801,
+          "relativeSeconds": 32.866
+        },
+        {
+          "kind": "key",
+          "atMs": 169919,
+          "relativeSeconds": 32.984
+        },
+        {
+          "kind": "key",
+          "atMs": 170039,
+          "relativeSeconds": 33.104
+        },
+        {
+          "kind": "key",
+          "atMs": 170266,
+          "relativeSeconds": 33.331
+        },
+        {
+          "kind": "key",
+          "atMs": 170379,
+          "relativeSeconds": 33.444
+        },
+        {
+          "kind": "key",
+          "atMs": 170493,
+          "relativeSeconds": 33.558
+        },
+        {
+          "kind": "key",
+          "atMs": 170607,
+          "relativeSeconds": 33.672
+        },
+        {
+          "kind": "key",
+          "atMs": 170722,
+          "relativeSeconds": 33.787
+        },
+        {
+          "kind": "key",
+          "atMs": 170840,
+          "relativeSeconds": 33.905
+        },
+        {
+          "kind": "key",
+          "atMs": 170954,
+          "relativeSeconds": 34.019
+        },
+        {
+          "kind": "key",
+          "atMs": 171071,
+          "relativeSeconds": 34.136
+        },
+        {
+          "kind": "key",
+          "atMs": 171183,
+          "relativeSeconds": 34.248
+        },
+        {
+          "kind": "key",
+          "atMs": 171297,
+          "relativeSeconds": 34.362
+        },
+        {
+          "kind": "key",
+          "atMs": 171413,
+          "relativeSeconds": 34.478
+        },
+        {
+          "kind": "key",
+          "atMs": 171530,
+          "relativeSeconds": 34.595
+        },
+        {
+          "kind": "key",
+          "atMs": 171649,
+          "relativeSeconds": 34.714
+        },
+        {
+          "kind": "key",
+          "atMs": 171766,
+          "relativeSeconds": 34.831
+        },
+        {
+          "kind": "key",
+          "atMs": 171885,
+          "relativeSeconds": 34.95
+        },
+        {
+          "kind": "key",
+          "atMs": 172002,
+          "relativeSeconds": 35.067
+        },
+        {
+          "kind": "key",
+          "atMs": 172115,
+          "relativeSeconds": 35.18
+        },
+        {
+          "kind": "key",
+          "atMs": 172232,
+          "relativeSeconds": 35.297
+        },
+        {
+          "kind": "key",
+          "atMs": 172350,
+          "relativeSeconds": 35.415
+        },
+        {
+          "kind": "key",
+          "atMs": 172468,
+          "relativeSeconds": 35.533
+        },
+        {
+          "kind": "key",
+          "atMs": 172587,
+          "relativeSeconds": 35.652
+        },
+        {
+          "kind": "key",
+          "atMs": 172702,
+          "relativeSeconds": 35.767
+        },
+        {
+          "kind": "key",
+          "atMs": 172822,
+          "relativeSeconds": 35.887
+        },
+        {
+          "kind": "key",
+          "atMs": 172937,
+          "relativeSeconds": 36.002
+        },
+        {
+          "kind": "key",
+          "atMs": 173058,
+          "relativeSeconds": 36.123
+        },
+        {
+          "kind": "key",
+          "atMs": 173172,
+          "relativeSeconds": 36.237
+        },
+        {
+          "kind": "key",
+          "atMs": 173289,
+          "relativeSeconds": 36.354
+        },
+        {
+          "kind": "key",
+          "atMs": 173410,
+          "relativeSeconds": 36.475
+        },
+        {
+          "kind": "key",
+          "atMs": 173526,
+          "relativeSeconds": 36.591
+        },
+        {
+          "kind": "key",
+          "atMs": 173644,
+          "relativeSeconds": 36.709
+        },
+        {
+          "kind": "key",
+          "atMs": 173773,
+          "relativeSeconds": 36.838
+        },
+        {
+          "kind": "key",
+          "atMs": 173892,
+          "relativeSeconds": 36.957
+        },
+        {
+          "kind": "key",
+          "atMs": 174009,
+          "relativeSeconds": 37.074
+        },
+        {
+          "kind": "key",
+          "atMs": 174125,
+          "relativeSeconds": 37.19
+        },
+        {
+          "kind": "key",
+          "atMs": 174238,
+          "relativeSeconds": 37.303
+        },
+        {
+          "kind": "click",
+          "atMs": 176826,
+          "relativeSeconds": 39.891
+        },
+        {
+          "kind": "click",
+          "atMs": 177609,
+          "relativeSeconds": 40.674
+        },
+        {
+          "kind": "click",
+          "atMs": 178393,
+          "relativeSeconds": 41.458
+        }
+      ],
+      "frames": [
+        {
+          "scene": "address",
+          "fraction": 0.010909487617731554,
+          "seconds": 137.535,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-1.png"
+        },
+        {
+          "scene": "address",
+          "fraction": 0.25,
+          "seconds": 150.6845,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-25.png"
+        },
+        {
+          "scene": "address",
+          "fraction": 0.45,
+          "seconds": 161.6841,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-45.png"
+        },
+        {
+          "scene": "address",
+          "fraction": 0.6,
+          "seconds": 169.9338,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-60.png"
+        },
+        {
+          "scene": "address",
+          "fraction": 0.85,
+          "seconds": 183.68329999999997,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-85.png"
+        },
+        {
+          "scene": "address",
+          "fraction": 0.9945452561911342,
+          "seconds": 191.633,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/address-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "campaign",
+      "startSeconds": 194.205,
+      "endSeconds": 236.555,
+      "sentences": [
+        {
+          "text": "Préparons un autre message pour ces deux personnes.",
+          "startMs": 439,
+          "endMs": 2249,
+          "method": "silence",
+          "videoSeconds": 194.644
+        },
+        {
+          "text": "Notre serveur de démonstration refuse définitivement Emma, mais accepte Léa.",
+          "startMs": 2866,
+          "endMs": 6862,
+          "method": "silence",
+          "videoSeconds": 197.071
+        },
+        {
+          "text": "Un seul essai suffit pour cet échec permanent.",
+          "startMs": 7459,
+          "endMs": 10309,
+          "method": "silence",
+          "videoSeconds": 201.664
+        },
+        {
+          "text": "Ouvrons Messages envoyés sous le formulaire.",
+          "startMs": 10538,
+          "endMs": 12444,
+          "method": "silence",
+          "videoSeconds": 204.743
+        },
+        {
+          "text": "L'historique conserve l'objet, le public, l'auteur et le résultat :",
+          "startMs": 12950,
+          "endMs": 17142,
+          "method": "silence",
+          "videoSeconds": 207.155
+        },
+        {
+          "text": "un envoyé, un en échec.",
+          "startMs": 17541,
+          "endMs": 18090,
+          "method": "silence",
+          "videoSeconds": 211.746
+        },
+        {
+          "text": "Voir le texte envoyé permet de relire la consigne originale et sa variable.",
+          "startMs": 18420,
+          "endMs": 22958,
+          "method": "silence",
+          "videoSeconds": 212.625
+        },
+        {
+          "text": "Le refus de test est maintenant levé.",
+          "startMs": 23695,
+          "endMs": 25101,
+          "method": "silence",
+          "videoSeconds": 217.9
+        },
+        {
+          "text": "Cliquons sur Renvoyer l'email en échec :",
+          "startMs": 25897,
+          "endMs": 26595,
+          "method": "silence",
+          "videoSeconds": 220.102
+        },
+        {
+          "text": "seule Emma repart dans la file, pas Léa.",
+          "startMs": 26739,
+          "endMs": 29811,
+          "method": "silence",
+          "videoSeconds": 220.944
+        },
+        {
+          "text": "Le bouton devient Remis en file.",
+          "startMs": 30070,
+          "endMs": 30382,
+          "method": "silence",
+          "videoSeconds": 224.275
+        },
+        {
+          "text": "Une autre demande ne renvoie rien de plus.",
+          "startMs": 31031,
+          "endMs": 32711,
+          "method": "silence",
+          "videoSeconds": 225.236
+        },
+        {
+          "text": "Rechargeons enfin le suivi pour voir les deux remises réussies.",
+          "startMs": 33322,
+          "endMs": 38310,
+          "method": "silence",
+          "videoSeconds": 227.527
+        },
+        {
+          "text": "Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
+          "startMs": 38945,
+          "endMs": 42062,
+          "method": "silence",
+          "videoSeconds": 233.15
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "campaign",
+          "phrase": "Voir le texte envoyé permet",
+          "startMs": 18420,
+          "endMs": 22958,
+          "cueMs": 212627
+        },
+        {
+          "segmentId": "campaign",
+          "phrase": "Le refus de test est",
+          "startMs": 23695,
+          "endMs": 25101,
+          "cueMs": 217902
+        },
+        {
+          "segmentId": "campaign",
+          "phrase": "seule Emma repart dans la",
+          "startMs": 26739,
+          "endMs": 29811,
+          "cueMs": 220946
+        },
+        {
+          "segmentId": "campaign",
+          "phrase": "Les rappels et confirmations automatiques",
+          "startMs": 38945,
+          "endMs": 42062,
+          "cueMs": 233150
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 195815,
+          "relativeSeconds": 1.61
+        },
+        {
+          "kind": "key",
+          "atMs": 196123,
+          "relativeSeconds": 1.918
+        },
+        {
+          "kind": "key",
+          "atMs": 196123,
+          "relativeSeconds": 1.918
+        },
+        {
+          "kind": "key",
+          "atMs": 196126,
+          "relativeSeconds": 1.921
+        },
+        {
+          "kind": "key",
+          "atMs": 196239,
+          "relativeSeconds": 2.034
+        },
+        {
+          "kind": "key",
+          "atMs": 196351,
+          "relativeSeconds": 2.146
+        },
+        {
+          "kind": "key",
+          "atMs": 196464,
+          "relativeSeconds": 2.259
+        },
+        {
+          "kind": "key",
+          "atMs": 196577,
+          "relativeSeconds": 2.372
+        },
+        {
+          "kind": "key",
+          "atMs": 196689,
+          "relativeSeconds": 2.484
+        },
+        {
+          "kind": "key",
+          "atMs": 196808,
+          "relativeSeconds": 2.603
+        },
+        {
+          "kind": "key",
+          "atMs": 196925,
+          "relativeSeconds": 2.72
+        },
+        {
+          "kind": "key",
+          "atMs": 197037,
+          "relativeSeconds": 2.832
+        },
+        {
+          "kind": "key",
+          "atMs": 197151,
+          "relativeSeconds": 2.946
+        },
+        {
+          "kind": "key",
+          "atMs": 197382,
+          "relativeSeconds": 3.177
+        },
+        {
+          "kind": "key",
+          "atMs": 197613,
+          "relativeSeconds": 3.408
+        },
+        {
+          "kind": "key",
+          "atMs": 197727,
+          "relativeSeconds": 3.522
+        },
+        {
+          "kind": "key",
+          "atMs": 197841,
+          "relativeSeconds": 3.636
+        },
+        {
+          "kind": "key",
+          "atMs": 197961,
+          "relativeSeconds": 3.756
+        },
+        {
+          "kind": "key",
+          "atMs": 198077,
+          "relativeSeconds": 3.872
+        },
+        {
+          "kind": "key",
+          "atMs": 198196,
+          "relativeSeconds": 3.991
+        },
+        {
+          "kind": "key",
+          "atMs": 198314,
+          "relativeSeconds": 4.109
+        },
+        {
+          "kind": "key",
+          "atMs": 198432,
+          "relativeSeconds": 4.227
+        },
+        {
+          "kind": "key",
+          "atMs": 198549,
+          "relativeSeconds": 4.344
+        },
+        {
+          "kind": "key",
+          "atMs": 198672,
+          "relativeSeconds": 4.467
+        },
+        {
+          "kind": "key",
+          "atMs": 198790,
+          "relativeSeconds": 4.585
+        },
+        {
+          "kind": "key",
+          "atMs": 198909,
+          "relativeSeconds": 4.704
+        },
+        {
+          "kind": "click",
+          "atMs": 199515,
+          "relativeSeconds": 5.31
+        },
+        {
+          "kind": "key",
+          "atMs": 199822,
+          "relativeSeconds": 5.617
+        },
+        {
+          "kind": "key",
+          "atMs": 199822,
+          "relativeSeconds": 5.617
+        },
+        {
+          "kind": "key",
+          "atMs": 199825,
+          "relativeSeconds": 5.62
+        },
+        {
+          "kind": "key",
+          "atMs": 199937,
+          "relativeSeconds": 5.732
+        },
+        {
+          "kind": "key",
+          "atMs": 200049,
+          "relativeSeconds": 5.844
+        },
+        {
+          "kind": "key",
+          "atMs": 200163,
+          "relativeSeconds": 5.958
+        },
+        {
+          "kind": "key",
+          "atMs": 200276,
+          "relativeSeconds": 6.071
+        },
+        {
+          "kind": "key",
+          "atMs": 200391,
+          "relativeSeconds": 6.186
+        },
+        {
+          "kind": "key",
+          "atMs": 200510,
+          "relativeSeconds": 6.305
+        },
+        {
+          "kind": "key",
+          "atMs": 200627,
+          "relativeSeconds": 6.422
+        },
+        {
+          "kind": "key",
+          "atMs": 200743,
+          "relativeSeconds": 6.538
+        },
+        {
+          "kind": "key",
+          "atMs": 200862,
+          "relativeSeconds": 6.657
+        },
+        {
+          "kind": "key",
+          "atMs": 200975,
+          "relativeSeconds": 6.77
+        },
+        {
+          "kind": "key",
+          "atMs": 201206,
+          "relativeSeconds": 7.001
+        },
+        {
+          "kind": "key",
+          "atMs": 201321,
+          "relativeSeconds": 7.116
+        },
+        {
+          "kind": "key",
+          "atMs": 201441,
+          "relativeSeconds": 7.236
+        },
+        {
+          "kind": "key",
+          "atMs": 201559,
+          "relativeSeconds": 7.354
+        },
+        {
+          "kind": "key",
+          "atMs": 201678,
+          "relativeSeconds": 7.473
+        },
+        {
+          "kind": "key",
+          "atMs": 201791,
+          "relativeSeconds": 7.586
+        },
+        {
+          "kind": "key",
+          "atMs": 201909,
+          "relativeSeconds": 7.704
+        },
+        {
+          "kind": "key",
+          "atMs": 202025,
+          "relativeSeconds": 7.82
+        },
+        {
+          "kind": "key",
+          "atMs": 202143,
+          "relativeSeconds": 7.938
+        },
+        {
+          "kind": "key",
+          "atMs": 202259,
+          "relativeSeconds": 8.054
+        },
+        {
+          "kind": "key",
+          "atMs": 202372,
+          "relativeSeconds": 8.167
+        },
+        {
+          "kind": "key",
+          "atMs": 202487,
+          "relativeSeconds": 8.282
+        },
+        {
+          "kind": "key",
+          "atMs": 202609,
+          "relativeSeconds": 8.404
+        },
+        {
+          "kind": "key",
+          "atMs": 202725,
+          "relativeSeconds": 8.52
+        },
+        {
+          "kind": "key",
+          "atMs": 202841,
+          "relativeSeconds": 8.636
+        },
+        {
+          "kind": "key",
+          "atMs": 202958,
+          "relativeSeconds": 8.753
+        },
+        {
+          "kind": "key",
+          "atMs": 203076,
+          "relativeSeconds": 8.871
+        },
+        {
+          "kind": "key",
+          "atMs": 203192,
+          "relativeSeconds": 8.987
+        },
+        {
+          "kind": "key",
+          "atMs": 203305,
+          "relativeSeconds": 9.1
+        },
+        {
+          "kind": "key",
+          "atMs": 203419,
+          "relativeSeconds": 9.214
+        },
+        {
+          "kind": "key",
+          "atMs": 203533,
+          "relativeSeconds": 9.328
+        },
+        {
+          "kind": "key",
+          "atMs": 203646,
+          "relativeSeconds": 9.441
+        },
+        {
+          "kind": "key",
+          "atMs": 203759,
+          "relativeSeconds": 9.554
+        },
+        {
+          "kind": "key",
+          "atMs": 203873,
+          "relativeSeconds": 9.668
+        },
+        {
+          "kind": "key",
+          "atMs": 203987,
+          "relativeSeconds": 9.782
+        },
+        {
+          "kind": "key",
+          "atMs": 204100,
+          "relativeSeconds": 9.895
+        },
+        {
+          "kind": "key",
+          "atMs": 204214,
+          "relativeSeconds": 10.009
+        },
+        {
+          "kind": "click",
+          "atMs": 204797,
+          "relativeSeconds": 10.592
+        },
+        {
+          "kind": "click",
+          "atMs": 205579,
+          "relativeSeconds": 11.374
+        },
+        {
+          "kind": "click",
+          "atMs": 206363,
+          "relativeSeconds": 12.158
+        },
+        {
+          "kind": "click",
+          "atMs": 218378,
+          "relativeSeconds": 24.173
+        },
+        {
+          "kind": "click",
+          "atMs": 221409,
+          "relativeSeconds": 27.204
+        }
+      ],
+      "frames": [
+        {
+          "scene": "campaign",
+          "fraction": 0.014167650531286895,
+          "seconds": 194.805,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-1.png"
+        },
+        {
+          "scene": "campaign",
+          "fraction": 0.25,
+          "seconds": 204.7925,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-25.png"
+        },
+        {
+          "scene": "campaign",
+          "fraction": 0.45,
+          "seconds": 213.2625,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-45.png"
+        },
+        {
+          "scene": "campaign",
+          "fraction": 0.6,
+          "seconds": 219.615,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-60.png"
+        },
+        {
+          "scene": "campaign",
+          "fraction": 0.85,
+          "seconds": 230.2025,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-85.png"
+        },
+        {
+          "scene": "campaign",
+          "fraction": 0.9929161747343566,
+          "seconds": 236.255,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/campaign-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "retention",
+      "startSeconds": 238.819,
+      "endSeconds": 265.755,
+      "sentences": [
+        {
+          "text": "Le suivi de la file est volontairement récent :",
+          "startMs": 287,
+          "endMs": 2881,
+          "method": "silence",
+          "videoSeconds": 239.106
+        },
+        {
+          "text": "les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours.",
+          "startMs": 3216,
+          "endMs": 8595,
+          "method": "silence",
+          "videoSeconds": 242.035
+        },
+        {
+          "text": "La page montre les deux cents lignes les plus récentes.",
+          "startMs": 9171,
+          "endMs": 11657,
+          "method": "silence",
+          "videoSeconds": 247.99
+        },
+        {
+          "text": "L'historique des messages ciblés est différent et reste douze mois.",
+          "startMs": 12397,
+          "endMs": 15753,
+          "method": "silence",
+          "videoSeconds": 251.216
+        },
+        {
+          "text": "Ne comptez donc pas sur le tableau des emails pour une archive permanente.",
+          "startMs": 16466,
+          "endMs": 19885,
+          "method": "silence",
+          "videoSeconds": 255.285
+        },
+        {
+          "text": "Pour comprendre un incident, consultez-le au bon moment, sans conserver inutilement des données personnelles.",
+          "startMs": 20662,
+          "endMs": 26455,
+          "method": "silence",
+          "videoSeconds": 259.481
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "retention",
+          "phrase": "L'historique des messages ciblés est",
+          "startMs": 12397,
+          "endMs": 15753,
+          "cueMs": 251217
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "retention",
+          "fraction": 0.022275022275022274,
+          "seconds": 239.419,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-2.png"
+        },
+        {
+          "scene": "retention",
+          "fraction": 0.25,
+          "seconds": 245.553,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-25.png"
+        },
+        {
+          "scene": "retention",
+          "fraction": 0.45,
+          "seconds": 250.9402,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-45.png"
+        },
+        {
+          "scene": "retention",
+          "fraction": 0.6,
+          "seconds": 254.9806,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-60.png"
+        },
+        {
+          "scene": "retention",
+          "fraction": 0.85,
+          "seconds": 261.7146,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-85.png"
+        },
+        {
+          "scene": "retention",
+          "fraction": 0.9888624888624888,
+          "seconds": 265.455,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/retention-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "result",
+      "startSeconds": 268.017,
+      "endSeconds": 294.613,
+      "sentences": [
+        {
+          "text": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action.",
+          "startMs": 475,
+          "endMs": 4965,
+          "method": "silence",
+          "videoSeconds": 268.492
+        },
+        {
+          "text": "Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé :",
+          "startMs": 5466,
+          "endMs": 12221,
+          "method": "silence",
+          "videoSeconds": 273.483
+        },
+        {
+          "text": "ce n'est pas la même chose.",
+          "startMs": 12378,
+          "endMs": 13217,
+          "method": "silence",
+          "videoSeconds": 280.395
+        },
+        {
+          "text": "Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne.",
+          "startMs": 13910,
+          "endMs": 18834,
+          "method": "silence",
+          "videoSeconds": 281.927
+        },
+        {
+          "text": "Avec une consigne claire et un contact humain si besoin, vous aidez l'équipe à retrouver l'information sans l'inonder de messages.",
+          "startMs": 19571,
+          "endMs": 26259,
+          "method": "silence",
+          "videoSeconds": 287.588
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "result",
+          "fraction": 0.02255978342607911,
+          "seconds": 268.617,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-2.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.25,
+          "seconds": 274.666,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-25.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.45,
+          "seconds": 279.9852,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-45.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.6,
+          "seconds": 283.97459999999995,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-60.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.85,
+          "seconds": 290.62359999999995,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-85.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.9887201082869604,
+          "seconds": 294.313,
+          "file": "/private/tmp/codex-video/videos/output/email-delivery-failures/review-frames/result-end.png"
+        }
+      ]
+    }
+  ]
+}

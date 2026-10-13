@@ -1,0 +1,32 @@
+[
+  {
+    "pdf": "complete.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": true
+  },
+  {
+    "pdf": "day.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": false
+  },
+  {
+    "pdf": "role.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": false
+  },
+  {
+    "pdf": "individual.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": false
+  },
+  {
+    "pdf": "attendance.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": false
+  },
+  {
+    "pdf": "phones.pdf",
+    "pagesWithNull": [],
+    "page1OnlyPlanning": false
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:46:20.960Z",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "promptSha256": "8208097e3fa2859f185446b87b082b67a02c4558bcccbf19d6ab1c1607603dfc",
+  "clipSha256": "3556f04ff9685b6ada9b18d053fd2ada21e3fd1fcc0da2648bc577c3790db391",
+  "scene": "certificate-settings",
+  "review": {
+    "heardOpening": "Préparons maintenant une attestation pour Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "ouvrons Attestation de bénévolat",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le lien et affichage de la page Réglages de l'attestation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Choisissons une période du premier mai au trente septembre",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie des dates 01/05/2026 et 30/09/2026 effectuée dans les champs",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "écrivons Accueil du public et rangement du matériel",
+        "visibleSeconds": 18.5,
+        "visible": "Saisie du texte dans le champ Texte libre (facultatif)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "L'aperçu reprend le nom du bénévole, celui de l'organisation",
+        "visibleSeconds": 25,
+        "visible": "L'aperçu détaillé et le logo restent hors champ en bas d'écran sans défilement",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À partir de 00:19, la voix décrit les éléments de l'aperçu (nom, organisation, détail, logo), mais l'écran ne défile pas vers le bas et ces éléments restent coupés hors champ.",
+      "La saisie des dates a lieu entre 00:03 et 00:05, plusieurs secondes avant que la consigne ne soit énoncée (00:07)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, calme et de bonne qualité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

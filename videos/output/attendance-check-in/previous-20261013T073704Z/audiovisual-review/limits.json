@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:35.878Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "40c9be96067dc2a358b6a2b44335791df315a7a451d5f82030c5c8a4f92b0da3",
+  "clipSha256": "925acadeb17a50a7c872e1ac203a21b1d5c3163b171eb6d102ca83c36c73a273",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "Le pointage enregistre une arrivée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le pointage enregistre une arrivée",
+        "visibleSeconds": 0.5,
+        "visible": "Écran de pointage des inscriptions affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Dans la fiche membre, les heures planifiées",
+        "visibleSeconds": 6,
+        "visible": "Liste des membres avec colonnes Heures planifiées (4h) et Heures attestées (2h)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "les créneaux où une présence a été enregistrée",
+        "visibleSeconds": 13.8,
+        "visible": "Affichage de la page « Activité de Léa Exemple » après clic sur Détail",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les explications visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

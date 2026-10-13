@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/event-reports/previous-20261012T210927Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

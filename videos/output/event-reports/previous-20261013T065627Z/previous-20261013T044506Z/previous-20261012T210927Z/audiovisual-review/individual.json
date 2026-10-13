@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:09:34.186Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "4aea1e120a1347e93dd0d65c582837ec56017360de6495e7a962746977ff2363",
+  "clipSha256": "3454dd739f558ecbf170ee0a4508f17a775e0d541e201b00d83e513d6012c4e7",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Pour Léa, le planning individuel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le planning individuel regroupe ses cinq créneaux sur trois postes",
+        "visibleSeconds": 1.8,
+        "visible": "Affichage de la première page du planning individuel de Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Sa frise montre aussi les prénoms des coéquipiers",
+        "visibleSeconds": 4.5,
+        "visible": "Grille horaire visible avec les prénoms des coéquipiers par créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "On retrouve ensuite le lieu, les consignes et le contact opérationnel",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le bas affichant les détails de lieu, contact et consignes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "passons à la suivante pour lire le dernier poste",
+        "visibleSeconds": 16.8,
+        "visible": "Bascule vers la feuille suivante affichant le créneau final",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

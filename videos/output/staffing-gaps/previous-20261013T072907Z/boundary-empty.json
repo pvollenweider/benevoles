@@ -1,0 +1,12 @@
+{
+  "anchor": "Postes sans personne attire l'attention sur un poste entièrement vide. Ici,",
+  "windowStart": 20.03,
+  "result": {
+    "found": true,
+    "startSeconds": 30.18,
+    "wordsHeard": "Poste"
+  },
+  "onset": 50.21,
+  "proposedCut": 50.029666500000005,
+  "note": "Proposal only; recut then independently audit before capture"
+}

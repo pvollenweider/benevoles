@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-10-05T22:40:26.029Z",
+  "actualInitialWorkerStates": true,
+  "actualRetryMailId": "2kB2RLaGmrYTeIrd2JEwAL",
+  "samePayloadOnRetry": true,
+  "correctedRecipientMailId": "3UteomG2nozfoPg3jeI4DR",
+  "oldPayloadUnchanged": true,
+  "campaignId": "cmuvu1zzg000i1oa5ej25w43r",
+  "onlyFailedResent": true,
+  "repeatedResendCreatedNothing": true,
+  "acceleratedClock": [
+    {
+      "now": "2026-10-05T22:45:13.434Z",
+      "attempts": 2,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T22:55:13.435Z",
+      "attempts": 3,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T23:15:13.436Z",
+      "attempts": 4,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T23:55:13.437Z",
+      "attempts": 5,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-06T01:15:13.438Z",
+      "attempts": 6,
+      "status": "failed"
+    }
+  ],
+  "smtpAttemptsDuringCapture": [
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:39:23.310Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:39:57.545Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:39:57.596Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.445Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:40:13.486Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.734Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.745Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.754Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.769Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:40:13.777Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:40:16.226Z"
+    }
+  ],
+  "audiovisualValidated": false
+}

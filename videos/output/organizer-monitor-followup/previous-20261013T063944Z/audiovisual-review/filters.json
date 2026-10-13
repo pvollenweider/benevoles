@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:11.453Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "15273e20b4bdb3b207ce5c5e9b717753ae687be70b355d42b7736ad97ff3948f",
+  "clipSha256": "7be8b0d8622b1d2f23e0ce85f2eba6563e0e676e66166d5a80336b20d6bf2dac",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Quand la liste grandit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "filtre par poste",
+        "visibleSeconds": 0.8,
+        "visible": "Le menu déroulant des postes est filtré sur Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "par créneau ou par statut",
+        "visibleSeconds": 3,
+        "visible": "Aucun filtre de créneau ni de statut n'est modifié à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "utilise la recherche pour retrouver un nom ou une adresse",
+        "visibleSeconds": 5,
+        "visible": "Le prénom Camille est saisi dans la barre de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "tu isoles exactement le groupe qui t’intéresse",
+        "visibleSeconds": 6.5,
+        "visible": "La liste n'affiche plus que les inscriptions correspondantes pour Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02, le filtrage par créneau ou par statut est énoncé mais n'est pas manipulé à l'écran (seul le filtre par poste puis la recherche textuelle sont démontrés)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

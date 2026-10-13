@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:21.003Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "f902ceaad790ef125d23a7bb94d9ac6756a3e2df76ae6d48d562116498ec9af2",
+  "clipSha256": "4e750cfaf5fc4ac82146f83a810d1696af50baf82955eef88ab536a57875acba",
+  "scene": "variables",
+  "review": {
+    "heardOpening": "Les mots entre accolades sont remplacés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 13.4,
+        "spoken": "si nous écrivons lieu entre accolades",
+        "visibleSeconds": 12.8,
+        "visible": "Saisie de {lieu} dans le champ Objet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "l'application signale une variable inconnue",
+        "visibleSeconds": 13.7,
+        "visible": "Message rouge affiché sous le champ : Variable inconnue : {lieu}",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.6,
+        "spoken": "Corrigeons le texte",
+        "visibleSeconds": 18.2,
+        "visible": "Remplacement de {lieu} par {poste} puis enregistrement du modèle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:38:09.596Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "1e51c240ed50598c78d73f43af506c473062e2f4a3b5602a03991aba476c7667",
+  "clipSha256": "cded710b0f5a02e076faecbf965cf70306934d583499ef5e5cd13cf8702096c8",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Nicolas et Léa arrivent ensemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Sélectionnons leurs deux lignes",
+        "visibleSeconds": 3.6,
+        "visible": "Cochage successif des cases pour Léa et Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "cliquer sur Marquer présents",
+        "visibleSeconds": 6.1,
+        "visible": "Clic sur le bouton Marquer présents (2)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Voici les deux marques",
+        "visibleSeconds": 8,
+        "visible": "Statut Présent affiché en vert sur les deux lignes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Une demande en attente de validation",
+        "visibleSeconds": 15.2,
+        "visible": "Affichage de la ligne avec statut Demande à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et articulation claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

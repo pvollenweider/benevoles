@@ -1,0 +1,17 @@
+{
+  "id": "EVENT_REPORTS",
+  "status": "READY",
+  "duration": 311.36,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 268,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -33.7,
+    "loudestMusicOnlyLufs": -32.7,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "All objective video checks pass; answer-summary cues aligned. Product bug: documents/complete.pdf page 1 contains only Planning heading (rendered/complete/page-1.png); Frise starts page 2. #922 null not reproduced.",
+  "sourceChanges": "Pass 1 CSV/print sentence anchors retained; no additional source change; no third take."
+}

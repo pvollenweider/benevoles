@@ -1,7 +1,7 @@
 {
-  "observedAt": "2026-10-06T17:34:50.316Z",
+  "observedAt": "2026-10-13T07:44:00.829Z",
   "chapter": "dayof-checkin",
-  "productCommit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
+  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
   "observed": {
     "serverPersisted": true,
     "oneRegistrationOnly": true,

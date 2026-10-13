@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour Léa, la cause est indiquée en français : refus définitif",
+  "windowStart": 40.81700000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 33.06,
+    "wordsHeard": "Pour"
+  },
+  "onset": 73.87700000000001,
+  "proposedCut": 73.5154585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

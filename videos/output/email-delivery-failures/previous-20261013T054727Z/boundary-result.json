@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bon réflexe, c'est de lire l'état et le détail, vérifier",
+  "windowStart": 219.606,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Le bon réflexe, c'est de lire l'état et le détail, vérifier"
+  },
+  "onset": 249.706,
+  "proposedCut": 249.605729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,84 @@
+{
+  "id": "TARGETED_MESSAGES",
+  "slug": "targeted-messages",
+  "validatedAt": "2026-10-05T18:36:17.325Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 302440,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21735,
+      "audioMs": 21734,
+      "driftMs": 1
+    },
+    {
+      "id": "audiences",
+      "visualMs": 25419,
+      "audioMs": 25418,
+      "driftMs": 1
+    },
+    {
+      "id": "count",
+      "visualMs": 22727,
+      "audioMs": 22724,
+      "driftMs": 3
+    },
+    {
+      "id": "template-create",
+      "visualMs": 37170,
+      "audioMs": 37167,
+      "driftMs": 3
+    },
+    {
+      "id": "variables",
+      "visualMs": 25999,
+      "audioMs": 25997,
+      "driftMs": 2
+    },
+    {
+      "id": "apply",
+      "visualMs": 21825,
+      "audioMs": 21823,
+      "driftMs": 2
+    },
+    {
+      "id": "context",
+      "visualMs": 21977,
+      "audioMs": 21975,
+      "driftMs": 2
+    },
+    {
+      "id": "preview",
+      "visualMs": 20673,
+      "audioMs": 20671,
+      "driftMs": 2
+    },
+    {
+      "id": "push",
+      "visualMs": 22785,
+      "audioMs": 22784,
+      "driftMs": 1
+    },
+    {
+      "id": "confirm",
+      "visualMs": 24094,
+      "audioMs": 24092,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 24232,
+      "audioMs": 24230,
+      "driftMs": 2
+    },
+    {
+      "id": "maintain",
+      "visualMs": 27626,
+      "audioMs": 27624,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

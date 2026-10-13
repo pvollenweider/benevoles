@@ -44,7 +44,7 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
     await at("Le format prévoit dix badges"); await page.locator(".sheet").nth(1).scrollIntoViewIfNeeded()
   })
   await scene("role", async at => {
-    await go(); await at("Les personnes retenues ont une"); await choose("Poste", "Buvette")
+    await go(); await at("Pour préparer seulement la buvette"); await choose("Poste", "Buvette")
     await at(0.26) /* mid-sentence */; await open(28)
     await at("Comparons le badge de Léa"); await page.locator(".badge").filter({ hasText: "Léa" }).scrollIntoViewIfNeeded()
     const filtered = await page.locator(".badge").filter({ hasText: "Léa" }).screenshot()
@@ -67,7 +67,7 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
     await choose("Bénévole (réimpression)", "video-document-person-1")
     await at("Voici le vrai message de"); await open(0)
     await page.getByText(/Tous les postes/).first().waitFor()
-    await at("Revenons aux filtres et choisissons"); await go(); await choose("Bénévole (réimpression)", "video-document-person-1"); await open(1)
+    await at("Revenons aux filtres et choisissons"); await go(); await choose("Poste", ""); await choose("Bénévole (réimpression)", "video-document-person-1"); await open(1)
   })
   await scene("colors", async at => {
     for (const [fraction, color] of [[0.08, "role"], [0.36, "event"], [0.66, "none"]] as const) {
@@ -87,7 +87,7 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
     await at("Vérifions aussi Jean-Baptiste et Marie-Charlotte"); await page.locator(".badge").filter({ hasText: "Marie-Charlotte" }).scrollIntoViewIfNeeded()
     await at("La boîte d'impression du navigateur n'est pas filmée ici"); await page.locator(".sheet").first().scrollIntoViewIfNeeded()
     await at("Regardons le vrai PDF obtenu"); await showRenderedPdfPage(page, path.resolve("videos/output/volunteer-badges/documents/rendered/all/page-1.png"), "Badges — page 1 sur 8")
-    await at("Une première feuille d'essai coûte"); await showRenderedPdfPage(page, path.resolve("videos/output/volunteer-badges/documents/rendered/all/page-8.png"), "Badges — page 8 sur 8")
+    await at("Cet aperçu sert à contrôler"); await showRenderedPdfPage(page, path.resolve("videos/output/volunteer-badges/documents/rendered/all/page-8.png"), "Badges — page 8 sur 8")
   })
   // Return to the real application before the next title, renewing its overlay host.
   await go()

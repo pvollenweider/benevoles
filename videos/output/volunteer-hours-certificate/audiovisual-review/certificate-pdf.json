@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:58:56.779Z",
+  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "promptSha256": "c619b3985346b9ae158ade5ed29cc715d18307e1490a18bb961548da6fcd6885",
+  "clipSha256": "56470a73f7ede87653ae6448971fd6b6390e838414ccc6965437a67f9bf037d7",
+  "scene": "certificate-pdf",
+  "review": {
+    "heardOpening": "Quand le contenu vous convient, cliquons sur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "cliquons sur Générer et imprimer l'attestation",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le bouton bleu « Générer et imprimer l'attestation » puis transition d'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page de présentation « PDF réel — Impression locale du navigateur » avec l'attestation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.4,
+        "spoken": "Relisons le nom, la période, les deux colonnes et la remarque",
+        "visibleSeconds": 20.4,
+        "visible": "Les mentions Aline Mercier, la période de dates, le tableau à colonnes et la remarque sont visibles sur le document",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.3,
+        "spoken": "Les zones Signature et Nom du signataire restent à compléter",
+        "visibleSeconds": 25.3,
+        "visible": "Champs vierges « Signature » et « Nom du signataire » visibles au bas de l'attestation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

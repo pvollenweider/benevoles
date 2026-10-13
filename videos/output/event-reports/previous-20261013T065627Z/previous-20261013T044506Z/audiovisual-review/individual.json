@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:18.396Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "b7a88ac84b06e113d1653e646392e3a78e367fb97a79ee77020a400a12ccc6ac",
+  "clipSha256": "059b4191ae690faa213fee255c1862ea3af500aa0571bb540fb0aa74c8d74cac",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Pour Léa, le planning individuel regroupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage du planning de Léa Giroud (puis vue détaillée de sa première feuille à 00:04).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "On retrouve ensuite le lieu, les consignes et le contact opérationnel",
+        "visibleSeconds": 9,
+        "visible": "Défilement vers le bas révélant le lieu, le contact opérationnel et les consignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "passons à la suivante pour lire le dernier poste.",
+        "visibleSeconds": 17.5,
+        "visible": "Transition vers la feuille suivante du planning de Léa détaillant les postes restants.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec la navigation visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

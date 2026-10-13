@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:40.910Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "e651907690a81f7056a6247d5530f3d2b527df1e9dfbc41e2cb80c531b8bc478",
+  "clipSha256": "d7f839f65d9fe2896efe0348499febab0e91a1ecb3dfc92741c601eb4416fd85",
+  "scene": "cancelled",
+  "review": {
+    "heardOpening": "Un cas à regarder de près : Sarah est arrivée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Enregistrons d'abord sa présence",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection de Sarah et validation du statut présent sur la page des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "puis ouvrons son créneau dans la liste",
+        "visibleSeconds": 11.2,
+        "visible": "Accès à la section Créneaux puis bascule vers l'affichage Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Lisons le récapitulatif et confirmons la suppression",
+        "visibleSeconds": 12.8,
+        "visible": "Boîte de dialogue de confirmation de suppression du créneau puis clic sur Supprimer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Revenons aux inscriptions : sa ligne a disparu",
+        "visibleSeconds": 14.5,
+        "visible": "Retour à la liste des inscriptions où Sarah n'apparaît plus",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Téléchargeons le fichier pour vérifier le bilan",
+        "visibleSeconds": 20.2,
+        "visible": "Clic sur Exporter les présences (CSV) puis affichage du tableau de données",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix synthétique claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

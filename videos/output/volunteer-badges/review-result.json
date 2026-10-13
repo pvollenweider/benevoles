@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_BADGES",
+  "status": "READY",
+  "duration": 234.72,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 202,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.3,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "All objective checks pass, including final PDF page cue; real role/individual/empty/colour/field variants inspected.",
+  "sourceChanges": "Pass 1 final-page sentence anchor retained; no additional source change; no third take."
+}

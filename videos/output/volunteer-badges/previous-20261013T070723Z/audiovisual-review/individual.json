@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:01:28.416Z",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "promptSha256": "5ddf3ec6469706f9288da9b058b6af5719f61a62d9df43c0fa51b11e19c6d26b",
+  "clipSha256": "0afc4de7b4ada2a3f289154f162e686dff06c7110e0792320cb0d035aa292085",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Un badge perdu ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Choisis une personne dans Bénévole, réimpression.",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection d'une personne dans le menu déroulant Bénévole (réimpression)",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer.",
+        "visibleSeconds": 5.8,
+        "visible": "Camille Berger (vidéos documents 001)... sélectionnée dans le menu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Sélectionnons la bonne Camille, puis générons sa feuille.",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Ouvrir les badges puis ouverture de la page avec le badge de Camille Berger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée dans l'ensemble."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

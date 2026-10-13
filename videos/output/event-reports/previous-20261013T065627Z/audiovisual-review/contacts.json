@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:30.160Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "432afdda0cd4adfd9a5f035a23ee9c71e4794eb5ef43bb8d6b7309cb1dd234f6",
+  "clipSha256": "7b206cf638ec856cb1866c43b9bb4bb606f42405be62d70727720b608601f96e",
+  "scene": "contacts",
+  "review": {
+    "heardOpening": "La liste avec téléphones",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Elle permet de retrouver une personne, son email, son téléphone et ses créneaux",
+        "visibleSeconds": 6.3,
+        "visible": "Affichage du rapport Liste avec téléphones avec les colonnes Nom, Prénom, Téléphone, Email et Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "regardons celui retenu dans le document",
+        "visibleSeconds": 16.2,
+        "visible": "Encadré bleu mettant en évidence le numéro de téléphone de Lila Grivet",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.6,
+        "spoken": "Gardez-la pour les personnes qui doivent réellement contacter l'équipe",
+        "visibleSeconds": 24,
+        "visible": "Document terrain Liste avec téléphones toujours affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement audible, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "TARGETED_MESSAGES",
+  "status": "NOT READY",
+  "duration": 318.6,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 280,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.7
+  },
+  "problems": "Notification cue aligned and Mailpit contains only current campaign. Variable correction finishes ~2 s before Corrigeons le texte. All technical/final narration/music checks pass. Subjective timbre flag not a blocker; Mailpit English dates nit.",
+  "sourceChanges": "Preview now validates actual audience member and both shift times, records recipient ID. Variable correction cue changed to at(Corrigeons le texte.). No third take."
+}

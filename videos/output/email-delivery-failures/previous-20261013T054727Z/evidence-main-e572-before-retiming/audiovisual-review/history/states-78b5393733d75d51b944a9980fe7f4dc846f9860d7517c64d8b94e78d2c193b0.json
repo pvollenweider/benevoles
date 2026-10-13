@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:36:21.499Z",
+  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "promptSha256": "6d2d19af448268277f89976b40785ee9a444cd76a9f48614b50e8f464218d771",
+  "clipSha256": "77a321a7072c23afc48b9c69e8587189a541541d950da40c33e12c488c8f8301",
+  "scene": "states",
+  "review": {
+    "heardOpening": "En attente d'envoi signifie que l'email est dans la file",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Jules n'a pas encore eu de tentative.",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Jules avec statut En attente d'envoi visible dans le tableau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Pour Sarah, Nouvel essai prévu indique un échec temporaire",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Sarah affichant Nouvel essai prévu et essai 2 sur 6.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.4,
+        "spoken": "Nicolas est marqué Envoyé",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Nicolas affichant le statut Envoyé en vert.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Emma a atteint six essais après une panne temporaire persistante.",
+        "visibleSeconds": 0,
+        "visible": "Ligne d'Emma affichant Échec définitif après incident serveur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Léa a reçu un refus définitif",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Léa affichant Échec définitif avec mention de refus du serveur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Dans cette formation, les délais des essais temporaires ont été accélérés",
+        "visibleSeconds": 26,
+        "visible": "Bandeau informatif noir affiché en bas de page.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, débit régulier et bonne articulation générale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:39.628Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "67249a53090f1ba24c16e2770966dc43f1111b065616ae6dd817cf824b00608a",
+  "clipSha256": "31306858875012d1a150a891b6b220d83713668567adb62cdff6fc3d4e7d217f",
+  "scene": "done",
+  "review": {
+    "heardOpening": "Le résultat, c’est un suivi simple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le résultat, c’est un suivi simple",
+        "visibleSeconds": 0,
+        "visible": "Un encart central affiche « Un suivi clair jusqu'au jour J - Voir, cibler, préparer » sur fond de journal d'activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "voir les manques, contacter les bonnes personnes, préparer le terrain",
+        "visibleSeconds": 2.5,
+        "visible": "L'encart s'estompe pour afficher le journal d'activité listant les inscriptions et créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "et retrouver l’historique sans jongler entre plusieurs outils",
+        "visibleSeconds": 6.3,
+        "visible": "Historique chronologique détaillé visible à l'écran avec les dates, statuts et liens « Voir le récit »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Ton planning reste lisible jusqu’au jour de l’événement",
+        "visibleSeconds": 8.7,
+        "visible": "Écran stable présentant la vue d'ensemble du suivi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle, synchronisée avec l'animation de transition."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:23:57.892Z",
-  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
-  "promptSha256": "d164943b580685aff2e1c68d8a061ecf70ac2c1a585ab2c2e0e3cddd473421ea",
-  "clipSha256": "35d833eebbd68cd174d7599a864efa5d72b7b8e06c173d73dec17207723d7311",
+  "reviewedAt": "2026-10-13T06:38:26.497Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "d5090e8ed8f467fcea7df97a27fcab3d3573abe57d11fdae22942937362eede2",
+  "clipSha256": "d88961f40d8da75189479b6d11488345c9a809e8df046fe5c79b701f712b0036",
   "scene": "availability",
   "review": {
-    "heardOpening": "Pour chercher de l'aide",
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités générales",
     "checkpoints": [
       {
         "spokenSeconds": 1.2,
         "spoken": "regardons les disponibilités générales dans les membres",
-        "visibleSeconds": 2,
-        "visible": "Navigation vers la page Membres avec la liste des membres",
+        "visibleSeconds": 1.9,
+        "visible": "Recherche de Zoé dans l'onglet Membres et affichage de sa disponibilité générale sous son contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 4.9,
         "spoken": "Zoé a indiqué le matin avec une remarque",
-        "visibleSeconds": 4.5,
-        "visible": "Filtre sur le prénom Zoé affichant sa ligne et sa note",
+        "visibleSeconds": 10.6,
+        "visible": "Ouverture de la fenêtre Modifier le membre montrant la case Matin cochée et le texte d'information",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.8,
+        "spokenSeconds": 15.5,
         "spoken": "Regardons aussi ses inscriptions",
-        "visibleSeconds": 17.5,
-        "visible": "Ouverture de la page Activité de Zoé montrant ses inscriptions",
+        "visibleSeconds": 18.1,
+        "visible": "Accès à la page Activité de Zoé Exemple listant ses inscriptions",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton neutre et explicatif."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

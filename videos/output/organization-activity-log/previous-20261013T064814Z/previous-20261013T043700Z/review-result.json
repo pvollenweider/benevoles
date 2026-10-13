@@ -1,0 +1,17 @@
+{
+  "id": "ORGANIZATION_ACTIVITY_LOG",
+  "status": "NOT READY",
+  "duration": 296.08,
+  "buildId": "QnaleWUIippKmUvaMUEKT",
+  "music": {
+    "voicedWindows": 256,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.4,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Return to journal: sentence at 78.081s, cue at 80.581s, page arrives later; wrong order of two sentence anchors. All types restored about 6s after essayons Tous les types; AV pages checkpoint and frame at 174s corroborate. Technical checks, source/final narration, music pass. CSV raw action identifiers are the real export, not stale UI labels. No product layout defect or forbidden identity/host seen.",
+  "sourceChanges": "record-org-activity.ts: put return to journal before Cette distinction; restore All types at essayons Tous les types avant. No re-film. Narration reused."
+}

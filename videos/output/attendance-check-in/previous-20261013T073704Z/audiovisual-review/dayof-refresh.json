@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:35:02.475Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
+  "clipSha256": "be2eecbc5d79138e8244b66620cde08f898e93704d5815f003951d768d934008",
+  "scene": "dayof-refresh",
+  "review": {
+    "heardOpening": "Avec Actualiser",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Avec Actualiser, vous récupérez les informations enregistrées",
+        "visibleSeconds": 1,
+        "visible": "Le bouton Actualiser et l'heure de dernière mise à jour sont visibles en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "La page indique l'heure de sa mise à jour",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la mention « Mis à jour à 7h31. » à côté du bouton Actualiser",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "nous actualisons réellement la page",
+        "visibleSeconds": 12,
+        "visible": "Le curseur clique sur le bouton Actualiser",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Relisez les noms et les compteurs avant d'agir",
+        "visibleSeconds": 20,
+        "visible": "La liste des bénévoles avec leurs créneaux et compteurs de présence reste lisible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments montrés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

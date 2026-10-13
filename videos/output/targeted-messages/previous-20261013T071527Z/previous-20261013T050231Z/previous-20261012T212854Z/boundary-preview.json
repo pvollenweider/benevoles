@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire :",
+  "windowStart": 163.619,
+  "result": {
+    "found": true,
+    "startSeconds": 13.26,
+    "wordsHeard": "Ouvrons"
+  },
+  "onset": 176.879,
+  "proposedCut": 176.838396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

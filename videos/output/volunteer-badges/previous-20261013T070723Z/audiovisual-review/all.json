@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:01:23.070Z",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "promptSha256": "7b8d07bc89ff22ddf3f2c3d8421e7e6396bf505ba6e60075e1f933df6d1141ee",
+  "clipSha256": "96227c75df3bffd3e2279db63283244c3af40319e2cd4fa85df890cf5daeb479",
+  "scene": "all",
+  "review": {
+    "heardOpening": "Gardons Tous les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Gardons Tous les postes et Tous les bénévoles",
+        "visibleSeconds": 0.5,
+        "visible": "Filtres Tous les postes et Tous les bénévoles sélectionnés sur la page de configuration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "puis ouvrons les badges",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le lien Ouvrir les badges et affichage de la planche de badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Léa est sur plusieurs horaires : elle n'a qu'un badge",
+        "visibleSeconds": 9.5,
+        "visible": "Badge de Léa visible en haut à droite avec plusieurs créneaux listés (Accueil, Buvette, Loge)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Regardons la première feuille puis la suivante",
+        "visibleSeconds": 15.1,
+        "visible": "Défilement vers le bas affichant la suite des badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées",
+        "visibleSeconds": 16.5,
+        "visible": "Disposition des badges en 2 colonnes et 5 rangées visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine naturelle, claire et au rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

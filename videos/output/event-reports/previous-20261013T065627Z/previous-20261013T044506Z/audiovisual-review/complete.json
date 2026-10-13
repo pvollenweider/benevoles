@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:14.368Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "c9dfdd38a9305492ddd68ad7ad4e7abe5b261288400193a1b95742cc63bd7fbe",
+  "clipSha256": "17a063a59d81ec7a831a1e0025f644b9e8bea2d85938eb25b0749598e8b3397c",
+  "scene": "complete",
+  "review": {
+    "heardOpening": "Pour une vue d'ensemble, descendez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ouvrez Export complet",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le lien Export complet et ouverture du document",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Ce document en couleur réunit le planning, les créneaux",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la grille de planning avec les créneaux et les noms des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Lisons une journée, puis retrouvons Léa",
+        "visibleSeconds": 13,
+        "visible": "Planning de la journée du samedi 10 octobre affiché, avec présence de Léa M. dans les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Le document décrit le planning enregistré",
+        "visibleSeconds": 18.5,
+        "visible": "Défilement vers la suite du document et la liste récapitulative des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle, bien synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

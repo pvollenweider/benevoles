@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:09:25.159Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "3aa68bea42dd7765ee07d2364106685841d6346fd742c9d9eae575a29cc8cb35",
-  "clipSha256": "e08854f8abb8a988750f245ae7fde33889dcd89a1c243e2b4334f164e23a1ecb",
+  "reviewedAt": "2026-10-13T07:06:23.179Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "9078715ec40ea6d5edbbddfc2ffb4b78e1de820d4a1a803b6ceb6833710d1d50",
+  "clipSha256": "d372f7b6a36bbcfc054104fa1275c2d7e70540dd12f7c9fa1bfb4e952b6f0945",
   "scene": "role",
   "review": {
-    "heardOpening": "Si tu coordonnes un poste",
+    "heardOpening": "Si vous coordonnez un poste",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
-        "spoken": "choisis le planning par poste",
-        "visibleSeconds": 3,
-        "visible": "Clic sur le lien Planning par poste dans la liste des rapports",
+        "spokenSeconds": 0.9,
+        "spoken": "choisissez le planning par poste",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le lien 'Planning par poste' et ouverture du document correspondant",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
-        "spoken": "La buvette a sa propre page",
-        "visibleSeconds": 5,
-        "visible": "Affichage de la section Buvette avec horaires, bénévoles et responsable",
+        "spoken": "La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable",
+        "visibleSeconds": 4.8,
+        "visible": "Défilement de la page vers le bloc dédié au poste Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 9.8,
         "spoken": "Regardons aussi les autres postes pour comprendre le découpage",
-        "visibleSeconds": 11,
-        "visible": "Défilement vers le bas affichant le poste Loge",
+        "visibleSeconds": 11.5,
+        "visible": "Défilement vers le poste suivant intitulé Loge",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, fluide et claire sur l'ensemble de l'extrait."
+      "observation": "Voix claire, posée et bien synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "assemble",
+    "exitCode": 0
+  },
+  {
+    "stage": "posters",
+    "exitCode": 0
+  },
+  {
+    "stage": "frames",
+    "exitCode": 0
+  },
+  {
+    "stage": "final-audio",
+    "exitCode": 0
+  },
+  {
+    "stage": "validate",
+    "exitCode": 0
+  }
+]

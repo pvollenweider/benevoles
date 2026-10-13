@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:09:51.246Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "dc4a8b6ee1de36de567054e52d3cbe079598fc80a75df854772ad5ee31753c9a",
-  "clipSha256": "d618d01e456b29d8b51bb7d691c391c84974afc1e42049b7c477e54f81be122e",
+  "reviewedAt": "2026-10-13T07:06:37.084Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "432afdda0cd4adfd9a5f035a23ee9c71e4794eb5ef43bb8d6b7309cb1dd234f6",
+  "clipSha256": "2d4197d91aa109fb5394b8410cad118bbb2764b3cce4e7e7ea6162f72c292787",
   "scene": "contacts",
   "review": {
     "heardOpening": "La liste avec téléphones",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "La liste avec téléphones est réservée à l'organisation",
-        "visibleSeconds": 4.5,
-        "visible": "Ouverture du document Liste avec téléphones",
+        "spokenSeconds": 0.5,
+        "spoken": "La liste avec téléphones est réservée à l'organisation.",
+        "visibleSeconds": 0,
+        "visible": "Aperçu d'une liste de présence avec colonnes Nom, Prénom, Téléphone.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.2,
-        "spoken": "retrouver une personne, son email, son téléphone et ses créneaux",
-        "visibleSeconds": 5,
-        "visible": "Affichage des colonnes Nom, Prénom, Téléphone, Email et Créneaux",
+        "spokenSeconds": 4.5,
+        "spoken": "Elle permet de retrouver une personne, son email, son téléphone et ses créneaux.",
+        "visibleSeconds": 7,
+        "visible": "Affichage du document 'Liste avec téléphones' comportant les colonnes Nom, Prénom, Téléphone, Email et Créneaux.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13.5,
-        "spoken": "regardons celui retenu dans le document",
-        "visibleSeconds": 13,
-        "visible": "Mise en évidence du numéro de téléphone sélectionné",
+        "spoken": "regardons celui retenu dans le document.",
+        "visibleSeconds": 16.8,
+        "visible": "Encadré bleu mettant en évidence le numéro de téléphone de Lila Griveuil.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et débit régulier, bien accordé aux repères visuels."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

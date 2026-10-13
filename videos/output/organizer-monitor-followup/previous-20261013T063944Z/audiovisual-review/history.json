@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:29.956Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "8c15d3068db5ed88469590a5cc56b77d2556be244e2beba7018aa3e77898eb3e",
+  "clipSha256": "4a097c7e7e567c0829872b99c6f72452a5ef90febc71346e4039e3d9adbac67a",
+  "scene": "history",
+  "review": {
+    "heardOpening": "Enfin, le journal d'activité permet de comprendre ce qui a changé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Enfin, le journal d’activité permet de comprendre ce qui a changé",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page « Journal » avec la liste chronologique des actions enregistrées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel",
+        "visibleSeconds": 4.1,
+        "visible": "Différentes lignes d'activité visibles (paramètres d'événement, présence, annulation, inscription)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Chaque action est datée, avec son origine",
+        "visibleSeconds": 9.8,
+        "visible": "Défilement vers le bas révélant d'autres actions avec date, heure et auteur de l'action",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

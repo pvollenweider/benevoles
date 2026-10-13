@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:58.747Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "b2bfd779867dcf8c9ce5fe0e75e86b072e111a19a5df0b0a1abc390247f39633",
+  "clipSha256": "7df0b94e1a81effe0173aa87c27c1d185e2b698689de428286d5f0c729a619be",
+  "scene": "dayof-phone",
+  "review": {
+    "heardOpening": "Quand un téléphone est renseigné",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Quand un téléphone est renseigné, un lien permet de préparer un appel",
+        "visibleSeconds": 0,
+        "visible": "Liens téléphoniques bleus visibles sur les différentes cartes de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Voici celui de Zoé",
+        "visibleSeconds": 5.8,
+        "visible": "Carte de Zoé Exemple affichant le numéro 079 000 00 01, sans mise en valeur ni curseur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Le contact du créneau peut aussi figurer sur sa carte",
+        "visibleSeconds": 8,
+        "visible": "Mention « Contact du créneau : Elodie Exemple » avec son numéro sous le créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Nous montrons le lien, sans appeler qui que ce soit",
+        "visibleSeconds": 11.2,
+        "visible": "Aucune interaction, survol ou mise en avant du lien n'est visible (écran statique)",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "Incohérence vocale à 00:05 : une voix masculine remplace brièvement la narratrice pour dire « Voici celui de Zoé. » avant le retour de la voix féminine.",
+      "L'affichage reste entièrement figé du début à la fin de l'extrait sans mouvement de curseur pour illustrer la démonstration annoncée."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Alternance involontaire de locuteurs : voix féminine principale avec une phrase insérée par une voix d'homme entre 00:05 et 00:07."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

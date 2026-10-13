@@ -1,51 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:38:21.071Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:47:13.079Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "7e715d81bf403b087d3ef974d3e4b183813501e0baef4e243c9f63164fda5736",
-  "clipSha256": "2cef34a2f3fd626443bf226d84297c10887545dc66928986dfb39e66ed3a43bb",
+  "clipSha256": "3044132ca01bf918da6b711f2b70c9886155324ca8b85723f6200bf0d54e8031",
   "scene": "correction",
   "review": {
-    "heardOpening": "Vous avez pointé Léa par erreur ?",
+    "heardOpening": "Vous avez pointé Léa par erreur",
     "checkpoints": [
       {
         "spokenSeconds": 2.1,
         "spoken": "Sélectionnons sa ligne",
-        "visibleSeconds": 2.2,
-        "visible": "Sélection de la case à cocher de Léa Exemple",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 4.6,
+        "visible": "Coche de la ligne de Léa Exemple",
+        "sync": "late",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "annulons la présence",
-        "visibleSeconds": 3.8,
+        "spokenSeconds": 3.7,
+        "spoken": "et annulons la présence",
+        "visibleSeconds": 6.1,
         "visible": "Clic sur le bouton Annuler la présence",
-        "sync": "aligned",
-        "severity": "none"
+        "sync": "late",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5.4,
         "spoken": "La marque disparaît",
-        "visibleSeconds": 5.2,
-        "visible": "Le badge Présent disparaît de la ligne",
+        "visibleSeconds": 6.8,
+        "visible": "Disparition de la mention Présent et notification Présence annulée pour 1 personne",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13.5,
         "spoken": "vous pouvez enregistrer sa présence à nouveau",
-        "visibleSeconds": 16.5,
-        "visible": "Sélection de la ligne et clic sur Marquer présent",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 17.5,
+        "visible": "Sélection d'un bénévole et pointage avec notification 1 personne marquée présente",
+        "sync": "late",
+        "severity": "minor"
       }
     ],
-    "issues": [],
+    "issues": [
+      "Léger décalage entre l'annonce de la sélection/annulation (00:02-00:04) et l'exécution à l'écran (00:05-00:06)."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec les actions à l'écran."
+      "observation": "Voix off posée, claire et bien articulée, conforme au script."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -2480,7 +2480,7 @@ async function main() {
           await page.getByLabel("Objet *", { exact: true }).scrollIntoViewIfNeeded()
           await at("Créneau demande un horaire précis."); await writeField(page.getByLabel("Objet *", { exact: true }), "Ton briefing pour {lieu}")
           await page.getByText(/Variable inconnue : \{lieu\}/).waitFor()
-          await at(0.62) /* mid-sentence */; await writeField(page.getByLabel("Objet *", { exact: true }), subject)
+          await at("Corrigeons le texte."); await writeField(page.getByLabel("Objet *", { exact: true }), subject)
           await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
           checks.unknownVariableVisible = true
         })
@@ -2507,7 +2507,9 @@ async function main() {
         await scene("preview", async at => {
           await preview()
           const text = await page.frameLocator('iframe[title="Contenu de l\'email"]').locator("body").innerText()
-          if (text.includes("{prénom}") || !text.includes(recipients[0].volunteer.firstName) || !text.includes(shift.startTime)) throw new Error("Preview variables not rendered")
+          const previewRecipient = recipients.find(recipient => text.includes(`Bonjour ${recipient.volunteer.firstName},`))
+          if (text.includes("{prénom}") || !previewRecipient || !text.includes(shift.startTime) || !text.includes(shift.endTime)) throw new Error("Preview variables not rendered for an actual selected recipient")
+          checks.previewRecipientId = previewRecipient.volunteerId
           await at("Si une phrase manque de"); await tap(page, page.getByRole("button", { name: "Retour au message", exact: true }))
           const message = page.getByLabel("Message *", { exact: true })
           await tap(page, message); await message.press("ControlOrMeta+A"); await message.press("ArrowRight")
@@ -2517,7 +2519,7 @@ async function main() {
         })
         await scene("push", async at => {
           const checkbox = page.getByRole("checkbox", { name: "Envoyer aussi une notification (téléphone ou ordinateur)", exact: true })
-          await checkbox.scrollIntoViewIfNeeded(); await at(0.25) /* mid-sentence */; await tap(page, checkbox)
+          await checkbox.scrollIntoViewIfNeeded(); await at("Vous pouvez aussi demander une notification"); await tap(page, checkbox)
           await at("Le nombre d'appareils n'est donc"); await tap(page, checkbox)
           checks.pushOptionExplainedNotReceipt = true
         })
@@ -2633,7 +2635,7 @@ async function main() {
           const held = initial.full.find(s => s.roleName === "Navette" && s.startTime === "08:00")
           if (!held || held.active !== 0 || held.requested !== 2 || held.missing !== 0) throw new Error("Requests didn't hold exactly two places")
           checks.requestsHoldPlacesWithoutConfirmations = true
-          await at("Suis le lien des demandes")
+          await at("Suivez le lien des demandes")
           await section("staffing-overview").scrollIntoViewIfNeeded()
           await tap(page, section("staffing-overview").getByRole("link", { name: "2 demandes à traiter", exact: true }))
           await settle(page)
@@ -2675,9 +2677,11 @@ async function main() {
           await tap(page, section("staffing-underfilled").getByRole("link", { name: /^Photos.*sam\..*10:00.*12:00/ }))
           await settle(page)
           await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
-          await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Julien")
-          await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Favre")
-          await typeNaturally(page, page.getByLabel("Email", { exact: true }), "julien.favre@example.org")
+          await at("Son email retrouve sa fiche")
+          await fillVisibly(page, page.getByRole("searchbox", { name: "Membre existant", exact: true }), "julien.favre@example.org")
+          await tap(page, page.getByRole("button", { name: "Chercher", exact: true }))
+          await tap(page, page.getByRole("button", { name: "Choisir Julien Favre", exact: true }))
+          await at("nous choisissons le bon horaire et enregistrons")
           await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
           await tap(page, page.getByRole("option", { name: /^sam\..*de 10h à 12h, Photos/ }))
           await at("nous choisissons le bon horaire et enregistrons")
@@ -2685,7 +2689,8 @@ async function main() {
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
           const result = await response
           if (result.status() !== 201) throw new Error("Actual photo assignment failed")
-          await page.getByRole("row").filter({ hasText: "Julien Favre" }).waitFor()
+          await at("La nouvelle inscription apparaît")
+          await page.getByRole("row").filter({ hasText: "Julien Favre" }).scrollIntoViewIfNeeded()
           await at("En revenant au rapport, le"); await returnToReport()
           const after = await readSummary()
           if (after.totals.missing !== initial.totals.missing - 1 || after.totals.active !== initial.totals.active + 1 || after.emptyRoles.some(r => r.roleName === "Photos")) throw new Error("Report didn't reflect actual assignment")
@@ -5170,14 +5175,24 @@ async function main() {
         await at(0.28) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: /Accepter la demande de/ }).first())
         await page.getByRole("dialog").waitFor()
-        await at("aucune décision n’est prise pendant")
+        await at("Ici, on referme simplement la fenêtre")
         await tap(page, page.getByRole("button", { name: "Annuler" }))
       })
 
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
       await scene("filters", async (at) => {
-        await at(0.12) /* mid-sentence */
-        await page.getByLabel("Filtrer par poste").selectOption("Buvette")
+        await at("Quand la liste grandit")
+        const roleFilter = page.getByLabel("Filtrer par poste")
+        await roleFilter.selectOption("Buvette")
+        const shiftFilter = page.getByRole("combobox", { name: "Filtrer par créneau", exact: true })
+        await tap(page, shiftFilter)
+        await tap(page, page.getByRole("option").filter({ visible: true }).nth(1))
+        await tap(page, shiftFilter)
+        await tap(page, page.getByRole("option", { name: "Tous les créneaux", exact: true }).filter({ visible: true }))
+        await roleFilter.selectOption("")
+        await tap(page, page.getByLabel(/Demandes à traiter/))
+        await tap(page, page.getByLabel(/Demandes à traiter/))
+        await roleFilter.selectOption("Buvette")
         await at(0.42) /* mid-sentence */
         const registrationSearch = page.locator("#reg-search")
         await fillVisibly(page, registrationSearch, "Camille")
@@ -5204,9 +5219,9 @@ async function main() {
         await tap(page, page.getByLabel("Les bénévoles d'un poste"))
         await at(0.38) /* mid-sentence */
         await page.getByLabel("Poste", { exact: true }).selectOption("Buvette")
-        await at(0.58) /* mid-sentence */
+        await at("la liste d’attente")
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))
-        await at("Le nombre de personnes est")
+        await at("ou les invités qui n’ont encore aucun créneau confirmé")
         await tap(page, page.getByLabel("Les invités sans créneau confirmé"))
         await at(0.88) /* mid-sentence */
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))

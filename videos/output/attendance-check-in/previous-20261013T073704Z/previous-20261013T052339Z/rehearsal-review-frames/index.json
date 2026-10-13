@@ -1,0 +1,201 @@
+{
+  "video": "attendance-check-in",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/capture.webm",
+  "capturePurpose": "rehearsal",
+  "extractedAt": "2026-10-05T17:09:43.000Z",
+  "note": "Four raw rehearsal frames per scene, including chapter start; no narration or audiovisual validation",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.014285374157758149,
+      "seconds": 0.776,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/welcome-1.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 10.67625,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 25.3766,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 35.87685,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/welcome-85.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.013635743829825917,
+      "seconds": 43.321,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/one-1.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.25,
+      "seconds": 53.7215,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/one-25.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.6,
+      "seconds": 69.12219999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/one-60.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.85,
+      "seconds": 80.1227,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/one-85.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.01304319471315841,
+      "seconds": 87.776,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/group-1.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.25,
+      "seconds": 98.67625,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/group-25.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.6,
+      "seconds": 114.7766,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/group-60.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.85,
+      "seconds": 126.27685000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/group-85.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.013042911177774879,
+      "seconds": 134.228,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/correction-1.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.25,
+      "seconds": 145.1285,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/correction-25.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.6,
+      "seconds": 161.22920000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/correction-60.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.85,
+      "seconds": 172.7297,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/correction-85.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.013333037043621253,
+      "seconds": 180.68,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/multiple-1.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.25,
+      "seconds": 191.33025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/multiple-25.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.6,
+      "seconds": 207.0806,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/multiple-60.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.85,
+      "seconds": 218.33085,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/multiple-85.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.013636363636363636,
+      "seconds": 226.136,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/limits-1.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.25,
+      "seconds": 236.536,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/limits-25.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.6,
+      "seconds": 251.936,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/limits-60.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.85,
+      "seconds": 262.936,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/limits-85.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.011764705882352941,
+      "seconds": 270.593,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/cancelled-1.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.25,
+      "seconds": 282.743,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/cancelled-25.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.6,
+      "seconds": 300.593,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/cancelled-60.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.85,
+      "seconds": 313.343,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/cancelled-85.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.012244648068406767,
+      "seconds": 322.045,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/export-1.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.25,
+      "seconds": 333.69525,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/export-25.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.6,
+      "seconds": 350.8456,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/export-60.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.85,
+      "seconds": 363.09585,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/rehearsal-review-frames/export-85.png"
+    }
+  ]
+}

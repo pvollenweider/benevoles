@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:38:21.071Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "7e715d81bf403b087d3ef974d3e4b183813501e0baef4e243c9f63164fda5736",
+  "clipSha256": "2cef34a2f3fd626443bf226d84297c10887545dc66928986dfb39e66ed3a43bb",
+  "scene": "correction",
+  "review": {
+    "heardOpening": "Vous avez pointé Léa par erreur ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Sélectionnons sa ligne",
+        "visibleSeconds": 2.2,
+        "visible": "Sélection de la case à cocher de Léa Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "annulons la présence",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le bouton Annuler la présence",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "La marque disparaît",
+        "visibleSeconds": 5.2,
+        "visible": "Le badge Présent disparaît de la ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "vous pouvez enregistrer sa présence à nouveau",
+        "visibleSeconds": 16.5,
+        "visible": "Sélection de la ligne et clic sur Marquer présent",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:27:36.222Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "9f5249ed2a32021b1fc8d14cbd193e7ff003c0f29e673d448a5cacab00756553",
+  "clipSha256": "5e5ab496737aa8b06dc43f1acbd4528a03000d8d94bc26789c968e5dec9fd107",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Pour préparer seulement la buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "revenons au formulaire et choisissons ce poste",
+        "visibleSeconds": 4.8,
+        "visible": "Section Badges du formulaire affichée avec le filtre Poste sur Buvette",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Comparons le badge de Léa avec sa version complète",
+        "visibleSeconds": 8,
+        "visible": "Page des badges générés pour la buvette où apparaît Léa Giroud",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "ses autres postes ne figurent plus dans cette version filtrée",
+        "visibleSeconds": 11.5,
+        "visible": "Écran comparatif côte à côte montrant le badge de Léa avec tous les postes versus filtré Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine fluide, bien articulée et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

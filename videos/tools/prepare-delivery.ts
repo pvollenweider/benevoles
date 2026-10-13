@@ -61,11 +61,11 @@ async function main() {
   await verifyProductBuild("http://localhost:43102")
   // These settings apply only to this tool's process, never to the running app.
   Object.assign(process.env, { SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+  const identityV2 = await readPrivateIdentityVersion("delivery")
   const runtime = await loadCurrentDeliveryRuntime("http://localhost:43102")
   const { db, enqueueNotifications, deliverOutbox, openPayload, outboxErrorSentence } = runtime
   const fixture = await controlledSmtp().catch(async error => { await db.$disconnect(); await runtime.unregister(); throw error })
   const orgId = "video-delivery", orgName = "Formation — suivi des emails", slug = "formation-livraisons"
-  const identityV2 = await readPrivateIdentityVersion("delivery")
   const identities = privateIdentities.delivery
   const originalError = console.error
   let controlledErrors = 0
@@ -79,21 +79,21 @@ async function main() {
     if (existing) assert(existing.name === orgName && existing.slug === slug)
     if (identityV2) assert(existing && existing.createdAt.toISOString() === identityV2.organizationCreatedAt, "Delivery identity ledger belongs to another generation")
     const previousCampaigns = await db.targetedMessage.findMany({ where: { organizationId: orgId } })
-    const expectedCampaignText: Record<string, string> = {
-      "Formation — adresse corrigée": "Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !",
-      "Formation — échec partiel": "Bonjour {prénom}, merci pour ton aide !",
+    const expectedCampaignText: Record<string, string[]> = {
+      "Formation — adresse corrigée": ["Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !", "Bonjour {prénom}, rendez-vous au stand. Merci !"],
+      "Formation — échec partiel": ["Bonjour {prénom}, merci pour ton aide !"],
     }
     const expectedAuthors: Record<string, string> = { "video-delivery-owner": identityV2 ? identities.owner : "Élodie Exemple", "video-delivery-organizer": identityV2 ? identities.organizer : "Marc Exemple" }
-    assert(previousCampaigns.every(message => message.eventId === "video-delivery-event" && message.authorId && expectedAuthors[message.authorId] === message.authorName && expectedCampaignText[message.subject] === message.message), "Unrecognized campaign in delivery fixture; refusing cleanup")
+    assert(previousCampaigns.every(message => message.eventId === "video-delivery-event" && message.authorId && expectedAuthors[message.authorId] === message.authorName && expectedCampaignText[message.subject]?.includes(message.message)), "Unrecognized campaign in delivery fixture; refusing cleanup")
     const campaignIds = new Set(previousCampaigns.map(message => message.id))
     const oldRows = await db.notificationOutbox.findMany({ where: { organizationId: orgId }, select: { id: true, payload: true, dedupeKey: true, targetedMessageId: true } })
     for (const row of oldRows) {
       const payload = openPayload(row.payload)
       const prepared = row.dedupeKey?.startsWith("video-delivery-preparation:") && row.targetedMessageId === null
-      const campaign = row.targetedMessageId && campaignIds.has(row.targetedMessageId) && row.dedupeKey?.startsWith("message:") && expectedCampaignText[String(payload.data.subject)] === payload.data.message
+      const campaign = row.targetedMessageId && campaignIds.has(row.targetedMessageId) && row.dedupeKey?.startsWith("message:") && expectedCampaignText[String(payload.data.subject)]?.includes(String(payload.data.message))
       // Campaign bodies are personalized by the route, so check the original
       // campaign above and the exact rendered fictitious first names here.
-      const personalizedCampaign = row.targetedMessageId && campaignIds.has(row.targetedMessageId) && row.dedupeKey?.startsWith("message:") && Object.values(expectedCampaignText).some(text => ["Léa", "Emma"].some(name => text.replace("{prénom}", name) === payload.data.message))
+      const personalizedCampaign = row.targetedMessageId && campaignIds.has(row.targetedMessageId) && row.dedupeKey?.startsWith("message:") && Object.values(expectedCampaignText).flat().some(text => ["Léa", "Emma"].some(name => text.replace("{prénom}", name) === payload.data.message))
       assert((prepared || campaign || personalizedCampaign) && payload.kind === "targeted_message" && /^video\.delivery\.[a-z-]+@example\.org$/.test(payload.recipient.email ?? "") && payload.data.eventTitle === "Atelier des emails", "Unrecognized outbox row; refusing fixture cleanup")
     }
     await db.$transaction(async tx => {

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:27.096Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "6f553a03293e5beed7140f46c2c1c8df7ec60c62bd86460cd62a6dc75111b7c0",
+  "clipSha256": "027144cdc8c97a72a20a60081c69b7a04c8706dae81f6267bcfa926945ead6b6",
+  "scene": "attendance",
+  "review": {
+    "heardOpening": "La feuille de présence sert",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La feuille de présence sert au pointage sur papier.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la feuille de présence imprimable intitulée 'Fête des associations - documents terrain'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "des lignes supplémentaires permettent de noter les arrivées imprévues.",
+        "visibleSeconds": 5,
+        "visible": "Lignes vierges avec cases à cocher visibles en bas du tableau d'émargement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille.",
+        "visibleSeconds": 9.2,
+        "visible": "Première ligne (Léa Giraud) avec la case 'Présent' déjà cochée par le système.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Le planning et l'arrivée sont deux informations différentes.",
+        "visibleSeconds": 21,
+        "visible": "Affichage du créneau suivant 'Retour du matériel' avec colonnes Arrivée et Présent.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

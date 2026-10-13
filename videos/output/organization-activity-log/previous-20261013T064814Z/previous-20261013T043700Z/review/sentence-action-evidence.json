@@ -1,0 +1,1071 @@
+{
+  "mp4Sha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "startSeconds": 1.141,
+      "endSeconds": 29.729,
+      "sentences": [
+        {
+          "text": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un réglage.",
+          "startMs": 299,
+          "endMs": 6429,
+          "method": "silence",
+          "videoSeconds": 1.44
+        },
+        {
+          "text": "Le journal de l'organisation aide à retrouver ces actions transversales.",
+          "startMs": 6879,
+          "endMs": 10396,
+          "method": "silence",
+          "videoSeconds": 8.02
+        },
+        {
+          "text": "Ouvrons Journal d'activité depuis les paramètres.",
+          "startMs": 11370,
+          "endMs": 13999,
+          "method": "silence",
+          "videoSeconds": 12.511
+        },
+        {
+          "text": "Les noms de notre équipe et les données sont fictifs.",
+          "startMs": 14714,
+          "endMs": 17056,
+          "method": "silence",
+          "videoSeconds": 15.855
+        },
+        {
+          "text": "Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté.",
+          "startMs": 17277,
+          "endMs": 21635,
+          "method": "silence",
+          "videoSeconds": 18.418
+        },
+        {
+          "text": "Ce journal ne remplace pas celui d'un événement :",
+          "startMs": 22179,
+          "endMs": 24788,
+          "method": "silence",
+          "videoSeconds": 23.32
+        },
+        {
+          "text": "les horaires et les inscriptions se consultent dans leur propre historique.",
+          "startMs": 25134,
+          "endMs": 28238,
+          "method": "silence",
+          "videoSeconds": 26.275
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Ouvrons Journal d'activité depuis les paramètres",
+          "startMs": 11370,
+          "endMs": 13999,
+          "cueMs": 12511
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 12998,
+          "relativeSeconds": 11.857
+        }
+      ],
+      "frames": [
+        {
+          "scene": "welcome",
+          "fraction": 0.020987827060305022,
+          "seconds": 1.741,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-2.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.25,
+          "seconds": 8.288,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-25.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.45,
+          "seconds": 14.005600000000001,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-45.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.6,
+          "seconds": 18.2938,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-60.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.85,
+          "seconds": 25.4408,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-85.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.9895060864698475,
+          "seconds": 29.429,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/welcome-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "read",
+      "startSeconds": 31.993,
+      "endSeconds": 59.698,
+      "sentences": [
+        {
+          "text": "Chaque ligne indique un auteur, une action et une date.",
+          "startMs": 353,
+          "endMs": 3086,
+          "method": "silence",
+          "videoSeconds": 32.346
+        },
+        {
+          "text": "Lisons deux actions réalisées par des personnes différentes.",
+          "startMs": 3355,
+          "endMs": 8208,
+          "method": "silence",
+          "videoSeconds": 35.348
+        },
+        {
+          "text": "Cela permet de demander à la bonne personne pourquoi elle a fait un changement.",
+          "startMs": 8494,
+          "endMs": 12085,
+          "method": "silence",
+          "videoSeconds": 40.487
+        },
+        {
+          "text": "Le nom affiché vient du compte encore présent ;",
+          "startMs": 12698,
+          "endMs": 14895,
+          "method": "silence",
+          "videoSeconds": 44.691
+        },
+        {
+          "text": "si ce compte n'existe plus, une indication générique peut le remplacer.",
+          "startMs": 15016,
+          "endMs": 19329,
+          "method": "silence",
+          "videoSeconds": 47.009
+        },
+        {
+          "text": "Le journal n'est donc pas une signature de contrat, ni une preuve que quelqu'un a lu les consignes.",
+          "startMs": 19525,
+          "endMs": 24759,
+          "method": "silence",
+          "videoSeconds": 51.518
+        },
+        {
+          "text": "C'est un repère pour travailler ensemble.",
+          "startMs": 24964,
+          "endMs": 27704,
+          "method": "silence",
+          "videoSeconds": 56.957
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "read",
+          "phrase": "Lisons deux actions réalisées par",
+          "startMs": 3355,
+          "endMs": 8208,
+          "cueMs": 35349
+        },
+        {
+          "segmentId": "read",
+          "phrase": "Le nom affiché vient du",
+          "startMs": 12698,
+          "endMs": 14895,
+          "cueMs": 44692
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "read",
+          "fraction": 0.02165674066053059,
+          "seconds": 32.593,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-2.png"
+        },
+        {
+          "scene": "read",
+          "fraction": 0.25,
+          "seconds": 38.91925,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-25.png"
+        },
+        {
+          "scene": "read",
+          "fraction": 0.45,
+          "seconds": 44.46025,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-45.png"
+        },
+        {
+          "scene": "read",
+          "fraction": 0.6,
+          "seconds": 48.616,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-60.png"
+        },
+        {
+          "scene": "read",
+          "fraction": 0.85,
+          "seconds": 55.54225,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-85.png"
+        },
+        {
+          "scene": "read",
+          "fraction": 0.9891716296697347,
+          "seconds": 59.398,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/read-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "members",
+      "startSeconds": 61.96,
+      "endSeconds": 90.161,
+      "sentences": [
+        {
+          "text": "Voici une création de membre, puis une modification et une désactivation.",
+          "startMs": 140,
+          "endMs": 4543,
+          "method": "silence",
+          "videoSeconds": 62.1
+        },
+        {
+          "text": "Ce sont des actions sur la fiche de l'organisation, pas la liste de tous les créneaux de cette personne.",
+          "startMs": 4742,
+          "endMs": 11146,
+          "method": "silence",
+          "videoSeconds": 66.702
+        },
+        {
+          "text": "Pour comprendre ses inscriptions, ouvrons sa fiche et son activité.",
+          "startMs": 11545,
+          "endMs": 15369,
+          "method": "silence",
+          "videoSeconds": 73.505
+        },
+        {
+          "text": "Nous pouvons ensuite revenir au journal général.",
+          "startMs": 16121,
+          "endMs": 18032,
+          "method": "silence",
+          "videoSeconds": 78.081
+        },
+        {
+          "text": "Cette distinction évite de prendre une modification de coordonnées pour une désinscription.",
+          "startMs": 18602,
+          "endMs": 23480,
+          "method": "silence",
+          "videoSeconds": 80.562
+        },
+        {
+          "text": "Lire une entrée ne modifie pas la fiche et ne réactive pas un membre.",
+          "startMs": 23672,
+          "endMs": 28059,
+          "method": "silence",
+          "videoSeconds": 85.632
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "members",
+          "phrase": "Ce sont des actions sur",
+          "startMs": 4742,
+          "endMs": 11146,
+          "cueMs": 66703
+        },
+        {
+          "segmentId": "members",
+          "phrase": "Pour comprendre ses inscriptions, ouvrons",
+          "startMs": 11545,
+          "endMs": 15369,
+          "cueMs": 73507
+        },
+        {
+          "segmentId": "members",
+          "phrase": "Cette distinction évite de prendre",
+          "startMs": 18602,
+          "endMs": 23480,
+          "cueMs": 80563
+        },
+        {
+          "segmentId": "members",
+          "phrase": "Nous pouvons ensuite revenir au",
+          "startMs": 16121,
+          "endMs": 18032,
+          "cueMs": 80581
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 64146,
+          "relativeSeconds": 2.186
+        }
+      ],
+      "frames": [
+        {
+          "scene": "members",
+          "fraction": 0.021275841282224036,
+          "seconds": 62.56,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-2.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.25,
+          "seconds": 69.01025,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-25.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.45,
+          "seconds": 74.65044999999999,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-45.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.6,
+          "seconds": 78.8806,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-60.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.85,
+          "seconds": 85.93085,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-85.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.989362079358888,
+          "seconds": 89.861,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/members-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "team",
+      "startSeconds": 92.435,
+      "endSeconds": 120.329,
+      "sentences": [
+        {
+          "text": "Les invitations de comptes admin, les changements de rôle et les retraits de l'équipe ont aussi leur place ici.",
+          "startMs": 231,
+          "endMs": 6287,
+          "method": "silence",
+          "videoSeconds": 92.666
+        },
+        {
+          "text": "Retrouvons une invitation puis un changement de rôle.",
+          "startMs": 6476,
+          "endMs": 9814,
+          "method": "silence",
+          "videoSeconds": 98.911
+        },
+        {
+          "text": "Le journal décrit ce qui a été fait ;",
+          "startMs": 10482,
+          "endMs": 10483,
+          "method": "silence",
+          "videoSeconds": 102.917
+        },
+        {
+          "text": "il n'accorde pas le droit de refaire cette action.",
+          "startMs": 11252,
+          "endMs": 15439,
+          "method": "silence",
+          "videoSeconds": 103.687
+        },
+        {
+          "text": "Les permissions du compte connecté restent applicables.",
+          "startMs": 15790,
+          "endMs": 18211,
+          "method": "silence",
+          "videoSeconds": 108.225
+        },
+        {
+          "text": "On peut aussi retrouver un changement des réglages de notification.",
+          "startMs": 19001,
+          "endMs": 22432,
+          "method": "silence",
+          "videoSeconds": 111.436
+        },
+        {
+          "text": "Un email renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.",
+          "startMs": 22781,
+          "endMs": 27292,
+          "method": "silence",
+          "videoSeconds": 115.216
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "team",
+          "phrase": "Retrouvons une invitation puis un",
+          "startMs": 6476,
+          "endMs": 9814,
+          "cueMs": 98914
+        },
+        {
+          "segmentId": "team",
+          "phrase": "il n'accorde pas le droit",
+          "startMs": 11252,
+          "endMs": 15439,
+          "cueMs": 103688
+        },
+        {
+          "segmentId": "team",
+          "phrase": "On peut aussi retrouver un",
+          "startMs": 19001,
+          "endMs": 22432,
+          "cueMs": 111439
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 95160,
+          "relativeSeconds": 2.725
+        },
+        {
+          "kind": "click",
+          "atMs": 111908,
+          "relativeSeconds": 19.473
+        }
+      ],
+      "frames": [
+        {
+          "scene": "team",
+          "fraction": 0.021510002151000216,
+          "seconds": 93.035,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-2.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.25,
+          "seconds": 99.4085,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-25.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.45,
+          "seconds": 104.9873,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-45.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.6,
+          "seconds": 109.17139999999999,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-60.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.85,
+          "seconds": 116.14489999999999,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-85.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.9892449989244999,
+          "seconds": 120.029,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/team-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "filters",
+      "startSeconds": 122.588,
+      "endSeconds": 152.199,
+      "sentences": [
+        {
+          "text": "Filtrer par type permet de se concentrer sur les membres, les comptes admin, les emails ou l'organisation.",
+          "startMs": 369,
+          "endMs": 7048,
+          "method": "silence",
+          "videoSeconds": 122.957
+        },
+        {
+          "text": "Choisissons Membres, puis Comptes admin, et regardons les lignes changer.",
+          "startMs": 7524,
+          "endMs": 12413,
+          "method": "silence",
+          "videoSeconds": 130.112
+        },
+        {
+          "text": "Revenons ensuite à Tous les types.",
+          "startMs": 13093,
+          "endMs": 15069,
+          "method": "silence",
+          "videoSeconds": 135.681
+        },
+        {
+          "text": "Le filtre ne supprime rien ;",
+          "startMs": 15498,
+          "endMs": 17349,
+          "method": "silence",
+          "videoSeconds": 138.086
+        },
+        {
+          "text": "il limite la liste affichée.",
+          "startMs": 17745,
+          "endMs": 19191,
+          "method": "silence",
+          "videoSeconds": 140.333
+        },
+        {
+          "text": "Cet écran n'a pas les mêmes filtres ni les modes Rejouer et Récit que le journal d'un événement.",
+          "startMs": 19860,
+          "endMs": 24163,
+          "method": "silence",
+          "videoSeconds": 142.448
+        },
+        {
+          "text": "Inutile de chercher une commande qui n'est pas proposée ici.",
+          "startMs": 24362,
+          "endMs": 29047,
+          "method": "silence",
+          "videoSeconds": 146.95
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "filters",
+          "phrase": "Choisissons Membres, puis Comptes admin",
+          "startMs": 7524,
+          "endMs": 12413,
+          "cueMs": 130114
+        },
+        {
+          "segmentId": "filters",
+          "phrase": "Choisissons Membres, puis Comptes admin",
+          "startMs": 7524,
+          "endMs": 12413,
+          "cueMs": 131423
+        },
+        {
+          "segmentId": "filters",
+          "phrase": "Revenons ensuite à Tous les",
+          "startMs": 13093,
+          "endMs": 15069,
+          "cueMs": 135682
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 130607,
+          "relativeSeconds": 8.019
+        },
+        {
+          "kind": "click",
+          "atMs": 131906,
+          "relativeSeconds": 9.318
+        },
+        {
+          "kind": "click",
+          "atMs": 136158,
+          "relativeSeconds": 13.57
+        }
+      ],
+      "frames": [
+        {
+          "scene": "filters",
+          "fraction": 0.02026274019789943,
+          "seconds": 123.188,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-2.png"
+        },
+        {
+          "scene": "filters",
+          "fraction": 0.25,
+          "seconds": 129.99075,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-25.png"
+        },
+        {
+          "scene": "filters",
+          "fraction": 0.45,
+          "seconds": 135.91295000000002,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-45.png"
+        },
+        {
+          "scene": "filters",
+          "fraction": 0.6,
+          "seconds": 140.3546,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-60.png"
+        },
+        {
+          "scene": "filters",
+          "fraction": 0.85,
+          "seconds": 147.75735,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-85.png"
+        },
+        {
+          "scene": "filters",
+          "fraction": 0.9898686299010503,
+          "seconds": 151.899,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/filters-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "pages",
+      "startSeconds": 154.46,
+      "endSeconds": 184.43,
+      "sentences": [
+        {
+          "text": "Si l'historique dépasse la première page, Charger plus affiche la suite.",
+          "startMs": 562,
+          "endMs": 4646,
+          "method": "silence",
+          "videoSeconds": 155.022
+        },
+        {
+          "text": "Descendons, utilisons le bouton et retrouvons les nouvelles lignes.",
+          "startMs": 5114,
+          "endMs": 9446,
+          "method": "silence",
+          "videoSeconds": 159.574
+        },
+        {
+          "text": "Le nombre d'entrées déjà chargées ne représente pas forcément la totalité de l'activité.",
+          "startMs": 10042,
+          "endMs": 14548,
+          "method": "silence",
+          "videoSeconds": 164.502
+        },
+        {
+          "text": "Si une sélection ne donne aucune ligne, essayons Tous les types avant de conclure qu'il n'y a aucun historique.",
+          "startMs": 15019,
+          "endMs": 21553,
+          "method": "silence",
+          "videoSeconds": 169.479
+        },
+        {
+          "text": "La liste sert à lire ;",
+          "startMs": 22663,
+          "endMs": 23959,
+          "method": "silence",
+          "videoSeconds": 177.123
+        },
+        {
+          "text": "pour corriger une fiche ou un rôle, il faut retourner dans la page qui permet réellement cette modification.",
+          "startMs": 24324,
+          "endMs": 29519,
+          "method": "silence",
+          "videoSeconds": 178.784
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "pages",
+          "phrase": "Descendons, utilisons le bouton et",
+          "startMs": 5114,
+          "endMs": 9446,
+          "cueMs": 159576
+        },
+        {
+          "segmentId": "pages",
+          "phrase": "Descendons, utilisons le bouton et",
+          "startMs": 5114,
+          "endMs": 9446,
+          "cueMs": 159588
+        },
+        {
+          "segmentId": "pages",
+          "phrase": "Si une sélection ne donne",
+          "startMs": 15019,
+          "endMs": 21553,
+          "cueMs": 169481
+        },
+        {
+          "segmentId": "pages",
+          "phrase": "pour corriger une fiche ou",
+          "startMs": 24324,
+          "endMs": 29519,
+          "cueMs": 178785
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 160072,
+          "relativeSeconds": 5.612
+        },
+        {
+          "kind": "click",
+          "atMs": 172606,
+          "relativeSeconds": 18.146
+        },
+        {
+          "kind": "click",
+          "atMs": 179254,
+          "relativeSeconds": 24.794
+        }
+      ],
+      "frames": [
+        {
+          "scene": "pages",
+          "fraction": 0.02002002002002002,
+          "seconds": 155.06,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-2.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.25,
+          "seconds": 161.9525,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-25.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.45,
+          "seconds": 167.9465,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-45.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.6,
+          "seconds": 172.442,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-60.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.85,
+          "seconds": 179.9345,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-85.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.98998998998999,
+          "seconds": 184.13,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/pages-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "export",
+      "startSeconds": 189.152,
+      "endSeconds": 222.228,
+      "sentences": [
+        {
+          "text": "Exporter tout le journal télécharge un fichier CSV.",
+          "startMs": 449,
+          "endMs": 3818,
+          "method": "silence",
+          "videoSeconds": 189.601
+        },
+        {
+          "text": "Le mot tout est important :",
+          "startMs": 4301,
+          "endMs": 5203,
+          "method": "silence",
+          "videoSeconds": 193.453
+        },
+        {
+          "text": "même si l'écran est filtré, ce fichier contient l'historique de l'organisation, pas seulement les lignes visibles.",
+          "startMs": 5501,
+          "endMs": 12135,
+          "method": "silence",
+          "videoSeconds": 194.653
+        },
+        {
+          "text": "Ouvrons le vrai fichier téléchargé.",
+          "startMs": 12918,
+          "endMs": 14625,
+          "method": "silence",
+          "videoSeconds": 202.07
+        },
+        {
+          "text": "Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés.",
+          "startMs": 15139,
+          "endMs": 21921,
+          "method": "silence",
+          "videoSeconds": 204.291
+        },
+        {
+          "text": "Les entrées vont des plus anciennes aux plus récentes, à l'inverse de la liste à l'écran.",
+          "startMs": 22086,
+          "endMs": 28080,
+          "method": "silence",
+          "videoSeconds": 211.238
+        },
+        {
+          "text": "Ce fichier est une copie à cet instant ;",
+          "startMs": 28658,
+          "endMs": 30698,
+          "method": "silence",
+          "videoSeconds": 217.81
+        },
+        {
+          "text": "il ne se mettra pas à jour tout seul.",
+          "startMs": 31166,
+          "endMs": 32604,
+          "method": "silence",
+          "videoSeconds": 220.318
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "export",
+          "phrase": "Le mot tout est important",
+          "startMs": 4301,
+          "endMs": 5203,
+          "cueMs": 193456
+        },
+        {
+          "segmentId": "export",
+          "phrase": "Ouvrons le vrai fichier téléchargé",
+          "startMs": 12918,
+          "endMs": 14625,
+          "cueMs": 202072
+        },
+        {
+          "segmentId": "export",
+          "phrase": "Il contient la date, l'acteur",
+          "startMs": 15139,
+          "endMs": 21921,
+          "cueMs": 204293
+        },
+        {
+          "segmentId": "export",
+          "phrase": "Les entrées vont des plus",
+          "startMs": 22086,
+          "endMs": 28080,
+          "cueMs": 211240
+        },
+        {
+          "segmentId": "export",
+          "phrase": "Ce fichier est une copie",
+          "startMs": 28658,
+          "endMs": 30698,
+          "cueMs": 217812
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 193924,
+          "relativeSeconds": 4.772
+        }
+      ],
+      "frames": [
+        {
+          "scene": "export",
+          "fraction": 0.018140041117426533,
+          "seconds": 189.752,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-2.png"
+        },
+        {
+          "scene": "export",
+          "fraction": 0.25,
+          "seconds": 197.421,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-25.png"
+        },
+        {
+          "scene": "export",
+          "fraction": 0.45,
+          "seconds": 204.0362,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-45.png"
+        },
+        {
+          "scene": "export",
+          "fraction": 0.6,
+          "seconds": 208.9976,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-60.png"
+        },
+        {
+          "scene": "export",
+          "fraction": 0.85,
+          "seconds": 217.2666,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-85.png"
+        },
+        {
+          "scene": "export",
+          "fraction": 0.9909299794412867,
+          "seconds": 221.928,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/export-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "limits",
+      "startSeconds": 224.489,
+      "endSeconds": 251.46,
+      "sentences": [
+        {
+          "text": "Le journal ne doit pas devenir une collection de captures envoyées partout.",
+          "startMs": 492,
+          "endMs": 4289,
+          "method": "silence",
+          "videoSeconds": 224.981
+        },
+        {
+          "text": "Même quand les coordonnées ne sont pas recopiées dans les changements, des noms d'auteurs peuvent rester visibles.",
+          "startMs": 4477,
+          "endMs": 9216,
+          "method": "silence",
+          "videoSeconds": 228.966
+        },
+        {
+          "text": "Gardons le fichier pour les personnes qui en ont besoin et pour le temps utile.",
+          "startMs": 9972,
+          "endMs": 13736,
+          "method": "silence",
+          "videoSeconds": 234.461
+        },
+        {
+          "text": "Le CSV n'est pas une sauvegarde complète de l'organisation, et il ne sert pas à restaurer un état passé.",
+          "startMs": 14393,
+          "endMs": 19874,
+          "method": "silence",
+          "videoSeconds": 238.882
+        },
+        {
+          "text": "Pour un incident, recoupons les informations et les résultats réels plutôt que d'accuser quelqu'un à partir d'une seule ligne.",
+          "startMs": 20347,
+          "endMs": 26970,
+          "method": "silence",
+          "videoSeconds": 244.836
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "limits",
+          "phrase": "Gardons le fichier pour les",
+          "startMs": 9972,
+          "endMs": 13736,
+          "cueMs": 234462
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "limits",
+          "fraction": 0.02224611619888028,
+          "seconds": 225.089,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-2.png"
+        },
+        {
+          "scene": "limits",
+          "fraction": 0.25,
+          "seconds": 231.23175,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-25.png"
+        },
+        {
+          "scene": "limits",
+          "fraction": 0.45,
+          "seconds": 236.62595000000002,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-45.png"
+        },
+        {
+          "scene": "limits",
+          "fraction": 0.6,
+          "seconds": 240.6716,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-60.png"
+        },
+        {
+          "scene": "limits",
+          "fraction": 0.85,
+          "seconds": 247.41435,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-85.png"
+        },
+        {
+          "scene": "limits",
+          "fraction": 0.9888769419005599,
+          "seconds": 251.16,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/limits-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "result",
+      "startSeconds": 253.724,
+      "endSeconds": 283.442,
+      "sentences": [
+        {
+          "text": "Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet.",
+          "startMs": 0,
+          "endMs": 6329,
+          "method": "silence",
+          "videoSeconds": 253.724
+        },
+        {
+          "text": "Pour avancer, le plus utile est souvent une question simple :",
+          "startMs": 7102,
+          "endMs": 10565,
+          "method": "silence",
+          "videoSeconds": 260.826
+        },
+        {
+          "text": "j'ai vu ce changement, pouvez-vous m'expliquer ?",
+          "startMs": 11071,
+          "endMs": 12144,
+          "method": "silence",
+          "videoSeconds": 264.795
+        },
+        {
+          "text": "Le journal facilite cette conversation.",
+          "startMs": 12336,
+          "endMs": 14128,
+          "method": "silence",
+          "videoSeconds": 266.06
+        },
+        {
+          "text": "Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits.",
+          "startMs": 14249,
+          "endMs": 22288,
+          "method": "silence",
+          "videoSeconds": 267.973
+        },
+        {
+          "text": "Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.",
+          "startMs": 22956,
+          "endMs": 29347,
+          "method": "silence",
+          "videoSeconds": 276.68
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "result",
+          "fraction": 0.02018978396931153,
+          "seconds": 254.324,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-2.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.25,
+          "seconds": 261.1535,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-25.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.45,
+          "seconds": 267.09709999999995,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-45.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.6,
+          "seconds": 271.5548,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-60.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.85,
+          "seconds": 278.98429999999996,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-85.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.9899051080153443,
+          "seconds": 283.142,
+          "file": "/private/tmp/codex-video/videos/output/organization-activity-log/review-frames/result-end.png"
+        }
+      ]
+    }
+  ]
+}

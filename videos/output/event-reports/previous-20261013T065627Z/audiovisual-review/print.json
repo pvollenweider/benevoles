@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:36.704Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "018ca1a9503eb4e8d9303cbe43dcd923eb9331b4b6186df12dd198aa240f6f9e",
+  "clipSha256": "4495c96a99d7aef5ad3cc961575c7cd7c5068a3a2c67107a490080b45e87df2f",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer toute la série",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avant d'imprimer toute la série, vérifiez les pages réellement produites.",
+        "visibleSeconds": 0,
+        "visible": "Page Synthèse des réponses avec bouton Imprimer affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Voici le planning de Léa : regardons la frise, les marges",
+        "visibleSeconds": 13.5,
+        "visible": "Planning individuel de Léa Giroud (page 4) affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "puis les consignes plus bas.",
+        "visibleSeconds": 16,
+        "visible": "Défilement vers le bas révélant les blocs de consignes horaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "La dernière passe sur la page suivante.",
+        "visibleSeconds": 18,
+        "visible": "Transition vers la page 5 affichant la fin des consignes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

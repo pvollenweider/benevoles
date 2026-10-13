@@ -1,0 +1,1131 @@
+{
+  "mp4Sha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "startSeconds": 0.166,
+      "endSeconds": 27.368,
+      "sentences": [
+        {
+          "text": "Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide.",
+          "startMs": 291,
+          "endMs": 5214,
+          "method": "silence",
+          "videoSeconds": 0.457
+        },
+        {
+          "text": "Depuis l'événement, ouvrez Où manque-t-il du monde.",
+          "startMs": 5336,
+          "endMs": 8840,
+          "method": "silence",
+          "videoSeconds": 5.502
+        },
+        {
+          "text": "Cette vue regroupe les besoins pour savoir où concentrer vos efforts, plutôt que de parcourir tout le planning.",
+          "startMs": 9399,
+          "endMs": 15882,
+          "method": "silence",
+          "videoSeconds": 9.565
+        },
+        {
+          "text": "Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider.",
+          "startMs": 16020,
+          "endMs": 23861,
+          "method": "silence",
+          "videoSeconds": 16.186
+        },
+        {
+          "text": "Regardons comment lire ces différences.",
+          "startMs": 24288,
+          "endMs": 26768,
+          "method": "silence",
+          "videoSeconds": 24.454
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Cette vue regroupe les besoins",
+          "startMs": 9399,
+          "endMs": 15882,
+          "cueMs": 9565
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 10031,
+          "relativeSeconds": 9.865
+        }
+      ],
+      "frames": [
+        {
+          "scene": "welcome",
+          "fraction": 0.022057201676347327,
+          "seconds": 0.766,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-2.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.25,
+          "seconds": 6.9665,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-25.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.45,
+          "seconds": 12.4069,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-45.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.6,
+          "seconds": 16.487199999999998,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-60.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.85,
+          "seconds": 23.2877,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-85.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.9889713991618263,
+          "seconds": 27.068,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/welcome-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "overview",
+      "startSeconds": 27.824,
+      "endSeconds": 50.656,
+      "sentences": [
+        {
+          "text": "En haut, les places pourvues sont les inscriptions confirmées, comparées à la capacité totale.",
+          "startMs": 432,
+          "endMs": 5753,
+          "method": "silence",
+          "videoSeconds": 28.256
+        },
+        {
+          "text": "Une personne inscrite à deux horaires occupe deux places :",
+          "startMs": 6177,
+          "endMs": 9962,
+          "method": "silence",
+          "videoSeconds": 34.001
+        },
+        {
+          "text": "ce n'est pas un compteur de personnes différentes.",
+          "startMs": 10177,
+          "endMs": 12284,
+          "method": "silence",
+          "videoSeconds": 38.001
+        },
+        {
+          "text": "La phrase de besoin et la barre donnent un aperçu, mais lisez aussi les attentes et les demandes.",
+          "startMs": 12794,
+          "endMs": 18200,
+          "method": "silence",
+          "videoSeconds": 40.618
+        },
+        {
+          "text": "Un bon chiffre global peut cacher un horaire où il manque encore quelqu'un.",
+          "startMs": 18408,
+          "endMs": 22352,
+          "method": "silence",
+          "videoSeconds": 46.232
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "overview",
+          "fraction": 0.026278906797477224,
+          "seconds": 28.424,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-3.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.25,
+          "seconds": 33.532,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-25.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.45,
+          "seconds": 38.0984,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-45.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.6,
+          "seconds": 41.523199999999996,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-60.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.85,
+          "seconds": 47.231199999999994,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-85.png"
+        },
+        {
+          "scene": "overview",
+          "fraction": 0.9868605466012614,
+          "seconds": 50.356,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/overview-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "empty",
+      "startSeconds": 51.109,
+      "endSeconds": 74.767,
+      "sentences": [
+        {
+          "text": "Postes sans personne attire l'attention sur un poste entièrement vide.",
+          "startMs": 484,
+          "endMs": 4405,
+          "method": "silence",
+          "videoSeconds": 51.593
+        },
+        {
+          "text": "Ici, Photos comporte deux créneaux et six places à pourvoir.",
+          "startMs": 4858,
+          "endMs": 8684,
+          "method": "silence",
+          "videoSeconds": 55.967
+        },
+        {
+          "text": "Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission.",
+          "startMs": 9090,
+          "endMs": 15302,
+          "method": "silence",
+          "videoSeconds": 60.199
+        },
+        {
+          "text": "Avant de recruter, assurez-vous que la demande est claire :",
+          "startMs": 16076,
+          "endMs": 19106,
+          "method": "silence",
+          "videoSeconds": 67.185
+        },
+        {
+          "text": "quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.",
+          "startMs": 19492,
+          "endMs": 23119,
+          "method": "silence",
+          "videoSeconds": 70.601
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "empty",
+          "phrase": "Cliquez sur le poste pour",
+          "startMs": 9090,
+          "endMs": 15302,
+          "cueMs": 60202
+        },
+        {
+          "segmentId": "empty",
+          "phrase": "quelqu'un doit comprendre ce qu'il",
+          "startMs": 19492,
+          "endMs": 23119,
+          "cueMs": 70602
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 60694,
+          "relativeSeconds": 9.585
+        },
+        {
+          "kind": "click",
+          "atMs": 61978,
+          "relativeSeconds": 10.869
+        }
+      ],
+      "frames": [
+        {
+          "scene": "empty",
+          "fraction": 0.0253613999492772,
+          "seconds": 51.709,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-3.png"
+        },
+        {
+          "scene": "empty",
+          "fraction": 0.25,
+          "seconds": 57.0235,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-25.png"
+        },
+        {
+          "scene": "empty",
+          "fraction": 0.45,
+          "seconds": 61.7551,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-45.png"
+        },
+        {
+          "scene": "empty",
+          "fraction": 0.6,
+          "seconds": 65.30380000000001,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-60.png"
+        },
+        {
+          "scene": "empty",
+          "fraction": 0.85,
+          "seconds": 71.2183,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-85.png"
+        },
+        {
+          "scene": "empty",
+          "fraction": 0.9873193000253614,
+          "seconds": 74.467,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/empty-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "needs",
+      "startSeconds": 75.221,
+      "endSeconds": 101.636,
+      "sentences": [
+        {
+          "text": "Créneaux à compléter va du plus dégarni au plus proche du complet.",
+          "startMs": 550,
+          "endMs": 4416,
+          "method": "silence",
+          "videoSeconds": 75.771
+        },
+        {
+          "text": "Chaque ligne indique la date, l'horaire, les places confirmées et le nombre manquant.",
+          "startMs": 4853,
+          "endMs": 9936,
+          "method": "silence",
+          "videoSeconds": 80.074
+        },
+        {
+          "text": "Les créneaux fermés aux inscriptions sont exclus de ce groupe.",
+          "startMs": 10630,
+          "endMs": 13315,
+          "method": "silence",
+          "videoSeconds": 85.851
+        },
+        {
+          "text": "Cliquons sur la buvette du soir :",
+          "startMs": 13816,
+          "endMs": 15809,
+          "method": "silence",
+          "videoSeconds": 89.037
+        },
+        {
+          "text": "la liste des inscriptions s'ouvre déjà filtrée.",
+          "startMs": 16123,
+          "endMs": 18067,
+          "method": "silence",
+          "videoSeconds": 91.344
+        },
+        {
+          "text": "Le lien Écrire à ce créneau prépare ensuite un message pour les personnes de cet horaire, pas pour recruter des inconnus.",
+          "startMs": 18248,
+          "endMs": 25945,
+          "method": "silence",
+          "videoSeconds": 93.469
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "needs",
+          "phrase": "Cliquons sur la buvette du soir",
+          "startMs": 13816,
+          "endMs": 15809,
+          "cueMs": 89039
+        },
+        {
+          "segmentId": "needs",
+          "phrase": "Le lien Écrire à ce",
+          "startMs": 18248,
+          "endMs": 25945,
+          "cueMs": 93470
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 89534,
+          "relativeSeconds": 14.313
+        },
+        {
+          "kind": "click",
+          "atMs": 93933,
+          "relativeSeconds": 18.712
+        }
+      ],
+      "frames": [
+        {
+          "scene": "needs",
+          "fraction": 0.022714366837024418,
+          "seconds": 75.821,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-2.png"
+        },
+        {
+          "scene": "needs",
+          "fraction": 0.25,
+          "seconds": 81.82475,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-25.png"
+        },
+        {
+          "scene": "needs",
+          "fraction": 0.45,
+          "seconds": 87.10775,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-45.png"
+        },
+        {
+          "scene": "needs",
+          "fraction": 0.6,
+          "seconds": 91.07,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-60.png"
+        },
+        {
+          "scene": "needs",
+          "fraction": 0.85,
+          "seconds": 97.67375,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-85.png"
+        },
+        {
+          "scene": "needs",
+          "fraction": 0.9886428165814878,
+          "seconds": 101.336,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/needs-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "requests",
+      "startSeconds": 103.253,
+      "endSeconds": 127.131,
+      "sentences": [
+        {
+          "text": "Les demandes à traiter gardent leur place pendant la décision.",
+          "startMs": 469,
+          "endMs": 3681,
+          "method": "silence",
+          "videoSeconds": 103.722
+        },
+        {
+          "text": "À la navette, deux demandes remplissent donc les deux places réservées, même si aucune n'est encore confirmée.",
+          "startMs": 3903,
+          "endMs": 9172,
+          "method": "silence",
+          "videoSeconds": 107.156
+        },
+        {
+          "text": "Le rapport ne les présente pas comme deux places manquantes.",
+          "startMs": 9521,
+          "endMs": 12883,
+          "method": "silence",
+          "videoSeconds": 112.774
+        },
+        {
+          "text": "Suivez le lien des demandes pour retrouver Lucas et Marc, puis examinez leurs informations avant de décider.",
+          "startMs": 13011,
+          "endMs": 18970,
+          "method": "silence",
+          "videoSeconds": 116.264
+        },
+        {
+          "text": "La confirmation et la demande en attente restent deux situations différentes.",
+          "startMs": 19410,
+          "endMs": 23723,
+          "method": "silence",
+          "videoSeconds": 122.663
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "requests",
+          "phrase": "Suivez le lien des demandes",
+          "startMs": 13011,
+          "endMs": 18970,
+          "cueMs": 116266
+        },
+        {
+          "segmentId": "requests",
+          "phrase": "La confirmation et la demande",
+          "startMs": 19410,
+          "endMs": 23723,
+          "cueMs": 122664
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 116760,
+          "relativeSeconds": 13.507
+        }
+      ],
+      "frames": [
+        {
+          "scene": "requests",
+          "fraction": 0.025127732640924702,
+          "seconds": 103.853,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-3.png"
+        },
+        {
+          "scene": "requests",
+          "fraction": 0.25,
+          "seconds": 109.2225,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-25.png"
+        },
+        {
+          "scene": "requests",
+          "fraction": 0.45,
+          "seconds": 113.99810000000001,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-45.png"
+        },
+        {
+          "scene": "requests",
+          "fraction": 0.6,
+          "seconds": 117.5798,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-60.png"
+        },
+        {
+          "scene": "requests",
+          "fraction": 0.85,
+          "seconds": 123.5493,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-85.png"
+        },
+        {
+          "scene": "requests",
+          "fraction": 0.9874361336795376,
+          "seconds": 126.831,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/requests-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "waiting",
+      "startSeconds": 127.582,
+      "endSeconds": 151.643,
+      "sentences": [
+        {
+          "text": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place.",
+          "startMs": 141,
+          "endMs": 5675,
+          "method": "silence",
+          "videoSeconds": 127.723
+        },
+        {
+          "text": "La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément.",
+          "startMs": 6215,
+          "endMs": 10980,
+          "method": "silence",
+          "videoSeconds": 133.797
+        },
+        {
+          "text": "En cliquant, vous retrouvez les noms et leurs positions dans la liste.",
+          "startMs": 11536,
+          "endMs": 14990,
+          "method": "silence",
+          "videoSeconds": 139.118
+        },
+        {
+          "text": "Vous pouvez ensuite réfléchir à une place supplémentaire ou à un autre horaire ;",
+          "startMs": 15770,
+          "endMs": 19717,
+          "method": "silence",
+          "videoSeconds": 143.352
+        },
+        {
+          "text": "ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+          "startMs": 19922,
+          "endMs": 23906,
+          "method": "silence",
+          "videoSeconds": 147.504
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "waiting",
+          "phrase": "En cliquant, vous retrouvez les",
+          "startMs": 11536,
+          "endMs": 14990,
+          "cueMs": 139120
+        },
+        {
+          "segmentId": "waiting",
+          "phrase": "ce rapport ne les inscrit",
+          "startMs": 19922,
+          "endMs": 23906,
+          "cueMs": 147506
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 139592,
+          "relativeSeconds": 12.01
+        }
+      ],
+      "frames": [
+        {
+          "scene": "waiting",
+          "fraction": 0.024936619425626534,
+          "seconds": 128.182,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-2.png"
+        },
+        {
+          "scene": "waiting",
+          "fraction": 0.25,
+          "seconds": 133.59725,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-25.png"
+        },
+        {
+          "scene": "waiting",
+          "fraction": 0.45,
+          "seconds": 138.40945000000002,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-45.png"
+        },
+        {
+          "scene": "waiting",
+          "fraction": 0.6,
+          "seconds": 142.0186,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-60.png"
+        },
+        {
+          "scene": "waiting",
+          "fraction": 0.85,
+          "seconds": 148.03385,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-85.png"
+        },
+        {
+          "scene": "waiting",
+          "fraction": 0.9875316902871867,
+          "seconds": 151.343,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/waiting-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "leaders",
+      "startSeconds": 152.097,
+      "endSeconds": 175.942,
+      "sentences": [
+        {
+          "text": "Postes sans responsable de secteur est un autre besoin, facultatif cette fois.",
+          "startMs": 346,
+          "endMs": 4751,
+          "method": "silence",
+          "videoSeconds": 152.443
+        },
+        {
+          "text": "Le poste peut avoir des bénévoles et manquer seulement d'un relais sur le terrain.",
+          "startMs": 5039,
+          "endMs": 9448,
+          "method": "silence",
+          "videoSeconds": 157.136
+        },
+        {
+          "text": "Le lien ouvre la gestion des responsables.",
+          "startMs": 9820,
+          "endMs": 12361,
+          "method": "silence",
+          "videoSeconds": 161.917
+        },
+        {
+          "text": "Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles.",
+          "startMs": 13078,
+          "endMs": 16150,
+          "method": "silence",
+          "videoSeconds": 165.175
+        },
+        {
+          "text": "Leur rôle est de suivre leur équipe ;",
+          "startMs": 16529,
+          "endMs": 18312,
+          "method": "silence",
+          "videoSeconds": 168.626
+        },
+        {
+          "text": "il ne leur donne pas automatiquement les droits d'un organisateur dans l'administration.",
+          "startMs": 18793,
+          "endMs": 23535,
+          "method": "silence",
+          "videoSeconds": 170.89
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "leaders",
+          "phrase": "Le lien ouvre la gestion",
+          "startMs": 9820,
+          "endMs": 12361,
+          "cueMs": 161924
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 162399,
+          "relativeSeconds": 10.302
+        }
+      ],
+      "frames": [
+        {
+          "scene": "leaders",
+          "fraction": 0.025162507863283706,
+          "seconds": 152.697,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-3.png"
+        },
+        {
+          "scene": "leaders",
+          "fraction": 0.25,
+          "seconds": 158.05825,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-25.png"
+        },
+        {
+          "scene": "leaders",
+          "fraction": 0.45,
+          "seconds": 162.82725,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-45.png"
+        },
+        {
+          "scene": "leaders",
+          "fraction": 0.6,
+          "seconds": 166.404,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-60.png"
+        },
+        {
+          "scene": "leaders",
+          "fraction": 0.85,
+          "seconds": 172.36525,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-85.png"
+        },
+        {
+          "scene": "leaders",
+          "fraction": 0.9874187460683581,
+          "seconds": 175.642,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/leaders-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "full",
+      "startSeconds": 176.396,
+      "endSeconds": 200.131,
+      "sentences": [
+        {
+          "text": "Créneaux complets rassemble les horaires sans besoin supplémentaire et sans liste d'attente.",
+          "startMs": 307,
+          "endMs": 5169,
+          "method": "silence",
+          "videoSeconds": 176.703
+        },
+        {
+          "text": "L'accueil de midi est rempli par des inscriptions confirmées.",
+          "startMs": 5558,
+          "endMs": 8491,
+          "method": "silence",
+          "videoSeconds": 181.954
+        },
+        {
+          "text": "La navette, elle, reste complète grâce aux demandes qui gardent leur place.",
+          "startMs": 9290,
+          "endMs": 12892,
+          "method": "silence",
+          "videoSeconds": 185.686
+        },
+        {
+          "text": "Lisez donc aussi les mentions de statut, pas seulement le ratio.",
+          "startMs": 13228,
+          "endMs": 17784,
+          "method": "silence",
+          "videoSeconds": 189.624
+        },
+        {
+          "text": "Être complet ne signifie ni que tout le monde est présent, ni que toutes les décisions ont déjà été prises.",
+          "startMs": 18024,
+          "endMs": 23395,
+          "method": "silence",
+          "videoSeconds": 194.42
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "full",
+          "fraction": 0.025279123657046557,
+          "seconds": 176.996,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-3.png"
+        },
+        {
+          "scene": "full",
+          "fraction": 0.25,
+          "seconds": 182.32975,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-25.png"
+        },
+        {
+          "scene": "full",
+          "fraction": 0.45,
+          "seconds": 187.07675,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-45.png"
+        },
+        {
+          "scene": "full",
+          "fraction": 0.6,
+          "seconds": 190.637,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-60.png"
+        },
+        {
+          "scene": "full",
+          "fraction": 0.85,
+          "seconds": 196.57075,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-85.png"
+        },
+        {
+          "scene": "full",
+          "fraction": 0.9873604381714767,
+          "seconds": 199.831,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/full-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "action",
+      "startSeconds": 200.585,
+      "endSeconds": 225.417,
+      "sentences": [
+        {
+          "text": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi.",
+          "startMs": 339,
+          "endMs": 4580,
+          "method": "silence",
+          "videoSeconds": 200.924
+        },
+        {
+          "text": "Nous ouvrons le créneau concerné, puis Ajouter manuellement.",
+          "startMs": 4794,
+          "endMs": 7827,
+          "method": "silence",
+          "videoSeconds": 205.379
+        },
+        {
+          "text": "Son email retrouve sa fiche ;",
+          "startMs": 8160,
+          "endMs": 9854,
+          "method": "silence",
+          "videoSeconds": 208.745
+        },
+        {
+          "text": "nous choisissons le bon horaire et enregistrons.",
+          "startMs": 10165,
+          "endMs": 12297,
+          "method": "silence",
+          "videoSeconds": 210.75
+        },
+        {
+          "text": "La nouvelle inscription apparaît.",
+          "startMs": 12890,
+          "endMs": 14703,
+          "method": "silence",
+          "videoSeconds": 213.475
+        },
+        {
+          "text": "En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide.",
+          "startMs": 15299,
+          "endMs": 20279,
+          "method": "silence",
+          "videoSeconds": 215.884
+        },
+        {
+          "text": "Vous pouvez vérifier le résultat, puis vous concentrer sur le besoin suivant.",
+          "startMs": 21067,
+          "endMs": 24541,
+          "method": "silence",
+          "videoSeconds": 221.652
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "action",
+          "phrase": "Nous ouvrons le créneau concerné",
+          "startMs": 4794,
+          "endMs": 7827,
+          "cueMs": 205382
+        },
+        {
+          "segmentId": "action",
+          "phrase": "nous choisissons le bon horaire et enregistrons",
+          "startMs": 10165,
+          "endMs": 12297,
+          "cueMs": 215547
+        },
+        {
+          "segmentId": "action",
+          "phrase": "En revenant au rapport, le",
+          "startMs": 15299,
+          "endMs": 20279,
+          "cueMs": 216330
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 205876,
+          "relativeSeconds": 5.291
+        },
+        {
+          "kind": "click",
+          "atMs": 207158,
+          "relativeSeconds": 6.573
+        },
+        {
+          "kind": "click",
+          "atMs": 207975,
+          "relativeSeconds": 7.39
+        },
+        {
+          "kind": "key",
+          "atMs": 208282,
+          "relativeSeconds": 7.697
+        },
+        {
+          "kind": "key",
+          "atMs": 208380,
+          "relativeSeconds": 7.795
+        },
+        {
+          "kind": "key",
+          "atMs": 208479,
+          "relativeSeconds": 7.894
+        },
+        {
+          "kind": "key",
+          "atMs": 208577,
+          "relativeSeconds": 7.992
+        },
+        {
+          "kind": "key",
+          "atMs": 208676,
+          "relativeSeconds": 8.091
+        },
+        {
+          "kind": "key",
+          "atMs": 208775,
+          "relativeSeconds": 8.19
+        },
+        {
+          "kind": "click",
+          "atMs": 209558,
+          "relativeSeconds": 8.973
+        },
+        {
+          "kind": "key",
+          "atMs": 209865,
+          "relativeSeconds": 9.28
+        },
+        {
+          "kind": "key",
+          "atMs": 209962,
+          "relativeSeconds": 9.377
+        },
+        {
+          "kind": "key",
+          "atMs": 210061,
+          "relativeSeconds": 9.476
+        },
+        {
+          "kind": "key",
+          "atMs": 210159,
+          "relativeSeconds": 9.574
+        },
+        {
+          "kind": "key",
+          "atMs": 210258,
+          "relativeSeconds": 9.673
+        },
+        {
+          "kind": "click",
+          "atMs": 211057,
+          "relativeSeconds": 10.472
+        },
+        {
+          "kind": "key",
+          "atMs": 211365,
+          "relativeSeconds": 10.78
+        },
+        {
+          "kind": "key",
+          "atMs": 211463,
+          "relativeSeconds": 10.878
+        },
+        {
+          "kind": "key",
+          "atMs": 211562,
+          "relativeSeconds": 10.977
+        },
+        {
+          "kind": "key",
+          "atMs": 211661,
+          "relativeSeconds": 11.076
+        },
+        {
+          "kind": "key",
+          "atMs": 211759,
+          "relativeSeconds": 11.174
+        },
+        {
+          "kind": "key",
+          "atMs": 211858,
+          "relativeSeconds": 11.273
+        },
+        {
+          "kind": "key",
+          "atMs": 211958,
+          "relativeSeconds": 11.373
+        },
+        {
+          "kind": "key",
+          "atMs": 212057,
+          "relativeSeconds": 11.472
+        },
+        {
+          "kind": "key",
+          "atMs": 212156,
+          "relativeSeconds": 11.571
+        },
+        {
+          "kind": "key",
+          "atMs": 212256,
+          "relativeSeconds": 11.671
+        },
+        {
+          "kind": "key",
+          "atMs": 212359,
+          "relativeSeconds": 11.774
+        },
+        {
+          "kind": "key",
+          "atMs": 212460,
+          "relativeSeconds": 11.875
+        },
+        {
+          "kind": "key",
+          "atMs": 212561,
+          "relativeSeconds": 11.976
+        },
+        {
+          "kind": "key",
+          "atMs": 212660,
+          "relativeSeconds": 12.075
+        },
+        {
+          "kind": "key",
+          "atMs": 212761,
+          "relativeSeconds": 12.176
+        },
+        {
+          "kind": "key",
+          "atMs": 212866,
+          "relativeSeconds": 12.281
+        },
+        {
+          "kind": "key",
+          "atMs": 212968,
+          "relativeSeconds": 12.383
+        },
+        {
+          "kind": "key",
+          "atMs": 213070,
+          "relativeSeconds": 12.485
+        },
+        {
+          "kind": "key",
+          "atMs": 213172,
+          "relativeSeconds": 12.587
+        },
+        {
+          "kind": "key",
+          "atMs": 213275,
+          "relativeSeconds": 12.69
+        },
+        {
+          "kind": "key",
+          "atMs": 213377,
+          "relativeSeconds": 12.792
+        },
+        {
+          "kind": "key",
+          "atMs": 213481,
+          "relativeSeconds": 12.896
+        },
+        {
+          "kind": "key",
+          "atMs": 213582,
+          "relativeSeconds": 12.997
+        },
+        {
+          "kind": "key",
+          "atMs": 213690,
+          "relativeSeconds": 13.105
+        },
+        {
+          "kind": "click",
+          "atMs": 214440,
+          "relativeSeconds": 13.855
+        },
+        {
+          "kind": "click",
+          "atMs": 215241,
+          "relativeSeconds": 14.656
+        },
+        {
+          "kind": "click",
+          "atMs": 216024,
+          "relativeSeconds": 15.439
+        }
+      ],
+      "frames": [
+        {
+          "scene": "action",
+          "fraction": 0.02416237113402062,
+          "seconds": 201.185,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-2.png"
+        },
+        {
+          "scene": "action",
+          "fraction": 0.25,
+          "seconds": 206.793,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-25.png"
+        },
+        {
+          "scene": "action",
+          "fraction": 0.45,
+          "seconds": 211.7594,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-45.png"
+        },
+        {
+          "scene": "action",
+          "fraction": 0.6,
+          "seconds": 215.48420000000002,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-60.png"
+        },
+        {
+          "scene": "action",
+          "fraction": 0.85,
+          "seconds": 221.6922,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-85.png"
+        },
+        {
+          "scene": "action",
+          "fraction": 0.9879188144329897,
+          "seconds": 225.117,
+          "file": "/private/tmp/codex-video/videos/output/staffing-gaps/review-frames/action-end.png"
+        }
+      ]
+    }
+  ]
+}

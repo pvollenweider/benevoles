@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une consigne que tu réutilises, ouvre les modèles de messages",
+  "windowStart": 54.876000000000005,
+  "result": {
+    "found": true,
+    "startSeconds": 14.86,
+    "wordsHeard": "Pour une consigne que tu réutilises, ouvre les modèles de messages"
+  },
+  "onset": 69.736,
+  "proposedCut": 69.876375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:23:20.625Z",
-  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
-  "promptSha256": "e110d775b179d509292582912c33c8367ac5a20bad343800b23523a985e4e447",
-  "clipSha256": "d2373d3568fc78b3f736f62331ef4240864a20f5e2571bf7983bac70fc8f55bc",
+  "reviewedAt": "2026-10-13T06:38:17.191Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "3f4e789b7e93e56fc87fe20107c5c6251010a11b3fa45a6455fdfde06ff89ef5",
+  "clipSha256": "f138d4535e2e851554cb68c84ca7dad0a89ec0f0c73c12062a8b5b4591bbbdff",
   "scene": "withdrawal",
   "review": {
     "heardOpening": "Aline ne peut plus venir à l'accueil",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 4.1,
         "spoken": "elle annule son inscription",
-        "visibleSeconds": 4.8,
-        "visible": "Clic sur le bouton Annuler puis validation du retrait de l'accueil",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le bouton Annuler du créneau Accueil du matin puis confirmation par Oui, annuler",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.1,
+        "spokenSeconds": 10.3,
         "spoken": "Revenons dans les inscriptions côté organisation",
-        "visibleSeconds": 12.3,
-        "visible": "Transition vers la liste des inscriptions de l'événement côté administrateur",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 15.6,
+        "visible": "Affichage de la page de gestion des inscriptions côté organisation",
+        "sync": "late",
+        "severity": "major"
       },
       {
-        "spokenSeconds": 17,
+        "spokenSeconds": 17.5,
         "spoken": "l'application lui propose de la prendre",
-        "visibleSeconds": 14,
-        "visible": "La ligne de Nicolas affiche le statut Place proposée",
+        "visibleSeconds": 16.5,
+        "visible": "Ligne de Nicolas Exemple avec le statut Place proposée sur le créneau Accueil du matin",
         "sync": "aligned",
         "severity": "none"
       },
@@ -36,16 +36,26 @@
         "spokenSeconds": 21.2,
         "spoken": "Ouvrons le vrai email reçu par Nicolas",
         "visibleSeconds": 21,
-        "visible": "Affichage du client de messagerie Mailpit avec le message destiné à Nicolas",
+        "visible": "Affichage de l'outil de messagerie Mailpit avec le courriel adressé à Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "On y retrouve le créneau et un délai de réponse",
+        "visibleSeconds": 23.5,
+        "visible": "Mention du créneau samedi 17 octobre 10:00-12:00 et de l'expiration du lien au mercredi 14 octobre",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:10 - 00:15 : La voix annonce le retour aux inscriptions côté organisation et commente le statut de confirmation active dès 00:13, mais l'ancien écran reste affiché jusqu'à 00:15.6 (retard supérieur à 2 secondes)."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier adapté au didacticiel."
+      "observation": "Voix féminine claire, posée et bien articulée, sans parasite sonore."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
