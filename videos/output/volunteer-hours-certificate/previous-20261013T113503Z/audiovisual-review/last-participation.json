@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:32:54.197Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "13b5f76c321f1436f78c212f278851f78a617092bc3a5310c86caf595fb96099",
+  "clipSha256": "b4c6ca876b1d1b45347c9f20c02ffd7706bba0226b4e639145c50057189e7219",
+  "scene": "last-participation",
+  "review": {
+    "heardOpening": "La dernière participation apporte un autre repère",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée",
+        "visibleSeconds": 3.7,
+        "visible": "Dans la colonne Dernière participation, la ligne d'Aline Mercier affiche la date du créneau au-dessus de la mention de présence",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Pour Benoît, aucune présence n'a été saisie",
+        "visibleSeconds": 9.8,
+        "visible": "La ligne de Benoît Faure indique 'Aucune présence saisie' sous la date",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Un clic les classe par ordre croissant",
+        "visibleSeconds": 16.8,
+        "visible": "Clic sur l'en-tête Heures attestées et réorganisation des lignes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.6,
+        "spoken": "Cliquons enfin sur Dernière participation pour trier cette date",
+        "visibleSeconds": 26.8,
+        "visible": "Clic sur l'en-tête Dernière participation sans modification visible du tri de la liste",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:19, le deuxième clic annoncé pour inverser le tri n'est pas visible ; la liste repasse directement à son état initial à 00:22.",
+      "À 00:27, le clic sur 'Dernière participation' ne déclenche aucun tri visible des lignes du tableau."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,12 +1,12 @@
 {
-  "checkedAt": "2026-10-13T09:30:12.610Z",
+  "checkedAt": "2026-10-13T11:39:18.315Z",
   "product": {
-    "commit": "39b375b9ede4d3a0081fbce1f964e4b79549a7c9",
-    "sourceTree": "2197b5f23af3dd7633ff7eb5e948bf0f26af8639",
-    "productSourceSha256": "e9fc098acc11b0ead2c152cebdd1f27fd5975c0aaadc8f42c84b1b03642b7f34",
-    "buildId": "RPQR_7CtwLDa6m9DyYOBY",
-    "snapshot": "/tmp/benevoles-video-production.batch15",
-    "builtAt": "2026-10-13T08:28:42.800Z"
+    "commit": "8b124a696edcfacc5a60879eb2b45eee110e93a6",
+    "sourceTree": "e33e85a0623226c3ee42996dd6713fa4dda7860b",
+    "productSourceSha256": "11e2130b19d137ace2254a74886e0f151e8926aeda4390bb98b5d9f8f8d8d476",
+    "buildId": "xYE1IdGm9lLkGSWKqeLjk",
+    "snapshot": "/tmp/benevoles-video-production.batch17",
+    "builtAt": "2026-10-13T11:25:29.139Z"
   },
   "hours-list": {
     "plannedHours": 8,
@@ -46,7 +46,7 @@
     "noClockedWorkedHoursClaim": true
   },
   "certificate-pdf": {
-    "actualPdfSha256": "3482038fe83d4e8ad5e2a9bd535ee74cc4574d184c29f87243e67d513b2deabc",
+    "actualPdfSha256": "d481b415c58021ec0f17f92592e96da4a23c91a4f141886f25605cec010296cb",
     "actualPdfPages": 1,
     "method": "browser-print-engine",
     "realProductPrintActionLogged": true,

@@ -1,34 +1,34 @@
 [
   {
-    "chapter": "hours-list",
-    "exitCode": 0
+    "scene": "hours-list",
+    "exit": 0
   },
   {
-    "chapter": "last-participation",
-    "exitCode": 1
+    "scene": "last-participation",
+    "exit": 1
   },
   {
-    "chapter": "activity",
-    "exitCode": 0
+    "scene": "activity",
+    "exit": 0
   },
   {
-    "chapter": "period-export",
-    "exitCode": 0
+    "scene": "period-export",
+    "exit": 0
   },
   {
-    "chapter": "certificate-settings",
-    "exitCode": 0
+    "scene": "certificate-settings",
+    "exit": 0
   },
   {
-    "chapter": "certificate-presence",
-    "exitCode": 0
+    "scene": "certificate-presence",
+    "exit": 0
   },
   {
-    "chapter": "certificate-pdf",
-    "exitCode": 0
+    "scene": "certificate-pdf",
+    "exit": 0
   },
   {
-    "chapter": "event-summary",
-    "exitCode": 0
+    "scene": "event-summary",
+    "exit": 0
   }
 ]

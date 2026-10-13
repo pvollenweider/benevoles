@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-13T11:31:05.887Z",
+  "product": {
+    "commit": "8b124a696edcfacc5a60879eb2b45eee110e93a6",
+    "sourceTree": "e33e85a0623226c3ee42996dd6713fa4dda7860b",
+    "productSourceSha256": "11e2130b19d137ace2254a74886e0f151e8926aeda4390bb98b5d9f8f8d8d476",
+    "buildId": "xYE1IdGm9lLkGSWKqeLjk",
+    "snapshot": "/tmp/benevoles-video-production.batch17",
+    "builtAt": "2026-10-13T11:25:29.139Z"
+  },
+  "hours-list": {
+    "plannedHours": 8,
+    "attestedHours": 6,
+    "futureAndCancelledExcluded": true,
+    "attestedIsSubsetNotAdditional": true
+  },
+  "last-participation": {
+    "confirmedDateAndPresenceDateShownSeparately": true,
+    "noPresenceNotAbsence": true,
+    "actualAttestedSortCycleVerified": true,
+    "actualLastParticipationSortVerified": true
+  },
+  "activity": {
+    "realFactualChronologyShown": true,
+    "hoursColumnsAreOnMembersListNotThisPage": true
+  },
+  "period-export": {
+    "actualDownloads": 2,
+    "firstFileChecked": true,
+    "includeZeroMemberVerified": true,
+    "plannedHours": 6,
+    "attestedHours": 2,
+    "period": "September2026"
+  },
+  "certificate-settings": {
+    "actualLivePreview": true,
+    "period": "MayToSeptember2026",
+    "actualNoteEntered": true,
+    "actualLogoLoaded": true,
+    "actualPrintGrayscaleComputed": true
+  },
+  "certificate-presence": {
+    "attestedHours": 6,
+    "additionalPlannedWithoutPresenceHours": 2,
+    "notEightPlusSix": true,
+    "noClockedWorkedHoursClaim": true
+  },
+  "certificate-pdf": {
+    "actualPdfSha256": "37f4e9b62249637fb94228619df5747ba19a0cbbfb312cccf0fc64421e2d1676",
+    "actualPdfPages": 1,
+    "method": "browser-print-engine",
+    "realProductPrintActionLogged": true,
+    "serverPdfDownloadFeature": false,
+    "stillRequiresHumanReviewAndSignature": true
+  },
+  "event-summary": {
+    "distinctPeopleNotRegistrations": true,
+    "partialCheckInNotAbsenceClaim": true,
+    "plannedHours": 6,
+    "attestedHours": 2,
+    "currentRealReportsSummary": true
+  }
+}

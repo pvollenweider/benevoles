@@ -1,15 +1,15 @@
 {
   "slug": "volunteer-hours-certificate",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-13T09:30:49.955Z",
+  "recordedAt": "2026-10-13T11:39:55.821Z",
   "video": "capture.webm",
   "product": {
-    "commit": "39b375b9ede4d3a0081fbce1f964e4b79549a7c9",
-    "sourceTree": "2197b5f23af3dd7633ff7eb5e948bf0f26af8639",
-    "productSourceSha256": "e9fc098acc11b0ead2c152cebdd1f27fd5975c0aaadc8f42c84b1b03642b7f34",
-    "buildId": "RPQR_7CtwLDa6m9DyYOBY",
-    "snapshot": "/tmp/benevoles-video-production.batch15",
-    "builtAt": "2026-10-13T08:28:42.800Z"
+    "commit": "8b124a696edcfacc5a60879eb2b45eee110e93a6",
+    "sourceTree": "e33e85a0623226c3ee42996dd6713fa4dda7860b",
+    "productSourceSha256": "11e2130b19d137ace2254a74886e0f151e8926aeda4390bb98b5d9f8f8d8d476",
+    "buildId": "xYE1IdGm9lLkGSWKqeLjk",
+    "snapshot": "/tmp/benevoles-video-production.batch17",
+    "builtAt": "2026-10-13T11:25:29.139Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,281 +26,281 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 48858
+      "atMs": 51281
     },
     {
       "kind": "click",
-      "atMs": 51223
+      "atMs": 54064
     },
     {
       "kind": "click",
-      "atMs": 57923
+      "atMs": 56665
     },
     {
       "kind": "click",
-      "atMs": 61655
+      "atMs": 57998
     },
     {
       "kind": "click",
-      "atMs": 69297
+      "atMs": 69367
     },
     {
       "kind": "click",
-      "atMs": 96804
+      "atMs": 96863
     },
     {
       "kind": "click",
-      "atMs": 97621
+      "atMs": 97681
     },
     {
       "kind": "click",
-      "atMs": 99438
+      "atMs": 99530
     },
     {
       "kind": "click",
-      "atMs": 101221
+      "atMs": 101313
     },
     {
       "kind": "click",
-      "atMs": 112587
+      "atMs": 112646
     },
     {
       "kind": "click",
-      "atMs": 113370
+      "atMs": 113429
     },
     {
       "kind": "click",
-      "atMs": 137861
+      "atMs": 137924
     },
     {
       "kind": "click",
-      "atMs": 141753
+      "atMs": 141811
     },
     {
       "kind": "click",
-      "atMs": 143569
+      "atMs": 143629
     },
     {
       "kind": "click",
-      "atMs": 145686
+      "atMs": 145744
     },
     {
       "kind": "key",
-      "atMs": 145994
+      "atMs": 146054
     },
     {
       "kind": "key",
-      "atMs": 146073
+      "atMs": 146134
     },
     {
       "kind": "key",
-      "atMs": 146150
+      "atMs": 146213
     },
     {
       "kind": "key",
-      "atMs": 146228
+      "atMs": 146290
     },
     {
       "kind": "key",
-      "atMs": 146307
+      "atMs": 146368
     },
     {
       "kind": "key",
-      "atMs": 146385
+      "atMs": 146447
     },
     {
       "kind": "key",
-      "atMs": 146463
+      "atMs": 146525
     },
     {
       "kind": "key",
-      "atMs": 146542
+      "atMs": 146604
     },
     {
       "kind": "key",
-      "atMs": 146620
+      "atMs": 146682
     },
     {
       "kind": "key",
-      "atMs": 146699
+      "atMs": 146761
     },
     {
       "kind": "key",
-      "atMs": 146777
+      "atMs": 146838
     },
     {
       "kind": "key",
-      "atMs": 146856
+      "atMs": 146916
     },
     {
       "kind": "key",
-      "atMs": 146934
+      "atMs": 146993
     },
     {
       "kind": "key",
-      "atMs": 147011
+      "atMs": 147071
     },
     {
       "kind": "key",
-      "atMs": 147088
+      "atMs": 147151
     },
     {
       "kind": "key",
-      "atMs": 147166
+      "atMs": 147229
     },
     {
       "kind": "key",
-      "atMs": 147244
+      "atMs": 147307
     },
     {
       "kind": "key",
-      "atMs": 147322
+      "atMs": 147385
     },
     {
       "kind": "key",
-      "atMs": 147399
+      "atMs": 147462
     },
     {
       "kind": "key",
-      "atMs": 147478
+      "atMs": 147541
     },
     {
       "kind": "key",
-      "atMs": 147556
+      "atMs": 147618
     },
     {
       "kind": "key",
-      "atMs": 147634
+      "atMs": 147696
     },
     {
       "kind": "key",
-      "atMs": 147713
+      "atMs": 147772
     },
     {
       "kind": "key",
-      "atMs": 147790
+      "atMs": 147853
     },
     {
       "kind": "key",
-      "atMs": 147868
+      "atMs": 147933
     },
     {
       "kind": "key",
-      "atMs": 147946
+      "atMs": 148015
     },
     {
       "kind": "key",
-      "atMs": 148024
+      "atMs": 148097
     },
     {
       "kind": "key",
-      "atMs": 148102
+      "atMs": 148174
     },
     {
       "kind": "key",
-      "atMs": 148180
+      "atMs": 148253
     },
     {
       "kind": "key",
-      "atMs": 148259
+      "atMs": 148329
     },
     {
       "kind": "key",
-      "atMs": 148336
+      "atMs": 148408
     },
     {
       "kind": "key",
-      "atMs": 148414
+      "atMs": 148485
     },
     {
       "kind": "key",
-      "atMs": 148493
+      "atMs": 148563
     },
     {
       "kind": "key",
-      "atMs": 148571
+      "atMs": 148641
     },
     {
       "kind": "key",
-      "atMs": 148650
+      "atMs": 148719
     },
     {
       "kind": "key",
-      "atMs": 148727
+      "atMs": 148796
     },
     {
       "kind": "key",
-      "atMs": 148805
+      "atMs": 148874
     },
     {
       "kind": "key",
-      "atMs": 148961
+      "atMs": 149030
     },
     {
       "kind": "key",
-      "atMs": 149038
+      "atMs": 149108
     },
     {
       "kind": "key",
-      "atMs": 149116
+      "atMs": 149186
     },
     {
       "kind": "key",
-      "atMs": 149194
+      "atMs": 149264
     },
     {
       "kind": "key",
-      "atMs": 149273
+      "atMs": 149343
     },
     {
       "kind": "click",
-      "atMs": 180601
+      "atMs": 180659
     },
     {
       "kind": "click",
-      "atMs": 207883
+      "atMs": 207942
     }
   ],
   "cues": [
     {
       "id": "hours-list",
-      "startMs": 3470,
-      "endMs": 31735
+      "startMs": 3522,
+      "endMs": 31787
     },
     {
       "id": "last-participation",
-      "startMs": 33998,
-      "endMs": 66554
+      "startMs": 34044,
+      "endMs": 66600
     },
     {
       "id": "activity",
-      "startMs": 68814,
-      "endMs": 92848
+      "startMs": 68862,
+      "endMs": 92895
     },
     {
       "id": "period-export",
-      "startMs": 95102,
-      "endMs": 131492
+      "startMs": 95156,
+      "endMs": 131547
     },
     {
       "id": "certificate-settings",
-      "startMs": 133751,
-      "endMs": 174095
+      "startMs": 133813,
+      "endMs": 174157
     },
     {
       "id": "certificate-presence",
-      "startMs": 176357,
-      "endMs": 204822
+      "startMs": 176416,
+      "endMs": 204883
     },
     {
       "id": "certificate-pdf",
-      "startMs": 207080,
-      "endMs": 241175
+      "startMs": 207139,
+      "endMs": 241234
     },
     {
       "id": "event-summary",
-      "startMs": 243439,
-      "endMs": 277133
+      "startMs": 243498,
+      "endMs": 277194
     }
   ],
   "anchors": [
@@ -309,98 +309,84 @@
       "phrase": "Pour Benoît, aucune présence n'a",
       "startMs": 9940,
       "endMs": 12066,
-      "cueMs": 43939
-    },
-    {
-      "segmentId": "last-participation",
-      "phrase": "Vous pouvez aussi trier les",
-      "startMs": 14391,
-      "endMs": 16253,
-      "cueMs": 48390
+      "cueMs": 43986
     },
     {
       "segmentId": "last-participation",
       "phrase": "Un clic les classe par",
       "startMs": 16760,
       "endMs": 22961,
-      "cueMs": 50759
+      "cueMs": 50805
     },
     {
       "segmentId": "last-participation",
       "phrase": "Cliquons enfin sur Dernière participation",
       "startMs": 23464,
       "endMs": 26569,
-      "cueMs": 57462
-    },
-    {
-      "segmentId": "last-participation",
-      "phrase": "Aucun de ces repères ne",
-      "startMs": 27176,
-      "endMs": 30778,
-      "cueMs": 61174
+      "cueMs": 57509
     },
     {
       "segmentId": "period-export",
       "phrase": "Cochons maintenant l'option pour inclure",
       "startMs": 17017,
       "endMs": 22189,
-      "cueMs": 112120
+      "cueMs": 112175
     },
     {
       "segmentId": "period-export",
       "phrase": "Le total indique six heures",
       "startMs": 25861,
       "endMs": 29137,
-      "cueMs": 120964
+      "cueMs": 121017
     },
     {
       "segmentId": "certificate-settings",
       "phrase": "Depuis son activité, ouvrons Attestation de bénévolat",
       "startMs": 3620,
       "endMs": 6845,
-      "cueMs": 137372
+      "cueMs": 137434
     },
     {
       "segmentId": "certificate-settings",
       "phrase": "Choisissons une période du premier mai",
       "startMs": 7483,
       "endMs": 11046,
-      "cueMs": 141235
+      "cueMs": 141298
     },
     {
       "segmentId": "certificate-settings",
       "phrase": "Vous pouvez ajouter une remarque facultative",
       "startMs": 11461,
       "endMs": 13899,
-      "cueMs": 145212
+      "cueMs": 145275
     },
     {
       "segmentId": "certificate-settings",
       "phrase": "L'aperçu reprend le nom du bénévole",
       "startMs": 18383,
       "endMs": 23428,
-      "cueMs": 152134
+      "cueMs": 152197
     },
     {
       "segmentId": "certificate-presence",
       "phrase": "Regardons cette colonne, puis cochons",
       "startMs": 3774,
       "endMs": 8326,
-      "cueMs": 180132
+      "cueMs": 180191
     },
     {
       "segmentId": "certificate-presence",
       "phrase": "Pour Aline, nous retrouvons six heures",
       "startMs": 16076,
       "endMs": 20595,
-      "cueMs": 192438
+      "cueMs": 192494
     },
     {
       "segmentId": "certificate-pdf",
       "phrase": "Quand le contenu vous convient",
       "startMs": 336,
       "endMs": 5204,
-      "cueMs": 207418
+      "cueMs": 207476
     }
   ]
 }

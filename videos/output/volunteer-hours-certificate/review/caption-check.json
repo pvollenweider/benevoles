@@ -1,5 +1,5 @@
 {
   "passed": true,
   "cues": 58,
-  "note": "Actual VTT equals current caption display formatter output, preserving narration meaning with French numeric dates and hours."
+  "note": "Actual VTT compared to current caption formatter; source and final narration independently audited."
 }

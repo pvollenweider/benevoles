@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:33:41.146Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "8208097e3fa2859f185446b87b082b67a02c4558bcccbf19d6ab1c1607603dfc",
+  "clipSha256": "6131990b5eeeee3c8180c0c5e960fa61b7103aea144f3618973395e2770f243f",
+  "scene": "certificate-settings",
+  "review": {
+    "heardOpening": "Préparons maintenant une attestation pour Aline.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "ouvrons Attestation de bénévolat.",
+        "visibleSeconds": 4.2,
+        "visible": "Ouverture du formulaire des réglages de l'attestation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "Choisissons une période du premier mai au trente septembre.",
+        "visibleSeconds": 8.1,
+        "visible": "Saisie des dates du 01/05/2026 au 30/09/2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "écrivons Accueil du public et rangement du matériel.",
+        "visibleSeconds": 12.5,
+        "visible": "Saisie du commentaire dans le champ Texte libre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "L'aperçu reprend le nom du bénévole",
+        "visibleSeconds": 18.2,
+        "visible": "Défilement vers l'aperçu du document généré",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:33:09.472Z",
-  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
+  "reviewedAt": "2026-10-13T11:42:25.918Z",
+  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
   "promptSha256": "c619b3985346b9ae158ade5ed29cc715d18307e1490a18bb961548da6fcd6885",
-  "clipSha256": "89d5d124f508d20c8a0c123d1a5185e64515e0421890c9e8d1200f97bd2c0f77",
+  "clipSha256": "859d0f6bbd229c1c6d2a76c713416afdd7a00fb6b9c9bd4d3f696425e2da9f06",
   "scene": "certificate-pdf",
   "review": {
     "heardOpening": "Quand le contenu vous convient",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.1,
         "spoken": "cliquons sur Générer et imprimer l'attestation",
-        "visibleSeconds": 2.1,
-        "visible": "Affichage de la page de résultat 'PDF réel — Impression locale du navigateur'",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le bouton bleu Générer et imprimer l'attestation puis affichage du PDF",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
-        "spoken": "nous ouvrons le vrai PDF produit par le moteur d'impression local",
-        "visibleSeconds": 2.1,
-        "visible": "Le PDF complet généré localement reste affiché au centre de l'écran",
+        "spokenSeconds": 11.4,
+        "spoken": "Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur",
+        "visibleSeconds": 2,
+        "visible": "Page PDF réel affichée avec le bandeau explicatif sur l'impression locale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20,
+        "spokenSeconds": 20.2,
         "spoken": "Relisons le nom, la période, les deux colonnes et la remarque",
-        "visibleSeconds": 20,
-        "visible": "Le nom d'Aline Mercier, la période, le tableau à colonnes et la remarque sont lisibles sur le PDF",
+        "visibleSeconds": 20.2,
+        "visible": "Attestation de bénévolat visible avec le nom d'Aline Mercier, les dates, le tableau à colonnes et la remarque",
         "sync": "aligned",
         "severity": "none"
       },
@@ -36,7 +36,7 @@
         "spokenSeconds": 25.1,
         "spoken": "Les zones Signature et Nom du signataire restent à compléter",
         "visibleSeconds": 25.1,
-        "visible": "Les mentions Signature et Nom du signataire sont visibles en bas de page",
+        "visible": "Champs Signature et Nom du signataire visibles en bas du document PDF",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, fluide et parfaitement audible tout au long de l'extrait."
+      "observation": "Voix posée, claire et bien articulée, en parfait accord avec le déroulement visuel."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

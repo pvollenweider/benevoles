@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T11:33:46.571Z",
+  "revalidatedAt": "2026-10-13T11:33:46.571Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "event-summary",
+      "audioSha256": "547702b3faf870727a45c606b967ffc718bf1fbe8f10a0c4a3079b919921dc60",
+      "recognized": "Enfin, ouvrons les rapports de la fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés. Une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale, les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "expected": "Enfin, ouvrons les rapports de la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}
