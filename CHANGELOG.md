@@ -27,6 +27,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 
 - **Plus d'annulation d'un créneau commencé ou terminé** (#946) : le lien personnel permettait d'annuler un créneau déjà commencé, voire terminé, ce qui libérait une place que personne ne pouvait plus prendre, pouvait la proposer à la liste d'attente, et retirait les heures du résumé et de l'export des heures. L'annulation est désormais refusée dès le début du créneau, avec un message clair si la page était restée ouverte, et la page personnelle affiche les personnes à prévenir.
+- **Attestation de bénévolat imprimée sans le menu** (#965) : imprimée ou enregistrée en PDF, l'attestation commençait par la barre de navigation de l'administration. Seul le document s'imprime désormais, comme sur les autres pages d'administration.
+- **Export complet : la frise commence sur la première page** (#966) : quand la frise d'une journée dépassait la place restante, la première page ne contenait que le titre « Planning ». La frise se coupe désormais entre deux lignes, l'en-tête des heures se répète sur la page suivante, et un titre ne reste plus seul en bas de page.
 
 ### Sécurité
 

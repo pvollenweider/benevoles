@@ -147,7 +147,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       padding-bottom: 4px;
       border-bottom: 2px solid #BFDBFE;
     }
-    .day-block { margin-bottom: 14px; page-break-inside: avoid; }
+    /* A day's Frise is often taller than a page: \`avoid\` on the whole block pushed it to page 2 and
+       left the « Planning » heading alone on page 1 (#966). The block now breaks between rows (rows
+       stay whole, the header repeats) and each heading stays with what follows it. */
+    .day-block { margin-bottom: 14px; }
+    .section-title, .day-sub-title { page-break-after: avoid; break-after: avoid; }
+    thead { display: table-header-group; }
     .day-sub-title {
       font-size: 11px;
       font-weight: 700;
