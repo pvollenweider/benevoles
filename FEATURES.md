@@ -139,23 +139,23 @@ Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec
 
 ## Questions fréquentes
 
-<!-- BROUILLON : questions à relire et réécrire par le propriétaire avant publication. Distinctes de celles de LOGICIEL-PLANNING-BENEVOLES.md et de FAQ-ACCUEIL.md : elles sont aussi les données structurées FAQPage de la page. -->
+<!-- Questions distinctes de celles de LOGICIEL-PLANNING-BENEVOLES.md et de FAQ-ACCUEIL.md : elles sont aussi les données structurées FAQPage de la page. -->
 
 ### Un bénévole peut-il prendre plusieurs créneaux ?
 
-Oui, en une seule inscription : il les sélectionne sur le planning, relit le récapitulatif et confirme une fois. Deux créneaux qui se chevauchent ne peuvent pas être pris ensemble. Sur un poste très demandé, vous pouvez limiter le nombre de créneaux par personne, par exemple deux à la loge des artistes.
+Oui, en une seule inscription : il sélectionne ses créneaux sur le planning, relit le récapitulatif et confirme une fois. Deux créneaux qui se chevauchent ne peuvent pas être pris ensemble. Sur un poste très demandé, vous pouvez limiter le nombre de créneaux par personne, par exemple à deux pour la loge des artistes.
 
 ### Que se passe-t-il quand un créneau est complet ?
 
-Si sa liste d'attente est activée, les bénévoles s'y inscrivent dans l'ordre d'arrivée. Quand une place se libère, la première personne de la file la reçoit par email et a 24 heures pour la prendre. Sans réponse, la place passe à la suivante.
+Si vous avez activé sa liste d'attente, les bénévoles s'y inscrivent dans l'ordre d'arrivée. Quand une place se libère, la première personne de la file la reçoit par email et a 24 heures pour la prendre, jamais au-delà du début du créneau. Sans réponse, la place passe à la suivante. Une place libérée moins d'une heure avant le début n'est pas proposée : vous êtes prévenu tout de suite, et c'est à vous de trouver quelqu'un.
 
 ### Plusieurs personnes peuvent-elles préparer le planning ?
 
-Oui. L'équipe d'administration a deux rôles : les organisateurs préparent les événements, suivent les inscriptions et écrivent aux bénévoles ; les propriétaires règlent en plus l'organisation et son équipe. Le journal de chaque événement dit qui a fait quoi, et quand.
+Oui. L'équipe d'administration a deux rôles : les organisateurs préparent les événements, suivent les inscriptions et écrivent aux bénévoles ; les propriétaires règlent en plus l'organisation et son équipe. Le journal de chaque événement indique qui a fait quoi, et quand.
 
 ### Un bénévole se désiste la veille. Que faire ?
 
-Si quelqu'un attend en liste d'attente, la place lui est proposée sans que vous ayez rien à faire. Sinon, l'email qui vous prévient du désistement propose **Trouver un remplaçant** : vous choisissez parmi vos membres à qui écrire, et leur email propose **Je prends ce créneau**.
+Si quelqu'un attend sur la liste d'attente du créneau, la place lui est proposée sans que vous ayez rien à faire. Sinon, l'email qui vous prévient du désistement, envoyé tout de suite quand le créneau commence dans moins de 24 heures, propose **Trouver un remplaçant** : vous choisissez parmi vos membres à qui écrire, et leur email propose **Je prends ce créneau**. Vous pouvez aussi fixer un délai d'annulation, par exemple 2 jours avant le créneau : passé ce délai, le bénévole ne peut plus annuler lui-même, et sa page lui indique qui prévenir.
 
 ### Une activité qui revient chaque semaine, c'est possible ?
 

@@ -130,7 +130,13 @@ describe.each(EDITORIAL)("%s", (pagePath) => {
   // Plain, concrete copy (the owner's rules): « vous », no em dash, no exclamation mark.
   it("keeps to the site's voice", () => {
     // Comments and screenshots aside: an alt text quotes the screen as it is (« Avant ta mission »).
-    const text = source.replace(/<!--[\s\S]*?-->/g, "").replace(/^!\[.*$/gm, "")
+    // Repeated until nothing changes, so no comment survives a single pass (CodeQL js/incomplete-multi-character-sanitization).
+    let text = source
+    for (let prev = ""; prev !== text; ) {
+      prev = text
+      text = text.replace(/<!--[\s\S]*?-->/g, "")
+    }
+    text = text.replace(/^!\[.*$/gm, "")
     expect(text).not.toMatch(/—/)
     expect(text).not.toMatch(/!(?!\[)/)
     // Whole words only: \b would cut « fêtes » after its « ê ».

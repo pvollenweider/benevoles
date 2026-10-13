@@ -426,7 +426,7 @@ function LandingPage() {
                 Il n&apos;y a ni abonnement ni version payante. Le code est public (licence AGPL-3.0)
                 et l&apos;outil évolue avec les retours des associations qui l&apos;utilisent.{" "}
                 <Link href="/tarifs" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
-                  Tarifs : pourquoi c&apos;est gratuit
+                  Tarifs et financement du projet
                 </Link>
               </dd>
             </div>
