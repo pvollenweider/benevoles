@@ -1,0 +1,1167 @@
+{
+  "mp4Sha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "chapters": [
+    {
+      "chapter": "hours-list",
+      "startSeconds": 3.454,
+      "endSeconds": 31.719,
+      "sentences": [
+        {
+          "text": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair.",
+          "startMs": 270,
+          "endMs": 3882,
+          "method": "silence",
+          "videoSeconds": 3.724
+        },
+        {
+          "text": "Dans la liste des membres, regardons les heures planifiées et les heures attestées.",
+          "startMs": 4184,
+          "endMs": 8675,
+          "method": "silence",
+          "videoSeconds": 7.638
+        },
+        {
+          "text": "Pour Aline, huit heures étaient prévues sur ses créneaux confirmés passés, et six correspondent à une présence saisie.",
+          "startMs": 9029,
+          "endMs": 14997,
+          "method": "silence",
+          "videoSeconds": 12.483
+        },
+        {
+          "text": "Ces six heures font partie des huit :",
+          "startMs": 15370,
+          "endMs": 17036,
+          "method": "silence",
+          "videoSeconds": 18.824
+        },
+        {
+          "text": "elles ne s'ajoutent pas.",
+          "startMs": 17216,
+          "endMs": 18283,
+          "method": "silence",
+          "videoSeconds": 20.67
+        },
+        {
+          "text": "Les créneaux à venir, les inscriptions annulées et les créneaux annulés ne gonflent pas ce bilan.",
+          "startMs": 18882,
+          "endMs": 23856,
+          "method": "silence",
+          "videoSeconds": 22.336
+        },
+        {
+          "text": "Toutes les personnes et les données de cette démonstration sont fictives.",
+          "startMs": 24422,
+          "endMs": 27901,
+          "method": "silence",
+          "videoSeconds": 27.876
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "hours-list",
+          "fraction": 0.021227666725632408,
+          "seconds": 4.054,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-2.png"
+        },
+        {
+          "scene": "hours-list",
+          "fraction": 0.25,
+          "seconds": 10.52025,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-25.png"
+        },
+        {
+          "scene": "hours-list",
+          "fraction": 0.45,
+          "seconds": 16.17325,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-45.png"
+        },
+        {
+          "scene": "hours-list",
+          "fraction": 0.6,
+          "seconds": 20.413,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-60.png"
+        },
+        {
+          "scene": "hours-list",
+          "fraction": 0.85,
+          "seconds": 27.47925,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-85.png"
+        },
+        {
+          "scene": "hours-list",
+          "fraction": 0.9893861666371838,
+          "seconds": 31.419,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/hours-list-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "last-participation",
+      "startSeconds": 33.979,
+      "endSeconds": 66.535,
+      "sentences": [
+        {
+          "text": "La dernière participation apporte un autre repère.",
+          "startMs": 316,
+          "endMs": 3184,
+          "method": "silence",
+          "videoSeconds": 34.295
+        },
+        {
+          "text": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée.",
+          "startMs": 3486,
+          "endMs": 9283,
+          "method": "silence",
+          "videoSeconds": 37.465
+        },
+        {
+          "text": "Pour Benoît, aucune présence n'a été saisie :",
+          "startMs": 9940,
+          "endMs": 12066,
+          "method": "silence",
+          "videoSeconds": 43.919
+        },
+        {
+          "text": "ce n'est pas une preuve d'absence.",
+          "startMs": 12373,
+          "endMs": 14193,
+          "method": "silence",
+          "videoSeconds": 46.352
+        },
+        {
+          "text": "Vous pouvez aussi trier les heures attestées.",
+          "startMs": 14391,
+          "endMs": 16253,
+          "method": "silence",
+          "videoSeconds": 48.37
+        },
+        {
+          "text": "Un clic les classe par ordre croissant, un deuxième inverse cet ordre, et le troisième rétablit la liste initiale.",
+          "startMs": 16760,
+          "endMs": 22961,
+          "method": "silence",
+          "videoSeconds": 50.739
+        },
+        {
+          "text": "Cliquons enfin sur Dernière participation pour trier cette date.",
+          "startMs": 23464,
+          "endMs": 26569,
+          "method": "silence",
+          "videoSeconds": 57.443
+        },
+        {
+          "text": "Aucun de ces repères ne désactive automatiquement un membre :",
+          "startMs": 27176,
+          "endMs": 30778,
+          "method": "silence",
+          "videoSeconds": 61.155
+        },
+        {
+          "text": "vous gardez la décision.",
+          "startMs": 31050,
+          "endMs": 32251,
+          "method": "silence",
+          "videoSeconds": 65.029
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "last-participation",
+          "phrase": "Pour Benoît, aucune présence n'a",
+          "startMs": 9940,
+          "endMs": 12066,
+          "cueMs": 43920
+        },
+        {
+          "segmentId": "last-participation",
+          "phrase": "Vous pouvez aussi trier les",
+          "startMs": 14391,
+          "endMs": 16253,
+          "cueMs": 48371
+        },
+        {
+          "segmentId": "last-participation",
+          "phrase": "Un clic les classe par",
+          "startMs": 16760,
+          "endMs": 22961,
+          "cueMs": 50740
+        },
+        {
+          "segmentId": "last-participation",
+          "phrase": "Cliquons enfin sur Dernière participation",
+          "startMs": 23464,
+          "endMs": 26569,
+          "cueMs": 57459
+        },
+        {
+          "segmentId": "last-participation",
+          "phrase": "Aucun de ces repères ne",
+          "startMs": 27176,
+          "endMs": 30778,
+          "cueMs": 61156
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 48859
+        },
+        {
+          "kind": "click",
+          "atMs": 51208
+        },
+        {
+          "kind": "click",
+          "atMs": 57925
+        },
+        {
+          "kind": "click",
+          "atMs": 61641
+        }
+      ],
+      "frames": [
+        {
+          "scene": "last-participation",
+          "fraction": 0.018429782528566162,
+          "seconds": 34.579,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-2.png"
+        },
+        {
+          "scene": "last-participation",
+          "fraction": 0.25,
+          "seconds": 42.118,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-25.png"
+        },
+        {
+          "scene": "last-participation",
+          "fraction": 0.45,
+          "seconds": 48.6292,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-45.png"
+        },
+        {
+          "scene": "last-participation",
+          "fraction": 0.6,
+          "seconds": 53.5126,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-60.png"
+        },
+        {
+          "scene": "last-participation",
+          "fraction": 0.85,
+          "seconds": 61.6516,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-85.png"
+        },
+        {
+          "scene": "last-participation",
+          "fraction": 0.9907851087357169,
+          "seconds": 66.235,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/last-participation-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "activity",
+      "startSeconds": 68.799,
+      "endSeconds": 92.833,
+      "sentences": [
+        {
+          "text": "Ouvrons l'activité d'Aline.",
+          "startMs": 496,
+          "endMs": 1766,
+          "method": "silence",
+          "videoSeconds": 69.295
+        },
+        {
+          "text": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné.",
+          "startMs": 2598,
+          "endMs": 6525,
+          "method": "silence",
+          "videoSeconds": 71.397
+        },
+        {
+          "text": "C'est utile pour comprendre son parcours et vérifier ce qui s'est passé.",
+          "startMs": 7132,
+          "endMs": 10608,
+          "method": "silence",
+          "videoSeconds": 75.931
+        },
+        {
+          "text": "Ce journal ne mesure pas le temps réellement travaillé :",
+          "startMs": 11319,
+          "endMs": 13857,
+          "method": "silence",
+          "videoSeconds": 80.118
+        },
+        {
+          "text": "les heures attestées reposent sur une présence saisie et sur la durée du créneau.",
+          "startMs": 14139,
+          "endMs": 18248,
+          "method": "silence",
+          "videoSeconds": 82.938
+        },
+        {
+          "text": "L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.",
+          "startMs": 18999,
+          "endMs": 23575,
+          "method": "silence",
+          "videoSeconds": 87.798
+        }
+      ],
+      "anchors": [],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 69281
+        }
+      ],
+      "frames": [
+        {
+          "scene": "activity",
+          "fraction": 0.024964633435965715,
+          "seconds": 69.399,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-2.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.25,
+          "seconds": 74.8075,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-25.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.45,
+          "seconds": 79.6143,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-45.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.6,
+          "seconds": 83.2194,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-60.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.85,
+          "seconds": 89.22789999999999,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-85.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.9875176832820172,
+          "seconds": 92.533,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/activity-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "period-export",
+      "startSeconds": 95.093,
+      "endSeconds": 131.485,
+      "sentences": [
+        {
+          "text": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par bénévole, pour une période.",
+          "startMs": 470,
+          "endMs": 4621,
+          "method": "silence",
+          "videoSeconds": 95.563
+        },
+        {
+          "text": "Choisissons le premier et le trente septembre.",
+          "startMs": 5252,
+          "endMs": 8231,
+          "method": "silence",
+          "videoSeconds": 100.345
+        },
+        {
+          "text": "Téléchargeons le CSV.",
+          "startMs": 8939,
+          "endMs": 10014,
+          "method": "silence",
+          "videoSeconds": 104.032
+        },
+        {
+          "text": "Il compte les créneaux confirmés non annulés de cette période, avec les heures planifiées et attestées séparées.",
+          "startMs": 10468,
+          "endMs": 16443,
+          "method": "silence",
+          "videoSeconds": 105.561
+        },
+        {
+          "text": "Cochons maintenant l'option pour inclure les membres sans créneau confirmé, puis téléchargeons à nouveau.",
+          "startMs": 17017,
+          "endMs": 22189,
+          "method": "silence",
+          "videoSeconds": 112.11
+        },
+        {
+          "text": "Dans ce vrai fichier, Clara apparaît avec des zéros.",
+          "startMs": 22783,
+          "endMs": 25231,
+          "method": "silence",
+          "videoSeconds": 117.876
+        },
+        {
+          "text": "Le total indique six heures planifiées, dont deux attestées.",
+          "startMs": 25861,
+          "endMs": 29137,
+          "method": "silence",
+          "videoSeconds": 120.954
+        },
+        {
+          "text": "La période choisie détermine le bilan :",
+          "startMs": 29572,
+          "endMs": 32141,
+          "method": "silence",
+          "videoSeconds": 124.665
+        },
+        {
+          "text": "si elle contient des dates futures, ces créneaux peuvent aussi y figurer.",
+          "startMs": 32395,
+          "endMs": 36083,
+          "method": "silence",
+          "videoSeconds": 127.488
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "period-export",
+          "phrase": "Cochons maintenant l'option pour inclure",
+          "startMs": 17017,
+          "endMs": 22189,
+          "cueMs": 112112
+        },
+        {
+          "segmentId": "period-export",
+          "phrase": "Le total indique six heures",
+          "startMs": 25861,
+          "endMs": 29137,
+          "cueMs": 120955
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 96812
+        },
+        {
+          "kind": "click",
+          "atMs": 97623
+        },
+        {
+          "kind": "click",
+          "atMs": 99439
+        },
+        {
+          "kind": "click",
+          "atMs": 101223
+        },
+        {
+          "kind": "click",
+          "atMs": 112606
+        },
+        {
+          "kind": "click",
+          "atMs": 113389
+        }
+      ],
+      "frames": [
+        {
+          "scene": "period-export",
+          "fraction": 0.016487140030775994,
+          "seconds": 95.693,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-2.png"
+        },
+        {
+          "scene": "period-export",
+          "fraction": 0.25,
+          "seconds": 104.191,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-25.png"
+        },
+        {
+          "scene": "period-export",
+          "fraction": 0.45,
+          "seconds": 111.4694,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-45.png"
+        },
+        {
+          "scene": "period-export",
+          "fraction": 0.6,
+          "seconds": 116.9282,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-60.png"
+        },
+        {
+          "scene": "period-export",
+          "fraction": 0.85,
+          "seconds": 126.0262,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-85.png"
+        },
+        {
+          "scene": "period-export",
+          "fraction": 0.991756429984612,
+          "seconds": 131.185,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/period-export-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "certificate-settings",
+      "startSeconds": 133.746,
+      "endSeconds": 174.091,
+      "sentences": [
+        {
+          "text": "Préparons maintenant une attestation pour Aline.",
+          "startMs": 314,
+          "endMs": 3416,
+          "method": "silence",
+          "videoSeconds": 134.06
+        },
+        {
+          "text": "Depuis son activité, ouvrons Attestation de bénévolat.",
+          "startMs": 3620,
+          "endMs": 6845,
+          "method": "silence",
+          "videoSeconds": 137.366
+        },
+        {
+          "text": "Choisissons une période du premier mai au trente septembre.",
+          "startMs": 7483,
+          "endMs": 11046,
+          "method": "silence",
+          "videoSeconds": 141.229
+        },
+        {
+          "text": "Vous pouvez ajouter une remarque facultative :",
+          "startMs": 11461,
+          "endMs": 13899,
+          "method": "silence",
+          "videoSeconds": 145.207
+        },
+        {
+          "text": "écrivons Accueil du public et rangement du matériel.",
+          "startMs": 14165,
+          "endMs": 17818,
+          "method": "silence",
+          "videoSeconds": 147.911
+        },
+        {
+          "text": "L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement.",
+          "startMs": 18383,
+          "endMs": 23428,
+          "method": "silence",
+          "videoSeconds": 152.129
+        },
+        {
+          "text": "Le logo enregistré dans les réglages de l'organisation apparaît aussi.",
+          "startMs": 23782,
+          "endMs": 29127,
+          "method": "silence",
+          "videoSeconds": 157.528
+        },
+        {
+          "text": "Il est imprimé en gris pour garder un document adapté au noir et blanc.",
+          "startMs": 29309,
+          "endMs": 32867,
+          "method": "silence",
+          "videoSeconds": 163.055
+        },
+        {
+          "text": "Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
+          "startMs": 33318,
+          "endMs": 40344,
+          "method": "silence",
+          "videoSeconds": 167.064
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "certificate-settings",
+          "phrase": "Depuis son activité, ouvrons Attestation de bénévolat",
+          "startMs": 3620,
+          "endMs": 6845,
+          "cueMs": 137368
+        },
+        {
+          "segmentId": "certificate-settings",
+          "phrase": "Choisissons une période du premier mai",
+          "startMs": 7483,
+          "endMs": 11046,
+          "cueMs": 141231
+        },
+        {
+          "segmentId": "certificate-settings",
+          "phrase": "Vous pouvez ajouter une remarque facultative",
+          "startMs": 11461,
+          "endMs": 13899,
+          "cueMs": 145213
+        },
+        {
+          "segmentId": "certificate-settings",
+          "phrase": "L'aperçu reprend le nom du bénévole",
+          "startMs": 18383,
+          "endMs": 23428,
+          "cueMs": 152131
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 137860
+        },
+        {
+          "kind": "click",
+          "atMs": 141738
+        },
+        {
+          "kind": "click",
+          "atMs": 143554
+        },
+        {
+          "kind": "click",
+          "atMs": 145687
+        },
+        {
+          "kind": "key",
+          "atMs": 145994
+        },
+        {
+          "kind": "key",
+          "atMs": 146073
+        },
+        {
+          "kind": "key",
+          "atMs": 146151
+        },
+        {
+          "kind": "key",
+          "atMs": 146230
+        },
+        {
+          "kind": "key",
+          "atMs": 146308
+        },
+        {
+          "kind": "key",
+          "atMs": 146386
+        },
+        {
+          "kind": "key",
+          "atMs": 146465
+        },
+        {
+          "kind": "key",
+          "atMs": 146545
+        },
+        {
+          "kind": "key",
+          "atMs": 146627
+        },
+        {
+          "kind": "key",
+          "atMs": 146707
+        },
+        {
+          "kind": "key",
+          "atMs": 146791
+        },
+        {
+          "kind": "key",
+          "atMs": 146870
+        },
+        {
+          "kind": "key",
+          "atMs": 146953
+        },
+        {
+          "kind": "key",
+          "atMs": 147035
+        },
+        {
+          "kind": "key",
+          "atMs": 147120
+        },
+        {
+          "kind": "key",
+          "atMs": 147204
+        },
+        {
+          "kind": "key",
+          "atMs": 147286
+        },
+        {
+          "kind": "key",
+          "atMs": 147378
+        },
+        {
+          "kind": "key",
+          "atMs": 147456
+        },
+        {
+          "kind": "key",
+          "atMs": 147537
+        },
+        {
+          "kind": "key",
+          "atMs": 147618
+        },
+        {
+          "kind": "key",
+          "atMs": 147698
+        },
+        {
+          "kind": "key",
+          "atMs": 147782
+        },
+        {
+          "kind": "key",
+          "atMs": 147863
+        },
+        {
+          "kind": "key",
+          "atMs": 147945
+        },
+        {
+          "kind": "key",
+          "atMs": 148026
+        },
+        {
+          "kind": "key",
+          "atMs": 148108
+        },
+        {
+          "kind": "key",
+          "atMs": 148190
+        },
+        {
+          "kind": "key",
+          "atMs": 148279
+        },
+        {
+          "kind": "key",
+          "atMs": 148361
+        },
+        {
+          "kind": "key",
+          "atMs": 148441
+        },
+        {
+          "kind": "key",
+          "atMs": 148522
+        },
+        {
+          "kind": "key",
+          "atMs": 148601
+        },
+        {
+          "kind": "key",
+          "atMs": 148679
+        },
+        {
+          "kind": "key",
+          "atMs": 148757
+        },
+        {
+          "kind": "key",
+          "atMs": 148838
+        },
+        {
+          "kind": "key",
+          "atMs": 148919
+        },
+        {
+          "kind": "key",
+          "atMs": 149081
+        },
+        {
+          "kind": "key",
+          "atMs": 149158
+        },
+        {
+          "kind": "key",
+          "atMs": 149239
+        },
+        {
+          "kind": "key",
+          "atMs": 149320
+        },
+        {
+          "kind": "key",
+          "atMs": 149401
+        }
+      ],
+      "frames": [
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.014871731317387532,
+          "seconds": 134.346,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-1.png"
+        },
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.25,
+          "seconds": 143.83225,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-25.png"
+        },
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.45,
+          "seconds": 151.90125,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-45.png"
+        },
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.6,
+          "seconds": 157.953,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-60.png"
+        },
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.85,
+          "seconds": 168.03925,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-85.png"
+        },
+        {
+          "scene": "certificate-settings",
+          "fraction": 0.9925641343413062,
+          "seconds": 173.791,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-settings-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "certificate-presence",
+      "startSeconds": 176.355,
+      "endSeconds": 204.822,
+      "sentences": [
+        {
+          "text": "Par défaut, l'attestation met en avant les heures attestées.",
+          "startMs": 312,
+          "endMs": 3603,
+          "method": "silence",
+          "videoSeconds": 176.667
+        },
+        {
+          "text": "Regardons cette colonne, puis cochons Inclure les heures planifiées sans présence saisie.",
+          "startMs": 3774,
+          "endMs": 8326,
+          "method": "silence",
+          "videoSeconds": 180.129
+        },
+        {
+          "text": "Attention à la lecture :",
+          "startMs": 8753,
+          "endMs": 10244,
+          "method": "silence",
+          "videoSeconds": 185.108
+        },
+        {
+          "text": "cette nouvelle colonne est le complément, pas le total des heures planifiées de la liste des membres.",
+          "startMs": 10495,
+          "endMs": 15886,
+          "method": "silence",
+          "videoSeconds": 186.85
+        },
+        {
+          "text": "Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence.",
+          "startMs": 16076,
+          "endMs": 20595,
+          "method": "silence",
+          "videoSeconds": 192.431
+        },
+        {
+          "text": "Ce document ne prétend pas mesurer un temps de travail chronométré.",
+          "startMs": 20963,
+          "endMs": 24606,
+          "method": "silence",
+          "videoSeconds": 197.318
+        },
+        {
+          "text": "Une présence non saisie n'est pas non plus une preuve d'absence.",
+          "startMs": 24816,
+          "endMs": 28129,
+          "method": "silence",
+          "videoSeconds": 201.171
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "certificate-presence",
+          "phrase": "Regardons cette colonne, puis cochons",
+          "startMs": 3774,
+          "endMs": 8326,
+          "cueMs": 180130
+        },
+        {
+          "segmentId": "certificate-presence",
+          "phrase": "Pour Aline, nous retrouvons six heures",
+          "startMs": 16076,
+          "endMs": 20595,
+          "cueMs": 192432
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 180620
+        }
+      ],
+      "frames": [
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.021077036568658447,
+          "seconds": 176.955,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-2.png"
+        },
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.25,
+          "seconds": 183.47175,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-25.png"
+        },
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.45,
+          "seconds": 189.16514999999998,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-45.png"
+        },
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.6,
+          "seconds": 193.4352,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-60.png"
+        },
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.85,
+          "seconds": 200.55195,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-85.png"
+        },
+        {
+          "scene": "certificate-presence",
+          "fraction": 0.9894614817156708,
+          "seconds": 204.522,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-presence-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "certificate-pdf",
+      "startSeconds": 207.083,
+      "endSeconds": 241.179,
+      "sentences": [
+        {
+          "text": "Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation.",
+          "startMs": 336,
+          "endMs": 5204,
+          "method": "silence",
+          "videoSeconds": 207.419
+        },
+        {
+          "text": "L'application lance l'impression du navigateur :",
+          "startMs": 5774,
+          "endMs": 8471,
+          "method": "silence",
+          "videoSeconds": 212.857
+        },
+        {
+          "text": "vous pouvez l'enregistrer en PDF.",
+          "startMs": 8816,
+          "endMs": 11060,
+          "method": "silence",
+          "videoSeconds": 215.899
+        },
+        {
+          "text": "Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur.",
+          "startMs": 11216,
+          "endMs": 21172,
+          "method": "silence",
+          "videoSeconds": 218.299
+        },
+        {
+          "text": "Relisons le nom, la période, les deux colonnes et la remarque.",
+          "startMs": 21596,
+          "endMs": 24851,
+          "method": "silence",
+          "videoSeconds": 228.679
+        },
+        {
+          "text": "Les zones Signature et Nom du signataire restent à compléter.",
+          "startMs": 24998,
+          "endMs": 29093,
+          "method": "silence",
+          "videoSeconds": 232.081
+        },
+        {
+          "text": "Vérifiez le document avant de le signer et de le remettre à la personne.",
+          "startMs": 29537,
+          "endMs": 34095,
+          "method": "silence",
+          "videoSeconds": 236.62
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "certificate-pdf",
+          "phrase": "Quand le contenu vous convient",
+          "startMs": 336,
+          "endMs": 5204,
+          "cueMs": 207419
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 207885
+        }
+      ],
+      "frames": [
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.017597372125762553,
+          "seconds": 207.683,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-2.png"
+        },
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.25,
+          "seconds": 215.607,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-25.png"
+        },
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.45,
+          "seconds": 222.42620000000002,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-45.png"
+        },
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.6,
+          "seconds": 227.5406,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-60.png"
+        },
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.85,
+          "seconds": 236.0646,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-85.png"
+        },
+        {
+          "scene": "certificate-pdf",
+          "fraction": 0.9912013139371187,
+          "seconds": 240.879,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/certificate-pdf-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "event-summary",
+      "startSeconds": 243.441,
+      "endSeconds": 277.136,
+      "sentences": [
+        {
+          "text": "Enfin, ouvrons les rapports de la Fête de septembre.",
+          "startMs": 147,
+          "endMs": 2661,
+          "method": "silence",
+          "videoSeconds": 243.588
+        },
+        {
+          "text": "Le résumé distingue les personnes et les inscriptions.",
+          "startMs": 3159,
+          "endMs": 6145,
+          "method": "silence",
+          "videoSeconds": 246.6
+        },
+        {
+          "text": "Ici, deux bénévoles occupent trois créneaux confirmés :",
+          "startMs": 6604,
+          "endMs": 9866,
+          "method": "silence",
+          "videoSeconds": 250.045
+        },
+        {
+          "text": "une personne participe pour la première fois, l'autre est de retour.",
+          "startMs": 10107,
+          "endMs": 13520,
+          "method": "silence",
+          "videoSeconds": 253.548
+        },
+        {
+          "text": "Les présences n'ont été saisies que pour un créneau.",
+          "startMs": 13761,
+          "endMs": 16933,
+          "method": "silence",
+          "videoSeconds": 257.202
+        },
+        {
+          "text": "Le bilan le signale :",
+          "startMs": 17102,
+          "endMs": 18357,
+          "method": "silence",
+          "videoSeconds": 260.543
+        },
+        {
+          "text": "les autres ne sont pas déclarés absents.",
+          "startMs": 18491,
+          "endMs": 20949,
+          "method": "silence",
+          "videoSeconds": 261.932
+        },
+        {
+          "text": "Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste.",
+          "startMs": 21107,
+          "endMs": 26693,
+          "method": "silence",
+          "videoSeconds": 264.548
+        },
+        {
+          "text": "Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+          "startMs": 26851,
+          "endMs": 33382,
+          "method": "silence",
+          "videoSeconds": 270.292
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "event-summary",
+          "fraction": 0.017806796260572785,
+          "seconds": 244.041,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-2.png"
+        },
+        {
+          "scene": "event-summary",
+          "fraction": 0.25,
+          "seconds": 251.86475,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-25.png"
+        },
+        {
+          "scene": "event-summary",
+          "fraction": 0.45,
+          "seconds": 258.60375,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-45.png"
+        },
+        {
+          "scene": "event-summary",
+          "fraction": 0.6,
+          "seconds": 263.658,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-60.png"
+        },
+        {
+          "scene": "event-summary",
+          "fraction": 0.85,
+          "seconds": 272.08175,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-85.png"
+        },
+        {
+          "scene": "event-summary",
+          "fraction": 0.9910966018697136,
+          "seconds": 276.836,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-hours-certificate/review-frames/event-summary-end.png"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:34:16.550Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "c619b3985346b9ae158ade5ed29cc715d18307e1490a18bb961548da6fcd6885",
+  "clipSha256": "154319adcf6c16f8d4e9b4f282477fecdabe6a2519110d673ec68f5d851feece",
+  "scene": "certificate-pdf",
+  "review": {
+    "heardOpening": "Quand le contenu vous convient",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "cliquons sur Générer et imprimer l'attestation",
+        "visibleSeconds": 1,
+        "visible": "Bouton Générer et imprimer l'attestation affiché brièvement, bascule directe vers le PDF à 00:02 sans clic matérialisé",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "nous ouvrons le vrai PDF produit par le moteur d'impression local",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page PDF réel — Impression locale du navigateur présent à l'écran depuis 00:02",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Relisons le nom, la période, les deux colonnes et la remarque",
+        "visibleSeconds": 20,
+        "visible": "Attestation affichant le nom Aline Mercier, la période mai à septembre 2026, les colonnes d'heures et la remarque",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "Les zones Signature et Nom du signataire restent à compléter",
+        "visibleSeconds": 25.5,
+        "visible": "Emplacements Signature et Nom du signataire visibles en bas du document PDF",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:02, l'écran passe directement sur le document PDF sans animation de clic sur « Générer et imprimer l'attestation », devançant de plusieurs secondes l'annonce de l'ouverture du PDF (vers 00:11)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, excellente qualité sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

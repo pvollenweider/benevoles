@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:34:31.135Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "7ceef71bca6d6b3d5c711480b7f87a8f27aab267e08b1d2d6811074058e11542",
+  "clipSha256": "86e6b69dfa041141208af6ca6095da7b292f6491cb9950692617a3cb018a38d8",
+  "scene": "event-summary",
+  "review": {
+    "heardOpening": "Enfin, ouvrons les rapports de la Fête de septembre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "ouvrons les rapports de la Fête de septembre",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page des rapports avec la section Résumé de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "deux bénévoles occupent trois créneaux confirmés",
+        "visibleSeconds": 1,
+        "visible": "Ligne Bénévoles indiquant 2 bénévoles distincts avec un créneau confirmé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les présences n'ont été saisies que pour un créneau",
+        "visibleSeconds": 1,
+        "visible": "Paragraphe Présences indiquant des présences saisies pour 1 sur 3 créneaux confirmés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "six heures planifiées, dont deux attestées, puis le remplissage par poste",
+        "visibleSeconds": 1,
+        "visible": "Mentions des heures (6h planifiées, dont 2h attestées) et tableau de remplissage par poste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

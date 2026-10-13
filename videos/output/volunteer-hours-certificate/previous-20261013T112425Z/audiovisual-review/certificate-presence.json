@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T09:32:56.397Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
+  "promptSha256": "8ff5fc319cdc1f59ac94e7ba0c460929c91b9e1f665a2675807b9bd19c6c7a07",
+  "clipSha256": "b43956d14f14ab4e5220f796cac75602405887a74863e4e9902ecf624fa2ad8a",
+  "scene": "certificate-presence",
+  "review": {
+    "heardOpening": "Par défaut, l'attestation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Regardons cette colonne",
+        "visibleSeconds": 2.2,
+        "visible": "La colonne Heures attestées est visible sur l'attestation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis cochons Inclure les heures planifiées sans présence saisie",
+        "visibleSeconds": 5,
+        "visible": "Remontée vers les réglages et case Inclure les heures planifiées sans présence saisie cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence",
+        "visibleSeconds": 16.5,
+        "visible": "L'attestation affiche 6 h attestées et 2 h planifiées (sans présence)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

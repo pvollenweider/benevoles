@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:32:36.636Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "71a0cf84cddf067dd6432a91408e52f7cbcab585f5f2caa0a3611a09d409bc77",
+  "clipSha256": "21bbfd3ed9f3ee7d795e2c2537968c54d23a71fa781aa7b2c2279bc107a6a5dc",
+  "scene": "hours-list",
+  "review": {
+    "heardOpening": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Dans la liste des membres, regardons les heures planifiées et les heures attestées.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la liste des membres avec les colonnes « Heures planifiées » et « Heures attestées ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Pour Aline, huit heures étaient prévues sur ses créneaux confirmés passés, et six correspondent à une présence saisie.",
+        "visibleSeconds": 0,
+        "visible": "Ligne d'Aline Mercier affichant 8h sous « Heures planifiées » et 6h sous « Heures attestées ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Toutes les personnes et les données de cette démonstration sont fictives.",
+        "visibleSeconds": 24,
+        "visible": "Écran stable sur le tableau des membres fictifs.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

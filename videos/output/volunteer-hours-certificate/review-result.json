@@ -1,17 +1,110 @@
 {
-  "id": "VOLUNTEER_HOURS_CERTIFICATE",
-  "status": "NOT READY",
-  "duration": 310.68,
-  "buildId": "RPQR_7CtwLDa6m9DyYOBY",
+  "status": "READY",
+  "batch": 17,
+  "takes": 2,
+  "durationSeconds": 310.76,
+  "product": {
+    "commit": "8b124a696edcfacc5a60879eb2b45eee110e93a6",
+    "sourceTree": "e33e85a0623226c3ee42996dd6713fa4dda7860b",
+    "productSourceSha256": "11e2130b19d137ace2254a74886e0f151e8926aeda4390bb98b5d9f8f8d8d476",
+    "buildId": "xYE1IdGm9lLkGSWKqeLjk",
+    "snapshot": "/tmp/benevoles-video-production.batch17",
+    "builtAt": "2026-10-13T11:25:29.139Z"
+  },
+  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
+  "pdfSha256": "d481b415c58021ec0f17f92592e96da4a23c91a4f141886f25605cec010296cb",
+  "chapters": [
+    {
+      "chapter": "hours-list",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "chapter": "last-participation",
+      "checkpoints": 3,
+      "issues": [
+        "À partir de 00:23, l'action annoncée (« Cliquons enfin sur Dernière participation pour trier cette date ») n'est pas effectuée à l'écran : le curseur reste immobile et la colonne n'est pas triée."
+      ]
+    },
+    {
+      "chapter": "activity",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "chapter": "period-export",
+      "checkpoints": 7,
+      "issues": []
+    },
+    {
+      "chapter": "certificate-settings",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "chapter": "certificate-presence",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "chapter": "certificate-pdf",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "chapter": "event-summary",
+      "checkpoints": 4,
+      "issues": []
+    }
+  ],
+  "automatedFlagAdjudication": {
+    "chapter": "last-participation",
+    "claim": "Missing date-sort click",
+    "decision": "Disproved by final-MP4 frames, recorded click and real aria-sort assertion",
+    "clickSeconds": [
+      17.237,
+      20.02,
+      22.621,
+      23.954
+    ],
+    "frames": [
+      "review/sort-17.3.png",
+      "review/sort-20.3.png",
+      "review/sort-23.15.png",
+      "review/sort-24.2.png",
+      "review/sort-25.0.png"
+    ],
+    "dateSentenceStartSeconds": 23.464,
+    "dateClickSeconds": 23.954,
+    "dateClickDelaySeconds": 0.49
+  },
+  "pdfReview": {
+    "pages": 1,
+    "certificateFirst": true,
+    "adminNavigationAbsent": true,
+    "tableWithinPageWidth": true,
+    "allPagesVisuallyInspected": true,
+    "finalFrame": "review/certificate-pdf-222.423.png"
+  },
+  "captions": {
+    "passed": true,
+    "cues": 58,
+    "note": "Actual VTT compared to current caption formatter; source and final narration independently audited."
+  },
+  "interactionEffects": {
+    "clicks": 17,
+    "keys": 42,
+    "markerCountsMatch": true
+  },
   "music": {
-    "voicedWindows": 252,
-    "musicOnlyWindows": 30,
+    "voicedWindows": 253,
+    "musicOnlyWindows": 31,
     "smallestGapLu": 12.5,
     "largestGapLu": 19.3,
-    "quietestMusicOnlyLufs": -34.6,
+    "quietestMusicOnlyLufs": -34.7,
     "loudestMusicOnlyLufs": -32.9,
-    "medianVoiceLufs": -16.4
+    "medianVoiceLufs": -16.3
   },
-  "problems": "Product defect #966/#965: attestation-aline.pdf page 1 still prints admin navigation, retained in final MP4 certificate-pdf-45.png at 222.42275 s. Settings preview restoration now visible and aligned; totals, two actual CSV downloads, print action, final narration, music and validation pass. Descending-sort missing flag disproved by exact chapter 19/20/21 s frames showing Aline first and downward Heures attest\u00e9es arrow. All eight chapters and full one-page PDF inspected. No re-film for product defect.",
-  "sourceChanges": "None; batch 14 preview-scroll and sentence anchors retained. No src changes."
+  "mailpit": "No Mailpit screen or notifications in either take; fixtures explicitly verify emailsSent=false. No mailbox mutation required.",
+  "subjectiveRealtimeListening": "Unavailable; independent final-MP4 narration and audiovisual checks performed, not an objective blocker."
 }

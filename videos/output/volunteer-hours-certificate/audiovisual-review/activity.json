@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:32:37.043Z",
-  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
+  "reviewedAt": "2026-10-13T11:41:53.995Z",
+  "videoSha256": "c8c50d5ecbb68de5885580bfa9c891694a0c2e7762a817dc55621eb9ad835241",
   "promptSha256": "5fc27af0b5d55ce93ab274ba670ca1fe150acca42c95e9379a929b6ef87434ca",
-  "clipSha256": "c50768419b283fafd9f32a447e8a003e13218d9fec0479e006d7d81cdfc8dd97",
+  "clipSha256": "04a0e2c404e25a8814e31b0dc773262bf256bea863535353964730813e7a8be0",
   "scene": "activity",
   "review": {
-    "heardOpening": "Ouvrons l'activité d'Aline",
+    "heardOpening": "Ouvrons l'activité d'Aline.",
     "checkpoints": [
       {
         "spokenSeconds": 0,
-        "spoken": "Ouvrons l'activité d'Aline",
+        "spoken": "Ouvrons l'activité d'Aline.",
         "visibleSeconds": 1,
-        "visible": "Transition de la liste des membres vers le journal d'activité détaillé d'Aline Mercier",
+        "visible": "Transition depuis la liste des membres vers le journal d'activité d'Aline Mercier.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné",
-        "visibleSeconds": 2.5,
-        "visible": "Affichage des lignes d'historique avec le statut (Inscrit, Présent...), la date/heure d'enregistrement et le lien vers l'événement",
+        "spokenSeconds": 2.2,
+        "spoken": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné.",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de la liste chronologique avec les faits (Inscrit, Présent), dates et événements associés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
-        "spoken": "Ce journal ne mesure pas le temps réellement travaillé",
+        "spokenSeconds": 11.2,
+        "spoken": "Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie",
         "visibleSeconds": 11,
-        "visible": "Vue stable sur le journal d'activité illustrant les enregistrements déclaratifs",
+        "visible": "Vue stable sur le journal d'activité illustrant les enregistrements et statuts de présence.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

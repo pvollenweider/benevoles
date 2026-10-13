@@ -1,0 +1,70 @@
+{
+  "id": "VOLUNTEER_HOURS_CERTIFICATE",
+  "slug": "volunteer-hours-certificate",
+  "validatedAt": "2026-10-13T11:32:23.608Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 310600,
+  "scenes": [
+    {
+      "id": "hours-list",
+      "visualMs": 28265,
+      "audioMs": 28264,
+      "driftMs": 1
+    },
+    {
+      "id": "last-participation",
+      "visualMs": 32556,
+      "audioMs": 32555,
+      "driftMs": 1
+    },
+    {
+      "id": "activity",
+      "visualMs": 24034,
+      "audioMs": 24033,
+      "driftMs": 1
+    },
+    {
+      "id": "period-export",
+      "visualMs": 36392,
+      "audioMs": 36390,
+      "driftMs": 2
+    },
+    {
+      "id": "certificate-settings",
+      "visualMs": 40345,
+      "audioMs": 40344,
+      "driftMs": 1
+    },
+    {
+      "id": "certificate-presence",
+      "visualMs": 28467,
+      "audioMs": 28465,
+      "driftMs": 2
+    },
+    {
+      "id": "certificate-pdf",
+      "visualMs": 34096,
+      "audioMs": 34095,
+      "driftMs": 1
+    },
+    {
+      "id": "event-summary",
+      "visualMs": 33695,
+      "audioMs": 33694,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 14,
+  "music": {
+    "voicedWindows": 252,
+    "musicOnlyWindows": 30,
+    "smallestGapLu": 12.5,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

@@ -1,0 +1,21 @@
+STATUS: NOT READY
+ID: VOLUNTEER_HOURS_CERTIFICATE
+Duration: 310.68
+BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
+Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
+Music: {'voicedWindows': 252, 'musicOnlyWindows': 30, 'smallestGapLu': 12.5, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': -34.6, 'loudestMusicOnlyLufs': -32.9, 'medianVoiceLufs': -16.4}
+Problems: Product defect #966/#965: attestation-aline.pdf page 1 still prints admin navigation, retained in final MP4 certificate-pdf-45.png at 222.42275 s. Settings preview restoration now visible and aligned; totals, two actual CSV downloads, print action, final narration, music and validation pass. Descending-sort missing flag disproved by exact chapter 19/20/21 s frames showing Aline first and downward Heures attestées arrow. All eight chapters and full one-page PDF inspected. No re-film for product defect.
+Source changes: None; batch 14 preview-scroll and sentence anchors retained. No src changes.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles preserve manifest text with intended French numeric display formatting: True (review/caption-check.json).
+MP4 frame evidence SHA256: e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+hours-list: 3.47–31.735 s; review/hours-list-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+last-participation: 33.998–66.554 s; review/last-participation-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["Entre 00:19 et 00:23, l'inversion de l'ordre par un deuxième clic n'est pas montrée à l'écran : le tableau revient brusquement à l'état initial sans afficher l'étape intermédiaire."]
+activity: 68.814–92.848 s; review/activity-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+period-export: 95.102–131.492 s; review/period-export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+certificate-settings: 133.751–174.095 s; review/certificate-settings-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+certificate-presence: 176.357–204.822 s; review/certificate-presence-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+certificate-pdf: 207.08–241.175 s; review/certificate-pdf-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+event-summary: 243.439–277.133 s; review/event-summary-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T11:33:26.582Z",
+  "videoSha256": "04f946a8712e8496f7bf4577ee7e6617c942d02ac5b52a62e72d18b8189d087d",
+  "promptSha256": "3e6c557c067317dc668d15b6b51c3174285d665dd756bcee0e107e7a670a72cb",
+  "clipSha256": "62da49d5116aa16edbb5db3bd08c009bdaa22929f4f7722432b3b48d4b0f35fa",
+  "scene": "period-export",
+  "review": {
+    "heardOpening": "Pour préparer un bilan, revenons aux membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons Heures par bénévole, pour une période",
+        "visibleSeconds": 1.7,
+        "visible": "Dépliement de la section Heures par bénévole, pour une période",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Choisissons le premier et le trente septembre",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie des dates 01/09/2026 et 30/09/2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Téléchargeons le CSV",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur le bouton Télécharger (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.1,
+        "spoken": "Cochons maintenant l'option pour inclure les membres sans créneau confirmé",
+        "visibleSeconds": 17.5,
+        "visible": "Coche de la case Inclure les membres sans créneau confirmé sur la période",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.1,
+        "spoken": "puis téléchargeons à nouveau",
+        "visibleSeconds": 20.2,
+        "visible": "Clic sur Télécharger (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.4,
+        "spoken": "Dans ce vrai fichier, Clara apparaît avec des zéros",
+        "visibleSeconds": 25.5,
+        "visible": "Affichage du tableau CSV avec Clara Besson et des valeurs à zéro",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.6,
+        "spoken": "Le total indique six heures planifiées, dont deux attestées",
+        "visibleSeconds": 26,
+        "visible": "Ligne Total affichant 6 heures planifiées et 2 heures attestées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

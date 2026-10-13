@@ -1,0 +1,2 @@
+STATUS: NOT READY
+Batch 17 take 1. Printed PDF passes: one A4 page, certificate first, no navigation, table within margins. Last-participation click about four seconds late; retake authorized with video-only fix. Final summary ASR recheck on identical audio passes. PDF click is visible in chapter-opening frame; immediate display of print result accompanies the print explanation and is not a missing action.
