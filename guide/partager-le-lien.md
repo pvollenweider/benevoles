@@ -2,7 +2,7 @@
 roles: [admin]
 group: publier
 order: 20
-summary: Copier ou partager le lien d'un événement publié, son aperçu, son QR code, et un lien par club ou équipe filtré sur ses postes.
+summary: Copier ou partager le lien d'un événement publié, son QR code, un lien par groupe filtré sur ses postes, ou l'inscription sur votre site.
 related: [publier-un-evenement, inviter-des-membres, suivre-les-inscriptions]
 legacy: [admin#partager-le-lien, admin#qr-code]
 aliases: []
@@ -43,7 +43,7 @@ La fête du village est montée par plusieurs sociétés : l'Amicale des pompier
 
 Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
-![Section « Partager l'événement » : le lien de l'événement, puis « Liens par groupe » avec deux liens, « Amicale des pompiers » (postes Montage, Sécurité, Démontage) et « Fanfare L'Écho du Mont » (poste Buvette, créneaux complets masqués), chacun avec son nombre d'inscriptions, son adresse et les boutons Copier le lien, QR code PNG, QR code SVG, Modifier et Supprimer ; en dessous, « Créer un lien pour un groupe »](/doc-img/admin-group-links.png)
+![Section « Partager l'événement » : le lien de l'événement, puis « Liens par groupe » avec deux liens, « Amicale des pompiers » (postes Montage, Sécurité, Démontage) et « Fanfare L'Écho du Mont » (poste Buvette, créneaux complets masqués), chacun avec son nombre d'inscriptions, son adresse et les boutons Copier le lien, QR code PNG, QR code SVG, Modifier et Supprimer ; en dessous, « Créer un lien pour un groupe », puis « Intégrer à votre site » avec le bouton « Code d'intégration »](/doc-img/admin-group-links.png)
 
 **2. Diffuser les liens.** Chaque lien a son adresse, de la forme `https://[organisation].benevol.app/[evenement]?groupe=[code]`. **Copier le lien** la copie pour un email ou une messagerie ; **QR code PNG** et **QR code SVG** téléchargent le QR code de ce lien, à imprimer sur l'affiche ou dans le bulletin de la société. Le code est tiré au hasard : on ne devine pas le lien d'une autre société à partir du sien.
 
@@ -58,3 +58,24 @@ Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 **Modifier** change le nom, les postes ou l'option des créneaux complets ; l'adresse et le QR code restent les mêmes, ceux déjà imprimés continuent de fonctionner. Renommer l'événement ou un poste ne casse pas non plus le lien : un poste renommé reste dans le lien sous son nouveau nom. Un poste supprimé en sort, et le lien continue avec les autres. S'il ne reste aucun de ses postes au planning, le lien affiche tout l'événement, avec une courte phrase qui le dit.
 
 **Supprimer** demande une confirmation. Les inscriptions venues de ce lien sont conservées, mais ne sont plus comptées pour ce groupe. L'adresse et le QR code du lien supprimé ouvrent ensuite tout l'événement, avec la phrase « Ce lien de groupe n'existe plus ». La création, la modification et la suppression d'un lien sont inscrites au [journal de l'événement](journal-de-l-evenement.md).
+
+## Intégrer l'inscription à votre site
+
+Votre association a son propre site ? Affichez-y l'inscription : les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site. La page garde le nom, le logo et la couleur de votre organisation ; seuls le lien « Retour » et le pied de page de benevol.app disparaissent.
+
+L'événement doit être publié. Dans la section **Partager l'événement** de la page de l'événement, sous **Intégrer à votre site**, cliquez sur **Code d'intégration**.
+
+![Section « Intégrer à votre site » ouverte : le choix « Postes affichés », la case « Ajuster la hauteur automatiquement », le code à coller dans un champ, les boutons « Copier le code » et « Aperçu en direct », puis les trois étapes pour l'ajouter à votre site](/doc-img/admin-embed.png)
+
+- **Postes affichés** : tout l'événement, ou les postes d'un [lien par groupe](#un-lien-par-groupe). Ce choix n'apparaît que si l'événement a des liens par groupe. Les inscriptions venues du site comptent alors pour ce lien.
+- **Ajuster la hauteur automatiquement** : sans cette option, le cadre a une hauteur fixe de 900 pixels et la page défile à l'intérieur. Avec elle, le code contient quelques lignes de script qui donnent au cadre la hauteur de la page, sans barre de défilement. Certains éditeurs de site refusent les scripts : laissez alors la case décochée.
+- **Copier le code** copie le code affiché. Si votre navigateur refuse la copie, le code est sélectionné : copiez-le.
+- **Aperçu en direct** montre la page telle qu'elle apparaîtra dans votre site. C'est la vraie page d'inscription : une inscription faite dans l'aperçu est enregistrée.
+
+**Ajouter le code à votre site.** Dans l'éditeur de votre site, ouvrez la page voulue et ajoutez un bloc de type « HTML », « Code personnalisé » ou « Intégrer » (le nom change d'un éditeur à l'autre). Collez-y le code, puis enregistrez et publiez la page. Le code ne charge aucun script d'un autre site : seulement la page d'inscription de benevol.app dans un cadre.
+
+**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page personnelle, les pages de l'événement, les mentions légales. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page personnelle, pas dans le cadre.
+
+Certains navigateurs ne laissent pas une page affichée dans le site d'un autre retenir quoi que ce soit sur l'appareil. Le bénévole doit alors retaper ses coordonnées pour un autre événement, et la page ne le reconnaît pas en revenant : son lien personnel reste dans l'email.
+
+Le cadre affiche uniquement la page d'inscription : la page personnelle, l'espace organisateur et les autres pages de benevol.app refusent de s'afficher dans un autre site.

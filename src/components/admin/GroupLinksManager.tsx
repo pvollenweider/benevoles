@@ -21,6 +21,7 @@ import { requestJson, useSubmit } from "@/lib/use-submit"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { COPIED, COPY_FAILED } from "@/components/admin/EventShareLink"
+import EventEmbedPanel from "@/components/admin/EventEmbedPanel"
 
 const outlineButton =
   "inline-flex items-center min-h-9 text-sm font-medium border border-blue-600 text-blue-700 px-3 py-1.5 rounded-xl hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -35,13 +36,17 @@ type FormValues = { name: string; roleNames: string[]; hideFull: boolean }
  * Share links per group (#947), in the event's « Partager l'événement » area: one link per club or
  * team, showing only its roles, with its QR code and the sign-ups it brought. Inline forms (no
  * dialog), the focus handled by hand as in MilestonesSection; deletion asks first.
+ *
+ * `embed` (#948), for a published event: « Intégrer à votre site » follows, with the links as they
+ * are now (one created a moment ago can be embedded right away).
  */
-export default function GroupLinksManager({ eventId, roles, initialLinks, published }: {
+export default function GroupLinksManager({ eventId, roles, initialLinks, published, embed }: {
   eventId: string
   /** Roles on the planning (live shifts), in its order. */
   roles: string[]
   initialLinks: AdminGroupLink[]
   published: boolean
+  embed?: { publicUrl: string; eventTitle: string; eventSlug: string }
 }) {
   const [links, setLinks] = useState(initialLinks)
   // "new" for the creation form, a link id for its edit form, null when no form is open.
@@ -229,6 +234,10 @@ export default function GroupLinksManager({ eventId, roles, initialLinks, publis
         <button ref={createButtonRef} type="button" onClick={() => setEditing("new")} className={outlineButton}>
           Créer un lien pour un groupe
         </button>
+      )}
+
+      {published && embed && (
+        <EventEmbedPanel {...embed} groupLinks={links.map((l) => ({ code: l.code, name: l.name }))} />
       )}
     </div>
   )

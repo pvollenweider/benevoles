@@ -7,6 +7,7 @@ import { NextResponse } from "next/server"
 import { withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl } from "@/lib/urls"
+import { frameHeaders } from "@/lib/security-headers"
 
 const { auth } = NextAuth(authConfig)
 
@@ -55,7 +56,10 @@ export default auth((req) => {
   // routes; a value sent by the client is always dropped first (#541).
   const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
 
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
+  // Framing (#948): refused everywhere but the embeddable sign-up (src/lib/security-headers.ts).
+  for (const { key, value } of frameHeaders(pathname, req.nextUrl.searchParams)) response.headers.set(key, value)
+  return response
 })
 
 export const config = {

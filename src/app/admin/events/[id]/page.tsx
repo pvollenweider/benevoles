@@ -210,6 +210,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
             roles={roles}
             initialLinks={groupLinks}
             published={event.publicStatus === "published"}
+            embed={{ publicUrl: eventPublicUrl(event.organization.slug, event.slug), eventTitle: event.title, eventSlug: event.slug }}
           />
         </section>
       )}

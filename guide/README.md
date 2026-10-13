@@ -84,7 +84,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 ### Publier et partager
 
 - [Publier un événement](publier-un-evenement.md) : Vérifier ce qui manque, prévisualiser comme un bénévole, puis publier l'événement, répertorié ou non sur la page publique. Pour : organisateurs.
-- [Partager le lien de l'événement](partager-le-lien.md) : Copier ou partager le lien d'un événement publié, son aperçu, son QR code, et un lien par club ou équipe filtré sur ses postes. Pour : organisateurs.
+- [Partager le lien de l'événement](partager-le-lien.md) : Copier ou partager le lien d'un événement publié, son QR code, un lien par groupe filtré sur ses postes, ou l'inscription sur votre site. Pour : organisateurs.
 - [Ouvrir et fermer les inscriptions](ouvrir-et-fermer-les-inscriptions.md) : Ouvrir ou fermer les inscriptions d'un événement publié, à la main ou à une date programmée, en gardant le planning visible. Pour : organisateurs.
 - [Archiver ou supprimer un événement](archiver-ou-supprimer-un-evenement.md) : Archiver un événement terminé pour le retirer du public, ou le supprimer définitivement après l'avoir sauvegardé. Pour : organisateurs.
 
