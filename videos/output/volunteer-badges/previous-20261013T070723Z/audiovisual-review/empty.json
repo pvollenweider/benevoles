@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:01:42.449Z",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "promptSha256": "4b49eb5265ad6801557415babdf5734653929b973809c373682673a43bb38e5e",
+  "clipSha256": "3a933d56e5985f07afcb09a0bb4836d780255946e5e4aafa61a0800d1e09c647",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Si tu combines un poste et une personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+        "visibleSeconds": 0,
+        "visible": "Section Badges affichant le poste « Loge » puis sélection de Camille Berger dans les bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Voici le vrai message de l'application.",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la page de résultat avec le message indiquant 0 badge car la personne n'est pas sur le poste Loge.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "choisissons Tous les postes",
+        "visibleSeconds": 11.8,
+        "visible": "L'option « Tous les postes » n'est pas sélectionnée : le champ Poste reste sur « Loge ».",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "ouvrons à nouveau le document",
+        "visibleSeconds": 14.1,
+        "visible": "Affichage du badge généré pour Camille Berger sur le créneau Buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Entre 0:09 et 0:13, rupture vocale : une voix féminine remplace temporairement la voix masculine du narrateur.",
+      "À 0:11-0:13, l'action annoncée « choisissons Tous les postes » n'est pas effectuée à l'écran (le filtre reste sur « Loge » avant l'ouverture du document)."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Incohérence majeure de voix : un enregistrement féminin distinct s'intercale entre 0:09 et 0:13 au milieu de la voix masculine principale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

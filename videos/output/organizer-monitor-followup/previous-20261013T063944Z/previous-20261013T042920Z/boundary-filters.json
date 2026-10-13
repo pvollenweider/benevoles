@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand la liste grandit, filtre par poste, par créneau ou par",
+  "windowStart": 26.165999999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 30,
+    "wordsHeard": "Quand la liste grandit, filtre par poste, par créneau ou par"
+  },
+  "onset": 56.166,
+  "proposedCut": 56.1659375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

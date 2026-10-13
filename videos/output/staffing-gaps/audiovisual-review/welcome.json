@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:34:47.215Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "264e69a33720990eb448b14e963556681e3e0c03b3a85332630c4aca545a99b9",
+  "clipSha256": "307b7f5369ec3f8001a53eda0dffd5d0ccc421e8d6d34b0f859c0abb5ec3b6b6",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Des bénévoles se sont inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "ouvrez Où manque-t-il du monde",
+        "visibleSeconds": 7,
+        "visible": "Clic sur le lien 'Voir les créneaux à compléter' dans la section 'Où manque-t-il du monde ?'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Cette vue regroupe les besoins pour savoir où concentrer vos efforts",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la page récapitulative 'Où manque-t-il du monde ?'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Notre fête contient des postes vides, des créneaux partiellement remplis",
+        "visibleSeconds": 17,
+        "visible": "Affichage des sections 'Postes sans personne' et 'Créneaux à compléter'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, engageante et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

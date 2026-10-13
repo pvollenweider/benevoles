@@ -18,7 +18,7 @@ export function assertHoursOwnership(value: unknown, createdAt: string) {
 }
 async function main() {
   const args = process.argv.slice(2)
-  assert(args.length === 0 || (args.length === 1 && args[0] === "--reset-owned"))
+  assert(args.length === 0 || (args[0] === "--reset-owned" && (args.length === 1 || args.length === 2 && args[1] === "--recover-stale-ledger")))
   const dir = path.resolve("videos/output/volunteer-hours-certificate")
   let ledger: unknown
   try { ledger = JSON.parse(await readFile(path.join(dir, "ownership.json"), "utf8")) } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
@@ -31,8 +31,15 @@ async function main() {
       let passwordHash: string
       if (existing) {
         assert.equal(args[0], "--reset-owned"); assert.equal(existing.id, HOURS_ORG)
-        assertHoursOwnership(ledger, existing.createdAt.toISOString())
-        const owned = await assertOwnedHoursFixture(tx as unknown as typeof db, "legacy-owned-reset")
+        const recovering = args.includes("--recover-stale-ledger")
+        const owned = await assertOwnedHoursFixture(tx as unknown as typeof db, recovering ? "current" : "legacy-owned-reset")
+        if (recovering) {
+          const prior = ledger as { organizationCreatedAt?: string }
+          assert(prior?.organizationCreatedAt && Number.isFinite(Date.parse(prior.organizationCreatedAt)))
+          assertHoursOwnership(ledger, prior.organizationCreatedAt)
+          assert(Date.parse(prior.organizationCreatedAt) < existing.createdAt.getTime() && existing.createdAt.getTime() < Date.now(), "Only an older same-schema ledger can be recovered")
+          await writeFile(path.join(dir, `stale-ledger-recovery-${Date.now()}.json`), JSON.stringify({ priorLedger: ledger, actualOrganizationCreatedAt: existing.createdAt.toISOString(), product, allCurrentFixtureFieldsAndReverseRelationsVerified: true }, null, 2))
+        } else assertHoursOwnership(ledger, existing.createdAt.toISOString())
         passwordHash = owned.admins[0].passwordHash
         for (const log of owned.logs) await tx.orgLog.delete({ where: { id: log.id } })
         for (const event of owned.events) await tx.event.delete({ where: { id: event.id } })

@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-10-12T21:11:22.412Z",
+  "product": {
+    "commit": "274c0b66f5a583975236f973e8062871910769d4",
+    "sourceTree": "7036ab2266cf08883e3e8472728766ef3e499946",
+    "productSourceSha256": "2aa0fc8a56d378a9804f53492e7db1b146eaefa3adaf312ddc9f66b161229c7e",
+    "buildId": "QnaleWUIippKmUvaMUEKT",
+    "snapshot": "/tmp/benevoles-video-production.fnLPuNgC",
+    "builtAt": "2026-10-12T20:53:06.047Z"
+  },
+  "scope": "actual report links, live HTML and generated PDFs; PDF pagination and visual review still required",
+  "pdfVisualReview": false,
+  "activePeople": 80,
+  "individualShiftsForLea": 5,
+  "existingAttendanceMarks": 6,
+  "results": [
+    {
+      "report": "complete",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/complete.pdf"
+    },
+    {
+      "report": "day",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/day.pdf"
+    },
+    {
+      "report": "role",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/role.pdf"
+    },
+    {
+      "report": "individual",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/individual.pdf"
+    },
+    {
+      "report": "attendance",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/attendance.pdf"
+    },
+    {
+      "report": "phones",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/phones.pdf"
+    }
+  ]
+}

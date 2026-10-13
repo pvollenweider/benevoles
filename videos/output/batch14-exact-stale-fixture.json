@@ -1,0 +1,36 @@
+{
+  "reason": "Exact source-defined synthetic identity, no relations; creation date differs from previous batch ledger",
+  "person": {
+    "id": "video-member-management-2",
+    "organizationId": "default",
+    "firstName": "René",
+    "lastName": "Meyer",
+    "email": null,
+    "phone": "079 000 02 00",
+    "tags": [
+      "accueil"
+    ],
+    "active": true,
+    "notes": "Contact à joindre par téléphone pour les horaires.",
+    "birthDate": null,
+    "availabilityPeriods": [
+      "evening"
+    ],
+    "availabilityNote": null,
+    "mergedIntoId": null,
+    "mergedAt": null,
+    "erasedAt": null,
+    "createdAt": "2026-10-12T07:20:21.039Z",
+    "updatedAt": "2026-10-12T07:20:21.114Z",
+    "_count": {
+      "registrations": 0,
+      "invites": 0,
+      "pushSubscriptions": 0,
+      "questionAnswers": 0,
+      "deliveryOutcomes": 0,
+      "mergedFrom": 0,
+      "duplicateDismissalsAsA": 0,
+      "duplicateDismissalsAsB": 0
+    }
+  }
+}

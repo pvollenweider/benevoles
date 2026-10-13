@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:42:08.070Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "4adf127226d4461970a4d0bda6f2e976c8207766c5a480d512e0d04c20dc2ea4",
+  "clipSha256": "176fb5ad3086f10cb5255e23e5f18f7f0080e004b99b94c9fe88d4093fca1cf7",
+  "scene": "dayof-undo",
+  "review": {
+    "heardOpening": "Une erreur de pointage ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Annuler la présence retire la marque",
+        "visibleSeconds": 0.8,
+        "visible": "Le clic sur 'Annuler la présence' remet le statut à 'Pas encore marqué'",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Vérifions après rechargement",
+        "visibleSeconds": 6.5,
+        "visible": "Aucun rechargement de la page n'est effectué à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Zoé conserve sa place, et son arrivée n'est plus marquée",
+        "visibleSeconds": 8.5,
+        "visible": "Zoé Exemple apparaît toujours avec le statut 'Pas encore marqué'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:06 : L'action de rechargement annoncée ('après rechargement') n'est pas exécutée visuellement."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

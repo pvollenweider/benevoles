@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:09.633Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "8d19f48f6a04e7a3969fa64d2bd68c2080cb9b5bca4381c9489024725cbb647b",
+  "clipSha256": "5448d94e905b05fec7782f08f4ee42264d505d4f3aae236b54864bbbe2740136",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une consigne pour toute l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une consigne pour toute l'équipe",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction affiché : « Écrire aux bonnes personnes, avec un message qui leur parle »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "ouvrez la page des messages",
+        "visibleSeconds": 3,
+        "visible": "La page « Écrire aux bénévoles » est déjà affichée en arrière-plan",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Nous allons choisir les destinataires",
+        "visibleSeconds": 13,
+        "visible": "Section des boutons radio pour le choix des destinataires visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, chaleureuse et parfaitement intelligible, sans parasite sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

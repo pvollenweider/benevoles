@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:07.412Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "fde51c61f8baea07baf1d3f10eb3eb7b3c701997dc705bc76373173129038c25",
+  "clipSha256": "c4a64bcf7e0e46974d62196c0056935b6d6aea5bec2aaef0f2da726430c72d36",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les postes sur validation sont clairement signalés.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les postes sur validation sont clairement signalés.",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions affichant deux demandes sous le statut Demande à traiter sur fond jaune orangé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvre une demande pour vérifier la personne, le créneau et ses réponses",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture d'une boîte de dialogue modale détaillant la demande de Marc Duc.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Ici, on referme simplement la fenêtre : aucune décision n'est prise",
+        "visibleSeconds": 9.4,
+        "visible": "Fermeture de la fenêtre modale par un clic sur Annuler, retour à la liste sans modification.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement articulée, en phase avec la vidéo."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

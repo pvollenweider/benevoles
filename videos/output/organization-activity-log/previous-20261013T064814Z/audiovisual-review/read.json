@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:09.411Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "121e9b388305c89dfb808556bf6990f036d205ae53e8e05eff3a40f1b0390540",
+  "clipSha256": "119fc8ae9c7d3d2d367bc9b2fd2aedd036e1517f52886308c90cb04442c841fa",
+  "scene": "read",
+  "review": {
+    "heardOpening": "Chaque ligne indique un auteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Chaque ligne indique un auteur, une action et une date.",
+        "visibleSeconds": 1,
+        "visible": "Tableau du journal d'activité listant pour chaque ligne l'auteur, le détail de l'action et l'horodatage.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Lisons deux actions réalisées par des personnes différentes.",
+        "visibleSeconds": 5,
+        "visible": "Aucune action n'est lue oralement ni mise en valeur visuellement sur le tableau qui reste statique.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Le nom affiché vient du compte encore présent",
+        "visibleSeconds": 12.5,
+        "visible": "Noms des utilisateurs ('Colette Exemple', 'Samira Exemple') visibles dans la première colonne.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Le journal n'est donc pas une signature de contrat",
+        "visibleSeconds": 19.5,
+        "visible": "Écran stable du journal d'activité accompagnant l'explication générale.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:05, la narratrice annonce « Lisons deux actions réalisées par des personnes différentes », mais aucune lecture n'est effectuée et aucun élément n'est mis en évidence à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine fluide, claire et posée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

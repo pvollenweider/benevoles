@@ -1,0 +1,12 @@
+{
+  "anchor": "Créneaux complets rassemble les horaires sans besoin supplémentaire et sans liste",
+  "windowStart": 141.055,
+  "result": {
+    "found": true,
+    "startSeconds": 30.96,
+    "wordsHeard": "Créneaux"
+  },
+  "onset": 172.01500000000001,
+  "proposedCut": 171.8744795,
+  "note": "Proposal only; recut then independently audit before capture"
+}

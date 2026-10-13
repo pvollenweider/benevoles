@@ -1,38 +1,58 @@
 {
-  "checkedAt": "2026-10-05T20:50:03.855Z",
+  "checkedAt": "2026-10-13T06:37:58.132Z",
   "scope": "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation",
   "messages": [
     {
       "kind": "waitlist_offered",
-      "mailId": "1Hce9iQqVnsZsbXgXTkzZV",
+      "mailId": "6caUn7MiMsCbD3AHpLdGUH",
       "recipient": "video.last-minute.person.1@example.org"
     },
     {
-      "kind": "registration_confirmation",
-      "mailId": "0KBjPljflg0dVVjgN3WF1Y",
-      "recipient": "video.last-minute.person.1@example.org"
+      "kind": "registration_cancelled",
+      "mailId": "3Ia1QpjYJce7vlzWKafXWN",
+      "recipient": "video.last-minute.owner@example.org"
     },
     {
       "kind": "targeted_message",
-      "mailId": "3WJItVioKx6wPzyTlzIl7d",
+      "mailId": "6xqOUh5oC85tvKnk1dbo7P",
       "recipient": "video.last-minute.person.3@example.org"
     },
     {
+      "kind": "registration_added_by_organizer",
+      "mailId": "0Q0Gytbe0cmvCG7yfO1Jeq",
+      "recipient": "video.last-minute.person.2@example.org"
+    },
+    {
       "kind": "shift_modified",
-      "mailId": "1Npueg2qMNEiSVj7L9PBhl",
+      "mailId": "5UZYQEIp2Ecyu4Lx8gcx8L",
       "recipient": "video.last-minute.person.4@example.org"
     },
     {
       "kind": "shift_cancelled",
-      "mailId": "0kLD6x7fNMDcOGCRKZPQ4I",
+      "mailId": "3ziCyzjSk3pI2J7XioNTCe",
       "recipient": "video.last-minute.person.0@example.org"
     },
     {
       "kind": "shift_cancelled",
-      "mailId": "2NeU98M6UWppiRTQ9dizuC",
+      "mailId": "6fzv2rLiN54e9TxJs0V6F8",
       "recipient": "video.last-minute.person.5@example.org"
     }
   ],
+  "suppressed": [
+    {
+      "id": "cmv6av9ov0004jya5gonnisiv",
+      "status": "cancelled",
+      "reason": "limit:recipient_per_hour",
+      "kind": "registration_withdrawn"
+    },
+    {
+      "id": "cmv6avxq70006jya5cpjjzksu",
+      "status": "cancelled",
+      "reason": "limit:recipient_per_hour",
+      "kind": "registration_confirmation"
+    }
+  ],
+  "allNotificationsDelivered": false,
   "schedulePendingExcluded": true,
   "activeAndRequestedCancellationDelivered": true
 }

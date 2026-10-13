@@ -1,0 +1,131 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T05:11:54.961Z",
+  "revalidatedAt": "2026-10-13T05:11:54.962Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "eb338cd1767bd06d384e404a4badc975e8eeddf54ac2996b6a5c44462610e48b",
+      "recognized": "Une consigne pour toute l'équipe, un briefing pour la buvette, ou une proposition aux personnes qui attendent une place. Le bon message ne va pas forcément à tout le monde. Depuis votre événement, ouvrez la page des messages. Nous allons choisir les destinataires, préparer un texte qui leur parle, vérifier l'aperçu, puis suivre un véritable envoi. Pas besoin d'écrire séparément à chaque personne.",
+      "expected": "Une consigne pour toute l'équipe, un briefing pour la buvette ou une proposition aux personnes qui attendent une place : le bon message ne va pas forcément à tout le monde. Depuis votre événement, ouvrez la page des messages. Nous allons choisir les destinataires, préparer un texte qui leur parle, vérifier l'aperçu, puis suivre un véritable envoi. Pas besoin d'écrire séparément à chaque personne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "audiences",
+      "audioSha256": "77eaa02b422043f7e19f40440e5c6c71f7708ab69404b4bb238648bedbbb3f79",
+      "recognized": "Commençons par le public. Tous les bénévoles inscrits visent les inscriptions confirmées. Pour un poste, choisis par exemple la buvette. Pour un créneau, précise aussi la date et l'horaire. La liste d'attente vise les personnes qui attendent une place, y compris celles qui ont une offre en cours. Enfin, les invités sans créneau confirmé permettent de reprendre contact avec ceux qui n'ont pas encore de confirmation. Regarde le compteur après chaque choix.",
+      "expected": "Commence par le public. Tous les bénévoles inscrits vise les inscriptions confirmées. Pour un poste, choisis par exemple la buvette ; pour un créneau, précise aussi la date et l'horaire. La liste d'attente vise les personnes qui attendent une place, y compris celles qui ont une offre en cours. Enfin, les invités sans créneau confirmé permettent de reprendre contact avec ceux qui n'ont pas encore de confirmation. Regarde le compteur après chaque choix.",
+      "wordErrorRate": 0.02666666666666667,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "count",
+      "audioSha256": "e3ac149d6455f7198883400bb5747b45e66d2dd543d363f8604bf791eb083005",
+      "recognized": "Le nombre affiché compte les personnes à qui un e-mail peut être adressé, pas leurs inscriptions. Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience. Sans adresse e-mail, une personne ne fait pas partie de cet envoi. Une demande à valider n'est pas encore une confirmation. Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette à toute la fête par erreur.",
+      "expected": "Le nombre affiché compte les personnes à qui un email peut être adressé, pas leurs inscriptions. Une bénévole inscrite sur deux horaires reçoit un seul message pour cette audience. Sans adresse email, une personne ne fait pas partie de cet envoi. Une demande à valider n'est pas encore une confirmation. Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette à toute la fête par erreur.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "template-create",
+      "audioSha256": "0a4bb815ad24c0e58c3c2009a82098c642dde1807fcfe5042614956ecfaf551e",
+      "recognized": "Pour une consigne que vous réutilisez, ouvrez les modèles de message de l'organisation, puis Nouveau modèle. Son nom sert à le retrouver dans l'administration. Les bénévoles ne le voient pas. Prenons Briefing avant le créneau. Un nom précis aide les autres organisateurs à retrouver le bon texte. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent. Les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
+      "expected": "Pour une consigne que vous réutilisez, ouvrez les modèles de messages de l'organisation, puis Nouveau modèle. Son nom sert à le retrouver dans l'administration : les bénévoles ne le voient pas. Prenons Briefing avant le créneau : un nom précis aide les autres organisateurs à retrouver le bon texte. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent : les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant, avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
+      "wordErrorRate": 0.009009009009009009,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "variables",
+      "audioSha256": "22fe586ccfc81620f65bdee1b22f261f3d9d6b2833a364eec085acb860813653",
+      "recognized": "Les mots entre accolades sont remplacés pour chaque destinataire. Prénom donne son prénom, et événement donne le nom de la fête. Post demande une audience post ou créneau, créneau demande un horaire précis. Ce n'est pas une liste de variables libres. Si nous écrivons lieu entre accolades, l'application signale une variable inconnue. Corrigeons le texte. Et même une variable connue peut être refusée si l'audience ne lui donne pas de sens.",
+      "expected": "Les mots entre accolades sont remplacés pour chaque destinataire. Prénom donne son prénom et événement donne le nom de la fête. Poste demande une audience poste ou créneau. Créneau demande un horaire précis. Ce n'est pas une liste de variables libres : si nous écrivons lieu entre accolades, l'application signale une variable inconnue. Corrigeons le texte. Et même une variable connue peut être refusée si l'audience ne lui donne pas de sens.",
+      "wordErrorRate": 0.02702702702702703,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "apply",
+      "audioSha256": "0783c83439785ebd4878aa7620e334751da1966bcd1ca9f40effd2d67bc2a4d1",
+      "recognized": "De retour dans le message, voici une première version écrite à la main. Choisir un modèle dans la liste ne la remplace pas encore, il faut cliquer sur utiliser ce modèle. L'objet et le texte changent alors ensemble. Si ce n'est pas ce que vous vouliez, rétablir le texte précédent récupère votre version. Appliquons de nouveau notre briefing, puis choisissons un créneau pour que toutes ces variables puissent être remplacées.",
+      "expected": "De retour dans le message, voici une première version écrite à la main. Choisir un modèle dans la liste ne la remplace pas encore : il faut cliquer sur Utiliser ce modèle. L'objet et le texte changent alors ensemble. Si ce n'est pas ce que vous vouliez, Rétablir le texte précédent récupère votre version. Appliquons de nouveau notre briefing, puis choisissons un créneau pour que toutes ses variables puissent être remplacées.",
+      "wordErrorRate": 0.013888888888888888,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "context",
+      "audioSha256": "17a5ccdca5083e8ec9bba5706bb5182a9e4f567d2d09359499654a01b1b17047",
+      "recognized": "Un modèle contenant créneau ne convient pas à toute l'équipe. Chacun peut avoir un horaire différent. Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir. Revenons à un seul créneau. Pour écrire à tout le monde, vous pouvez aussi adapter le modèle avec une consigne générale et garder seulement prénom et événement. L'idée est de personnaliser juste, pas de remplir les accolades au hasard.",
+      "expected": "Un modèle contenant créneau ne convient pas à toute l'équipe : chacun peut avoir un horaire différent. Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir. Revenons à un seul créneau. Pour écrire à tout le monde, vous pouvez aussi adapter le modèle avec une consigne générale et garder seulement prénom et événement. L'idée est de personnaliser juste, pas de remplir les accolades au hasard.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "475ae5214d90a27b631e287c1f976144c4d47a9a18b829c6455f73fb5347cb33",
+      "recognized": "Ouvrons maintenant l'aperçu. C'est l'e-mail préparé pour le premier destinataire. Son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prenez le temps de le lire comme si vous le receviez. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
+      "expected": "Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prenez le temps de le lire comme si vous le receviez. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "push",
+      "audioSha256": "2161705a9da06a3414699af9f1ab460fe43097a89d3672f173f1cda49266220d",
+      "recognized": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur. Elle concerne seulement les appareils réellement abonnés aux notifications. Elle ne remplace pas l'email et n'atteint pas tous les téléphones par magie. L'objet sert de titre, et la première ligne non vide du message sert de texte court. Le nombre d'appareils n'est donc pas le nombre de personnes. Gardez les informations utiles au début, et vérifiez ce qui sera envoyé.",
+      "expected": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur. Elle concerne seulement les appareils réellement abonnés aux notifications ; elle ne remplace pas l'email et n'atteint pas tous les téléphones par magie. L'objet sert de titre, et la première ligne non vide du message sert de texte court. Le nombre d'appareils n'est donc pas le nombre de personnes. Gardez les informations utiles au début et vérifiez ce qui sera envoyé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "a61b7542555f4596a5a27b1866f4b599e1f280a38b2411caa531de9128da02e4",
+      "recognized": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relisez le public et le nombre de destinataires avant de valider. Nous annulons une première fois. Aucun message n'est parti. Reprenons ensuite le parcours et confirmons réellement notre briefing. Ces étapes servent à éviter le clic trop rapide, surtout quand vous écrivez à beaucoup de monde. Attendez le résultat plutôt que de relancer l'envoi immédiatement.",
+      "expected": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relisez le public et le nombre de destinataires avant de valider. Nous annulons une première fois : aucun message n'est parti. Reprenons ensuite le parcours et confirmons réellement notre briefing. Ces étapes servent à éviter le clic trop rapide, surtout quand vous écrivez à beaucoup de monde. Attendez le résultat plutôt que de relancer l'envoi immédiatement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "6419e59151a2480ac439b54a89f8a46cc67e5570d7ebc3536e115a6b01caadb5",
+      "recognized": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les e-mails de deux bénévoles. Chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu. Pour une information urgente, prévoyez aussi votre relais sur le terrain.",
+      "expected": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
+      "wordErrorRate": 0.02666666666666667,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "maintain",
+      "audioSha256": "b3934cccfd76737f2ad81face7ce25c424e110c8449bd70d6c3e32d70b48e668",
+      "recognized": "Les modèles peuvent évoluer avec votre organisation. Ouvrez, modifiez, ajustez le nom ou le texte et enregistrez. La suppression demande une confirmation, vous pouvez encore annuler. Un modèle n'est pas l'historique d'un message déjà envoyé. Pour chaque nouveau briefing, gardez le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat. Des consignes simples et un petit merci, ça aide aussi l'équipe à se sentir accueillie.",
+      "expected": "Les modèles peuvent évoluer avec votre organisation. Ouvrez Modifier, ajustez le nom ou le texte et enregistrez. La suppression demande une confirmation : vous pouvez encore annuler. Un modèle n'est pas l'historique d'un message déjà envoyé. Pour chaque nouveau briefing, gardez le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat. Des consignes simples et un petit merci, ça aide aussi l'équipe à se sentir accueillie.",
+      "wordErrorRate": 0.013333333333333334,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

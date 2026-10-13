@@ -1,0 +1,17 @@
+{
+  "id": "REGISTRATION_MONITOR_FOLLOWUP",
+  "status": "NOT READY",
+  "duration": 191.12,
+  "buildId": "QnaleWUIippKmUvaMUEKT",
+  "music": {
+    "voicedWindows": 161,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 15.2,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Dialog closure 2.5s late. No product layout bug confirmed.",
+  "sourceChanges": "record.ts: closure anchored to Ici, on referme simplement la fen\u00eatre; no re-film. TTS cache rejected; continuous narration regenerated and recut/audited."
+}

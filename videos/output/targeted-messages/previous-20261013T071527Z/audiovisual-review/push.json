@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:35.636Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
+  "clipSha256": "f3517c8410cbfd1ee847511ec7f57938b0e03a49bbb91e3f6850d5052d58a9fd",
+  "scene": "push",
+  "review": {
+    "heardOpening": "Vous pouvez aussi demander une notification",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "demander une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 6.2,
+        "visible": "La case « Envoyer aussi une notification (téléphone ou ordinateur) » est cochée",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "la première ligne non vide du message sert de texte court",
+        "visibleSeconds": 12.1,
+        "visible": "Le champ Message avec la première ligne de texte est affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Le nombre d'appareils n'est donc pas le nombre de personnes",
+        "visibleSeconds": 16.5,
+        "visible": "La section Messages envoyés affichant le nombre de personnes et d'appareils est visible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:01, l'activation de la notification est annoncée, mais le clic sur la case à cocher n'intervient qu'à 00:06 (environ 4 secondes de retard)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

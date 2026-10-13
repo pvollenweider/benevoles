@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_HOURS_CERTIFICATE",
+  "status": "NOT READY",
+  "duration": 310.64,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 252,
+    "musicOnlyWindows": 30,
+    "smallestGapLu": 12.5,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -34.7,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Settings preview remains below viewport after print-media restoration. Presence/print cues aligned; totals/CSV/PDF/music/validation pass. Final event-summary ASR recheck passed. Product bug: attestation-aline.pdf page 1 prints admin navigation; exact MP4 frame certificate-pdf-45.png at 222.432 s.",
+  "sourceChanges": "Added real preview scroll after print-media restoration. Pass 1 anchors retained. No third take or src change."
+}

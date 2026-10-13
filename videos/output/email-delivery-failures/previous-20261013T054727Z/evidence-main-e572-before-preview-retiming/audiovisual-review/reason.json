@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:17:21.255Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "436549e8473d4612b2172c9b70cb8103b8284bc60fa4504e882dd3d2fb5b22e5",
+  "clipSha256": "306e2b697b0c38f13a5ae78b7174f7a5010d302865f7dc1bc36d3c77d309f07b",
+  "scene": "reason",
+  "review": {
+    "heardOpening": "Pour Léa, la cause est indiquée en français",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi, boîte aux lettres introuvable, adresse à vérifier.",
+        "visibleSeconds": 0,
+        "visible": "La ligne Léa Perrin affiche le statut Échec définitif et le détail explicatif correspondant.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Pour Sarah, le problème est temporaire et un nouvel essai est prévu.",
+        "visibleSeconds": 8,
+        "visible": "La ligne Sarah Rochat présente l'état Nouvel essai prévu avec la mention d'incident temporaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Les détails techniques bruts ne sont pas affichés.",
+        "visibleSeconds": 11.5,
+        "visible": "Le tableau résume les erreurs sans afficher de logs techniques bruts.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec l'écran statique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:26:55.399Z",
-  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
+  "reviewedAt": "2026-10-13T06:05:08.229Z",
+  "videoSha256": "52afb2df03a76906c093d60412ba84c9d62704e905be18a7149155e30c7a0ba9",
   "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
-  "clipSha256": "0ba4007cb5c60796e7e94e16b8cf5ed30056eef40df5e19bb48d9decff00d308",
+  "clipSha256": "33c3934e166d9396124a726a65eab1279b6b99015e36886feb3828b1ba19f002",
   "scene": "retry",
   "review": {
-    "heardOpening": "Pour Emma, le refus de notre serveur",
+    "heardOpening": "Pour Emma",
     "checkpoints": [
       {
-        "spokenSeconds": 5.1,
-        "spoken": "Renvoyer remet le même email dans la file",
-        "visibleSeconds": 5.4,
-        "visible": "Clic sur le lien Renvoyer pour Emma Pavre et passage en file d'attente",
+        "spokenSeconds": 4.5,
+        "spoken": "Sur l'échec définitif, Renvoyer remet le même email dans la file",
+        "visibleSeconds": 4.3,
+        "visible": "Clic sur le lien Renvoyer sur la ligne d'Emma Pavre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
-        "spoken": "Attendons le résultat et rechargeons le suivi",
-        "visibleSeconds": 11.5,
-        "visible": "Rafraîchissement de la page de suivi des emails",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 13.6,
+        "spokenSeconds": 13.1,
         "spoken": "La ligne passe à Envoyé avec une heure",
         "visibleSeconds": 13.8,
-        "visible": "La ligne d'Emma Pavre affiche le statut vert Envoyé avec l'horodatage",
+        "visible": "Actualisation de la page, le statut d'Emma Pavre passe à Envoyé à 08:03",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.5,
+        "spokenSeconds": 17,
         "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale",
         "visibleSeconds": 16,
-        "visible": "Affichage de la boîte Mailpit avec le courriel adressé à Emma",
+        "visible": "Affichage de la messagerie Mailpit avec le message adressé à Emma",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et articulation claire, bien synchronisée avec les actions affichées."
+      "observation": "Voix masculine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

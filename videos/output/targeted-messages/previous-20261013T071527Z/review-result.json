@@ -1,0 +1,17 @@
+{
+  "id": "TARGETED_MESSAGES",
+  "status": "NOT READY",
+  "duration": 318.56,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 280,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.1,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "Notification checkbox clicked about 4 seconds late; Mailpit sidebar still contains prior journal invitations. Known nit: Mailpit English dates. All validation and final transcript/music checks pass.",
+  "sourceChanges": "Push cue converted from 25% to at(\"Vous pouvez aussi demander une notification\"). Added guarded prepare-catalogue-mailbox.ts to clear identified fixture messages across prior takes. Existing continuous audio reused after boundary realignment and independent audit; no new TTS. No re-film."
+}

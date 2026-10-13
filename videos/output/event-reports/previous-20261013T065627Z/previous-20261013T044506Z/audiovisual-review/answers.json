@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:28.879Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "2ad908a465f15e43360f62e9bf7fed6bbf5f01d4826e4f9d14b6179169364b7c",
+  "clipSha256": "d2140e9671988daed8cb2aa1252382fb68d444d425019f972eea878ef51b3355",
+  "scene": "answers",
+  "review": {
+    "heardOpening": "Pour préparer les t-shirts et les repas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "ouvrez Questions aux bénévoles, puis la Synthèse des réponses",
+        "visibleSeconds": 0,
+        "visible": "La page Questions aux bénévoles avec la section Synthèse des réponses est déjà affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Lisons les tailles et les régimes renseignés",
+        "visibleSeconds": 11.2,
+        "visible": "Les tableaux récapitulatifs pour la taille du t-shirt et le régime alimentaire sont visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "ou ouvrir sa version imprimable. Regardons ce vrai document",
+        "visibleSeconds": 21,
+        "visible": "La page bascule sur la version imprimable du document récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,13 +1,15 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-05T18:34:28.699Z",
-  "revalidatedAt": "2026-10-05T18:34:28.700Z",
-  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-12T21:19:55.884Z",
+  "revalidatedAt": "2026-10-13T07:07:24.031Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
       "audioSha256": "ab6460e0041ec0fe772a9dd5526c722442909091eeb6f56710a97ff19f3d28b1",
-      "recognized": "Un prénom visible et le bon poste. Un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapport, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe, il n'est ni un contrôle d'accès ni une preuve de présence.",
+      "recognized": "Un prénom visible et le bon poste, un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapport, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe, il n'est ni un contrôle d'accès ni une preuve de présence.",
       "expected": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapports, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
       "wordErrorRate": 0.015384615384615385,
       "needsReview": false,
@@ -17,9 +19,9 @@
     {
       "id": "all",
       "audioSha256": "98926f4b3d3b3908756f826998d66eab926d976fb688410f1c5b1a3e22f677dc",
-      "recognized": "Gardons tous les postes et tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires, elle n'a qu'un badge. Regardons la première feuille, puis la suivante. Le format prévoit 10 badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
+      "recognized": "Gardons tous les postes et tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires, elle n'a qu'un badge. Regardons la première feuille, puis la suivante. Le format prévoit dix badges par page A quatre, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
       "expected": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires : elle n'a qu'un badge. Regardons la première feuille puis la suivante. Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
-      "wordErrorRate": 0.0136986301369863,
+      "wordErrorRate": 0.0273972602739726,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
@@ -37,9 +39,9 @@
     {
       "id": "individual",
       "audioSha256": "cfb207ae67572f9ef2f5ceb9e817c45420bdc6c45f456f4c9e703ea6f97637aa",
-      "recognized": "Un badge perdu ? Choisis une personne dans « bénévole », « réimpression ». Nous avons deux Camille Berger. L'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif. Une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
+      "recognized": "Un badge perdu ? Choisis une personne dans bénévoles, réimpression. Nous avons deux Camille Berger. L'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif. Une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
       "expected": "Un badge perdu ? Choisis une personne dans Bénévole, réimpression. Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.014705882352941176,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []

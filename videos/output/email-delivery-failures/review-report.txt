@@ -1,0 +1,21 @@
+STATUS: READY
+ID: EMAIL_DELIVERY_FAILURES
+Duration: 295.08
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 269, 'musicOnlyWindows': 1, 'smallestGapLu': 14, 'largestGapLu': 19.7, 'quietestMusicOnlyLufs': -34, 'loudestMusicOnlyLufs': -34, 'medianVoiceLufs': -16.7}
+Problems: Only known nit: Mailpit English dates. Remis en file warning disproved by exact final-MP4 frame at 225.705 s showing the disabled control and real queue confirmation. All objective checks pass.
+Source changes: Guarded catalogue mailbox cleanup; preparation checks identity ledger before opening SMTP and recognizes the exact short recorder campaign; partial-campaign preflight updated for one permanent refusal. Standard identity migration applied to newly created fixture after real rehearsal. Cached narration reused unchanged.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: False
+MP4 frame evidence SHA256: 52afb2df03a76906c093d60412ba84c9d62704e905be18a7149155e30c7a0ba9
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 2.492–39.932 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+states: 42.196–78.274 s; review/states-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues []
+reason: 80.538–106.867 s; review/reason-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+retry: 109.13–134.618 s; review/retry-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+address: 136.935–191.933 s; review/address-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 7; reported issues []
+campaign: 194.205–236.555 s; review/campaign-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ['À 00:31, la voix annonce que « Le bouton devient Remis en file », mais le lien disparaît simplement pour laisser place à un message vert de notification sans bouton portant cet intitulé.']
+retention: 238.819–265.755 s; review/retention-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 268.017–294.613 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

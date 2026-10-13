@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T07:23:04.777Z",
-  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
-  "promptSha256": "355ee33623e97c68190d19766bc83c66cb1782e9d55ae67331c2e2c3a1e165ac",
-  "clipSha256": "17465134aaadb1ac3ed3044f8b02bb71530147eb0018bca1717173bdadff9df8",
+  "reviewedAt": "2026-10-13T06:38:12.604Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
+  "clipSha256": "744971a9d3273313076284ac583cbf24a2557dae1a564a02076c04764cc230ec",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un désistement, un horaire qui bouge",
     "checkpoints": [
       {
         "spokenSeconds": 0.9,
-        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
-        "visibleSeconds": 0.5,
-        "visible": "Fenêtre d'introduction affichant 'Gérer un imprévu sans perdre le fil'",
+        "spoken": "Un désistement, un horaire qui bouge",
+        "visibleSeconds": 1,
+        "visible": "Titre superposé « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
+        "spokenSeconds": 9.2,
+        "spoken": "Le plus important, c'est de vérifier les faits",
         "visibleSeconds": 11.8,
-        "visible": "Fermeture du volet d'introduction et affichage du tableau de bord de l'événement",
+        "visible": "L'encadré central disparaît, révélant la page de l'événement « Fête des imprévus – démonstration »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "nous allons suivre une place libérée, chercher une autre aide",
-        "visibleSeconds": 16.5,
-        "visible": "Vue d'ensemble de l'événement 'Fête des imprévus — démonstration'",
+        "spokenSeconds": 15.6,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 16,
+        "visible": "Vue d'ensemble de la page de gestion de l'événement en environnement de formation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et fluide, conforme au contexte de présentation."
+      "observation": "Voix claire, posée, enregistrée sans bruit parasite ni rupture de ton."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

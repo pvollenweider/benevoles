@@ -39,7 +39,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
     await page.goto(`${base}/admin/events/${eventId}/questions`); await settle(page)
     await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).scrollIntoViewIfNeeded()
     await page.getByText(/Chaque bénévole compte une fois/).waitFor()
-    await at("Les confirmés et les personnes")
+    await at("Vous pouvez télécharger cette synthèse")
     const ready = page.waitForEvent("download")
     await tap(page, page.getByRole("link", { name: /^Télécharger la synthèse/ }))
     const download = await ready
@@ -50,7 +50,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
     const rows = parse(csv, { bom: true, delimiter: ";", columns: true }) as Record<string, string>[]
     const questionLabels = [...new Set(rows.map(row => row.Question))]
     if (questionLabels.length !== 2 || questionLabels.some(label => rows.filter(row => row.Question === label).reduce((sum, row) => sum + Number(row["Confirmés"]), 0) !== 80)) throw new Error("Summary must count 80 people, not 84 registrations, for each question")
-    await at("Vous pouvez télécharger cette synthèse")
+    await at("Regardons ce vrai document")
     const popupReady = page.waitForEvent("popup")
     await tap(page, page.getByRole("link", { name: /^Imprimer la synthèse/ }))
     const popup = await popupReady

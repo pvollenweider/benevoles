@@ -1,0 +1,35 @@
+{
+  "receivedAt": "2026-10-13T05:14:46.404Z",
+  "status": "completed",
+  "usage": {
+    "total_tokens": 6317,
+    "total_input_tokens": 806,
+    "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 806
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 5511,
+    "output_tokens_by_modality": [
+      {
+        "modality": "audio",
+        "tokens": 5511
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 0
+  },
+  "steps": [
+    {
+      "type": "model_output",
+      "content": [
+        {
+          "type": "audio",
+          "encodedLength": 14116312
+        }
+      ]
+    }
+  ]
+}

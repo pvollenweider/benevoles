@@ -1,0 +1,1125 @@
+{
+  "mp4Sha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "startSeconds": 1.299,
+      "endSeconds": 23.122,
+      "sentences": [
+        {
+          "text": "Au stand d’accueil, un document clair fait gagner du temps à toute l’équipe.",
+          "startMs": 282,
+          "endMs": 4323,
+          "method": "silence",
+          "videoSeconds": 1.581
+        },
+        {
+          "text": "Ouvrons Rapports.",
+          "startMs": 4547,
+          "endMs": 4910,
+          "method": "silence",
+          "videoSeconds": 5.846
+        },
+        {
+          "text": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier.",
+          "startMs": 5136,
+          "endMs": 9773,
+          "method": "silence",
+          "videoSeconds": 6.435
+        },
+        {
+          "text": "Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive.",
+          "startMs": 10143,
+          "endMs": 15369,
+          "method": "silence",
+          "videoSeconds": 11.442
+        },
+        {
+          "text": "Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
+          "startMs": 15673,
+          "endMs": 21612,
+          "method": "silence",
+          "videoSeconds": 16.972
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Les feuilles à afficher ou",
+          "startMs": 5136,
+          "endMs": 9773,
+          "cueMs": 6437
+        },
+        {
+          "segmentId": "welcome",
+          "phrase": "Choisissons ensemble le bon document",
+          "startMs": 15673,
+          "endMs": 21612,
+          "cueMs": 16975
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 6914,
+          "relativeSeconds": 5.615
+        }
+      ],
+      "frames": [
+        {
+          "scene": "welcome",
+          "fraction": 0.02749392842413967,
+          "seconds": 1.899,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-3.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.25,
+          "seconds": 6.75475,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-25.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.45,
+          "seconds": 11.11935,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-45.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.6,
+          "seconds": 14.3928,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-60.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.85,
+          "seconds": 19.84855,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-85.png"
+        },
+        {
+          "scene": "welcome",
+          "fraction": 0.9862530357879302,
+          "seconds": 22.822,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/welcome-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "complete",
+      "startSeconds": 25.387,
+      "endSeconds": 52.122,
+      "sentences": [
+        {
+          "text": "Pour une vue d’ensemble, descendez dans la partie réservée aux organisateurs et ouvrez Export complet.",
+          "startMs": 151,
+          "endMs": 5696,
+          "method": "silence",
+          "videoSeconds": 25.538
+        },
+        {
+          "text": "Ce document en couleur réunit le planning, les créneaux et le récapitulatif des bénévoles.",
+          "startMs": 5908,
+          "endMs": 10482,
+          "method": "silence",
+          "videoSeconds": 31.295
+        },
+        {
+          "text": "Lisons une journée, puis retrouvons Léa.",
+          "startMs": 10685,
+          "endMs": 14874,
+          "method": "silence",
+          "videoSeconds": 36.072
+        },
+        {
+          "text": "Les effectifs indiquent où il manque du monde.",
+          "startMs": 15250,
+          "endMs": 16430,
+          "method": "silence",
+          "videoSeconds": 40.637
+        },
+        {
+          "text": "Le document décrit le planning enregistré au moment de son ouverture, pas une preuve de présence :",
+          "startMs": 16604,
+          "endMs": 22155,
+          "method": "silence",
+          "videoSeconds": 41.991
+        },
+        {
+          "text": "une inscription ne veut pas forcément dire que la personne est arrivée.",
+          "startMs": 22277,
+          "endMs": 26424,
+          "method": "silence",
+          "videoSeconds": 47.664
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "complete",
+          "phrase": "Lisons une journée, puis retrouvons",
+          "startMs": 10685,
+          "endMs": 14874,
+          "cueMs": 36074
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 30918,
+          "relativeSeconds": 5.531
+        }
+      ],
+      "frames": [
+        {
+          "scene": "complete",
+          "fraction": 0.022442491116513932,
+          "seconds": 25.987,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-2.png"
+        },
+        {
+          "scene": "complete",
+          "fraction": 0.25,
+          "seconds": 32.07075,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-25.png"
+        },
+        {
+          "scene": "complete",
+          "fraction": 0.45,
+          "seconds": 37.41775,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-45.png"
+        },
+        {
+          "scene": "complete",
+          "fraction": 0.6,
+          "seconds": 41.428,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-60.png"
+        },
+        {
+          "scene": "complete",
+          "fraction": 0.85,
+          "seconds": 48.11175,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-85.png"
+        },
+        {
+          "scene": "complete",
+          "fraction": 0.988778754441743,
+          "seconds": 51.822,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/complete-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "day",
+      "startSeconds": 54.386,
+      "endSeconds": 79.501,
+      "sentences": [
+        {
+          "text": "Pour l'accueil, le planning par jour est plus direct.",
+          "startMs": 310,
+          "endMs": 3135,
+          "method": "silence",
+          "videoSeconds": 54.696
+        },
+        {
+          "text": "Voici la première journée, puis la suivante.",
+          "startMs": 3276,
+          "endMs": 4963,
+          "method": "silence",
+          "videoSeconds": 57.662
+        },
+        {
+          "text": "Les postes et les créneaux sont regroupés par date, avec le détail des personnes et des places libres.",
+          "startMs": 5232,
+          "endMs": 11050,
+          "method": "silence",
+          "videoSeconds": 59.618
+        },
+        {
+          "text": "Repérons l'accueil du matin et la buvette.",
+          "startMs": 11273,
+          "endMs": 12880,
+          "method": "silence",
+          "videoSeconds": 65.659
+        },
+        {
+          "text": "Cette feuille aide à orienter les arrivées sans distribuer un carnet d'adresses.",
+          "startMs": 13040,
+          "endMs": 17926,
+          "method": "silence",
+          "videoSeconds": 67.426
+        },
+        {
+          "text": "Vérifions le contenu de la feuille, pas seulement son titre :",
+          "startMs": 18413,
+          "endMs": 20182,
+          "method": "silence",
+          "videoSeconds": 72.799
+        },
+        {
+          "text": "les coordonnées privées des bénévoles ne doivent pas devenir une affiche publique.",
+          "startMs": 20394,
+          "endMs": 24817,
+          "method": "silence",
+          "videoSeconds": 74.78
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "day",
+          "phrase": "Les postes et les créneaux",
+          "startMs": 5232,
+          "endMs": 11050,
+          "cueMs": 59626
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 56695,
+          "relativeSeconds": 2.309
+        }
+      ],
+      "frames": [
+        {
+          "scene": "day",
+          "fraction": 0.02389010551463269,
+          "seconds": 54.986,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-2.png"
+        },
+        {
+          "scene": "day",
+          "fraction": 0.25,
+          "seconds": 60.66475,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-25.png"
+        },
+        {
+          "scene": "day",
+          "fraction": 0.45,
+          "seconds": 65.68775,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-45.png"
+        },
+        {
+          "scene": "day",
+          "fraction": 0.6,
+          "seconds": 69.455,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-60.png"
+        },
+        {
+          "scene": "day",
+          "fraction": 0.85,
+          "seconds": 75.73375,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-85.png"
+        },
+        {
+          "scene": "day",
+          "fraction": 0.9880549472426836,
+          "seconds": 79.201,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/day-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "role",
+      "startSeconds": 81.763,
+      "endSeconds": 107.434,
+      "sentences": [
+        {
+          "text": "Si vous coordonnez un poste, choisissez le planning par poste.",
+          "startMs": 193,
+          "endMs": 4239,
+          "method": "silence",
+          "videoSeconds": 81.956
+        },
+        {
+          "text": "La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable.",
+          "startMs": 4678,
+          "endMs": 8296,
+          "method": "silence",
+          "videoSeconds": 86.441
+        },
+        {
+          "text": "Regardons aussi les autres postes pour comprendre le découpage.",
+          "startMs": 8641,
+          "endMs": 12950,
+          "method": "silence",
+          "videoSeconds": 90.404
+        },
+        {
+          "text": "Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand.",
+          "startMs": 13456,
+          "endMs": 17195,
+          "method": "silence",
+          "videoSeconds": 95.219
+        },
+        {
+          "text": "Cela ne crée pas un compte d'administration, ni un droit supplémentaire :",
+          "startMs": 17344,
+          "endMs": 23379,
+          "method": "silence",
+          "videoSeconds": 99.107
+        },
+        {
+          "text": "c'est un document de coordination, à remettre à la personne qui en a besoin.",
+          "startMs": 23770,
+          "endMs": 25369,
+          "method": "silence",
+          "videoSeconds": 105.533
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "role",
+          "phrase": "Si vous coordonnez un poste",
+          "startMs": 193,
+          "endMs": 4239,
+          "cueMs": 81958
+        },
+        {
+          "segmentId": "role",
+          "phrase": "La buvette a sa propre",
+          "startMs": 4678,
+          "endMs": 8296,
+          "cueMs": 86442
+        },
+        {
+          "segmentId": "role",
+          "phrase": "Remettre cette feuille à un",
+          "startMs": 13456,
+          "endMs": 17195,
+          "cueMs": 95220
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 84286,
+          "relativeSeconds": 2.523
+        }
+      ],
+      "frames": [
+        {
+          "scene": "role",
+          "fraction": 0.02337267734018932,
+          "seconds": 82.363,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-2.png"
+        },
+        {
+          "scene": "role",
+          "fraction": 0.25,
+          "seconds": 88.18075,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-25.png"
+        },
+        {
+          "scene": "role",
+          "fraction": 0.45,
+          "seconds": 93.31495,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-45.png"
+        },
+        {
+          "scene": "role",
+          "fraction": 0.6,
+          "seconds": 97.16560000000001,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-60.png"
+        },
+        {
+          "scene": "role",
+          "fraction": 0.85,
+          "seconds": 103.58335000000001,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-85.png"
+        },
+        {
+          "scene": "role",
+          "fraction": 0.9883136613299054,
+          "seconds": 107.134,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/role-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "individual",
+      "startSeconds": 113.686,
+      "endSeconds": 143.893,
+      "sentences": [
+        {
+          "text": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+          "startMs": 320,
+          "endMs": 4796,
+          "method": "silence",
+          "videoSeconds": 114.006
+        },
+        {
+          "text": "Sa frise montre aussi les prénoms des coéquipiers présents sur ces horaires.",
+          "startMs": 5145,
+          "endMs": 8747,
+          "method": "silence",
+          "videoSeconds": 118.831
+        },
+        {
+          "text": "On retrouve ensuite le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés.",
+          "startMs": 9345,
+          "endMs": 14661,
+          "method": "silence",
+          "videoSeconds": 123.031
+        },
+        {
+          "text": "Ici, son planning tient sur deux pages :",
+          "startMs": 15174,
+          "endMs": 17698,
+          "method": "silence",
+          "videoSeconds": 128.86
+        },
+        {
+          "text": "passons à la suivante pour lire le dernier poste.",
+          "startMs": 18179,
+          "endMs": 20399,
+          "method": "silence",
+          "videoSeconds": 131.865
+        },
+        {
+          "text": "Remettez-lui les deux pages de son planning, pas toutes celles de l'équipe.",
+          "startMs": 20541,
+          "endMs": 24856,
+          "method": "silence",
+          "videoSeconds": 134.227
+        },
+        {
+          "text": "Et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
+          "startMs": 25375,
+          "endMs": 29421,
+          "method": "silence",
+          "videoSeconds": 139.061
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "individual",
+          "phrase": "Sa frise montre aussi les",
+          "startMs": 5145,
+          "endMs": 8747,
+          "cueMs": 118833
+        },
+        {
+          "segmentId": "individual",
+          "phrase": "On retrouve ensuite le lieu",
+          "startMs": 9345,
+          "endMs": 14661,
+          "cueMs": 123032
+        },
+        {
+          "segmentId": "individual",
+          "phrase": "passons à la suivante pour lire le dernier poste",
+          "startMs": 18179,
+          "endMs": 20399,
+          "cueMs": 131865
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "individual",
+          "fraction": 0.01986294567484358,
+          "seconds": 114.286,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-2.png"
+        },
+        {
+          "scene": "individual",
+          "fraction": 0.25,
+          "seconds": 121.23775,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-25.png"
+        },
+        {
+          "scene": "individual",
+          "fraction": 0.45,
+          "seconds": 127.27914999999999,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-45.png"
+        },
+        {
+          "scene": "individual",
+          "fraction": 0.6,
+          "seconds": 131.8102,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-60.png"
+        },
+        {
+          "scene": "individual",
+          "fraction": 0.85,
+          "seconds": 139.36195,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-85.png"
+        },
+        {
+          "scene": "individual",
+          "fraction": 0.9900685271625782,
+          "seconds": 143.593,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/individual-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "attendance",
+      "startSeconds": 150.158,
+      "endSeconds": 178.446,
+      "sentences": [
+        {
+          "text": "La feuille de présence sert au pointage sur papier.",
+          "startMs": 785,
+          "endMs": 3180,
+          "method": "silence",
+          "videoSeconds": 150.943
+        },
+        {
+          "text": "Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues.",
+          "startMs": 3769,
+          "endMs": 8465,
+          "method": "silence",
+          "videoSeconds": 153.927
+        },
+        {
+          "text": "Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille.",
+          "startMs": 9414,
+          "endMs": 14048,
+          "method": "silence",
+          "videoSeconds": 159.572
+        },
+        {
+          "text": "En revanche, cocher une case au stylo ne met pas le site à jour.",
+          "startMs": 14487,
+          "endMs": 18480,
+          "method": "silence",
+          "videoSeconds": 164.645
+        },
+        {
+          "text": "Si vous utilisez le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application.",
+          "startMs": 19041,
+          "endMs": 24116,
+          "method": "silence",
+          "videoSeconds": 169.199
+        },
+        {
+          "text": "Le planning et l'arrivée sont deux informations différentes.",
+          "startMs": 24689,
+          "endMs": 27590,
+          "method": "silence",
+          "videoSeconds": 174.847
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "attendance",
+          "phrase": "En revanche, cocher une case",
+          "startMs": 14487,
+          "endMs": 18480,
+          "cueMs": 164646
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "attendance",
+          "fraction": 0.021210407239819005,
+          "seconds": 150.758,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-2.png"
+        },
+        {
+          "scene": "attendance",
+          "fraction": 0.25,
+          "seconds": 157.23,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-25.png"
+        },
+        {
+          "scene": "attendance",
+          "fraction": 0.45,
+          "seconds": 162.8876,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-45.png"
+        },
+        {
+          "scene": "attendance",
+          "fraction": 0.6,
+          "seconds": 167.1308,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-60.png"
+        },
+        {
+          "scene": "attendance",
+          "fraction": 0.85,
+          "seconds": 174.2028,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-85.png"
+        },
+        {
+          "scene": "attendance",
+          "fraction": 0.9893947963800905,
+          "seconds": 178.146,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/attendance-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "contacts",
+      "startSeconds": 180.708,
+      "endSeconds": 207.473,
+      "sentences": [
+        {
+          "text": "La liste avec téléphones est réservée à l'organisation.",
+          "startMs": 698,
+          "endMs": 3694,
+          "method": "silence",
+          "videoSeconds": 181.406
+        },
+        {
+          "text": "Elle permet de retrouver une personne, son email, son téléphone et ses créneaux.",
+          "startMs": 4277,
+          "endMs": 8096,
+          "method": "silence",
+          "videoSeconds": 184.985
+        },
+        {
+          "text": "Pour notre exemple, le numéro donné dans l'inscription est différent du numéro de sa fiche :",
+          "startMs": 8932,
+          "endMs": 13580,
+          "method": "silence",
+          "videoSeconds": 189.64
+        },
+        {
+          "text": "regardons celui retenu dans le document.",
+          "startMs": 13869,
+          "endMs": 15611,
+          "method": "silence",
+          "videoSeconds": 194.577
+        },
+        {
+          "text": "Cette liste contient des coordonnées personnelles.",
+          "startMs": 16606,
+          "endMs": 18657,
+          "method": "silence",
+          "videoSeconds": 197.314
+        },
+        {
+          "text": "Elle ne va pas sur le panneau public du stand et ne se distribue pas à tout le monde.",
+          "startMs": 19191,
+          "endMs": 22866,
+          "method": "silence",
+          "videoSeconds": 199.899
+        },
+        {
+          "text": "Gardez-la pour les personnes qui doivent réellement contacter l'équipe.",
+          "startMs": 23526,
+          "endMs": 26226,
+          "method": "silence",
+          "videoSeconds": 204.234
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "contacts",
+          "phrase": "Elle permet de retrouver une",
+          "startMs": 4277,
+          "endMs": 8096,
+          "cueMs": 184985
+        },
+        {
+          "segmentId": "contacts",
+          "phrase": "Cette liste contient des coordonnées",
+          "startMs": 16606,
+          "endMs": 18657,
+          "cueMs": 197315
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 187297,
+          "relativeSeconds": 6.589
+        },
+        {
+          "kind": "click",
+          "atMs": 197843,
+          "relativeSeconds": 17.135
+        }
+      ],
+      "frames": [
+        {
+          "scene": "contacts",
+          "fraction": 0.022417336073229963,
+          "seconds": 181.308,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-2.png"
+        },
+        {
+          "scene": "contacts",
+          "fraction": 0.25,
+          "seconds": 187.39925,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-25.png"
+        },
+        {
+          "scene": "contacts",
+          "fraction": 0.45,
+          "seconds": 192.75225,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-45.png"
+        },
+        {
+          "scene": "contacts",
+          "fraction": 0.6,
+          "seconds": 196.767,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-60.png"
+        },
+        {
+          "scene": "contacts",
+          "fraction": 0.85,
+          "seconds": 203.45825,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-85.png"
+        },
+        {
+          "scene": "contacts",
+          "fraction": 0.988791331963385,
+          "seconds": 207.173,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/contacts-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "answers",
+      "startSeconds": 209.739,
+      "endSeconds": 241.977,
+      "sentences": [
+        {
+          "text": "Pour préparer les t-shirts et les repas, ouvrez Questions aux bénévoles, puis la Synthèse des réponses.",
+          "startMs": 542,
+          "endMs": 6336,
+          "method": "silence",
+          "videoSeconds": 210.281
+        },
+        {
+          "text": "Chaque personne compte une seule fois, même si elle a plusieurs créneaux.",
+          "startMs": 6805,
+          "endMs": 10635,
+          "method": "silence",
+          "videoSeconds": 216.544
+        },
+        {
+          "text": "Lisons les tailles et les régimes renseignés.",
+          "startMs": 11484,
+          "endMs": 13525,
+          "method": "silence",
+          "videoSeconds": 221.223
+        },
+        {
+          "text": "Les confirmés et les personnes en attente sont distingués ;",
+          "startMs": 14362,
+          "endMs": 17006,
+          "method": "silence",
+          "videoSeconds": 224.101
+        },
+        {
+          "text": "les inscriptions annulées ne comptent pas.",
+          "startMs": 17670,
+          "endMs": 19111,
+          "method": "silence",
+          "videoSeconds": 227.409
+        },
+        {
+          "text": "Vous pouvez télécharger cette synthèse en CSV pour travailler avec les chiffres, ou ouvrir sa version imprimable.",
+          "startMs": 19582,
+          "endMs": 25620,
+          "method": "silence",
+          "videoSeconds": 229.321
+        },
+        {
+          "text": "Regardons ce vrai document :",
+          "startMs": 26403,
+          "endMs": 27525,
+          "method": "silence",
+          "videoSeconds": 236.142
+        },
+        {
+          "text": "les réponses sont regroupées sans distribuer les coordonnées de toute l’équipe.",
+          "startMs": 28326,
+          "endMs": 31761,
+          "method": "silence",
+          "videoSeconds": 238.065
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "answers",
+          "phrase": "Les confirmés et les personnes",
+          "startMs": 14362,
+          "endMs": 17006,
+          "cueMs": 224103
+        },
+        {
+          "segmentId": "answers",
+          "phrase": "Vous pouvez télécharger cette synthèse",
+          "startMs": 19582,
+          "endMs": 25620,
+          "cueMs": 229321
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 224569,
+          "relativeSeconds": 14.83
+        },
+        {
+          "kind": "click",
+          "atMs": 229786,
+          "relativeSeconds": 20.047
+        }
+      ],
+      "frames": [
+        {
+          "scene": "answers",
+          "fraction": 0.018611576400521124,
+          "seconds": 210.339,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-2.png"
+        },
+        {
+          "scene": "answers",
+          "fraction": 0.25,
+          "seconds": 217.7985,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-25.png"
+        },
+        {
+          "scene": "answers",
+          "fraction": 0.45,
+          "seconds": 224.2461,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-45.png"
+        },
+        {
+          "scene": "answers",
+          "fraction": 0.6,
+          "seconds": 229.0818,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-60.png"
+        },
+        {
+          "scene": "answers",
+          "fraction": 0.85,
+          "seconds": 237.1413,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-85.png"
+        },
+        {
+          "scene": "answers",
+          "fraction": 0.9906942117997395,
+          "seconds": 241.677,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/answers-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "print",
+      "startSeconds": 244.244,
+      "endSeconds": 273.641,
+      "sentences": [
+        {
+          "text": "Avant d'imprimer toute la série, vérifiez les pages réellement produites.",
+          "startMs": 512,
+          "endMs": 4436,
+          "method": "silence",
+          "videoSeconds": 244.756
+        },
+        {
+          "text": "Le navigateur permet d'imprimer ou d'enregistrer en PDF.",
+          "startMs": 4653,
+          "endMs": 8963,
+          "method": "silence",
+          "videoSeconds": 248.897
+        },
+        {
+          "text": "Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression.",
+          "startMs": 9158,
+          "endMs": 12802,
+          "method": "silence",
+          "videoSeconds": 253.402
+        },
+        {
+          "text": "Voici le planning de Léa :",
+          "startMs": 13335,
+          "endMs": 15132,
+          "method": "silence",
+          "videoSeconds": 257.579
+        },
+        {
+          "text": "regardons la frise, les marges, puis les consignes plus bas.",
+          "startMs": 15625,
+          "endMs": 18082,
+          "method": "silence",
+          "videoSeconds": 259.869
+        },
+        {
+          "text": "La dernière passe sur la page suivante.",
+          "startMs": 18278,
+          "endMs": 19245,
+          "method": "silence",
+          "videoSeconds": 262.522
+        },
+        {
+          "text": "Pensez à remettre les deux pages ensemble.",
+          "startMs": 19909,
+          "endMs": 23867,
+          "method": "silence",
+          "videoSeconds": 264.153
+        },
+        {
+          "text": "Vérifiez toujours le document final :",
+          "startMs": 24262,
+          "endMs": 25323,
+          "method": "silence",
+          "videoSeconds": 268.506
+        },
+        {
+          "text": "c'est celui que l'équipe utilisera sur le terrain.",
+          "startMs": 25487,
+          "endMs": 29067,
+          "method": "silence",
+          "videoSeconds": 269.731
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "print",
+          "phrase": "Le navigateur permet d'imprimer ou",
+          "startMs": 4653,
+          "endMs": 8963,
+          "cueMs": 248899
+        },
+        {
+          "segmentId": "print",
+          "phrase": "regardons la frise, les marges",
+          "startMs": 15625,
+          "endMs": 18082,
+          "cueMs": 259871
+        },
+        {
+          "segmentId": "print",
+          "phrase": "La dernière passe sur la page suivante",
+          "startMs": 18278,
+          "endMs": 19245,
+          "cueMs": 262522
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "print",
+          "fraction": 0.02041024594346362,
+          "seconds": 244.844,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-2.png"
+        },
+        {
+          "scene": "print",
+          "fraction": 0.25,
+          "seconds": 251.59325,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-25.png"
+        },
+        {
+          "scene": "print",
+          "fraction": 0.45,
+          "seconds": 257.47265,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-45.png"
+        },
+        {
+          "scene": "print",
+          "fraction": 0.6,
+          "seconds": 261.8822,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-60.png"
+        },
+        {
+          "scene": "print",
+          "fraction": 0.85,
+          "seconds": 269.23145,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-85.png"
+        },
+        {
+          "scene": "print",
+          "fraction": 0.9897948770282682,
+          "seconds": 273.341,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/print-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "result",
+      "startSeconds": 277.076,
+      "endSeconds": 304.82,
+      "sentences": [
+        {
+          "text": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel et une liste de contacts réservée à l'organisation.",
+          "startMs": 329,
+          "endMs": 8337,
+          "method": "silence",
+          "videoSeconds": 277.405
+        },
+        {
+          "text": "Un fichier enregistré ne se met pas à jour tout seul.",
+          "startMs": 9017,
+          "endMs": 11998,
+          "method": "silence",
+          "videoSeconds": 286.093
+        },
+        {
+          "text": "Si le planning change, générez une nouvelle version et remplacez les anciennes copies.",
+          "startMs": 12419,
+          "endMs": 16556,
+          "method": "silence",
+          "videoSeconds": 289.495
+        },
+        {
+          "text": "Pour les coordonnées et les réponses personnelles, conservez seulement ce qui reste utile.",
+          "startMs": 17243,
+          "endMs": 21830,
+          "method": "silence",
+          "videoSeconds": 294.319
+        },
+        {
+          "text": "Le bon document, remis à la bonne personne :",
+          "startMs": 22378,
+          "endMs": 24829,
+          "method": "silence",
+          "videoSeconds": 299.454
+        },
+        {
+          "text": "c'est souvent le plus simple pour un jour J serein.",
+          "startMs": 24984,
+          "endMs": 27411,
+          "method": "silence",
+          "videoSeconds": 302.06
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "result",
+          "fraction": 0.02162629757785467,
+          "seconds": 277.676,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-2.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.25,
+          "seconds": 284.012,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-25.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.45,
+          "seconds": 289.5608,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-45.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.6,
+          "seconds": 293.72240000000005,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-60.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.85,
+          "seconds": 300.65840000000003,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-85.png"
+        },
+        {
+          "scene": "result",
+          "fraction": 0.9891868512110726,
+          "seconds": 304.52,
+          "file": "/private/tmp/codex-video/videos/output/event-reports/review-frames/result-end.png"
+        }
+      ]
+    }
+  ]
+}

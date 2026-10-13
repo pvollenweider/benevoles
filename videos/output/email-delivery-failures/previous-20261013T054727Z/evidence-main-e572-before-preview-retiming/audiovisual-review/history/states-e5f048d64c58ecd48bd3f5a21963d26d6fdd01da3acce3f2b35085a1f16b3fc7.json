@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:08:33.742Z",
+  "videoSha256": "27f9909f7b69ce0919bf10854b00f5062a806ca282cc0e5a5775ea62270b9cce",
+  "promptSha256": "6d2d19af448268277f89976b40785ee9a444cd76a9f48614b50e8f464218d771",
+  "clipSha256": "d2cb58a6eb577b7e759b1b3d4b9eeb8ff69de1a36ae76ede9ba08e9ffeddb78f",
+  "scene": "states",
+  "review": {
+    "heardOpening": "En attente d'envoi signifie que l'email est dans la file",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Jules n'a pas encore eu de tentative",
+        "visibleSeconds": 2.5,
+        "visible": "Ligne de Jules Berger affichée avec la mention en attente dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Pour Sarah, Nouvel essai prévu indique un échec temporaire",
+        "visibleSeconds": 6.8,
+        "visible": "Ligne de Sarah Rochat visible avec le statut Nouvel essai prévu et compteur d'essais",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.4,
+        "spoken": "Nicolas est marqué Envoyé",
+        "visibleSeconds": 12.4,
+        "visible": "Ligne de Nicolas Morel visible avec le statut vert Envoyé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.3,
+        "spoken": "Léa a reçu un refus définitif",
+        "visibleSeconds": 21.3,
+        "visible": "Ligne de Léa Perrin affichée avec l'état Échec définitif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et articulation claire, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

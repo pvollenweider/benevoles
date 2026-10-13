@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:01:55.227Z",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "promptSha256": "bcf24701f4d401c0a0609b2fd255750646b0a24a3429f15b78923da64a308d86",
+  "clipSha256": "55bc3730b952ab8f03d3bce6bb9b6656336fc8cb7200a746ed8a62f0406ffb98",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le badge choisi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le badge choisi est prêt pour l'accueil",
+        "visibleSeconds": 0,
+        "visible": "Aperçu du badge pour Léa Giroud sur la page des documents terrain",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.4,
+        "spoken": "Il n'a ni photo, ni QR code personnel",
+        "visibleSeconds": 2,
+        "visible": "Le badge affiché ne comporte effectivement aucune photo ni code QR, seulement du texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "reconnaître la personne, retrouver son équipe",
+        "visibleSeconds": 13,
+        "visible": "Présence visible du prénom/nom (Léa GIROUD) et des affectations (Accueil · Buvette · Loge) sur le badge",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, posée et bien articulée, synchronisée avec l'écran d'explication."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

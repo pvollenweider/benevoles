@@ -1,0 +1,73 @@
+{
+  "source": "videos/output/attendance-check-in/documents/attendance.csv",
+  "sha256": "b1db9ecb140527ef475c29cab1ee3e393d857091bc3b47be8b0a41469734b92a",
+  "rows": [
+    {
+      "Prénom": "Noah",
+      "Nom": "Exemple",
+      "Email": "video.attendance.3@example.org",
+      "Téléphone": "",
+      "Poste": "Accueil",
+      "Créneau": "Accueil du matin",
+      "Date": "2026-10-11",
+      "Début": "08:00",
+      "Fin": "10:00",
+      "Présent": "non",
+      "Pointé le": ""
+    },
+    {
+      "Prénom": "Aline",
+      "Nom": "Exemple",
+      "Email": "video.attendance.0@example.org",
+      "Téléphone": "",
+      "Poste": "Accueil",
+      "Créneau": "Accueil du matin",
+      "Date": "2026-10-11",
+      "Début": "08:00",
+      "Fin": "10:00",
+      "Présent": "oui",
+      "Pointé le": "13.10.2026 09:39"
+    },
+    {
+      "Prénom": "Nicolas",
+      "Nom": "Exemple",
+      "Email": "video.attendance.1@example.org",
+      "Téléphone": "",
+      "Poste": "Accueil",
+      "Créneau": "Accueil du matin",
+      "Date": "2026-10-11",
+      "Début": "08:00",
+      "Fin": "10:00",
+      "Présent": "oui",
+      "Pointé le": "13.10.2026 09:39"
+    },
+    {
+      "Prénom": "Léa",
+      "Nom": "Exemple",
+      "Email": "video.attendance.2@example.org",
+      "Téléphone": "",
+      "Poste": "Accueil",
+      "Créneau": "Accueil du matin",
+      "Date": "2026-10-11",
+      "Début": "08:00",
+      "Fin": "10:00",
+      "Présent": "oui",
+      "Pointé le": "13.10.2026 09:40"
+    },
+    {
+      "Prénom": "Léa",
+      "Nom": "Exemple",
+      "Email": "video.attendance.2@example.org",
+      "Téléphone": "",
+      "Poste": "Buvette",
+      "Créneau": "Buvette de midi",
+      "Date": "2026-10-11",
+      "Début": "12:00",
+      "Fin": "14:00",
+      "Présent": "non",
+      "Pointé le": ""
+    }
+  ],
+  "rowsCount": 5,
+  "sarahExcluded": true
+}

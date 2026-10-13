@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos",
+  "windowStart": 177.091,
+  "result": {
+    "found": true,
+    "startSeconds": 13.9,
+    "wordsHeard": "Pour terminer"
+  },
+  "onset": 190.991,
+  "proposedCut": 190.7416875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

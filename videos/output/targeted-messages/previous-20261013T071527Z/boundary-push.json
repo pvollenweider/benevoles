@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur. Elle",
+  "windowStart": 167.223,
+  "result": {
+    "found": true,
+    "startSeconds": 26.35,
+    "wordsHeard": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur. Elle"
+  },
+  "onset": 193.573,
+  "proposedCut": 193.7423335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

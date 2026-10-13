@@ -1,0 +1,12 @@
+{
+  "anchor": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette",
+  "windowStart": 134.82200000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 26.84,
+    "wordsHeard": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette"
+  },
+  "onset": 161.66200000000003,
+  "proposedCut": 161.587104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

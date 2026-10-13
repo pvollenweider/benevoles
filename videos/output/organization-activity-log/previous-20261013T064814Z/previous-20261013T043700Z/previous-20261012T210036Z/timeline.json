@@ -1,0 +1,53 @@
+{
+  "slug": "organization-activity-log",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T19:14:50.478Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1195,
+      "endMs": 31122
+    },
+    {
+      "id": "read",
+      "startMs": 31575,
+      "endMs": 58316
+    },
+    {
+      "id": "members",
+      "startMs": 58768,
+      "endMs": 85109
+    },
+    {
+      "id": "team",
+      "startMs": 85562,
+      "endMs": 111941
+    },
+    {
+      "id": "filters",
+      "startMs": 112393,
+      "endMs": 140472
+    },
+    {
+      "id": "pages",
+      "startMs": 140923,
+      "endMs": 170638
+    },
+    {
+      "id": "export",
+      "startMs": 173876,
+      "endMs": 210420
+    },
+    {
+      "id": "limits",
+      "startMs": 210874,
+      "endMs": 238388
+    },
+    {
+      "id": "result",
+      "startMs": 238840,
+      "endMs": 270459
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "slug": "organization-activity-log",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-12T21:01:52.771Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "274c0b66f5a583975236f973e8062871910769d4",
+    "sourceTree": "7036ab2266cf08883e3e8472728766ef3e499946",
+    "productSourceSha256": "2aa0fc8a56d378a9804f53492e7db1b146eaefa3adaf312ddc9f66b161229c7e",
+    "buildId": "QnaleWUIippKmUvaMUEKT",
+    "snapshot": "/tmp/benevoles-video-production.fnLPuNgC",
+    "builtAt": "2026-10-12T20:53:06.047Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "ORGANIZATION_ACTIVITY_LOG",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 4373
+    },
+    {
+      "kind": "click",
+      "atMs": 9758
+    },
+    {
+      "kind": "click",
+      "atMs": 15790
+    },
+    {
+      "kind": "click",
+      "atMs": 17154
+    },
+    {
+      "kind": "click",
+      "atMs": 20738
+    },
+    {
+      "kind": "click",
+      "atMs": 22022
+    },
+    {
+      "kind": "click",
+      "atMs": 23304
+    },
+    {
+      "kind": "click",
+      "atMs": 26905
+    },
+    {
+      "kind": "click",
+      "atMs": 28221
+    },
+    {
+      "kind": "click",
+      "atMs": 29504
+    },
+    {
+      "kind": "click",
+      "atMs": 32382
+    },
+    {
+      "kind": "click",
+      "atMs": 35498
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1159,
+      "endMs": 4680
+    },
+    {
+      "id": "read",
+      "startMs": 6939,
+      "endMs": 7002
+    },
+    {
+      "id": "members",
+      "startMs": 9263,
+      "endMs": 13009
+    },
+    {
+      "id": "team",
+      "startMs": 15282,
+      "endMs": 17974
+    },
+    {
+      "id": "filters",
+      "startMs": 20237,
+      "endMs": 24124
+    },
+    {
+      "id": "pages",
+      "startMs": 26387,
+      "endMs": 30321
+    },
+    {
+      "id": "export",
+      "startMs": 35012,
+      "endMs": 35833
+    },
+    {
+      "id": "limits",
+      "startMs": 38095,
+      "endMs": 39238
+    },
+    {
+      "id": "result",
+      "startMs": 41502,
+      "endMs": 42687
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons Journal d'activité depuis les paramètres",
+      "startMs": 18753,
+      "endMs": 23835,
+      "cueMs": 3884
+    },
+    {
+      "segmentId": "read",
+      "phrase": "Lisons deux actions réalisées par",
+      "startMs": 5604,
+      "endMs": 12228,
+      "cueMs": 6943
+    },
+    {
+      "segmentId": "read",
+      "phrase": "Le nom affiché vient du",
+      "startMs": 20507,
+      "endMs": 25347,
+      "cueMs": 6970
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Ce sont des actions sur",
+      "startMs": 7971,
+      "endMs": 18816,
+      "cueMs": 10581
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Pour comprendre ses inscriptions, ouvrons",
+      "startMs": 18816,
+      "endMs": 26133,
+      "cueMs": 10672
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Cette distinction évite de prendre",
+      "startMs": 31491,
+      "endMs": 41813,
+      "cueMs": 11904
+    },
+    {
+      "segmentId": "members",
+      "phrase": "Nous pouvons ensuite revenir au",
+      "startMs": 26133,
+      "endMs": 31491,
+      "cueMs": 11916
+    },
+    {
+      "segmentId": "team",
+      "phrase": "Retrouvons une invitation puis un",
+      "startMs": 11968,
+      "endMs": 17952,
+      "cueMs": 16610
+    },
+    {
+      "segmentId": "team",
+      "phrase": "il n'accorde pas le droit",
+      "startMs": 21676,
+      "endMs": 26995,
+      "cueMs": 16619
+    },
+    {
+      "segmentId": "team",
+      "phrase": "On peut aussi retrouver un",
+      "startMs": 33378,
+      "endMs": 40957,
+      "cueMs": 16658
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Choisissons Membres, puis Comptes admin",
+      "startMs": 12214,
+      "endMs": 20878,
+      "cueMs": 20237
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Choisissons Membres, puis Comptes admin",
+      "startMs": 12214,
+      "endMs": 20878,
+      "cueMs": 21555
+    },
+    {
+      "segmentId": "filters",
+      "phrase": "Revenons ensuite à Tous les",
+      "startMs": 20878,
+      "endMs": 24855,
+      "cueMs": 22844
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Descendons, utilisons le bouton et",
+      "startMs": 7240,
+      "endMs": 14235,
+      "cueMs": 26388
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Descendons, utilisons le bouton et",
+      "startMs": 7240,
+      "endMs": 14235,
+      "cueMs": 26428
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "Si une sélection ne donne",
+      "startMs": 23193,
+      "endMs": 34115,
+      "cueMs": 27718
+    },
+    {
+      "segmentId": "pages",
+      "phrase": "pour corriger une fiche ou",
+      "startMs": 36078,
+      "endMs": 47000,
+      "cueMs": 29043
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Le mot tout est important",
+      "startMs": 5791,
+      "endMs": 8618,
+      "cueMs": 35012
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Ouvrons le vrai fichier téléchargé",
+      "startMs": 21142,
+      "endMs": 25182,
+      "cueMs": 35803
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Il contient la date, l'acteur",
+      "startMs": 25182,
+      "endMs": 36628,
+      "cueMs": 35826
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Les entrées vont des plus",
+      "startMs": 36628,
+      "endMs": 46055,
+      "cueMs": 35828
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Ce fichier est une copie",
+      "startMs": 46055,
+      "endMs": 50229,
+      "cueMs": 35831
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Gardons le fichier pour les",
+      "startMs": 19799,
+      "endMs": 27818,
+      "cueMs": 38095
+    }
+  ]
+}

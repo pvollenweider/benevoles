@@ -1,0 +1,17 @@
+{
+  "id": "EVENT_REPORTS",
+  "status": "NOT READY",
+  "duration": 311.32,
+  "buildId": "QnaleWUIippKmUvaMUEKT",
+  "music": {
+    "voicedWindows": 268,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14.1,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -32.7,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Day chapter announces Rep\u00e9rons accueil du matin while the screen stays on Sunday (Accueil du dimanche); actual Saturday label off screen. AV day at 11.5\u201312s and day-sheet corroborate. All technical/source/final narration/music checks pass. Frise width fixed in PDFs; no null found in all six PDFs incl. day page 2. French dates/current labels; no forbidden host/identity or overlay observed.",
+  "sourceChanges": "record-report-documents.ts: added sentence anchor Rep\u00e9rons accueil du matin et la buvette, scroll to actual Accueil du matin and reading pointer. No re-film; narration reused."
+}

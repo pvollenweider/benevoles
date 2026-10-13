@@ -1,0 +1,12 @@
+{
+  "anchor": "Terminons dans la vue de couverture et les inscriptions à jour.",
+  "windowStart": 286.80199999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 15.34,
+    "wordsHeard": "Terminons"
+  },
+  "onset": 302.14199999999994,
+  "proposedCut": 301.802104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

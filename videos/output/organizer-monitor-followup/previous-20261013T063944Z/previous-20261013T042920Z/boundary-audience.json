@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une relance, choisis précisément les destinataires : tous les inscrits,",
+  "windowStart": 50.81299999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 30.6,
+    "wordsHeard": "Pour une relance"
+  },
+  "onset": 81.41299999999998,
+  "proposedCut": 80.813354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

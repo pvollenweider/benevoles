@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:17:11.143Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "6d2d19af448268277f89976b40785ee9a444cd76a9f48614b50e8f464218d771",
+  "clipSha256": "7a109c6e94ea0c5b0542e8e9de03f44823dab8fb73b7503357c7632a852d2f74",
+  "scene": "states",
+  "review": {
+    "heardOpening": "En attente d'envoi signifie que l'email est dans la file",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative.",
+        "visibleSeconds": 0.5,
+        "visible": "Ligne du tableau pour Jules Berger affichant le statut En attente d'envoi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Pour Sarah, Nouvel essai prévu indique un échec temporaire",
+        "visibleSeconds": 6,
+        "visible": "Ligne pour Sarah Rochat affichant Nouvel essai prévu et essai 2 sur 6.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Nicolas est marqué Envoyé : remis au serveur",
+        "visibleSeconds": 12,
+        "visible": "Ligne pour Nicolas Morel avec statut Envoyé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Emma a atteint six essais après une panne temporaire persistante.",
+        "visibleSeconds": 17.5,
+        "visible": "Ligne pour Emma Favre avec Échec définitif et essai 6 sur 6.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "Léa a reçu un refus définitif : l'application s'arrête dès le premier essai",
+        "visibleSeconds": 21.5,
+        "visible": "Ligne pour Léa Perrin indiquant un Échec définitif sans retentatives.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27,
+        "spoken": "Dans cette formation, les délais des essais temporaires ont été accélérés",
+        "visibleSeconds": 26.5,
+        "visible": "Bandeau informatif noir affiché en bas de page précisant l'accélération des délais.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, débit régulier et bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:39:18.883Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "82fcfa717afa1f73e3b485b0b81fc6ca69fb360542dece21be61f9032968ba22",
+  "clipSha256": "655768753358b486f94bc3cd3d3dfa7171c9a43a9544b5015d1884bd5436c333",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Téléchargeons maintenant le véritable export des présences",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Téléchargeons maintenant le véritable export des présences.",
+        "visibleSeconds": 3.8,
+        "visible": "Passage direct à l'écran de visualisation du CSV téléchargé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le.",
+        "visibleSeconds": 4,
+        "visible": "Tableau affichant les colonnes Créneau, Présent et Pointé le avec différentes lignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de l'interface mobile Jour J adaptée au terrain.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et fluide, en bonne adéquation avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

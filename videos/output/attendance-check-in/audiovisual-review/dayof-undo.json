@@ -1,45 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:42:08.070Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:47:54.159Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "4adf127226d4461970a4d0bda6f2e976c8207766c5a480d512e0d04c20dc2ea4",
-  "clipSha256": "176fb5ad3086f10cb5255e23e5f18f7f0080e004b99b94c9fe88d4093fca1cf7",
+  "clipSha256": "ece53fd8dc7ef94728d57845e0da053fef3cdfc52a520dbece84b195fa194742",
   "scene": "dayof-undo",
   "review": {
-    "heardOpening": "Une erreur de pointage ?",
+    "heardOpening": "Une erreur de pointage",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.5,
         "spoken": "Annuler la présence retire la marque",
         "visibleSeconds": 0.8,
-        "visible": "Le clic sur 'Annuler la présence' remet le statut à 'Pas encore marqué'",
+        "visible": "Clic sur le bouton 'Annuler présence', le statut de Zoé passe à 'Pas encore marqué'",
         "sync": "early",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 5.9,
+        "spokenSeconds": 6,
         "spoken": "Vérifions après rechargement",
-        "visibleSeconds": 6.5,
-        "visible": "Aucun rechargement de la page n'est effectué à l'écran",
+        "visibleSeconds": 6,
+        "visible": "Aucun rechargement de page ni clic sur 'Actualiser' n'est effectué",
         "sync": "missing",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 8.1,
+        "spokenSeconds": 8,
         "spoken": "Zoé conserve sa place, et son arrivée n'est plus marquée",
-        "visibleSeconds": 8.5,
-        "visible": "Zoé Exemple apparaît toujours avec le statut 'Pas encore marqué'",
+        "visibleSeconds": 8,
+        "visible": "Zoé Exemple figure toujours dans la liste avec l'état 'Pas encore marqué'",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "00:06 : L'action de rechargement annoncée ('après rechargement') n'est pas exécutée visuellement."
+      "À 00:06, la voix annonce une vérification 'après rechargement', mais aucun rafraîchissement ni clic sur le bouton 'Actualiser' n'est réalisé à l'écran."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton pédagogique adapté."
+      "observation": "Voix off féminine claire, bien rythmée et posée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

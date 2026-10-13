@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:53:57.767Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "fc3f640473a329ddb194adc988f8dfe7291cc0450dda42e1bb031fa5dfe5549f",
+  "clipSha256": "39afb7196cd78fbb3ccd3aa012b0efe2c32a338a8279bc7c6bf8809341f32f66",
+  "scene": "colors",
+  "review": {
+    "heardOpening": "Le bandeau peut prendre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Générons les trois versions pour les comparer",
+        "visibleSeconds": 4.8,
+        "visible": "Génération et affichage des badges selon la couleur du poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "couleur d'événement comme solution de repli",
+        "visibleSeconds": 11,
+        "visible": "Affichage des badges avec bandeau à la couleur de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "Pour une impression simple, le noir et blanc est pratique",
+        "visibleSeconds": 16.5,
+        "visible": "Choix de l'option noir et blanc et affichage des badges correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction claire et articulation fluide, rythme bien synchronisé avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

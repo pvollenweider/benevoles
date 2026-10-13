@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:55:33.684Z",
+  "videoSha256": "475ca0d8e812ba018e34867fd4f1346406eb2dc8ed5577a391ea41682a092416",
+  "promptSha256": "a03c379f1eed378f57d0aaba5a7d6b11e4acfb66b0df46229ba027638d3984e1",
+  "clipSha256": "9ae27c3d55b913a0e50ac184cac20c5af17fc115ffaec8edd80642134b1de8bc",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Filtrer par type permet",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Choisissons Membres",
+        "visibleSeconds": 7.5,
+        "visible": "Le menu déroulant affiche Membres et la liste des événements se met à jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "puis Comptes admin",
+        "visibleSeconds": 9.5,
+        "visible": "Le filtre bascule sur Comptes admin et seules les lignes associées apparaissent",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Revenons ensuite à Tous les types",
+        "visibleSeconds": 13.5,
+        "visible": "Le filtre revient sur Tous les types et l'ensemble des entrées réapparaît",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

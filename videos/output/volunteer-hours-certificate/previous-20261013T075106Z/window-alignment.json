@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-13T05:37:32.392Z",
+  "masterSha256": "6bd04768ed941503d73e59ea489a784a26ab0b020e6f1713abb2d138f5a6debc",
+  "totalSeconds": 257.84,
+  "cuts": [
+    {
+      "id": "last-participation",
+      "seconds": 28.264125
+    },
+    {
+      "id": "activity",
+      "seconds": 60.819208
+    },
+    {
+      "id": "period-export",
+      "seconds": 84.8525415
+    },
+    {
+      "id": "certificate-settings",
+      "seconds": 121.2428955
+    },
+    {
+      "id": "certificate-presence",
+      "seconds": 161.587104
+    },
+    {
+      "id": "certificate-pdf",
+      "seconds": 190.0517295
+    },
+    {
+      "id": "event-summary",
+      "seconds": 224.1465
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

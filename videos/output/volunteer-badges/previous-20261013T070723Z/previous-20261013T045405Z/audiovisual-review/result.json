@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:28:05.952Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "bcf24701f4d401c0a0609b2fd255750646b0a24a3429f15b78923da64a308d86",
+  "clipSha256": "e1d3d196b3e24c517ea8ab1aaf946ac3b278879cd2e97fc6aa3eb1f9f31cae22",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le badge choisi est prêt pour l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "Le badge choisi est prêt pour l'accueil",
+        "visibleSeconds": 0,
+        "visible": "Aperçu du badge individuel prêt pour Léa Girood avec le bouton Imprimer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Il n'a ni photo, ni QR code personnel",
+        "visibleSeconds": 2.2,
+        "visible": "Le modèle de badge affiché contient uniquement du texte (nom, rôles, créneaux) sans photo ni QR code",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "retrouver son équipe",
+        "visibleSeconds": 15.1,
+        "visible": "Mentions des équipes et postes « Accueil · Buvette · Loge » visibles sur le badge",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, en parfait accord avec le texte explicatif."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

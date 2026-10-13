@@ -1,0 +1,103 @@
+{
+  "renderedAt": "2026-10-05T16:03:57.055Z",
+  "note": "Every page rendered; human/model visual review and pagination checks still required",
+  "results": [
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/all.pdf",
+      "pages": 8,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-1.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-2.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-3.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-4.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-5.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-6.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-7.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/all/page-8.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/black-white.pdf",
+      "pages": 8,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-1.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-2.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-3.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-4.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-5.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-6.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-7.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/black-white/page-8.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/buvette.pdf",
+      "pages": 3,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/buvette/page-1.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/buvette/page-2.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/buvette/page-3.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/camille-second.pdf",
+      "pages": 1,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/camille-second/page-1.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/empty-combined.pdf",
+      "pages": 1,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/empty-combined/page-1.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/event-color.pdf",
+      "pages": 8,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-1.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-2.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-3.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-4.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-5.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-6.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-7.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/event-color/page-8.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/lea-five-shifts.pdf",
+      "pages": 1,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/lea-five-shifts/page-1.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/loge-fallback.pdf",
+      "pages": 3,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/loge-fallback/page-1.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/loge-fallback/page-2.png",
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/loge-fallback/page-3.png"
+      ],
+      "visualReview": false
+    },
+    {
+      "pdf": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/minimal.pdf",
+      "pages": 1,
+      "images": [
+        "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/documents/rendered/minimal/page-1.png"
+      ],
+      "visualReview": false
+    }
+  ]
+}

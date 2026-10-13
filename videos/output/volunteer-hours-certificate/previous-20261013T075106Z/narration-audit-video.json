@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T05:45:47.057Z",
+  "revalidatedAt": "2026-10-13T05:45:47.057Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "hours-list",
+      "audioSha256": "ad29e405fb4fd631c1d5c526453b825c70371978deeb291a3d62a5ecdbd06121",
+      "recognized": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures planifiées et les heures attestées. Pour Aline, huit heures étaient prévues sur ses créneaux confirmés passés, et six correspondent à une présence saisie. Ces six heures font partie des huit, elles ne s'ajoutent pas. Les créneaux à venir, les inscriptions annulées et les créneaux annulés ne gonflent pas ce bilan. Toutes les personnes et les données de cette démonstration sont fictives.",
+      "expected": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures planifiées et les heures attestées. Pour Aline, huit heures étaient prévues sur ses créneaux confirmés passés, et six correspondent à une présence saisie. Ces six heures font partie des huit : elles ne s'ajoutent pas. Les créneaux à venir, les inscriptions annulées et les créneaux annulés ne gonflent pas ce bilan. Toutes les personnes et les données de cette démonstration sont fictives.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "last-participation",
+      "audioSha256": "07630322ee0e6950c82d1b3b5e97e9d47606fa3b158c5dccf1515e82ce57c2f7",
+      "recognized": "La dernière participation apporte un autre repère. Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée. Pour Benoît, aucune présence n'a été saisie. Ce n'est pas une preuve d'absence. Vous pouvez aussi trier les heures attestées : un clic les classe par ordre croissant, un deuxième inverse cet ordre et le troisième rétablit la liste initiale. Cliquons enfin sur Dernière participation pour trier cette date. Aucun de ces repères ne désactive automatiquement un membre. Vous gardez la décision.",
+      "expected": "La dernière participation apporte un autre repère. Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée. Pour Benoît, aucune présence n'a été saisie : ce n'est pas une preuve d'absence. Vous pouvez aussi trier les heures attestées. Un clic les classe par ordre croissant, un deuxième inverse cet ordre, et le troisième rétablit la liste initiale. Cliquons enfin sur Dernière participation pour trier cette date. Aucun de ces repères ne désactive automatiquement un membre : vous gardez la décision.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "activity",
+      "audioSha256": "373b557c30f5c850c655b35074ae021fb3a86791a3fb12d691ecfd35cdb26177",
+      "recognized": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé. Les heures attestées reposent sur une présence saisie et sur la durée du créneau. L'absence de présence saisie ne permet pas à elle seule de conclure qu'une personne était absente.",
+      "expected": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie et sur la durée du créneau. L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "period-export",
+      "audioSha256": "06ea1dd5bb461e9bad1827cf0dc8ba3b24393d2d5c68fc04773c663434f084a3",
+      "recognized": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par bénévole. Pour une période, choisissons le premier et le trente septembre. Téléchargeons le CSV. Il compte les créneaux confirmés non annulés de cette période, avec les heures planifiées et attestées séparées. Cochons maintenant l'option pour inclure les membres sans créneau confirmé, puis téléchargeons à nouveau. Dans ce vrai fichier, Clara apparaît avec des zéros. Le total indique six heures planifiées, dont deux attestées. La période choisie détermine le bilan. Si elle contient des dates futures, ces créneaux peuvent aussi y figurer.",
+      "expected": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par bénévole, pour une période. Choisissons le premier et le trente septembre. Téléchargeons le CSV. Il compte les créneaux confirmés non annulés de cette période, avec les heures planifiées et attestées séparées. Cochons maintenant l'option pour inclure les membres sans créneau confirmé, puis téléchargeons à nouveau. Dans ce vrai fichier, Clara apparaît avec des zéros. Le total indique six heures planifiées, dont deux attestées. La période choisie détermine le bilan : si elle contient des dates futures, ces créneaux peuvent aussi y figurer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "certificate-settings",
+      "audioSha256": "7768de6edda9dee7156df2f23d8121608087d104d5c420a00576186afba4fc24",
+      "recognized": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative. Écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Le logo enregistré dans les réglages de l'organisation apparaît aussi. Il est imprimé en gris pour garder un document adapté au noir et blanc. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
+      "expected": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative : écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Le logo enregistré dans les réglages de l'organisation apparaît aussi. Il est imprimé en gris pour garder un document adapté au noir et blanc. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "certificate-presence",
+      "audioSha256": "b7b96f732e1fef4cf84e2a235ab2289862eb5bd9f75c3b2c9f74d2263faa4a24",
+      "recognized": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons : Inclure les heures planifiées sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures planifiées de la liste des membres. Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence. Ce document ne prétend pas mesurer un temps de travail chronométré, une présence non saisie n'est pas non plus une preuve d'absence.",
+      "expected": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures planifiées sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures planifiées de la liste des membres. Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "certificate-pdf",
+      "audioSha256": "0a2e108dbf6f97cc26ef8edd9fa8e28c92baa5144b5570e75519bc08f32ef2e1",
+      "recognized": "Quand le contenu vous convient, cliquons sur générer et imprimer l'attestation. L'application lance l'impression du navigateur. Vous pouvez l'enregistrer en PDF. Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur. Relisons le nom, la période, les deux colonnes et la remarque. Les zones signature et nom du signataire restent à compléter. Vérifiez le document avant de le signer et de le remettre à la personne.",
+      "expected": "Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation. L'application lance l'impression du navigateur : vous pouvez l'enregistrer en PDF. Pour cette démonstration, nous ouvrons le vrai PDF produit par le moteur d'impression local du navigateur, pas un téléchargement proposé par le serveur. Relisons le nom, la période, les deux colonnes et la remarque. Les zones Signature et Nom du signataire restent à compléter. Vérifiez le document avant de le signer et de le remettre à la personne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "event-summary",
+      "audioSha256": "4356d5bd85d53d8d0635b54d52751a21862c9bfdf8419c3f7001c03fed71c598",
+      "recognized": "Enfin, ouvrons les rapports de la fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés. Une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau, le bilan le signale, les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "expected": "Enfin, ouvrons les rapports de la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

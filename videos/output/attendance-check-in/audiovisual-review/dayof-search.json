@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:39:46.747Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:47:41.069Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "db531a1f232c05674f5b8608a889555acb3d95aa293ee4e884c8a8fa931a9eb7",
-  "clipSha256": "b835e26752f713faa2497e8d41fdc2ad4ff9a1f9f7f1a5cc884f87ffadffa09a",
+  "clipSha256": "b24e7abce1faf352ab84547db159121d683ddd3550db563a6f64fea4a7c1fe1c",
   "scene": "dayof-search",
   "review": {
     "heardOpening": "Vous cherchez Zoé ?",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 2,
         "spoken": "Tapez son prénom sans accent",
-        "visibleSeconds": 1.2,
-        "visible": "Le terme « zoe » est saisi dans la barre de recherche filtrant la liste.",
+        "visibleSeconds": 1,
+        "visible": "Saisie de « zoe » dans le champ de recherche et affichage du résultat correspondant",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 6.5,
         "spoken": "chercher un poste, comme Accueil",
-        "visibleSeconds": 9.8,
-        "visible": "Le texte « Accueil » remplace la recherche précédente.",
-        "sync": "aligned",
-        "severity": "none"
+        "visibleSeconds": 10.5,
+        "visible": "Saisie de « Accueil » dans le champ de recherche filtrant la liste",
+        "sync": "late",
+        "severity": "minor"
       },
       {
         "spokenSeconds": 13.5,
-        "spoken": "Effaçons la recherche pour retrouver le planning",
-        "visibleSeconds": 14,
-        "visible": "Le champ de recherche est vidé, rétablissant la vue par défaut.",
+        "spoken": "Effaçons la recherche pour retrouver le planning du moment",
+        "visibleSeconds": 13.5,
+        "visible": "Suppression du texte dans la barre de recherche et réinitialisation de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Cette page montre les inscriptions confirmées",
+        "visibleSeconds": 17,
+        "visible": "Affichage de la liste générale des inscriptions confirmées à pointer",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:10, la saisie du mot « Accueil » intervient avec environ deux secondes de retard par rapport à l'annonce vocale."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution fluide, claire et bien articulée."
+      "observation": "Voix féminine naturelle, claire et posée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

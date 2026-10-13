@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:22.812Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "f0bf28942702ed3bb7d2de52c8f7f6e91f1144fec4bedf584c13bf9320123a87",
+  "clipSha256": "510de0d24ecb33021c45ed0179f68f68b13b4a96871a5a0d1ee1fc83cc3c4bf4",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "De retour dans le message",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "voici une première version écrite à la main",
+        "visibleSeconds": 2.2,
+        "visible": "L'objet et le message sont complétés manuellement dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "il faut cliquer sur Utiliser ce modèle",
+        "visibleSeconds": 8.9,
+        "visible": "Clic sur le bouton Utiliser ce modèle après avoir choisi Briefing avant le créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Rétablir le texte précédent récupère votre version",
+        "visibleSeconds": 12.4,
+        "visible": "Clic sur Rétablir le texte précédent et réapparition de la version saisie à la main",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "puis choisissons un créneau",
+        "visibleSeconds": 17.8,
+        "visible": "Sélection de l'option Les bénévoles d'un créneau et sélection d'un créneau Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, naturelle et parfaitement rythmée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

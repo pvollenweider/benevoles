@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:38:48.689Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:47:15.830Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "40c9be96067dc2a358b6a2b44335791df315a7a451d5f82030c5c8a4f92b0da3",
-  "clipSha256": "043d5774b2945d86c30796bf753cf94d75a48cef27a66bf435774fb710fa94d8",
+  "clipSha256": "3d089887fdfcccb9c78facd9aecde5b557f6edfd5dd24999168dad4486c0bfb6",
   "scene": "limits",
   "review": {
     "heardOpening": "Le pointage enregistre une arrivée",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Le pointage enregistre une arrivée",
-        "visibleSeconds": 0,
-        "visible": "Page Inscriptions avec liste d'émargement affichée",
+        "spokenSeconds": 6,
+        "spoken": "Dans la fiche membre, les heures planifiées restent les heures prévues",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la liste des membres avec les colonnes Heures planifiées (4h) et Heures attestées (2h)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
-        "spoken": "Dans la fiche membre, les heures planifiées",
-        "visibleSeconds": 3,
-        "visible": "Affichage de la liste des membres avec colonnes des heures planifiées et attestées",
+        "spokenSeconds": 11,
+        "spoken": "Les heures attestées reprennent, parmi elles, les créneaux où une présence a été enregistrée",
+        "visibleSeconds": 13.5,
+        "visible": "Ouverture de la page Activité de Léa Exemple montrant le créneau avec statut Présent",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "les créneaux où une présence a été enregistrée",
-        "visibleSeconds": 14,
-        "visible": "Ouverture de la page Activité de Léa Exemple avec le détail des présences",
+        "spokenSeconds": 18.5,
+        "spoken": "Une arrivée plus tardive n'est pas un calcul automatique du retard",
+        "visibleSeconds": 18.5,
+        "visible": "Vue détaillée de l'activité du membre et de l'historique des inscriptions et pointages",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée et claire, débit régulier."
+      "observation": "Voix pédagogique claire, fluide et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,72 @@
+{
+  "slug": "organizer-monitor-followup",
+  "recordedAt": "2026-10-04T07:54:54.251Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "overview",
+      "startMs": 1174,
+      "endMs": 12857
+    },
+    {
+      "id": "coverage",
+      "startMs": 16278,
+      "endMs": 29696
+    },
+    {
+      "id": "registrations",
+      "startMs": 31344,
+      "endMs": 45961
+    },
+    {
+      "id": "requests",
+      "startMs": 47610,
+      "endMs": 62083
+    },
+    {
+      "id": "filters",
+      "startMs": 63774,
+      "endMs": 77277
+    },
+    {
+      "id": "actions",
+      "startMs": 77729,
+      "endMs": 93354
+    },
+    {
+      "id": "audience",
+      "startMs": 96860,
+      "endMs": 107948
+    },
+    {
+      "id": "message",
+      "startMs": 108401,
+      "endMs": 122683
+    },
+    {
+      "id": "channels",
+      "startMs": 123134,
+      "endMs": 138792
+    },
+    {
+      "id": "reminders",
+      "startMs": 140461,
+      "endMs": 151458
+    },
+    {
+      "id": "reports",
+      "startMs": 154828,
+      "endMs": 169402
+    },
+    {
+      "id": "history",
+      "startMs": 171201,
+      "endMs": 184236
+    },
+    {
+      "id": "done",
+      "startMs": 184688,
+      "endMs": 197846
+    }
+  ]
+}

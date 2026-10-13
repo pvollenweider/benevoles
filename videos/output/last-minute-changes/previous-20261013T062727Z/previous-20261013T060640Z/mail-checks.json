@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-05T20:50:03.855Z",
+  "scope": "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation",
+  "messages": [
+    {
+      "kind": "waitlist_offered",
+      "mailId": "1Hce9iQqVnsZsbXgXTkzZV",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "registration_confirmation",
+      "mailId": "0KBjPljflg0dVVjgN3WF1Y",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "targeted_message",
+      "mailId": "3WJItVioKx6wPzyTlzIl7d",
+      "recipient": "video.last-minute.person.3@example.org"
+    },
+    {
+      "kind": "shift_modified",
+      "mailId": "1Npueg2qMNEiSVj7L9PBhl",
+      "recipient": "video.last-minute.person.4@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "0kLD6x7fNMDcOGCRKZPQ4I",
+      "recipient": "video.last-minute.person.0@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "2NeU98M6UWppiRTQ9dizuC",
+      "recipient": "video.last-minute.person.5@example.org"
+    }
+  ],
+  "schedulePendingExcluded": true,
+  "activeAndRequestedCancellationDelivered": true
+}

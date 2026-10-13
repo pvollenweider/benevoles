@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-05T14:47:30.789Z",
+  "scope": "local API preflight, not a video or delivery check",
+  "audiences": [
+    {
+      "audience": "event",
+      "recipients": 22,
+      "pushDevices": 0,
+      "personalizedSubject": true
+    },
+    {
+      "audience": "role",
+      "recipients": 14,
+      "pushDevices": 0,
+      "personalizedSubject": true
+    },
+    {
+      "audience": "shift",
+      "recipients": 5,
+      "pushDevices": 0,
+      "personalizedSubject": true
+    },
+    {
+      "audience": "waitlist",
+      "recipients": 3,
+      "pushDevices": 0,
+      "personalizedSubject": true
+    },
+    {
+      "audience": "invited_without_shift",
+      "recipients": 2,
+      "pushDevices": 0,
+      "personalizedSubject": true
+    }
+  ],
+  "invalidVariablesBlocked": true,
+  "previewsAndValidationCreatedNoSend": true,
+  "historyBefore": 1,
+  "historyAfter": 1,
+  "outboxBefore": 71,
+  "outboxAfter": 71
+}

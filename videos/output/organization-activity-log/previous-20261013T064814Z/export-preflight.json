@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-13T04:38:10.545Z",
+  "scope": "real UI download, CSV reconciliation, actual member registration; not audiovisual validation",
+  "rows": 61,
+  "columns": [
+    "Date",
+    "Acteur",
+    "Type d'acteur",
+    "Action",
+    "Entité",
+    "Identifiant",
+    "Changements"
+  ],
+  "distinctActors": 2,
+  "allRowsDespiteAdminFilter": true,
+  "oldestFirstComparedWithFullApi": true,
+  "memberActivityHasActualRegistration": true,
+  "fileSha256": "b5b97217ff7f9ef26562d3014873dcc66931386a863f662b3bd398fde11fb1b1",
+  "eventId": "cmv66xa9f006u4qa5bidf4nyo",
+  "shiftId": "cmv66xa9z006v4qa5xrv8e0i8"
+}

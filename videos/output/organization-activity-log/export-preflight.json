@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-05T19:07:34.954Z",
+  "checkedAt": "2026-10-13T06:49:11.620Z",
   "scope": "real UI download, CSV reconciliation, actual member registration; not audiovisual validation",
   "rows": 61,
   "columns": [
@@ -15,7 +15,7 @@
   "allRowsDespiteAdminFilter": true,
   "oldestFirstComparedWithFullApi": true,
   "memberActivityHasActualRegistration": true,
-  "fileSha256": "2b616c3eb34dd9fb1fb5c72eea7e37ca3abb1f8fc8fc344d99b724ea7484a30c",
-  "eventId": "cmuvmgdzm00knmna5tqdhwqx7",
-  "shiftId": "cmuvmge2q00komna5cyhbz660"
+  "fileSha256": "0ea72ef540a453d1517162db3944ef3ef26a577a663a826c231bd3f394962805",
+  "eventId": "cmv6blrwi006wdma5mzmckr1i",
+  "shiftId": "cmv6blrx3006xdma5b3glbu51"
 }

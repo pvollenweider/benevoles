@@ -1,0 +1,12 @@
+{
+  "anchor": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions",
+  "windowStart": 18.28,
+  "result": {
+    "found": true,
+    "startSeconds": 30.8,
+    "wordsHeard": "Nicolas"
+  },
+  "onset": 49.08,
+  "proposedCut": 49.053021,
+  "note": "Proposal only; recut then independently audit before capture"
+}

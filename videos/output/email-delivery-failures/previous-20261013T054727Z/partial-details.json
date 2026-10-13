@@ -1,0 +1,82 @@
+{
+  "checkedAt": "2026-10-05T22:25:53.421Z",
+  "historyId": "cmuvtjjfe00059sa52pjdat32",
+  "actualCampaignRecipients": 2,
+  "actualSmtpAttempts": [
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.194Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:25:52.200Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.751Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.762Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.770Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.778Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:25:52.792Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:25:53.099Z"
+    }
+  ],
+  "acceleratedWorkerClock": [
+    {
+      "now": "2026-10-05T22:30:52.187Z",
+      "attempts": 2,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T22:40:52.188Z",
+      "attempts": 3,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T23:00:52.189Z",
+      "attempts": 4,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-05T23:40:52.190Z",
+      "attempts": 5,
+      "status": "pending"
+    },
+    {
+      "now": "2026-10-06T01:00:52.191Z",
+      "attempts": 6,
+      "status": "failed"
+    }
+  ],
+  "actualHistoryTextOpened": true,
+  "actualUiRetry": true,
+  "repeatedUiClickCreatedNoRequest": true,
+  "onlyFailedResent": 1,
+  "repeatedResend": 0,
+  "successfulDeliveryTimestampUnchanged": true,
+  "allFinallySent": true,
+  "scope": "Actual history UI and retry button plus application routes/SMTP/worker, not yet a narrated capture"
+}

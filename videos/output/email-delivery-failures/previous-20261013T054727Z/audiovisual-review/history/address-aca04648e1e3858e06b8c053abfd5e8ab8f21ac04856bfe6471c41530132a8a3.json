@@ -1,0 +1,78 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:17:52.528Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "f3940b78049824b9e450e2e285fdc02ac2acf954c4464ad25c0bc9ad7537b9bb",
+  "clipSha256": "05bf41e56b413b69ef0ef4908be1b75f68c5d16ce85d4fc362a51cffb2dfd2b9",
+  "scene": "address",
+  "review": {
+    "heardOpening": "Une adresse erronée demande une autre attention.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvrons les membres, puis la fiche de Léa.",
+        "visibleSeconds": 3.5,
+        "visible": "Ouverture de la fenêtre de modification du profil de Léa.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Corrigeons son email et enregistrons.",
+        "visibleSeconds": 8.5,
+        "visible": "Modification de l'adresse et clic sur Enregistrer.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Revenons au suivi : l'ancien email en échec garde toujours son ancien destinataire.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la page du suivi des emails envoyés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "préparons donc un nouvel envoi.",
+        "visibleSeconds": 23.5,
+        "visible": "Accès au formulaire d'envoi aux bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28,
+        "spoken": "Choisissons un objet clair, puis écrivons notre consigne.",
+        "visibleSeconds": 27,
+        "visible": "Saisie de l'objet puis du corps du message.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36,
+        "spoken": "Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation.",
+        "visibleSeconds": 42,
+        "visible": "Affichage de la modale d'aperçu puis de confirmation.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 45,
+        "spoken": "Ouvrons maintenant celui réellement reçu par Léa",
+        "visibleSeconds": 45,
+        "visible": "Consultation du message reçu dans l'interface de messagerie.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:36 - L'aperçu et la boîte de confirmation s'ouvrent avec un léger décalage après l'annonce vocale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton didactique constant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

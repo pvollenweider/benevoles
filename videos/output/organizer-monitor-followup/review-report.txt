@@ -1,0 +1,26 @@
+STATUS: NOT READY
+ID: REGISTRATION_MONITOR_FOLLOWUP
+Duration: 191.28
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 161, 'musicOnlyWindows': 3, 'smallestGapLu': 14.9, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': -33.9, 'loudestMusicOnlyLufs': -33.2, 'medianVoiceLufs': -16.3}
+Problems: Shift/status filters now demonstrated. Audience waitlist click ~2 s late; invited-audience click ~3.5 s late. All technical, final narration, music and other chapter checks pass.
+Source changes: Visible-option selector repaired during rehearsal. Remaining audience cues converted to sentence anchors; no third narrated take.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+overview: 1.136–12.986 s; review/overview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+coverage: 16.359–30.086 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+registrations: 31.766–48.128 s; review/registrations-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+requests: 49.786–64.021 s; review/requests-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+filters: 65.658–77.51 s; review/filters-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+actions: 77.991–90.791 s; review/actions-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+audience: 94.165–108.253 s; review/audience-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:08, le clic sur « Les personnes en liste d'attente » intervient avec près de deux secondes de retard par rapport à l'énoncé oral (00:06.8)."]
+message: 108.704–121.93 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+channels: 123.179–135.771 s; review/channels-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+reminders: 137.453–148.334 s; review/reminders-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+reports: 151.68–161.49 s; review/reports-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+history: 163.082–178.398 s; review/history-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+done: 178.849–190.812 s; review/done-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

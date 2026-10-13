@@ -1,0 +1,20 @@
+{
+  "product": {
+    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
+    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
+    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+    "snapshot": "/tmp/benevoles-video-production.batch14resume",
+    "builtAt": "2026-10-13T04:30:00.658Z"
+  },
+  "nullIssue922": "Not reproduced: no null in any PDF text; all three per-day pages visually inspected.",
+  "layoutBug": {
+    "report": "Export complet",
+    "pdf": "complete.pdf",
+    "page": 1,
+    "evidence": "rendered/complete/page-1.png",
+    "observation": "Only Planning heading on first landscape A4 page; remaining area blank. Frise starts on page 2. No source change or hidden page.",
+    "routePattern": "/admin/events/<event-id>/export/pdf"
+  },
+  "individual": "L\u00e9a pages 4 and 5 inspected: timeline fits width and five shifts continue correctly."
+}

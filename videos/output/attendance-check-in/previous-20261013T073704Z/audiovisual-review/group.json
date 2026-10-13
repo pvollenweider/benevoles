@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:15.895Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "1e51c240ed50598c78d73f43af506c473062e2f4a3b5602a03991aba476c7667",
+  "clipSha256": "712a51087ccb46a66fdf36d1cff436efb6b6237c8e422582df6dd0728bc988c9",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Nicolas et Léa arrivent ensemble.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents.",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection successive des cases de Léa et Nicolas, affichage du compteur '2 sélectionnées' et du bouton 'Marquer présents (2)'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque.",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur 'Marquer présents (2)' et affichage du badge vert '✓ Présent' pour Léa et Nicolas.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Une demande en attente de validation n'est pas une inscription confirmée à pointer.",
+        "visibleSeconds": 15.2,
+        "visible": "Défilement vers le bas mettant en évidence la ligne de Lucas Exemple avec le statut 'Demande à traiter' et les boutons Accepter/Refuser.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:13.700Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "c9dfdd38a9305492ddd68ad7ad4e7abe5b261288400193a1b95742cc63bd7fbe",
+  "clipSha256": "8f236e5364b4b63a3342b5d965e6d3565045d4a9ce2d1cb2c2b99b8c8393d9e5",
+  "scene": "complete",
+  "review": {
+    "heardOpening": "Pour une vue d'ensemble, descendez dans la partie réservée aux organisateurs",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "descendez dans la partie réservée aux organisateurs",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Rapports avec la section Pour les organisateurs seulement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "et ouvrez Export complet.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le lien Export complet et ouverture du document",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Ce document en couleur réunit le planning",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la grille de planning colorée avec les créneaux et les noms",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Lisons une journée, puis retrouvons Léa.",
+        "visibleSeconds": 13.5,
+        "visible": "Planning du samedi affiché avec la case mentionnant Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "Le document décrit le planning enregistré au moment de son ouverture",
+        "visibleSeconds": 18.5,
+        "visible": "Défilement vers le bas révélant le tableau récapitulatif et la liste des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

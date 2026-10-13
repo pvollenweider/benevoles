@@ -1,0 +1,22 @@
+{
+  "preparedAt": "2026-10-12T21:02:15.643Z",
+  "scope": "actual local routes and two distinct sessions; no audiovisual validation",
+  "organizationId": "video-org-activity",
+  "members": 56,
+  "firstMemberId": "cmv5qmyrd003i00a50urznen7",
+  "inactiveMemberId": "cmv5qmyrz003k00a5e417nz78",
+  "invitedAdminId": "cmv5qmza6006o00a5b9e6jfzx",
+  "journalEntries": 61,
+  "distinctActors": 2,
+  "actions": [
+    "member.created",
+    "member.updated",
+    "member.deactivated",
+    "adminuser.invited",
+    "adminuser.role_changed",
+    "organization.notifications_updated"
+  ],
+  "firstPageEntries": 50,
+  "nextPageAvailable": true,
+  "sensitiveMemberValuesNotCopied": true
+}

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:09:34.186Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "4aea1e120a1347e93dd0d65c582837ec56017360de6495e7a962746977ff2363",
-  "clipSha256": "3454dd739f558ecbf170ee0a4508f17a775e0d541e201b00d83e513d6012c4e7",
+  "reviewedAt": "2026-10-13T07:06:23.669Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "b7a88ac84b06e113d1653e646392e3a78e367fb97a79ee77020a400a12ccc6ac",
+  "clipSha256": "ae861b44d41f88c22aca9f9bc58e90b9e15412ac6dd15fc71f7f24e1a2d1c035",
   "scene": "individual",
   "review": {
     "heardOpening": "Pour Léa, le planning individuel",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "le planning individuel regroupe ses cinq créneaux sur trois postes",
-        "visibleSeconds": 1.8,
-        "visible": "Affichage de la première page du planning individuel de Léa",
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes.",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage de la première page du planning individuel de Léa Giroud (Accueil, Buvette, Loge).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "Sa frise montre aussi les prénoms des coéquipiers",
-        "visibleSeconds": 4.5,
-        "visible": "Grille horaire visible avec les prénoms des coéquipiers par créneau",
+        "spokenSeconds": 5.4,
+        "spoken": "Sa frise montre aussi les prénoms des coéquipiers présents sur ces horaires.",
+        "visibleSeconds": 5.4,
+        "visible": "Colonnes horaires avec prénoms des coéquipiers (Aline M., Étienne M., etc.).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "On retrouve ensuite le lieu, les consignes et le contact opérationnel",
-        "visibleSeconds": 8,
-        "visible": "Défilement vers le bas affichant les détails de lieu, contact et consignes",
+        "spokenSeconds": 9.2,
+        "spoken": "On retrouve ensuite le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés.",
+        "visibleSeconds": 9.5,
+        "visible": "Détails sous la frise indiquant lieu, consignes et contact pour chaque créneau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "passons à la suivante pour lire le dernier poste",
-        "visibleSeconds": 16.8,
-        "visible": "Bascule vers la feuille suivante affichant le créneau final",
+        "spokenSeconds": 17.5,
+        "spoken": "passons à la suivante pour lire le dernier poste.",
+        "visibleSeconds": 18,
+        "visible": "Transition vers la feuille suivante affichant le créneau de Loge.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

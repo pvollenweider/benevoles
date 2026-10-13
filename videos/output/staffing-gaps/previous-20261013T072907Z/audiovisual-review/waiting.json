@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:21:56.786Z",
+  "videoSha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "promptSha256": "61536220d3ccee2026d48825753cf92ffe96c2964ef53f5604dd1aacaf368d1c",
+  "clipSha256": "14e31d7e3842daee1a84373fa397f4e9ad0043e3a938a5e486033e6055a71e85",
+  "scene": "waiting",
+  "review": {
+    "heardOpening": "Dans Personnes en liste d'attente, vous repérez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place.",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'Personnes en liste d'attente' affichée avec le créneau Buvette 14:00-18:00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément.",
+        "visibleSeconds": 6.2,
+        "visible": "Indication '4/4 3 personnes en attente' visible pour la Buvette de l'après-midi.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "En cliquant, vous retrouvez les noms et leurs positions dans la liste.",
+        "visibleSeconds": 12,
+        "visible": "Ouverture de la page Inscriptions montrant les bénévoles et le statut 'Liste d'attente position 1'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+        "visibleSeconds": 20,
+        "visible": "Retour à la page du rapport global 'Où manque-t-il du monde ?'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

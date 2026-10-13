@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_BADGES",
+  "status": "NOT READY",
+  "duration": 234.76,
+  "buildId": "QnaleWUIippKmUvaMUEKT",
+  "music": {
+    "voicedWindows": 203,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -33.5,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "Role filter Buvette selected about 2.6s after its announced action; empty chapter says choose Tous les postes but navigation resets it without a visible selection. AV role/empty checkpoints and frame sheets corroborate. Technical checks, source/final narration, music pass; current labels/French dates, no forbidden host/identity or overlay. Real PDF pages 1/8 and Lea/minimal variants inspected; no product layout bug confirmed.",
+  "sourceChanges": "record-badges.ts: anchor role filter to Pour pr\u00e9parer seulement la buvette; explicitly choose Tous les postes in empty correction. No re-film. Narration reused."
+}

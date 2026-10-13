@@ -1,0 +1,187 @@
+{
+  "at": "2026-10-13T05:55:38.458Z",
+  "deleted": [
+    {
+      "ID": "64jugVw7JyZUv6aVUkt54s",
+      "MessageID": "outbox-cmv69nc25000306a5jrxxw1rm@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.corrected@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — échec partiel — Atelier des emails",
+      "Created": "2026-10-13T05:54:24.899Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 4249,
+      "Attachments": 0,
+      "Snippet": "Bonjour Léa, merci pour ton aide ! Hello Léa ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des emails. Bonjour Léa, merci pour ton aide ! Tes créneaux concernés : Accuei..."
+    },
+    {
+      "ID": "5qRxaIl5fhXzZ83JFyk9BV",
+      "MessageID": "outbox-cmv69n9wn00884qa5hia3vrrq@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.corrected@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — adresse corrigée — Atelier des emails",
+      "Created": "2026-10-13T05:54:22.117Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4523,
+      "Attachments": 0,
+      "Snippet": "Bonjour Léa, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide… Hello Léa ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des email..."
+    },
+    {
+      "ID": "0UvksReKG5AHTIW9A6GanY",
+      "MessageID": "outbox-cmv69n6oo0003tga5caxviarh@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.recoverable@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — recoverable — Atelier des emails",
+      "Created": "2026-10-13T05:54:19.681Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3350,
+      "Attachments": 0,
+      "Snippet": "Données fictives. Rendez-vous au stand quinze minutes avant votre créneau. Hello Emma ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des emails. Données fictives. Rendez-vo..."
+    },
+    {
+      "ID": "4KMXJOVdURWLIJqyduHqGY",
+      "MessageID": "outbox-cmv69n6s4000ctga5zo1a00qy@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.sent@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — sent — Atelier des emails",
+      "Created": "2026-10-13T05:54:18.031Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3325,
+      "Attachments": 0,
+      "Snippet": "Données fictives. Rendez-vous au stand quinze minutes avant votre créneau. Hello Nicolas ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des emails. Données fictives. Rendez..."
+    },
+    {
+      "ID": "2XDgJsXu5mk1i3lrtUQiA1",
+      "MessageID": "outbox-cmv69lr0s00038oa5weomsyt9@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.recoverable@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — recoverable — Atelier des emails",
+      "Created": "2026-10-13T05:53:38.336Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3350,
+      "Attachments": 0,
+      "Snippet": "Données fictives. Rendez-vous au stand quinze minutes avant votre créneau. Hello Emma ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des emails. Données fictives. Rendez-vo..."
+    },
+    {
+      "ID": "3oStEHwVXm6sjShyxHdENI",
+      "MessageID": "outbox-cmv69lr46000c8oa5cfnmia3v@localhost",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.delivery.sent@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.delivery.owner@example.org"
+        }
+      ],
+      "Subject": "Formation — sent — Atelier des emails",
+      "Created": "2026-10-13T05:53:11.204Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3325,
+      "Attachments": 0,
+      "Snippet": "Données fictives. Rendez-vous au stand quinze minutes avant votre créneau. Hello Nicolas ! 👋 Un message de Formation — suivi des emails au sujet de Atelier des emails. Données fictives. Rendez..."
+    }
+  ],
+  "preservedIds": [],
+  "guard": "Exact fixture sender, synthetic recipients and video SMTP username or reserved video identities; individual inspected IDs only"
+}

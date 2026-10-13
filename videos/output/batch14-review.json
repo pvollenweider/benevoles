@@ -1,0 +1,160 @@
+{
+  "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "complete": false,
+  "videos": [
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "status": "READY",
+      "duration": 295.08,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 269,
+        "musicOnlyWindows": 1,
+        "smallestGapLu": 14,
+        "largestGapLu": 19.7,
+        "quietestMusicOnlyLufs": -34,
+        "loudestMusicOnlyLufs": -34,
+        "medianVoiceLufs": -16.7
+      },
+      "problems": "Only known nit: Mailpit English dates. Remis en file warning disproved by exact final-MP4 frame at 225.705 s showing the disabled control and real queue confirmation. All objective checks pass.",
+      "sourceChanges": "Guarded catalogue mailbox cleanup; preparation checks identity ledger before opening SMTP and recognizes the exact short recorder campaign; partial-campaign preflight updated for one permanent refusal. Standard identity migration applied to newly created fixture after real rehearsal. Cached narration reused unchanged."
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "status": "NOT READY",
+      "duration": 225.88,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 212,
+        "musicOnlyWindows": 0,
+        "smallestGapLu": 14.5,
+        "largestGapLu": 19.1,
+        "quietestMusicOnlyLufs": null,
+        "loudestMusicOnlyLufs": null,
+        "medianVoiceLufs": -16.3
+      },
+      "problems": "Final addition uses manual identity fields instead of the announced email lookup; selection/save late and new row not held visibly. Full chapter countdown flag unsupported by independent source and MP4 recognition; return to report in empty chapter is a relevant stable screen. All technical/music checks pass.",
+      "sourceChanges": "Only requested four verbs changed; entire continuous TTS regenerated because tooling rejects mixed chapter generations, boundaries aligned and audited. Action now uses real member email search with sentence anchors for lookup, shift/save and visible new row. No re-film."
+    },
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "status": "NOT READY",
+      "duration": 402.96,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 350,
+        "musicOnlyWindows": 9,
+        "smallestGapLu": 13.6,
+        "largestGapLu": 19.2,
+        "quietestMusicOnlyLufs": -34,
+        "loudestMusicOnlyLufs": -32.9,
+        "medianVoiceLufs": -16.3
+      },
+      "problems": "Single-arrival chapter reload occurs roughly 7 seconds late. Phone link is visibly shown without a call; static-screen/timbre flags are not objective failures. All validation/final transcript/music checks pass. Mobile capture is a narrow readable column with unused grey canvas.",
+      "sourceChanges": "Moved check-in result to at(\"La marque appara\u00eet sur son inscription\") and reload to at(\"Rechargeons la page\"). Cached narration reused unchanged. No re-film."
+    },
+    {
+      "id": "VOLUNTEER_HOURS_CERTIFICATE",
+      "status": "NOT READY",
+      "duration": 310.68,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 252,
+        "musicOnlyWindows": 30,
+        "smallestGapLu": 12.6,
+        "largestGapLu": 19.5,
+        "quietestMusicOnlyLufs": -34.6,
+        "loudestMusicOnlyLufs": -32.9,
+        "medianVoiceLufs": -16.4
+      },
+      "problems": "Certificate settings/added-column explanations occur with preview off screen; checkbox late; print action early. Product layout bug: admin navigation printed atop certificate PDF. Dates French; totals/real PDF/CSV, validation/final transcript/music pass.",
+      "sourceChanges": "Added sentence anchors for certificate navigation, dates, note, checkbox and print; explicitly scroll real preview and total into view. Added explicit strict stale-ledger recovery for exact current hours fixture; prior ledger retained. Cache lacked matching fingerprint metadata, so continuous narration regenerated, aligned and audited. No re-film."
+    },
+    {
+      "id": "EVENT_REPORTS",
+      "status": "NOT READY",
+      "duration": 311.24,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 268,
+        "musicOnlyWindows": 12,
+        "smallestGapLu": 14.1,
+        "largestGapLu": 19.6,
+        "quietestMusicOnlyLufs": -33.8,
+        "loudestMusicOnlyLufs": -32.7,
+        "medianVoiceLufs": -16.3
+      },
+      "problems": "Answer-summary CSV download and printable-view opening occur early. Product layout bug: Export complet PDF page 1 has only Planning heading; timeline begins page 2. #922 null not reproduced. All validation/final transcript/music checks pass; subjective voice flag is not a blocker.",
+      "sourceChanges": "Retained WIP morning-report anchor; CSV cue now at(\"Vous pouvez t\u00e9l\u00e9charger cette synth\u00e8se\"), printable cue at(\"Regardons ce vrai document\"). No re-film or product edit."
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "status": "NOT READY",
+      "duration": 318.56,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 280,
+        "musicOnlyWindows": 0,
+        "smallestGapLu": 14.1,
+        "largestGapLu": 19.3,
+        "quietestMusicOnlyLufs": null,
+        "loudestMusicOnlyLufs": null,
+        "medianVoiceLufs": -16.6
+      },
+      "problems": "Notification checkbox clicked about 4 seconds late; Mailpit sidebar still contains prior journal invitations. Known nit: Mailpit English dates. All validation and final transcript/music checks pass.",
+      "sourceChanges": "Push cue converted from 25% to at(\"Vous pouvez aussi demander une notification\"). Added guarded prepare-catalogue-mailbox.ts to clear identified fixture messages across prior takes. Existing continuous audio reused after boundary realignment and independent audit; no new TTS. No re-film."
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "status": "NOT READY",
+      "duration": 191.04,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 162,
+        "musicOnlyWindows": 3,
+        "smallestGapLu": 15.4,
+        "largestGapLu": 19.3,
+        "quietestMusicOnlyLufs": -33.9,
+        "loudestMusicOnlyLufs": -33.2,
+        "medianVoiceLufs": -16.3
+      },
+      "problems": "Filters chapter mentions shift/status filtering but demonstrates only role and text search; all validation, final audio and music checks pass.",
+      "sourceChanges": "Retained WIP requests anchor; added sentence-anchored demonstration of real shift and pending-request filters for a future take. No re-film."
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "status": "NOT READY",
+      "duration": 296.08,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 256,
+        "musicOnlyWindows": 11,
+        "smallestGapLu": 14.8,
+        "largestGapLu": 19.5,
+        "quietestMusicOnlyLufs": -34.6,
+        "loudestMusicOnlyLufs": -33.1,
+        "medianVoiceLufs": -16.3
+      },
+      "problems": "Result chapter navigates to Aline about 6 seconds early; sentence timing 22.956 s, visible at about 17.5 s. Pagination audit false alarm: click marker 5.629 s, 50\u219261 real entries and button disappears in exact frames. Two authors/actions are visible during read. Native file-picker English labels are a cosmetic nit.",
+      "sourceChanges": "Retained WIP member-return and empty-filter anchors; replaced result 60% cue by at(\"Une fois le point compris\"). No re-film."
+    },
+    {
+      "id": "VOLUNTEER_BADGES",
+      "status": "NOT READY",
+      "duration": 234.72,
+      "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+      "music": {
+        "voicedWindows": 203,
+        "musicOnlyWindows": 4,
+        "smallestGapLu": 14.2,
+        "largestGapLu": 19.1,
+        "quietestMusicOnlyLufs": -33.4,
+        "loudestMusicOnlyLufs": -32.8,
+        "medianVoiceLufs": -16.6
+      },
+      "problems": "Last PDF page appears about 4 seconds after it is announced. Empty-filter audit disproved by exact MP4 frame at 113.2 s showing Tous les postes, then correct single Camille badge. All technical/final transcript/music checks pass; subjective timbre observation is not a blocker.",
+      "sourceChanges": "Retained WIP role-selection anchor and Tous les postes recovery. Last PDF-page cue changed to at(\"Cet aper\u00e7u sert \u00e0 contr\u00f4ler\"). No re-film."
+    }
+  ]
+}

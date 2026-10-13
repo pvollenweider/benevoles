@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:36:09.724Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "7c9bcf4e8824956a89a4a51eeb6f5216a8a4e8b138f8f6309724c7623f10e155",
+  "clipSha256": "37057aa0c382b72e51e52b07f42fe53ac02331a1037f2213469fe18e268652d4",
+  "scene": "actions",
+  "review": {
+    "heardOpening": "Tu peux agir sur une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Tu peux agir sur une inscription",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection d'une ligne via sa case à cocher, faisant apparaître la barre d'actions contextuelles avec « 1 sélectionnée »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "par exemple renvoyer son lien personnel",
+        "visibleSeconds": 2,
+        "visible": "Le bouton d'action « Renvoyer le lien » est disponible dans la barre supérieure",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ou sélectionner plusieurs lignes pour appliquer une action groupée",
+        "visibleSeconds": 5.5,
+        "visible": "Coche d'une seconde ligne, le bandeau affiche désormais « 2 sélectionnées » avec les actions plurielles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

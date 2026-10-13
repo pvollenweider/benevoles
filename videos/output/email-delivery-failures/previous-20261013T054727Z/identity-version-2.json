@@ -1,0 +1,48 @@
+{
+  "scope": "delivery",
+  "version": 2,
+  "organizationId": "video-delivery",
+  "identities": {
+    "organizationId": "video-delivery",
+    "directory": "videos/output/email-delivery-failures",
+    "owner": "Élodie Martin",
+    "organizer": "Marc Dupont",
+    "members": {
+      "pending": "Berger",
+      "retrying": "Rochat",
+      "recoverable": "Favre",
+      "wrong": "Perrin",
+      "sent": "Morel"
+    }
+  },
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "evidenceSha256": "7efd701af2e4fd8f18bf1d471aed65eb8f47e4766478aa8074e7c545603f0123",
+  "evidenceFile": "identity-v1-evidence.json",
+  "migratedAt": "2026-10-06T18:33:12.362Z",
+  "protectedBeforeSha256": "6a6316084dc23725236ce0919eaa43db8481f686ba98bc6371838c16e2aca353",
+  "protectedAfterSha256": "6a6316084dc23725236ce0919eaa43db8481f686ba98bc6371838c16e2aca353",
+  "changedMemberIds": [
+    "video-delivery-member-pending",
+    "video-delivery-member-recoverable",
+    "video-delivery-member-retrying",
+    "video-delivery-member-sent",
+    "video-delivery-member-wrong"
+  ],
+  "changedAdminIds": [
+    "video-delivery-organizer",
+    "video-delivery-owner"
+  ],
+  "changedAuthorHistoryIds": [
+    "cmuwyi9qu0003ksa5wqq5cgui",
+    "cmuwyiuqr0009ksa5cik6mh8v"
+  ],
+  "organizationCreatedAt": "2026-10-05T22:06:34.920Z",
+  "note": "Encrypted sent payloads, erased tombstones, tokens, results, logs and fixture-generation ownership are preserved."
+}

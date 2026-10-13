@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:39:46.747Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "db531a1f232c05674f5b8608a889555acb3d95aa293ee4e884c8a8fa931a9eb7",
+  "clipSha256": "b835e26752f713faa2497e8d41fdc2ad4ff9a1f9f7f1a5cc884f87ffadffa09a",
+  "scene": "dayof-search",
+  "review": {
+    "heardOpening": "Vous cherchez Zoé ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Tapez son prénom sans accent",
+        "visibleSeconds": 1.2,
+        "visible": "Le terme « zoe » est saisi dans la barre de recherche filtrant la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "chercher un poste, comme Accueil",
+        "visibleSeconds": 9.8,
+        "visible": "Le texte « Accueil » remplace la recherche précédente.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Effaçons la recherche pour retrouver le planning",
+        "visibleSeconds": 14,
+        "visible": "Le champ de recherche est vidé, rétablissant la vue par défaut.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

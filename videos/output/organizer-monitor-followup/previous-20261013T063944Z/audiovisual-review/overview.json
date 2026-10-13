@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:35:58.991Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "644bca6723e2cdc5af9af2609208594199643070bf4f101442ab713ce09b92d9",
+  "clipSha256": "b7ac4cb21c32d95752df93a7c091aee944798d1a2536279adaef17325e8c88d9",
+  "scene": "overview",
+  "review": {
+    "heardOpening": "Une fois le planning publié, voici comment suivre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une fois le planning publié",
+        "visibleSeconds": 2.5,
+        "visible": "L'encart d'introduction disparaît et l'état « Publié » est bien coché dans la barre d'état",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "tu retrouves tout de suite son état",
+        "visibleSeconds": 2.5,
+        "visible": "L'état d'avancement de l'événement (« Publié ») est affiché en haut de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "les prochaines étapes",
+        "visibleSeconds": 7,
+        "visible": "Défilement vers la section « Jalons » listant les prochaines étapes datées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "et les accès utiles pour garder une vue claire",
+        "visibleSeconds": 7.5,
+        "visible": "Boutons d'accès rapide visibles en haut de section (« Gérer les créneaux », « Voir les inscriptions », onglets)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec le défilement de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

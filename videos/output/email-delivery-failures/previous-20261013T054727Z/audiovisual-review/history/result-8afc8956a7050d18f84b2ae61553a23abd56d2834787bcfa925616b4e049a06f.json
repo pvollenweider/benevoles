@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:18:28.088Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "32920474a3be6ad5933f1653a032f706a5a1542a075437fccdb38f1908fd2b4e",
+  "clipSha256": "eabf9ebdaf3b3a29c657bb311a97784e89e0767a4beeb4554d37a85409bcebee",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le bon réflexe, c'est de lire l'état",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "lire l'état et le détail",
+        "visibleSeconds": 0,
+        "visible": "Colonnes État et Détail affichées dans la liste des emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Notre boîte de test confirme la réception",
+        "visibleSeconds": 0,
+        "visible": "Liste d'adresses de test avec statut Envoyé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "retrouver l'information sans l'inonder de messages",
+        "visibleSeconds": 0,
+        "visible": "Page stable récapitulative des réglages et envois d'emails",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et régulière sur l'ensemble de la conclusion."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

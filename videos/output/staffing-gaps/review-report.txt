@@ -1,0 +1,22 @@
+STATUS: READY
+ID: STAFFING_GAPS
+Duration: 227.28
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 216, 'musicOnlyWindows': 0, 'smallestGapLu': 14.4, 'largestGapLu': 19.1, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.3}
+Problems: All objective checks pass. Real member-email lookup, Julien added row and reduced Photos need visible and aligned; corrected vous narration retained.
+Source changes: Pass 1 member lookup/result anchors retained. Reused fresh audited TTS; no new audio or source change in pass2.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 0.198–27.399 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+overview: 27.853–50.686 s; review/overview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+empty: 51.141–74.8 s; review/empty-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+needs: 75.253–101.667 s; review/needs-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+requests: 103.278–127.154 s; review/requests-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+waiting: 127.606–151.665 s; review/waiting-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+leaders: 152.118–175.961 s; review/leaders-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+full: 176.412–200.148 s; review/full-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+action: 200.599–225.431 s; review/action-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []

@@ -1,0 +1,12 @@
+{
+  "anchor": "Les mots entre accolades sont remplacés pour chaque destinataire. Prénom donne",
+  "windowStart": 84.714,
+  "result": {
+    "found": true,
+    "startSeconds": 22.35,
+    "wordsHeard": "Les mots entre accolades sont remplacés pour chaque destinataire. Prénom donne"
+  },
+  "onset": 107.064,
+  "proposedCut": 107.0429375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relisez le",
+  "windowStart": 190.52,
+  "result": {
+    "found": true,
+    "startSeconds": 28.2,
+    "wordsHeard": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relisez le"
+  },
+  "onset": 218.72,
+  "proposedCut": 217.97199999999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

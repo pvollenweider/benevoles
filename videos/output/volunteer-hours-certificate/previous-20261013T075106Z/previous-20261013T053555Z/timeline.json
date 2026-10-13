@@ -1,0 +1,306 @@
+{
+  "slug": "volunteer-hours-certificate",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-06T18:51:59.206Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-heures",
+    "scenario": "VOLUNTEER_HOURS_CERTIFICATE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6425
+    },
+    {
+      "kind": "click",
+      "atMs": 7207
+    },
+    {
+      "kind": "click",
+      "atMs": 8007
+    },
+    {
+      "kind": "click",
+      "atMs": 8807
+    },
+    {
+      "kind": "click",
+      "atMs": 11864
+    },
+    {
+      "kind": "click",
+      "atMs": 16141
+    },
+    {
+      "kind": "click",
+      "atMs": 16957
+    },
+    {
+      "kind": "click",
+      "atMs": 18791
+    },
+    {
+      "kind": "click",
+      "atMs": 20574
+    },
+    {
+      "kind": "click",
+      "atMs": 21407
+    },
+    {
+      "kind": "click",
+      "atMs": 22191
+    },
+    {
+      "kind": "click",
+      "atMs": 26538
+    },
+    {
+      "kind": "click",
+      "atMs": 27375
+    },
+    {
+      "kind": "click",
+      "atMs": 29225
+    },
+    {
+      "kind": "click",
+      "atMs": 31007
+    },
+    {
+      "kind": "key",
+      "atMs": 31316
+    },
+    {
+      "kind": "key",
+      "atMs": 31396
+    },
+    {
+      "kind": "key",
+      "atMs": 31473
+    },
+    {
+      "kind": "key",
+      "atMs": 31552
+    },
+    {
+      "kind": "key",
+      "atMs": 31630
+    },
+    {
+      "kind": "key",
+      "atMs": 31708
+    },
+    {
+      "kind": "key",
+      "atMs": 31785
+    },
+    {
+      "kind": "key",
+      "atMs": 31864
+    },
+    {
+      "kind": "key",
+      "atMs": 31942
+    },
+    {
+      "kind": "key",
+      "atMs": 32021
+    },
+    {
+      "kind": "key",
+      "atMs": 32099
+    },
+    {
+      "kind": "key",
+      "atMs": 32177
+    },
+    {
+      "kind": "key",
+      "atMs": 32254
+    },
+    {
+      "kind": "key",
+      "atMs": 32332
+    },
+    {
+      "kind": "key",
+      "atMs": 32410
+    },
+    {
+      "kind": "key",
+      "atMs": 32487
+    },
+    {
+      "kind": "key",
+      "atMs": 32566
+    },
+    {
+      "kind": "key",
+      "atMs": 32644
+    },
+    {
+      "kind": "key",
+      "atMs": 32722
+    },
+    {
+      "kind": "key",
+      "atMs": 32800
+    },
+    {
+      "kind": "key",
+      "atMs": 32878
+    },
+    {
+      "kind": "key",
+      "atMs": 32958
+    },
+    {
+      "kind": "key",
+      "atMs": 33035
+    },
+    {
+      "kind": "key",
+      "atMs": 33113
+    },
+    {
+      "kind": "key",
+      "atMs": 33192
+    },
+    {
+      "kind": "key",
+      "atMs": 33269
+    },
+    {
+      "kind": "key",
+      "atMs": 33347
+    },
+    {
+      "kind": "key",
+      "atMs": 33425
+    },
+    {
+      "kind": "key",
+      "atMs": 33504
+    },
+    {
+      "kind": "key",
+      "atMs": 33582
+    },
+    {
+      "kind": "key",
+      "atMs": 33660
+    },
+    {
+      "kind": "key",
+      "atMs": 33738
+    },
+    {
+      "kind": "key",
+      "atMs": 33816
+    },
+    {
+      "kind": "key",
+      "atMs": 33893
+    },
+    {
+      "kind": "key",
+      "atMs": 33972
+    },
+    {
+      "kind": "key",
+      "atMs": 34050
+    },
+    {
+      "kind": "key",
+      "atMs": 34128
+    },
+    {
+      "kind": "key",
+      "atMs": 34285
+    },
+    {
+      "kind": "key",
+      "atMs": 34363
+    },
+    {
+      "kind": "key",
+      "atMs": 34441
+    },
+    {
+      "kind": "key",
+      "atMs": 34519
+    },
+    {
+      "kind": "key",
+      "atMs": 34597
+    },
+    {
+      "kind": "click",
+      "atMs": 37490
+    },
+    {
+      "kind": "click",
+      "atMs": 40556
+    }
+  ],
+  "cues": [
+    {
+      "id": "hours-list",
+      "startMs": 3481,
+      "endMs": 3562
+    },
+    {
+      "id": "last-participation",
+      "startMs": 5823,
+      "endMs": 9115
+    },
+    {
+      "id": "activity",
+      "startMs": 11372,
+      "endMs": 12206
+    },
+    {
+      "id": "period-export",
+      "startMs": 14463,
+      "endMs": 22570
+    },
+    {
+      "id": "certificate-settings",
+      "startMs": 24832,
+      "endMs": 34697
+    },
+    {
+      "id": "certificate-presence",
+      "startMs": 36964,
+      "endMs": 37799
+    },
+    {
+      "id": "certificate-pdf",
+      "startMs": 40064,
+      "endMs": 41751
+    },
+    {
+      "id": "event-summary",
+      "startMs": 44010,
+      "endMs": 45270
+    }
+  ]
+}

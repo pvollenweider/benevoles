@@ -1,0 +1,58 @@
+{
+  "slug": "last-minute-changes",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T22:29:25.321Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1358,
+      "endMs": 32024
+    },
+    {
+      "id": "withdrawal",
+      "startMs": 32478,
+      "endMs": 63763
+    },
+    {
+      "id": "offer",
+      "startMs": 64214,
+      "endMs": 90745
+    },
+    {
+      "id": "coverage",
+      "startMs": 91197,
+      "endMs": 121248
+    },
+    {
+      "id": "availability",
+      "startMs": 121701,
+      "endMs": 151155
+    },
+    {
+      "id": "message",
+      "startMs": 151610,
+      "endMs": 212507
+    },
+    {
+      "id": "schedule",
+      "startMs": 212959,
+      "endMs": 243445
+    },
+    {
+      "id": "cancel",
+      "startMs": 243897,
+      "endMs": 277173
+    },
+    {
+      "id": "journal",
+      "startMs": 277626,
+      "endMs": 306807
+    },
+    {
+      "id": "result",
+      "startMs": 307260,
+      "endMs": 335300
+    }
+  ]
+}

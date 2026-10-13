@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:35:11.278Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "8cb795ab12e4512dc1dda5f1976964a92bdc0c99454f896140e859b2dc94870d",
+  "clipSha256": "356ba91959b21ffc8d1ee7e09116f3759d4ce65f2af67f7bade3a6e83ecb1fbf",
+  "scene": "action",
+  "review": {
+    "heardOpening": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.3,
+        "spoken": "Nous ouvrons le créneau concerné, puis Ajouter manuellement.",
+        "visibleSeconds": 5.8,
+        "visible": "Ouverture de la page du créneau Photos et clic sur Ajouter manuellement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Son email retrouve sa fiche",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie de l'adresse email et sélection de Julien Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "nous choisissons le bon horaire et enregistrons.",
+        "visibleSeconds": 12.7,
+        "visible": "Sélection du créneau dans le menu déroulant et validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "La nouvelle inscription apparaît.",
+        "visibleSeconds": 14,
+        "visible": "Affichage de la ligne d'inscription pour Julien Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide.",
+        "visibleSeconds": 15.5,
+        "visible": "Retour à la vue du rapport où le créneau Photos passe à 1/3",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine posée, claire et fluide, parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

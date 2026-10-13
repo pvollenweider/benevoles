@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/attendance-check-in/previous-20261013T073704Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

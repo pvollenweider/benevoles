@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:15.271Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "121e9b388305c89dfb808556bf6990f036d205ae53e8e05eff3a40f1b0390540",
+  "clipSha256": "8dfba263b8e80b43fe6a10cb1524285981ed938af3361e70b7f6a8b08f61ffa7",
+  "scene": "read",
+  "review": {
+    "heardOpening": "Chaque ligne indique un auteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Chaque ligne indique un auteur, une action et une date",
+        "visibleSeconds": 0,
+        "visible": "Lignes du journal d'activité affichant l'auteur, l'intitulé de l'action et l'horodatage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "Lisons deux actions réalisées par des personnes différentes",
+        "visibleSeconds": 5,
+        "visible": "Actions attribuées à Colette Exemple et Samira Exemple visibles dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.7,
+        "spoken": "Le nom affiché vient du compte encore présent",
+        "visibleSeconds": 12,
+        "visible": "Affichage des noms des comptes auteurs des modifications dans la colonne de gauche",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'écran présenté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

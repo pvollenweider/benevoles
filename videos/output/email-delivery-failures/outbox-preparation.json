@@ -1,63 +1,86 @@
 {
-  "checkedAt": "2026-10-07T02:19:26.927Z",
+  "checkedAt": "2026-10-13T05:58:38.506Z",
   "organizationId": "video-delivery",
   "ids": {
-    "pending": "cmuxhbrs800005ya5yj03brg1",
-    "retrying": "cmuxhbrsc00015ya52686x1j0",
-    "recoverable": "cmuxhbrta00035ya5bccg609g",
-    "wrong": "cmuxhbrv8000a5ya57esnkakm",
-    "sent": "cmuxhbrvm000c5ya5nbskm33r"
+    "pending": "cmv69srkp0000sua5kb4mg3wj",
+    "retrying": "cmv69srks0001sua5itg2ojko",
+    "recoverable": "cmv69srmb0003sua52v1s5487",
+    "wrong": "cmv69srp1000asua5ueaeelk3",
+    "sent": "cmv69srpj000csua5b9k1gw4w"
   },
   "product": {
-    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
-    "sourceTree": "bfab8fbc924aded37eb0fd93e8d919c9adbeb263",
-    "productSourceSha256": "22bb6e20c2de867839c01472d726f2c928ea5f47ec1923cece8b72c11c3df37e",
-    "buildId": "D_AkF4h7ikVJu_EdLprcI",
-    "snapshot": "/tmp/benevoles-video-production.bI4zju",
-    "builtAt": "2026-10-07T01:56:36.997Z"
+    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
+    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
+    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+    "snapshot": "/tmp/benevoles-video-production.batch14resume",
+    "builtAt": "2026-10-13T04:30:00.658Z"
   },
   "importedSourcePaths": [
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/prisma.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/outbox.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/outbox-view.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/client.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/internal/class.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/internal/prismaNamespace.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/enums.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/report-error.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/index.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/channels/email.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/env.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/index.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/shared.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/urls.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/shift-info.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/map-link.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/org-logo.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/registration.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/message-variables.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/gantt-utils.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/markdown.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/spoken-time.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/registrations-list.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/text-fold.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/utils.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/invitations.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/reminders.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/waitlist.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/waitlist-copy.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/open-shifts.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/availability.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/role-reservation.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/administration.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/smtp-outcome.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/types.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/token-vault.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
-    "/private/tmp/benevoles-video-production.bI4zju/src/lib/token-hash.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d"
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/prisma.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/outbox.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/outbox-view.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/generated/prisma/client.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/generated/prisma/internal/class.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/generated/prisma/internal/prismaNamespace.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/generated/prisma/enums.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/report-error.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/index.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/channels/email.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/env.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/index.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/shared.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/urls.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/shift-info.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/map-link.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/site.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/org-logo.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/registration.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/message-variables.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/gantt-utils.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/markdown.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/spoken-time.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/registrations-list.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/text-fold.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/utils.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/group-links.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/invitations.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/reminders.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/waitlist.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/waitlist-copy.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/open-shifts.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/availability.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/role-reservation.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/administration.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/doc-href.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/signup-welcome.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/templates/withdrawal-digest.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/digest-items.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/smtp-outcome.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/outbox-org-cancel-reason.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/outbox-org-pending-reason.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/types.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/outbox-member-deleted-reason.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/org-send-guard.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/org-approval.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/send-limits.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/rate-limit.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/usage-stats.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/usage-counters.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/signup-indicators.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/org-review.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/org-suspension.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/retention.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/past-event-retention.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/org-inactivity.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/token-vault.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/token-hash.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/notifications/added-by-organizer.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da",
+    "/private/tmp/benevoles-video-production.batch14resume/src/lib/registration-capacity.ts?namespace=delivery-8aa4acb2-35a2-4969-9753-1944708af3da"
   ],
   "clock": "Supported current-main deliverOutbox clock advanced to real due times; 451 temporary retries only; 550 permanent rejection stops after one attempt",
   "actualSmtpAttempts": [
@@ -65,178 +88,196 @@
       "recipient": "video.delivery.retrying@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.725Z"
+      "timestamp": "2026-10-13T05:58:38.275Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.745Z"
+      "timestamp": "2026-10-13T05:58:38.305Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.756Z"
+      "timestamp": "2026-10-13T05:58:38.322Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.767Z"
+      "timestamp": "2026-10-13T05:58:38.339Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.778Z"
+      "timestamp": "2026-10-13T05:58:38.355Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.789Z"
+      "timestamp": "2026-10-13T05:58:38.370Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-07T02:19:26.799Z"
+      "timestamp": "2026-10-13T05:58:38.385Z"
     },
     {
       "recipient": "video.delivery.wrong@example.org",
       "accepted": false,
       "responseCode": 550,
-      "timestamp": "2026-10-07T02:19:26.814Z"
+      "timestamp": "2026-10-13T05:58:38.403Z"
     },
     {
       "recipient": "video.delivery.sent@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-07T02:19:26.828Z"
+      "timestamp": "2026-10-13T05:58:38.420Z"
     }
   ],
   "workerSnapshots": [
     {
-      "id": "cmuxhbrsc00015ya52686x1j0",
+      "id": "cmv69srks0001sua5itg2ojko",
       "recipient": "video.delivery.retrying@example.org",
-      "now": "2026-10-07T02:19:26.705Z",
+      "now": "2026-10-13T05:58:38.240Z",
       "status": "pending",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-07T02:24:26.705Z",
+      "nextAttemptAt": "2026-10-13T06:03:38.240Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T02:19:26.739Z",
+      "now": "2026-10-13T05:58:38.294Z",
       "status": "pending",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-07T02:24:26.739Z",
+      "nextAttemptAt": "2026-10-13T06:03:38.294Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T02:24:26.740Z",
+      "now": "2026-10-13T06:03:38.295Z",
       "status": "pending",
       "attempts": 2,
-      "nextAttemptAt": "2026-10-07T02:34:26.740Z",
+      "nextAttemptAt": "2026-10-13T06:13:38.295Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T02:34:26.741Z",
+      "now": "2026-10-13T06:13:38.296Z",
       "status": "pending",
       "attempts": 3,
-      "nextAttemptAt": "2026-10-07T02:54:26.741Z",
+      "nextAttemptAt": "2026-10-13T06:33:38.296Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T02:54:26.742Z",
+      "now": "2026-10-13T06:33:38.297Z",
       "status": "pending",
       "attempts": 4,
-      "nextAttemptAt": "2026-10-07T03:34:26.742Z",
+      "nextAttemptAt": "2026-10-13T07:13:38.297Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T03:34:26.743Z",
+      "now": "2026-10-13T07:13:38.298Z",
       "status": "pending",
       "attempts": 5,
-      "nextAttemptAt": "2026-10-07T04:54:26.743Z",
+      "nextAttemptAt": "2026-10-13T08:33:38.298Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrta00035ya5bccg609g",
+      "id": "cmv69srmb0003sua52v1s5487",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-07T04:54:26.744Z",
+      "now": "2026-10-13T08:33:38.299Z",
       "status": "failed",
       "attempts": 6,
-      "nextAttemptAt": "2026-10-07T07:34:26.744Z",
+      "nextAttemptAt": "2026-10-13T11:13:38.299Z",
       "outcome": {
         "sent": 0,
         "retried": 0,
-        "failed": 1
+        "failed": 1,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrv8000a5ya57esnkakm",
+      "id": "cmv69srp1000asua5ueaeelk3",
       "recipient": "video.delivery.wrong@example.org",
-      "now": "2026-10-07T02:19:26.809Z",
+      "now": "2026-10-13T05:58:38.392Z",
       "status": "failed",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-07T02:24:26.809Z",
+      "nextAttemptAt": "2026-10-13T06:03:38.392Z",
       "outcome": {
         "sent": 0,
         "retried": 0,
-        "failed": 1
+        "failed": 1,
+        "cancelled": 0,
+        "held": 0
       }
     },
     {
-      "id": "cmuxhbrvm000c5ya5nbskm33r",
+      "id": "cmv69srpj000csua5b9k1gw4w",
       "recipient": "video.delivery.sent@example.org",
-      "now": "2026-10-07T02:19:26.822Z",
+      "now": "2026-10-13T05:58:38.410Z",
       "status": "sent",
       "attempts": 0,
-      "nextAttemptAt": "2026-10-07T02:19:26.818Z",
+      "nextAttemptAt": "2026-10-13T05:58:38.407Z",
       "outcome": {
         "sent": 1,
         "retried": 0,
-        "failed": 0
+        "failed": 0,
+        "cancelled": 0,
+        "held": 0
       }
     }
   ],
   "pendingWithoutAttempt": true,
-  "actualDeliveredMailId": "5enUQLA27QM4v3ZCl6felN",
+  "actualDeliveredMailId": "6ysHlHUIqPASPWK409UZ5w",
   "controlledErrorLogsCount": 2,
   "note": "Real worker/SMTP evidence; UI retry, address correction and campaign still to film"
 }

@@ -35,6 +35,9 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     await open("Planning par jour", "sheets/day")
     // The second day is spoken around 5 s, not at the middle of the chapter.
     await at("Les postes et les créneaux"); await page.getByText(/Dimanche 11 octobre 2026/i).first().scrollIntoViewIfNeeded()
+    await at("Repérons l'accueil du matin et la buvette")
+    const morning = page.getByText("Accueil du matin", { exact: true }).first()
+    await morning.scrollIntoViewIfNeeded(); await tap(page, morning)
   })
   await scene("role", async at => {
     await at("Si vous coordonnez un poste"); await open("Planning par poste", "sheets/role")

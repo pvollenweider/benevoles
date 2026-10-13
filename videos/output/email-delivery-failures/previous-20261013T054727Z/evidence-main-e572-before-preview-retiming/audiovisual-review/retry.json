@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:17:32.382Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
+  "clipSha256": "64e12338e6b41ec06f6e91d7b5a02fac719fe01ab26010a14c7610875f3d9a11",
+  "scene": "retry",
+  "review": {
+    "heardOpening": "Pour Emma, le refus de notre serveur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Renvoyer remet le même email dans la file",
+        "visibleSeconds": 4,
+        "visible": "Le statut pour Emma Pavre passe en nouvel essai programmé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "rechargeons le suivi. La ligne passe à Envoyé avec une heure",
+        "visibleSeconds": 12,
+        "visible": "Rafraîchissement de la page affichant le statut Envoyé pour le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale",
+        "visibleSeconds": 16,
+        "visible": "Affichage de la boîte Mailpit avec le message Hello Emma ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les démonstrations visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

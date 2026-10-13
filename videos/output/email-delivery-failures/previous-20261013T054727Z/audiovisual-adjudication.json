@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "videoId": "EMAIL_DELIVERY_FAILURES",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
+  "productCommit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
+  "scene": "campaign",
+  "rawReviewPath": "audiovisual-review/campaign.json",
+  "rawReviewSha256": "13e6a9eefbbe1d7be53130a4b1973bb31d1fdab8f4d4edb9fdea0ec70c85a4b1",
+  "rawReviewPreserved": true,
+  "decision": "reviewer-false-positive",
+  "claim": "The reviewer mistook the borderless disabled button for plain text.",
+  "sourceEvidence": {
+    "path": "src/components/admin/messages/ResendFailedButton.tsx",
+    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
+    "sha256": "f2ec428267d15b0dbd8560b2a1abe1f3caa3f1de4955e56a044c9bb1383dc0fa",
+    "lines": [28, 38],
+    "finding": "The actual JSX always renders a button, keeps it in place after resend, sets aria-disabled when done, and changes its visible name to Remis en file."
+  },
+  "runtimeEvidence": {
+    "path": "capture-checks.json",
+    "sha256": "862bf1371280c5b8af1a75661fa686f65f8f444f5fcddbcbc253945d340748a9",
+    "captureCompleted": true,
+    "assertionSource": "videos/lib/record-delivery.ts",
+    "finding": "The completed real capture waited for getByRole(button, /^Remis en file/) and asserted aria-disabled=true before verifying only the failed email was resent and a repeated resend created nothing."
+  },
+  "visualEvidence": {
+    "path": "review-frames/campaign-85.png",
+    "finding": "Remis en file is visible at the original button location; its borderless styling matches current main. The independently reviewed synchronization checkpoints all have severity none."
+  },
+  "newCaptureProvenanceAttributed": false,
+  "requiresParentAcceptance": true
+}

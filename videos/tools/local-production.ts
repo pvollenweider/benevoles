@@ -123,7 +123,7 @@ async function main() {
       if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only exact owned export preparation accepted")
       await verifyProductBuild("http://localhost:43102")
     } else if (script === "videos/tools/prepare-volunteer-hours.ts") {
-      if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated hours preparation or explicit owned reset accepted")
+      if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest[0] === "--reset-owned" && (rest.length === 1 || rest.length === 2 && rest[1] === "--recover-stale-ledger")))) throw new Error("Only isolated hours preparation or explicit owned reset accepted")
       await verifyProductBuild("http://localhost:43114")
     } else if (script === "videos/tools/prepare-event-questions.ts") {
       if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated questions preparation or explicit owned reset accepted")

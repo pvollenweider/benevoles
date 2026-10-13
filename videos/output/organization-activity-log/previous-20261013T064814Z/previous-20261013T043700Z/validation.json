@@ -1,0 +1,76 @@
+{
+  "id": "ORGANIZATION_ACTIVITY_LOG",
+  "slug": "organization-activity-log",
+  "validatedAt": "2026-10-12T21:08:01.358Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 296080,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 28588,
+      "audioMs": 28587,
+      "driftMs": 1
+    },
+    {
+      "id": "read",
+      "visualMs": 27705,
+      "audioMs": 27704,
+      "driftMs": 1
+    },
+    {
+      "id": "members",
+      "visualMs": 28201,
+      "audioMs": 28198,
+      "driftMs": 3
+    },
+    {
+      "id": "team",
+      "visualMs": 27894,
+      "audioMs": 27892,
+      "driftMs": 2
+    },
+    {
+      "id": "filters",
+      "visualMs": 29611,
+      "audioMs": 29609,
+      "driftMs": 2
+    },
+    {
+      "id": "pages",
+      "visualMs": 29970,
+      "audioMs": 29968,
+      "driftMs": 2
+    },
+    {
+      "id": "export",
+      "visualMs": 33076,
+      "audioMs": 33074,
+      "driftMs": 2
+    },
+    {
+      "id": "limits",
+      "visualMs": 26971,
+      "audioMs": 26970,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 29718,
+      "audioMs": 29717,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 23,
+  "music": {
+    "voicedWindows": 256,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.4,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

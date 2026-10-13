@@ -1,0 +1,100 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T05:16:21.007Z",
+  "revalidatedAt": "2026-10-13T05:16:21.007Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "6a91af8e0064cc2598913b812d233bea44498385bfa0c6e03460ba3a3d8d0c66",
+      "recognized": "Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide. Depuis l'événement, ouvrez Où manque-t-il du monde ? Cette vue regroupe les besoins pour savoir où concentrer vos efforts, plutôt que de parcourir tout le planning. Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider. Regardons comment lire ces différences.",
+      "expected": "Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide. Depuis l'événement, ouvrez Où manque-t-il du monde. Cette vue regroupe les besoins pour savoir où concentrer vos efforts, plutôt que de parcourir tout le planning. Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider. Regardons comment lire ces différences.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "overview",
+      "audioSha256": "313dca6c60858f237dc43bc7e53bd3062bee7fef3d1c3f910cea03d489da1a8f",
+      "recognized": "En haut, les places pourvues sont les inscriptions confirmées, comparées à la capacité totale. Une personne inscrite à deux horaires occupe deux places, ce n'est pas un compteur de personnes différentes. La phrase de besoin et la barre donnent un aperçu, mais lisez aussi les attentes et les demandes. Un bon chiffre global peut cacher un horaire où il manque encore quelqu'un.",
+      "expected": "En haut, les places pourvues sont les inscriptions confirmées, comparées à la capacité totale. Une personne inscrite à deux horaires occupe deux places : ce n'est pas un compteur de personnes différentes. La phrase de besoin et la barre donnent un aperçu, mais lisez aussi les attentes et les demandes. Un bon chiffre global peut cacher un horaire où il manque encore quelqu'un.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "empty",
+      "audioSha256": "f4e1703d18b642788bbac6e7bc9805afb4f57fff1e881c8dcc97f43edfed30df",
+      "recognized": "Poste sans personne attire l'attention sur un poste entièrement vide. Ici, photo comporte deux créneaux et six places à pourvoir. Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission. Avant de recruter, assurez-vous que la demande est claire. Quelqu'un doit comprendre ce qu'il fera, où, et pendant combien de temps.",
+      "expected": "Postes sans personne attire l'attention sur un poste entièrement vide. Ici, Photos comporte deux créneaux et six places à pourvoir. Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission. Avant de recruter, assurez-vous que la demande est claire : quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.",
+      "wordErrorRate": 0.03225806451612903,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "needs",
+      "audioSha256": "49a835cec0e6a2fb623a6b727533a6ea36cbd40fb00b9cc59c952379bd23b48e",
+      "recognized": "Créneaux à compléter va du plus dégarni au plus proche du complet. Chaque ligne indique la date, l'horaire, les places confirmées et le nombre manquant. Les créneaux fermés aux inscriptions sont exclus de ce groupe. Cliquons sur la buvette du soir. La liste des inscriptions s'ouvre, déjà filtrée. Le lien écrire à ce créneau prépare ensuite un message pour les personnes de cet horaire, pas pour recruter des inconnus.",
+      "expected": "Créneaux à compléter va du plus dégarni au plus proche du complet. Chaque ligne indique la date, l'horaire, les places confirmées et le nombre manquant. Les créneaux fermés aux inscriptions sont exclus de ce groupe. Cliquons sur la buvette du soir : la liste des inscriptions s'ouvre déjà filtrée. Le lien Écrire à ce créneau prépare ensuite un message pour les personnes de cet horaire, pas pour recruter des inconnus.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "requests",
+      "audioSha256": "12d116e64570e7b59d1fa23160e4aa20f6093d5b6119d657d16d72e8553b5888",
+      "recognized": "Les demandes à traiter gardent leur place pendant la décision. À la navette, deux demandes remplissent donc les deux places réservées, même si aucune n'est encore confirmée. Le rapport ne les présente pas comme deux places manquantes. Suivez le lien des demandes pour retrouver Lucas et Marc, puis examiner leurs informations avant de décider. La confirmation et la demande en attente restent deux situations différentes.",
+      "expected": "Les demandes à traiter gardent leur place pendant la décision. À la navette, deux demandes remplissent donc les deux places réservées, même si aucune n'est encore confirmée. Le rapport ne les présente pas comme deux places manquantes. Suivez le lien des demandes pour retrouver Lucas et Marc, puis examinez leurs informations avant de décider. La confirmation et la demande en attente restent deux situations différentes.",
+      "wordErrorRate": 0.015151515151515152,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "waiting",
+      "audioSha256": "3429a0a7a2441e24d31c4604e671be6204778e8149d8d956dca7f84dbdc77e5f",
+      "recognized": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place. La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément. En cliquant, vous retrouvez les noms et leur position dans la liste. Vous pouvez ensuite réfléchir à une place supplémentaire ou à un autre horaire. Ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+      "expected": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place. La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément. En cliquant, vous retrouvez les noms et leurs positions dans la liste. Vous pouvez ensuite réfléchir à une place supplémentaire ou à un autre horaire ; ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+      "wordErrorRate": 0.029850746268656716,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "leaders",
+      "audioSha256": "0087b23d242a434b95deaf427df8ce5335c2dba7fa3dd8fcca6f7e4dd7e760b4",
+      "recognized": "Poste sans responsable de secteur est un autre besoin, facultatif cette fois. Le poste peut avoir des bénévoles et manquer seulement d'un relais sur le terrain. Le lien ouvre la gestion des responsables. Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles. Leur rôle est de suivre leur équipe. Il ne leur donne pas automatiquement les droits d'un organisateur dans l'administration.",
+      "expected": "Postes sans responsable de secteur est un autre besoin, facultatif cette fois. Le poste peut avoir des bénévoles et manquer seulement d'un relais sur le terrain. Le lien ouvre la gestion des responsables. Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles. Leur rôle est de suivre leur équipe ; il ne leur donne pas automatiquement les droits d'un organisateur dans l'administration.",
+      "wordErrorRate": 0.014705882352941176,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "full",
+      "audioSha256": "162b12e4e39ff413ebed7a62bc259a9aa4b96d5fe2ca16de620e46bbbb5f986b",
+      "recognized": "Créneau complet rassemble les horaires sans besoin supplémentaire et sans liste d'attente. L'accueil de midi est rempli par des inscriptions confirmées. La navette, elle, reste complète grâce aux demandes qui gardent leur place. Lisez donc aussi les mentions de statut, pas seulement le ratio. Être complet ne signifie ni que tout le monde est présent, ni que toutes les décisions ont déjà été prises.",
+      "expected": "Créneaux complets rassemble les horaires sans besoin supplémentaire et sans liste d'attente. L'accueil de midi est rempli par des inscriptions confirmées. La navette, elle, reste complète grâce aux demandes qui gardent leur place. Lisez donc aussi les mentions de statut, pas seulement le ratio. Être complet ne signifie ni que tout le monde est présent, ni que toutes les décisions ont déjà été prises.",
+      "wordErrorRate": 0.030303030303030304,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "action",
+      "audioSha256": "09812623dbe5783a189ef06bccb13cce5a5b52b9781e1179aa0b00360abac4c4",
+      "recognized": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi. Nous ouvrons le créneau concerné, puis Ajouter manuellement. Son e-mail retrouve sa fiche, nous choisissons le bon horaire et enregistrons. La nouvelle inscription apparaît. En revenant au rapport, le besoin diminue d'une place et photo n'est plus un poste entièrement vide. Vous pouvez vérifier le résultat, puis vous concentrer sur le besoin suivant.",
+      "expected": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi. Nous ouvrons le créneau concerné, puis Ajouter manuellement. Son email retrouve sa fiche ; nous choisissons le bon horaire et enregistrons. La nouvelle inscription apparaît. En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide. Vous pouvez vérifier le résultat, puis vous concentrer sur le besoin suivant.",
+      "wordErrorRate": 0.014492753623188406,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

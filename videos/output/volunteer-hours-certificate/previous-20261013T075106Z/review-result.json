@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_HOURS_CERTIFICATE",
+  "status": "NOT READY",
+  "duration": 310.68,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 252,
+    "musicOnlyWindows": 30,
+    "smallestGapLu": 12.6,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.4
+  },
+  "problems": "Certificate settings/added-column explanations occur with preview off screen; checkbox late; print action early. Product layout bug: admin navigation printed atop certificate PDF. Dates French; totals/real PDF/CSV, validation/final transcript/music pass.",
+  "sourceChanges": "Added sentence anchors for certificate navigation, dates, note, checkbox and print; explicitly scroll real preview and total into view. Added explicit strict stale-ledger recovery for exact current hours fixture; prior ledger retained. Cache lacked matching fingerprint metadata, so continuous narration regenerated, aligned and audited. No re-film."
+}

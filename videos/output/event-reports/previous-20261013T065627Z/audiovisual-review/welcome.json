@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:11.340Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "107b077444b0f19dc60fe8eaded97cebf28ef03b5872b53258003845b8123a03",
+  "clipSha256": "de6f62c1054cf582c63393349e775ed108e44881d06cadc987f8a927b34ee731",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Au stand d'accueil, un document clair",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.9,
+        "spoken": "Ouvrons Rapports.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton Rapports et ouverture de la page correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier.",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la première section intitulée À afficher ou à remettre aux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "puis les badges, le résumé de l’événement et l’archive.",
+        "visibleSeconds": 13.5,
+        "visible": "Défilement vers le bas révélant les sections Badges, Résumé de l'événement et Archive",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

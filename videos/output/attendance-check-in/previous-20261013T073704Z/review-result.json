@@ -1,0 +1,17 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "status": "NOT READY",
+  "duration": 402.96,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 350,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 13.6,
+    "largestGapLu": 19.2,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -32.9,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Single-arrival chapter reload occurs roughly 7 seconds late. Phone link is visibly shown without a call; static-screen/timbre flags are not objective failures. All validation/final transcript/music checks pass. Mobile capture is a narrow readable column with unused grey canvas.",
+  "sourceChanges": "Moved check-in result to at(\"La marque appara\u00eet sur son inscription\") and reload to at(\"Rechargeons la page\"). Cached narration reused unchanged. No re-film."
+}

@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/email-delivery-failures/previous-20261013T054727Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

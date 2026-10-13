@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:27.577Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "50d6ecf3b6d45c2ab028431d74ece6fc7bb3e9a77bb4b0e5b7fe11b7181a7413",
+  "clipSha256": "63bd970569662a7c11cdf6367b27bf7fb3ced58f09c201030cf51e7ae8a170c1",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Si l'historique dépasse la première page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Descendons, utilisons le bouton et retrouvons les nouvelles lignes.",
+        "visibleSeconds": 5.2,
+        "visible": "Défilement vers le bas de la liste et clic sur « Charger plus », affichant de nouvelles lignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Si une sélection ne donne aucune ligne",
+        "visibleSeconds": 18.5,
+        "visible": "Sélection du filtre « Emails » avec le message « Aucune activité pour l'instant. ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "essayons Tous les types avant de conclure qu'il n'y a aucun historique.",
+        "visibleSeconds": 24.5,
+        "visible": "Sélection de « Tous les types » dans le menu déroulant, restaurant la liste complète.",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, fluide et parfaitement audible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

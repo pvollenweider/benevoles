@@ -1,0 +1,17 @@
+{
+  "id": "ORGANIZATION_ACTIVITY_LOG",
+  "status": "NOT READY",
+  "duration": 296.08,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 256,
+    "musicOnlyWindows": 11,
+    "smallestGapLu": 14.8,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -33.1,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Result chapter navigates to Aline about 6 seconds early; sentence timing 22.956 s, visible at about 17.5 s. Pagination audit false alarm: click marker 5.629 s, 50\u219261 real entries and button disappears in exact frames. Two authors/actions are visible during read. Native file-picker English labels are a cosmetic nit.",
+  "sourceChanges": "Retained WIP member-return and empty-filter anchors; replaced result 60% cue by at(\"Une fois le point compris\"). No re-film."
+}

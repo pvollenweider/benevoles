@@ -1,0 +1,12 @@
+{
+  "anchor": "L'application affiche le résultat de l'envoi. Dans notre boîte de test,",
+  "windowStart": 232.355,
+  "result": {
+    "found": true,
+    "startSeconds": 12.18,
+    "wordsHeard": "l'application affiche le résultat de l'envoi dans notre boîte de test"
+  },
+  "onset": 244.535,
+  "proposedCut": 244.38622900000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

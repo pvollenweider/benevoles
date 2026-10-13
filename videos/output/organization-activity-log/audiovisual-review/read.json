@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:55:22.548Z",
+  "videoSha256": "475ca0d8e812ba018e34867fd4f1346406eb2dc8ed5577a391ea41682a092416",
+  "promptSha256": "121e9b388305c89dfb808556bf6990f036d205ae53e8e05eff3a40f1b0390540",
+  "clipSha256": "7230cad6fd1073a0553e65fd9558d27b27ae980977789231449496bb906631c9",
+  "scene": "read",
+  "review": {
+    "heardOpening": "Chaque ligne indique un auteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Chaque ligne indique un auteur, une action et une date.",
+        "visibleSeconds": 1.2,
+        "visible": "Tableau du journal d'activité affichant les colonnes d'auteur, d'action et d'horodatage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Lisons deux actions réalisées par des personnes différentes.",
+        "visibleSeconds": 5.1,
+        "visible": "Aucune action n'est lue ni mise en évidence, l'écran reste entièrement statique sans mouvement de curseur",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Le nom affiché vient du compte encore présent",
+        "visibleSeconds": 12.8,
+        "visible": "Noms d'utilisateurs visibles dans les entrées du journal",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:05 : L'action annoncée (« Lisons deux actions réalisées par des personnes différentes ») n'est pas exécutée : aucune ligne n'est lue à voix haute ni mise en valeur à l'écran, la vidéo restant totalement figée."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-05T22:14:34.596Z",
+  "organizationId": "video-delivery",
+  "fourActualStatesVisible": true,
+  "actualUiRetryDelivered": true,
+  "retryMailId": "0Cwhp1pV5chCvN8EXzBLan",
+  "sameOutboxIdAndPayload": true,
+  "retryOfSentRefused": true,
+  "actualMemberEmailCorrection": true,
+  "oldMessagePayloadUnchangedAfterCorrection": true,
+  "remaining": "New message to corrected address and partial-failure campaign still to demonstrate"
+}

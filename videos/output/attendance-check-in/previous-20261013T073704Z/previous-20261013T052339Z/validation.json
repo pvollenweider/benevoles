@@ -1,0 +1,96 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "slug": "attendance-check-in",
+  "validatedAt": "2026-10-06T17:37:17.428Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 401800,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 24386,
+      "audioMs": 24386,
+      "driftMs": 0
+    },
+    {
+      "id": "one",
+      "visualMs": 24668,
+      "audioMs": 24667,
+      "driftMs": 1
+    },
+    {
+      "id": "group",
+      "visualMs": 23329,
+      "audioMs": 23328,
+      "driftMs": 1
+    },
+    {
+      "id": "correction",
+      "visualMs": 22565,
+      "audioMs": 22564,
+      "driftMs": 1
+    },
+    {
+      "id": "multiple",
+      "visualMs": 26131,
+      "audioMs": 26130,
+      "driftMs": 1
+    },
+    {
+      "id": "limits",
+      "visualMs": 24380,
+      "audioMs": 24379,
+      "driftMs": 1
+    },
+    {
+      "id": "cancelled",
+      "visualMs": 37912,
+      "audioMs": 37909,
+      "driftMs": 3
+    },
+    {
+      "id": "export",
+      "visualMs": 24065,
+      "audioMs": 24064,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-window",
+      "visualMs": 28643,
+      "audioMs": 28642,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-search",
+      "visualMs": 23323,
+      "audioMs": 23321,
+      "driftMs": 2
+    },
+    {
+      "id": "dayof-phone",
+      "visualMs": 26118,
+      "audioMs": 26117,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-checkin",
+      "visualMs": 25050,
+      "audioMs": 25048,
+      "driftMs": 2
+    },
+    {
+      "id": "dayof-refresh",
+      "visualMs": 25143,
+      "audioMs": 25142,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-undo",
+      "visualMs": 26944,
+      "audioMs": 26944,
+      "driftMs": 0
+    }
+  ],
+  "issues": []
+}

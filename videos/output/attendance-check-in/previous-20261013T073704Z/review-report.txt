@@ -1,0 +1,27 @@
+STATUS: NOT READY
+ID: ATTENDANCE_CHECK_IN
+Duration: 402.96
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 350, 'musicOnlyWindows': 9, 'smallestGapLu': 13.6, 'largestGapLu': 19.2, 'quietestMusicOnlyLufs': -34, 'loudestMusicOnlyLufs': -32.9, 'medianVoiceLufs': -16.3}
+Problems: Single-arrival chapter reload occurs roughly 7 seconds late. Phone link is visibly shown without a call; static-screen/timbre flags are not objective failures. All validation/final transcript/music checks pass. Mobile capture is a narrow readable column with unused grey canvas.
+Source changes: Moved check-in result to at("La marque apparaît sur son inscription") and reload to at("Rechargeons la page"). Cached narration reused unchanged. No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 0.211–24.599 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+one: 26.926–51.595 s; review/one-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["Désynchronisation à 00:10 : le rechargement de la page est annoncé et commenté comme déjà effectif, mais le rafraîchissement visuel n'a lieu qu'à 00:17 (près de 7 secondes de retard)."]
+group: 53.859–77.188 s; review/group-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+correction: 79.451–102.017 s; review/correction-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+multiple: 104.278–130.411 s; review/multiple-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+limits: 132.677–157.058 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+cancelled: 159.325–197.237 s; review/cancelled-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+export: 200.655–224.72 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+dayof-window: 228.15–256.793 s; review/dayof-window-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+dayof-search: 260.184–283.509 s; review/dayof-search-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+dayof-phone: 285.77–311.888 s; review/dayof-phone-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ['Incohérence vocale à 00:05 : une voix masculine remplace brièvement la narratrice pour dire « Voici celui de Zoé. » avant le retour de la voix féminine.', "L'affichage reste entièrement figé du début à la fin de l'extrait sans mouvement de curseur pour illustrer la démonstration annoncée."]
+dayof-checkin: 314.163–339.212 s; review/dayof-checkin-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+dayof-refresh: 341.473–366.617 s; review/dayof-refresh-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+dayof-undo: 368.881–395.825 s; review/dayof-undo-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

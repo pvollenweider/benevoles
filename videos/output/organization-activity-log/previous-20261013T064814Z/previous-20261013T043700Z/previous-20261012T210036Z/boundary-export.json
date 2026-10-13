@@ -1,0 +1,12 @@
+{
+  "anchor": "Exporter tout le journal télécharge un fichier CSV. Le mot tout",
+  "windowStart": 141.958,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Exporter tout le journal télécharge un fichier CSV. Le mot tout"
+  },
+  "onset": 172.298,
+  "proposedCut": 171.9582915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:06.141Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "7929a8509657d0bf39f8029958e38d1a97cfb68771416f7d57809d141b6b20a9",
+  "clipSha256": "7cf5e647cfa4dfe3fa9130307cf387344a98ac0cb9eed7b84d55a82350cfc247",
+  "scene": "day",
+  "review": {
+    "heardOpening": "Pour l'accueil, le planning par jour",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le planning par jour est plus direct",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le lien « Planning par jour » et ouverture du planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Voici la première journée",
+        "visibleSeconds": 3.2,
+        "visible": "Affichage du planning pour « Samedi 10 octobre 2026 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis la suivante",
+        "visibleSeconds": 4.8,
+        "visible": "Défilement vertical vers « Dimanche 11 octobre 2026 »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Repérons l'accueil du matin et la buvette",
+        "visibleSeconds": 12,
+        "visible": "L'écran reste figé sur le dimanche (qui indique « Accueil du dimanche ») alors que « Accueil du matin » était sur le samedi défilé hors champ ; aucun curseur ni surbrillance ne repère les éléments",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:12, l'invitation à repérer « l'accueil du matin » fait référence au samedi qui n'est plus à l'écran suite au défilement, et aucun élément n'est mis en valeur à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions du document."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

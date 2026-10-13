@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:27:55.162Z",
+  "videoSha256": "a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b",
+  "promptSha256": "5d851bac9bacc59f340c91ff05c084c83a3c2aad6f937ed6abe1bcf1fa6aba56",
+  "clipSha256": "f06945abb764bd284c19a47e04197e3af3bb8aa579c68e21885cf7e0093c13dd",
+  "scene": "fields",
+  "review": {
+    "heardOpening": "Tu peux alléger le badge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Décochons les deux cases, générons",
+        "visibleSeconds": 3.7,
+        "visible": "Décochage des cases Nom de famille et Créneaux puis clic sur Ouvrir les badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "le prénom reste",
+        "visibleSeconds": 6.3,
+        "visible": "Affichage du badge généré ne contenant que le prénom Léa et les postes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.1,
+        "spoken": "Remettons-les ensuite",
+        "visibleSeconds": 10.8,
+        "visible": "Retour à la page de configuration avec les cases cochées à nouveau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.7,
+        "spoken": "le badge montre au plus quatre lignes puis indique les autres créneaux",
+        "visibleSeconds": 13.9,
+        "visible": "Affichage du badge de Léa avec 4 lignes de créneaux et la mention + 1 autre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, naturelle et parfaitement articulée, suivant fidèlement le déroulement des actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

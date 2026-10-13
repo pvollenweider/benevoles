@@ -1,0 +1,82 @@
+{
+  "at": "2026-10-13T05:49:29.996Z",
+  "deleted": [
+    {
+      "ID": "4tFNFO4Chs4XBVgmHovIIe",
+      "MessageID": "outbox-cmv4rdvoc001ymba5ay098w8n@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "admin@localhost"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "benevol.app : plafond d'envoi atteint",
+      "Created": "2026-10-12T04:35:24.472Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3414,
+      "Attachments": 0,
+      "Snippet": "Emails abandonnés : trop de demandes publiques pour une même adresse en une heure (organisation video-questions). Pendant l'heure, les demandes suivantes pour une même adresse sont ignorées. benev..."
+    },
+    {
+      "ID": "4bNTYXdRdYZO61n3MzykPq",
+      "MessageID": "outbox-cmv4n33k3001ynfa51dm89hlv@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "admin@localhost"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "benevol.app : plafond d'envoi atteint",
+      "Created": "2026-10-12T02:35:03.001Z",
+      "Username": "",
+      "Tags": [],
+      "Size": 3414,
+      "Attachments": 0,
+      "Snippet": "Emails abandonnés : trop de demandes publiques pour une même adresse en une heure (organisation video-questions). Pendant l'heure, les demandes suivantes pour une même adresse sont ignorées. benev..."
+    },
+    {
+      "ID": "06x6cxth4OGVKJPD9cbKlf",
+      "MessageID": "outbox-cmv4ar7i700bzbia50gbsdyw0@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "admin@localhost"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "benevol.app : plafond d'envoi atteint",
+      "Created": "2026-10-11T20:49:52.854Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3414,
+      "Attachments": 0,
+      "Snippet": "Emails abandonnés : trop de demandes publiques pour une même adresse en une heure (organisation video-privacy-a). Pendant l'heure, les demandes suivantes pour une même adresse sont ignorées. benev..."
+    }
+  ],
+  "preservedIds": [],
+  "guard": "Exact fixture sender, synthetic recipients and video SMTP username or reserved video identities; individual inspected IDs only"
+}

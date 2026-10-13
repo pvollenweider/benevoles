@@ -1,0 +1,232 @@
+{
+  "at": "2026-10-13T07:15:29.299Z",
+  "deleted": [
+    {
+      "ID": "6PN83SJ3xlXhSBvFiNXMDp",
+      "MessageID": "outbox-cmv6blqsq006rdma5j15zv5rj@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.org-activity.invited@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Invitation à rejoindre Formation — journal d'organisation sur Bénévoles",
+      "Created": "2026-10-13T06:49:09.925Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3683,
+      "Attachments": 0,
+      "Snippet": "Créez votre compte en un clic — lien valable 7 jours. Bonjour Alex Exemple, Nous vous invitons à rejoindre Formation — journal d'organisation en tant qu'administratrice ou administrateur sur B..."
+    },
+    {
+      "ID": "5N65L7x4GtXV6PRlskHhQL",
+      "MessageID": "outbox-cmv6bkn5v0039dma55yzp6zso@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.org-activity.invited@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Invitation à rejoindre Formation — journal d'organisation sur Bénévoles",
+      "Created": "2026-10-13T06:48:18.668Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3683,
+      "Attachments": 0,
+      "Snippet": "Créez votre compte en un clic — lien valable 7 jours. Bonjour Alex Exemple, Nous vous invitons à rejoindre Formation — journal d'organisation en tant qu'administratrice ou administrateur sur B..."
+    },
+    {
+      "ID": "0Q0Gytbe0cmvCG7yfO1Jeq",
+      "MessageID": "outbox-cmv6ayzfp000djya5j7jnh3s1@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.2@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Tu es inscrit·e : Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:37:10.191Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3949,
+      "Attachments": 0,
+      "Snippet": "Inscrit·e : Logistique, Installation du matériel, samedi 17 octobre, de 12h à 14h. Hello Zoé, Colette Exemple, de Formation — imprévus, t'a inscrit·e à Fête des imprévus — démonstration ..."
+    },
+    {
+      "ID": "3Ia1QpjYJce7vlzWKafXWN",
+      "MessageID": "outbox-cmv6av9os0003jya5qw5yxv9u@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.owner@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Désistement — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:37:10.15Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3927,
+      "Attachments": 0,
+      "Snippet": "Aline Exemple se désiste de Accueil · Accueil du matin. Aline Exemple se désiste de Accueil · Accueil du matin (17/10/2026 · 10:00–12:00) pour Fête des imprévus — démonstration. La place a..."
+    },
+    {
+      "ID": "6fzv2rLiN54e9TxJs0V6F8",
+      "MessageID": "outbox-cmv6b03cs000jjya5xv8f1kn0@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.5@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : créneau annulé — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:32:19.835Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3903,
+      "Attachments": 0,
+      "Snippet": "Toutes nos excuses — d'autres créneaux restent peut-être disponibles. Hello Lucas ! Le créneau Caisse de la petite scène du samedi 17 octobre pour Fête des imprévus — démonstration a malheu..."
+    },
+    {
+      "ID": "3ziCyzjSk3pI2J7XioNTCe",
+      "MessageID": "outbox-cmv6b03cp000ijya539lwujpl@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.0@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : créneau annulé — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:32:19.807Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3903,
+      "Attachments": 0,
+      "Snippet": "Toutes nos excuses — d'autres créneaux restent peut-être disponibles. Hello Aline ! Le créneau Caisse de la petite scène du samedi 17 octobre pour Fête des imprévus — démonstration a malheu..."
+    },
+    {
+      "ID": "5UZYQEIp2Ecyu4Lx8gcx8L",
+      "MessageID": "outbox-cmv6azdo3000fjya5wx1aw8bm@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : changement d'horaire — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:31:46.466Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4146,
+      "Attachments": 0,
+      "Snippet": "Nouvel horaire : samedi 17 octobre · 14:30–16:30 (était 14:00–16:00) Hello Sarah ! Petite info : le créneau Réception du matériel pour Fête des imprévus — démonstration a changé d'horai..."
+    },
+    {
+      "ID": "6xqOUh5oC85tvKnk1dbo7P",
+      "MessageID": "outbox-cmv6ayf6e0009jya5dfphkzco@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Un coup de main pour la logistique ? — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:31:01.841Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4463,
+      "Attachments": 0,
+      "Snippet": "Il reste une place de 12h à 14h. Connais-tu quelqu'un qui pourrait aider ? Merci ! Hello Emma ! 👋 Un message de Formation — imprévus au sujet de Fête des imprévus — démonstration. Il reste..."
+    },
+    {
+      "ID": "6caUn7MiMsCbD3AHpLdGUH",
+      "MessageID": "outbox-cmv6av9ob0001jya5nxnezfjd@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.1@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "🎉 Une place s'est libérée — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T06:28:34.782Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4078,
+      "Attachments": 0,
+      "Snippet": "Une place s'est libérée ! Confirme avant le mercredi 14 octobre à 08:28. Hello Nicolas ! 🎉 Bonne nouvelle : une place s'est libérée pour Accueil du matin lors de Fête des imprévus — démon..."
+    }
+  ],
+  "preservedIds": [],
+  "guard": "Exact fixture sender, synthetic recipients and video SMTP username or reserved video identities; individual inspected IDs only"
+}

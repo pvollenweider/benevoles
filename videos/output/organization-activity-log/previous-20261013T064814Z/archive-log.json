@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/organization-activity-log/previous-20261013T043700Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

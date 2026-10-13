@@ -1,0 +1,12 @@
+{
+  "anchor": "Le nombre affiché compte les personnes à qui un email peut",
+  "windowStart": 37.351,
+  "result": {
+    "found": true,
+    "startSeconds": 10,
+    "wordsHeard": "Le nombre affiché compte les personnes à qui un email peut"
+  },
+  "onset": 47.351,
+  "proposedCut": 47.1519165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

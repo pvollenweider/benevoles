@@ -1,0 +1,32 @@
+[
+  {
+    "pdf": "videos/output/event-reports/documents/individual.pdf",
+    "nullPages": [],
+    "pages": 81
+  },
+  {
+    "pdf": "videos/output/event-reports/documents/complete.pdf",
+    "nullPages": [],
+    "pages": 7
+  },
+  {
+    "pdf": "videos/output/event-reports/documents/day.pdf",
+    "nullPages": [],
+    "pages": 3
+  },
+  {
+    "pdf": "videos/output/event-reports/documents/attendance.pdf",
+    "nullPages": [],
+    "pages": 8
+  },
+  {
+    "pdf": "videos/output/event-reports/documents/role.pdf",
+    "nullPages": [],
+    "pages": 6
+  },
+  {
+    "pdf": "videos/output/event-reports/documents/phones.pdf",
+    "nullPages": [],
+    "pages": 7
+  }
+]

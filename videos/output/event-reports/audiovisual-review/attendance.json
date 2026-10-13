@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:09:41.560Z",
-  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
-  "promptSha256": "42aa84cacafd6f58d9c2635b7641e835eede8002eae68b3c6ab60b5207528466",
-  "clipSha256": "8b99511b6c25cb75ba9e08189b4e6c8eb4ffa8469879e7dbd814df5b1c3c36bf",
+  "reviewedAt": "2026-10-13T07:06:28.312Z",
+  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "promptSha256": "6f553a03293e5beed7140f46c2c1c8df7ec60c62bd86460cd62a6dc75111b7c0",
+  "clipSha256": "c83e4131c08ab70d8c554d50edcb2f78b8e0b163005aa6046a708f7829f4013f",
   "scene": "attendance",
   "review": {
     "heardOpening": "La feuille de présence sert au pointage sur papier",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "La feuille de présence sert au pointage sur papier",
-        "visibleSeconds": 1.8,
-        "visible": "Affichage de la feuille de présence imprimable après disparition du macaron central",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 5.4,
-        "spoken": "des lignes supplémentaires permettent de noter les arrivées imprévues",
-        "visibleSeconds": 5.4,
-        "visible": "Lignes de tableau vierges visibles en bas de liste",
+        "spokenSeconds": 3.5,
+        "spoken": "Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la liste nominative avec cases à cocher et lignes vierges en bas de tableau",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.2,
-        "spoken": "Voici aussi une présence déjà enregistrée dans l'application",
+        "spoken": "Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille",
         "visibleSeconds": 9.2,
-        "visible": "Première case cochée informatiquement pour la première entrée du tableau",
+        "visible": "Case cochée numériquement sur la première ligne pour Léa Giraud",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.5,
+        "spokenSeconds": 20.8,
         "spoken": "reporter les présences utiles dans l'application",
-        "visibleSeconds": 19.8,
-        "visible": "Changement de document avec la liste Retour du matériel",
+        "visibleSeconds": 20.5,
+        "visible": "Défilement vers la page suivante présentant un autre créneau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton régulier adapté à un format pédagogique."
+      "observation": "Voix claire, fluide et naturelle, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

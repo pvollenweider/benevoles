@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:40.357Z",
-  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "reviewedAt": "2026-10-13T07:47:00.370Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
   "promptSha256": "ab27ebac66a3bb5c502e1f539746d78767d3dd9a7ac5e33e589c34e02b5af730",
-  "clipSha256": "befd6f2d6a73002524406775ef91047951f2905e7c6451d8f09ee1842f3125b8",
+  "clipSha256": "a7acda873f29516d89d67638e0e99ad234cef2043ecc5439a12c02f491ec4138",
   "scene": "welcome",
   "review": {
     "heardOpening": "Le jour J, savoir qui est arrivé",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 6.8,
         "spoken": "choisissons l'accueil du matin avec les filtres",
-        "visibleSeconds": 10.3,
-        "visible": "Sélection du créneau Accueil du matin dans le filtre des créneaux",
+        "visibleSeconds": 7.5,
+        "visible": "Sélection du poste 'Accueil' puis du créneau 'Accueil du matin' dans les menus déroulants",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.2,
         "spoken": "Chaque ligne correspond à une inscription sur un créneau",
-        "visibleSeconds": 11.5,
-        "visible": "Affichage de la liste filtrée des inscriptions par créneau",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la liste filtrée montrant les bénévoles inscrits sur le créneau du matin",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 19.5,
         "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel",
-        "visibleSeconds": 20,
-        "visible": "Écran stable sur la liste filtrée en attente des actions annoncées",
+        "visibleSeconds": 19.5,
+        "visible": "Écran stable sur la liste des inscriptions en préparation des actions annoncées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien articulée."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

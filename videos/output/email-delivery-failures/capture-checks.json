@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-10-07T02:25:10.293Z",
+  "checkedAt": "2026-10-13T06:03:36.473Z",
   "actualInitialWorkerStates": true,
   "actualOrganizerReadOnlySettings": true,
-  "actualRetryMailId": "3ieoyUVaOM9fBAu4AnrUfn",
+  "actualRetryMailId": "33oCruSAKgvfuBhQDfyPmw",
   "samePayloadOnRetry": true,
-  "correctedRecipientMailId": "15iQLZChGujjrW2yNXYP0V",
+  "correctedRecipientMailId": "6pdxQUVl7efa9dSkYjX7gN",
   "correctedRecipientMailIsNew": true,
   "oldPayloadUnchanged": true,
-  "campaignId": "cmuxhh8es0017ira5uy4yaaul",
+  "campaignId": "cmv69x99t000y06a5a7ae80o2",
   "onlyFailedResent": true,
   "repeatedResendCreatedNothing": true,
   "permanentFailureStoppedAfterOneAttempt": true,
@@ -16,37 +16,37 @@
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-07T02:22:09.452Z"
-    },
-    {
-      "recipient": "video.delivery.recoverable@example.org",
-      "accepted": true,
-      "responseCode": 250,
-      "timestamp": "2026-10-07T02:23:10.000Z"
+      "timestamp": "2026-10-13T06:00:35.168Z"
     },
     {
       "recipient": "video.delivery.corrected@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-07T02:23:10.030Z"
+      "timestamp": "2026-10-13T06:01:39.898Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-13T06:01:39.935Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-13T06:02:07.843Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 550,
-      "timestamp": "2026-10-07T02:23:41.553Z"
-    },
-    {
-      "recipient": "video.delivery.corrected@example.org",
-      "accepted": true,
-      "responseCode": 250,
-      "timestamp": "2026-10-07T02:23:41.591Z"
+      "timestamp": "2026-10-13T06:02:07.924Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-07T02:23:55.330Z"
+      "timestamp": "2026-10-13T06:02:22.866Z"
     }
   ],
   "audiovisualValidated": false

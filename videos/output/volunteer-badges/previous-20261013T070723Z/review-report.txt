@@ -1,0 +1,22 @@
+STATUS: NOT READY
+ID: VOLUNTEER_BADGES
+Duration: 234.72
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 203, 'musicOnlyWindows': 4, 'smallestGapLu': 14.2, 'largestGapLu': 19.1, 'quietestMusicOnlyLufs': -33.4, 'loudestMusicOnlyLufs': -32.8, 'medianVoiceLufs': -16.6}
+Problems: Last PDF page appears about 4 seconds after it is announced. Empty-filter audit disproved by exact MP4 frame at 113.2 s showing Tous les postes, then correct single Camille badge. All technical/final transcript/music checks pass; subjective timbre observation is not a blocker.
+Source changes: Retained WIP role-selection anchor and Tous les postes recovery. Last PDF-page cue changed to at("Cet aperçu sert à contrôler"). No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.136–21.953 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+all: 24.216–48.614 s; review/all-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+role: 50.876–72.966 s; review/role-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+individual: 75.235–99.193 s; review/individual-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+empty: 101.454–121.372 s; review/empty-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ['Entre 0:09 et 0:13, rupture vocale : une voix féminine remplace temporairement la voix masculine du narrateur.', "À 0:11-0:13, l'action annoncée « choisissons Tous les postes » n'est pas effectuée à l'écran (le filtre reste sur « Loge » avant l'ouverture du document)."]
+colors: 123.636–144.374 s; review/colors-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+fields: 146.638–169.463 s; review/fields-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+print: 171.726–203.773 s; review/print-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:24, la voix annonce la dernière page du PDF, mais celle-ci n'apparaît à l'écran qu'à 00:28."]
+result: 210.78–234.253 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

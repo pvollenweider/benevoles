@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-10-13T05:30:06.355Z",
+  "chapter": "dayof-window",
+  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "observed": {
+    "actualServerTime": true,
+    "fourTemporalCasesVisible": true,
+    "mobileViewportSimulationOnly": true
+  },
+  "finalValidation": false
+}

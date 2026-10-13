@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:45:59.799Z",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "promptSha256": "5fc27af0b5d55ce93ab274ba670ca1fe150acca42c95e9379a929b6ef87434ca",
+  "clipSha256": "8c84d3ed52b5f66da634ca60f010b3d51e6abe9c2f3cae1a669e2bf0c5c3b0da",
+  "scene": "activity",
+  "review": {
+    "heardOpening": "Ouvrons l'activité d'Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.3,
+        "spoken": "Ouvrons l'activité d'Aline.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page de l'historique d'activité d'Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné.",
+        "visibleSeconds": 2.5,
+        "visible": "Liste des lignes d'activité mentionnant le statut/action, la date et l'événement associé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Ce journal ne mesure pas le temps réellement travaillé",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage fixe du journal des inscriptions et présences",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un léger fond musical continu."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

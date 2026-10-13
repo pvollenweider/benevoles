@@ -1,0 +1,38 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "overview",
+    "exitCode": 0
+  },
+  {
+    "chapter": "empty",
+    "exitCode": 0
+  },
+  {
+    "chapter": "needs",
+    "exitCode": 0
+  },
+  {
+    "chapter": "requests",
+    "exitCode": 0
+  },
+  {
+    "chapter": "waiting",
+    "exitCode": 0
+  },
+  {
+    "chapter": "leaders",
+    "exitCode": 0
+  },
+  {
+    "chapter": "full",
+    "exitCode": 0
+  },
+  {
+    "chapter": "action",
+    "exitCode": 0
+  }
+]

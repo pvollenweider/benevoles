@@ -1,0 +1,157 @@
+{
+  "at": "2026-10-13T07:20:23.256Z",
+  "deleted": [
+    {
+      "ID": "0e5W8dGdcDFPbEYlZRUNvn",
+      "MessageID": "outbox-cmv6cpfht007ddma5llkwg5yk@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "lea.giroud@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Ton briefing pour Buvette — Fête du village de Montvert",
+      "Created": "2026-10-13T07:20:01.736Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4748,
+      "Attachments": 0,
+      "Snippet": "Bonjour Léa, Pour Fête du village de Montvert, retrouve-nous quinze minutes avant Buvette (samedi 1… Hello Léa ! 👋 Un message de Fêtes de Montvert au sujet de Fête du village de Montvert. Bo..."
+    },
+    {
+      "ID": "7Ze2LcCy8up1qEXipwsOxs",
+      "MessageID": "outbox-cmv6cpfhr007cdma5m0za45cq@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "chloe.bonvin@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Ton briefing pour Buvette — Fête du village de Montvert",
+      "Created": "2026-10-13T07:20:01.704Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4827,
+      "Attachments": 0,
+      "Snippet": "Bonjour Chloé, Pour Fête du village de Montvert, retrouve-nous quinze minutes avant Buvette (samedi… Hello Chloé ! 👋 Un message de Fêtes de Montvert au sujet de Fête du village de Montvert. ..."
+    },
+    {
+      "ID": "36rWm3MlLFZLHerNzCBHgh",
+      "MessageID": "outbox-cmv6cpfhp007bdma5p8xa9z6d@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "noah.dubois@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Ton briefing pour Buvette — Fête du village de Montvert",
+      "Created": "2026-10-13T07:20:01.674Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4796,
+      "Attachments": 0,
+      "Snippet": "Bonjour Noah, Pour Fête du village de Montvert, retrouve-nous quinze minutes avant Buvette (samedi … Hello Noah ! 👋 Un message de Fêtes de Montvert au sujet de Fête du village de Montvert. Bon..."
+    },
+    {
+      "ID": "0YEf5s04qw6L3NwX2xo4fz",
+      "MessageID": "outbox-cmv6cpfhm007adma5mtjdbj1c@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "gabriel.monnier@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Ton briefing pour Buvette — Fête du village de Montvert",
+      "Created": "2026-10-13T07:20:01.646Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4816,
+      "Attachments": 0,
+      "Snippet": "Bonjour Gabriel, Pour Fête du village de Montvert, retrouve-nous quinze minutes avant Buvette (same… Hello Gabriel ! 👋 Un message de Fêtes de Montvert au sujet de Fête du village de Montvert. ..."
+    },
+    {
+      "ID": "0CtEsA74JBpJCPA1nPG5In",
+      "MessageID": "outbox-cmv6cpfhi0079dma535yyqayy@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "theo.berset@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "organisation.montvert@example.org"
+        }
+      ],
+      "Subject": "Ton briefing pour Buvette — Fête du village de Montvert",
+      "Created": "2026-10-13T07:20:01.607Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4818,
+      "Attachments": 0,
+      "Snippet": "Bonjour Théo, Pour Fête du village de Montvert, retrouve-nous quinze minutes avant Buvette (samedi … Hello Théo ! 👋 Un message de Fêtes de Montvert au sujet de Fête du village de Montvert. B..."
+    }
+  ],
+  "preservedIds": [],
+  "guard": "Exact fixture sender, synthetic recipients and video SMTP username or reserved video identities; individual inspected IDs only"
+}

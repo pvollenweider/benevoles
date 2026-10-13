@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:14.380Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "9078715ec40ea6d5edbbddfc2ffb4b78e1de820d4a1a803b6ceb6833710d1d50",
+  "clipSha256": "73c3f986e0a074b7d424e8c10fc0b440fcf66b6c755fb18b8eecfcaf1e4e0b68",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Si vous coordonnez un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "choisissez le planning par poste",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le lien Planning par poste et ouverture du document",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "La buvette a sa propre page",
+        "visibleSeconds": 5.4,
+        "visible": "Défilement montrant la section Buvette avec son responsable et ses créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Regardons aussi les autres postes pour comprendre le découpage",
+        "visibleSeconds": 11.2,
+        "visible": "Défilement vers le bas affichant le poste Loge",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

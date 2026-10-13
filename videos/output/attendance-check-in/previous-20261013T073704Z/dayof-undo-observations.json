@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-13T05:32:12.067Z",
+  "chapter": "dayof-undo",
+  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "observed": {
+    "actualUndoPersisted": true,
+    "registrationStillActive": true
+  },
+  "finalValidation": false
+}

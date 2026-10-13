@@ -1,0 +1,17 @@
+{
+  "id": "VOLUNTEER_BADGES",
+  "status": "NOT READY",
+  "duration": 234.72,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 203,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 14.2,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -32.8,
+    "medianVoiceLufs": -16.6
+  },
+  "problems": "Last PDF page appears about 4 seconds after it is announced. Empty-filter audit disproved by exact MP4 frame at 113.2 s showing Tous les postes, then correct single Camille badge. All technical/final transcript/music checks pass; subjective timbre observation is not a blocker.",
+  "sourceChanges": "Retained WIP role-selection anchor and Tous les postes recovery. Last PDF-page cue changed to at(\"Cet aper\u00e7u sert \u00e0 contr\u00f4ler\"). No re-film."
+}

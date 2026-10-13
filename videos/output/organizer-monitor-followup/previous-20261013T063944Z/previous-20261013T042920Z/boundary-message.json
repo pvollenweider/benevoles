@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis",
+  "windowStart": 61.68999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 33.3,
+    "wordsHeard": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis"
+  },
+  "onset": 94.98999999999998,
+  "proposedCut": 94.89889600000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

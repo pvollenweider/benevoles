@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant d'imprimer en quantité, regarde la première feuille et la dernière.",
+  "windowStart": 139.726,
+  "result": {
+    "found": true,
+    "startSeconds": 15.07,
+    "wordsHeard": "Avant"
+  },
+  "onset": 154.796,
+  "proposedCut": 154.72645799999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

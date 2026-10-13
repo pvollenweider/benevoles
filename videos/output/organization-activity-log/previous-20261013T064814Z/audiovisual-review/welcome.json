@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:09.052Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "a7086eff1e439067e300b061a5cfe6e46d61b43f060cdd88d904dd159e6aad63",
+  "clipSha256": "5ec1295f6398aadfc4ce09e80dc1f5c05c84af6db29f236e24f7f8c155ac3a46",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand plusieurs personnes préparent une fête",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche",
+        "visibleSeconds": 1,
+        "visible": "Bandeau titre 'Se coordonner avec le journal de l'organisation' affiché sur la page des paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Ouvrons Journal d'activité depuis les paramètres.",
+        "visibleSeconds": 11.3,
+        "visible": "Clic sur l'onglet 'Journal d'activité' et chargement immédiat de la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les noms de notre équipe et les données sont fictifs.",
+        "visibleSeconds": 14.5,
+        "visible": "Liste des actions visible avec des identités fictives (Colette Exemple, Samira Exemple)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Ce journal ne remplace pas celui d'un événement",
+        "visibleSeconds": 22.5,
+        "visible": "Vue d'ensemble stable du journal d'activité de l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

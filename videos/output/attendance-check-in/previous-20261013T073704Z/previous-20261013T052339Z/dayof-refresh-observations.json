@@ -1,0 +1,10 @@
+{
+  "observedAt": "2026-10-06T17:35:20.157Z",
+  "chapter": "dayof-refresh",
+  "productCommit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
+  "observed": {
+    "actualRefresh": true,
+    "otherDeviceMutationDemonstrated": false
+  },
+  "finalValidation": false
+}

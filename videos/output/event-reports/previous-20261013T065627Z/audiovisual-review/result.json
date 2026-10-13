@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:40.933Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "e00985a8b590da6e92e9901c82716311f48b215aba0fe9e4c15b090d950d624e",
+  "clipSha256": "82fe3a43122ae95f559a4aa38ac42e1b81f2b5aa714c1e640e7f34f75458ef35",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons maintenant une feuille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "une feuille adaptée à l'accueil, une autre pour un poste",
+        "visibleSeconds": 1,
+        "visible": "Page Rapports avec les liens Planning par jour et Planning par poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "un planning personnel et une liste de contacts réservée à l'organisation",
+        "visibleSeconds": 4.5,
+        "visible": "Liens Planning individuel et Liste avec téléphones visibles sous les sections de rapports",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Si le planning change, générez une nouvelle version",
+        "visibleSeconds": 12.5,
+        "visible": "Écran de conclusion stable sur la vue d'ensemble des rapports à imprimer ou télécharger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, chaleureuse et parfaitement intelligible tout au long de la conclusion."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

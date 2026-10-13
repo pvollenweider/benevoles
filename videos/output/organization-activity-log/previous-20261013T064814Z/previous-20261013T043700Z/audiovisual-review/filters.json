@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:22.835Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "a03c379f1eed378f57d0aaba5a7d6b11e4acfb66b0df46229ba027638d3984e1",
+  "clipSha256": "11d17ccfa499c93fed7d05d9c685509e523845125333af936bd66ed95876ce1c",
+  "scene": "filters",
+  "review": {
+    "heardOpening": "Filtrer par type permet de se concentrer sur les membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Choisissons Membres",
+        "visibleSeconds": 7.4,
+        "visible": "Le menu déroulant Filtre par type passe sur Membres et la liste s'actualise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "puis Comptes admin",
+        "visibleSeconds": 9.7,
+        "visible": "Sélection de Comptes admin dans le filtre et mise à jour des entrées affichées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Revenons ensuite à Tous les types",
+        "visibleSeconds": 13.5,
+        "visible": "Sélection de Tous les types et réaffichage de l'ensemble des événements du journal",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

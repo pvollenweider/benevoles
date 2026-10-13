@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand un téléphone est renseigné, un lien permet de préparer un",
+  "windowStart": 235.079,
+  "result": {
+    "found": true,
+    "startSeconds": 24.77,
+    "wordsHeard": "Quand un téléphone est renseigné, un lien permet de préparer un"
+  },
+  "onset": 259.849,
+  "proposedCut": 259.38972950000004,
+  "note": "Proposal only; recut then independently audit before capture"
+}

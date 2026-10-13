@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:35:59.570Z",
+  "videoSha256": "791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091",
+  "promptSha256": "c216151cb196f43f367031042589ea45590055522fedb525761766011f65a283",
+  "clipSha256": "fdd83e571273460351260fd76e1662b2ae55b04f2cad079409c81bc9dda4c24b",
+  "scene": "coverage",
+  "review": {
+    "heardOpening": "Commence par regarder la couverture du planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "regarder la couverture du planning",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page 'Où manque-t-il du monde ?' avec le récapitulatif global (30 places pourvues sur 44)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "montrent les créneaux déjà bien remplis, ceux où il reste des places",
+        "visibleSeconds": 4.5,
+        "visible": "Liste des créneaux à compléter avec jauges et mentions des places manquantes (ex. 4/6 manque 2)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "et les personnes placées en liste d’attente",
+        "visibleSeconds": 8.8,
+        "visible": "Défilement vers la section 'Personnes en liste d'attente' montrant 3 personnes en attente pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la présentation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

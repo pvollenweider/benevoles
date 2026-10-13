@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:55.082Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "eefd8d78a0b6b9b443f31947d6b7d3dc46b24fd221ec8688117155dd43c885c3",
+  "clipSha256": "0c39cdefb9f3a4e40446dcac54c05f032115774cf3048182245be4b37a486a3f",
+  "scene": "dayof-checkin",
+  "review": {
+    "heardOpening": "Zoé arrive à l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Marquer présent enregistre sa présence sur ce créneau",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur 'Marquer présent' pour Zoé Exemple qui passe à l'état Présent",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "et le bouton devient Annuler la présence.",
+        "visibleSeconds": 4.1,
+        "visible": "Le bouton de Zoé Exemple affiche 'Annuler la présence'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Rechargeons la page : la marque est conservée.",
+        "visibleSeconds": 10.7,
+        "visible": "La page est rechargée / défile vers le haut, 'Annuler la présence' et 'Présent' restent affichés pour Zoé Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

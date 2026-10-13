@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T05:01:06.999Z",
+  "revalidatedAt": "2026-10-13T05:01:06.999Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "57424b2a23e5c2960f14e13a4c946b67e23819d9ae6722fc3a8725c266d76f73",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "7386006281b671bc74916cba598992de2ce918728a32d0e3aa80d258831762e5",
+      "recognized": "Un prénom visible et le bon poste. Un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapport, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe, il n'est ni un contrôle d'accès, ni une preuve de présence.",
+      "expected": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapports, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
+      "wordErrorRate": 0.015384615384615385,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "all",
+      "audioSha256": "3a25d38e92292ba7b47c0b72b896bc3d3eba132d210fc0ee9191c71225d49e57",
+      "recognized": "Gardons tous les postes et tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires, elle n'a qu'un badge. Regardons la première feuille, puis la suivante. Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
+      "expected": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires : elle n'a qu'un badge. Regardons la première feuille puis la suivante. Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "role",
+      "audioSha256": "7e186f0158195876dc045433a639a909d32fcc63e3114042cf9265fc83e0c5a9",
+      "recognized": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce poste. Les personnes retenues ont une inscription confirmée à la buvette. Comparons le badge de Léa avec sa version complète. Ses autres postes ne figurent plus dans cette version filtrée. Le filtre change le contenu généré, pas ses inscriptions. Si tu veux son badge pour toute la fête, reviens à tous les postes avant de le refaire.",
+      "expected": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce poste. Les personnes retenues ont une inscription confirmée à la buvette. Comparons le badge de Léa avec sa version complète : ses autres postes ne figurent plus dans cette version filtrée. Le filtre change le contenu généré, pas ses inscriptions. Si tu veux son badge pour toute la fête, reviens à Tous les postes avant de le refaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "individual",
+      "audioSha256": "2f4ab579071f27b05a4e00e0fcbeb1ef47ca50acb8f3c14864985d52366d121c",
+      "recognized": "Un badge perdu ? Choisis une personne dans Bénévoles, Réimpression. Nous avons deux Camille Berger. L'adresse affichée dans la sélection permet de les distinguer, elle n'est pas imprimée sur le badge. Attention aux filtres de postes encore actifs : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
+      "expected": "Un badge perdu ? Choisis une personne dans Bénévole, réimpression. Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
+      "wordErrorRate": 0.07352941176470588,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "empty",
+      "audioSha256": "9748302ed092f763f3cf74c3cc03e6f4864f5ee7e8f3bc3d3eef2fda9808bfb0",
+      "recognized": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge. Voici le vrai message de l'application. Ce n'est pas un problème d'imprimante à contourner. Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document. Le résultat doit correspondre à la personne choisie et à ses confirmations, pas simplement à un nom ressemblant.",
+      "expected": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge. Voici le vrai message de l'application. Ce n'est pas un problème d'imprimante à contourner. Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document. Le résultat doit correspondre à la personne choisie et à ses confirmations, pas simplement à un nom ressemblant.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "colors",
+      "audioSha256": "f8954bed0a5359574835dc5942dd1754605802daccb6bbf4edc4a8463f330560",
+      "recognized": "Le bandeau peut prendre la couleur du poste, celle de l'événement ou rester noir et blanc. Générons les trois versions pour les comparer. Avec plusieurs postes, le bandeau ne devient pas multicolore. Une couleur de poste est retenue avec la couleur d'événement comme solution de repli. Pour une impression simple, le noir et blanc est pratique. Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
+      "expected": "Le bandeau peut prendre la couleur du poste, celle de l'événement ou rester noir et blanc. Générons les trois versions pour les comparer. Avec plusieurs postes, le bandeau ne devient pas multicolore : une couleur de poste est retenue, avec la couleur d'événement comme solution de repli. Pour une impression simple, le noir et blanc est pratique. Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "fields",
+      "audioSha256": "2ae3fb0b13b6adf3f08519a9cf1873c0f188388ff9cc4a161c1540e97f9d96af",
+      "recognized": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux. Décochons les deux cases, générons et regardons ce qui disparaît. Le prénom reste. Remettons-les ensuite. Léa a cinq créneaux. Le badge montre au plus quatre lignes puis indique les autres créneaux. Il ne remplace donc pas son planning individuel. Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
+      "expected": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux. Décochons les deux cases, générons et regardons ce qui disparaît : le prénom reste. Remettons-les ensuite. Léa a cinq créneaux : le badge montre au plus quatre lignes puis indique les autres créneaux. Il ne remplace donc pas son planning individuel. Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "print",
+      "audioSha256": "5ffb16e72fe324df15da8beae0d03e028866d54752bf61c0ea28e0329ea7bb3c",
+      "recognized": "Avant d'imprimer en quantité, regarde la première feuille et la dernière. Voici le document imprimable. Deux colonnes, cinq rangées et les repères de découpe. Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs. La boîte d'impression du navigateur n'est pas filmée ici. Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle. Tu peux aussi enregistrer en PDF. Regardons le vrai PDF obtenu, avec sa première puis sa dernière page. Cet aperçu sert à contrôler le fichier, ce n'est pas une boîte d'impression simulée. Une première feuille d'essai coûte moins cher qu'une série à refaire.",
+      "expected": "Avant d'imprimer en quantité, regarde la première feuille et la dernière. Voici le document imprimable : deux colonnes, cinq rangées et les repères de découpe. Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs. La boîte d'impression du navigateur n'est pas filmée ici. Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle ; tu peux aussi enregistrer en PDF. Regardons le vrai PDF obtenu, avec sa première puis sa dernière page. Cet aperçu sert à contrôler le fichier, ce n'est pas une boîte d'impression simulée. Une première feuille d'essai coûte moins cher qu'une série à refaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "b6f2903afadf93855eb522516fa50d9d8cf6a20d4cc203ff9fa5b3e970a78698",
+      "recognized": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge. Ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe, et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+      "expected": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

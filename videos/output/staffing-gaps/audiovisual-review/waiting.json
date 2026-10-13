@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:34:59.291Z",
+  "videoSha256": "1618adc4a2fe6fe129c0628893d4490e26f446cc2156fe77f1a72ba82bf9706c",
+  "promptSha256": "61536220d3ccee2026d48825753cf92ffe96c2964ef53f5604dd1aacaf368d1c",
+  "clipSha256": "dcdd7bfe796e43efecdb84e82f5146a85384acc1c33c7ccb2039d533d832cbe0",
+  "scene": "waiting",
+  "review": {
+    "heardOpening": "Dans Personnes en liste d'attente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place.",
+        "visibleSeconds": 0,
+        "visible": "Section 'Personnes en liste d'attente' visible avec les horaires correspondants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément.",
+        "visibleSeconds": 6,
+        "visible": "Ligne Buvette 14:00-18:00 affichant 4/4 et 3 personnes en attente.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "En cliquant, vous retrouvez les noms et leurs positions dans la liste.",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page des inscriptions avec les noms et le statut Liste d'attente position 1.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+        "visibleSeconds": 20,
+        "visible": "Retour à la vue du rapport 'Où manque-t-il du monde ?'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,26 @@
+STATUS: NOT READY
+ID: REGISTRATION_MONITOR_FOLLOWUP
+Duration: 191.04
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 162, 'musicOnlyWindows': 3, 'smallestGapLu': 15.4, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': -33.9, 'loudestMusicOnlyLufs': -33.2, 'medianVoiceLufs': -16.3}
+Problems: Filters chapter mentions shift/status filtering but demonstrates only role and text search; all validation, final audio and music checks pass.
+Source changes: Retained WIP requests anchor; added sentence-anchored demonstration of real shift and pending-request filters for a future take. No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 791eed59d7a46d14a30fa6db2e6f3a0f65ba99253a4ce17d18932b6e83fa9091
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+overview: 1.12–12.97 s; review/overview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+coverage: 16.303–30.027 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+registrations: 31.675–48.038 s; review/registrations-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+requests: 49.654–63.891 s; review/requests-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+filters: 65.539–77.39 s; review/filters-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:02, le filtrage par créneau ou par statut est énoncé mais n'est pas manipulé à l'écran (seul le filtre par poste puis la recherche textuelle sont démontrés)."]
+actions: 77.865–90.665 s; review/actions-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+audience: 94.001–108.089 s; review/audience-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+message: 108.541–121.767 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+channels: 122.992–135.584 s; review/channels-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+reminders: 137.222–148.105 s; review/reminders-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+reports: 151.453–161.262 s; review/reports-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+history: 162.868–178.185 s; review/history-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+done: 178.637–190.602 s; review/done-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-06T17:33:05.363Z",
+  "checkedAt": "2026-10-13T07:42:15.677Z",
   "audiovisualValidation": false,
   "activeRows": 5,
   "people": 4,
@@ -7,7 +7,7 @@
   "absentRows": 2,
   "cancellation": {
     "registrationId": "video-dayof-registration-old-4",
-    "retainedCheckIn": "2026-10-06T17:32:08.371Z",
+    "retainedCheckIn": "2026-10-13T07:41:21.676Z",
     "excludedFromActiveExport": true
   },
   "noWorkedHoursCalculated": true

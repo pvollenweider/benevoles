@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par",
+  "windowStart": 54.85300000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.24,
+    "wordsHeard": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par"
+  },
+  "onset": 85.093,
+  "proposedCut": 84.8525415,
+  "note": "Proposal only; recut then independently audit before capture"
+}

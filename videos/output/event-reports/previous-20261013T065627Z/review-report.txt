@@ -1,0 +1,23 @@
+STATUS: NOT READY
+ID: EVENT_REPORTS
+Duration: 311.24
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 268, 'musicOnlyWindows': 12, 'smallestGapLu': 14.1, 'largestGapLu': 19.6, 'quietestMusicOnlyLufs': -33.8, 'loudestMusicOnlyLufs': -32.7, 'medianVoiceLufs': -16.3}
+Problems: Answer-summary CSV download and printable-view opening occur early. Product layout bug: Export complet PDF page 1 has only Planning heading; timeline begins page 2. #922 null not reproduced. All validation/final transcript/music checks pass; subjective voice flag is not a blocker.
+Source changes: Retained WIP morning-report anchor; CSV cue now at("Vous pouvez télécharger cette synthèse"), printable cue at("Regardons ce vrai document"). No re-film or product edit.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: 52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.263–23.086 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+complete: 25.351–52.087 s; review/complete-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+day: 54.352–79.465 s; review/day-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+role: 81.735–107.406 s; review/role-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+individual: 113.629–143.836 s; review/individual-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+attendance: 150.091–178.377 s; review/attendance-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+contacts: 180.641–207.406 s; review/contacts-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+answers: 209.667–241.905 s; review/answers-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ['00:07 - Changement soudain de voix (voix masculine intervenant brièvement entre 00:07 et 00:10 au milieu de la voix féminine principale).']
+print: 244.168–273.565 s; review/print-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+result: 276.987–304.731 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

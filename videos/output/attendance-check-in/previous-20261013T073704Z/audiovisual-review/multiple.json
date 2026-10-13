@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:29.442Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "5e20c59e9f1479ee96512d51811bc9b3c9a8ffbc22d6ea50564168cf53ccdc78",
+  "clipSha256": "ae131ee733e9d99c0a0e52640af3f4d4a3d1bc09542e6bdb8a27c7156b53b7f3",
+  "scene": "multiple",
+  "review": {
+    "heardOpening": "Une personne peut aider sur plusieurs horaires.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Recherchons Léa pour retrouver ses deux inscriptions.",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie dans la barre de recherche et affichage des deux lignes de Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Elle aide le matin, puis à la buvette.",
+        "visibleSeconds": 4.5,
+        "visible": "Les colonnes Créneau indiquent Buvette de midi et Accueil du matin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas.",
+        "visibleSeconds": 15,
+        "visible": "La ligne du matin affiche le statut Présent alors que la ligne buvette n'a pas de pointage",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

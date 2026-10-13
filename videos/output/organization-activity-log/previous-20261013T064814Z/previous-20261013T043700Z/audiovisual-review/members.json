@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:11.864Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "67c245ad3c49cf041f196ac3ba91383dee733ae309f73acb32b2bb8ed0aa6ef2",
+  "clipSha256": "4cdfeb98cf77c66a7d022c7cc493ad97fa92d9c45a1222bd23a23271153b449f",
+  "scene": "members",
+  "review": {
+    "heardOpening": "Voici une création de membre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Voici une création de membre, puis une modification et une désactivation.",
+        "visibleSeconds": 2.5,
+        "visible": "Le filtre par type est réglé sur « Membres », affichant les lignes de création, modification et désactivation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "ouvrons sa fiche et son activité.",
+        "visibleSeconds": 11.8,
+        "visible": "Affichage de la page « Activité de Aline Exemple 01 » avec le détail de ses inscriptions et modifications.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Nous pouvons ensuite revenir au journal général.",
+        "visibleSeconds": 18.2,
+        "visible": "Retour à la page « Journal d'activité » de l'organisation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -20,9 +20,19 @@ export async function verifyLastMinuteReviewFixture(db: PrismaClient, directory:
   if (events.length !== 1 || events[0].id !== "video-last-minute-event" || events[0].title !== "Fête des imprévus — démonstration" || events[0].shifts.length !== 5 || events[0].shifts.some(shift => !/^video-last-minute-shift-[0-4]$/.test(shift.id)) || events[0].registrations.length !== 9 || events[0].registrations.some(reg => !people.some(person => person.id === reg.volunteerId))) throw new Error("Last-minute event is not exclusively synthetic")
   const capture = JSON.parse(await readFile(path.join(directory, "capture-checks.json"), "utf8"))
   const mail = JSON.parse(await readFile(path.join(directory, "mail-checks.json"), "utf8"))
-  if (!capture.offerConfirmed || !capture.logisticsFilled || !capture.priorAttendancePreserved || !capture.actualCausalStory || !mail.schedulePendingExcluded || !Array.isArray(mail.messages) || mail.messages.length !== 6) throw new Error("Current capture and SMTP evidence missing")
+  if (!capture.offerConfirmed || !capture.logisticsFilled || !capture.priorAttendancePreserved || !capture.actualCausalStory || !mail.schedulePendingExcluded || !Array.isArray(mail.messages) || mail.messages.length < 4) throw new Error("Current capture and SMTP evidence missing")
   const outbox = await db.notificationOutbox.findMany({ where: { organizationId } })
-  if (outbox.length !== 6 || outbox.some(row => row.status !== "sent" || !/^video\.last-minute\.person\.[0-5]@example\.org$/.test(openPayload(row.payload).recipient.email ?? ""))) throw new Error("Last-minute notification recipient differs")
+  if (!outbox.length || outbox.some(row => (row.status !== "sent" && !(row.status === "cancelled" && row.lastError === "limit:recipient_per_hour")) || !/^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/.test(openPayload(row.payload).recipient.email ?? ""))) throw new Error("Last-minute notification recipient differs")
+  // Review permission is separate from delivery readiness: every shown notification
+  // must be received, and suppressed rows must remain explicit in the evidence.
+  if (mail.messages.length !== outbox.filter(row => row.status === "sent").length || outbox.filter(row => row.status !== "sent").some(row => !mail.suppressed?.some((item: { id: string; status: string; reason: string }) => item.id === row.id && item.status === row.status && item.reason === row.lastError))) throw new Error("Notification evidence does not account for every outbox row")
+  const shown = [
+    ["waitlist_offered", "video.last-minute.person.1@example.org"],
+    ["shift_modified", "video.last-minute.person.4@example.org"],
+    ["shift_cancelled", "video.last-minute.person.0@example.org"],
+    ["shift_cancelled", "video.last-minute.person.5@example.org"],
+  ]
+  if (shown.some(([kind, recipient]) => mail.messages.filter((item: { kind: string; recipient: string }) => item.kind === kind && item.recipient === recipient).length !== 1)) throw new Error("Shown notifications must have actual SMTP receipts")
   // Mailpit's sidebar can display other local messages. Reject non-demo domains
   // throughout this local mailbox, not just the six emails opened in the video.
   const response = await fetch("http://localhost:48026/api/v1/messages?limit=1000", { signal: AbortSignal.timeout(10_000) })
@@ -31,5 +41,5 @@ export async function verifyLastMinuteReviewFixture(db: PrismaClient, directory:
   if (!Array.isArray(inbox.messages) || (inbox.messages_count && inbox.messages_count > inbox.messages.length)) throw new Error("Local mailbox inventory incomplete")
   if (inbox.messages.some(message => message.To.some(recipient => !/@(?:example\.(?:org|com)|localhost)$/.test(recipient.Address)))) throw new Error("Local mailbox contains a non-demo recipient")
   const mailIds = new Set(inbox.messages.map(message => message.ID))
-  if (mail.messages.some((message: { mailId: string; recipient: string }) => !mailIds.has(message.mailId) || !/^video\.last-minute\.person\.[0-5]@example\.org$/.test(message.recipient))) throw new Error("Received classroom message evidence differs")
+  if (mail.messages.some((message: { mailId: string; recipient: string }) => !mailIds.has(message.mailId) || !/^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/.test(message.recipient))) throw new Error("Received classroom message evidence differs")
 }

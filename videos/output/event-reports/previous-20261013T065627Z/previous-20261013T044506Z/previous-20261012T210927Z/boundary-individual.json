@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois",
+  "windowStart": 69.334,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Pour Léa le planning individuel regroupe ses cinq créneaux sur trois"
+  },
+  "onset": 99.73400000000001,
+  "proposedCut": 99.3341875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

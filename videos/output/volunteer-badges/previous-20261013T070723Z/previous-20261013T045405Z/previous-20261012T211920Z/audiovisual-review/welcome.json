@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:53:17.740Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "83c62e99f199de38e030e3e4f7a5f96717a2dc403ea3acbe132be2f225b3379d",
+  "clipSha256": "490ef9e466474dc41901b1fb672a1aa6ac585a7f5170978c07612c5bfd0a21ee",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un prénom visible et le bon poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Depuis Rapports, ouvrons les options des badges",
+        "visibleSeconds": 6,
+        "visible": "Défilement vers le bas révélant la section et les réglages des Badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Nous allons préparer une série, réimprimer une seule personne",
+        "visibleSeconds": 6.5,
+        "visible": "Options visibles avec listes déroulantes de sélection globale et individuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Ce badge identifie un membre de l'équipe",
+        "visibleSeconds": 15.5,
+        "visible": "Affichage statique des paramètres d'édition de badges",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et conforme au ton attendu."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

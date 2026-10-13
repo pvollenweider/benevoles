@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand le contenu vous convient, cliquons sur Générer et imprimer l'attestation.",
+  "windowStart": 165.53200000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 24.9,
+    "wordsHeard": "Quand le contenu vous convient"
+  },
+  "onset": 190.43200000000004,
+  "proposedCut": 190.0517295,
+  "note": "Proposal only; recut then independently audit before capture"
+}

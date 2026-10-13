@@ -1004,8 +1004,8 @@
         "organisateur"
       ],
       "feature": "Journal d'activité de l'organisation",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -1077,8 +1077,8 @@
         "organisateur"
       ],
       "feature": "Rapports imprimables",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1100,8 +1100,8 @@
         "organisateur"
       ],
       "feature": "Badges des bénévoles",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1176,8 +1176,8 @@
         "organisateur"
       ],
       "feature": "Où manque-t-il du monde ?",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1396,8 +1396,8 @@
         "organisateur"
       ],
       "feature": "Suivi de livraison des emails",
-      "updatedAt": "2026-10-06",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "avance"
     },
     {

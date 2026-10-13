@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans Personnes en liste d'attente, vous repérez les horaires où des",
+  "windowStart": 89.38600000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 34.88,
+    "wordsHeard": "Dans Personnes en liste d'attente, vous repérez les horaires où des"
+  },
+  "onset": 124.26600000000002,
+  "proposedCut": 123.97535400000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

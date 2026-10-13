@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:18:41.631Z",
+  "videoSha256": "faaf4f3d5278186fd7b3e88a14ac6818ef1708720e7f4d562fb8a3f10c14b74e",
+  "promptSha256": "018ca1a9503eb4e8d9303cbe43dcd923eb9331b4b6186df12dd198aa240f6f9e",
+  "clipSha256": "5e778d1a1cf1239ed66ce46d1199c7c22490e2198d602c89cd51f6cfdc6f29ce",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Avant d'imprimer toute la série, vérifiez les pages réellement produites.",
+        "visibleSeconds": 0,
+        "visible": "Page Synthèse des réponses avec le bouton Imprimer en haut à droite.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression.",
+        "visibleSeconds": 5,
+        "visible": "Aperçu du PDF réel affiché (planning individuel de Léa Giroud, page 4).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Voici le planning de Léa : regardons la frise, les marges, puis les consignes plus bas.",
+        "visibleSeconds": 15.5,
+        "visible": "Défilement vers le bas montrant la frise puis les consignes en bas de page.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "La dernière passe sur la page suivante.",
+        "visibleSeconds": 18,
+        "visible": "Passage à la page 5 du PDF montrant la suite des consignes horaires.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et pédagogique, bien calée avec le défilement du document."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

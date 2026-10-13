@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:34:40.380Z",
+  "videoSha256": "fba952d64d0a1ac00df3da01d5a8f5631c372328dc50a9e1f2dedc539ad8eb4b",
+  "promptSha256": "82fcfa717afa1f73e3b485b0b81fc6ca69fb360542dece21be61f9032968ba22",
+  "clipSha256": "fe94a659055d72c67ed94005ed6f71926c5f8588cf25b3148dd3715ab68a8a07",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Téléchargeons maintenant le véritable export des présences",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Téléchargeons maintenant le véritable export des présences",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page de lecture du CSV téléchargé avec le tableau des présences",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le",
+        "visibleSeconds": 7,
+        "visible": "Défilement horizontal dévoilant les colonnes Présent et Pointé le avec les lignes correspondantes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone",
+        "visibleSeconds": 19.2,
+        "visible": "Affichage de la vue mobile de la page Jour J pour le pointage terrain",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

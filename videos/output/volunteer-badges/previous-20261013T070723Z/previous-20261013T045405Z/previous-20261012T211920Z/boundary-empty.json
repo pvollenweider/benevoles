@@ -1,0 +1,12 @@
+{
+  "anchor": "Si tu combines un poste et une personne qui n'y est",
+  "windowStart": 76.25399999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.3,
+    "wordsHeard": "Si tu combines un poste et une personne qui n'y est"
+  },
+  "onset": 91.55399999999999,
+  "proposedCut": 91.25354200000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:53:08.368Z",
+  "videoSha256": "52d4a850d82c2b53a3eb073596774370de5fd792223da8e949746a772238846b",
+  "promptSha256": "7929a8509657d0bf39f8029958e38d1a97cfb68771416f7d57809d141b6b20a9",
+  "clipSha256": "c104dfc0f9644c8f8cbaa66946222e49ad85012699802e16f2e5130465c7e8fd",
+  "scene": "day",
+  "review": {
+    "heardOpening": "Pour l'accueil, le planning par jour est plus direct.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "le planning par jour est plus direct",
+        "visibleSeconds": 1.9,
+        "visible": "Clic sur le lien Planning par jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Voici la première journée",
+        "visibleSeconds": 3.3,
+        "visible": "Affichage de la page Planning par jour avec Samedi 10 octobre 2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis la suivante",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers le bas affichant Dimanche 11 octobre 2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Repérons l'accueil du matin et la buvette",
+        "visibleSeconds": 11,
+        "visible": "Remontée sur la page et survol de la ligne Accueil du matin puis de la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

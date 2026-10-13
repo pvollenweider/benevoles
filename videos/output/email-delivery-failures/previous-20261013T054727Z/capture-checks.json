@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-10-07T02:25:10.293Z",
+  "actualInitialWorkerStates": true,
+  "actualOrganizerReadOnlySettings": true,
+  "actualRetryMailId": "3ieoyUVaOM9fBAu4AnrUfn",
+  "samePayloadOnRetry": true,
+  "correctedRecipientMailId": "15iQLZChGujjrW2yNXYP0V",
+  "correctedRecipientMailIsNew": true,
+  "oldPayloadUnchanged": true,
+  "campaignId": "cmuxhh8es0017ira5uy4yaaul",
+  "onlyFailedResent": true,
+  "repeatedResendCreatedNothing": true,
+  "permanentFailureStoppedAfterOneAttempt": true,
+  "smtpAttemptsDuringCapture": [
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-07T02:22:09.452Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-07T02:23:10.000Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-07T02:23:10.030Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "responseCode": 550,
+      "timestamp": "2026-10-07T02:23:41.553Z"
+    },
+    {
+      "recipient": "video.delivery.corrected@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-07T02:23:41.591Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": true,
+      "responseCode": 250,
+      "timestamp": "2026-10-07T02:23:55.330Z"
+    }
+  ],
+  "audiovisualValidated": false
+}

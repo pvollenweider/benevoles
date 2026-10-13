@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:39:56.641Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "b2bfd779867dcf8c9ce5fe0e75e86b072e111a19a5df0b0a1abc390247f39633",
+  "clipSha256": "26ed93a625f9f009abd29c71ff7c352ee16d2d4423bedcfc9f55e410ef717c34",
+  "scene": "dayof-phone",
+  "review": {
+    "heardOpening": "Quand un téléphone est renseigné",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "un lien permet de préparer un appel",
+        "visibleSeconds": 2,
+        "visible": "Liens téléphoniques cliquables affichés sous chaque participant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Voici celui de Zoé",
+        "visibleSeconds": 6,
+        "visible": "Fiche de Zoé Exemple affichée avec son numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Le contact du créneau peut aussi figurer sur sa carte",
+        "visibleSeconds": 8.5,
+        "visible": "Mention Contact du créneau avec nom et téléphone visible sur la carte Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et articulation fluide sur fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

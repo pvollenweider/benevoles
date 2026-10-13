@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T21:08:39.324Z",
+  "videoSha256": "d71b0fef8e479292088c6249f4db961793844d4f3d6ec5498c68efd07d9aee71",
+  "promptSha256": "6e72b356ad3d49ee0b20a9f57a20a3ee4bc6c10c77b8f893e06366616f0944d0",
+  "clipSha256": "d9b9a6e03dc448447d71be2a0e4b76486ef9406622b63518c54389734f3459b0",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons retrouvé les actions sur les membres et l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Nous avons retrouvé les actions sur les membres et l'équipe",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page Journal d'activité avec l'historique des actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Il donne des repères quand plusieurs personnes organisent ensemble",
+        "visibleSeconds": 17.8,
+        "visible": "Transition vers la page Activité de Aline Example 01 dans l'onglet Membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.1,
+        "spoken": "revenons à la fiche ou aux paramètres concernés pour faire la bonne correction",
+        "visibleSeconds": 24.1,
+        "visible": "Affichage maintenu sur la fiche d'activité du membre pour illustrer le retour aux détails",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, avec un fond musical discret et équilibré."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

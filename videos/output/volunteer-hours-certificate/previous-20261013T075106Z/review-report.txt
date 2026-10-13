@@ -1,0 +1,21 @@
+STATUS: NOT READY
+ID: VOLUNTEER_HOURS_CERTIFICATE
+Duration: 310.68
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 252, 'musicOnlyWindows': 30, 'smallestGapLu': 12.6, 'largestGapLu': 19.5, 'quietestMusicOnlyLufs': -34.6, 'loudestMusicOnlyLufs': -32.9, 'medianVoiceLufs': -16.4}
+Problems: Certificate settings/added-column explanations occur with preview off screen; checkbox late; print action early. Product layout bug: admin navigation printed atop certificate PDF. Dates French; totals/real PDF/CSV, validation/final transcript/music pass.
+Source changes: Added sentence anchors for certificate navigation, dates, note, checkbox and print; explicitly scroll real preview and total into view. Added explicit strict stale-ledger recovery for exact current hours fixture; prior ledger retained. Cache lacked matching fingerprint metadata, so continuous narration regenerated, aligned and audited. No re-film.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: False
+MP4 frame evidence SHA256: 391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+hours-list: 3.424–31.706 s; review/hours-list-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+last-participation: 33.969–66.526 s; review/last-participation-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+activity: 68.786–92.822 s; review/activity-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+period-export: 95.081–131.473 s; review/period-export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 7; reported issues []
+certificate-settings: 133.738–174.083 s; review/certificate-settings-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À partir de 00:19, la voix décrit les éléments de l'aperçu (nom, organisation, détail, logo), mais l'écran ne défile pas vers le bas et ces éléments restent coupés hors champ.", 'La saisie des dates a lieu entre 00:03 et 00:05, plusieurs secondes avant que la consigne ne soit énoncée (00:07).']
+certificate-presence: 176.347–204.813 s; review/certificate-presence-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:05, la voix demande de cocher l'option 'Inclure les heures planifiées sans présence saisie', mais l'écran ne défile vers les réglages qu'à 00:12 où la case est déjà cochée sans action de clic.", "À partir de 00:16, les six heures attestées et deux heures planifiées annoncées sont invisibles car le bas de page contenant le tableau de l'attestation n'est pas affiché à l'écran."]
+certificate-pdf: 207.078–241.177 s; review/certificate-pdf-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["Dès 00:01, l'affichage bascule directement sur le document PDF final alors que l'action « cliquons sur Générer et imprimer l'attestation » n'est prononcée qu'à partir de 00:02."]
+event-summary: 243.439–277.133 s; review/event-summary-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

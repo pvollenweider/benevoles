@@ -1,0 +1,12 @@
+{
+  "anchor": "Le résultat, c’est un suivi simple : voir les manques, contacter",
+  "windowStart": 126.71899999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "Le résultat, c’est un suivi simple : voir les manques, contacter"
+  },
+  "onset": 157.21899999999997,
+  "proposedCut": 156.718521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

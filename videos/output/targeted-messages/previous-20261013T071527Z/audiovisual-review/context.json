@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:12:31.267Z",
+  "videoSha256": "47b49d8ab07e62e4f2e46d786cf03f22d0e5f980b48c742ec1837d0fb851f3c7",
+  "promptSha256": "41a9d7f68d35eea1b4b99147ef12a1791d58721a8028b59f3c752df09d48e6b0",
+  "clipSha256": "c0b21f3800a4467616c79e921c7c8975bdba68c9f589a01d6ec75285f803da18",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Un modèle contenant créneau ne convient pas",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "l'erreur explique pourquoi le texte n'est pas prêt à partir",
+        "visibleSeconds": 5,
+        "visible": "L'encadré d'erreur rouge sous le champ de message explique la restriction sur les variables",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Revenons à un seul créneau",
+        "visibleSeconds": 12.5,
+        "visible": "Sélection de l'option radio « Les bénévoles d'un créneau » avec le créneau Buvette affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "adapter le modèle avec une consigne générale et garder seulement prénom et événement",
+        "visibleSeconds": 14,
+        "visible": "Affichage stable du formulaire de destinataires et du modèle de briefing",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine claire, fluide et posée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -25,3 +25,5 @@ La capacité globale comprend les créneaux fermés, mais le total des manques n
 Source du rapport examinée, narration de neuf chapitres générée, seed exécuté et vérifié avec le helper réel, recorder préparé ; TypeScript passe. Le 5 octobre 2026, un contrôle navigateur en lecture seule a confirmé que les quatre liens de démonstration (Buvette soir, Buvette avec attentes, Navette avec demandes, Photos samedi) existent chacun exactement une fois. Le recorder utilise leur format réel HH:MM, distinct du format oral du sélecteur de créneau.
 
 Le contrôle indépendant de narration est interrompu par HTTP 402 (crédits prépayés Gemini épuisés). Capture et MP4 restent à produire ; aucun audio nouveau n'est présenté comme contrôlé.
+
+Révision batch 14 : seuls les impératifs des chapitres overview, requests et full changent : « lisez aussi les attentes », « Suivez le lien des demandes… puis examinez leurs informations », « Lisez donc aussi les mentions ». Tous les autres mots du transcript sont conservés.

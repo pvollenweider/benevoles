@@ -1,0 +1,34 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "states",
+    "exitCode": 0
+  },
+  {
+    "chapter": "reason",
+    "exitCode": 0
+  },
+  {
+    "chapter": "retry",
+    "exitCode": 0
+  },
+  {
+    "chapter": "address",
+    "exitCode": 0
+  },
+  {
+    "chapter": "campaign",
+    "exitCode": 1
+  },
+  {
+    "chapter": "retention",
+    "exitCode": 0
+  },
+  {
+    "chapter": "result",
+    "exitCode": 0
+  }
+]

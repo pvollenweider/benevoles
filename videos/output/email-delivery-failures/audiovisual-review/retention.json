@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-07T02:27:34.294Z",
-  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
+  "reviewedAt": "2026-10-13T06:05:19.751Z",
+  "videoSha256": "52afb2df03a76906c093d60412ba84c9d62704e905be18a7149155e30c7a0ba9",
   "promptSha256": "db4ef558e5ec6c4f4f9682cf65490ab089dd10ec7fc4c8740327914cee3025a5",
-  "clipSha256": "8fc6e1fbe36bc415b56b0a3d8ba1acadb70b7d029f5aebbe521c203cc97e44b0",
+  "clipSha256": "9c2cd30840b2a1145d6325bcfb4d353b2b52e49ea06eb0e1c0580c28a74c687c",
   "scene": "retention",
   "review": {
     "heardOpening": "Le suivi de la file est volontairement récent",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Le suivi de la file est volontairement récent",
+        "spoken": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés",
         "visibleSeconds": 0.5,
-        "visible": "Page des paramètres affichant la liste des emails récents",
+        "visible": "Page Paramètres > Emails affichant les compteurs et la mention d'effacement nocturne",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 9.2,
         "spoken": "La page montre les deux cents lignes les plus récentes",
-        "visibleSeconds": 9,
-        "visible": "Tableau de suivi des emails toujours affiché",
+        "visibleSeconds": 9.2,
+        "visible": "Tableau récapitulatif des emails récents affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 12.3,
         "spoken": "L'historique des messages ciblés est différent et reste douze mois",
-        "visibleSeconds": 14,
-        "visible": "Défilement vers la section Messages envoyés dans Événements",
+        "visibleSeconds": 13.5,
+        "visible": "Navigation vers la page Écrire aux bénévoles avec la section Messages envoyés et mention de conservation de 12 mois",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation conforme."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les explications visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

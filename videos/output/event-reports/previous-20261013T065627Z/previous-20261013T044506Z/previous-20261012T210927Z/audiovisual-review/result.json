@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:10:14.259Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "0ca313108a795736b95dade46dfa60c4fe6cacae05616799f5eb4985e515b273",
+  "clipSha256": "c5997785ea2d95bea58504a52c4f7e70a35e8cccdc8b2558ff6734f9b8fc97b7",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons maintenant une feuille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "une feuille adaptée à l'accueil",
+        "visibleSeconds": 2,
+        "visible": "Page des rapports avec la liste des documents imprimables",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "une autre pour un poste, un planning personnel",
+        "visibleSeconds": 4,
+        "visible": "Liens vers Planning par poste et Planning individuel à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "une liste de contacts réservée à l'organisation",
+        "visibleSeconds": 6,
+        "visible": "Section Pour les organisateurs seulement visible après léger défilement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

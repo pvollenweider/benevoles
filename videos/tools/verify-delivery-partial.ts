@@ -13,7 +13,6 @@ async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   Object.assign(process.env, { SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
   const { prisma: db } = await import("../../src/lib/prisma")
-  const { deliverOutbox } = await import("../../src/lib/notifications/outbox")
   const fixture = await controlledSmtp()
   const browser = await launchVideoBrowser(chromium)
   const base = "http://localhost:43106", eventId = "video-delivery-event", memberId = "video-delivery-member-recoverable", regId = "video-delivery-registration-partial"
@@ -47,18 +46,10 @@ async function main() {
     }
     assert.equal(rows.length, 2)
     const successful = rows.find(row => row.status === "sent")
-    const failed = rows.find(row => row.status === "pending" && row.attempts === 1)
+    const failed = rows.find(row => row.status === "failed" && row.attempts === 1)
     assert(successful && failed)
-    const transitions: { now: string; attempts: number; status: string }[] = []
-    for (let n = 1; n < 6; n++) {
-      const before = await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })
-      const now = new Date(Math.max(Date.now(), before.nextAttemptAt.getTime()) + 1)
-      await deliverOutbox({ ids: [failed.id], now })
-      const after: (typeof rows)[number] = await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })
-      assert.equal(after.attempts, n + 1)
-      transitions.push({ now: now.toISOString(), attempts: after.attempts, status: after.status })
-    }
-    assert.equal((await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })).status, "failed")
+    assert.equal(failed.attempts, 1, "A permanent SMTP rejection stops after one attempt")
+    assert(failed.lastError?.startsWith("smtp:rejected_permanent:"))
     await page.goto(`${base}/admin/events/${eventId}/message`)
     const article = page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) })
     await article.getByRole("heading", { name: "Formation — échec partiel", exact: true }).waitFor()
@@ -95,10 +86,10 @@ async function main() {
     assert.equal(final.status, "sent")
     const stillSuccessful = await db.notificationOutbox.findUniqueOrThrow({ where: { id: successful.id } })
     assert.equal(stillSuccessful.sentAt?.toISOString(), successful.sentAt?.toISOString())
-    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 6)
+    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 1)
     assert.equal(fixture.attempts.filter(attempt => attempt.accepted).length, 2)
-    await writeFile("videos/output/email-delivery-failures/partial-details.json", JSON.stringify({ checkedAt: new Date().toISOString(), historyId: history.id, actualCampaignRecipients: 2, actualSmtpAttempts: fixture.attempts, acceleratedWorkerClock: transitions, actualHistoryTextOpened: true, actualUiRetry: true, repeatedUiClickCreatedNoRequest: true, onlyFailedResent: 1, repeatedResend: 0, successfulDeliveryTimestampUnchanged: true, allFinallySent: true, scope: "Actual history UI and retry button plus application routes/SMTP/worker, not yet a narrated capture" }, null, 2))
-    console.log("✓ Real two-person campaign: six SMTP failures for one recipient, other delivered once; retry only the failure, repeated retry sends nothing")
+    await writeFile("videos/output/email-delivery-failures/partial-details.json", JSON.stringify({ checkedAt: new Date().toISOString(), historyId: history.id, actualCampaignRecipients: 2, actualSmtpAttempts: fixture.attempts, permanentFailureStoppedAfterOneAttempt: true, actualHistoryTextOpened: true, actualUiRetry: true, repeatedUiClickCreatedNoRequest: true, onlyFailedResent: 1, repeatedResend: 0, successfulDeliveryTimestampUnchanged: true, allFinallySent: true, scope: "Actual history UI and retry button plus application routes/SMTP/worker, not yet a narrated capture" }, null, 2))
+    console.log("✓ Real two-person campaign: one permanent SMTP refusal for one recipient, other delivered once; retry only the failure, repeated retry sends nothing")
   } finally { await browser.close(); await db.$disconnect(); await fixture.close() }
 }
 main().catch(error => { console.error(error instanceof Error ? error.message : "Partial delivery verification failed"); process.exitCode = 1 })

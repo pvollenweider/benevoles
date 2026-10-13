@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:35.852Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "6e72b356ad3d49ee0b20a9f57a20a3ee4bc6c10c77b8f893e06366616f0944d0",
+  "clipSha256": "3da5827538ce7bf292c92fea549ec2ec1e31361cc08c84f6cc99b8c8d291e828",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Nous avons retrouvé les actions sur les membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "retrouvé les actions sur les membres et l'équipe",
+        "visibleSeconds": 0,
+        "visible": "Page Journal d'activité affichant la liste des actions des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Le journal facilite cette conversation",
+        "visibleSeconds": 14.5,
+        "visible": "Écran stable sur le Journal d'activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24,
+        "spoken": "revenons à la fiche ou aux paramètres concernés",
+        "visibleSeconds": 17.5,
+        "visible": "Affichage de la page Activité de Aline Exemple 01 dans l'onglet Membres",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:17 : La transition vers la fiche du membre s'effectue avec environ 6 secondes d'avance par rapport à la phrase correspondante (« revenons à la fiche » à 00:24)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée, au ton fluide et pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

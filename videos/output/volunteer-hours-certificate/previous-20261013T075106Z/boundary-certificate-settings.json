@@ -1,0 +1,12 @@
+{
+  "anchor": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation",
+  "windowStart": 98.41000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 23.4,
+    "wordsHeard": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation"
+  },
+  "onset": 121.81000000000003,
+  "proposedCut": 121.2428955,
+  "note": "Proposal only; recut then independently audit before capture"
+}

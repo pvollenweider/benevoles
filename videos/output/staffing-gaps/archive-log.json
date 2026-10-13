@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/staffing-gaps/previous-20261013T072907Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

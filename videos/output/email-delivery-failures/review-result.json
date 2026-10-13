@@ -1,0 +1,17 @@
+{
+  "id": "EMAIL_DELIVERY_FAILURES",
+  "status": "READY",
+  "duration": 295.08,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 269,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -34,
+    "medianVoiceLufs": -16.7
+  },
+  "problems": "Only known nit: Mailpit English dates. Remis en file warning disproved by exact final-MP4 frame at 225.705 s showing the disabled control and real queue confirmation. All objective checks pass.",
+  "sourceChanges": "Guarded catalogue mailbox cleanup; preparation checks identity ledger before opening SMTP and recognizes the exact short recorder campaign; partial-campaign preflight updated for one permanent refusal. Standard identity migration applied to newly created fixture after real rehearsal. Cached narration reused unchanged."
+}

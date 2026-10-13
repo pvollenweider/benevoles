@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:46:00.654Z",
+  "videoSha256": "391e6bcb2c108c9f3cdbf21057f2c1ee3410830ad86e28e300c3fd7a37726830",
+  "promptSha256": "13b5f76c321f1436f78c212f278851f78a617092bc3a5310c86caf595fb96099",
+  "clipSha256": "af930ab964f045babfb110abb2c8bdaf49087ada86a2c3aa258459b10cddad5d",
+  "scene": "last-participation",
+  "review": {
+    "heardOpening": "La dernière participation apporte un autre repère",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "Pour Aline, la date du dernier créneau confirmé apparaît au-dessus",
+        "visibleSeconds": 4,
+        "visible": "Dans la ligne d'Aline, la colonne Dernière participation affiche la date et la présence enregistrée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.7,
+        "spoken": "Pour Benoît, aucune présence n'a été saisie",
+        "visibleSeconds": 10,
+        "visible": "Mention Aucune présence saisie affichée sous la date pour Benoît Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Un clic les classe par ordre croissant, un deuxième inverse cet ordre, et le troisième rétablit la liste initiale",
+        "visibleSeconds": 16.5,
+        "visible": "Trois clics successifs sur l'en-tête Heures attestées effectuent les tris puis le retour à l'ordre initial",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.3,
+        "spoken": "Cliquons enfin sur Dernière participation pour trier cette date",
+        "visibleSeconds": 25.5,
+        "visible": "Le curseur clique sur la colonne Dernière participation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien calée sur les manipulations de tri à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

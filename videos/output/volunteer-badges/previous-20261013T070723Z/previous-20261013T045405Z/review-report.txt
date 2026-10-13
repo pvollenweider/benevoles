@@ -1,0 +1,22 @@
+STATUS: NOT READY
+ID: VOLUNTEER_BADGES
+Duration: 234.76
+BUILD_ID: QnaleWUIippKmUvaMUEKT
+Commit: 274c0b66f5a583975236f973e8062871910769d4
+Music: {'voicedWindows': 203, 'musicOnlyWindows': 4, 'smallestGapLu': 14.2, 'largestGapLu': 19, 'quietestMusicOnlyLufs': -33.5, 'loudestMusicOnlyLufs': -32.8, 'medianVoiceLufs': -16.6}
+Problems: Role filter Buvette selected about 2.6s after its announced action; empty chapter says choose Tous les postes but navigation resets it without a visible selection. AV role/empty checkpoints and frame sheets corroborate. Technical checks, source/final narration, music pass; current labels/French dates, no forbidden host/identity or overlay. Real PDF pages 1/8 and Lea/minimal variants inspected; no product layout bug confirmed.
+Source changes: record-badges.ts: anchor role filter to Pour préparer seulement la buvette; explicitly choose Tous les postes in empty correction. No re-film. Narration reused.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: a8fad8725680e6ecea11cf389a68d62848da96e65d63b25887f7382badee308b
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.135–21.952 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+all: 24.216–48.613 s; review/all-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+role: 50.876–72.965 s; review/role-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+individual: 75.237–99.195 s; review/individual-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+empty: 101.459–121.376 s; review/empty-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["Entre 00:10 et 00:12, la voix annonce « choisissons Tous les postes », mais aucune interaction n'a lieu avec le menu déroulant du poste."]
+colors: 123.64–144.378 s; review/colors-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+fields: 146.643–169.467 s; review/fields-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+print: 171.739–203.784 s; review/print-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 210.827–234.297 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

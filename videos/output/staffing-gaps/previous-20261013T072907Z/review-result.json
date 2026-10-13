@@ -1,0 +1,17 @@
+{
+  "id": "STAFFING_GAPS",
+  "status": "NOT READY",
+  "duration": 225.88,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 212,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.5,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Final addition uses manual identity fields instead of the announced email lookup; selection/save late and new row not held visibly. Full chapter countdown flag unsupported by independent source and MP4 recognition; return to report in empty chapter is a relevant stable screen. All technical/music checks pass.",
+  "sourceChanges": "Only requested four verbs changed; entire continuous TTS regenerated because tooling rejects mixed chapter generations, boundaries aligned and audited. Action now uses real member email search with sentence anchors for lookup, shift/save and visible new row. No re-film."
+}

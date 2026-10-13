@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:47:31.067Z",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "promptSha256": "f4f7495576cd45c295f634ea3cb778afa22445018c51ca20555667a4262b2104",
+  "clipSha256": "3d31cce1af34f8f8ef9a3e317e5702b4d54b8d1f7350c66dd5bd701d4c10a59b",
+  "scene": "reports",
+  "review": {
+    "heardOpening": "À l'approche du jour J",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "les plannings individuels",
+        "visibleSeconds": 0.5,
+        "visible": "Lien 'Planning individuel' affiché sous la section 'À afficher ou à remettre aux bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.7,
+        "spoken": "et les badges",
+        "visibleSeconds": 6.2,
+        "visible": "Défilement de la page vers la section 'Badges'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Tu génères seulement les documents dont ton équipe a besoin",
+        "visibleSeconds": 7.1,
+        "visible": "Vue sur les différents formats et options de génération de rapports",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le défilement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,248 @@
+{
+  "slug": "event-reports",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T21:16:41.124Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "274c0b66f5a583975236f973e8062871910769d4",
+    "sourceTree": "7036ab2266cf08883e3e8472728766ef3e499946",
+    "productSourceSha256": "2aa0fc8a56d378a9804f53492e7db1b146eaefa3adaf312ddc9f66b161229c7e",
+    "buildId": "QnaleWUIippKmUvaMUEKT",
+    "snapshot": "/tmp/benevoles-video-production.fnLPuNgC",
+    "builtAt": "2026-10-12T20:53:06.047Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REPORTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6914
+    },
+    {
+      "kind": "click",
+      "atMs": 30918
+    },
+    {
+      "kind": "click",
+      "atMs": 56695
+    },
+    {
+      "kind": "click",
+      "atMs": 84286
+    },
+    {
+      "kind": "click",
+      "atMs": 110187
+    },
+    {
+      "kind": "click",
+      "atMs": 146735
+    },
+    {
+      "kind": "click",
+      "atMs": 187297
+    },
+    {
+      "kind": "click",
+      "atMs": 197843
+    },
+    {
+      "kind": "click",
+      "atMs": 224569
+    },
+    {
+      "kind": "click",
+      "atMs": 229786
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1299,
+      "endMs": 23122
+    },
+    {
+      "id": "complete",
+      "startMs": 25387,
+      "endMs": 52122
+    },
+    {
+      "id": "day",
+      "startMs": 54386,
+      "endMs": 79501
+    },
+    {
+      "id": "role",
+      "startMs": 81763,
+      "endMs": 107434
+    },
+    {
+      "id": "individual",
+      "startMs": 113686,
+      "endMs": 143893
+    },
+    {
+      "id": "attendance",
+      "startMs": 150158,
+      "endMs": 178446
+    },
+    {
+      "id": "contacts",
+      "startMs": 180708,
+      "endMs": 207473
+    },
+    {
+      "id": "answers",
+      "startMs": 209739,
+      "endMs": 241977
+    },
+    {
+      "id": "print",
+      "startMs": 244244,
+      "endMs": 273641
+    },
+    {
+      "id": "result",
+      "startMs": 277076,
+      "endMs": 304820
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Les feuilles à afficher ou",
+      "startMs": 5136,
+      "endMs": 9773,
+      "cueMs": 6437
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Choisissons ensemble le bon document",
+      "startMs": 15673,
+      "endMs": 21612,
+      "cueMs": 16975
+    },
+    {
+      "segmentId": "complete",
+      "phrase": "Lisons une journée, puis retrouvons",
+      "startMs": 10685,
+      "endMs": 14874,
+      "cueMs": 36074
+    },
+    {
+      "segmentId": "day",
+      "phrase": "Les postes et les créneaux",
+      "startMs": 5232,
+      "endMs": 11050,
+      "cueMs": 59626
+    },
+    {
+      "segmentId": "role",
+      "phrase": "Si vous coordonnez un poste",
+      "startMs": 193,
+      "endMs": 4239,
+      "cueMs": 81958
+    },
+    {
+      "segmentId": "role",
+      "phrase": "La buvette a sa propre",
+      "startMs": 4678,
+      "endMs": 8296,
+      "cueMs": 86442
+    },
+    {
+      "segmentId": "role",
+      "phrase": "Remettre cette feuille à un",
+      "startMs": 13456,
+      "endMs": 17195,
+      "cueMs": 95220
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "Sa frise montre aussi les",
+      "startMs": 5145,
+      "endMs": 8747,
+      "cueMs": 118833
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "On retrouve ensuite le lieu",
+      "startMs": 9345,
+      "endMs": 14661,
+      "cueMs": 123032
+    },
+    {
+      "segmentId": "individual",
+      "phrase": "passons à la suivante pour lire le dernier poste",
+      "startMs": 18179,
+      "endMs": 20399,
+      "cueMs": 131865
+    },
+    {
+      "segmentId": "attendance",
+      "phrase": "En revanche, cocher une case",
+      "startMs": 14487,
+      "endMs": 18480,
+      "cueMs": 164646
+    },
+    {
+      "segmentId": "contacts",
+      "phrase": "Elle permet de retrouver une",
+      "startMs": 4277,
+      "endMs": 8096,
+      "cueMs": 184985
+    },
+    {
+      "segmentId": "contacts",
+      "phrase": "Cette liste contient des coordonnées",
+      "startMs": 16606,
+      "endMs": 18657,
+      "cueMs": 197315
+    },
+    {
+      "segmentId": "answers",
+      "phrase": "Les confirmés et les personnes",
+      "startMs": 14362,
+      "endMs": 17006,
+      "cueMs": 224103
+    },
+    {
+      "segmentId": "answers",
+      "phrase": "Vous pouvez télécharger cette synthèse",
+      "startMs": 19582,
+      "endMs": 25620,
+      "cueMs": 229321
+    },
+    {
+      "segmentId": "print",
+      "phrase": "Le navigateur permet d'imprimer ou",
+      "startMs": 4653,
+      "endMs": 8963,
+      "cueMs": 248899
+    },
+    {
+      "segmentId": "print",
+      "phrase": "regardons la frise, les marges",
+      "startMs": 15625,
+      "endMs": 18082,
+      "cueMs": 259871
+    },
+    {
+      "segmentId": "print",
+      "phrase": "La dernière passe sur la page suivante",
+      "startMs": 18278,
+      "endMs": 19245,
+      "cueMs": 262522
+    }
+  ]
+}

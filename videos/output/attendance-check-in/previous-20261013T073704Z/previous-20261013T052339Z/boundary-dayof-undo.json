@@ -1,0 +1,12 @@
+{
+  "anchor": "Une erreur de pointage ? Annuler la présence retire la marque,",
+  "windowStart": 307.70399999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 28.16,
+    "wordsHeard": "Une erreur de pointage"
+  },
+  "onset": 335.864,
+  "proposedCut": 335.696229,
+  "note": "Proposal only; recut then independently audit before capture"
+}

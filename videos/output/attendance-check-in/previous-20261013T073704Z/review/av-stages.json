@@ -1,0 +1,58 @@
+[
+  {
+    "chapter": "welcome",
+    "exitCode": 0
+  },
+  {
+    "chapter": "one",
+    "exitCode": 1
+  },
+  {
+    "chapter": "group",
+    "exitCode": 0
+  },
+  {
+    "chapter": "correction",
+    "exitCode": 0
+  },
+  {
+    "chapter": "multiple",
+    "exitCode": 0
+  },
+  {
+    "chapter": "limits",
+    "exitCode": 0
+  },
+  {
+    "chapter": "cancelled",
+    "exitCode": 0
+  },
+  {
+    "chapter": "export",
+    "exitCode": 0
+  },
+  {
+    "chapter": "dayof-window",
+    "exitCode": 0
+  },
+  {
+    "chapter": "dayof-search",
+    "exitCode": 0
+  },
+  {
+    "chapter": "dayof-phone",
+    "exitCode": 1
+  },
+  {
+    "chapter": "dayof-checkin",
+    "exitCode": 0
+  },
+  {
+    "chapter": "dayof-refresh",
+    "exitCode": 0
+  },
+  {
+    "chapter": "dayof-undo",
+    "exitCode": 0
+  }
+]

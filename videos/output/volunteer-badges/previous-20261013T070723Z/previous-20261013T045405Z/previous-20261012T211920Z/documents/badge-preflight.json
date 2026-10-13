@@ -1,0 +1,130 @@
+{
+  "checkedAt": "2026-10-05T16:03:25.384Z",
+  "scope": "actual form, routes, DOM and generated PDFs; PDF pagination and visual review not yet verified",
+  "pdfVisualReview": false,
+  "homonymsDistinguished": true,
+  "activePeople": 80,
+  "results": [
+    {
+      "variant": "all",
+      "badges": 80,
+      "sheetCounts": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "colors": [
+        "rgb(151, 60, 0)",
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/all.pdf"
+    },
+    {
+      "variant": "buvette",
+      "badges": 28,
+      "sheetCounts": [
+        10,
+        10,
+        8
+      ],
+      "colors": [
+        "rgb(151, 60, 0)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/buvette.pdf"
+    },
+    {
+      "variant": "camille-second",
+      "badges": 1,
+      "sheetCounts": [
+        1
+      ],
+      "colors": [
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/camille-second.pdf"
+    },
+    {
+      "variant": "lea-five-shifts",
+      "badges": 1,
+      "sheetCounts": [
+        1
+      ],
+      "colors": [
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/lea-five-shifts.pdf"
+    },
+    {
+      "variant": "empty-combined",
+      "badges": 0,
+      "sheetCounts": [],
+      "colors": [],
+      "pdf": "videos/output/volunteer-badges/documents/empty-combined.pdf"
+    },
+    {
+      "variant": "event-color",
+      "badges": 80,
+      "sheetCounts": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "colors": [
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/event-color.pdf"
+    },
+    {
+      "variant": "black-white",
+      "badges": 80,
+      "sheetCounts": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "colors": [
+        "rgb(17, 17, 17)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/black-white.pdf"
+    },
+    {
+      "variant": "minimal",
+      "badges": 1,
+      "sheetCounts": [
+        1
+      ],
+      "colors": [
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/minimal.pdf"
+    },
+    {
+      "variant": "loge-fallback",
+      "badges": 27,
+      "sheetCounts": [
+        10,
+        10,
+        7
+      ],
+      "colors": [
+        "rgb(20, 71, 230)"
+      ],
+      "pdf": "videos/output/volunteer-badges/documents/loge-fallback.pdf"
+    }
+  ]
+}

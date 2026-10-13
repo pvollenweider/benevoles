@@ -1,29 +1,229 @@
 WEBVTT
 
-00:00:01.195 --> 00:00:31.122
-Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un réglage. Le journal de l'organisation aide à retrouver ces actions transversales. Ouvrons Journal d'activité depuis les paramètres. Les noms de notre équipe et les données sont fictifs. Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté. Ce journal ne remplace pas celui d'un événement : les horaires et les inscriptions se consultent dans leur propre historique.
+00:00:01.133 --> 00:00:05.898
+Quand plusieurs personnes préparent une
+fête, on peut facilement se demander qui a
 
-00:00:31.575 --> 00:00:58.316
-Chaque ligne indique un auteur, une action et une date. Lisons deux actions réalisées par des personnes différentes. Cela permet de demander à la bonne personne pourquoi elle a fait un changement. Le nom affiché vient du compte encore présent ; si ce compte n'existe plus, une indication générique peut le remplacer. Le journal n'est donc pas une signature de contrat, ni une preuve que quelqu'un a lu les consignes. C'est un repère pour travailler ensemble.
+00:00:05.898 --> 00:00:11.029
+changé une fiche ou un réglage. Le journal
+de l'organisation aide à retrouver ces
 
-00:00:58.768 --> 00:01:25.109
-Voici une création de membre, puis une modification et une désactivation. Ce sont des actions sur la fiche de l'organisation, pas la liste de tous les créneaux de cette personne. Pour comprendre ses inscriptions, ouvrons sa fiche et son activité. Nous pouvons ensuite revenir au journal général. Cette distinction évite de prendre une modification de coordonnées pour une désinscription. Lire une entrée ne modifie pas la fiche et ne réactive pas un membre.
+00:00:11.029 --> 00:00:14.694
+actions transversales. Ouvrons Journal
+d'activité depuis les paramètres. Les noms
 
-00:01:25.562 --> 00:01:51.941
-Les invitations de comptes admin, les changements de rôle et les retraits de l'équipe ont aussi leur place ici. Retrouvons une invitation puis un changement de rôle. Le journal décrit ce qui a été fait ; il n'accorde pas le droit de refaire cette action. Les permissions du compte connecté restent applicables. On peut aussi retrouver un changement des réglages de notification. Un email renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.
+00:00:14.694 --> 00:00:19.458
+de notre équipe et les données sont
+fictifs. Nous allons lire les actions,
 
-00:01:52.393 --> 00:02:20.472
-Filtrer par type permet de se concentrer sur les membres, les comptes admin, les emails ou l'organisation. Choisissons Membres, puis Comptes admin, et regardons les lignes changer. Revenons ensuite à Tous les types. Le filtre ne supprime rien ; il limite la liste affichée. Cet écran n'a pas les mêmes filtres ni les modes Rejouer et Récit que le journal d'un événement. Inutile de chercher une commande qui n'est pas proposée ici.
+00:00:19.458 --> 00:00:24.589
+filtrer la liste et ouvrir le fichier
+exporté. Ce journal ne remplace pas celui
 
-00:02:20.923 --> 00:02:50.638
-Si l'historique dépasse la première page, Charger plus affiche la suite. Descendons, utilisons le bouton et retrouvons les nouvelles lignes. Le nombre d'entrées déjà chargées ne représente pas forcément la totalité de l'activité. Si une sélection ne donne aucune ligne, essayons Tous les types avant de conclure qu'il n'y a aucun historique. La liste sert à lire ; pour corriger une fiche ou un rôle, il faut retourner dans la page qui permet réellement cette modification.
+00:00:24.589 --> 00:00:28.987
+d'un événement : les horaires et les
+inscriptions se consultent dans leur
 
-00:02:53.876 --> 00:03:30.420
-Exporter tout le journal télécharge un fichier CSV. Le mot tout est important : même si l'écran est filtré, ce fichier contient l'historique de l'organisation, pas seulement les lignes visibles. Ouvrons le vrai fichier téléchargé. Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés. Les entrées vont des plus anciennes aux plus récentes, à l'inverse de la liste à l'écran. Ce fichier est une copie à cet instant ; il ne se mettra pas à jour tout seul.
+00:00:28.987 --> 00:00:29.720
+propre historique.
 
-00:03:30.874 --> 00:03:58.388
-Le journal ne doit pas devenir une collection de captures envoyées partout. Même quand les coordonnées ne sont pas recopiées dans les changements, des noms d'auteurs peuvent rester visibles. Gardons le fichier pour les personnes qui en ont besoin et pour le temps utile. Le CSV n'est pas une sauvegarde complète de l'organisation, et il ne sert pas à restaurer un état passé. Pour un incident, recoupons les informations et les résultats réels plutôt que d'accuser quelqu'un à partir d'une seule ligne.
+00:00:31.984 --> 00:00:37.087
+Chaque ligne indique un auteur, une action
+et une date. Lisons deux actions réalisées
 
-00:03:58.840 --> 00:04:30.459
-Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet. Pour avancer, le plus utile est souvent une question simple : j'ai vu ce changement, peux-tu m'expliquer ? Le journal facilite cette conversation. Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits. Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.
+00:00:37.087 --> 00:00:41.826
+par des personnes différentes. Cela permet
+de demander à la bonne personne pourquoi
+
+00:00:41.826 --> 00:00:47.659
+elle a fait un changement. Le nom affiché
+vient du compte encore présent ; si ce
+
+00:00:47.659 --> 00:00:51.668
+compte n'existe plus, une indication
+générique peut le remplacer. Le journal
+
+00:00:51.668 --> 00:00:57.136
+n'est donc pas une signature de contrat,
+ni une preuve que quelqu'un a lu les
+
+00:00:57.136 --> 00:00:59.688
+consignes. C'est un repère pour travailler
+ensemble.
+
+00:01:01.948 --> 00:01:06.970
+Voici une création de membre, puis une
+modification et une désactivation. Ce sont
+
+00:01:06.970 --> 00:01:11.991
+des actions sur la fiche de
+l'organisation, pas la liste de tous les
+
+00:01:11.991 --> 00:01:15.854
+créneaux de cette personne. Pour
+comprendre ses inscriptions, ouvrons sa
+
+00:01:15.854 --> 00:01:20.489
+fiche et son activité. Nous pouvons
+ensuite revenir au journal général. Cette
+
+00:01:20.489 --> 00:01:24.352
+distinction évite de prendre une
+modification de coordonnées pour une
+
+00:01:24.352 --> 00:01:30.146
+désinscription. Lire une entrée ne modifie
+pas la fiche et ne réactive pas un membre.
+
+00:01:32.418 --> 00:01:37.067
+Les invitations de comptes admin, les
+changements de rôle et les retraits de
+
+00:01:37.067 --> 00:01:41.000
+l'équipe ont aussi leur place ici.
+Retrouvons une invitation puis un
+
+00:01:41.000 --> 00:01:47.079
+changement de rôle. Le journal décrit ce
+qui a été fait ; il n'accorde pas le droit
+
+00:01:47.079 --> 00:01:51.370
+de refaire cette action. Les permissions
+du compte connecté restent applicables. On
+
+00:01:51.370 --> 00:01:55.661
+peut aussi retrouver un changement des
+réglages de notification. Un email renvoyé
+
+00:01:55.661 --> 00:02:00.310
+apparaît comme une action d'envoi, pas
+comme la preuve qu'il a été lu.
+
+00:02:02.569 --> 00:02:08.326
+Filtrer par type permet de se concentrer
+sur les membres, les comptes admin, les
+
+00:02:08.326 --> 00:02:12.439
+emails ou l'organisation. Choisissons
+Membres, puis Comptes admin, et regardons
+
+00:02:12.439 --> 00:02:18.196
+les lignes changer. Revenons ensuite à
+Tous les types. Le filtre ne supprime rien
+
+00:02:18.196 --> 00:02:24.776
+; il limite la liste affichée. Cet écran
+n'a pas les mêmes filtres ni les modes
+
+00:02:24.776 --> 00:02:29.711
+Rejouer et Récit que le journal d'un
+événement. Inutile de chercher une
+
+00:02:29.711 --> 00:02:32.178
+commande qui n'est pas proposée ici.
+
+00:02:34.448 --> 00:02:39.180
+Si l'historique dépasse la première page,
+Charger plus affiche la suite. Descendons,
+
+00:02:39.180 --> 00:02:43.912
+utilisons le bouton et retrouvons les
+nouvelles lignes. Le nombre d'entrées déjà
+
+00:02:43.912 --> 00:02:48.643
+chargées ne représente pas forcément la
+totalité de l'activité. Si une sélection
+
+00:02:48.643 --> 00:02:54.558
+ne donne aucune ligne, essayons Tous les
+types avant de conclure qu'il n'y a aucun
+
+00:02:54.558 --> 00:03:00.867
+historique. La liste sert à lire ; pour
+corriger une fiche ou un rôle, il faut
+
+00:03:00.867 --> 00:03:04.416
+retourner dans la page qui permet
+réellement cette modification.
+
+00:03:09.112 --> 00:03:14.624
+Exporter tout le journal télécharge un
+fichier CSV. Le mot tout est important :
+
+00:03:14.624 --> 00:03:18.955
+même si l'écran est filtré, ce fichier
+contient l'historique de l'organisation,
+
+00:03:18.955 --> 00:03:24.074
+pas seulement les lignes visibles. Ouvrons
+le vrai fichier téléchargé. Il contient la
+
+00:03:24.074 --> 00:03:28.011
+date, l'acteur, son type, l'action,
+l'entité, son identifiant et les
+
+00:03:28.011 --> 00:03:32.736
+changements enregistrés. Les entrées vont
+des plus anciennes aux plus récentes, à
+
+00:03:32.736 --> 00:03:39.036
+l'inverse de la liste à l'écran. Ce
+fichier est une copie à cet instant ; il
+
+00:03:39.036 --> 00:03:42.186
+ne se mettra pas à jour tout seul.
+
+00:03:44.449 --> 00:03:48.396
+Le journal ne doit pas devenir une
+collection de captures envoyées partout.
+
+00:03:48.396 --> 00:03:52.672
+Même quand les coordonnées ne sont pas
+recopiées dans les changements, des noms
+
+00:03:52.672 --> 00:03:56.947
+d'auteurs peuvent rester visibles. Gardons
+le fichier pour les personnes qui en ont
+
+00:03:56.947 --> 00:04:01.552
+besoin et pour le temps utile. Le CSV
+n'est pas une sauvegarde complète de
+
+00:04:01.552 --> 00:04:06.157
+l'organisation, et il ne sert pas à
+restaurer un état passé. Pour un incident,
+
+00:04:06.157 --> 00:04:09.446
+recoupons les informations et les
+résultats réels plutôt que d'accuser
+
+00:04:09.446 --> 00:04:11.419
+quelqu'un à partir d'une seule ligne.
+
+00:04:13.682 --> 00:04:19.397
+Nous avons retrouvé les actions sur les
+membres et l'équipe, lu la suite de la
+
+00:04:19.397 --> 00:04:24.350
+liste et ouvert l'export complet. Pour
+avancer, le plus utile est souvent une
+
+00:04:24.350 --> 00:04:28.921
+question simple : j'ai vu ce changement,
+pouvez-vous m'expliquer ? Le journal
+
+00:04:28.921 --> 00:04:32.731
+facilite cette conversation. Il donne des
+repères quand plusieurs personnes
+
+00:04:32.731 --> 00:04:37.303
+organisent ensemble, sans remplacer leurs
+échanges ni leurs droits. Une fois le
+
+00:04:37.303 --> 00:04:42.637
+point compris, revenons à la fiche ou aux
+paramètres concernés pour faire la bonne
+
+00:04:42.637 --> 00:04:43.399
+correction, tranquillement.
 

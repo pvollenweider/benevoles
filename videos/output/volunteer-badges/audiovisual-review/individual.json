@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:53:39.672Z",
-  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
-  "promptSha256": "7561a18f384f6ca570010b9711b2dcce470aee055ebadce017ee38f2f8fbbdab",
-  "clipSha256": "a2fa2711e099d5e2d839a238e089656320eb1febcafa11ce5e6416565f3cbf1d",
+  "reviewedAt": "2026-10-13T07:14:53.827Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "5ddf3ec6469706f9288da9b058b6af5719f61a62d9df43c0fa51b11e19c6d26b",
+  "clipSha256": "da346bede764a5333a71adb79a15220f862af020fd41940bc332ac94d166480b",
   "scene": "individual",
   "review": {
-    "heardOpening": "Un badge perdu ?",
+    "heardOpening": "Un badge perdu ? Choisis une personne",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Choisis une personne dans Bénévole, réimpression.",
-        "visibleSeconds": 2.8,
-        "visible": "Défilement vers la section Badges et le champ Bénévole (réimpression).",
+        "spokenSeconds": 2.2,
+        "spoken": "Choisis une personne dans Bénévole, réimpression",
+        "visibleSeconds": 4,
+        "visible": "Sélection d'une personne dans le champ Bénévole (réimpression)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer.",
-        "visibleSeconds": 7.5,
-        "visible": "Le menu déroulant affiche Camille Berger avec l'identifiant/adresse pour différencier.",
+        "spokenSeconds": 11.5,
+        "spoken": "Attention au filtre de poste encore actif",
+        "visibleSeconds": 11.5,
+        "visible": "Le sélecteur de poste affiche le filtre Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "Sélectionnons la bonne Camille, puis générons sa feuille.",
-        "visibleSeconds": 16.8,
-        "visible": "Clic sur Ouvrir les badges et affichage de la fiche badge de Camille Berger.",
+        "spokenSeconds": 17.5,
+        "spoken": "puis générons sa feuille",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Ouvrir les badges et affichage du badge individuel généré",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix synthétique claire, posée et bien articulée tout au long du segment."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

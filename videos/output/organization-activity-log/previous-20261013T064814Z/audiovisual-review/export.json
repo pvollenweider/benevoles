@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:30.069Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "5a1d835f4631fd7802c94b6d65878f78f78bc8f0c492e41de514cdc12c12d1b3",
+  "clipSha256": "10c5902dd9d41db104b596f59597d115eaeb32cb6edfcfaf04ecece3b49c57e0",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Exporter tout le journal télécharge un fichier CSV",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Exporter tout le journal télécharge un fichier CSV",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur le lien « Exporter tout le journal (CSV) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Ouvrons le vrai fichier téléchargé",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la vue « Lecture du CSV téléchargé » avec le tableau des données",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés",
+        "visibleSeconds": 16,
+        "visible": "Défilement horizontal révélant les colonnes Identifiant et Changements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24,
+        "spoken": "Les entrées vont des plus anciennes aux plus récentes",
+        "visibleSeconds": 27.5,
+        "visible": "Retour du défilement vers la gauche pour afficher les dates et acteurs",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

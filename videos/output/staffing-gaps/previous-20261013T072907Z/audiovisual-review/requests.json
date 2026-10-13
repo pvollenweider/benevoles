@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T05:21:55.288Z",
+  "videoSha256": "e3605cd2129411e5c85666586ceeea51a0b170ca44e0c9e077a87bc8ca424348",
+  "promptSha256": "ae4012b2fdc8ccf7898da5aaed761f84a72e7f376450c27f6dd51139e629c751",
+  "clipSha256": "bf5fcdbf49affc9bdbad4398dd419fcee896e5f8e9fa5ee1b34a774c16c6611d",
+  "scene": "requests",
+  "review": {
+    "heardOpening": "Les demandes à traiter gardent leur place",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "À la navette, deux demandes remplissent donc les deux places réservées",
+        "visibleSeconds": 4,
+        "visible": "Dans la section Créneaux complets, la ligne Navette affiche bien 0/2 : 2 demandes à traiter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Suivez le lien des demandes",
+        "visibleSeconds": 13,
+        "visible": "Clic sur le lien bleu « 2 demandes à traiter » menant vers la page Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "pour retrouver Lucas et Marc, puis examinez leurs informations",
+        "visibleSeconds": 14.8,
+        "visible": "Affichage de la liste des demandes à traiter avec les profils détaillés de Lucas Girard et Marc Duc",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

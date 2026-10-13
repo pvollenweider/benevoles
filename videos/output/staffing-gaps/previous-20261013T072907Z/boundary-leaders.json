@@ -1,0 +1,12 @@
+{
+  "anchor": "Postes sans responsable de secteur est un autre besoin, facultatif cette",
+  "windowStart": 117.293,
+  "result": {
+    "found": true,
+    "startSeconds": 30.88,
+    "wordsHeard": "Postes sans responsable de secteur est un autre besoin"
+  },
+  "onset": 148.173,
+  "proposedCut": 148.032875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,229 @@
+WEBVTT
+
+00:00:01.139 --> 00:00:05.904
+Quand plusieurs personnes préparent une
+fête, on peut facilement se demander qui a
+
+00:00:05.904 --> 00:00:11.035
+changé une fiche ou un réglage. Le journal
+de l'organisation aide à retrouver ces
+
+00:00:11.035 --> 00:00:14.700
+actions transversales. Ouvrons Journal
+d'activité depuis les paramètres. Les noms
+
+00:00:14.700 --> 00:00:19.464
+de notre équipe et les données sont
+fictifs. Nous allons lire les actions,
+
+00:00:19.464 --> 00:00:24.595
+filtrer la liste et ouvrir le fichier
+exporté. Ce journal ne remplace pas celui
+
+00:00:24.595 --> 00:00:28.993
+d'un événement : les horaires et les
+inscriptions se consultent dans leur
+
+00:00:28.993 --> 00:00:29.726
+propre historique.
+
+00:00:32.003 --> 00:00:37.106
+Chaque ligne indique un auteur, une action
+et une date. Lisons deux actions réalisées
+
+00:00:37.106 --> 00:00:41.845
+par des personnes différentes. Cela permet
+de demander à la bonne personne pourquoi
+
+00:00:41.845 --> 00:00:47.678
+elle a fait un changement. Le nom affiché
+vient du compte encore présent ; si ce
+
+00:00:47.678 --> 00:00:51.687
+compte n'existe plus, une indication
+générique peut le remplacer. Le journal
+
+00:00:51.687 --> 00:00:57.155
+n'est donc pas une signature de contrat,
+ni une preuve que quelqu'un a lu les
+
+00:00:57.155 --> 00:00:59.707
+consignes. C'est un repère pour travailler
+ensemble.
+
+00:01:01.969 --> 00:01:06.991
+Voici une création de membre, puis une
+modification et une désactivation. Ce sont
+
+00:01:06.991 --> 00:01:12.012
+des actions sur la fiche de
+l'organisation, pas la liste de tous les
+
+00:01:12.012 --> 00:01:15.875
+créneaux de cette personne. Pour
+comprendre ses inscriptions, ouvrons sa
+
+00:01:15.875 --> 00:01:20.510
+fiche et son activité. Nous pouvons
+ensuite revenir au journal général. Cette
+
+00:01:20.510 --> 00:01:24.373
+distinction évite de prendre une
+modification de coordonnées pour une
+
+00:01:24.373 --> 00:01:30.167
+désinscription. Lire une entrée ne modifie
+pas la fiche et ne réactive pas un membre.
+
+00:01:32.441 --> 00:01:37.090
+Les invitations de comptes admin, les
+changements de rôle et les retraits de
+
+00:01:37.090 --> 00:01:41.023
+l'équipe ont aussi leur place ici.
+Retrouvons une invitation puis un
+
+00:01:41.023 --> 00:01:47.102
+changement de rôle. Le journal décrit ce
+qui a été fait ; il n'accorde pas le droit
+
+00:01:47.102 --> 00:01:51.393
+de refaire cette action. Les permissions
+du compte connecté restent applicables. On
+
+00:01:51.393 --> 00:01:55.684
+peut aussi retrouver un changement des
+réglages de notification. Un email renvoyé
+
+00:01:55.684 --> 00:02:00.333
+apparaît comme une action d'envoi, pas
+comme la preuve qu'il a été lu.
+
+00:02:02.593 --> 00:02:08.350
+Filtrer par type permet de se concentrer
+sur les membres, les comptes admin, les
+
+00:02:08.350 --> 00:02:12.463
+emails ou l'organisation. Choisissons
+Membres, puis Comptes admin, et regardons
+
+00:02:12.463 --> 00:02:18.220
+les lignes changer. Revenons ensuite à
+Tous les types. Le filtre ne supprime rien
+
+00:02:18.220 --> 00:02:24.800
+; il limite la liste affichée. Cet écran
+n'a pas les mêmes filtres ni les modes
+
+00:02:24.800 --> 00:02:29.735
+Rejouer et Récit que le journal d'un
+événement. Inutile de chercher une
+
+00:02:29.735 --> 00:02:32.202
+commande qui n'est pas proposée ici.
+
+00:02:34.471 --> 00:02:39.203
+Si l'historique dépasse la première page,
+Charger plus affiche la suite. Descendons,
+
+00:02:39.203 --> 00:02:43.935
+utilisons le bouton et retrouvons les
+nouvelles lignes. Le nombre d'entrées déjà
+
+00:02:43.935 --> 00:02:48.666
+chargées ne représente pas forcément la
+totalité de l'activité. Si une sélection
+
+00:02:48.666 --> 00:02:54.581
+ne donne aucune ligne, essayons Tous les
+types avant de conclure qu'il n'y a aucun
+
+00:02:54.581 --> 00:03:00.890
+historique. La liste sert à lire ; pour
+corriger une fiche ou un rôle, il faut
+
+00:03:00.890 --> 00:03:04.439
+retourner dans la page qui permet
+réellement cette modification.
+
+00:03:09.133 --> 00:03:14.645
+Exporter tout le journal télécharge un
+fichier CSV. Le mot tout est important :
+
+00:03:14.645 --> 00:03:18.976
+même si l'écran est filtré, ce fichier
+contient l'historique de l'organisation,
+
+00:03:18.976 --> 00:03:24.095
+pas seulement les lignes visibles. Ouvrons
+le vrai fichier téléchargé. Il contient la
+
+00:03:24.095 --> 00:03:28.032
+date, l'acteur, son type, l'action,
+l'entité, son identifiant et les
+
+00:03:28.032 --> 00:03:32.757
+changements enregistrés. Les entrées vont
+des plus anciennes aux plus récentes, à
+
+00:03:32.757 --> 00:03:39.057
+l'inverse de la liste à l'écran. Ce
+fichier est une copie à cet instant ; il
+
+00:03:39.057 --> 00:03:42.207
+ne se mettra pas à jour tout seul.
+
+00:03:44.475 --> 00:03:48.422
+Le journal ne doit pas devenir une
+collection de captures envoyées partout.
+
+00:03:48.422 --> 00:03:52.698
+Même quand les coordonnées ne sont pas
+recopiées dans les changements, des noms
+
+00:03:52.698 --> 00:03:56.973
+d'auteurs peuvent rester visibles. Gardons
+le fichier pour les personnes qui en ont
+
+00:03:56.973 --> 00:04:01.578
+besoin et pour le temps utile. Le CSV
+n'est pas une sauvegarde complète de
+
+00:04:01.578 --> 00:04:06.183
+l'organisation, et il ne sert pas à
+restaurer un état passé. Pour un incident,
+
+00:04:06.183 --> 00:04:09.472
+recoupons les informations et les
+résultats réels plutôt que d'accuser
+
+00:04:09.472 --> 00:04:11.445
+quelqu'un à partir d'une seule ligne.
+
+00:04:13.709 --> 00:04:19.424
+Nous avons retrouvé les actions sur les
+membres et l'équipe, lu la suite de la
+
+00:04:19.424 --> 00:04:24.377
+liste et ouvert l'export complet. Pour
+avancer, le plus utile est souvent une
+
+00:04:24.377 --> 00:04:28.948
+question simple : j'ai vu ce changement,
+pouvez-vous m'expliquer ? Le journal
+
+00:04:28.948 --> 00:04:32.758
+facilite cette conversation. Il donne des
+repères quand plusieurs personnes
+
+00:04:32.758 --> 00:04:37.330
+organisent ensemble, sans remplacer leurs
+échanges ni leurs droits. Une fois le
+
+00:04:37.330 --> 00:04:42.664
+point compris, revenons à la fiche ou aux
+paramètres concernés pour faire la bonne
+
+00:04:42.664 --> 00:04:43.426
+correction, tranquillement.
+

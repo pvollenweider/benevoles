@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T04:44:18.130Z",
+  "videoSha256": "440e855e07ca91ffa4ab1206cb15494403f5a3101c23b48944f00c54badb3df6",
+  "promptSha256": "6f4b172632e8e024cfa5bba9e82915b62d6eb0a78b399642a145ebbdd81c64ff",
+  "clipSha256": "f2c7a69ec63135ec493893317bf297c4a6ffc7588f143bf69ddb0c92bbb7e183",
+  "scene": "team",
+  "review": {
+    "heardOpening": "Les invitations de comptes admin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "les changements de rôle et les retraits de l'équipe ont aussi leur place ici",
+        "visibleSeconds": 3.2,
+        "visible": "Sélection du filtre 'Comptes admin' dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Retrouvons une invitation puis un changement de rôle",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage des deux entrées : invitation d'un admin et changement de rôle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "On peut aussi retrouver un changement des réglages de notification",
+        "visibleSeconds": 20,
+        "visible": "Sélection du filtre 'Organisation' et affichage de la ligne de modification des réglages de notification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

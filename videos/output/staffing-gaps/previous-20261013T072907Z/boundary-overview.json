@@ -1,0 +1,12 @@
+{
+  "anchor": "En haut, les places pourvues sont les inscriptions confirmées, comparées à",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 26.98,
+    "wordsHeard": "En haut, les places pourvues sont les inscriptions confirmées, comparées à"
+  },
+  "onset": 26.98,
+  "proposedCut": 27.199542,
+  "note": "Proposal only; recut then independently audit before capture"
+}
