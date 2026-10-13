@@ -11,6 +11,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { generateShiftSeries, seriesProblem } from "@/lib/shift-series"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
+import { minVolunteersProblem } from "@/lib/staffing"
 
 const schema = z.object({
   eventId: z.string(),
@@ -23,6 +24,8 @@ const schema = z.object({
   slotMinutes: z.number().int(),
   breakMinutes: z.number().int().optional(),
   capacity: z.number().int().min(1),
+  // Minimum per shift (#949), the same on every shift of the series.
+  minVolunteers: z.number().nullable().optional(),
   locationDetails: z.string().optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
@@ -34,6 +37,10 @@ const schema = z.object({
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
+  .superRefine((d, ctx) => {
+    const problem = minVolunteersProblem(d.minVolunteers, d.capacity)
+    if (problem) ctx.addIssue({ code: "custom", message: problem, path: ["minVolunteers"] })
+  })
 
 /** Creates a series of shifts (#393) in one transaction: all of them, or none. */
 export async function POST(req: Request) {

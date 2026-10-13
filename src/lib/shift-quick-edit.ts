@@ -3,6 +3,7 @@
 
 import { addMinutes, toMin, toMinEnd } from "./gantt-utils"
 import { addDays } from "./shift-series"
+import { minVolunteersProblem } from "./staffing"
 
 /**
  * Quick edits from the schedule (#398): the rules behind « Dupliquer », « Décaler » and
@@ -40,6 +41,31 @@ export function capacityPlan(shifts: CapacityTarget[], capacity: number): { upda
     if (next !== s.capacity) updates.push({ id: s.id, capacity: next })
   }
   return { updates, keptHigher }
+}
+
+export type MinimumTarget = { id: string; capacity: number; minVolunteers: number | null }
+
+/**
+ * The minimum of people to set on each shift of a role (#949), from « Appliquer à tout le poste ».
+ * `capacity` is each shift's capacity once the places are applied. `minVolunteers` undefined keeps
+ * every shift's own minimum, null removes it. Refused, with nothing to update, when a minimum would
+ * be above a shift's places: the organizer lowers the minimum first.
+ */
+export function roleMinimumPlan(shifts: MinimumTarget[], minVolunteers: number | null | undefined): { updates: { id: string; minVolunteers: number | null }[]; problem: string | null } {
+  if (minVolunteers != null) {
+    const invalid = minVolunteersProblem(minVolunteers, Math.max(...shifts.map((s) => s.capacity), 1))
+    if (invalid) return { updates: [], problem: invalid }
+  }
+  const next = (s: MinimumTarget) => (minVolunteers === undefined ? s.minVolunteers : minVolunteers)
+  const tooHigh = shifts.filter((s) => { const m = next(s); return m != null && m > s.capacity })
+  if (tooHigh.length > 0) {
+    const n = tooHigh.length
+    return { updates: [], problem: `Sur ${n} créneau${n > 1 ? "x" : ""} du poste, le minimum dépasserait les places : baissez d'abord le minimum.` }
+  }
+  return {
+    updates: shifts.filter((s) => next(s) !== s.minVolunteers).map((s) => ({ id: s.id, minVolunteers: next(s) })),
+    problem: null,
+  }
 }
 
 /** Why a moved time range can't be saved, or null. */

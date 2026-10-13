@@ -3,7 +3,39 @@
 
 import Link from "next/link"
 import { fmtRange } from "@/lib/gantt-utils"
-import { fillPercent, type StaffingShiftLine as Line } from "@/lib/staffing"
+import { fillPercent, shiftStaffingState, spokenStaffingState, staffingStateText, type StaffingShiftLine as Line, type StaffingState } from "@/lib/staffing"
+
+/**
+ * The state of a shift against its minimum (#949), in words: « sous le minimum (2) » in a red badge
+ * with ⚠, « minimum atteint » or « complet » as plain text. Nothing without a minimum. Screen
+ * readers get « sous le minimum de 2 » (« (2) » would be a bare number). The badge uses the
+ * Erreur pair of DESIGN.md (#fee2e2 / #b91c1c), with a border in forced colours.
+ */
+export function StaffingStateLabel({ s, state }: { s: { capacity: number; minVolunteers?: number | null }; state: StaffingState }) {
+  const text = staffingStateText(s, state)
+  if (!text) return null
+  const spoken = spokenStaffingState(s, state) ?? text
+  const words = (
+    <>
+      <span aria-hidden="true">{text}</span>
+      <span className="sr-only">{spoken}</span>
+    </>
+  )
+  if (state !== "below_minimum") return words
+  return (
+    <span className="inline-block rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 forced-colors:border forced-colors:border-[CanvasText]">
+      <span aria-hidden="true">⚠ </span>
+      {words}
+    </span>
+  )
+}
+
+/** « · minimum atteint » after the figures, or nothing for a shift without a minimum. */
+export function StaffingStateSuffix({ s }: { s: { capacity: number; minVolunteers?: number | null; active: number; requested?: number; state?: StaffingState } }) {
+  const state = s.state ?? shiftStaffingState(s)
+  if (!staffingStateText(s, state)) return null
+  return <> · <StaffingStateLabel s={s} state={state} /></>
+}
 
 export const staffingLinkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

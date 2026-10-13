@@ -11,6 +11,7 @@ import { deleteShiftRecapFor, timelineBarName, timelineBarPlaces } from "@/lib/s
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
+import { shiftStaffingState } from "@/lib/staffing"
 import { toMin, toMinEnd, fromMin, fmt, hourLabel, type GanttShow } from "@/lib/gantt-utils"
 import {
   AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SHOW_H,
@@ -28,6 +29,8 @@ export type AdminShift = {
   startTime: string
   endTime: string
   capacity: number
+  /** Minimum of people the shift can run with (#949); null = the same as capacity. */
+  minVolunteers?: number | null
   status: string
   registrationCount: number
   displayOrder: number
@@ -247,17 +250,21 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     showToast("Créneau dupliqué")
   }
 
-  async function handleApplyCapacity(roleName: string, capacity: number) {
+  // Places and minimum together (#949): the minimum is checked against the places asked.
+  async function handleApplyCapacity(roleName: string, capacity: number, minVolunteers?: number | null): Promise<boolean> {
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ capacity }),
+      body: JSON.stringify(minVolunteers !== undefined ? { capacity, minVolunteers } : { capacity }),
     }), "Capacité non appliquée.")
-    if (!outcome.ok) { showToast(outcome.error); return }
+    if (!outcome.ok) { showToast(outcome.error, "error"); return false }
     for (const s of shifts) {
-      if (s.roleName === roleName && s.status !== "cancelled") onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount) })
+      if (s.roleName === roleName && s.status !== "cancelled") {
+        onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount), ...(minVolunteers !== undefined ? { minVolunteers } : {}) })
+      }
     }
-    showToast("Capacité appliquée au poste")
+    showToast(minVolunteers != null ? "Places et minimum appliqués au poste" : "Capacité appliquée au poste")
+    return true
   }
 
   // ── Hour ticks ──────────────────────────────────────────────────────────────
@@ -358,6 +365,9 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     const laneTop    = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
                     const isSelected = selected === shift.id
                     const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
+                    // Below its minimum (#949): a dashed white frame on top of the words on the bar,
+                    // so the critical shifts stand out at a glance even when the text is cut.
+                    const belowMin   = !isFull && shiftStaffingState({ ...shift, active: shift.registrationCount }) === "below_minimum"
                     const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default", shift.colorKey)
                     const hasLabel   = shift.label && shift.label !== shift.roleName
 
@@ -366,9 +376,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                         key={shift.id}
                         id={`shift-bar-${shift.id}`}
                         data-shift-bar="1"
+                        data-below-minimum={belowMin ? "1" : undefined}
                         className={`absolute rounded-lg cursor-pointer overflow-hidden focus:z-20
                           flex items-center transition-shadow
-                          ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${barCls}`}
+                          ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${belowMin ? "border-2 border-dashed border-white" : ""} ${barCls}`}
                         style={{
                           left: barLeft,
                           width: barWidth,
@@ -497,6 +508,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
           onDelete={handleDelete}
           onDuplicate={handleDuplicate}
           onApplyCapacity={handleApplyCapacity}
+          onNotSaved={(message) => showToast(message, "error")}
         />
       )}
 

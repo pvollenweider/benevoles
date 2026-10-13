@@ -18,6 +18,8 @@ export type TemplateShift = {
   startTime: string
   endTime: string
   capacity: number
+  /** Minimum of people (#949), 1 to capacity; absent = the same as capacity. */
+  minVolunteers?: number
   waitlistEnabled?: boolean
 }
 
@@ -181,7 +183,7 @@ export function findTemplate(id: string): EventTemplate | undefined {
   return EVENT_TEMPLATES.find((t) => t.id === id)
 }
 
-type TemplateShiftRow = { roleName: string; label: string; date: string; startTime: string; endTime: string; capacity: number; displayOrder: number; waitlistEnabled: boolean }
+type TemplateShiftRow = { roleName: string; label: string; date: string; startTime: string; endTime: string; capacity: number; minVolunteers?: number; displayOrder: number; waitlistEnabled: boolean }
 
 export type TemplateEvent = {
   title: string
@@ -230,6 +232,8 @@ export function templateToEvent(template: EventTemplate, input: { title: string;
       startTime: s.startTime,
       endTime: s.endTime,
       capacity: s.capacity,
+      // Carried over when the template sets one (#949); none of the built-in templates does yet.
+      ...(s.minVolunteers != null ? { minVolunteers: s.minVolunteers } : {}),
       displayOrder: roleOrder.indexOf(s.roleName) * 100,
       waitlistEnabled: s.waitlistEnabled ?? false,
     })),

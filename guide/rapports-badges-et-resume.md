@@ -29,7 +29,7 @@ aliases: []
 | Synthèse des réponses | par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées (voir [Synthèse des réponses](questions-aux-benevoles.md#synthese-des-reponses)) | organisateurs, ou pour passer commande |
 | Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
-Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
+Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous le minimum (2) » ou « minimum atteint » aux créneaux qui ont un minimum de personnes, avec une phrase qui l'explique sous le tableau. Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
 
 ## Badges
 
@@ -43,6 +43,6 @@ Toujours depuis **Rapports**, la section **Résumé de l'événement** (juste av
 - nombre de créneaux confirmés avec une présence enregistrée sur le total, avec une phrase explicite si le pointage n'a pas été utilisé ou seulement en partie ;
 - heures planifiées (le total des créneaux confirmés) et, parmi elles, les heures attestées (présence enregistrée), par exemple « 46 h planifiées, dont 38 h attestées » ;
 - taux de remplissage global puis par poste, chiffres à l'appui (« 46 places occupées sur 52 ») ;
-- la liste des créneaux restés incomplets.
+- la liste des créneaux restés incomplets, avec ceux restés sous leur minimum de personnes.
 
 Tant que l'événement n'est pas terminé, un bandeau rappelle que ces chiffres sont provisoires. Mêmes règles de comptage que l'attestation de bénévolat et l'export « Heures par bénévole » (voir [Gérer les membres](gerer-les-membres.md)) : seules les inscriptions actives sur un créneau jamais annulé comptent.

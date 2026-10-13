@@ -14,14 +14,14 @@ aliases: []
 
 **Événements**, puis l'événement, puis, dans la section **Où manque-t-il du monde ?**, **Voir les créneaux à compléter** (ou **Voir le détail des créneaux** quand tout est complet)
 
-En haut de la page principale de l'événement (**Événements**, puis l'événement), 4 chiffres donnent l'état en un coup d'œil : créneaux, places totales, inscrits, places restantes. Juste en dessous, **Où manque-t-il du monde ?** résume en une phrase (« Il manque encore 12 personnes sur 20 places ») et mène à la vue détaillée.
+En haut de la page principale de l'événement (**Événements**, puis l'événement), 4 chiffres donnent l'état en un coup d'œil : créneaux, places totales, inscrits, places restantes. Juste en dessous, **Où manque-t-il du monde ?** résume en une phrase (« Il manque encore 12 personnes sur 20 places », suivie de « 2 créneaux sont sous leur minimum. » s'il y en a) et mène à la vue détaillée.
 
 La question que se pose l'organisateur avant l'événement, en une page, du plus urgent au moins urgent :
 
 ![Page « Où manque-t-il du monde ? » d'un événement : vue d'ensemble des places pourvues, puis les créneaux à compléter du plus dégarni au plus proche du complet](/doc-img/admin-staffing.png)
 
 - **Postes sans personne** : aucun inscrit sur aucun créneau du poste ;
-- **Créneaux à compléter** : chaque créneau avec des places libres, du plus dégarni au plus proche du complet, avec le nombre de personnes qui manquent (les créneaux fermés aux inscriptions ne sont pas comptés) ;
+- **Créneaux à compléter** : chaque créneau avec des places libres, du plus dégarni au plus proche du complet, avec le nombre de personnes qui manquent (les créneaux fermés aux inscriptions ne sont pas comptés). Quand des créneaux ont un minimum de personnes (voir [Minimum de personnes](configurer-les-creneaux.md#minimum-de-personnes)), ceux qui ne l'ont pas encore passent d'abord, avec la mention **sous le minimum** ; ceux qui l'ont atteint (**minimum atteint**) viennent ensuite. Un créneau sans minimum a besoin de toutes ses places : il reste parmi les premiers, trié par personnes manquantes ;
 - **Personnes en liste d'attente** : créneaux complets où des bénévoles attendent une place, à qui proposer une place de plus ou un autre créneau ;
 - **Postes sans responsable de secteur** (facultatif si vous n'utilisez pas les responsables) ;
 - **Créneaux complets**, pour mémoire.
@@ -36,7 +36,7 @@ Après un désistement qui laisse une place vide sans personne sur la liste d'at
 
 Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page pour proposer ce créneau à des membres choisis ; **Chercher des bénévoles pour plusieurs créneaux**, sous la liste, permet d'en proposer plusieurs à la fois. Sur cette page :
 
-1. Cochez les créneaux à proposer, parmi ceux qui manquent de monde (places libres indiquées).
+1. Cochez les créneaux à proposer, parmi ceux qui manquent de monde (places libres indiquées, et « sous le minimum » ou « minimum atteint » pour un créneau qui a un minimum ; l'email aux membres n'en parle pas).
 2. La liste des membres apparaît, par ordre alphabétique, sans classement ni score. Pour chaque membre, les raisons de sa présence sont écrites : ses tags, sa disponibilité générale (indicative : elle ne confirme rien pour ces créneaux) et si elle correspond aux horaires choisis, s'il est déjà inscrit à l'événement, s'il est déjà invité ou s'il recevra une invitation. Filtrez par tag ou cherchez un nom si besoin.
 3. Un membre dont une inscription chevauche un créneau choisi, même de quelques minutes, est affiché avec la mention **Chevauchement** et la durée en commun : ce créneau ne lui est pas proposé. S'il n'a plus rien à recevoir, sa case n'est pas cochable.
 4. Personne n'est coché d'avance : cochez vous-même chaque personne. Les membres inactifs, sans email, déjà inscrits sur tous les créneaux choisis, sans le tag d'un poste réservé, ou dont la date de naissance connue est sous l'âge minimum du créneau ne sont pas listés ; une phrase dit combien ont été laissés de côté et pourquoi. Les membres qui ont répondu « pas disponible » à leur invitation sont aussi laissés de côté, sauf si vous cochez **Afficher aussi les membres qui ont répondu « pas disponible »**.
@@ -48,4 +48,4 @@ Chaque personne reçoit un seul email avec les créneaux qu'elle peut prendre (d
 
 ### Un poste critique risque d'être en sous-effectif (sécurité, premiers secours…) : comment je le surveille ?
 
-La page **Où manque-t-il du monde ?** de l'événement (lien depuis sa page principale) liste tous les créneaux encore ouverts avec des places libres, tous postes confondus, du plus dégarni au plus proche du complet, et les postes où personne n'est inscrit : pas besoin d'éplucher le planning entier la veille pour repérer ce qui manque.
+La page **Où manque-t-il du monde ?** de l'événement (lien depuis sa page principale) liste tous les créneaux encore ouverts avec des places libres, tous postes confondus, du plus dégarni au plus proche du complet, et les postes où personne n'est inscrit : pas besoin d'éplucher le planning entier la veille pour repérer ce qui manque. Donnez aussi à ces créneaux un minimum de personnes (par exemple 2 secouristes sur 3 places) : ceux qui ne l'ont pas atteint passent en tête de la liste, marqués **sous le minimum**.

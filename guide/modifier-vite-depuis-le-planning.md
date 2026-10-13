@@ -14,10 +14,10 @@ aliases: []
 
 Un clic sur une barre du planning des créneaux ouvre une petite fenêtre pour agir sans quitter la vue :
 
-- **Libellé** et **Places** : enregistrés à la fermeture ; **Appliquer à tout le poste** met le même nombre de places sur tous les créneaux du poste (jamais en dessous des inscrits déjà confirmés sur un créneau) ;
+- **Libellé**, **Places** et **Minimum** (facultatif, voir [Minimum de personnes](configurer-les-creneaux.md#minimum-de-personnes)) : enregistrés à la fermeture ; un minimum plus grand que les places n'est pas enregistré, et les places non plus. **Appliquer à tout le poste** met les mêmes places et le même minimum sur tous les créneaux du poste (jamais en dessous des inscrits déjà confirmés sur un créneau) ; un minimum laissé vide retire celui de ce créneau à tout le poste, ou ne change rien si ce créneau n'en avait pas ;
 - **Horaires** : changez le début ou la fin puis **Décaler** ; les bénévoles inscrits reçoivent un email si les horaires changent ;
 - **Inscriptions** : **Ouvertes**, **Complet**, **Fermées** (le créneau reste visible, personne ne peut plus s'y inscrire) ou **Créneau annulé** ;
-- **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
+- **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, minimum de personnes, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
 - **Voir les inscriptions** (lien vers les inscriptions du créneau) et **Supprimer le créneau**.
 
 Annuler un créneau prévient les bénévoles inscrits par email et annule leur inscription (voir [Rappels et changements de créneau](rappels.md#notifications-de-modification)).

@@ -11,13 +11,14 @@
  */
 
 import { WORKLOAD_LIMITS } from "./workload"
+import { shiftStaffingState } from "./staffing"
 
 const DAY = 24 * 60 * 60 * 1000
 export const UNDERFILLED_WINDOW_DAYS = 7
 export const OFFER_WARNING_HOURS = 12
 export const INVITE_NUDGE_DAYS = 3
 
-export type AttentionShift = { date: Date; capacity: number; active: number }
+export type AttentionShift = { date: Date; capacity: number; active: number; /** Minimum of people (#949); null = the same as capacity. */ minVolunteers?: number | null }
 export type AttentionEvent = {
   id: string
   title: string
@@ -89,11 +90,17 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
     })
     if (soon.length > 0) {
       const free = soon.reduce((n, s) => n + (s.capacity - s.active), 0)
-      const within2Days = soon.some((s) => startOfUtcDay(s.date) <= today + 2 * DAY)
+      // A shift that reached its minimum (#949) can run: it isn't what makes the next two days urgent.
+      // Without a minimum, a shift needs all its places, as before.
+      const reached = (s: AttentionShift) => shiftStaffingState(s) === "minimum_reached"
+      const within2Days = soon.some((s) => startOfUtcDay(s.date) <= today + 2 * DAY && !reached(s))
+      const below = soon.filter((s) => shiftStaffingState(s) === "below_minimum").length
+      const belowText = below > 0 ? `, dont ${below} sous ${plural(below, "son", "leur")} minimum` : ""
       items.push({
         id: `underfilled:${e.id}`, severity: within2Days ? "high" : "medium", eventTitle: e.title,
-        message: `${soon.length} ${plural(soon.length, "créneau", "créneaux")} des ${UNDERFILLED_WINDOW_DAYS} prochains jours ${plural(soon.length, "n'est pas complet", "ne sont pas complets")} (${free} ${plural(free, "place libre", "places libres")}).`,
-        action: "Voir les créneaux", href: `${base}/shifts`,
+        message: `${soon.length} ${plural(soon.length, "créneau", "créneaux")} des ${UNDERFILLED_WINDOW_DAYS} prochains jours ${plural(soon.length, "n'est pas complet", "ne sont pas complets")}${belowText} (${free} ${plural(free, "place libre", "places libres")}).`,
+        // Straight to the shifts to complete, critical first, when some have a minimum.
+        action: "Voir les créneaux", href: below > 0 ? `${base}/staffing` : `${base}/shifts`,
       })
     }
 

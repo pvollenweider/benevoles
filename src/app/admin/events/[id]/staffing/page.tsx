@@ -5,11 +5,11 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { staffingHeadline, staffingSummary } from "@/lib/staffing"
+import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
 import HelpLink from "@/components/admin/HelpLink"
-import { Meter, ShiftLine, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
+import { Meter, ShiftLine, StaffingStateSuffix, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -53,7 +53,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       shifts: {
         where: { status: { not: "cancelled" } },
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
         },
       },
@@ -65,7 +65,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
   const summary = staffingSummary(
     event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
+      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers, closed: s.status === "closed",
       active: s.registrations.filter((r) => r.status === "active").length,
       waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: s.registrations.filter((r) => r.status === "requested").length,
@@ -100,6 +100,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
             <Meter active={t.active} capacity={t.capacity} className="mt-2" />
             <p className="mt-2 text-sm text-gray-700">
               {staffingHeadline(t)}
+              {belowMinimumSentence(summary.belowMinimum.length) && ` ${belowMinimumSentence(summary.belowMinimum.length)}`}
               {t.waiting > 0 && ` ${plural(t.waiting, "personne")} en liste d'attente.`}
               {t.requested > 0 && (
                 <>
@@ -134,14 +135,16 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
 
           {summary.underfilled.length > 0 && (
             <div className="space-y-2">
-            <Group id="staffing-underfilled" title="Créneaux à compléter" count={summary.underfilled.length} hint="Du plus dégarni au plus proche du complet. Les créneaux fermés aux inscriptions ne sont pas comptés.">
+            <Group id="staffing-underfilled" title="Créneaux à compléter" count={summary.underfilled.length} hint={summary.usesMinimum
+              ? "Ceux qui n'ont pas leur minimum d'abord (sans minimum, un créneau a besoin de toutes ses places), du plus dégarni au plus proche du complet, puis ceux qui ont atteint leur minimum. Les créneaux fermés aux inscriptions ne sont pas comptés."
+              : "Du plus dégarni au plus proche du complet. Les créneaux fermés aux inscriptions ne sont pas comptés."}>
               {summary.underfilled.map((s) => (
                 <ShiftLine
                   key={s.id}
                   eventId={event.id}
                   group="underfilled"
                   s={s}
-                  detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong>{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
+                  detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong><StaffingStateSuffix s={s} />{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
                   action={
                     <Link href={`${base}/staffing/search?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
                       Chercher des bénévoles
@@ -161,7 +164,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.waitlisted.length > 0 && (
             <Group id="staffing-waitlist" title="Personnes en liste d'attente" count={summary.waitlisted.length} hint="Créneaux complets où des bénévoles attendent une place : une place de plus, ou un autre créneau à leur proposer.">
               {summary.waitlisted.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="waitlist" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong> · {plural(s.waiting, "personne")} en attente</>} />
+                <ShiftLine key={s.id} eventId={event.id} group="waitlist" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong><StaffingStateSuffix s={s} /> · {plural(s.waiting, "personne")} en attente</>} />
               ))}
             </Group>
           )}

@@ -30,7 +30,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true,
           locationDetails: true, contactName: true, contactPhone: true, instructions: true,
           registrations: {
             where: { status: "active" },
@@ -56,7 +56,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     // The role's sector leaders by name (#560) on the individual sheet, handed to the volunteers.
     shifts: event.shifts.map((s) => withSectorLeaders(withDayContact({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity,
+      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers,
       locationDetails: s.locationDetails, contactName: s.contactName, contactPhone: s.contactPhone, instructions: s.instructions,
       registrations: s.registrations.map((r) => ({
         id: r.volunteer.id, firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email,

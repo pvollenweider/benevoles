@@ -19,7 +19,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 
 ![Tableau de bord : « Ce qui demande votre attention » avec, du plus urgent au moins urgent, deux demandes d'inscription à traiter, un jalon en retard, des créneaux à compléter, une invitation sans réponse, des postes sans responsable et le début de l'événement, puis les chiffres clés](/doc-img/admin-dashboard.png)
 
-- créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours) ;
+- créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours, sauf si tous ceux-là ont atteint leur minimum de personnes), avec le nombre de créneaux sous leur minimum ; le lien mène alors à **Où manque-t-il du monde ?** ;
 - demandes d'inscription à accepter ou refuser, sur les créneaux sur validation (urgent) ;
 - places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
 - jalons en retard ;

@@ -184,6 +184,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
                 <label htmlFor={`${id}-shift-${s.id}`} className="font-medium text-gray-900">{shiftName(s)}, {shiftDay(s.date, "short")}, {shiftHours(s)}</label>
                 <p id={`${id}-shift-${s.id}-detail`} className="text-gray-700">
                   {placesLeftLabel(s.placesLeft)}
+                  {s.staffingState && <>, <span aria-hidden="true">{s.staffingState}</span><span className="sr-only">{s.spokenStaffingState ?? s.staffingState}</span></>}
                   {(s.reservedTags ?? []).length > 0 && `, poste réservé aux tags ${s.reservedTags!.join(", ")}`}
                 </p>
               </div>

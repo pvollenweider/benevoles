@@ -2,8 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const findUnique = vi.hoisted(() => vi.fn())
 const findMany = vi.hoisted(() => vi.fn())
+// The role's shifts with a minimum of people (#949); none unless a test says so.
+const shiftFindMany = vi.hoisted(() => vi.fn<(args?: unknown) => Promise<unknown[]>>(async () => []))
 vi.mock("@/lib/prisma", () => ({
-  prisma: { sectorLeader: { findUnique }, registration: { findMany } },
+  prisma: { sectorLeader: { findUnique }, registration: { findMany }, shift: { findMany: shiftFindMany } },
 }))
 
 function get(token: string) {
@@ -46,5 +48,28 @@ describe("GET /api/public/leader/[token]", () => {
     expect(body.roleName).toBe("Bar")
     expect(body.registrations).toHaveLength(1)
     expect(body.registrations[0].volunteer.email).toBe("bob@x.com")
+  })
+
+  it("lists the role's shifts with a minimum and their state, none without one (#949)", async () => {
+    findUnique.mockResolvedValue({
+      id: "l1", eventId: "evt-1", roleName: "Bar", name: "Alice", token: "tok",
+      event: { id: "evt-1", title: "Festival", slug: "festival" },
+    })
+    findMany.mockResolvedValue([])
+    shiftFindMany.mockResolvedValueOnce([
+      { id: "s1", label: "Bar", date: new Date("2026-06-01"), startTime: "18:00", endTime: "22:00", capacity: 4, minVolunteers: 2, registrations: [{ status: "active" }] },
+      { id: "s2", label: "Bar", date: new Date("2026-06-02"), startTime: "18:00", endTime: "22:00", capacity: 4, minVolunteers: 2, registrations: [{ status: "active" }, { status: "requested" }] },
+    ])
+    const { GET } = await import("@/app/api/public/leader/[token]/route")
+    const res = await GET(get("tok"), { params: Promise.resolve({ token: "tok" }) })
+    expect(shiftFindMany).toHaveBeenCalledWith(expect.objectContaining({
+      where: { eventId: "evt-1", roleName: "Bar", status: { not: "cancelled" }, minVolunteers: { not: null } },
+    }))
+    const body = await res.json()
+    expect(body.staffing.map((s: { active: number; state: string }) => [s.active, s.state])).toEqual([[1, "below_minimum"], [1, "minimum_reached"]])
+
+    shiftFindMany.mockResolvedValueOnce([])
+    const none = await (await GET(get("tok"), { params: Promise.resolve({ token: "tok" }) })).json()
+    expect(none.staffing).toEqual([])
   })
 })
