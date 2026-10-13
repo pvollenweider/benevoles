@@ -1,0 +1,11 @@
+{
+  "mp4Sha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
+  "asrVideoSha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
+  "vttHits": [],
+  "asrHits": [],
+  "tuCount": 0,
+  "captionFormatterMatches": true,
+  "captionCues": 54,
+  "allLanguageASR": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "passed": true
+}

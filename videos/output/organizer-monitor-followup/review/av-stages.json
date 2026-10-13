@@ -13,11 +13,11 @@
   },
   {
     "chapter": "requests",
-    "exitCode": 0
+    "exitCode": 1
   },
   {
     "chapter": "filters",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "actions",

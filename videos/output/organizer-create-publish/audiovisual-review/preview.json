@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:44.659Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "b854c3741ce09209cc4b3032c418665c6906f616a1f1c8f7b3f6de8e7a111071",
+  "clipSha256": "abc9477b13c3c5e0e34be542cbc4dc3bf62b8c7275c0dc1fe2f1a4c6603e808b",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Avant de publier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "ouvrez l'aperçu bénévole",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la page d'aperçu bénévole suite au clic sur Prévisualiser",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "Choisissez un créneau",
+        "visibleSeconds": 6.1,
+        "visible": "Clic et sélection du créneau Accueil 10h-12h",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "renseignez les coordonnées du bénévole",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie des informations du bénévole (Alex Martin et adresse e-mail)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "et confirmez ses choix",
+        "visibleSeconds": 11.2,
+        "visible": "Cochage des conditions et clic sur le bouton Voir la confirmation (aperçu)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "vérifier tout le parcours qu'il verra",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la page Aperçu de la confirmation avec récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

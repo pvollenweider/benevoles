@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T09:01:58.905Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
+  "promptSha256": "f4f7495576cd45c295f634ea3cb778afa22445018c51ca20555667a4262b2104",
+  "clipSha256": "1fdfc8f204092b947cbab09dc63367ac5195c1b9c8d6471e6066bfc6e7d22f5f",
+  "scene": "reports",
+  "review": {
+    "heardOpening": "À l'approche du jour J",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "les listes à afficher sur les stands",
+        "visibleSeconds": 1.5,
+        "visible": "Page Rapports avec les rubriques de planning par jour et par poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "les plannings individuels",
+        "visibleSeconds": 3.8,
+        "visible": "Option 'Planning individuel' affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "et les badges",
+        "visibleSeconds": 6.5,
+        "visible": "Défilement vers le bas révélant la section Badges",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

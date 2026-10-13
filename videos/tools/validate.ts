@@ -29,7 +29,7 @@ async function durationMs(file: string) {
 async function main() {
   const manifest = await loadManifest(reference!)
   if (!manifest.continuousNarration) {
-    throw new Error(`${manifest.id}: masterclass videos must use one continuous narration take`)
+    throw new Error(`${manifest.id}: masterclass videos require a continuous narration base`)
   }
   const dir = videoDir(manifest.slug)
   const timeline = await readJson<Timeline>(path.join(dir, "timeline.json"))
@@ -117,7 +117,8 @@ async function main() {
     id: manifest.id,
     slug: manifest.slug,
     validatedAt: new Date().toISOString(),
-    continuousNarration: true,
+    continuousNarration: !audio.sentenceRevision,
+    sentenceRevision: Boolean(audio.sentenceRevision),
     narrationContentChecked,
     voice: manifest.voice,
     captureMs,
@@ -128,7 +129,7 @@ async function main() {
   }
   await writeFile(path.join(dir, "validation.json"), `${JSON.stringify(report, null, 2)}\n`)
   if (issues.length > 0) throw new Error(`${manifest.id} synchronization failed:\n- ${issues.join("\n- ")}`)
-  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, one continuous ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}; music ${music?.smallestGapLu}–${music?.largestGapLu} LU under the voice`)
+  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, ${audio.sentenceRevision ? "sentence revisions with selected" : "one continuous"} ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}; music ${music?.smallestGapLu}–${music?.largestGapLu} LU under the voice`)
 }
 
 main().catch((error) => {

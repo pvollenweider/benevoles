@@ -1,0 +1,20 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T16:37:41.625Z",
+  "revalidatedAt": "2026-10-13T16:37:41.625Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "organization",
+      "audioSha256": "5e098c9caaacccd5f0e0712c16edfbce382c240d7d4a49d94d087717f204ced3",
+      "recognized": "Tout commence avec l'identité de l'organisation. Son identifiant public forme une adresse comme fête tiret de mon verre point bénévole point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la convention des bénévoles que chacun devra accepter.",
+      "expected": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+      "wordErrorRate": 0.125,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

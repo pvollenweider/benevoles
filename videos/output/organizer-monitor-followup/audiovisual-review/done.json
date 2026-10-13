@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:02:05.430Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "67249a53090f1ba24c16e2770966dc43f1111b065616ae6dd817cf824b00608a",
-  "clipSha256": "dd7800b97b3dbfb4422f0dfd4b37201e4b1239f0ab8223c050f7b7360116ec8d",
+  "reviewedAt": "2026-10-13T17:05:34.225Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "69e0aef05af8a282ebf85adfa296202c4d699599e7b89fc49c9a9433df43b80b",
+  "clipSha256": "3a8d8037d29add87a376ab1fd612aadbfe397b8ecee8638ec3f3132b08178a43",
   "scene": "done",
   "review": {
-    "heardOpening": "Le résultat, c’est un suivi simple",
+    "heardOpening": "Le résultat, c'est un suivi simple",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
+        "spokenSeconds": 0.5,
         "spoken": "Le résultat, c'est un suivi simple",
-        "visibleSeconds": 0,
-        "visible": "Cartouche affichant 'Un suivi clair jusqu'au jour J - Voir, cibler, préparer'",
+        "visibleSeconds": 0.5,
+        "visible": "Bannière centrale « Un suivi clair jusqu'au jour J » affichée au centre de l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "voir les manques, contacter les bonnes personnes",
-        "visibleSeconds": 2.6,
-        "visible": "Disparition du cartouche et affichage de la liste de l'historique d'activité",
+        "spokenSeconds": 5.9,
+        "spoken": "retrouver l’historique sans jongler entre plusieurs outils",
+        "visibleSeconds": 5.9,
+        "visible": "Affichage complet du journal d'activité listant l'historique des inscriptions et modifications de créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "retrouver l'historique sans jongler entre plusieurs outils",
-        "visibleSeconds": 6,
-        "visible": "Vue détaillée du journal d'inscriptions et créneaux (historique)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8.7,
-        "spoken": "Ton planning reste lisible jusqu'au jour de l'événement",
-        "visibleSeconds": 8.7,
-        "visible": "Écran récapitulatif stable en conclusion",
+        "spokenSeconds": 8.9,
+        "spoken": "Votre planning reste lisible jusqu’au jour de l’événement",
+        "visibleSeconds": 8.9,
+        "visible": "Vue d'ensemble stable des entrées chronologiques du planning d'événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec l'affichage de conclusion."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

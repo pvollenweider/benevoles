@@ -1,5 +1,7 @@
 # Suivre les inscriptions et relancer au bon moment
 
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 ## Objectif
 
 Montrer comment un organisateur pilote un événement déjà publié : vérifier les postes couverts, examiner les demandes, retrouver une personne, relancer les bénévoles concernés, préparer les documents du jour J et garder une trace des changements.
@@ -28,5 +30,5 @@ Chaleureux, souriant et concret. La personne qui raconte connaît la réalité d
 - Utiliser uniquement la base locale E2E et les données fictives de `scripts/seed-demo.ts`.
 - Ne jamais envoyer de message réel : la vidéo s’arrête à l’aperçu et à la confirmation.
 - Ne prendre aucune décision définitive sur une demande : ouvrir la fenêtre puis la refermer.
-- La narration est générée en une seule prise pour conserver la même voix, le même sourire et la même énergie.
+- La narration conserve la voix de la prise d’origine lors du remplacement des phrases révisées.
 - Chaque page doit être chargée avant que la phrase qui la décrit ne commence.

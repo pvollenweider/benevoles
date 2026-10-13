@@ -1,0 +1,10 @@
+STATUS: READY
+Commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8
+BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
+Second narrated take (one video-only re-film), product provenance accepted by recorder and validator. First take/report/evidence retained in previous-20261011T193127. Source WAVs reused unchanged; all source audits and all 16 final-MP4 chapter ASR checks pass. The first take's URL spelling ASR alerts remain preserved; second take organization audit passes at 7.5%.
+video:validate passes incl. 14 sentence anchors, music 13.6–18.3 LU below voice, music-only -33.5 to -32.1 LUFS. Posters metadata review/renders-generated.json only. VTT text is identical to manifest display text (French numeric hours/dates); independent final audio matches narration. Effects match 18 clicks and 8 keys; hash/count checks in objective-evidence.json.
+Reviewed all 96 MP4 frames (sheets 0–7) alongside sentence-action-evidence.json. Intro stable; organization address/identity, team roles, lifecycle, duplicate, registrations, members, questions, messages, reminders, reports and activity match their narration and current UI. No localhost, org-admin@localhost, Timeline or dev overlay observed; current Frise and French dates.
+Retake fixes confirmed: appearance color shown before coordinates sentence, coordinates revealed at 82.639 s (sheet-2); resizing precedes series opening at 119.469 s, tied to Pour des horaires (sheet-3); age visible before waiting-controls sentence at 137.829 s (sheet-3); page title waits for Donne un titre at 202.763 s (sheet-5). Relevant examples/screens held through the described sentence.
+Local sources: record.ts timing/anchors for appearance, resize/series, age/waiting controls and page title. Removed obsolete DOM address rewriting; displayed address comes from configured URL. No src/ changes.
+Known product nits, report only: Prévenir en cas de désistement checkbox offset (sheet-6); event log raw shift field/status values (sheet-7).
+Real-time subjective listening unavailable; not used as a failure reason. Objective audio ASR, captions, music, effects and sentence/action frame review completed.

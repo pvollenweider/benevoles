@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:14:40.682Z",
-  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
-  "promptSha256": "9f5249ed2a32021b1fc8d14cbd193e7ff003c0f29e673d448a5cacab00756553",
-  "clipSha256": "a68d787eecd8c315e4d1284b143dde85af25a423d52a6b9636615ed41005c45e",
+  "reviewedAt": "2026-10-13T17:17:03.291Z",
+  "videoSha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
+  "promptSha256": "216ef26e903d2ce999a040a137d811e53f2d84f1e0c9135edea08adfb2057f0a",
+  "clipSha256": "41d05ffab9f1ae71fa7a5471bcdd9736fc39f24ea8b38e8aea4f7526b1b269a3",
   "scene": "role",
   "review": {
     "heardOpening": "Pour préparer seulement la buvette",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "revenons au formulaire et choisissons ce poste",
-        "visibleSeconds": 1.8,
-        "visible": "Défilement vers la section Badges et sélection du poste Buvette",
+        "spokenSeconds": 2,
+        "spoken": "revenons au formulaire et choisissons ce poste.",
+        "visibleSeconds": 1.2,
+        "visible": "Défilement vers le formulaire des badges où le champ Poste indique Buvette.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5,
-        "spoken": "Les personnes retenues ont une inscription confirmée à la buvette",
+        "spoken": "Les personnes retenues ont une inscription confirmée à la buvette.",
         "visibleSeconds": 6.8,
-        "visible": "Clic sur 'Ouvrir les badges' puis affichage de la planche de badges filtrés sur la buvette",
+        "visible": "Clic sur Ouvrir les badges puis affichage du document généré filtré sur le poste Buvette.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
+        "spokenSeconds": 8.3,
         "spoken": "Comparons le badge de Léa avec sa version complète",
         "visibleSeconds": 11.2,
-        "visible": "Écran comparatif affichant 'Léa — tous les postes' et 'Léa — filtre Buvette'",
+        "visible": "Affichage de la vue comparative entre le badge complet Tous les postes et le badge filtre Buvette de Léa Giroud.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "revenez à Tous les postes avant de le refaire.",
+        "visibleSeconds": 17.8,
+        "visible": "Écran comparatif stable illustrant l'impact du filtre sur les postes affichés.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine claire, posée et bien synchronisée avec les transitions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les enchaînements visuels."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

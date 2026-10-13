@@ -63,6 +63,7 @@ export type AudioMetadata = {
   model: string
   voice: string
   generatedAt: string
+  sentenceRevision?: import("./narration-generation").SentenceRevision
   segments: Record<string, { file: string; durationMs: number; generationSha256: string }>
 }
 

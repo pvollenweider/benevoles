@@ -1,0 +1,11 @@
+{
+  "coverage": {
+    "sourceAudioSha256": "7625c9d3688d5341941243c23aa4f142e070dac5cca5b286b7a6b951506be10d",
+    "boundariesMs": [
+      0,
+      2787.5,
+      10549.5,
+      13721.917
+    ]
+  }
+}

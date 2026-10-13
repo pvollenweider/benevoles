@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:14:43.591Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "166262b30c4791580cea87cfa50713167f31c0ee3c6828bfe5c4e48a3575539f",
+  "clipSha256": "f6a01a724d13ef77ec78f8d2d83c945b0d25faff40fc89b6af5173f9be6ad911",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un prénom visible et le bon poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un prénom visible et le bon poste : un badge peut suffire",
+        "visibleSeconds": 0,
+        "visible": "Titre 'Des badges lisibles pour accueillir son équipe' affiché sur la page Rapports",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Depuis Rapports, ouvrons les options des badges",
+        "visibleSeconds": 6,
+        "visible": "Affichage de la section Badges avec ses options de filtrage et de mise en page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.4,
+        "spoken": "Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence",
+        "visibleSeconds": 15,
+        "visible": "Écran stable sur le formulaire de configuration des badges",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

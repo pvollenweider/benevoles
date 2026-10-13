@@ -1,0 +1,2 @@
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/intro/0.wav'
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/intro/1.wav'

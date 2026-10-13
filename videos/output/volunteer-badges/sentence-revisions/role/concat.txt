@@ -1,0 +1,5 @@
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/role/0.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/role/1.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/role/2.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/role/3.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/role/4.wav'

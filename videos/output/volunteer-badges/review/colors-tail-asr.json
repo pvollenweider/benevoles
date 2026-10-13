@@ -1,0 +1,10 @@
+{
+  "mp4Sha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
+  "chapter": "colors",
+  "startSeconds": 140.485,
+  "endSeconds": 145.224,
+  "clipSha256": "0b6ebf404265d620c486f63c79b844586cb95559a524c99e1ff0a0aacf7616e7",
+  "recognized": "Le noir et blanc est pratique. Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
+  "independent": true,
+  "note": "Blind all-language recognition of actual final-MP4 tail, no reference narration supplied."
+}

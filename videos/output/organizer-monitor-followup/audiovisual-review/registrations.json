@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:24.063Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
+  "reviewedAt": "2026-10-13T17:04:49.532Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
   "promptSha256": "9dd4a234035ca837124233f13b31c3b9f0270d01aab8fbbdbf26c637c0f76dff",
-  "clipSha256": "ec180b083b0b89c89a336792e90bc4f3fe32875702173f592f061c86f12a2ca6",
+  "clipSha256": "ae65ee229039626f27cfb834b983f035e6f9e79de679af00b02a9cc9d8fafb46",
   "scene": "registrations",
   "review": {
-    "heardOpening": "Dans les inscriptions, chaque ligne rassemble",
+    "heardOpening": "Dans les inscriptions",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles.",
-        "visibleSeconds": 0,
-        "visible": "Page Inscriptions affichant un tableau avec les colonnes Bénévole, Créneau, Source et Statut.",
+        "spoken": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut",
+        "visibleSeconds": 0.5,
+        "visible": "Page Inscriptions affichant le tableau avec les colonnes Bénévole, Créneau, Source et Statut",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 7,
         "spoken": "Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire",
-        "visibleSeconds": 7.3,
-        "visible": "Mentions « Taille de t-shirt : M » et « Régime : Végétarien » visibles sous les coordonnées du bénévole Camille Rochat.",
+        "visibleSeconds": 7,
+        "visible": "Mentions « Taille de t-shirt : M » et « Régime : Végétarien » visibles sous les coordonnées de Camille Rochat",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
-        "visibleSeconds": 11.2,
-        "visible": "Vue d'ensemble centralisée dans la liste sans navigation externe requise.",
+        "spokenSeconds": 11.5,
+        "spoken": "restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers",
+        "visibleSeconds": 11.5,
+        "visible": "Informations personnalisées directement intégrées dans les lignes du tableau sans manipulation supplémentaire",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement audible, sans bruit parasite."
+      "observation": "Voix off féminine claire, fluide et naturelle, en adéquation avec la description générale de l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

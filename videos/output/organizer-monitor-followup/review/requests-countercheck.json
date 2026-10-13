@@ -1,0 +1,21 @@
+{
+  "mp4Sha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "scene": "requests",
+  "reported": "Modal remains open until the end",
+  "measuredSentenceStartSeconds": 9.243,
+  "actualCancelClickSeconds": 9.721,
+  "latencySeconds": 0.478,
+  "frames": [
+    {
+      "relativeSeconds": 10.05,
+      "file": "review/requests-close-10.05.png",
+      "observation": "modal absent; two requests still awaiting decision"
+    },
+    {
+      "relativeSeconds": 13,
+      "file": "review/requests-close-13.0.png",
+      "observation": "modal absent, contradicting the report at 13 seconds"
+    }
+  ],
+  "conclusion": "False missing-action flag; raw audiovisual report retained, no rewritten success claim and no retake."
+}

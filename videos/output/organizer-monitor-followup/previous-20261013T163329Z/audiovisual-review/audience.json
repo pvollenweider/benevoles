@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T09:01:43.503Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
+  "promptSha256": "9b0101d3b6113ef945e220d266e0155c303402a503af0dcaaf0ff546e3654777",
+  "clipSha256": "7bd8c0c674c0b24ddfee0574f28427a4908ee579d28427faf0b366d40d9e0fef",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance, choisis précisément les destinataires",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "tous les inscrits, un poste",
+        "visibleSeconds": 4.3,
+        "visible": "Le bouton radio 'Les bénévoles d'un poste' est sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "les invités qui n’ont encore aucun créneau confirmé",
+        "visibleSeconds": 7.1,
+        "visible": "L'option 'Les invités sans créneau confirmé' est cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Le nombre de personnes est recalculé avant l’envoi",
+        "visibleSeconds": 12.1,
+        "visible": "La sélection revient sur la liste d'attente et indique '3 personnes recevront ce message'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les clics à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

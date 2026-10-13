@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:56:52.486Z",
+  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "promptSha256": "72f8e17f8c908bc762b48627a507eaec2bf0bf4e3b5ecf5dd7a461d7dc4f83a0",
+  "clipSha256": "0548405e9f12953f67393492d536c5ae23c443c6aa6eaf4356a98ca0d22aa3b5",
+  "scene": "publish",
+  "review": {
+    "heardOpening": "Quand tout est prêt, publiez le planning.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "publiez le planning",
+        "visibleSeconds": 0,
+        "visible": "Clic sur le bouton vert « Publier » dans la section Publication",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "La page d’inscription devient accessible",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de la mention « L'événement est publié : les bénévoles peuvent s'inscrire. »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "aucun message n’est envoyé automatiquement",
+        "visibleSeconds": 5,
+        "visible": "Écran stable de confirmation de publication et liste de vérification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la publication de l'événement."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

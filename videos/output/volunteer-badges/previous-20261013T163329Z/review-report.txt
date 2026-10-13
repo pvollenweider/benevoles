@@ -1,0 +1,22 @@
+STATUS: READY
+ID: VOLUNTEER_BADGES
+Duration: 234.72
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 202, 'musicOnlyWindows': 4, 'smallestGapLu': 14.3, 'largestGapLu': 19, 'quietestMusicOnlyLufs': -33.3, 'loudestMusicOnlyLufs': -32.8, 'medianVoiceLufs': -16.6}
+Problems: All objective checks pass, including final PDF page cue; real role/individual/empty/colour/field variants inspected.
+Source changes: Pass 1 final-page sentence anchor retained; no additional source change; no third take.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.143–21.96 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+all: 24.227–48.622 s; review/all-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+role: 50.892–72.98 s; review/role-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+individual: 75.252–99.214 s; review/individual-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+empty: 101.475–121.39 s; review/empty-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+colors: 123.654–144.392 s; review/colors-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+fields: 146.655–169.48 s; review/fields-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
+print: 171.745–203.789 s; review/print-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 210.798–234.272 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []

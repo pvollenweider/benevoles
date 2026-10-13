@@ -1,0 +1,3 @@
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/organization/0.wav'
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/organization/1.wav'
+file '/private/tmp/codex-video/videos/output/admin-features-tour/sentence-revisions/organization/2.wav'

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:46:52.296Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "6cc9c04240f3f77c26e542fe8fd153eb4b929442ceb2dbe8e499cc8b1a2454bb",
+  "clipSha256": "03ccc9d0603df8771b60d564e1439afe4d6affb1f127240f8ce77d17b1dd2c0f",
+  "scene": "team",
+  "review": {
+    "heardOpening": "Côté équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le propriétaire administre l'organisation et ses accès",
+        "visibleSeconds": 1,
+        "visible": "Section Administrateurs affichant les membres avec le rôle Propriétaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Les organisateurs préparent les événements",
+        "visibleSeconds": 5,
+        "visible": "Rôle Organisateur visible dans la liste des administrateurs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Les responsables de secteur reçoivent un lien personnel limité à leur poste",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la page Responsables de secteur avec les postes Accueil et Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

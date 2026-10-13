@@ -1,52 +1,52 @@
 {
-  "mp4Sha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "mp4Sha256": "533d046e080cf6f79de887e6c2892087a9425bfc3f5dd6ec90ad19f3ddfbcf09",
   "chapters": [
     {
       "chapter": "welcome",
-      "startSeconds": 1.143,
-      "endSeconds": 21.96,
+      "startSeconds": 1.136,
+      "endSeconds": 21.956,
       "sentences": [
         {
           "text": "Un prénom visible et le bon poste :",
           "startMs": 253,
           "endMs": 2123,
           "method": "silence",
-          "videoSeconds": 1.396
+          "videoSeconds": 1.389
         },
         {
           "text": "un badge peut suffire à rendre l'accueil plus chaleureux et plus simple.",
           "startMs": 2629,
           "endMs": 5742,
           "method": "silence",
-          "videoSeconds": 3.772
+          "videoSeconds": 3.765
         },
         {
           "text": "Depuis Rapports, ouvrons les options des badges.",
           "startMs": 6540,
           "endMs": 8847,
           "method": "silence",
-          "videoSeconds": 7.683
+          "videoSeconds": 7.676
         },
         {
           "text": "Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper.",
           "startMs": 9434,
           "endMs": 14840,
           "method": "silence",
-          "videoSeconds": 10.577
+          "videoSeconds": 10.57
         },
         {
           "text": "Ce badge identifie un membre de l'équipe ;",
           "startMs": 15724,
           "endMs": 17595,
           "method": "silence",
-          "videoSeconds": 16.867
+          "videoSeconds": 16.86
         },
         {
           "text": "il n'est ni un contrôle d'accès, ni une preuve de présence.",
           "startMs": 17946,
           "endMs": 20328,
           "method": "silence",
-          "videoSeconds": 19.089
+          "videoSeconds": 19.082
         }
       ],
       "anchors": [
@@ -55,102 +55,102 @@
           "phrase": "Depuis Rapports, ouvrons les options",
           "startMs": 6540,
           "endMs": 8847,
-          "cueMs": 7685
+          "cueMs": 7678
         }
       ],
       "interactions": [],
       "frames": [
         {
           "scene": "welcome",
-          "fraction": 0.02882259691598213,
-          "seconds": 1.743,
+          "fraction": 0.02881844380403458,
+          "seconds": 1.736,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-3.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.25,
-          "seconds": 6.34725,
+          "seconds": 6.341,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-25.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.45,
-          "seconds": 10.51065,
+          "seconds": 10.505,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-45.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.6,
-          "seconds": 13.633199999999999,
+          "seconds": 13.628,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-60.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.85,
-          "seconds": 18.83745,
+          "seconds": 18.833,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-85.png"
         },
         {
           "scene": "welcome",
-          "fraction": 0.985588701542009,
-          "seconds": 21.66,
+          "fraction": 0.9855907780979827,
+          "seconds": 21.656,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/welcome-end.png"
         }
       ]
     },
     {
       "chapter": "all",
-      "startSeconds": 24.227,
-      "endSeconds": 48.622,
+      "startSeconds": 24.222,
+      "endSeconds": 48.618,
       "sentences": [
         {
           "text": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les badges.",
           "startMs": 497,
           "endMs": 4267,
           "method": "silence",
-          "videoSeconds": 24.724
+          "videoSeconds": 24.719
         },
         {
           "text": "La série comporte un badge par personne confirmée, pas un badge par inscription.",
           "startMs": 5003,
           "endMs": 8802,
           "method": "silence",
-          "videoSeconds": 29.23
+          "videoSeconds": 29.225
         },
         {
           "text": "Léa est sur plusieurs horaires :",
           "startMs": 9569,
           "endMs": 10875,
           "method": "silence",
-          "videoSeconds": 33.796
+          "videoSeconds": 33.791
         },
         {
           "text": "elle n'a qu'un badge.",
           "startMs": 11157,
           "endMs": 11905,
           "method": "silence",
-          "videoSeconds": 35.384
+          "videoSeconds": 35.379
         },
         {
           "text": "Regardons la première feuille puis la suivante.",
           "startMs": 12757,
           "endMs": 14657,
           "method": "silence",
-          "videoSeconds": 36.984
+          "videoSeconds": 36.979
         },
         {
           "text": "Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées.",
           "startMs": 15572,
           "endMs": 17674,
           "method": "silence",
-          "videoSeconds": 39.799
+          "videoSeconds": 39.794
         },
         {
           "text": "Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
           "startMs": 17927,
           "endMs": 23939,
           "method": "silence",
-          "videoSeconds": 42.154
+          "videoSeconds": 42.149
         }
       ],
       "anchors": [
@@ -159,115 +159,115 @@
           "phrase": "La série comporte un badge",
           "startMs": 5003,
           "endMs": 8802,
-          "cueMs": 29231
+          "cueMs": 29227
         },
         {
           "segmentId": "all",
           "phrase": "Léa est sur plusieurs horaires",
           "startMs": 9569,
           "endMs": 10875,
-          "cueMs": 33797
+          "cueMs": 33794
         },
         {
           "segmentId": "all",
           "phrase": "Le format prévoit dix badges",
           "startMs": 15572,
           "endMs": 17674,
-          "cueMs": 39801
+          "cueMs": 39794
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 29699,
-          "relativeSeconds": 5.472
+          "atMs": 29716,
+          "relativeSeconds": 5.494
         }
       ],
       "frames": [
         {
           "scene": "all",
-          "fraction": 0.02459520393523263,
-          "seconds": 24.827,
+          "fraction": 0.02459419576979833,
+          "seconds": 24.822,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-2.png"
         },
         {
           "scene": "all",
           "fraction": 0.25,
-          "seconds": 30.32575,
+          "seconds": 30.321,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-25.png"
         },
         {
           "scene": "all",
           "fraction": 0.45,
-          "seconds": 35.20475,
+          "seconds": 35.200199999999995,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-45.png"
         },
         {
           "scene": "all",
           "fraction": 0.6,
-          "seconds": 38.864,
+          "seconds": 38.8596,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-60.png"
         },
         {
           "scene": "all",
           "fraction": 0.85,
-          "seconds": 44.96275,
+          "seconds": 44.9586,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-85.png"
         },
         {
           "scene": "all",
-          "fraction": 0.9877023980323837,
-          "seconds": 48.322,
+          "fraction": 0.9877029021151008,
+          "seconds": 48.318,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/all-end.png"
         }
       ]
     },
     {
       "chapter": "role",
-      "startSeconds": 50.892,
-      "endSeconds": 72.98,
+      "startSeconds": 50.88,
+      "endSeconds": 72.968,
       "sentences": [
         {
           "text": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce poste.",
           "startMs": 464,
           "endMs": 4223,
           "method": "silence",
-          "videoSeconds": 51.356
+          "videoSeconds": 51.344
         },
         {
           "text": "Les personnes retenues ont une inscription confirmée à la buvette.",
           "startMs": 5000,
           "endMs": 7630,
           "method": "silence",
-          "videoSeconds": 55.892
+          "videoSeconds": 55.88
         },
         {
           "text": "Comparons le badge de Léa avec sa version complète :",
           "startMs": 8651,
           "endMs": 10735,
           "method": "silence",
-          "videoSeconds": 59.543
+          "videoSeconds": 59.531
         },
         {
           "text": "ses autres postes ne figurent plus dans cette version filtrée.",
           "startMs": 11560,
           "endMs": 13819,
           "method": "silence",
-          "videoSeconds": 62.452
+          "videoSeconds": 62.44
         },
         {
           "text": "Le filtre change le contenu généré, pas ses inscriptions.",
           "startMs": 14459,
           "endMs": 17202,
           "method": "silence",
-          "videoSeconds": 65.351
+          "videoSeconds": 65.339
         },
         {
-          "text": "Si tu veux son badge pour toute la fête, reviens à Tous les postes avant de le refaire.",
-          "startMs": 17782,
-          "endMs": 21592,
+          "text": "Si vous voulez son badge pour toute la fête, revenez à Tous les postes avant de le refaire.",
+          "startMs": 17701,
+          "endMs": 21887,
           "method": "silence",
-          "videoSeconds": 68.674
+          "videoSeconds": 68.581
         }
       ],
       "anchors": [
@@ -276,855 +276,855 @@
           "phrase": "Pour préparer seulement la buvette",
           "startMs": 464,
           "endMs": 4223,
-          "cueMs": 52126
+          "cueMs": 52121
         },
         {
           "segmentId": "role",
           "phrase": "Comparons le badge de Léa",
           "startMs": 8651,
           "endMs": 10735,
-          "cueMs": 59543
+          "cueMs": 59532
         },
         {
           "segmentId": "role",
           "phrase": "ses autres postes ne figurent",
           "startMs": 11560,
           "endMs": 13819,
-          "cueMs": 62454
+          "cueMs": 62442
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 52613,
-          "relativeSeconds": 1.721
+          "atMs": 52610,
+          "relativeSeconds": 1.73
         },
         {
           "kind": "click",
-          "atMs": 57113,
-          "relativeSeconds": 6.221
+          "atMs": 57124,
+          "relativeSeconds": 6.244
         }
       ],
       "frames": [
         {
           "scene": "role",
           "fraction": 0.027164070988772184,
-          "seconds": 51.492,
+          "seconds": 51.48,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-3.png"
         },
         {
           "scene": "role",
           "fraction": 0.25,
-          "seconds": 56.414,
+          "seconds": 56.402,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-25.png"
         },
         {
           "scene": "role",
           "fraction": 0.45,
-          "seconds": 60.8316,
+          "seconds": 60.8196,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-45.png"
         },
         {
           "scene": "role",
           "fraction": 0.6,
-          "seconds": 64.1448,
+          "seconds": 64.1328,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-60.png"
         },
         {
           "scene": "role",
           "fraction": 0.85,
-          "seconds": 69.66680000000001,
+          "seconds": 69.65480000000001,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-85.png"
         },
         {
           "scene": "role",
           "fraction": 0.9864179645056139,
-          "seconds": 72.68,
+          "seconds": 72.668,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/role-end.png"
         }
       ]
     },
     {
       "chapter": "individual",
-      "startSeconds": 75.252,
-      "endSeconds": 99.214,
+      "startSeconds": 75.236,
+      "endSeconds": 99.333,
       "sentences": [
         {
           "text": "Un badge perdu ?",
           "startMs": 494,
           "endMs": 1124,
           "method": "silence",
-          "videoSeconds": 75.746
+          "videoSeconds": 75.73
         },
         {
-          "text": "Choisis une personne dans Bénévole, réimpression.",
-          "startMs": 1813,
-          "endMs": 3372,
+          "text": "Choisissez une personne dans Bénévole, réimpression.",
+          "startMs": 1660,
+          "endMs": 3791,
           "method": "silence",
-          "videoSeconds": 77.065
+          "videoSeconds": 76.896
         },
         {
           "text": "Nous avons deux Camille Berger :",
-          "startMs": 3673,
-          "endMs": 4270,
+          "startMs": 3999,
+          "endMs": 4566,
           "method": "silence",
-          "videoSeconds": 78.925
+          "videoSeconds": 79.235
         },
         {
           "text": "l'adresse affichée dans la sélection permet de les distinguer.",
-          "startMs": 5123,
-          "endMs": 9241,
+          "startMs": 5259,
+          "endMs": 9377,
           "method": "silence",
-          "videoSeconds": 80.375
+          "videoSeconds": 80.495
         },
         {
           "text": "Elle n'est pas imprimée sur le badge.",
-          "startMs": 9817,
-          "endMs": 10966,
+          "startMs": 9954,
+          "endMs": 11102,
           "method": "silence",
-          "videoSeconds": 85.069
+          "videoSeconds": 85.19
         },
         {
           "text": "Attention au filtre de poste encore actif :",
-          "startMs": 11767,
-          "endMs": 13415,
+          "startMs": 11903,
+          "endMs": 13551,
           "method": "silence",
-          "videoSeconds": 87.019
+          "videoSeconds": 87.139
         },
         {
           "text": "une réimpression individuelle garde cette restriction.",
-          "startMs": 13928,
-          "endMs": 15959,
+          "startMs": 14064,
+          "endMs": 16096,
           "method": "silence",
-          "videoSeconds": 89.18
+          "videoSeconds": 89.3
         },
         {
           "text": "Sélectionnons la bonne Camille, puis générons sa feuille.",
-          "startMs": 16709,
-          "endMs": 19342,
+          "startMs": 16846,
+          "endMs": 19479,
           "method": "silence",
-          "videoSeconds": 91.961
+          "videoSeconds": 92.082
         },
         {
           "text": "Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
-          "startMs": 20057,
-          "endMs": 23553,
+          "startMs": 20194,
+          "endMs": 23689,
           "method": "silence",
-          "videoSeconds": 95.309
+          "videoSeconds": 95.43
         }
       ],
       "anchors": [
         {
           "segmentId": "individual",
           "phrase": "Nous avons deux Camille Berger",
-          "startMs": 3673,
-          "endMs": 4270,
-          "cueMs": 78926
+          "startMs": 3999,
+          "endMs": 4566,
+          "cueMs": 79237
         },
         {
           "segmentId": "individual",
           "phrase": "Elle n'est pas imprimée sur",
-          "startMs": 9817,
-          "endMs": 10966,
-          "cueMs": 85072
+          "startMs": 9954,
+          "endMs": 11102,
+          "cueMs": 85191
         },
         {
           "segmentId": "individual",
           "phrase": "Sélectionnons la bonne Camille, puis",
-          "startMs": 16709,
-          "endMs": 19342,
-          "cueMs": 91964
+          "startMs": 16846,
+          "endMs": 19479,
+          "cueMs": 92082
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 76954,
-          "relativeSeconds": 1.702
+          "atMs": 77065,
+          "relativeSeconds": 1.829
         },
         {
           "kind": "click",
-          "atMs": 79385,
-          "relativeSeconds": 4.133
+          "atMs": 79713,
+          "relativeSeconds": 4.477
         },
         {
           "kind": "click",
-          "atMs": 85534,
-          "relativeSeconds": 10.282
+          "atMs": 85681,
+          "relativeSeconds": 10.445
         },
         {
           "kind": "click",
-          "atMs": 92452,
-          "relativeSeconds": 17.2
+          "atMs": 92547,
+          "relativeSeconds": 17.311
         },
         {
           "kind": "click",
-          "atMs": 93885,
-          "relativeSeconds": 18.633
+          "atMs": 93981,
+          "relativeSeconds": 18.745
         }
       ],
       "frames": [
         {
           "scene": "individual",
-          "fraction": 0.02503964610633503,
-          "seconds": 75.852,
-          "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-3.png"
+          "fraction": 0.024899365066190813,
+          "seconds": 75.836,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-2.png"
         },
         {
           "scene": "individual",
           "fraction": 0.25,
-          "seconds": 81.2425,
+          "seconds": 81.26025,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-25.png"
         },
         {
           "scene": "individual",
           "fraction": 0.45,
-          "seconds": 86.0349,
+          "seconds": 86.07965,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-45.png"
         },
         {
           "scene": "individual",
           "fraction": 0.6,
-          "seconds": 89.6292,
+          "seconds": 89.6942,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-60.png"
         },
         {
           "scene": "individual",
           "fraction": 0.85,
-          "seconds": 95.6197,
+          "seconds": 95.71844999999999,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-85.png"
         },
         {
           "scene": "individual",
-          "fraction": 0.9874801769468324,
-          "seconds": 98.914,
+          "fraction": 0.9875503174669046,
+          "seconds": 99.033,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/individual-end.png"
         }
       ]
     },
     {
       "chapter": "empty",
-      "startSeconds": 101.475,
-      "endSeconds": 121.39,
+      "startSeconds": 101.593,
+      "endSeconds": 122.222,
       "sentences": [
         {
-          "text": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
-          "startMs": 405,
-          "endMs": 4487,
+          "text": "Si vous combinez un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+          "startMs": 185,
+          "endMs": 5214,
           "method": "silence",
-          "videoSeconds": 101.88
+          "videoSeconds": 101.778
         },
         {
           "text": "Voici le vrai message de l'application.",
-          "startMs": 5052,
-          "endMs": 6472,
+          "startMs": 5766,
+          "endMs": 7186,
           "method": "silence",
-          "videoSeconds": 106.527
+          "videoSeconds": 107.359
         },
         {
           "text": "Ce n'est pas un problème d'imprimante à contourner.",
-          "startMs": 7232,
-          "endMs": 8945,
+          "startMs": 7946,
+          "endMs": 9659,
           "method": "silence",
-          "videoSeconds": 108.707
+          "videoSeconds": 109.539
         },
         {
           "text": "Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document.",
-          "startMs": 9474,
-          "endMs": 13785,
+          "startMs": 10188,
+          "endMs": 14499,
           "method": "silence",
-          "videoSeconds": 110.949
+          "videoSeconds": 111.781
         },
         {
           "text": "Le résultat doit correspondre à la personne choisie et à ses confirmations, pas simplement à un nom ressemblant.",
-          "startMs": 14442,
-          "endMs": 19482,
+          "startMs": 15156,
+          "endMs": 20196,
           "method": "silence",
-          "videoSeconds": 115.917
+          "videoSeconds": 116.749
         }
       ],
       "anchors": [
         {
           "segmentId": "empty",
           "phrase": "Voici le vrai message de",
-          "startMs": 5052,
-          "endMs": 6472,
-          "cueMs": 106530
+          "startMs": 5766,
+          "endMs": 7186,
+          "cueMs": 107360
         },
         {
           "segmentId": "empty",
           "phrase": "Voici le vrai message de",
-          "startMs": 5052,
-          "endMs": 6472,
-          "cueMs": 107956
+          "startMs": 5766,
+          "endMs": 7186,
+          "cueMs": 108813
         },
         {
           "segmentId": "empty",
           "phrase": "Revenons aux filtres et choisissons",
-          "startMs": 9474,
-          "endMs": 13785,
-          "cueMs": 110955
+          "startMs": 10188,
+          "endMs": 14499,
+          "cueMs": 111783
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 103113,
-          "relativeSeconds": 1.638
+          "atMs": 103220,
+          "relativeSeconds": 1.627
         },
         {
           "kind": "click",
-          "atMs": 106997,
-          "relativeSeconds": 5.522
+          "atMs": 107853,
+          "relativeSeconds": 6.26
         },
         {
           "kind": "click",
-          "atMs": 108428,
-          "relativeSeconds": 6.953
+          "atMs": 109286,
+          "relativeSeconds": 7.693
         },
         {
           "kind": "click",
-          "atMs": 112579,
-          "relativeSeconds": 11.104
+          "atMs": 113426,
+          "relativeSeconds": 11.833
         },
         {
           "kind": "click",
-          "atMs": 114028,
-          "relativeSeconds": 12.553
+          "atMs": 114874,
+          "relativeSeconds": 13.281
         },
         {
           "kind": "click",
-          "atMs": 115462,
-          "relativeSeconds": 13.987
+          "atMs": 116309,
+          "relativeSeconds": 14.716
         }
       ],
       "frames": [
         {
           "scene": "empty",
-          "fraction": 0.03012804418779814,
-          "seconds": 102.075,
+          "fraction": 0.029085268311600174,
+          "seconds": 102.193,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-3.png"
         },
         {
           "scene": "empty",
           "fraction": 0.25,
-          "seconds": 106.45375,
+          "seconds": 106.75025,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-25.png"
         },
         {
           "scene": "empty",
           "fraction": 0.45,
-          "seconds": 110.43675,
+          "seconds": 110.87605,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-45.png"
         },
         {
           "scene": "empty",
           "fraction": 0.6,
-          "seconds": 113.424,
+          "seconds": 113.9704,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-60.png"
         },
         {
           "scene": "empty",
           "fraction": 0.85,
-          "seconds": 118.40275,
+          "seconds": 119.12764999999999,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-85.png"
         },
         {
           "scene": "empty",
-          "fraction": 0.9849359779061009,
-          "seconds": 121.09,
+          "fraction": 0.9854573658442,
+          "seconds": 121.922,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/empty-end.png"
         }
       ]
     },
     {
       "chapter": "colors",
-      "startSeconds": 123.654,
-      "endSeconds": 144.392,
+      "startSeconds": 124.485,
+      "endSeconds": 145.224,
       "sentences": [
         {
           "text": "Le bandeau peut prendre la couleur du poste, celle de l'événement ou rester noir et blanc.",
           "startMs": 435,
           "endMs": 4326,
           "method": "silence",
-          "videoSeconds": 124.089
+          "videoSeconds": 124.92
         },
         {
           "text": "Générons les trois versions pour les comparer.",
           "startMs": 5133,
           "endMs": 6685,
           "method": "silence",
-          "videoSeconds": 128.787
+          "videoSeconds": 129.618
         },
         {
           "text": "Avec plusieurs postes, le bandeau ne devient pas multicolore :",
           "startMs": 7641,
           "endMs": 10484,
           "method": "silence",
-          "videoSeconds": 131.295
+          "videoSeconds": 132.126
         },
         {
           "text": "une couleur de poste est retenue, avec la couleur d'événement comme solution de repli.",
           "startMs": 10731,
           "endMs": 14245,
           "method": "silence",
-          "videoSeconds": 134.385
+          "videoSeconds": 135.216
         },
         {
           "text": "Pour une impression simple, le noir et blanc est pratique.",
           "startMs": 14828,
           "endMs": 17200,
           "method": "silence",
-          "videoSeconds": 138.482
+          "videoSeconds": 139.313
         },
         {
           "text": "Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
           "startMs": 17485,
           "endMs": 20352,
           "method": "silence",
-          "videoSeconds": 141.139
+          "videoSeconds": 141.97
         }
       ],
       "anchors": [],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 126943,
-          "relativeSeconds": 3.289
+          "atMs": 127741,
+          "relativeSeconds": 3.256
         },
         {
           "kind": "click",
-          "atMs": 128375,
-          "relativeSeconds": 4.721
+          "atMs": 129175,
+          "relativeSeconds": 4.69
         },
         {
           "kind": "click",
-          "atMs": 132776,
-          "relativeSeconds": 9.122
+          "atMs": 133591,
+          "relativeSeconds": 9.106
         },
         {
           "kind": "click",
-          "atMs": 134209,
-          "relativeSeconds": 10.555
+          "atMs": 135023,
+          "relativeSeconds": 10.538
         },
         {
           "kind": "click",
-          "atMs": 138986,
-          "relativeSeconds": 15.332
+          "atMs": 139801,
+          "relativeSeconds": 15.316
         },
         {
           "kind": "click",
-          "atMs": 140419,
-          "relativeSeconds": 16.765
+          "atMs": 141233,
+          "relativeSeconds": 16.748
         }
       ],
       "frames": [
         {
           "scene": "colors",
-          "fraction": 0.02893239463786286,
-          "seconds": 124.254,
+          "fraction": 0.028930999566035006,
+          "seconds": 125.085,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-3.png"
         },
         {
           "scene": "colors",
           "fraction": 0.25,
-          "seconds": 128.8385,
+          "seconds": 129.66975,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-25.png"
         },
         {
           "scene": "colors",
           "fraction": 0.45,
-          "seconds": 132.9861,
+          "seconds": 133.81754999999998,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-45.png"
         },
         {
           "scene": "colors",
           "fraction": 0.6,
-          "seconds": 136.0968,
+          "seconds": 136.92839999999998,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-60.png"
         },
         {
           "scene": "colors",
           "fraction": 0.85,
-          "seconds": 141.2813,
+          "seconds": 142.11315,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-85.png"
         },
         {
           "scene": "colors",
-          "fraction": 0.9855338026810686,
-          "seconds": 144.092,
+          "fraction": 0.9855345002169825,
+          "seconds": 144.924,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/colors-end.png"
         }
       ]
     },
     {
       "chapter": "fields",
-      "startSeconds": 146.655,
-      "endSeconds": 169.48,
+      "startSeconds": 147.504,
+      "endSeconds": 170.922,
       "sentences": [
         {
-          "text": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux.",
-          "startMs": 402,
-          "endMs": 3002,
+          "text": "Vous pouvez alléger le badge en retirant le nom de famille ou les créneaux.",
+          "startMs": 225,
+          "endMs": 3523,
           "method": "silence",
-          "videoSeconds": 147.057
+          "videoSeconds": 147.729
         },
         {
           "text": "Décochons les deux cases, générons et regardons ce qui disparaît :",
-          "startMs": 3413,
-          "endMs": 6442,
+          "startMs": 3991,
+          "endMs": 7020,
           "method": "silence",
-          "videoSeconds": 150.068
+          "videoSeconds": 151.495
         },
         {
           "text": "le prénom reste.",
-          "startMs": 6907,
-          "endMs": 7700,
+          "startMs": 7486,
+          "endMs": 8279,
           "method": "silence",
-          "videoSeconds": 153.562
+          "videoSeconds": 154.99
         },
         {
           "text": "Remettons-les ensuite.",
-          "startMs": 8407,
-          "endMs": 9218,
+          "startMs": 8986,
+          "endMs": 9796,
           "method": "silence",
-          "videoSeconds": 155.062
+          "videoSeconds": 156.49
         },
         {
           "text": "Léa a cinq créneaux :",
-          "startMs": 10045,
-          "endMs": 11265,
+          "startMs": 10624,
+          "endMs": 11843,
           "method": "silence",
-          "videoSeconds": 156.7
+          "videoSeconds": 158.128
         },
         {
           "text": "le badge montre au plus quatre lignes puis indique les autres créneaux.",
-          "startMs": 11718,
-          "endMs": 14587,
+          "startMs": 12296,
+          "endMs": 15166,
           "method": "silence",
-          "videoSeconds": 158.373
+          "videoSeconds": 159.8
         },
         {
           "text": "Il ne remplace donc pas son planning individuel.",
-          "startMs": 14977,
-          "endMs": 16941,
+          "startMs": 15556,
+          "endMs": 17519,
           "method": "silence",
-          "videoSeconds": 161.632
+          "videoSeconds": 163.06
         },
         {
-          "text": "Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
-          "startMs": 17545,
-          "endMs": 22439,
+          "text": "Pour le détail de tous ses horaires et de ses consignes, utilisez le planning plutôt que d'essayer de tout faire tenir ici.",
+          "startMs": 18096,
+          "endMs": 23204,
           "method": "silence",
-          "videoSeconds": 164.2
+          "videoSeconds": 165.6
         }
       ],
       "anchors": [
         {
           "segmentId": "fields",
           "phrase": "Décochons les deux cases, générons",
-          "startMs": 3413,
-          "endMs": 6442,
-          "cueMs": 150071
+          "startMs": 3991,
+          "endMs": 7020,
+          "cueMs": 151496
         },
         {
           "segmentId": "fields",
           "phrase": "Décochons les deux cases, générons",
-          "startMs": 3413,
-          "endMs": 6442,
-          "cueMs": 150848
+          "startMs": 3991,
+          "endMs": 7020,
+          "cueMs": 152292
         },
         {
           "segmentId": "fields",
           "phrase": "Léa a cinq créneaux ",
-          "startMs": 10045,
-          "endMs": 11265,
-          "cueMs": 156702
+          "startMs": 10624,
+          "endMs": 11843,
+          "cueMs": 158130
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 148278,
-          "relativeSeconds": 1.623
+          "atMs": 149122,
+          "relativeSeconds": 1.618
         },
         {
           "kind": "click",
-          "atMs": 150544,
-          "relativeSeconds": 3.889
+          "atMs": 151987,
+          "relativeSeconds": 4.483
         },
         {
           "kind": "click",
-          "atMs": 151327,
-          "relativeSeconds": 4.672
+          "atMs": 152770,
+          "relativeSeconds": 5.266
         },
         {
           "kind": "click",
-          "atMs": 152113,
-          "relativeSeconds": 5.458
+          "atMs": 153553,
+          "relativeSeconds": 6.049
         },
         {
           "kind": "click",
-          "atMs": 158343,
-          "relativeSeconds": 11.688
+          "atMs": 159761,
+          "relativeSeconds": 12.257
         },
         {
           "kind": "click",
-          "atMs": 159774,
-          "relativeSeconds": 13.119
+          "atMs": 161209,
+          "relativeSeconds": 13.705
         }
       ],
       "frames": [
         {
           "scene": "fields",
-          "fraction": 0.02628696604600219,
-          "seconds": 147.255,
+          "fraction": 0.025621316935690495,
+          "seconds": 148.104,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-3.png"
         },
         {
           "scene": "fields",
           "fraction": 0.25,
-          "seconds": 152.36125,
+          "seconds": 153.3585,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-25.png"
         },
         {
           "scene": "fields",
           "fraction": 0.45,
-          "seconds": 156.92625,
+          "seconds": 158.0421,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-45.png"
         },
         {
           "scene": "fields",
           "fraction": 0.6,
-          "seconds": 160.35,
+          "seconds": 161.5548,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-60.png"
         },
         {
           "scene": "fields",
           "fraction": 0.85,
-          "seconds": 166.05625,
+          "seconds": 167.4093,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-85.png"
         },
         {
           "scene": "fields",
-          "fraction": 0.9868565169769989,
-          "seconds": 169.18,
+          "fraction": 0.9871893415321548,
+          "seconds": 170.622,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/fields-end.png"
         }
       ]
     },
     {
       "chapter": "print",
-      "startSeconds": 171.745,
-      "endSeconds": 203.789,
+      "startSeconds": 173.187,
+      "endSeconds": 206.023,
       "sentences": [
         {
-          "text": "Avant d'imprimer en quantité, regarde la première feuille et la dernière.",
-          "startMs": 421,
-          "endMs": 3688,
+          "text": "Avant d'imprimer en quantité, regardez la première feuille et la dernière.",
+          "startMs": 206,
+          "endMs": 3832,
           "method": "silence",
-          "videoSeconds": 172.166
+          "videoSeconds": 173.393
         },
         {
           "text": "Voici le document imprimable :",
-          "startMs": 4460,
-          "endMs": 5746,
+          "startMs": 4494,
+          "endMs": 5779,
           "method": "silence",
-          "videoSeconds": 176.205
+          "videoSeconds": 177.681
         },
         {
           "text": "deux colonnes, cinq rangées et les repères de découpe.",
-          "startMs": 6072,
-          "endMs": 8620,
+          "startMs": 6106,
+          "endMs": 8653,
           "method": "silence",
-          "videoSeconds": 177.817
+          "videoSeconds": 179.293
         },
         {
           "text": "Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs.",
-          "startMs": 9210,
-          "endMs": 12163,
+          "startMs": 9243,
+          "endMs": 12197,
           "method": "silence",
-          "videoSeconds": 180.955
+          "videoSeconds": 182.43
         },
         {
           "text": "La boîte d'impression du navigateur n'est pas filmée ici.",
-          "startMs": 13133,
-          "endMs": 15493,
+          "startMs": 13167,
+          "endMs": 15526,
           "method": "silence",
-          "videoSeconds": 184.878
+          "videoSeconds": 186.354
         },
         {
-          "text": "Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle ;",
-          "startMs": 15944,
-          "endMs": 18032,
+          "text": "Quand vous l'ouvrez, choisissez un format A4 et vérifiez l'échelle ;",
+          "startMs": 16001,
+          "endMs": 18275,
           "method": "silence",
-          "videoSeconds": 187.689
+          "videoSeconds": 189.188
         },
         {
-          "text": "tu peux aussi enregistrer en PDF.",
-          "startMs": 18190,
-          "endMs": 20865,
+          "text": "vous pouvez aussi enregistrer en PDF.",
+          "startMs": 18558,
+          "endMs": 21812,
           "method": "silence",
-          "videoSeconds": 189.935
+          "videoSeconds": 191.745
         },
         {
           "text": "Regardons le vrai PDF obtenu, avec sa première puis sa dernière page.",
-          "startMs": 21673,
-          "endMs": 23117,
+          "startMs": 22463,
+          "endMs": 23907,
           "method": "silence",
-          "videoSeconds": 193.418
+          "videoSeconds": 195.65
         },
         {
           "text": "Cet aperçu sert à contrôler le fichier, ce n'est pas une boîte d'impression simulée.",
-          "startMs": 23325,
-          "endMs": 28741,
+          "startMs": 24115,
+          "endMs": 29531,
           "method": "silence",
-          "videoSeconds": 195.07
+          "videoSeconds": 197.302
         },
         {
           "text": "Une première feuille d'essai coûte moins cher qu'une série à refaire.",
-          "startMs": 29239,
-          "endMs": 31604,
+          "startMs": 30029,
+          "endMs": 32394,
           "method": "silence",
-          "videoSeconds": 200.984
+          "videoSeconds": 203.216
         }
       ],
       "anchors": [
         {
           "segmentId": "print",
           "phrase": "Voici le document imprimable ",
-          "startMs": 4460,
-          "endMs": 5746,
-          "cueMs": 176206
+          "startMs": 4494,
+          "endMs": 5779,
+          "cueMs": 177683
         },
         {
           "segmentId": "print",
           "phrase": "Vérifions aussi Jean-Baptiste et Marie-Charlotte",
-          "startMs": 9210,
-          "endMs": 12163,
-          "cueMs": 180956
+          "startMs": 9243,
+          "endMs": 12197,
+          "cueMs": 182432
         },
         {
           "segmentId": "print",
           "phrase": "La boîte d'impression du navigateur n'est pas filmée ici",
-          "startMs": 13133,
-          "endMs": 15493,
-          "cueMs": 184878
+          "startMs": 13167,
+          "endMs": 15526,
+          "cueMs": 186354
         },
         {
           "segmentId": "print",
           "phrase": "Regardons le vrai PDF obtenu",
-          "startMs": 21673,
-          "endMs": 23117,
-          "cueMs": 193419
+          "startMs": 22463,
+          "endMs": 23907,
+          "cueMs": 195652
         },
         {
           "segmentId": "print",
           "phrase": "Cet aperçu sert à contrôler",
-          "startMs": 23325,
-          "endMs": 28741,
-          "cueMs": 195070
+          "startMs": 24115,
+          "endMs": 29531,
+          "cueMs": 197303
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 176702,
-          "relativeSeconds": 4.957
+          "atMs": 178160,
+          "relativeSeconds": 4.973
         }
       ],
       "frames": [
         {
           "scene": "print",
-          "fraction": 0.018724254150543004,
-          "seconds": 172.345,
+          "fraction": 0.018272627603849432,
+          "seconds": 173.787,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-2.png"
         },
         {
           "scene": "print",
           "fraction": 0.25,
-          "seconds": 179.756,
+          "seconds": 181.396,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-25.png"
         },
         {
           "scene": "print",
           "fraction": 0.45,
-          "seconds": 186.16479999999999,
+          "seconds": 187.9632,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-45.png"
         },
         {
           "scene": "print",
           "fraction": 0.6,
-          "seconds": 190.9714,
+          "seconds": 192.8886,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-60.png"
         },
         {
           "scene": "print",
           "fraction": 0.85,
-          "seconds": 198.98239999999998,
+          "seconds": 201.0976,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-85.png"
         },
         {
           "scene": "print",
-          "fraction": 0.9906378729247285,
-          "seconds": 203.489,
+          "fraction": 0.9908636861980753,
+          "seconds": 205.723,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/print-end.png"
         }
       ]
     },
     {
       "chapter": "result",
-      "startSeconds": 210.798,
-      "endSeconds": 234.272,
+      "startSeconds": 213.077,
+      "endSeconds": 237.362,
       "sentences": [
         {
           "text": "Le badge choisi est prêt pour l'accueil.",
           "startMs": 440,
           "endMs": 1957,
           "method": "silence",
-          "videoSeconds": 211.238
+          "videoSeconds": 213.517
         },
         {
           "text": "Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole.",
           "startMs": 2345,
           "endMs": 6411,
           "method": "silence",
-          "videoSeconds": 213.143
+          "videoSeconds": 215.422
         },
         {
           "text": "Quelqu'un peut perdre ou faire photographier son badge :",
-          "startMs": 6871,
-          "endMs": 8958,
+          "startMs": 6811,
+          "endMs": 9141,
           "method": "silence",
-          "videoSeconds": 217.669
+          "videoSeconds": 219.888
         },
         {
-          "text": "ne le traite pas comme une autorisation d'accès automatique.",
-          "startMs": 9170,
-          "endMs": 12943,
+          "text": "ne le traitez pas comme une autorisation d'accès automatique.",
+          "startMs": 9284,
+          "endMs": 13757,
           "method": "silence",
-          "videoSeconds": 219.968
+          "videoSeconds": 222.361
         },
         {
           "text": "Son rôle est plus simple :",
-          "startMs": 13319,
-          "endMs": 14634,
+          "startMs": 14132,
+          "endMs": 15448,
           "method": "silence",
-          "videoSeconds": 224.117
+          "videoSeconds": 227.209
         },
         {
           "text": "reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire.",
-          "startMs": 14866,
-          "endMs": 19068,
+          "startMs": 15680,
+          "endMs": 19881,
           "method": "silence",
-          "videoSeconds": 225.664
+          "videoSeconds": 228.757
         },
         {
           "text": "Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
-          "startMs": 19252,
-          "endMs": 23189,
+          "startMs": 20066,
+          "endMs": 24002,
           "method": "silence",
-          "videoSeconds": 230.05
+          "videoSeconds": 233.143
         }
       ],
       "anchors": [],
@@ -1132,38 +1132,38 @@
       "frames": [
         {
           "scene": "result",
-          "fraction": 0.025560194257476358,
-          "seconds": 211.398,
-          "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-3.png"
+          "fraction": 0.02470660901791229,
+          "seconds": 213.677,
+          "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-2.png"
         },
         {
           "scene": "result",
           "fraction": 0.25,
-          "seconds": 216.6665,
+          "seconds": 219.14825,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-25.png"
         },
         {
           "scene": "result",
           "fraction": 0.45,
-          "seconds": 221.3613,
+          "seconds": 224.00525,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-45.png"
         },
         {
           "scene": "result",
           "fraction": 0.6,
-          "seconds": 224.8824,
+          "seconds": 227.648,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-60.png"
         },
         {
           "scene": "result",
           "fraction": 0.85,
-          "seconds": 230.7509,
+          "seconds": 233.71925,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-85.png"
         },
         {
           "scene": "result",
-          "fraction": 0.9872199028712618,
-          "seconds": 233.972,
+          "fraction": 0.9876466954910439,
+          "seconds": 237.062,
           "file": "/private/tmp/codex-video/videos/output/volunteer-badges/review-frames/result-end.png"
         }
       ]

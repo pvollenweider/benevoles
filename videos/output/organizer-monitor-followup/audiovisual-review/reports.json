@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:58.905Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "f4f7495576cd45c295f634ea3cb778afa22445018c51ca20555667a4262b2104",
-  "clipSha256": "1fdfc8f204092b947cbab09dc63367ac5195c1b9c8d6471e6066bfc6e7d22f5f",
+  "reviewedAt": "2026-10-13T17:05:25.245Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "55267fff3420123d1c7bd01d81241b6f7741030057951b6926c92255693b5699",
+  "clipSha256": "d7ed22cea74268f1d08e7e4b46a68a165180094646a307f949f744da03121739",
   "scene": "reports",
   "review": {
-    "heardOpening": "À l'approche du jour J",
+    "heardOpening": "À l'approche du jour J, les rapports",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.1,
         "spoken": "les listes à afficher sur les stands",
-        "visibleSeconds": 1.5,
-        "visible": "Page Rapports avec les rubriques de planning par jour et par poste",
+        "visibleSeconds": 1,
+        "visible": "Section « À afficher ou à remettre aux bénévoles » avec Planning par jour et Planning par poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.8,
         "spoken": "les plannings individuels",
-        "visibleSeconds": 3.8,
-        "visible": "Option 'Planning individuel' affichée à l'écran",
+        "visibleSeconds": 2,
+        "visible": "Lien « Planning individuel » affiché sous la section",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "et les badges",
-        "visibleSeconds": 6.5,
-        "visible": "Défilement vers le bas révélant la section Badges",
+        "spokenSeconds": 5.4,
+        "spoken": "les réponses aux questions et les badges",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement vers le bas affichant « Synthèse des réponses » et la section « Badges »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec la présentation générale des rapports à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

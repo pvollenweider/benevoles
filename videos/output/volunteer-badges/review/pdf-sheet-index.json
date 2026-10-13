@@ -1,0 +1,108 @@
+[
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/all.pdf",
+    "pages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-all-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/all.pdf",
+    "pages": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-all-5.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/black-white.pdf",
+    "pages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-black-white-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/black-white.pdf",
+    "pages": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-black-white-5.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/buvette.pdf",
+    "pages": [
+      1,
+      2,
+      3
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-buvette-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/camille-second.pdf",
+    "pages": [
+      1
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-camille-second-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/empty-combined.pdf",
+    "pages": [
+      1
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-empty-combined-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/event-color.pdf",
+    "pages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-event-color-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/event-color.pdf",
+    "pages": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-event-color-5.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/lea-five-shifts.pdf",
+    "pages": [
+      1
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-lea-five-shifts-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/loge-fallback.pdf",
+    "pages": [
+      1,
+      2,
+      3
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-loge-fallback-1.png"
+  },
+  {
+    "pdf": "/private/tmp/codex-video/videos/output/volunteer-badges/documents/minimal.pdf",
+    "pages": [
+      1
+    ],
+    "sheet": "/tmp/codex-video/videos/output/volunteer-badges/review/pdf-minimal-1.png"
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "source": "videos/output/volunteer-badges/previous-20261013T163329Z/audio-original/individual.wav",
+  "sourceAudioSha256": "cfb207ae67572f9ef2f5ceb9e817c45420bdc6c45f456f4c9e703ea6f97637aa",
+  "result": {
+    "starts": [
+      0,
+      1.34,
+      4.96,
+      9.34,
+      11.44,
+      16.32,
+      19.84
+    ],
+    "heard": "Un badge perdu ? Choisis une personne dans Bénévole, réimpression. Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne."
+  },
+  "gaps": [
+    {
+      "startMs": 1123,
+      "endMs": 1818
+    },
+    {
+      "startMs": 3368,
+      "endMs": 3674
+    },
+    {
+      "startMs": 4261,
+      "endMs": 5125
+    },
+    {
+      "startMs": 6314,
+      "endMs": 7045
+    },
+    {
+      "startMs": 9235,
+      "endMs": 9818
+    },
+    {
+      "startMs": 10965,
+      "endMs": 11768
+    },
+    {
+      "startMs": 13404,
+      "endMs": 13929
+    },
+    {
+      "startMs": 15953,
+      "endMs": 16709
+    },
+    {
+      "startMs": 17891,
+      "endMs": 18214
+    },
+    {
+      "startMs": 19319,
+      "endMs": 20058
+    },
+    {
+      "startMs": 23553,
+      "endMs": 23957
+    }
+  ],
+  "selected": [
+    {
+      "startMs": 1123,
+      "endMs": 1818
+    },
+    {
+      "startMs": 4261,
+      "endMs": 5125
+    },
+    {
+      "startMs": 9235,
+      "endMs": 9818
+    },
+    {
+      "startMs": 10965,
+      "endMs": 11768
+    },
+    {
+      "startMs": 15953,
+      "endMs": 16709
+    },
+    {
+      "startMs": 19319,
+      "endMs": 20058
+    }
+  ],
+  "boundariesMs": [
+    0,
+    1470.5,
+    4693,
+    9526.5,
+    11366.5,
+    16331,
+    19688.5,
+    23957.166999999998
+  ],
+  "note": "Model locations are proposals only, snapped to measured real silences. Rebuilt full-chapter independent ASR and register review required before capture."
+}

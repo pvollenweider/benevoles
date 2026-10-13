@@ -1,0 +1,74 @@
+[
+  {
+    "to": "organization",
+    "atSeconds": 14.43755,
+    "gapMs": 3341,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-organization.png"
+  },
+  {
+    "to": "lifecycle",
+    "atSeconds": 52.98655,
+    "gapMs": 3361,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-lifecycle.png"
+  },
+  {
+    "to": "duplicate",
+    "atSeconds": 90.44055,
+    "gapMs": 1601,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-duplicate.png"
+  },
+  {
+    "to": "shift-methods",
+    "atSeconds": 104.7761,
+    "gapMs": 3322,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-shift-methods.png"
+  },
+  {
+    "to": "registrations",
+    "atSeconds": 143.83115,
+    "gapMs": 3453,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-registrations.png"
+  },
+  {
+    "to": "members",
+    "atSeconds": 161.97529999999998,
+    "gapMs": 1666,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-members.png"
+  },
+  {
+    "to": "questions",
+    "atSeconds": 179.00825,
+    "gapMs": 1575,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-questions.png"
+  },
+  {
+    "to": "pages",
+    "atSeconds": 194.849,
+    "gapMs": 1580,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-pages.png"
+  },
+  {
+    "to": "messages",
+    "atSeconds": 211.1674,
+    "gapMs": 3308,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-messages.png"
+  },
+  {
+    "to": "reminders",
+    "atSeconds": 231.20954999999998,
+    "gapMs": 1601,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-reminders.png"
+  },
+  {
+    "to": "reports",
+    "atSeconds": 245.42585,
+    "gapMs": 3327,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-reports.png"
+  },
+  {
+    "to": "activity",
+    "atSeconds": 265.78679999999997,
+    "gapMs": 3316,
+    "file": "/tmp/codex-video/videos/output/admin-features-tour/review/transition-activity.png"
+  }
+]

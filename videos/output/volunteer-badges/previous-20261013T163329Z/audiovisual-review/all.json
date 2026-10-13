@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:14:50.494Z",
+  "videoSha256": "c77f1f758025abf0de0029bc6f0d7a7dcafe30978b41be617a0b4b58b56184b0",
+  "promptSha256": "7b8d07bc89ff22ddf3f2c3d8421e7e6396bf505ba6e60075e1f933df6d1141ee",
+  "clipSha256": "9c053da7d48ca11eb5bb51c34d47a3c0f28b591365e3b58345f5a7b38ac16de2",
+  "scene": "all",
+  "review": {
+    "heardOpening": "Gardons Tous les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Gardons Tous les postes et Tous les bénévoles",
+        "visibleSeconds": 0.5,
+        "visible": "Filtres Tous les postes et Tous les bénévoles affichés à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "ouvrons les badges",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le lien Ouvrir les badges et ouverture du document.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Léa est sur plusieurs horaires : elle n'a qu'un badge",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage du badge unique de Léa Giroud listant plusieurs créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Regardons la première feuille puis la suivante",
+        "visibleSeconds": 15.2,
+        "visible": "Défilement vers le bas découvrant la suite des badges.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

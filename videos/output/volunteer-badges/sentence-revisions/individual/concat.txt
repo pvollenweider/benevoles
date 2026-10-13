@@ -1,0 +1,7 @@
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/0.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/1.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/2.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/3.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/4.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/5.wav'
+file '/private/tmp/codex-video/videos/output/volunteer-badges/sentence-revisions/individual/6.wav'

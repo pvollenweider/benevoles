@@ -1,77 +1,376 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-11T21:43:46.197Z",
+  "generatedAt": "2026-10-13T16:43:18.220Z",
+  "sentenceRevision": {
+    "version": 1,
+    "unit": "sentence",
+    "baseline": {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "slug": "organizer-create-publish",
+      "title": "Préparer, publier et partager un planning bénévole",
+      "description": "Créer un événement depuis un modèle ou une page blanche, préparer ses postes, programmer les inscriptions, prévisualiser, publier et inviter ses membres.",
+      "viewer": {
+        "summary": "Dans cette vidéo, vous préparez un planning complet, de la création de l'événement jusqu'à l'invitation de vos bénévoles.",
+        "steps": [
+          "Créez l'événement avec un titre, une description, un lieu et des dates.",
+          "Ajoutez des créneaux manuellement ou en série pour les horaires qui se répètent.",
+          "Activez l'inscription sur validation pour un poste sensible.",
+          "Vérifiez le récapitulatif, puis prévisualisez le parcours bénévole avant de publier.",
+          "Publiez le planning : la page devient accessible, sans envoi automatique.",
+          "Téléchargez le QR code et importez vos membres depuis un fichier CSV ou Excel.",
+          "Invitez les membres concernés, par lot ou individuellement."
+        ],
+        "remember": [
+          "Publier n'envoie aucun message automatiquement : vous gardez la main sur la diffusion.",
+          "L'aperçu bénévole ne crée ni inscription ni envoi réel.",
+          "L'import de membres montre ce qui sera créé avant toute confirmation."
+        ]
+      },
+      "language": "fr-CH",
+      "voice": "Kore",
+      "continuousNarration": true,
+      "voiceStyle": "Speak with an audible smile throughout. Sound warm, capable and relaxed, like an experienced association organizer showing a colleague a pleasantly simple workflow. Use natural conversational French, clear articulation and a medium pace. Preserve exactly the same vocal identity, smile, pitch and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "deviceScaleFactor": 1
+      },
+      "segments": [
+        {
+          "id": "overview",
+          "transcript": "Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.",
+          "fallbackDurationMs": 12500
+        },
+        {
+          "id": "basics",
+          "transcript": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que tu n’as pas terminé ton planning.",
+          "fallbackDurationMs": 10500
+        },
+        {
+          "id": "series",
+          "transcript": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+          "fallbackDurationMs": 14500
+        },
+        {
+          "id": "delivery",
+          "transcript": "Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+          "fallbackDurationMs": 13000
+        },
+        {
+          "id": "cash",
+          "transcript": "Pour un poste sensible comme la Caisse, active l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+          "fallbackDurationMs": 11500
+        },
+        {
+          "id": "registration",
+          "transcript": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
+          "fallbackDurationMs": 13000
+        },
+        {
+          "id": "review",
+          "transcript": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+          "fallbackDurationMs": 10500
+        },
+        {
+          "id": "preview",
+          "transcript": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+          "fallbackDurationMs": 17000
+        },
+        {
+          "id": "preview-result",
+          "transcript": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.",
+          "fallbackDurationMs": 13000
+        },
+        {
+          "id": "publish",
+          "transcript": "Quand tout est prêt, publie le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : tu gardes la main sur sa diffusion.",
+          "fallbackDurationMs": 10000
+        },
+        {
+          "id": "qr",
+          "transcript": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+          "fallbackDurationMs": 11000
+        },
+        {
+          "id": "import",
+          "transcript": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+          "fallbackDurationMs": 15500
+        },
+        {
+          "id": "invite",
+          "transcript": "Retourne ensuite dans les invitations de l’événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
+          "fallbackDurationMs": 14500
+        },
+        {
+          "id": "public",
+          "transcript": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !",
+          "fallbackDurationMs": 11500
+        }
+      ]
+    },
+    "baseGenerationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786",
+    "chapters": {
+      "overview": {
+        "sourceAudioSha256": "03501304ae35c0981c3b3af2a3d6609a11d3067ae408fbda040314336a6a96e2",
+        "sentences": [
+          {
+            "index": 1,
+            "transcript": "Pour démarrer, vous pouvez choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche.",
+            "generationSha256": "b7cae5fc21d718774375be318b92b5391a5cdf70ff740fbfa8186131a0707308",
+            "audioSha256": "bf6a8709108fcef58ab203328ae77d5b14b7b0c047dc2a13325b48e6339b2794"
+          }
+        ]
+      },
+      "basics": {
+        "sourceAudioSha256": "e8be94611fea743e86d610c5cb9486799cfa6d73497b6a0d573d0d02af1315d5",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates.",
+            "generationSha256": "d35e1433040ffc5adf26fcdd916069907336dc0eb424594c616064d3f6bd4e0b",
+            "audioSha256": "41b3fd70f9ae659fee919f90679b11d9c1b9f3c8fdd87d3bf924068fefcc6cf1"
+          },
+          {
+            "index": 1,
+            "transcript": "L’événement reste en brouillon : rien n’est visible tant que vous n’avez pas terminé votre planning.",
+            "generationSha256": "497afe58d25a2347f1f8951f6b99a0889dd6a4f68cc1429bffe219e3d79a55a8",
+            "audioSha256": "dabcce557273569e8f62f2c7583654b43b14cad83b612ba7378680fbc9db4bb3"
+          }
+        ]
+      },
+      "series": {
+        "sourceAudioSha256": "0554afcf046d2581a6fd1ce84db5431f70a55b526a8915222429328ad2096b84",
+        "sentences": [
+          {
+            "index": 1,
+            "transcript": "Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+            "generationSha256": "37ddc508d2f20252b92cc18497e3daef99498fff16ed2cbe2d33eebaa48d9d56",
+            "audioSha256": "476f5a4321d669529bab91649616de715bca3aa53c1b48e295ba4d3e66f7c139"
+          }
+        ]
+      },
+      "delivery": {
+        "sourceAudioSha256": "c0794b9b14dd56d91dbef6b2f0170afb2a892b26ee79595774b3ecf98ba18331",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Ajoutez ensuite manuellement un poste Livraison.",
+            "generationSha256": "f5f392db811be39de2cfe980bbc49893cf36f904e19494984dbf23d9907cdfab",
+            "audioSha256": "fcf25e759818e8bca38dab3e525ef194e07112f149e99c8fb6f5a51fac73e4d1"
+          }
+        ]
+      },
+      "cash": {
+        "sourceAudioSha256": "221557f3ed1254a6583dba0445531b7a720193afe2d9d309f9c7364ad67bea6d",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Pour un poste sensible comme la Caisse, activez l’inscription sur validation.",
+            "generationSha256": "6e37ee375edbf7c67f08e8c697ec1bfccfb1f1b151cf8cfa1a4f66696086b860",
+            "audioSha256": "db9ebbcbfcb1c5047fd4d77a6857b64e1013969a95ac33e7662826e6be88f2a9"
+          }
+        ]
+      },
+      "registration": {
+        "sourceAudioSha256": "a14b1a190d948a6d378249b98c63430bd851394405b6f03079f6d6e3c48d2a6d",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Vous pouvez aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de votre organisation.",
+            "generationSha256": "2955ee604ced9c63c8444c428e980cb338e4014594d121978e3b322f8a5e6e25",
+            "audioSha256": "38f726e1cd28edce890ff36848de4be95270da73330f3a361c79741b3cb33759"
+          },
+          {
+            "index": 1,
+            "transcript": "Si vous ne programmez pas de date d’ouverture, elles seront disponibles dès la publication.",
+            "generationSha256": "597161af4a77e1d5c09dcfbc9d2715d3a2681c7033412b1eb775f182bb5339bc",
+            "audioSha256": "c77a828ea4484b12ab5a4649e270316b6508717373279a14518773103f3f50b3"
+          }
+        ]
+      },
+      "review": {
+        "sourceAudioSha256": "d3b3fa41bf1e6abe6316718ff81fc2efaa3578f15cd9970ba4c993df5cc20a91",
+        "sentences": [
+          {
+            "index": 1,
+            "transcript": "Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne.",
+            "generationSha256": "a0e8d11b902f6d36287e17340b93765b61427314aba043c67348ec2366318db3",
+            "audioSha256": "c0d40f2a41e29fcc0412c328937f0341a4802ae210595e2976e780e7ffb33d77"
+          }
+        ]
+      },
+      "preview": {
+        "sourceAudioSha256": "b358f1d2eb83c05317758b0504373ec5ece841f52371b4ace950fc4f35d02270",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Avant de publier, ouvrez l’aperçu bénévole et simulez une vraie inscription.",
+            "generationSha256": "eb23d9b731b2538db7e338c1d847809e909937fb8393217890f8fc9eb2abf8b2",
+            "audioSha256": "412f311116f857749f892b7a532ec79124b566bde27cd130d887ffca78248f4d"
+          },
+          {
+            "index": 1,
+            "transcript": "Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix.",
+            "generationSha256": "cf0f05484d3c6375e8481e86ed6d5678a6e22bdce2b51029440e6a97419f8144",
+            "audioSha256": "59b01501f1c4c9f2a74c4163c9c78b87fcc73f63cb190fce972b41f85c99f2a0"
+          },
+          {
+            "index": 2,
+            "transcript": "Vous pouvez ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+            "generationSha256": "45a25166c976b2074b3bdf9ebd510f72e44287be73bbf0f57ec9654f2171093a",
+            "audioSha256": "22973bad6989dc81715499c81e8a9401c439b5a88ff9a98694ccec5a86a60fb1"
+          }
+        ]
+      },
+      "preview-result": {
+        "sourceAudioSha256": "cac33836d73d5fd618200af21afb69161cf920c3de7cbb6198193c166c539517",
+        "sentences": []
+      },
+      "publish": {
+        "sourceAudioSha256": "f8aa3332e8388c705f68fc25d47caeede41865f19da136bc48296cf69f6ef120",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Quand tout est prêt, publiez le planning.",
+            "generationSha256": "e4f24eb6bba6341883a79840c4c1c3ead623c99dc767e4a8353307efd0dbbafb",
+            "audioSha256": "8aa38a956ffcfd8f26d0e5e30e9d94be7841fc0dab0d7ad16efc3cdb596c1574"
+          },
+          {
+            "index": 1,
+            "transcript": "La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : vous gardez la main sur sa diffusion.",
+            "generationSha256": "a08b6736314098df9f40a05c39ad28ea8674aa1b02c3bf0d0cb46c4ea854a87c",
+            "audioSha256": "071b6f2bbec2d774a5c383059246f0e8904d5ab32cacbaf6b598056aca26af02"
+          }
+        ]
+      },
+      "qr": {
+        "sourceAudioSha256": "80fd4813be6f08fef07ad9d3659d3395bc2ff83f36d1f6ec94752f2612f0fe5c",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code.",
+            "generationSha256": "f423b37bba61aac990fcd3eba92b7c01afb6e234693786b89e64e8bbc8a45eee",
+            "audioSha256": "e1c46710eac4591c0f4b33596417833f01969b89e32d72af19002592ba5d35c2"
+          },
+          {
+            "index": 1,
+            "transcript": "Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+            "generationSha256": "90c9372a486d3abef530fb4d85c7e0130e71bd39fe46a39946f41a10541be0a1",
+            "audioSha256": "c87a688c8c936f7d09e157a0046ecdc717832e058246838961574457dd0dc631"
+          }
+        ]
+      },
+      "import": {
+        "sourceAudioSha256": "a7bbeffefe1320c58e368a001e0b36c3ae8c7bafd838072e1ca453213262bfb2",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel.",
+            "generationSha256": "c92e9db6d03be873f302418da6d7b34141f34c2f2737ff905b022a33866802c4",
+            "audioSha256": "43f298e913e82ddbeee3b9c16584e50bdcd18ee5f840ab4fa586035ffb9ea512"
+          }
+        ]
+      },
+      "invite": {
+        "sourceAudioSha256": "b899a1df2cba9a94d919c6394233df3cac3f6c5693cdc951937dd8607c414dad",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Retournez ensuite dans les invitations de l’événement.",
+            "generationSha256": "699119ef968244f77f2f0714c03ae68a6b4d9081e723b0c0cc8e0effbd8bb1b5",
+            "audioSha256": "7d487c34a9d0bd041ae2e09280a1671dd6486574b62556981d602c96583c30cf"
+          },
+          {
+            "index": 1,
+            "transcript": "Filtrez les membres par tag et sélectionnez les personnes concernées.",
+            "generationSha256": "614b57602f94b145c245a9b9d2fd086bcba7bde432b0be4ab5b5d888c408fd8b",
+            "audioSha256": "997429e0ea43f69dab5b418462058025b870e9ae28318b577f07971bcd01431d"
+          },
+          {
+            "index": 2,
+            "transcript": "Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
+            "generationSha256": "17976a64405663227bbe3eba7822e89c4dc65a14cd539190b7868510e9af4e73",
+            "audioSha256": "00d3efe6a8188c47287acfb76b3dc59fd30085746146bde1c60238ebee53ff60"
+          }
+        ]
+      },
+      "public": {
+        "sourceAudioSha256": "623a89004d85cc5753ad9a3f083cc5b2346ebc2f0e5940a07ca6ec055a7a5356",
+        "sentences": []
+      }
+    }
+  },
   "segments": {
     "overview": {
       "file": "audio/overview.wav",
-      "durationMs": 12976,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 12989,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "basics": {
       "file": "audio/basics.wav",
-      "durationMs": 9421,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 9451,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "series": {
       "file": "audio/series.wav",
-      "durationMs": 15084,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 15066,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "delivery": {
       "file": "audio/delivery.wav",
-      "durationMs": 12829,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 12833,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "cash": {
       "file": "audio/cash.wav",
-      "durationMs": 11806,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 11788,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "registration": {
       "file": "audio/registration.wav",
-      "durationMs": 11701,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 11675,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "review": {
       "file": "audio/review.wav",
-      "durationMs": 10100,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 10118,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "preview": {
       "file": "audio/preview.wav",
-      "durationMs": 16586,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 16578,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "preview-result": {
       "file": "audio/preview-result.wav",
       "durationMs": 12515,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "publish": {
       "file": "audio/publish.wav",
-      "durationMs": 10572,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 10563,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "qr": {
       "file": "audio/qr.wav",
-      "durationMs": 10677,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 10693,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "import": {
       "file": "audio/import.wav",
-      "durationMs": 17092,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 17095,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "invite": {
       "file": "audio/invite.wav",
-      "durationMs": 14433,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "durationMs": 14442,
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     },
     "public": {
       "file": "audio/public.wav",
       "durationMs": 12048,
-      "generationSha256": "045a4cd4a518bdb789b38db662dd38a866ff42701e135c5180aecf2f85437786"
+      "generationSha256": "2876f21bd35b03e2496600f14c455fd18ed090f76266fafbcd851df6f6fb6f7f"
     }
   }
 }

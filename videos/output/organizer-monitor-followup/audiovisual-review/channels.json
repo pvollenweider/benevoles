@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:01:51.245Z",
-  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
-  "promptSha256": "237a804804755d3993290513ca4b22f69c056a5264de986421027c9849f692af",
-  "clipSha256": "566316a37976a09b061fb58dd19b3c4c989a4991e72aa941af3d767cf37b9ecc",
+  "reviewedAt": "2026-10-13T17:05:15.985Z",
+  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "promptSha256": "495a18a16335bf23633c49630f7f6cf8cbbad4240e1dc40ff44bf1fe7d455197",
+  "clipSha256": "4f640c397d5e138287ea8a8185d6673d16ce0f1bc38bf91b065312c1308cb079",
   "scene": "channels",
   "review": {
     "heardOpening": "L'email part à toutes les personnes ciblées",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0,
         "spoken": "L'email part à toutes les personnes ciblées",
         "visibleSeconds": 0,
-        "visible": "Formulaire de rédaction du message affiché à l'écran",
+        "visible": "Formulaire de rédaction du message destiné aux personnes ciblées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "tu peux ajouter une notification sur téléphone ou ordinateur",
-        "visibleSeconds": 2.9,
-        "visible": "Cochage de la case 'Envoyer aussi une notification (téléphone ou ordinateur)'",
+        "spokenSeconds": 3.2,
+        "spoken": "vous pouvez ajouter une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 2.8,
+        "visible": "La case « Envoyer aussi une notification (téléphone ou ordinateur) » est cochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 9.5,
         "spoken": "La confirmation finale évite les envois involontaires",
-        "visibleSeconds": 6.2,
-        "visible": "Ouverture de la fenêtre d'aperçu de l'email avec le bouton de confirmation d'envoi",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la modale « Aperçu de l'email » avec le bouton de validation finale « Envoyer à 3 personnes »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, naturelle et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

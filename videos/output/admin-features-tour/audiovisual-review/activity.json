@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:58.458Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "36163116f04c214c642289fc6921ea5d1dda4e961431b08c22289822f3f5c862",
+  "clipSha256": "7524e82bc1ce7a9c3d4d69e128256c96ce834f641f47697da8e4f25accb73910",
+  "scene": "activity",
+  "review": {
+    "heardOpening": "Enfin, le journal d’activité garde la chronologie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Enfin, le journal d’activité garde la chronologie",
+        "visibleSeconds": 0,
+        "visible": "Page Journal affichant l'historique chronologique des actions effectuées sur l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "On sait ce qui s’est passé, qui l’a fait et quand.",
+        "visibleSeconds": 11,
+        "visible": "Lignes du journal détaillant l'auteur (Élodie Rochat), l'horodatage et la nature exacte des modifications",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "La recherche globale permet ensuite de tout retrouver rapidement.",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur la barre de recherche globale en haut à droite puis affichage de la page Recherche avec les résultats pour « buvette »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien calée sur la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

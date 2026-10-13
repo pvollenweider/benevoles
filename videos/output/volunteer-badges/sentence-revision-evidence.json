@@ -1,0 +1,112 @@
+{
+  "previous": "/private/tmp/codex-video/videos/output/volunteer-badges/previous-20261013T163329Z",
+  "generatedAt": "2026-10-13T16:48:56.871Z",
+  "voice": "Puck",
+  "note": "Verified continuous original with changed sentences regenerated only; no claim of a single new TTS take. Original chapters without changes are byte-identical.",
+  "sentences": [
+    {
+      "chapter": "role",
+      "index": 4,
+      "before": "Si tu veux son badge pour toute la fête, reviens à Tous les postes avant de le refaire.",
+      "after": "Si vous voulez son badge pour toute la fête, revenez à Tous les postes avant de le refaire.",
+      "originalStartMs": 17492,
+      "originalEndMs": 22086.666999999998,
+      "generatedFile": "sentence-revisions/role/4-855654c3b683522a8f9776158404dc0c7d8737586805ae8119f7442259fc4fd2.wav",
+      "generatedMs": 5680,
+      "tempo": 1.2362158128108094,
+      "replacementMs": 4594.25,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "individual",
+      "index": 1,
+      "before": "Choisis une personne dans Bénévole, réimpression.",
+      "after": "Choisissez une personne dans Bénévole, réimpression.",
+      "originalStartMs": 1470.5,
+      "originalEndMs": 4693,
+      "generatedFile": "sentence-revisions/individual/1-5773d2ac4715255d6a2474ae3ee1e4ebb276b8d695e6d7a31ed5b48739c1fc3d.wav",
+      "generatedMs": 4200,
+      "tempo": 1.25,
+      "replacementMs": 3358.875,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "empty",
+      "index": 0,
+      "before": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+      "after": "Si vous combinez un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+      "originalStartMs": 0,
+      "originalEndMs": 4769.5,
+      "generatedFile": "sentence-revisions/empty/0-462d307d8dfa040bd5a955c98c7586a9d5ba780f577b751eb375c4a81b1843dc.wav",
+      "generatedMs": 6840,
+      "tempo": 1.25,
+      "replacementMs": 5483.375,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "fields",
+      "index": 0,
+      "before": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux.",
+      "after": "Vous pouvez alléger le badge en retirant le nom de famille ou les créneaux.",
+      "originalStartMs": 0,
+      "originalEndMs": 3207.5,
+      "generatedFile": "sentence-revisions/fields/0-0d41e0feabf0d300311d56fc4ed9865d1b63c528dd35fad1ed0d82afa7891b7c.wav",
+      "generatedMs": 4720,
+      "tempo": 1.25,
+      "replacementMs": 3786.083,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "fields",
+      "index": 5,
+      "before": "Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
+      "after": "Pour le détail de tous ses horaires et de ses consignes, utilisez le planning plutôt que d'essayer de tout faire tenir ici.",
+      "originalStartMs": 17243,
+      "originalEndMs": 22822.708,
+      "generatedFile": "sentence-revisions/fields/5-2c8941f5fc1637a2bd8ef0d51646ad98b398b9d99d51740c1a8ce4220d3693c5.wav",
+      "generatedMs": 6960,
+      "tempo": 1.2473771028878216,
+      "replacementMs": 5594.9580000000005,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "print",
+      "index": 0,
+      "before": "Avant d'imprimer en quantité, regarde la première feuille et la dernière.",
+      "after": "Avant d'imprimer en quantité, regardez la première feuille et la dernière.",
+      "originalStartMs": 0,
+      "originalEndMs": 4074,
+      "generatedFile": "sentence-revisions/print/0-93c587b56559d98a3cdb8ecb321aa87276b523524d354d5c3fe30d0baf0affd1.wav",
+      "generatedMs": 5120,
+      "tempo": 1.25,
+      "replacementMs": 4107.583,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "print",
+      "index": 4,
+      "before": "Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle ; tu peux aussi enregistrer en PDF.",
+      "after": "Quand vous l'ouvrez, choisissez un format A4 et vérifiez l'échelle ; vous pouvez aussi enregistrer en PDF.",
+      "originalStartMs": 15718.5,
+      "originalEndMs": 21269,
+      "generatedFile": "sentence-revisions/print/4-7e6d5ed812e8d90be73928ff34d1a88b8f7828019e63299e781dbe74fb6f2f02.wav",
+      "generatedMs": 7880,
+      "tempo": 1.25,
+      "replacementMs": 6306.875,
+      "originalBoundaryMethod": "silence"
+    },
+    {
+      "chapter": "result",
+      "index": 2,
+      "before": "Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique.",
+      "after": "Quelqu'un peut perdre ou faire photographier son badge : ne le traitez pas comme une autorisation d'accès automatique.",
+      "originalStartMs": 6641,
+      "originalEndMs": 11434,
+      "generatedFile": "sentence-revisions/result/2-cdaab06cdf158f276541950ba9f608b81e6c4890028a71aa640564d3a150fd77.wav",
+      "generatedMs": 7000,
+      "tempo": 1.25,
+      "replacementMs": 5606.417,
+      "originalBoundaryMethod": "silence"
+    }
+  ]
+}

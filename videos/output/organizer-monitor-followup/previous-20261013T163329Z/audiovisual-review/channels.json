@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T09:01:51.245Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
+  "promptSha256": "237a804804755d3993290513ca4b22f69c056a5264de986421027c9849f692af",
+  "clipSha256": "566316a37976a09b061fb58dd19b3c4c989a4991e72aa941af3d767cf37b9ecc",
+  "scene": "channels",
+  "review": {
+    "heardOpening": "L'email part à toutes les personnes ciblées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "L'email part à toutes les personnes ciblées",
+        "visibleSeconds": 0,
+        "visible": "Formulaire de rédaction du message affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "tu peux ajouter une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 2.9,
+        "visible": "Cochage de la case 'Envoyer aussi une notification (téléphone ou ordinateur)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "La confirmation finale évite les envois involontaires",
+        "visibleSeconds": 6.2,
+        "visible": "Ouverture de la fenêtre d'aperçu de l'email avec le bouton de confirmation d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, naturelle et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

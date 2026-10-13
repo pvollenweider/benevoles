@@ -1,0 +1,2 @@
+file '/private/tmp/codex-video/videos/output/organizer-monitor-followup/sentence-revisions/audience/0.wav'
+file '/private/tmp/codex-video/videos/output/organizer-monitor-followup/sentence-revisions/audience/1.wav'
