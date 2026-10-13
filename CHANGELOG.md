@@ -26,6 +26,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Pages des tutoriels vidéo** : la vidéo vient juste sous le titre, avant sa description. « Les étapes », « À retenir » et la transcription sont réunies sous « Pour aller plus loin », fermées par défaut, avec leur nombre d'éléments.
 - **Place proposée depuis la liste d'attente** (#946) : les 24 heures pour la prendre s'arrêtent au début du créneau, et une place libérée moins d'une heure avant le début n'est plus proposée.
 
 ### Corrigé

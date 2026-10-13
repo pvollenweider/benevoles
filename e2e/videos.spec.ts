@@ -47,13 +47,27 @@ test("shows « Vidéo bientôt disponible » without VIDEO_MEDIA_BASE_URL", asyn
 
 // #644 owner feedback: the detail page shows what the video explains to the viewer, never the
 // internal editorial script (Utilité/Démonstration/Résultat visible/Points d'attention).
-test("detail page shows the viewer content, not the internal script, and the transcript is collapsed by default", async ({ page }) => {
+test("detail page shows the video first, the viewer content, not the internal script, and collapses the details by default", async ({ page }) => {
   await page.goto("/videos/EVENT_CREATE_BLANK")
   const main = page.getByRole("main")
 
   await expect(main.getByRole("heading", { level: 2, name: "Dans cette vidéo" })).toBeVisible()
-  await expect(main.getByRole("heading", { level: 2, name: "Les étapes" })).toBeVisible()
-  await expect(main.getByRole("heading", { level: 2, name: "À retenir" })).toBeVisible()
+  // Watch page: the player comes right after the title, the steps, key points and transcript are
+  // closed disclosures under « Pour aller plus loin ».
+  // The player (or its « bientôt disponible » fallback) is the first thing after the title.
+  const playerFirst = await main.evaluate((m) => {
+    const h1 = m.querySelector("h1")
+    const player = m.querySelector("video") ?? [...m.querySelectorAll("p, div")].find((e) => e.textContent?.trim() === "Vidéo bientôt disponible.")
+    const description = m.querySelector("h1 ~ * p")
+    if (!h1 || !player) return false
+    const after = (a: Node, b: Node) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING)
+    return after(h1, player) && (!description || after(player, description) || player.contains(description))
+  })
+  expect(playerFirst).toBe(true)
+  await expect(main.getByRole("heading", { level: 2, name: "Pour aller plus loin" })).toBeVisible()
+  await expect(main.locator("summary", { hasText: /^▸?\s*Les étapes \(\d+\)$/ })).toBeVisible()
+  await expect(main.locator("summary", { hasText: /^▸?\s*À retenir \(\d+\)$/ })).toBeVisible()
+  await expect(main.locator("details ol").first()).toBeHidden()
   await expect(main.getByRole("heading", { level: 2, name: "Script", exact: true })).toHaveCount(0)
   await expect(main.getByText("Utilité", { exact: true })).toHaveCount(0)
   await expect(main.getByText("Démonstration", { exact: true })).toHaveCount(0)
