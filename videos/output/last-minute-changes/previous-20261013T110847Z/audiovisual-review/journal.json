@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:48:23.599Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
+  "clipSha256": "8e3abf2662b226f734d299ae697fd147f285737bd444c0fb1dc36018c5d1fd1d",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour comprendre l'imprévu après coup",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons le journal de l'événement",
+        "visibleSeconds": 0,
+        "visible": "Page Journal affichée avec la liste chronologique des événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Retrouvons le retrait, l'offre et son acceptation",
+        "visibleSeconds": 10.5,
+        "visible": "Défilement vers les entrées d'annulation, proposition de place et confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
+        "visibleSeconds": 15.5,
+        "visible": "Sélection de l'onglet Récit puis ouverture d'un enchaînement d'actions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine claire, bien posée et parfaitement compréhensible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

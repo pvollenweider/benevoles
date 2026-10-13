@@ -1,17 +1,17 @@
 {
   "id": "LAST_MINUTE_CHANGES",
   "slug": "last-minute-changes",
-  "validatedAt": "2026-10-13T08:47:38.092Z",
+  "validatedAt": "2026-10-13T11:19:25.352Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 354080,
+  "captureMs": 354000,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 30659,
+      "visualMs": 30662,
       "audioMs": 30658,
-      "driftMs": 1
+      "driftMs": 4
     },
     {
       "id": "withdrawal",
@@ -27,15 +27,15 @@
     },
     {
       "id": "coverage",
-      "visualMs": 30050,
+      "visualMs": 30051,
       "audioMs": 30049,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "availability",
-      "visualMs": 29453,
+      "visualMs": 29456,
       "audioMs": 29452,
-      "driftMs": 1
+      "driftMs": 4
     },
     {
       "id": "message",
@@ -45,15 +45,15 @@
     },
     {
       "id": "schedule",
-      "visualMs": 30484,
+      "visualMs": 30488,
       "audioMs": 30484,
-      "driftMs": 0
+      "driftMs": 4
     },
     {
       "id": "cancel",
-      "visualMs": 33276,
+      "visualMs": 33275,
       "audioMs": 33274,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "journal",
@@ -73,7 +73,7 @@
     "voicedWindows": 321,
     "musicOnlyWindows": 1,
     "smallestGapLu": 14,
-    "largestGapLu": 19.6,
+    "largestGapLu": 19.4,
     "quietestMusicOnlyLufs": -33,
     "loudestMusicOnlyLufs": -33,
     "medianVoiceLufs": -16.3

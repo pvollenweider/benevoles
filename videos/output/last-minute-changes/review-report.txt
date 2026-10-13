@@ -1,23 +1,26 @@
-STATUS: NOT READY
-ID: LAST_MINUTE_CHANGES
-Duration: 354.08
-BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
-Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
-Music: {'voicedWindows': 321, 'musicOnlyWindows': 1, 'smallestGapLu': 14, 'largestGapLu': 19.6, 'quietestMusicOnlyLufs': -33, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.3}
-Problems: All technical, narration, music and SMTP checks pass (nine delivered messages). Schedule ASR diagnosed as transient service failure and now passes. Withdrawal, schedule return and replacement cues aligned. Cancellation dialog remains about 4.7 s late; corrected to Ouvrons la confirmation sentence anchor after the single re-film, no third take. Nicolas missing flag disproved by exact frames 328.0, 329.0, 330.0 showing his row. Mailpit English dates nit.
-Source changes: Replacement selection/addition and coverage sentence anchors; remaining cancellation-dialog cue anchored to Ouvrons la confirmation. Empty-ASR bounded retry. No src changes.
-Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
-Real-time subjective listening unavailable; never used as a NOT READY reason.
-Subtitles preserve manifest text with intended French numeric display formatting: True (review/caption-check.json; quatorze heures becomes 14 h).
-MP4 frame evidence SHA256: 14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3
-All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 1.347–32.006 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-withdrawal: 34.265–65.548 s; review/withdrawal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-offer: 67.814–94.343 s; review/offer-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-coverage: 96.605–126.655 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-availability: 128.916–158.369 s; review/availability-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-message: 160.63–221.527 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 8; reported issues []
-schedule: 223.791–254.275 s; review/schedule-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-cancel: 256.539–289.815 s; review/cancel-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["00:06 - 00:10 : L'ouverture de la modale de confirmation intervient avec environ 3 à 4 secondes de décalage par rapport à l'annonce vocale."]
-journal: 292.082–321.265 s; review/journal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-result: 323.528–351.567 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues ['À 00:04, la voix cite Nicolas comme ayant accepté sa place, mais la liste filtrée sous « Inscriptions » ne montre que Zoé, Sarah, Emma et Lucas.']
+STATUS: READY
+
+Batch 16 — LAST_MINUTE_CHANGES
+Commit: 80a00bcf7842ce5f23db1042cc319bce74cb310f
+BUILD_ID: MGm3Rsx8eH8bmTLMCUaJ6
+Duration: 354.00 s
+MP4 SHA256: c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2
+
+One narrated take, after successful rehearsal, with current cancellation sentence anchor. No second take needed. Previous artifacts retained under previous-20261013T110847Z/. Audited audio reused unchanged; no TTS generation.
+
+All objective checks pass: 10 chapter durations, 33 sentence anchors, final-MP4 independent narration in all 10 chapters (schedule 0% word difference), music gap 14.0–19.4 LU, 73 actual VTT cues, 30 click and 192 key markers/effects, verified pinned product provenance. Sixty sampled final frames, ten chapter sheets and precise cancellation/result frames inspected.
+
+Nine actual SMTP messages verified against current outbox and Mailpit; none suppressed. Pending schedule request excluded; active and requested cancellation delivered; prior attendance preserved. Fixture mailbox cleanup preceded rehearsal and narrated take. Real compiled cron delivered delayed notifications; no fabricated emails.
+
+welcome: Introduction and public benevol.app event address inspected; title readable and held.
+withdrawal: Actual personal withdrawal, active cancellation, offered Nicolas row and real offer email/deadline aligned.
+offer: Actual offer acceptance and Place confirmée; active Nicolas registration visible after return.
+coverage: Accueil full; Logistique manque 1; pending reservation and totals visible at their explanations.
+availability: Zoé morning availability and remark visible in member row before detailed dialog; evening registration shown on activity page.
+message: One Emma recipient, exact preview and received SMTP mail; Zoé existing identity, correct Logistique selection/addition and filled coverage aligned.
+schedule: Editor date and both hours, save, received old/new-hour email, and return to modified planning aligned. Final MP4 ASR passes at 0% word difference.
+cancel: Opening anchor 262.644 s; click visible 263.0 s; full dialog/caption visible 264.0 s. Independent audiovisual review observes speech 6.3 s/dialog 6.8 s relative to chapter. Confirmation aligned. Journal cancellation state is prepared before Vérifions le statut and remains readable; minor preparatory lead is acceptable. Actual active+requested cancellation and preserved prior attendance verified.
+journal: Actual withdrawal/offer/acceptance, changed hours and cancellation records visible; Récit explanation followed by actual causal story. General explanation of mode precedes selection, with no missing action.
+result: Nicolas accepted and Zoé correct shift visible at 328/329/330 s. Demandes à traiter checkbox is unchecked. Automated missing-Nicolas/filter claim contradicted by these exact final MP4 frames. Modified hours shown in list and cancelled Caisse excluded from coverage.
+
+Known nit: Mailpit English dates. No product layout defect identified in inspected frames. Automated result false flag retained unchanged with evidence disposition in review-result.json. Real-time subjective listening unavailable; not a NOT READY reason. No src changes, renders.json changes, commit, push or publication.

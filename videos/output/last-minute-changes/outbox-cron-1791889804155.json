@@ -1,0 +1,39 @@
+{
+  "product": {
+    "commit": "80a00bcf7842ce5f23db1042cc319bce74cb310f",
+    "sourceTree": "23f9b5ffaa043ef6913dac1798455a65b9b83b22",
+    "productSourceSha256": "13a63b17c208365f9fc2c81f768446da08ca10139a186ae4163c87b8a4cf9f43",
+    "buildId": "MGm3Rsx8eH8bmTLMCUaJ6",
+    "snapshot": "/tmp/benevoles-video-production.batch16",
+    "builtAt": "2026-10-13T11:09:25.781Z"
+  },
+  "at": "2026-10-13T11:10:04.155Z",
+  "note": "Off-screen few-minutes ellipse: only nextAttemptAt changed; real compiled cron/SMTP delivery, no fabricated payload/status/attempt count",
+  "dueIds": [
+    "cmv6kx8ky0003nha5f0v1dvcs",
+    "cmv6kx8ov000bnha5g9mfroh1"
+  ],
+  "temporarilyHeldOtherFixtureIds": [
+    "cmv5qlhxh003g00a59kmdaf0l",
+    "cmv5qn0f5006y00a50dbeidhp",
+    "cmv66w2ur003g4qa5dhlegbfx",
+    "cmv66xaax006y4qa59cs5rpw7",
+    "cmv688kam007z4qa5yupjpfsc",
+    "cmv68fk6i00824qa513egw33x",
+    "cmv69srkp0000sua5kb4mg3wj",
+    "cmv69srks0001sua5itg2ojko",
+    "cmv6bkoc8003idma53sseeqqv",
+    "cmv6blry60070dma5tudw2ieu",
+    "cmv6d1wky0084dma54c1se9ov",
+    "cmv6d6ndy0087dma5dwt8iqk1"
+  ],
+  "actualCronResult": {
+    "outbox": {
+      "sent": 2,
+      "retried": 0,
+      "failed": 0,
+      "cancelled": 0,
+      "held": 0
+    }
+  }
+}

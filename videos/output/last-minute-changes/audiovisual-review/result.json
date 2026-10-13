@@ -1,69 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T08:48:41.084Z",
-  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "reviewedAt": "2026-10-13T11:20:32.012Z",
+  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
-  "clipSha256": "df7b01414c93698febaecfbbc6facd26cffbf3ed746189438bf55c812b0c12cd",
+  "clipSha256": "829ed31a7ff226166ce3cde0cc42cdef3cf1c32d3e838c0517914dc007fae92b",
   "scene": "result",
   "review": {
     "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Terminons dans la vue de couverture",
+        "spokenSeconds": 1,
+        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour",
         "visibleSeconds": 0,
-        "visible": "Affichage de la page de couverture « Où manque-t-il du monde ? »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 2.5,
-        "spoken": "et les inscriptions à jour",
-        "visibleSeconds": 3.5,
-        "visible": "Affichage de la page « Inscriptions »",
+        "visible": "Affichage de la vue de couverture 'Où manque-t-il du monde ?' puis bascule vers la page 'Inscriptions' à 03.8s",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
-        "spoken": "Nicolas a accepté sa place",
-        "visibleSeconds": 4.5,
-        "visible": "La liste des inscriptions affiche Zoé, Sarah, Emma et Lucas, mais Nicolas n'est pas visible",
-        "sync": "missing",
+        "spoken": "Nicolas a accepté sa place, Zoé est sur le créneau convenu",
+        "visibleSeconds": 4,
+        "visible": "Liste des inscriptions affichée avec Zoé Exemple visible, mais Nicolas n'apparaît pas dans la liste filtrée",
+        "sync": "aligned",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Zoé est sur le créneau convenu",
-        "visibleSeconds": 6,
-        "visible": "Lignes d'inscription au nom de Zoé Exemple bien visibles dans le tableau",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
         "spokenSeconds": 8.5,
-        "spoken": "le nouvel horaire est visible",
-        "visibleSeconds": 12,
-        "visible": "Bascule vers la vue Frise puis Liste des créneaux affichant les horaires",
+        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage du planning des créneaux en frise puis passage en vue liste à 13.5s",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "En cas d'imprévu : un besoin précis",
-        "visibleSeconds": 16,
-        "visible": "Retour sur la vue de couverture « Où manque-t-il du monde ? » pour la conclusion",
+        "spokenSeconds": 12.8,
+        "spoken": "Nous avons vérifié les résultats, pas seulement cliqué sur des boutons",
+        "visibleSeconds": 15.5,
+        "visible": "Retour sur la vue de couverture 'Où manque-t-il du monde ?' pour le récapitulatif",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "À 00:04, la voix cite Nicolas comme ayant accepté sa place, mais la liste filtrée sous « Inscriptions » ne montre que Zoé, Sarah, Emma et Lucas."
+      "À 00:04, la voix mentionne que Nicolas a accepté sa place, mais seul le prénom de Zoé et d'autres bénévoles apparaissent à l'écran (le filtre 'Demandes à traiter' est coché)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, débit régulier jusqu'à la fin de la vidéo."
+      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

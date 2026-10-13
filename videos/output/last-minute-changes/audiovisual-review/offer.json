@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T08:47:52.169Z",
-  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "reviewedAt": "2026-10-13T11:19:44.571Z",
+  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "promptSha256": "aa98864be2a6cee3720a475690bff3cd5579af6ab6c5d9d8ac317e66d6550292",
-  "clipSha256": "26797392de843a140cfc16509b3c925925b1437e2870d96ef68d5ad7fe3e8f72",
+  "clipSha256": "d69d112ebade8c11b4064c2f6f1226580d1825eecb292a1188b9c671c7276f4a",
   "scene": "offer",
   "review": {
-    "heardOpening": "Une place proposée n'est pas encore une personne confirmée.",
+    "heardOpening": "Une place proposée n'est pas encore",
     "checkpoints": [
       {
         "spokenSeconds": 6.8,
-        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple",
-        "visibleSeconds": 7.2,
-        "visible": "Clic sur le bouton 'Prendre la place' suivi de l'écran 'Place confirmée !'",
+        "spoken": "acceptons la place dans cet exemple",
+        "visibleSeconds": 7,
+        "visible": "Clic sur le bouton Prendre la place puis affichage de l'écran de confirmation Place confirmée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
+        "spokenSeconds": 10.7,
         "spoken": "Puis vérifions le statut dans les inscriptions",
-        "visibleSeconds": 13.5,
-        "visible": "Affichage de l'onglet 'Inscriptions' de l'événement",
+        "visibleSeconds": 13.2,
+        "visible": "Affichage de la page de gestion des Inscriptions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
+        "spokenSeconds": 13.9,
         "spoken": "Maintenant seulement, sa participation est confirmée",
         "visibleSeconds": 14.5,
-        "visible": "Ligne de Nicolas Exemple visible dans la liste des inscriptions",
+        "visible": "Ligne de Nicolas Exemple visible dans la liste des bénévoles pour le créneau Accueil du matin",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, naturelle et posée, bien calée sur les transitions visuelles avec un fond sonore discret."
+      "observation": "Voix off féminine naturelle, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

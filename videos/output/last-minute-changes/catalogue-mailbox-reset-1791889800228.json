@@ -1,0 +1,182 @@
+{
+  "at": "2026-10-13T11:10:00.228Z",
+  "deleted": [
+    {
+      "ID": "3J6BRpyTsQvGvr27mtulpq",
+      "MessageID": "outbox-cmv6kwrpk000g4ca5bwg4tq2b@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.5@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : créneau annulé — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.958Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3903,
+      "Attachments": 0,
+      "Snippet": "Toutes nos excuses — d'autres créneaux restent peut-être disponibles. Hello Lucas ! Le créneau Caisse de la petite scène du samedi 17 octobre pour Fête des imprévus — démonstration a malheu..."
+    },
+    {
+      "ID": "4Q0E9KwQWvSOIewg7f1EeY",
+      "MessageID": "outbox-cmv6kwrph000f4ca5yybp7m7l@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.0@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : créneau annulé — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.922Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3903,
+      "Attachments": 0,
+      "Snippet": "Toutes nos excuses — d'autres créneaux restent peut-être disponibles. Hello Aline ! Le créneau Caisse de la petite scène du samedi 17 octobre pour Fête des imprévus — démonstration a malheu..."
+    },
+    {
+      "ID": "4C6E1wXnLK2gvYcQXtbbRc",
+      "MessageID": "outbox-cmv6kwrom000d4ca5l3qg4xbh@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.4@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Info : changement d'horaire — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.905Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4146,
+      "Attachments": 0,
+      "Snippet": "Nouvel horaire : samedi 17 octobre · 14:30–16:30 (était 14:00–16:00) Hello Sarah ! Petite info : le créneau Réception du matériel pour Fête des imprévus — démonstration a changé d'horai..."
+    },
+    {
+      "ID": "1I0LfsXVu6DiRyNB2Znx4H",
+      "MessageID": "outbox-cmv6kwrjs00054ca5y8kyqjuq@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.1@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Inscription confirmée — Fête des imprévus — démonstration 🎉",
+      "Created": "2026-10-13T11:09:40.894Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4377,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Nicolas ! 🎉 Super, ton inscription pour Fête des imprévus — démonstration est confirmée ! Accueil du matin · 17/10/2026 · 10:00..."
+    },
+    {
+      "ID": "5Y1xcRMLWGnZ8iZpS9aFnu",
+      "MessageID": "outbox-cmv6kwrlt00084ca5l7m3drfb@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Un coup de main pour la logistique ? — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.882Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4511,
+      "Attachments": 0,
+      "Snippet": "Il reste une place de 12h à 14h. Merci de nous répondre avant de modifier votre planning. Hello Emma ! 👋 Un message de Formation — imprévus au sujet de Fête des imprévus — démonstration. ..."
+    },
+    {
+      "ID": "44AT3zJAMOu5yI71g0W7BB",
+      "MessageID": "outbox-cmv6kwrim00044ca5c7dcjtdz@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.0@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "Ton inscription a été annulée : Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.877Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3486,
+      "Attachments": 0,
+      "Snippet": "Ton inscription a été annulée : Fête des imprévus — démonstration. Hello Aline, Ton inscription a été annulée, le 13 octobre à 13:09, depuis ton lien personnel : Fête des imprévus — d..."
+    },
+    {
+      "ID": "7eRJAuKwRC0kqI3lSSBYQW",
+      "MessageID": "outbox-cmv6kwrhx00014ca53qlwjz2p@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.last-minute.person.1@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [],
+      "Subject": "🎉 Une place s'est libérée — Fête des imprévus — démonstration",
+      "Created": "2026-10-13T11:09:40.867Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4078,
+      "Attachments": 0,
+      "Snippet": "Une place s'est libérée ! Confirme avant le mercredi 14 octobre à 13:09. Hello Nicolas ! 🎉 Bonne nouvelle : une place s'est libérée pour Accueil du matin lors de Fête des imprévus — démon..."
+    }
+  ],
+  "preservedIds": [],
+  "guard": "Exact fixture sender, synthetic recipients and video SMTP username or reserved video identities; individual inspected IDs only"
+}

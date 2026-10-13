@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:47:52.169Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "promptSha256": "aa98864be2a6cee3720a475690bff3cd5579af6ab6c5d9d8ac317e66d6550292",
+  "clipSha256": "26797392de843a140cfc16509b3c925925b1437e2870d96ef68d5ad7fe3e8f72",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore une personne confirmée.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le bouton 'Prendre la place' suivi de l'écran 'Place confirmée !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Puis vérifions le statut dans les inscriptions",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage de l'onglet 'Inscriptions' de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Maintenant seulement, sa participation est confirmée",
+        "visibleSeconds": 14.5,
+        "visible": "Ligne de Nicolas Exemple visible dans la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et posée, bien calée sur les transitions visuelles avec un fond sonore discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

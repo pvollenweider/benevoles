@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T08:47:54.993Z",
-  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
+  "reviewedAt": "2026-10-13T11:19:44.910Z",
+  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
   "promptSha256": "3f4e789b7e93e56fc87fe20107c5c6251010a11b3fa45a6455fdfde06ff89ef5",
-  "clipSha256": "c4eca91a11c76ab2462c27932a11000a688a33913cc8de2fce9b68c4cc4c3f86",
+  "clipSha256": "98309a497fb5e402fb1ee448307b16a7eae7b858658bbc81c8a1c854a406493a",
   "scene": "withdrawal",
   "review": {
     "heardOpening": "Aline ne peut plus venir à l'accueil",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3.8,
         "spoken": "elle annule son inscription",
         "visibleSeconds": 4.5,
-        "visible": "Clic sur « Oui, annuler » dans la fenêtre de confirmation",
+        "visible": "Clic sur Annuler puis validation sur Oui, annuler",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
+        "spokenSeconds": 9.5,
         "spoken": "Revenons dans les inscriptions côté organisation",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage du tableau de gestion des inscriptions côté organisateur",
+        "visibleSeconds": 9.7,
+        "visible": "Transition vers la vue Inscriptions du tableau de bord organisateur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.5,
+        "spokenSeconds": 17.5,
         "spoken": "l'application lui propose de la prendre",
-        "visibleSeconds": 17.5,
-        "visible": "Ligne de Nicolas Exemple avec le statut « Place proposée »",
+        "visibleSeconds": 17,
+        "visible": "Ligne de Nicolas Exemple avec le statut Place proposée pour l'accueil",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.3,
+        "spokenSeconds": 21,
         "spoken": "Ouvrons le vrai email reçu par Nicolas",
-        "visibleSeconds": 21,
-        "visible": "Ouverture de la boîte de réception affichant le courriel destiné à Nicolas",
+        "visibleSeconds": 20.8,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail adressé à Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "On y retrouve le créneau et un délai de réponse",
+        "visibleSeconds": 24.5,
+        "visible": "Créneau samedi 17 octobre et mention de date d'expiration du lien dans l'e-mail",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
