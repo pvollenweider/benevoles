@@ -14,6 +14,7 @@ import { registrationToken } from "@/lib/token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
+import { minVolunteersProblem } from "@/lib/staffing"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -23,6 +24,8 @@ const schema = z.object({
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
   capacity: z.number().int().min(1).optional(),
+  // Minimum per shift (#949): null removes it; checked below against the places it will have.
+  minVolunteers: z.number().nullable().optional(),
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
   locationDetails: z.string().optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
@@ -69,6 +72,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (parsed.data.date && !isDayInPeriod(parsed.data.date, before.event?.startDate, before.event?.endDate)) {
     return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
   }
+  // The minimum and the places as they will be (#949): lowering the places under the minimum is
+  // refused until the minimum is lowered too.
+  const minProblem = minVolunteersProblem(
+    parsed.data.minVolunteers !== undefined ? parsed.data.minVolunteers : before.minVolunteers,
+    parsed.data.capacity ?? before.capacity,
+  )
+  if (minProblem) return NextResponse.json({ error: minProblem }, { status: 400 })
 
   const { notifyVolunteers, ...rest } = parsed.data
   const updateData: Record<string, unknown> = { ...rest }
@@ -121,6 +131,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "startTime",
     "endTime",
     "capacity",
+    "minVolunteers",
     "status",
     "waitlistEnabled",
     "requiresApproval",

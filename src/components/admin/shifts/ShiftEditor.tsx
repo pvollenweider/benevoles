@@ -11,11 +11,12 @@ import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/g
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
+import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import type { RawShift } from "./types"
 
 export const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
-  capacity: 2, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false, requiresApproval: false,
+  capacity: 2, minVolunteers: "" as number | string, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false, requiresApproval: false,
   minAge: "" as number | string,
   contactName: "", contactPhone: "", instructions: "",
 }
@@ -66,6 +67,10 @@ export default function ShiftEditor({
   const startField = fieldError("startTime")
   const endField = fieldError("endTime")
   const capacityField = fieldError("capacity")
+  // Minimum of people (#949): optional, 1 to the places. Checked like the required fields, once
+  // a save was attempted, and then live as it is corrected.
+  const minimumProblem = minVolunteersProblem(parseMinVolunteers(form.minVolunteers), Number(form.capacity))
+  const minimumInvalid = attempted && minimumProblem !== null
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
@@ -75,12 +80,15 @@ export default function ShiftEditor({
     // aria-disabled, not disabled, while saving: a disabled button would drop focus to <body>.
     if (saving) return
     const missingNow = missingShiftFields(form)
-    if (missingNow.length > 0) {
+    const minimumNow = minVolunteersProblem(parseMinVolunteers(form.minVolunteers), Number(form.capacity))
+    if (missingNow.length > 0 || minimumNow) {
       // Each message is tied to its field, not an alert: focus moves to the first invalid field
       // once it says it is invalid, so its message is read once, with the field.
       setAttempted(true)
       setError(null)
-      requestAnimationFrame(() => document.getElementById(`${missingNow[0]}-${sfx}`)?.focus())
+      // In form order: the required fields, then the minimum (it comes after the capacity).
+      const first = missingNow[0] ?? "minVolunteers"
+      requestAnimationFrame(() => document.getElementById(`${first}-${sfx}`)?.focus())
       return
     }
     setSaving(true)
@@ -90,12 +98,13 @@ export default function ShiftEditor({
     const url    = editingId ? `/api/admin/shifts/${editingId}` : "/api/admin/shifts"
     const method = editingId ? "PATCH" : "POST"
     const minAge = form.minAge === "" ? null : Number(form.minAge)
+    const minVolunteers = parseMinVolunteers(form.minVolunteers)
     const displayOrder = editingId
       ? form.displayOrder
       : resolveNewShiftDisplayOrder(existingShifts, form.roleName, form.displayOrder)
     const body   = editingId
-      ? { ...form, label, capacity: Number(form.capacity), minAge, displayOrder }
-      : { ...form, label, eventId, capacity: Number(form.capacity), minAge, displayOrder }
+      ? { ...form, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
+      : { ...form, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
 
     const outcome = await requestJson<RawShift & { date?: string }>(() => fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), "Erreur lors de la sauvegarde.")
     setSaving(false)
@@ -186,13 +195,27 @@ export default function ShiftEditor({
           {endField.message}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div>
           <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité <span aria-hidden="true">*</span></label>
-          <input id={`capacity-${sfx}`} type="number" min="1" required {...capacityField.invalidProps} value={form.capacity} onChange={e => setField("capacity", e.target.value)} className={`input ${capacityField.border}`} />
+          <input id={`capacity-${sfx}`} type="number" min="1" required {...capacityField.invalidProps} {...(minimumInvalid && !capacityField.invalidProps["aria-describedby"] ? { "aria-describedby": `minVolunteers-error-${sfx}` } : {})} value={form.capacity} onChange={e => setField("capacity", e.target.value)} className={`input ${capacityField.border}`} />
           {capacityField.message}
         </div>
         <div>
+          <label htmlFor={`minVolunteers-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Minimum (optionnel)</label>
+          <input
+            id={`minVolunteers-${sfx}`}
+            type="number" min="1" max={Number(form.capacity) || undefined} inputMode="numeric" placeholder="ex. 2"
+            value={form.minVolunteers}
+            onChange={e => setField("minVolunteers", e.target.value)}
+            aria-invalid={minimumInvalid || undefined}
+            aria-describedby={minimumInvalid ? `minVolunteers-error-${sfx} minVolunteers-hint-${sfx}` : `minVolunteers-hint-${sfx}`}
+            className={`input ${minimumInvalid ? "!border-red-600" : ""}`}
+          />
+          {minimumInvalid && <p id={`minVolunteers-error-${sfx}`} className="text-xs text-red-700 mt-1">{minimumProblem}</p>}
+          <p id={`minVolunteers-hint-${sfx}`} className="text-xs text-gray-600 mt-1">Sous ce nombre de personnes, le créneau ne peut pas tourner. Vide : toutes les places.</p>
+        </div>
+        <div className="col-span-2 sm:col-span-1">
           <label htmlFor={`description-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Description</label>
           <input id={`description-${sfx}`} type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
         </div>
@@ -285,6 +308,7 @@ export default function ShiftEditor({
       {missing.length > 0 && (
         <p className="text-xs text-red-700">{missingFieldsSummary(missing)}</p>
       )}
+      {minimumInvalid && <p className="text-xs text-red-700">À corriger : le minimum.</p>}
 
       <div className="flex gap-3">
         <button type="button" onClick={handleSave} aria-disabled={saving || undefined}

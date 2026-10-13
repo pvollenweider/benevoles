@@ -5,6 +5,7 @@ import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
 import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
+import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
 
 /**
  * Printable sheets (#400): paper still matters on site. Six views of one event, each a plain
@@ -40,6 +41,8 @@ export type SheetShift = ShiftInfo & {
   startTime: string
   endTime: string
   capacity: number
+  /** Minimum of people (#949); null or absent = the same as capacity. */
+  minVolunteers?: number | null
   displayOrder?: number
   registrations: SheetVolunteer[]
 }
@@ -129,6 +132,19 @@ function namesCell(s: SheetShift): string {
   return [names.join(", "), blanks].filter(Boolean).join(names.length ? " · " : "")
 }
 
+/** « 2/4 », then « · sous le minimum (2) » or « · minimum atteint » for a shift with a minimum (#949): words, for black and white. */
+export function effectifCell(s: SheetShift): string {
+  const figures = `${s.registrations.length}/${s.capacity}`
+  const state = s.registrations.length < s.capacity ? staffingStateText(s, shiftStaffingState({ ...s, active: s.registrations.length })) : null
+  return state ? `${figures} · ${state === "minimum atteint" ? state : `<strong>${state}</strong>`}` : figures
+}
+
+/** Under a detail table whose shifts have a minimum (#949): what the words in « Effectif » mean. */
+export function minimumLegend(shifts: SheetShift[]): string {
+  if (!shifts.some((s) => effectiveMinimum(s) != null)) return ""
+  return `<p class="meta">Effectif : inscrits sur les places. « Sous le minimum (2) » : moins de personnes que le minimum avec lequel le créneau peut tourner ; « minimum atteint » : le créneau peut tourner, sans être complet.</p>`
+}
+
 function detailTable(shifts: SheetShift[], caption: string, second: string, secondOf: (s: SheetShift) => string): string {
   return `
       <table class="detail">
@@ -139,10 +155,10 @@ function detailTable(shifts: SheetShift[], caption: string, second: string, seco
             <td class="nowrap mono">${esc(fmtRange(s.startTime, s.endTime))}</td>
             <td>${esc(secondOf(s))}</td>
             <td>${namesCell(s)}</td>
-            <td class="num mono">${s.registrations.length}/${s.capacity}</td>
+            <td class="num mono">${effectifCell(s)}</td>
           </tr>`).join("")}
         </tbody>
-      </table>`
+      </table>${minimumLegend(shifts)}`
 }
 
 function sectionHead(title: string, stats: string): string {

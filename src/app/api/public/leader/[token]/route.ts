@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
 import { linkToken } from "@/lib/token-vault"
+import { shiftStaffingState } from "@/lib/staffing"
 
 // Read-only roster for a sector leader (#186): who's signed up for their roleName's shifts.
 // No mutation here — v1 is intentionally read-only, see prisma/schema.prisma's SectorLeader doc.
@@ -31,6 +32,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
 
+  // Shifts of the role that have a minimum of people (#949), with their state, so the leader sees
+  // which ones can't run yet, including those nobody has signed up for. None without a minimum.
+  const minShifts = await prisma.shift.findMany({
+    where: { eventId: leader.eventId, roleName: leader.roleName, status: { not: "cancelled" }, minVolunteers: { not: null } },
+    select: {
+      id: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true,
+      registrations: { where: { status: { in: ["active", "requested"] } }, select: { status: true } },
+    },
+    orderBy: [{ date: "asc" }, { startTime: "asc" }],
+  })
+
   return NextResponse.json({
     event: { title: leader.event.title, slug: leader.event.slug },
     roleName: leader.roleName,
@@ -52,5 +64,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         endTime: r.shift.endTime,
       },
     })),
+    staffing: minShifts.map((s) => {
+      const active = s.registrations.filter((r) => r.status === "active").length
+      const requested = s.registrations.length - active
+      return {
+        label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime,
+        capacity: s.capacity, minVolunteers: s.minVolunteers, active,
+        state: shiftStaffingState({ capacity: s.capacity, minVolunteers: s.minVolunteers, active, requested }),
+      }
+    }),
   })
 }

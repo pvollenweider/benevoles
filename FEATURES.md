@@ -23,6 +23,7 @@ C'est gratuit, open source et hébergé en France. Ça convient aussi bien à un
 <!-- image: SHIFTS_ROLES_VIEWS | La Frise des créneaux d'un événement : une ligne par poste, chaque créneau placé sur la journée avec ses places. -->
 
 - **Des postes et des créneaux**, avec le nombre de places voulu. Un créneau de nuit peut finir le lendemain.
+- **Un minimum par créneau**, si vous le souhaitez : un bar prévu à quatre qui tourne à deux. Chaque créneau dit alors en toutes lettres s'il est sous le minimum, s'il l'a atteint ou s'il est complet.
 - **Des créneaux en série** : pour une buvette ouverte de 10 h à 22 h, les six créneaux de deux heures se créent en une fois, et vous voyez un aperçu avant de valider.
 - **Des permanences qui reviennent chaque semaine** : l'accueil du mercredi ou la distribution du samedi se décrit une fois pour toute la saison, jours fériés et fermetures exclus.
 - **Un bon départ** : des modèles d'événement (festival, buvette, manifestation sportive, fête de village) et d'activités régulières (épicerie participative, distribution alimentaire, permanence d'accueil, repair café), ou l'événement de l'an dernier dupliqué avec toutes ses dates décalées.
@@ -65,7 +66,7 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 
 <!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
 
-- **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
+- **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne. Ceux qui n'ont pas encore leur minimum passent en tête : « 2/4 · minimum atteint » ne se confond plus avec « 0/4 ».
 - **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois. C'est vous qui choisissez, l'outil ne classe ni ne présélectionne personne. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
 - **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Un désistement moins de 24 heures avant le début vous parvient tout de suite, marqué « dernière minute ». Une annulation faite par erreur se rétablit depuis les inscriptions.
 - **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard.

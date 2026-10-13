@@ -4,7 +4,7 @@
 import type { OrgScopedPrisma } from "./prisma-org"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { reservedRoles } from "./role-reservation"
-import { staffingSummary } from "./staffing"
+import { spokenStaffingState, staffingStateText, staffingSummary } from "./staffing"
 import type { EventShiftRef, InviteRef, LiveRegistration, OpenShift, PoolMember } from "./open-shifts"
 
 /**
@@ -23,7 +23,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true, reservedTags: true, minAge: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, status: true } },
         },
       },
@@ -47,7 +47,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   const summary = staffingSummary(
     event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
+      startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers, closed: s.status === "closed",
       active: s.registrations.filter((r) => r.status === "active").length,
       waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: s.registrations.filter((r) => r.status === "requested").length,
@@ -59,7 +59,9 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   const reserved = reservedRoles(event.shifts)
   // Underfilled shifts in time order: the order the email and the picker read best in.
   const openShifts: OpenShift[] = summary.underfilled
-    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null }))
+    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null,
+      // The state against the minimum (#949), for the organizer's list only: never in the email.
+      staffingState: staffingStateText(s, s.state ?? "open"), spokenStaffingState: spokenStaffingState(s, s.state ?? "open") }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr"))
 
   const members: PoolMember[] = volunteers.map((v) => ({

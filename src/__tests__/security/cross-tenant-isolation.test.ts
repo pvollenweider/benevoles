@@ -710,6 +710,31 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("PATCH /api/admin/shifts/[id] with a minimum (#949) returns 404 for org-B shift, updating nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
+    const db = setupGuard() // shift.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await PATCH(makeRequest("/api/admin/shifts/shift-b", "PATCH", { minVolunteers: 1 }), params("shift-b"))
+    expect(res.status).toBe(404)
+    expect($transaction).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with places and minimum (#949) returns 404 for an org-B event, updating nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const db = setupGuard() // event.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { capacity: 4, minVolunteers: 2 }),
+      { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(404)
+    expect($transaction).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/events/[id]/message returns 404 for an org-B event, sending nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/message/route")
     setupGuard() // event.findFirst → null

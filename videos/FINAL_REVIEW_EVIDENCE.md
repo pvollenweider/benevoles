@@ -79,3 +79,23 @@ ce manque.
 - Tous les autres modules et les compléments de couverture documentaire ne
   sont pas encore repris. Ces résultats ne constituent pas une livraison des
   54 vidéos, ni une garantie de couverture intégrale du produit.
+
+## Écarts ouverts par le minimum par créneau (#949)
+
+Le champ facultatif « Minimum » change des écrans montrés, sans changer les
+libellés ni les sélecteurs de capture existants (« Places », « Capacité * »,
+« Personnes par créneau ») :
+
+- `shift-timeline-quick-actions` : la fenêtre d'un créneau sur la frise a un
+  champ « Minimum » à côté de « Places », et « Appliquer à tout le poste » passe
+  sous les deux champs, avec une aide « Places et minimum sur tout le poste ».
+- `shift-create-series` : le formulaire de série a un champ « Minimum par
+  créneau (optionnel) » après « Personnes par créneau ».
+- toute vidéo qui ouvre le formulaire d'un créneau, au moins `shift-create-edit-detail` (à vérifier : `organizer-create-publish`, `shift-approval`, `shift-waitlist-offer`, `admin-features-tour`) :
+  un champ « Minimum (optionnel) » entre « Capacité » et « Description ».
+- `staffing-gaps` : rien ne change tant que la base de démonstration n'a aucun
+  créneau avec un minimum (le texte d'aide et le tri restent ceux d'avant) ; la
+  narration ne parle pas encore du minimum.
+
+Ces vidéos n'ont pas été régénérées dans la même PR : elles montrent encore
+l'ancienne disposition de ces formulaires et restent à reprendre.

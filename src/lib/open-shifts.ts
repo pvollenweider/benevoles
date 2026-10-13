@@ -28,7 +28,11 @@ export type EventShiftRef = { id: string; roleName: string; label: string; date:
 /** An underfilled shift the organizer picked: places left, and the tags its role is reserved to (#470). */
 export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[]
   /** Shift.minAge (#869): a member known to be younger on the shift's day is not offered it. */
-  minAge?: number | null }
+  minAge?: number | null
+  /** « sous le minimum (2) », « minimum atteint » (#949), shown to the organizer, never in the email; null without a minimum. */
+  staffingState?: string | null
+  /** The same for screen readers: « sous le minimum de 2 ». */
+  spokenStaffingState?: string | null }
 
 export type PoolMember = {
   id: string

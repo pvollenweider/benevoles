@@ -32,6 +32,8 @@ export type EventSummary = {
   fillOverall: { filled: number; capacity: number }
   fillByRole: RoleFill[]
   underfilled: StaffingSummary["underfilled"]
+  /** The underfilled shifts left below their minimum (#949): they could not run as planned. */
+  belowMinimum: StaffingSummary["belowMinimum"]
 }
 
 function byRoleFill(shifts: StaffingShift[]): RoleFill[] {
@@ -69,5 +71,6 @@ export function eventSummary(
     fillOverall: { filled: staffing.totals.active, capacity: staffing.totals.capacity },
     fillByRole: byRoleFill(shifts),
     underfilled: staffing.underfilled,
+    belowMinimum: staffing.belowMinimum,
   }
 }

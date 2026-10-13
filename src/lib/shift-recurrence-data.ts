@@ -17,7 +17,7 @@ export async function loadRuleShifts(db: ReturnType<typeof getOrgClient>, ruleId
   if (!rule) return null
   const rows = await db.shift.findMany({
     where: { recurrenceId: ruleId },
-    select: { id: true, date: true, startTime: true, status: true, registrations: { select: { status: true } } },
+    select: { id: true, date: true, startTime: true, status: true, minVolunteers: true, registrations: { select: { status: true } } },
     orderBy: [{ date: "asc" }, { startTime: "asc" }],
   })
   const committed = new Set<string>(COMMITTED_STATUSES)
@@ -28,6 +28,7 @@ export async function loadRuleShifts(db: ReturnType<typeof getOrgClient>, ruleId
     status: s.status,
     committed: s.registrations.filter((r) => committed.has(r.status)).length,
     hasHistory: s.registrations.length > 0,
+    minVolunteers: s.minVolunteers,
   }))
   return { rule, shifts }
 }

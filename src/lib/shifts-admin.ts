@@ -9,6 +9,7 @@
 
 import { deleteShiftRecap, shiftWhen, type ActionRecap } from "./action-recap"
 import { spokenShiftName, spokenTimeRange } from "./spoken-time"
+import { shiftStaffingState, spokenStaffingState, staffingStateText } from "./staffing"
 
 type ShiftLike = {
   id: string
@@ -127,10 +128,12 @@ export function spokenPlaces(registered: number, capacity: number): string {
  * The accessible name of a shift's bar on the admin timeline (#587): « Bar, Soir, de 10h30 à 12h,
  * 3 inscrits sur 5, complet, modifier ». It starts with the role, as the bar shows it.
  */
-export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number; minAge?: number | null }, full: boolean): string {
+export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number; minAge?: number | null; minVolunteers?: number | null }, full: boolean): string {
   const free = s.capacity - s.registrationCount
+  // Against the minimum (#949): « sous le minimum de 2 », « minimum atteint », as on the bar.
+  const minState = full ? null : spokenStaffingState(s, shiftStaffingState({ ...s, active: s.registrationCount }))
   // « 2 libres » as on the bar (#925, 2.5.3): a voice command can use the words it shows.
-  const state = full ? ", complet" : free > 0 ? `, ${free} libre${free > 1 ? "s" : ""}` : ""
+  const state = full ? ", complet" : minState ? `, ${minState}` : free > 0 ? `, ${free} libre${free > 1 ? "s" : ""}` : ""
   return `${spokenShiftName(s)}, ${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${state}${s.minAge != null ? `, ${s.minAge} ans minimum` : ""}, modifier`
 }
 
@@ -138,11 +141,13 @@ export function timelineBarName(s: ShiftWords & { registrationCount: number; cap
  * The places line of a bar on the admin timeline (#925): « 2/4 inscrits · 2 libres », « 3/3 inscrits
  * · Complet », after « 18 ans min. · » for a shift with a minimum age (first, so that a narrow bar
  * cuts the figures rather than the rule). « inscrits » says what the figures count, « libres »
- * agrees with the number as in the list view.
+ * agrees with the number as in the list view. With a minimum of people (#949), the state takes the
+ * place of the free spots: « 1/4 inscrits · sous le minimum (2) », « 2/4 inscrits · minimum atteint ».
  */
-export function timelineBarPlaces(s: { registrationCount: number; capacity: number; minAge?: number | null }): string {
+export function timelineBarPlaces(s: { registrationCount: number; capacity: number; minAge?: number | null; minVolunteers?: number | null }): string {
   const free = s.capacity - s.registrationCount
-  const places = `${s.registrationCount}/${s.capacity} inscrit${s.registrationCount > 1 ? "s" : ""} · ${free > 0 ? `${free} libre${free > 1 ? "s" : ""}` : "Complet"}`
+  const minState = free > 0 ? staffingStateText(s, shiftStaffingState({ ...s, active: s.registrationCount })) : null
+  const places = `${s.registrationCount}/${s.capacity} inscrit${s.registrationCount > 1 ? "s" : ""} · ${minState ?? (free > 0 ? `${free} libre${free > 1 ? "s" : ""}` : "Complet")}`
   return s.minAge != null ? `${s.minAge} ans min. · ${places}` : places
 }
 

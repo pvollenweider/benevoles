@@ -12,6 +12,7 @@ import { eventSummary, type EventSummaryRegistration } from "@/lib/event-summary
 import { returningVolunteerIds } from "@/lib/volunteer-hours"
 import { fmtDuration } from "@/lib/signup-recap"
 import { orgTimeZone } from "@/lib/time-zone"
+import { StaffingStateSuffix } from "@/components/admin/StaffingShiftLine"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Rapports" }
@@ -39,7 +40,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           where: { status: { not: "cancelled" } },
           orderBy: { displayOrder: "asc" },
           select: {
-            id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
+            id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
             registrations: {
               where: { status: { in: [...LIVE_STATUSES] } },
               select: { status: true, checkedInAt: true, volunteerId: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
@@ -66,7 +67,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
   const timeZone = orgTimeZone(org)
   const staffingShifts = event.shifts.map((s) => ({
     id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
+    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers, closed: s.status === "closed",
     active: s.registrations.filter((r) => r.status === "active").length,
     waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
     requested: s.registrations.filter((r) => r.status === "requested").length,
@@ -255,11 +256,16 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           {summary.underfilled.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-gray-900">Créneaux restés incomplets ({summary.underfilled.length})</h3>
+              {summary.belowMinimum.length > 0 && (
+                <p className="text-sm text-gray-800 mt-1">
+                  Dont <strong className="tabular-nums">{summary.belowMinimum.length}</strong> sous {summary.belowMinimum.length > 1 ? "leur" : "son"} minimum, le nombre de personnes sous lequel un créneau ne peut pas tourner.
+                </p>
+              )}
               {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
               <ul role="list" className="text-sm text-gray-800 mt-1 space-y-0.5 list-disc list-inside">
                 {summary.underfilled.map((s) => (
                   <li key={s.id}>
-                    {s.label !== s.roleName ? `${s.roleName} (${s.label})` : s.roleName}, {day(new Date(s.date))} : <span className="tabular-nums">{s.active} sur {s.capacity}</span>, manque {s.missing}
+                    {s.label !== s.roleName ? `${s.roleName} (${s.label})` : s.roleName}, {day(new Date(s.date))} : <span className="tabular-nums">{s.active} sur {s.capacity}</span><StaffingStateSuffix s={s} />, manque {s.missing}
                   </li>
                 ))}
               </ul>

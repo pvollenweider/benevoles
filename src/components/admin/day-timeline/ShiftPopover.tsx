@@ -10,17 +10,18 @@ import { fmt, clamp } from "@/lib/gantt-utils"
 import { ROW_H } from "@/lib/day-timeline"
 import { moveProblem } from "@/lib/shift-quick-edit"
 import { normalizeTime } from "@/lib/shifts-admin"
+import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import { spokenTimeRange } from "@/lib/spoken-time"
 import { popoverPlacement } from "@/lib/popover-placement"
 import type { AdminShift } from "../AdminDayTimeline"
 
 /**
- * Quick edits of one shift from the timeline (#398): label, capacity (for this shift or the
- * whole role), times, status, duplicate, delete. Closing (click outside, Escape, ✕) saves the
- * label and capacity; the other actions save on their own button.
+ * Quick edits of one shift from the timeline (#398): label, capacity and minimum (#949, for this
+ * shift or the whole role), times, status, duplicate, delete. Closing (click outside, Escape, ✕)
+ * saves the label, capacity and minimum; the other actions save on their own button.
  */
 export default function ShiftPopover({
-  shift, anchor, eventId, onClose, onPatch, onDelete, onDuplicate, onApplyCapacity,
+  shift, anchor, eventId, onClose, onPatch, onDelete, onDuplicate, onApplyCapacity, onNotSaved,
 }: {
   shift:    AdminShift
   anchor:   { x: number; y: number; w: number }
@@ -29,11 +30,16 @@ export default function ShiftPopover({
   onPatch:  (id: string, data: Partial<AdminShift>) => Promise<void> | void
   onDelete: (id: string) => void
   onDuplicate: (id: string) => Promise<void> | void
-  onApplyCapacity: (roleName: string, capacity: number) => Promise<void> | void
+  /** `minVolunteers` (#949): null removes it on the role, absent leaves each shift's own. */
+  onApplyCapacity: (roleName: string, capacity: number, minVolunteers?: number | null) => Promise<boolean | void> | boolean | void
+  /** Said out loud by the parent once the popover is closed (#949): what closing did not save, and why. */
+  onNotSaved?: (message: string) => void
 }) {
   const id = useId()
   const [label, setLabel]       = useState(shift.label === shift.roleName ? "" : shift.label)
   const [capacity, setCapacity] = useState(shift.capacity)
+  // Minimum of people (#949), as typed: "" is none.
+  const [minimum, setMinimum]   = useState<string>(shift.minVolunteers != null ? String(shift.minVolunteers) : "")
   const [status, setStatus]     = useState(shift.status)
   const [startTime, setStartTime] = useState(shift.startTime)
   const [endTime, setEndTime]     = useState(shift.endTime)
@@ -82,8 +88,10 @@ export default function ShiftPopover({
   // Sync latest values into refs so closeAndSave closure stays stable
   const labelRef    = useRef(label)
   const capacityRef = useRef(capacity)
+  const minimumRef  = useRef(minimum)
   useEffect(() => { labelRef.current = label },    [label])
   useEffect(() => { capacityRef.current = capacity }, [capacity])
+  useEffect(() => { minimumRef.current = minimum }, [minimum])
   useEffect(() => {
     openerRef.current = document.activeElement as HTMLElement | null
     headingRef.current?.focus()
@@ -91,6 +99,9 @@ export default function ShiftPopover({
 
   const minCapacity = Math.max(shift.registrationCount, 1)
   const capacityTooLow = capacity < minCapacity
+  // The minimum against the places typed (#949): an invalid pair saves neither.
+  const minimumValue = parseMinVolunteers(minimum)
+  const minimumError = minVolunteersProblem(minimumValue, capacity)
 
   const closedRef = useRef(false)
   // Focus goes back to the bar unless it already moved elsewhere (Tab out, click on another control).
@@ -98,15 +109,24 @@ export default function ShiftPopover({
     if (closedRef.current) return
     closedRef.current = true
     const capacity = capacityRef.current
+    const min = parseMinVolunteers(minimumRef.current)
+    const capacityOk = capacity >= Math.max(shift.registrationCount, 1)
+    // A minimum that doesn't fit the places (#949) saves neither: the shift keeps both.
+    const pairProblem = minVolunteersProblem(min, capacityOk ? capacity : shift.capacity)
+    const pairOk = pairProblem === null
+    const minChanged = min !== (shift.minVolunteers ?? null)
     onPatch(shift.id, {
       label: labelRef.current.trim() || shift.roleName,
       // A capacity under the confirmed people isn't saved: the shift keeps its current one.
-      ...(capacity >= Math.max(shift.registrationCount, 1) ? { capacity } : {}),
+      ...(capacityOk && pairOk ? { capacity } : {}),
+      ...(pairOk && minChanged ? { minVolunteers: min } : {}),
     })
     onClose()
     const opener = openerRef.current
     if (restoreFocus && opener?.isConnected) opener.focus()
-  }, [shift.id, shift.roleName, shift.registrationCount, onPatch, onClose])
+    // The field's message is gone with the popover: the discarded pair is announced (3.3.1, 4.1.3).
+    if (pairProblem) onNotSaved?.(`Places et minimum non enregistrés : ${pairProblem}`)
+  }, [shift.id, shift.roleName, shift.registrationCount, shift.capacity, shift.minVolunteers, onPatch, onClose, onNotSaved])
 
   useEffect(() => {
     function onMD(e: MouseEvent) {
@@ -144,11 +164,18 @@ export default function ShiftPopover({
   }
 
   async function applyCapacity() {
-    if (busy || capacityTooLow) return
+    if (busy || capacityTooLow || minimumError) return
     setBusy("capacity")
-    await onApplyCapacity(shift.roleName, capacity)
+    // The minimum goes with the places when there is one, or when this shift's is being removed;
+    // an empty field on a shift without one leaves each shift's own minimum as it is.
+    const ok = minimumValue != null || shift.minVolunteers != null
+      ? await onApplyCapacity(shift.roleName, capacity, minimumValue)
+      : await onApplyCapacity(shift.roleName, capacity)
     setBusy(null)
-    announce(`Capacité de ${capacity} appliquée au poste « ${shift.roleName} ».`)
+    if (ok === false) return
+    announce(minimumValue != null
+      ? `${capacity} places et un minimum de ${minimumValue} appliqués au poste « ${shift.roleName} ».`
+      : `Capacité de ${capacity} appliquée au poste « ${shift.roleName} ».`)
   }
 
   // The bar as it is now (after a scroll or a resize), else where it was when the popover opened.
@@ -206,17 +233,26 @@ export default function ShiftPopover({
         <div className="flex items-end gap-2">
           <div className="w-20">
             <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Places</label>
-            <input id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={`${id}-capacity-hint`} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
+            <input id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={minimumError ? `${id}-capacity-hint ${id}-minimum-hint` : `${id}-capacity-hint`} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
           </div>
-          <button type="button" onClick={applyCapacity} aria-disabled={busy !== null || capacityTooLow} aria-describedby={`${id}-capacity-hint`} className={`${action} text-blue-700 hover:bg-blue-50 ${busy || capacityTooLow ? "opacity-50" : ""}`}>
+          <div className="w-24">
+            <label htmlFor={`${id}-minimum`} className="block text-xs font-medium text-gray-700 mb-1">Minimum</label>
+            <input id={`${id}-minimum`} type="number" min={1} max={capacity} inputMode="numeric" value={minimum} placeholder="Aucun" aria-invalid={minimumError ? true : undefined} aria-describedby={`${id}-minimum-hint`} onChange={e => setMinimum(e.target.value)} className={`${field} text-center ${minimumError ? "!border-red-600" : ""}`} />
+          </div>
+        </div>
+        <p id={`${id}-minimum-hint`} className={`text-xs -mt-2 ${minimumError ? "text-red-700" : "text-gray-600"}`}>
+          {minimumError ? `${minimumError} Non enregistré.` : "Facultatif : sous ce nombre de personnes, le créneau ne peut pas tourner. Vide : toutes les places."}
+        </p>
+        <div>
+          <button type="button" onClick={applyCapacity} aria-disabled={busy !== null || capacityTooLow || !!minimumError} aria-describedby={minimumError ? `${id}-minimum-hint ${id}-capacity-hint` : `${id}-capacity-hint`} className={`${action} text-blue-700 hover:bg-blue-50 ${busy || capacityTooLow || minimumError ? "opacity-50" : ""}`}>
             {busy === "capacity" ? "Application…" : "Appliquer à tout le poste"}
           </button>
+          <p id={`${id}-capacity-hint`} className={`text-xs mt-1 ${capacityTooLow ? "text-red-700" : "text-gray-600"}`}>
+            {capacityTooLow
+              ? `Au moins ${minCapacity} : ${shift.registrationCount} personne${shift.registrationCount > 1 ? "s sont déjà inscrites" : " est déjà inscrite"}. Non enregistré en dessous.`
+              : busy === "capacity" ? "Enregistrement en cours…" : "Places et minimum sur tout le poste, jamais en dessous des inscrits d'un créneau."}
+          </p>
         </div>
-        <p id={`${id}-capacity-hint`} className={`text-xs -mt-2 ${capacityTooLow ? "text-red-700" : "text-gray-600"}`}>
-          {capacityTooLow
-            ? `Au moins ${minCapacity} : ${shift.registrationCount} personne${shift.registrationCount > 1 ? "s sont déjà inscrites" : " est déjà inscrite"}. Non enregistré en dessous.`
-            : busy === "capacity" ? "Enregistrement en cours…" : "Sur tout le poste, jamais en dessous des inscrits d'un créneau."}
-        </p>
 
         <fieldset>
           <legend className="text-xs font-medium text-gray-700 mb-1">Horaires</legend>

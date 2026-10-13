@@ -8,7 +8,7 @@ import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
-import { capacityPlan } from "@/lib/shift-quick-edit"
+import { capacityPlan, roleMinimumPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 
@@ -41,11 +41,13 @@ const updateSchema = z.object({
   colorKey: z.enum(COLOR_KEYS).nullable().optional(),
   /** Applied to every live shift of the role (#398), never below the people confirmed on a shift. */
   capacity: z.number().int().min(1).optional(),
+  /** Minimum of people on every live shift of the role (#949), with or without `capacity`; null removes it. */
+  minVolunteers: z.number().nullable().optional(),
   /** Shifts per volunteer on this role (#466); null removes the limit. */
   maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
   /** Tags one of which a member needs for this role (#470); [] opens it to everyone. */
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -60,7 +62,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, maxPerVolunteer } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -70,9 +72,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true, capacity: true, status: true, maxPerVolunteer: true, reservedTags: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
+
+  // Places and minimum (#398, #949), planned before anything is written: a minimum above a shift's
+  // places refuses the whole request, with its message, rather than half-applying it.
+  const live = shifts.filter((s) => s.status !== "cancelled")
+  const plan = capacity !== undefined
+    ? capacityPlan(live.map((s) => ({ id: s.id, capacity: s.capacity, active: s._count.registrations })), capacity)
+    : { updates: [] as { id: string; capacity: number }[], keptHigher: [] as string[] }
+  const capacityAfter = new Map(plan.updates.map((u) => [u.id, u.capacity]))
+  const minPlan = capacity !== undefined || minVolunteers !== undefined
+    ? roleMinimumPlan(live.map((s) => ({ id: s.id, capacity: capacityAfter.get(s.id) ?? s.capacity, minVolunteers: s.minVolunteers })), minVolunteers)
+    : { updates: [], problem: null }
+  if (minPlan.problem) return NextResponse.json({ error: minPlan.problem }, { status: 400 })
 
   const actor = adminActor(guard.session)
 
@@ -146,21 +160,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   let keptHigher = 0
   let capacityUpdated = 0
-  if (capacity !== undefined) {
-    const plan = capacityPlan(
-      shifts.filter((s) => s.status !== "cancelled").map((s) => ({ id: s.id, capacity: s.capacity, active: s._count.registrations })),
-      capacity,
-    )
+  if (capacity !== undefined || minVolunteers !== undefined) {
     keptHigher = plan.keptHigher.length
     capacityUpdated = plan.updates.length
+    // Places and minimum of a shift in one update: the database checks minimum ≤ places per row.
+    const minAfter = new Map(minPlan.updates.map((u) => [u.id, u.minVolunteers]))
+    const touched = live.filter((s) => capacityAfter.has(s.id) || minAfter.has(s.id))
     await db.$transaction(async (tx) => {
-      for (const u of plan.updates) await tx.shift.update({ where: { id: u.id }, data: { capacity: u.capacity } })
+      for (const s of touched) {
+        await tx.shift.update({
+          where: { id: s.id },
+          data: { ...(capacityAfter.has(s.id) ? { capacity: capacityAfter.get(s.id) } : {}), ...(minAfter.has(s.id) ? { minVolunteers: minAfter.get(s.id) } : {}) },
+        })
+      }
     })
-    for (const u of plan.updates) {
-      const before = shifts.find((s) => s.id === u.id)!
+    for (const s of touched) {
       await logEvent({
-        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: u.id,
-        changes: { capacity: { from: before.capacity, to: u.capacity } },
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: {
+          ...(capacityAfter.has(s.id) ? { capacity: { from: s.capacity, to: capacityAfter.get(s.id) } } : {}),
+          ...(minAfter.has(s.id) ? { minVolunteers: { from: s.minVolunteers, to: minAfter.get(s.id) } } : {}),
+        },
       })
     }
   }

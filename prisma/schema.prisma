@@ -414,6 +414,10 @@ model Shift {
   startTime       String
   endTime         String
   capacity        Int
+  // Minimum of people the shift can run with (#949): 1 ≤ minVolunteers ≤ capacity. Null = the same
+  // as capacity, so a shift without a minimum behaves as before (« complet » or not). Only the
+  // organizers see it (below minimum, minimum reached, full); the public page shows free places only.
+  minVolunteers   Int?
   status          String   @default("open")
   locationDetails String?
   displayOrder    Int      @default(0)

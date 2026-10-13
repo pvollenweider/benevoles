@@ -15,6 +15,8 @@ import { spokenShift, spokenTimeRange } from "@/lib/spoken-time"
 import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
 import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
+import { StaffingStateLabel } from "./StaffingShiftLine"
+import { shiftStaffingState } from "@/lib/staffing"
 import ShiftSeriesForm from "./ShiftSeriesForm"
 import ShiftRecurrenceForm from "./ShiftRecurrenceForm"
 import RecurrenceList from "./RecurrenceList"
@@ -264,6 +266,8 @@ export default function ShiftsManager({
   const daysWithShifts = dates.filter(d => shiftsByDay[d]?.length > 0)
 
   const sortedShifts = sortShifts(shifts)
+  // The legend explains the minimum (#949) only when a shift has one: otherwise nothing changes.
+  const usesMinimum = shifts.some((s) => s.status !== "cancelled" && s.minVolunteers != null)
 
   const statusCls: Record<string, string> = {
     open:   "bg-green-100 text-green-700",
@@ -430,6 +434,7 @@ export default function ShiftsManager({
       {view === "timeline" && daysWithShifts.length > 0 && (
         <p className="text-xs text-gray-600 pl-1">
           Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne et l&apos;accès réservé se règlent sur le poste, dans « Gérer les postes ».
+          {usesMinimum && " Un créneau avec un minimum de personnes affiche « sous le minimum (2) » tant qu'il ne l'a pas, encadré de pointillés, puis « minimum atteint » jusqu'à ce qu'il soit complet."}
         </p>
       )}
       {view === "timeline" && daysWithShifts.map(day => (
@@ -491,6 +496,10 @@ export default function ShiftsManager({
                       ? <p className="text-[11px] text-orange-800">Complet</p>
                       : <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
                     }
+                    {/* Against the minimum (#949), only for a shift that has one and isn't full. */}
+                    {s.registrationCount < s.capacity && s.minVolunteers != null && (
+                      <p className="text-[11px] text-gray-800 mt-0.5"><StaffingStateLabel s={s} state={shiftStaffingState({ ...s, active: s.registrationCount })} /></p>
+                    )}
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-700"}`}>
@@ -509,6 +518,7 @@ export default function ShiftsManager({
                         startTime: s.startTime,
                         endTime: s.endTime,
                         capacity: s.capacity,
+                        minVolunteers: s.minVolunteers ?? "",
                         // Carried through so saving doesn't reset it to emptyShift's 0 default,
                         // which silently dragged the whole role back to the front of the
                         // timeline on every edit (#215) — displayOrder is shared per role

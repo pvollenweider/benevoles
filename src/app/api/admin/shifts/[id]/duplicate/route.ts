@@ -8,8 +8,8 @@ import { slotAfter } from "@/lib/shift-quick-edit"
 
 /**
  * POST /api/admin/shifts/[id]/duplicate (#398): a copy of the shift right after it, same length,
- * open, without registrations. Every setting is copied (label, capacity, waitlist, minimum age,
- * practical info, notes, colour).
+ * open, without registrations. Every setting is copied (label, capacity, minimum of people,
+ * waitlist, minimum age, practical info, notes, colour).
  */
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -31,6 +31,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       startTime: slot.startTime,
       endTime: slot.endTime,
       capacity: source.capacity,
+      minVolunteers: source.minVolunteers,
       status: "open",
       locationDetails: source.locationDetails,
       latitude: source.latitude,

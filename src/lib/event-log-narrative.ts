@@ -32,6 +32,7 @@ const FIELD_LABELS: Record<string, string> = {
   invites: "invitations",
   sectorLeaders: "responsables de secteur",
   capacity: "capacité",
+  minVolunteers: "minimum de personnes",
   status: "statut",
   date: "date",
   startTime: "heure de début",

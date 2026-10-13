@@ -3,7 +3,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { hasLevel } from "@/lib/permissions"
 import { formatShortDate } from "@/lib/utils"
-import { staffingHeadline, staffingSummary } from "@/lib/staffing"
+import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
@@ -86,7 +86,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const staffing = staffingSummary(
     event.shifts.map((sh) => ({
       id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),
-      startTime: sh.startTime, endTime: sh.endTime, capacity: sh.capacity, closed: sh.status === "closed",
+      startTime: sh.startTime, endTime: sh.endTime, capacity: sh.capacity, minVolunteers: sh.minVolunteers, closed: sh.status === "closed",
       active: sh.registrations.filter((r) => r.status === "active").length,
       waiting: sh.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: sh.registrations.filter((r) => r.status === "requested").length,
@@ -263,6 +263,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <h2 className="text-sm font-semibold text-gray-700 mb-2">Où manque-t-il du monde ?</h2>
         <p className="text-sm text-gray-800">
           {staffingHeadline(staffing.totals)}
+          {belowMinimumSentence(staffing.belowMinimum.length) && ` ${belowMinimumSentence(staffing.belowMinimum.length)}`}
           {staffing.totals.waiting > 0 && ` ${staffing.totals.waiting} personne${staffing.totals.waiting > 1 ? "s" : ""} en liste d'attente.`}
         </p>
         {staffing.totals.shifts > 0 && (

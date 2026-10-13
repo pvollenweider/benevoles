@@ -27,12 +27,27 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Date | Jour du créneau |
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` (voir [Horaires et créneaux de nuit](horaires-et-nuit.md)) |
 | Capacité | Nombre maximum de bénévoles |
+| Minimum (optionnel) | Nombre de personnes sous lequel le créneau ne peut pas tourner, de 1 à la capacité (ex. : `2` pour un bar prévu à 4). Vide : le créneau a besoin de toutes ses places. Voir [Minimum de personnes](#minimum-de-personnes). |
 | Description | Texte court, qui n'est affiché ni sur la page publique ni dans les emails. Ce n'est pas un champ confidentiel : pour ce qui doit rester à l'organisation, utilisez les notes internes ; pour ce que les bénévoles doivent savoir, les infos pratiques |
 | Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page publique d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page personnelle), jamais affichée publiquement, sous le libellé « Contact pour ce créneau ». Sans contact sur le créneau, les bénévoles confirmés voient le **Contact le jour J** de l'événement, s'il est renseigné. Facultatifs, courts : pas de fiche de mission. |
 | Notes internes | Jamais montrées aux bénévoles |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription : voir [Âge minimum sur un poste](age-minimum.md). |
 | Activer la liste d'attente | Une fois le créneau complet, les bénévoles peuvent s'inscrire en liste d'attente : voir [Liste d'attente](liste-d-attente.md) |
 | Sur validation | Chaque inscription devient une demande à accepter ou refuser : voir [Inscriptions sur validation](inscriptions-sur-validation.md) |
+
+## Minimum de personnes
+
+Un créneau peut fonctionner avec moins de monde que prévu : un bar prévu à 4 tourne à 2. Le **minimum** le dit, pour voir quels créneaux sont vraiment à risque. Chaque créneau qui en a un se trouve dans l'un de ces trois états, toujours écrits en toutes lettres à côté des chiffres :
+
+- **sous le minimum** : moins de personnes que le minimum, par exemple « 1/4 · sous le minimum (2) » ; c'est le plus urgent ;
+- **minimum atteint** : le créneau peut tourner, sans être complet, par exemple « 2/4 · minimum atteint » ;
+- **complet** : toutes les places sont prises.
+
+Comptent les inscriptions confirmées et les demandes à traiter des créneaux sur validation, qui gardent leur place ; la liste d'attente ne compte pas. Sur le planning des créneaux, une demande n'est comptée qu'une fois acceptée, comme les « inscrits ».
+
+Le minimum va de 1 au nombre de places. Pour baisser les places sous le minimum, baissez d'abord le minimum (un message le rappelle). Un créneau sans minimum s'affiche comme avant, sans ces mentions.
+
+Le minimum apparaît sur le planning des créneaux (avec un cadre en pointillés autour d'un créneau sous son minimum), dans [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md), dans **Chercher des bénévoles**, sur le tableau de bord, sur la page des responsables de secteur, dans le résumé de l'événement et dans les plannings imprimés par jour et par poste. La page publique n'en dit rien : les bénévoles voient seulement les places libres. Il se règle dans le formulaire du créneau, dans [Créer une série de créneaux](creer-une-serie-de-creneaux.md) et depuis le planning (voir [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md), où **Appliquer à tout le poste** l'applique avec les places). Il est copié quand on duplique le créneau ou l'événement.
 
 Un créneau est créé ouvert ; son état (inscriptions ouvertes, fermées, complet, créneau annulé) se change ensuite depuis le planning (voir [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md)).
 

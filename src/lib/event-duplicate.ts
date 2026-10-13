@@ -37,6 +37,8 @@ export type DuplicableShift = {
   startTime: string
   endTime: string
   capacity: number
+  /** Minimum of people (#949); null = the same as capacity. */
+  minVolunteers?: number | null
   locationDetails: string | null
   latitude: number | null
   longitude: number | null
@@ -111,6 +113,7 @@ export function copiedShift(s: DuplicableShift) {
     startTime: s.startTime,
     endTime: s.endTime,
     capacity: s.capacity,
+    minVolunteers: s.minVolunteers ?? null,
     status: "open" as const,
     locationDetails: s.locationDetails,
     latitude: s.latitude,
@@ -246,6 +249,8 @@ export function duplicatedRecurrences(source: DuplicableEvent, offsetDays: numbe
       },
       shifts: generateRecurrence(input).shifts.map((slot) => ({
         ...copiedShift(template), date: new Date(slot.date), startTime: slot.startTime, endTime: slot.endTime, capacity: rule.capacity,
+        // The template's minimum (#949) only if it fits the rule's places, which these shifts take.
+        minVolunteers: template.minVolunteers != null && template.minVolunteers <= rule.capacity ? template.minVolunteers : null,
       })),
     })
   }

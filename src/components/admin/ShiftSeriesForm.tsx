@@ -13,6 +13,7 @@ import { isValidClock } from "@/lib/shift-time"
 import { spokenTimeRange } from "@/lib/spoken-time"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, type ShiftField } from "@/lib/shift-editor-form"
 import { describeSeries, generateShiftSeries, seriesProblem, SERIES_MAX_BREAK_MINUTES, SERIES_MIN_SLOT_MINUTES, type SeriesSlot } from "@/lib/shift-series"
+import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import type { AdminShift } from "./AdminDayTimeline"
 
 const SLOT_OPTIONS = [30, 45, 60, 90, 120, 180, 240]
@@ -48,6 +49,8 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const [slotMinutes, setSlotMinutes] = useState(120)
   const [breakMinutes, setBreakMinutes] = useState(0)
   const [capacity, setCapacity] = useState(2)
+  // Minimum of people per shift (#949), as typed: "" is none.
+  const [minimum, setMinimum] = useState("")
   const [waitlistEnabled, setWaitlistEnabled] = useState(false)
   const [requiresApproval, setRequiresApproval] = useState(false)
   const [attempted, setAttempted] = useState(false)
@@ -66,6 +69,9 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const complete = missingFields.length === 0
   const problem = complete ? seriesProblem({ date, startTime, endTime, slotMinutes, breakMinutes }) : null
   const slots: SeriesSlot[] = complete && !problem ? generateShiftSeries({ date, startTime, endTime, slotMinutes, breakMinutes }) : []
+  const minimumValue = parseMinVolunteers(minimum)
+  const minimumProblem = minVolunteersProblem(minimumValue, Number(capacity))
+  const minimumInvalid = attempted && minimumProblem !== null
 
   async function handleCreate() {
     if (saving) return
@@ -74,6 +80,11 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
       // moves to the first missing field once it says it is invalid, so its message is read with it.
       flushSync(() => setAttempted(true))
       document.getElementById(fieldId(missingFields[0]))?.focus()
+      return
+    }
+    if (minimumProblem) {
+      flushSync(() => setAttempted(true))
+      document.getElementById(`${id}-minimum`)?.focus()
       return
     }
     setAttempted(true)
@@ -85,7 +96,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         eventId, roleName: roleName.trim(), label: label.trim() || undefined, date, startTime, endTime,
-        slotMinutes, breakMinutes, capacity: Number(capacity), waitlistEnabled, requiresApproval,
+        slotMinutes, breakMinutes, capacity: Number(capacity), minVolunteers: minimumValue, waitlistEnabled, requiresApproval,
         displayOrder: resolveNewShiftDisplayOrder(existingShifts, roleName.trim(), 0),
       }),
     }), "Erreur lors de la création.")
@@ -203,10 +214,21 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
         <div>
           <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-600 mb-1">Personnes par créneau <span aria-hidden="true">*</span></label>
-          <input id={`${id}-capacity`} type="number" min={1} required value={capacity} aria-invalid={capacity < 1 ? true : undefined} onChange={(e) => setCapacity(Number(e.target.value))} className="input" />
+          <input id={`${id}-capacity`} type="number" min={1} required value={capacity} aria-invalid={capacity < 1 ? true : undefined} aria-describedby={minimumInvalid ? `${id}-minimum-error` : undefined} onChange={(e) => setCapacity(Number(e.target.value))} className="input" />
+        </div>
+        <div>
+          <label htmlFor={`${id}-minimum`} className={`block text-xs font-medium mb-1 ${minimumInvalid ? "text-red-700" : "text-gray-600"}`}>Minimum par créneau (optionnel)</label>
+          <input
+            id={`${id}-minimum`} type="number" min={1} max={capacity || undefined} inputMode="numeric" placeholder="ex. 2" value={minimum}
+            aria-invalid={minimumInvalid || undefined}
+            aria-describedby={minimumInvalid ? `${id}-minimum-error ${id}-minimum-hint` : `${id}-minimum-hint`}
+            onChange={(e) => setMinimum(e.target.value)} className={`input ${minimumInvalid ? "!border-red-600" : ""}`}
+          />
+          {minimumInvalid && <p id={`${id}-minimum-error`} className="text-xs text-red-700 mt-1">{minimumProblem}</p>}
+          <p id={`${id}-minimum-hint`} className="text-[11px] text-gray-600 mt-1">Sous ce nombre de personnes, un créneau ne peut pas tourner. Vide : toutes les places.</p>
         </div>
         <div className="flex items-center gap-2 min-h-11">
           <input id={`${id}-waitlist`} type="checkbox" checked={waitlistEnabled} onChange={(e) => setWaitlistEnabled(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
@@ -227,7 +249,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         <p id={summaryId} aria-live="polite" aria-atomic="true" className={!complete ? "text-gray-600" : problem ? "text-red-700" : "font-medium text-gray-800"}>
           {!complete
             ? "Renseignez le poste, la date et les heures pour voir les créneaux."
-            : problem ?? `Aperçu : ${describeSeries(slots)}, ${capacity} personne${capacity > 1 ? "s" : ""} par créneau.`}
+            : problem ?? `Aperçu : ${describeSeries(slots)}, ${capacity} personne${capacity > 1 ? "s" : ""} par créneau${minimumValue != null && !minimumProblem ? `, ${minimumValue} au minimum` : ""}.`}
         </p>
         {slots.length > 0 && (
           <>

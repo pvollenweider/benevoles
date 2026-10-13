@@ -220,6 +220,8 @@ export type RuleShift = {
   committed: number
   /** Any registration at all, cancelled ones included: the shift has a history to keep. */
   hasHistory: boolean
+  /** Minimum of people (#949) set on this date's shift, if any. */
+  minVolunteers?: number | null
 }
 
 const live = (s: RuleShift, from: string) => s.date >= from && s.status !== "cancelled"
@@ -267,6 +269,12 @@ export function planChange(
     if (!Number.isInteger(change.capacity) || change.capacity < 1) return { ...none, problem: "Indiquez au moins une personne par créneau." }
     const tooSmall = affected.filter((s) => s.committed > change.capacity!)
     if (tooSmall.length > 0) return { update: [], tooSmall, problem: `Plus de ${change.capacity} personne${change.capacity > 1 ? "s sont" : " est"} déjà inscrite${change.capacity > 1 ? "s" : ""} sur ${tooSmall.length} date${tooSmall.length > 1 ? "s" : ""}.` }
+    // Places under a date's minimum of people (#949): its minimum is lowered first, on that date.
+    const belowMin = affected.filter((s) => s.minVolunteers != null && s.minVolunteers > change.capacity!)
+    if (belowMin.length > 0) {
+      const n = belowMin.length
+      return { ...none, problem: `Sur ${n} date${n > 1 ? "s" : ""}, le minimum de personnes dépasserait ${change.capacity} place${change.capacity > 1 ? "s" : ""} : baissez d'abord le minimum de ${n > 1 ? "ces créneaux" : "ce créneau"}.` }
+    }
   }
   return { update: affected.map((s) => s.id), problem: null, tooSmall: [] }
 }

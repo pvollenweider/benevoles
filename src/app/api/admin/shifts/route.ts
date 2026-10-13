@@ -10,6 +10,7 @@ import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
+import { minVolunteersProblem } from "@/lib/staffing"
 
 const schema = z.object({
   eventId: z.string(),
@@ -20,6 +21,8 @@ const schema = z.object({
   startTime: clockSchema,
   endTime: clockSchema,
   capacity: z.number().int().min(1),
+  // Minimum per shift (#949): 1 to capacity, null = none (the same as capacity).
+  minVolunteers: z.number().nullable().optional(),
   locationDetails: z.string().optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
@@ -32,6 +35,10 @@ const schema = z.object({
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
 }).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
+  .superRefine((d, ctx) => {
+    const problem = minVolunteersProblem(d.minVolunteers, d.capacity)
+    if (problem) ctx.addIssue({ code: "custom", message: problem, path: ["minVolunteers"] })
+  })
 
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
@@ -66,6 +73,7 @@ export async function POST(req: Request) {
       startTime: { from: null, to: data.startTime },
       endTime: { from: null, to: data.endTime },
       capacity: { from: null, to: data.capacity },
+      ...(data.minVolunteers != null ? { minVolunteers: { from: null, to: data.minVolunteers } } : {}),
     },
   })
 
