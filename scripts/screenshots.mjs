@@ -160,6 +160,14 @@ async function run() {
     await visit(ev())
     await save(a, "admin-group-links", { target: a.getByRole("region", { name: "Partager l'événement" }) })
   })
+  // « Intégrer à votre site » (#948), opened: options, code, copy and preview buttons, instructions.
+  await shot("admin-embed", async () => {
+    await visit(ev())
+    const section = a.getByRole("region", { name: "Partager l'événement" })
+    await section.getByRole("button", { name: "Code d'intégration" }).click()
+    const panel = section.getByRole("heading", { name: "Intégrer à votre site" }).locator("xpath=../..")
+    await save(a, "admin-embed", { target: panel })
+  })
   await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
   await shot("admin-shifts", async () => { await visit(ev("/shifts")); await save(a, "admin-shifts") })
   await shot("admin-registrations", async () => { await visit(ev("/registrations")); await save(a, "admin-registrations") })

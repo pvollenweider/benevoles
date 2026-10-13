@@ -10,6 +10,7 @@ import { apexBaseUrl, eventPublicUrl } from "@/lib/urls"
 import EventPageClient, { type EventData } from "./EventPageClient"
 import { consentPrivacyHref } from "@/lib/public-signup"
 import { GROUP_PARAM, parseGroupCode, resolveGroupFilter } from "@/lib/group-links"
+import { EMBED_PARAM, isEmbedMode } from "@/lib/embed"
 
 // Only a published event gives its title and its link preview (#564); unlisted (#414), draft and
 // archived events are noindex. The canonical URL is the event's public one on the organization's
@@ -26,19 +27,26 @@ const loadEvent = cache((organizationId: string, slug: string) =>
   prisma.event.findFirst({ where: { slug, organizationId }, include: publicEventInclude }),
 )
 
-export async function generateMetadata({ params }: { params: Promise<{ eventSlug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: {
+  params: Promise<{ eventSlug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}): Promise<Metadata> {
   const { eventSlug } = await params
+  const embed = isEmbedMode((await searchParams)[EMBED_PARAM])
   const rawOrgSlug = (await headers()).get("x-org-slug")
   if (!rawOrgSlug) return {}
   const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}`)
   if (!resolved || resolved.redirectUrl) return {}
   const event = await loadEvent(resolved.org.id, eventSlug)
   if (!event) return {} // deleted, or another organization's slug
-  return eventPageMetadata(
+  const metadata = eventPageMetadata(
     { ...event, organizationName: resolved.org.name },
     // The platform's social card lives on the apex host (src/app/og-image.png/route.tsx).
     { canonicalUrl: eventPublicUrl(resolved.org.slug, event.slug), imageUrl: `${apexBaseUrl()}/og-image.png` },
   )
+  // The embeddable variant (#948) is the same page in another site's frame: never indexed itself,
+  // its canonical stays the public page.
+  return embed ? { ...metadata, robots: { index: false, follow: false } } : metadata
 }
 
 export default async function EventPage({ params, searchParams }: {
@@ -49,10 +57,16 @@ export default async function EventPage({ params, searchParams }: {
   const rawOrgSlug = (await headers()).get("x-org-slug")
   if (!rawOrgSlug) notFound()
 
-  // Share link per group (#947): `?groupe=<code>`, kept through a historical organisation address.
-  const rawGroup = (await searchParams)[GROUP_PARAM]
+  // Share link per group (#947): `?groupe=<code>`, kept through a historical organisation address,
+  // like the embeddable variant (#948), `?embed=1`.
+  const query = await searchParams
+  const rawGroup = query[GROUP_PARAM]
   const groupCode = parseGroupCode(rawGroup)
-  const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}${groupCode ? `?${GROUP_PARAM}=${groupCode}` : ""}`)
+  const embed = isEmbedMode(query[EMBED_PARAM])
+  const kept = new URLSearchParams()
+  if (groupCode) kept.set(GROUP_PARAM, groupCode)
+  if (embed) kept.set(EMBED_PARAM, "1")
+  const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}${kept.size ? `?${kept}` : ""}`)
   if (!resolved) notFound()
   if (resolved.redirectUrl) redirect(resolved.redirectUrl)
 
@@ -74,6 +88,7 @@ export default async function EventPage({ params, searchParams }: {
       eventSlug={eventSlug}
       initialEvent={publicEventPayload(event) as EventData}
       groupFilter={groupFilter}
+      embed={embed}
     />
   )
 }

@@ -27,6 +27,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-dashboard": ["src/app/admin/dashboard/page.tsx"],
   "admin-event-overview": ["src/app/admin/events/[id]/page.tsx"],
   "admin-group-links": ["src/app/admin/events/[id]/page.tsx"],
+  "admin-embed": ["src/app/admin/events/[id]/page.tsx"],
   "admin-staffing": ["src/app/admin/events/[id]/staffing/page.tsx"],
   "admin-shifts": ["src/app/admin/events/[id]/shifts/page.tsx"],
   "admin-registrations": ["src/app/admin/events/[id]/registrations/page.tsx"],

@@ -42,10 +42,11 @@ En savoir plus : [créer un événement](guide/creer-un-evenement.md), [configur
 - **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Vos règles** : un âge minimum, un téléphone obligatoire, une validation pour les postes sensibles, quelques questions (taille de t-shirt, permis), des postes réservés aux membres qui portent une étiquette.
 - **Un lien par club ou par équipe** : quand plusieurs sociétés recrutent chacune pour leurs postes, chacune reçoit son propre lien, à envoyer par email ou à imprimer sur son affiche, qui n'affiche que ses postes. Vous voyez combien d'inscriptions chaque lien a apportées, et quelle société doit encore mobiliser.
+- **Sur le site de votre association** : un code à copier-coller affiche l'inscription dans une page de votre site, avec le nom et le logo de votre organisation. Les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site.
 
 <!-- video: VOLUNTEER_REGISTER -->
 
-En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/liste-d-attente.md), [les inscriptions sur validation](guide/inscriptions-sur-validation.md), [un lien par groupe](guide/partager-le-lien.md#un-lien-par-groupe).
+En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/liste-d-attente.md), [les inscriptions sur validation](guide/inscriptions-sur-validation.md), [un lien par groupe](guide/partager-le-lien.md#un-lien-par-groupe), [l'inscription sur votre site](guide/partager-le-lien.md#integrer-l-inscription-a-votre-site).
 
 ## Garder chacun informé
 

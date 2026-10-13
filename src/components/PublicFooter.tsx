@@ -16,7 +16,7 @@ const linkClass =
 const NEW_TAB = "(ouvre dans un nouvel onglet)"
 const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
 
-type FooterLink = { href: string; label: string; external?: boolean; github?: boolean }
+type FooterLink = { href: string; label: string; external?: boolean; github?: boolean; newTab?: boolean }
 type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
 
 /** The hosted service's legal pages, or the instance's operator page elsewhere (#760). */
@@ -78,7 +78,19 @@ export function footerEventColumns(): readonly FooterColumn[] {
   ]
 }
 
+/** The embedded sign-up (#948): legal links only, each in a new tab, the flow stays in the frame. */
+export function footerEmbedLinks(): readonly FooterLink[] {
+  return legalColumn().links.map((l) => ({ ...l, newTab: true }))
+}
+
 function FooterAnchor({ link }: { link: FooterLink }) {
+  if (link.newTab) {
+    return (
+      <a href={link.href} target="_blank" rel="noopener" className={linkClass}>
+        {link.label}{" "}<span className="sr-only">{NEW_TAB}</span>
+      </a>
+    )
+  }
   if (!link.external) return <Link href={link.href} className={linkClass}>{link.label}</Link>
   return (
     <a href={link.href} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
@@ -106,7 +118,8 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  * src/components/public/site-container.ts), whose width it takes, so its edges line up with the
  * header and the content; `event` at `max-w-xl`, with `px-4` when the page has no container.
  */
-export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
+export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" | "embed" }) {
+  if (variant === "embed") return <EmbedFooter />
   const columns = variant === "site" ? footerSiteColumns() : footerEventColumns()
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
@@ -132,6 +145,32 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
           </a>
         </p>
       )}
+    </footer>
+  )
+}
+
+/**
+ * The embedded sign-up's footer (#948): no site chrome, a single line with the legal links and the
+ * tool's name, every link in a new tab (the site around the frame stays where it is). Still one
+ * `<footer>` and one `<nav>` « Liens utiles », after the `</main>`.
+ */
+function EmbedFooter() {
+  return (
+    <footer className="max-w-6xl mx-auto mt-6 pt-4 pb-4 border-t border-gray-200 text-xs text-gray-600">
+      <nav aria-label="Liens utiles">
+        <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          {footerEmbedLinks().map((l) => (
+            <li key={l.href}><FooterAnchor link={l} /></li>
+          ))}
+          <li>
+            <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
+              <GitHubMark className="w-3.5 h-3.5" />
+              benevol.app
+              <span className="sr-only">, code source sur GitHub {NEW_TAB}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </footer>
   )
 }

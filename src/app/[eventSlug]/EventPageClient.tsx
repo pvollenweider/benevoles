@@ -50,6 +50,9 @@ import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
+import { readStored, removeStored, writeStored } from "@/lib/device-storage"
+import { NEW_TAB_HINT, embedFlowParams, takeReturnToSchedule } from "@/lib/embed"
+import EmbedFrame from "@/components/public/EmbedFrame"
 import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
 
 
@@ -127,8 +130,14 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * `groupFilter` (#947): the share link per group the page was opened with (`?groupe=`), resolved by
  * the server. A filtered page shows only the link's roles, says so, and lets the visitor see every
  * role; the sign-up is counted for the link either way.
+ *
+ * `embed` (#948): the sign-up in the association's own website, inside an iframe (`?embed=1`). The
+ * organisation's branding and the whole flow stay; the « Retour » link and the site footer go,
+ * what leaves the flow (event pages, personal page, legal pages) opens in a new tab, the
+ * « Continuer » bar is not fixed (a resized frame is as tall as its content) and the page's height
+ * is posted to the site around it (EmbedFrame).
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" } }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" }, embed = false }: {
   /** The consent's privacy link, from the server (#760: the operator page on another instance). */
   privacyHref?: string
   orgSlug: string
@@ -136,6 +145,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   preview?: { eventId: string; adminEventUrl: string }
   initialEvent?: EventData
   groupFilter?: GroupFilter
+  embed?: boolean
 }) {
   const previewEventId = preview?.eventId ?? null
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
@@ -214,6 +224,22 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
   const submitButtonRef = useRef<HTMLButtonElement>(null)
   const hadPreviewResult = useRef(false)
+  // Between the two steps, the button that had the focus unmounts: the form's title takes it
+  // when the form opens, « Continuer » (else the title) when going back. In the embedded page
+  // (#948) this also brings the step into view in the site around the frame.
+  const formHeadingRef = useRef<HTMLHeadingElement>(null)
+  const stepFocus = useRef<"form" | "select" | null>(null)
+  useEffect(() => {
+    if (stepFocus.current !== step) return
+    stepFocus.current = null
+    if (step === "form") { formHeadingRef.current?.focus(); return }
+    const visibleContinue = () => [...document.querySelectorAll<HTMLElement>("[data-continue]")].find((b) => b.offsetParent !== null) ?? null
+    focusFirstAvailable([visibleContinue, titleRef.current])
+  }, [step])
+  // Back from the embedded confirmation (« Revenir au planning »): the title takes the focus.
+  useEffect(() => {
+    if (embed && takeReturnToSchedule()) titleRef.current?.focus()
+  }, [embed])
 
   // Focus to move once React has committed the render it goes with (a dialog closed, a row removed),
   // the RoleManagerPanel pattern. Only while focus is in a dialog or was dropped to <body> by an
@@ -308,7 +334,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   useEffect(() => {
     if (previewEventId) return // a preview never picks up a volunteer's session on this browser
-    const token = localStorage.getItem(storageKey)
+    // Storage may be refused or partitioned (a third-party frame, #948): no session then.
+    const token = readStored(storageKey)
     if (!token) return
     fetch(`/api/public/registrations/${token}`)
       .then((r) => r.ok ? r.json() : null)
@@ -497,7 +524,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     saveRememberedContact(form)
     const params = new URLSearchParams()
     if (data.editToken) {
-      localStorage.setItem(storageKey, data.editToken)
+      writeStored(storageKey, data.editToken)
       params.set("token", data.editToken)
     }
     if (data.onWaitlist) params.set("waitlist", "1")
@@ -505,12 +532,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       params.set("requested", String(data.requestedShifts))
       params.set("active", String(data.activeShifts ?? 0))
     }
+    // Embedded (#948): the frame keeps its group link, organisation and `embed=1` on the confirmation.
+    if (embed) embedFlowParams(searchParams).forEach((value, key) => params.set(key, value))
     const query = params.toString()
     router.push(`/${eventSlug}/success${query ? `?${query}` : ""}`)
   }
 
   function quitSession() {
-    localStorage.removeItem(storageKey)
+    removeStored(storageKey)
     forgetRememberedContact()
     setUsedRemembered(false)
     setMyRegistrations([])
@@ -522,6 +551,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // Another event's signup on this device (#901) fills the empty contact fields when the form
   // opens. An invitation brings its own member, and this event's session its own volunteer.
   function openForm() {
+    stepFocus.current = "form"
     setStep("form")
     if (previewEventId || inviteToken || myRegistrations.length > 0) return
     const remembered = loadRememberedContact()
@@ -634,12 +664,15 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const newShiftIds = new Set(allSelectedShifts.map((s) => s.id).filter((id) => !myShiftIds.has(id)))
   // The fixed « Continuer » bar of the shift choice, below lg (see the footer's bottom room).
   const showMobileCta = !previewResult && step === "select" && newShiftIds.size > 0
+  // Embedded (#948): a resized frame is as tall as its content, a bar fixed to its bottom would sit
+  // far below the visitor's screen. The button follows the selection instead.
+  const fixedMobileCta = showMobileCta && !embed
 
   // The organiser's colour (#300): a band behind the title, neutral header otherwise.
   const accent = eventAccent(event.accentColorKey)
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+  const page = (
+    <div className={embed ? "bg-gray-50" : "min-h-screen bg-gray-50"}>
       {/* The preview sits inside the admin layout, which already has its own skip link and main. */}
       {!preview && <SkipLink />}
       {preview && (
@@ -655,13 +688,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       )}
       <header className={`px-4 py-4 ${accent ? accent.band : "bg-white border-b border-gray-200"}`}>
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between">
-            <Link
+          <div className={`flex items-center ${embed ? "justify-end" : "justify-between"}`}>
+            {/* Embedded (#948): no way back to the organisation's site, the frame is the association's. */}
+            {!embed && <Link
               href={preview ? preview.adminEventUrl : "/"}
               className={`text-sm rounded focus-visible:outline-2 focus-visible:outline-offset-2 ${accent ? `underline underline-offset-2 ${accent.focus}` : "text-blue-600 focus-visible:outline-blue-600"}`}
             >
               <span aria-hidden="true">← </span>Retour
-            </Link>
+            </Link>}
             {myRegistrations.length > 0 && (
               <div className="flex items-center gap-2">
                 <span className={`text-sm font-medium ${accent ? "" : "text-gray-600"}`}>
@@ -702,7 +736,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
         </div>
       </header>
 
-      <ContentLandmark preview={!!preview} className="max-w-6xl mx-auto px-4 py-6 pb-28 lg:pb-10 space-y-4">
+      <ContentLandmark preview={!!preview} className={`max-w-6xl mx-auto px-4 py-6 ${embed ? "pb-6" : "pb-28"} lg:pb-10 space-y-4`}>
         {windowClosedText && (
           <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
         )}
@@ -729,9 +763,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <Link
                 key={p.slug}
                 href={preview ? `${preview.adminEventUrl}/pages` : `/${eventSlug}/${p.slug}`}
+                {...(embed ? { target: "_blank", rel: "noopener" } : {})}
                 className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
               >
                 {p.title}
+                {embed && <>{" "}<span className="sr-only">{NEW_TAB_HINT}</span></>}
               </Link>
             ))}
           </nav>
@@ -928,7 +964,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
                   <div data-shift-list className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -959,11 +995,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         Créneaux sélectionnés
                       </p>
                       <div data-shift-list className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
                           <button
+                            data-continue
                             onClick={openForm}
                             className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
@@ -977,11 +1014,25 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </div>
             </div>
 
+            {/* Embedded, mobile: the same button after the selection, in the flow of the page. */}
+            {showMobileCta && embed && (
+              <div className="lg:hidden">
+                <button
+                  data-continue
+                  onClick={openForm}
+                  className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
+                >
+                  Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                </button>
+              </div>
+            )}
+
             {/* Mobile: fixed bottom CTA */}
-            {showMobileCta && (
+            {fixedMobileCta && (
               <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
                 <div className="max-w-2xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
                   <button
+                    data-continue
                     onClick={openForm}
                     className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
@@ -1018,8 +1069,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             {/* Form */}
             <div className="bg-white rounded-2xl border border-blue-200 p-5 lg:col-start-1 lg:row-start-1">
               <div className="flex items-center gap-2 mb-5">
-                <button onClick={() => setStep("select")} className="text-blue-600 text-sm"><span aria-hidden="true">← </span>Retour</button>
-                <h2 className="text-base font-semibold text-gray-800">Tes informations</h2>
+                <button onClick={() => { stepFocus.current = "select"; setStep("select") }} className="text-blue-600 text-sm"><span aria-hidden="true">← </span>Retour</button>
+                <h2 ref={formHeadingRef} tabIndex={-1} className="text-base font-semibold text-gray-800 focus:outline-none">Tes informations</h2>
               </div>
 
               {/* Mobile: the recap inside the form card (#373); the desktop sidebar shows the same. */}
@@ -1200,7 +1251,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     <p>{failure.message}</p>
                     <p className="text-red-700">{failure.hint}</p>
                     {failure.kind === "conflict" && (
-                      <button type="button" onClick={() => { setFailure(null); setStep("select") }} className="mt-1 text-sm font-medium text-red-800 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+                      <button type="button" onClick={() => { setFailure(null); stepFocus.current = "select"; setStep("select") }} className="mt-1 text-sm font-medium text-red-800 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
                         Revenir au planning
                       </button>
                     )}
@@ -1265,11 +1316,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
       {/* Below lg the fixed « Continuer » bar covers the bottom of the page: room under the
           footer so a focused footer link is never hidden behind it (WCAG 2.4.11). */}
-      <div className={`px-4 ${showMobileCta ? "pb-28 lg:pb-0" : ""}`}>
-        <PublicFooter />
+      <div className={`px-4 ${fixedMobileCta ? "pb-28 lg:pb-0" : ""}`}>
+        <PublicFooter variant={embed ? "embed" : "event"} />
       </div>
     </div>
   )
+  return embed ? <EmbedFrame>{page}</EmbedFrame> : page
 }
 
 /**

@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { measureEmbedBand } from "@/lib/embed"
 import { useEffect, useId, useRef } from "react"
 import { canTakeFocus, focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { tabbables, trapTarget } from "@/lib/focus-trap"
@@ -113,6 +114,8 @@ export default function ModalShell({
     const el = dialogRef.current
     if (!el) return
 
+    // In the embedded sign-up (#948), open in the part of the frame on screen now.
+    measureEmbedBand()
     const preferred = initialFocusRef?.current
     const target = canTakeFocus(preferred) ? preferred : tabbables(el)[0]
     target?.focus()
@@ -148,7 +151,9 @@ export default function ModalShell({
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+      // The whole window, or in the embedded sign-up (#948) the part of the frame the visitor sees
+      // (CSS variables set by EmbedFrame; absent everywhere else, so top 0 and full height).
+      className="fixed inset-x-0 top-[var(--embed-view-top,0px)] h-[var(--embed-view-height,100%)] bg-black/40 flex items-center justify-center z-50 p-4"
       onClick={closeOnBackdrop ? requestClose : undefined}
     >
       <div
@@ -157,7 +162,7 @@ export default function ModalShell({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={describedBy}
-        className={`bg-white rounded-2xl p-5 w-full max-h-[85dvh] overflow-y-auto overscroll-contain ${panelClassName}`}
+        className={`bg-white rounded-2xl p-5 w-full max-h-[calc(var(--embed-view-height,100dvh)*0.85)] overflow-y-auto overscroll-contain ${panelClassName}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">

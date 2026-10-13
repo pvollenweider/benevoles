@@ -1,15 +1,17 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
+import { useParams, useSearchParams } from "next/navigation"
 import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
 import { outcomeHeading, readOutcome, requestNotice } from "@/lib/signup-outcome"
 import Link from "next/link"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
 import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
+import EmbedFrame from "@/components/public/EmbedFrame"
+import { EMBED_PARAM, EMBED_PERSONAL_LINK_NOTE, NEW_TAB_HINT, embedFlowParams, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
 
 type RegistrationData = {
   volunteer: { firstName: string; email: string }
@@ -19,7 +21,17 @@ type RegistrationData = {
 
 function SuccessContent() {
   const params = useSearchParams()
+  const { eventSlug } = useParams<{ eventSlug: string }>()
   const token = params.get("token")
+  // The embedded sign-up (#948): same confirmation inside the association's site, without the site
+  // footer; the personal page opens in a new tab, and push reminders are offered there instead
+  // (a third-party frame may not ask for notifications).
+  const embed = isEmbedMode(params.get(EMBED_PARAM))
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  useEffect(() => {
+    // Brings the confirmation into view in the site around the frame, and says it.
+    if (embed) headingRef.current?.focus()
+  }, [embed])
   const outcome = readOutcome(params)
   const isWaitlist = outcome.waitlist
   // Only requests, no place yet (#484): no celebration, no confirmation message.
@@ -51,17 +63,17 @@ function SuccessContent() {
     return renderMarkdown(interpolate(regData.confirmationMessage, vars))
   })()
 
-  return (
+  const content = (
     <>
-    <main className="flex-1 bg-gray-50 flex flex-col px-4">
-      <div className="flex-1 flex items-center justify-center py-12">
+    <main className={`${embed ? "" : "flex-1"} bg-gray-50 flex flex-col px-4`}>
+      <div className={`flex-1 flex items-center justify-center ${embed ? "py-6" : "py-12"}`}>
         <div
           role="status"
           aria-live="polite"
           className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center"
         >
           <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">{outcomeHeading(outcome)}</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{outcomeHeading(outcome)}</h1>
           {notice && (
             <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-4">{notice}</p>
           )}
@@ -98,36 +110,52 @@ function SuccessContent() {
             </p>
           )}
 
+          {embed && <p className="text-gray-700 text-sm mb-6">{EMBED_PERSONAL_LINK_NOTE}</p>}
+
           {token && (
             <div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-3">
               <div>
                 <p className="text-xs text-gray-500 mb-2">Lien pour modifier ou annuler</p>
-                <Link
-                  href={`/my/${token}`}
-                  className="text-blue-600 text-sm font-medium underline break-all"
-                >
-                  Accéder à mon inscription
-                </Link>
+                {embed ? (
+                  <a
+                    href={`/my/${token}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-blue-600 text-sm font-medium underline break-all"
+                  >
+                    Accéder à mon inscription{" "}<span className="sr-only">{NEW_TAB_HINT}</span>
+                  </a>
+                ) : (
+                  <Link
+                    href={`/my/${token}`}
+                    className="text-blue-600 text-sm font-medium underline break-all"
+                  >
+                    Accéder à mon inscription
+                  </Link>
+                )}
               </div>
-              {regData && !isWaitlist && !onlyRequests && (
+              {regData && !isWaitlist && !onlyRequests && !embed && (
                 <PushSubscribeButton editToken={token} />
               )}
             </div>
           )}
 
+          {/* Embedded: back to the event's schedule in the frame; the organisation's home can't be framed. */}
           <Link
-            href="/"
+            href={embed ? `/${eventSlug}?${embedFlowParams(params)}` : "/"}
+            onClick={embed ? markReturnToSchedule : undefined}
             className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
           >
-            Retour à l&apos;accueil
+            {embed ? "Revenir au planning" : <>Retour à l&apos;accueil</>}
           </Link>
         </div>
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
-    <div className="px-4"><PublicFooter /></div>
+    <div className="px-4"><PublicFooter variant={embed ? "embed" : "event"} /></div>
     </>
   )
+  return embed ? <EmbedFrame>{content}</EmbedFrame> : content
 }
 
 export default function SuccessPage() {

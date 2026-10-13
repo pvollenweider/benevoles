@@ -34,3 +34,9 @@ Vous recevrez un accusé de réception sous 48 h. Une fois la faille confirmée 
 - Renouveler régulièrement les mots de passe SMTP et les secrets NextAuth
 - Définir `CRON_SECRET` : sans lui, les endpoints `/api/cron/*` refusent toutes les requêtes en production
 - Ne pas laisser les valeurs par défaut du seed en production (mot de passe `change-me`) : définir `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ORG_ADMIN_EMAIL` et `ORG_ADMIN_PASSWORD` avant `npm run db:seed`
+
+## Affichage dans un cadre (clickjacking)
+
+Toutes les pages et routes refusent d'être affichées dans le cadre (`<iframe>`) d'un autre site : `Content-Security-Policy: frame-ancestors 'none'` et `X-Frame-Options: DENY`, posés par `src/proxy.ts` (`src/lib/security-headers.ts`). Une seule exception : l'inscription intégrable au site d'une association, `/<événement>?embed=1` et sa confirmation, qui répondent `frame-ancestors *` sans `X-Frame-Options`.
+
+Ce parcours ne contient aucune action destructive en un clic : s'inscrire demande de cocher la convention et le consentement, de remplir le formulaire puis de confirmer, et un retrait demande une confirmation dans une fenêtre. La page n'envoie au site qui l'affiche que sa hauteur (un nombre, `postMessage`), jamais de donnée du bénévole ; l'administration, la page personnelle, l'espace responsable et la connexion ne sont jamais affichables dans un cadre.

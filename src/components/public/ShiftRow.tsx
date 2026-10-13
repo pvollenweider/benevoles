@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { NEW_TAB_HINT } from "@/lib/embed"
 import { fmt } from "@/lib/gantt-utils"
 import { withdrawCopy } from "@/lib/volunteer-withdraw"
 import { CANCEL_CLOSED_LINK, CANCEL_CLOSED_SHORT } from "@/lib/cancel-deadline"
@@ -38,6 +39,8 @@ type Props = {
   cancellable?: boolean
   /** The volunteer's personal page, linked from the sentence of a shift that can't be cancelled online. */
   personalHref?: string
+  /** The embedded sign-up (#948): the personal page opens in a new tab, the frame keeps the flow. */
+  newTab?: boolean
   /** In the current selection (blue row). */
   selected: boolean
   /** Held shift: asks to cancel; gets the button, to find its list and give focus back to it. */
@@ -50,7 +53,7 @@ type Props = {
  * A selected or held shift on the public sign-up page, in the mobile summary card and the desktop
  * sidebar.
  */
-export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, selected, onCancel, onRemove }: Props) {
+export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, newTab = false, selected, onCancel, onRemove }: Props) {
   const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
   const name = s.label && s.label !== s.roleName ? s.label : s.roleName
   return (
@@ -71,7 +74,7 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
           <p className="text-xs text-gray-700 mt-0.5">
             {CANCEL_CLOSED_SHORT}{" "}
             {personalHref
-              ? <a href={personalHref} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700">{CANCEL_CLOSED_LINK}</a>
+              ? <a href={personalHref} {...(newTab ? { target: "_blank", rel: "noopener" } : {})} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700">{CANCEL_CLOSED_LINK}{newTab && <>{" "}<span className="sr-only">{NEW_TAB_HINT}</span></>}</a>
               : CANCEL_CLOSED_LINK}.
           </p>
         )}
