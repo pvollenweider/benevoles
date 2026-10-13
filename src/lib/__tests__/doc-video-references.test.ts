@@ -325,8 +325,14 @@ describe("video references in the public sources", () => {
       if (findVideoReferences(read(source)).length === 0) continue
       const route = read(path.join("src/app", page.path, "page.tsx"))
       expect(route, page.path).toMatch(/export const dynamic = "force-dynamic"/)
-      // /fonctionnalites and the editorial pages (#767) lay their source out (src/lib/features-page.ts), same variable.
-      const laidOut = source === "FEATURES.md" || source === "LOGICIEL-PLANNING-BENEVOLES.md"
+      // The editorial pages (#767, #872, #950) render through EditorialPage, which lays their
+      // source out like /fonctionnalites (src/lib/features-page.ts), with the same variable.
+      if (route.includes("<EditorialPage path={PATH}")) {
+        const component = read("src/components/public/EditorialPage.tsx")
+        expect(component).toContain("renderFeaturesPage(env.VIDEO_MEDIA_BASE_URL, page.source")
+        continue
+      }
+      const laidOut = source === "FEATURES.md"
       expect(route, page.path).toContain(laidOut ? "renderFeaturesPage(" : `renderPublicSource("${source}", `)
       expect(route, page.path).toMatch(/env\.VIDEO_MEDIA_BASE_URL[,)]/)
     }

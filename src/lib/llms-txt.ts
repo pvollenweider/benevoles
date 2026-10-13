@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitle } from "@/lib/doc-pages"
+import { AUDIENCE_INDEX_PATH, AUDIENCE_PAGES, DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitle } from "@/lib/doc-pages"
 import { DOC_GROUPS, docUnitAudience, sortDocUnits, type DocUnit } from "@/lib/doc-units"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { SITE_NAME, absoluteUrl } from "@/lib/seo-metadata"
@@ -76,6 +76,14 @@ export function llmsTxt(s: LlmsSources): string {
   out.push(link(features.title, url(features.path), features.summary))
   for (const section of markdownSections(s.features)) out.push(`  ${link(section.title, url(`${features.path}#${section.id}`))}`)
   if (pageAvailable(planning)) out.push(link(planning.title, url(planning.path), planning.summary))
+  // The audience pages under their index (#872), then the price (#950): the hosted service's pages.
+  const audienceIndex = PUBLIC_PAGES.find((p) => p.path === AUDIENCE_INDEX_PATH)!
+  if (pageAvailable(audienceIndex)) {
+    out.push(link(audienceIndex.title, url(audienceIndex.path), audienceIndex.summary))
+    for (const page of AUDIENCE_PAGES.filter((p) => pageAvailable(p))) out.push(`  ${link(page.title, url(page.path), page.summary)}`)
+  }
+  const pricing = PUBLIC_PAGES.find((p) => p.path === "/tarifs")!
+  if (pageAvailable(pricing)) out.push(link(pricing.title, url(pricing.path), pricing.summary))
   out.push(link(news.title, url(news.path), news.summary))
   out.push(link(blog.title, url(blog.path), blog.summary))
   out.push("")

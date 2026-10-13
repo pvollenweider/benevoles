@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { eventSlugFromTitle } from "@/lib/event-slug"
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { slugify } from "@/lib/utils"
 import { duplicateOptionsSchema, duplicatePlan } from "@/lib/event-duplicate"
 import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { adminActor } from "@/lib/event-log"
@@ -45,7 +45,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, recurrences: source.shiftRecurrences }, parsed.data)
 
-  let slug = slugify(plan.event.title)
+  // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
+  const slugged = eventSlugFromTitle(plan.event.title)
+  if ("error" in slugged) return NextResponse.json({ error: slugged.error }, { status: 400 })
+  let slug = slugged.slug
   const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
 

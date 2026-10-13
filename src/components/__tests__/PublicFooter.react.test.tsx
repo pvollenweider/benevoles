@@ -4,7 +4,7 @@
 import { describe, it, expect, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
-import PublicFooter from "../PublicFooter"
+import PublicFooter, { footerSiteColumns } from "../PublicFooter"
 import pkg from "../../../package.json"
 
 const GITHUB = "https://github.com/pvollenweider/benevoles"
@@ -44,9 +44,11 @@ describe("PublicFooter", () => {
   })
 
   describe("site variant (benevol.app's own pages)", () => {
-    it("groups the links in three titled columns", () => {
+    it("groups the links in four titled columns", () => {
       render(<PublicFooter variant="site" />)
       expect(columns()).toEqual({
+        // #872, #950: what the service is, for whom and at what price, from every page.
+        "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"]],
         // #757 (changelog) and the public video library stay one click away from every page.
         "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"]],
         "benevol.app": [
@@ -56,6 +58,13 @@ describe("PublicFooter", () => {
         ],
         "Informations légales": [["Confidentialité", "/legal/privacy"], ["CGU", "/legal/terms"], ["Accessibilité", "/accessibilite"]],
       })
+    })
+
+    // #760: another instance has no audience pages nor pricing page.
+    it("leaves the « Découvrir » column out on an instance that is not the hosted service", () => {
+      const ids = footerSiteColumns("asso.example.org", null, false).map((c) => c.id)
+      expect(ids).toEqual(["help", "project", "legal"])
+      expect(footerSiteColumns("benevol.app", null, true).map((c) => c.id)).toEqual(["discover", "help", "project", "legal"])
     })
 
     it("opens the external links in a new tab and says so, the GitHub mark hidden", () => {

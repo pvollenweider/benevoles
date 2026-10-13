@@ -2,7 +2,7 @@
 
 Vous créez les postes et les créneaux, vous partagez un lien, et chaque bénévole choisit ses créneaux depuis son téléphone, sans compte à créer. Vous voyez tout de suite où il manque du monde, et les rappels partent tout seuls.
 
-C'est gratuit, open source et hébergé en France. Ça convient aussi bien à une fête de village ou à une buvette qu'à un festival sur plusieurs jours ou à une manifestation sportive.
+C'est gratuit, open source et hébergé en France. Ça convient aussi bien à une [fête de village](BENEVOLES-FETE-DE-VILLAGE.md) ou à une buvette qu'à un [festival sur plusieurs jours](BENEVOLES-FESTIVAL.md), à une [manifestation sportive](BENEVOLES-MANIFESTATION-SPORTIVE.md) ou à des [permanences chaque semaine](PLANNING-PERMANENCES-BENEVOLES.md).
 
 <!-- actions -->
 - [Demander un espace](/inscription)
@@ -124,7 +124,7 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 
 ## Un outil sur lequel compter
 
-- **Gratuit et open source** : le code est publié sous licence AGPL. Il n'y a ni abonnement ni fonction payante.
+- **Gratuit et open source** : le code est publié sous licence AGPL. Il n'y a ni abonnement ni fonction payante ; la page [Tarifs](TARIFS.md) explique comment le projet est financé.
 - **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité.
 - **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) et la [liste des sous-traitants](SOUS-TRAITANTS.md), avec leur localisation et leurs garanties.
 - **Chaque organisation est séparée**, et les liens personnels restent privés : ils sont envoyés par email, et un lien perdu se redemande avec son adresse.
@@ -133,9 +133,33 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 
 ## Se former
 
-Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Vous cherchez encore le bon outil ? La page [Logiciel de planning pour bénévoles](LOGICIEL-PLANNING-BENEVOLES.md) répond aux questions qu'on se pose avant de choisir. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
+Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Vous cherchez encore le bon outil ? La page [Logiciel de planning pour bénévoles](LOGICIEL-PLANNING-BENEVOLES.md) répond aux questions qu'on se pose avant de choisir, et la page [Pour qui ?](POUR-QUI.md) montre comment s'organisent une fête, un festival, une course ou des permanences. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
 
 > **Bénévole ?** Rien à installer, aucun compte à créer : il suffit d'ouvrir le lien reçu par email ou partagé par l'association. Lien perdu ? [Le recevoir à nouveau](guide/lien-personnel.md).
+
+## Questions fréquentes
+
+<!-- Questions distinctes de celles de LOGICIEL-PLANNING-BENEVOLES.md et de FAQ-ACCUEIL.md : elles sont aussi les données structurées FAQPage de la page. -->
+
+### Un bénévole peut-il prendre plusieurs créneaux ?
+
+Oui, en une seule inscription : il sélectionne ses créneaux sur le planning, relit le récapitulatif et confirme une fois. Deux créneaux qui se chevauchent ne peuvent pas être pris ensemble. Sur un poste très demandé, vous pouvez limiter le nombre de créneaux par personne, par exemple à deux pour la loge des artistes.
+
+### Que se passe-t-il quand un créneau est complet ?
+
+Si vous avez activé sa liste d'attente, les bénévoles s'y inscrivent dans l'ordre d'arrivée. Quand une place se libère, la première personne de la file la reçoit par email et a 24 heures pour la prendre, jamais au-delà du début du créneau. Sans réponse, la place passe à la suivante. Une place libérée moins d'une heure avant le début n'est pas proposée : vous êtes prévenu tout de suite, et c'est à vous de trouver quelqu'un.
+
+### Plusieurs personnes peuvent-elles préparer le planning ?
+
+Oui. L'équipe d'administration a deux rôles : les organisateurs préparent les événements, suivent les inscriptions et écrivent aux bénévoles ; les propriétaires règlent en plus l'organisation et son équipe. Le journal de chaque événement indique qui a fait quoi, et quand.
+
+### Un bénévole se désiste la veille. Que faire ?
+
+Si quelqu'un attend sur la liste d'attente du créneau, la place lui est proposée sans que vous ayez rien à faire. Sinon, l'email qui vous prévient du désistement, envoyé tout de suite quand le créneau commence dans moins de 24 heures, propose **Trouver un remplaçant** : vous choisissez parmi vos membres à qui écrire, et leur email propose **Je prends ce créneau**. Vous pouvez aussi fixer un délai d'annulation, par exemple 2 jours avant le créneau : passé ce délai, le bénévole ne peut plus annuler lui-même, et sa page lui indique qui prévenir.
+
+### Une activité qui revient chaque semaine, c'est possible ?
+
+Oui. Une permanence se décrit une fois, avec ses jours et ses horaires, et toutes ses dates sont créées, jours fériés exclus. La page [Le planning des permanences de bénévoles](PLANNING-PERMANENCES-BENEVOLES.md) montre comment s'organise une saison.
 
 ## Démarrer
 

@@ -8,13 +8,13 @@ import { docImageFile, docImageFromBytes, docImageTag, type DocImage } from "@/l
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
-import { parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
+import { parseFaqSource, parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureScreenshot, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
 import { hideLineArrows, type BlogPost } from "@/lib/blog"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
-import { REPOSITORY_URL } from "@/lib/structured-data"
+import { REPOSITORY_URL, type FaqItem } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
 import { localizeInstanceText } from "@/lib/site"
 
@@ -81,6 +81,7 @@ const docUnitPartsCache = createRenderCache<DocUnitPart[]>()
 const docUnitHeadingIdsCache = createRenderCache<string[]>()
 const featuresPageCache = createRenderCache<RenderedFeaturesPage>()
 const changelogCache = createRenderCache<RenderedRelease[]>()
+const faqSourceCache = createRenderCache<RenderedQuestion[]>()
 
 /**
  * A documentation unit's HTML (#649, src/lib/doc-units.ts), the same rendering as the guides: its
@@ -186,6 +187,11 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
     const poster = videoMediaUrls(video.slug, mediaBaseUrl, video.render)?.poster
     return poster ? { src: poster, width: video.render.width, height: video.render.height, alt: image.alt } : null
   }
+  // A capture of public/doc-img (#872): its real size and versioned URL; a missing file shows nothing.
+  const screenshot = (shot: FeatureScreenshot): FeatureStill | null => {
+    const info = docImage(shot.src)
+    return info ? { src: info.src, width: info.width, height: info.height, alt: shot.alt } : null
+  }
   const render = (block: FeatureBlock): RenderedFeatureBlock => {
     const players = new Map<string, DocVideoPlayer>()
     const videoSlot = (id: string) => {
@@ -198,7 +204,7 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
     return {
       parts: splitAtDocVideoSlots(html, players),
       actions: block.actions,
-      stills: block.images.map(still).filter((s): s is FeatureStill => s !== null),
+      stills: [...block.images.map(still), ...block.screenshots.map(screenshot)].filter((s): s is FeatureStill => s !== null),
     }
   }
   const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false })
@@ -213,6 +219,33 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
       faq: s.faq?.map((q) => ({ question: q.question, id: q.id, html: markdownHtml(q.answer), text: plainAnswer(q.answer) })) ?? null,
     })),
   }
+}
+
+/**
+ * The questions of a page laid out by FeaturesPage, as its FAQPage structured data reads them
+ * (#951): the questions the page renders, their answers in plain text, so the two cannot drift.
+ */
+export function featuresPageFaq(page: RenderedFeaturesPage): FaqItem[] {
+  return page.sections.flatMap((s) => s.faq ?? []).map((q) => ({ question: q.question, answer: q.text }))
+}
+
+/**
+ * A source made only of questions (the home's FAQ, #951, FAQ-ACCUEIL.md): each answer as HTML for
+ * the page, links between sources made site links, and as plain text for its FAQPage data. Empty
+ * when the file isn't such a list (the page then shows no FAQ rather than a broken one).
+ */
+export function renderFaqSource(source: string): RenderedQuestion[] {
+  return faqSourceCache(source, () => {
+    const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
+    const parsed = parseFaqSource(localizeInstanceText(raw))
+    if (!parsed) return []
+    return parsed.questions.map((q) => ({
+      question: q.question,
+      id: q.id,
+      html: renderEventPageMarkdown(linkSourcesToRoutes(q.answer), { shiftHeadings: false }),
+      text: plainAnswer(q.answer),
+    }))
+  })
 }
 
 /** A released version as /nouveautes draws it: its date for people, its intro and sections as HTML. */

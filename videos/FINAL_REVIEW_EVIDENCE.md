@@ -99,3 +99,10 @@ libellés ni les sélecteurs de capture existants (« Places », « Capacité * 
 
 Ces vidéos n'ont pas été régénérées dans la même PR : elles montrent encore
 l'ancienne disposition de ces formulaires et restent à reprendre.
+
+## Écart connu : en-tête des pages publiques (#872)
+
+- `masterclass-03-first-steps` montre brièvement `/doc/admin`. Depuis l'ajout de
+  « Pour qui ? » dans l'en-tête des pages publiques, l'en-tête filmé n'a pas
+  cette entrée. Ni la narration ni les sélecteurs de capture ne sont touchés :
+  à reprendre à la prochaine régénération de cette vidéo.

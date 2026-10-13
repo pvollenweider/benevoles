@@ -15,6 +15,11 @@ type Env = Record<string, string | undefined>
 export const UPSTREAM_DOMAIN = "benevol.app"
 const UPSTREAM_CONTACT = `contact@${UPSTREAM_DOMAIN}`
 const UPSTREAM_SUPPORT = `https://buymeacoffee.com/${UPSTREAM_DOMAIN}`
+/**
+ * The hosted service's address (#872): where a presentation page lives (the audience pages,
+ * /tarifs) when this instance has none, so a shared source links there instead of a 404.
+ */
+export const HOSTED_SERVICE_URL = `https://www.${UPSTREAM_DOMAIN}`
 
 const runtimeEnv = (): Env => (typeof process !== "undefined" ? process.env : {})
 

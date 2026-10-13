@@ -85,7 +85,7 @@ En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.
 
 ## Un outil sur lequel compter
 
-Vous ne payez rien, et le nombre de bénévoles ou d'événements n'est pas plafonné. Le code est open source, publié sous licence AGPL : chacun peut le lire, et une association qui préfère l'installer sur son propre serveur peut le faire.
+Vous ne payez rien, et le nombre de bénévoles ou d'événements n'est pas plafonné ; la page [Tarifs](TARIFS.md) explique comment le projet est financé. Le code est open source, publié sous licence AGPL : chacun peut le lire, et une association qui préfère l'installer sur son propre serveur peut le faire.
 
 Les données sont hébergées en France. Une copie de sauvegarde chiffrée, illisible sans sa clé, est gardée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité, et un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) fixe par écrit comment benevol.app traite les données de votre association.
 
@@ -115,7 +115,7 @@ Oui. Le bilan de chaque événement donne les heures planifiées et les heures e
 
 ### Est-ce adapté à une fête de village ou à un festival ?
 
-Oui, c'est l'usage prévu : des modèles existent pour un festival, une buvette, une manifestation sportive et une fête de village. Un événement peut durer plusieurs jours, avec des créneaux de nuit, et des responsables de secteur peuvent suivre leur poste depuis un lien personnel.
+Oui, c'est l'usage prévu : des modèles existent pour un festival, une buvette, une manifestation sportive et une fête de village. Un événement peut durer plusieurs jours, avec des créneaux de nuit, et des responsables de secteur peuvent suivre leur poste depuis un lien personnel. La page [Pour qui ?](POUR-QUI.md) détaille chaque situation.
 
 ### Comment commencer ?
 
@@ -123,7 +123,7 @@ Créez votre espace en ligne depuis la [page d'inscription](/inscription) : il e
 
 ## Démarrer
 
-Une question avant de vous lancer ? Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, et la page [Fonctionnalités](FEATURES.md) détaille tout ce que fait benevol.app.
+Une question avant de vous lancer ? Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, et la page [Fonctionnalités](FEATURES.md) détaille tout ce que fait benevol.app. Pour votre situation précise, voyez la page [Pour qui ?](POUR-QUI.md) ; pour le prix, la page [Tarifs](TARIFS.md).
 
 <!-- actions -->
 - [Demander un espace](/inscription)

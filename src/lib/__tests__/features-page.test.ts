@@ -4,7 +4,8 @@
 import fs from "fs"
 import path from "path"
 import { describe, it, expect } from "vitest"
-import { actionHref, mailtoAddress, parseFaq, parseFeatureBlock, parseFeaturesPage, parseSteps, plainAnswer } from "../features-page"
+import { actionHref, mailtoAddress, parseFaq, parseFaqSource, parseFeatureBlock, parseFeaturesPage, parseSteps, plainAnswer } from "../features-page"
+import { splitTitle } from "../doc-pages"
 import { createHeadingSlugger } from "../heading-anchors"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { resolveVideoReference } from "../video-catalog"
@@ -37,6 +38,47 @@ describe("parseFeatureBlock", () => {
     const block = parseFeatureBlock("<!-- actions -->\n- [Un](/un)\n- pas un lien\n")
     expect(block.actions).toEqual([{ label: "Un", href: "/un" }])
     expect(block.markdown).toBe("- pas un lien")
+  })
+})
+
+// #872: the audience pages show real captures of public/doc-img, which need no media server.
+describe("parseFeatureBlock, documentation screenshots", () => {
+  it("takes a /doc-img screenshot alone on its line out of the Markdown, with its alt text", () => {
+    const block = parseFeatureBlock("Texte.\n\n![La frise  des créneaux](/doc-img/admin-shifts.png)\n\nSuite.")
+    expect(block.screenshots).toEqual([{ src: "/doc-img/admin-shifts.png", alt: "La frise des créneaux" }])
+    expect(block.markdown).toBe("Texte.\n\nSuite.")
+  })
+
+  it("leaves any other image in the text: inline, elsewhere than /doc-img, or without alt text", () => {
+    const md = "Voir ![a](/doc-img/a.png) ici.\n\n![b](https://example.org/b.png)\n\n![](/doc-img/c.png)\n\n![d](/doc-img/../d.png)"
+    const block = parseFeatureBlock(md)
+    expect(block.screenshots).toEqual([])
+    expect(block.markdown).toBe(md)
+  })
+})
+
+describe("parseFaqSource and the draft marker (#951)", () => {
+  it("reads a file made only of questions, its title and comments aside", () => {
+    const source = "<!-- BROUILLON : à relire -->\n<!-- Une note. -->\n\n# Questions\n\n### Gratuit ?\n\nOui.\n\n### Un compte ?\n\nNon, un [lien](TARIFS.md).\n"
+    expect(parseFaqSource(source)).toEqual({
+      title: "Questions",
+      questions: [
+        { question: "Gratuit ?", id: "gratuit", answer: "Oui." },
+        { question: "Un compte ?", id: "un-compte", answer: "Non, un [lien](TARIFS.md)." },
+      ],
+    })
+    expect(parseFaqSource("# Titre\n\nUn paragraphe.\n")).toBeNull()
+  })
+
+  it("lets a comment line stand before the first question of a FAQ section", () => {
+    const faq = parseFaq("<!-- BROUILLON -->\n\n### Q ?\n\nR.", createHeadingSlugger())
+    expect(faq).toEqual([{ question: "Q ?", id: "q", answer: "R." }])
+  })
+
+  it("drops the comments before a source's title, so the draft marker is never the title nor rendered", () => {
+    expect(splitTitle("<!-- BROUILLON -->\n\n# Titre\nCorps.\n")).toEqual({ title: "Titre", body: "Corps.\n" })
+    expect(splitTitle("Pas de titre.\n")).toEqual({ title: null, body: "Pas de titre.\n" })
+    expect(parseFeaturesPage("<!-- BROUILLON -->\n\n# Titre\n\nIntro.\n").intro.markdown).toBe("Intro.")
   })
 })
 
@@ -174,6 +216,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
       "a-l-image-de-votre-association",
       "un-outil-sur-lequel-compter",
       "se-former",
+      "questions-frequentes",
       "demarrer",
       "ce-que-benevol-app-ne-fait-pas-volontairement",
     ])
@@ -202,8 +245,17 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
     expect(read("FEATURES.md")).not.toMatch(/\btags?\b/i)
   })
 
-  it("has no FAQ section: its questions live on the home and the editorial pages", () => {
-    expect(page.sections.every((s) => s.faq === null)).toBe(true)
+  // #951: a short FAQ of its own, also its FAQPage structured data (the draft marker is no question).
+  it("has one FAQ section of four to six questions, each with its answer", () => {
+    const faqs = page.sections.filter((s) => s.faq !== null)
+    expect(faqs.map((s) => s.id)).toEqual(["questions-frequentes"])
+    const questions = faqs[0].faq!
+    expect(questions.length).toBeGreaterThanOrEqual(4)
+    expect(questions.length).toBeLessThanOrEqual(6)
+    for (const q of questions) {
+      expect(q.question, q.id).toMatch(/\?$/)
+      expect(q.answer, q.id).not.toContain("BROUILLON")
+    }
   })
 })
 

@@ -14,7 +14,8 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
-  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  // The audience pages, their index and the pricing page (#872, #950).
+  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/planning-permanences-benevoles", "/tarifs", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -44,11 +45,34 @@ test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
   // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
   // /doc/rappels: a unit for both audiences, with its jump links, previous and next, « Dans ce thème ».
-  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
+  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
       expect.soft(await seriousViolations(page)).toEqual([])
+    })
+  }
+})
+
+// « Pour qui ? » (#872): the disclosure of the header, open, at 320 px and on a desktop.
+test.describe("« Pour qui ? » in the header", () => {
+  for (const viewport of [{ width: 320, height: 640 }, { width: 1280, height: 800 }]) {
+    test(`opens, closes on Escape and stays on screen at ${viewport.width} px`, async ({ page }) => {
+      await page.setViewportSize(viewport)
+      await page.goto("/fonctionnalites")
+      const button = page.getByRole("button", { name: "Pour qui ?" })
+      await button.click()
+      await expect(button).toHaveAttribute("aria-expanded", "true")
+      const list = page.locator(`[id="${await button.getAttribute("aria-controls")}"]`)
+      await expect(list.getByRole("link", { name: "Toutes les situations" })).toBeVisible()
+      const box = await list.boundingBox()
+      expect(box!.x).toBeGreaterThanOrEqual(0)
+      expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width)
+      expect.soft(await seriousViolations(page)).toEqual([])
+      await list.getByRole("link").first().focus()
+      await page.keyboard.press("Escape")
+      await expect(button).toHaveAttribute("aria-expanded", "false")
+      await expect(button).toBeFocused()
     })
   }
 })

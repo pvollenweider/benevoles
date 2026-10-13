@@ -146,6 +146,17 @@ async function run() {
     await mob.close()
   })
 
+  // A season of weekly permanences (#866, #872), on a phone: the month buttons and the first
+  // dates. Needs scripts/seed-demo-permanences.ts (its own organisation, « Épicerie de la Gare »).
+  await shot("public-permanences-mobile", async () => {
+    const mob = await browser.newContext(MOBILE)
+    const m = await mob.newPage()
+    await m.goto(`${BASE}/saison-automne?org=epicerie-de-la-gare`)
+    await settle(m)
+    await save(m, "public-permanences-mobile")
+    await mob.close()
+  })
+
   if (process.env.PUBLIC_ONLY) return finish(browser)
 
   // ── Administration ───────────────────────────────────────────────────────

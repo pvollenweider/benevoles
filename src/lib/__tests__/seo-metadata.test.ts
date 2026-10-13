@@ -54,7 +54,7 @@ describe("every public page, with the production base URL", () => {
   const units = loadDocUnits()
   const outputs: [string, unknown][] = [
     ["/", landingMetadata(BASE)],
-    ["/ (JSON-LD)", landingJsonLd(BASE)],
+    ["/ (JSON-LD)", landingJsonLd(BASE, [])],
     ...PUBLIC_PAGES.flatMap((p): [string, unknown][] => [[p.path, publicPageMetadata(p.path, BASE)], [`${p.path} (JSON-LD)`, publicPageJsonLd(p.path, BASE)]]),
     ...units.flatMap((u): [string, unknown][] => [[`/doc/${u.slug}`, docUnitMetadata(u, BASE)], [`/doc/${u.slug} (JSON-LD)`, docUnitJsonLd(u, BASE)]]),
   ]

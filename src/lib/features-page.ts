@@ -14,6 +14,10 @@ import { videoReferenceId } from "@/lib/doc-video-references"
  *     <!-- image: STAFFING_GAPS | Texte alternatif --> a still of that video (its poster), with its alt text
  *     <!-- actions -->                                 the list of links right below becomes buttons
  *
+ * and one in plain Markdown: a documentation screenshot alone on its line,
+ * `![Texte alternatif](/doc-img/admin-shifts.png)`, is the section's still like a video's poster
+ * (the audience pages, #872, show real captures that need no media server).
+ *
  * The text before the first `## ` is the page's opening; each `## ` opens a section, its id the
  * heading's slug (the same anchors as the rest of the site, src/lib/heading-anchors.ts). A section
  * made of a single ordered list whose items start with a bold title is drawn as numbered steps; a
@@ -25,6 +29,8 @@ import { videoReferenceId } from "@/lib/doc-video-references"
 
 export type FeatureAction = { label: string; href: string }
 export type FeatureImage = { videoId: string; alt: string }
+/** A documentation screenshot (public/doc-img) used as a section's still. */
+export type FeatureScreenshot = { src: string; alt: string }
 export type FeatureStep = { title: string; text: string }
 /** A question of a FAQ section, its answer as written (Markdown). */
 export type FeatureQuestion = { question: string; id: string; answer: string }
@@ -34,6 +40,8 @@ export type FeatureBlock = {
   markdown: string
   actions: FeatureAction[]
   images: FeatureImage[]
+  /** Screenshots of public/doc-img, after the video stills. */
+  screenshots: FeatureScreenshot[]
   videos: string[]
 }
 
@@ -51,6 +59,7 @@ export type FeaturesPage = { title: string | null; intro: FeatureBlock; sections
 const IMAGE_RE = /^<!--\s*image:\s*([A-Z][A-Z0-9_]+)\s*\|\s*([\s\S]+?)\s*-->$/
 const ACTIONS_RE = /^<!--\s*actions\s*-->$/i
 const LINK_ITEM_RE = /^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/
+const SCREENSHOT_RE = /^!\[([^\]]+)\]\((\/doc-img\/[a-z0-9-]+\.png)\)$/
 
 /**
  * An action's address as the site serves it: a link to a source file (`guide/premiers-pas.md`,
@@ -68,9 +77,15 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
   const kept: string[] = []
   const actions: FeatureAction[] = []
   const images: FeatureImage[] = []
+  const screenshots: FeatureScreenshot[] = []
   const videos: string[] = []
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
+    const screenshot = line.match(SCREENSHOT_RE)
+    if (screenshot) {
+      screenshots.push({ src: screenshot[2], alt: screenshot[1].replace(/\s+/g, " ").trim() })
+      continue
+    }
     if (/^<!--\s*image\b/i.test(line)) {
       // A malformed image line (lower-case id, no alt text) shows nothing, like a malformed video.
       const image = line.match(IMAGE_RE)
@@ -99,7 +114,7 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
     }
     kept.push(lines[i])
   }
-  return { markdown: kept.join("\n").replace(/\n{3,}/g, "\n\n").trim(), actions, images, videos }
+  return { markdown: kept.join("\n").replace(/\n{3,}/g, "\n\n").trim(), actions, images, screenshots, videos }
 }
 
 /** « 1. **Title.** text » items (comment lines ignored), or null when the Markdown is anything else than such a list. */
@@ -121,7 +136,8 @@ export function parseSteps(markdown: string): FeatureStep[] | null {
  * its anchor, from the page's own slugger so ids never repeat.
  */
 export function parseFaq(markdown: string, slug: (text: string) => string): FeatureQuestion[] | null {
-  const trimmed = markdown.trim()
+  // A comment line (a note to the authors, such as a draft marker) is no part of a question.
+  const trimmed = markdown.replace(COMMENT_LINE_RE, "").trim()
   if (!trimmed.startsWith("### ")) return null
   const entries: { question: string; answer: string }[] = []
   for (const chunk of trimmed.split(/^### +/m).slice(1)) {
@@ -133,6 +149,18 @@ export function parseFaq(markdown: string, slug: (text: string) => string): Feat
   }
   // Slugged once the whole section is known to be a FAQ, so a section that isn't uses no id.
   return entries.map((e) => ({ ...e, id: slug(e.question) }))
+}
+
+const COMMENT_LINE_RE = /^[ \t]*<!--[\s\S]*?-->[ \t]*$/gm
+
+/**
+ * A source made only of questions (the home's FAQ, #951): its title, then « ### Question » headings
+ * with their answers, read the way a FAQ section is. Null when it isn't such a list.
+ */
+export function parseFaqSource(source: string): { title: string | null; questions: FeatureQuestion[] } | null {
+  const { title, body } = splitTitle(source)
+  const questions = parseFaq(body, createHeadingSlugger())
+  return questions ? { title, questions } : null
 }
 
 /**
