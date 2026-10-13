@@ -185,7 +185,7 @@ test("the organiser gets the code and a live preview from « Partager l'événem
   await expect(code).toHaveValue(/title="Inscription bénévoles – E2E Intégration \d+"/)
 
   await section.getByRole("checkbox", { name: "Ajuster la hauteur automatiquement" }).check()
-  expect(await code.inputValue()).toContain("<script>")
+  await expect.poll(() => code.inputValue()).toContain("<script>")
 
   await section.getByRole("button", { name: "Aperçu en direct" }).click()
   const preview = page.frameLocator(`iframe[title^="Aperçu : Inscription bénévoles"]`)
