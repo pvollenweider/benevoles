@@ -881,8 +881,8 @@
         "organisateur"
       ],
       "feature": "Suivi des inscriptions et relances",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1053,8 +1053,8 @@
         "organisateur"
       ],
       "feature": "Pointage des présences",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-13",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1150,8 +1150,8 @@
         "organisateur"
       ],
       "feature": "Messages ciblés et modèles",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-13",
+      "revision": 2,
       "level": "essentiel"
     },
     {

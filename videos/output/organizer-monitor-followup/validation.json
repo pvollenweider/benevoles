@@ -1,29 +1,29 @@
 {
   "id": "REGISTRATION_MONITOR_FOLLOWUP",
   "slug": "organizer-monitor-followup",
-  "validatedAt": "2026-10-13T06:46:45.297Z",
+  "validatedAt": "2026-10-13T09:01:10.314Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 191280,
+  "captureMs": 191840,
   "scenes": [
     {
       "id": "overview",
-      "visualMs": 11850,
+      "visualMs": 11851,
       "audioMs": 11849,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "coverage",
-      "visualMs": 13727,
+      "visualMs": 13724,
       "audioMs": 13722,
-      "driftMs": 5
+      "driftMs": 2
     },
     {
       "id": "registrations",
-      "visualMs": 16362,
+      "visualMs": 16363,
       "audioMs": 16361,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "requests",
@@ -33,15 +33,15 @@
     },
     {
       "id": "filters",
-      "visualMs": 11852,
+      "visualMs": 11850,
       "audioMs": 11849,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "actions",
-      "visualMs": 12800,
+      "visualMs": 12801,
       "audioMs": 12798,
-      "driftMs": 2
+      "driftMs": 3
     },
     {
       "id": "audience",
@@ -51,9 +51,9 @@
     },
     {
       "id": "message",
-      "visualMs": 13226,
+      "visualMs": 13227,
       "audioMs": 13224,
-      "driftMs": 2
+      "driftMs": 3
     },
     {
       "id": "channels",
@@ -81,18 +81,18 @@
     },
     {
       "id": "done",
-      "visualMs": 11963,
+      "visualMs": 11961,
       "audioMs": 11961,
-      "driftMs": 2
+      "driftMs": 0
     }
   ],
-  "anchorsChecked": 13,
+  "anchorsChecked": 14,
   "music": {
-    "voicedWindows": 161,
-    "musicOnlyWindows": 3,
-    "smallestGapLu": 14.9,
-    "largestGapLu": 19.3,
-    "quietestMusicOnlyLufs": -33.9,
+    "voicedWindows": 163,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.4,
+    "quietestMusicOnlyLufs": -33.6,
     "loudestMusicOnlyLufs": -33.2,
     "medianVoiceLufs": -16.3
   },

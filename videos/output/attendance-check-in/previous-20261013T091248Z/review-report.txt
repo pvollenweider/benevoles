@@ -1,0 +1,27 @@
+STATUS: NOT READY
+ID: ATTENDANCE_CHECK_IN
+Duration: 403.04
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 350, 'musicOnlyWindows': 9, 'smallestGapLu': 13.6, 'largestGapLu': 19.2, 'quietestMusicOnlyLufs': -34, 'loudestMusicOnlyLufs': -32.9, 'medianVoiceLufs': -16.3}
+Problems: Original single-arrival reload fixed. Correction selection/undo/repoint and mobile role search still late; upcoming-section presentation late; undo early. Reload actually executed despite automated missing flag. Technical/final narration/music/CSV checks pass; subjective phone timbre flag not a blocker.
+Source changes: Correction cues moved to selection/repoint sentences; mobile temporal sections, role search, undo and reload now anchored to their describing sentences. No third take.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: True
+MP4 frame evidence SHA256: fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 0.209–24.596 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+one: 26.919–51.587 s; review/one-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+group: 53.851–77.18 s; review/group-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+correction: 79.441–102.006 s; review/correction-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["Léger décalage entre l'annonce de la sélection/annulation (00:02-00:04) et l'exécution à l'écran (00:05-00:06)."]
+multiple: 104.269–130.401 s; review/multiple-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+limits: 132.665–157.046 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+cancelled: 159.307–197.217 s; review/cancelled-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues []
+export: 200.665–224.729 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+dayof-window: 228.171–256.813 s; review/dayof-window-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:11, la voix aborde la section 'Dans les trois prochaines heures' qui n'apparaît à l'écran qu'à 00:15 après le défilement de la page."]
+dayof-search: 260.203–283.526 s; review/dayof-search-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:10, la saisie du mot « Accueil » intervient avec environ deux secondes de retard par rapport à l'annonce vocale."]
+dayof-phone: 285.787–311.905 s; review/dayof-phone-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ['À 00:06, la phrase « Voici celui de Zoé » est prononcée par une voix masculine, interrompant la voix off féminine principale.']
+dayof-checkin: 314.163–339.213 s; review/dayof-checkin-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+dayof-refresh: 341.475–366.619 s; review/dayof-refresh-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+dayof-undo: 368.881–395.826 s; review/dayof-undo-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:06, la voix annonce une vérification 'après rechargement', mais aucun rafraîchissement ni clic sur le bouton 'Actualiser' n'est réalisé à l'écran."]

@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-13T08:27:50.439Z",
+  "revalidatedAt": "2026-10-13T08:27:50.440Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "schedule",
+      "audioSha256": "9223f85ed1f83843c98f445731d36451ad37894923869d17c80e8fbcb20e6143",
+      "recognized": "Le matériel arrive plus tard. Nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contacte aussi les personnes directement.",
+      "expected": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contacte aussi les personnes directement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

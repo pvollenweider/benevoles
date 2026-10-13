@@ -1,17 +1,17 @@
 {
   "id": "TARGETED_MESSAGES",
-  "status": "NOT READY",
-  "duration": 318.6,
-  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "status": "READY",
+  "duration": 318.64,
+  "buildId": "RPQR_7CtwLDa6m9DyYOBY",
   "music": {
     "voicedWindows": 280,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 14.2,
-    "largestGapLu": 19.3,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.7
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -34.7,
+    "loudestMusicOnlyLufs": -34.7,
+    "medianVoiceLufs": -16.6
   },
-  "problems": "Notification cue aligned and Mailpit contains only current campaign. Variable correction finishes ~2 s before Corrigeons le texte. All technical/final narration/music checks pass. Subjective timbre flag not a blocker; Mailpit English dates nit.",
-  "sourceChanges": "Preview now validates actual audience member and both shift times, records recipient ID. Variable correction cue changed to at(Corrigeons le texte.). No third take."
+  "problems": "All objective checks pass, including Corrigeons le texte cue, actual selected-recipient preview, five personalized/deduplicated emails and retained history. Twelve final chapter reports and all frame sheets inspected. Automated subjective timbre observation on push is not an objective blocker; identical audited continuous Puck narration reused, all final words pass. Mailpit English dates nit.",
+  "sourceChanges": "None for this video; batch 14 anchors retained. Shared empty-ASR retry only."
 }

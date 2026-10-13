@@ -5253,8 +5253,8 @@ async function main() {
           throw new Error(`Message preview did not open. Alerts: ${alerts.join(" | ") || "none"}. Form: ${formText.slice(0, 800)}`)
         }
         await at("La confirmation finale évite les")
-        await tap(page, page.getByRole("button", { name: "Retour au message" }))
       })
+      await tap(page, page.getByRole("button", { name: "Retour au message" }))
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("reminders", async (at) => {

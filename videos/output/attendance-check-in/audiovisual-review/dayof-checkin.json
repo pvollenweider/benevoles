@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:47:40.321Z",
-  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "reviewedAt": "2026-10-13T09:23:28.610Z",
+  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "promptSha256": "eefd8d78a0b6b9b443f31947d6b7d3dc46b24fd221ec8688117155dd43c885c3",
-  "clipSha256": "c66d900ab0366d1adc7a405be0a681c2873bcaa583e7b07896dd754cc8308de7",
+  "clipSha256": "029bebe3c306722176b6fa2899fbe6aef33292abc98f9d341a762195ad8afe81",
   "scene": "dayof-checkin",
   "review": {
     "heardOpening": "Zoé arrive à l'accueil",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Zoé arrive à l'accueil.",
-        "visibleSeconds": 0,
-        "visible": "Fiche du créneau Accueil sur place affichée avec la ligne Zoé Exemple.",
+        "spokenSeconds": 2.5,
+        "spoken": "Marquer présent enregistre sa présence",
+        "visibleSeconds": 3.3,
+        "visible": "Clic sur le bouton 'Marquer présent' pour Zoé Exemple",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence.",
-        "visibleSeconds": 3.8,
-        "visible": "Clic sur Marquer présent en face de Zoé Exemple, le bouton bascule en Annuler la présence.",
+        "spokenSeconds": 5.5,
+        "spoken": "le bouton devient Annuler la présence",
+        "visibleSeconds": 4,
+        "visible": "Le bouton devient 'Annuler la présence' avec la mention 'Présent'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.5,
-        "spoken": "Rechargeons la page : la marque est conservée.",
-        "visibleSeconds": 10.5,
-        "visible": "La page est rechargée et le statut Présent avec le bouton Annuler la présence reste bien conservé pour Zoé Exemple.",
+        "spoken": "Rechargeons la page : la marque est conservée",
+        "visibleSeconds": 11,
+        "visible": "La page est actualisée et Zoé Exemple reste marquée présente",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

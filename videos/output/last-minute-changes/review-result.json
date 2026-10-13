@@ -1,17 +1,17 @@
 {
   "id": "LAST_MINUTE_CHANGES",
   "status": "NOT READY",
-  "duration": 354.12,
-  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "duration": 354.08,
+  "buildId": "RPQR_7CtwLDa6m9DyYOBY",
   "music": {
     "voicedWindows": 321,
     "musicOnlyWindows": 1,
-    "smallestGapLu": 13.9,
+    "smallestGapLu": 14,
     "largestGapLu": 19.6,
     "quietestMusicOnlyLufs": -33,
     "loudestMusicOnlyLufs": -33,
     "medianVoiceLufs": -16.3
   },
-  "problems": "Withdrawal admin navigation 5 s late; schedule return 4.5 s late. Final-MP4 ASR repeatedly returned empty schedule response. Seven emails verified; withdrawal receipt/acceptance confirmation suppressed by local recipient limit. Result Nicolas transiently off screen; Mailpit English dates nit.",
-  "sourceChanges": "Withdrawal dialog/confirm/admin navigation moved to their respective sentence anchors; planning return anchored to Un email envoy\u00e9 ne prouve. Mail evidence guard supports real organiser digest and explicitly records suppressed notifications. No re-film after review; no src changes."
+  "problems": "All technical, narration, music and SMTP checks pass (nine delivered messages). Schedule ASR diagnosed as transient service failure and now passes. Withdrawal, schedule return and replacement cues aligned. Cancellation dialog remains about 4.7 s late; corrected to Ouvrons la confirmation sentence anchor after the single re-film, no third take. Nicolas missing flag disproved by exact frames 328.0, 329.0, 330.0 showing his row. Mailpit English dates nit.",
+  "sourceChanges": "Replacement selection/addition and coverage sentence anchors; remaining cancellation-dialog cue anchored to Ouvrons la confirmation. Empty-ASR bounded retry. No src changes."
 }

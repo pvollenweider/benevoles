@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:58:54.231Z",
+  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "promptSha256": "7ceef71bca6d6b3d5c711480b7f87a8f27aab267e08b1d2d6811074058e11542",
+  "clipSha256": "cd8eaacffc5c426972dde247c8bb3bc6756a83df0ecfc844fc59182772425268",
+  "scene": "event-summary",
+  "review": {
+    "heardOpening": "Enfin, ouvrons les rapports de la Fête de septembre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrons les rapports de la Fête de septembre",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page des Rapports puis du Résumé de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "deux bénévoles occupent trois créneaux confirmés",
+        "visibleSeconds": 1.5,
+        "visible": "Section Bénévoles indiquant 2 bénévoles distincts avec un créneau confirmé (1 première fois, 1 retour)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les présences n'ont été saisies que pour un créneau",
+        "visibleSeconds": 1.5,
+        "visible": "Section Présences indiquant saisies pour 1 sur 3 créneaux confirmés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "six heures planifiées, dont deux attestées",
+        "visibleSeconds": 1.5,
+        "visible": "Section Heures indiquant 6h planifiées dont 2h attestées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les informations affichées dans la section du résumé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

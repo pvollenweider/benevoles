@@ -5,7 +5,7 @@
   },
   {
     "chapter": "last-participation",
-    "exitCode": 0
+    "exitCode": 1
   },
   {
     "chapter": "activity",
@@ -17,7 +17,7 @@
   },
   {
     "chapter": "certificate-settings",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "certificate-presence",

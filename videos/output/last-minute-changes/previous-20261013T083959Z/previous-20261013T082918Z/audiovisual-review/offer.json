@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:38:13.813Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "aa98864be2a6cee3720a475690bff3cd5579af6ab6c5d9d8ac317e66d6550292",
+  "clipSha256": "f06f5f03ba147f71c6118417e8473bd95e4d533acaf54b04cc47f00bcfff8a96",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur 'Prendre la place' et affichage de l'écran 'Place confirmée !'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 13.1,
+        "visible": "Affichage de la page de gestion des Inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 14,
+        "visible": "Le compteur indique '5 inscriptions confirmées' et Nicolas Exemple figure dans la liste des inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

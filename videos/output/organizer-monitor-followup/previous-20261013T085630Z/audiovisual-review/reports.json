@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:56:03.085Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "f4f7495576cd45c295f634ea3cb778afa22445018c51ca20555667a4262b2104",
+  "clipSha256": "8b16cd6a6484d8d732b0c12cf1247fe95a8080a4ab44de682f7c0b4cfc191803",
+  "scene": "reports",
+  "review": {
+    "heardOpening": "À l'approche du jour J",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "les listes à afficher sur les stands",
+        "visibleSeconds": 2.2,
+        "visible": "Section « À afficher ou à remettre aux bénévoles » avec les liens de plannings affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "les plannings individuels",
+        "visibleSeconds": 3.8,
+        "visible": "Option et description « Planning individuel » visibles dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "et les badges",
+        "visibleSeconds": 6.3,
+        "visible": "Défilement de la page vers le bas affichant le bloc « Badges »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec l'affichage et le défilement de la page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

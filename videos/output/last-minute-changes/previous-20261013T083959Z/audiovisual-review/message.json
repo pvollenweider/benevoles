@@ -1,0 +1,110 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:39:17.845Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "0ab1fef9018dc9ebf48cbce3c2af803be558dd4ccd80d5ab235c8797cdd0c511",
+  "clipSha256": "51e21947a7b140d9a38a40eea9f54f1a000804fc1955864d086d7fa186308b95",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection de l'option radio « Les bénévoles d'un créneau »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "puis Installation du matériel.",
+        "visibleSeconds": 2.2,
+        "visible": "Le créneau « Logistique - Installation du matériel » est sélectionné dans la liste déroulante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Écrivons un objet clair et une courte demande.",
+        "visibleSeconds": 12,
+        "visible": "L'objet est saisi et le texte de la demande est en cours de rédaction dans le champ message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "Vérifions l'aperçu et le destinataire",
+        "visibleSeconds": 25.5,
+        "visible": "Clic sur « Voir l'aperçu et envoyer » et ouverture de la fenêtre modale d'aperçu pour Emma",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "puis confirmons l'envoi.",
+        "visibleSeconds": 30,
+        "visible": "Clic sur le bouton « Confirmer l'envoi » dans la boîte de dialogue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "Ouvrons le vrai email reçu.",
+        "visibleSeconds": 31.8,
+        "visible": "Affichage de la boîte Mailpit avec l'email reçu affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 38,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
+        "visibleSeconds": 39.5,
+        "visible": "Clic sur « + Ajouter manuellement » sur la page des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 41.5,
+        "spoken": "Saisissons son prénom, son nom et la même adresse email",
+        "visibleSeconds": 42,
+        "visible": "Champs Prénom, Nom et Email remplis avec les coordonnées de Zoé Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 47,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures",
+        "visibleSeconds": 49,
+        "visible": "Sélection du créneau « sam. 17 oct., 12h-14h : Logistique - Installation du matériel »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 50.8,
+        "spoken": "puis ajoutons-la.",
+        "visibleSeconds": 56.2,
+        "visible": "Clic sur le bouton « Ajouter » en bas du formulaire d'inscription",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 52.5,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
+        "visibleSeconds": 57,
+        "visible": "Affichage de l'écran « Où manque-t-il du monde ? »",
+        "sync": "late",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Désynchronisation importante entre 00:50 et 00:57 : la voix annonce l'ajout de Zoé puis commente l'écran de couverture (« Enfin, revenons à la couverture : le poste est rempli » à 00:52), alors que le clic sur « Ajouter » n'a lieu qu'à 00:56 et que l'écran de couverture ne s'affiche qu'à 00:57 (plus de 4 secondes de retard)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

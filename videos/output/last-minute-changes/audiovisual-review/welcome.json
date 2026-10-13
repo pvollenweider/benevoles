@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:38:12.604Z",
-  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "reviewedAt": "2026-10-13T08:47:56.721Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
   "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
-  "clipSha256": "744971a9d3273313076284ac583cbf24a2557dae1a564a02076c04764cc230ec",
+  "clipSha256": "152d65a4edf79b2d19f95cfb67bdee6f2d9f767b92b8544f5af9d8344490b0b7",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un désistement, un horaire qui bouge",
     "checkpoints": [
       {
-        "spokenSeconds": 0.9,
-        "spoken": "Un désistement, un horaire qui bouge",
-        "visibleSeconds": 1,
-        "visible": "Titre superposé « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
+        "spokenSeconds": 0.5,
+        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau central affichant le titre 'Gérer un imprévu sans perdre le fil' et le sous-titre 'Vérifier, prévenir, contrôler le résultat'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Le plus important, c'est de vérifier les faits",
-        "visibleSeconds": 11.8,
-        "visible": "L'encadré central disparaît, révélant la page de l'événement « Fête des imprévus – démonstration »",
+        "spokenSeconds": 9.5,
+        "spoken": "c'est de vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
+        "visibleSeconds": 11.5,
+        "visible": "Le bandeau titre s'efface, laissant apparaître la page de gestion 'Fête des imprévus – démonstration'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
-        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "spokenSeconds": 15.5,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée, chercher une autre aide",
         "visibleSeconds": 16,
-        "visible": "Vue d'ensemble de la page de gestion de l'événement en environnement de formation",
+        "visible": "Écran stable de l'événement de démonstration servant de support à l'annonce du sommaire",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, enregistrée sans bruit parasite ni rupture de ton."
+      "observation": "Voix féminine calme, claire et bien articulée, avec un débit régulier adapté à une introduction pédagogique."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

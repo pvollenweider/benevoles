@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:47:39.307Z",
-  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "reviewedAt": "2026-10-13T09:23:27.160Z",
+  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "promptSha256": "b2bfd779867dcf8c9ce5fe0e75e86b072e111a19a5df0b0a1abc390247f39633",
-  "clipSha256": "701590eba7ce753ad55b6984d76f2d2c4ffc199089b0553f52672afdce511865",
+  "clipSha256": "c8b58dfafc34ebe6c717ca06f64f2e2f8b40b64f5672b9964ef616dbb41b5bf6",
   "scene": "dayof-phone",
   "review": {
     "heardOpening": "Quand un téléphone est renseigné",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Quand un téléphone est renseigné, un lien permet de préparer un appel",
-        "visibleSeconds": 1,
-        "visible": "Numéros de téléphone cliquables affichés sous forme de liens bleus sur les cartes",
+        "spokenSeconds": 5.8,
+        "spoken": "Voici celui de Zoé.",
+        "visibleSeconds": 0,
+        "visible": "La fiche de Zoé Exemple avec son lien de numéro de téléphone (079 000 00 01) est visible à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.1,
-        "spoken": "Voici celui de Zoé",
-        "visibleSeconds": 6.1,
-        "visible": "Carte de Zoé Exemple avec le lien téléphonique 079 000 00 01 visible à l'écran (sans surbrillance ni curseur)",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8.3,
-        "spoken": "Le contact du créneau peut aussi figurer sur sa carte",
-        "visibleSeconds": 8.3,
-        "visible": "Mention « Contact du créneau : Elodie Exemple » avec lien téléphonique sur la carte du créneau Buvette",
+        "spokenSeconds": 8,
+        "spoken": "Le contact du créneau peut aussi figurer sur sa carte.",
+        "visibleSeconds": 0,
+        "visible": "La mention « Contact du créneau : Elodie Exemple » avec son numéro apparaît sur la carte Buvette.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 14.5,
-        "spoken": "Cette page garde seulement les informations utiles sur place",
-        "visibleSeconds": 14.5,
-        "visible": "Vue fixe de la liste présentant les noms, horaires, contacts et statuts de présence",
+        "spoken": "Cette page garde seulement les informations utiles sur place : les noms, les horaires, le téléphone et la présence.",
+        "visibleSeconds": 0,
+        "visible": "L'interface liste les noms, plages horaires, liens téléphoniques et boutons de pointage de présence.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:06, la phrase « Voici celui de Zoé » est prononcée par une voix masculine, interrompant la voix off féminine principale."
-    ],
+    "issues": [],
     "voice": {
-      "consistent": false,
+      "consistent": true,
       "warm": true,
-      "observation": "Alternance de deux locuteurs distincts : narratrice féminine principale et voix masculine insérée à 00:06."
+      "observation": "Voix off posée, claire et bien articulée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

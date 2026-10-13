@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:39:38.660Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
+  "clipSha256": "cf10991da0a7f04db5875126e8cc8956b19248d9a227a2963c35af63e5ca6f9b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la vue de couverture Où manque-t-il du monde ?, puis bascule sur Inscriptions à 00:03",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.3,
+        "spoken": "Nicolas a accepté sa place, Zoé est sur le créneau convenu",
+        "visibleSeconds": 4,
+        "visible": "Tableau des inscriptions affiché avec les bénévoles inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage du planning des créneaux en frise puis en liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.4,
+        "spoken": "En cas d'imprévu : un besoin précis, une proposition claire",
+        "visibleSeconds": 15.5,
+        "visible": "Retour sur la vue récapitulative Où manque-t-il du monde ? pour la conclusion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

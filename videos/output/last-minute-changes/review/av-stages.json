@@ -5,7 +5,7 @@
   },
   {
     "chapter": "withdrawal",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "offer",
@@ -25,11 +25,11 @@
   },
   {
     "chapter": "schedule",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "cancel",
-    "exitCode": 0
+    "exitCode": 1
   },
   {
     "chapter": "journal",

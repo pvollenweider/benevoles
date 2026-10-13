@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:47:25.969Z",
+  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "promptSha256": "82fcfa717afa1f73e3b485b0b81fc6ca69fb360542dece21be61f9032968ba22",
+  "clipSha256": "a77ac7866d100b50043cfb64dfbcb22584206ce332a56aee2a6036d78cc00c0f",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Téléchargeons maintenant le véritable export des présences",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Téléchargeons maintenant le véritable export des présences.",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de l'écran « Lecture du CSV téléchargé » présentant les données exportées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le.",
+        "visibleSeconds": 6.8,
+        "visible": "Le tableau défile vers la droite pour faire apparaître les colonnes « Présent » et « Pointé le ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire.",
+        "visibleSeconds": 16.5,
+        "visible": "Sélection d'une personne spécifique (« Léa Exemple ») dans la liste déroulante pour restreindre l'affichage.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+        "visibleSeconds": 19.5,
+        "visible": "Basculement vers la vue mobile « Jour J » adaptée au terrain.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

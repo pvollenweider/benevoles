@@ -1,52 +1,52 @@
 {
-  "mp4Sha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "mp4Sha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "chapters": [
     {
       "chapter": "welcome",
-      "startSeconds": 0.209,
-      "endSeconds": 24.596,
+      "startSeconds": 0.215,
+      "endSeconds": 24.601,
       "sentences": [
         {
           "text": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à repérer les absences.",
           "startMs": 345,
           "endMs": 5445,
           "method": "silence",
-          "videoSeconds": 0.554
+          "videoSeconds": 0.56
         },
         {
           "text": "Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres.",
           "startMs": 5878,
           "endMs": 10324,
           "method": "silence",
-          "videoSeconds": 6.087
+          "videoSeconds": 6.093
         },
         {
           "text": "Chaque ligne correspond à une inscription sur un créneau.",
           "startMs": 10640,
           "endMs": 13402,
           "method": "silence",
-          "videoSeconds": 10.849
+          "videoSeconds": 10.855
         },
         {
           "text": "Être inscrit, c'est ce qui était prévu.",
           "startMs": 13772,
           "endMs": 16068,
           "method": "silence",
-          "videoSeconds": 13.981
+          "videoSeconds": 13.987
         },
         {
           "text": "Être marqué présent, c'est une autre information.",
           "startMs": 16634,
           "endMs": 18856,
           "method": "silence",
-          "videoSeconds": 16.843
+          "videoSeconds": 16.849
         },
         {
           "text": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
           "startMs": 19263,
           "endMs": 23983,
           "method": "silence",
-          "videoSeconds": 19.472
+          "videoSeconds": 19.478
         }
       ],
       "anchors": [
@@ -55,125 +55,125 @@
           "phrase": "Ouvrons les inscriptions et choisissons",
           "startMs": 5878,
           "endMs": 10324,
-          "cueMs": 6087
+          "cueMs": 6095
         },
         {
           "segmentId": "welcome",
           "phrase": "Chaque ligne correspond à une",
           "startMs": 10640,
           "endMs": 13402,
-          "cueMs": 10854
+          "cueMs": 10857
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 7722,
+          "atMs": 7728,
           "relativeSeconds": 7.513
         },
         {
           "kind": "click",
-          "atMs": 11322,
-          "relativeSeconds": 11.113
+          "atMs": 11325,
+          "relativeSeconds": 11.11
         },
         {
           "kind": "click",
-          "atMs": 12105,
-          "relativeSeconds": 11.896
+          "atMs": 12110,
+          "relativeSeconds": 11.895
         }
       ],
       "frames": [
         {
           "scene": "welcome",
-          "fraction": 0.024603272235207283,
-          "seconds": 0.809,
+          "fraction": 0.024604281144919218,
+          "seconds": 0.815,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-2.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.25,
-          "seconds": 6.30575,
+          "seconds": 6.3115,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-25.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.45,
-          "seconds": 11.18315,
+          "seconds": 11.1887,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-45.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.6,
-          "seconds": 14.841199999999999,
+          "seconds": 14.8466,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-60.png"
         },
         {
           "scene": "welcome",
           "fraction": 0.85,
-          "seconds": 20.93795,
+          "seconds": 20.943099999999998,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-85.png"
         },
         {
           "scene": "welcome",
-          "fraction": 0.9876983638823964,
-          "seconds": 24.296,
+          "fraction": 0.9876978594275404,
+          "seconds": 24.301,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-end.png"
         }
       ]
     },
     {
       "chapter": "one",
-      "startSeconds": 26.919,
-      "endSeconds": 51.587,
+      "startSeconds": 26.923,
+      "endSeconds": 51.59,
       "sentences": [
         {
           "text": "Aline vient d'arriver.",
           "startMs": 404,
           "endMs": 1778,
           "method": "silence",
-          "videoSeconds": 27.323
+          "videoSeconds": 27.327
         },
         {
           "text": "Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence.",
           "startMs": 2293,
           "endMs": 7406,
           "method": "silence",
-          "videoSeconds": 29.212
+          "videoSeconds": 29.216
         },
         {
           "text": "La marque apparaît sur son inscription.",
           "startMs": 7798,
           "endMs": 9591,
           "method": "silence",
-          "videoSeconds": 34.717
+          "videoSeconds": 34.721
         },
         {
           "text": "Rechargeons la page :",
           "startMs": 10346,
           "endMs": 11227,
           "method": "silence",
-          "videoSeconds": 37.265
+          "videoSeconds": 37.269
         },
         {
           "text": "elle est toujours là.",
           "startMs": 11734,
           "endMs": 12310,
           "method": "silence",
-          "videoSeconds": 38.653
+          "videoSeconds": 38.657
         },
         {
           "text": "Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée.",
           "startMs": 12872,
           "endMs": 17479,
           "method": "silence",
-          "videoSeconds": 39.791
+          "videoSeconds": 39.795
         },
         {
           "text": "Le nombre d'inscriptions affichées décrit la liste filtrée, pas le nombre de personnes présentes.",
           "startMs": 17964,
           "endMs": 24667,
           "method": "silence",
-          "videoSeconds": 44.883
+          "videoSeconds": 44.887
         }
       ],
       "anchors": [
@@ -182,113 +182,113 @@
           "phrase": "La marque apparaît sur son inscription",
           "startMs": 7798,
           "endMs": 9591,
-          "cueMs": 34716
+          "cueMs": 34722
         },
         {
           "segmentId": "one",
           "phrase": "Rechargeons la page",
           "startMs": 10346,
           "endMs": 11227,
-          "cueMs": 37267
+          "cueMs": 37274
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 31094,
-          "relativeSeconds": 4.175
+          "atMs": 31114,
+          "relativeSeconds": 4.191
         },
         {
           "kind": "click",
-          "atMs": 35193,
-          "relativeSeconds": 8.274
+          "atMs": 35212,
+          "relativeSeconds": 8.289
         }
       ],
       "frames": [
         {
           "scene": "one",
-          "fraction": 0.02432300956705043,
-          "seconds": 27.519,
+          "fraction": 0.024323995621680788,
+          "seconds": 27.523,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-2.png"
         },
         {
           "scene": "one",
           "fraction": 0.25,
-          "seconds": 33.086,
+          "seconds": 33.08975,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-25.png"
         },
         {
           "scene": "one",
           "fraction": 0.45,
-          "seconds": 38.0196,
+          "seconds": 38.02315,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-45.png"
         },
         {
           "scene": "one",
           "fraction": 0.6,
-          "seconds": 41.719800000000006,
+          "seconds": 41.7232,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-60.png"
         },
         {
           "scene": "one",
           "fraction": 0.85,
-          "seconds": 47.8868,
+          "seconds": 47.88995,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-85.png"
         },
         {
           "scene": "one",
-          "fraction": 0.9878384952164748,
-          "seconds": 51.287,
+          "fraction": 0.9878380021891596,
+          "seconds": 51.29,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-end.png"
         }
       ]
     },
     {
       "chapter": "group",
-      "startSeconds": 53.851,
-      "endSeconds": 77.18,
+      "startSeconds": 53.853,
+      "endSeconds": 77.183,
       "sentences": [
         {
           "text": "Nicolas et Léa arrivent ensemble.",
           "startMs": 206,
           "endMs": 1802,
           "method": "silence",
-          "videoSeconds": 54.057
+          "videoSeconds": 54.059
         },
         {
           "text": "Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents.",
           "startMs": 2047,
           "endMs": 6568,
           "method": "silence",
-          "videoSeconds": 55.898
+          "videoSeconds": 55.9
         },
         {
           "text": "Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque.",
           "startMs": 7028,
           "endMs": 11184,
           "method": "silence",
-          "videoSeconds": 60.879
+          "videoSeconds": 60.881
         },
         {
           "text": "Une demande en attente de validation n'est pas une inscription confirmée à pointer.",
           "startMs": 11707,
           "endMs": 15839,
           "method": "silence",
-          "videoSeconds": 65.558
+          "videoSeconds": 65.56
         },
         {
           "text": "Ne la transformez pas en présence simplement pour compléter votre bilan :",
           "startMs": 16137,
           "endMs": 19716,
           "method": "silence",
-          "videoSeconds": 69.988
+          "videoSeconds": 69.99
         },
         {
           "text": "traitez d'abord sa demande selon les règles de l'événement.",
           "startMs": 19839,
           "endMs": 23183,
           "method": "silence",
-          "videoSeconds": 73.69
+          "videoSeconds": 73.692
         }
       ],
       "anchors": [
@@ -297,264 +297,264 @@
           "phrase": "Ne la transformez pas en",
           "startMs": 16137,
           "endMs": 19716,
-          "cueMs": 69989
+          "cueMs": 69991
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 57867,
-          "relativeSeconds": 4.016
+          "atMs": 57838,
+          "relativeSeconds": 3.985
         },
         {
           "kind": "click",
-          "atMs": 58675,
-          "relativeSeconds": 4.824
+          "atMs": 58620,
+          "relativeSeconds": 4.767
         },
         {
           "kind": "click",
-          "atMs": 63233,
-          "relativeSeconds": 9.382
+          "atMs": 63220,
+          "relativeSeconds": 9.367
         }
       ],
       "frames": [
         {
           "scene": "group",
-          "fraction": 0.025719062111535,
-          "seconds": 54.451,
+          "fraction": 0.02571795970852979,
+          "seconds": 54.453,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-3.png"
         },
         {
           "scene": "group",
           "fraction": 0.25,
-          "seconds": 59.68325,
+          "seconds": 59.6855,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-25.png"
         },
         {
           "scene": "group",
           "fraction": 0.45,
-          "seconds": 64.34905,
+          "seconds": 64.3515,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-45.png"
         },
         {
           "scene": "group",
           "fraction": 0.6,
-          "seconds": 67.8484,
+          "seconds": 67.851,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-60.png"
         },
         {
           "scene": "group",
           "fraction": 0.85,
-          "seconds": 73.68065,
+          "seconds": 73.6835,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-85.png"
         },
         {
           "scene": "group",
-          "fraction": 0.9871404689442325,
-          "seconds": 76.88,
+          "fraction": 0.9871410201457351,
+          "seconds": 76.883,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-end.png"
         }
       ]
     },
     {
       "chapter": "correction",
-      "startSeconds": 79.441,
-      "endSeconds": 102.006,
+      "startSeconds": 79.448,
+      "endSeconds": 102.013,
       "sentences": [
         {
           "text": "Vous avez pointé Léa par erreur ?",
           "startMs": 168,
           "endMs": 1584,
           "method": "silence",
-          "videoSeconds": 79.609
+          "videoSeconds": 79.616
         },
         {
           "text": "Sélectionnons sa ligne et annulons la présence.",
           "startMs": 2221,
           "endMs": 4695,
           "method": "silence",
-          "videoSeconds": 81.662
+          "videoSeconds": 81.669
         },
         {
           "text": "La marque disparaît, mais son inscription et sa place restent.",
           "startMs": 5109,
           "endMs": 8304,
           "method": "silence",
-          "videoSeconds": 84.55
+          "videoSeconds": 84.557
         },
         {
           "text": "Ce n'est pas la même action que retirer quelqu'un de son créneau.",
           "startMs": 8758,
           "endMs": 11268,
           "method": "silence",
-          "videoSeconds": 88.199
+          "videoSeconds": 88.206
         },
         {
           "text": "Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau.",
           "startMs": 11788,
           "endMs": 15218,
           "method": "silence",
-          "videoSeconds": 91.229
+          "videoSeconds": 91.236
         },
         {
           "text": "Relisez le nom et l'horaire avant chaque correction :",
           "startMs": 15723,
           "endMs": 18172,
           "method": "silence",
-          "videoSeconds": 95.164
+          "videoSeconds": 95.171
         },
         {
           "text": "c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
           "startMs": 18376,
           "endMs": 22391,
           "method": "silence",
-          "videoSeconds": 97.817
+          "videoSeconds": 97.824
         }
       ],
       "anchors": [
         {
           "segmentId": "correction",
-          "phrase": "La marque disparaît, mais son",
-          "startMs": 5109,
-          "endMs": 8304,
-          "cueMs": 84552
+          "phrase": "Sélectionnons sa ligne et annulons",
+          "startMs": 2221,
+          "endMs": 4695,
+          "cueMs": 81671
         },
         {
           "segmentId": "correction",
-          "phrase": "La marque disparaît, mais son",
-          "startMs": 5109,
-          "endMs": 8304,
-          "cueMs": 85360
+          "phrase": "Sélectionnons sa ligne et annulons",
+          "startMs": 2221,
+          "endMs": 4695,
+          "cueMs": 82465
         },
         {
           "segmentId": "correction",
-          "phrase": "Relisez le nom et l'horaire",
-          "startMs": 15723,
-          "endMs": 18172,
-          "cueMs": 95169
+          "phrase": "Quand la bonne personne arrive",
+          "startMs": 11788,
+          "endMs": 15218,
+          "cueMs": 91239
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 85054,
-          "relativeSeconds": 5.613
+          "atMs": 82159,
+          "relativeSeconds": 2.711
         },
         {
           "kind": "click",
-          "atMs": 85871,
-          "relativeSeconds": 6.43
+          "atMs": 82975,
+          "relativeSeconds": 3.527
         },
         {
           "kind": "click",
-          "atMs": 96823,
-          "relativeSeconds": 17.382
+          "atMs": 92870,
+          "relativeSeconds": 13.422
         },
         {
           "kind": "click",
-          "atMs": 97672,
-          "relativeSeconds": 18.231
+          "atMs": 93670,
+          "relativeSeconds": 14.222
         }
       ],
       "frames": [
         {
           "scene": "correction",
           "fraction": 0.026589851539995567,
-          "seconds": 80.041,
+          "seconds": 80.048,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-3.png"
         },
         {
           "scene": "correction",
           "fraction": 0.25,
-          "seconds": 85.08225,
+          "seconds": 85.08925,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-25.png"
         },
         {
           "scene": "correction",
           "fraction": 0.45,
-          "seconds": 89.59525,
+          "seconds": 89.60225,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-45.png"
         },
         {
           "scene": "correction",
           "fraction": 0.6,
-          "seconds": 92.98,
+          "seconds": 92.987,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-60.png"
         },
         {
           "scene": "correction",
           "fraction": 0.85,
-          "seconds": 98.62125,
+          "seconds": 98.62825,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-85.png"
         },
         {
           "scene": "correction",
           "fraction": 0.9867050742300022,
-          "seconds": 101.706,
+          "seconds": 101.713,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-end.png"
         }
       ]
     },
     {
       "chapter": "multiple",
-      "startSeconds": 104.269,
-      "endSeconds": 130.401,
+      "startSeconds": 104.274,
+      "endSeconds": 130.406,
       "sentences": [
         {
           "text": "Une personne peut aider sur plusieurs horaires.",
           "startMs": 207,
           "endMs": 2024,
           "method": "silence",
-          "videoSeconds": 104.476
+          "videoSeconds": 104.481
         },
         {
           "text": "Recherchons Léa pour retrouver ses deux inscriptions.",
           "startMs": 2422,
           "endMs": 6108,
           "method": "silence",
-          "videoSeconds": 106.691
+          "videoSeconds": 106.696
         },
         {
           "text": "Elle aide le matin, puis à la buvette.",
           "startMs": 6419,
           "endMs": 7256,
           "method": "silence",
-          "videoSeconds": 110.688
+          "videoSeconds": 110.693
         },
         {
           "text": "Le pointage concerne la ligne sélectionnée, pas toute sa journée.",
           "startMs": 7672,
           "endMs": 10901,
           "method": "silence",
-          "videoSeconds": 111.941
+          "videoSeconds": 111.946
         },
         {
           "text": "Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second.",
           "startMs": 11319,
           "endMs": 14118,
           "method": "silence",
-          "videoSeconds": 115.588
+          "videoSeconds": 115.593
         },
         {
           "text": "Regardons les deux lignes côte à côte :",
           "startMs": 14719,
           "endMs": 17846,
           "method": "silence",
-          "videoSeconds": 118.988
+          "videoSeconds": 118.993
         },
         {
           "text": "l'une est pointée et l'autre ne l'est pas.",
           "startMs": 18044,
           "endMs": 18915,
           "method": "silence",
-          "videoSeconds": 122.313
+          "videoSeconds": 122.318
         },
         {
           "text": "Vous gardez ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
           "startMs": 19575,
           "endMs": 25842,
           "method": "silence",
-          "videoSeconds": 123.844
+          "videoSeconds": 123.849
         }
       ],
       "anchors": [
@@ -563,258 +563,258 @@
           "phrase": "Recherchons Léa pour retrouver ses",
           "startMs": 2422,
           "endMs": 6108,
-          "cueMs": 106694
+          "cueMs": 106697
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 107175,
-          "relativeSeconds": 2.906
+          "atMs": 107176,
+          "relativeSeconds": 2.902
         },
         {
           "kind": "key",
-          "atMs": 107484,
-          "relativeSeconds": 3.215
+          "atMs": 107485,
+          "relativeSeconds": 3.211
         },
         {
           "kind": "key",
-          "atMs": 107553,
-          "relativeSeconds": 3.284
+          "atMs": 107555,
+          "relativeSeconds": 3.281
         },
         {
           "kind": "key",
-          "atMs": 107621,
-          "relativeSeconds": 3.352
+          "atMs": 107624,
+          "relativeSeconds": 3.35
         },
         {
           "kind": "key",
-          "atMs": 107690,
-          "relativeSeconds": 3.421
+          "atMs": 107692,
+          "relativeSeconds": 3.418
         },
         {
           "kind": "key",
-          "atMs": 107759,
-          "relativeSeconds": 3.49
+          "atMs": 107761,
+          "relativeSeconds": 3.487
         },
         {
           "kind": "key",
-          "atMs": 107827,
-          "relativeSeconds": 3.558
+          "atMs": 107829,
+          "relativeSeconds": 3.555
         },
         {
           "kind": "key",
           "atMs": 107896,
-          "relativeSeconds": 3.627
+          "relativeSeconds": 3.622
         },
         {
           "kind": "key",
           "atMs": 107965,
-          "relativeSeconds": 3.696
+          "relativeSeconds": 3.691
         },
         {
           "kind": "key",
-          "atMs": 108033,
-          "relativeSeconds": 3.764
+          "atMs": 108034,
+          "relativeSeconds": 3.76
         },
         {
           "kind": "key",
           "atMs": 108102,
-          "relativeSeconds": 3.833
+          "relativeSeconds": 3.828
         },
         {
           "kind": "key",
           "atMs": 108170,
-          "relativeSeconds": 3.901
+          "relativeSeconds": 3.896
         },
         {
           "kind": "key",
-          "atMs": 108239,
-          "relativeSeconds": 3.97
+          "atMs": 108238,
+          "relativeSeconds": 3.964
         },
         {
           "kind": "key",
-          "atMs": 108306,
-          "relativeSeconds": 4.037
+          "atMs": 108307,
+          "relativeSeconds": 4.033
         },
         {
           "kind": "key",
-          "atMs": 108375,
-          "relativeSeconds": 4.106
+          "atMs": 108376,
+          "relativeSeconds": 4.102
         },
         {
           "kind": "key",
-          "atMs": 108443,
-          "relativeSeconds": 4.174
+          "atMs": 108444,
+          "relativeSeconds": 4.17
         },
         {
           "kind": "key",
-          "atMs": 108511,
-          "relativeSeconds": 4.242
+          "atMs": 108512,
+          "relativeSeconds": 4.238
         },
         {
           "kind": "key",
-          "atMs": 108579,
-          "relativeSeconds": 4.31
+          "atMs": 108581,
+          "relativeSeconds": 4.307
         },
         {
           "kind": "key",
-          "atMs": 108647,
-          "relativeSeconds": 4.378
+          "atMs": 108649,
+          "relativeSeconds": 4.375
         },
         {
           "kind": "key",
-          "atMs": 108716,
-          "relativeSeconds": 4.447
+          "atMs": 108717,
+          "relativeSeconds": 4.443
         },
         {
           "kind": "key",
-          "atMs": 108783,
-          "relativeSeconds": 4.514
+          "atMs": 108786,
+          "relativeSeconds": 4.512
         },
         {
           "kind": "key",
-          "atMs": 108852,
-          "relativeSeconds": 4.583
+          "atMs": 108854,
+          "relativeSeconds": 4.58
         },
         {
           "kind": "key",
-          "atMs": 108920,
-          "relativeSeconds": 4.651
+          "atMs": 108922,
+          "relativeSeconds": 4.648
         },
         {
           "kind": "key",
-          "atMs": 108987,
-          "relativeSeconds": 4.718
+          "atMs": 108990,
+          "relativeSeconds": 4.716
         },
         {
           "kind": "key",
-          "atMs": 109055,
-          "relativeSeconds": 4.786
+          "atMs": 109059,
+          "relativeSeconds": 4.785
         },
         {
           "kind": "key",
-          "atMs": 109124,
-          "relativeSeconds": 4.855
+          "atMs": 109127,
+          "relativeSeconds": 4.853
         },
         {
           "kind": "key",
-          "atMs": 109192,
-          "relativeSeconds": 4.923
+          "atMs": 109194,
+          "relativeSeconds": 4.92
         },
         {
           "kind": "key",
-          "atMs": 109260,
-          "relativeSeconds": 4.991
+          "atMs": 109262,
+          "relativeSeconds": 4.988
         },
         {
           "kind": "key",
-          "atMs": 109327,
-          "relativeSeconds": 5.058
+          "atMs": 109330,
+          "relativeSeconds": 5.056
         },
         {
           "kind": "key",
-          "atMs": 109395,
-          "relativeSeconds": 5.126
+          "atMs": 109398,
+          "relativeSeconds": 5.124
         },
         {
           "kind": "key",
-          "atMs": 109463,
-          "relativeSeconds": 5.194
+          "atMs": 109466,
+          "relativeSeconds": 5.192
         }
       ],
       "frames": [
         {
           "scene": "multiple",
           "fraction": 0.022960355120159193,
-          "seconds": 104.869,
+          "seconds": 104.874,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-2.png"
         },
         {
           "scene": "multiple",
           "fraction": 0.25,
-          "seconds": 110.802,
+          "seconds": 110.807,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-25.png"
         },
         {
           "scene": "multiple",
           "fraction": 0.45,
-          "seconds": 116.02839999999999,
+          "seconds": 116.0334,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-45.png"
         },
         {
           "scene": "multiple",
           "fraction": 0.6,
-          "seconds": 119.9482,
+          "seconds": 119.9532,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-60.png"
         },
         {
           "scene": "multiple",
           "fraction": 0.85,
-          "seconds": 126.4812,
+          "seconds": 126.4862,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-85.png"
         },
         {
           "scene": "multiple",
           "fraction": 0.9885198224399204,
-          "seconds": 130.101,
+          "seconds": 130.106,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-end.png"
         }
       ]
     },
     {
       "chapter": "limits",
-      "startSeconds": 132.665,
-      "endSeconds": 157.046,
+      "startSeconds": 132.672,
+      "endSeconds": 157.053,
       "sentences": [
         {
           "text": "Le pointage enregistre une arrivée.",
           "startMs": 350,
           "endMs": 1995,
           "method": "silence",
-          "videoSeconds": 133.015
+          "videoSeconds": 133.022
         },
         {
           "text": "Il ne mesure pas l'heure de départ ni la durée réellement travaillée.",
           "startMs": 2401,
           "endMs": 5165,
           "method": "silence",
-          "videoSeconds": 135.066
+          "videoSeconds": 135.073
         },
         {
           "text": "Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux passés.",
           "startMs": 5607,
           "endMs": 10292,
           "method": "silence",
-          "videoSeconds": 138.272
+          "videoSeconds": 138.279
         },
         {
           "text": "Les heures attestées reprennent, parmi elles, les créneaux où une présence a été enregistrée.",
           "startMs": 10603,
           "endMs": 15378,
           "method": "silence",
-          "videoSeconds": 143.268
+          "videoSeconds": 143.275
         },
         {
           "text": "Ce ne sont donc pas des heures chronométrées.",
           "startMs": 15700,
           "endMs": 17564,
           "method": "silence",
-          "videoSeconds": 148.365
+          "videoSeconds": 148.372
         },
         {
           "text": "Une arrivée plus tardive n'est pas un calcul automatique du retard :",
           "startMs": 18133,
           "endMs": 21351,
           "method": "silence",
-          "videoSeconds": 150.798
+          "videoSeconds": 150.805
         },
         {
           "text": "gardez cette différence en tête quand vous lisez le bilan.",
           "startMs": 21650,
           "endMs": 23991,
           "method": "silence",
-          "videoSeconds": 154.315
+          "videoSeconds": 154.322
         }
       ],
       "anchors": [
@@ -823,136 +823,136 @@
           "phrase": "Il ne mesure pas l'heure",
           "startMs": 2401,
           "endMs": 5165,
-          "cueMs": 135067
+          "cueMs": 135074
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 146069,
-          "relativeSeconds": 13.404
+          "atMs": 146064,
+          "relativeSeconds": 13.392
         }
       ],
       "frames": [
         {
           "scene": "limits",
           "fraction": 0.02460932693490833,
-          "seconds": 133.265,
+          "seconds": 133.272,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-2.png"
         },
         {
           "scene": "limits",
           "fraction": 0.25,
-          "seconds": 138.76025,
+          "seconds": 138.76725,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-25.png"
         },
         {
           "scene": "limits",
           "fraction": 0.45,
-          "seconds": 143.63645000000002,
+          "seconds": 143.64345,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-45.png"
         },
         {
           "scene": "limits",
           "fraction": 0.6,
-          "seconds": 147.2936,
+          "seconds": 147.3006,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-60.png"
         },
         {
           "scene": "limits",
           "fraction": 0.85,
-          "seconds": 153.38885000000002,
+          "seconds": 153.39585,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-85.png"
         },
         {
           "scene": "limits",
           "fraction": 0.9876953365325458,
-          "seconds": 156.746,
+          "seconds": 156.753,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-end.png"
         }
       ]
     },
     {
       "chapter": "cancelled",
-      "startSeconds": 159.307,
-      "endSeconds": 197.217,
+      "startSeconds": 159.319,
+      "endSeconds": 197.23,
       "sentences": [
         {
           "text": "Un cas à regarder de près :",
           "startMs": 403,
           "endMs": 1886,
           "method": "silence",
-          "videoSeconds": 159.71
+          "videoSeconds": 159.722
         },
         {
           "text": "Sarah est arrivée, mais son créneau doit finalement être annulé.",
           "startMs": 2261,
           "endMs": 5221,
           "method": "silence",
-          "videoSeconds": 161.568
+          "videoSeconds": 161.58
         },
         {
           "text": "Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste.",
           "startMs": 5692,
           "endMs": 9516,
           "method": "silence",
-          "videoSeconds": 164.999
+          "videoSeconds": 165.011
         },
         {
           "text": "Lisons le récapitulatif et confirmons la suppression.",
           "startMs": 10165,
           "endMs": 13103,
           "method": "silence",
-          "videoSeconds": 169.472
+          "videoSeconds": 169.484
         },
         {
           "text": "Revenons aux inscriptions :",
           "startMs": 14103,
           "endMs": 15099,
           "method": "silence",
-          "videoSeconds": 173.41
+          "videoSeconds": 173.422
         },
         {
           "text": "sa ligne a disparu.",
           "startMs": 15267,
           "endMs": 15380,
           "method": "silence",
-          "videoSeconds": 174.574
+          "videoSeconds": 174.586
         },
         {
           "text": "Téléchargeons le fichier pour vérifier le bilan.",
           "startMs": 15640,
           "endMs": 19439,
           "method": "silence",
-          "videoSeconds": 174.947
+          "videoSeconds": 174.959
         },
         {
           "text": "Sarah n'y figure pas, car cet export ne retient que les inscriptions actives.",
           "startMs": 20181,
           "endMs": 24043,
           "method": "silence",
-          "videoSeconds": 179.488
+          "videoSeconds": 179.5
         },
         {
           "text": "Pourtant, le pointage enregistré avant l'annulation est conservé.",
           "startMs": 24481,
           "endMs": 27563,
           "method": "silence",
-          "videoSeconds": 183.788
+          "videoSeconds": 183.8
         },
         {
           "text": "Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé.",
           "startMs": 28256,
           "endMs": 31325,
           "method": "silence",
-          "videoSeconds": 187.563
+          "videoSeconds": 187.575
         },
         {
           "text": "Avant d'annuler un créneau déjà commencé, vérifiez avec l'organisation comment garder une trace utile.",
           "startMs": 32143,
           "endMs": 37465,
           "method": "silence",
-          "videoSeconds": 191.45
+          "videoSeconds": 191.462
         }
       ],
       "anchors": [
@@ -961,154 +961,154 @@
           "phrase": "Enregistrons d'abord sa présence, puis",
           "startMs": 5692,
           "endMs": 9516,
-          "cueMs": 165001
+          "cueMs": 165011
         },
         {
           "segmentId": "cancelled",
           "phrase": "Lisons le récapitulatif et confirmons",
           "startMs": 10165,
           "endMs": 13103,
-          "cueMs": 169474
+          "cueMs": 169484
         },
         {
           "segmentId": "cancelled",
           "phrase": "Revenons aux inscriptions ",
           "startMs": 14103,
           "endMs": 15099,
-          "cueMs": 173411
+          "cueMs": 173422
         },
         {
           "segmentId": "cancelled",
           "phrase": "sa ligne a disparu.",
           "startMs": 15267,
           "endMs": 15380,
-          "cueMs": 174576
+          "cueMs": 174587
         },
         {
           "segmentId": "cancelled",
           "phrase": "Sarah n'y figure pas, car",
           "startMs": 20181,
           "endMs": 24043,
-          "cueMs": 179497
+          "cueMs": 179500
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 166710,
-          "relativeSeconds": 7.403
+          "atMs": 166700,
+          "relativeSeconds": 7.381
         },
         {
           "kind": "click",
-          "atMs": 167494,
-          "relativeSeconds": 8.187
+          "atMs": 167482,
+          "relativeSeconds": 8.163
         },
         {
           "kind": "click",
-          "atMs": 171095,
-          "relativeSeconds": 11.788
+          "atMs": 171099,
+          "relativeSeconds": 11.78
         },
         {
           "kind": "click",
-          "atMs": 171894,
-          "relativeSeconds": 12.587
+          "atMs": 171882,
+          "relativeSeconds": 12.563
         },
         {
           "kind": "click",
-          "atMs": 173894,
-          "relativeSeconds": 14.587
+          "atMs": 173881,
+          "relativeSeconds": 14.562
         },
         {
           "kind": "click",
-          "atMs": 179970,
-          "relativeSeconds": 20.663
+          "atMs": 179971,
+          "relativeSeconds": 20.652
         }
       ],
       "frames": [
         {
           "scene": "cancelled",
-          "fraction": 0.015826958586125033,
-          "seconds": 159.907,
+          "fraction": 0.015826541109440533,
+          "seconds": 159.919,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-2.png"
         },
         {
           "scene": "cancelled",
           "fraction": 0.25,
-          "seconds": 168.7845,
+          "seconds": 168.79675,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-25.png"
         },
         {
           "scene": "cancelled",
           "fraction": 0.45,
-          "seconds": 176.3665,
+          "seconds": 176.37895,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-45.png"
         },
         {
           "scene": "cancelled",
           "fraction": 0.6,
-          "seconds": 182.053,
+          "seconds": 182.06560000000002,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-60.png"
         },
         {
           "scene": "cancelled",
           "fraction": 0.85,
-          "seconds": 191.5305,
+          "seconds": 191.54335,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-85.png"
         },
         {
           "scene": "cancelled",
-          "fraction": 0.9920865207069375,
-          "seconds": 196.917,
+          "fraction": 0.9920867294452798,
+          "seconds": 196.93,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-end.png"
         }
       ]
     },
     {
       "chapter": "export",
-      "startSeconds": 200.665,
-      "endSeconds": 224.729,
+      "startSeconds": 200.676,
+      "endSeconds": 224.741,
       "sentences": [
         {
           "text": "Téléchargeons maintenant le véritable export des présences.",
           "startMs": 447,
           "endMs": 3499,
           "method": "silence",
-          "videoSeconds": 201.112
+          "videoSeconds": 201.123
         },
         {
           "text": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le.",
           "startMs": 4124,
           "endMs": 9434,
           "method": "silence",
-          "videoSeconds": 204.789
+          "videoSeconds": 204.8
         },
         {
           "text": "Ce fichier ne calcule pas des heures réellement travaillées.",
           "startMs": 9736,
           "endMs": 13675,
           "method": "silence",
-          "videoSeconds": 210.401
+          "videoSeconds": 210.412
         },
         {
           "text": "Il peut aussi contenir des coordonnées et des réponses aux questions :",
           "startMs": 14267,
           "endMs": 16975,
           "method": "silence",
-          "videoSeconds": 214.932
+          "videoSeconds": 214.943
         },
         {
           "text": "partagez seulement ce qui est nécessaire.",
           "startMs": 17096,
           "endMs": 18970,
           "method": "silence",
-          "videoSeconds": 217.761
+          "videoSeconds": 217.772
         },
         {
           "text": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
           "startMs": 19715,
           "endMs": 23750,
           "method": "silence",
-          "videoSeconds": 220.38
+          "videoSeconds": 220.391
         }
       ],
       "anchors": [
@@ -1117,458 +1117,465 @@
           "phrase": "Téléchargeons maintenant le véritable export",
           "startMs": 447,
           "endMs": 3499,
-          "cueMs": 201114
+          "cueMs": 201124
         },
         {
           "segmentId": "export",
           "phrase": "Comparons une ligne pointée et",
           "startMs": 4124,
           "endMs": 9434,
-          "cueMs": 204790
+          "cueMs": 204800
         },
         {
           "segmentId": "export",
           "phrase": "partagez seulement ce qui est",
           "startMs": 17096,
           "endMs": 18970,
-          "cueMs": 217762
+          "cueMs": 217772
         },
         {
           "segmentId": "export",
           "phrase": "Voyons maintenant un écran plus",
           "startMs": 19715,
           "endMs": 23750,
-          "cueMs": 220382
+          "cueMs": 220392
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 201602,
-          "relativeSeconds": 0.937
+          "atMs": 201600,
+          "relativeSeconds": 0.924
         }
       ],
       "frames": [
         {
           "scene": "export",
-          "fraction": 0.024933510638297872,
-          "seconds": 201.265,
+          "fraction": 0.0249324745480989,
+          "seconds": 201.276,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-2.png"
         },
         {
           "scene": "export",
           "fraction": 0.25,
-          "seconds": 206.681,
+          "seconds": 206.69225,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-25.png"
         },
         {
           "scene": "export",
           "fraction": 0.45,
-          "seconds": 211.4938,
+          "seconds": 211.50525,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-45.png"
         },
         {
           "scene": "export",
           "fraction": 0.6,
-          "seconds": 215.1034,
+          "seconds": 215.115,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-60.png"
         },
         {
           "scene": "export",
           "fraction": 0.85,
-          "seconds": 221.11939999999998,
+          "seconds": 221.13125,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-85.png"
         },
         {
           "scene": "export",
-          "fraction": 0.987533244680851,
-          "seconds": 224.429,
+          "fraction": 0.9875337627259505,
+          "seconds": 224.441,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-window",
-      "startSeconds": 228.171,
-      "endSeconds": 256.813,
+      "startSeconds": 228.174,
+      "endSeconds": 256.817,
       "sentences": [
         {
           "text": "La page Jour J se concentre sur les personnes attendues maintenant.",
           "startMs": 321,
           "endMs": 3664,
           "method": "silence",
-          "videoSeconds": 228.492
+          "videoSeconds": 228.495
         },
         {
           "text": "La vue En cours regroupe les créneaux qui ont commencé, y compris une veille commencée hier et pas encore terminée.",
           "startMs": 4403,
           "endMs": 10347,
           "method": "silence",
-          "videoSeconds": 232.574
+          "videoSeconds": 232.577
         },
         {
           "text": "Dans les trois prochaines heures montre les prochaines relèves.",
           "startMs": 10980,
           "endMs": 13759,
           "method": "silence",
-          "videoSeconds": 239.151
+          "videoSeconds": 239.154
         },
         {
           "text": "Plus tôt aujourd'hui permet de retrouver les créneaux terminés, par exemple pour corriger une arrivée oubliée.",
           "startMs": 14352,
           "endMs": 20080,
           "method": "silence",
-          "videoSeconds": 242.523
+          "videoSeconds": 242.526
         },
         {
           "text": "Les horaires suivent le fuseau de l'organisation.",
           "startMs": 20247,
           "endMs": 22824,
           "method": "silence",
-          "videoSeconds": 248.418
+          "videoSeconds": 248.421
         },
         {
           "text": "Ici, nous montrons cette page dans une fenêtre de la taille d'un téléphone, pas sur un appareil physique.",
           "startMs": 23133,
           "endMs": 28492,
           "method": "silence",
-          "videoSeconds": 251.304
+          "videoSeconds": 251.307
         }
       ],
       "anchors": [
         {
           "segmentId": "dayof-window",
-          "phrase": "Dans les trois prochaines heures",
-          "startMs": 10980,
-          "endMs": 13759,
-          "cueMs": 239154
+          "phrase": "La vue En cours regroupe",
+          "startMs": 4403,
+          "endMs": 10347,
+          "cueMs": 232581
         },
         {
           "segmentId": "dayof-window",
-          "phrase": "Ici, nous montrons cette page",
-          "startMs": 23133,
-          "endMs": 28492,
-          "cueMs": 251305
+          "phrase": "Dans les trois prochaines heures",
+          "startMs": 10980,
+          "endMs": 13759,
+          "cueMs": 239156
+        },
+        {
+          "segmentId": "dayof-window",
+          "phrase": "Plus tôt aujourd'hui permet",
+          "startMs": 14352,
+          "endMs": 20080,
+          "cueMs": 242530
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 251776,
-          "relativeSeconds": 23.605
+          "atMs": 242995,
+          "relativeSeconds": 14.821
         }
       ],
       "frames": [
         {
           "scene": "dayof-window",
-          "fraction": 0.020948257803226032,
-          "seconds": 228.771,
+          "fraction": 0.020947526446252137,
+          "seconds": 228.774,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-2.png"
         },
         {
           "scene": "dayof-window",
           "fraction": 0.25,
-          "seconds": 235.3315,
+          "seconds": 235.33475,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-25.png"
         },
         {
           "scene": "dayof-window",
           "fraction": 0.45,
-          "seconds": 241.0599,
+          "seconds": 241.06335,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-45.png"
         },
         {
           "scene": "dayof-window",
           "fraction": 0.6,
-          "seconds": 245.3562,
+          "seconds": 245.35979999999998,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-60.png"
         },
         {
           "scene": "dayof-window",
           "fraction": 0.85,
-          "seconds": 252.51670000000001,
+          "seconds": 252.52055,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-85.png"
         },
         {
           "scene": "dayof-window",
-          "fraction": 0.989525871098387,
-          "seconds": 256.513,
+          "fraction": 0.9895262367768739,
+          "seconds": 256.517,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-search",
-      "startSeconds": 260.203,
-      "endSeconds": 283.526,
+      "startSeconds": 260.23,
+      "endSeconds": 283.554,
       "sentences": [
         {
           "text": "Vous cherchez Zoé ?",
           "startMs": 150,
           "endMs": 399,
           "method": "silence",
-          "videoSeconds": 260.353
+          "videoSeconds": 260.38
         },
         {
           "text": "Tapez son prénom sans accent :",
           "startMs": 842,
           "endMs": 3010,
           "method": "silence",
-          "videoSeconds": 261.045
+          "videoSeconds": 261.072
         },
         {
           "text": "sa ligne reste facile à retrouver.",
           "startMs": 3130,
           "endMs": 5628,
           "method": "silence",
-          "videoSeconds": 263.333
+          "videoSeconds": 263.36
         },
         {
           "text": "Vous pouvez aussi chercher un poste, comme Accueil.",
           "startMs": 5954,
           "endMs": 8879,
           "method": "silence",
-          "videoSeconds": 266.157
+          "videoSeconds": 266.184
         },
         {
           "text": "Les personnes de ce poste restent ensemble, ce qui aide à coordonner l'équipe.",
           "startMs": 9183,
           "endMs": 12944,
           "method": "silence",
-          "videoSeconds": 269.386
+          "videoSeconds": 269.413
         },
         {
           "text": "Effaçons la recherche pour retrouver le planning du moment.",
           "startMs": 13196,
           "endMs": 16036,
           "method": "silence",
-          "videoSeconds": 273.399
+          "videoSeconds": 273.426
         },
         {
           "text": "Cette page montre les inscriptions confirmées :",
           "startMs": 16529,
           "endMs": 19279,
           "method": "silence",
-          "videoSeconds": 276.732
+          "videoSeconds": 276.759
         },
         {
           "text": "une demande encore à valider n'est pas une personne attendue à pointer.",
           "startMs": 19680,
           "endMs": 23162,
           "method": "silence",
-          "videoSeconds": 279.883
+          "videoSeconds": 279.91
         }
       ],
       "anchors": [
         {
           "segmentId": "dayof-search",
-          "phrase": "Les personnes de ce poste",
-          "startMs": 9183,
-          "endMs": 12944,
-          "cueMs": 269389
+          "phrase": "Vous pouvez aussi chercher un poste",
+          "startMs": 5954,
+          "endMs": 8879,
+          "cueMs": 266185
         },
         {
           "segmentId": "dayof-search",
           "phrase": "Effaçons la recherche pour retrouver",
           "startMs": 13196,
           "endMs": 16036,
-          "cueMs": 273402
+          "cueMs": 273428
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 260745,
-          "relativeSeconds": 0.542
+          "atMs": 260752,
+          "relativeSeconds": 0.522
         },
         {
           "kind": "key",
-          "atMs": 261055,
-          "relativeSeconds": 0.852
+          "atMs": 261057,
+          "relativeSeconds": 0.827
         },
         {
           "kind": "key",
-          "atMs": 261152,
-          "relativeSeconds": 0.949
+          "atMs": 261155,
+          "relativeSeconds": 0.925
         },
         {
           "kind": "key",
-          "atMs": 261250,
-          "relativeSeconds": 1.047
+          "atMs": 261253,
+          "relativeSeconds": 1.023
         },
         {
           "kind": "click",
-          "atMs": 269875,
-          "relativeSeconds": 9.672
+          "atMs": 266650,
+          "relativeSeconds": 6.42
         },
         {
           "kind": "key",
-          "atMs": 270180,
-          "relativeSeconds": 9.977
+          "atMs": 266956,
+          "relativeSeconds": 6.726
         },
         {
           "kind": "key",
-          "atMs": 270180,
-          "relativeSeconds": 9.977
+          "atMs": 266957,
+          "relativeSeconds": 6.727
         },
         {
           "kind": "key",
-          "atMs": 270183,
-          "relativeSeconds": 9.98
+          "atMs": 266960,
+          "relativeSeconds": 6.73
         },
         {
           "kind": "click",
-          "atMs": 270725,
-          "relativeSeconds": 10.522
+          "atMs": 267500,
+          "relativeSeconds": 7.27
         },
         {
           "kind": "key",
-          "atMs": 271031,
-          "relativeSeconds": 10.828
+          "atMs": 267806,
+          "relativeSeconds": 7.576
         },
         {
           "kind": "key",
-          "atMs": 271128,
-          "relativeSeconds": 10.925
+          "atMs": 267903,
+          "relativeSeconds": 7.673
         },
         {
           "kind": "key",
-          "atMs": 271227,
-          "relativeSeconds": 11.024
+          "atMs": 268001,
+          "relativeSeconds": 7.771
         },
         {
           "kind": "key",
-          "atMs": 271324,
-          "relativeSeconds": 11.121
+          "atMs": 268098,
+          "relativeSeconds": 7.868
         },
         {
           "kind": "key",
-          "atMs": 271425,
-          "relativeSeconds": 11.222
+          "atMs": 268195,
+          "relativeSeconds": 7.965
         },
         {
           "kind": "key",
-          "atMs": 271527,
-          "relativeSeconds": 11.324
+          "atMs": 268293,
+          "relativeSeconds": 8.063
         },
         {
           "kind": "key",
-          "atMs": 271627,
-          "relativeSeconds": 11.424
+          "atMs": 268395,
+          "relativeSeconds": 8.165
         },
         {
           "kind": "click",
-          "atMs": 273891,
-          "relativeSeconds": 13.688
+          "atMs": 273901,
+          "relativeSeconds": 13.671
         },
         {
           "kind": "key",
-          "atMs": 274196,
-          "relativeSeconds": 13.993
+          "atMs": 274206,
+          "relativeSeconds": 13.976
         },
         {
           "kind": "key",
-          "atMs": 274196,
-          "relativeSeconds": 13.993
+          "atMs": 274207,
+          "relativeSeconds": 13.977
         },
         {
           "kind": "key",
-          "atMs": 274199,
-          "relativeSeconds": 13.996
+          "atMs": 274209,
+          "relativeSeconds": 13.979
         }
       ],
       "frames": [
         {
           "scene": "dayof-search",
-          "fraction": 0.02572567851477083,
-          "seconds": 260.803,
+          "fraction": 0.025724575544503515,
+          "seconds": 260.83,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-3.png"
         },
         {
           "scene": "dayof-search",
           "fraction": 0.25,
-          "seconds": 266.03375,
+          "seconds": 266.061,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-25.png"
         },
         {
           "scene": "dayof-search",
           "fraction": 0.45,
-          "seconds": 270.69835,
+          "seconds": 270.7258,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-45.png"
         },
         {
           "scene": "dayof-search",
           "fraction": 0.6,
-          "seconds": 274.1968,
+          "seconds": 274.2244,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-60.png"
         },
         {
           "scene": "dayof-search",
           "fraction": 0.85,
-          "seconds": 280.02754999999996,
+          "seconds": 280.0554,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-85.png"
         },
         {
           "scene": "dayof-search",
-          "fraction": 0.9871371607426146,
-          "seconds": 283.226,
+          "fraction": 0.9871377122277483,
+          "seconds": 283.254,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-phone",
-      "startSeconds": 285.787,
-      "endSeconds": 311.905,
+      "startSeconds": 285.814,
+      "endSeconds": 311.934,
       "sentences": [
         {
           "text": "Quand un téléphone est renseigné, un lien permet de préparer un appel à la personne concernée.",
           "startMs": 162,
           "endMs": 5334,
           "method": "silence",
-          "videoSeconds": 285.949
+          "videoSeconds": 285.976
         },
         {
           "text": "Voici celui de Zoé.",
           "startMs": 6051,
           "endMs": 6933,
           "method": "silence",
-          "videoSeconds": 291.838
+          "videoSeconds": 291.865
         },
         {
           "text": "Le contact du créneau peut aussi figurer sur sa carte.",
           "startMs": 7499,
           "endMs": 11063,
           "method": "silence",
-          "videoSeconds": 293.286
+          "videoSeconds": 293.313
         },
         {
           "text": "Nous montrons le lien, sans appeler qui que ce soit.",
           "startMs": 11341,
           "endMs": 13543,
           "method": "silence",
-          "videoSeconds": 297.128
+          "videoSeconds": 297.155
         },
         {
           "text": "Cette page garde seulement les informations utiles sur place :",
           "startMs": 13992,
           "endMs": 17596,
           "method": "silence",
-          "videoSeconds": 299.779
+          "videoSeconds": 299.806
         },
         {
           "text": "les noms, les horaires, le téléphone et la présence.",
           "startMs": 18062,
           "endMs": 20292,
           "method": "silence",
-          "videoSeconds": 303.849
+          "videoSeconds": 303.876
         },
         {
           "text": "Elle ne distribue pas les emails, les réponses aux questions ou les notes internes.",
           "startMs": 20421,
           "endMs": 25484,
           "method": "silence",
-          "videoSeconds": 306.208
+          "videoSeconds": 306.235
         }
       ],
       "anchors": [],
@@ -1576,197 +1583,197 @@
       "frames": [
         {
           "scene": "dayof-phone",
-          "fraction": 0.02297266253158741,
-          "seconds": 286.387,
+          "fraction": 0.022970903522205207,
+          "seconds": 286.414,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-2.png"
         },
         {
           "scene": "dayof-phone",
           "fraction": 0.25,
-          "seconds": 292.3165,
+          "seconds": 292.344,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-25.png"
         },
         {
           "scene": "dayof-phone",
           "fraction": 0.45,
-          "seconds": 297.5401,
+          "seconds": 297.568,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-45.png"
         },
         {
           "scene": "dayof-phone",
           "fraction": 0.6,
-          "seconds": 301.45779999999996,
+          "seconds": 301.486,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-60.png"
         },
         {
           "scene": "dayof-phone",
           "fraction": 0.85,
-          "seconds": 307.9873,
+          "seconds": 308.016,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-85.png"
         },
         {
           "scene": "dayof-phone",
-          "fraction": 0.9885136687342063,
-          "seconds": 311.605,
+          "fraction": 0.9885145482388974,
+          "seconds": 311.634,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-checkin",
-      "startSeconds": 314.163,
-      "endSeconds": 339.213,
+      "startSeconds": 314.194,
+      "endSeconds": 339.242,
       "sentences": [
         {
           "text": "Zoé arrive à l'accueil.",
           "startMs": 640,
           "endMs": 1810,
           "method": "silence",
-          "videoSeconds": 314.803
+          "videoSeconds": 314.834
         },
         {
           "text": "Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence.",
           "startMs": 2244,
           "endMs": 6796,
           "method": "silence",
-          "videoSeconds": 316.407
+          "videoSeconds": 316.438
         },
         {
           "text": "Rechargeons la page :",
           "startMs": 7004,
           "endMs": 8195,
           "method": "silence",
-          "videoSeconds": 321.167
+          "videoSeconds": 321.198
         },
         {
           "text": "la marque est conservée.",
           "startMs": 8734,
           "endMs": 9622,
           "method": "silence",
-          "videoSeconds": 322.897
+          "videoSeconds": 322.928
         },
         {
           "text": "C'est la même présence que depuis les inscriptions, pas un deuxième système de pointage.",
           "startMs": 10146,
           "endMs": 15746,
           "method": "silence",
-          "videoSeconds": 324.309
+          "videoSeconds": 324.34
         },
         {
           "text": "Si une personne aide sur plusieurs créneaux, son arrivée ici ne marque pas automatiquement tous les autres.",
           "startMs": 16074,
           "endMs": 21515,
           "method": "silence",
-          "videoSeconds": 330.237
+          "videoSeconds": 330.268
         },
         {
           "text": "Ce geste confirme une arrivée ;",
           "startMs": 21989,
           "endMs": 23288,
           "method": "silence",
-          "videoSeconds": 336.152
+          "videoSeconds": 336.183
         },
         {
           "text": "il ne démarre pas un chronomètre.",
           "startMs": 23484,
           "endMs": 24846,
           "method": "silence",
-          "videoSeconds": 337.647
+          "videoSeconds": 337.678
         }
       ],
       "anchors": [],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 317658,
-          "relativeSeconds": 3.495
+          "atMs": 317717,
+          "relativeSeconds": 3.523
         }
       ],
       "frames": [
         {
           "scene": "dayof-checkin",
-          "fraction": 0.023952095808383235,
-          "seconds": 314.763,
+          "fraction": 0.023954008304056213,
+          "seconds": 314.794,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-2.png"
         },
         {
           "scene": "dayof-checkin",
           "fraction": 0.25,
-          "seconds": 320.4255,
+          "seconds": 320.456,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-25.png"
         },
         {
           "scene": "dayof-checkin",
           "fraction": 0.45,
-          "seconds": 325.4355,
+          "seconds": 325.4656,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-45.png"
         },
         {
           "scene": "dayof-checkin",
           "fraction": 0.6,
-          "seconds": 329.193,
+          "seconds": 329.2228,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-60.png"
         },
         {
           "scene": "dayof-checkin",
           "fraction": 0.85,
-          "seconds": 335.4555,
+          "seconds": 335.4848,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-85.png"
         },
         {
           "scene": "dayof-checkin",
-          "fraction": 0.9880239520958084,
-          "seconds": 338.913,
+          "fraction": 0.9880229958479719,
+          "seconds": 338.942,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-refresh",
-      "startSeconds": 341.475,
-      "endSeconds": 366.619,
+      "startSeconds": 341.503,
+      "endSeconds": 366.646,
       "sentences": [
         {
           "text": "Avec Actualiser, vous récupérez les informations enregistrées sur le serveur.",
           "startMs": 213,
           "endMs": 5375,
           "method": "silence",
-          "videoSeconds": 341.688
+          "videoSeconds": 341.716
         },
         {
           "text": "La page indique l'heure de sa mise à jour.",
           "startMs": 5917,
           "endMs": 7694,
           "method": "silence",
-          "videoSeconds": 347.392
+          "videoSeconds": 347.42
         },
         {
           "text": "C'est utile quand plusieurs personnes accueillent les bénévoles avec des appareils différents.",
           "startMs": 7988,
           "endMs": 11678,
           "method": "silence",
-          "videoSeconds": 349.463
+          "videoSeconds": 349.491
         },
         {
           "text": "Dans cette démonstration, nous actualisons réellement la page ;",
           "startMs": 11990,
           "endMs": 15449,
           "method": "silence",
-          "videoSeconds": 353.465
+          "videoSeconds": 353.493
         },
         {
           "text": "nous ne prétendons pas qu'une autre personne vient de modifier une présence ailleurs.",
           "startMs": 15919,
           "endMs": 20003,
           "method": "silence",
-          "videoSeconds": 357.394
+          "videoSeconds": 357.422
         },
         {
           "text": "Relisez les noms et les compteurs avant d'agir, surtout quand une nouvelle relève arrive.",
           "startMs": 20282,
           "endMs": 24847,
           "method": "silence",
-          "videoSeconds": 361.757
+          "videoSeconds": 361.785
         }
       ],
       "anchors": [
@@ -1775,175 +1782,182 @@
           "phrase": "Dans cette démonstration, nous actualisons",
           "startMs": 11990,
           "endMs": 15449,
-          "cueMs": 353467
+          "cueMs": 353495
         },
         {
           "segmentId": "dayof-refresh",
           "phrase": "nous ne prétendons pas qu'une",
           "startMs": 15919,
           "endMs": 20003,
-          "cueMs": 357397
+          "cueMs": 357423
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 353972,
-          "relativeSeconds": 12.497
+          "atMs": 353971,
+          "relativeSeconds": 12.468
         }
       ],
       "frames": [
         {
           "scene": "dayof-refresh",
-          "fraction": 0.023862551702195353,
-          "seconds": 342.075,
+          "fraction": 0.023863500775563776,
+          "seconds": 342.103,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-2.png"
         },
         {
           "scene": "dayof-refresh",
           "fraction": 0.25,
-          "seconds": 347.761,
+          "seconds": 347.78875,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-25.png"
         },
         {
           "scene": "dayof-refresh",
           "fraction": 0.45,
-          "seconds": 352.7898,
+          "seconds": 352.81735,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-45.png"
         },
         {
           "scene": "dayof-refresh",
           "fraction": 0.6,
-          "seconds": 356.56140000000005,
+          "seconds": 356.5888,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-60.png"
         },
         {
           "scene": "dayof-refresh",
           "fraction": 0.85,
-          "seconds": 362.84740000000005,
+          "seconds": 362.87455,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-85.png"
         },
         {
           "scene": "dayof-refresh",
-          "fraction": 0.9880687241489023,
-          "seconds": 366.319,
+          "fraction": 0.9880682496122181,
+          "seconds": 366.346,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-end.png"
         }
       ]
     },
     {
       "chapter": "dayof-undo",
-      "startSeconds": 368.881,
-      "endSeconds": 395.826,
+      "startSeconds": 368.908,
+      "endSeconds": 395.852,
       "sentences": [
         {
           "text": "Une erreur de pointage ?",
           "startMs": 296,
           "endMs": 1730,
           "method": "silence",
-          "videoSeconds": 369.177
+          "videoSeconds": 369.204
         },
         {
           "text": "Annuler la présence retire la marque, pas l'inscription.",
           "startMs": 2288,
           "endMs": 5442,
           "method": "silence",
-          "videoSeconds": 371.169
+          "videoSeconds": 371.196
         },
         {
           "text": "Vérifions après rechargement :",
           "startMs": 5769,
           "endMs": 7550,
           "method": "silence",
-          "videoSeconds": 374.65
+          "videoSeconds": 374.677
         },
         {
           "text": "Zoé conserve sa place, et son arrivée n'est plus marquée.",
           "startMs": 7720,
           "endMs": 9627,
           "method": "silence",
-          "videoSeconds": 376.601
+          "videoSeconds": 376.628
         },
         {
           "text": "Vous pouvez recommencer lorsqu'elle sera vraiment là.",
           "startMs": 9918,
           "endMs": 13856,
           "method": "silence",
-          "videoSeconds": 378.799
+          "videoSeconds": 378.826
         },
         {
           "text": "Sur le terrain, le plus utile reste ce petit réflexe :",
           "startMs": 14562,
           "endMs": 17472,
           "method": "silence",
-          "videoSeconds": 383.443
+          "videoSeconds": 383.47
         },
         {
           "text": "vérifier la personne et le créneau, marquer une arrivée, et corriger sans désinscrire.",
           "startMs": 17804,
           "endMs": 22871,
           "method": "silence",
-          "videoSeconds": 386.685
+          "videoSeconds": 386.712
         },
         {
           "text": "Vous gardez ainsi un planning juste et une équipe accueillie sereinement.",
           "startMs": 23204,
           "endMs": 26635,
           "method": "silence",
-          "videoSeconds": 392.085
+          "videoSeconds": 392.112
         }
       ],
       "anchors": [
         {
           "segmentId": "dayof-undo",
-          "phrase": "Zoé conserve sa place, et",
-          "startMs": 7720,
-          "endMs": 9627,
-          "cueMs": 376603
+          "phrase": "Annuler la présence retire la marque",
+          "startMs": 2288,
+          "endMs": 5442,
+          "cueMs": 371197
+        },
+        {
+          "segmentId": "dayof-undo",
+          "phrase": "Vérifions après rechargement",
+          "startMs": 5769,
+          "endMs": 7550,
+          "cueMs": 374678
         }
       ],
       "interactions": [
         {
           "kind": "click",
-          "atMs": 369388,
-          "relativeSeconds": 0.507
+          "atMs": 371670,
+          "relativeSeconds": 2.762
         }
       ],
       "frames": [
         {
           "scene": "dayof-undo",
-          "fraction": 0.022267582111709035,
-          "seconds": 369.481,
+          "fraction": 0.022268408551068885,
+          "seconds": 369.508,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-2.png"
         },
         {
           "scene": "dayof-undo",
           "fraction": 0.25,
-          "seconds": 375.61725,
+          "seconds": 375.644,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-25.png"
         },
         {
           "scene": "dayof-undo",
           "fraction": 0.45,
-          "seconds": 381.00625,
+          "seconds": 381.0328,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-45.png"
         },
         {
           "scene": "dayof-undo",
           "fraction": 0.6,
-          "seconds": 385.048,
+          "seconds": 385.0744,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-60.png"
         },
         {
           "scene": "dayof-undo",
           "fraction": 0.85,
-          "seconds": 391.78425,
+          "seconds": 391.8104,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-85.png"
         },
         {
           "scene": "dayof-undo",
-          "fraction": 0.9888662089441455,
-          "seconds": 395.526,
+          "fraction": 0.9888657957244655,
+          "seconds": 395.552,
           "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-end.png"
         }
       ]

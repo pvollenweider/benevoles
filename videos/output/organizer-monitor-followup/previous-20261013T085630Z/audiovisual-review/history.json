@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:56:17.542Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "8c15d3068db5ed88469590a5cc56b77d2556be244e2beba7018aa3e77898eb3e",
+  "clipSha256": "bea0b67e7d4eda457ab986d7a6177290ecfe04b2adb0a5592e168e8e815ceda2",
+  "scene": "history",
+  "review": {
+    "heardOpening": "Enfin, le journal d'activité",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Enfin, le journal d’activité permet de comprendre ce qui a changé",
+        "visibleSeconds": 0,
+        "visible": "Page du journal d'activité avec les filtres de recherche et la liste chronologique des actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel",
+        "visibleSeconds": 3.6,
+        "visible": "Entrées du journal détaillant les modifications d'événements, inscriptions, annulations et ajouts manuels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Chaque action est datée, avec son origine",
+        "visibleSeconds": 9.3,
+        "visible": "Défilement de la liste montrant les dates, heures et mentions d'origine (formulaire, manuel)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Tu gardes ainsi le fil, même à plusieurs organisateurs",
+        "visibleSeconds": 12,
+        "visible": "Visualisation de l'historique complet impliquant plusieurs organisateurs (Colette Favre, Julien Favre, Camille Rochat)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement intelligible, bien calée sur la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

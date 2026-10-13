@@ -1,338 +1,338 @@
 WEBVTT
 
-00:00:00.209 --> 00:00:06.015
+00:00:00.215 --> 00:00:06.021
 Le jour J, savoir qui est arrivé aide à
 accueillir l'équipe et à repérer les
 
-00:00:06.015 --> 00:00:10.273
+00:00:06.021 --> 00:00:10.279
 absences. Ouvrons les inscriptions et
 choisissons l'accueil du matin avec les
 
-00:00:10.273 --> 00:00:14.918
+00:00:10.279 --> 00:00:14.924
 filtres. Chaque ligne correspond à une
 inscription sur un créneau. Être inscrit,
 
-00:00:14.918 --> 00:00:19.950
+00:00:14.924 --> 00:00:19.956
 c'est ce qui était prévu. Être marqué
 présent, c'est une autre information. Nous
 
-00:00:19.950 --> 00:00:24.595
+00:00:19.956 --> 00:00:24.601
 allons pointer une arrivée, corriger une
 erreur et regarder le bilan réel.
 
-00:00:26.919 --> 00:00:31.518
+00:00:26.923 --> 00:00:31.522
 Aline vient d'arriver. Sélectionnons
 uniquement sa ligne, puis lisons le nombre
 
-00:00:31.518 --> 00:00:36.535
+00:00:31.522 --> 00:00:36.539
 indiqué avant de marquer sa présence. La
 marque apparaît sur son inscription.
 
-00:00:36.535 --> 00:00:42.388
+00:00:36.539 --> 00:00:42.392
 Rechargeons la page : elle est toujours
 là. Ce contrôle évite de confondre une
 
-00:00:42.388 --> 00:00:46.569
+00:00:42.392 --> 00:00:46.573
 sélection à l'écran avec une donnée
 réellement enregistrée. Le nombre
 
-00:00:46.569 --> 00:00:51.168
+00:00:46.573 --> 00:00:51.172
 d'inscriptions affichées décrit la liste
 filtrée, pas le nombre de personnes
 
-00:00:51.168 --> 00:00:51.586
+00:00:51.172 --> 00:00:51.590
 présentes.
 
-00:00:53.851 --> 00:00:57.386
+00:00:53.853 --> 00:00:57.388
 Nicolas et Léa arrivent ensemble.
 Sélectionnons leurs deux lignes et
 
-00:00:57.386 --> 00:01:01.980
+00:00:57.388 --> 00:01:01.982
 vérifions le nombre avant de cliquer sur
 Marquer présents. Voici les deux marques,
 
-00:01:01.980 --> 00:01:06.575
+00:01:01.982 --> 00:01:06.577
 tandis qu'une personne pas encore arrivée
 reste sans marque. Une demande en attente
 
-00:01:06.575 --> 00:01:11.170
+00:01:06.577 --> 00:01:11.172
 de validation n'est pas une inscription
 confirmée à pointer. Ne la transformez pas
 
-00:01:11.170 --> 00:01:15.412
+00:01:11.172 --> 00:01:15.414
 en présence simplement pour compléter
 votre bilan : traitez d'abord sa demande
 
-00:01:15.412 --> 00:01:17.179
+00:01:15.414 --> 00:01:17.181
 selon les règles de l'événement.
 
-00:01:19.441 --> 00:01:23.755
+00:01:19.448 --> 00:01:23.762
 Vous avez pointé Léa par erreur ?
 Sélectionnons sa ligne et annulons la
 
-00:01:23.755 --> 00:01:28.068
+00:01:23.762 --> 00:01:28.075
 présence. La marque disparaît, mais son
 inscription et sa place restent. Ce n'est
 
-00:01:28.068 --> 00:01:32.714
+00:01:28.075 --> 00:01:32.721
 pas la même action que retirer quelqu'un
 de son créneau. Quand la bonne personne
 
-00:01:32.714 --> 00:01:36.696
+00:01:32.721 --> 00:01:36.703
 arrive, vous pouvez enregistrer sa
 présence à nouveau. Relisez le nom et
 
-00:01:36.696 --> 00:01:40.678
+00:01:36.703 --> 00:01:40.685
 l'horaire avant chaque correction : c'est
 plus simple que de reconstruire une
 
-00:01:40.678 --> 00:01:42.005
+00:01:40.685 --> 00:01:42.012
 inscription supprimée par mégarde.
 
-00:01:44.269 --> 00:01:47.907
+00:01:44.274 --> 00:01:47.912
 Une personne peut aider sur plusieurs
 horaires. Recherchons Léa pour retrouver
 
-00:01:47.907 --> 00:01:52.869
+00:01:47.912 --> 00:01:52.874
 ses deux inscriptions. Elle aide le matin,
 puis à la buvette. Le pointage concerne la
 
-00:01:52.869 --> 00:01:57.169
+00:01:52.874 --> 00:01:57.174
 ligne sélectionnée, pas toute sa journée.
 Sa présence au premier créneau ne prouve
 
-00:01:57.169 --> 00:02:01.799
+00:01:57.174 --> 00:02:01.804
 pas qu'elle est arrivée au second.
 Regardons les deux lignes côte à côte :
 
-00:02:01.799 --> 00:02:06.430
+00:02:01.804 --> 00:02:06.435
 l'une est pointée et l'autre ne l'est pas.
 Vous gardez ainsi une information utile
 
-00:02:06.430 --> 00:02:10.399
+00:02:06.435 --> 00:02:10.404
 pour chaque équipe, sans généraliser une
 seule arrivée à tous les postes.
 
-00:02:12.665 --> 00:02:17.477
+00:02:12.672 --> 00:02:17.484
 Le pointage enregistre une arrivée. Il ne
 mesure pas l'heure de départ ni la durée
 
-00:02:17.477 --> 00:02:21.005
+00:02:17.484 --> 00:02:21.012
 réellement travaillée. Dans la fiche
 membre, les heures planifiées restent les
 
-00:02:21.005 --> 00:02:24.534
+00:02:21.012 --> 00:02:24.541
 heures prévues par les créneaux passés.
 Les heures attestées reprennent, parmi
 
-00:02:24.534 --> 00:02:29.345
+00:02:24.541 --> 00:02:29.352
 elles, les créneaux où une présence a été
 enregistrée. Ce ne sont donc pas des
 
-00:02:29.345 --> 00:02:33.195
+00:02:29.352 --> 00:02:33.202
 heures chronométrées. Une arrivée plus
 tardive n'est pas un calcul automatique du
 
-00:02:33.195 --> 00:02:37.044
+00:02:33.202 --> 00:02:37.051
 retard : gardez cette différence en tête
 quand vous lisez le bilan.
 
-00:02:39.307 --> 00:02:45.051
+00:02:39.319 --> 00:02:45.063
 Un cas à regarder de près : Sarah est
 arrivée, mais son créneau doit finalement
 
-00:02:45.051 --> 00:02:49.646
+00:02:45.063 --> 00:02:49.658
 être annulé. Enregistrons d'abord sa
 présence, puis ouvrons son créneau dans la
 
-00:02:49.646 --> 00:02:53.475
+00:02:49.658 --> 00:02:53.487
 liste. Lisons le récapitulatif et
 confirmons la suppression. Revenons aux
 
-00:02:53.475 --> 00:02:58.070
+00:02:53.487 --> 00:02:58.082
 inscriptions : sa ligne a disparu.
 Téléchargeons le fichier pour vérifier le
 
-00:02:58.070 --> 00:03:03.048
+00:02:58.082 --> 00:03:03.060
 bilan. Sarah n'y figure pas, car cet
 export ne retient que les inscriptions
 
-00:03:03.048 --> 00:03:06.877
+00:03:03.060 --> 00:03:06.889
 actives. Pourtant, le pointage enregistré
 avant l'annulation est conservé. Ce
 
-00:03:06.877 --> 00:03:12.238
+00:03:06.889 --> 00:03:12.250
 fichier n'est donc pas un relevé complet
 de tout ce qui s'est passé. Avant
 
-00:03:12.238 --> 00:03:15.684
+00:03:12.250 --> 00:03:15.696
 d'annuler un créneau déjà commencé,
 vérifiez avec l'organisation comment
 
-00:03:15.684 --> 00:03:17.216
+00:03:15.696 --> 00:03:17.228
 garder une trace utile.
 
-00:03:20.665 --> 00:03:24.311
+00:03:20.676 --> 00:03:24.322
 Téléchargeons maintenant le véritable
 export des présences. Comparons une ligne
 
-00:03:24.311 --> 00:03:29.416
+00:03:24.322 --> 00:03:29.427
 pointée et une ligne non pointée, leurs
 créneaux et les colonnes Présent et Pointé
 
-00:03:29.416 --> 00:03:34.155
+00:03:29.427 --> 00:03:34.166
 le. Ce fichier ne calcule pas des heures
 réellement travaillées. Il peut aussi
 
-00:03:34.155 --> 00:03:38.895
+00:03:34.166 --> 00:03:38.906
 contenir des coordonnées et des réponses
 aux questions : partagez seulement ce qui
 
-00:03:38.895 --> 00:03:43.635
+00:03:38.906 --> 00:03:43.646
 est nécessaire. Voyons maintenant un écran
 plus simple à utiliser sur le terrain,
 
-00:03:43.635 --> 00:03:44.729
+00:03:43.646 --> 00:03:44.740
 depuis son téléphone.
 
-00:03:48.171 --> 00:03:53.121
+00:03:48.174 --> 00:03:53.124
 La page Jour J se concentre sur les
 personnes attendues maintenant. La vue En
 
-00:03:53.121 --> 00:03:57.365
+00:03:53.124 --> 00:03:57.368
 cours regroupe les créneaux qui ont
 commencé, y compris une veille commencée
 
-00:03:57.365 --> 00:04:01.608
+00:03:57.368 --> 00:04:01.611
 hier et pas encore terminée. Dans les
 trois prochaines heures montre les
 
-00:04:01.608 --> 00:04:05.498
+00:04:01.611 --> 00:04:05.501
 prochaines relèves. Plus tôt aujourd'hui
 permet de retrouver les créneaux terminés,
 
-00:04:05.498 --> 00:04:10.095
+00:04:05.501 --> 00:04:10.098
 par exemple pour corriger une arrivée
 oubliée. Les horaires suivent le fuseau de
 
-00:04:10.095 --> 00:04:14.691
+00:04:10.098 --> 00:04:14.694
 l'organisation. Ici, nous montrons cette
 page dans une fenêtre de la taille d'un
 
-00:04:14.691 --> 00:04:16.813
+00:04:14.694 --> 00:04:16.816
 téléphone, pas sur un appareil physique.
 
-00:04:20.203 --> 00:04:25.585
+00:04:20.230 --> 00:04:25.612
 Vous cherchez Zoé ? Tapez son prénom sans
 accent : sa ligne reste facile à
 
-00:04:25.585 --> 00:04:30.249
+00:04:25.612 --> 00:04:30.276
 retrouver. Vous pouvez aussi chercher un
 poste, comme Accueil. Les personnes de ce
 
-00:04:30.249 --> 00:04:34.555
+00:04:30.276 --> 00:04:34.582
 poste restent ensemble, ce qui aide à
 coordonner l'équipe. Effaçons la recherche
 
-00:04:34.555 --> 00:04:38.502
+00:04:34.582 --> 00:04:38.529
 pour retrouver le planning du moment.
 Cette page montre les inscriptions
 
-00:04:38.502 --> 00:04:43.525
+00:04:38.529 --> 00:04:43.552
 confirmées : une demande encore à valider
 n'est pas une personne attendue à pointer.
 
-00:04:45.787 --> 00:04:51.154
+00:04:45.814 --> 00:04:51.181
 Quand un téléphone est renseigné, un lien
 permet de préparer un appel à la personne
 
-00:04:51.154 --> 00:04:56.162
+00:04:51.181 --> 00:04:56.189
 concernée. Voici celui de Zoé. Le contact
 du créneau peut aussi figurer sur sa
 
-00:04:56.162 --> 00:05:01.171
+00:04:56.189 --> 00:05:01.198
 carte. Nous montrons le lien, sans appeler
 qui que ce soit. Cette page garde
 
-00:05:01.171 --> 00:05:05.464
+00:05:01.198 --> 00:05:05.491
 seulement les informations utiles sur
 place : les noms, les horaires, le
 
-00:05:05.464 --> 00:05:10.115
+00:05:05.491 --> 00:05:10.142
 téléphone et la présence. Elle ne
 distribue pas les emails, les réponses aux
 
-00:05:10.115 --> 00:05:11.904
+00:05:10.142 --> 00:05:11.931
 questions ou les notes internes.
 
-00:05:14.163 --> 00:05:18.815
+00:05:14.194 --> 00:05:18.846
 Zoé arrive à l'accueil. Marquer présent
 enregistre sa présence sur ce créneau, et
 
-00:05:18.815 --> 00:05:23.467
+00:05:18.846 --> 00:05:23.498
 le bouton devient Annuler la présence.
 Rechargeons la page : la marque est
 
-00:05:23.467 --> 00:05:27.760
+00:05:23.498 --> 00:05:27.791
 conservée. C'est la même présence que
 depuis les inscriptions, pas un deuxième
 
-00:05:27.760 --> 00:05:32.770
+00:05:27.791 --> 00:05:32.801
 système de pointage. Si une personne aide
 sur plusieurs créneaux, son arrivée ici ne
 
-00:05:32.770 --> 00:05:37.422
+00:05:32.801 --> 00:05:37.453
 marque pas automatiquement tous les
 autres. Ce geste confirme une arrivée ; il
 
-00:05:37.422 --> 00:05:39.211
+00:05:37.453 --> 00:05:39.242
 ne démarre pas un chronomètre.
 
-00:05:41.475 --> 00:05:45.228
+00:05:41.503 --> 00:05:45.256
 Avec Actualiser, vous récupérez les
 informations enregistrées sur le serveur.
 
-00:05:45.228 --> 00:05:50.481
+00:05:45.256 --> 00:05:50.509
 La page indique l'heure de sa mise à jour.
 C'est utile quand plusieurs personnes
 
-00:05:50.481 --> 00:05:53.858
+00:05:50.509 --> 00:05:53.886
 accueillent les bénévoles avec des
 appareils différents. Dans cette
 
-00:05:53.858 --> 00:05:58.361
+00:05:53.886 --> 00:05:58.389
 démonstration, nous actualisons réellement
 la page ; nous ne prétendons pas qu'une
 
-00:05:58.361 --> 00:06:03.240
+00:05:58.389 --> 00:06:03.268
 autre personne vient de modifier une
 présence ailleurs. Relisez les noms et les
 
-00:06:03.240 --> 00:06:06.617
+00:06:03.268 --> 00:06:06.645
 compteurs avant d'agir, surtout quand une
 nouvelle relève arrive.
 
-00:06:08.881 --> 00:06:13.567
+00:06:08.908 --> 00:06:13.594
 Une erreur de pointage ? Annuler la
 présence retire la marque, pas
 
-00:06:13.567 --> 00:06:17.472
+00:06:13.594 --> 00:06:17.499
 l'inscription. Vérifions après
 rechargement : Zoé conserve sa place, et
 
-00:06:17.472 --> 00:06:21.377
+00:06:17.499 --> 00:06:21.404
 son arrivée n'est plus marquée. Vous
 pouvez recommencer lorsqu'elle sera
 
-00:06:21.377 --> 00:06:27.234
+00:06:21.404 --> 00:06:27.261
 vraiment là. Sur le terrain, le plus utile
 reste ce petit réflexe : vérifier la
 
-00:06:27.234 --> 00:06:31.530
+00:06:27.261 --> 00:06:31.557
 personne et le créneau, marquer une
 arrivée, et corriger sans désinscrire.
 
-00:06:31.530 --> 00:06:35.825
+00:06:31.557 --> 00:06:35.852
 Vous gardez ainsi un planning juste et une
 équipe accueillie sereinement.
 

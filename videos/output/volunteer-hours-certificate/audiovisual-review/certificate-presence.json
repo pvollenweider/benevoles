@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:58:41.646Z",
-  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "reviewedAt": "2026-10-13T09:32:56.397Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
   "promptSha256": "8ff5fc319cdc1f59ac94e7ba0c460929c91b9e1f665a2675807b9bd19c6c7a07",
-  "clipSha256": "033c313a392911f2f9b19cf19a2a70f263ce311ed93e0c8267a134f9d8340836",
+  "clipSha256": "b43956d14f14ab4e5220f796cac75602405887a74863e4e9902ecf624fa2ad8a",
   "scene": "certificate-presence",
   "review": {
-    "heardOpening": "Par défaut, l'attestation met en avant",
+    "heardOpening": "Par défaut, l'attestation",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 2.2,
         "spoken": "Regardons cette colonne",
-        "visibleSeconds": 2.5,
-        "visible": "Affichage de la colonne 'Heures attestées' dans le tableau de l'attestation",
+        "visibleSeconds": 2.2,
+        "visible": "La colonne Heures attestées est visible sur l'attestation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 4.8,
         "spoken": "puis cochons Inclure les heures planifiées sans présence saisie",
-        "visibleSeconds": 5.4,
-        "visible": "La case à cocher 'Inclure les heures planifiées sans présence saisie' est cochée",
+        "visibleSeconds": 5,
+        "visible": "Remontée vers les réglages et case Inclure les heures planifiées sans présence saisie cochée",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,7 @@
         "spokenSeconds": 16.2,
         "spoken": "Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence",
         "visibleSeconds": 16.5,
-        "visible": "L'attestation mise à jour affiche le tableau avec 6 h attestées et 2 h planifiées sans présence",
+        "visible": "L'attestation affiche 6 h attestées et 2 h planifiées (sans présence)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,8 @@
+{
+  "previous": "videos/output/volunteer-hours-certificate/previous-20261013T075106Z",
+  "audioExisted": true,
+  "revalidatedEvidence": [
+    "audio-metadata.json",
+    "narration-audit.json"
+  ]
+}

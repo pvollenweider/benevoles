@@ -1,53 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:47:13.079Z",
-  "videoSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "reviewedAt": "2026-10-13T09:22:57.839Z",
+  "videoSha256": "ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9",
   "promptSha256": "7e715d81bf403b087d3ef974d3e4b183813501e0baef4e243c9f63164fda5736",
-  "clipSha256": "3044132ca01bf918da6b711f2b70c9886155324ca8b85723f6200bf0d54e8031",
+  "clipSha256": "a38d3c7c22da677e131da93a90a3d6116d3d86f757319bd4f78ee172b893fc7f",
   "scene": "correction",
   "review": {
-    "heardOpening": "Vous avez pointé Léa par erreur",
+    "heardOpening": "Vous avez pointé Léa par erreur ?",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 2,
         "spoken": "Sélectionnons sa ligne",
-        "visibleSeconds": 4.6,
-        "visible": "Coche de la ligne de Léa Exemple",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 3.7,
-        "spoken": "et annulons la présence",
-        "visibleSeconds": 6.1,
-        "visible": "Clic sur le bouton Annuler la présence",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 5.4,
-        "spoken": "La marque disparaît",
-        "visibleSeconds": 6.8,
-        "visible": "Disparition de la mention Présent et notification Présence annulée pour 1 personne",
+        "visibleSeconds": 2.1,
+        "visible": "La case à cocher de la ligne de Léa Exemple est sélectionnée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "vous pouvez enregistrer sa présence à nouveau",
-        "visibleSeconds": 17.5,
-        "visible": "Sélection d'un bénévole et pointage avec notification 1 personne marquée présente",
-        "sync": "late",
-        "severity": "minor"
+        "spokenSeconds": 3.1,
+        "spoken": "et annulons la présence",
+        "visibleSeconds": 3.5,
+        "visible": "Clic sur le bouton Annuler la présence dans la barre d'actions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "La marque disparaît, mais son inscription et sa place restent.",
+        "visibleSeconds": 4.5,
+        "visible": "La mention Présent disparaît de la ligne de Léa tandis que son inscription reste listée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "vous pouvez enregistrer sa présence à nouveau.",
+        "visibleSeconds": 13.5,
+        "visible": "La case de Noah est cochée et le bouton Marquer présent est cliqué",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "Léger décalage entre l'annonce de la sélection/annulation (00:02-00:04) et l'exécution à l'écran (00:05-00:06)."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, conforme au script."
+      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,514 @@
+{
+  "video": "attendance-check-in",
+  "source": "/private/tmp/codex-video/videos/output/attendance-check-in/attendance-check-in.mp4",
+  "sourceSha256": "fef188066db02c87faf6d4c230d747cea7b428ed674d2db993f3d35af8cb0a02",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-13T07:45:40.943Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.024603272235207283,
+      "seconds": 0.809,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-2.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 6.30575,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 11.18315,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 14.841199999999999,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 20.93795,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9876983638823964,
+      "seconds": 24.296,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.02432300956705043,
+      "seconds": 27.519,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-2.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.25,
+      "seconds": 33.086,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-25.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.45,
+      "seconds": 38.0196,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-45.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.6,
+      "seconds": 41.719800000000006,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-60.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.85,
+      "seconds": 47.8868,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-85.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.9878384952164748,
+      "seconds": 51.287,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/one-end.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.025719062111535,
+      "seconds": 54.451,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-3.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.25,
+      "seconds": 59.68325,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-25.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.45,
+      "seconds": 64.34905,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-45.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.6,
+      "seconds": 67.8484,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-60.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.85,
+      "seconds": 73.68065,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-85.png"
+    },
+    {
+      "scene": "group",
+      "fraction": 0.9871404689442325,
+      "seconds": 76.88,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/group-end.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.026589851539995567,
+      "seconds": 80.041,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-3.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.25,
+      "seconds": 85.08225,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-25.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.45,
+      "seconds": 89.59525,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-45.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.6,
+      "seconds": 92.98,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-60.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.85,
+      "seconds": 98.62125,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-85.png"
+    },
+    {
+      "scene": "correction",
+      "fraction": 0.9867050742300022,
+      "seconds": 101.706,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/correction-end.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.022960355120159193,
+      "seconds": 104.869,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-2.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.25,
+      "seconds": 110.802,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-25.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.45,
+      "seconds": 116.02839999999999,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-45.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.6,
+      "seconds": 119.9482,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-60.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.85,
+      "seconds": 126.4812,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-85.png"
+    },
+    {
+      "scene": "multiple",
+      "fraction": 0.9885198224399204,
+      "seconds": 130.101,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/multiple-end.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.02460932693490833,
+      "seconds": 133.265,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-2.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.25,
+      "seconds": 138.76025,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-25.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.45,
+      "seconds": 143.63645000000002,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-45.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.6,
+      "seconds": 147.2936,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-60.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.85,
+      "seconds": 153.38885000000002,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-85.png"
+    },
+    {
+      "scene": "limits",
+      "fraction": 0.9876953365325458,
+      "seconds": 156.746,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/limits-end.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.015826958586125033,
+      "seconds": 159.907,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-2.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.25,
+      "seconds": 168.7845,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-25.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.45,
+      "seconds": 176.3665,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-45.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.6,
+      "seconds": 182.053,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-60.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.85,
+      "seconds": 191.5305,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-85.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.9920865207069375,
+      "seconds": 196.917,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/cancelled-end.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.024933510638297872,
+      "seconds": 201.265,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-2.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.25,
+      "seconds": 206.681,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-25.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.45,
+      "seconds": 211.4938,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-45.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.6,
+      "seconds": 215.1034,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-60.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.85,
+      "seconds": 221.11939999999998,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-85.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.987533244680851,
+      "seconds": 224.429,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/export-end.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.020948257803226032,
+      "seconds": 228.771,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-2.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.25,
+      "seconds": 235.3315,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-25.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.45,
+      "seconds": 241.0599,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-45.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.6,
+      "seconds": 245.3562,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-60.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.85,
+      "seconds": 252.51670000000001,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-85.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.989525871098387,
+      "seconds": 256.513,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-window-end.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.02572567851477083,
+      "seconds": 260.803,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-3.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.25,
+      "seconds": 266.03375,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-25.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.45,
+      "seconds": 270.69835,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-45.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.6,
+      "seconds": 274.1968,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-60.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.85,
+      "seconds": 280.02754999999996,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-85.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.9871371607426146,
+      "seconds": 283.226,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-search-end.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.02297266253158741,
+      "seconds": 286.387,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-2.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.25,
+      "seconds": 292.3165,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-25.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.45,
+      "seconds": 297.5401,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-45.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.6,
+      "seconds": 301.45779999999996,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-60.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.85,
+      "seconds": 307.9873,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-85.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.9885136687342063,
+      "seconds": 311.605,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-phone-end.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.023952095808383235,
+      "seconds": 314.763,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-2.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.25,
+      "seconds": 320.4255,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-25.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.45,
+      "seconds": 325.4355,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-45.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.6,
+      "seconds": 329.193,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-60.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.85,
+      "seconds": 335.4555,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-85.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.9880239520958084,
+      "seconds": 338.913,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-checkin-end.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.023862551702195353,
+      "seconds": 342.075,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-2.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.25,
+      "seconds": 347.761,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-25.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.45,
+      "seconds": 352.7898,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-45.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.6,
+      "seconds": 356.56140000000005,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-60.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.85,
+      "seconds": 362.84740000000005,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-85.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.9880687241489023,
+      "seconds": 366.319,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-refresh-end.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.022267582111709035,
+      "seconds": 369.481,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-2.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.25,
+      "seconds": 375.61725,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-25.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.45,
+      "seconds": 381.00625,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-45.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.6,
+      "seconds": 385.048,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-60.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.85,
+      "seconds": 391.78425,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-85.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.9888662089441455,
+      "seconds": 395.526,
+      "file": "/private/tmp/codex-video/videos/output/attendance-check-in/review-frames/dayof-undo-end.png"
+    }
+  ]
+}

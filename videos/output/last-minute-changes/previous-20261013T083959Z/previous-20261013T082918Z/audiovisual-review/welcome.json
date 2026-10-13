@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:38:12.604Z",
+  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
+  "clipSha256": "744971a9d3273313076284ac583cbf24a2557dae1a564a02076c04764cc230ec",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un désistement, un horaire qui bouge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.9,
+        "spoken": "Un désistement, un horaire qui bouge",
+        "visibleSeconds": 1,
+        "visible": "Titre superposé « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Le plus important, c'est de vérifier les faits",
+        "visibleSeconds": 11.8,
+        "visible": "L'encadré central disparaît, révélant la page de l'événement « Fête des imprévus – démonstration »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 16,
+        "visible": "Vue d'ensemble de la page de gestion de l'événement en environnement de formation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, enregistrée sans bruit parasite ni rupture de ton."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

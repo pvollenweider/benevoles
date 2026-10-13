@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:52.182Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "badbab8fbf6b337d5cf5e6f376f1dc9f5d9f85e40ff6bc5d8807d1aa09daebd4",
+  "clipSha256": "92e06d0546894a3a8d61b3eb49750911561ccb2840fe661fc55b27f1de3eb197",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Tu peux partir d'un modèle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Tu peux partir d'un modèle, adapter l'objet et le texte",
+        "visibleSeconds": 1.2,
+        "visible": "Sélection et clic sur « Utiliser ce modèle », qui remplit automatiquement l'objet et le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "utiliser des variables comme le prénom ou les créneaux",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage des variables comme {prenom} dans le champ Message et explication sous le champ",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "ouvre l'aperçu",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur « Voir l'aperçu et envoyer » et apparition de la fenêtre modale « Aperçu de l'email »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "tu contrôles le rendu exact et le nombre de destinataires",
+        "visibleSeconds": 9,
+        "visible": "L'aperçu montre le rendu personnalisé avec le prénom et la mention « Envoyer l'email à 3 personnes »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

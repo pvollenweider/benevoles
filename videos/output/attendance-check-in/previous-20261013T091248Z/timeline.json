@@ -1,0 +1,584 @@
+{
+  "slug": "attendance-check-in",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-13T07:45:11.834Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
+    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
+    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
+    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+    "snapshot": "/tmp/benevoles-video-production.batch14resume",
+    "builtAt": "2026-10-13T04:30:00.658Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-jour-j",
+    "scenario": "ATTENDANCE_CHECK_IN",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7722
+    },
+    {
+      "kind": "click",
+      "atMs": 11322
+    },
+    {
+      "kind": "click",
+      "atMs": 12105
+    },
+    {
+      "kind": "click",
+      "atMs": 31094
+    },
+    {
+      "kind": "click",
+      "atMs": 35193
+    },
+    {
+      "kind": "click",
+      "atMs": 57867
+    },
+    {
+      "kind": "click",
+      "atMs": 58675
+    },
+    {
+      "kind": "click",
+      "atMs": 63233
+    },
+    {
+      "kind": "click",
+      "atMs": 85054
+    },
+    {
+      "kind": "click",
+      "atMs": 85871
+    },
+    {
+      "kind": "click",
+      "atMs": 96823
+    },
+    {
+      "kind": "click",
+      "atMs": 97672
+    },
+    {
+      "kind": "click",
+      "atMs": 107175
+    },
+    {
+      "kind": "key",
+      "atMs": 107484
+    },
+    {
+      "kind": "key",
+      "atMs": 107553
+    },
+    {
+      "kind": "key",
+      "atMs": 107621
+    },
+    {
+      "kind": "key",
+      "atMs": 107690
+    },
+    {
+      "kind": "key",
+      "atMs": 107759
+    },
+    {
+      "kind": "key",
+      "atMs": 107827
+    },
+    {
+      "kind": "key",
+      "atMs": 107896
+    },
+    {
+      "kind": "key",
+      "atMs": 107965
+    },
+    {
+      "kind": "key",
+      "atMs": 108033
+    },
+    {
+      "kind": "key",
+      "atMs": 108102
+    },
+    {
+      "kind": "key",
+      "atMs": 108170
+    },
+    {
+      "kind": "key",
+      "atMs": 108239
+    },
+    {
+      "kind": "key",
+      "atMs": 108306
+    },
+    {
+      "kind": "key",
+      "atMs": 108375
+    },
+    {
+      "kind": "key",
+      "atMs": 108443
+    },
+    {
+      "kind": "key",
+      "atMs": 108511
+    },
+    {
+      "kind": "key",
+      "atMs": 108579
+    },
+    {
+      "kind": "key",
+      "atMs": 108647
+    },
+    {
+      "kind": "key",
+      "atMs": 108716
+    },
+    {
+      "kind": "key",
+      "atMs": 108783
+    },
+    {
+      "kind": "key",
+      "atMs": 108852
+    },
+    {
+      "kind": "key",
+      "atMs": 108920
+    },
+    {
+      "kind": "key",
+      "atMs": 108987
+    },
+    {
+      "kind": "key",
+      "atMs": 109055
+    },
+    {
+      "kind": "key",
+      "atMs": 109124
+    },
+    {
+      "kind": "key",
+      "atMs": 109192
+    },
+    {
+      "kind": "key",
+      "atMs": 109260
+    },
+    {
+      "kind": "key",
+      "atMs": 109327
+    },
+    {
+      "kind": "key",
+      "atMs": 109395
+    },
+    {
+      "kind": "key",
+      "atMs": 109463
+    },
+    {
+      "kind": "click",
+      "atMs": 146069
+    },
+    {
+      "kind": "click",
+      "atMs": 166710
+    },
+    {
+      "kind": "click",
+      "atMs": 167494
+    },
+    {
+      "kind": "click",
+      "atMs": 171095
+    },
+    {
+      "kind": "click",
+      "atMs": 171894
+    },
+    {
+      "kind": "click",
+      "atMs": 173894
+    },
+    {
+      "kind": "click",
+      "atMs": 179970
+    },
+    {
+      "kind": "click",
+      "atMs": 201602
+    },
+    {
+      "kind": "click",
+      "atMs": 251776
+    },
+    {
+      "kind": "click",
+      "atMs": 260745
+    },
+    {
+      "kind": "key",
+      "atMs": 261055
+    },
+    {
+      "kind": "key",
+      "atMs": 261152
+    },
+    {
+      "kind": "key",
+      "atMs": 261250
+    },
+    {
+      "kind": "click",
+      "atMs": 269875
+    },
+    {
+      "kind": "key",
+      "atMs": 270180
+    },
+    {
+      "kind": "key",
+      "atMs": 270180
+    },
+    {
+      "kind": "key",
+      "atMs": 270183
+    },
+    {
+      "kind": "click",
+      "atMs": 270725
+    },
+    {
+      "kind": "key",
+      "atMs": 271031
+    },
+    {
+      "kind": "key",
+      "atMs": 271128
+    },
+    {
+      "kind": "key",
+      "atMs": 271227
+    },
+    {
+      "kind": "key",
+      "atMs": 271324
+    },
+    {
+      "kind": "key",
+      "atMs": 271425
+    },
+    {
+      "kind": "key",
+      "atMs": 271527
+    },
+    {
+      "kind": "key",
+      "atMs": 271627
+    },
+    {
+      "kind": "click",
+      "atMs": 273891
+    },
+    {
+      "kind": "key",
+      "atMs": 274196
+    },
+    {
+      "kind": "key",
+      "atMs": 274196
+    },
+    {
+      "kind": "key",
+      "atMs": 274199
+    },
+    {
+      "kind": "click",
+      "atMs": 317658
+    },
+    {
+      "kind": "click",
+      "atMs": 353972
+    },
+    {
+      "kind": "click",
+      "atMs": 369388
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 209,
+      "endMs": 24596
+    },
+    {
+      "id": "one",
+      "startMs": 26919,
+      "endMs": 51587
+    },
+    {
+      "id": "group",
+      "startMs": 53851,
+      "endMs": 77180
+    },
+    {
+      "id": "correction",
+      "startMs": 79441,
+      "endMs": 102006
+    },
+    {
+      "id": "multiple",
+      "startMs": 104269,
+      "endMs": 130401
+    },
+    {
+      "id": "limits",
+      "startMs": 132665,
+      "endMs": 157046
+    },
+    {
+      "id": "cancelled",
+      "startMs": 159307,
+      "endMs": 197217
+    },
+    {
+      "id": "export",
+      "startMs": 200665,
+      "endMs": 224729
+    },
+    {
+      "id": "dayof-window",
+      "startMs": 228171,
+      "endMs": 256813
+    },
+    {
+      "id": "dayof-search",
+      "startMs": 260203,
+      "endMs": 283526
+    },
+    {
+      "id": "dayof-phone",
+      "startMs": 285787,
+      "endMs": 311905
+    },
+    {
+      "id": "dayof-checkin",
+      "startMs": 314163,
+      "endMs": 339213
+    },
+    {
+      "id": "dayof-refresh",
+      "startMs": 341475,
+      "endMs": 366619
+    },
+    {
+      "id": "dayof-undo",
+      "startMs": 368881,
+      "endMs": 395826
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "welcome",
+      "phrase": "Ouvrons les inscriptions et choisissons",
+      "startMs": 5878,
+      "endMs": 10324,
+      "cueMs": 6087
+    },
+    {
+      "segmentId": "welcome",
+      "phrase": "Chaque ligne correspond à une",
+      "startMs": 10640,
+      "endMs": 13402,
+      "cueMs": 10854
+    },
+    {
+      "segmentId": "one",
+      "phrase": "La marque apparaît sur son inscription",
+      "startMs": 7798,
+      "endMs": 9591,
+      "cueMs": 34716
+    },
+    {
+      "segmentId": "one",
+      "phrase": "Rechargeons la page",
+      "startMs": 10346,
+      "endMs": 11227,
+      "cueMs": 37267
+    },
+    {
+      "segmentId": "group",
+      "phrase": "Ne la transformez pas en",
+      "startMs": 16137,
+      "endMs": 19716,
+      "cueMs": 69989
+    },
+    {
+      "segmentId": "correction",
+      "phrase": "La marque disparaît, mais son",
+      "startMs": 5109,
+      "endMs": 8304,
+      "cueMs": 84552
+    },
+    {
+      "segmentId": "correction",
+      "phrase": "La marque disparaît, mais son",
+      "startMs": 5109,
+      "endMs": 8304,
+      "cueMs": 85360
+    },
+    {
+      "segmentId": "correction",
+      "phrase": "Relisez le nom et l'horaire",
+      "startMs": 15723,
+      "endMs": 18172,
+      "cueMs": 95169
+    },
+    {
+      "segmentId": "multiple",
+      "phrase": "Recherchons Léa pour retrouver ses",
+      "startMs": 2422,
+      "endMs": 6108,
+      "cueMs": 106694
+    },
+    {
+      "segmentId": "limits",
+      "phrase": "Il ne mesure pas l'heure",
+      "startMs": 2401,
+      "endMs": 5165,
+      "cueMs": 135067
+    },
+    {
+      "segmentId": "cancelled",
+      "phrase": "Enregistrons d'abord sa présence, puis",
+      "startMs": 5692,
+      "endMs": 9516,
+      "cueMs": 165001
+    },
+    {
+      "segmentId": "cancelled",
+      "phrase": "Lisons le récapitulatif et confirmons",
+      "startMs": 10165,
+      "endMs": 13103,
+      "cueMs": 169474
+    },
+    {
+      "segmentId": "cancelled",
+      "phrase": "Revenons aux inscriptions ",
+      "startMs": 14103,
+      "endMs": 15099,
+      "cueMs": 173411
+    },
+    {
+      "segmentId": "cancelled",
+      "phrase": "sa ligne a disparu.",
+      "startMs": 15267,
+      "endMs": 15380,
+      "cueMs": 174576
+    },
+    {
+      "segmentId": "cancelled",
+      "phrase": "Sarah n'y figure pas, car",
+      "startMs": 20181,
+      "endMs": 24043,
+      "cueMs": 179497
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Téléchargeons maintenant le véritable export",
+      "startMs": 447,
+      "endMs": 3499,
+      "cueMs": 201114
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Comparons une ligne pointée et",
+      "startMs": 4124,
+      "endMs": 9434,
+      "cueMs": 204790
+    },
+    {
+      "segmentId": "export",
+      "phrase": "partagez seulement ce qui est",
+      "startMs": 17096,
+      "endMs": 18970,
+      "cueMs": 217762
+    },
+    {
+      "segmentId": "export",
+      "phrase": "Voyons maintenant un écran plus",
+      "startMs": 19715,
+      "endMs": 23750,
+      "cueMs": 220382
+    },
+    {
+      "segmentId": "dayof-window",
+      "phrase": "Dans les trois prochaines heures",
+      "startMs": 10980,
+      "endMs": 13759,
+      "cueMs": 239154
+    },
+    {
+      "segmentId": "dayof-window",
+      "phrase": "Ici, nous montrons cette page",
+      "startMs": 23133,
+      "endMs": 28492,
+      "cueMs": 251305
+    },
+    {
+      "segmentId": "dayof-search",
+      "phrase": "Les personnes de ce poste",
+      "startMs": 9183,
+      "endMs": 12944,
+      "cueMs": 269389
+    },
+    {
+      "segmentId": "dayof-search",
+      "phrase": "Effaçons la recherche pour retrouver",
+      "startMs": 13196,
+      "endMs": 16036,
+      "cueMs": 273402
+    },
+    {
+      "segmentId": "dayof-refresh",
+      "phrase": "Dans cette démonstration, nous actualisons",
+      "startMs": 11990,
+      "endMs": 15449,
+      "cueMs": 353467
+    },
+    {
+      "segmentId": "dayof-refresh",
+      "phrase": "nous ne prétendons pas qu'une",
+      "startMs": 15919,
+      "endMs": 20003,
+      "cueMs": 357397
+    },
+    {
+      "segmentId": "dayof-undo",
+      "phrase": "Zoé conserve sa place, et",
+      "startMs": 7720,
+      "endMs": 9627,
+      "cueMs": 376603
+    }
+  ]
+}

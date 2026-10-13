@@ -1,7 +1,7 @@
 {
-  "observedAt": "2026-10-13T07:42:46.235Z",
+  "observedAt": "2026-10-13T09:18:22.318Z",
   "chapter": "dayof-window",
-  "productCommit": "7e0069bba916e06d82b7009efff283aeface6afc",
+  "productCommit": "39b375b9ede4d3a0081fbce1f964e4b79549a7c9",
   "observed": {
     "actualServerTime": true,
     "fourTemporalCasesVisible": true,

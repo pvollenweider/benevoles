@@ -17,7 +17,7 @@
   },
   {
     "chapter": "filters",
-    "exitCode": 0
+    "exitCode": 1
   },
   {
     "chapter": "actions",
@@ -25,7 +25,7 @@
   },
   {
     "chapter": "audience",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "message",

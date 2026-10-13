@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:39:26.675Z",
+  "videoSha256": "2eb4cb358540f64d97e634a756145ea4060ead03274f2aba0fe8a0d1ec6ed7f9",
+  "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
+  "clipSha256": "f03e04df22faffa93dde050c30465cf211f03e8665b80b7eaaed0252a74f1f98",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Une mission n'a plus lieu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+        "visibleSeconds": 10,
+        "visible": "Clic sur Supprimer pour la ligne Caisse et ouverture de la fenêtre modale de confirmation avec les conséquences listées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Après confirmation, les inscriptions concernées sont annulées",
+        "visibleSeconds": 12,
+        "visible": "Validation par clic sur Supprimer dans la modale, le créneau Caisse est retiré de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "Vérifions le statut, puis le vrai email reçu.",
+        "visibleSeconds": 21.5,
+        "visible": "Basculement vers la boîte de réception Mailpit affichant l'email de notification d'annulation pour Lucas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Si des présences ont déjà été enregistrées, elles ne doivent pas être effacées",
+        "visibleSeconds": 28.5,
+        "visible": "Affichage de la page Inscriptions avec la liste des bénévoles et statuts",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

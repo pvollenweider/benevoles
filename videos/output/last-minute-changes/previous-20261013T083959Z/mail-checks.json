@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-10-13T08:37:14.459Z",
+  "scope": "actual local SMTP inbox and outbox; not proof of reading by a person or audiovisual validation",
+  "messages": [
+    {
+      "kind": "waitlist_offered",
+      "mailId": "71PcCKU4C9Pc7mG0eMqsMk",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "registration_cancelled",
+      "mailId": "1HHBBUvugZQ7HQBtdi4ivy",
+      "recipient": "video.last-minute.owner@example.org"
+    },
+    {
+      "kind": "registration_withdrawn",
+      "mailId": "2LiOSl0IedasGVyZqidN94",
+      "recipient": "video.last-minute.person.0@example.org"
+    },
+    {
+      "kind": "registration_confirmation",
+      "mailId": "4RczmI1hSSMV1uaaIVXFo3",
+      "recipient": "video.last-minute.person.1@example.org"
+    },
+    {
+      "kind": "targeted_message",
+      "mailId": "2RgitncZDpsNYgHIbiyx2n",
+      "recipient": "video.last-minute.person.3@example.org"
+    },
+    {
+      "kind": "registration_added_by_organizer",
+      "mailId": "3VAHlpEsd9iXxCVscrwbro",
+      "recipient": "video.last-minute.person.2@example.org"
+    },
+    {
+      "kind": "shift_modified",
+      "mailId": "42qobRRhaaSLJqx7CFLKl1",
+      "recipient": "video.last-minute.person.4@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "5lUxHHQSKmtsuHoRVSu7N2",
+      "recipient": "video.last-minute.person.0@example.org"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "6cmuo3wmyRvGUCyYenkUlm",
+      "recipient": "video.last-minute.person.5@example.org"
+    }
+  ],
+  "suppressed": [],
+  "allNotificationsDelivered": true,
+  "schedulePendingExcluded": true,
+  "activeAndRequestedCancellationDelivered": true
+}

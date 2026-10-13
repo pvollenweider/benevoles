@@ -1,0 +1,23 @@
+STATUS: NOT READY
+ID: LAST_MINUTE_CHANGES
+Duration: 354.12
+BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
+Commit: 7e0069bba916e06d82b7009efff283aeface6afc
+Music: {'voicedWindows': 321, 'musicOnlyWindows': 1, 'smallestGapLu': 13.9, 'largestGapLu': 19.6, 'quietestMusicOnlyLufs': -33, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.3}
+Problems: Withdrawal admin navigation 5 s late; schedule return 4.5 s late. Final-MP4 ASR repeatedly returned empty schedule response. Seven emails verified; withdrawal receipt/acceptance confirmation suppressed by local recipient limit. Result Nicolas transiently off screen; Mailpit English dates nit.
+Source changes: Withdrawal dialog/confirm/admin navigation moved to their respective sentence anchors; planning return anchored to Un email envoyé ne prouve. Mail evidence guard supports real organiser digest and explicitly records suppressed notifications. No re-film after review; no src changes.
+Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
+Real-time subjective listening unavailable; never used as a NOT READY reason.
+Subtitles match manifest text exactly: False
+MP4 frame evidence SHA256: 3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf
+All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
+welcome: 1.335–31.995 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+withdrawal: 34.256–65.539 s; review/withdrawal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ["00:10 - 00:15 : La voix annonce le retour aux inscriptions côté organisation et commente le statut de confirmation active dès 00:13, mais l'ancien écran reste affiché jusqu'à 00:15.6 (retard supérieur à 2 secondes)."]
+offer: 67.812–94.342 s; review/offer-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+coverage: 96.604–126.656 s; review/coverage-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+availability: 128.92–158.372 s; review/availability-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+message: 160.636–221.535 s; review/message-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 7; reported issues []
+schedule: 223.803–254.288 s; review/schedule-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["À 00:21, la voix demande de revenir au planning, mais l'écran de messagerie reste affiché jusqu'à 00:25,5 avant la transition."]
+cancel: 256.551–289.827 s; review/cancel-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+journal: 292.097–321.278 s; review/journal-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+result: 323.54–351.582 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues ["À 00:05, lors de la mention de Nicolas ayant accepté sa place, son nom n'apparaît pas dans la portion visible de la liste des inscriptions."]

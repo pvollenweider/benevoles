@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:58:25.607Z",
-  "videoSha256": "0423fa39f77fad9f1e3965f637c1c284cfea9e079b989f5f6f4cbd5b3d859a93",
+  "reviewedAt": "2026-10-13T09:32:37.043Z",
+  "videoSha256": "e3733ff31b87ca607c4506bbb69edea10c1addb06cf35d61db4f2ee1fcca595f",
   "promptSha256": "5fc27af0b5d55ce93ab274ba670ca1fe150acca42c95e9379a929b6ef87434ca",
-  "clipSha256": "893bbefe70e419b05a97367d6f45d060f2b1018b5ca21461699e4612011e7b06",
+  "clipSha256": "c50768419b283fafd9f32a447e8a003e13218d9fec0479e006d7d81cdfc8dd97",
   "scene": "activity",
   "review": {
     "heardOpening": "Ouvrons l'activité d'Aline",
     "checkpoints": [
       {
         "spokenSeconds": 0,
-        "spoken": "Ouvrons l'activité d'Aline.",
+        "spoken": "Ouvrons l'activité d'Aline",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page de l'historique d'activité d'Aline",
+        "visible": "Transition de la liste des membres vers le journal d'activité détaillé d'Aline Mercier",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné.",
+        "spokenSeconds": 2.5,
+        "spoken": "Vous retrouvez les faits enregistrés, leur date et l'événement concerné",
         "visibleSeconds": 2.5,
-        "visible": "Lignes de journal affichant le statut, l'horodatage et le nom de l'événement",
+        "visible": "Affichage des lignes d'historique avec le statut (Inscrit, Présent...), la date/heure d'enregistrement et le lien vers l'événement",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,7 @@
         "spokenSeconds": 11,
         "spoken": "Ce journal ne mesure pas le temps réellement travaillé",
         "visibleSeconds": 11,
-        "visible": "Écran stable de l'activité détaillant les inscriptions et présences",
+        "visible": "Vue stable sur le journal d'activité illustrant les enregistrements déclaratifs",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien articulée, synchronisation naturelle avec l'affichage."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

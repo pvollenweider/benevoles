@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:47:38.678Z",
-  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "reviewedAt": "2026-10-13T09:02:05.430Z",
+  "videoSha256": "e95b6330bfa4d65a8cd07337a9987c345670dba138dd654c2dcb122f6cd6fcfb",
   "promptSha256": "67249a53090f1ba24c16e2770966dc43f1111b065616ae6dd817cf824b00608a",
-  "clipSha256": "59570166ee5fe163848f7a6dabe43eed20f33299834e4cb37253b39b8a16fd46",
+  "clipSha256": "dd7800b97b3dbfb4422f0dfd4b37201e4b1239f0ab8223c050f7b7360116ec8d",
   "scene": "done",
   "review": {
-    "heardOpening": "Le résultat, c'est un suivi simple",
+    "heardOpening": "Le résultat, c’est un suivi simple",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.6,
         "spoken": "Le résultat, c'est un suivi simple",
         "visibleSeconds": 0,
-        "visible": "Encart de titre « Un suivi clair jusqu'au jour J - Voir, cibler, préparer » affiché au centre",
+        "visible": "Cartouche affichant 'Un suivi clair jusqu'au jour J - Voir, cibler, préparer'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.1,
+        "spokenSeconds": 3.2,
+        "spoken": "voir les manques, contacter les bonnes personnes",
+        "visibleSeconds": 2.6,
+        "visible": "Disparition du cartouche et affichage de la liste de l'historique d'activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
         "spoken": "retrouver l'historique sans jongler entre plusieurs outils",
-        "visibleSeconds": 2.7,
-        "visible": "L'encart disparaît pour révéler le journal chronologique complet des actions et inscriptions",
+        "visibleSeconds": 6,
+        "visible": "Vue détaillée du journal d'inscriptions et créneaux (historique)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 8.7,
         "spoken": "Ton planning reste lisible jusqu'au jour de l'événement",
-        "visibleSeconds": 9.2,
-        "visible": "Vue d'ensemble stable du flux d'activité et des inscriptions",
+        "visibleSeconds": 8.7,
+        "visible": "Écran récapitulatif stable en conclusion",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec l'animation visuelle."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

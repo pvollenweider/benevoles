@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:55:38.594Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "7c9bcf4e8824956a89a4a51eeb6f5216a8a4e8b138f8f6309724c7623f10e155",
+  "clipSha256": "5831a94bf7def7a1ca95f1b6c29b492f6baa1af5aa004e032d40d8042936f02d",
+  "scene": "actions",
+  "review": {
+    "heardOpening": "Tu peux agir sur une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Tu peux agir sur une inscription",
+        "visibleSeconds": 0.8,
+        "visible": "Cochage d'une première inscription (Camille Rochat) et apparition des actions contextuelles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "par exemple renvoyer son lien personnel",
+        "visibleSeconds": 2.2,
+        "visible": "Le bouton 'Renvoyer le lien' est affiché dans la barre d'action",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ou sélectionner plusieurs lignes pour appliquer une action groupée",
+        "visibleSeconds": 5.6,
+        "visible": "Sélection d'une deuxième ligne et passage du compteur à '2 sélectionnées' avec actions groupées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Les liens restent individuels",
+        "visibleSeconds": 9.5,
+        "visible": "Clic sur 'Désélectionner' pour réinitialiser la sélection",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée, en parfait accord avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

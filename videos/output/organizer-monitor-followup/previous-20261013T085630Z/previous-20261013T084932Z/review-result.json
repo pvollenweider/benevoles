@@ -1,0 +1,17 @@
+{
+  "id": "REGISTRATION_MONITOR_FOLLOWUP",
+  "status": "NOT READY",
+  "duration": 191.28,
+  "buildId": "B8kWoz3CnvzJpJCwHaAPH",
+  "music": {
+    "voicedWindows": 161,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.3
+  },
+  "problems": "Shift/status filters now demonstrated. Audience waitlist click ~2 s late; invited-audience click ~3.5 s late. All technical, final narration, music and other chapter checks pass.",
+  "sourceChanges": "Visible-option selector repaired during rehearsal. Remaining audience cues converted to sentence anchors; no third narrated take."
+}

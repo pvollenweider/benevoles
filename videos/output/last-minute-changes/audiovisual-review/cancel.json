@@ -1,43 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T06:38:48.797Z",
-  "videoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "reviewedAt": "2026-10-13T08:48:23.751Z",
+  "videoSha256": "14e7f8175cc5134c3b41c6d5f33b796fe96e06dd65ec4981e8d6d106d9bbc3a3",
   "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
-  "clipSha256": "dae9d765851056decb45d727ab646b45a19b1c8b04c744e274f65e70796c9bc1",
+  "clipSha256": "08bca44ee4cd0a568f62feb886e88ef0c46dbb1b2e1c46a7894520d8bac1b906",
   "scene": "cancel",
   "review": {
     "heardOpening": "Une mission n'a plus lieu",
     "checkpoints": [
       {
-        "spokenSeconds": 6.5,
+        "spokenSeconds": 6.3,
         "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
         "visibleSeconds": 10,
-        "visible": "Affichage de la modale de confirmation détaillant l'annulation et l'envoi de l'email",
+        "visible": "Clic sur Supprimer et ouverture de la fenêtre modale de confirmation détaillant les conséquences",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Après confirmation, les inscriptions concernées sont annulées et les personnes sont prévenues.",
+        "visibleSeconds": 12.4,
+        "visible": "Clic sur le bouton Supprimer dans la modale, qui se ferme ensuite",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "Après confirmation, les inscriptions concernées sont annulées",
-        "visibleSeconds": 12.5,
-        "visible": "Validation de la suppression et retrait du créneau de la liste",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 20,
+        "spokenSeconds": 20.3,
         "spoken": "Vérifions le statut, puis le vrai email reçu.",
-        "visibleSeconds": 21.5,
-        "visible": "Affichage dans Mailpit de l'email informant de l'annulation du créneau",
+        "visibleSeconds": 21.3,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail d'annulation du créneau",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:06 - 00:10 : L'ouverture de la modale de confirmation intervient avec environ 3 à 4 secondes de décalage par rapport à l'annonce vocale."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

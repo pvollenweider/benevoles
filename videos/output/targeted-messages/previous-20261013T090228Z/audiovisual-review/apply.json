@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:27:50.322Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "f0bf28942702ed3bb7d2de52c8f7f6e91f1144fec4bedf584c13bf9320123a87",
+  "clipSha256": "ee23a1aba8af349c89d43dcb37c3fdd02b0f066dc11e779bfb92a6061429cd37",
+  "scene": "apply",
+  "review": {
+    "heardOpening": "De retour dans le message, voici une première version",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "voici une première version écrite à la main",
+        "visibleSeconds": 2,
+        "visible": "Saisie manuelle du texte dans le champ Objet puis dans le champ Message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "il faut cliquer sur Utiliser ce modèle",
+        "visibleSeconds": 8,
+        "visible": "Clic sur le bouton Utiliser ce modèle après avoir sélectionné Briefing avant le créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Rétablir le texte précédent récupère votre version",
+        "visibleSeconds": 13,
+        "visible": "Clic sur Rétablir le texte précédent et réapparition immédiate du texte saisi manuellement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "puis choisissons un créneau pour que toutes ses variables puissent être remplacées",
+        "visibleSeconds": 18,
+        "visible": "Sélection du bouton radio Les bénévoles d'un créneau et choix d'un créneau dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

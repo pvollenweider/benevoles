@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:28:13.327Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "0a19b0f6ba2a2e13d97068c778d9e6a037b15772ab183b12a1cf2cdb468f2755",
+  "clipSha256": "e7df4e581b197f059bb7b577104ec3d1daba2ac5c79874f7d46268a35edb7cae",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Le bouton d'envoi dans l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "ouvre une seconde confirmation",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton d'envoi dans l'aperçu et affichage de la modale « Confirmer l'envoi »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Nous annulons une première fois",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur Annuler fermant la boîte de dialogue sans envoyer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Reprenons ensuite le parcours et confirmons réellement notre briefing",
+        "visibleSeconds": 15.5,
+        "visible": "Réouverture du parcours et clic sur Confirmer l'envoi, affichant l'envoi réussi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions montrées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

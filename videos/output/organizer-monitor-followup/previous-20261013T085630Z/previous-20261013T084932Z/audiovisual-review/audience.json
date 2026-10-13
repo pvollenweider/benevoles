@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T06:47:22.376Z",
+  "videoSha256": "5782699088248e39079e7823c62531a88a957b0abc7bd13c3a90083ec913dcc4",
+  "promptSha256": "9b0101d3b6113ef945e220d266e0155c303402a503af0dcaaf0ff546e3654777",
+  "clipSha256": "5b70f5c6b0c9f0b47826c218b3e9747c4aeab4f7864d57a2a699087f1d711826",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance, choisis précisément les destinataires :",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "un poste",
+        "visibleSeconds": 4,
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec le poste Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "la liste d'attente",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de l'option « Les personnes en liste d'attente »",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "ou les invités qui n’ont encore aucun créneau confirmé",
+        "visibleSeconds": 11.5,
+        "visible": "Sélection de l'option « Les invités sans créneau confirmé »",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Le nombre de personnes est recalculé avant l’envoi",
+        "visibleSeconds": 12.8,
+        "visible": "Mise à jour du nombre de destinataires affiché sous les options",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:08, le clic sur « Les personnes en liste d'attente » intervient avec près de deux secondes de retard par rapport à l'énoncé oral (00:06.8)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

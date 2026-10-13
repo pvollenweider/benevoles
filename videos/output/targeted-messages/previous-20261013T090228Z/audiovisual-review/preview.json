@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:28:03.776Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "74746a8a3eb5ce5604af305f47f24c2922451ebc6022c8bef0f62e1b0c04e3c9",
+  "clipSha256": "ce5aa141027c1bc55599b6e8d41a105266d0b14ef045a40ddada7d95c43ba828",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Ouvrons maintenant l'aperçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons maintenant l'aperçu",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton 'Voir l'aperçu et envoyer' et affichage de la fenêtre 'Aperçu de l'email'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte",
+        "visibleSeconds": 2,
+        "visible": "Le texte de l'aperçu montre le prénom Léa, l'événement Fête du village de Montvert, le poste Buvette et l'horaire samedi 17 octobre 10:00-14:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "retournez au message",
+        "visibleSeconds": 14.7,
+        "visible": "Clic sur le lien 'Retour au message' qui ferme la modale et réaffiche le formulaire d'édition",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et parfaitement synchronisée avec les interactions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

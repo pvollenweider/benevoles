@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:27:37.432Z",
-  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "reviewedAt": "2026-10-13T09:11:39.094Z",
+  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
   "promptSha256": "d755128be59b9fda0e88911458a262e8d3f363eb8bd3f8e6961abe17df548639",
-  "clipSha256": "129808d2242cb597673e344bc2a30a071dacd4b63883fa3788c27f8933c2c560",
+  "clipSha256": "48060bf133433edfbdc2d62eb7cad3a4e610106870cd1c074aa97126358e81cc",
   "scene": "count",
   "review": {
-    "heardOpening": "Le nombre affiché",
+    "heardOpening": "Le nombre affiché compte les personnes",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Le nombre affiché compte les personnes à qui un e-mail peut être adressé",
-        "visibleSeconds": 0,
-        "visible": "Page Inscriptions affichant la liste des inscriptions avec champ de recherche",
+        "spokenSeconds": 0.5,
+        "spoken": "Le nombre affiché compte les personnes à qui un email peut être adressé",
+        "visibleSeconds": 1.5,
+        "visible": "Recherche filtrée sur Léa Giroud affichant ses deux inscriptions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 5.4,
         "spoken": "Une bénévole inscrite sur deux horaires reçoit un seul message",
-        "visibleSeconds": 2.5,
-        "visible": "Filtrage sur Léa Giroud montrant deux créneaux horaires distincts pour la buvette",
+        "visibleSeconds": 5,
+        "visible": "Léa Giroud visible avec deux créneaux distincts à la buvette",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,15 +28,15 @@
         "spokenSeconds": 13,
         "spoken": "Une demande à valider n'est pas encore une confirmation",
         "visibleSeconds": 13,
-        "visible": "Affichage de l'écran Écrire aux bénévoles avec le ciblage par destinataires",
+        "visible": "Page 'Écrire aux bénévoles' affichée avec sélection des destinataires",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
         "spoken": "Vérifier ce chiffre et le public choisi, c'est éviter d'envoyer une consigne de buvette",
-        "visibleSeconds": 15.5,
-        "visible": "Sélection du poste Buvette indiquant que 14 personnes recevront ce message",
+        "visibleSeconds": 15,
+        "visible": "Option 'Les bénévoles d'un poste' : Buvette cochée, avec '14 personnes recevront ce message'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et bien articulée, synchronisée avec les exemples à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les démonstrations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

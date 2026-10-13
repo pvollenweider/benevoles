@@ -1,0 +1,16 @@
+{
+  "diagnosis": "Transient empty recognition service response, not silent audio or wrong extraction window",
+  "priorVideoSha256": "3a3ee4423baf644ada4a0c3f1345a47c01585384684dd90404c5111e55003caf",
+  "audioSha256": "9223f85ed1f83843c98f445731d36451ad37894923869d17c80e8fbcb20e6143",
+  "oldWindowSeconds": [
+    223.803,
+    254.288
+  ],
+  "sourceDurationSeconds": 30.484,
+  "mixedDurationSeconds": 30.485,
+  "sourcePeakDb": -1.1,
+  "mixedPeakDb": -2.0,
+  "independentRecheckWordErrorRate": 0,
+  "auditEvidence": "/private/tmp/codex-video/videos/output/last-minute-changes/previous-20261013T083959Z/previous-20261013T082918Z/narration-audit-video-schedule.json",
+  "fix": "Retry identical audio up to three times only on an empty service response; no narration changes"
+}

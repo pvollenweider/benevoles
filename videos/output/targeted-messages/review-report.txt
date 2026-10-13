@@ -1,25 +1,25 @@
-STATUS: NOT READY
+STATUS: READY
 ID: TARGETED_MESSAGES
-Duration: 318.6
-BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
-Commit: 7e0069bba916e06d82b7009efff283aeface6afc
-Music: {'voicedWindows': 280, 'musicOnlyWindows': 0, 'smallestGapLu': 14.2, 'largestGapLu': 19.3, 'quietestMusicOnlyLufs': None, 'loudestMusicOnlyLufs': None, 'medianVoiceLufs': -16.7}
-Problems: Notification cue aligned and Mailpit contains only current campaign. Variable correction finishes ~2 s before Corrigeons le texte. All technical/final narration/music checks pass. Subjective timbre flag not a blocker; Mailpit English dates nit.
-Source changes: Preview now validates actual audience member and both shift times, records recipient ID. Variable correction cue changed to at(Corrigeons le texte.). No third take.
+Duration: 318.64
+BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
+Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
+Music: {'voicedWindows': 280, 'musicOnlyWindows': 1, 'smallestGapLu': 14.3, 'largestGapLu': 19.5, 'quietestMusicOnlyLufs': -34.7, 'loudestMusicOnlyLufs': -34.7, 'medianVoiceLufs': -16.6}
+Problems: All objective checks pass, including Corrigeons le texte cue, actual selected-recipient preview, five personalized/deduplicated emails and retained history. Twelve final chapter reports and all frame sheets inspected. Automated subjective timbre observation on push is not an objective blocker; identical audited continuous Puck narration reused, all final words pass. Mailpit English dates nit.
+Source changes: None for this video; batch 14 anchors retained. Shared empty-ASR retry only.
 Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
 Real-time subjective listening unavailable; never used as a NOT READY reason.
 Subtitles match manifest text exactly: True
-MP4 frame evidence SHA256: 2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6
+MP4 frame evidence SHA256: baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934
 All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 0.246–23.156 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-audiences: 25.415–50.693 s; review/audiences-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
-count: 52.953–74.868 s; review/count-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-template-create: 77.151–113.034 s; review/template-create-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-variables: 115.295–139.591 s; review/variables-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:19, la consigne « Corrigeons le texte » est prononcée après que la correction et l'enregistrement ont déjà été effectués à l'écran (vers 00:17-00:18)."]
-apply: 141.848–163.89 s; review/apply-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-context: 166.151–187.757 s; review/context-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-preview: 190.013–209.835 s; review/preview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-push: 212.092–236.322 s; review/push-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["00:10 - Rupture vocale notable avec changement d'orateur ou de timbre en milieu d'explication"]
-confirm: 238.581–262.529 s; review/confirm-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-result: 264.791–288.493 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-maintain: 290.754–317.616 s; review/maintain-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+welcome: 0.28–23.189 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+audiences: 25.449–50.736 s; review/audiences-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+count: 52.997–74.91 s; review/count-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+template-create: 77.173–113.057 s; review/template-create-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+variables: 115.315–139.611 s; review/variables-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+apply: 141.872–163.915 s; review/apply-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues []
+context: 166.18–187.788 s; review/context-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+preview: 190.049–209.871 s; review/preview-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+push: 212.129–236.36 s; review/push-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues ["00:10 : Changement inattendu de voix et de locuteur en cours d'explication (voix féminine de 00:00 à 00:10, puis voix masculine à partir de 00:10)"]
+confirm: 238.619–262.568 s; review/confirm-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+result: 264.828–288.531 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
+maintain: 290.794–317.656 s; review/maintain-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []

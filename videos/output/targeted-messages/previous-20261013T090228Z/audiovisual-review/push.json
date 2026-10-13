@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T07:28:06.324Z",
+  "videoSha256": "2e1def5276b987dbb0fa2865663c2b04671d855af8d12515e8490fccbcdb89b6",
+  "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
+  "clipSha256": "d006cb9a1c65c6175897fb830d035b9604bcac3c466c9fc1196170f3b3f405fb",
+  "scene": "push",
+  "review": {
+    "heardOpening": "Vous pouvez aussi demander",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 0,
+        "visible": "Option cochée 'Envoyer aussi une notification (téléphone ou ordinateur)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "L'objet sert de titre",
+        "visibleSeconds": 0,
+        "visible": "Haut du formulaire où le champ objet est partiellement visible au-dessus du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "la première ligne non vide du message sert de texte court",
+        "visibleSeconds": 0,
+        "visible": "Champ Message visible contenant le modèle de texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "vérifiez ce qui sera envoyé",
+        "visibleSeconds": 0,
+        "visible": "Bouton 'Voir l'aperçu et envoyer' visible sous l'option de notification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:10 - Rupture vocale notable avec changement d'orateur ou de timbre en milieu d'explication"
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Changement net de voix à 00:10, passant d'un timbre posé et plus grave à une voix plus dynamique et aiguë."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T08:56:04.702Z",
+  "videoSha256": "c82f1e0f07b47046c9678bbdca453d6b89017eac1d64f7a4706d93e34e52fb32",
+  "promptSha256": "237a804804755d3993290513ca4b22f69c056a5264de986421027c9849f692af",
+  "clipSha256": "9f5a57f5cd51ab4e58e462d680f461612827d0fd8814696762dc3fd1844c5827",
+  "scene": "channels",
+  "review": {
+    "heardOpening": "L'email part à toutes les personnes ciblées",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'email part à toutes les personnes ciblées",
+        "visibleSeconds": 0,
+        "visible": "Formulaire de rédaction du message avec texte d'invitation pré-rempli",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "tu peux ajouter une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 3,
+        "visible": "Coche de la case « Envoyer aussi une notification (téléphone ou ordinateur) »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "La confirmation finale évite les envois involontaires",
+        "visibleSeconds": 5.5,
+        "visible": "Modale d'aperçu affichée à 00:05.5, mais qui disparaît à 00:09.5 au moment précis où la voix mentionne la confirmation",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:09.5, la fenêtre modale d'aperçu et de confirmation se referme brusquement alors que la voix commente précisément « La confirmation finale évite les envois involontaires »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
