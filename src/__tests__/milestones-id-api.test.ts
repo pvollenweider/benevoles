@@ -62,6 +62,35 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
     )
   })
 
+  it("PATCH changes the title and the due date and logs both (#989)", async () => {
+    findFirst.mockResolvedValue({ id: "m1", eventId: "evt-1", title: "Fermer les inscriptions", dueDate: new Date("2026-09-20"), done: false })
+    update.mockResolvedValue({ id: "m1", eventId: "evt-1", title: "Clore les inscriptions", dueDate: new Date("2026-09-25"), done: false })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    const res = await PATCH(patch({ title: "Clore les inscriptions", dueDate: "2026-09-25" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith({ where: { id: "m1" }, data: { title: "Clore les inscriptions", dueDate: new Date("2026-09-25") } })
+    expect(logCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          action: "eventmilestone.updated",
+          changes: {
+            title: { from: "Fermer les inscriptions", to: "Clore les inscriptions" },
+            dueDate: { from: new Date("2026-09-20").toISOString(), to: new Date("2026-09-25").toISOString() },
+          },
+        }),
+      }),
+    )
+  })
+
+  it("PATCH refuses an empty title or a missing date, like creation (#989)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    for (const body of [{ title: "" }, { dueDate: "pas une date" }, { title: "a".repeat(141) }]) {
+      const res = await PATCH(patch(body), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
+      expect(res.status).toBe(400)
+    }
+    expect(update).not.toHaveBeenCalled()
+  })
+
   it("PATCH doesn't log anything when nothing changed", async () => {
     findFirst.mockResolvedValue({ id: "m1", eventId: "evt-1", title: "Fermer les inscriptions", dueDate: new Date("2026-09-20"), done: false })
     update.mockResolvedValue({ id: "m1", eventId: "evt-1", title: "Fermer les inscriptions", dueDate: new Date("2026-09-20"), done: false })

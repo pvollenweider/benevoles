@@ -167,6 +167,11 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       delete: vi.fn(),
       ...((overrides.eventGroupLink as object) ?? {}),
     },
+    eventMilestone: {
+      findFirst: vi.fn().mockResolvedValue(null),
+      update: vi.fn(),
+      ...((overrides.eventMilestone as object) ?? {}),
+    },
   }
 }
 
@@ -1200,6 +1205,31 @@ describe("Milestones — cross-tenant isolation", () => {
       { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
     )
     expect(res.status).toBe(404)
+  })
+
+  it("PATCH /api/admin/events/[id]/milestones/[milestoneId] does not edit an org-B milestone's title or date (#989)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    const db = setupGuard()
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/milestones/m-1", "PATCH", { title: "Clore les inscriptions", dueDate: "2026-09-25" }),
+      { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(db.eventMilestone.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH through an org-A event does not reach a milestone of another event (#989)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) } })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/milestones/m-b", "PATCH", { title: "Clore les inscriptions" }),
+      { params: Promise.resolve({ id: "evt-a", milestoneId: "m-b" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(db.eventMilestone.findFirst).toHaveBeenCalledWith({ where: { id: "m-b", eventId: "evt-a" } })
+    expect(db.eventMilestone.update).not.toHaveBeenCalled()
   })
 
   it("DELETE /api/admin/events/[id]/milestones/[milestoneId] returns 404 for org-B event", async () => {

@@ -3,10 +3,12 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useId, useRef, useEffect } from "react"
+import { useState, useId, useRef, useLayoutEffect } from "react"
 import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
 import { deleteMilestoneRecap } from "@/lib/action-recap"
+import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { dueDateInputValue, milestoneChanges, MILESTONE_TITLE_MAX, replaceMilestone, sortMilestones, validateMilestoneInput } from "@/lib/milestones"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { requestJson, useSubmit } from "@/lib/use-submit"
@@ -29,6 +31,136 @@ function isOverdue(m: MilestoneRow) {
   return new Date(m.dueDate) < today
 }
 
+const primaryButton =
+  "inline-flex items-center min-h-9 border border-transparent bg-blue-600 text-white px-4 py-1.5 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50 aria-disabled:cursor-wait transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const quietButton =
+  "inline-flex items-center min-h-9 text-sm font-medium border border-gray-300 text-gray-800 px-3 py-1.5 rounded-xl hover:bg-gray-100 aria-disabled:opacity-50 aria-disabled:cursor-wait transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+
+/**
+ * The milestone form, for a new one (no `milestone`) or in place of a row (#989): same fields,
+ * checks and messages both ways. Escape cancels, except while the request runs (nor does
+ * « Annuler »: the form would close under the answer).
+ */
+function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
+  eventId: string
+  milestone?: MilestoneRow
+  onSaved: (milestone: MilestoneRow) => void
+  onCancel: () => void
+}) {
+  const id = useId()
+  const titleRef = useRef<HTMLInputElement>(null)
+  const dateRef = useRef<HTMLInputElement>(null)
+  const [title, setTitle] = useState(milestone?.title ?? "")
+  const [dueDate, setDueDate] = useState(milestone ? dueDateInputValue(milestone.dueDate) : "")
+  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const errorId = `${id}-error`
+
+  useLayoutEffect(() => {
+    const input = titleRef.current
+    if (!input) return
+    input.focus()
+    // Caret at the end of a prefilled title: a stray key does not wipe it.
+    input.setSelectionRange(input.value.length, input.value.length)
+  }, [])
+
+  function cancel() {
+    if (busy) return
+    onCancel()
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    const checked = validateMilestoneInput({ title, dueDate })
+    if (!checked.ok) {
+      fail(checked.message, checked.field, checked.field === "title" ? titleRef.current : dateRef.current)
+      return
+    }
+    if (milestone) {
+      const changes = milestoneChanges(milestone, checked.value)
+      if (Object.keys(changes).length === 0) { onSaved(milestone); return }
+    }
+    const outcome = await submit<MilestoneRow>(() => fetch(
+      milestone ? `/api/admin/events/${eventId}/milestones/${milestone.id}` : `/api/admin/events/${eventId}/milestones`,
+      {
+        method: milestone ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(milestone ? milestoneChanges(milestone, checked.value) : checked.value),
+      },
+    ), { silent: true })
+    if (!outcome.ok) {
+      if (!outcome.error) return // a second click while the first request runs
+      fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? titleRef.current : null)
+      return
+    }
+    onSaved(outcome.data)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLFormElement>) {
+    if (e.key !== "Escape" || e.nativeEvent.isComposing || e.defaultPrevented) return
+    e.preventDefault()
+    e.stopPropagation()
+    cancel()
+  }
+
+  const titleInvalid = isInvalid("title")
+  const dateInvalid = isInvalid("dueDate")
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      onKeyDown={handleKeyDown}
+      noValidate
+      aria-label={milestone ? `Modifier le jalon « ${milestone.title} »` : "Nouveau jalon"}
+      className={milestone ? "space-y-3" : "bg-white border border-gray-200 rounded-xl p-4 space-y-3"}
+    >
+      <div>
+        <label htmlFor={`${id}-title`} className="block text-sm font-medium text-gray-700 mb-1">
+          Titre <span aria-hidden="true">*</span>
+        </label>
+        <input
+          ref={titleRef}
+          id={`${id}-title`}
+          type="text"
+          required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          aria-invalid={titleInvalid}
+          aria-describedby={titleInvalid ? errorId : undefined}
+          maxLength={MILESTONE_TITLE_MAX}
+          placeholder="ex. Fermer les inscriptions"
+          className={`input w-full ${titleInvalid ? "!border-red-600" : ""}`}
+        />
+      </div>
+      <div>
+        <label htmlFor={`${id}-date`} className="block text-sm font-medium text-gray-700 mb-1">
+          Échéance <span aria-hidden="true">*</span>
+        </label>
+        <input
+          ref={dateRef}
+          id={`${id}-date`}
+          type="date"
+          required
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          aria-invalid={dateInvalid}
+          aria-describedby={dateInvalid ? errorId : undefined}
+          className={`input w-full ${dateInvalid ? "!border-red-600" : ""}`}
+        />
+      </div>
+      <FormStatus error={error} errorId={errorId} />
+      <p role="status" className="sr-only">{busy ? "Enregistrement en cours…" : ""}</p>
+      <div className="flex flex-wrap justify-end gap-2">
+        <button type="button" onClick={cancel} aria-disabled={busy || undefined} className={quietButton}>
+          Annuler
+        </button>
+        <button type="submit" aria-disabled={busy || undefined} className={primaryButton}>
+          {busy ? (milestone ? "Enregistrement…" : "Ajout…") : milestone ? "Enregistrer" : "Ajouter"}
+        </button>
+      </div>
+    </form>
+  )
+}
+
 export default function MilestonesSection({
   eventId, initialMilestones,
 }: {
@@ -37,14 +169,10 @@ export default function MilestonesSection({
 }) {
   const [milestones, setMilestones] = useState(initialMilestones)
   const [announcement, setAnnouncement] = useState("")
-  const [showForm, setShowForm] = useState(false)
+  // "new" for the creation form, a milestone id for its edit form, null when no form is open.
+  const [editing, setEditing] = useState<string | null>(null)
 
-  const titleId = useId()
-  const dateId = useId()
-  const [title, setTitle] = useState("")
-  const [dueDate, setDueDate] = useState("")
-  const { submit, busy: saving, error, fail, isInvalid, reset } = useSubmit()
-  const errorId = useId()
+  const checkboxIdPrefix = useId()
   // Deletion goes through a confirmation (#379); its failure stays in the dialog.
   const [pendingRemove, setPendingRemove] = useState<MilestoneRow | null>(null)
   const [removing, setRemoving] = useState(false)
@@ -53,46 +181,35 @@ export default function MilestonesSection({
   const [outcome, setOutcome] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const outcomeRef = useRef<HTMLParagraphElement>(null)
 
-  const titleInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
-  const wasOpenRef = useRef(false)
+  const listRef = useRef<HTMLUListElement>(null)
+  // Once React has committed the render that goes with it (form closed, list re-sorted).
+  const [focusRequest, setFocusRequest] = useState<{ candidates: FocusCandidate[] } | null>(null)
+  useLayoutEffect(() => {
+    if (focusRequest) focusFirstAvailable(focusRequest.candidates)
+  }, [focusRequest])
 
-  // Same inline-reveal focus handling as SectorLeadersManager/PageFormModal: no ModalShell here
-  // (a two-field inline form doesn't warrant a dialog), so focus is moved by hand.
-  useEffect(() => {
-    if (showForm) {
-      titleInputRef.current?.focus()
-      wasOpenRef.current = true
-    } else if (wasOpenRef.current) {
-      addButtonRef.current?.focus()
-      wasOpenRef.current = false
-    }
-  }, [showForm])
+  // A getter: the row may have moved (re-sorted) or been remounted when focus comes back.
+  const editButtonOf = (id: string) => () =>
+    listRef.current?.querySelector<HTMLElement>(`[data-milestone-id="${CSS.escape(id)}"] [data-action="edit"]`) ?? null
 
-  function closeForm() {
-    setShowForm(false)
-    reset()
+  function closeForm(focusTo: FocusCandidate[]) {
+    setEditing(null)
+    setFocusRequest({ candidates: focusTo })
   }
 
-  async function handleAdd(e: React.FormEvent) {
-    e.preventDefault()
-    if (!title.trim()) { fail("Indiquez le titre du jalon.", "title", titleInputRef.current); return }
-    if (!dueDate) { fail("Indiquez l'échéance.", "dueDate", document.getElementById(dateId)); return }
-    const outcome = await submit<MilestoneRow>(() => fetch(`/api/admin/events/${eventId}/milestones`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: title.trim(), dueDate }),
-    }), { silent: true })
-    if (!outcome.ok) {
-      fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? titleInputRef.current : null)
-      return
-    }
-    const milestone = outcome.data
-    setMilestones((prev) => [...prev, milestone].sort((a, b) => a.dueDate.localeCompare(b.dueDate)))
+  function added(milestone: MilestoneRow) {
+    setMilestones((prev) => sortMilestones([...prev, milestone]))
+    setOutcome(null)
     announce(setAnnouncement, `Jalon « ${milestone.title} » ajouté.`)
-    setTitle("")
-    setDueDate("")
-    closeForm()
+    closeForm([() => addButtonRef.current, editButtonOf(milestone.id)])
+  }
+
+  function edited(milestone: MilestoneRow) {
+    setMilestones((prev) => replaceMilestone(prev, milestone))
+    setOutcome(null)
+    announce(setAnnouncement, `Jalon « ${milestone.title} » enregistré.`)
+    closeForm([editButtonOf(milestone.id), () => addButtonRef.current])
   }
 
   async function toggleDone(milestone: MilestoneRow) {
@@ -145,17 +262,30 @@ export default function MilestonesSection({
         {outcome?.text ?? ""}
       </p>
 
-      {milestones.length === 0 && !showForm && (
+      {milestones.length === 0 && editing !== "new" && (
         <p className="text-sm text-gray-500">Aucun jalon pour l&apos;instant.</p>
       )}
 
       {milestones.length > 0 && (
-        <ul className="space-y-1.5" role="list">
+        <ul ref={listRef} className="space-y-1.5" role="list">
           {milestones.map((m) => {
+            if (editing === m.id) {
+              return (
+                <li key={m.id} data-milestone-id={m.id} className="bg-white border border-gray-200 rounded-lg px-3 py-3">
+                  <MilestoneForm
+                    eventId={eventId}
+                    milestone={m}
+                    onSaved={edited}
+                    onCancel={() => closeForm([editButtonOf(m.id), () => addButtonRef.current])}
+                  />
+                </li>
+              )
+            }
             const overdue = isOverdue(m)
-            const checkboxId = `${titleId}-done-${m.id}`
+            const checkboxId = `${checkboxIdPrefix}-done-${m.id}`
             return (
-              <li key={m.id} className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-3 py-2">
+              // On a narrow screen the date and the actions wrap under the title instead of squeezing it.
+              <li key={m.id} data-milestone-id={m.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 bg-white border border-gray-200 rounded-lg px-3 py-2">
                 <input
                   id={checkboxId}
                   type="checkbox"
@@ -163,76 +293,48 @@ export default function MilestonesSection({
                   onChange={() => toggleDone(m)}
                   className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                 />
-                <label htmlFor={checkboxId} className={`flex-1 min-w-0 text-sm cursor-pointer ${m.done ? "text-gray-500 line-through" : "text-gray-800"}`}>
+                <label htmlFor={checkboxId} className={`flex-1 min-w-[10rem] break-words text-sm cursor-pointer ${m.done ? "text-gray-500 line-through" : "text-gray-800"}`}>
                   {m.title}
                 </label>
-                <span className={`text-xs flex-shrink-0 whitespace-nowrap ${overdue ? "text-red-600 font-medium" : "text-gray-500"}`}>
-                  {overdue && <span aria-hidden="true">⚠ </span>}
-                  {fmtDate(m.dueDate)}
-                  {overdue && <span className="sr-only"> (dépassé)</span>}
+                <span className="ml-auto flex items-center gap-3 flex-shrink-0">
+                  <span className={`text-xs whitespace-nowrap ${overdue ? "text-red-600 font-medium" : "text-gray-500"}`}>
+                    {overdue && <span aria-hidden="true">⚠ </span>}
+                    {fmtDate(m.dueDate)}
+                    {overdue && <span className="sr-only"> (dépassé)</span>}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    {/* Named with the milestone (#587): every row has a « Modifier ». */}
+                    <button
+                      type="button"
+                      data-action="edit"
+                      onClick={() => setEditing(m.id)}
+                      className="inline-flex items-center min-h-6 px-1.5 rounded text-xs text-gray-600 hover:text-blue-700 transition-colors"
+                    >
+                      Modifier<span className="sr-only"> le jalon « {m.title} »</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(m)}
+                      aria-label={`Supprimer le jalon ${m.title}`}
+                      className="inline-flex items-center justify-center min-h-6 min-w-6 rounded text-xs text-gray-500 hover:text-red-600 transition-colors"
+                    >
+                      ×
+                    </button>
+                  </span>
                 </span>
-                <button
-                  type="button"
-                  onClick={() => handleRemove(m)}
-                  aria-label={`Supprimer le jalon ${m.title}`}
-                  className="text-xs text-gray-500 hover:text-red-600 transition-colors flex-shrink-0"
-                >
-                  ×
-                </button>
               </li>
             )
           })}
         </ul>
       )}
 
-      {showForm ? (
-        <form onSubmit={handleAdd} noValidate className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
-          <div>
-            <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre *</label>
-            <input
-              ref={titleInputRef}
-              id={titleId}
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              aria-invalid={isInvalid("title")}
-              aria-describedby={isInvalid("title") ? errorId : undefined}
-              maxLength={140}
-              placeholder="ex. Fermer les inscriptions"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor={dateId} className="block text-sm text-gray-700 mb-1">Échéance *</label>
-            <input
-              id={dateId}
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              aria-invalid={isInvalid("dueDate")}
-              aria-describedby={isInvalid("dueDate") ? errorId : undefined}
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-            />
-          </div>
-          <FormStatus error={error} errorId={errorId} />
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={closeForm} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
-              Annuler
-            </button>
-            <button
-              type="submit"
-              aria-disabled={saving || undefined}
-              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait transition-colors"
-            >
-              {saving ? "Ajout…" : "Ajouter"}
-            </button>
-          </div>
-        </form>
+      {editing === "new" ? (
+        <MilestoneForm eventId={eventId} onSaved={added} onCancel={() => closeForm([() => addButtonRef.current])} />
       ) : (
         <button
           ref={addButtonRef}
           type="button"
-          onClick={() => setShowForm(true)}
+          onClick={() => setEditing("new")}
           className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
         >
           + Ajouter un jalon
