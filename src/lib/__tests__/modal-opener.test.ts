@@ -68,6 +68,23 @@ describe("resolveOpener", () => {
     expect(resolveOpener(document.body)).toBeNull()
   })
 
+  // #987: a table's scroll region (tabIndex 0) is the nearest focusable ancestor of its row
+  // buttons, so WebKit drops focus there, not on <main>. The pressed button inside it is the opener.
+  it("is the pressed control when focus fell back to a focusable ancestor of it", () => {
+    const root = mount(`<main tabindex="-1"><div role="region" tabindex="0" id="r"><button id="a">A</button></div></main>`)
+    const a = root.querySelector<HTMLElement>("#a")!
+    const region = root.querySelector<HTMLElement>("#r")!
+    a.dispatchEvent(new Event("pointerdown", { bubbles: true }))
+    expect(resolveOpener(region)).toBe(a)
+  })
+
+  it("is the focused element when the pressed control is not inside it", () => {
+    const root = mount(`<div tabindex="0" id="r"></div><button id="a">A</button>`)
+    root.querySelector<HTMLElement>("#a")!.dispatchEvent(new Event("pointerdown", { bubbles: true }))
+    const region = root.querySelector<HTMLElement>("#r")!
+    expect(resolveOpener(region)).toBe(region)
+  })
+
   it("forgets the pointer press after a key press", () => {
     const root = mount(`<button id="a">A</button>`)
     root.querySelector<HTMLElement>("#a")!.dispatchEvent(new Event("pointerdown", { bubbles: true }))

@@ -37,14 +37,16 @@ export function trackPointerOpener(doc: Document | undefined = typeof document =
 
 /**
  * The opener of a dialog that opens now: the focused element, unless focus was dropped
- * (`isFocusDropped`), then the control last pressed with a pointer. Consumes the record either way,
- * so a later dialog never reuses it.
+ * (`isFocusDropped`) or fell back to a focusable ancestor of the control last pressed with a
+ * pointer (a table's scroll region around its row buttons, #987): then that control. Consumes the
+ * record either way, so a later dialog never reuses it.
  */
 export function resolveOpener(active: Element | null): HTMLElement | null {
   const pressed = pointerOpener
   pointerOpener = null
-  if (!isFocusDropped(active)) return active instanceof HTMLElement ? active : null
-  return pressed
+  if (isFocusDropped(active)) return pressed
+  if (pressed && pressed !== active && active?.contains(pressed)) return pressed
+  return active instanceof HTMLElement ? active : null
 }
 
 export function resetPointerOpenerForTests(): void {
