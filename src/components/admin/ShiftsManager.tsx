@@ -460,21 +460,24 @@ export default function ShiftsManager({
 
       {/* ── List view ───────────────────────────────────────────────────────── */}
       {view === "list" && sortedShifts.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        // A scroll region, not overflow-hidden (#987): the actions column was cut off at the right
+        // edge of a phone. The table fits 320 px; larger text or zoom scrolls it here, never the page.
+        <div role="region" aria-labelledby="shifts-list-caption" tabIndex={0} className="bg-white rounded-xl border border-gray-200 overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm">
+            <caption id="shifts-list-caption" className="sr-only">Liste des créneaux</caption>
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date et horaire</th>
-                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
+                <th scope="col" className="text-left px-2 sm:px-4 py-2.5 text-xs font-medium text-gray-500">Date et horaire</th>
+                <th scope="col" className="text-left px-2 sm:px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Places</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
-                <th scope="col" className="px-4 py-2.5" />
+                <th scope="col" className="px-2 sm:px-4 py-2.5"><span className="sr-only">Actions</span></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {sortedShifts.map(s => (
                 <tr key={s.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                  <td className="px-2 sm:px-4 py-3 text-gray-500 text-xs sm:whitespace-nowrap">
                     <p>{fmtDate(s.date)}</p>
                     {/* « 10:00–12:00 » is read « tiret »: the screen reader gets it in words (#587). */}
                     <p className="font-medium text-gray-700">
@@ -482,7 +485,7 @@ export default function ShiftsManager({
                       <span className="sr-only">{spokenTimeRange(s.startTime, s.endTime)}</span>
                     </p>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-2 sm:px-4 py-3 [overflow-wrap:anywhere]">
                     <p className="font-medium text-gray-800">{s.roleName}</p>
                     {s.label !== s.roleName && <p className="text-xs text-gray-500">{s.label}</p>}
                     {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans minimum</p>}
@@ -506,7 +509,9 @@ export default function ShiftsManager({
                       {statusLabel[s.status] ?? s.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                  {/* On a phone the two actions stack, so the row fits the screen (#987). */}
+                  <td className="px-2 sm:px-4 py-2 whitespace-nowrap">
+                    <div className="flex flex-col items-end gap-1 sm:flex-row sm:justify-end sm:gap-1">
                     <button
                       type="button"
                       ref={(el) => { if (el) editBtnRefs.current.set(s.id, el); else editBtnRefs.current.delete(s.id) }}
@@ -535,7 +540,7 @@ export default function ShiftsManager({
                         contactPhone: s.contactPhone ?? "",
                         instructions: s.instructions ?? "",
                       }, s.id)}
-                      className="text-xs text-blue-700 hover:text-blue-900 mr-3"
+                      className="text-xs font-medium text-blue-700 hover:text-blue-900 rounded-xl px-2 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                       {/* Named with the shift (#587): every row has a « Modifier » and a « Supprimer ». */}
                       Modifier{" "}<span className="sr-only">le créneau {spokenShift(s)}</span>
@@ -543,10 +548,11 @@ export default function ShiftsManager({
                     <button
                       type="button"
                       onClick={() => handleDeleteShift(s.id)}
-                      className="text-xs text-red-700 hover:text-red-900"
+                      className="text-xs font-medium text-red-700 hover:text-red-900 rounded-xl px-2 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                       Supprimer{" "}<span className="sr-only">le créneau {spokenShift(s)}</span>
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))}

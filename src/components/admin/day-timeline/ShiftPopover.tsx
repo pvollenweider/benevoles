@@ -13,6 +13,8 @@ import { normalizeTime } from "@/lib/shifts-admin"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import { spokenTimeRange } from "@/lib/spoken-time"
 import { popoverPlacement } from "@/lib/popover-placement"
+import { focusLeftContainer } from "@/lib/focus-leave"
+import { isFocusDropped } from "@/lib/focus-return"
 import type { AdminShift } from "../AdminDayTimeline"
 
 /**
@@ -122,7 +124,12 @@ export default function ShiftPopover({
       ...(pairOk && minChanged ? { minVolunteers: min } : {}),
     })
     onClose()
-    const opener = openerRef.current
+    // The bar itself when what was focused at opening is gone (the bar is drawn again when a
+    // duplicate adds a lane), was no control (WebKit, #987), or is the popover's own heading (the
+    // opening effect run twice in development).
+    const recorded = openerRef.current
+    const usable = recorded?.isConnected && !isFocusDropped(recorded) && !ref.current?.contains(recorded)
+    const opener = usable ? recorded : document.getElementById(`shift-bar-${shift.id}`)
     if (restoreFocus && opener?.isConnected) opener.focus()
     // The field's message is gone with the popover: the discarded pair is announced (3.3.1, 4.1.3).
     if (pairProblem) onNotSaved?.(`Places et minimum non enregistrés : ${pairProblem}`)
@@ -138,7 +145,8 @@ export default function ShiftPopover({
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") closeAndSave(!!ref.current?.contains(document.activeElement))
+      // Focus inside, or dropped on an ancestor after a tap (WebKit, #987): back to the bar.
+      if (e.key === "Escape") closeAndSave(!focusLeftContainer(ref.current, document.activeElement))
     }
     document.addEventListener("keydown", onKey)
     return () => document.removeEventListener("keydown", onKey)
@@ -201,9 +209,16 @@ export default function ShiftPopover({
       onMouseDown={e => e.stopPropagation()}
       onBlur={e => {
         // Focus left the popover for another control of the page: close and save, without pulling
-        // focus back. A null target (window switch, focus lost to the page) keeps it open.
-        const next = e.relatedTarget as Node | null
-        if (next && !ref.current?.contains(next)) closeAndSave(false)
+        // focus back. A null target (window switch) keeps it open, and so does an ancestor such as
+        // <main tabIndex={-1}>: where WebKit drops focus on a tap of a button it does not focus
+        // (#987), which closed the popover before the tap's click.
+        if (focusLeftContainer(ref.current, e.relatedTarget as Node | null)) closeAndSave(false)
+      }}
+      onClickCapture={e => {
+        // The tapped control takes focus itself (WebKit does not give it, #987), before its own
+        // handler moves it: Tab then goes on from there, not from the top of the page.
+        const control = (e.target as Element).closest?.("button, a, select, input")
+        if (control instanceof HTMLElement && ref.current?.contains(control) && !ref.current.contains(document.activeElement)) control.focus()
       }}
     >
       <div ref={contentRef} data-popover-content="" className="p-3 space-y-3">
