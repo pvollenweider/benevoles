@@ -20,8 +20,9 @@ const shift = (label: string, startTime: string, endTime: string) => ({
 const bar = { id: "r-bar", editToken: "tok-bar", status: "active", shift: shift("Bar", "10:00", "12:00") }
 const accueil = { id: "r-accueil", editToken: "tok-accueil", status: "waiting", waitingPosition: 1, shift: shift("Accueil", "14:00", "16:00") }
 
-function pageData(registrations: unknown[]) {
+function pageData(registrations: unknown[], extra: Record<string, unknown> = {}) {
   return {
+    ...extra,
     event: { id: "e1", title: "Fête d'été", slug: "fete" },
     volunteer: { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" },
     registrations,
@@ -34,10 +35,10 @@ function pageData(registrations: unknown[]) {
 const json = (body: unknown, status = 200) => ({ ok: status >= 200 && status < 300, status, json: async () => body })
 
 /** Stubs fetch: the page's GET answers `registrations`; DELETE answers with `del` (a promise, so a test can hold it). */
-function stubFetch(registrations: unknown[], del: () => Promise<unknown>) {
+function stubFetch(registrations: unknown[], del: () => Promise<unknown>, extra: Record<string, unknown> = {}) {
   const fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (init?.method === "DELETE") return del()
-    if (url === "/api/public/registrations/tok-bar") return Promise.resolve(json(pageData(registrations)))
+    if (url === "/api/public/registrations/tok-bar") return Promise.resolve(json(pageData(registrations, extra)))
     return Promise.resolve(json({}))
   })
   vi.stubGlobal("fetch", fetchMock)
@@ -51,8 +52,8 @@ function deferred<T>() {
   return { promise, resolve, reject }
 }
 
-async function renderPage(registrations: unknown[], del: () => Promise<unknown> = () => Promise.resolve(json({ success: true }))) {
-  const calls = stubFetch(registrations, del)
+async function renderPage(registrations: unknown[], del: () => Promise<unknown> = () => Promise.resolve(json({ success: true })), extra: Record<string, unknown> = {}) {
+  const calls = stubFetch(registrations, del, extra)
   render(<MyRegistrationPage />)
   await screen.findByRole("heading", { level: 1, name: "Mes inscriptions" })
   return calls
@@ -238,5 +239,43 @@ describe("MyRegistrationPage — withdrawal", () => {
     await renderPage([bar, accueil])
     openBar()
     expect(document.body.innerHTML).not.toMatch(/red-500/)
+  })
+})
+
+// Signing up for more shifts (#988): a link after the shifts while a sign-up is possible, the link
+// at the bottom gone then (same page), else named after where it goes.
+describe("MyRegistrationPage — more shifts", () => {
+  afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+
+  const signUpUrl = "http://localhost:3000/fete?org=asso-a&groupe=abcd2345"
+  const eventPageUrl = "http://localhost:3000/fete?org=asso-a"
+  const noop = () => Promise.resolve(json({ success: true }))
+
+  it("links to the sign-up page, group link and organisation kept, inside the shifts section, and drops the bottom link", async () => {
+    await renderPage([bar, accueil], noop, { signUpUrl, eventPageUrl })
+    const link = screen.getByRole("link", { name: "S'inscrire à d'autres créneaux" })
+    expect(link).toHaveAttribute("href", signUpUrl)
+    expect(screen.getByRole("region", { name: "Tous mes créneaux" })).toContainElement(link)
+    expect(screen.queryByRole("link", { name: "Voir la page de l'événement" })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Retour à l'accueil" })).toBeNull()
+  })
+
+  it("without a sign-up possible, no sign-up link and the bottom link names the event page", async () => {
+    await renderPage([bar], noop, { signUpUrl: null, eventPageUrl })
+    expect(screen.queryByRole("link", { name: "S'inscrire à d'autres créneaux" })).toBeNull()
+    expect(screen.getByRole("link", { name: "Voir la page de l'événement" })).toHaveAttribute("href", eventPageUrl)
+  })
+
+  it("once the event is not published, « Retour à l'accueil » goes to the organisation's home", async () => {
+    await renderPage([bar], noop, { signUpUrl: null, eventPageUrl: null })
+    expect(screen.getByRole("link", { name: "Retour à l'accueil" })).toHaveAttribute("href", "https://org.example")
+  })
+
+  it("after the last withdrawal, the empty view keeps the sign-up link", async () => {
+    await renderPage([bar], noop, { signUpUrl, eventPageUrl })
+    openBar()
+    confirmBar()
+    await screen.findByRole("heading", { level: 1, name: "Toutes tes inscriptions ont été annulées" })
+    expect(screen.getByRole("link", { name: "S'inscrire à d'autres créneaux" })).toHaveAttribute("href", signUpUrl)
   })
 })

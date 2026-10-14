@@ -14,10 +14,11 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
  */
 
 let event: PublicEvent
+const title = `E2E Page perso ${Date.now()}`
 
 test.beforeAll(async ({ browser }) => {
   test.setTimeout(120_000)
-  event = await createPublicEvent(browser, `E2E Page perso ${Date.now()}`, [
+  event = await createPublicEvent(browser, title, [
     { label: "Bar", startTime: "10:00", endTime: "12:00" },
     { label: "Accueil", startTime: "14:00", endTime: "16:00" },
     { label: "Vestiaire", startTime: "17:00", endTime: "19:00" },
@@ -88,6 +89,17 @@ test("withdrawing with the keyboard: focus in the confirmation, back on the trig
   await page.keyboard.press("Enter")
   await expect(page.getByRole("heading", { level: 1, name: "Toutes tes inscriptions ont été annulées" })).toBeFocused()
   await expect(pageStatus(page)).toHaveText(/^Créneau annulé : Accueil, /)
+})
+
+test("links to the event's sign-up page for more shifts, the bottom link gone (#988)", async ({ page }) => {
+  await openMyPage(page)
+  const more = page.getByRole("link", { name: "S'inscrire à d'autres créneaux" })
+  await expect(more).toBeVisible()
+  await expect(page.getByRole("link", { name: "Voir la page de l'événement" })).toHaveCount(0)
+  await expect(page.getByRole("link", { name: "Retour à l'accueil" })).toHaveCount(0)
+  await more.click()
+  await expect(page).toHaveURL((url) => url.pathname === `/${event.slug}`)
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible()
 })
 
 test("a message left on withdrawal reaches the organizer's email (#559)", async ({ page }) => {

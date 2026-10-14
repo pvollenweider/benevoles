@@ -19,7 +19,7 @@ const prismaMock = vi.hoisted(() => ({
   registration: { findFirst: vi.fn(), findMany: vi.fn() },
 }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
-vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.example` }))
+vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.example`, eventPublicUrl: (org: string, slug: string) => `https://${org}.example/${slug}` }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn() }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
 vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications: vi.fn() }))
