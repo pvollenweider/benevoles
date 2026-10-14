@@ -22,6 +22,8 @@ Vos données vous appartiennent et sortent de l'application à tout moment, sans
 | Le planning, la liste des bénévoles, les feuilles à imprimer | **Rapports** de l'événement | PDF (depuis le navigateur) |
 | La feuille de présence | **Inscriptions** de l'événement → **Exporter les présences (CSV)** | CSV |
 
+![Section « Archive » de la page Rapports d'un événement : le lien « Archive de l'événement (JSON) », qui télécharge dans un fichier ses réglages, créneaux, inscriptions, pages, responsables, jalons et journal](/doc-img/admin-event-archive.png)
+
 Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-virgule). Une valeur qui commence par `=`, `+`, `-` ou `@` (un numéro `+41…`, par exemple) y est précédée d'une apostrophe : le tableur l'affiche comme du texte au lieu de l'exécuter comme une formule. Les archives ne contiennent jamais de lien personnel ni de jeton d'accès.
 
 ## Durées de conservation

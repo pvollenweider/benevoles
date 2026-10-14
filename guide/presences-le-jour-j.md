@@ -22,6 +22,8 @@ Pendant les dates de l'événement, sa page principale affiche un encadré **C'e
 - **Actualiser** recharge la page, avec les présences marquées depuis un autre téléphone ; l'heure de la dernière mise à jour est affichée au-dessus.
 - En bas, des liens vers les inscriptions, « Où manque-t-il du monde ? » et l'écriture aux bénévoles.
 
+![Page « Jour J » sur un téléphone : l'heure de mise à jour avec le bouton « Actualiser », la recherche, puis « En cours » : le créneau Comptage en rayon de 16 h à 19 h, « 1 présent sur 2 attendus. Il manque 1 personne. », le contact du créneau, Aline Dupraz, avec son téléphone, puis David Pasche « Pas encore marqué » avec le bouton « Marquer présent » et Céline Ruchet « Présent » avec le bouton « Annuler la présence », chacun avec son téléphone](/doc-img/admin-day-of.png)
+
 La page reste accessible en dehors des dates, par exemple depuis un favori enregistré sur le téléphone : elle le signale et n'affiche que ce qui tombe dans la fenêtre du moment. Elle est ouverte aux propriétaires et aux organisateurs, pas aux responsables de secteur.
 
 ## Depuis les inscriptions

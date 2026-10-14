@@ -16,9 +16,13 @@ L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page perso
 
 Sur ta page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans ta boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre ta messagerie avec l'objet déjà rempli.
 
+![Encadré « Ton lien personnel » : « Ce lien est personnel : il donne accès à tes inscriptions et permet de les annuler. Ne le partage pas. », la date du dernier email qui le contenait, et le bouton « Recevoir ce lien par email »](/doc-img/public-personal-link.png)
+
 ## La page « Ce lien ne fonctionne pas » s'affiche
 
 Le lien a pu être coupé par ta messagerie (ouvre-le depuis l'email plutôt que de le recopier), ou l'inscription qu'il ouvrait a été annulée (« Inscription introuvable ou déjà annulée »). La page propose de recevoir un nouveau lien : indique l'adresse email utilisée pour t'inscrire ; si une inscription existe à cette adresse dans cette organisation, un email part pour chaque événement à venir. La réponse affichée est la même dans tous les cas, pour que personne ne puisse vérifier qui est inscrit.
+
+![Page « Ce lien ne fonctionne pas » : « Inscription introuvable ou déjà annulée. », trois explications numérotées, le champ « Adresse email utilisée pour t'inscrire » et le bouton « Recevoir un nouveau lien »](/doc-img/public-link-invalid.png)
 
 ## Questions fréquentes
 

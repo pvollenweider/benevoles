@@ -43,11 +43,15 @@ Les jours fériés suivent le pays de l'organisation (France ou Suisse, selon so
 
 L'aperçu donne le nombre de dates et de créneaux, les premières dates, et chaque date exclue avec sa raison (jour férié ou fermeture). Une permanence compte au plus 500 créneaux : pour plus, raccourcissez la période ou espacez les créneaux.
 
+![Formulaire « Répéter un créneau chaque semaine » rempli : poste Accueil, du 19 octobre 2026 au 17 janvier 2027, chaque vendredi de 14:00 à 17:00 en un seul créneau, 2 personnes, jours fériés de Suisse exclus et une fermeture le vendredi 30 octobre 2026 ; l'aperçu annonce 10 dates et 3 dates exclues (la fermeture, Noël et Nouvel an), au-dessus du bouton « Créer 10 créneaux »](/doc-img/admin-recurrence-form.png)
+
 Une fois créés, ce sont des créneaux ordinaires : les bénévoles s'y inscrivent comme aux autres, les rappels partent avant chacun, et chaque date se modifie ou se supprime séparément.
 
 ## Modifier ou arrêter une permanence
 
 Les permanences de l'événement sont listées sous **Permanences récurrentes**, avec leur rythme, leur période et le nombre de dates à venir.
+
+![Liste « Permanences récurrentes » de la saison d'une épicerie, toutes du 19 octobre 2026 au 17 janvier 2027 : Caisse et accueil le mardi et le jeudi, Caisse et accueil le samedi, Mise en rayon le samedi et Réception des livraisons le mercredi, chacune avec ses horaires, son nombre de dates à venir et les boutons « Modifier à partir d'une date » et « Arrêter à partir d'une date »](/doc-img/admin-recurrences.png)
 
 - **Modifier à partir d'une date** : le nombre de personnes par créneau, et les horaires pour une permanence d'un seul créneau par jour, changent sur toutes les dates à partir du jour choisi. Les dates précédentes et les créneaux annulés ne bougent pas. Les bénévoles inscrits reçoivent un email si l'horaire change. Un nombre de personnes plus petit que les inscrits d'une date est refusé, et ces dates sont listées.
 - **Arrêter à partir d'une date** : les dates sans inscrit sont supprimées. Si des dates ont déjà des inscrits, elles sont d'abord listées avec leur nombre d'inscrits, et rien ne change ; elles ne sont annulées, avec un email à chaque personne, que si vous confirmez. Arrêter à partir de la première date retire la permanence de la liste.

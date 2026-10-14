@@ -19,7 +19,11 @@ Un créneau complet peut garder une liste d'attente : les inscriptions suivantes
 
 ### Le créneau que je veux est complet
 
-Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (rayée, avec « Complet · file d'attente ») et le récapitulatif avant confirmation le signale. Concrètement :
+Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (rayée, avec « Complet · file d'attente ») et le récapitulatif avant confirmation le signale.
+
+![Planning public : la barre Buvette de 14 h à 18 h, complète (4/4), sélectionnée et marquée « En attente » ; dans « Créneaux sélectionnés », Buvette 14h–18h porte la mention « Complet · liste d'attente si place libérée », au-dessus du bouton « Continuer (1 nouveau créneau) »](/doc-img/public-waitlist-selection.png)
+
+Concrètement :
 
 1. ton inscription **n'est pas encore confirmée** : le créneau est complet ;
 2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (ta position figure dans l'email et sur ta page personnelle) ;

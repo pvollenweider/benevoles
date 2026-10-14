@@ -10,6 +10,9 @@
  *   2. DATABASE_URL, AUTH_SECRET, ORG_ADMIN_EMAIL, ORG_ADMIN_PASSWORD and
  *      NEXT_PUBLIC_APP_URL=http://localhost:3200 in the environment.
  *   3. npx prisma migrate deploy && npx tsx prisma/seed.ts && npx tsx scripts/seed-demo.ts
+ *      && npx tsx scripts/seed-demo-permanences.ts && npx tsx scripts/seed-demo-day-of.ts
+ *      (the last one dates its shifts around the current hour: run it again right before
+ *      the shots if an hour or more has passed, and capture during the day)
  *   4. npx next dev -p 3200    (from a checkout with its own node_modules: Turbopack refuses a
  *      symlinked one)
  *   5. BASE_URL=http://localhost:3200 npm run screenshots
@@ -67,22 +70,26 @@ async function shot(name, fn) {
   }
 }
 
-async function adminSession(browser) {
+/** Signs in as `email` (the demo password) and returns the id of the event titled `title` (default: the first one). */
+async function signIn(browser, { email = ORG_ADMIN_EMAIL, device = DESKTOP, title, seed = "scripts/seed-demo.ts" } = {}) {
   if (!ORG_ADMIN_PASSWORD) throw new Error("ORG_ADMIN_PASSWORD is required for the admin screenshots")
-  const context = await browser.newContext(DESKTOP)
+  const context = await browser.newContext(device)
   const page = await context.newPage()
   await page.goto(`${BASE}/admin/login`)
-  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
   await page.waitForURL(/\/admin\/(events|dashboard)/)
   await page.goto(`${BASE}/admin/events`)
   await settle(page)
-  const href = await page.getByRole("link", { name: /^Gérer/ }).first().getAttribute("href")
+  const link = title ? page.getByRole("link", { name: `Dupliquer ${title}`, exact: true }) : page.getByRole("link", { name: /^Gérer/ })
+  const href = await link.first().getAttribute("href")
   const eventId = href?.match(/\/admin\/events\/([^/?#]+)/)?.[1]
-  if (!eventId) throw new Error("demo event not found: run scripts/seed-demo.ts first")
+  if (!eventId) throw new Error(`demo event not found: run ${seed} first`)
   return { context, page, eventId }
 }
+
+const adminSession = (browser) => signIn(browser)
 
 async function run() {
   // French browser process too: native date fields show day before month (AGENTS.md).
@@ -134,6 +141,36 @@ async function run() {
     await p.goto(withOrg(`/leader/${TOKENS.leader}`))
     await settle(p)
     await save(p, "leader-page")
+  })
+  // A full shift with a waitlist: the bar stays clickable, the selection says it is a waitlist.
+  // A fresh context: the selection of the shots above is kept by the browser.
+  await shot("public-waitlist-selection", async () => {
+    const fresh = await browser.newContext(DESKTOP)
+    const w = await fresh.newPage()
+    await w.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(w)
+    await w.getByRole("button", { name: /^14h–18h .*Buvette : rejoindre la file d.attente/ }).first().click()
+    await save(w, "public-waitlist-selection")
+    await fresh.close()
+  })
+
+  // The « Ton lien personnel » box of the personal page, and the page of a link that no longer works.
+  await shot("public-personal-link", async () => {
+    await p.goto(withOrg(`/my/${TOKENS.volunteer}`))
+    await settle(p)
+    await save(p, "public-personal-link", { target: p.getByRole("region", { name: "Ton lien personnel" }) })
+  })
+  await shot("public-link-invalid", async () => {
+    await p.goto(withOrg("/my/demo-unknown-link-0000"))
+    await settle(p)
+    await save(p, "public-link-invalid", { target: p.getByRole("heading", { name: "Ce lien ne fonctionne pas" }).locator("xpath=..") })
+  })
+
+  // « Demander un espace »: the form only, without the site footer.
+  await shot("public-signup", async () => {
+    await p.goto(`${BASE}/inscription`)
+    await settle(p)
+    await save(p, "public-signup", { target: p.locator("main") })
   })
   await desk.close()
 
@@ -219,7 +256,81 @@ async function run() {
     await save(a, "admin-member-activity")
   })
 
+  await shot("admin-event-review", async () => {
+    await visit(ev("/review"))
+    await save(a, "admin-event-review", { target: a.getByRole("region", { name: "Vérification" }) })
+  })
+  // « Créer une série », filled like the guide's example (a bar from 10 h to 22 h, two-hour shifts,
+  // three people each): the preview lists the shifts. Nothing is created.
+  await shot("admin-shift-series", async () => {
+    await visit(ev("/shifts"))
+    await a.getByRole("button", { name: "Créer une série" }).click()
+    const form = a.getByRole("region", { name: "Créer une série de créneaux" })
+    await form.getByRole("combobox", { name: "Poste" }).fill("Buvette")
+    await form.getByRole("combobox", { name: "Date" }).selectOption({ index: 2 })
+    await form.getByRole("textbox", { name: "Début" }).fill("10:00")
+    await form.getByRole("textbox", { name: "Fin" }).fill("22:00")
+    await form.getByRole("spinbutton", { name: "Personnes par créneau" }).fill("3")
+    await form.getByRole("checkbox", { name: "Activer la liste d'attente" }).check()
+    await a.evaluate(() => document.activeElement?.blur())
+    await a.waitForTimeout(300)
+    await save(a, "admin-shift-series", { target: form })
+  })
+  await shot("admin-invitations", async () => { await visit(ev("/invitations")); await save(a, "admin-invitations") })
+  await shot("admin-reminders", async () => {
+    await visit(ev())
+    await save(a, "admin-reminders", { target: a.getByRole("region", { name: "Rappels automatiques activés" }) })
+  })
+  await shot("admin-event-archive", async () => {
+    await visit(ev("/print"))
+    await save(a, "admin-event-archive", { target: a.getByRole("region", { name: "Archive" }) })
+  })
+
   await context.close()
+
+  // ── Permanences and Jour J: « Épicerie de la Gare » (scripts/seed-demo-permanences.ts and
+  //    scripts/seed-demo-day-of.ts), signed in as its organizer ─────────────────
+  const epicerie = { email: "epicerie.admin@example.org", seed: "scripts/seed-demo-permanences.ts" }
+  const season = ONLY && !["admin-recurrence-form", "admin-recurrences"].some((n) => ONLY.has(n)) ? null : await signIn(browser, { ...epicerie, title: "Saison d'automne" })
+  if (season) {
+    const shifts = `${BASE}/admin/events/${season.eventId}/shifts`
+    // « Répéter chaque semaine », filled: a Friday afternoon reception, Swiss holidays excluded
+    // (Christmas and New Year's Day of the 2026–2027 season fall on a Friday), and the second
+    // Friday closed (the season starts on a Monday).
+    await shot("admin-recurrence-form", async () => {
+      await season.page.goto(shifts)
+      await settle(season.page)
+      await season.page.getByRole("button", { name: "Répéter chaque semaine" }).click()
+      const form = season.page.getByRole("region", { name: "Répéter un créneau chaque semaine" })
+      await form.getByRole("combobox", { name: "Poste" }).fill("Accueil")
+      await form.getByRole("checkbox", { name: "vendredi" }).check()
+      await form.getByRole("textbox", { name: "Début" }).fill("14:00")
+      await form.getByRole("textbox", { name: "Fin" }).fill("17:00")
+      const from = await form.getByRole("textbox", { name: "Du" }).inputValue()
+      const closed = new Date(Date.parse(`${from}T00:00:00Z`) + 11 * 86_400_000).toISOString().slice(0, 10)
+      await form.getByLabel("Fermetures (vacances, jours sans permanence)").fill(closed)
+      await form.getByRole("button", { name: "Ajouter la date" }).click()
+      await season.page.evaluate(() => document.activeElement?.blur())
+      await season.page.waitForTimeout(300)
+      await save(season.page, "admin-recurrence-form", { target: form })
+    })
+    await shot("admin-recurrences", async () => {
+      await season.page.goto(shifts)
+      await settle(season.page)
+      await save(season.page, "admin-recurrences", { target: season.page.getByRole("region", { name: "Permanences récurrentes" }) })
+    })
+    await season.context.close()
+  }
+
+  // « Jour J » on a phone, as on site: the first screen, the running shift with one person marked.
+  await shot("admin-day-of", async () => {
+    const dayOf = await signIn(browser, { ...epicerie, device: MOBILE, title: "Inventaire d'automne", seed: "scripts/seed-demo-day-of.ts" })
+    await dayOf.page.goto(`${BASE}/admin/events/${dayOf.eventId}/day-of`)
+    await settle(dayOf.page)
+    await save(dayOf.page, "admin-day-of")
+    await dayOf.context.close()
+  })
+
   return finish(browser)
 }
 
