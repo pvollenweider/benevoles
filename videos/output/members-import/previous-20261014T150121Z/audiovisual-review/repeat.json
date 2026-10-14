@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:47:08.481Z",
+  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "promptSha256": "476beca7da3d6ace166ff7a345ef8b2e9344ef5752ab51890c2b95ae95aec6cc",
+  "clipSha256": "80faba115cf51001ba6e078356dac75e88267a977ddbf9a4650b45e21c1c01c8",
+  "scene": "repeat",
+  "review": {
+    "heardOpening": "Si vous analysez de nouveau ce fichier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
+        "visibleSeconds": 2.2,
+        "visible": "Boîte de dialogue d'importation avec l'option Ignorer cochée, puis clic sur Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "les emails déjà présents sont reconnus",
+        "visibleSeconds": 4.2,
+        "visible": "Affichage du rapport d'analyse indiquant 39 fiches ignorées avec les adresses email associées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "puis annulez si vous ne souhaitez rien ajouter",
+        "visibleSeconds": 16.6,
+        "visible": "Clic sur le bouton Retour qui ferme la modale sans valider l'importation de la fiche supplémentaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la manipulation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

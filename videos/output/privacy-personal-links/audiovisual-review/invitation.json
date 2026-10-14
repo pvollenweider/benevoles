@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:28:08.372Z",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "promptSha256": "39d6081d1366e3d885603d0e352ee1cc410e70e86f3632730ff4d90ddd2932d6",
+  "clipSha256": "0215afa2b360fee1bcc19f96fc5340ed7376a4ee3f9e9867f770ab176525f1af",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente d'un lien public.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 4,
+        "visible": "Fenêtre modale 'Inviter des membres' affichant Zoé Exemple sélectionnée avant envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "puis nous ouvrons le vrai email reçu",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage de la messagerie Mailpit avec l'e-mail d'invitation adressé à Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues pour cette invitation",
+        "visibleSeconds": 8.5,
+        "visible": "Accès au formulaire d'inscription sur la sélection de créneau puis sur la page 'Tes informations'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+        "visibleSeconds": 18,
+        "visible": "Champs du formulaire préremplis avec le prénom Zoé, l'adresse email et le créneau sélectionné dans l'encadré latéral",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien synchronisée avec le déroulement de la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

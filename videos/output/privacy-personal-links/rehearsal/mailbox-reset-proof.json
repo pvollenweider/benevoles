@@ -1,0 +1,190 @@
+{
+  "checkedAt": "2026-10-14T15:08:42.927Z",
+  "deletedMessages": [
+    {
+      "ID": "3BhJ1JX1XScPjLIc7rJfm9",
+      "MessageID": "9a26fb1a-c6f7-7408-dd96-8f386cb64f3e@benevol.app",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.member.3@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "[Formation — confidentialité A] On a besoin de toi — Fête des liens — organisation A 🙌",
+      "Created": "2026-10-14T15:07:55.543Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4698,
+      "Attachments": 0,
+      "Snippet": "Formation — confidentialité A t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic. Hello Zoé ! 👋 On a besoin de bénévoles géniaux comme toi pour Fête des liens — organis..."
+    },
+    {
+      "ID": "7JiHyzhf1SXJsdenQaYSC3",
+      "MessageID": "outbox-cmv88upl9002jfpa56y6rdjz2@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.member.0@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "Ton lien pour gérer ton inscription — Fête des liens — organisation A",
+      "Created": "2026-10-14T15:07:41.75Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3501,
+      "Attachments": 0,
+      "Snippet": "Ton lien pour Fête des liens — organisation A Hello Léa ! 👋 Voici ton lien personnel pour voir ou modifier ton inscription à Fête des liens — organisation A. Gérer mon inscription À très..."
+    },
+    {
+      "ID": "7hBkEJENxBniUbwCSPASJ4",
+      "MessageID": "outbox-cmv88ujdc002hfpa5uqld6ltx@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.new@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "Ton lien pour gérer ton inscription — Fête des liens — organisation A",
+      "Created": "2026-10-14T15:07:33.685Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3472,
+      "Attachments": 0,
+      "Snippet": "Ton lien pour Fête des liens — organisation A Hello Jules ! 👋 Voici ton lien personnel pour voir ou modifier ton inscription à Fête des liens — organisation A. Gérer mon inscription À tr..."
+    },
+    {
+      "ID": "2NBFRbG1NHuoB5ziGleub0",
+      "MessageID": "outbox-cmv88uehz002bfpa5ytpr74u7@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "Nouvelle inscription — Fête des liens — organisation A",
+      "Created": "2026-10-14T15:07:27.48Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3114,
+      "Attachments": 0,
+      "Snippet": "Jules Exemple · 1 créneau Jules Exemple (video.privacy.a.new@example.org) vient de s'inscrire à Fête des liens — organisation A. Accueil · Accueil — équipe A · 24/10/2026 · 10:00–12:00 b..."
+    },
+    {
+      "ID": "3W8mDJnzlakKEuj4sJbbHd",
+      "MessageID": "outbox-cmv88uehw002afpa5dd5q49q7@video.invalid",
+      "Read": true,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.new@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "Inscription confirmée — Fête des liens — organisation A 🎉",
+      "Created": "2026-10-14T15:07:27.417Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 4315,
+      "Attachments": 0,
+      "Snippet": "1 créneau confirmé — on a hâte de te retrouver ! Hello Jules ! 🎉 Super, ton inscription pour Fête des liens — organisation A est confirmée ! Accueil — équipe A · 24/10/2026 · 10:00..."
+    },
+    {
+      "ID": "4gpGJKXDwm31enaJqOnSJg",
+      "MessageID": "outbox-cmv88txyd0024fpa5omo7mvjd@video.invalid",
+      "Read": false,
+      "From": {
+        "Name": "Bénévoles vidéo",
+        "Address": "notifications@benevol.app"
+      },
+      "To": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.leader@example.org"
+        }
+      ],
+      "Cc": null,
+      "Bcc": null,
+      "ReplyTo": [
+        {
+          "Name": "",
+          "Address": "video.privacy.a.owner@example.org"
+        }
+      ],
+      "Subject": "Vous êtes responsable de « Accueil » — Fête des liens — organisation A",
+      "Created": "2026-10-14T15:07:06.042Z",
+      "Username": "video",
+      "Tags": [],
+      "Size": 3782,
+      "Attachments": 0,
+      "Snippet": "Consultez la liste des bénévoles inscrits sur « Accueil ». Bonjour Camille, Vous avez été désigné·e responsable du poste Accueil pour Fête des liens — organisation A. Voir qui est inscrit ..."
+    }
+  ],
+  "preservedMessageIds": [
+    "4a2EzjNA6hhojIHlJoNJiC",
+    "0iLI6TPxzLk0cbs9OIksr3",
+    "3O7S09FRzxGsQMkhnyInvt"
+  ]
+}

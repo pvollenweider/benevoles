@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:57.367Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T15:20:08.130Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
   "promptSha256": "4722abadbb7f9a2435deca588f03c7540debb407a43556355a40d1edb9d8809e",
-  "clipSha256": "e7b874b1317763948cfad061bf8f16b76c9a0074aac7243c983cce5bc97e9d6c",
+  "clipSha256": "2422c0ba072f53cefdaca8be481b7833e3bf2b42c485d7cd2db067e9d7302ee6",
   "scene": "corrected",
   "review": {
     "heardOpening": "Nous choisissons maintenant le fichier Excel corrigé",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Nous choisissons maintenant le fichier Excel corrigé",
-        "visibleSeconds": 1.1,
-        "visible": "La fenêtre d'import s'affiche avec le fichier membres-corriges.xlsx sélectionné",
+        "spokenSeconds": 0,
+        "spoken": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse.",
+        "visibleSeconds": 1,
+        "visible": "La fenêtre d'importation affiche le fichier 'membres-corriges.xlsx' sélectionné et le bouton 'Analyser le fichier'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.1,
-        "spoken": "et relançons l'analyse",
-        "visibleSeconds": 4.1,
-        "visible": "Clic sur le bouton bleu Analyser le fichier",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 4.5,
         "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
-        "visibleSeconds": 5.8,
-        "visible": "Affichage de la synthèse avec 0 ligne en erreur et le bouton Importer 40 membres",
+        "visibleSeconds": 5,
+        "visible": "L'analyse se termine : mention '0 ligne en erreur', 'Membres du fichier (40)' et bouton 'Importer 40 membres'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
-        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
-        "visibleSeconds": 11.5,
-        "visible": "La ligne 3 montre René Meyer sans adresse email avec action Créer",
+        "spokenSeconds": 10.5,
+        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone.",
+        "visibleSeconds": 11,
+        "visible": "La ligne 4 affiche René Meyer avec le champ email vide et l'action 'Créer'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Vérifiez une dernière fois les noms, les catégories et le récapitulatif.",
+        "visibleSeconds": 15,
+        "visible": "Le tableau récapitulatif avec les colonnes Nom, Email, Tags et Action reste affiché.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les étapes d'import."
+      "observation": "Voix féminine posée, claire et bien articulée, parfaitement synchronisée avec l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

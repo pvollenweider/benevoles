@@ -1,59 +1,61 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:46.809Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T15:19:21.880Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
   "promptSha256": "76d5f7749b7d647fc4dc4f33983c0de25f54035a66bac1105f43841d3d80d962",
-  "clipSha256": "bddd9366c75d2d9be2008bc588d89bca40f63a3aa0f97913ebc121b44f8c5443",
+  "clipSha256": "7b8278d7565ee7a9f742f10113ea6a6f5da8e811d701a78e0d6d7fcac88b2c09",
   "scene": "preview",
   "review": {
-    "heardOpening": "Ouvrez Importer des membres",
+    "heardOpening": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
         "visibleSeconds": 0,
-        "visible": "La fenêtre modale « Importer des membres » est déjà ouverte avec le fichier « membres-a-verifier.csv » sélectionné.",
-        "sync": "aligned",
-        "severity": "none"
+        "visible": "La fenêtre Importer des membres et le fichier sont déjà ouverts et sélectionnés à l'écran dès le début.",
+        "sync": "missing",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 4.5,
         "spoken": "l'option Ignorer conserve la fiche actuelle.",
-        "visibleSeconds": 6.2,
-        "visible": "La case radio « Ignorer » est bien cochée sous « Si un email existe déjà ».",
+        "visibleSeconds": 4.5,
+        "visible": "Le bouton radio Ignorer est bien coché dans le formulaire.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.2,
         "spoken": "Cliquez sur Analyser le fichier.",
-        "visibleSeconds": 10.5,
-        "visible": "Clic sur le bouton bleu « Analyser le fichier », ouvrant la vue de résultat de l'analyse.",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur le bouton bleu Analyser le fichier.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.5,
+        "spokenSeconds": 11.5,
         "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
-        "visibleSeconds": 12,
-        "visible": "Affichage du texte de synthèse (35 à créer, 2 déjà présents ignorés, 3 lignes en erreur) et des tableaux correspondants.",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage du récapitulatif avec le statut global, le bloc d'erreurs et la liste des membres.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.8,
+        "spokenSeconds": 17.2,
         "spoken": "Les colonnes reconnues et les tags sont également indiqués.",
-        "visibleSeconds": 18.8,
-        "visible": "Les mentions « Tags ajoutés » et « Colonnes reconnues » sont affichées sous le récapitulatif.",
+        "visibleSeconds": 17.2,
+        "visible": "Lignes décrivant les tags ajoutés et les colonnes reconnues bien visibles en haut de la fenêtre.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:00, l'action d'ouverture du dialogue d'importation et la sélection du fichier ne sont pas effectuées à l'écran : la fenêtre modale contenant déjà le fichier est présente dès la première image."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse claire, fluide et posée, bien synchronisée avec les éléments affichés."
+      "observation": "Voix claire, posée et bien articulée, avec un débit régulier et un ton engageant."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

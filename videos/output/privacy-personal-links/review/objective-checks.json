@@ -1,0 +1,466 @@
+{
+  "checkedAt": "2026-10-14T15:29:41.250636+00:00",
+  "id": "PRIVACY_PERSONAL_LINKS",
+  "status": "NOT READY",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "product": {
+    "commit": "8941cc1cb184ca53a23a7ade7fc9e889075e7725",
+    "sourceTree": "8f5a1c9946faac17bc7430b6ee49b10f666c8688",
+    "productSourceSha256": "5f78abc7d5573a573c24ec850f42291e49d5d98eeb063808e54850964ac0cbee",
+    "buildId": "zHvrRgnTvwimSPsFYL2Dw",
+    "snapshot": "/tmp/benevoles-video-production.Ns1yr5eb",
+    "builtAt": "2026-10-14T15:02:37.334Z"
+  },
+  "durationSeconds": 366.6,
+  "checks": {
+    "pinnedCommit": true,
+    "oneContinuousKoreGeneration": true,
+    "sourceNarrationAudited": true,
+    "finalMultilingualASR": true,
+    "validation": true,
+    "music": true,
+    "actualInputEffects": true,
+    "vttMatchesCurrentManifest": true,
+    "viewerRegisterVTT": true,
+    "viewerRegisterASR": true,
+    "noAddedEnglishSpeech": true,
+    "noForbiddenUIInInspectedFrames": true,
+    "audiovisual": false
+  },
+  "music": {
+    "voicedWindows": 332,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.8,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.3
+  },
+  "effects": {
+    "clicks": 29,
+    "keys": 177
+  },
+  "viewerTuCountVTT": 0,
+  "viewerTuCountASR": 0,
+  "retainedScreenLabelCountVTT": 1,
+  "ocrFlags": [],
+  "reviews": [
+    {
+      "chapter": "welcome",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 14.5,
+          "spoken": "deux organisations ont chacune une Léa Exemple",
+          "visibleSeconds": 17.5,
+          "visible": "Affichage de la liste des membres dans l'organisation A avec Léa Exemple, puis bascule vers l'organisation B affichant également Léa Exemple",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 21.6,
+          "spoken": "les fiches et les adresses sont différentes",
+          "visibleSeconds": 22,
+          "visible": "L'adresse email spécifique de Léa pour l'organisation B (video.privacy.b.member.2@example.org) est visible dans le tableau",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 25.4,
+          "spoken": "Chaque organisation retrouve son propre événement dans son administration",
+          "visibleSeconds": 28.5,
+          "visible": "Transition vers la page de l'événement Fête des liens – organisation A avec le planning",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine naturelle, claire et fluide, accompagnée d'un fond musical léger."
+      }
+    },
+    {
+      "chapter": "signup",
+      "issues": [
+        "À 00:20, la validation du formulaire redirige vers une page d'erreur 404 ('Cette page est tombée à l'eau') au lieu de l'écran normal de confirmation d'inscription décrit par la voix."
+      ],
+      "checkpoints": [
+        {
+          "spokenSeconds": 5,
+          "spoken": "Jules choisit un créneau et renseigne ses coordonnées.",
+          "visibleSeconds": 5.5,
+          "visible": "Sélection du créneau 10h-12h puis affichage du formulaire avec saisie des coordonnées",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 19.5,
+          "spoken": "Après l'envoi, l'inscription est enregistrée",
+          "visibleSeconds": 20,
+          "visible": "Clic sur 'Confirmer mon inscription' affichant une page d'erreur 404 ('Cette page est tombée à l'eau')",
+          "sync": "aligned",
+          "severity": "major"
+        },
+        {
+          "spokenSeconds": 33.2,
+          "spoken": "Ouvrons donc le vrai message reçu par Jules",
+          "visibleSeconds": 34,
+          "visible": "Affichage de la boîte email Mailpit avec le courriel d'inscription confirmée",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 38,
+          "spoken": "Nous arrivons sur sa propre inscription",
+          "visibleSeconds": 38,
+          "visible": "Page 'Mes inscriptions' de Jules avec le récapitulatif du créneau",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off féminine naturelle, claire et posée."
+      }
+    },
+    {
+      "chapter": "personal",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.2,
+          "spoken": "Jules retrouve son créneau et les actions prévues pour son inscription.",
+          "visibleSeconds": 2,
+          "visible": "Page 'Mes inscriptions' affichant les détails de la mission et les créneaux pour Jules Exemple.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.8,
+          "spoken": "Le panneau Ton lien personnel rappelle à quoi sert cet accès.",
+          "visibleSeconds": 6,
+          "visible": "Encadré 'Ton lien personnel' visible avec le texte explicatif.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 19.1,
+          "spoken": "Utilisons Recevoir ce lien par email",
+          "visibleSeconds": 20.3,
+          "visible": "Clic sur le bouton 'Recevoir ce lien par email'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 21.8,
+          "spoken": "puis ouvrons le nouveau message reçu.",
+          "visibleSeconds": 23.4,
+          "visible": "Affichage de la messagerie Mailpit avec le courriel reçu ouvert.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+      }
+    },
+    {
+      "chapter": "recovery",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription.",
+          "visibleSeconds": 3.3,
+          "visible": "Saisie de l'adresse email de membre puis clic sur le bouton pour recevoir le lien.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11.2,
+          "spoken": "Vérifions le message reçu dans la boîte de Léa.",
+          "visibleSeconds": 11.4,
+          "visible": "Affichage de la boîte Mailpit avec le courriel adressé à Léa contenant le bouton d'accès.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.5,
+          "spoken": "Recommençons avec une adresse fictive inconnue :",
+          "visibleSeconds": 15.6,
+          "visible": "Retour au formulaire et saisie d'une adresse inconnue suivie de la validation.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 21.1,
+          "spoken": "demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B.",
+          "visibleSeconds": 21.6,
+          "visible": "Saisie de l'adresse du membre B dans le formulaire de l'organisation A.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+      }
+    },
+    {
+      "chapter": "invitation",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.8,
+          "spoken": "L'organisation l'envoie à Zoé",
+          "visibleSeconds": 4,
+          "visible": "Fenêtre modale 'Inviter des membres' affichant Zoé Exemple sélectionnée avant envoi",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.9,
+          "spoken": "puis nous ouvrons le vrai email reçu",
+          "visibleSeconds": 6.2,
+          "visible": "Affichage de la messagerie Mailpit avec l'e-mail d'invitation adressé à Zoé",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8,
+          "spoken": "Son lien conduit au formulaire avec les informations prévues pour cette invitation",
+          "visibleSeconds": 8.5,
+          "visible": "Accès au formulaire d'inscription sur la sélection de créneau puis sur la page 'Tes informations'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 18,
+          "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+          "visibleSeconds": 18,
+          "visible": "Champs du formulaire préremplis avec le prénom Zoé, l'adresse email et le créneau sélectionné dans l'encadré latéral",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée, claire et bien synchronisée avec le déroulement de la démonstration."
+      }
+    },
+    {
+      "chapter": "leader",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.5,
+          "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
+          "visibleSeconds": 3.8,
+          "visible": "Affichage de la page « Responsable - Accueil » listant les bénévoles inscrits à ce poste.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 20.5,
+          "spoken": "Revenons dans l'administration et retirons ce responsable.",
+          "visibleSeconds": 21,
+          "visible": "Retour à la page d'administration « Responsables de secteur » et clic sur « Retirer » pour Camille Exemple.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 24.5,
+          "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+          "visibleSeconds": 26.8,
+          "visible": "La page s'ouvre sur un message d'erreur « Lien introuvable ».",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée, claire et parfaitement intelligible, débit régulier et bien synchronisé avec la démonstration."
+      }
+    },
+    {
+      "chapter": "admin",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 4.8,
+          "spoken": "Dans les inscriptions, il retrouve les personnes et les réponses aux questions",
+          "visibleSeconds": 4.8,
+          "visible": "Défilement de la liste des inscriptions avec les réponses des bénévoles",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.2,
+          "spoken": "Dans les membres, il peut consulter les disponibilités et les notes internes",
+          "visibleSeconds": 9.2,
+          "visible": "Affichage de l'onglet Membres avec les coordonnées et les notes internes",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.3,
+          "spoken": "Regardons la fiche de Léa, puis comparons avec les deux vues précédentes.",
+          "visibleSeconds": 14.5,
+          "visible": "Ouverture de la fenêtre modale de modification du membre Léa",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 19.1,
+          "spoken": "Sa page personnelle ne montre pas les notes internes.",
+          "visibleSeconds": 19.6,
+          "visible": "Affichage de l'espace personnel 'Mes inscriptions' de Léa sans note interne",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 22.1,
+          "spoken": "Le responsable reçoit les contacts de son équipe, pas la fiche membre complète.",
+          "visibleSeconds": 22,
+          "visible": "Affichage de la vue responsable d'équipe avec uniquement les coordonnées",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix posée, claire et bien articulée, synchronisée avec les transitions d'écran."
+      }
+    },
+    {
+      "chapter": "legal",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.3,
+          "spoken": "Ouvrons Confidentialité.",
+          "visibleSeconds": 4.8,
+          "visible": "Clic sur le lien Confidentialité et affichage de la Politique de confidentialité",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.1,
+          "spoken": "Repérons aussi les indications de conservation et les moyens de contact.",
+          "visibleSeconds": 10.2,
+          "visible": "Défilement vers la section 7. Conservation des données puis 6. Droits des personnes concernées",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 20,
+          "spoken": "Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre.",
+          "visibleSeconds": 22,
+          "visible": "Clic sur le lien CGU et ouverture des Conditions générales d'utilisation",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+      }
+    },
+    {
+      "chapter": "copies",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+          "visibleSeconds": 4.5,
+          "visible": "Ouverture du rapport « Planning par jour » avec la grille horaire et les bénévoles affectés.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.5,
+          "spoken": "Comparons-le au CSV des membres",
+          "visibleSeconds": 8.5,
+          "visible": "Navigation vers l'onglet « Membres » puis clic sur « Exporter les membres (CSV) ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.7,
+          "spoken": "ce fichier comporte notamment des coordonnées et des notes internes.",
+          "visibleSeconds": 13.2,
+          "visible": "Affichage de la vue « Lecture du CSV des membres » montrant les colonnes détaillées de données personnelles.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, calme et dynamique, parfaitement intelligible avec un débit régulier."
+      }
+    },
+    {
+      "chapter": "result",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Revenons à la page personnelle et à son avertissement.",
+          "visibleSeconds": 0,
+          "visible": "Page « Mes inscriptions » affichée avec la section « Ton lien personnel » et son avertissement.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "Pour recruter, partagez la page publique.",
+          "visibleSeconds": 3.1,
+          "visible": "Affichage de la page publique de l'événement « Fête des liens – organisation A ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.3,
+          "spoken": "Pour gérer une inscription, gardez le lien personnel pour son destinataire.",
+          "visibleSeconds": 5.6,
+          "visible": "Retour à la page « Mes inscriptions » avec le bloc « Ton lien personnel ».",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.4,
+          "spoken": "Pour coordonner un poste, remettez le lien du responsable à la personne désignée.",
+          "visibleSeconds": 9.5,
+          "visible": "Affichage de la page « Responsable – Accueil » avec la liste des bénévoles inscrits.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.4,
+          "spoken": "Si un accès a été diffusé par erreur, contactez l'organisation",
+          "visibleSeconds": 14,
+          "visible": "Retour à la page « Mes inscriptions » avec le bouton « Écrire à l'organisation ».",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, synchronisée avec les changements d'écrans illustratifs."
+      }
+    }
+  ],
+  "subjectiveRealtimeListening": "Unavailable; not a failure criterion. Actual sound reviewed through independent multilingual ASR and audiovisual chapter clips."
+}

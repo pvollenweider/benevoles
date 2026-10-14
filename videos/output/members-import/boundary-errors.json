@@ -1,0 +1,12 @@
+{
+  "anchor": "Ici, la ligne six n'a pas de prénom, et la ligne",
+  "windowStart": 61.596000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 9.15,
+    "wordsHeard": "Ici, la ligne six n'a pas de prénom, et la ligne"
+  },
+  "onset": 70.74600000000001,
+  "proposedCut": 70.639292,
+  "note": "Proposal only; recut then independently audit before capture"
+}

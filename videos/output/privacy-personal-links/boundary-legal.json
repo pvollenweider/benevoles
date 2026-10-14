@@ -1,0 +1,12 @@
+{
+  "anchor": "Les informations publiques se trouvent aussi dans le pied de page.",
+  "windowStart": 223.144,
+  "result": {
+    "found": true,
+    "startSeconds": 20.06,
+    "wordsHeard": "Les informations publiques se trouvent aussi dans le pied de page."
+  },
+  "onset": 243.204,
+  "proposedCut": 242.98502100000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

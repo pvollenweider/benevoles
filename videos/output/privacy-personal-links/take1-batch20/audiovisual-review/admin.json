@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:17:21.261Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "1adac85fc0f665eccbaa6cdcf09b7f89150d20e58dce9bdce78cd32644b5eaf2",
+  "clipSha256": "45749c7f4588a18c13d08f25acefa58d99612854711a39d524b08099b1b8db12",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement.",
+        "visibleSeconds": 5,
+        "visible": "Page des Inscriptions affichée avec la liste des inscrits et les détails des réponses.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Dans les membres, il peut consulter les disponibilités et les notes internes de préparation.",
+        "visibleSeconds": 9.6,
+        "visible": "Navigation vers l'onglet Membres affichant la liste des bénévoles et leurs disponibilités.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Regardons la fiche de Léa, puis comparons avec les deux vues précédentes.",
+        "visibleSeconds": 14.7,
+        "visible": "Ouverture de la fenêtre modale 'Modifier le membre' pour Léa affichant le champ Notes internes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Sa page personnelle ne montre pas les notes internes.",
+        "visibleSeconds": 19.3,
+        "visible": "Affichage de la vue personnelle bénévole 'Mes inscriptions' sans mention des notes internes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Le responsable reçoit les contacts de son équipe, pas la fiche membre complète.",
+        "visibleSeconds": 21.6,
+        "visible": "Affichage de la vue Responsable - Accueil listant uniquement les contacts des équipiers.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation précise avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

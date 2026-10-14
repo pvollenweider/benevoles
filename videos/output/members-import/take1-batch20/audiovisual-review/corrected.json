@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:11:42.156Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "4722abadbb7f9a2435deca588f03c7540debb407a43556355a40d1edb9d8809e",
+  "clipSha256": "6363dc222670ae1623d7f1d8b243c4982ffbfdabb5fef4a561563d85d1c8e75e",
+  "scene": "corrected",
+  "review": {
+    "heardOpening": "Nous choisissons maintenant le fichier Excel corrigé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Nous choisissons maintenant le fichier Excel corrigé",
+        "visibleSeconds": 1,
+        "visible": "La fenêtre modale affiche le fichier sélectionné membres-corriges.xlsx",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "et relançons l'analyse",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton bleu Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
+        "visibleSeconds": 4.6,
+        "visible": "Affichage du récapitulatif avec 0 ligne en erreur et Membres du fichier (40)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.7,
+        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
+        "visibleSeconds": 11,
+        "visible": "La ligne de René Meyer est visible dans le tableau sans adresse email avec l'action Créer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,223 @@
+{
+  "slug": "members-import",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-12T05:45:37.070Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
+    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
+    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
+    "buildId": "Ro9VdxUayqlTAULEvQpY0",
+    "snapshot": "/tmp/benevoles-video-production.batch11",
+    "builtAt": "2026-10-12T04:25:58.799Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "MEMBERS_IMPORT",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 23115
+    },
+    {
+      "kind": "click",
+      "atMs": 59898
+    },
+    {
+      "kind": "click",
+      "atMs": 99262
+    },
+    {
+      "kind": "click",
+      "atMs": 100045
+    },
+    {
+      "kind": "click",
+      "atMs": 106027
+    },
+    {
+      "kind": "click",
+      "atMs": 126744
+    },
+    {
+      "kind": "click",
+      "atMs": 132244
+    },
+    {
+      "kind": "click",
+      "atMs": 153143
+    },
+    {
+      "kind": "click",
+      "atMs": 166525
+    },
+    {
+      "kind": "click",
+      "atMs": 167343
+    },
+    {
+      "kind": "click",
+      "atMs": 170542
+    },
+    {
+      "kind": "click",
+      "atMs": 174040
+    },
+    {
+      "kind": "click",
+      "atMs": 177891
+    },
+    {
+      "kind": "key",
+      "atMs": 178199
+    },
+    {
+      "kind": "click",
+      "atMs": 179541
+    },
+    {
+      "kind": "click",
+      "atMs": 180359
+    },
+    {
+      "kind": "click",
+      "atMs": 181159
+    },
+    {
+      "kind": "click",
+      "atMs": 193942
+    },
+    {
+      "kind": "click",
+      "atMs": 194742
+    }
+  ],
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 148,
+      "endMs": 22173
+    },
+    {
+      "id": "file",
+      "startMs": 22625,
+      "endMs": 48232
+    },
+    {
+      "id": "preview",
+      "startMs": 48685,
+      "endMs": 74312
+    },
+    {
+      "id": "errors",
+      "startMs": 74765,
+      "endMs": 98344
+    },
+    {
+      "id": "update",
+      "startMs": 98796,
+      "endMs": 125806
+    },
+    {
+      "id": "corrected",
+      "startMs": 126260,
+      "endMs": 152035
+    },
+    {
+      "id": "confirm",
+      "startMs": 152487,
+      "endMs": 176913
+    },
+    {
+      "id": "repeat",
+      "startMs": 177367,
+      "endMs": 198831
+    },
+    {
+      "id": "result",
+      "startMs": 199283,
+      "endMs": 220466
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "file",
+      "phrase": "prénom, nom, email, téléphone et",
+      "startMs": 6272,
+      "endMs": 8414,
+      "cueMs": 28898
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Le récapitulatif montre les créations",
+      "startMs": 10722,
+      "endMs": 16751,
+      "cueMs": 59407
+    },
+    {
+      "segmentId": "errors",
+      "phrase": "Corrige le fichier d'origine plutôt",
+      "startMs": 13836,
+      "endMs": 17009,
+      "cueMs": 88602
+    },
+    {
+      "segmentId": "update",
+      "phrase": "Ici, Camille et Julien passent",
+      "startMs": 20071,
+      "endMs": 26790,
+      "cueMs": 118868
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "Les erreurs ont disparu.",
+      "startMs": 5516,
+      "endMs": 6526,
+      "cueMs": 131778
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "René n'a pas d'email ",
+      "startMs": 11813,
+      "endMs": 12770,
+      "cueMs": 138075
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Ferme la fenêtre et recherchez",
+      "startMs": 13538,
+      "endMs": 15608,
+      "cueMs": 166027
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Ouvrez sa fiche pour vérifier",
+      "startMs": 17585,
+      "endMs": 20640,
+      "cueMs": 170077
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Importer une personne ne l'inscrit",
+      "startMs": 21060,
+      "endMs": 24038,
+      "cueMs": 173548
+    },
+    {
+      "segmentId": "repeat",
+      "phrase": "Regardez toujours le nombre de",
+      "startMs": 16086,
+      "endMs": 20930,
+      "cueMs": 193454
+    }
+  ]
+}

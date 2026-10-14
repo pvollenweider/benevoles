@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:17:51.532Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "678f5ac30d706299fcbd534c58a4ce180490388633abcc5cf58b2268ad156388",
+  "clipSha256": "a8ee74c88533ec5355d8592769074e99f6c36a5dcc46f9dbb1784178cefd132e",
+  "scene": "copies",
+  "review": {
+    "heardOpening": "Sur le terrain, une liste bien choisie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le lien « Planning par jour » et affichage du rapport correspondant.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Comparons-le au CSV des membres",
+        "visibleSeconds": 9.2,
+        "visible": "Navigation vers la liste des membres puis export vers le visualiseur CSV.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "ce fichier comporte notamment des coordonnées et des notes internes.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage des colonnes de données personnelles dans le visualiseur CSV.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

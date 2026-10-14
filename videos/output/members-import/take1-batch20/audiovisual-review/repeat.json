@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:12:15.637Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "476beca7da3d6ace166ff7a345ef8b2e9344ef5752ab51890c2b95ae95aec6cc",
+  "clipSha256": "830f45f3d2af22217116e3825f48710c50182bd7983ed4041d54fd85a6ed3335",
+  "scene": "repeat",
+  "review": {
+    "heardOpening": "Si vous analysez de nouveau ce fichier avec Ignorer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
+        "visibleSeconds": 2.2,
+        "visible": "Fenêtre d'importation avec le fichier sélectionné et l'option Ignorer active, puis clic sur Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "les emails déjà présents sont reconnus",
+        "visibleSeconds": 4.5,
+        "visible": "Synthèse de l'analyse affichant 39 déjà présents ignoré",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "Mais attention aux fiches sans email",
+        "visibleSeconds": 5,
+        "visible": "Fiche de René Meyer sans adresse email marquée avec l'action créer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "puis annulez si vous ne souhaitez rien ajouter",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur le bouton Annuler fermant la fenêtre modale sans importer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, posée et parfaitement claire, sans bruit de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

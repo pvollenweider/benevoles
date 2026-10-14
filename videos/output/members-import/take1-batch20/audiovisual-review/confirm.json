@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:12:01.174Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "c1ae23974bc24aea4dd7c2fd898ca0d84acc1cb122f542f15a1010ae3f0dc71d",
+  "clipSha256": "2444633d51c98b4b004cc5c529c9b450bcfa3e51ef8e0a58d84dc44931ad1109",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Quand l'aperçu vous convient, confirmez l'import.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "confirmez l'import.",
+        "visibleSeconds": 0.5,
+        "visible": "Le clic sur le bouton 'Importer 40 membres' est effectué et la fenêtre de confirmation s'affiche.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le résultat indique combien ont été créées, mises à jour ou ignorées",
+        "visibleSeconds": 7,
+        "visible": "Le message 'Import terminé : 38 créés, 2 mis à jour, 0 ignorés (40 lignes lues).' est affiché dans la boîte de dialogue.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Fermez la fenêtre et recherchez Maya",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur 'Fermer' puis saisie de 'Maya' dans le champ de recherche.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses tags.",
+        "visibleSeconds": 18.8,
+        "visible": "Clic sur 'Éditer' pour ouvrir la fiche de Maya Perret avec son numéro de téléphone et ses tags visibles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

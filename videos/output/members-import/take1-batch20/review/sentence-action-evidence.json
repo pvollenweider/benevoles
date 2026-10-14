@@ -1,0 +1,741 @@
+{
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "id": "welcome",
+      "startMs": 148,
+      "endMs": 22060,
+      "sentences": [
+        {
+          "text": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
+          "startMs": 420,
+          "endMs": 4880,
+          "method": "silence",
+          "absoluteStartMs": 568
+        },
+        {
+          "text": "L'import évite de ressaisir chaque personne.",
+          "startMs": 5314,
+          "endMs": 7951,
+          "method": "silence",
+          "absoluteStartMs": 5462
+        },
+        {
+          "text": "Il peut aussi compléter une liste existante.",
+          "startMs": 8262,
+          "endMs": 10547,
+          "method": "silence",
+          "absoluteStartMs": 8410
+        },
+        {
+          "text": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair.",
+          "startMs": 11214,
+          "endMs": 17096,
+          "method": "silence",
+          "absoluteStartMs": 11362
+        },
+        {
+          "text": "Bien sûr, vous pouvez toujours créer les membres manuellement avec Nouveau membre.",
+          "startMs": 17519,
+          "endMs": 21471,
+          "method": "silence",
+          "absoluteStartMs": 17667
+        }
+      ],
+      "anchors": [],
+      "interactions": []
+    },
+    {
+      "chapter": "file",
+      "id": "file",
+      "startMs": 22512,
+      "endMs": 46872,
+      "sentences": [
+        {
+          "text": "Le fichier peut être un CSV ou un Excel.",
+          "startMs": 443,
+          "endMs": 3022,
+          "method": "silence",
+          "absoluteStartMs": 22955
+        },
+        {
+          "text": "La première ligne contient les noms des colonnes :",
+          "startMs": 3362,
+          "endMs": 5421,
+          "method": "silence",
+          "absoluteStartMs": 25874
+        },
+        {
+          "text": "prénom, nom, email, téléphone et tags.",
+          "startMs": 5809,
+          "endMs": 7814,
+          "method": "silence",
+          "absoluteStartMs": 28321
+        },
+        {
+          "text": "Le prénom et le nom sont nécessaires.",
+          "startMs": 8019,
+          "endMs": 9357,
+          "method": "silence",
+          "absoluteStartMs": 30531
+        },
+        {
+          "text": "Une fiche sans email reste possible, mais elle ne recevra pas de messages par email.",
+          "startMs": 9989,
+          "endMs": 16691,
+          "method": "silence",
+          "absoluteStartMs": 32501
+        },
+        {
+          "text": "Les tags se séparent par des virgules.",
+          "startMs": 17191,
+          "endMs": 19004,
+          "method": "silence",
+          "absoluteStartMs": 39703
+        },
+        {
+          "text": "Les disponibilités, elles, se renseignent ensuite dans la fiche :",
+          "startMs": 19672,
+          "endMs": 22811,
+          "method": "silence",
+          "absoluteStartMs": 42184
+        },
+        {
+          "text": "elles ne sont pas importées.",
+          "startMs": 22989,
+          "endMs": 23957,
+          "method": "silence",
+          "absoluteStartMs": 45501
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "file",
+          "phrase": "prénom, nom, email, téléphone et",
+          "startMs": 5809,
+          "endMs": 7814,
+          "cueMs": 28323,
+          "sentenceAbsoluteMs": 28321,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/file-1.png",
+            "atMs": 28973
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 23001
+        }
+      ]
+    },
+    {
+      "chapter": "preview",
+      "id": "preview",
+      "startMs": 47324,
+      "endMs": 71694,
+      "sentences": [
+        {
+          "text": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+          "startMs": 401,
+          "endMs": 3965,
+          "method": "silence",
+          "absoluteStartMs": 47725
+        },
+        {
+          "text": "Si un email existe déjà, l'option Ignorer conserve la fiche actuelle.",
+          "startMs": 4640,
+          "endMs": 8811,
+          "method": "silence",
+          "absoluteStartMs": 51964
+        },
+        {
+          "text": "Cliquez sur Analyser le fichier.",
+          "startMs": 9351,
+          "endMs": 10075,
+          "method": "silence",
+          "absoluteStartMs": 56675
+        },
+        {
+          "text": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+          "startMs": 10208,
+          "endMs": 15719,
+          "method": "silence",
+          "absoluteStartMs": 57532
+        },
+        {
+          "text": "Les colonnes reconnues et les tags sont également indiqués.",
+          "startMs": 15971,
+          "endMs": 18570,
+          "method": "silence",
+          "absoluteStartMs": 63295
+        },
+        {
+          "text": "Rien n'est encore enregistré :",
+          "startMs": 18694,
+          "endMs": 20302,
+          "method": "silence",
+          "absoluteStartMs": 66018
+        },
+        {
+          "text": "vous pouvez prendre le temps de vérifier.",
+          "startMs": 20954,
+          "endMs": 24044,
+          "method": "silence",
+          "absoluteStartMs": 68278
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "preview",
+          "phrase": "Le récapitulatif montre les créations",
+          "startMs": 10208,
+          "endMs": 15719,
+          "cueMs": 57533,
+          "sentenceAbsoluteMs": 57532,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 57998
+          },
+          "deltaMs": 466,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/preview-1.png",
+            "atMs": 58648
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 57998
+        }
+      ]
+    },
+    {
+      "chapter": "errors",
+      "id": "errors",
+      "startMs": 72145,
+      "endMs": 95527,
+      "sentences": [
+        {
+          "text": "Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide.",
+          "startMs": 334,
+          "endMs": 5568,
+          "method": "silence",
+          "absoluteStartMs": 72479
+        },
+        {
+          "text": "La ligne neuf reprend l'email de la ligne huit :",
+          "startMs": 6353,
+          "endMs": 8740,
+          "method": "silence",
+          "absoluteStartMs": 78498
+        },
+        {
+          "text": "ce doublon dans le fichier est également signalé.",
+          "startMs": 9088,
+          "endMs": 11368,
+          "method": "silence",
+          "absoluteStartMs": 81233
+        },
+        {
+          "text": "Ces lignes ne seront pas importées.",
+          "startMs": 11981,
+          "endMs": 13473,
+          "method": "silence",
+          "absoluteStartMs": 84126
+        },
+        {
+          "text": "Corrigez le fichier d'origine plutôt que de laisser une erreur de contact.",
+          "startMs": 13976,
+          "endMs": 17162,
+          "method": "silence",
+          "absoluteStartMs": 86121
+        },
+        {
+          "text": "Deux personnes portant le même nom ne sont pas automatiquement fusionnées :",
+          "startMs": 17798,
+          "endMs": 21214,
+          "method": "silence",
+          "absoluteStartMs": 89943
+        },
+        {
+          "text": "la comparaison utilise l'email.",
+          "startMs": 21214,
+          "endMs": 23018,
+          "method": "estimate",
+          "absoluteStartMs": 93359
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "errors",
+          "phrase": "Corrigez le fichier d'origine plutôt",
+          "startMs": 13976,
+          "endMs": 17162,
+          "cueMs": 86122,
+          "sentenceAbsoluteMs": 86121,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/errors-1.png",
+            "atMs": 86772
+          }
+        }
+      ],
+      "interactions": []
+    },
+    {
+      "chapter": "update",
+      "id": "update",
+      "startMs": 95981,
+      "endMs": 121730,
+      "sentences": [
+        {
+          "text": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse.",
+          "startMs": 363,
+          "endMs": 4138,
+          "method": "silence",
+          "absoluteStartMs": 96344
+        },
+        {
+          "text": "Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email.",
+          "startMs": 4895,
+          "endMs": 10327,
+          "method": "silence",
+          "absoluteStartMs": 100876
+        },
+        {
+          "text": "Cela réactive aussi une fiche inactive.",
+          "startMs": 10685,
+          "endMs": 12959,
+          "method": "silence",
+          "absoluteStartMs": 106666
+        },
+        {
+          "text": "Les tags ne sont donc pas simplement ajoutés aux anciens :",
+          "startMs": 13591,
+          "endMs": 15899,
+          "method": "silence",
+          "absoluteStartMs": 109572
+        },
+        {
+          "text": "vérifiez bien les valeurs du fichier.",
+          "startMs": 16367,
+          "endMs": 18861,
+          "method": "silence",
+          "absoluteStartMs": 112348
+        },
+        {
+          "text": "Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.",
+          "startMs": 19079,
+          "endMs": 25624,
+          "method": "silence",
+          "absoluteStartMs": 115060
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "update",
+          "phrase": "Ici, Camille et Julien passent",
+          "startMs": 19079,
+          "endMs": 25624,
+          "cueMs": 115061,
+          "sentenceAbsoluteMs": 115060,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/update-1.png",
+            "atMs": 115711
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 96464
+        },
+        {
+          "kind": "click",
+          "atMs": 97246
+        },
+        {
+          "kind": "click",
+          "atMs": 102879
+        }
+      ]
+    },
+    {
+      "chapter": "corrected",
+      "id": "corrected",
+      "startMs": 122182,
+      "endMs": 146626,
+      "sentences": [
+        {
+          "text": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse.",
+          "startMs": 150,
+          "endMs": 3953,
+          "method": "silence",
+          "absoluteStartMs": 122332
+        },
+        {
+          "text": "Les erreurs ont disparu.",
+          "startMs": 4757,
+          "endMs": 5794,
+          "method": "silence",
+          "absoluteStartMs": 126939
+        },
+        {
+          "text": "Les quarante lignes sont reconnues, dont les deux adresses déjà présentes.",
+          "startMs": 6373,
+          "endMs": 10139,
+          "method": "silence",
+          "absoluteStartMs": 128555
+        },
+        {
+          "text": "René n'a pas d'email :",
+          "startMs": 10895,
+          "endMs": 11980,
+          "method": "silence",
+          "absoluteStartMs": 133077
+        },
+        {
+          "text": "sa fiche peut être créée avec son téléphone.",
+          "startMs": 12315,
+          "endMs": 14323,
+          "method": "silence",
+          "absoluteStartMs": 134497
+        },
+        {
+          "text": "Vérifiez une dernière fois les noms, les catégories et le récapitulatif.",
+          "startMs": 14998,
+          "endMs": 19403,
+          "method": "silence",
+          "absoluteStartMs": 137180
+        },
+        {
+          "text": "Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
+          "startMs": 20038,
+          "endMs": 24106,
+          "method": "silence",
+          "absoluteStartMs": 142220
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "corrected",
+          "phrase": "Les erreurs ont disparu.",
+          "startMs": 4757,
+          "endMs": 5794,
+          "cueMs": 126939,
+          "sentenceAbsoluteMs": 126939,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 127412
+          },
+          "deltaMs": 473,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/corrected-1.png",
+            "atMs": 128062
+          }
+        },
+        {
+          "segmentId": "corrected",
+          "phrase": "René n'a pas d'email ",
+          "startMs": 10895,
+          "endMs": 11980,
+          "cueMs": 133077,
+          "sentenceAbsoluteMs": 133077,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/corrected-2.png",
+            "atMs": 133727
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 122645
+        },
+        {
+          "kind": "click",
+          "atMs": 127412
+        }
+      ]
+    },
+    {
+      "chapter": "confirm",
+      "id": "confirm",
+      "startMs": 147078,
+      "endMs": 171450,
+      "sentences": [
+        {
+          "text": "Quand l'aperçu vous convient, confirmez l'import.",
+          "startMs": 412,
+          "endMs": 3183,
+          "method": "silence",
+          "absoluteStartMs": 147490
+        },
+        {
+          "text": "Cette fois, les fiches sont enregistrées.",
+          "startMs": 3844,
+          "endMs": 5869,
+          "method": "silence",
+          "absoluteStartMs": 150922
+        },
+        {
+          "text": "Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées.",
+          "startMs": 6639,
+          "endMs": 13219,
+          "method": "silence",
+          "absoluteStartMs": 153717
+        },
+        {
+          "text": "Fermez la fenêtre et recherchez Maya :",
+          "startMs": 13962,
+          "endMs": 16313,
+          "method": "silence",
+          "absoluteStartMs": 161040
+        },
+        {
+          "text": "elle est maintenant dans la liste.",
+          "startMs": 16837,
+          "endMs": 18113,
+          "method": "silence",
+          "absoluteStartMs": 163915
+        },
+        {
+          "text": "Ouvrez sa fiche pour vérifier son téléphone et ses tags.",
+          "startMs": 18636,
+          "endMs": 21079,
+          "method": "silence",
+          "absoluteStartMs": 165714
+        },
+        {
+          "text": "Importer une personne ne l'inscrit à aucun créneau.",
+          "startMs": 21386,
+          "endMs": 24106,
+          "method": "silence",
+          "absoluteStartMs": 168464
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "confirm",
+          "phrase": "Fermez la fenêtre et recherchez",
+          "startMs": 13962,
+          "endMs": 16313,
+          "cueMs": 161041,
+          "sentenceAbsoluteMs": 161040,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 161528
+          },
+          "deltaMs": 488,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/confirm-1.png",
+            "atMs": 162178
+          }
+        },
+        {
+          "segmentId": "confirm",
+          "phrase": "Ouvrez sa fiche pour vérifier",
+          "startMs": 18636,
+          "endMs": 21079,
+          "cueMs": 165714,
+          "sentenceAbsoluteMs": 165714,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 166178
+          },
+          "deltaMs": 464,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/confirm-2.png",
+            "atMs": 166828
+          }
+        },
+        {
+          "segmentId": "confirm",
+          "phrase": "Importer une personne ne l'inscrit",
+          "startMs": 21386,
+          "endMs": 24106,
+          "cueMs": 168466,
+          "sentenceAbsoluteMs": 168464,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 168944
+          },
+          "deltaMs": 480,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/confirm-3.png",
+            "atMs": 169594
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 147677
+        },
+        {
+          "kind": "click",
+          "atMs": 161528
+        },
+        {
+          "kind": "click",
+          "atMs": 162378
+        },
+        {
+          "kind": "click",
+          "atMs": 166178
+        },
+        {
+          "kind": "click",
+          "atMs": 168944
+        }
+      ]
+    },
+    {
+      "chapter": "repeat",
+      "id": "repeat",
+      "startMs": 171903,
+      "endMs": 192757,
+      "sentences": [
+        {
+          "text": "Si vous analysez de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus.",
+          "startMs": 288,
+          "endMs": 5919,
+          "method": "silence",
+          "absoluteStartMs": 172191
+        },
+        {
+          "text": "Mais attention aux fiches sans email :",
+          "startMs": 6274,
+          "endMs": 8388,
+          "method": "silence",
+          "absoluteStartMs": 178177
+        },
+        {
+          "text": "le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas.",
+          "startMs": 8639,
+          "endMs": 12433,
+          "method": "silence",
+          "absoluteStartMs": 180542
+        },
+        {
+          "text": "Ne confirmez donc pas une seconde fois machinalement.",
+          "startMs": 13203,
+          "endMs": 15419,
+          "method": "silence",
+          "absoluteStartMs": 185106
+        },
+        {
+          "text": "Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.",
+          "startMs": 15664,
+          "endMs": 20495,
+          "method": "silence",
+          "absoluteStartMs": 187567
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "repeat",
+          "phrase": "Regardez toujours le nombre de",
+          "startMs": 15664,
+          "endMs": 20495,
+          "cueMs": 187569,
+          "sentenceAbsoluteMs": 187567,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 188043
+          },
+          "deltaMs": 476,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/members-import/review/anchors/repeat-1.png",
+            "atMs": 188693
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 172409
+        },
+        {
+          "kind": "key",
+          "atMs": 172717
+        },
+        {
+          "kind": "click",
+          "atMs": 174094
+        },
+        {
+          "kind": "click",
+          "atMs": 174902
+        },
+        {
+          "kind": "click",
+          "atMs": 175692
+        },
+        {
+          "kind": "click",
+          "atMs": 188043
+        },
+        {
+          "kind": "click",
+          "atMs": 188843
+        }
+      ]
+    },
+    {
+      "chapter": "result",
+      "id": "result",
+      "startMs": 193209,
+      "endMs": 215495,
+      "sentences": [
+        {
+          "text": "Votre liste est prête à être utilisée pour les prochaines invitations.",
+          "startMs": 371,
+          "endMs": 3536,
+          "method": "silence",
+          "absoluteStartMs": 193580
+        },
+        {
+          "text": "Gardez un fichier simple, vérifiez les coordonnées et lisez l'aperçu avant chaque confirmation.",
+          "startMs": 4282,
+          "endMs": 9610,
+          "method": "silence",
+          "absoluteStartMs": 197491
+        },
+        {
+          "text": "Si quelques personnes manquent, ajoutez-les manuellement.",
+          "startMs": 10235,
+          "endMs": 13010,
+          "method": "silence",
+          "absoluteStartMs": 203444
+        },
+        {
+          "text": "Et si leurs disponibilités changent, complétez leur fiche séparément.",
+          "startMs": 13668,
+          "endMs": 16872,
+          "method": "silence",
+          "absoluteStartMs": 206877
+        },
+        {
+          "text": "L'import fait gagner du temps, tout en vous laissant le dernier mot sur ce qui sera enregistré.",
+          "startMs": 17685,
+          "endMs": 21946,
+          "method": "silence",
+          "absoluteStartMs": 210894
+        }
+      ],
+      "anchors": [],
+      "interactions": []
+    }
+  ]
+}

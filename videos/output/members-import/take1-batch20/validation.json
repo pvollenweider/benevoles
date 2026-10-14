@@ -1,0 +1,77 @@
+{
+  "id": "MEMBERS_IMPORT",
+  "slug": "members-import",
+  "validatedAt": "2026-10-14T15:10:07.327Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 215960,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21912,
+      "audioMs": 21911,
+      "driftMs": 1
+    },
+    {
+      "id": "file",
+      "visualMs": 24360,
+      "audioMs": 24359,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 24370,
+      "audioMs": 24369,
+      "driftMs": 1
+    },
+    {
+      "id": "errors",
+      "visualMs": 23382,
+      "audioMs": 23381,
+      "driftMs": 1
+    },
+    {
+      "id": "update",
+      "visualMs": 25749,
+      "audioMs": 25748,
+      "driftMs": 1
+    },
+    {
+      "id": "corrected",
+      "visualMs": 24444,
+      "audioMs": 24443,
+      "driftMs": 1
+    },
+    {
+      "id": "confirm",
+      "visualMs": 24372,
+      "audioMs": 24370,
+      "driftMs": 2
+    },
+    {
+      "id": "repeat",
+      "visualMs": 20854,
+      "audioMs": 20853,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 22286,
+      "audioMs": 22285,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 210,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.2,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

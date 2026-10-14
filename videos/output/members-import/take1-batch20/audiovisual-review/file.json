@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:10:32.515Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "2797c7f70dcfd6b192642fe7814ba9f5b9fb23a4a82fe6917c3511fc8a15c756",
+  "clipSha256": "a55aefc168d378b018d1229da4f0790802c37e15a13ff25ff2b5e3f8a04e6ce9",
+  "scene": "file",
+  "review": {
+    "heardOpening": "Le fichier peut être un CSV ou un Excel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le fichier peut être un CSV ou un Excel",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture de la modale 'Importer des membres' avec mention 'Fichier CSV ou Excel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "La première ligne contient les noms des colonnes",
+        "visibleSeconds": 1,
+        "visible": "Texte d'explication dans la modale : 'Colonnes attendues : prénom, nom, email, téléphone, tags...'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "un fichier membres-à-vérifier.csv est sélectionné",
+        "visibleSeconds": 5.5,
+        "visible": "Apparition du fichier sélectionné 'membres-a-verifier.csv'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "Les disponibilités, elles, se renseignent ensuite dans la fiche",
+        "visibleSeconds": 20,
+        "visible": "Modale d'import toujours affichée, bouton 'Analyser le fichier' présent",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et posée, bien synchronisée avec l'affichage de la fenêtre modale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

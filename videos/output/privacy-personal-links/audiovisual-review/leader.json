@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:28:21.881Z",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "promptSha256": "a7e87e700c6e1f3caff04e680254553acc25bbf4ccee0ccc40a1c3bfe7d1b65c",
+  "clipSha256": "8453762eee903e9f24bd712dda39f3f2ac39e726da911479aa641b7eaeb2d118",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page « Responsable - Accueil » listant les bénévoles inscrits à ce poste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Revenons dans l'administration et retirons ce responsable.",
+        "visibleSeconds": 21,
+        "visible": "Retour à la page d'administration « Responsables de secteur » et clic sur « Retirer » pour Camille Exemple.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+        "visibleSeconds": 26.8,
+        "visible": "La page s'ouvre sur un message d'erreur « Lien introuvable ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement intelligible, débit régulier et bien synchronisé avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

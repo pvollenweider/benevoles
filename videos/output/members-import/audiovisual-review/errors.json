@@ -1,31 +1,31 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:50.661Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
-  "promptSha256": "31b499c666728ceb9078a128b15d9244bd8950a31ee074e4638f6e29ec066ec7",
-  "clipSha256": "31d1fbdceac3f76bdc7a49b49951f1a5ff47b98d2f2f096206d363679bd936c0",
+  "reviewedAt": "2026-10-14T15:19:35.978Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "70cc41e6a6d03ba0b694544ea0644be9ae3c9119fad6ef22e19de14ff73d9185",
+  "clipSha256": "864acd2c692382cf84a28ff0bb2f2c0c74c620b41001e9f01c8c23b0278b6643",
   "scene": "errors",
   "review": {
     "heardOpening": "Ici, la ligne six n'a pas de prénom",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1,
         "spoken": "la ligne six n'a pas de prénom",
         "visibleSeconds": 0,
-        "visible": "Dans le tableau 'Lignes en erreur, non importées (3)', la ligne 6 indique 'Prénom manquant'",
+        "visible": "Dans la section 'Lignes en erreur, non importées (3)', la ligne 6 indique 'Prénom manquant'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.4,
         "spoken": "la ligne sept contient une adresse email invalide",
         "visibleSeconds": 0,
-        "visible": "La ligne 7 indique 'Email invalide : adresse-incomplete'",
+        "visible": "La ligne 7 indique 'Email invalide : adresse incomplète'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
+        "spokenSeconds": 6.3,
         "spoken": "La ligne neuf reprend l'email de la ligne huit",
         "visibleSeconds": 0,
         "visible": "La ligne 9 indique 'Même email que la ligne 8'",
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, sur fond musical discret."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la fenêtre d'importation affichée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

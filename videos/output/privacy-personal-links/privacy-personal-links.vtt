@@ -1,315 +1,317 @@
 WEBVTT
 
-00:00:00.004 --> 00:00:05.565
+00:00:00.005 --> 00:00:05.890
 Un lien pour recruter, un lien pour gérer
 son inscription, un lien pour suivre une
 
-00:00:05.565 --> 00:00:10.756
+00:00:05.890 --> 00:00:11.383
 équipe : ils ne servent pas à la même
 chose. Voyons lesquels partager, lesquels
 
-00:00:10.756 --> 00:00:15.205
+00:00:11.383 --> 00:00:16.091
 garder pour soi, et comment retrouver un
 accès perdu. Dans notre démonstration,
 
-00:00:15.205 --> 00:00:20.025
+00:00:16.091 --> 00:00:21.191
 deux organisations ont chacune une Léa
 Exemple et une fête portant le même
 
-00:00:20.025 --> 00:00:24.474
+00:00:21.191 --> 00:00:25.899
 identifiant. Les noms se ressemblent, mais
 les fiches et les adresses sont
 
-00:00:24.474 --> 00:00:27.810
+00:00:25.899 --> 00:00:29.430
 différentes. Chaque organisation retrouve
 son propre événement dans son
 
-00:00:27.810 --> 00:00:31.518
+00:00:29.430 --> 00:00:33.353
 administration. Toutes les personnes et
 coordonnées utilisées ici sont fictives.
 
-00:00:33.792 --> 00:00:38.847
+00:00:35.626 --> 00:00:41.298
 Le lien public, ou son QR code, sert à
 découvrir les missions et à s'inscrire.
 
-00:00:38.847 --> 00:00:43.228
+00:00:41.298 --> 00:00:46.215
 Jules choisit un créneau et renseigne ses
 coordonnées. Prénom, nom, adresse email et
 
-00:00:43.228 --> 00:00:47.609
+00:00:46.215 --> 00:00:51.131
 téléphone : ces informations permettent à
 l'organisation de retrouver Jules et de le
 
-00:00:47.609 --> 00:00:50.979
+00:00:51.131 --> 00:00:54.912
 contacter. Il accepte ensuite les
 conditions du formulaire. Après l'envoi,
 
-00:00:50.979 --> 00:00:55.697
+00:00:54.912 --> 00:01:00.206
 l'inscription est enregistrée et un email
 lui est adressé. Le lien de gestion n'est
 
-00:00:55.697 --> 00:00:59.741
+00:01:00.206 --> 00:01:04.744
 pas révélé sur cet écran pour une
 inscription sans invitation. Taper une
 
-00:00:59.741 --> 00:01:04.796
+00:01:04.744 --> 00:01:10.417
 adresse ne prouve pas qu'on peut lire sa
 boîte email. Ouvrons donc le vrai message
 
-00:01:04.796 --> 00:01:09.177
+00:01:10.417 --> 00:01:15.333
 reçu par Jules, puis son lien personnel.
 Nous arrivons sur sa propre inscription,
 
-00:01:09.177 --> 00:01:11.536
+00:01:15.333 --> 00:01:17.980
 pas sur la liste de toute l'équipe.
 
-00:01:13.800 --> 00:01:18.011
+00:01:20.243 --> 00:01:25.040
 Sur la page personnelle, Jules retrouve
 son créneau et les actions prévues pour
 
-00:01:18.011 --> 00:01:22.222
+00:01:25.040 --> 00:01:29.837
 son inscription. Le panneau Ton lien
 personnel rappelle à quoi sert cet accès.
 
-00:01:22.222 --> 00:01:27.080
+00:01:29.837 --> 00:01:35.372
 Gardons ce lien pour son destinataire :
 une personne qui le reçoit peut accéder à
 
-00:01:27.080 --> 00:01:30.967
+00:01:35.372 --> 00:01:39.801
 la page correspondante. Ce n'est pas le
 lien public de recrutement. Utilisons
 
-00:01:30.967 --> 00:01:35.178
+00:01:39.801 --> 00:01:44.598
 Recevoir ce lien par email, puis ouvrons
 le nouveau message reçu. Cette action
 
-00:01:35.178 --> 00:01:39.389
+00:01:44.598 --> 00:01:49.395
 renvoie l'accès ; elle ne crée pas une
 deuxième inscription. Pour inviter des
 
-00:01:39.389 --> 00:01:42.628
-amis à participer, partage plutôt la page
+00:01:49.395 --> 00:01:53.085
+amis à participer, partagez plutôt la page
 publique de l'événement.
 
-00:01:44.902 --> 00:01:49.589
+00:01:55.358 --> 00:02:00.016
 Le lien est perdu ? Depuis la page de
 récupération, saisissons l'adresse
 
-00:01:49.589 --> 00:01:53.884
+00:02:00.016 --> 00:02:04.286
 utilisée pour l'inscription. La réponse
 indique quoi faire ensuite, sans afficher
 
-00:01:53.884 --> 00:01:59.352
+00:02:04.286 --> 00:02:09.721
 de coordonnées ni de lien personnel.
 Vérifions le message reçu dans la boîte de
 
-00:01:59.352 --> 00:02:04.429
+00:02:09.721 --> 00:02:14.767
 Léa. Recommençons avec une adresse fictive
 inconnue : la réponse affichée reste la
 
-00:02:04.429 --> 00:02:08.335
+00:02:14.767 --> 00:02:18.649
 même. Enfin, demandons depuis
 l'organisation A le lien d'une adresse
 
-00:02:08.335 --> 00:02:13.802
+00:02:18.649 --> 00:02:24.083
 appartenant seulement à B. La réponse ne
 révèle pas cette autre fiche et aucun
 
-00:02:13.802 --> 00:02:20.051
-email de B n'est envoyé. Si tu ne reçois
-rien, vérifie ton adresse et les courriers
+00:02:24.083 --> 00:02:29.518
+email de B n'est envoyé. Si vous ne
+recevez rien, vérifiez votre adresse et
 
-00:02:20.051 --> 00:02:22.394
-indésirables, puis contacte l'organisation
-au besoin.
+00:02:29.518 --> 00:02:32.623
+les courriers indésirables, puis contactez
+l'organisation au besoin.
 
-00:02:24.662 --> 00:02:28.504
+00:02:34.893 --> 00:02:38.530
 Une invitation nominative est différente
 d'un lien public. L'organisation l'envoie
 
-00:02:28.504 --> 00:02:34.268
+00:02:38.530 --> 00:02:43.985
 à Zoé, puis nous ouvrons le vrai email
 reçu. Son lien conduit au formulaire avec
 
-00:02:34.268 --> 00:02:38.110
+00:02:43.985 --> 00:02:47.621
 les informations prévues pour cette
 invitation. Cela facilite l'inscription de
 
-00:02:38.110 --> 00:02:43.874
+00:02:47.621 --> 00:02:53.076
 la personne concernée ; ce n'est pas une
 affiche à diffuser à tout le monde.
 
-00:02:43.874 --> 00:02:48.869
+00:02:53.076 --> 00:02:57.440
 Vérifions le prénom, l'adresse et le
-créneau avant de continuer. Si tu recrutes
+créneau avant de continuer. Si vous
 
-00:02:48.869 --> 00:02:54.248
-largement, utilise le lien public ou le QR
-code public, pas l'invitation adressée à
+00:02:57.440 --> 00:03:01.804
+recrutez largement, utilisez le lien
+public ou le QR code public, pas
 
-00:02:54.248 --> 00:02:55.401
-une autre personne.
+00:03:01.804 --> 00:03:03.986
+l'invitation adressée à une autre
+personne.
 
-00:02:57.667 --> 00:03:03.248
+00:03:06.244 --> 00:03:11.299
 Le responsable a lui aussi un accès
 destiné à sa mission. Ouvrons le lien de
 
-00:03:03.248 --> 00:03:08.085
+00:03:11.299 --> 00:03:15.680
 Camille, responsable de l'accueil. Il voit
 les bénévoles de ce poste, leurs horaires
 
-00:03:08.085 --> 00:03:12.550
+00:03:15.680 --> 00:03:19.724
 et les coordonnées utiles pour les
 contacter. Les personnes de la logistique
 
-00:03:12.550 --> 00:03:18.131
+00:03:19.724 --> 00:03:24.779
 et de l'autre organisation ne sont pas
 dans cette équipe. Ce lien donne accès à
 
-00:03:18.131 --> 00:03:22.968
+00:03:24.779 --> 00:03:29.160
 des informations opérationnelles : ne le
-publie pas sur une affiche. Revenons dans
+publiez pas sur une affiche. Revenons dans
 
-00:03:22.968 --> 00:03:26.689
+00:03:29.160 --> 00:03:32.530
 l'administration et retirons ce
 responsable. En rouvrant son ancien lien,
 
-00:03:26.689 --> 00:03:31.154
+00:03:32.530 --> 00:03:36.574
 l'accès n'est plus disponible. Cela permet
 de retirer cet accès quand la
 
-00:03:31.154 --> 00:03:32.270
+00:03:36.574 --> 00:03:37.585
 responsabilité prend fin.
 
-00:03:34.533 --> 00:03:37.879
+00:03:39.850 --> 00:03:43.190
 L'organisateur travaille dans son
 administration, avec sa propre connexion.
 
-00:03:37.879 --> 00:03:42.712
+00:03:43.190 --> 00:03:48.015
 Dans les inscriptions, il retrouve les
 personnes et les réponses aux questions de
 
-00:03:42.712 --> 00:03:47.173
+00:03:48.015 --> 00:03:52.469
 l'événement. Dans les membres, il peut
 consulter les disponibilités et les notes
 
-00:03:47.173 --> 00:03:52.007
+00:03:52.469 --> 00:03:57.294
 internes de préparation. Regardons la
 fiche de Léa, puis comparons avec les deux
 
-00:03:52.007 --> 00:03:56.468
+00:03:57.294 --> 00:04:01.747
 vues précédentes. Sa page personnelle ne
 montre pas les notes internes. Le
 
-00:03:56.468 --> 00:04:00.929
+00:04:01.747 --> 00:04:06.201
 responsable reçoit les contacts de son
 équipe, pas la fiche membre complète.
 
-00:04:00.929 --> 00:04:05.762
+00:04:06.201 --> 00:04:10.655
 Avant de transmettre une information,
-demande-toi qui en a besoin et pour quelle
+demandez-vous qui en a besoin et pour
 
-00:04:05.762 --> 00:04:10.967
-tâche. Une note utile à l'organisation n'a
-pas forcément sa place dans un document
+00:04:10.655 --> 00:04:15.108
+quelle tâche. Une note utile à
+l'organisation n'a pas forcément sa place
 
-00:04:10.967 --> 00:04:11.339
-distribué.
+00:04:15.108 --> 00:04:16.593
+dans un document distribué.
 
-00:04:13.603 --> 00:04:18.241
+00:04:18.860 --> 00:04:23.183
 Les informations publiques se trouvent
 aussi dans le pied de page. Ouvrons
 
-00:04:18.241 --> 00:04:22.493
+00:04:23.183 --> 00:04:27.146
 Confidentialité. Cette page décrit les
 usages annoncés et les destinataires des
 
-00:04:22.493 --> 00:04:27.131
+00:04:27.146 --> 00:04:31.470
 données. Repérons aussi les indications de
 conservation et les moyens de contact.
 
-00:04:27.131 --> 00:04:31.769
+00:04:31.470 --> 00:04:35.433
 Pour une question ou une demande
-concernant les données, appuie-toi sur ces
+concernant les données, appuyez-vous sur
 
-00:04:31.769 --> 00:04:34.861
-informations et sur l'organisation
+00:04:35.433 --> 00:04:38.675
+ces informations et sur l'organisation
 concernée. Ouvrons maintenant les
 
-00:04:34.861 --> 00:04:39.113
+00:04:38.675 --> 00:04:42.639
 conditions d'utilisation, qui complètent
 ce cadre. Cette vidéo explique les gestes
 
-00:04:39.113 --> 00:04:44.910
+00:04:42.639 --> 00:04:48.043
 dans l'outil ; elle ne remplace pas une
 lecture des textes actuels ni un avis
 
-00:04:44.910 --> 00:04:49.548
+00:04:48.043 --> 00:04:52.366
 juridique. Il n'existe pas un délai de
 conservation unique à appliquer sans
 
-00:04:49.548 --> 00:04:50.708
+00:04:52.366 --> 00:04:53.447
 regarder le contexte.
 
-00:04:52.973 --> 00:04:57.309
+00:04:55.708 --> 00:04:59.895
 Sur le terrain, une liste bien choisie
 peut suffire. Ouvrons le rapport prévu
 
-00:04:57.309 --> 00:05:00.644
+00:04:59.895 --> 00:05:03.115
 pour le stand et regardons les
 informations qu'il contient. Comparons-le
 
-00:05:00.644 --> 00:05:05.313
+00:05:03.115 --> 00:05:07.624
 au CSV des membres : ce fichier comporte
 notamment des coordonnées et des notes
 
-00:05:05.313 --> 00:05:09.315
+00:05:07.624 --> 00:05:11.167
 internes. Il n'est donc pas à remettre
-indistinctement à toute l'équipe. Choisis
+indistinctement à toute l'équipe.
 
-00:05:09.315 --> 00:05:14.652
-le document adapté à la personne qui en a
-besoin, range-le dans un espace protégé et
+00:05:11.167 --> 00:05:15.353
+Choisissez le document adapté à la
+personne qui en a besoin, rangez-le dans
 
-00:05:14.652 --> 00:05:19.321
-limite les copies. Un fichier téléchargé
-reste une photographie du moment : il ne
+00:05:15.353 --> 00:05:19.218
+un espace protégé et limitez les copies.
+Un fichier téléchargé reste une
 
-00:05:19.321 --> 00:05:23.990
-se met pas à jour quand le planning
-change. Pense aussi aux anciennes copies
+00:05:19.218 --> 00:05:24.371
+photographie du moment : il ne se met pas
+à jour quand le planning change. Pensez
 
-00:05:23.990 --> 00:05:24.657
-devenues inutiles.
+00:05:24.371 --> 00:05:26.303
+aussi aux anciennes copies devenues
+inutiles.
 
-00:05:28.046 --> 00:05:33.026
+00:05:29.689 --> 00:05:34.539
 Revenons à la page personnelle et à son
-avertissement. Pour recruter, partage la
+avertissement. Pour recruter, partagez la
 
-00:05:33.026 --> 00:05:37.624
+00:05:34.539 --> 00:05:39.016
 page publique. Pour gérer une inscription,
-garde le lien personnel pour son
+gardez le lien personnel pour son
 
-00:05:37.624 --> 00:05:42.221
+00:05:39.016 --> 00:05:43.493
 destinataire. Pour coordonner un poste,
-remets le lien du responsable à la
+remettez le lien du responsable à la
 
-00:05:42.221 --> 00:05:46.435
+00:05:43.493 --> 00:05:47.598
 personne désignée. Si un accès a été
-diffusé par erreur, contacte
+diffusé par erreur, contactez
 
-00:05:46.435 --> 00:05:51.415
+00:05:47.598 --> 00:05:52.448
 l'organisation plutôt que de continuer à
 le faire circuler. Et avant d'envoyer un
 
-00:05:51.415 --> 00:05:55.247
-document, vérifie son contenu et ses
+00:05:52.448 --> 00:05:56.179
+document, vérifiez son contenu et ses
 destinataires. Quelques gestes simples
 
-00:05:55.247 --> 00:05:59.844
+00:05:56.179 --> 00:06:00.656
 permettent de rester accueillant, tout en
 prenant soin des informations confiées par
 
-00:05:59.844 --> 00:06:00.610
+00:06:00.656 --> 00:06:01.402
 les bénévoles.
 

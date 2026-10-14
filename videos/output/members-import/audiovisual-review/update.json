@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:56.627Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T15:19:53.116Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
   "promptSha256": "8456908c726d52e1b927f2afc339cecac7b7331b54ef1c62205707642f0f2262",
-  "clipSha256": "a8f0a9ec71f9ddd92fd4768b61456ef9cb1d9221ab6e128eac872ca6edb99f69",
+  "clipSha256": "9d804751bbca6348a4fa3cd41d2ddd6a978af801078764f2e23a26e89bd25b8f",
   "scene": "update",
   "review": {
     "heardOpening": "Avec Retour, vous pouvez changer l'option",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse.",
-        "visibleSeconds": 1,
-        "visible": "Retour à l'étape précédente avec l'option « Mettre à jour » cochée, puis clic sur « Analyser le fichier ».",
+        "spokenSeconds": 0.1,
+        "spoken": "Avec Retour, vous pouvez changer l'option",
+        "visibleSeconds": 0.8,
+        "visible": "L'écran revient à l'étape précédente avec l'option Mettre à jour sélectionnée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Mettre à jour remplace le prénom, le nom, le téléphone et les tags",
-        "visibleSeconds": 6.5,
-        "visible": "Affichage des résultats de l'analyse indiquant « 2 à mettre à jour ».",
+        "spokenSeconds": 3.2,
+        "spoken": "puis refaire l'analyse",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton Analyser le fichier pour relancer l'analyse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.3,
+        "spokenSeconds": 18.2,
         "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
-        "visibleSeconds": 20.5,
-        "visible": "Camille Rochat et Julien Favre apparaissent dans le tableau avec l'action « Mettre à jour ».",
+        "visibleSeconds": 6.8,
+        "visible": "Le tableau d'analyse affiche Camille Rochat et Julien Favre avec le statut Mettre à jour",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix off posée, claire et parfaitement audible, en adéquation avec la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

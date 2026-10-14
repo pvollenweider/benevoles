@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:16:48.043Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "39d6081d1366e3d885603d0e352ee1cc410e70e86f3632730ff4d90ddd2932d6",
+  "clipSha256": "6478758ba046ea6dfdfb9393d758d2b8640ff68b3681734033e3595cab03d194",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 4.5,
+        "visible": "Fenêtre modale d'invitation avec Zoé sélectionnée et clic sur Envoyer 1 invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.6,
+        "spoken": "puis nous ouvrons le vrai email reçu",
+        "visibleSeconds": 6.4,
+        "visible": "Affichage de la boîte de messagerie Mailpit avec le courriel Hello Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues pour cette invitation",
+        "visibleSeconds": 10.7,
+        "visible": "Arrivée sur la page Tes informations avec le prénom Zoé pré-renseigné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+        "visibleSeconds": 18.2,
+        "visible": "Formulaire visible avec le prénom Zoé, l'email et le récapitulatif du créneau à droite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

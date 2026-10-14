@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:10:45.122Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "76d5f7749b7d647fc4dc4f33983c0de25f54035a66bac1105f43841d3d80d962",
+  "clipSha256": "0bf498657135d29ab04b660d56ea7f86064f646a2fc064173cd0bea7409a62a3",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Ouvrez Importer des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+        "visibleSeconds": 0,
+        "visible": "La fenêtre modale Importer des membres est déjà ouverte avec le fichier membres-a-verifier.csv sélectionné.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Si un email existe déjà, l'option Ignorer conserve la fiche actuelle.",
+        "visibleSeconds": 4.1,
+        "visible": "La case radio Ignorer est cochée sous la section Si un email existe déjà.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Cliquez sur Analyser le fichier.",
+        "visibleSeconds": 9.9,
+        "visible": "Clic sur le bouton bleu Analyser le fichier qui affiche un indicateur de chargement puis ouvre le résultat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+        "visibleSeconds": 11.5,
+        "visible": "Le résumé affiche le décompte (à créer, déjà présents, en erreur) et le tableau Lignes en erreur, non importées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Les colonnes reconnues et les tags sont également indiqués.",
+        "visibleSeconds": 17.2,
+        "visible": "Les mentions Tags ajoutés et Colonnes reconnues sont affichées sous le récapitulatif.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

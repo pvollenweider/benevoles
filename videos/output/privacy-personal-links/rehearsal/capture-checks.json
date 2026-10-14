@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-14T15:08:34.145Z",
+  "audiovisualValidated": false,
+  "sessionPreparation": "Two real local administrator logins; no invented sessions",
+  "anonymousSignupLinkOnlyInEmail": true,
+  "signupMail": "3W8mDJnzlakKEuj4sJbbHd",
+  "resendMail": "7hBkEJENxBniUbwCSPASJ4",
+  "recoveryMail": "7JiHyzhf1SXJsdenQaYSC3",
+  "sameRecoveryMessageThreeAddresses": true,
+  "invitationMail": "3BhJ1JX1XScPjLIc7rJfm9",
+  "invitationPrefill": true,
+  "leaderFrameSha256": "31793c86c388a5508b7ab05e796cf5293d587a00ef150d0818773738fe030cc6",
+  "actualLeaderRevocation": true,
+  "actualAdminAnswerAndInternalNote": true,
+  "actualPublicLegalPages": true,
+  "actualReportVsMemberCsv": true,
+  "memberCsvSha256": "b40b905c313074a0fc6036a53f1b0e43c5b9811019a6033415ec33f5c2a2695d"
+}

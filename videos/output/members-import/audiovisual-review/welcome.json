@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:43.604Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T15:18:54.520Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
   "promptSha256": "6e19c1d161c7499ae1618c38b2ba224f29781894ddc9dd7180915fb980f8a331",
-  "clipSha256": "07f04b5fba92add7fc68513c8e12fcc1e0c42ce8b2f6f3fa1b93bc750b34949f",
+  "clipSha256": "1d9238ce41c6776c21793d205bc7b1f7a5d2dd5dd72cddc77847fed94aaa38ca",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Vous utilisez Benevol pour la première fois",
+    "heardOpening": "Vous utilisez Benevov pour la première fois",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
+        "spokenSeconds": 0.5,
+        "spoken": "Vous utilisez Benevol pour la première fois",
         "visibleSeconds": 0,
-        "visible": "Titre d'introduction affiché en superposition : « Importer ses membres sans repartir de zéro - Analyser avant de confirmer » sur la page Membres",
+        "visible": "Titre en superposition : « Importer ses membres sans repartir de zéro / Analyser avant de confirmer » sur la page Membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "L'import évite de ressaisir chaque personne.",
-        "visibleSeconds": 3,
-        "visible": "L'encart de titre disparaît, dévoilant la liste des membres et le bouton « Importer CSV/Excel »",
+        "spokenSeconds": 11.2,
+        "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la page de gestion des Membres (introduction annonçant le programme du tutoriel)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.1,
-        "spoken": "créer les membres manuellement avec Nouveau membre",
-        "visibleSeconds": 19.5,
-        "visible": "Bouton bleu « + Nouveau membre » bien visible en haut à droite de la liste",
+        "spokenSeconds": 18.5,
+        "spoken": "vous pouvez toujours créer les membres manuellement avec Nouveau membre",
+        "visibleSeconds": 18.5,
+        "visible": "Bouton bleu « + Nouveau membre » visible en haut à droite de la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée, au débit naturel et parfaitement intelligible."
+      "observation": "Voix off fluide, claire et bien articulée, avec un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,8 +1,20 @@
-STATUS: READY
-ID: PRIVACY_PERSONAL_LINKS
-Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
-Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
-Objective evidence: 60 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.2 / 18.6 LU. Effects vs input events: {'click': 29, 'key': 177}; counts match: True. OCR flags: [{'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/signup-85.png', 'line': 'Accueil - équipe A • 24/10/2026 • 10:00-12:00'}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-60.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation d'inscription : accepté par le serveur d'envoi 12/10/2026 00:27"}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-85.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation dinscription : accepté par le serveur d'envoi 12/10/2026 00:27"}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-end.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation dinscription : accepté par le serveur d'envoi 12/10/2026 00:27"}]. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
-Review observations: 60 images et passages courts legal/admin/result revus. Renvoi 90.930 s vs phrase 90.451 ; retrait 205.294 vs 204.802 ; confidentialité 257.480 vs 256.975 ; conservation visible à sa phrase 264.269 ; rapport 296.962 vs 296.471. Accès retiré, notes réservées, export réel, rappel enregistré clairement signalé. Dates anglaises Mailpit notées seulement ; profil neuf puis invitation nominative, aucune préremplissage masquée. ASR final, sous-titres, effets et musique conformes.
-Local source changes: Aucun changement ; narration réutilisée.
-Real-time subjective listening unavailable; not used as a failure reason.
+STATUS: NOT READY
+Batch 20 — 2026-10-14 — PRIVACY_PERSONAL_LINKS
+Product commit: 8941cc1cb184ca53a23a7ade7fc9e889075e7725
+BUILD_ID: zHvrRgnTvwimSPsFYL2Dw
+Final MP4: privacy-personal-links.mp4 — 366.600 s — SHA256 dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd
+
+Two narrated captures; no third take. The abandoned retake launch failed before recording because the preflight proof had been archived; the actual proof was restored, then seed and exact mailbox cleanup were repeated before the second narrated capture.
+Previous artifacts: previous-20261014T150121Z/ and take1-batch20/.
+Full fresh continuous Kore generation, continuousPauseTags: false; no old sentence audio reused. Five boundaries recut at independently located measured silences. All ten source and final MP4 multilingual ASR chapters pass. No added English words or spoken pause instructions found.
+Final VTT viewer-addressed tu/ton/ta/tes/toi/te/t': 0. Final ASR viewer-addressed count: 0. The one retained « Ton » occurrence quotes the actual panel title « Ton lien personnel ». VTT matches the current manifest.
+video:validate passes: ten scenes, 42 sentence anchors, music 14.8–19.8 LU under voice; music-only windows -34 to -33.2 LUFS. Effects match 29 real clicks and 177 real key events. Posters use review/renders-generated.json; videos/renders.json unchanged.
+971 video tests and 192-source video TypeScript check pass.
+All ten final audiovisual reports match the final MP4. Nine pass; signup is flagged for the confirmed 404. Sentence/action frames plus the 60-frame grid inspected. OCR finds no localhost, org-admin@localhost, Timeline or development overlay. Product dates are French and day precedes month. Actual received emails, Zoé prefill, A/B isolation, leader revocation, notes/contacts and real six-member CSV are retained as evidence.
+
+BLOCKER — observed product/local-context defect:
+At 61.039 s (review-frames/signup-60.png; signup chapter starts 35.626 s), successful anonymous registration leads to the real 404 « Cette page est tombée à l'eau » at http://localhost:43102/fete-des-liens/success instead of the confirmation screen. The API actually returns 201 with editToken null and linkSentByEmail true, and the real confirmation email arrives. This does NOT validate the negative assertion about the management link on a normal confirmation screen, because that screen is absent.
+The current non-embedded EventPageClient navigation drops org on /success. Read-only requests: the exact destination returns 404; adding ?org=formation-confidentialite-a returns 200. Inference: missing organization context explains this localhost multi-organization reproduction. Impact on production subdomains not established. Proof: review/product-bug.json and audiovisual-review/signup.json. No src change, URL correction, fake email or hidden workaround applied to the capture.
+The second take fixes only the opening of Camille's real leader link with at("Ouvrons le lien de Camille"); the current leader review confirms aligned actions. No further take permitted.
+No publishing, push, commit or PR. Real-time subjective listening unavailable; not the reason for NOT READY. Independent recognition and audiovisual clips cover the actual final sound.
+doc-img: unchanged

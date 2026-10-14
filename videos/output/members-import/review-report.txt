@@ -1,21 +1,18 @@
-STATUS: READY
-{
-  "id": "MEMBERS_IMPORT",
-  "status": "READY",
-  "duration": 220.92,
-  "buildId": "Ro9VdxUayqlTAULEvQpY0",
-  "music": {
-    "voicedWindows": 215,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 14,
-    "largestGapLu": 19.2,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "54images revues ; bouton natif Choisir un fichier/Aucun fichier choisi français. AV9/9,ASR9/9,validate,ancres,VTT,effets,musique passent ; 38créations+2misesàjour,64membres,réanalyse39ignorés+1sans-email annulée. Fermeture résultat et Éditer Maya alignés. Dates françaises,aucune adresse interdite/overlay. Nit connu : actions Membres hors1280px.",
-  "sourceChanges": "Aucune ; lancement navigateur/processus français de main fonctionne ; narration réutilisée,aucun re-film.",
-  "report": "videos/output/members-import/review-report.txt",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+STATUS: NOT READY
+Batch 20 — 2026-10-14 — MEMBERS_IMPORT
+Product commit: 8941cc1cb184ca53a23a7ade7fc9e889075e7725
+BUILD_ID: zHvrRgnTvwimSPsFYL2Dw
+Final MP4: members-import.mp4 — 215.960 s — SHA256 6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696
+
+Two narrated captures; no third take. Previous artifacts are archived in previous-20261014T150121Z/ and take1-batch20/.
+Full fresh continuous Kore generation, continuousPauseTags: false. No old sentence audio reused. Four boundaries were recut at independently located, measured silences; the complete source and final MP4 multilingual ASR pass.
+Final VTT viewer-addressed tu/ton/ta/tes/toi/te/t': 0. Final ASR viewer-addressed count: 0. No added English speech found. VTT text matches the current manifest.
+video:validate passes: nine scenes, 11 filmed sentence anchors, music 15.1–18.9 LU under narration. Real input effects match 18 clicks and 1 key event. Posters use review/renders-generated.json; videos/renders.json unchanged.
+971 video tests and the 192-source video TypeScript check pass. Source anchor tests also cover the subsequent, unfilmed preview fix.
+All nine final audiovisual chapter reports match the final MP4 hash; sentence/action frames and the 54-frame review grid inspected. OCR finds no localhost, org-admin@localhost, Timeline or development overlay. The actual import creates 38 members and updates 2; Maya's contact/tags and the unconfirmed repeat preview are visible.
+
+BLOCKER: At 47.313 s, chapter preview opens with the import dialog and CSV already prepared in chapter file, before the instruction « Ouvrez Importer des membres et choisissez le fichier à vérifier ». Confirmed in review-frames/file-60.png and preview-2.png, plus audiovisual-review/preview.json. The source now closes the preparation dialog at the last file sentence, reopens/selects at at("Ouvrez Importer des membres"), and analyses at at("Cliquez sur Analyser le fichier"). This correction is NOT filmed in the delivered MP4 because the single retake allowance was consumed by the early confirmation click.
+The confirmation retake uses at("Quand l'aperçu vous convient") plus a 1.2 s within-sentence delay; the final confirm chapter reports aligned checkpoints.
+No product code changed. No new product bug observed in this journey. No publishing, push, commit or PR.
+Real-time subjective listening unavailable; this is not the reason for NOT READY. Independent audio recognition and audiovisual review cover the actual final sound.
+doc-img: unchanged

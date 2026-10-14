@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:16:33.266Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "16c8078ff8adc6cada03f88df8907ed36701a7694658069bbdacf80fd3685faa",
+  "clipSha256": "a96b8bbea6121aaaae26946729b7a96610c04771c3f6f786d9083be810222f9f",
+  "scene": "recovery",
+  "review": {
+    "heardOpening": "Le lien est perdu ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription.",
+        "visibleSeconds": 2.8,
+        "visible": "Saisie de l'adresse e-mail dans le formulaire et validation avec le bouton Recevoir un nouveau lien.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Vérifions le message reçu dans la boîte de Léa.",
+        "visibleSeconds": 11,
+        "visible": "Affichage de la messagerie Mailpit avec le courriel adressé à Léa contenant le bouton de gestion de son inscription.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.7,
+        "spoken": "Recommençons avec une adresse fictive inconnue : la réponse affichée reste la même.",
+        "visibleSeconds": 15.6,
+        "visible": "Retour sur le formulaire, saisie d'une adresse fictive inconnue et affichage du même message d'information.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.9,
+        "spoken": "Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B.",
+        "visibleSeconds": 21.8,
+        "visible": "Saisie de l'adresse liée à l'organisation B et confirmation générique identique sans fuite d'information.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine fluide, naturelle et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

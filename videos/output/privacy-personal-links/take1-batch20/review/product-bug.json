@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-14T15:17:05.533133+00:00",
+  "observedFrame": {
+    "file": "review-frames/signup-60.png",
+    "seconds": 61.041
+  },
+  "observedNavigation": "http://localhost:43102/fete-des-liens/success",
+  "causeInference": "Non-embedded signup drops org query during success navigation; event context cannot resolve on the localhost multi-organization fixture. Scope on production subdomains not established.",
+  "readonlyRequests": [
+    {
+      "url": "http://localhost:43102/fete-des-liens/success",
+      "httpStatus": 404,
+      "has404Page": true,
+      "hasSuccessHeading": false
+    },
+    {
+      "url": "http://localhost:43102/fete-des-liens/success?org=formation-confidentialite-a",
+      "httpStatus": 200,
+      "has404Page": true,
+      "hasSuccessHeading": true
+    }
+  ]
+}
