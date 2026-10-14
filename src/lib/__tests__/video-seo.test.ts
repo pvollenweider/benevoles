@@ -11,6 +11,7 @@ import {
   indexableVideos,
   isoDuration,
   isVideoIndexable,
+  lastModifiedDay,
   serializeJsonLd,
   videoDetailMetadata,
   videoJsonLd,
@@ -22,8 +23,10 @@ import {
   videoUploadDate,
   VIDEO_LIBRARY_PRIORITY,
   VIDEO_PAGE_PRIORITY,
+  VIDEO_PAGE_SOURCES,
   type VideoSeoContext,
 } from "../video-seo"
+import { VIDEO_PAGE_SOURCES as SCRIPT_VIDEO_PAGE_SOURCES } from "../../../scripts/doc-lastmod.mjs"
 
 // The public video library's SEO (owner request, 2026-10-07): indexed pages, canonical, link
 // previews, VideoObject / BreadcrumbList / CollectionPage, and the video sitemap.
@@ -255,6 +258,55 @@ describe("videoSitemapEntries", () => {
 
   it("is empty without media: nothing playable, not even the gallery", () => {
     expect(videoSitemapEntries([makeVideo()], offline)).toEqual([])
+  })
+})
+
+// A new page layout (#972, the player under the title) changed every video page without touching
+// the catalogue: the lastmod stayed older than Google's last crawl, so nothing told it to come back.
+describe("lastmod after a change to the pages' own code", () => {
+  const videos = [makeVideo({ updatedAt: "2026-10-11" }), makeVideo({ id: "NEWER", slug: "newer", updatedAt: "2026-10-14" })]
+  const withPages: VideoSeoContext = { ...ctx, pagesModifiedAt: { library: "2026-10-12", video: "2026-10-13" } }
+
+  it("dates each page by the later of its video's update and its code's last change", () => {
+    const out = videoSitemapXml(videos, withPages)
+    const lastmods = [...out.matchAll(/<loc>([^<]+)<\/loc>\n<lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]])
+    expect(lastmods).toEqual([
+      ["https://www.benevol.app/videos", "2026-10-14"],
+      ["https://www.benevol.app/videos/EVENT_CREATE_BLANK", "2026-10-13"],
+      ["https://www.benevol.app/videos/NEWER", "2026-10-14"],
+    ])
+    expect(videoSitemapEntries(videos, withPages).map((e) => e.lastModified)).toEqual([
+      new Date("2026-10-14T00:00:00Z"),
+      new Date("2026-10-13T00:00:00Z"),
+      new Date("2026-10-14T00:00:00Z"),
+    ])
+  })
+
+  it("keeps the publication date on the video's own update", () => {
+    expect(videoSitemapXml(videos, withPages)).toContain("<video:publication_date>2026-10-11T00:00:00+00:00</video:publication_date>")
+  })
+
+  it("dates the library by its code when that is the latest change", () => {
+    const later: VideoSeoContext = { ...ctx, pagesModifiedAt: { library: "2026-10-20", video: null } }
+    const entries = videoSitemapEntries(videos, later)
+    expect(entries[0].lastModified).toEqual(new Date("2026-10-20T00:00:00Z"))
+    expect(entries[1].lastModified).toEqual(new Date("2026-10-11T00:00:00Z"))
+  })
+
+  it("lastModifiedDay gives the latest UTC day of the dated files, null when none is", () => {
+    const dates: Record<string, Date> = {
+      "a.tsx": new Date("2026-10-13T18:48:45+02:00"),
+      "b.tsx": new Date("2026-10-14T00:30:00+02:00"),
+    }
+    const lookup = (s: string) => dates[s] ?? null
+    expect(lastModifiedDay(["a.tsx", "b.tsx", "c.tsx"], lookup)).toBe("2026-10-13")
+    expect(lastModifiedDay(["a.tsx"], lookup)).toBe("2026-10-13")
+    expect(lastModifiedDay(["c.tsx"], lookup)).toBeNull()
+  })
+
+  it("names files that exist, the same list as scripts/doc-lastmod.mjs dates", () => {
+    expect(SCRIPT_VIDEO_PAGE_SOURCES).toEqual(VIDEO_PAGE_SOURCES)
+    for (const file of [...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video]) expect(fs.existsSync(path.join(process.cwd(), file)), file).toBe(true)
   })
 })
 

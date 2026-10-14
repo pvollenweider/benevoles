@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import { docLastmodLookup } from "../doc-lastmod"
 import { apexSitemap, PUBLIC_PAGES } from "../doc-pages"
 import { readDocUnits } from "../doc-units"
-import { docLastmod, docLastmodSources } from "../../../scripts/doc-lastmod.mjs"
+import { docLastmod, docLastmodSources, VIDEO_PAGE_SOURCES } from "../../../scripts/doc-lastmod.mjs"
 
 // The apex sitemap's lastmod comes from doc-lastmod.json (each source's last commit, written at
 // deploy), not from the files' mtime in the image, which is the build time for every page.
@@ -41,11 +41,12 @@ describe("scripts/doc-lastmod.mjs", () => {
 
   // The script reads the list from src/lib/doc-pages.ts and guide/ rather than importing the
   // TypeScript: this guard fails if the two ever drift (a renamed field, a new kind of source).
-  it("dates every source of PUBLIC_PAGES and every documentation unit, and nothing else", () => {
+  it("dates every source of PUBLIC_PAGES, every documentation unit and the video pages' code, and nothing else", () => {
     const pages = PUBLIC_PAGES.map((p) => p.source).filter((s): s is string => !!s)
     const units = readDocUnits().map((u) => u.source)
+    const videoPages = [...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video]
     expect(units.length).toBeGreaterThan(1)
-    expect([...sources].sort()).toEqual([...new Set([...pages, ...units])].sort())
+    expect([...sources].sort()).toEqual([...new Set([...pages, ...units, ...videoPages])].sort())
     expect(sources).not.toContain("guide/README.md")
   })
 
