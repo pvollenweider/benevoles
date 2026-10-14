@@ -33,6 +33,35 @@ export type VideoSeoContext = {
   siteBase: string
   /** VIDEO_MEDIA_BASE_URL; without it nothing can be played, so nothing is indexed. */
   mediaBaseUrl: string | null | undefined
+  /**
+   * Last change (AAAA-MM-JJ, UTC) of the code the library and the video pages are rendered from
+   * (VIDEO_PAGE_SOURCES), from doc-lastmod.json. Unknown (local build, tests): the catalogue dates only.
+   */
+  pagesModifiedAt?: { library: string | null; video: string | null }
+}
+
+/**
+ * The files the library and a video page are rendered from, besides the catalogue. Their last
+ * commit is written to doc-lastmod.json at deploy by scripts/doc-lastmod.mjs, which keeps the same
+ * list (a test checks it).
+ */
+export const VIDEO_PAGE_SOURCES = {
+  library: ["src/app/videos/layout.tsx", "src/app/videos/page.tsx"],
+  video: ["src/app/videos/layout.tsx", "src/app/videos/[id]/page.tsx"],
+} as const
+
+/**
+ * The latest day (AAAA-MM-JJ, UTC) among the given files' last commits, null when none is dated.
+ * `modifiedAt` is the doc-lastmod.json lookup (src/lib/doc-lastmod.ts).
+ */
+export function lastModifiedDay(sources: readonly string[], modifiedAt: (source: string) => Date | null): string | null {
+  const days = sources.map(modifiedAt).filter((d): d is Date => d !== null).map((d) => d.toISOString().slice(0, 10))
+  return days.sort().at(-1) ?? null
+}
+
+// Both AAAA-MM-JJ, so the later one is the greater string.
+function laterDay(day: string, other: string | null | undefined): string {
+  return other && other > day ? other : day
 }
 
 function trimBase(base: string): string {
@@ -266,16 +295,19 @@ type VideoSitemapPage = { url: string; lastmod: string; video: Video | null }
 /**
  * The pages both sitemaps list, the one selection: the gallery (when at least one video is
  * indexed, its last change the latest video's), then each indexed video page. Never an
- * unpublished or unplayable (« À venir ») video.
+ * unpublished or unplayable (« À venir ») video. A page's lastmod is also never older than the
+ * last change of its own code (`pagesModifiedAt`): a new layout is a change Google must re-crawl
+ * for, and an unchanged lastmod told it the pages were as it last saw them.
  */
 function videoSitemapPages(videos: Video[], ctx: VideoSeoContext): VideoSitemapPage[] {
   const base = trimBase(ctx.siteBase)
   const listed = indexableVideos(videos, ctx.mediaBaseUrl)
   if (listed.length === 0) return []
   const latest = listed.map((v) => v.updatedAt).sort().at(-1)!
+  const pages = ctx.pagesModifiedAt
   return [
-    { url: videoLibraryUrl(base), lastmod: latest, video: null },
-    ...listed.map((video) => ({ url: videoPageUrl(base, video.id), lastmod: video.updatedAt, video })),
+    { url: videoLibraryUrl(base), lastmod: laterDay(latest, pages?.library), video: null },
+    ...listed.map((video) => ({ url: videoPageUrl(base, video.id), lastmod: laterDay(video.updatedAt, pages?.video), video })),
   ]
 }
 

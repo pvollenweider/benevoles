@@ -4,8 +4,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 // Writes doc-lastmod.json at the repo root: each source file of the apex sitemap (the `source` of
-// PUBLIC_PAGES in src/lib/doc-pages.ts and the documentation units guide/*.md) mapped to the ISO
-// date of its last commit. The sitemap (src/app/sitemap.ts) reads it as each page's lastmod: the
+// PUBLIC_PAGES in src/lib/doc-pages.ts, the documentation units guide/*.md and the video pages'
+// own code, VIDEO_PAGE_SOURCES) mapped to the ISO date of its last commit. The sitemap (src/app/sitemap.ts) reads it as each page's lastmod: the
 // files' mtime in the image is the build time, identical for every page on every deploy.
 //
 // Run by deploy.yml before the image build, on a full clone (fetch-depth: 0): a shallow clone
@@ -17,6 +17,17 @@ import { fileURLToPath } from "node:url"
 import path from "node:path"
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+
+/**
+ * The files a video page is rendered from, besides its catalogue entry: a change to them changes
+ * every video page (#972 moved the player under the title), so the video sitemaps date a page by
+ * the later of its video's `updatedAt` and these files' last commit. Same list as
+ * VIDEO_PAGE_SOURCES in src/lib/video-seo.ts; a test checks the two match.
+ */
+export const VIDEO_PAGE_SOURCES = {
+  library: ["src/app/videos/layout.tsx", "src/app/videos/page.tsx"],
+  video: ["src/app/videos/layout.tsx", "src/app/videos/[id]/page.tsx"],
+}
 
 /**
  * The sitemap's source files, read from the code itself so the list can't drift: every
@@ -32,7 +43,7 @@ export function docLastmodSources(root = ROOT) {
   const units = existsSync(guideDir)
     ? readdirSync(guideDir).filter((f) => f.endsWith(".md") && f !== "README.md").sort().map((f) => `guide/${f}`)
     : []
-  return [...new Set([...sources, ...units])]
+  return [...new Set([...sources, ...units, ...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video])]
 }
 
 /**

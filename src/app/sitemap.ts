@@ -1,6 +1,4 @@
 import type { MetadataRoute } from "next"
-import fs from "fs"
-import path from "path"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
@@ -10,27 +8,11 @@ import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { loadBlogPosts } from "@/lib/blog"
 import { isHostedService } from "@/lib/site"
-import { docLastmodLookup } from "@/lib/doc-lastmod"
+import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { videoSitemapEntries } from "@/lib/video-seo"
 import { videoSeoContext } from "@/lib/video-seo-context"
 import { reportError } from "@/lib/report-error"
-
-// A doc page's last change is its source file's last commit, written at deploy into
-// doc-lastmod.json (scripts/doc-lastmod.mjs): in the image every file's mtime is the build time.
-// Read once; without the file (development, tests) or with a malformed one, no lastmod at all.
-let docLastmod: ((source: string) => Date | null) | null = null
-function docLastmodFromFile(): (source: string) => Date | null {
-  if (docLastmod) return docLastmod
-  let json: unknown = null
-  try {
-    json = JSON.parse(fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "doc-lastmod.json"), "utf-8"))
-  } catch {
-    json = null
-  }
-  docLastmod = docLastmodLookup(json)
-  return docLastmod
-}
 
 // The video library and every indexed video, the selection /video-sitemap.xml lists (one
 // function, src/lib/video-seo.ts) without its video extension. A broken catalogue never takes the
@@ -54,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    return [...apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits(), isHostedService(), loadBlogPosts()), ...apexVideoEntries()]
+    return [...apexSitemap(apexBaseUrl(), loadDocLastmod(), loadDocUnits(), isHostedService(), loadBlogPosts()), ...apexVideoEntries()]
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)
