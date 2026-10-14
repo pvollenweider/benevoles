@@ -2,7 +2,7 @@
 roles: [benevole]
 group: apres-inscription
 order: 10
-summary: Ta page personnelle : ton prochain créneau, tes infos pratiques, changer de créneau ou annuler, l'ajouter à ton calendrier, tes disponibilités.
+summary: Ta page personnelle : ton prochain créneau, tes infos pratiques, d'autres créneaux, changer ou annuler, ton calendrier, tes disponibilités.
 related: [lien-personnel, rappels, revenir-sur-la-page-d-inscription]
 legacy: [benevole#gerer-son-inscription]
 aliases: []
@@ -36,6 +36,12 @@ Un créneau en liste d'attente ou sur validation n'y figure pas tant qu'il n'est
 
 Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré).
 
+## S'inscrire à d'autres créneaux
+
+Tu as encore du temps ? Sous tes créneaux, le lien **S'inscrire à d'autres créneaux** t'emmène sur la page d'inscription de l'événement, qui te reconnaît : choisis-y de nouveaux créneaux comme la première fois. Si tu t'étais inscrit par le lien d'un groupe (ton club, ton équipe), tu retrouves ses postes.
+
+Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand elles sont fermées ou que l'événement est passé, il disparaît, et le lien en bas de la page s'appelle **Voir la page de l'événement** (ou **Retour à l'accueil**, vers la page de l'organisation, si l'événement n'est plus en ligne).
+
 ## Annuler un créneau
 
 **Annuler** retire un créneau à la fois : une confirmation t'est demandée (**Oui, annuler** ou **Non, garder**), puis la place est immédiatement libérée et proposée à la première personne en liste d'attente. Selon le cas, le bouton s'appelle autrement, toujours avec une confirmation :
@@ -55,11 +61,11 @@ Tu peux annuler toi-même jusqu'au début du créneau, jamais après. L'organisa
 
 Le délai ne vaut que pour une place confirmée : tu peux quitter une liste d'attente, refuser une place proposée ou retirer une demande jusqu'au début du créneau. Si ta page était ouverte depuis un moment et que le délai est passé entre-temps, l'annulation est refusée avec un message, rien n'est annulé, et le créneau affiche les personnes à prévenir.
 
-Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, retourne sur la page de l'événement et choisis tes créneaux.
+Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, **S'inscrire à d'autres créneaux** te ramène sur la page de l'événement, tant que les inscriptions sont ouvertes.
 
 ## Changer de créneau
 
-Il n'y a pas de bouton pour échanger un créneau contre un autre : le changement se fait en deux temps. Inscris-toi d'abord au nouveau créneau sur la page de l'événement (le lien « Retour à l'accueil », en bas de ta page personnelle, t'y ramène et te reconnaît), puis reviens ici annuler l'ancien avec **Annuler**. Si les deux créneaux se chevauchent, le nouveau ne peut pas être sélectionné : annule alors d'abord l'ancien, en sachant que sa place est aussitôt proposée à la liste d'attente. Le champ « Un mot pour l'organisation ? » de l'annulation te permet de prévenir l'organisation du changement.
+Il n'y a pas de bouton pour échanger un créneau contre un autre : le changement se fait en deux temps. Inscris-toi d'abord au nouveau créneau sur la page de l'événement (le lien **S'inscrire à d'autres créneaux**, sous tes créneaux, t'y ramène et te reconnaît), puis reviens ici annuler l'ancien avec **Annuler**. Si les deux créneaux se chevauchent, le nouveau ne peut pas être sélectionné : annule alors d'abord l'ancien, en sachant que sa place est aussitôt proposée à la liste d'attente. Le champ « Un mot pour l'organisation ? » de l'annulation te permet de prévenir l'organisation du changement.
 
 ## Ajouter mes créneaux à mon calendrier
 

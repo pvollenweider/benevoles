@@ -4,7 +4,8 @@
 import { NextResponse } from "next/server"
 import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
-import { orgBaseUrl } from "@/lib/urls"
+import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
+import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { logEvent } from "@/lib/event-log"
@@ -39,6 +40,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           location: true, latitude: true, longitude: true, publicInstructions: true,
           dayContactName: true, dayContactPhone: true,
           cancelDeadlineDays: true, cancelDeadlineHours: true,
+          // Whether a sign-up for more shifts is possible (#988).
+          endDate: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
           pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
           // The sector leaders' names only (#560): never their email nor their link.
           sectorLeaders: { select: { roleName: true, name: true } },
@@ -61,7 +64,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       eventId: registration.eventId,
       status: { in: LIVE },
     },
-    include: { shift: true },
+    include: { shift: true, groupLink: { select: { code: true } } },
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
 
@@ -71,6 +74,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const { event } = registration
   const timeZone = orgTimeZone(registration.event.organization)
   const now = new Date()
+  // The event's page with the organisation (`?org=` locally, #982): for more shifts (#988), with the
+  // volunteer's group link, only while a sign-up is possible; for the page itself, while published.
+  const publicUrl = eventPublicUrl(orgSlug, event.slug)
+  const groupCode = volunteerGroupCode(allRegistrations, registration.id)
   return NextResponse.json({
     // What the « Avant ta mission » block falls back on (#560). The information pages only
     // open once the event is published: no link to a page that would answer 404.
@@ -87,6 +94,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     confirmationMessage: registration.event.confirmationMessage ?? null,
     orgHomeUrl: baseUrl,
     eventUrl,
+    eventPageUrl: event.publicStatus === "published" ? publicUrl : null,
+    signUpUrl: signUpUrl({ event, eventUrl: publicUrl, groupCode, now, timeZone }),
     timeZone,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),

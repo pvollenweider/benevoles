@@ -21,6 +21,7 @@ import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/
 import MissionBriefCard from "@/components/public/MissionBriefCard"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { SIGN_UP_MORE_LABEL, bottomLink, emptyPageLink } from "@/lib/personal-page-links"
 import { CANCEL_CONTACTS_INTRO, cancelClosedText, cancelContacts, cancelUntilText, type SelfCancelReason } from "@/lib/cancel-deadline"
 
 type ShiftRef = {
@@ -61,6 +62,10 @@ type PageData = {
   registrations: RegistrationItem[]
   orgHomeUrl: string
   eventUrl: string
+  /** The event's page (`?org=` locally), null once it is not published any more (#988). */
+  eventPageUrl?: string | null
+  /** Where to sign up for more shifts, with the volunteer's group link; null when no sign-up is possible (#988). */
+  signUpUrl?: string | null
   timeZone?: string
   linkEmailedAt?: string | null
   contactEmail?: string | null
@@ -242,7 +247,13 @@ export default function MyRegistrationPage() {
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
   const status = <p id="withdraw-status" role="status" className="sr-only">{statusText}</p>
 
+  // Links to the event (#988): « S'inscrire à d'autres créneaux » while a sign-up is possible; the
+  // link at the bottom then goes away (same page), else it names where it goes.
+  const links = { signUpUrl: data.signUpUrl, eventPageUrl: data.eventPageUrl, orgHomeUrl: data.orgHomeUrl }
+  const back = bottomLink(links)
+
   if (data.registrations.length === 0) {
+    const empty = emptyPageLink(links)
     return (
       <>
         {status}
@@ -250,7 +261,8 @@ export default function MyRegistrationPage() {
           <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
             <span aria-hidden="true" className="text-4xl block mb-4">✓</span>
             <h1 id={EMPTY_TITLE_ID} tabIndex={-1} className="text-lg font-bold text-gray-900 mb-2 focus:outline-none">Toutes tes inscriptions ont été annulées</h1>
-            <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-blue-600 text-sm mt-4 block">Retour à l'accueil</Link>
+            {/* The sign-up page while a sign-up is possible (#988), else the event page or the organisation's home. */}
+            <Link href={empty.href} className="mt-4 inline-block text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{empty.label}</Link>
           </div>
         </main>
       </>
@@ -434,6 +446,14 @@ export default function MyRegistrationPage() {
               </div>
             )
           })}
+          {/* More shifts (#988): in the list's section, after the cards; outside them, so the focus
+              return of a withdrawal never lands on it. */}
+          {data.signUpUrl && (
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <p className="text-sm text-gray-700">Encore un peu de temps ?</p>
+              <Link href={data.signUpUrl} className="mt-1 inline-block text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{SIGN_UP_MORE_LABEL}</Link>
+            </div>
+          )}
         </section>
 
         <PersonalLinkPanel
@@ -472,10 +492,8 @@ export default function MyRegistrationPage() {
 
         <AvailabilityForm token={token} initialPeriods={data.volunteer.availabilityPeriods ?? []} initialNote={data.volunteer.availabilityNote ?? null} />
 
-        <div className="flex items-center justify-between pt-2">
-          <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-sm text-gray-500 hover:text-gray-700">
-            Retour à l&apos;accueil
-          </Link>
+        <div className="flex items-center justify-between gap-3 pt-2">
+          {back && <Link href={back.href} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{back.label}</Link>}
           <PushSubscribeButton editToken={token} />
         </div>
       </div>
