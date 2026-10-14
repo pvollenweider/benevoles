@@ -22,7 +22,7 @@ export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65ch]
   prose-h4:text-lg prose-h4:leading-[1.4] prose-h4:mt-6 prose-h4:mb-1
   prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-[1.75] prose-p:max-w-[65ch]
   prose-li:text-base prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:leading-[1.75] prose-li:max-w-[65ch]
-  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
+  prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 prose-a:hover:decoration-2
   prose-a:rounded prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-600 dark:prose-a:focus-visible:outline-blue-400
   prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold
   prose-code:text-sm prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:before:content-none prose-code:after:content-none

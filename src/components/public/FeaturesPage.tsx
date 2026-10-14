@@ -23,7 +23,7 @@ export const FEATURES_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-no
   prose-p:text-base prose-p:leading-[1.75] prose-p:max-w-[65ch] prose-p:text-gray-700 dark:prose-p:text-gray-300
   prose-li:text-base prose-li:leading-[1.75] prose-li:max-w-[65ch] prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:my-2
   prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold
-  prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2 prose-a:rounded
+  prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-a:underline prose-a:underline-offset-2 prose-a:hover:decoration-2 prose-a:rounded
   prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-700 dark:prose-a:focus-visible:outline-blue-300
   prose-code:text-sm prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:before:content-none prose-code:after:content-none
   prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:max-w-[65ch] prose-blockquote:rounded-xl prose-blockquote:border prose-blockquote:border-s prose-blockquote:border-blue-200 dark:prose-blockquote:border-blue-800

@@ -73,7 +73,7 @@ export default async function EventCustomPage({
           prose-h1:text-xl prose-h2:text-lg prose-h3:text-base
           prose-p:text-sm prose-p:text-gray-700 prose-p:leading-relaxed
           prose-li:text-sm prose-li:text-gray-700
-          prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+          prose-a:text-blue-600 prose-a:no-underline prose-a:hover:underline
           prose-strong:text-gray-900
         ">
           <h1>{page.title}</h1>
