@@ -38,6 +38,8 @@ La page **Vérification et publication** (dernière étape de la [création](cre
 - **Rappels automatiques**, seulement s'il reste un créneau à venir : tous envoyés, en partie ou entièrement désactivés pour l'organisation (lien vers **Paramètres**, puis **Emails**), ou coupés pour cet événement (lien **Modifier** vers la case **Rappels automatiques** du formulaire de l'événement).
 - **Couverture**, une fois l'événement publié : places occupées et créneaux incomplets (« 46 places occupées sur 52, 3 créneaux incomplets »), avec le lien **Voir les créneaux incomplets** vers la page [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md).
 
+![Section « Vérification » d'un événement publié : huit points cochés (dates, créneaux, lieu, message de confirmation, instructions, responsables, inscriptions ouvertes, rappels J-2, J-1 et du jour), chacun avec un lien « Modifier » ou « Réglages des emails », et deux points « À vérifier » marqués d'un point d'interrogation, « 11 créneaux sans contact » avec le lien « Ajouter », et « 30 places occupées sur 44, 8 créneaux incomplets » avec le lien « Voir les créneaux incomplets »](/doc-img/admin-event-review.png)
+
 Depuis la page de l'événement (**Événements**, puis l'événement), cliquer sur **Publier**.
 
 L'événement devient alors visible à l'URL :

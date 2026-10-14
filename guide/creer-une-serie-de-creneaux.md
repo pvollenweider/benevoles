@@ -24,6 +24,8 @@ Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de
 
 L'aperçu se met à jour au fur et à mesure : nombre de créneaux, horaires de chacun. Si la plage ne se divise pas exactement, le dernier créneau est plus court (indiqué dans l'aperçu) ; supprimez-le ensuite s'il ne sert pas. Les créneaux qui commencent après minuit sont datés du lendemain. Une série compte au plus 48 créneaux.
 
+![Formulaire « Créer une série de créneaux » rempli : poste Buvette, dimanche de 10:00 à 22:00, créneaux de 2 h sans pause, 3 personnes par créneau, liste d'attente activée ; l'aperçu annonce 6 créneaux de 2 h, de 10:00–12:00 à 20:00–22:00, au-dessus du bouton « Créer 6 créneaux »](/doc-img/admin-shift-series.png)
+
 Une fois créés, ce sont des créneaux ordinaires : chacun se modifie ou se supprime séparément.
 
 Une série couvre une seule journée. Pour une permanence qui revient chaque semaine (l'accueil du mercredi, la distribution du samedi), voir [Permanences récurrentes](permanences-recurrentes.md) : ses dates sont toutes créées d'un coup, et elle se modifie ou s'arrête ensuite d'un seul geste.

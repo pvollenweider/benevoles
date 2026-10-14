@@ -21,6 +21,8 @@ import { findTemplate, templateToEvent } from "../src/lib/event-templates"
 import { addDays } from "../src/lib/shift-series"
 
 export const DEMO_PERMANENCES_ORG_SLUG = "epicerie-de-la-gare"
+/** Its organizer, signed in on the screenshots of this organization (same password as ORG_ADMIN_EMAIL). */
+export const DEMO_PERMANENCES_ADMIN_EMAIL = "epicerie.admin@example.org"
 
 const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
 
@@ -40,6 +42,15 @@ async function main() {
   await prisma.organization.deleteMany({ where: { slug: DEMO_PERMANENCES_ORG_SLUG } })
   const org = await prisma.organization.create({
     data: { name: "Épicerie de la Gare", slug: DEMO_PERMANENCES_ORG_SLUG, publicTitle: "Bénévoles de l'Épicerie de la Gare", timeZone: "Europe/Zurich" },
+  })
+  // Reuse the demo admin's password hash (scripts/seed-demo.ts does the same): no other secret.
+  const demoAdmin = await prisma.adminUser.findFirstOrThrow({
+    where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" },
+    select: { passwordHash: true },
+  })
+  await prisma.adminUser.deleteMany({ where: { email: DEMO_PERMANENCES_ADMIN_EMAIL } })
+  await prisma.adminUser.create({
+    data: { organizationId: org.id, name: "Aline Dupraz", email: DEMO_PERMANENCES_ADMIN_EMAIL, passwordHash: demoAdmin.passwordHash, role: "admin", isActive: true },
   })
 
   const template = findTemplate("epicerie")!

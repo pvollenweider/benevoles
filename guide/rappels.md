@@ -50,6 +50,8 @@ Les rappels partent sans intervention de votre part pour les événements publi�
 
 La section **Communications** de la page de l'événement indique ce qui partira vraiment pour cet événement : les rappels envoyés avec leur délai, ceux désactivés pour l'organisation, ou l'absence de rappel (désactivés pour l'organisation, coupés pour cet événement, ou plus aucun créneau à venir). Pour un brouillon, elle précise que les rappels ne partent qu'une fois l'événement publié. Ses liens mènent à la case **Rappels automatiques** de l'événement et aux réglages des emails de l'organisation.
 
+![Encadré « Rappels automatiques activés » de la section Communications : Rappel J-2 environ 48 h avant le premier créneau du jour, Rappel J-1 environ 24 h avant, Rappel du jour 2 à 4 h avant, une phrase sur le regroupement en un seul email par jour, et les liens « Rappels automatiques de l'événement » et « Réglages des emails de l'organisation »](/doc-img/admin-reminders.png)
+
 Pour envoyer vous-même un rappel à tous les inscrits, voir [Rappel manuel](ecrire-aux-benevoles.md#rappel-manuel).
 
 ### Un bénévole inscrit sur plusieurs créneaux le même jour reçoit-il beaucoup de rappels ?

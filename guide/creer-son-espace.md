@@ -21,6 +21,8 @@ Sur la page [Demander un espace](/inscription), remplissez les quatre champs, to
 - **Votre nom**, sans lien ni adresse.
 - **Votre adresse email** : elle reçoit le lien de confirmation et devient votre identifiant de connexion.
 
+![Formulaire « Demander un espace » : les quatre champs obligatoires « Nom de l'association », « Votre association et votre besoin » (entre 20 et 1000 caractères), « Votre nom » et « Votre adresse email », puis le bouton « Créer mon espace »](/doc-img/public-signup.png)
+
 Puis cliquez sur **Créer mon espace**. Le message « Vérifiez votre boîte email » s'affiche, quoi qu'il arrive : pour protéger les comptes existants, la page ne dit jamais si une adresse est déjà connue.
 
 ## Confirmer votre adresse

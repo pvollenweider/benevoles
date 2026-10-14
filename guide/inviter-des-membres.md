@@ -37,6 +37,8 @@ Le tableau affiche pour chaque membre invité l'un de trois statuts :
 
 Les compteurs en haut récapitulent : **Invités**, **Inscrits**, **Pas disponible** et **Sans réponse** ; ils s'additionnent toujours au nombre d'invités. Cliquer sur un compteur filtre le tableau sur cet état ; cliquer sur **Invités** l'efface.
 
+![Page « Invitations » : les compteurs 9 Invités, 8 Inscrits, 0 Pas disponible et 1 Sans réponse, le bouton « + Inviter des membres », le bouton « Relancer la personne sans créneau » et le lien « Écrire un message à la personne sans créneau », puis le tableau des membres invités avec leurs tags, la date d'invitation et le statut « Participation confirmée » ou « Sans réponse »](/doc-img/admin-invitations.png)
+
 **Tester l'envoi d'email** envoie un exemple de l'email d'invitation à l'adresse de votre choix, pour vérifier le rendu avant d'inviter.
 
 ## Pas disponible
