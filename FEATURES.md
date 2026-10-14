@@ -125,7 +125,7 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 ## Un outil sur lequel compter
 
 - **Gratuit et open source** : le code est publié sous licence AGPL. Il n'y a ni abonnement ni fonction payante ; la page [Tarifs](TARIFS.md) explique comment le projet est financé.
-- **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité.
+- **Développé en Suisse, hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité.
 - **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) et la [liste des sous-traitants](SOUS-TRAITANTS.md), avec leur localisation et leurs garanties.
 - **Chaque organisation est séparée**, et les liens personnels restent privés : ils sont envoyés par email, et un lien perdu se redemande avec son adresse.
 - **Pensé pour tous** : l'inscription et l'administration s'utilisent au clavier et avec un lecteur d'écran ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
