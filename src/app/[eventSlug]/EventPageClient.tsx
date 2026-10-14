@@ -51,7 +51,8 @@ import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
-import { NEW_TAB_HINT, embedFlowParams, takeReturnToSchedule } from "@/lib/embed"
+import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
+import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
 
@@ -522,20 +523,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     // No editToken when the address already belonged to a volunteer and nothing proved the
     // submitter owns it: the management link then only goes out by email (#285).
     saveRememberedContact(form)
-    const params = new URLSearchParams()
-    if (data.editToken) {
-      writeStored(storageKey, data.editToken)
-      params.set("token", data.editToken)
-    }
-    if (data.onWaitlist) params.set("waitlist", "1")
-    if (Number(data.requestedShifts) > 0) {
-      params.set("requested", String(data.requestedShifts))
-      params.set("active", String(data.activeShifts ?? 0))
-    }
-    // Embedded (#948): the frame keeps its group link, organisation and `embed=1` on the confirmation.
-    if (embed) embedFlowParams(searchParams).forEach((value, key) => params.set(key, value))
-    const query = params.toString()
-    router.push(`/${eventSlug}/success${query ? `?${query}` : ""}`)
+    if (data.editToken) writeStored(storageKey, data.editToken)
+    router.push(successPath(eventSlug, data, searchParams, embed))
   }
 
   function quitSession() {
