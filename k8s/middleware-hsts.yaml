@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# HSTS for the hosted service: a browser that has seen benevol.app over HTTPS goes straight to
+# https:// for a year, so a typed or copied http:// link never travels in clear text nor through the
+# redirect of ingressroute-http.yaml. Traefik only sends it on HTTPS responses.
+#
+# Set here and not in the app (src/lib/security-headers.ts): a self-hosted instance chooses its own
+# HTTPS policy. Without includeSubDomains: webmail.benevol.app points to Gandi and has no valid
+# certificate for that name, and HSTS would make it unreachable. Every host the app answers (apex,
+# www, each organization's subdomain) sends its own header anyway. No preload: hard to undo.
+#
+# Used by the Ingress (ingress.yaml, annotation) and the token IngressRoute on websecure
+# (ingressroute-tokens.yaml). Apply this file first: a router that names a missing middleware is
+# disabled by Traefik. Applied by the deploy workflow, before the routes.
+#
+#   kubectl apply -f k8s/middleware-hsts.yaml
+#   curl -sI https://www.benevol.app/ | grep -i strict-transport   # → max-age=31536000
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: benevoles-hsts
+  namespace: benevoles
+spec:
+  headers:
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: false

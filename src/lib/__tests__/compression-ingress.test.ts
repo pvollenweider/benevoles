@@ -34,7 +34,7 @@ describe("compression by Traefik", () => {
 
   it("runs compress before the Accept-Encoding removal, on the Ingress and the token route", () => {
     expect(ingress).toContain(
-      "traefik.ingress.kubernetes.io/router.middlewares: benevoles-benevoles-compress@kubernetescrd,benevoles-benevoles-identity-upstream@kubernetescrd",
+      "traefik.ingress.kubernetes.io/router.middlewares: benevoles-benevoles-compress@kubernetescrd,benevoles-benevoles-identity-upstream@kubernetescrd,benevoles-benevoles-hsts@kubernetescrd",
     )
     const websecure = tokens.slice(tokens.indexOf("name: benevoles-app-tokens\n"), tokens.indexOf("name: benevoles-app-tokens-http"))
     expect(websecure).toMatch(/middlewares:\n\s+- name: benevoles-compress\n\s+- name: benevoles-identity-upstream\n/)
@@ -45,6 +45,29 @@ describe("compression by Traefik", () => {
     expect(at("middleware-compress.yaml")).toBeGreaterThan(-1)
     expect(at("middleware-compress.yaml")).toBeLessThan(at("ingress.yaml"))
     expect(at("middleware-compress.yaml")).toBeLessThan(at("ingressroute-tokens.yaml"))
+  })
+})
+
+// HSTS for the hosted service only (k8s/middleware-hsts.yaml), on every route that answers HTTPS.
+describe("HSTS by Traefik", () => {
+  const hsts = read("k8s/middleware-hsts.yaml")
+
+  it("keeps browsers on HTTPS for a year, host by host", () => {
+    expect(hsts).toMatch(/name: benevoles-hsts\n[\s\S]*?headers:\n\s+stsSeconds: 31536000\n/)
+    // webmail.benevol.app (Gandi) has no valid certificate for its name: includeSubDomains would lock
+    // it out, and preload can't be undone quickly.
+    expect(hsts).toMatch(/stsIncludeSubdomains: false\n/)
+    expect(hsts).toMatch(/stsPreload: false\n/)
+  })
+
+  it("is on the Ingress and the token route, and applied before them", () => {
+    expect(ingress).toMatch(/router\.middlewares: [^\n]*benevoles-benevoles-hsts@kubernetescrd/)
+    const websecure = tokens.slice(tokens.indexOf("name: benevoles-app-tokens\n"), tokens.indexOf("name: benevoles-app-tokens-http"))
+    expect(websecure).toMatch(/middlewares:\n(\s+- name: \S+\n)*\s+- name: benevoles-hsts\n/)
+    const at = (file: string) => workflow.indexOf(`kubectl apply -f k8s/${file}`)
+    expect(at("middleware-hsts.yaml")).toBeGreaterThan(-1)
+    expect(at("middleware-hsts.yaml")).toBeLessThan(at("ingress.yaml"))
+    expect(at("middleware-hsts.yaml")).toBeLessThan(at("ingressroute-tokens.yaml"))
   })
 })
 
