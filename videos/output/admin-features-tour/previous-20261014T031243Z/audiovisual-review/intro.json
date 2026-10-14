@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:49:13.438Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "cf43ae78225f83d39ffcda55ad3938e61b7f9acb2d75599aa9cc057f9e6cf396",
+  "clipSha256": "ab8d318c0f9c2ab61197991aaf9b7932df4a4eff8f62c0b0f2deb7bdda3df1ea",
+  "scene": "intro",
+  "review": {
+    "heardOpening": "Voici une visite complète",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Voici une visite complète de l'administration",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction « Organiser ses bénévoles, du premier réglage au jour J » superposé à l'interface d'administration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "préparer votre organisation, construire un événement",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition de la vignette d'introduction et affichage de la page de gestion des événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "puis préparer le jour J",
+        "visibleSeconds": 10.5,
+        "visible": "Écran stable présentant l'événement « Fête du village de Montvert »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:05 : Rupture vocale en plein milieu de phrase ; une voix masculine commence l'introduction (00:00-00:05), puis une voix féminine avec musique de fond prend subitement la suite (00:05-00:12)."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Changement brusque d'orateur à 00:05, passant d'une voix masculine sans fond sonore à une voix féminine accompagnée de musique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -23,7 +23,7 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
-  "voiceStyle": "Speak with an audible smile throughout. Sound warm, friendly and confident, like an experienced association organizer helping a colleague. Use conversational French, clear articulation and a calm medium pace. Preserve exactly the same vocal identity, smile, pitch and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
+  "voiceStyle": "Speak in warm, friendly conversational French with an audible smile, clear articulation and a calm medium pace.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -32,12 +32,12 @@
   "segments": [
     {
       "id": "intro",
-      "transcript": "Voici une visite complète de l’administration, dans l’ordre où tu l’utiliseras vraiment : préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+      "transcript": "Voici une visite complète de l’administration, dans l’ordre où vous l’utiliserez vraiment : préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
       "fallbackDurationMs": 12000
     },
     {
       "id": "organization",
-      "transcript": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app. Tu choisis aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+      "transcript": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
       "fallbackDurationMs": 15000
     },
     {
@@ -52,12 +52,12 @@
     },
     {
       "id": "appearance",
-      "transcript": "Dans ses paramètres, tu règles le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+      "transcript": "Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
       "fallbackDurationMs": 15000
     },
     {
       "id": "duplicate",
-      "transcript": "Pour repartir d’une édition précédente, duplique l’événement et décale toutes les dates. Tu choisis ce qui est repris : les créneaux, les réglages, les pages d’information et les responsables.",
+      "transcript": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les réglages, les pages d’information et les responsables.",
       "fallbackDurationMs": 12000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "registrations",
-      "transcript": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Tu peux filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+      "transcript": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Vous pouvez filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
       "fallbackDurationMs": 16000
     },
     {
@@ -82,17 +82,17 @@
     },
     {
       "id": "questions",
-      "transcript": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher. Tu décides si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+      "transcript": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
       "fallbackDurationMs": 16000
     },
     {
       "id": "pages",
-      "transcript": "Tu peux aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donne un titre, rédige le contenu, puis organise leur ordre : elles apparaissent directement avec la page d’inscription.",
+      "transcript": "Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donnez un titre et rédigez le contenu, puis enregistrez la page. Puis organisez leur ordre avec les flèches : ces pages apparaissent directement avec la page d’inscription.",
       "fallbackDurationMs": 14000
     },
     {
       "id": "messages",
-      "transcript": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Tu prévisualises toujours le résultat avant l’envoi.",
+      "transcript": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Vous prévisualisez toujours le résultat avant l’envoi.",
       "fallbackDurationMs": 17000
     },
     {
@@ -102,7 +102,7 @@
     },
     {
       "id": "reports",
-      "transcript": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, par poste ou par créneau, prêts à imprimer et découper.",
+      "transcript": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression, prêts à imprimer et découper.",
       "fallbackDurationMs": 17000
     },
     {
@@ -110,5 +110,6 @@
       "transcript": "Enfin, le journal d’activité garde la chronologie : création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs. On sait ce qui s’est passé, qui l’a fait et quand. La recherche globale permet ensuite de tout retrouver rapidement.",
       "fallbackDurationMs": 17000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

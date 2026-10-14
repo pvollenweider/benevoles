@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:35.880Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "c822f6f6038443b3ad9757c063e0a581ca1d6cadc7464f7c78eced54ad931bb7",
+  "clipSha256": "5f33cb1285519b9b489ac73cc8baf60a6bc1e9ccc17881f7761ebb7047d6317d",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Vous pouvez aussi créer des pages publiques",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "créer des pages publiques",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le bouton '+ Ajouter une page' et ouverture de la fenêtre Nouvelle page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Donnez un titre",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie de 'Accès et parking' dans le champ Titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "rédigez le contenu",
+        "visibleSeconds": 8.3,
+        "visible": "Saisie du texte au format Markdown dans le champ Contenu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "organisez leur ordre",
+        "visibleSeconds": 9,
+        "visible": "L'organisation de l'ordre n'est pas manipulée : la modale de saisie reste affichée sans validation",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À partir de 00:09, l'action d'organiser l'ordre des pages n'est pas démontrée car la modale de création reste ouverte et le bouton Enregistrer n'est pas cliqué."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et bien articulée, synchronisée avec les étapes de saisie."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

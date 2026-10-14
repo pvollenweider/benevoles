@@ -1,7 +1,7 @@
 [
   {
     "chapter": "intro",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "organization",
@@ -21,7 +21,7 @@
   },
   {
     "chapter": "duplicate",
-    "exitCode": 0
+    "exitCode": 1
   },
   {
     "chapter": "shift-methods",
@@ -41,11 +41,11 @@
   },
   {
     "chapter": "questions",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "pages",
-    "exitCode": 1
+    "exitCode": 0
   },
   {
     "chapter": "messages",

@@ -1,0 +1,13 @@
+{
+  "source": "/tmp/codex-video/videos/output/shift-recurrence/take-1/review/mixkit-tech-house-vibes-130.mp3",
+  "sourceSha256": "95972c602ff0686e298792f45b384f0e15477f3cf983f05dd98fd5e5d965eed6",
+  "clipSha256": "fe95cd5cfac6d5623bc0ecdd3083191fb519b087d2d50ffd99da0ad26946de19",
+  "start": 25,
+  "length": 25,
+  "prompt": "Écoute cet extrait réel. Transcris exactement toutes les paroles audibles dans toutes les langues. Ne transforme pas des percussions, basses ou sons synthétiques en paroles. Si aucune parole n’est intelligible, transcription doit être vide. Décris aussi les sons entendus. Ne complète pas les phrases coupées. Retourne uniquement JSON {\"transcription\":\"...\",\"sounds\":\"...\",\"intelligibleSpeech\":true}.",
+  "result": {
+    "transcription": "Feel the beat, turn it up, feel the beat",
+    "sounds": "beat électronique, percussions, ligne de basse, voix masculine rythmée",
+    "intelligibleSpeech": true
+  }
+}

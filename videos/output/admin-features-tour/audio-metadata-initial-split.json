@@ -1,0 +1,87 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-14T03:13:56.699Z",
+  "segments": {
+    "intro": {
+      "file": "audio/intro.wav",
+      "durationMs": 16518,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "organization": {
+      "file": "audio/organization.wav",
+      "durationMs": 12655,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "team": {
+      "file": "audio/team.wav",
+      "durationMs": 18798,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "lifecycle": {
+      "file": "audio/lifecycle.wav",
+      "durationMs": 19303,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "appearance": {
+      "file": "audio/appearance.wav",
+      "durationMs": 15163,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "duplicate": {
+      "file": "audio/duplicate.wav",
+      "durationMs": 12088,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "shift-methods": {
+      "file": "audio/shift-methods.wav",
+      "durationMs": 15839,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "shift-fields": {
+      "file": "audio/shift-fields.wav",
+      "durationMs": 18595,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "registrations": {
+      "file": "audio/registrations.wav",
+      "durationMs": 16717,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "members": {
+      "file": "audio/members.wav",
+      "durationMs": 16244,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "questions": {
+      "file": "audio/questions.wav",
+      "durationMs": 15184,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "pages": {
+      "file": "audio/pages.wav",
+      "durationMs": 16959,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "messages": {
+      "file": "audio/messages.wav",
+      "durationMs": 17387,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "reminders": {
+      "file": "audio/reminders.wav",
+      "durationMs": 12951,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "reports": {
+      "file": "audio/reports.wav",
+      "durationMs": 19610,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    },
+    "activity": {
+      "file": "audio/activity.wav",
+      "durationMs": 17629,
+      "generationSha256": "394db6396fef229e203cdd7b4ee5d3692ce3b16e0324141c23cf68b8ad7895cf"
+    }
+  }
+}

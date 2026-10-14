@@ -1,9 +1,9 @@
 {
-  "mp4Sha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
-  "BUILD_ID": "pNdKfvSuEWlaFsKM4WH1j",
-  "commit": "3a2ee752986f41652560ed5f7a1f80bb3a02a57c",
+  "mp4Sha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "BUILD_ID": "Pef0qFtQGGE6GvN9qeIJS",
+  "commit": "0ad1a7d71fe7b28d88dd7ce4b9673d24dd080fdc",
   "effectCountsMatch": true,
-  "clicks": 18,
+  "clicks": 20,
   "keys": 8,
   "effectHashMatches": true,
   "timelineHashMatches": true,
@@ -11,15 +11,15 @@
   "musicHashMatches": true,
   "registerHashMatches": true,
   "music": {
-    "voicedWindows": 239,
-    "musicOnlyWindows": 6,
-    "smallestGapLu": 14.9,
-    "largestGapLu": 19.7,
-    "quietestMusicOnlyLufs": -34.6,
-    "loudestMusicOnlyLufs": -33.2,
+    "voicedWindows": 244,
+    "musicOnlyWindows": 9,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 19.4,
+    "quietestMusicOnlyLufs": -34.7,
+    "loudestMusicOnlyLufs": -32.8,
     "medianVoiceLufs": -16.2
   },
-  "anchorsChecked": 14,
+  "anchorsChecked": 15,
   "issues": [],
   "passed": true
 }

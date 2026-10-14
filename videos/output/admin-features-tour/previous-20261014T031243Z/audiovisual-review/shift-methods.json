@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:18.533Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "019ca29f7e0e453c315f599ba2508beb2db3abafe1c816ea65a6f673df613084",
+  "clipSha256": "432f40be6677236b38380de366183acd5d0a1477055d26d5dafe77388e01e4f9",
+  "scene": "shift-methods",
+  "review": {
+    "heardOpening": "Pour construire le planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "ajouter un créneau depuis la liste",
+        "visibleSeconds": 3.9,
+        "visible": "Affichage du formulaire Nouveau créneau après bascule sur l'onglet Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "copier un créneau existant",
+        "visibleSeconds": 7.3,
+        "visible": "Sélection d'un créneau existant sur la frise et duplication avec message Créneau dupliqué",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "dessiner directement sa plage sur la frise puis l'élargir",
+        "visibleSeconds": 9.5,
+        "visible": "Tracé direct à la souris d'un créneau sur la frise puis étirement de sa plage horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "la création en série prépare plusieurs créneaux d'un coup",
+        "visibleSeconds": 13,
+        "visible": "Ouverture du formulaire Créer une série de créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

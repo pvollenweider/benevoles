@@ -1,0 +1,25 @@
+{
+  "mp4Sha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "BUILD_ID": "pNdKfvSuEWlaFsKM4WH1j",
+  "commit": "3a2ee752986f41652560ed5f7a1f80bb3a02a57c",
+  "effectCountsMatch": true,
+  "clicks": 18,
+  "keys": 8,
+  "effectHashMatches": true,
+  "timelineHashMatches": true,
+  "videoMixHashMatches": true,
+  "musicHashMatches": true,
+  "registerHashMatches": true,
+  "music": {
+    "voicedWindows": 239,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -34.6,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.2
+  },
+  "anchorsChecked": 14,
+  "issues": [],
+  "passed": true
+}

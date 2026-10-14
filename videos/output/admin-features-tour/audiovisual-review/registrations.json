@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:20.505Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:23:00.526Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "d1b2c6acc972a82b86c612aa935bd4ba4f4c6880a2956d8300e7448da1765336",
-  "clipSha256": "5106b06014f39d8b0e39b6a0523e57ee3fa40d32fbdd54da77c2cb69a5446451",
+  "clipSha256": "72ca9c7248d4c7ece6530ba80767e27219042716d2de2b82f25b15ccbe898cb0",
   "scene": "registrations",
   "review": {
     "heardOpening": "La vue des inscriptions montre",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "La vue des inscriptions montre qui est inscrit",
-        "visibleSeconds": 1,
-        "visible": "Page Inscriptions avec la liste des bénévoles inscrits affichée",
+        "spokenSeconds": 0.5,
+        "spoken": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen",
+        "visibleSeconds": 0.5,
+        "visible": "Le tableau des inscriptions est affiché avec les colonnes Bénévole, Créneau et Source",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.1,
-        "spoken": "sur quel créneau et par quel moyen",
-        "visibleSeconds": 3,
-        "visible": "Colonnes indiquant les postes/créneaux horaires et la source d'inscription",
+        "spokenSeconds": 5.7,
+        "spoken": "Vous pouvez filtrer",
+        "visibleSeconds": 5.7,
+        "visible": "Les barres de recherche et menus déroulants de filtrage sont visibles au-dessus de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Vous pouvez filtrer, ajouter quelqu'un manuellement",
-        "visibleSeconds": 5,
-        "visible": "Barre de filtres de recherche et bouton '+ Ajouter manuellement' visibles en haut du tableau",
+        "spokenSeconds": 7.2,
+        "spoken": "ajouter quelqu’un manuellement",
+        "visibleSeconds": 7.2,
+        "visible": "Le bouton bleu '+ Ajouter manuellement' est bien visible au-dessus du tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off claire, posée et bien articulée, accompagnant adéquatement l'écran d'introduction."
+      "observation": "Voix claire, posée et naturelle, avec un rythme adapté à une vue d'ensemble introductive."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

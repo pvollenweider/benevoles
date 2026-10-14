@@ -1,0 +1,345 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-13T16:35:04.647Z",
+  "sentenceRevision": {
+    "version": 1,
+    "baseline": {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "slug": "admin-features-tour",
+      "title": "Organiser ses bénévoles, du premier réglage au jour J",
+      "description": "Visite complète de l’administration : organisation, équipe, événements, créneaux, inscriptions, membres, questions, messages, rappels et rapports.",
+      "viewer": {
+        "summary": "Dans cette vidéo, vous découvrez un tour d'ensemble de l'administration, de la création de votre organisation jusqu'à la préparation du jour J.",
+        "steps": [
+          "Configurez l'identité de votre organisation : nom, adresse publique, fuseau horaire et convention des bénévoles.",
+          "Invitez votre équipe et attribuez les bons rôles : propriétaire, organisateur, responsable de secteur.",
+          "Créez un événement et faites-le passer de brouillon à publié, puis archivé en fin de vie.",
+          "Construisez le planning : ajoutez des créneaux un par un, copiez-les ou créez-les en série.",
+          "Gérez vos membres et leurs inscriptions, et posez des questions utiles dans le formulaire.",
+          "Communiquez par messages ciblés et rappels automatiques.",
+          "Préparez le jour J avec les rapports, les badges et le journal d'activité."
+        ],
+        "remember": [
+          "Un organisateur ne voit pas les réglages réservés au propriétaire.",
+          "Un événement publié peut rester non répertorié et accessible seulement par son lien.",
+          "La recherche globale permet de retrouver rapidement une information."
+        ]
+      },
+      "language": "fr-CH",
+      "voice": "Kore",
+      "continuousNarration": true,
+      "voiceStyle": "Speak with an audible smile throughout. Sound warm, friendly and confident, like an experienced association organizer helping a colleague. Use conversational French, clear articulation and a calm medium pace. Preserve exactly the same vocal identity, smile, pitch and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "deviceScaleFactor": 1
+      },
+      "segments": [
+        {
+          "id": "intro",
+          "transcript": "Voici une visite complète de l’administration, dans l’ordre où tu l’utiliseras vraiment : préparer ton organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+          "fallbackDurationMs": 12000
+        },
+        {
+          "id": "organization",
+          "transcript": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app. Tu choisis aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+          "fallbackDurationMs": 15000
+        },
+        {
+          "id": "team",
+          "transcript": "Côté équipe, le propriétaire administre l’organisation et ses accès. Les organisateurs préparent les événements, les membres et les communications. Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.",
+          "fallbackDurationMs": 18000
+        },
+        {
+          "id": "lifecycle",
+          "transcript": "Un événement suit un cycle clair : brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé. Même publié, il peut rester non répertorié et accessible seulement par son lien. Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
+          "fallbackDurationMs": 18000
+        },
+        {
+          "id": "appearance",
+          "transcript": "Dans ses paramètres, tu règles le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+          "fallbackDurationMs": 15000
+        },
+        {
+          "id": "duplicate",
+          "transcript": "Pour repartir d’une édition précédente, duplique l’événement et décale toutes les dates. Tu choisis ce qui est repris : les créneaux, les réglages, les pages d’information et les responsables.",
+          "fallbackDurationMs": 12000
+        },
+        {
+          "id": "shift-methods",
+          "transcript": "Pour construire le planning, trois méthodes se complètent : ajouter un créneau depuis la liste, copier un créneau existant, ou dessiner directement sa plage sur la frise puis l’élargir. Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d’un coup.",
+          "fallbackDurationMs": 17000
+        },
+        {
+          "id": "shift-fields",
+          "transcript": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et la capacité, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d’attente et l’inscription sur validation s’activent ici.",
+          "fallbackDurationMs": 18000
+        },
+        {
+          "id": "registrations",
+          "transcript": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Tu peux filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+          "fallbackDurationMs": 16000
+        },
+        {
+          "id": "members",
+          "transcript": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures planifiées et activité. La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
+          "fallbackDurationMs": 15000
+        },
+        {
+          "id": "questions",
+          "transcript": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher. Tu décides si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+          "fallbackDurationMs": 16000
+        },
+        {
+          "id": "pages",
+          "transcript": "Tu peux aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donne un titre, rédige le contenu, puis organise leur ordre : elles apparaissent directement avec la page d’inscription.",
+          "fallbackDurationMs": 14000
+        },
+        {
+          "id": "messages",
+          "transcript": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Tu prévisualises toujours le résultat avant l’envoi.",
+          "fallbackDurationMs": 17000
+        },
+        {
+          "id": "reminders",
+          "transcript": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même. L’organisation choisit lesquels activer, où arrivent les réponses, et si ses admins doivent être prévenus à chaque nouvelle inscription.",
+          "fallbackDurationMs": 13000
+        },
+        {
+          "id": "reports",
+          "transcript": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, par poste ou par créneau, prêts à imprimer et découper.",
+          "fallbackDurationMs": 17000
+        },
+        {
+          "id": "activity",
+          "transcript": "Enfin, le journal d’activité garde la chronologie : création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs. On sait ce qui s’est passé, qui l’a fait et quand. La recherche globale permet ensuite de tout retrouver rapidement.",
+          "fallbackDurationMs": 17000
+        }
+      ]
+    },
+    "baseGenerationSha256": "a0376d094500c4f2f2cf7a67972613fc3fcf2d26e04f7925abef5a6528de04be",
+    "chapters": {
+      "intro": {
+        "sourceAudioSha256": "31b9701d061433b955417297a98c5fe4faddf972dbe77ac66c261060afc6811e",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Voici une visite complète de l’administration, dans l’ordre où vous l’utiliserez vraiment :",
+            "generationSha256": "2aa40a6b8cc480c1e11ca76ead5bc2b441217b6d8955ab6a947b070a7f470b7f",
+            "audioSha256": "728ffbfa5630f7a916b5824c03b90099ec422e7aee40233df45f041f769c5462"
+          },
+          {
+            "index": 1,
+            "transcript": "préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+            "generationSha256": "6e53b999a49f05f34266920fcc0ead841e71746452f368b98b5041915e0c7ad1",
+            "audioSha256": "87384b30956aa681e81aec487c041d4616a2e7bf1304df0687f774d7de926a4c"
+          }
+        ]
+      },
+      "organization": {
+        "sourceAudioSha256": "894094b09b0b7a855441b038fa99746825e7f0d8d017dc71cd874d9a5e3a6db7",
+        "sentences": [
+          {
+            "index": 2,
+            "transcript": "Vous choisissez aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+            "generationSha256": "f6f541fb8c9f1bb8b97674e56caa83c579a3cbfa3e49ec8a2b134730f1204820",
+            "audioSha256": "3309bcc2db930cca17ac0d845b1bafa1e111d96292e62ece447b221ac943ed0b"
+          }
+        ]
+      },
+      "team": {
+        "sourceAudioSha256": "5eae440859f07efabaab1d1d00ab1dcf115ff2ae16dfa4d3d66b8a3da05a7ac7",
+        "sentences": []
+      },
+      "lifecycle": {
+        "sourceAudioSha256": "67a3bd2b817b4a53053ae13110d38f6c9753f018c75d4ee8a0e1fd4d4a57024b",
+        "sentences": []
+      },
+      "appearance": {
+        "sourceAudioSha256": "f4cfc68a809bba7a40046f6adf996dfd0fbe8cc4f9a14bc2fc2dae766316c29d",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible.",
+            "generationSha256": "97f4f466ef027ae33fc583dec01f1a32d839d016c2a15c5ae0969496ba85af9f",
+            "audioSha256": "73c350d3c26705aa9a8c998d4f660a5ee5131eaeedfce1e065a2978abf031b88"
+          }
+        ]
+      },
+      "duplicate": {
+        "sourceAudioSha256": "ccd1493fd20a47dd8443441d3604dece13d340639e70ba4948c250ce5dc6a9d4",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates.",
+            "generationSha256": "a383e4b548702d6a932d7ba8eab1de1ae0f63fa56d142e03df70285d79733863",
+            "audioSha256": "560a43df37cd94780a78e89eb1a3e3ed04ff283ad150d5d112867fa446123b51"
+          },
+          {
+            "index": 1,
+            "transcript": "Vous choisissez ce qui est repris :",
+            "generationSha256": "ab0a1307962824cd8142fa2870f23639bd42bd00e1b6f458a5dc1a7d180f9b05",
+            "audioSha256": "40f6935d9106c054f6f6a4d4518b50e785bf70b695e0d61bc3521540d8342030"
+          }
+        ]
+      },
+      "shift-methods": {
+        "sourceAudioSha256": "b97dbac3ef8f25c22b061acfc2af0d951407058f8e1c2900689ade94eeb952a0",
+        "sentences": []
+      },
+      "shift-fields": {
+        "sourceAudioSha256": "cda97f27faf43ce8528575c39e82253a0fe0aefb78934afc339b7ee6007070bf",
+        "sentences": []
+      },
+      "registrations": {
+        "sourceAudioSha256": "4d6c3184e183a4c2cf3316172a7fa932b05a95853ae5f686348c3d949c0ac461",
+        "sentences": [
+          {
+            "index": 1,
+            "transcript": "Vous pouvez filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+            "generationSha256": "cf464ac26e5cc7eae4105cb2683fa3cc94256a137c341cadaf0fef21b5504911",
+            "audioSha256": "4bb5bfc738e8b4ac17755ba46a0e8ab04ead91e455a035f55bbe6cc93f9157f3"
+          }
+        ]
+      },
+      "members": {
+        "sourceAudioSha256": "bcfc01bef50f197195556ce4fe95cb35a487d0ac4e579307b93311b9c1b519f8",
+        "sentences": []
+      },
+      "questions": {
+        "sourceAudioSha256": "f6a2efdb591bfbef56984305b9277be819191a647d88957413af8fc4fcd120c9",
+        "sentences": [
+          {
+            "index": 2,
+            "transcript": "Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+            "generationSha256": "48affd98c7c6dd8fe61e1d8f84d41bc9ca666961145f0835cd78e5fbaf7fd7b9",
+            "audioSha256": "9578e7b0d5e0fad8d10ec612ce3a0df955e2536ef6e985128296ffdbac4d8808"
+          }
+        ]
+      },
+      "pages": {
+        "sourceAudioSha256": "a81630f9cc9541a2f911370ab15596069f2794f13dc3e3e856d33102bdf49c82",
+        "sentences": [
+          {
+            "index": 0,
+            "transcript": "Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement.",
+            "generationSha256": "53333166d104e588c1d57faf2aef51c9821b4166651353a92a8aef5706795e5b",
+            "audioSha256": "12606e2dd15c29124bfe4e9a1ffbae5a0af3f6b289add33002768a251567e2b4"
+          },
+          {
+            "index": 1,
+            "transcript": "Donnez un titre, rédigez le contenu, puis organisez leur ordre :",
+            "generationSha256": "2bc6829ade4e59ece1faddb9bdfd61edf1b7e89a5796bf4d952eb21015e38a5b",
+            "audioSha256": "b9978c476c5170c11421cb8f3500cc6fe3cdc1ed3dfc6c4a86bf32a2ed8b7a65"
+          }
+        ]
+      },
+      "messages": {
+        "sourceAudioSha256": "bd85ce28bb53a98a789814f7d019b3d0b9f071f115925a3ed712e2eb77c37ffc",
+        "sentences": [
+          {
+            "index": 2,
+            "transcript": "Vous prévisualisez toujours le résultat avant l’envoi.",
+            "generationSha256": "37e9d8f8c58730896fa9be9356346bfe0a05e96735b9842150175eb4ad13d9d3",
+            "audioSha256": "e44b1a7162b8264e503ed95f66573ca8da8ef6f858656b7d5439864254b79b0c"
+          }
+        ]
+      },
+      "reminders": {
+        "sourceAudioSha256": "c00a848f3d459e9e29ca65f2dfd3c5cc2f040aa0a93af0ea1c9c3d3e60139916",
+        "sentences": []
+      },
+      "reports": {
+        "sourceAudioSha256": "59ea7b00ff880267489cc5556eae2c37292c4b0442f1ceb249230c3060aa3c9a",
+        "sentences": []
+      },
+      "activity": {
+        "sourceAudioSha256": "8e396e7c7f8bf519c7953254cbcf45e5463c1d83fbde8e8921bb79c5d2891ef5",
+        "sentences": []
+      }
+    }
+  },
+  "segments": {
+    "intro": {
+      "file": "audio/intro.wav",
+      "durationMs": 12600,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "organization": {
+      "file": "audio/organization.wav",
+      "durationMs": 15471,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "team": {
+      "file": "audio/team.wav",
+      "durationMs": 19269,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "lifecycle": {
+      "file": "audio/lifecycle.wav",
+      "durationMs": 19160,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "appearance": {
+      "file": "audio/appearance.wav",
+      "durationMs": 15448,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "duplicate": {
+      "file": "audio/duplicate.wav",
+      "durationMs": 11788,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "shift-methods": {
+      "file": "audio/shift-methods.wav",
+      "durationMs": 17186,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "shift-fields": {
+      "file": "audio/shift-fields.wav",
+      "durationMs": 18019,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "registrations": {
+      "file": "audio/registrations.wav",
+      "durationMs": 15673,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "members": {
+      "file": "audio/members.wav",
+      "durationMs": 15416,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "questions": {
+      "file": "audio/questions.wav",
+      "durationMs": 14262,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "pages": {
+      "file": "audio/pages.wav",
+      "durationMs": 13785,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "messages": {
+      "file": "audio/messages.wav",
+      "durationMs": 17669,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "reminders": {
+      "file": "audio/reminders.wav",
+      "durationMs": 11663,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "reports": {
+      "file": "audio/reports.wav",
+      "durationMs": 17037,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    },
+    "activity": {
+      "file": "audio/activity.wav",
+      "durationMs": 18067,
+      "generationSha256": "fd3d9f457d35b621ac0e4765e92d21dd0e08069924ec0cea2cdef84cbf7e5d10"
+    }
+  }
+}
