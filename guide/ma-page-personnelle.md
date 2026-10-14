@@ -38,7 +38,7 @@ Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'enca
 
 ## S'inscrire à d'autres créneaux
 
-Tu as encore du temps ? Sous tes créneaux, le lien **S'inscrire à d'autres créneaux** t'emmène sur la page d'inscription de l'événement, qui te reconnaît : choisis-y de nouveaux créneaux comme la première fois. Si tu t'étais inscrit par le lien d'un groupe (ton club, ton équipe), tu retrouves ses postes.
+Encore un peu de temps ? Sous tes créneaux, le lien **S'inscrire à d'autres créneaux** t'emmène sur la page d'inscription de l'événement, qui te reconnaît : choisis-y de nouveaux créneaux comme la première fois. Si tu t'étais inscrit par le lien d'un groupe (ton club, ton équipe), tu retrouves ses postes.
 
 Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand elles sont fermées ou que l'événement est passé, il disparaît, et le lien en bas de la page s'appelle **Voir la page de l'événement** (ou **Retour à l'accueil**, vers la page de l'organisation, si l'événement n'est plus en ligne).
 
@@ -61,7 +61,7 @@ Tu peux annuler toi-même jusqu'au début du créneau, jamais après. L'organisa
 
 Le délai ne vaut que pour une place confirmée : tu peux quitter une liste d'attente, refuser une place proposée ou retirer une demande jusqu'au début du créneau. Si ta page était ouverte depuis un moment et que le délai est passé entre-temps, l'annulation est refusée avec un message, rien n'est annulé, et le créneau affiche les personnes à prévenir.
 
-Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, **S'inscrire à d'autres créneaux** te ramène sur la page de l'événement, tant que les inscriptions sont ouvertes.
+Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, **S'inscrire à d'autres créneaux** te ramène sur la page de l'événement, tant que l'événement accepte des inscriptions.
 
 ## Changer de créneau
 
