@@ -17,6 +17,9 @@ describe("compression by Traefik", () => {
       expect(middlewares).toContain(`- ${type}\n`)
     }
     for (const type of ["image/png", "image/jpeg", "video/mp4", "application/pdf"]) expect(middlewares).not.toContain(type)
+    // The favicon is the one image served uncompressed by default: an ICO stores raw bitmaps
+    // (src/app/favicon.ico, 15 KB; Pingdom graded « Compress components » F for it alone).
+    for (const type of ["image/x-icon", "image/vnd.microsoft.icon"]) expect(middlewares).toContain(`- ${type}\n`)
     // Traefik never compresses a response that already has a Content-Encoding (the app's gzip).
     expect(middlewares).toMatch(/name: benevoles-identity-upstream\n[\s\S]*?customRequestHeaders:\n(\s+#.*\n)*\s+Accept-Encoding: ""/)
   })
