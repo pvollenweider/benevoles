@@ -1,9 +1,5 @@
 [
   {
-    "stage": "assemble",
-    "exitCode": 0
-  },
-  {
     "stage": "posters",
     "exitCode": 0
   },
@@ -12,11 +8,31 @@
     "exitCode": 0
   },
   {
+    "stage": "evidence",
+    "exitCode": 0
+  },
+  {
+    "stage": "transitions",
+    "exitCode": 0
+  },
+  {
     "stage": "final-audio",
     "exitCode": 0
   },
   {
+    "stage": "audiovisual",
+    "exitCode": 0
+  },
+  {
     "stage": "validate",
+    "exitCode": 0
+  },
+  {
+    "stage": "register-check",
+    "exitCode": 0
+  },
+  {
+    "stage": "objective",
     "exitCode": 0
   }
 ]

@@ -22,12 +22,12 @@ La liste des membres rassemble inscrits et personnes importées, avec coordonné
 
 Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.
 
-Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donnez un titre, rédigez le contenu, puis organisez leur ordre : elles apparaissent directement avec la page d’inscription.
+Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement. Donnez un titre et rédigez le contenu, puis enregistrez la page. Puis organisez leur ordre avec les flèches : ces pages apparaissent directement avec la page d’inscription.
 
 Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Vous prévisualisez toujours le résultat avant l’envoi.
 
 Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même. L’organisation choisit lesquels activer, où arrivent les réponses, et si ses admins doivent être prévenus à chaque nouvelle inscription.
 
-Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, par poste ou par créneau, prêts à imprimer et découper.
+Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression, prêts à imprimer et découper.
 
 Enfin, le journal d’activité garde la chronologie : création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs. On sait ce qui s’est passé, qui l’a fait et quand. La recherche globale permet ensuite de tout retrouver rapidement.

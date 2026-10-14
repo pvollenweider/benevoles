@@ -1,0 +1,41 @@
+{
+  "status": "NOT READY",
+  "mp4Sha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "durationSeconds": 295.32,
+  "product": {
+    "commit": "0ad1a7d71fe7b28d88dd7ce4b9673d24dd080fdc",
+    "sourceTree": "3f6018d8171e81766b3a2d4dc7e7e9dcd21b72af",
+    "productSourceSha256": "f3857cc85552ab2cb8ca4c3b9107c546fb73a92c502274bc4c7a9efb1d39913e",
+    "buildId": "Pef0qFtQGGE6GvN9qeIJS",
+    "snapshot": "/tmp/benevoles-video-production.batch19",
+    "builtAt": "2026-10-14T03:13:34.926Z"
+  },
+  "singleContinuousNewGeneration": {
+    "singleContinuousGeneration": true,
+    "continuousPauseTags": false,
+    "voice": "Kore",
+    "masterSha256": "a667e109dc33039dad27fb60dac0ed08699ff065b44734586cec1cabb8686b1c",
+    "oldSentenceAudioReused": []
+  },
+  "latestFullChapterAV": {
+    "chapters": 16,
+    "checkpoints": 51,
+    "allVoiceConsistent": true,
+    "currentIssues": []
+  },
+  "objectiveEvidencePassed": true,
+  "wholeMP4RegisterHits": [],
+  "blockers": [
+    "Unresolved contradictory English-speech recognition near 91 s: initial full-chapter AV reports one, short blind all-language ASR reports One, two; subsequent AV, short countercheck and entire-MP4 ASR omit them. Music-only recognition also reports English vocals, with unstable wording. Narration-only source probe contains French only. Do not certify absence of stray English from this contradictory evidence."
+  ],
+  "retakes": 0,
+  "visualInspection": {
+    "finalChapterFrames": 96,
+    "betweenSceneFrames": 12,
+    "allInspected": true
+  },
+  "knownNits": [
+    "Native upload control shows Choose File / No file chosen despite fr-FR browser context/process locale. Filled dates are day.month.year, never mm/dd.",
+    "Journal details expose ISO dates; no product changes made."
+  ]
+}

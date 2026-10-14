@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:49:13.438Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:22:35.945Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "cf43ae78225f83d39ffcda55ad3938e61b7f9acb2d75599aa9cc057f9e6cf396",
-  "clipSha256": "ab8d318c0f9c2ab61197991aaf9b7932df4a4eff8f62c0b0f2deb7bdda3df1ea",
+  "clipSha256": "04d0142f23058b726b4c371ea5f5601159d5c18213041884f122e73013247fad",
   "scene": "intro",
   "review": {
-    "heardOpening": "Voici une visite complète",
+    "heardOpening": "Voici une visite complète de l'administration",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Voici une visite complète de l'administration",
         "visibleSeconds": 0,
-        "visible": "Titre d'introduction « Organiser ses bénévoles, du premier réglage au jour J » superposé à l'interface d'administration",
+        "visible": "Encart titre « Organiser ses bénévoles, du premier réglage au jour J » affiché au premier plan sur l'interface de gestion",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "préparer votre organisation, construire un événement",
+        "spokenSeconds": 3,
+        "spoken": "dans l'ordre où vous l'utiliserez vraiment",
         "visibleSeconds": 2.5,
-        "visible": "Disparition de la vignette d'introduction et affichage de la page de gestion des événements",
+        "visible": "L'encart titre disparaît, affichant la page Événements de l'administration",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "puis préparer le jour J",
-        "visibleSeconds": 10.5,
-        "visible": "Écran stable présentant l'événement « Fête du village de Montvert »",
+        "spokenSeconds": 5.5,
+        "spoken": "préparer votre organisation, construire un événement",
+        "visibleSeconds": 5.5,
+        "visible": "Vue d'ensemble stable de l'espace administration durant l'annonce du sommaire",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:05 : Rupture vocale en plein milieu de phrase ; une voix masculine commence l'introduction (00:00-00:05), puis une voix féminine avec musique de fond prend subitement la suite (00:05-00:12)."
-    ],
+    "issues": [],
     "voice": {
-      "consistent": false,
+      "consistent": true,
       "warm": true,
-      "observation": "Changement brusque d'orateur à 00:05, passant d'une voix masculine sans fond sonore à une voix féminine accompagnée de musique."
+      "observation": "Voix féminine naturelle, claire et engageante, accompagnée d'un fond musical léger et bien dosé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:46:51.882Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:22:34.627Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "5f6d0078ae970a579106ab7b74780fa6aee7b6b14b742004eda1d1cad8a7e0ea",
-  "clipSha256": "2e34b10d616aba90d5eee98bf53e1e48adacd6219f08023c56197beb8a939016",
+  "clipSha256": "e089b2e634a2cb02ff6d5d9c1af06ebbc47f2198ea0163c7b2841fb661ca2353",
   "scene": "organization",
   "review": {
-    "heardOpening": "Tout commence avec l'identité",
+    "heardOpening": "Tout commence avec l'identité de l'organisation.",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app",
-        "visibleSeconds": 3,
-        "visible": "Champ « Identifiant public (slug) » avec « fetes-de-montvert » et adresse d'espace correspondante affichée",
+        "spokenSeconds": 3.4,
+        "spoken": "Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app.",
+        "visibleSeconds": 3.4,
+        "visible": "Section Identifiant public (slug) avec fetes-de-montvert et l'adresse fetes-de-montvert.benevol.app affichée en dessous",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.8,
         "spoken": "Vous choisissez aussi le nom affiché",
-        "visibleSeconds": 8,
-        "visible": "Section « Titre de la page publique » visible au-dessus avant le défilement",
+        "visibleSeconds": 8.8,
+        "visible": "Champ Titre de la page publique avec Bénévoles des Fêtes de Montvert visible à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
+        "spokenSeconds": 10.5,
         "spoken": "le fuseau horaire",
-        "visibleSeconds": 11,
-        "visible": "Défilement montrant la section « Fuseau horaire » réglée sur « Europe/Zurich »",
+        "visibleSeconds": 10.5,
+        "visible": "Section Fuseau horaire avec le choix Europe/Zurich bien visible lors du défilement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.5,
-        "spoken": "et la Convention des Bénévoles que chacun devra accepter",
-        "visibleSeconds": 12.5,
-        "visible": "Section « Convention des Bénévoles » visible en bas de page",
+        "spokenSeconds": 12.1,
+        "spoken": "et la Convention des Bénévoles que chacun devra accepter.",
+        "visibleSeconds": 12,
+        "visible": "Défilement vers le bas révélant la section Convention des Bénévoles et son texte d'engagement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec le défilement de l'interface."
+      "observation": "Voix féminine claire, posée, bien articulée et parfaitement synchronisée avec la présentation visuelle des réglages."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:49:14.392Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "e0c1e79d298955f34152e154fd2f2c145aa79b1fc3e10e2c0cf0b0e8a439bd7d",
+  "clipSha256": "b8a276a2734186e532104101c902cf302ee5d0de56bfd7456e15e658400e9fa2",
+  "scene": "questions",
+  "review": {
+    "heardOpening": "Le formulaire peut poser quelques questions utiles",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "taille de t-shirt, régime alimentaire ou permis de conduire",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la liste des questions avec Taille de t-shirt, Régime alimentaire et Permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "sous forme de texte, de choix unique ou de cases à cocher",
+        "visibleSeconds": 7,
+        "visible": "Affichage du type de réponse Choix unique et de la liste des choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Vous décidez si la réponse est obligatoire",
+        "visibleSeconds": 8,
+        "visible": "La case à cocher Réponse obligatoire est visible dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 - Changement inattendu de voix : une voix masculine remplace la voix féminine pour énumérer les exemples, avant le retour de la voix féminine à 00:05."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Alternance anormale entre deux voix différentes (féminine puis masculine puis féminine) au sein du même extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

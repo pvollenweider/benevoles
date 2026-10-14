@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:04.889Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "a7180648bfad2e37efa7114b00ecbcdc0fd77a3c62ce2fc6cff0dd286dd4b096",
+  "clipSha256": "754b8445185d9346c8415d371896d2571b48ebb94f38884159b21687b17d7de4",
+  "scene": "appearance",
+  "review": {
+    "heardOpening": "Dans ses paramètres, vous réglez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "vous réglez le titre, les dates",
+        "visibleSeconds": 1.2,
+        "visible": "Haut du formulaire « Modifier l'événement » affichant les champs Titre et Dates",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "et une couleur d’en-tête accessible",
+        "visibleSeconds": 5,
+        "visible": "Défilement vers la sélection de couleur de bannière et l'aperçu de l'en-tête",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Le lieu peut recevoir des coordonnées",
+        "visibleSeconds": 7.5,
+        "visible": "Retour vers le haut avec les champs Lieu et Coordonnées GPS ou lien de carte",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les mouvements de page."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

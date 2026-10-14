@@ -1,0 +1,7 @@
+{
+  "stoppedAt": "2026-10-14T03:30:06.435596+00:00",
+  "pid": 80850,
+  "method": "SIGTERM by exact registered child PID",
+  "port": 43102,
+  "listenerAbsent": true
+}

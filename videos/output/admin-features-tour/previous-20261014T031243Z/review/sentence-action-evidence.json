@@ -1,0 +1,1308 @@
+{
+  "mp4Sha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "chapters": [
+    {
+      "chapter": "intro",
+      "startSeconds": 0,
+      "endSeconds": 12.6,
+      "sentences": [
+        {
+          "text": "Voici une visite complète de l’administration, dans l’ordre où vous l’utiliserez vraiment :",
+          "startMs": 214,
+          "endMs": 5315,
+          "method": "silence",
+          "videoSeconds": 0.214
+        },
+        {
+          "text": "préparer votre organisation, construire un événement, accueillir les bénévoles, communiquer, puis préparer le jour J.",
+          "startMs": 5854,
+          "endMs": 12370,
+          "method": "silence",
+          "videoSeconds": 5.854
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "intro",
+          "fraction": 0.047619047619047616,
+          "seconds": 0.6,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-5.png"
+        },
+        {
+          "scene": "intro",
+          "fraction": 0.25,
+          "seconds": 3.15,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-25.png"
+        },
+        {
+          "scene": "intro",
+          "fraction": 0.45,
+          "seconds": 5.67,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-45.png"
+        },
+        {
+          "scene": "intro",
+          "fraction": 0.6,
+          "seconds": 7.56,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-60.png"
+        },
+        {
+          "scene": "intro",
+          "fraction": 0.85,
+          "seconds": 10.71,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-85.png"
+        },
+        {
+          "scene": "intro",
+          "fraction": 0.9761904761904762,
+          "seconds": 12.3,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/intro-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "organization",
+      "startSeconds": 15.941,
+      "endSeconds": 31.414,
+      "sentences": [
+        {
+          "text": "Tout commence avec l’identité de l’organisation.",
+          "startMs": 285,
+          "endMs": 2593,
+          "method": "silence",
+          "videoSeconds": 16.226
+        },
+        {
+          "text": "Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app.",
+          "startMs": 3191,
+          "endMs": 8473,
+          "method": "silence",
+          "videoSeconds": 19.132
+        },
+        {
+          "text": "Vous choisissez aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+          "startMs": 8593,
+          "endMs": 15180,
+          "method": "silence",
+          "videoSeconds": 24.534
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "organization",
+          "fraction": 0.038777224843275386,
+          "seconds": 16.541,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-4.png"
+        },
+        {
+          "scene": "organization",
+          "fraction": 0.25,
+          "seconds": 19.80925,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-25.png"
+        },
+        {
+          "scene": "organization",
+          "fraction": 0.45,
+          "seconds": 22.90385,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-45.png"
+        },
+        {
+          "scene": "organization",
+          "fraction": 0.6,
+          "seconds": 25.2248,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-60.png"
+        },
+        {
+          "scene": "organization",
+          "fraction": 0.85,
+          "seconds": 29.093049999999998,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-85.png"
+        },
+        {
+          "scene": "organization",
+          "fraction": 0.9806113875783623,
+          "seconds": 31.114,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/organization-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "team",
+      "startSeconds": 31.867,
+      "endSeconds": 51.138,
+      "sentences": [
+        {
+          "text": "Côté équipe, le propriétaire administre l’organisation et ses accès.",
+          "startMs": 407,
+          "endMs": 4419,
+          "method": "silence",
+          "videoSeconds": 32.274
+        },
+        {
+          "text": "Les organisateurs préparent les événements, les membres et les communications.",
+          "startMs": 5197,
+          "endMs": 8882,
+          "method": "silence",
+          "videoSeconds": 37.064
+        },
+        {
+          "text": "Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.",
+          "startMs": 9329,
+          "endMs": 18457,
+          "method": "silence",
+          "videoSeconds": 41.196
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "team",
+          "phrase": "Les responsables de secteur reçoivent",
+          "startMs": 9329,
+          "endMs": 18457,
+          "cueMs": 41199
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "team",
+          "fraction": 0.031134865860619584,
+          "seconds": 32.467,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-3.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.25,
+          "seconds": 36.68475,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-25.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.45,
+          "seconds": 40.53895,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-45.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.6,
+          "seconds": 43.4296,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-60.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.85,
+          "seconds": 48.24735,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-85.png"
+        },
+        {
+          "scene": "team",
+          "fraction": 0.9844325670696902,
+          "seconds": 50.838,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/team-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "lifecycle",
+      "startSeconds": 54.499,
+      "endSeconds": 73.659,
+      "sentences": [
+        {
+          "text": "Un événement suit un cycle clair :",
+          "startMs": 821,
+          "endMs": 2753,
+          "method": "silence",
+          "videoSeconds": 55.32
+        },
+        {
+          "text": "brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé.",
+          "startMs": 2876,
+          "endMs": 8398,
+          "method": "silence",
+          "videoSeconds": 57.375
+        },
+        {
+          "text": "Même publié, il peut rester non répertorié et accessible seulement par son lien.",
+          "startMs": 9221,
+          "endMs": 13380,
+          "method": "silence",
+          "videoSeconds": 63.72
+        },
+        {
+          "text": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
+          "startMs": 13811,
+          "endMs": 18777,
+          "method": "silence",
+          "videoSeconds": 68.31
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "lifecycle",
+          "phrase": "Même publié, il peut rester",
+          "startMs": 9221,
+          "endMs": 13380,
+          "cueMs": 63722
+        },
+        {
+          "segmentId": "lifecycle",
+          "phrase": "Les inscriptions peuvent être immédiates",
+          "startMs": 13811,
+          "endMs": 18777,
+          "cueMs": 68312
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "lifecycle",
+          "fraction": 0.031315240083507306,
+          "seconds": 55.099,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-3.png"
+        },
+        {
+          "scene": "lifecycle",
+          "fraction": 0.25,
+          "seconds": 59.289,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-25.png"
+        },
+        {
+          "scene": "lifecycle",
+          "fraction": 0.45,
+          "seconds": 63.121,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-45.png"
+        },
+        {
+          "scene": "lifecycle",
+          "fraction": 0.6,
+          "seconds": 65.995,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-60.png"
+        },
+        {
+          "scene": "lifecycle",
+          "fraction": 0.85,
+          "seconds": 70.785,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-85.png"
+        },
+        {
+          "scene": "lifecycle",
+          "fraction": 0.9843423799582464,
+          "seconds": 73.359,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/lifecycle-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "appearance",
+      "startSeconds": 74.112,
+      "endSeconds": 89.56,
+      "sentences": [
+        {
+          "text": "Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible.",
+          "startMs": 271,
+          "endMs": 7062,
+          "method": "silence",
+          "videoSeconds": 74.383
+        },
+        {
+          "text": "Le lieu peut recevoir des coordonnées :",
+          "startMs": 7850,
+          "endMs": 9373,
+          "method": "silence",
+          "videoSeconds": 81.962
+        },
+        {
+          "text": "les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.",
+          "startMs": 9933,
+          "endMs": 15156,
+          "method": "silence",
+          "videoSeconds": 84.045
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "appearance",
+          "phrase": "Le lieu peut recevoir des",
+          "startMs": 7850,
+          "endMs": 9373,
+          "cueMs": 81963
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "appearance",
+          "fraction": 0.038839979285344384,
+          "seconds": 74.712,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-4.png"
+        },
+        {
+          "scene": "appearance",
+          "fraction": 0.25,
+          "seconds": 77.974,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-25.png"
+        },
+        {
+          "scene": "appearance",
+          "fraction": 0.45,
+          "seconds": 81.06360000000001,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-45.png"
+        },
+        {
+          "scene": "appearance",
+          "fraction": 0.6,
+          "seconds": 83.38080000000001,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-60.png"
+        },
+        {
+          "scene": "appearance",
+          "fraction": 0.85,
+          "seconds": 87.2428,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-85.png"
+        },
+        {
+          "scene": "appearance",
+          "fraction": 0.9805800103573278,
+          "seconds": 89.26,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/appearance-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "duplicate",
+      "startSeconds": 91.161,
+      "endSeconds": 102.949,
+      "sentences": [
+        {
+          "text": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates.",
+          "startMs": 266,
+          "endMs": 5114,
+          "method": "silence",
+          "videoSeconds": 91.427
+        },
+        {
+          "text": "Vous choisissez ce qui est repris :",
+          "startMs": 5704,
+          "endMs": 6851,
+          "method": "silence",
+          "videoSeconds": 96.865
+        },
+        {
+          "text": "les créneaux, les réglages, les pages d’information et les responsables.",
+          "startMs": 7197,
+          "endMs": 11061,
+          "method": "silence",
+          "videoSeconds": 98.358
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "duplicate",
+          "fraction": 0.05089921954530031,
+          "seconds": 91.761,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-5.png"
+        },
+        {
+          "scene": "duplicate",
+          "fraction": 0.25,
+          "seconds": 94.108,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-25.png"
+        },
+        {
+          "scene": "duplicate",
+          "fraction": 0.45,
+          "seconds": 96.46560000000001,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-45.png"
+        },
+        {
+          "scene": "duplicate",
+          "fraction": 0.6,
+          "seconds": 98.2338,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-60.png"
+        },
+        {
+          "scene": "duplicate",
+          "fraction": 0.85,
+          "seconds": 101.1808,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-85.png"
+        },
+        {
+          "scene": "duplicate",
+          "fraction": 0.9745503902273498,
+          "seconds": 102.649,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/duplicate-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "shift-methods",
+      "startSeconds": 106.271,
+      "endSeconds": 123.459,
+      "sentences": [
+        {
+          "text": "Pour construire le planning, trois méthodes se complètent :",
+          "startMs": 779,
+          "endMs": 3239,
+          "method": "silence",
+          "videoSeconds": 107.05
+        },
+        {
+          "text": "ajouter un créneau depuis la liste, copier un créneau existant, ou dessiner directement sa plage sur la frise puis l’élargir.",
+          "startMs": 3908,
+          "endMs": 11381,
+          "method": "silence",
+          "videoSeconds": 110.179
+        },
+        {
+          "text": "Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d’un coup.",
+          "startMs": 11846,
+          "endMs": 17186,
+          "method": "silence",
+          "videoSeconds": 118.117
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "shift-methods",
+          "phrase": "ajouter un créneau depuis la",
+          "startMs": 3908,
+          "endMs": 11381,
+          "cueMs": 110182
+        },
+        {
+          "segmentId": "shift-methods",
+          "phrase": "ajouter un créneau depuis la",
+          "startMs": 3908,
+          "endMs": 11381,
+          "cueMs": 110983
+        },
+        {
+          "segmentId": "shift-methods",
+          "phrase": "Pour des horaires répétitifs, la",
+          "startMs": 11846,
+          "endMs": 17186,
+          "cueMs": 118800
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 108455,
+          "relativeSeconds": 2.184
+        },
+        {
+          "kind": "click",
+          "atMs": 110672,
+          "relativeSeconds": 4.401
+        },
+        {
+          "kind": "click",
+          "atMs": 111471,
+          "relativeSeconds": 5.2
+        },
+        {
+          "kind": "click",
+          "atMs": 112272,
+          "relativeSeconds": 6.001
+        },
+        {
+          "kind": "click",
+          "atMs": 113056,
+          "relativeSeconds": 6.785
+        },
+        {
+          "kind": "click",
+          "atMs": 113972,
+          "relativeSeconds": 7.701
+        },
+        {
+          "kind": "click",
+          "atMs": 115189,
+          "relativeSeconds": 8.918
+        },
+        {
+          "kind": "click",
+          "atMs": 115736,
+          "relativeSeconds": 9.465
+        },
+        {
+          "kind": "click",
+          "atMs": 117636,
+          "relativeSeconds": 11.365
+        },
+        {
+          "kind": "click",
+          "atMs": 119289,
+          "relativeSeconds": 13.018
+        }
+      ],
+      "frames": [
+        {
+          "scene": "shift-methods",
+          "fraction": 0.03490807540144287,
+          "seconds": 106.871,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-3.png"
+        },
+        {
+          "scene": "shift-methods",
+          "fraction": 0.25,
+          "seconds": 110.568,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-25.png"
+        },
+        {
+          "scene": "shift-methods",
+          "fraction": 0.45,
+          "seconds": 114.0056,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-45.png"
+        },
+        {
+          "scene": "shift-methods",
+          "fraction": 0.6,
+          "seconds": 116.5838,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-60.png"
+        },
+        {
+          "scene": "shift-methods",
+          "fraction": 0.85,
+          "seconds": 120.88080000000001,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-85.png"
+        },
+        {
+          "scene": "shift-methods",
+          "fraction": 0.9825459622992786,
+          "seconds": 123.159,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-methods-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "shift-fields",
+      "startSeconds": 123.911,
+      "endSeconds": 141.932,
+      "sentences": [
+        {
+          "text": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et la capacité, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum.",
+          "startMs": 842,
+          "endMs": 13125,
+          "method": "silence",
+          "videoSeconds": 124.753
+        },
+        {
+          "text": "La liste d’attente et l’inscription sur validation s’activent ici.",
+          "startMs": 13253,
+          "endMs": 17638,
+          "method": "silence",
+          "videoSeconds": 137.164
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "shift-fields",
+          "phrase": "La liste d’attente et l’inscription",
+          "startMs": 13253,
+          "endMs": 17638,
+          "cueMs": 137166
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 124387,
+          "relativeSeconds": 0.476
+        }
+      ],
+      "frames": [
+        {
+          "scene": "shift-fields",
+          "fraction": 0.0332944897619444,
+          "seconds": 124.511,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-3.png"
+        },
+        {
+          "scene": "shift-fields",
+          "fraction": 0.25,
+          "seconds": 128.41625,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-25.png"
+        },
+        {
+          "scene": "shift-fields",
+          "fraction": 0.45,
+          "seconds": 132.02045,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-45.png"
+        },
+        {
+          "scene": "shift-fields",
+          "fraction": 0.6,
+          "seconds": 134.7236,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-60.png"
+        },
+        {
+          "scene": "shift-fields",
+          "fraction": 0.85,
+          "seconds": 139.22885,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-85.png"
+        },
+        {
+          "scene": "shift-fields",
+          "fraction": 0.9833527551190278,
+          "seconds": 141.632,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/shift-fields-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "registrations",
+      "startSeconds": 145.385,
+      "endSeconds": 161.059,
+      "sentences": [
+        {
+          "text": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen.",
+          "startMs": 345,
+          "endMs": 4929,
+          "method": "silence",
+          "videoSeconds": 145.73
+        },
+        {
+          "text": "Vous pouvez filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.",
+          "startMs": 5375,
+          "endMs": 15336,
+          "method": "silence",
+          "videoSeconds": 150.76
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "registrations",
+          "fraction": 0.03827995406405512,
+          "seconds": 145.985,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-4.png"
+        },
+        {
+          "scene": "registrations",
+          "fraction": 0.25,
+          "seconds": 149.3035,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-25.png"
+        },
+        {
+          "scene": "registrations",
+          "fraction": 0.45,
+          "seconds": 152.4383,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-45.png"
+        },
+        {
+          "scene": "registrations",
+          "fraction": 0.6,
+          "seconds": 154.7894,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-60.png"
+        },
+        {
+          "scene": "registrations",
+          "fraction": 0.85,
+          "seconds": 158.7079,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-85.png"
+        },
+        {
+          "scene": "registrations",
+          "fraction": 0.9808600229679725,
+          "seconds": 160.759,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/registrations-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "members",
+      "startSeconds": 162.725,
+      "endSeconds": 178.142,
+      "sentences": [
+        {
+          "text": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures planifiées et activité.",
+          "startMs": 409,
+          "endMs": 8799,
+          "method": "silence",
+          "videoSeconds": 163.134
+        },
+        {
+          "text": "La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
+          "startMs": 8998,
+          "endMs": 15031,
+          "method": "silence",
+          "videoSeconds": 171.723
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "members",
+          "fraction": 0.03891807744697412,
+          "seconds": 163.325,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-4.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.25,
+          "seconds": 166.57925,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-25.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.45,
+          "seconds": 169.66264999999999,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-45.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.6,
+          "seconds": 171.9752,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-60.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.85,
+          "seconds": 175.82945,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-85.png"
+        },
+        {
+          "scene": "members",
+          "fraction": 0.9805409612765129,
+          "seconds": 177.842,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/members-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "questions",
+      "startSeconds": 179.717,
+      "endSeconds": 193.98,
+      "sentences": [
+        {
+          "text": "Le formulaire peut poser quelques questions utiles :",
+          "startMs": 393,
+          "endMs": 2480,
+          "method": "silence",
+          "videoSeconds": 180.11
+        },
+        {
+          "text": "taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher.",
+          "startMs": 2826,
+          "endMs": 9284,
+          "method": "silence",
+          "videoSeconds": 182.543
+        },
+        {
+          "text": "Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+          "startMs": 9738,
+          "endMs": 13986,
+          "method": "silence",
+          "videoSeconds": 189.455
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "questions",
+          "phrase": "taille de t-shirt, régime alimentaire",
+          "startMs": 2826,
+          "endMs": 9284,
+          "cueMs": 182544
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 183032,
+          "relativeSeconds": 3.315
+        },
+        {
+          "kind": "click",
+          "atMs": 184498,
+          "relativeSeconds": 4.781
+        }
+      ],
+      "frames": [
+        {
+          "scene": "questions",
+          "fraction": 0.04206688634929538,
+          "seconds": 180.317,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-4.png"
+        },
+        {
+          "scene": "questions",
+          "fraction": 0.25,
+          "seconds": 183.28275,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-25.png"
+        },
+        {
+          "scene": "questions",
+          "fraction": 0.45,
+          "seconds": 186.13535000000002,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-45.png"
+        },
+        {
+          "scene": "questions",
+          "fraction": 0.6,
+          "seconds": 188.2748,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-60.png"
+        },
+        {
+          "scene": "questions",
+          "fraction": 0.85,
+          "seconds": 191.84054999999998,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-85.png"
+        },
+        {
+          "scene": "questions",
+          "fraction": 0.9789665568253523,
+          "seconds": 193.68,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/questions-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "pages",
+      "startSeconds": 195.56,
+      "endSeconds": 209.348,
+      "sentences": [
+        {
+          "text": "Vous pouvez aussi créer des pages publiques pour l’accès, le parking, la foire aux questions ou le règlement.",
+          "startMs": 289,
+          "endMs": 6088,
+          "method": "silence",
+          "videoSeconds": 195.849
+        },
+        {
+          "text": "Donnez un titre, rédigez le contenu, puis organisez leur ordre :",
+          "startMs": 6628,
+          "endMs": 10168,
+          "method": "silence",
+          "videoSeconds": 202.188
+        },
+        {
+          "text": "elles apparaissent directement avec la page d’inscription.",
+          "startMs": 10645,
+          "endMs": 13632,
+          "method": "silence",
+          "videoSeconds": 206.205
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "pages",
+          "phrase": "Donnez un titre, rédigez le",
+          "startMs": 6628,
+          "endMs": 10168,
+          "cueMs": 202189
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 198796,
+          "relativeSeconds": 3.236
+        },
+        {
+          "kind": "click",
+          "atMs": 202694,
+          "relativeSeconds": 7.134
+        },
+        {
+          "kind": "click",
+          "atMs": 204361,
+          "relativeSeconds": 8.801
+        }
+      ],
+      "frames": [
+        {
+          "scene": "pages",
+          "fraction": 0.04351610095735422,
+          "seconds": 196.16,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-4.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.25,
+          "seconds": 199.007,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-25.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.45,
+          "seconds": 201.7646,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-45.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.6,
+          "seconds": 203.8328,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-60.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.85,
+          "seconds": 207.2798,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-85.png"
+        },
+        {
+          "scene": "pages",
+          "fraction": 0.9782419495213229,
+          "seconds": 209.048,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/pages-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "messages",
+      "startSeconds": 212.656,
+      "endSeconds": 230.329,
+      "sentences": [
+        {
+          "text": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau.",
+          "startMs": 290,
+          "endMs": 6665,
+          "method": "silence",
+          "videoSeconds": 212.946
+        },
+        {
+          "text": "Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel.",
+          "startMs": 7101,
+          "endMs": 13671,
+          "method": "silence",
+          "videoSeconds": 219.757
+        },
+        {
+          "text": "Vous prévisualisez toujours le résultat avant l’envoi.",
+          "startMs": 14255,
+          "endMs": 17249,
+          "method": "silence",
+          "videoSeconds": 226.911
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "messages",
+          "phrase": "Les modèles réutilisables acceptent des",
+          "startMs": 7101,
+          "endMs": 13671,
+          "cueMs": 219758
+        },
+        {
+          "segmentId": "messages",
+          "phrase": "Vous prévisualisez toujours le résultat",
+          "startMs": 14255,
+          "endMs": 17249,
+          "cueMs": 226912
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "messages",
+          "fraction": 0.03395009336275675,
+          "seconds": 213.256,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-3.png"
+        },
+        {
+          "scene": "messages",
+          "fraction": 0.25,
+          "seconds": 217.07425,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-25.png"
+        },
+        {
+          "scene": "messages",
+          "fraction": 0.45,
+          "seconds": 220.60885000000002,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-45.png"
+        },
+        {
+          "scene": "messages",
+          "fraction": 0.6,
+          "seconds": 223.25979999999998,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-60.png"
+        },
+        {
+          "scene": "messages",
+          "fraction": 0.85,
+          "seconds": 227.67804999999998,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-85.png"
+        },
+        {
+          "scene": "messages",
+          "fraction": 0.9830249533186216,
+          "seconds": 230.029,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/messages-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "reminders",
+      "startSeconds": 231.93,
+      "endSeconds": 243.596,
+      "sentences": [
+        {
+          "text": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même.",
+          "startMs": 180,
+          "endMs": 4074,
+          "method": "silence",
+          "videoSeconds": 232.11
+        },
+        {
+          "text": "L’organisation choisit lesquels activer, où arrivent les réponses, et si ses admins doivent être prévenus à chaque nouvelle inscription.",
+          "startMs": 4840,
+          "endMs": 11331,
+          "method": "silence",
+          "videoSeconds": 236.77
+        }
+      ],
+      "anchors": [],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "reminders",
+          "fraction": 0.05143151037202126,
+          "seconds": 232.53,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-5.png"
+        },
+        {
+          "scene": "reminders",
+          "fraction": 0.25,
+          "seconds": 234.8465,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-25.png"
+        },
+        {
+          "scene": "reminders",
+          "fraction": 0.45,
+          "seconds": 237.17970000000003,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-45.png"
+        },
+        {
+          "scene": "reminders",
+          "fraction": 0.6,
+          "seconds": 238.9296,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-60.png"
+        },
+        {
+          "scene": "reminders",
+          "fraction": 0.85,
+          "seconds": 241.8461,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-85.png"
+        },
+        {
+          "scene": "reminders",
+          "fraction": 0.9742842448139893,
+          "seconds": 243.296,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reminders-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "reports",
+      "startSeconds": 246.923,
+      "endSeconds": 263.963,
+      "sentences": [
+        {
+          "text": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs.",
+          "startMs": 337,
+          "endMs": 10896,
+          "method": "silence",
+          "videoSeconds": 247.26
+        },
+        {
+          "text": "Les badges se génèrent en PDF, par poste ou par créneau, prêts à imprimer et découper.",
+          "startMs": 11496,
+          "endMs": 16744,
+          "method": "silence",
+          "videoSeconds": 258.419
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "reports",
+          "phrase": "Les badges se génèrent en",
+          "startMs": 11496,
+          "endMs": 16744,
+          "cueMs": 258421
+        }
+      ],
+      "interactions": [],
+      "frames": [
+        {
+          "scene": "reports",
+          "fraction": 0.035211267605633804,
+          "seconds": 247.523,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-4.png"
+        },
+        {
+          "scene": "reports",
+          "fraction": 0.25,
+          "seconds": 251.183,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-25.png"
+        },
+        {
+          "scene": "reports",
+          "fraction": 0.45,
+          "seconds": 254.591,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-45.png"
+        },
+        {
+          "scene": "reports",
+          "fraction": 0.6,
+          "seconds": 257.147,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-60.png"
+        },
+        {
+          "scene": "reports",
+          "fraction": 0.85,
+          "seconds": 261.407,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-85.png"
+        },
+        {
+          "scene": "reports",
+          "fraction": 0.9823943661971831,
+          "seconds": 263.663,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/reports-end.png"
+        }
+      ]
+    },
+    {
+      "chapter": "activity",
+      "startSeconds": 267.279,
+      "endSeconds": 285.348,
+      "sentences": [
+        {
+          "text": "Enfin, le journal d’activité garde la chronologie :",
+          "startMs": 292,
+          "endMs": 3317,
+          "method": "silence",
+          "videoSeconds": 267.571
+        },
+        {
+          "text": "création et modification des créneaux, inscriptions, désinscriptions, invitations et actions des organisateurs.",
+          "startMs": 3993,
+          "endMs": 11046,
+          "method": "silence",
+          "videoSeconds": 271.272
+        },
+        {
+          "text": "On sait ce qui s’est passé, qui l’a fait et quand.",
+          "startMs": 11636,
+          "endMs": 13388,
+          "method": "silence",
+          "videoSeconds": 278.915
+        },
+        {
+          "text": "La recherche globale permet ensuite de tout retrouver rapidement.",
+          "startMs": 13748,
+          "endMs": 17700,
+          "method": "silence",
+          "videoSeconds": 281.027
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "activity",
+          "phrase": "La recherche globale permet ensuite",
+          "startMs": 13748,
+          "endMs": 17700,
+          "cueMs": 281028
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 281504,
+          "relativeSeconds": 14.225
+        },
+        {
+          "kind": "click",
+          "atMs": 282318,
+          "relativeSeconds": 15.039
+        },
+        {
+          "kind": "key",
+          "atMs": 282626,
+          "relativeSeconds": 15.347
+        },
+        {
+          "kind": "key",
+          "atMs": 282726,
+          "relativeSeconds": 15.447
+        },
+        {
+          "kind": "key",
+          "atMs": 282825,
+          "relativeSeconds": 15.546
+        },
+        {
+          "kind": "key",
+          "atMs": 282923,
+          "relativeSeconds": 15.644
+        },
+        {
+          "kind": "key",
+          "atMs": 283021,
+          "relativeSeconds": 15.742
+        },
+        {
+          "kind": "key",
+          "atMs": 283119,
+          "relativeSeconds": 15.84
+        },
+        {
+          "kind": "key",
+          "atMs": 283220,
+          "relativeSeconds": 15.941
+        },
+        {
+          "kind": "key",
+          "atMs": 283511,
+          "relativeSeconds": 16.232
+        }
+      ],
+      "frames": [
+        {
+          "scene": "activity",
+          "fraction": 0.03320604349991699,
+          "seconds": 267.879,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-3.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.25,
+          "seconds": 271.79625,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-25.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.45,
+          "seconds": 275.41005,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-45.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.6,
+          "seconds": 278.1204,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-60.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.85,
+          "seconds": 282.63765,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-85.png"
+        },
+        {
+          "scene": "activity",
+          "fraction": 0.9833969782500415,
+          "seconds": 285.048,
+          "file": "/private/tmp/codex-video/videos/output/admin-features-tour/review-frames/activity-end.png"
+        }
+      ]
+    }
+  ]
+}

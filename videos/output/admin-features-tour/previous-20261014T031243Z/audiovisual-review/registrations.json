@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:20.505Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "d1b2c6acc972a82b86c612aa935bd4ba4f4c6880a2956d8300e7448da1765336",
+  "clipSha256": "5106b06014f39d8b0e39b6a0523e57ee3fa40d32fbdd54da77c2cb69a5446451",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "La vue des inscriptions montre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "La vue des inscriptions montre qui est inscrit",
+        "visibleSeconds": 1,
+        "visible": "Page Inscriptions avec la liste des bénévoles inscrits affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "sur quel créneau et par quel moyen",
+        "visibleSeconds": 3,
+        "visible": "Colonnes indiquant les postes/créneaux horaires et la source d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Vous pouvez filtrer, ajouter quelqu'un manuellement",
+        "visibleSeconds": 5,
+        "visible": "Barre de filtres de recherche et bouton '+ Ajouter manuellement' visibles en haut du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, posée et bien articulée, accompagnant adéquatement l'écran d'introduction."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

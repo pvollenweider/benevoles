@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:04.581Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:22:47.457Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "d91880d1cedd30549bff1d6b098c7fb6bfbbcc1d2fbbb6e5ea03f682278dd2eb",
-  "clipSha256": "fac750582c156d15d85b7e572f141f86100a6593f18e0c4da772777c737f27c7",
+  "clipSha256": "92db36da481c6ee062b32ed3c8929074304024dc1fd8aa1cddffefcac7434335",
   "scene": "lifecycle",
   "review": {
     "heardOpening": "Un événement suit un cycle clair",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé",
-        "visibleSeconds": 2.5,
-        "visible": "Affichage de la vue d'ensemble de l'événement avec les étapes de cycle de vie : Brouillon, Prêt à publier, Publié, Terminé, Archivé",
+        "spokenSeconds": 0,
+        "spoken": "Un événement suit un cycle clair : brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé.",
+        "visibleSeconds": 0,
+        "visible": "Barre d'état du cycle de vie avec les étapes Brouillon, Prêt à publier, Publié, Terminé et Archivé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.4,
-        "spoken": "il peut rester non répertorié et accessible seulement par son lien",
-        "visibleSeconds": 10.4,
-        "visible": "Option 'Afficher cet événement sur la page publique de l'organisation' visible avec mention de l'accès réservé par lien",
+        "spokenSeconds": 9,
+        "spoken": "Même publié, il peut rester non répertorié et accessible seulement par son lien.",
+        "visibleSeconds": 11,
+        "visible": "Affichage des options de visibilité avec la case à cocher 'Afficher cet événement sur la page publique de l'organisation'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.3,
-        "spoken": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise",
-        "visibleSeconds": 14.3,
-        "visible": "Section Inscriptions affichant 'Inscriptions ouvertes' ainsi que les champs de date pour 'Ouverture programmée' et 'Fermeture programmée'",
+        "spokenSeconds": 14,
+        "spoken": "Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.",
+        "visibleSeconds": 14,
+        "visible": "Section Inscriptions montrant la mention 'Inscriptions ouvertes' et les champs de programmation d'ouverture et de fermeture",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée, au débit régulier et parfaitement intelligible."
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les affichages à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

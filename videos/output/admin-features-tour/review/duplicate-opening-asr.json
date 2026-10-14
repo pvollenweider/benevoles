@@ -1,0 +1,10 @@
+{
+  "mp4Sha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "chapter": "duplicate",
+  "startSeconds": 91.241,
+  "endSeconds": 94.141,
+  "clipSha256": "2cc9d409178af976cdfd1df3bade19b4127fb35f931ab09f41f35a9b7ff3662c",
+  "recognized": "One, two. Pour repartir d'une édition précédente",
+  "independent": true,
+  "note": "Blind all-language recognition of actual final-MP4 opening, including 400 ms before the chapter, no reference narration supplied."
+}

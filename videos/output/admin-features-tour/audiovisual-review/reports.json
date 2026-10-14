@@ -1,17 +1,17 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:47.418Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
-  "promptSha256": "823baa1553d63754fc1aa448f4d585a9a1e6cdcc044faf063350a0fd407bd2a7",
-  "clipSha256": "13bae847c613283f4efcc7732932ac3fb8330d568c18f5056b4752850c7f6516",
+  "reviewedAt": "2026-10-14T03:23:28.569Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "promptSha256": "fad71c64f2027e24a02ef39373a883925089a981def703af2afd75bcf3846cce",
+  "clipSha256": "06aea545cf55e0815fec635f53263f6c2cfdeb7c2f594d181c7e7360b041173a",
   "scene": "reports",
   "review": {
-    "heardOpening": "Pour le terrain, les rapports",
+    "heardOpening": "Pour le terrain, les rapports proposent",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "les rapports proposent le planning complet, une vue par poste, une vue par bénévole",
-        "visibleSeconds": 1,
+        "spokenSeconds": 1.7,
+        "spoken": "le planning complet, une vue par poste, une vue par bénévole",
+        "visibleSeconds": 1.5,
         "visible": "Page Rapports affichant les liens Planning par jour, Planning par poste et Planning individuel",
         "sync": "aligned",
         "severity": "none"
@@ -19,16 +19,24 @@
       {
         "spokenSeconds": 6.3,
         "spoken": "la feuille de présence et la liste avec téléphones réservée aux organisateurs",
-        "visibleSeconds": 6.5,
-        "visible": "Liens Feuille de présence et Liste avec téléphones visibles sous la section Pour les organisateurs seulement",
+        "visibleSeconds": 10,
+        "visible": "Défilement vers le bas révélant la section Pour les organisateurs seulement avec Feuille de présence et Liste avec téléphones",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "Les badges se génèrent en PDF, par poste ou par créneau",
-        "visibleSeconds": 11.8,
-        "visible": "Défilement de la page vers la section Badges présentant les options de sélection par poste et de tri par créneaux",
+        "spokenSeconds": 11.4,
+        "spoken": "Les badges se génèrent en PDF",
+        "visibleSeconds": 11.5,
+        "visible": "Section Badges avec la mention du format PDF et le bouton Ouvrir les badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "avec un filtre par poste et une sélection de bénévole pour la réimpression",
+        "visibleSeconds": 13.5,
+        "visible": "Champs de sélection Poste (Tous les postes) et Bénévole (réimpression) affichés à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le défilement et les sections affichées."
+      "observation": "Voix off claire, posée et bien synchronisée avec le défilement et le contenu de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

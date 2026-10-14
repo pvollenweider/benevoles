@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-13T16:47:45.880Z",
+  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "promptSha256": "1026cc6d63cb97a6a75ee4a2e792d88eb2dc6e50bc58cade78f7026b257a0e47",
+  "clipSha256": "879207952a230b950faae15beff50eff70609ed0678618089b41cf88a7123408",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Les rappels automatiques peuvent partir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même",
+        "visibleSeconds": 0,
+        "visible": "Section 'Rappels automatiques aux bénévoles inscrits' avec 'Rappel J-2', 'Rappel J-1' et 'Rappel du jour'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "où arrivent les réponses",
+        "visibleSeconds": 0,
+        "visible": "Champ de saisie 'Adresse de réponse' visible sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "si ses admins doivent être prévenus à chaque nouvelle inscription",
+        "visibleSeconds": 0,
+        "visible": "Case à cocher 'Prévenir les administrateurs à chaque inscription'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, bien articulée avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:45.232Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:23:22.715Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "6eddd3aab558d4b58fbc77df99fc5d834424b3f0184d30ea9891f2c98bf250f2",
-  "clipSha256": "61fe60e8f1dd146060b54e6bf3bcbb0e17f8dfa20be3af9c31f62f79dff74179",
+  "clipSha256": "2b62b8aee5d61838a228769ba9ec6d899d1611c390ee5d7f718fe64e94b5e077",
   "scene": "messages",
   "review": {
     "heardOpening": "Les messages ciblent tous les inscrits",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau",
-        "visibleSeconds": 0.5,
-        "visible": "Page Écrire aux bénévoles avec la liste des options sous Destinataires (tous les inscrits, poste, créneau, liste d'attente, sans créneau)",
+        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page 'Écrire aux bénévoles' avec les options de destinataires correspondantes",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
-        "spoken": "Les modèles réutilisables acceptent des variables",
-        "visibleSeconds": 6.8,
-        "visible": "Transition vers l'écran Paramètres > Modèles de messages",
+        "spoken": "Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel",
+        "visibleSeconds": 7,
+        "visible": "Changement de page vers l'onglet Paramètres et la liste des 'Modèles de messages'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13.5,
-        "spoken": "Vous prévisualisez toujours le résultat avant l'envoi",
-        "visibleSeconds": 13.7,
-        "visible": "Affichage du bas du formulaire avec le bouton bleu « Voir l'aperçu et envoyer »",
+        "spoken": "Vous prévisualisez toujours le résultat avant l’envoi",
+        "visibleSeconds": 14.5,
+        "visible": "Retour sur la rédaction du message et affichage du bouton 'Voir l'aperçu et envoyer'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien synchronisée avec le défilement des interfaces."
+      "observation": "Voix féminine claire, naturelle et fluide, calée sur les transitions d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

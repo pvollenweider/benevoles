@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:35.880Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
-  "promptSha256": "c822f6f6038443b3ad9757c063e0a581ca1d6cadc7464f7c78eced54ad931bb7",
-  "clipSha256": "5f33cb1285519b9b489ac73cc8baf60a6bc1e9ccc17881f7761ebb7047d6317d",
+  "reviewedAt": "2026-10-14T03:23:11.538Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "promptSha256": "036c473b52b5607609c177becdd924bbc2c89cdf5990eb44df73a439afd5a68a",
+  "clipSha256": "a1ab44c35ccae45ec0be21ba4083c5ead30899b63a037ee04819d1f7ea779006",
   "scene": "pages",
   "review": {
     "heardOpening": "Vous pouvez aussi créer des pages publiques",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "créer des pages publiques",
-        "visibleSeconds": 2.8,
-        "visible": "Clic sur le bouton '+ Ajouter une page' et ouverture de la fenêtre Nouvelle page",
+        "spokenSeconds": 1,
+        "spoken": "Vous pouvez aussi créer des pages publiques",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton « + Ajouter une page » et ouverture de la fenêtre modale « Nouvelle page »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
-        "spoken": "Donnez un titre",
-        "visibleSeconds": 6.8,
-        "visible": "Saisie de 'Accès et parking' dans le champ Titre",
+        "spokenSeconds": 6.8,
+        "spoken": "Donnez un titre et rédigez le contenu, puis enregistrez la page.",
+        "visibleSeconds": 7.3,
+        "visible": "Saisie du titre « Accès bénévoles », du texte dans le contenu puis clic sur le bouton « Enregistrer »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "rédigez le contenu",
-        "visibleSeconds": 8.3,
-        "visible": "Saisie du texte au format Markdown dans le champ Contenu",
+        "spokenSeconds": 11.2,
+        "spoken": "Puis organisez leur ordre avec les flèches",
+        "visibleSeconds": 11.5,
+        "visible": "Clic sur la flèche montante de la ligne « Accès bénévoles » pour réordonner la liste",
         "sync": "aligned",
         "severity": "none"
-      },
-      {
-        "spokenSeconds": 9,
-        "spoken": "organisez leur ordre",
-        "visibleSeconds": 9,
-        "visible": "L'organisation de l'ordre n'est pas manipulée : la modale de saisie reste affichée sans validation",
-        "sync": "missing",
-        "severity": "minor"
       }
     ],
-    "issues": [
-      "À partir de 00:09, l'action d'organiser l'ordre des pages n'est pas démontrée car la modale de création reste ouverte et le bouton Enregistrer n'est pas cliqué."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, naturelle et bien articulée, synchronisée avec les étapes de saisie."
+      "observation": "Voix claire, fluide et naturelle, en parfait accord avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

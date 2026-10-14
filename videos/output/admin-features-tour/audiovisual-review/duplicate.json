@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:47:09.901Z",
-  "videoSha256": "a664008fcc1467d49504d945472f011b7222fdf31ab19f688b5f282f7863d5a7",
+  "reviewedAt": "2026-10-14T03:23:56.198Z",
+  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
   "promptSha256": "725608f110f4d3059ce2737b641d5dd4b04cbab81f05f25a24491cde78f262dd",
-  "clipSha256": "ee61b300f03199d1dddc7852b5f066d4560ec73953935444142fda847a2ac6ea",
+  "clipSha256": "2fd70d2e577cc77821b967ffa52f28c8f18f9b550d9e4ead4599d204e162c9cd",
   "scene": "duplicate",
   "review": {
     "heardOpening": "Pour repartir d'une édition précédente",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
-        "spoken": "dupliquez l’événement",
+        "spokenSeconds": 0.8,
+        "spoken": "dupliquez l'événement",
         "visibleSeconds": 0,
-        "visible": "Page intitulée « Dupliquer l'événement » avec le titre de la copie prérempli",
+        "visible": "Page intitulée « Dupliquer l'événement » affichant les paramètres de duplication",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "décalez toutes les dates",
+        "spokenSeconds": 3.6,
+        "spoken": "et décalez toutes les dates",
         "visibleSeconds": 0,
-        "visible": "Champ « Premier jour de la copie » avec mention indiquant le décalage automatique de toutes les dates",
+        "visible": "Champ « Premier jour de la copie » avec mention du décalage automatique de l'ensemble des dates",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 5.8,
         "spoken": "les créneaux, les réglages, les pages d’information et les responsables",
         "visibleSeconds": 0,
-        "visible": "Cases à cocher sous « Ce qui est copié » listant les créneaux, réglages, pages personnalisées et responsables de secteur",
+        "visible": "Section « Ce qui est copié » avec les cases à cocher pour les créneaux, réglages, pages et responsables",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire et rythmée, accompagnée d'une musique de fond discrète."
+      "observation": "Voix claire, posée et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
