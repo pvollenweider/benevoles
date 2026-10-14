@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:15:42.212Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "aebf841c5f64acc44970bbd832fde47e9ad64d8b8cf9b6305b007c9efbb9e9bb",
+  "clipSha256": "34e19ba2ece723056f7fb41b1444501bbca08c272b71474afc1746db26057e81",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un lien pour recruter, un lien pour gérer son inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un lien pour recruter, un lien pour gérer son inscription",
+        "visibleSeconds": 0,
+        "visible": "Titre introductif « Les bons liens, pour les bonnes personnes » sur l'onglet Membres de l'organisation A",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "deux organisations ont chacune une Léa Exemple et une fête portant le même identifiant.",
+        "visibleSeconds": 18.5,
+        "visible": "Passage de la vue des membres de « Formation – confidentialité A » à « Formation – confidentialité B » avec la présence de Léa Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "Chaque organisation retrouve son propre événement dans son administration.",
+        "visibleSeconds": 28.5,
+        "visible": "Affichage du planning / frise de la « Fête des liens – organisation A »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, pédagogique et bien articulée, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

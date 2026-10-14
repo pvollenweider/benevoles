@@ -1,8 +1,20 @@
 STATUS: READY
-ID: PRIVACY_PERSONAL_LINKS
-Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
-Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
-Objective evidence: 60 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.2 / 18.6 LU. Effects vs input events: {'click': 29, 'key': 177}; counts match: True. OCR flags: [{'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/signup-85.png', 'line': 'Accueil - équipe A • 24/10/2026 • 10:00-12:00'}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-60.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation d'inscription : accepté par le serveur d'envoi 12/10/2026 00:27"}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-85.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation dinscription : accepté par le serveur d'envoi 12/10/2026 00:27"}, {'file': '/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/copies-end.png', 'line': "1: accepté par le serveur d'envoi ; 12/10/2026 00:27 Confirmation dinscription : accepté par le serveur d'envoi 12/10/2026 00:27"}]. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
-Review observations: 60 images et passages courts legal/admin/result revus. Renvoi 90.930 s vs phrase 90.451 ; retrait 205.294 vs 204.802 ; confidentialité 257.480 vs 256.975 ; conservation visible à sa phrase 264.269 ; rapport 296.962 vs 296.471. Accès retiré, notes réservées, export réel, rappel enregistré clairement signalé. Dates anglaises Mailpit notées seulement ; profil neuf puis invitation nominative, aucune préremplissage masquée. ASR final, sous-titres, effets et musique conformes.
-Local source changes: Aucun changement ; narration réutilisée.
-Real-time subjective listening unavailable; not used as a failure reason.
+Batch 21 — PRIVACY_PERSONAL_LINKS — 2026-10-14
+Product commit: e110bfff7be601ceb18a52e456c4147158782e96
+BUILD_ID: ZQDQCQ6Dod5iXimlU7yZf
+Final MP4: privacy-personal-links.mp4 — 366.560 s
+SHA256: 49bbcf2ac5f769c3ebb44f68b2ca5c06a9bde69de24f9b6230b2bfb5f094b5fd
+
+One narrated take after fresh dedicated scenario seed, real preflight, successful quick rehearsal, fresh reseed and exact fixture-mailbox cleanup. No retake. Cleanup preserved unrelated messages.
+Batch 20 artifacts moved to previous-20261014T163639Z/; unchanged audio retained and exact metadata/audit copied back. Continuous Kore narration reused byte-for-byte; source audit revalidated without new TTS.
+Final multilingual MP4 ASR: all ten chapters pass with 0.0% word difference, no English speech or unexpected instructions. Viewer-addressed tu/ton/ta/tes/toi/te/t' count: 0 in both ASR and VTT. The sole Ton occurrence quotes the actual panel title Ton lien personnel.
+video:validate passes; 971 video tests and 192-source TypeScript check pass. Ten fresh audiovisual chapter reviews match the final MP4 hash; all unflagged, all reported checkpoints aligned. The full 60-frame chapter grid and 84 sentence-anchor frames were inspected. OCR found no localhost, org-admin@localhost, Timeline or development overlay. Actual French dates have day before month.
+Music 14.6–19.7 LU under voice; music-only windows -34 to -33.2 LUFS. Soft effects match 29 actual clicks and 177 actual key events. Posters generated into review/renders-generated.json; videos/renders.json unchanged.
+
+Batch 20 blocker resolved on #982 build. At 61.039 s, review/confirmation-61.039.png and review-frames/signup-60.png show Inscription confirmée ! and Merci pour ton engagement. Un email de confirmation a été envoyé., with Retour à l'accueil. No management link is visible. This agrees with the unchanged sentence Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. No narration correction or regeneration required. See review/confirmation-check.json.
+The real registration returns 201 without editToken and with linkSentByEmail; its actual received email is shown, then Jules's personal page. No URL correction or hidden workaround was used. Actual resend/recovery emails, Zoé prefill, A/B isolation, leader revocation, admin notes/answers, public legal pages, report and six-member CSV are retained in this take's evidence.
+No guide page is shown: #981 documentation screenshots have no effect on this take.
+No observed product bug or remaining blocker. No src change.
+Source change shared with MEMBERS_IMPORT: build-main-product.ts retains snapshot-to-main verification for every input, allowing audited local videos/ editorial WIP to differ from the pinned product snapshot.
+Real-time subjective listening unavailable; independent source/final ASR and audiovisual checks cover actual final sound.
+No publishing, push, commit or PR. doc-img: unchanged

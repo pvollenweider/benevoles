@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:11:10.583Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "8456908c726d52e1b927f2afc339cecac7b7331b54ef1c62205707642f0f2262",
+  "clipSha256": "e97549b53d759b0e0bf7d4340c4534261518edddf99393680ffcc1f8ff1da393",
+  "scene": "update",
+  "review": {
+    "heardOpening": "Avec Retour, vous pouvez changer l'option",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse.",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton Retour et réaffichage de l'étape de choix des options d'importation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Mettre à jour remplace le prénom, le nom, le téléphone et les tags",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection de l'option radio Mettre à jour puis clic sur Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
+        "visibleSeconds": 7,
+        "visible": "Tableau des membres affichant Camille Rochat et Julien Favre avec l'action Mettre à jour",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

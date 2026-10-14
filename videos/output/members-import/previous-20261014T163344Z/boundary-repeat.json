@@ -1,0 +1,12 @@
+{
+  "anchor": "Si vous analysez de nouveau ce fichier avec Ignorer, les emails",
+  "windowStart": 150.465,
+  "result": {
+    "found": true,
+    "startSeconds": 18.3,
+    "wordsHeard": "Si vous analysez de nouveau ce fichier avec Ignorer, les emails"
+  },
+  "onset": 168.76500000000001,
+  "proposedCut": 168.581625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

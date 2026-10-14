@@ -1,0 +1,96 @@
+{
+  "id": "PRIVACY_PERSONAL_LINKS",
+  "slug": "privacy-personal-links",
+  "title": "Les bons liens, pour les bonnes personnes",
+  "description": "Comprendre les liens publics, personnels et de responsables, retrouver son accès et partager seulement les informations utiles.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French. Warm, reassuring and conversational with an audible smile. Clear patient delivery, natural pauses, same timbre throughout.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "signup": "S'inscrire et recevoir son accès",
+    "personal": "Garder son lien personnel",
+    "recovery": "Retrouver un lien perdu",
+    "invitation": "Une invitation destinée à une personne",
+    "leader": "L'équipe du responsable",
+    "admin": "Les informations de l'organisation",
+    "legal": "Lire les informations publiques",
+    "copies": "Partager une copie utile, pas tout",
+    "result": "Le bon lien au bon destinataire"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe : ils ne servent pas à la même chose. Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu. Dans notre démonstration, deux organisations ont chacune une Léa Exemple et une fête portant le même identifiant. Les noms se ressemblent, mais les fiches et les adresses sont différentes. Chaque organisation retrouve son propre événement dans son administration. Toutes les personnes et coordonnées utilisées ici sont fictives.",
+      "fallbackDurationMs": 54000
+    },
+    {
+      "id": "signup",
+      "transcript": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire. Jules choisit un créneau et renseigne ses coordonnées. Prénom, nom, adresse email et téléphone : ces informations permettent à l'organisation de retrouver Jules et de le contacter. Il accepte ensuite les conditions du formulaire. Après l'envoi, l'inscription est enregistrée et un email lui est adressé. Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation. Taper une adresse ne prouve pas qu'on peut lire sa boîte email. Ouvrons donc le vrai message reçu par Jules, puis son lien personnel. Nous arrivons sur sa propre inscription, pas sur la liste de toute l'équipe.",
+      "fallbackDurationMs": 68000
+    },
+    {
+      "id": "personal",
+      "transcript": "Sur la page personnelle, Jules retrouve son créneau et les actions prévues pour son inscription. Le panneau Ton lien personnel rappelle à quoi sert cet accès. Gardons ce lien pour son destinataire : une personne qui le reçoit peut accéder à la page correspondante. Ce n'est pas le lien public de recrutement. Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu. Cette action renvoie l'accès ; elle ne crée pas une deuxième inscription. Pour inviter des amis à participer, partage plutôt la page publique de l'événement.",
+      "fallbackDurationMs": 55000
+    },
+    {
+      "id": "recovery",
+      "transcript": "Le lien est perdu ? Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription. La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel. Vérifions le message reçu dans la boîte de Léa. Recommençons avec une adresse fictive inconnue : la réponse affichée reste la même. Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B. La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé. Si tu ne reçois rien, vérifie ton adresse et les courriers indésirables, puis contacte l'organisation au besoin.",
+      "fallbackDurationMs": 66000
+    },
+    {
+      "id": "invitation",
+      "transcript": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à Zoé, puis nous ouvrons le vrai email reçu. Son lien conduit au formulaire avec les informations prévues pour cette invitation. Cela facilite l'inscription de la personne concernée ; ce n'est pas une affiche à diffuser à tout le monde. Vérifions le prénom, l'adresse et le créneau avant de continuer. Si tu recrutes largement, utilise le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+      "fallbackDurationMs": 57000
+    },
+    {
+      "id": "leader",
+      "transcript": "Le responsable a lui aussi un accès destiné à sa mission. Ouvrons le lien de Camille, responsable de l'accueil. Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter. Les personnes de la logistique et de l'autre organisation ne sont pas dans cette équipe. Ce lien donne accès à des informations opérationnelles : ne le publie pas sur une affiche. Revenons dans l'administration et retirons ce responsable. En rouvrant son ancien lien, l'accès n'est plus disponible. Cela permet de retirer cet accès quand la responsabilité prend fin.",
+      "fallbackDurationMs": 66000
+    },
+    {
+      "id": "admin",
+      "transcript": "L'organisateur travaille dans son administration, avec sa propre connexion. Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement. Dans les membres, il peut consulter les disponibilités et les notes internes de préparation. Regardons la fiche de Léa, puis comparons avec les deux vues précédentes. Sa page personnelle ne montre pas les notes internes. Le responsable reçoit les contacts de son équipe, pas la fiche membre complète. Avant de transmettre une information, demande-toi qui en a besoin et pour quelle tâche. Une note utile à l'organisation n'a pas forcément sa place dans un document distribué.",
+      "fallbackDurationMs": 67000
+    },
+    {
+      "id": "legal",
+      "transcript": "Les informations publiques se trouvent aussi dans le pied de page. Ouvrons Confidentialité. Cette page décrit les usages annoncés et les destinataires des données. Repérons aussi les indications de conservation et les moyens de contact. Pour une question ou une demande concernant les données, appuie-toi sur ces informations et sur l'organisation concernée. Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre. Cette vidéo explique les gestes dans l'outil ; elle ne remplace pas une lecture des textes actuels ni un avis juridique. Il n'existe pas un délai de conservation unique à appliquer sans regarder le contexte.",
+      "fallbackDurationMs": 60000
+    },
+    {
+      "id": "copies",
+      "transcript": "Sur le terrain, une liste bien choisie peut suffire. Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient. Comparons-le au CSV des membres : ce fichier comporte notamment des coordonnées et des notes internes. Il n'est donc pas à remettre indistinctement à toute l'équipe. Choisis le document adapté à la personne qui en a besoin, range-le dans un espace protégé et limite les copies. Un fichier téléchargé reste une photographie du moment : il ne se met pas à jour quand le planning change. Pense aussi aux anciennes copies devenues inutiles.",
+      "fallbackDurationMs": 62000
+    },
+    {
+      "id": "result",
+      "transcript": "Revenons à la page personnelle et à son avertissement. Pour recruter, partage la page publique. Pour gérer une inscription, garde le lien personnel pour son destinataire. Pour coordonner un poste, remets le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contacte l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifie son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+      "fallbackDurationMs": 56000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous distinguez le lien public, le lien personnel d'un bénévole et le lien d'un responsable, vous voyez comment retrouver un accès perdu et quelles informations partager.",
+    "steps": [
+      "Partagez le lien public ou son QR code pour faire découvrir l'événement et recruter.",
+      "Gardez le lien personnel reçu par email : il ouvre votre propre inscription et peut être renvoyé avec « Recevoir ce lien par email ».",
+      "Si le lien est perdu, utilisez la page de récupération avec l'adresse de l'inscription.",
+      "N'utilisez une invitation nominative que pour la personne invitée : jamais sur une affiche.",
+      "Remettez le lien de responsable seulement à la personne désignée ; retirer le responsable désactive ce lien.",
+      "Avant de transmettre un document, choisissez celui qui convient à la personne et à sa tâche."
+    ],
+    "remember": [
+      "La page de récupération répond toujours de la même façon, sans révéler si une adresse est connue.",
+      "La page personnelle ne montre pas les notes internes, et un responsable ne voit que les contacts de son équipe.",
+      "Le CSV des membres contient des coordonnées et des notes internes : ne le distribuez pas à toute l'équipe.",
+      "Si un accès a été diffusé par erreur, prévenez l'organisation et ne le transmettez pas plus loin."
+    ]
+  }
+}

@@ -203,19 +203,20 @@ async function main() {
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
   const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug) && process.platform === "darwin"
-  if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
+  const frenchChromiumRevision = slug === "members-import" ? "1248" : "1243"
+  if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
-    ...(questionsFrenchLauncher ? { executablePath: path.resolve("videos/tools/chromium-fr-questions.sh") } : {}),
+    ...(questionsFrenchLauncher ? { executablePath: path.resolve(slug === "members-import" ? "videos/tools/chromium-fr-members-import.sh" : "videos/tools/chromium-fr-questions.sh") } : {}),
     args: ["--lang=fr-FR"],
-    env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" },
+    env: { ...process.env, LANG: ["members-import", "privacy-personal-links"].includes(slug) ? "fr_CH.UTF-8" : "fr_FR.UTF-8", LC_ALL: ["members-import", "privacy-personal-links"].includes(slug) ? "fr_CH.UTF-8" : "fr_FR.UTF-8" },
   }, baseUrl)
   const context = await browser.newContext({
     viewport: { width: manifest.viewport.width, height: manifest.viewport.height },
     deviceScaleFactor: manifest.viewport.deviceScaleFactor,
     isMobile: manifest.viewport.width < 600,
     hasTouch: manifest.viewport.width < 600,
-    locale: "fr-FR",
+    locale: ["members-import", "privacy-personal-links"].includes(slug) ? "fr-CH" : "fr-FR",
     timezoneId: "Europe/Zurich",
     colorScheme: "light",
     reducedMotion: "reduce",
@@ -3311,9 +3312,14 @@ async function main() {
         await at("prénom, nom, email, téléphone et")
         await form().getByLabel("Fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-a-verifier.csv"))
         await form().getByText(/Colonnes attendues/).scrollIntoViewIfNeeded()
+        await at("elles ne sont pas importées")
+        await tap(page, form().getByRole("button", { name: "Annuler", exact: true }))
       })
       await scene("preview", async at => {
-        await at("Le récapitulatif montre les créations")
+        await at("Ouvrez Importer des membres")
+        await open()
+        await form().getByLabel("Fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-a-verifier.csv"))
+        await at("Cliquez sur Analyser le fichier")
         const body = await analyse()
         checks.firstPreview = body.plan.counts
         if (body.plan.counts.skip !== 2 || body.plan.counts.error !== 3) throw new Error("Expected two existing emails and three real file errors")
@@ -3324,7 +3330,7 @@ async function main() {
       await scene("errors", async at => {
         await form().getByRole("region").filter({ has: page.getByText("Prénom manquant", { exact: true }) }).scrollIntoViewIfNeeded()
         await form().getByText("Même email que la ligne 8", { exact: true }).waitFor()
-        await at("Corrige le fichier d'origine plutôt")
+        await at("Corrigez le fichier d'origine plutôt")
         await form().getByText("Email invalide : adresse-incomplete", { exact: true }).scrollIntoViewIfNeeded()
       })
       await scene("update", async at => {
@@ -3356,6 +3362,10 @@ async function main() {
         const ownershipDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: dbUrl.href }) })
         try {
         const beforeMembers = await ownershipDb.volunteer.findMany({ where: { organizationId: "default" } })
+        await at("Quand l'aperçu vous convient")
+        // Mid-sentence: the imperative follows the conditional opening by 1.6 s.
+        // With the pointer's own 0.48 s lead-in, this places the click on « confirmez ».
+        await page.waitForTimeout(1200)
         const importStartedAt = new Date().toISOString()
         const response = page.waitForResponse(r => r.url().endsWith("/api/admin/members/import") && r.request().method() === "POST")
         await tap(page, form().getByRole("button", { name: "Importer 40 membres", exact: true }))
@@ -3375,7 +3385,7 @@ async function main() {
         await writeFile(path.join(dir, "owned-import-members-v2.json"), ownershipJson)
         checks.confirmed = body
         await form().getByText(/Import terminé/).waitFor()
-        await at("Ferme la fenêtre et recherchez")
+        await at("Fermez la fenêtre et recherchez")
         await tap(page, form().getByRole("button", { name: "Fermer", exact: true }).last())
         await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Maya")
         await at("Ouvrez sa fiche pour vérifier")

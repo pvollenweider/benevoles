@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-12T05:47:02.763Z",
+  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "promptSha256": "87bdfebff6d0224d239139c063f11c40841c51a290715cc9adc8d58a1a3cca05",
+  "clipSha256": "22dbf9afef40903480c7a22c70f46ec61ce722cd2faa51acb8a3ff9fe66e8787",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Quand l'aperçu te convient",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "confirme l'import.",
+        "visibleSeconds": 1,
+        "visible": "Clic sur « Importer 40 membres » et affichage du récapitulatif de fin d'import.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Le résultat indique combien ont été créées, mises à jour, ou ignorées",
+        "visibleSeconds": 6,
+        "visible": "La fenêtre modale affiche « Import terminé : 38 créés, 2 mis à jour, 0 ignorés ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Ferme la fenêtre et recherchez Maya : elle est maintenant dans la liste.",
+        "visibleSeconds": 14.8,
+        "visible": "Fermeture de la modale, saisie de « Maya » dans la recherche et affichage du résultat Maya Perret.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses tags.",
+        "visibleSeconds": 18.2,
+        "visible": "Ouverture du formulaire « Modifier le membre » montrant le téléphone et les tags de Maya Perret.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide et bien articulée, alternant voix féminine et masculine/synthétique selon le script, synchronisation correcte avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

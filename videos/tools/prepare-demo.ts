@@ -31,9 +31,9 @@ export function ownsTargetedMessageNoEmailMember(person: Partial<SeedIdentity>) 
 }
 export async function recordedMembers(): Promise<OwnedMember[]> {
   const entries: OwnedMember[] = []
-  for (const [file, version] of [["owned-members.json", 1], ["owned-members-v2.json", 2]] as const) {
+  for (const [directory, file, version] of [["members-management", "owned-members.json", 1], ["members-management", "owned-members-v2.json", 2], ["members-import/baseline-contacts", "owned-members-v2.json", 2]] as const) {
     let raw: string
-    try { raw = await readFile(path.resolve("videos/output/members-management", file), "utf8") }
+    try { raw = await readFile(path.resolve("videos/output", directory, file), "utf8") }
     catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") continue; throw error }
     const ledger = JSON.parse(raw)
     assert(ledger.schemaVersion === version && ledger.scenario === "members-management" && Array.isArray(ledger.members) && ledger.members.length <= 30, "Invalid recorder ownership ledger")
@@ -41,7 +41,7 @@ export async function recordedMembers(): Promise<OwnedMember[]> {
     if (version === 2) {
       assert(ledger.members.every((entry: OwnedMember) => entry.actualCreatedAt && Number.isFinite(Date.parse(entry.actualCreatedAt))), "V2 creation proof needs the actual API creation date")
       const hash = createHash("sha256").update(raw).digest("hex")
-      assert(await readFile(path.resolve(`videos/output/members-management/owned-members-v2-${hash}.json`), "utf8") === raw, "Actual v2 creation ledger must have its immutable hashed snapshot")
+      assert(await readFile(path.resolve(`videos/output/${directory}/owned-members-v2-${hash}.json`), "utf8") === raw, "Actual v2 creation ledger must have its immutable hashed snapshot")
     }
     entries.push(...ledger.members)
   }

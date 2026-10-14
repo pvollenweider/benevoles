@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-14T15:05:31.395Z",
+  "crossOrganizationDetailRefusedBothWays": true,
+  "homonymsHaveDistinctAddresses": true,
+  "personalPageOwnRegistrationOnly": true,
+  "personalAvailabilityVisibleNotesAbsent": true,
+  "leaderRosterOwnRoleOnly": true,
+  "leaderContactVisibleNotesAbsent": true,
+  "anonymousSignupDoesNotReturnPersonalToken": true,
+  "recoveryResponsesIdenticalWithoutPersonalData": true,
+  "recoveryDoesNotEmailOtherOrganization": true,
+  "actualInvitationSent": true,
+  "leaderId": "cmv88rvp50015fpa5vuti0995",
+  "fixtureModified": true,
+  "audiovisualValidated": false,
+  "detailsCheckedAt": "2026-10-14T15:05:32.912Z",
+  "actualEmailsReceived": [
+    {
+      "recipient": "video.privacy.a.new@example.org",
+      "mailId": "32c0ps4aG9eNb3noEh1GRN",
+      "personalLink": true
+    },
+    {
+      "recipient": "video.privacy.a.member.0@example.org",
+      "mailId": "4FHlD3FonBpDqutifm7fM9",
+      "personalLink": true
+    },
+    {
+      "recipient": "video.privacy.a.member.3@example.org",
+      "mailId": "09xWsldRRAGo39VjZinI5U",
+      "personalLink": false
+    }
+  ],
+  "invitationPrefillsOwnMemberOnly": true,
+  "invitationRefusedOnOtherOrganization": true,
+  "leaderRevocationRefusesOldLink": true
+}

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:46:57.367Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T16:41:56.815Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "4722abadbb7f9a2435deca588f03c7540debb407a43556355a40d1edb9d8809e",
-  "clipSha256": "e7b874b1317763948cfad061bf8f16b76c9a0074aac7243c983cce5bc97e9d6c",
+  "clipSha256": "2ae5d68a275911329bd66f5c3607e62b729ec2447ffffded60f2e3e511c3414e",
   "scene": "corrected",
   "review": {
     "heardOpening": "Nous choisissons maintenant le fichier Excel corrigé",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Nous choisissons maintenant le fichier Excel corrigé",
-        "visibleSeconds": 1.1,
-        "visible": "La fenêtre d'import s'affiche avec le fichier membres-corriges.xlsx sélectionné",
+        "spokenSeconds": 2.7,
+        "spoken": "relançons l'analyse",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le bouton bleu « Analyser le fichier »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.1,
-        "spoken": "et relançons l'analyse",
-        "visibleSeconds": 4.1,
-        "visible": "Clic sur le bouton bleu Analyser le fichier",
+        "spokenSeconds": 4.5,
+        "spoken": "Les erreurs ont disparu",
+        "visibleSeconds": 5,
+        "visible": "Affichage de « 0 ligne en erreur » et disparition du bloc d'erreurs",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
-        "visibleSeconds": 5.8,
-        "visible": "Affichage de la synthèse avec 0 ligne en erreur et le bouton Importer 40 membres",
+        "spokenSeconds": 6.3,
+        "spoken": "Les quarante lignes sont reconnues",
+        "visibleSeconds": 5.1,
+        "visible": "Mention « Membres du fichier (40) » et bouton « Importer 40 membres » affichés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
-        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
-        "visibleSeconds": 11.5,
-        "visible": "La ligne 3 montre René Meyer sans adresse email avec action Créer",
+        "spokenSeconds": 10.3,
+        "spoken": "René n'a pas d'email",
+        "visibleSeconds": 10.5,
+        "visible": "Ligne 3 affichant René Meyer avec la colonne Email vide et l'action Créer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les étapes d'import."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

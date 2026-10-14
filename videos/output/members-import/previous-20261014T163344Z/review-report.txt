@@ -1,0 +1,18 @@
+STATUS: NOT READY
+Batch 20 — 2026-10-14 — MEMBERS_IMPORT
+Product commit: 8941cc1cb184ca53a23a7ade7fc9e889075e7725
+BUILD_ID: zHvrRgnTvwimSPsFYL2Dw
+Final MP4: members-import.mp4 — 215.960 s — SHA256 6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696
+
+Two narrated captures; no third take. Previous artifacts are archived in previous-20261014T150121Z/ and take1-batch20/.
+Full fresh continuous Kore generation, continuousPauseTags: false. No old sentence audio reused. Four boundaries were recut at independently located, measured silences; the complete source and final MP4 multilingual ASR pass.
+Final VTT viewer-addressed tu/ton/ta/tes/toi/te/t': 0. Final ASR viewer-addressed count: 0. No added English speech found. VTT text matches the current manifest.
+video:validate passes: nine scenes, 11 filmed sentence anchors, music 15.1–18.9 LU under narration. Real input effects match 18 clicks and 1 key event. Posters use review/renders-generated.json; videos/renders.json unchanged.
+971 video tests and the 192-source video TypeScript check pass. Source anchor tests also cover the subsequent, unfilmed preview fix.
+All nine final audiovisual chapter reports match the final MP4 hash; sentence/action frames and the 54-frame review grid inspected. OCR finds no localhost, org-admin@localhost, Timeline or development overlay. The actual import creates 38 members and updates 2; Maya's contact/tags and the unconfirmed repeat preview are visible.
+
+BLOCKER: At 47.313 s, chapter preview opens with the import dialog and CSV already prepared in chapter file, before the instruction « Ouvrez Importer des membres et choisissez le fichier à vérifier ». Confirmed in review-frames/file-60.png and preview-2.png, plus audiovisual-review/preview.json. The source now closes the preparation dialog at the last file sentence, reopens/selects at at("Ouvrez Importer des membres"), and analyses at at("Cliquez sur Analyser le fichier"). This correction is NOT filmed in the delivered MP4 because the single retake allowance was consumed by the early confirmation click.
+The confirmation retake uses at("Quand l'aperçu vous convient") plus a 1.2 s within-sentence delay; the final confirm chapter reports aligned checkpoints.
+No product code changed. No new product bug observed in this journey. No publishing, push, commit or PR.
+Real-time subjective listening unavailable; this is not the reason for NOT READY. Independent audio recognition and audiovisual review cover the actual final sound.
+doc-img: unchanged

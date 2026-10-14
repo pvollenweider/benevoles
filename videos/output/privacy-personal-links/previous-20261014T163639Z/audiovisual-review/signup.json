@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:27:26.657Z",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "promptSha256": "e5c9d540715375f7dfb8398da077f7112578ccfd4e12e4579439e2d8a94c1d55",
+  "clipSha256": "c821f9f287f9bdbff735fb8175b9890c9869d9d93dd5fe0468fcddd270048916",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public, ou son QR code",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Jules choisit un créneau et renseigne ses coordonnées.",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection du créneau 10h-12h puis affichage du formulaire avec saisie des coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Après l'envoi, l'inscription est enregistrée",
+        "visibleSeconds": 20,
+        "visible": "Clic sur 'Confirmer mon inscription' affichant une page d'erreur 404 ('Cette page est tombée à l'eau')",
+        "sync": "aligned",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 33.2,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 34,
+        "visible": "Affichage de la boîte email Mailpit avec le courriel d'inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 38,
+        "spoken": "Nous arrivons sur sa propre inscription",
+        "visibleSeconds": 38,
+        "visible": "Page 'Mes inscriptions' de Jules avec le récapitulatif du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:20, la validation du formulaire redirige vers une page d'erreur 404 ('Cette page est tombée à l'eau') au lieu de l'écran normal de confirmation d'inscription décrit par la voix."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

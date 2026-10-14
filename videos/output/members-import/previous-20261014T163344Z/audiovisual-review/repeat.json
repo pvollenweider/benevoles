@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:20:36.251Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "476beca7da3d6ace166ff7a345ef8b2e9344ef5752ab51890c2b95ae95aec6cc",
+  "clipSha256": "4c12158aecb98c3a25764878e0753d1a9e51c2f2d0fbed986bfc36d0473549c4",
+  "scene": "repeat",
+  "review": {
+    "heardOpening": "Si vous analysez de nouveau ce fichier avec Ignorer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
+        "visibleSeconds": 2.2,
+        "visible": "Ouverture de la modale d'import avec l'option Ignorer cochée puis clic sur Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "les emails déjà présents sont reconnus",
+        "visibleSeconds": 4.5,
+        "visible": "Résultat d'analyse affichant 39 déjà présents ignoré et action ignorer pour les fiches avec email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Mais attention aux fiches sans email",
+        "visibleSeconds": 7,
+        "visible": "Fiche de René Meyer visible sans email avec l'action créer et le bouton Importer 1 membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "puis annulez si vous ne souhaitez rien ajouter",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur Retour puis sur Annuler, fermant la fenêtre d'import",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

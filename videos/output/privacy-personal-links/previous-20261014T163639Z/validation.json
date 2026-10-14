@@ -1,0 +1,83 @@
+{
+  "id": "PRIVACY_PERSONAL_LINKS",
+  "slug": "privacy-personal-links",
+  "validatedAt": "2026-10-14T15:31:01.007Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 366600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 33349,
+      "audioMs": 33348,
+      "driftMs": 1
+    },
+    {
+      "id": "signup",
+      "visualMs": 42355,
+      "audioMs": 42354,
+      "driftMs": 1
+    },
+    {
+      "id": "personal",
+      "visualMs": 32844,
+      "audioMs": 32842,
+      "driftMs": 2
+    },
+    {
+      "id": "recovery",
+      "visualMs": 37266,
+      "audioMs": 37265,
+      "driftMs": 1
+    },
+    {
+      "id": "invitation",
+      "visualMs": 29093,
+      "audioMs": 29093,
+      "driftMs": 0
+    },
+    {
+      "id": "leader",
+      "visualMs": 31342,
+      "audioMs": 31341,
+      "driftMs": 1
+    },
+    {
+      "id": "admin",
+      "visualMs": 36744,
+      "audioMs": 36743,
+      "driftMs": 1
+    },
+    {
+      "id": "legal",
+      "visualMs": 34588,
+      "audioMs": 34587,
+      "driftMs": 1
+    },
+    {
+      "id": "copies",
+      "visualMs": 30597,
+      "audioMs": 30595,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 31715,
+      "audioMs": 31713,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 42,
+  "music": {
+    "voicedWindows": 332,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 14.8,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -34,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.3
+  },
+  "issues": []
+}

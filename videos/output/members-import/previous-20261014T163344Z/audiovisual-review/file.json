@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:19:02.969Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "2797c7f70dcfd6b192642fe7814ba9f5b9fb23a4a82fe6917c3511fc8a15c756",
+  "clipSha256": "98785b6827d7ef0198f569e385bd7261810934c8918798419d96962e0e3ccd35",
+  "scene": "file",
+  "review": {
+    "heardOpening": "Le fichier peut être un CSV ou un Excel.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le fichier peut être un CSV ou un Excel.",
+        "visibleSeconds": 0.8,
+        "visible": "La modale 'Importer des membres' s'ouvre avec le champ Fichier CSV ou Excel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags.",
+        "visibleSeconds": 3.2,
+        "visible": "Texte d'explication des colonnes visibles dans la modale : prénom, nom, email, téléphone, tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "téléphone, et tags.",
+        "visibleSeconds": 5.9,
+        "visible": "Un fichier 'membres-a-verifier.csv' est sélectionné dans l'input",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Le prénom et le nom sont nécessaires.",
+        "visibleSeconds": 10.3,
+        "visible": "Modale toujours affichée avec le fichier sélectionné et les options d'import",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de la modale et la sélection du fichier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

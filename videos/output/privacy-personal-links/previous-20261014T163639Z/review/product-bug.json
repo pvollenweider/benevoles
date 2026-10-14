@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-14T15:27:34.514153+00:00",
+  "commit": "8941cc1cb184ca53a23a7ade7fc9e889075e7725",
+  "buildId": "zHvrRgnTvwimSPsFYL2Dw",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "frame": {
+    "scene": "signup",
+    "fraction": 0.6,
+    "seconds": 61.039,
+    "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review-frames/signup-60.png"
+  },
+  "signupChapter": {
+    "id": "signup",
+    "startMs": 35626,
+    "endMs": 77981
+  },
+  "url": "http://localhost:43102/fete-des-liens/success",
+  "urlEvidence": "Recorder waits for /fete-des-liens/success; the current non-embedded EventPageClient navigation drops org, and the anonymous API response discloses no token. Read-only requests confirm the destination fails without org.",
+  "readonlyRequests": [
+    {
+      "url": "http://localhost:43102/fete-des-liens/success",
+      "httpStatus": 404
+    },
+    {
+      "url": "http://localhost:43102/fete-des-liens/success?org=formation-confidentialite-a",
+      "httpStatus": 200
+    }
+  ],
+  "scope": "Observed on localhost multi-organization fixture. Impact on production subdomains not established.",
+  "workaroundApplied": false
+}

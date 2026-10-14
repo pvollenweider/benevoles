@@ -1,21 +1,19 @@
 STATUS: READY
-{
-  "id": "MEMBERS_IMPORT",
-  "status": "READY",
-  "duration": 220.92,
-  "buildId": "Ro9VdxUayqlTAULEvQpY0",
-  "music": {
-    "voicedWindows": 215,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 14,
-    "largestGapLu": 19.2,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "54images revues ; bouton natif Choisir un fichier/Aucun fichier choisi français. AV9/9,ASR9/9,validate,ancres,VTT,effets,musique passent ; 38créations+2misesàjour,64membres,réanalyse39ignorés+1sans-email annulée. Fermeture résultat et Éditer Maya alignés. Dates françaises,aucune adresse interdite/overlay. Nit connu : actions Membres hors1280px.",
-  "sourceChanges": "Aucune ; lancement navigateur/processus français de main fonctionne ; narration réutilisée,aucun re-film.",
-  "report": "videos/output/members-import/review-report.txt",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+Batch 21 — MEMBERS_IMPORT — 2026-10-14
+Product commit: e110bfff7be601ceb18a52e456c4147158782e96
+BUILD_ID: ZQDQCQ6Dod5iXimlU7yZf
+Final MP4: members-import.mp4 — 215.960 s
+SHA256: e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6
+
+One narrated take after a fresh guarded seed and successful quick rehearsal. No retake.
+Batch 20 artifacts moved to previous-20261014T163344Z/; unchanged audio retained, exact metadata and source audit copied back, ownership receipts retained for guarded reset.
+Batch 20 continuous Kore narration reused byte-for-byte, source audit revalidated without new TTS. Final multilingual MP4 ASR: all nine chapters pass, no added English speech or viewer-directed informal pronouns. VTT viewer-addressed tu/ton/ta/tes/toi/te/t': 0; VTT matches narration manifest.
+video:validate passes; 971 video tests and 192-source TypeScript check pass. Nine fresh audiovisual chapter reviews match the final hash, all unflagged. All checkpoints aligned except file selection described as early within the same opening sentence with severity none; it occurs after the opening anchor and does not precede the instruction.
+Music 15.1–18.9 LU under voice, music-only rule passes. Soft effects match 20 real clicks and one key event. Posters written using review/renders-generated.json; videos/renders.json unchanged.
+54-frame chapter grid and 26 sentence-anchor evidence frames inspected. OCR finds no localhost, org-admin@localhost, Timeline or development overlay. French file control is visible. No guide page is shown; #981 has no impact on this take.
+
+Batch 20 blocker resolved: file-end.png shows the closed dialog; preview-2.png at about 47.913 s remains closed; reopening occurs at the opening sentence anchor 47.715 s, file selection follows; analysis uses its own sentence anchor 56.665 s. Actual final import creates 38 and updates 2. Maya's contact/tags and the repeat preview with cancellation are shown.
+No observed product bug or remaining blocker. No src change.
+Source change: build-main-product.ts keeps exact snapshot-to-main blob verification for every input while permitting audited local videos/ editorial WIP to differ from the product snapshot.
+Real-time subjective listening unavailable; independent source/final ASR and audiovisual checks cover actual final sound.
+No publishing, push, commit or PR. doc-img: unchanged

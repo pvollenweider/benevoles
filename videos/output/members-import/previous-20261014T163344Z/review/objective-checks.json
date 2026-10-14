@@ -1,0 +1,415 @@
+{
+  "checkedAt": "2026-10-14T15:23:17.879522+00:00",
+  "id": "MEMBERS_IMPORT",
+  "status": "NOT READY",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "product": {
+    "commit": "8941cc1cb184ca53a23a7ade7fc9e889075e7725",
+    "sourceTree": "8f5a1c9946faac17bc7430b6ee49b10f666c8688",
+    "productSourceSha256": "5f78abc7d5573a573c24ec850f42291e49d5d98eeb063808e54850964ac0cbee",
+    "buildId": "zHvrRgnTvwimSPsFYL2Dw",
+    "snapshot": "/tmp/benevoles-video-production.Ns1yr5eb",
+    "builtAt": "2026-10-14T15:02:37.334Z"
+  },
+  "durationSeconds": 215.96,
+  "checks": {
+    "pinnedCommit": true,
+    "oneContinuousKoreGeneration": true,
+    "sourceNarrationAudited": true,
+    "finalMultilingualASR": true,
+    "validation": true,
+    "music": true,
+    "actualInputEffects": true,
+    "vttMatchesCurrentManifest": true,
+    "viewerRegisterVTT": true,
+    "viewerRegisterASR": true,
+    "noAddedEnglishSpeech": true,
+    "noForbiddenUIInInspectedFrames": true,
+    "audiovisual": false
+  },
+  "music": {
+    "voicedWindows": 210,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.1,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "effects": {
+    "clicks": 18,
+    "keys": 1
+  },
+  "viewerTuCountVTT": 0,
+  "viewerTuCountASR": 0,
+  "retainedScreenLabelCountVTT": 0,
+  "ocrFlags": [],
+  "reviews": [
+    {
+      "chapter": "welcome",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Vous utilisez Benevol pour la première fois",
+          "visibleSeconds": 0,
+          "visible": "Titre en superposition : « Importer ses membres sans repartir de zéro / Analyser avant de confirmer » sur la page Membres",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11.2,
+          "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
+          "visibleSeconds": 2.5,
+          "visible": "Affichage de la page de gestion des Membres (introduction annonçant le programme du tutoriel)",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 18.5,
+          "spoken": "vous pouvez toujours créer les membres manuellement avec Nouveau membre",
+          "visibleSeconds": 18.5,
+          "visible": "Bouton bleu « + Nouveau membre » visible en haut à droite de la liste",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off fluide, claire et bien articulée, avec un fond musical discret."
+      }
+    },
+    {
+      "chapter": "file",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Le fichier peut être un CSV ou un Excel.",
+          "visibleSeconds": 0.8,
+          "visible": "La modale 'Importer des membres' s'ouvre avec le champ Fichier CSV ou Excel",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags.",
+          "visibleSeconds": 3.2,
+          "visible": "Texte d'explication des colonnes visibles dans la modale : prénom, nom, email, téléphone, tags",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6,
+          "spoken": "téléphone, et tags.",
+          "visibleSeconds": 5.9,
+          "visible": "Un fichier 'membres-a-verifier.csv' est sélectionné dans l'input",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.3,
+          "spoken": "Le prénom et le nom sont nécessaires.",
+          "visibleSeconds": 10.3,
+          "visible": "Modale toujours affichée avec le fichier sélectionné et les options d'import",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage de la modale et la sélection du fichier."
+      }
+    },
+    {
+      "chapter": "preview",
+      "issues": [
+        "À 00:00, l'action d'ouverture du dialogue d'importation et la sélection du fichier ne sont pas effectuées à l'écran : la fenêtre modale contenant déjà le fichier est présente dès la première image."
+      ],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+          "visibleSeconds": 0,
+          "visible": "La fenêtre Importer des membres et le fichier sont déjà ouverts et sélectionnés à l'écran dès le début.",
+          "sync": "missing",
+          "severity": "minor"
+        },
+        {
+          "spokenSeconds": 4.5,
+          "spoken": "l'option Ignorer conserve la fiche actuelle.",
+          "visibleSeconds": 4.5,
+          "visible": "Le bouton radio Ignorer est bien coché dans le formulaire.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.2,
+          "spoken": "Cliquez sur Analyser le fichier.",
+          "visibleSeconds": 9.8,
+          "visible": "Clic sur le bouton bleu Analyser le fichier.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11.5,
+          "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+          "visibleSeconds": 11.2,
+          "visible": "Affichage du récapitulatif avec le statut global, le bloc d'erreurs et la liste des membres.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 17.2,
+          "spoken": "Les colonnes reconnues et les tags sont également indiqués.",
+          "visibleSeconds": 17.2,
+          "visible": "Lignes décrivant les tags ajoutés et les colonnes reconnues bien visibles en haut de la fenêtre.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, avec un débit régulier et un ton engageant."
+      }
+    },
+    {
+      "chapter": "errors",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 1,
+          "spoken": "la ligne six n'a pas de prénom",
+          "visibleSeconds": 0,
+          "visible": "Dans la section 'Lignes en erreur, non importées (3)', la ligne 6 indique 'Prénom manquant'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "la ligne sept contient une adresse email invalide",
+          "visibleSeconds": 0,
+          "visible": "La ligne 7 indique 'Email invalide : adresse incomplète'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.3,
+          "spoken": "La ligne neuf reprend l'email de la ligne huit",
+          "visibleSeconds": 0,
+          "visible": "La ligne 9 indique 'Même email que la ligne 8'",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la fenêtre d'importation affichée."
+      }
+    },
+    {
+      "chapter": "update",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.1,
+          "spoken": "Avec Retour, vous pouvez changer l'option",
+          "visibleSeconds": 0.8,
+          "visible": "L'écran revient à l'étape précédente avec l'option Mettre à jour sélectionnée",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "puis refaire l'analyse",
+          "visibleSeconds": 4.5,
+          "visible": "Clic sur le bouton Analyser le fichier pour relancer l'analyse",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 18.2,
+          "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
+          "visibleSeconds": 6.8,
+          "visible": "Le tableau d'analyse affiche Camille Rochat et Julien Favre avec le statut Mettre à jour",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off posée, claire et parfaitement audible, en adéquation avec la démonstration."
+      }
+    },
+    {
+      "chapter": "corrected",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse.",
+          "visibleSeconds": 1,
+          "visible": "La fenêtre d'importation affiche le fichier 'membres-corriges.xlsx' sélectionné et le bouton 'Analyser le fichier'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.5,
+          "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
+          "visibleSeconds": 5,
+          "visible": "L'analyse se termine : mention '0 ligne en erreur', 'Membres du fichier (40)' et bouton 'Importer 40 membres'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.5,
+          "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone.",
+          "visibleSeconds": 11,
+          "visible": "La ligne 4 affiche René Meyer avec le champ email vide et l'action 'Créer'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 15,
+          "spoken": "Vérifiez une dernière fois les noms, les catégories et le récapitulatif.",
+          "visibleSeconds": 15,
+          "visible": "Le tableau récapitulatif avec les colonnes Nom, Email, Tags et Action reste affiché.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine posée, claire et bien articulée, parfaitement synchronisée avec l'écran."
+      }
+    },
+    {
+      "chapter": "confirm",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 1.5,
+          "spoken": "confirmez l'import",
+          "visibleSeconds": 1.8,
+          "visible": "Clic sur le bouton « Importer 40 membres » et affichage du message de confirmation",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.8,
+          "spoken": "Le résultat indique combien ont été créées",
+          "visibleSeconds": 6.8,
+          "visible": "La fenêtre modale affiche « Import terminé : 38 créés, 2 mis à jour, 0 ignorés »",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13.7,
+          "spoken": "Fermez la fenêtre et recherchez Maya",
+          "visibleSeconds": 14.1,
+          "visible": "Clic sur « Fermer » puis saisie de « Maya » dans le champ de recherche",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 17.9,
+          "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses tags",
+          "visibleSeconds": 18.3,
+          "visible": "Clic sur « Éditer » et ouverture de la fiche de Maya Perret affichant son téléphone et ses tags",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine calme, naturelle et parfaitement synchronisée avec les actions à l'écran."
+      }
+    },
+    {
+      "chapter": "repeat",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 1,
+          "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
+          "visibleSeconds": 2.2,
+          "visible": "Ouverture de la modale d'import avec l'option Ignorer cochée puis clic sur Analyser le fichier",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.5,
+          "spoken": "les emails déjà présents sont reconnus",
+          "visibleSeconds": 4.5,
+          "visible": "Résultat d'analyse affichant 39 déjà présents ignoré et action ignorer pour les fiches avec email",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.8,
+          "spoken": "Mais attention aux fiches sans email",
+          "visibleSeconds": 7,
+          "visible": "Fiche de René Meyer visible sans email avec l'action créer et le bouton Importer 1 membre",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 18.2,
+          "spoken": "puis annulez si vous ne souhaitez rien ajouter",
+          "visibleSeconds": 17.2,
+          "visible": "Clic sur Retour puis sur Annuler, fermant la fenêtre d'import",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec les manipulations à l'écran."
+      }
+    },
+    {
+      "chapter": "result",
+      "issues": [],
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Votre liste est prête à être utilisée pour les prochaines invitations",
+          "visibleSeconds": 0.8,
+          "visible": "Affichage de la page de gestion des membres avec la liste mise à jour",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.5,
+          "spoken": "Si quelques personnes manquent, ajoutez-les manuellement",
+          "visibleSeconds": 10.5,
+          "visible": "Le bouton '+ Nouveau membre' est présent en haut à droite de la liste",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.8,
+          "spoken": "complétez leur fiche séparément",
+          "visibleSeconds": 14.8,
+          "visible": "Les liens d'action 'Éditer' sont accessibles sur chaque ligne de membre",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine calme, claire et bien articulée, accompagnant adéquatement la conclusion sur un écran stable."
+      }
+    }
+  ],
+  "subjectiveRealtimeListening": "Unavailable; not a failure criterion. Actual sound reviewed through independent multilingual ASR and audiovisual chapter clips."
+}

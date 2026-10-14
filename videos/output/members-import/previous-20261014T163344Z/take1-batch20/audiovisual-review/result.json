@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:12:29.878Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "2740fe833c72dc345bbe43f92474132f43c09ed07a36c07027b4a73ee84301cd",
+  "clipSha256": "b6b2cfa8d4728e86f49a7751ea028bbc96d3f21660c082c3ad064131c70b08ea",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Votre liste est prête à être utilisée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Votre liste est prête à être utilisée",
+        "visibleSeconds": 0.8,
+        "visible": "Page Membres affichant la liste de 64 membres avec leurs coordonnées et informations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "ajoutez-les manuellement",
+        "visibleSeconds": 11.5,
+        "visible": "Bouton '+ Nouveau membre' présent en haut à droite du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "complétez leur fiche séparément",
+        "visibleSeconds": 15.2,
+        "visible": "Actions 'Éditer' visibles sur chaque ligne de membre dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et pédagogue, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:47:08.481Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
+  "reviewedAt": "2026-10-14T16:42:22.162Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "476beca7da3d6ace166ff7a345ef8b2e9344ef5752ab51890c2b95ae95aec6cc",
-  "clipSha256": "80faba115cf51001ba6e078356dac75e88267a977ddbf9a4650b45e21c1c01c8",
+  "clipSha256": "03d6e05a523b702fa4d958665229bf053a5629d484d760a7a39637ad45711dbc",
   "scene": "repeat",
   "review": {
-    "heardOpening": "Si vous analysez de nouveau ce fichier",
+    "heardOpening": "Si vous analysez de nouveau",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1.2,
         "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
-        "visibleSeconds": 2.2,
-        "visible": "Boîte de dialogue d'importation avec l'option Ignorer cochée, puis clic sur Analyser le fichier",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la fenêtre d'import avec l'option Ignorer cochée, puis clic sur Analyser le fichier",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 4,
         "spoken": "les emails déjà présents sont reconnus",
-        "visibleSeconds": 4.2,
-        "visible": "Affichage du rapport d'analyse indiquant 39 fiches ignorées avec les adresses email associées",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage du rapport d'analyse indiquant 39 fiches déjà présentes ignorées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.2,
+        "spokenSeconds": 6.8,
+        "spoken": "attention aux fiches sans email : le système ne peut pas les rapprocher",
+        "visibleSeconds": 6,
+        "visible": "Dans la liste, la fiche René Meyer apparaît sans email avec l'action créer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
         "spoken": "puis annulez si vous ne souhaitez rien ajouter",
-        "visibleSeconds": 16.6,
-        "visible": "Clic sur le bouton Retour qui ferme la modale sans valider l'importation de la fiche supplémentaire",
+        "visibleSeconds": 16.2,
+        "visible": "Clic sur Annuler pour fermer la fenêtre sans importer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec la manipulation à l'écran."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

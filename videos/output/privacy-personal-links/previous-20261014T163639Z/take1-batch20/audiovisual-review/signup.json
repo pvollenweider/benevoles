@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:16:04.135Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "e5c9d540715375f7dfb8398da077f7112578ccfd4e12e4579439e2d8a94c1d55",
+  "clipSha256": "0dec453513e3f261eb2cc17820abdff566e97386bdb9688e63ebbb93d262f27f",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Jules choisit un créneau et renseigne ses coordonnées",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection du créneau 10h-12h puis affichage du formulaire de coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Il accepte ensuite les conditions du formulaire",
+        "visibleSeconds": 17.5,
+        "visible": "Cochage des cases de consentement et clic sur Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Après l'envoi, l'inscription est enregistrée",
+        "visibleSeconds": 20,
+        "visible": "Affichage d'une page d'erreur 404 (« Cette page est tombée à l'eau ») au lieu de l'écran d'enregistrement annoncé",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 33,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 34,
+        "visible": "Ouverture du client Mailpit montrant l'email Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.5,
+        "spoken": "puis son lien personnel. Nous arrivons sur sa propre inscription",
+        "visibleSeconds": 38,
+        "visible": "Clic sur Gérer mes inscriptions et ouverture de la page Mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:20, la validation du formulaire redirige vers une page d'erreur 404 (« Cette page est tombée à l'eau ») au lieu d'une page confirmant l'inscription."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et posée, bonne qualité audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

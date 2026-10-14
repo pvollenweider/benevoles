@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:10:25.092Z",
+  "videoSha256": "aaa2efea53a808d86c47d512edf477c4e005e4c053397952f16d1001e8e6fabd",
+  "promptSha256": "6e19c1d161c7499ae1618c38b2ba224f29781894ddc9dd7180915fb980f8a331",
+  "clipSha256": "f46b96f702354cdceead809dfa416c976b3b4756d5b3bbf980527c13e566b11f",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Vous utilisez Benevol pour la première fois",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre « Importer ses membres sans repartir de zéro » affiché au centre de la page des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Il peut aussi compléter une liste existante.",
+        "visibleSeconds": 3,
+        "visible": "Disparition du bandeau d'introduction et affichage complet de la liste des membres déjà enregistrés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "créer les membres manuellement avec Nouveau membre.",
+        "visibleSeconds": 19.5,
+        "visible": "Le bouton bleu « + Nouveau membre » est visible en haut à droite du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier et un fond sonore propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:17:05.799Z",
+  "videoSha256": "90eb29fae0e96c720a3279511fa0fab92ab63dc2a2df6857cd0278311a3b9de6",
+  "promptSha256": "a7e87e700c6e1f3caff04e680254553acc25bbf4ccee0ccc40a1c3bfe7d1b65c",
+  "clipSha256": "eb468e06a2be5d87217ede2301185d7b45a333fe0bbedfa112e2ab89732fb3f1",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès destiné à sa mission",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil",
+        "visibleSeconds": 0,
+        "visible": "La vue « Responsable - Accueil » est déjà affichée dès le départ sans montrer l'ouverture du lien",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la liste des bénévoles inscrits avec leurs horaires, e-mails et numéros de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Revenons dans l'administration et retirons ce responsable",
+        "visibleSeconds": 21.5,
+        "visible": "Affichage de l'administration des responsables de secteur, clic sur « Retirer » puis confirmation dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible",
+        "visibleSeconds": 27.2,
+        "visible": "Écran blanc affichant le message « Lien introuvable »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:03, l'action « Ouvrons le lien » n'est pas filmée : l'écran présente déjà la page ouverte depuis 00:00."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, calme, claire et intelligible tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse. Mettre à",
+  "windowStart": 83.537,
+  "result": {
+    "found": true,
+    "startSeconds": 10.6,
+    "wordsHeard": "Avec"
+  },
+  "onset": 94.137,
+  "proposedCut": 94.020729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

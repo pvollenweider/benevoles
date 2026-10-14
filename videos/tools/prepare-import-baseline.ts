@@ -49,7 +49,7 @@ async function main() {
       assert.equal(response.status(), 201, "A real application creation response is mandatory")
       const person = await response.json()
       assert(person.organizationId === "default" && /^[A-Za-z0-9_-]{8,100}$/.test(person.id) && !before.some(member => member.id === person.id) && person.firstName === "René" && person.lastName === "Aubert" && person.email === null && person.phone?.replace(/\s/g, "") === "0790009002", "Actual API response does not match the exact synthetic contact")
-      const file = path.resolve("videos/output/members-management/owned-members-v2.json")
+      const file = path.resolve("videos/output/members-import/baseline-contacts/owned-members-v2.json")
       let members: unknown[] = []
       try {
         const previous = JSON.parse(await readFile(file, "utf8"))

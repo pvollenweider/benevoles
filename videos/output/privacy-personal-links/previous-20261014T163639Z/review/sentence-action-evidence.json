@@ -1,0 +1,2198 @@
+{
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "chapters": [
+    {
+      "chapter": "welcome",
+      "id": "welcome",
+      "startMs": 5,
+      "endMs": 33354,
+      "sentences": [
+        {
+          "text": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe :",
+          "startMs": 241,
+          "endMs": 5460,
+          "method": "silence",
+          "absoluteStartMs": 246
+        },
+        {
+          "text": "ils ne servent pas à la même chose.",
+          "startMs": 5739,
+          "endMs": 7313,
+          "method": "silence",
+          "absoluteStartMs": 5744
+        },
+        {
+          "text": "Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu.",
+          "startMs": 7656,
+          "endMs": 13155,
+          "method": "silence",
+          "absoluteStartMs": 7661
+        },
+        {
+          "text": "Dans notre démonstration, deux organisations ont chacune une Léa Exemple et une fête portant le même identifiant.",
+          "startMs": 13995,
+          "endMs": 18879,
+          "method": "silence",
+          "absoluteStartMs": 14000
+        },
+        {
+          "text": "Les noms se ressemblent, mais les fiches et les adresses sont différentes.",
+          "startMs": 19080,
+          "endMs": 24752,
+          "method": "silence",
+          "absoluteStartMs": 19085
+        },
+        {
+          "text": "Chaque organisation retrouve son propre événement dans son administration.",
+          "startMs": 24896,
+          "endMs": 28604,
+          "method": "silence",
+          "absoluteStartMs": 24901
+        },
+        {
+          "text": "Toutes les personnes et coordonnées utilisées ici sont fictives.",
+          "startMs": 28960,
+          "endMs": 33053,
+          "method": "silence",
+          "absoluteStartMs": 28965
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "welcome",
+          "phrase": "Dans notre démonstration, deux organisations",
+          "startMs": 13995,
+          "endMs": 18879,
+          "cueMs": 14002,
+          "sentenceAbsoluteMs": 14000,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/welcome-1.png",
+            "atMs": 14652
+          }
+        },
+        {
+          "segmentId": "welcome",
+          "phrase": "Les noms se ressemblent, mais",
+          "startMs": 19080,
+          "endMs": 24752,
+          "cueMs": 19087,
+          "sentenceAbsoluteMs": 19085,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/welcome-2.png",
+            "atMs": 19737
+          }
+        },
+        {
+          "segmentId": "welcome",
+          "phrase": "Toutes les personnes et coordonnées",
+          "startMs": 28960,
+          "endMs": 33053,
+          "cueMs": 28965,
+          "sentenceAbsoluteMs": 28965,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/welcome-3.png",
+            "atMs": 29615
+          }
+        }
+      ],
+      "interactions": []
+    },
+    {
+      "chapter": "signup",
+      "id": "signup",
+      "startMs": 35626,
+      "endMs": 77981,
+      "sentences": [
+        {
+          "text": "Le lien public, ou son QR code, sert à découvrir les missions et à s'inscrire.",
+          "startMs": 380,
+          "endMs": 4774,
+          "method": "silence",
+          "absoluteStartMs": 36006
+        },
+        {
+          "text": "Jules choisit un créneau et renseigne ses coordonnées.",
+          "startMs": 5308,
+          "endMs": 8144,
+          "method": "silence",
+          "absoluteStartMs": 40934
+        },
+        {
+          "text": "Prénom, nom, adresse email et téléphone :",
+          "startMs": 8647,
+          "endMs": 11701,
+          "method": "silence",
+          "absoluteStartMs": 44273
+        },
+        {
+          "text": "ces informations permettent à l'organisation de retrouver Jules et de le contacter.",
+          "startMs": 11862,
+          "endMs": 15856,
+          "method": "silence",
+          "absoluteStartMs": 47488
+        },
+        {
+          "text": "Il accepte ensuite les conditions du formulaire.",
+          "startMs": 16298,
+          "endMs": 18860,
+          "method": "silence",
+          "absoluteStartMs": 51924
+        },
+        {
+          "text": "Après l'envoi, l'inscription est enregistrée et un email lui est adressé.",
+          "startMs": 19450,
+          "endMs": 24172,
+          "method": "silence",
+          "absoluteStartMs": 55076
+        },
+        {
+          "text": "Le lien de gestion n'est pas révélé sur cet écran pour une inscription sans invitation.",
+          "startMs": 24636,
+          "endMs": 29290,
+          "method": "silence",
+          "absoluteStartMs": 60262
+        },
+        {
+          "text": "Taper une adresse ne prouve pas qu'on peut lire sa boîte email.",
+          "startMs": 29513,
+          "endMs": 33294,
+          "method": "silence",
+          "absoluteStartMs": 65139
+        },
+        {
+          "text": "Ouvrons donc le vrai message reçu par Jules, puis son lien personnel.",
+          "startMs": 33517,
+          "endMs": 37706,
+          "method": "silence",
+          "absoluteStartMs": 69143
+        },
+        {
+          "text": "Nous arrivons sur sa propre inscription, pas sur la liste de toute l'équipe.",
+          "startMs": 38086,
+          "endMs": 42208,
+          "method": "silence",
+          "absoluteStartMs": 73712
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "signup",
+          "phrase": "Jules choisit un créneau et",
+          "startMs": 5308,
+          "endMs": 8144,
+          "cueMs": 40934,
+          "sentenceAbsoluteMs": 40934,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 41412
+          },
+          "deltaMs": 478,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/signup-1.png",
+            "atMs": 42062
+          }
+        },
+        {
+          "segmentId": "signup",
+          "phrase": "Il accepte ensuite les conditions",
+          "startMs": 16298,
+          "endMs": 18860,
+          "cueMs": 52317,
+          "sentenceAbsoluteMs": 51924,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 52777
+          },
+          "deltaMs": 853,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/signup-2.png",
+            "atMs": 53427
+          }
+        },
+        {
+          "segmentId": "signup",
+          "phrase": "Après l'envoi, l'inscription est enregistrée",
+          "startMs": 19450,
+          "endMs": 24172,
+          "cueMs": 55077,
+          "sentenceAbsoluteMs": 55076,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 55560
+          },
+          "deltaMs": 484,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/signup-3.png",
+            "atMs": 56210
+          }
+        },
+        {
+          "segmentId": "signup",
+          "phrase": "Ouvrons donc le vrai message",
+          "startMs": 33517,
+          "endMs": 37706,
+          "cueMs": 69144,
+          "sentenceAbsoluteMs": 69143,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/signup-4.png",
+            "atMs": 69794
+          }
+        },
+        {
+          "segmentId": "signup",
+          "phrase": "Nous arrivons sur sa propre",
+          "startMs": 38086,
+          "endMs": 42208,
+          "cueMs": 73713,
+          "sentenceAbsoluteMs": 73712,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/signup-5.png",
+            "atMs": 74363
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 41412
+        },
+        {
+          "kind": "click",
+          "atMs": 42194
+        },
+        {
+          "kind": "click",
+          "atMs": 43010
+        },
+        {
+          "kind": "key",
+          "atMs": 43320
+        },
+        {
+          "kind": "key",
+          "atMs": 43321
+        },
+        {
+          "kind": "key",
+          "atMs": 43325
+        },
+        {
+          "kind": "key",
+          "atMs": 43437
+        },
+        {
+          "kind": "key",
+          "atMs": 43551
+        },
+        {
+          "kind": "key",
+          "atMs": 43664
+        },
+        {
+          "kind": "key",
+          "atMs": 43777
+        },
+        {
+          "kind": "click",
+          "atMs": 44394
+        },
+        {
+          "kind": "key",
+          "atMs": 44700
+        },
+        {
+          "kind": "key",
+          "atMs": 44701
+        },
+        {
+          "kind": "key",
+          "atMs": 44703
+        },
+        {
+          "kind": "key",
+          "atMs": 44816
+        },
+        {
+          "kind": "key",
+          "atMs": 44929
+        },
+        {
+          "kind": "key",
+          "atMs": 45043
+        },
+        {
+          "kind": "key",
+          "atMs": 45156
+        },
+        {
+          "kind": "key",
+          "atMs": 45268
+        },
+        {
+          "kind": "key",
+          "atMs": 45382
+        },
+        {
+          "kind": "click",
+          "atMs": 45993
+        },
+        {
+          "kind": "key",
+          "atMs": 46301
+        },
+        {
+          "kind": "key",
+          "atMs": 46301
+        },
+        {
+          "kind": "key",
+          "atMs": 46303
+        },
+        {
+          "kind": "key",
+          "atMs": 46417
+        },
+        {
+          "kind": "key",
+          "atMs": 46529
+        },
+        {
+          "kind": "key",
+          "atMs": 46642
+        },
+        {
+          "kind": "key",
+          "atMs": 46755
+        },
+        {
+          "kind": "key",
+          "atMs": 46868
+        },
+        {
+          "kind": "key",
+          "atMs": 46981
+        },
+        {
+          "kind": "key",
+          "atMs": 47093
+        },
+        {
+          "kind": "key",
+          "atMs": 47206
+        },
+        {
+          "kind": "key",
+          "atMs": 47320
+        },
+        {
+          "kind": "key",
+          "atMs": 47432
+        },
+        {
+          "kind": "key",
+          "atMs": 47546
+        },
+        {
+          "kind": "key",
+          "atMs": 47659
+        },
+        {
+          "kind": "key",
+          "atMs": 47771
+        },
+        {
+          "kind": "key",
+          "atMs": 47884
+        },
+        {
+          "kind": "key",
+          "atMs": 47997
+        },
+        {
+          "kind": "key",
+          "atMs": 48111
+        },
+        {
+          "kind": "key",
+          "atMs": 48223
+        },
+        {
+          "kind": "key",
+          "atMs": 48337
+        },
+        {
+          "kind": "key",
+          "atMs": 48450
+        },
+        {
+          "kind": "key",
+          "atMs": 48562
+        },
+        {
+          "kind": "key",
+          "atMs": 48676
+        },
+        {
+          "kind": "key",
+          "atMs": 48790
+        },
+        {
+          "kind": "key",
+          "atMs": 48903
+        },
+        {
+          "kind": "key",
+          "atMs": 49017
+        },
+        {
+          "kind": "key",
+          "atMs": 49129
+        },
+        {
+          "kind": "key",
+          "atMs": 49243
+        },
+        {
+          "kind": "key",
+          "atMs": 49357
+        },
+        {
+          "kind": "key",
+          "atMs": 49468
+        },
+        {
+          "kind": "key",
+          "atMs": 49582
+        },
+        {
+          "kind": "key",
+          "atMs": 49695
+        },
+        {
+          "kind": "click",
+          "atMs": 50310
+        },
+        {
+          "kind": "key",
+          "atMs": 50617
+        },
+        {
+          "kind": "key",
+          "atMs": 50618
+        },
+        {
+          "kind": "key",
+          "atMs": 50620
+        },
+        {
+          "kind": "key",
+          "atMs": 50733
+        },
+        {
+          "kind": "key",
+          "atMs": 50846
+        },
+        {
+          "kind": "key",
+          "atMs": 50959
+        },
+        {
+          "kind": "key",
+          "atMs": 51073
+        },
+        {
+          "kind": "key",
+          "atMs": 51186
+        },
+        {
+          "kind": "key",
+          "atMs": 51299
+        },
+        {
+          "kind": "key",
+          "atMs": 51412
+        },
+        {
+          "kind": "key",
+          "atMs": 51526
+        },
+        {
+          "kind": "key",
+          "atMs": 51640
+        },
+        {
+          "kind": "key",
+          "atMs": 51754
+        },
+        {
+          "kind": "key",
+          "atMs": 51866
+        },
+        {
+          "kind": "key",
+          "atMs": 51979
+        },
+        {
+          "kind": "key",
+          "atMs": 52093
+        },
+        {
+          "kind": "key",
+          "atMs": 52205
+        },
+        {
+          "kind": "click",
+          "atMs": 52777
+        },
+        {
+          "kind": "click",
+          "atMs": 53561
+        },
+        {
+          "kind": "click",
+          "atMs": 55560
+        }
+      ]
+    },
+    {
+      "chapter": "personal",
+      "id": "personal",
+      "startMs": 80243,
+      "endMs": 113087,
+      "sentences": [
+        {
+          "text": "Sur la page personnelle, Jules retrouve son créneau et les actions prévues pour son inscription.",
+          "startMs": 245,
+          "endMs": 6404,
+          "method": "silence",
+          "absoluteStartMs": 80488
+        },
+        {
+          "text": "Le panneau Ton lien personnel rappelle à quoi sert cet accès.",
+          "startMs": 6694,
+          "endMs": 9512,
+          "method": "silence",
+          "absoluteStartMs": 86937
+        },
+        {
+          "text": "Gardons ce lien pour son destinataire :",
+          "startMs": 10068,
+          "endMs": 12510,
+          "method": "silence",
+          "absoluteStartMs": 90311
+        },
+        {
+          "text": "une personne qui le reçoit peut accéder à la page correspondante.",
+          "startMs": 13050,
+          "endMs": 16080,
+          "method": "silence",
+          "absoluteStartMs": 93293
+        },
+        {
+          "text": "Ce n'est pas le lien public de recrutement.",
+          "startMs": 16296,
+          "endMs": 18632,
+          "method": "silence",
+          "absoluteStartMs": 96539
+        },
+        {
+          "text": "Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu.",
+          "startMs": 18969,
+          "endMs": 23489,
+          "method": "silence",
+          "absoluteStartMs": 99212
+        },
+        {
+          "text": "Cette action renvoie l'accès ;",
+          "startMs": 23798,
+          "endMs": 24578,
+          "method": "silence",
+          "absoluteStartMs": 104041
+        },
+        {
+          "text": "elle ne crée pas une deuxième inscription.",
+          "startMs": 24706,
+          "endMs": 27662,
+          "method": "silence",
+          "absoluteStartMs": 104949
+        },
+        {
+          "text": "Pour inviter des amis à participer, partagez plutôt la page publique de l'événement.",
+          "startMs": 28019,
+          "endMs": 32519,
+          "method": "silence",
+          "absoluteStartMs": 108262
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "personal",
+          "phrase": "Le panneau Ton lien personnel",
+          "startMs": 6694,
+          "endMs": 9512,
+          "cueMs": 86938,
+          "sentenceAbsoluteMs": 86937,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 99683
+          },
+          "deltaMs": 12746,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/personal-1.png",
+            "atMs": 100333
+          }
+        },
+        {
+          "segmentId": "personal",
+          "phrase": "Utilisons Recevoir ce lien par",
+          "startMs": 18969,
+          "endMs": 23489,
+          "cueMs": 99213,
+          "sentenceAbsoluteMs": 99212,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 99683
+          },
+          "deltaMs": 471,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/personal-2.png",
+            "atMs": 100333
+          }
+        },
+        {
+          "segmentId": "personal",
+          "phrase": "Cette action renvoie l'accès ",
+          "startMs": 23798,
+          "endMs": 24578,
+          "cueMs": 104042,
+          "sentenceAbsoluteMs": 104041,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/personal-3.png",
+            "atMs": 104692
+          }
+        },
+        {
+          "segmentId": "personal",
+          "phrase": "Pour inviter des amis à",
+          "startMs": 28019,
+          "endMs": 32519,
+          "cueMs": 108263,
+          "sentenceAbsoluteMs": 108262,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/personal-4.png",
+            "atMs": 108913
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 99683
+        }
+      ]
+    },
+    {
+      "chapter": "recovery",
+      "id": "recovery",
+      "startMs": 115358,
+      "endMs": 152624,
+      "sentences": [
+        {
+          "text": "Le lien est perdu ?",
+          "startMs": 260,
+          "endMs": 1608,
+          "method": "silence",
+          "absoluteStartMs": 115618
+        },
+        {
+          "text": "Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription.",
+          "startMs": 2219,
+          "endMs": 5912,
+          "method": "silence",
+          "absoluteStartMs": 117577
+        },
+        {
+          "text": "La réponse indique quoi faire ensuite, sans afficher de coordonnées ni de lien personnel.",
+          "startMs": 6520,
+          "endMs": 10814,
+          "method": "silence",
+          "absoluteStartMs": 121878
+        },
+        {
+          "text": "Vérifions le message reçu dans la boîte de Léa.",
+          "startMs": 11420,
+          "endMs": 13642,
+          "method": "silence",
+          "absoluteStartMs": 126778
+        },
+        {
+          "text": "Recommençons avec une adresse fictive inconnue :",
+          "startMs": 14583,
+          "endMs": 17045,
+          "method": "silence",
+          "absoluteStartMs": 129941
+        },
+        {
+          "text": "la réponse affichée reste la même.",
+          "startMs": 17946,
+          "endMs": 19500,
+          "method": "silence",
+          "absoluteStartMs": 133304
+        },
+        {
+          "text": "Enfin, demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B.",
+          "startMs": 19931,
+          "endMs": 25842,
+          "method": "silence",
+          "absoluteStartMs": 135289
+        },
+        {
+          "text": "La réponse ne révèle pas cette autre fiche et aucun email de B n'est envoyé.",
+          "startMs": 26461,
+          "endMs": 28746,
+          "method": "silence",
+          "absoluteStartMs": 141819
+        },
+        {
+          "text": "Si vous ne recevez rien, vérifiez votre adresse et les courriers indésirables, puis contactez l'organisation au besoin.",
+          "startMs": 28899,
+          "endMs": 36832,
+          "method": "silence",
+          "absoluteStartMs": 144257
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "recovery",
+          "phrase": "Depuis la page de récupération",
+          "startMs": 2219,
+          "endMs": 5912,
+          "cueMs": 117578,
+          "sentenceAbsoluteMs": 117577,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 118095
+          },
+          "deltaMs": 518,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/recovery-1.png",
+            "atMs": 118745
+          }
+        },
+        {
+          "segmentId": "recovery",
+          "phrase": "Vérifions le message reçu dans",
+          "startMs": 11420,
+          "endMs": 13642,
+          "cueMs": 126779,
+          "sentenceAbsoluteMs": 126778,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 131545
+          },
+          "deltaMs": 4767,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/recovery-2.png",
+            "atMs": 132195
+          }
+        },
+        {
+          "segmentId": "recovery",
+          "phrase": "Recommençons avec une adresse fictive",
+          "startMs": 14583,
+          "endMs": 17045,
+          "cueMs": 129942,
+          "sentenceAbsoluteMs": 129941,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 131545
+          },
+          "deltaMs": 1604,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/recovery-3.png",
+            "atMs": 132195
+          }
+        },
+        {
+          "segmentId": "recovery",
+          "phrase": "Enfin, demandons depuis l'organisation A",
+          "startMs": 19931,
+          "endMs": 25842,
+          "cueMs": 135290,
+          "sentenceAbsoluteMs": 135289,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 136893
+          },
+          "deltaMs": 1604,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/recovery-4.png",
+            "atMs": 137543
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 118095
+        },
+        {
+          "kind": "key",
+          "atMs": 118401
+        },
+        {
+          "kind": "key",
+          "atMs": 118401
+        },
+        {
+          "kind": "key",
+          "atMs": 118404
+        },
+        {
+          "kind": "key",
+          "atMs": 118426
+        },
+        {
+          "kind": "key",
+          "atMs": 118449
+        },
+        {
+          "kind": "key",
+          "atMs": 118470
+        },
+        {
+          "kind": "key",
+          "atMs": 118492
+        },
+        {
+          "kind": "key",
+          "atMs": 118514
+        },
+        {
+          "kind": "key",
+          "atMs": 118536
+        },
+        {
+          "kind": "key",
+          "atMs": 118559
+        },
+        {
+          "kind": "key",
+          "atMs": 118580
+        },
+        {
+          "kind": "key",
+          "atMs": 118602
+        },
+        {
+          "kind": "key",
+          "atMs": 118625
+        },
+        {
+          "kind": "key",
+          "atMs": 118647
+        },
+        {
+          "kind": "key",
+          "atMs": 118669
+        },
+        {
+          "kind": "key",
+          "atMs": 118691
+        },
+        {
+          "kind": "key",
+          "atMs": 118714
+        },
+        {
+          "kind": "key",
+          "atMs": 118736
+        },
+        {
+          "kind": "key",
+          "atMs": 118758
+        },
+        {
+          "kind": "key",
+          "atMs": 118779
+        },
+        {
+          "kind": "key",
+          "atMs": 118801
+        },
+        {
+          "kind": "key",
+          "atMs": 118824
+        },
+        {
+          "kind": "key",
+          "atMs": 118846
+        },
+        {
+          "kind": "key",
+          "atMs": 118868
+        },
+        {
+          "kind": "key",
+          "atMs": 118890
+        },
+        {
+          "kind": "key",
+          "atMs": 118912
+        },
+        {
+          "kind": "key",
+          "atMs": 118934
+        },
+        {
+          "kind": "key",
+          "atMs": 118956
+        },
+        {
+          "kind": "key",
+          "atMs": 118979
+        },
+        {
+          "kind": "key",
+          "atMs": 119000
+        },
+        {
+          "kind": "key",
+          "atMs": 119023
+        },
+        {
+          "kind": "key",
+          "atMs": 119044
+        },
+        {
+          "kind": "key",
+          "atMs": 119065
+        },
+        {
+          "kind": "key",
+          "atMs": 119087
+        },
+        {
+          "kind": "key",
+          "atMs": 119109
+        },
+        {
+          "kind": "key",
+          "atMs": 119131
+        },
+        {
+          "kind": "key",
+          "atMs": 119153
+        },
+        {
+          "kind": "key",
+          "atMs": 119175
+        },
+        {
+          "kind": "click",
+          "atMs": 119678
+        },
+        {
+          "kind": "click",
+          "atMs": 131545
+        },
+        {
+          "kind": "key",
+          "atMs": 131851
+        },
+        {
+          "kind": "key",
+          "atMs": 131852
+        },
+        {
+          "kind": "key",
+          "atMs": 131855
+        },
+        {
+          "kind": "key",
+          "atMs": 131878
+        },
+        {
+          "kind": "key",
+          "atMs": 131899
+        },
+        {
+          "kind": "key",
+          "atMs": 131921
+        },
+        {
+          "kind": "key",
+          "atMs": 131943
+        },
+        {
+          "kind": "key",
+          "atMs": 131966
+        },
+        {
+          "kind": "key",
+          "atMs": 131988
+        },
+        {
+          "kind": "key",
+          "atMs": 132010
+        },
+        {
+          "kind": "key",
+          "atMs": 132032
+        },
+        {
+          "kind": "key",
+          "atMs": 132053
+        },
+        {
+          "kind": "key",
+          "atMs": 132075
+        },
+        {
+          "kind": "key",
+          "atMs": 132097
+        },
+        {
+          "kind": "key",
+          "atMs": 132119
+        },
+        {
+          "kind": "key",
+          "atMs": 132142
+        },
+        {
+          "kind": "key",
+          "atMs": 132164
+        },
+        {
+          "kind": "key",
+          "atMs": 132186
+        },
+        {
+          "kind": "key",
+          "atMs": 132208
+        },
+        {
+          "kind": "key",
+          "atMs": 132230
+        },
+        {
+          "kind": "key",
+          "atMs": 132253
+        },
+        {
+          "kind": "key",
+          "atMs": 132276
+        },
+        {
+          "kind": "key",
+          "atMs": 132297
+        },
+        {
+          "kind": "key",
+          "atMs": 132319
+        },
+        {
+          "kind": "key",
+          "atMs": 132341
+        },
+        {
+          "kind": "key",
+          "atMs": 132363
+        },
+        {
+          "kind": "key",
+          "atMs": 132386
+        },
+        {
+          "kind": "key",
+          "atMs": 132408
+        },
+        {
+          "kind": "key",
+          "atMs": 132431
+        },
+        {
+          "kind": "key",
+          "atMs": 132451
+        },
+        {
+          "kind": "key",
+          "atMs": 132473
+        },
+        {
+          "kind": "key",
+          "atMs": 132496
+        },
+        {
+          "kind": "key",
+          "atMs": 132517
+        },
+        {
+          "kind": "key",
+          "atMs": 132539
+        },
+        {
+          "kind": "key",
+          "atMs": 132561
+        },
+        {
+          "kind": "click",
+          "atMs": 133044
+        },
+        {
+          "kind": "click",
+          "atMs": 136893
+        },
+        {
+          "kind": "key",
+          "atMs": 137198
+        },
+        {
+          "kind": "key",
+          "atMs": 137199
+        },
+        {
+          "kind": "key",
+          "atMs": 137201
+        },
+        {
+          "kind": "key",
+          "atMs": 137223
+        },
+        {
+          "kind": "key",
+          "atMs": 137245
+        },
+        {
+          "kind": "key",
+          "atMs": 137266
+        },
+        {
+          "kind": "key",
+          "atMs": 137288
+        },
+        {
+          "kind": "key",
+          "atMs": 137311
+        },
+        {
+          "kind": "key",
+          "atMs": 137331
+        },
+        {
+          "kind": "key",
+          "atMs": 137353
+        },
+        {
+          "kind": "key",
+          "atMs": 137375
+        },
+        {
+          "kind": "key",
+          "atMs": 137398
+        },
+        {
+          "kind": "key",
+          "atMs": 137421
+        },
+        {
+          "kind": "key",
+          "atMs": 137443
+        },
+        {
+          "kind": "key",
+          "atMs": 137464
+        },
+        {
+          "kind": "key",
+          "atMs": 137486
+        },
+        {
+          "kind": "key",
+          "atMs": 137508
+        },
+        {
+          "kind": "key",
+          "atMs": 137530
+        },
+        {
+          "kind": "key",
+          "atMs": 137553
+        },
+        {
+          "kind": "key",
+          "atMs": 137575
+        },
+        {
+          "kind": "key",
+          "atMs": 137597
+        },
+        {
+          "kind": "key",
+          "atMs": 137617
+        },
+        {
+          "kind": "key",
+          "atMs": 137639
+        },
+        {
+          "kind": "key",
+          "atMs": 137661
+        },
+        {
+          "kind": "key",
+          "atMs": 137683
+        },
+        {
+          "kind": "key",
+          "atMs": 137705
+        },
+        {
+          "kind": "key",
+          "atMs": 137728
+        },
+        {
+          "kind": "key",
+          "atMs": 137749
+        },
+        {
+          "kind": "key",
+          "atMs": 137771
+        },
+        {
+          "kind": "key",
+          "atMs": 137792
+        },
+        {
+          "kind": "key",
+          "atMs": 137814
+        },
+        {
+          "kind": "key",
+          "atMs": 137836
+        },
+        {
+          "kind": "key",
+          "atMs": 137857
+        },
+        {
+          "kind": "key",
+          "atMs": 137879
+        },
+        {
+          "kind": "key",
+          "atMs": 137902
+        },
+        {
+          "kind": "key",
+          "atMs": 137924
+        },
+        {
+          "kind": "key",
+          "atMs": 137947
+        },
+        {
+          "kind": "key",
+          "atMs": 137968
+        },
+        {
+          "kind": "click",
+          "atMs": 138459
+        }
+      ]
+    },
+    {
+      "chapter": "invitation",
+      "id": "invitation",
+      "startMs": 154893,
+      "endMs": 183986,
+      "sentences": [
+        {
+          "text": "Une invitation nominative est différente d'un lien public.",
+          "startMs": 434,
+          "endMs": 3367,
+          "method": "silence",
+          "absoluteStartMs": 155327
+        },
+        {
+          "text": "L'organisation l'envoie à Zoé, puis nous ouvrons le vrai email reçu.",
+          "startMs": 3726,
+          "endMs": 7683,
+          "method": "silence",
+          "absoluteStartMs": 158619
+        },
+        {
+          "text": "Son lien conduit au formulaire avec les informations prévues pour cette invitation.",
+          "startMs": 8577,
+          "endMs": 12327,
+          "method": "silence",
+          "absoluteStartMs": 163470
+        },
+        {
+          "text": "Cela facilite l'inscription de la personne concernée ;",
+          "startMs": 13067,
+          "endMs": 15514,
+          "method": "silence",
+          "absoluteStartMs": 167960
+        },
+        {
+          "text": "ce n'est pas une affiche à diffuser à tout le monde.",
+          "startMs": 15749,
+          "endMs": 17680,
+          "method": "silence",
+          "absoluteStartMs": 170642
+        },
+        {
+          "text": "Vérifions le prénom, l'adresse et le créneau avant de continuer.",
+          "startMs": 18502,
+          "endMs": 21840,
+          "method": "silence",
+          "absoluteStartMs": 173395
+        },
+        {
+          "text": "Si vous recrutez largement, utilisez le lien public ou le QR code public, pas l'invitation adressée à une autre personne.",
+          "startMs": 22497,
+          "endMs": 28784,
+          "method": "silence",
+          "absoluteStartMs": 177390
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "invitation",
+          "phrase": "L'organisation l'envoie à Zoé, puis",
+          "startMs": 3726,
+          "endMs": 7683,
+          "cueMs": 158621,
+          "sentenceAbsoluteMs": 158619,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 159098
+          },
+          "deltaMs": 479,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/invitation-1.png",
+            "atMs": 159748
+          }
+        },
+        {
+          "segmentId": "invitation",
+          "phrase": "Son lien conduit au formulaire",
+          "startMs": 8577,
+          "endMs": 12327,
+          "cueMs": 163470,
+          "sentenceAbsoluteMs": 163470,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 165060
+          },
+          "deltaMs": 1590,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/invitation-2.png",
+            "atMs": 165710
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 159098
+        },
+        {
+          "kind": "click",
+          "atMs": 159882
+        },
+        {
+          "kind": "click",
+          "atMs": 160664
+        },
+        {
+          "kind": "click",
+          "atMs": 165060
+        },
+        {
+          "kind": "click",
+          "atMs": 165841
+        }
+      ]
+    },
+    {
+      "chapter": "leader",
+      "id": "leader",
+      "startMs": 186244,
+      "endMs": 217586,
+      "sentences": [
+        {
+          "text": "Le responsable a lui aussi un accès destiné à sa mission.",
+          "startMs": 332,
+          "endMs": 3132,
+          "method": "silence",
+          "absoluteStartMs": 186576
+        },
+        {
+          "text": "Ouvrons le lien de Camille, responsable de l'accueil.",
+          "startMs": 3752,
+          "endMs": 6148,
+          "method": "silence",
+          "absoluteStartMs": 189996
+        },
+        {
+          "text": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter.",
+          "startMs": 6642,
+          "endMs": 11113,
+          "method": "silence",
+          "absoluteStartMs": 192886
+        },
+        {
+          "text": "Les personnes de la logistique et de l'autre organisation ne sont pas dans cette équipe.",
+          "startMs": 11911,
+          "endMs": 15753,
+          "method": "silence",
+          "absoluteStartMs": 198155
+        },
+        {
+          "text": "Ce lien donne accès à des informations opérationnelles :",
+          "startMs": 16214,
+          "endMs": 18677,
+          "method": "silence",
+          "absoluteStartMs": 202458
+        },
+        {
+          "text": "ne le publiez pas sur une affiche.",
+          "startMs": 18942,
+          "endMs": 20466,
+          "method": "silence",
+          "absoluteStartMs": 205186
+        },
+        {
+          "text": "Revenons dans l'administration et retirons ce responsable.",
+          "startMs": 21066,
+          "endMs": 23893,
+          "method": "silence",
+          "absoluteStartMs": 207310
+        },
+        {
+          "text": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+          "startMs": 24557,
+          "endMs": 27418,
+          "method": "silence",
+          "absoluteStartMs": 210801
+        },
+        {
+          "text": "Cela permet de retirer cet accès quand la responsabilité prend fin.",
+          "startMs": 27937,
+          "endMs": 31016,
+          "method": "silence",
+          "absoluteStartMs": 214181
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "leader",
+          "phrase": "Ouvrons le lien de Camille",
+          "startMs": 3752,
+          "endMs": 6148,
+          "cueMs": 189996,
+          "sentenceAbsoluteMs": 189996,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 208932
+          },
+          "deltaMs": 18936,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/leader-1.png",
+            "atMs": 209582
+          }
+        },
+        {
+          "segmentId": "leader",
+          "phrase": "Il voit les bénévoles de",
+          "startMs": 6642,
+          "endMs": 11113,
+          "cueMs": 192886,
+          "sentenceAbsoluteMs": 192886,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 208932
+          },
+          "deltaMs": 16046,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/leader-2.png",
+            "atMs": 209582
+          }
+        },
+        {
+          "segmentId": "leader",
+          "phrase": "Revenons dans l'administration et retirons",
+          "startMs": 21066,
+          "endMs": 23893,
+          "cueMs": 207310,
+          "sentenceAbsoluteMs": 207310,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 208932
+          },
+          "deltaMs": 1622,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/leader-3.png",
+            "atMs": 209582
+          }
+        },
+        {
+          "segmentId": "leader",
+          "phrase": "En rouvrant son ancien lien",
+          "startMs": 24557,
+          "endMs": 27418,
+          "cueMs": 210801,
+          "sentenceAbsoluteMs": 210801,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 211264
+          },
+          "deltaMs": 463,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/leader-4.png",
+            "atMs": 211914
+          }
+        },
+        {
+          "segmentId": "leader",
+          "phrase": "Cela permet de retirer cet",
+          "startMs": 27937,
+          "endMs": 31016,
+          "cueMs": 214181,
+          "sentenceAbsoluteMs": 214181,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/leader-5.png",
+            "atMs": 214831
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 208932
+        },
+        {
+          "kind": "click",
+          "atMs": 211264
+        }
+      ]
+    },
+    {
+      "chapter": "admin",
+      "id": "admin",
+      "startMs": 219850,
+      "endMs": 256594,
+      "sentences": [
+        {
+          "text": "L'organisateur travaille dans son administration, avec sa propre connexion.",
+          "startMs": 333,
+          "endMs": 4073,
+          "method": "silence",
+          "absoluteStartMs": 220183
+        },
+        {
+          "text": "Dans les inscriptions, il retrouve les personnes et les réponses aux questions de l'événement.",
+          "startMs": 5022,
+          "endMs": 8889,
+          "method": "silence",
+          "absoluteStartMs": 224872
+        },
+        {
+          "text": "Dans les membres, il peut consulter les disponibilités et les notes internes de préparation.",
+          "startMs": 9831,
+          "endMs": 14077,
+          "method": "silence",
+          "absoluteStartMs": 229681
+        },
+        {
+          "text": "Regardons la fiche de Léa, puis comparons avec les deux vues précédentes.",
+          "startMs": 14778,
+          "endMs": 18398,
+          "method": "silence",
+          "absoluteStartMs": 234628
+        },
+        {
+          "text": "Sa page personnelle ne montre pas les notes internes.",
+          "startMs": 19026,
+          "endMs": 21353,
+          "method": "silence",
+          "absoluteStartMs": 238876
+        },
+        {
+          "text": "Le responsable reçoit les contacts de son équipe, pas la fiche membre complète.",
+          "startMs": 21876,
+          "endMs": 25920,
+          "method": "silence",
+          "absoluteStartMs": 241726
+        },
+        {
+          "text": "Avant de transmettre une information, demandez-vous qui en a besoin et pour quelle tâche.",
+          "startMs": 26953,
+          "endMs": 31533,
+          "method": "silence",
+          "absoluteStartMs": 246803
+        },
+        {
+          "text": "Une note utile à l'organisation n'a pas forcément sa place dans un document distribué.",
+          "startMs": 32273,
+          "endMs": 36387,
+          "method": "silence",
+          "absoluteStartMs": 252123
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "admin",
+          "phrase": "Dans les inscriptions, il retrouve",
+          "startMs": 5022,
+          "endMs": 8889,
+          "cueMs": 224873,
+          "sentenceAbsoluteMs": 224872,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 235127
+          },
+          "deltaMs": 10255,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-1.png",
+            "atMs": 235777
+          }
+        },
+        {
+          "segmentId": "admin",
+          "phrase": "Dans les membres, il peut",
+          "startMs": 9831,
+          "endMs": 14077,
+          "cueMs": 229682,
+          "sentenceAbsoluteMs": 229681,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 235127
+          },
+          "deltaMs": 5446,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-2.png",
+            "atMs": 235777
+          }
+        },
+        {
+          "segmentId": "admin",
+          "phrase": "Regardons la fiche de Léa",
+          "startMs": 14778,
+          "endMs": 18398,
+          "cueMs": 234629,
+          "sentenceAbsoluteMs": 234628,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 235127
+          },
+          "deltaMs": 499,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-3.png",
+            "atMs": 235777
+          }
+        },
+        {
+          "segmentId": "admin",
+          "phrase": "Sa page personnelle ne montre",
+          "startMs": 19026,
+          "endMs": 21353,
+          "cueMs": 238880,
+          "sentenceAbsoluteMs": 238876,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 239342
+          },
+          "deltaMs": 466,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-4.png",
+            "atMs": 239992
+          }
+        },
+        {
+          "segmentId": "admin",
+          "phrase": "Le responsable reçoit les contacts",
+          "startMs": 21876,
+          "endMs": 25920,
+          "cueMs": 241727,
+          "sentenceAbsoluteMs": 241726,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-5.png",
+            "atMs": 242377
+          }
+        },
+        {
+          "segmentId": "admin",
+          "phrase": "Avant de transmettre une information",
+          "startMs": 26953,
+          "endMs": 31533,
+          "cueMs": 246804,
+          "sentenceAbsoluteMs": 246803,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/admin-6.png",
+            "atMs": 247454
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 235127
+        },
+        {
+          "kind": "click",
+          "atMs": 239342
+        }
+      ]
+    },
+    {
+      "chapter": "legal",
+      "id": "legal",
+      "startMs": 258860,
+      "endMs": 293448,
+      "sentences": [
+        {
+          "text": "Les informations publiques se trouvent aussi dans le pied de page.",
+          "startMs": 357,
+          "endMs": 3939,
+          "method": "silence",
+          "absoluteStartMs": 259217
+        },
+        {
+          "text": "Ouvrons Confidentialité.",
+          "startMs": 4322,
+          "endMs": 5100,
+          "method": "silence",
+          "absoluteStartMs": 263182
+        },
+        {
+          "text": "Cette page décrit les usages annoncés et les destinataires des données.",
+          "startMs": 5617,
+          "endMs": 8897,
+          "method": "silence",
+          "absoluteStartMs": 264477
+        },
+        {
+          "text": "Repérons aussi les indications de conservation et les moyens de contact.",
+          "startMs": 9491,
+          "endMs": 12904,
+          "method": "silence",
+          "absoluteStartMs": 268351
+        },
+        {
+          "text": "Pour une question ou une demande concernant les données, appuyez-vous sur ces informations et sur l'organisation concernée.",
+          "startMs": 13851,
+          "endMs": 19261,
+          "method": "silence",
+          "absoluteStartMs": 272711
+        },
+        {
+          "text": "Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre.",
+          "startMs": 20020,
+          "endMs": 23203,
+          "method": "silence",
+          "absoluteStartMs": 278880
+        },
+        {
+          "text": "Cette vidéo explique les gestes dans l'outil ;",
+          "startMs": 23918,
+          "endMs": 26204,
+          "method": "silence",
+          "absoluteStartMs": 282778
+        },
+        {
+          "text": "elle ne remplace pas une lecture des textes actuels ni un avis juridique.",
+          "startMs": 26355,
+          "endMs": 29510,
+          "method": "silence",
+          "absoluteStartMs": 285215
+        },
+        {
+          "text": "Il n'existe pas un délai de conservation unique à appliquer sans regarder le contexte.",
+          "startMs": 30269,
+          "endMs": 34209,
+          "method": "silence",
+          "absoluteStartMs": 289129
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "legal",
+          "phrase": "Ouvrons Confidentialité.",
+          "startMs": 4322,
+          "endMs": 5100,
+          "cueMs": 263184,
+          "sentenceAbsoluteMs": 263182,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 263691
+          },
+          "deltaMs": 509,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/legal-1.png",
+            "atMs": 264341
+          }
+        },
+        {
+          "segmentId": "legal",
+          "phrase": "Repérons aussi les indications de",
+          "startMs": 9491,
+          "endMs": 12904,
+          "cueMs": 268357,
+          "sentenceAbsoluteMs": 268351,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 280519
+          },
+          "deltaMs": 12168,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/legal-2.png",
+            "atMs": 281169
+          }
+        },
+        {
+          "segmentId": "legal",
+          "phrase": "Pour une question ou une",
+          "startMs": 13851,
+          "endMs": 19261,
+          "cueMs": 272712,
+          "sentenceAbsoluteMs": 272711,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 280519
+          },
+          "deltaMs": 7808,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/legal-3.png",
+            "atMs": 281169
+          }
+        },
+        {
+          "segmentId": "legal",
+          "phrase": "Ouvrons maintenant les conditions d'utilisation",
+          "startMs": 20020,
+          "endMs": 23203,
+          "cueMs": 278881,
+          "sentenceAbsoluteMs": 278880,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 280519
+          },
+          "deltaMs": 1639,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/legal-4.png",
+            "atMs": 281169
+          }
+        },
+        {
+          "segmentId": "legal",
+          "phrase": "elle ne remplace pas une",
+          "startMs": 26355,
+          "endMs": 29510,
+          "cueMs": 285216,
+          "sentenceAbsoluteMs": 285215,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/legal-5.png",
+            "atMs": 285866
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 263691
+        },
+        {
+          "kind": "click",
+          "atMs": 280519
+        }
+      ]
+    },
+    {
+      "chapter": "copies",
+      "id": "copies",
+      "startMs": 295708,
+      "endMs": 326305,
+      "sentences": [
+        {
+          "text": "Sur le terrain, une liste bien choisie peut suffire.",
+          "startMs": 381,
+          "endMs": 2941,
+          "method": "silence",
+          "absoluteStartMs": 296089
+        },
+        {
+          "text": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+          "startMs": 3598,
+          "endMs": 7245,
+          "method": "silence",
+          "absoluteStartMs": 299306
+        },
+        {
+          "text": "Comparons-le au CSV des membres :",
+          "startMs": 7914,
+          "endMs": 9610,
+          "method": "silence",
+          "absoluteStartMs": 303622
+        },
+        {
+          "text": "ce fichier comporte notamment des coordonnées et des notes internes.",
+          "startMs": 10121,
+          "endMs": 13140,
+          "method": "silence",
+          "absoluteStartMs": 305829
+        },
+        {
+          "text": "Il n'est donc pas à remettre indistinctement à toute l'équipe.",
+          "startMs": 13715,
+          "endMs": 16311,
+          "method": "silence",
+          "absoluteStartMs": 309423
+        },
+        {
+          "text": "Choisissez le document adapté à la personne qui en a besoin, rangez-le dans un espace protégé et limitez les copies.",
+          "startMs": 16934,
+          "endMs": 21416,
+          "method": "silence",
+          "absoluteStartMs": 312642
+        },
+        {
+          "text": "Un fichier téléchargé reste une photographie du moment :",
+          "startMs": 21594,
+          "endMs": 25457,
+          "method": "silence",
+          "absoluteStartMs": 317302
+        },
+        {
+          "text": "il ne se met pas à jour quand le planning change.",
+          "startMs": 25776,
+          "endMs": 27718,
+          "method": "silence",
+          "absoluteStartMs": 321484
+        },
+        {
+          "text": "Pensez aussi aux anciennes copies devenues inutiles.",
+          "startMs": 28328,
+          "endMs": 30195,
+          "method": "silence",
+          "absoluteStartMs": 324036
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "copies",
+          "phrase": "Ouvrons le rapport prévu pour",
+          "startMs": 3598,
+          "endMs": 7245,
+          "cueMs": 299307,
+          "sentenceAbsoluteMs": 299306,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 299782
+          },
+          "deltaMs": 476,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/copies-1.png",
+            "atMs": 300432
+          }
+        },
+        {
+          "segmentId": "copies",
+          "phrase": "ce fichier comporte notamment des",
+          "startMs": 10121,
+          "endMs": 13140,
+          "cueMs": 305829,
+          "sentenceAbsoluteMs": 305829,
+          "firstInputAfterAnchor": {
+            "kind": "click",
+            "atMs": 307498
+          },
+          "deltaMs": 1669,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/copies-2.png",
+            "atMs": 308148
+          }
+        },
+        {
+          "segmentId": "copies",
+          "phrase": "Il n'est donc pas à",
+          "startMs": 13715,
+          "endMs": 16311,
+          "cueMs": 309423,
+          "sentenceAbsoluteMs": 309423,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/copies-3.png",
+            "atMs": 310073
+          }
+        },
+        {
+          "segmentId": "copies",
+          "phrase": "Choisissez le document adapté à",
+          "startMs": 16934,
+          "endMs": 21416,
+          "cueMs": 312642,
+          "sentenceAbsoluteMs": 312642,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/copies-4.png",
+            "atMs": 313292
+          }
+        }
+      ],
+      "interactions": [
+        {
+          "kind": "click",
+          "atMs": 299782
+        },
+        {
+          "kind": "click",
+          "atMs": 307498
+        }
+      ]
+    },
+    {
+      "chapter": "result",
+      "id": "result",
+      "startMs": 329689,
+      "endMs": 361404,
+      "sentences": [
+        {
+          "text": "Revenons à la page personnelle et à son avertissement.",
+          "startMs": 403,
+          "endMs": 2538,
+          "method": "silence",
+          "absoluteStartMs": 330092
+        },
+        {
+          "text": "Pour recruter, partagez la page publique.",
+          "startMs": 3110,
+          "endMs": 5066,
+          "method": "silence",
+          "absoluteStartMs": 332799
+        },
+        {
+          "text": "Pour gérer une inscription, gardez le lien personnel pour son destinataire.",
+          "startMs": 5617,
+          "endMs": 8971,
+          "method": "silence",
+          "absoluteStartMs": 335306
+        },
+        {
+          "text": "Pour coordonner un poste, remettez le lien du responsable à la personne désignée.",
+          "startMs": 9536,
+          "endMs": 13481,
+          "method": "silence",
+          "absoluteStartMs": 339225
+        },
+        {
+          "text": "Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler.",
+          "startMs": 14206,
+          "endMs": 18966,
+          "method": "silence",
+          "absoluteStartMs": 343895
+        },
+        {
+          "text": "Et avant d'envoyer un document, vérifiez son contenu et ses destinataires.",
+          "startMs": 19450,
+          "endMs": 24363,
+          "method": "silence",
+          "absoluteStartMs": 349139
+        },
+        {
+          "text": "Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+          "startMs": 24757,
+          "endMs": 31381,
+          "method": "silence",
+          "absoluteStartMs": 354446
+        }
+      ],
+      "anchors": [
+        {
+          "segmentId": "result",
+          "phrase": "Pour recruter, partagez la page",
+          "startMs": 3110,
+          "endMs": 5066,
+          "cueMs": 332800,
+          "sentenceAbsoluteMs": 332799,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/result-1.png",
+            "atMs": 333450
+          }
+        },
+        {
+          "segmentId": "result",
+          "phrase": "Pour gérer une inscription, gardez",
+          "startMs": 5617,
+          "endMs": 8971,
+          "cueMs": 335307,
+          "sentenceAbsoluteMs": 335306,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/result-2.png",
+            "atMs": 335957
+          }
+        },
+        {
+          "segmentId": "result",
+          "phrase": "Pour coordonner un poste, remettez",
+          "startMs": 9536,
+          "endMs": 13481,
+          "cueMs": 339227,
+          "sentenceAbsoluteMs": 339225,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/result-3.png",
+            "atMs": 339877
+          }
+        },
+        {
+          "segmentId": "result",
+          "phrase": "Si un accès a été",
+          "startMs": 14206,
+          "endMs": 18966,
+          "cueMs": 343896,
+          "sentenceAbsoluteMs": 343895,
+          "firstInputAfterAnchor": null,
+          "deltaMs": null,
+          "frame": {
+            "file": "/private/tmp/codex-video/videos/output/privacy-personal-links/review/anchors/result-4.png",
+            "atMs": 344546
+          }
+        }
+      ],
+      "interactions": []
+    }
+  ]
+}

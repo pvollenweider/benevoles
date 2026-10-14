@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:47:10.233Z",
-  "videoSha256": "83bdcd1cb1e4510a5ce406f7ba36104cf3c2f30dbda9294076b03154e6d6810b",
-  "promptSha256": "e48fa031ec7bed615b7c66eaf2d2c8018aca989778904a168cb4ccaab0b7499d",
-  "clipSha256": "24070d8b2122431d3e4b767171f81e82e08434923d7d54606bac8d5dc7d09bd7",
+  "reviewedAt": "2026-10-14T16:42:39.947Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
+  "promptSha256": "2740fe833c72dc345bbe43f92474132f43c09ed07a36c07027b4a73ee84301cd",
+  "clipSha256": "673c439abe316ee1035941677f3d697f79053ef25ddbd45a5c2005ba1f751364",
   "scene": "result",
   "review": {
-    "heardOpening": "Ta liste est prête à être utilisée",
+    "heardOpening": "Votre liste est prête",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Ta liste est prête à être utilisée pour les prochaines invitations",
-        "visibleSeconds": 0,
-        "visible": "Tableau de la liste des membres affiché avec l'ensemble des coordonnées",
+        "spokenSeconds": 0.8,
+        "spoken": "Votre liste est prête à être utilisée pour les prochaines invitations.",
+        "visibleSeconds": 0.8,
+        "visible": "Page des membres affichant la liste des personnes importées avec leurs coordonnées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Si quelques personnes manquent, ajoute-les manuellement",
-        "visibleSeconds": 0,
-        "visible": "Bouton bleu '+ Nouveau membre' visible en haut à droite du tableau",
+        "spokenSeconds": 10.3,
+        "spoken": "Si quelques personnes manquent, ajoutez-les manuellement.",
+        "visibleSeconds": 10.3,
+        "visible": "Bouton '+ Nouveau membre' visible en haut à droite du tableau.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Et si leurs disponibilités changent, complète leur fiche séparément",
-        "visibleSeconds": 0,
-        "visible": "Actions 'Éditer' et 'Détail' visibles au bout de chaque ligne de membre",
+        "spokenSeconds": 14.5,
+        "spoken": "complétez leur fiche séparément.",
+        "visibleSeconds": 14.5,
+        "visible": "Liens d'action 'Éditer' accessibles en regard de chaque membre dans la liste.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, accompagnant un écran de conclusion stable."
+      "observation": "Voix féminine claire, naturelle et bien posée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
