@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:28:21.881Z",
-  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "reviewedAt": "2026-10-14T16:50:50.503Z",
+  "videoSha256": "49bbcf2ac5f769c3ebb44f68b2ca5c06a9bde69de24f9b6230b2bfb5f094b5fd",
   "promptSha256": "a7e87e700c6e1f3caff04e680254553acc25bbf4ccee0ccc40a1c3bfe7d1b65c",
-  "clipSha256": "8453762eee903e9f24bd712dda39f3f2ac39e726da911479aa641b7eaeb2d118",
+  "clipSha256": "b7cc079579698234de68a90d3946f0737e356054518b0a9006d7e68da0567f25",
   "scene": "leader",
   "review": {
     "heardOpening": "Le responsable a lui aussi un accès",
     "checkpoints": [
       {
-        "spokenSeconds": 3.5,
-        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
-        "visibleSeconds": 3.8,
-        "visible": "Affichage de la page « Responsable - Accueil » listant les bénévoles inscrits à ce poste.",
+        "spokenSeconds": 3.3,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la page Responsable - Accueil avec les bénévoles inscrits",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 20.5,
-        "spoken": "Revenons dans l'administration et retirons ce responsable.",
+        "spoken": "Revenons dans l'administration et retirons ce responsable",
         "visibleSeconds": 21,
-        "visible": "Retour à la page d'administration « Responsables de secteur » et clic sur « Retirer » pour Camille Exemple.",
+        "visible": "Retour à la page Responsables de secteur et suppression de l'accès de Camille",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 24.5,
-        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
-        "visibleSeconds": 26.8,
-        "visible": "La page s'ouvre sur un message d'erreur « Lien introuvable ».",
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible",
+        "visibleSeconds": 27,
+        "visible": "Affichage de la page Lien introuvable",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement intelligible, débit régulier et bien synchronisé avec la démonstration."
+      "observation": "Voix claire, posée et professionnelle, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

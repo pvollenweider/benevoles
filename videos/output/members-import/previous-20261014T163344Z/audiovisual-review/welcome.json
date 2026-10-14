@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:18:54.520Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "6e19c1d161c7499ae1618c38b2ba224f29781894ddc9dd7180915fb980f8a331",
+  "clipSha256": "1d9238ce41c6776c21793d205bc7b1f7a5d2dd5dd72cddc77847fed94aaa38ca",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Vous utilisez Benevov pour la première fois",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Vous utilisez Benevol pour la première fois",
+        "visibleSeconds": 0,
+        "visible": "Titre en superposition : « Importer ses membres sans repartir de zéro / Analyser avant de confirmer » sur la page Membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la page de gestion des Membres (introduction annonçant le programme du tutoriel)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "vous pouvez toujours créer les membres manuellement avec Nouveau membre",
+        "visibleSeconds": 18.5,
+        "visible": "Bouton bleu « + Nouveau membre » visible en haut à droite de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

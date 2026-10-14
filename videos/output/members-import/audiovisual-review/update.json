@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:19:53.116Z",
-  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "reviewedAt": "2026-10-14T16:41:41.222Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "8456908c726d52e1b927f2afc339cecac7b7331b54ef1c62205707642f0f2262",
-  "clipSha256": "9d804751bbca6348a4fa3cd41d2ddd6a978af801078764f2e23a26e89bd25b8f",
+  "clipSha256": "257e0b0a80360ca932d7bec53d71647840562018d27e649681bf2b0f45972a69",
   "scene": "update",
   "review": {
     "heardOpening": "Avec Retour, vous pouvez changer l'option",
     "checkpoints": [
       {
-        "spokenSeconds": 0.1,
+        "spokenSeconds": 0.6,
         "spoken": "Avec Retour, vous pouvez changer l'option",
-        "visibleSeconds": 0.8,
-        "visible": "L'écran revient à l'étape précédente avec l'option Mettre à jour sélectionnée",
+        "visibleSeconds": 1,
+        "visible": "Clic sur le bouton Retour et retour à l'écran de sélection de l'option (Mettre à jour sélectionné)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.4,
         "spoken": "puis refaire l'analyse",
-        "visibleSeconds": 4.5,
-        "visible": "Clic sur le bouton Analyser le fichier pour relancer l'analyse",
+        "visibleSeconds": 4,
+        "visible": "Clic sur le bouton « Analyser le fichier » puis réaffichage du rapport",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.2,
+        "spokenSeconds": 18.5,
         "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
-        "visibleSeconds": 6.8,
-        "visible": "Le tableau d'analyse affiche Camille Rochat et Julien Favre avec le statut Mettre à jour",
+        "visibleSeconds": 7,
+        "visible": "Le tableau affiche bien Camille Rochat et Julien Favre avec l'action « Mettre à jour »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement audible, en adéquation avec la démonstration."
+      "observation": "Voix off fluide, claire et parfaitement synchronisée avec la manipulation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

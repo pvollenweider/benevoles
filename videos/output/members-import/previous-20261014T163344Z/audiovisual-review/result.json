@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:20:51.501Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "2740fe833c72dc345bbe43f92474132f43c09ed07a36c07027b4a73ee84301cd",
+  "clipSha256": "36b8a22a379cad1c14ed3a405ef821c73a865674fe3463a7654ff400f4d74bc8",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Votre liste est prête à être utilisée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Votre liste est prête à être utilisée pour les prochaines invitations",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage de la page de gestion des membres avec la liste mise à jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Si quelques personnes manquent, ajoutez-les manuellement",
+        "visibleSeconds": 10.5,
+        "visible": "Le bouton '+ Nouveau membre' est présent en haut à droite de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "complétez leur fiche séparément",
+        "visibleSeconds": 14.8,
+        "visible": "Les liens d'action 'Éditer' sont accessibles sur chaque ligne de membre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine calme, claire et bien articulée, accompagnant adéquatement la conclusion sur un écran stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

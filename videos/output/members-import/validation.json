@@ -1,7 +1,7 @@
 {
   "id": "MEMBERS_IMPORT",
   "slug": "members-import",
-  "validatedAt": "2026-10-14T15:30:58.839Z",
+  "validatedAt": "2026-10-14T16:51:31.259Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
@@ -16,9 +16,9 @@
     },
     {
       "id": "file",
-      "visualMs": 24359,
+      "visualMs": 24361,
       "audioMs": 24359,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "preview",
@@ -28,15 +28,15 @@
     },
     {
       "id": "errors",
-      "visualMs": 23381,
+      "visualMs": 23382,
       "audioMs": 23381,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "update",
-      "visualMs": 25749,
+      "visualMs": 25748,
       "audioMs": 25748,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "corrected",
@@ -46,15 +46,15 @@
     },
     {
       "id": "confirm",
-      "visualMs": 24373,
+      "visualMs": 24375,
       "audioMs": 24370,
-      "driftMs": 3
+      "driftMs": 5
     },
     {
       "id": "repeat",
-      "visualMs": 20854,
+      "visualMs": 20865,
       "audioMs": 20853,
-      "driftMs": 1
+      "driftMs": 12
     },
     {
       "id": "result",
@@ -63,7 +63,7 @@
       "driftMs": 1
     }
   ],
-  "anchorsChecked": 11,
+  "anchorsChecked": 13,
   "music": {
     "voicedWindows": 210,
     "musicOnlyWindows": 0,

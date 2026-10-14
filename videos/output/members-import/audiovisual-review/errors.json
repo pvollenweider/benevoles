@@ -1,32 +1,32 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:19:35.978Z",
-  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "reviewedAt": "2026-10-14T16:41:29.244Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "70cc41e6a6d03ba0b694544ea0644be9ae3c9119fad6ef22e19de14ff73d9185",
-  "clipSha256": "864acd2c692382cf84a28ff0bb2f2c0c74c620b41001e9f01c8c23b0278b6643",
+  "clipSha256": "0c5712918d2de6ded54bae22379958db34d9c981edb1bed3123b440529fc54c1",
   "scene": "errors",
   "review": {
     "heardOpening": "Ici, la ligne six n'a pas de prénom",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
-        "spoken": "la ligne six n'a pas de prénom",
+        "spokenSeconds": 0,
+        "spoken": "Ici, la ligne six n'a pas de prénom",
         "visibleSeconds": 0,
-        "visible": "Dans la section 'Lignes en erreur, non importées (3)', la ligne 6 indique 'Prénom manquant'",
+        "visible": "Dans l'encadré 'Lignes en erreur, non importées', la ligne 6 affiche 'Prénom manquant'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "la ligne sept contient une adresse email invalide",
+        "spokenSeconds": 3,
+        "spoken": "et la ligne sept contient une adresse email invalide",
         "visibleSeconds": 0,
-        "visible": "La ligne 7 indique 'Email invalide : adresse incomplète'",
+        "visible": "La ligne 7 indique 'Email invalide : adresse-incomplete'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "La ligne neuf reprend l'email de la ligne huit",
+        "spokenSeconds": 6.2,
+        "spoken": "La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé",
         "visibleSeconds": 0,
         "visible": "La ligne 9 indique 'Même email que la ligne 8'",
         "sync": "aligned",
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la fenêtre d'importation affichée."
+      "observation": "Voix off posée, claire et parfaitement audible, fidèle au texte affiché."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,18 +1,18 @@
 {
-  "checkedAt": "2026-10-14T15:25:44.245Z",
+  "checkedAt": "2026-10-14T16:48:31.928Z",
   "audiovisualValidated": false,
   "sessionPreparation": "Two real local administrator logins; no invented sessions",
   "anonymousSignupLinkOnlyInEmail": true,
-  "signupMail": "6Wyx00iqQtV0kVKqd7cWDv",
-  "resendMail": "6MIiFVhOtBp8vNlpyk2mBA",
-  "recoveryMail": "5wJuBT8auhKbd78i2R7Dn5",
+  "signupMail": "1bfFFeqSvSX1utcQuWdOiH",
+  "resendMail": "2GAD4hMHq4baFGYiB3dwG6",
+  "recoveryMail": "43Y6L8Vgj5RX3HIZKicYcc",
   "sameRecoveryMessageThreeAddresses": true,
-  "invitationMail": "7IyRoZ6lyojWdcbK2nKi7S",
+  "invitationMail": "1mmKOehspS6pUxFvrZQbN5",
   "invitationPrefill": true,
-  "leaderFrameSha256": "4605c9bda8c8cfaf787f4d54f1770103a202252f7e525b808864dd484990e002",
+  "leaderFrameSha256": "6ba374a1d9a7b18ea67d940602cc04968d6e68b26e1b9dbdf7ad91aebc6081aa",
   "actualLeaderRevocation": true,
   "actualAdminAnswerAndInternalNote": true,
   "actualPublicLegalPages": true,
   "actualReportVsMemberCsv": true,
-  "memberCsvSha256": "918f8708368c6f59cfed6ef18bdb73e4a904260319b2d52e824ec1a26a57fbbd"
+  "memberCsvSha256": "f7ec860b46de0642dde0d5cfcc3e0bd81354486ab9499185f01e3a06285049c0"
 }

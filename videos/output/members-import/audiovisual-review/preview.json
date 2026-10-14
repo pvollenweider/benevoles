@@ -1,61 +1,67 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:19:21.880Z",
-  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "reviewedAt": "2026-10-14T16:41:18.525Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "76d5f7749b7d647fc4dc4f33983c0de25f54035a66bac1105f43841d3d80d962",
-  "clipSha256": "7b8278d7565ee7a9f742f10113ea6a6f5da8e811d701a78e0d6d7fcac88b2c09",
+  "clipSha256": "4bb78d578d79213fef3a0986e543a873dcd89933e390b7b8454a028fb0da645a",
   "scene": "preview",
   "review": {
     "heardOpening": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez Importer des membres",
         "visibleSeconds": 0,
-        "visible": "La fenêtre Importer des membres et le fichier sont déjà ouverts et sélectionnés à l'écran dès le début.",
-        "sync": "missing",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 4.5,
-        "spoken": "l'option Ignorer conserve la fiche actuelle.",
-        "visibleSeconds": 4.5,
-        "visible": "Le bouton radio Ignorer est bien coché dans le formulaire.",
+        "visible": "Clic sur Importer CSV/Excel et ouverture de la modale d'importation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
-        "spoken": "Cliquez sur Analyser le fichier.",
-        "visibleSeconds": 9.8,
-        "visible": "Clic sur le bouton bleu Analyser le fichier.",
+        "spokenSeconds": 2.1,
+        "spoken": "choisissez le fichier à vérifier",
+        "visibleSeconds": 1,
+        "visible": "Le fichier membres-a-verifier.csv est déjà sélectionné dans la modale",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "l'option Ignorer conserve la fiche actuelle",
+        "visibleSeconds": 5.3,
+        "visible": "Option radio 'Ignorer' cochée par défaut sous 'Si un email existe déjà'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
-        "visibleSeconds": 11.2,
-        "visible": "Affichage du récapitulatif avec le statut global, le bloc d'erreurs et la liste des membres.",
+        "spokenSeconds": 8.7,
+        "spoken": "Cliquez sur Analyser le fichier",
+        "visibleSeconds": 9,
+        "visible": "Clic sur le bouton bleu 'Analyser le fichier'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.2,
-        "spoken": "Les colonnes reconnues et les tags sont également indiqués.",
-        "visibleSeconds": 17.2,
-        "visible": "Lignes décrivant les tags ajoutés et les colonnes reconnues bien visibles en haut de la fenêtre.",
+        "spokenSeconds": 11.4,
+        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur",
+        "visibleSeconds": 10,
+        "visible": "Affichage du récapitulatif d'analyse avec les lignes en erreur et les membres du fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.9,
+        "spoken": "Les colonnes reconnues et les tags sont également indiqués",
+        "visibleSeconds": 17,
+        "visible": "Sections 'Tags ajoutés' et 'Colonnes reconnues' visibles en haut du récapitulatif",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:00, l'action d'ouverture du dialogue d'importation et la sélection du fichier ne sont pas effectuées à l'écran : la fenêtre modale contenant déjà le fichier est présente dès la première image."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, avec un débit régulier et un ton engageant."
+      "observation": "Voix féminine claire, posée et professionnelle, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

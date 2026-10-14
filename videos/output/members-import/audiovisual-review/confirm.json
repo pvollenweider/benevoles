@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:20:19.094Z",
-  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "reviewedAt": "2026-10-14T16:42:05.896Z",
+  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
   "promptSha256": "c1ae23974bc24aea4dd7c2fd898ca0d84acc1cb122f542f15a1010ae3f0dc71d",
-  "clipSha256": "8da08b36f1c58399a38adb7ba2edaef8260b2a24cda467468f6831756a7b3e8e",
+  "clipSha256": "adbdc2d2a978e4b34d118f9443db52150468b93bd5af9f6f1cbbb3fea6116b05",
   "scene": "confirm",
   "review": {
-    "heardOpening": "Quand l'aperçu vous convient",
+    "heardOpening": "Quand l'aperçu vous convient, confirmez l'import",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
+        "spokenSeconds": 0.8,
         "spoken": "confirmez l'import",
-        "visibleSeconds": 1.8,
-        "visible": "Clic sur le bouton « Importer 40 membres » et affichage du message de confirmation",
+        "visibleSeconds": 1.4,
+        "visible": "Clic sur 'Importer 40 membres' et affichage du résultat d'import",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
-        "spoken": "Le résultat indique combien ont été créées",
-        "visibleSeconds": 6.8,
-        "visible": "La fenêtre modale affiche « Import terminé : 38 créés, 2 mis à jour, 0 ignorés »",
+        "spoken": "Le résultat indique combien ont été créées, mises à jour ou ignorées",
+        "visibleSeconds": 2,
+        "visible": "Modal avec 'Import terminé: 38 créés, 2 mis à jour, 0 ignorés'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.7,
+        "spokenSeconds": 13.9,
         "spoken": "Fermez la fenêtre et recherchez Maya",
-        "visibleSeconds": 14.1,
-        "visible": "Clic sur « Fermer » puis saisie de « Maya » dans le champ de recherche",
+        "visibleSeconds": 14.5,
+        "visible": "Fermeture de la pop-up puis saisie de 'Maya' dans le champ de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.9,
+        "spokenSeconds": 18.2,
         "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses tags",
-        "visibleSeconds": 18.3,
-        "visible": "Clic sur « Éditer » et ouverture de la fiche de Maya Perret affichant son téléphone et ses tags",
+        "visibleSeconds": 19.1,
+        "visible": "Ouverture du formulaire 'Modifier le membre' montrant téléphone et tags",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, naturelle et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix off féminine fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

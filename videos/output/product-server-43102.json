@@ -1,10 +1,10 @@
 {
-  "commit": "8941cc1cb184ca53a23a7ade7fc9e889075e7725",
-  "sourceTree": "8f5a1c9946faac17bc7430b6ee49b10f666c8688",
-  "productSourceSha256": "5f78abc7d5573a573c24ec850f42291e49d5d98eeb063808e54850964ac0cbee",
-  "buildId": "zHvrRgnTvwimSPsFYL2Dw",
-  "snapshot": "/tmp/benevoles-video-production.Ns1yr5eb",
-  "builtAt": "2026-10-14T15:02:37.334Z",
-  "pid": 57589,
+  "commit": "e110bfff7be601ceb18a52e456c4147158782e96",
+  "sourceTree": "739e4e1eec84a564556a00d65e95eb03f88fa39d",
+  "productSourceSha256": "7c9d7a055bb4edbdc86bc21622b46178ac0a390449bf99989fd3bac8454c1d88",
+  "buildId": "ZQDQCQ6Dod5iXimlU7yZf",
+  "snapshot": "/tmp/benevoles-video-production.Batch21",
+  "builtAt": "2026-10-14T16:35:01.795Z",
+  "pid": 22847,
   "port": 43102
 }

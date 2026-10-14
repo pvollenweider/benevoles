@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:28:52.854Z",
-  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "reviewedAt": "2026-10-14T16:51:22.348Z",
+  "videoSha256": "49bbcf2ac5f769c3ebb44f68b2ca5c06a9bde69de24f9b6230b2bfb5f094b5fd",
   "promptSha256": "e06d0d7377ff0269b90965ff8cea8bc90a0d06c94d50de9ac2daa471d70f980f",
-  "clipSha256": "9bdc6e7ca8c629449b2b4e8d5cd2859c3611a476a2f3fcb1fc6963b39178d53f",
+  "clipSha256": "a561d20f75171543516bdd3c228294da8b5d3842554ce2afd9de168c3c118b23",
   "scene": "legal",
   "review": {
     "heardOpening": "Les informations publiques se trouvent aussi dans le pied de page.",
     "checkpoints": [
       {
-        "spokenSeconds": 3.3,
+        "spokenSeconds": 3,
         "spoken": "Ouvrons Confidentialité.",
         "visibleSeconds": 4.8,
-        "visible": "Clic sur le lien Confidentialité et affichage de la Politique de confidentialité",
+        "visible": "Clic sur le lien Confidentialité en pied de page et ouverture de la Politique de confidentialité",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.1,
+        "spokenSeconds": 9.5,
         "spoken": "Repérons aussi les indications de conservation et les moyens de contact.",
-        "visibleSeconds": 10.2,
-        "visible": "Défilement vers la section 7. Conservation des données puis 6. Droits des personnes concernées",
+        "visibleSeconds": 10.5,
+        "visible": "Défilement sur les mentions de contact et l'article Conservation des données",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20,
-        "spoken": "Ouvrons maintenant les conditions d'utilisation, qui complètent ce cadre.",
-        "visibleSeconds": 22,
-        "visible": "Clic sur le lien CGU et ouverture des Conditions générales d'utilisation",
+        "spokenSeconds": 19.5,
+        "spoken": "Ouvrons maintenant les conditions d'utilisation",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur le lien CGU en pied de page et affichage des Conditions générales d'utilisation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+      "observation": "Voix fluide, claire et calme, bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

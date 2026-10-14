@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:19:53.116Z",
+  "videoSha256": "6c63cfc00e59ce3026b1125fed8d2f2337807bc7f8962025f98d4a144ae2e696",
+  "promptSha256": "8456908c726d52e1b927f2afc339cecac7b7331b54ef1c62205707642f0f2262",
+  "clipSha256": "9d804751bbca6348a4fa3cd41d2ddd6a978af801078764f2e23a26e89bd25b8f",
+  "scene": "update",
+  "review": {
+    "heardOpening": "Avec Retour, vous pouvez changer l'option",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Avec Retour, vous pouvez changer l'option",
+        "visibleSeconds": 0.8,
+        "visible": "L'écran revient à l'étape précédente avec l'option Mettre à jour sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "puis refaire l'analyse",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton Analyser le fichier pour relancer l'analyse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
+        "visibleSeconds": 6.8,
+        "visible": "Le tableau d'analyse affiche Camille Rochat et Julien Favre avec le statut Mettre à jour",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement audible, en adéquation avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

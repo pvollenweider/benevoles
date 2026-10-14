@@ -1,18 +1,18 @@
 {
   "id": "PRIVACY_PERSONAL_LINKS",
   "slug": "privacy-personal-links",
-  "validatedAt": "2026-10-14T15:31:01.007Z",
+  "validatedAt": "2026-10-14T16:51:32.628Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 366600,
+  "captureMs": 366560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 33349,
+      "visualMs": 33351,
       "audioMs": 33348,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "signup",
@@ -22,9 +22,9 @@
     },
     {
       "id": "personal",
-      "visualMs": 32844,
+      "visualMs": 32845,
       "audioMs": 32842,
-      "driftMs": 2
+      "driftMs": 3
     },
     {
       "id": "recovery",
@@ -52,32 +52,32 @@
     },
     {
       "id": "legal",
-      "visualMs": 34588,
+      "visualMs": 34589,
       "audioMs": 34587,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "copies",
-      "visualMs": 30597,
+      "visualMs": 30599,
       "audioMs": 30595,
-      "driftMs": 2
+      "driftMs": 4
     },
     {
       "id": "result",
-      "visualMs": 31715,
+      "visualMs": 31716,
       "audioMs": 31713,
-      "driftMs": 2
+      "driftMs": 3
     }
   ],
   "anchorsChecked": 42,
   "music": {
-    "voicedWindows": 332,
+    "voicedWindows": 331,
     "musicOnlyWindows": 2,
-    "smallestGapLu": 14.8,
-    "largestGapLu": 19.8,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 19.7,
     "quietestMusicOnlyLufs": -34,
     "loudestMusicOnlyLufs": -33.2,
-    "medianVoiceLufs": -16.3
+    "medianVoiceLufs": -16.4
   },
   "issues": []
 }

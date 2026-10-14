@@ -1300,8 +1300,8 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-14",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1445,8 +1445,8 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-14",
+      "revision": 3,
       "level": "essentiel"
     },
     {

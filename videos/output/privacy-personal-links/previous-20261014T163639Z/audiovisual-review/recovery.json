@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-14T15:27:53.627Z",
+  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "promptSha256": "16c8078ff8adc6cada03f88df8907ed36701a7694658069bbdacf80fd3685faa",
+  "clipSha256": "4c4c0befdef0ebf02e282fb64c3ed6e15105a5cbbbf477a969841fc0de06419d",
+  "scene": "recovery",
+  "review": {
+    "heardOpening": "Le lien est perdu ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Depuis la page de récupération, saisissons l'adresse utilisée pour l'inscription.",
+        "visibleSeconds": 3.3,
+        "visible": "Saisie de l'adresse email de membre puis clic sur le bouton pour recevoir le lien.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Vérifions le message reçu dans la boîte de Léa.",
+        "visibleSeconds": 11.4,
+        "visible": "Affichage de la boîte Mailpit avec le courriel adressé à Léa contenant le bouton d'accès.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Recommençons avec une adresse fictive inconnue :",
+        "visibleSeconds": 15.6,
+        "visible": "Retour au formulaire et saisie d'une adresse inconnue suivie de la validation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.1,
+        "spoken": "demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B.",
+        "visibleSeconds": 21.6,
+        "visible": "Saisie de l'adresse du membre B dans le formulaire de l'organisation A.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

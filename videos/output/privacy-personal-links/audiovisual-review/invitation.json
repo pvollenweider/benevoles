@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T15:28:08.372Z",
-  "videoSha256": "dc81ef5f1713d264b8e200ab98be8611161019daed0d5a8db2184a58e17ae0bd",
+  "reviewedAt": "2026-10-14T16:50:32.565Z",
+  "videoSha256": "49bbcf2ac5f769c3ebb44f68b2ca5c06a9bde69de24f9b6230b2bfb5f094b5fd",
   "promptSha256": "39d6081d1366e3d885603d0e352ee1cc410e70e86f3632730ff4d90ddd2932d6",
-  "clipSha256": "0215afa2b360fee1bcc19f96fc5340ed7376a4ee3f9e9867f770ab176525f1af",
+  "clipSha256": "ec8dea9dd306db120bb89b720aff6be900c0ee599af12d6f95524672d46624bd",
   "scene": "invitation",
   "review": {
-    "heardOpening": "Une invitation nominative est différente d'un lien public.",
+    "heardOpening": "Une invitation nominative est différente",
     "checkpoints": [
       {
-        "spokenSeconds": 3.8,
+        "spokenSeconds": 3.7,
         "spoken": "L'organisation l'envoie à Zoé",
-        "visibleSeconds": 4,
-        "visible": "Fenêtre modale 'Inviter des membres' affichant Zoé Exemple sélectionnée avant envoi",
+        "visibleSeconds": 4.5,
+        "visible": "Dans la modale Inviter des membres, Zoé Exemple est cochée puis l'envoi est validé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.9,
-        "spoken": "puis nous ouvrons le vrai email reçu",
-        "visibleSeconds": 6.2,
-        "visible": "Affichage de la messagerie Mailpit avec l'e-mail d'invitation adressé à Zoé",
+        "spokenSeconds": 6.3,
+        "spoken": "puis nous ouvrons le vrai email reçu.",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'email reçu pour Zoé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Son lien conduit au formulaire avec les informations prévues pour cette invitation",
-        "visibleSeconds": 8.5,
-        "visible": "Accès au formulaire d'inscription sur la sélection de créneau puis sur la page 'Tes informations'",
+        "spokenSeconds": 8.5,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues",
+        "visibleSeconds": 10.6,
+        "visible": "Affichage de la page du formulaire d'inscription pré-remplie Tes informations",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
-        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
-        "visibleSeconds": 18,
-        "visible": "Champs du formulaire préremplis avec le prénom Zoé, l'adresse email et le créneau sélectionné dans l'encadré latéral",
+        "spokenSeconds": 18.2,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer.",
+        "visibleSeconds": 18.5,
+        "visible": "Prénom Zoé, adresse email et récapitulatif du créneau 10:00-12:00 visibles à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien synchronisée avec le déroulement de la démonstration."
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les étapes montrées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
