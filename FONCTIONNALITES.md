@@ -263,6 +263,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Jalons (section sur la page de l'événement)
 
 - Checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, fait / pas fait
+- « Modifier » sur chaque ligne (#989) : titre et échéance corrigés sur place, mêmes contrôles et messages qu'à l'ajout (`src/lib/milestones.ts`), Échap annule, le focus revient sur « Modifier » ; la liste reste triée par échéance
 - Purement informatif, aucune automatisation (une échéance ne déclenche rien elle-même)
 - Un jalon dépassé et non coché est mis en évidence
 - Visible par les admins de l'organisation uniquement, pas par les responsables de secteur (#186)

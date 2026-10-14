@@ -16,6 +16,8 @@ Section **Jalons** sur la page de l'événement (**Événements**, puis l'évén
 
 Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, coché ou non. Purement informatif : cocher un jalon ne déclenche aucune action automatique. Un jalon dépassé et non coché est mis en évidence, sur la page de l'événement et dans **Ce qui demande votre attention** du [tableau de bord](tableau-de-bord.md).
 
+Pour corriger le titre ou l'échéance d'un jalon, cliquez sur **Modifier** sur sa ligne : les deux champs s'ouvrent à sa place, puis **Enregistrer** (ou **Annuler**, ou la touche Échap). Le jalon reprend sa place dans la liste, triée par échéance. Une échéance passée est acceptée, comme à l'ajout. **×** supprime le jalon après confirmation. Chaque ajout, modification et suppression est inscrit au [journal de l'événement](journal-de-l-evenement.md).
+
 Les jalons ne sont jamais copiés lors d'une duplication.
 
 ## Questions fréquentes
