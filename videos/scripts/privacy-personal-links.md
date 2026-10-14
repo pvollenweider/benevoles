@@ -1,5 +1,7 @@
 # Les bons liens, pour les bonnes personnes
 
+Révision du 14 octobre 2026 — batch 20 : toutes les phrases adressées au public passent au vouvoiement, impératifs compris. Les libellés cités restent identiques. Narration Kore entière régénérée en une prise continue, sans balises de pause ; ancres de capture mises en cohérence. Le rendu final de 366,600 secondes est NOT READY : après la vraie inscription, la navigation locale vers /fete-des-liens/success affiche une 404 à 61.039 secondes. Le vrai email arrive, mais il ne valide pas l’écran de confirmation absent. La seconde prise recale l’ouverture du lien responsable ; les dix audits audio, le vouvoiement, la musique et la validation technique passent. Aucun contournement de la 404 ni changement produit appliqué.
+
 Quatrième prise : capture et montage terminés, dix durées de scènes alignées.
 La fiche de Léa s'ouvre désormais à 39 % du chapitre « admin » au lieu de 29 % ;
 la comparaison avec le responsable montre le même rappel réel et explicitement

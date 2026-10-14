@@ -30,7 +30,7 @@
     },
     {
       "id": "errors",
-      "transcript": "Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrige le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.",
+      "transcript": "Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrigez le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.",
       "fallbackDurationMs": 40000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "confirm",
-      "transcript": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
+      "transcript": "Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Fermez la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
       "fallbackDurationMs": 39000
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "id": "result",
-      "transcript": "Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifiez les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.",
+      "transcript": "Votre liste est prête à être utilisée pour les prochaines invitations. Gardez un fichier simple, vérifiez les coordonnées et lisez l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoutez-les manuellement. Et si leurs disponibilités changent, complétez leur fiche séparément. L'import fait gagner du temps, tout en vous laissant le dernier mot sur ce qui sera enregistré.",
       "fallbackDurationMs": 32000
     }
   ],
@@ -75,5 +75,6 @@
       "Les disponibilités ne sont pas importées, et importer une personne ne l'inscrit à aucun créneau.",
       "Un import est limité à 2 Mo et 5 000 lignes."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

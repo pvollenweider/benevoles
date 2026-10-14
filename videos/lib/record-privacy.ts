@@ -36,7 +36,7 @@ export async function preparePrivacyRecording(page: Page, base: string, director
     }
     if (await db.sectorLeader.count({ where: { eventId: "video-privacy-a-event" } }) || await db.memberInvite.count({ where: { eventId: "video-privacy-a-event" } })) throw new Error("Privacy fixture already modified; run its real seed")
     const cookiesA = await page.context().cookies()
-    other = await page.context().browser()!.newContext()
+    other = await page.context().browser()!.newContext({ locale: "fr-CH", timezoneId: "Europe/Zurich" })
     const b = await other.newPage()
     await b.goto(`${base}/admin/login`)
     await b.getByLabel("Email", { exact: true }).fill("video.privacy.b.owner@example.org")
@@ -121,10 +121,12 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Il accepte ensuite les conditions")
       await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
       await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+      // Read the actual response before the successful form navigates away.
       const sent = page.waitForResponse(response => response.url().endsWith("/api/public/registrations") && response.request().method() === "POST")
+        .then(async response => ({ status: response.status(), data: await response.json() }))
       await at("Après l'envoi, l'inscription est enregistrée"); await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
-      const response = await sent, data = await response.json()
-      if (response.status() !== 201 || data.editToken !== null || data.linkSentByEmail !== true) throw new Error("Anonymous signup unexpectedly disclosed an access link")
+      const { status, data } = await sent
+      if (status !== 201 || data.editToken !== null || data.linkSentByEmail !== true) throw new Error("Anonymous signup unexpectedly disclosed an access link")
       await page.waitForURL(/\/fete-des-liens\/success/); await settle(page)
       if (await page.getByRole("link", { name: "Accéder à mon inscription", exact: true }).count()) throw new Error("Personal link revealed on anonymous success screen")
       await at("Ouvrons donc le vrai message"); signupMail = await openMail(before, "video.privacy.a.new@example.org", "personal")
@@ -182,6 +184,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       checks.invitationPrefill = true
     })
     await scene("leader", async at => {
+      await at("Ouvrons le lien de Camille")
       await go(`/leader/${setup.leaderToken}`)
       await page.getByRole("heading", { name: "Responsable · Accueil", exact: true }).waitFor()
       await at("Il voit les bénévoles de"); await page.getByText("video.privacy.a.member.0@example.org", { exact: true }).scrollIntoViewIfNeeded()
@@ -241,7 +244,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const file = path.join(directory, "privacy-members.csv"); await (await pending).saveAs(file)
       await at("Il n'est donc pas à"); const csv = await showMembersCsv(page, file)
       if (csv.rows.length !== 6 || !csv.rows.some(row => row.includes("Note interne fictive — organisation A"))) throw new Error("Actual member CSV lacks expected private fields")
-      await at("Choisis le document adapté à"); await page.locator(".scroll").evaluate(element => { element.scrollLeft = element.scrollWidth })
+      await at("Choisissez le document adapté à"); await page.locator(".scroll").evaluate(element => { element.scrollLeft = element.scrollWidth })
       checks.actualReportVsMemberCsv = true
       checks.memberCsvSha256 = csv.sha256
     })
@@ -249,11 +252,11 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
     await scene("result", async at => {
       await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
       await page.getByText(PERSONAL_LINK_NOTICE, { exact: true }).waitFor()
-      await at("Pour recruter, partage la page"); await go("/fete-des-liens?org=formation-confidentialite-a")
+      await at("Pour recruter, partagez la page"); await go("/fete-des-liens?org=formation-confidentialite-a")
       await page.getByRole("heading", { name: "Fête des liens — organisation A", exact: true }).waitFor()
-      await at("Pour gérer une inscription, garde"); await go(personalPath)
+      await at("Pour gérer une inscription, gardez"); await go(personalPath)
       await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
-      await at("Pour coordonner un poste, remets"); await showRecordedLeader()
+      await at("Pour coordonner un poste, remettez"); await showRecordedLeader()
       await at("Si un accès a été"); await page.locator("#video-recorded-leader-recap").evaluate(element => element.remove())
       await page.getByRole("region", { name: "Ton lien personnel", exact: true }).getByRole("link", { name: "Écrire à l'organisation", exact: true }).scrollIntoViewIfNeeded()
     })

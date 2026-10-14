@@ -1,5 +1,7 @@
 # Importer ses membres sans repartir de zéro
 
+Révision du 14 octobre 2026 — batch 20 : toutes les phrases adressées au public passent au vouvoiement, impératifs compris. Les libellés cités restent identiques. Narration Kore entière régénérée en une prise continue, sans balises de pause ; ancres de capture mises en cohérence. Le rendu final de 215,960 secondes est NOT READY : la confirmation a été recalée dans la seconde prise, mais la revue finale confirme une ouverture du dialogue anticipée au chapitre précédent. Les ancres d’ouverture et d’analyse sont corrigées dans la source pour la prochaine capture ; cette dernière correction n’est pas filmée, la reprise autorisée ayant déjà été utilisée. Les audits audio, le vouvoiement, la musique et la validation technique passent.
+
 Vidéo autonome 35, destinée aux organisateurs. Voix unique, souriante et rassurante. Montrer les actions lentement, puis leur résultat réel.
 
 ## Parcours à filmer
