@@ -37,6 +37,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Adresses réservées pour les événements** : un événement dont le titre donnerait une adresse du site lui-même (`/tarifs`, `/pour-qui`, `/blog`, `/admin`…) est refusé à la création, depuis un modèle et à la duplication, avec un message qui propose d'ajouter un mot au titre. Sa page n'aurait jamais été joignable.
 - **Page introuvable lisible sans JavaScript** (#935) : une fiche de documentation, une vidéo ou une adresse inexistante sur www.benevol.app (par exemple une page légale mal tapée) renvoyait bien une erreur 404, mais une page vide tant que le navigateur n'avait pas exécuté le JavaScript ; les moteurs de recherche et les lecteurs sans JavaScript ne voyaient rien. La page « Cette page est tombée à l'eau. » et ses liens sont désormais dans la page envoyée par le serveur, avec une seule indication de non-indexation au lieu de deux.
 - **Sur une autre instance**, les liens de la page Fonctionnalités vers les pages de présentation du service hébergé (Pour qui ?, Tarifs) mènent à ces pages sur benevol.app, au lieu d'une page introuvable.
+- **Soulignement des liens au survol** : dans les guides, les pages de contenu, la page Fonctionnalités et les pages d'un événement, survoler le texte épaississait ou soulignait tous ses liens à la fois. Seul le lien survolé change désormais.
 
 ### Sécurité
 
