@@ -200,7 +200,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
 
   it("says what decides: free, open source, no account for the volunteers", () => {
     const text = read("FEATURES.md")
-    for (const words of [/gratuit/i, /open source/i, /sans compte/i, /hébergé en France/i]) expect(text).toMatch(words)
+    for (const words of [/gratuit/i, /open source/i, /sans compte/i, /hébergé en France/i, /développé en Suisse/i]) expect(text).toMatch(words)
   })
 
   it("has the decision page's sections, « Comment ça marche » drawn as three steps", () => {

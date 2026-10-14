@@ -433,7 +433,8 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Hébergé en France, sans pistage</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                L&apos;application et sa base de données sont hébergées chez OVH, en France. Le site ne
+                L&apos;application et sa base de données sont hébergées chez OVH, en France ; le
+                projet, lui, est développé en Suisse. Le site ne
                 dépose aucun cookie de pistage, ni analytique ni publicitaire.{" "}
                 <Link href="/legal/privacy" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Politique de confidentialité

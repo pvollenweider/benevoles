@@ -20,7 +20,7 @@ Oui. La page d'inscription est pensée d'abord pour le téléphone : le planning
 
 ### Où sont les données ?
 
-L'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Infomaniak, en Suisse. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité. Le détail est dans la [politique de confidentialité](/legal/privacy).
+benevol.app est développé en Suisse, mais l'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Infomaniak, en Suisse. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité. Le détail est dans la [politique de confidentialité](/legal/privacy).
 
 ### Peut-on l'installer soi-même ?
 
