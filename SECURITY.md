@@ -35,6 +35,10 @@ Vous recevrez un accusé de réception sous 48 h. Une fois la faille confirmée 
 - Définir `CRON_SECRET` : sans lui, les endpoints `/api/cron/*` refusent toutes les requêtes en production
 - Ne pas laisser les valeurs par défaut du seed en production (mot de passe `change-me`) : définir `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ORG_ADMIN_EMAIL` et `ORG_ADMIN_PASSWORD` avant `npm run db:seed`
 
+## HTTPS strict (HSTS)
+
+Le service hébergé (benevol.app) répond `Strict-Transport-Security: max-age=31536000` sur chaque hôte (apex, www, sous-domaine de chaque organisation) : un navigateur qui l'a vu passe directement en HTTPS pendant un an, même pour un lien saisi en `http://`. L'en-tête est posé par Traefik (`k8s/middleware-hsts.yaml`), pas par l'application : une instance auto-hébergée choisit sa propre politique HTTPS. Sans `includeSubDomains` (un sous-domaine hors du service n'a pas de certificat valide) ni `preload`.
+
 ## Affichage dans un cadre (clickjacking)
 
 Toutes les pages et routes refusent d'être affichées dans le cadre (`<iframe>`) d'un autre site : `Content-Security-Policy: frame-ancestors 'none'` et `X-Frame-Options: DENY`, posés par `src/proxy.ts` (`src/lib/security-headers.ts`). Une seule exception : l'inscription intégrable au site d'une association, `/<événement>?embed=1` et sa confirmation, qui répondent `frame-ancestors *` sans `X-Frame-Options`.
