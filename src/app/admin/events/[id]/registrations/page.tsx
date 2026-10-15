@@ -125,6 +125,7 @@ export default async function RegistrationsPage({
             endTime: r.shift.endTime,
             capacity: r.shift.capacity,
             registrationCount: regCountByShift[r.shift.id] ?? 0,
+            overlapAllowed: r.shift.overlapAllowed,
           },
         }))}
         shifts={event.shifts.map((s) => ({
@@ -136,6 +137,8 @@ export default async function RegistrationsPage({
           endTime: s.endTime,
           capacity: s.capacity,
           registrationCount: regCountByShift[s.id] ?? 0,
+          // A cumulable role (#986): no overlap warning when adding someone by hand.
+          overlapAllowed: s.overlapAllowed,
         }))}
       />
 

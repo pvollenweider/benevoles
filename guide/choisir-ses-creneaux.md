@@ -28,7 +28,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte : clique pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |
-| Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir |
+| Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir (sauf poste cumulable, voir plus bas) |
 | Fond violet (🎪) | Plage d'un spectacle, repère visuel uniquement |
 
 Chaque créneau ouvert affiche aussi le nombre d'inscrits sur la capacité totale (par exemple « 3/5 ») : pratique pour repérer un créneau avec assez de place pour s'inscrire à plusieurs.
@@ -51,7 +51,7 @@ Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà
 
 Un créneau marqué « Sur validation » se choisit comme les autres, mais ton inscription y sera une demande : voir [Inscriptions sur validation](inscriptions-sur-validation.md).
 
-L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent.
+L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent. Certains postes peuvent pourtant se cumuler avec un autre créneau, par exemple les premiers secours pendant que tu tiens la buvette : l'organisation l'a prévu, et ces créneaux restent sélectionnables même s'ils se passent en même temps qu'un autre de tes choix.
 
 ## Un événement sur toute une saison
 

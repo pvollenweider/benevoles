@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const create = vi.hoisted(() => vi.fn(async ({ data }: { data: object }) => ({ id: "s", ...data })))
 const eventFindFirst = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: async () => ({ db: { event: { findFirst: eventFindFirst }, shift: { create } }, organizationId: "o", session: {} }) }))
+vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: async () => ({ db: { event: { findFirst: eventFindFirst }, shift: { findMany: vi.fn().mockResolvedValue([]), create } }, organizationId: "o", session: {} }) }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn(), adminActor: () => ({}) }))
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 

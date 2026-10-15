@@ -103,7 +103,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte propriétaire (`admin`), organisateur (`organizer`) ou super admin ; empreintes des jetons d'activation et de réinitialisation ; `sessionVersion` ; abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, répertorié ou non (`isListed`), fenêtre d'inscription (`registrationsOpen`, `registrationOpensAt`, `registrationClosesAt`), téléphone obligatoire, rappels activés |
-| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192), validation requise (`requiresApproval`), plafond par bénévole (`maxPerVolunteer`), étiquettes réservées (`reservedTags`) |
+| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192), validation requise (`requiresApproval`), plafond par bénévole (`maxPerVolunteer`), étiquettes réservées (`reservedTags`), poste cumulable avec un autre créneau (`overlapAllowed`, #986) |
 | `Volunteer` | Bénévole d'une organisation, unique par email et organisation ; `birthDate` optionnel, collecté seulement si un créneau l'exige |
 | `Registration` | Inscription d'un bénévole à un créneau : statut, jeton (empreinte et copie chiffrée), position en liste d'attente, dates d'envoi des rappels |
 | `MemberInvite` | Invitation d'un membre à un événement : jeton (empreinte et copie chiffrée) |

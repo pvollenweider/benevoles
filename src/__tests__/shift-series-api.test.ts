@@ -37,6 +37,7 @@ describe("POST /api/admin/shifts/series", () => {
     transaction.mockImplementation(async (fn: (tx: unknown) => unknown) => fn(tx))
     const db = {
       event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      shift: { findMany: vi.fn().mockResolvedValue([]) },
       $transaction: transaction,
     }
     requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: {} })

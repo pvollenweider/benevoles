@@ -22,7 +22,7 @@
  * mapping (Volunteer.mergedIntoId) is how old ids resolve afterwards.
  */
 
-import { shiftsOverlap } from "./utils"
+import { shiftsClash } from "./shift-overlap"
 
 export type FieldChoice = "keep" | "absorb"
 
@@ -57,6 +57,8 @@ export interface ShiftMeta {
   minAge: number | null
   maxPerVolunteer: number | null
   reservedTags: string[]
+  /** Its role may overlap another shift (#986): no overlap conflict. Missing = false. */
+  overlapAllowed?: boolean
 }
 
 export interface RegistrationLite {
@@ -241,7 +243,7 @@ export function mergeConflicts(input: MemberMergeInput, choices: MemberMergeChoi
 
   // Overlap between a kept-record live registration's shift and an absorbed-record live
   // registration's shift (not already on the same shift, that's the case above). Informational
-  // only: the organizer already placed both.
+  // only: the organizer already placed both. A cumulable role (#986) is no conflict.
   for (const a of input.keepRegistrations.filter((r) => LIVE_REGISTRATION_STATUSES.has(r.status))) {
     const shiftA = shifts.get(a.shiftId)
     if (!shiftA) continue
@@ -249,7 +251,7 @@ export function mergeConflicts(input: MemberMergeInput, choices: MemberMergeChoi
       if (b.shiftId === a.shiftId) continue
       const shiftB = shifts.get(b.shiftId)
       if (!shiftB) continue
-      if (shiftsOverlap(shiftA, shiftB)) {
+      if (shiftsClash(shiftA, shiftB)) {
         conflicts.push({ kind: "overlap", shiftIds: [shiftA.id, shiftB.id], labels: [shiftA.label, shiftB.label] })
       }
     }

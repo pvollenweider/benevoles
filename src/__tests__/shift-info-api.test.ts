@@ -20,7 +20,7 @@ describe("shift practical info — API", () => {
     vi.clearAllMocks()
     create.mockImplementation(async ({ data }: { data: unknown }) => ({ id: "s1", ...(data as object) }))
     requireOrgSessionMock.mockResolvedValue({
-      db: { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { create } },
+      db: { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { findMany: vi.fn().mockResolvedValue([]), create } },
       organizationId: "org-a", session: {},
     })
   })

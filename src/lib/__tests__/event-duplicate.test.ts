@@ -151,6 +151,13 @@ describe("duplicatePlan with recurring permanences", () => {
     expect(shifts[0]).toMatchObject({ roleName: "Accueil", locationDetails: "Cantine", status: "open", capacity: 2 })
   })
 
+  it("keeps a cumulable role cumulable (#986), on copied and regenerated shifts", () => {
+    const cumulable = { ...season, shifts: season.shifts.map((s) => ({ ...s, overlapAllowed: s.roleName === "Accueil" })) }
+    const plan = duplicatePlan(cumulable, { startDate: "2027-09-01" })
+    expect(plan.shifts.map((s) => s.overlapAllowed)).toEqual([false])
+    expect(plan.recurrences[0].shifts.every((s) => s.overlapAllowed)).toBe(true)
+  })
+
   it("copies no permanence when the shifts are not copied", () => {
     expect(duplicatePlan(season, { copy: { shifts: false } }).recurrences).toEqual([])
   })

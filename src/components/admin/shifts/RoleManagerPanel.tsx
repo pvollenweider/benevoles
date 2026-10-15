@@ -10,10 +10,11 @@ import { requestJson } from "@/lib/use-submit"
 import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
+import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
-import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "./RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "./RoleSettings"
 import type { RawShift } from "./types"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
@@ -29,7 +30,7 @@ function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el
  * Stays mounted while closed (renders nothing) so that, as before the split, an inline editor left
  * open, its typed value or the last error are still there when the panel is reopened.
  *
- * Focus (#554): when an inline editor (rename, colour, limit, access) closes, focus goes back to the
+ * Focus (#554): when an inline editor (rename, colour, limit, access, cumul) closes, focus goes back to the
  * row button that opened it, or to the panel's heading when that row is gone; never to <body>.
  */
 
@@ -73,6 +74,10 @@ export default function RoleManagerPanel({
   const [reserveRole, setReserveRole] = useState<string | null>(null)
   const [reserveValue, setReserveValue] = useState("")
   const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // « Cumulable avec un autre créneau » (#986): the inline editor, like the limit's.
+  const [overlapRole, setOverlapRole] = useState<string | null>(null)
+  const [overlapValue, setOverlapValue] = useState(false)
+  const overlapBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Limite » buttons per role: focus returns there when the inline form closes (#466).
   const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Renommer » and colour buttons per role, and the heading, the fallback when the row is gone (#554).
@@ -155,6 +160,7 @@ export default function RoleManagerPanel({
     setRoleActionError(null)
     setLimitRole(null)
     setReserveRole(null)
+    setOverlapRole(null)
     setColorPickerRole(null)
     setRenameError(null)
     setRenamingRole(role)
@@ -235,6 +241,7 @@ export default function RoleManagerPanel({
     setColorPickerRole(null)
     setRenamingRole(null)
     setReserveRole(null)
+    setOverlapRole(null)
     setLimitRole(limitRole === role ? null : role)
     setLimitValue(String(roleLimitOf(role) ?? ""))
   }
@@ -249,8 +256,30 @@ export default function RoleManagerPanel({
     setColorPickerRole(null)
     setRenamingRole(null)
     setLimitRole(null)
+    setOverlapRole(null)
     setReserveRole(reserveRole === role ? null : role)
     setReserveValue(reservedTagsOf(role).join(", "))
+  }
+
+  function overlapAllowedOf(role: string): boolean {
+    return roleOverlapAllowed(shifts, role)
+  }
+
+  function startOverlap(role: string) {
+    setEditorAutoFocus(true)
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(null)
+    setOverlapRole(overlapRole === role ? null : role)
+    setOverlapValue(overlapAllowedOf(role))
+  }
+
+  function closeOverlap(role: string) {
+    setOverlapRole(null)
+    setRoleActionError(null)
+    focusRoleButton(overlapBtnRefs, role)
   }
 
   function closeReserve(role: string) {
@@ -278,7 +307,7 @@ export default function RoleManagerPanel({
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
         <h3 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h3>
-        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou le supprimer (avec tous ses créneaux).</p>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
       </div>
       {roleActionError && (
         <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
@@ -291,6 +320,7 @@ export default function RoleManagerPanel({
           const isPickingColor = colorPickerRole === role
           const limit = roleLimitOf(role)
           const reservedTags = reservedTagsOf(role)
+          const cumulable = overlapAllowedOf(role)
           return (
           <li key={role}>
             <div
@@ -335,7 +365,7 @@ export default function RoleManagerPanel({
               <button
                 ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
                 type="button"
-                onClick={() => { setLimitRole(null); setReserveRole(null); setColorPickerRole(isPickingColor ? null : role) }}
+                onClick={() => { setLimitRole(null); setReserveRole(null); setOverlapRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                 disabled={isBusy || isRenaming}
                 aria-label={`Changer la couleur du poste ${role}`}
                 aria-expanded={isPickingColor}
@@ -406,6 +436,18 @@ export default function RoleManagerPanel({
                     {reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
                   <button
+                    ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
+                    type="button"
+                    onClick={() => startOverlap(role)}
+                    disabled={isBusy}
+                    aria-expanded={overlapRole === role}
+                    aria-controls={overlapRole === role ? `overlap-form-${i}` : undefined}
+                    aria-label={cumulable ? `Cumul : oui, poste « ${role} » cumulable avec un autre créneau` : `Cumul : non, poste « ${role} » non cumulable avec un autre créneau`}
+                    className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                  >
+                    {cumulable ? "Cumul : oui" : "Cumul : non"}
+                  </button>
+                  <button
                     ref={(el) => setRoleButton(renameBtnRefs.current, role, el)}
                     type="button"
                     onClick={() => startRenameRole(role)}
@@ -443,6 +485,23 @@ export default function RoleManagerPanel({
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}
                 onClose={closeReserve}
+                setShifts={setShifts}
+                onAnnounce={onAnnounce}
+              />
+            )}
+            {overlapRole === role && (
+              <RoleOverlapForm
+                eventId={eventId}
+                autoFocus={editorAutoFocus}
+                role={role}
+                index={i}
+                overlapAllowed={cumulable}
+                value={overlapValue}
+                onValueChange={setOverlapValue}
+                busyRole={roleActionBusy}
+                onBusyRoleChange={setRoleActionBusy}
+                onActionError={setRoleActionError}
+                onClose={closeOverlap}
                 setShifts={setShifts}
                 onAnnounce={onAnnounce}
               />

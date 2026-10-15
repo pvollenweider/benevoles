@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Poste cumulable avec un autre créneau** (#986) : dans **Gérer les postes**, le bouton « Cumul » rend un poste cumulable, par exemple les premiers secours tenus depuis la buvette ; un bénévole peut alors prendre un de ses créneaux et un autre créneau aux mêmes heures, sur la page d'inscription comme à l'ajout manuel. Entre deux postes ordinaires, le chevauchement reste refusé.
 - **Rattacher une question à un poste** (#984) : dans **Questions**, le champ facultatif **Poste concerné** confie une question à un poste, par exemple le repas du soir à l'équipe Cuisine ; quand un bénévole modifie sa réponse depuis sa page personnelle, l'email part aux responsables de secteur de ce poste au lieu des administrateurs, et aux administrateurs si le poste n'a pas de responsable.
 - **Modifier ses réponses depuis sa page personnelle** (#984) : sous « Mes réponses », **Modifier mes réponses** rouvre les questions de l'inscription, tant que le bénévole peut encore annuler un de ses créneaux lui-même ; chaque modification est inscrite au journal de l'événement et signalée aux administrateurs par un email regroupé, avec la réponse finale.
 - **Revoir ses réponses depuis sa page personnelle** (#984) : sous « Tous mes créneaux », l'encadré « Mes réponses » montre au bénévole ce qu'il a répondu à chaque question de l'événement, dans l'ordre du formulaire, ou « Pas de réponse ».

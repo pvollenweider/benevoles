@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
 import { useState } from "react"
 
-import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
 import type { RawShift } from "../admin/shifts/types"
 
 // Inline editors of a role in « Gérer les postes »: limit per person (#466), reserved tags (#470), colour.
@@ -37,6 +37,89 @@ describe("RoleSettings", () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  // « Cumulable avec un autre créneau » (#986).
+  describe("RoleOverlapForm", () => {
+    const setup = (value: boolean, overlapAllowed = false, busyRole: string | null = null) => {
+      const cb = { ...callbacks(), onValueChange: vi.fn() }
+      render(<RoleOverlapForm eventId="evt-1" role="Secours" index={0} overlapAllowed={overlapAllowed} value={value} busyRole={busyRole} {...cb} />)
+      return cb
+    }
+
+    it("labels the checkbox with the role, describes its effect and takes focus", () => {
+      setup(false)
+      const box = screen.getByRole("checkbox", { name: "Poste « Secours » cumulable avec un autre créneau" })
+      expect(box).toHaveFocus()
+      expect(box).not.toBeChecked()
+      expect(box).toHaveAccessibleDescription(/peut prendre en même temps un autre créneau/)
+    })
+
+    it("reports a click to the panel, which keeps the value", () => {
+      const cb = setup(false)
+      fireEvent.click(screen.getByRole("checkbox"))
+      expect(cb.onValueChange).toHaveBeenCalledWith(true)
+    })
+
+    it("saves the option, updates the role's shifts, closes and announces", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup(true)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onClose).toHaveBeenCalledWith("Secours"))
+      const [url, init] = fetchMock.mock.calls[0]
+      expect(url).toBe("/api/admin/events/evt-1/roles/Secours")
+      expect(JSON.parse(init.body)).toEqual({ overlapAllowed: true })
+      expect(applied(cb.setShifts, [shift({ roleName: "Secours" }), shift({ id: "s2", roleName: "Bar" })]).map(s => s.overlapAllowed)).toEqual([true, undefined])
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Secours » : cumulable avec un autre créneau.")
+    })
+
+    it("announces the removal in words", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup(false, true)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Secours » : ne se cumule plus avec un autre créneau."))
+    })
+
+    it("closes without a request when nothing changed, saying so once", () => {
+      const cb = setup(true, true)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(cb.onClose).toHaveBeenCalledWith("Secours")
+      expect(cb.onAnnounce).toHaveBeenCalledTimes(1)
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Secours » : aucune modification.")
+    })
+
+    it("reports the server's error and stays open, focus on « Enregistrer »", async () => {
+      fetchMock.mockResolvedValue({ ok: false, json: async () => ({ error: "Poste introuvable" }) })
+      const cb = setup(true)
+      const save = screen.getByRole("button", { name: "Enregistrer" })
+      save.focus()
+      fireEvent.click(save)
+      await waitFor(() => expect(cb.onActionError).toHaveBeenLastCalledWith("Poste introuvable"))
+      expect(cb.onClose).not.toHaveBeenCalled()
+      expect(cb.setShifts).not.toHaveBeenCalled()
+      expect(save).toHaveFocus()
+    })
+
+    it("sends nothing while another action runs, and marks the button busy for its own role", () => {
+      setup(true, false, "Secours")
+      const save = screen.getByRole("button", { name: "Enregistrement…" })
+      expect(save).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(save)
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it("closes on Escape", () => {
+      const cb = setup(false)
+      fireEvent.keyDown(screen.getByRole("checkbox"), { key: "Escape" })
+      expect(cb.onClose).toHaveBeenCalledWith("Secours")
+    })
+
+    it("waits for a running save before closing on Escape", () => {
+      const cb = setup(true, false, "Secours")
+      fireEvent.keyDown(screen.getByRole("checkbox"), { key: "Escape" })
+      expect(cb.onClose).not.toHaveBeenCalled()
+    })
   })
 
   describe("RoleLimitForm", () => {

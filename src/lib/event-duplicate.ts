@@ -54,6 +54,8 @@ export type DuplicableShift = {
   colorKey: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[]
+  /** Role cumulable with another shift (#986), copied with the role's other settings. */
+  overlapAllowed?: boolean
   /** Recurring permanence (#866) the shift came from: such shifts are regenerated, not copied. */
   recurrenceId?: string | null
 }
@@ -130,6 +132,7 @@ export function copiedShift(s: DuplicableShift) {
     colorKey: s.colorKey,
     maxPerVolunteer: s.maxPerVolunteer ?? null,
     reservedTags: s.reservedTags ?? [],
+    overlapAllowed: s.overlapAllowed ?? false,
   }
 }
 

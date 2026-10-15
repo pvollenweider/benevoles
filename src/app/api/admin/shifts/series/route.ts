@@ -12,6 +12,7 @@ import { validationError } from "@/lib/api-error"
 import { generateShiftSeries, seriesProblem } from "@/lib/shift-series"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
+import { roleOverlapSetting } from "@/lib/role-overlap-setting"
 
 const schema = z.object({
   eventId: z.string(),
@@ -60,6 +61,8 @@ export async function POST(req: Request) {
   if (!isDayInPeriod(parsed.data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
 
   const slots = generateShiftSeries({ date, startTime, endTime, slotMinutes, breakMinutes })
+  // Shifts added to a cumulable role are cumulable too (#986).
+  const overlapAllowed = await roleOverlapSetting(db, eventId, rest.roleName)
   const shifts = await db.$transaction((tx) =>
     Promise.all(
       slots.map((slot) =>
@@ -72,6 +75,7 @@ export async function POST(req: Request) {
             startTime: slot.startTime,
             endTime: slot.endTime,
             status: "open",
+            overlapAllowed,
           },
         }),
       ),

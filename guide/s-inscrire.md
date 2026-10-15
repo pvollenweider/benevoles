@@ -29,7 +29,7 @@ Renseigne :
 
 Si tu t'es déjà inscrit à un autre événement depuis ce navigateur, ton prénom, ton nom, ton email et ton téléphone sont déjà remplis : vérifie-les, c'est tout. Ces coordonnées restent seulement sur ton appareil. Sur un appareil partagé, **Ce n'est pas moi, effacer** vide ces champs et les oublie ; **Quitter la session** les oublie aussi.
 
-Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinateur, au-dessus du formulaire sur téléphone) reprend tes créneaux dans l'ordre, avec le jour et les heures (« jusqu'au lendemain » pour un créneau qui passe minuit), ce qui les sépare (enchaînés, pause, ou **chevauchement** : dans ce cas l'inscription sera refusée, retire un créneau), si chaque inscription est ferme, en liste d'attente ou sur validation, l'âge minimum éventuel, et la liste exacte des données transmises à l'organisation.
+Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinateur, au-dessus du formulaire sur téléphone) reprend tes créneaux dans l'ordre, avec le jour et les heures (« jusqu'au lendemain » pour un créneau qui passe minuit), ce qui les sépare (enchaînés, pause, ou **chevauchement** : dans ce cas l'inscription sera refusée, retire un créneau ; si l'un des deux postes se cumule avec un autre créneau, le récapitulatif dit simplement qu'ils ont lieu en même temps et l'inscription est acceptée), si chaque inscription est ferme, en liste d'attente ou sur validation, l'âge minimum éventuel, et la liste exacte des données transmises à l'organisation.
 
 ## Infos pratiques d'un créneau
 
@@ -61,7 +61,7 @@ Tout ce que tu as saisi reste en place. Le message dit de quoi il s'agit : un ch
 
 ### J'ai un message « Ce créneau chevauche une inscription existante »
 
-Tu as déjà une inscription sur un créneau qui se passe en même temps. Les créneaux qui se chevauchent avec une de tes inscriptions ne peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi.
+Tu as déjà une inscription sur un créneau qui se passe en même temps. Les créneaux qui se chevauchent avec une de tes inscriptions ne peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi. Seuls les postes que l'organisation a rendus cumulables avec un autre créneau échappent à cette règle.
 
 ### Où sont utilisées mes données personnelles ?
 

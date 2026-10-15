@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { crossesMidnight, fmtRange, toMin, toMinEnd } from "./gantt-utils"
+import { shiftsClash } from "./shift-overlap"
 
 /**
  * The recap shown before « Confirmer mon inscription » (#373): each selected shift with its day
@@ -23,6 +24,8 @@ export type RecapShiftInput = {
   /** « Sur validation » (#484). Optional: older callers and previews may not send it. */
   requiresApproval?: boolean
   minAge: number | null
+  /** Its role may overlap another shift (#986). */
+  overlapAllowed?: boolean
 }
 
 export type RecapShift = {
@@ -36,6 +39,12 @@ export type RecapShift = {
   /** A request for the organizer to accept, not a place (#484). Never true with `waitlist`. */
   request: boolean
   minAge: number | null
+  /** The shift's day and hours as given, for the overlap rule (src/lib/shift-overlap.ts). */
+  date: string
+  startTime: string
+  endTime: string
+  /** Its role may overlap another shift (#986): an overlap with it is accepted. */
+  overlapAllowed: boolean
   /** Minutes from an arbitrary origin, for ordering and gaps. */
   startAbs: number
   endAbs: number
@@ -43,6 +52,8 @@ export type RecapShift = {
 
 export type Gap =
   | { kind: "overlap"; minutes: number }
+  /** Overlap the sign-up accepts: one of the two roles is cumulable (#986). */
+  | { kind: "parallel"; minutes: number }
   | { kind: "back_to_back" }
   | { kind: "break"; minutes: number }
   | { kind: "other_day" }
@@ -79,6 +90,10 @@ export function recapShifts(shifts: RecapShiftInput[]): RecapShift[] {
         waitlist: isWaitlistShift(s),
         request: !isWaitlistShift(s) && (s.requiresApproval ?? false),
         minAge: s.minAge,
+        date: s.date,
+        startTime: s.startTime,
+        endTime: s.endTime,
+        overlapAllowed: s.overlapAllowed ?? false,
         startAbs: d * DAY + toMin(s.startTime),
         endAbs: d * DAY + toMinEnd(s.endTime, s.startTime),
       }
@@ -91,7 +106,10 @@ export function gapAfter(sorted: RecapShift[], i: number): Gap | null {
   const a = sorted[i]
   const b = sorted[i + 1]
   if (!b) return null
-  if (b.startAbs < a.endAbs) return { kind: "overlap", minutes: Math.min(a.endAbs, b.endAbs) - b.startAbs }
+  if (b.startAbs < a.endAbs) {
+    const minutes = Math.min(a.endAbs, b.endAbs) - b.startAbs
+    return shiftsClash(a, b) ? { kind: "overlap", minutes } : { kind: "parallel", minutes }
+  }
   const gap = b.startAbs - a.endAbs
   if (gap === 0) return { kind: "back_to_back" }
   // A night between them isn't a « pause »: the next shift starts on a later calendar day.
@@ -102,14 +120,19 @@ export function gapAfter(sorted: RecapShift[], i: number): Gap | null {
 export function gapLabel(g: Gap): string | null {
   switch (g.kind) {
     case "overlap": return `Ces deux créneaux se chevauchent de ${fmtDuration(g.minutes)} : l'inscription sera refusée.`
+    case "parallel": return `En même temps que le créneau suivant pendant ${fmtDuration(g.minutes)} : c'est possible, l'un des deux postes se cumule avec un autre créneau.`
     case "back_to_back": return "Enchaîné avec le suivant, sans pause."
     case "break": return `Pause de ${fmtDuration(g.minutes)} avant le suivant.`
     case "other_day": return null
   }
 }
 
+/**
+ * Whether two of the shifts overlap in a way the sign-up refuses: any pair, not only neighbours, and
+ * neither of a cumulable role (#986, src/lib/shift-overlap.ts).
+ */
 export function hasOverlap(sorted: RecapShift[]): boolean {
-  return sorted.some((_, i) => gapAfter(sorted, i)?.kind === "overlap")
+  return sorted.some((a, i) => sorted.slice(i + 1).some((b) => shiftsClash(a, b)))
 }
 
 /** The personal data the form will send, worded for the volunteer. */

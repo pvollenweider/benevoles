@@ -11,6 +11,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
+import { roleOverlapSetting } from "@/lib/role-overlap-setting"
 
 const schema = z.object({
   eventId: z.string(),
@@ -57,8 +58,10 @@ export async function POST(req: Request) {
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   if (!isDayInPeriod(data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
 
+  // A shift added to a cumulable role is cumulable too (#986): the option belongs to the role.
+  const overlapAllowed = await roleOverlapSetting(db, data.eventId, data.roleName)
   const shift = await db.shift.create({
-    data: { ...data, date: new Date(data.date), status: "open" },
+    data: { ...data, date: new Date(data.date), status: "open", overlapAllowed },
   })
 
   await logEvent({

@@ -47,7 +47,9 @@ const updateSchema = z.object({
   maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
   /** Tags one of which a member needs for this role (#470); [] opens it to everyone. */
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined, { message: "Rien à modifier." })
+  /** « Cumulable avec un autre créneau » (#986): the role's shifts may overlap any other shift of a volunteer. */
+  overlapAllowed: z.boolean().optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -62,7 +64,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -72,7 +74,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -156,6 +158,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
         changes: { reservedTags: { from: s.reservedTags, to: reservedTags } },
+      })
+    }
+  }
+
+  if (overlapAllowed !== undefined) {
+    // Every shift of the role, cancelled ones too, so the role keeps one value (#986). Turning it
+    // off keeps the registrations already made: it applies to the next sign-ups.
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { overlapAllowed },
+    })
+    for (const s of shifts.filter((sh) => sh.overlapAllowed !== overlapAllowed)) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { overlapAllowed: { from: s.overlapAllowed, to: overlapAllowed } },
       })
     }
   }

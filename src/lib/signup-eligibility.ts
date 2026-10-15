@@ -14,12 +14,11 @@ import { acceptsRegistrations, refusalMessage, registrationState, type Registrat
 import { memberMayTake, reservationRefusal } from "./role-reservation"
 import { orgTimeZone } from "./time-zone"
 import { pastShiftLabel } from "./long-event"
-import { shiftsOverlap, shiftsTooYoungFor } from "./utils"
+import { shiftsTooYoungFor } from "./utils"
+import { shiftsClash, type OverlapShift } from "./shift-overlap"
 
 /** The HTTP answer to a refused sign-up: its status and JSON body. */
 export type SignupRefusal = { status: number; body: { error: string } & Record<string, unknown> }
-
-type OverlapShift = Parameters<typeof shiftsOverlap>[0]
 
 /**
  * Registration window (#463): the page may have been opened before registrations closed. The
@@ -57,11 +56,11 @@ export function fullShift(shiftId: string, label: string): SignupRefusal {
   return { status: 409, body: { error: `Le créneau "${label}" est complet. Recharge la page.`, fullShiftId: shiftId } }
 }
 
-/** Two of the asked shifts overlap each other. */
+/** Two of the asked shifts overlap each other, neither of a cumulable role (#986). */
 export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string })[]): SignupRefusal | null {
   for (let i = 0; i < shifts.length; i++) {
     for (let j = i + 1; j < shifts.length; j++) {
-      if (shiftsOverlap(shifts[i], shifts[j])) {
+      if (shiftsClash(shifts[i], shifts[j])) {
         return { status: 400, body: { error: `Les créneaux "${shifts[i].label}" et "${shifts[j].label}" se chevauchent.` } }
       }
     }
@@ -69,14 +68,14 @@ export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string 
   return null
 }
 
-/** The first of the volunteer's registrations that overlaps one of the asked shifts. */
+/** The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a cumulable role may overlap). */
 export function findOverlap(
   existing: { shift: OverlapShift & { label: string } }[],
   shifts: OverlapShift[],
 ): { label: string } | null {
   for (const reg of existing) {
     for (const shift of shifts) {
-      if (shiftsOverlap(reg.shift, shift)) return { label: reg.shift.label }
+      if (shiftsClash(reg.shift, shift)) return { label: reg.shift.label }
     }
   }
   return null
