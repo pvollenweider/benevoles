@@ -95,7 +95,8 @@ test.describe("admin", () => {
     // « /questions » carries the answers summary (#686), with its tables or its empty state; « /review » the share link (#564) and the review checks (#565);
     // « /staffing/search » the shift picker of « Chercher des bénévoles » (#566).
     // « /day-of » (#561): its empty state here, outside the event's dates; with content in e2e/day-of.spec.ts.
-    for (const sub of ["/shifts", "/registrations", "/message", "/invitations", "/questions", "/review", "/staffing", "/staffing/search", "/day-of"]) {
+    // « /share » the Partage tab (public link, links per group, embed); « /edit » the Réglages tab and its deletion section.
+    for (const sub of ["/shifts", "/registrations", "/message", "/invitations", "/questions", "/review", "/staffing", "/staffing/search", "/day-of", "/share", "/edit"]) {
       await page.goto(base + sub)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
       expect.soft(await seriousViolations(page), sub).toEqual([])
@@ -188,7 +189,7 @@ test.describe("admin", () => {
   // #557: the members list (new "Heures attestées" / "Dernière participation" columns and the
   // hours-export form), then an event's Rapports page with its post-event summary section.
   // #599: the dashboard, with its « Ce qui demande votre attention » section.
-  test("members list and an event's Rapports page (with the post-event summary) have no serious violation", async ({ page }) => {
+  test("members list and an event's Documents page (with the post-event summary) have no serious violation", async ({ page }) => {
     await page.goto("/admin/login")
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
@@ -209,7 +210,7 @@ test.describe("admin", () => {
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     await page.goto(page.url() + "/print")
-    await expect(page.getByRole("heading", { level: 1, name: "Rapports" })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: "Documents à imprimer" })).toBeVisible()
     await expect(page.getByRole("heading", { level: 2, name: "Résumé de l'événement" })).toBeVisible()
     expect.soft(await seriousViolations(page), "reports page with summary").toEqual([])
   })

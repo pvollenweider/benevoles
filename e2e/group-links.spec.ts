@@ -32,8 +32,8 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   await expect(page).toHaveURL(/\/admin\/events/)
 
   // ── Admin: create the link ────────────────────────────────────────────────
-  await page.goto(`/admin/events/${event.eventId}`)
-  const section = page.getByRole("region", { name: "Partager l'événement" })
+  await page.goto(`/admin/events/${event.eventId}/share`)
+  const section = page.getByRole("region", { name: "Liens par groupe et intégration" })
   const create = section.getByRole("button", { name: "Créer un lien pour un groupe" })
   await waitForHydration(create)
   await create.click()
@@ -131,7 +131,7 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   await expect(page.getByText("Aucun résultat.")).toBeVisible()
 
   // ── Admin: delete, after confirmation; the registration stays ─────────────
-  await page.goto(`/admin/events/${event.eventId}`)
+  await page.goto(`/admin/events/${event.eventId}/share`)
   const remove = item.getByRole("button", { name: "Supprimer le lien « Amicale E2E »" })
   await waitForHydration(remove)
   await remove.click()

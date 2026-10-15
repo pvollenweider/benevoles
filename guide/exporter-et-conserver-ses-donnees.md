@@ -16,13 +16,13 @@ Vos données vous appartiennent et sortent de l'application à tout moment, sans
 
 | Export | Où | Format |
 |---|---|---|
-| Un événement complet (réglages, créneaux, inscriptions avec les bénévoles, pages, responsables, jalons, journal) | page de l'événement → **Rapports** → **Archive de l'événement (JSON)** | JSON |
+| Un événement complet (réglages, créneaux, inscriptions avec les bénévoles, pages, responsables, jalons, journal) | onglet **Documents** de l'événement → **Archive de l'événement (JSON)** | JSON |
 | Tous les membres (étiquettes, disponibilités, notes, nombre d'inscriptions, membres désactivés compris) | **Membres** → **Exporter les membres (CSV)** | CSV |
 | Le journal d'activité de l'organisation | **Paramètres** → **Journal d'activité** → **Exporter tout le journal (CSV)** | CSV |
-| Le planning, la liste des bénévoles, les feuilles à imprimer | **Rapports** de l'événement | PDF (depuis le navigateur) |
+| Le planning, la liste des bénévoles, les feuilles à imprimer | onglet **Documents** de l'événement | PDF (depuis le navigateur) |
 | La feuille de présence | **Inscriptions** de l'événement → **Exporter les présences (CSV)** | CSV |
 
-![Section « Archive » de la page Rapports d'un événement : le lien « Archive de l'événement (JSON) », qui télécharge dans un fichier ses réglages, créneaux, inscriptions, pages, responsables, jalons et journal](/doc-img/admin-event-archive.png)
+![Section « Archive » de la page « Documents à imprimer » d'un événement : le lien « Archive de l'événement (JSON) », qui télécharge dans un fichier ses réglages, créneaux, inscriptions, pages, responsables, jalons et journal](/doc-img/admin-event-archive.png)
 
 Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-virgule). Une valeur qui commence par `=`, `+`, `-` ou `@` (un numéro `+41…`, par exemple) y est précédée d'une apostrophe : le tableur l'affiche comme du texte au lieu de l'exécuter comme une formule. Les archives ne contiennent jamais de lien personnel ni de jeton d'accès.
 
@@ -61,7 +61,7 @@ Pour ne pas garder sans fin les données personnelles des bénévoles, les inscr
 - **Ce qui part** : sur ces inscriptions, le nom, l'adresse email et le téléphone des bénévoles, et leurs commentaires ; les réponses aux questions, les invitations et les responsables de secteur de l'événement.
 - **Ce qui reste** : l'événement, ses créneaux, les effectifs, les présences et les heures. Chaque bénévole y devient « Bénévole effacé », sans lien avec sa fiche de membre. Les fiches des membres restent elles aussi, mais ces événements n'apparaissent plus dans leur historique ni sur leur attestation de bénévolat.
 
-Vous êtes prévenu par email 30 jours avant la première anonymisation, avec la liste des événements concernés : exportez avant cette date ce dont vous avez besoin (**Rapports** → **Archive de l'événement (JSON)**, attestations des membres). Ensuite, chaque mois, les événements qui atteignent 3 ans sont anonymisés de la même façon, sans nouveau message.
+Vous êtes prévenu par email 30 jours avant la première anonymisation, avec la liste des événements concernés : exportez avant cette date ce dont vous avez besoin (onglet **Documents** → **Archive de l'événement (JSON)**, attestations des membres). Ensuite, chaque mois, les événements qui atteignent 3 ans sont anonymisés de la même façon, sans nouveau message.
 
 Un membre qui n'a participé à aucun événement depuis 3 ans garde sa fiche : vous pouvez le désactiver, ou effacer ses données, depuis **Membres** (voir [Effacer ou supprimer un membre](effacer-ou-supprimer-un-membre.md)).
 

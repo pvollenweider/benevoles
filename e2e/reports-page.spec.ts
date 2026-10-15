@@ -21,7 +21,7 @@ async function openReports(page: Page) {
   expect(res.ok(), await res.text()).toBeTruthy()
   const event: { id: string } = await res.json()
   await page.goto(`/admin/events/${event.id}/print`)
-  await expect(page.getByRole("heading", { level: 1, name: "Rapports" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "Documents à imprimer" })).toBeVisible()
 }
 
 test("sections in order: volunteers, organizers only (with the full export), badges, archive last", async ({ page }) => {

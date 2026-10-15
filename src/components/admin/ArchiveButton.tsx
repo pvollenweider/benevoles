@@ -7,11 +7,12 @@ import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 
 /**
- * Archives a published or draft event (PATCH publicStatus). Once archived the
- * event can be deleted for good from the section at the bottom of the page.
- * The component stays mounted after archiving so its status message is announced.
+ * Archives a published or draft event (PATCH publicStatus). Once archived the event can be deleted
+ * for good from the « Suppression définitive » section of its Réglages page. A row of the event
+ * header's « ⋯ » panel: `onDone` hands the outcome to the header, which announces it and moves the
+ * focus, since this unmounts with the panel.
  */
-export default function ArchiveButton({ eventId, currentStatus }: { eventId: string; currentStatus: string }) {
+export default function ArchiveButton({ eventId, currentStatus, onDone }: { eventId: string; currentStatus: string; onDone?: (message: string) => void }) {
   const router = useRouter()
   const [confirming, setConfirming] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -32,6 +33,7 @@ export default function ArchiveButton({ eventId, currentStatus }: { eventId: str
   }, [confirming])
 
   function cancel() {
+    if (loading) return
     restoreFocus.current = true
     setConfirming(false)
   }
@@ -48,6 +50,7 @@ export default function ArchiveButton({ eventId, currentStatus }: { eventId: str
       if (!res.ok) throw new Error()
       setConfirming(false)
       setMessage("Événement archivé.")
+      onDone?.("Événement archivé.")
       router.refresh()
     } catch {
       setError("Impossible d'archiver l'événement. Réessayez.")
@@ -57,7 +60,7 @@ export default function ArchiveButton({ eventId, currentStatus }: { eventId: str
   }
 
   return (
-    <div className="flex flex-col items-end gap-1">
+    <div className="flex flex-col items-stretch gap-1">
       {!isArchived &&
         (confirming ? (
           <div
@@ -65,28 +68,29 @@ export default function ArchiveButton({ eventId, currentStatus }: { eventId: str
             aria-labelledby="archive-confirm-label"
             aria-describedby="archive-confirm-desc"
             onKeyDown={(e) => {
-              if (e.key === "Escape") cancel()
+              // preventDefault: the « ⋯ » panel around leaves an Escape already handled here alone.
+              if (e.key === "Escape") { e.preventDefault(); cancel() }
             }}
-            className="flex flex-col gap-2 bg-yellow-50 border border-yellow-300 rounded-xl px-3 py-2 max-w-xs"
+            className="flex flex-col gap-2 bg-yellow-50 border border-yellow-300 rounded-xl px-3 py-2"
           >
             <span id="archive-confirm-label" className="text-sm text-yellow-900 font-semibold">Archiver cet événement ?</span>
             <span id="archive-confirm-desc" className="text-xs text-yellow-900">
-              Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement.
+              Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement depuis ses réglages.
             </span>
             <div className="flex items-center gap-2">
               <button
                 ref={confirmRef}
                 type="button"
-                onClick={archive}
-                disabled={loading}
-                className="text-sm min-h-9 bg-yellow-700 text-white px-3 py-1 rounded-full font-medium hover:bg-yellow-800 disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+                onClick={() => { if (!loading) void archive() }}
+                aria-disabled={loading || undefined}
+                className="text-sm min-h-9 bg-yellow-700 text-white px-3 py-1 rounded-full font-medium hover:bg-yellow-800 aria-disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
                 {loading ? "Archivage…" : "Confirmer"}
               </button>
               <button
                 type="button"
                 onClick={cancel}
-                disabled={loading}
+                aria-disabled={loading || undefined}
                 className="text-sm min-h-9 px-2 text-yellow-900 underline hover:text-yellow-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
                 Annuler
@@ -98,7 +102,7 @@ export default function ArchiveButton({ eventId, currentStatus }: { eventId: str
             ref={openerRef}
             type="button"
             onClick={() => setConfirming(true)}
-            className="text-sm px-3 py-1.5 rounded-full font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+            className="flex w-full min-h-11 items-center rounded-lg px-3 text-left text-sm text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
           >
             Archiver
           </button>

@@ -705,17 +705,18 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         {error && <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
 
-        <div className="flex gap-3 pt-2">
-          {!isEdit && (
+        {/* Editing saves as you go, and the event's header leads everywhere else: no button here. */}
+        {!isEdit && (
+          <div className="flex gap-3 pt-2">
             <button type="submit" disabled={saving}
               className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50">
               {saving ? "Création…" : "Créer l'événement"}
             </button>
-          )}
-          <button type="button" onClick={() => router.back()} className="text-gray-500 px-4 py-2.5 text-sm hover:text-gray-800">
-            <span aria-hidden="true">← </span>Retour
-          </button>
-        </div>
+            <button type="button" onClick={() => router.back()} className="text-gray-500 px-4 py-2.5 text-sm hover:text-gray-800">
+              <span aria-hidden="true">← </span>Retour
+            </button>
+          </div>
+        )}
 
       </form>
     </>

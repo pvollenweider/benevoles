@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { attentionItems, overdueMilestonesMessage, type AttentionEvent } from "../attention"
+import { attentionItems, eventAttentionItems, overdueMilestonesMessage, type AttentionEvent } from "../attention"
 
 // « Ce qui demande votre attention » (#372): what an admin should act on, from the data.
 
@@ -47,6 +47,7 @@ describe("attentionItems", () => {
     const items = attentionItems({ now, events: [ev({ overdueMilestones: late, unansweredInvites: 3 })], offers: [] })
     expect(ids(items)).toEqual(["milestones:e1", "invites:e1"])
     expect(items[0].message).toBe("2 jalons sont en retard : « Louer la tente » (qui s'en occupe : Samira Diallo), « Commander les t-shirts ».")
+    expect(items[0].href).toBe("/admin/events/e1#jalons")
     expect(items[1].href).toBe("/admin/events/e1/message?audience=invited")
     expect(items[1].message).toMatch(/aucun créneau confirmé/)
   })
@@ -114,5 +115,30 @@ describe("attentionItems", () => {
   it("says nothing about addresses when the count is zero or absent", () => {
     expect(ids(attentionItems({ now, events: [], offers: [], addressesToVerifyCount: 0 }))).not.toContain("addresses-to-verify")
     expect(ids(attentionItems({ now, events: [], offers: [] }))).not.toContain("addresses-to-verify")
+  })
+})
+
+// The event page's « À traiter »: one event's items, without what its other blocks already say.
+describe("eventAttentionItems", () => {
+  it("keeps the event's own items, drops other events, under-filled shifts and « commence bientôt »", () => {
+    const late = [{ title: "Louer la tente", ownerName: null }]
+    const items = attentionItems({
+      now,
+      events: [
+        ev({ startDate: day(1), endDate: day(1), shifts: [{ date: day(1), capacity: 4, active: 1, roleName: "Bar" }], overdueMilestones: late, pendingRequests: 2 }),
+        ev({ id: "e2", overdueMilestones: late }),
+      ],
+      offers: [],
+      addressesToVerifyCount: 3,
+    })
+    expect(ids(items)).toContain("underfilled:e1")
+    expect(ids(items)).toContain("starting:e1")
+    expect(ids(eventAttentionItems(items, "e1"))).toEqual(["requests:e1", "milestones:e1"])
+    expect(ids(eventAttentionItems(items, "e2"))).toEqual(["milestones:e2"])
+  })
+
+  it("an event whose id is a prefix of another's gets only its own", () => {
+    const items = attentionItems({ now, events: [ev({ id: "e1", pendingRequests: 1 }), ev({ id: "e10", pendingRequests: 1 })], offers: [] })
+    expect(ids(eventAttentionItems(items, "e1"))).toEqual(["requests:e1"])
   })
 })

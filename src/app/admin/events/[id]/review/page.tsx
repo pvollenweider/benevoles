@@ -5,26 +5,19 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { canPublish, hasUpcomingShift, practicalInfoGaps, reviewChecks } from "@/lib/event-wizard"
-import { parseNotificationSettings } from "@/lib/notification-settings"
-import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { canPublish } from "@/lib/event-wizard"
+import { loadReviewChecks } from "@/lib/review-checks-data"
 import { acceptsRegistrations } from "@/lib/registration-window"
-import { staffingSummary } from "@/lib/staffing"
-import { orgTimeZone } from "@/lib/time-zone"
 import { eventPublicUrl } from "@/lib/urls"
 import WizardSteps from "@/components/admin/WizardSteps"
 import PublishToggle from "@/components/admin/PublishToggle"
 import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import EventShareLink from "@/components/admin/EventShareLink"
 import HelpLink from "@/components/admin/HelpLink"
+import ReviewChecklist from "@/components/admin/ReviewChecklist"
 
 export const dynamic = "force-dynamic"
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const ctx = await getOrgContext()
-  const { id } = await params
-  const event = ctx ? await ctx.db.event.findFirst({ where: { id }, select: { title: true } }) : null
-  return { title: event ? `Vérification et publication – ${event.title}` : "Vérification et publication" }
-}
+export const metadata: Metadata = { title: "Vérifier avant publication" }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -35,53 +28,10 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
   if (!ctx) redirect("/admin/login")
   const { id } = await params
 
-  const event = await ctx.db.event.findFirst({
-    where: { id },
-    select: {
-      id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
-      latitude: true, longitude: true, dayContactName: true, dayContactPhone: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
-      organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
-      shifts: {
-        where: { status: { not: "cancelled" } },
-        select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
-          locationDetails: true, contactName: true, contactPhone: true, latitude: true, longitude: true,
-          registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
-        },
-      },
-      _count: { select: { sectorLeaders: true } },
-    },
-  })
-  if (!event) notFound()
-
   const now = new Date()
-  const timeZone = orgTimeZone(event.organization)
-  const shifts = event.shifts.map((s) => ({
-    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
-    active: s.registrations.filter((r) => r.status === "active").length,
-    waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
-    requested: s.registrations.filter((r) => r.status === "requested").length,
-  }))
-  const checks = reviewChecks({
-    id: event.id, title: event.title,
-    startDate: event.startDate.toISOString().slice(0, 10), endDate: event.endDate.toISOString().slice(0, 10),
-    location: event.location, confirmationMessage: event.confirmationMessage, publicInstructions: event.publicInstructions,
-    publicStatus: event.publicStatus,
-    shiftCount: event.shifts.length,
-    roleCount: new Set(event.shifts.map((s) => s.roleName)).size,
-    capacity: event.shifts.reduce((n, s) => n + s.capacity, 0),
-    leaderCount: event._count.sectorLeaders,
-    practicalInfo: practicalInfoGaps(event.shifts, event),
-    registration: { registrationsOpen: event.registrationsOpen, opensAt: event.registrationOpensAt, closesAt: event.registrationClosesAt, timeZone, now },
-    reminders: {
-      eventEnabled: event.remindersEnabled,
-      organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
-      upcomingShifts: hasUpcomingShift(shifts, now, timeZone),
-    },
-    // Leaders don't matter to the coverage line: only the totals and the incomplete shifts are read.
-    coverage: staffingSummary(shifts, []),
-  })
+  const loaded = await loadReviewChecks(ctx.db, id, now)
+  if (!loaded) notFound()
+  const { event, checks } = loaded
   const ready = canPublish(checks)
   const published = event.publicStatus === "published"
   const publicUrl = eventPublicUrl(event.organization.slug, event.slug)
@@ -90,7 +40,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     <div className="space-y-6 max-w-2xl">
       <WizardSteps current={3} eventId={event.id} />
       <div>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">{event.title}</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Vérifier avant publication</h1>
         <HelpLink route="/admin/events/[id]/review" />
         <p role="status" className="text-sm text-gray-700 mt-1">
           {published
@@ -103,27 +53,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
 
       <section aria-labelledby="review-checks" className="space-y-2">
         <h2 id="review-checks" className="text-base font-semibold text-gray-900">Vérification</h2>
-        {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
-        <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
-          {checks.map((c) => (
-            <li key={c.id} className="px-4 py-3 text-sm flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <div className="min-w-0">
-                <p className="text-gray-900">
-                  <span className="sr-only">{c.ok ? "Fait : " : c.required ? "À faire : " : c.warn ? "À vérifier : " : "Facultatif : "}</span>
-                  <span aria-hidden="true" className={`inline-block w-5 ${c.ok ? "text-green-800" : c.required ? "text-red-700" : c.warn ? "text-amber-800" : "text-gray-500"}`}>{c.ok ? "✓" : c.required ? "!" : c.warn ? "?" : "–"}</span>
-                  {c.label}
-                </p>
-                {!c.ok && c.hint && <p id={`${c.id}-hint`} className="text-xs text-gray-600 pl-5">{c.hint}</p>}
-              </div>
-              {c.href && (
-                <Link href={c.href} aria-describedby={!c.ok && c.hint ? `${c.id}-hint` : undefined} className={linkClass}>
-                  {c.action ?? (c.ok ? "Modifier" : c.required ? "Compléter" : "Ajouter")}
-                  <span className="sr-only"> : {c.label}</span>
-                </Link>
-              )}
-            </li>
-          ))}
-        </ul>
+        <ReviewChecklist checks={checks} />
       </section>
 
       <section aria-labelledby="review-preview" className="space-y-2">
@@ -140,9 +70,10 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
           <>
             <EventShareLink url={publicUrl} />
             <div className="flex flex-wrap gap-3 items-center">
+              <Link href={`/admin/events/${event.id}/share`} className={linkClass}>Liens par groupe et intégration</Link>
               <Link href={`/admin/events/${event.id}/qr`} className={linkClass}>QR code</Link>
               <Link href={`/admin/events/${event.id}/invitations`} className={linkClass}>Inviter des membres</Link>
-              <Link href={`/admin/events/${event.id}`} className={linkClass}>Ouvrir la page de l&apos;événement</Link>
+              <Link href={`/admin/events/${event.id}`} className={linkClass}>Aperçu de l&apos;événement</Link>
             </div>
           </>
         ) : (

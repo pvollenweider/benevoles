@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: TARGETED_MESSAGES -->
 
-Depuis la page de l'événement (**Événements**, puis l'événement, puis **Écrire aux bénévoles**) ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
+Depuis l'onglet **Communication** de l'événement (**Événements**, puis l'événement, puis **Communication**), section **Écrire aux bénévoles**, ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
 
 ![Page « Écrire aux bénévoles » : choix des destinataires (tous les inscrits, un poste, un créneau, la liste d'attente, les invités sans créneau) avec le nombre de personnes, le choix d'un modèle, puis l'objet et le message](/doc-img/admin-message.png)
 
@@ -34,12 +34,12 @@ Vous saisissez un objet et un message texte (les retours à la ligne sont conser
 
 ## Messages envoyés
 
-Sous le formulaire, chaque message déjà envoyé pour l'événement (y compris les créneaux proposés depuis « Chercher des bénévoles »), du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas : voir [Réglages et suivi des emails](reglages-et-suivi-des-emails.md#emails-envoyes). Les messages sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
+En bas de l'onglet **Communication**, chaque message déjà envoyé pour l'événement (y compris les créneaux proposés depuis « Chercher des bénévoles »), du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas : voir [Réglages et suivi des emails](reglages-et-suivi-des-emails.md#emails-envoyes). Les messages sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
 
 ## Rappel manuel
 
-Depuis la page de l'événement, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
+Dans l'onglet **Communication**, section **Rappels**, sous l'encadré des rappels automatiques, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
 
-Avant d'envoyer, rédiger un message dans la section « Message de rappel » (page de l'événement, puis **Modifier**). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
+Avant d'envoyer, rédiger un message dans la section « Message de rappel » (onglet **Réglages** de l'événement). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
 
 Les rappels automatiques (J-2, J-1, jour J) partent sans intervention : voir [Rappels et changements de créneau](rappels.md).

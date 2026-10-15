@@ -53,8 +53,8 @@ test("the event page leads to « Jour J », where one tap marks a person present
   const { eventId, registrationIds } = await eventRunningToday(page, stamp)
 
   await page.goto(`/admin/events/${eventId}`)
-  await expect(page.getByRole("heading", { name: "C'est le jour J" })).toBeVisible()
-  await page.getByRole("link", { name: "Ouvrir le jour J" }).click()
+  // On the event's days, a « Jour J » tab.
+  await page.getByRole("navigation", { name: "Sections de l'événement" }).getByRole("link", { name: "Jour J" }).click()
   await expect(page).toHaveURL(new RegExp(`/admin/events/${eventId}/day-of$`))
   await expect(page.getByRole("heading", { level: 1, name: "Jour J" })).toBeVisible()
 

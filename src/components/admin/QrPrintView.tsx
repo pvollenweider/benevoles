@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import Link from "next/link"
 
 type Props = {
   eventId: string
@@ -12,7 +11,6 @@ type Props = {
   startDate: string
   endDate: string
   publicUrl: string
-  backHref: string
 }
 
 function formatDateRange(startISO: string, endISO: string) {
@@ -32,7 +30,6 @@ export default function QrPrintView({
   startDate,
   endDate,
   publicUrl,
-  backHref,
 }: Props) {
   const pngUrl = `/api/admin/events/${eventId}/qr?format=png`
   const svgUrl = `/api/admin/events/${eventId}/qr?format=svg`
@@ -41,8 +38,7 @@ export default function QrPrintView({
     <div className="space-y-5">
       <div className="no-print flex items-center justify-between flex-wrap gap-3">
         <div>
-          <Link href={backHref} className="text-sm text-blue-600">← Retour à l&apos;événement</Link>
-          <h1 className="text-xl font-bold text-gray-900 mt-1">QR code</h1>
+          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">QR code</h1>
         </div>
         <div className="flex gap-2">
           <a

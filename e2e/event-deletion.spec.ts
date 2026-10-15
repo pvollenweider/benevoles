@@ -110,12 +110,23 @@ test("archive then delete an event from the admin UI", async ({ browser }) => {
   })
   const { id } = await created.json()
 
-  await page.goto(`/admin/events/${id}`)
-  await expect(page.getByText("Archivez cet événement pour pouvoir le supprimer.")).toBeVisible()
+  // Réglages: the deletion section says how to get there.
+  await page.goto(`/admin/events/${id}/edit`)
+  await expect(page.getByText(/Archivez cet événement pour pouvoir le supprimer/)).toBeVisible()
   await expect(page.getByRole("button", { name: /Supprimer l'événement/ })).toHaveCount(0)
 
+  // Archive from the header's « Autres actions », then the menu leads to the deletion section.
+  await page.goto(`/admin/events/${id}`)
+  const more = page.getByRole("button", { name: "Autres actions" })
+  await more.click()
   await page.getByRole("button", { name: "Archiver", exact: true }).click()
   await page.getByRole("button", { name: "Confirmer" }).click()
+  await expect(page.getByText("Événement archivé.", { exact: true })).toBeAttached()
+  await expect(more).toBeFocused()
+  await more.click()
+  await page.getByRole("link", { name: "Supprimer définitivement…" }).click()
+  await expect(page).toHaveURL(new RegExp(`/admin/events/${id}/edit#suppression-definitive$`))
+  await expect(page.getByRole("heading", { level: 2, name: "Suppression définitive" })).toBeFocused()
   await page.getByRole("button", { name: /Supprimer l'événement/ }).click()
 
   const dialog = page.getByRole("dialog")

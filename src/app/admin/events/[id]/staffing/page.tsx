@@ -79,8 +79,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
-        <Link href={base} className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Où manque-t-il du monde ?</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Où manque-t-il du monde ?</h1>
         <HelpLink route="/admin/events/[id]/staffing" />
       </div>
 

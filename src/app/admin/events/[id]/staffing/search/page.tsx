@@ -35,8 +35,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <Link href={`${base}/staffing`} className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Où manque-t-il du monde ?</Link>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Chercher des bénévoles</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Chercher des bénévoles</h1>
         <p className="text-sm text-gray-700 mt-1">
           Choisissez les créneaux à compléter, puis cochez les membres à qui les proposer. Personne n&apos;est coché d&apos;avance et rien ne part sans votre confirmation. Chaque personne reçoit un seul email avec les créneaux qui la concernent et son lien pour s&apos;inscrire.
         </p>

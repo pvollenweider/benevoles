@@ -60,9 +60,9 @@ test("event summary on Rapports, members list columns, and the hours-by-voluntee
   // Member A also takes a shift on the recent event: returning volunteer for this one.
   await post("/api/admin/registrations", { eventId: eventRecent.id, shiftId: shiftRecent2.id, firstName: "E2E", lastName: `SummaryA${stamp}`, email: emailA })
 
-  // ── Rapports: the event summary ──────────────────────────────────────────
+  // ── Documents à imprimer: the event summary ──────────────────────────────────────────
   await page.goto(`/admin/events/${eventRecent.id}/print`)
-  await expect(page.getByRole("heading", { level: 1, name: "Rapports" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "Documents à imprimer" })).toBeVisible()
   const summary = page.getByRole("region", { name: "Résumé de l'événement" })
   await expect(summary.getByRole("heading", { level: 2 })).toHaveText("Résumé de l'événement")
   await expect(summary).toContainText("2 bénévoles distincts")

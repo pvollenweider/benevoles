@@ -13,7 +13,7 @@ updated: 2026-10-12
 
 <!-- video: REGISTRATIONS_MANAGEMENT -->
 
-**Événements**, puis l'événement, puis **Voir les inscriptions**
+**Événements**, puis l'événement, puis l'onglet **Inscriptions**
 
 Vue tabulaire des inscriptions, en quatre colonnes :
 

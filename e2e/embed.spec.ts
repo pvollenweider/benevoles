@@ -166,7 +166,7 @@ test("the height message is a number under a namespaced type, nothing else", asy
   }
 })
 
-test("the organiser gets the code and a live preview from « Partager l'événement »", async ({ page }) => {
+test("the organiser gets the code and a live preview from the Partage tab", async ({ page }) => {
   test.setTimeout(90_000)
   await page.goto("/admin/login")
   await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
@@ -174,8 +174,8 @@ test("the organiser gets the code and a live preview from « Partager l'événem
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/events/)
 
-  await page.goto(`/admin/events/${event.eventId}`)
-  const section = page.getByRole("region", { name: "Partager l'événement" })
+  await page.goto(`/admin/events/${event.eventId}/share`)
+  const section = page.getByRole("region", { name: "Liens par groupe et intégration" })
   const open = section.getByRole("button", { name: "Code d'intégration" })
   await waitForHydration(open)
   await open.click()

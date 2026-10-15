@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
@@ -9,6 +10,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { localDay } from "@/lib/day-of"
 
 export const dynamic = "force-dynamic"
+export const metadata: Metadata = { title: "Créneaux" }
 
 export default async function ShiftsPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ wizard?: string }> }) {
   const ctx = await getOrgContext()
@@ -43,8 +45,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
       {wizard && <WizardSteps current={2} eventId={id} />}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
-          <h1 className="text-xl font-bold text-gray-900 mt-1">Créneaux</h1>
+          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Créneaux</h1>
           <HelpLink route="/admin/events/[id]/shifts" />
         </div>
         {wizard && (

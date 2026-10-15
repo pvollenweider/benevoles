@@ -10,7 +10,7 @@ aliases: []
 
 # Partager le lien de l'événement
 
-Une fois l'événement publié, la page de l'événement (section **Partager l'événement**) et la page de vérification avant publication affichent le lien à partager, avec deux boutons :
+L'onglet **Partage** de l'événement (le bouton **Partager le lien**, en haut de ses pages une fois publié, y mène) ouvre la page **Partager l'événement**. Une fois l'événement publié, sa section **Lien de l'événement**, comme la page de vérification avant publication, affiche le lien à partager, avec deux boutons :
 
 - **Copier le lien** copie l'adresse publique de l'événement. « Lien copié. » s'affiche sous les boutons. Si le navigateur refuse la copie, le lien affiché est sélectionné : copiez-le.
 - **Partager** ouvre le partage de votre téléphone ou de votre navigateur (WhatsApp, email, messages…). Ce bouton n'apparaît que si votre navigateur sait partager, le plus souvent sur téléphone.
@@ -23,13 +23,13 @@ Une messagerie peut garder l'ancien aperçu quelque temps après une modificatio
 
 ## QR code
 
-Depuis la page de l'événement, puis **QR code**, télécharger le QR code de la page publique de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche. Pour un partage en ligne (messagerie, email, réseau social), utilisez plutôt **Copier le lien** ou **Partager**.
+Dans l'onglet **Partage**, page **QR code**, télécharger le QR code de la page publique de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche. Pour un partage en ligne (messagerie, email, réseau social), utilisez plutôt **Copier le lien** ou **Partager**.
 
 ## Un lien par groupe
 
 Quand plusieurs clubs ou équipes recrutent chacun pour leurs propres postes, donnez à chacun son lien : il ouvre la page de l'événement sur les postes de ce groupe seulement, avec son propre QR code, et vous voyez combien d'inscriptions chaque lien a apportées.
 
-Les liens par groupe se gèrent dans la section **Partager l'événement** de la page de l'événement, sous **Liens par groupe**. Vous pouvez les préparer avant de publier : ils ouvrent la page de l'événement une fois celui-ci publié, et tant qu'il ne l'est pas, ils mènent à la même page introuvable que le lien principal.
+Les liens par groupe se gèrent dans l'onglet **Partage**, section **Liens par groupe et intégration**. Vous pouvez les préparer avant de publier : ils ouvrent la page de l'événement une fois celui-ci publié, et tant qu'il ne l'est pas, ils mènent à la même page introuvable que le lien principal.
 
 ### Exemple : la fête du village et ses sociétés locales
 
@@ -63,7 +63,7 @@ Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
 Votre association a son propre site ? Affichez-y l'inscription : les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site. La page garde le nom, le logo et la couleur de votre organisation ; seuls le lien « Retour » et le pied de page de benevol.app disparaissent.
 
-L'événement doit être publié. Dans la section **Partager l'événement** de la page de l'événement, sous **Intégrer à votre site**, cliquez sur **Code d'intégration**.
+L'événement doit être publié. Dans l'onglet **Partage**, section **Liens par groupe et intégration**, sous **Intégrer à votre site**, cliquez sur **Code d'intégration**.
 
 ![Section « Intégrer à votre site » ouverte : le choix « Postes affichés », la case « Ajuster la hauteur automatiquement », le code à coller dans un champ, les boutons « Copier le code » et « Aperçu en direct », puis les trois étapes pour l'ajouter à votre site](/doc-img/admin-embed.png)
 

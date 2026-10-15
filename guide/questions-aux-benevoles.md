@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_QUESTIONS -->
 
-**Événements**, puis l'événement, puis **Questions**.
+**Événements**, puis l'événement, puis l'onglet **Réglages**, et **Questions** dans ses pages.
 
 ![Page des questions d'un événement : « Taille de t-shirt » (choix unique S à XL, obligatoire), « Régime alimentaire » et « Permis de conduire » (texte court), chacune avec son nombre de réponses et les actions Monter, Descendre, Modifier et Retirer, puis le début de la synthèse des réponses](/doc-img/admin-questions.png)
 
