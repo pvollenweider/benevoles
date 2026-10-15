@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { generateToken } from "@/lib/utils"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -130,7 +131,8 @@ export async function POST(req: Request) {
             // volunteer consent to the charter was ever given here.
             ...registrationToken.data(generateToken()),
           },
-          include: { volunteer: true, shift: true },
+          // Returned to the admin: never the stored token (#1009); the link only goes by email.
+          select: { ...REGISTRATION_ADMIN_SELECT, volunteer: true, shift: true },
         })
         const notice = notices.get(shift.id)!
         // Grouped per person and event (#916): shifts added together or in a row are one email,

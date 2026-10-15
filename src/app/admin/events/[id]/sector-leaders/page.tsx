@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
 export const dynamic = "force-dynamic"
 
@@ -19,6 +20,8 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
   const [leaders, shifts, registrations] = await Promise.all([
     db.sectorLeader.findMany({
       where: { eventId: id },
+      // Props reach the browser: never the link token's hash or encrypted copy (#1009).
+      select: SECTOR_LEADER_ADMIN_SELECT,
       orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
     }),
     db.shift.findMany({ where: { eventId: id }, select: { roleName: true }, distinct: ["roleName"] }),

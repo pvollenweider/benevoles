@@ -7,6 +7,7 @@ import { adminActor } from "@/lib/event-log"
 import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
 const postSchema = z.object({
   roleName: z.string().min(1).max(100),
@@ -25,6 +26,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const leaders = await db.sectorLeader.findMany({
     where: { eventId },
+    // Never the link token's hash or encrypted copy (#1009): the page only needs who leads what.
+    select: SECTOR_LEADER_ADMIN_SELECT,
     orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
   })
   return NextResponse.json(leaders)

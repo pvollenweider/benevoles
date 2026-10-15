@@ -57,6 +57,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Sécurité
 
 - **Pages protégées contre l'affichage dans le cadre d'un autre site** (#948) : toutes les pages et routes répondent `Content-Security-Policy: frame-ancestors 'none'` et `X-Frame-Options: DENY` (protection contre le clickjacking), sauf l'inscription intégrable (`/<événement>?embed=1` et sa confirmation), que tout site peut afficher.
+- **Liens personnels jamais envoyés au navigateur de l'administration** (#1009) : la liste des responsables de secteur, l'ajout d'un responsable, le détail d'un événement, l'ajout ou la modification d'une inscription et la page Créneaux transmettaient au navigateur des administrateurs de l'organisation la version stockée du lien personnel des responsables et des bénévoles (son empreinte, sa copie chiffrée et, tant qu'aucune clé de chiffrement n'était configurée, le lien en clair). Ces champs restent désormais sur le serveur ; les liens ne partent toujours que par email.
 
 ## [2.3.0] — 2026-10-12
 

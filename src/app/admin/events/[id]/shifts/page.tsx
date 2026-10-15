@@ -24,7 +24,8 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
       organization: { select: { timeZone: true } },
       shiftRecurrences: { orderBy: { createdAt: "asc" } },
       shifts: {
-        include: { registrations: { where: { status: "active" } } },
+        // Only counted: the rows (and their link token) never go to the browser (#1009).
+        include: { registrations: { where: { status: "active" }, select: { id: true } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
     },
@@ -66,10 +67,10 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         defaultHolidays={defaultHolidayCalendar(orgTimeZone(event.organization))}
         today={localDay(new Date(), orgTimeZone(event.organization))}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
-        initialShifts={event.shifts.map(s => ({
+        initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,
           date: s.date.toISOString().split("T")[0],
-          registrationCount: s.registrations.length,
+          registrationCount: registrations.length,
         }))}
       />
     </div>
