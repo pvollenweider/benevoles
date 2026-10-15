@@ -207,7 +207,10 @@ test("the countdown waits while the focus stays on the bar, and runs once it lea
   let detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
   expect(detail.shifts[0].registrations).toHaveLength(1)
 
-  // Focus elsewhere: the window runs out and the removal is committed.
+  // Focus elsewhere: the window runs out and the removal is committed. The pointer leaves too: the
+  // bar can open right under where the dialog's « Retirer » was clicked, and a pointer on the bar
+  // holds the countdown as well (the event header moved the bar there).
+  await page.mouse.move(0, 0)
   await page.locator("#reg-search").focus()
   await expect(page.getByRole("status").filter({ hasText: "1 bénévole retiré." })).toBeVisible({ timeout: 15_000 })
   detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
