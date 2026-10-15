@@ -11,6 +11,7 @@ import { COLOR_OPTIONS } from "@/lib/roles"
 import { capacityPlan, roleMinimumPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
+import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -98,16 +99,31 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: `Le poste « ${newName} » existe déjà — fusionner deux postes par renommage n'est pas pris en charge.` }, { status: 409 })
     }
 
-    await db.shift.updateMany({
-      where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-      data: { roleName: newName },
-    })
-    // A shift's own label defaults to matching its role name (see ShiftsManager's form) — keep
-    // that in sync for shifts that never had a distinct label, in a second pass, since updateMany
-    // can't conditionally set "label = new value only where label used to equal the old name".
-    await db.shift.updateMany({
-      where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
-      data: { label: newName },
+    // Everything matched to the poste by its name moves in one transaction: its shifts, the share
+    // links that show it (#947), the questions attached to it (#984, part 3) and its sector
+    // leaders (#1001), so its leaders keep their list, its withdrawals and its answer changes.
+    const droppedLeaders = await db.$transaction(async (tx) => {
+      await tx.shift.updateMany({
+        where: { eventId: id, roleName: decodedRole, event: { organizationId } },
+        data: { roleName: newName },
+      })
+      // A shift's own label defaults to matching its role name (see ShiftsManager's form) — keep
+      // that in sync for shifts that never had a distinct label, in a second pass, since updateMany
+      // can't conditionally set "label = new value only where label used to equal the old name".
+      await tx.shift.updateMany({
+        where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
+        data: { label: newName },
+      })
+      await updateGroupLinks(tx, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
+      await tx.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
+      const [moving, atTarget] = await Promise.all([
+        tx.sectorLeader.findMany({ where: { eventId: id, roleName: decodedRole }, select: { id: true, email: true } }),
+        tx.sectorLeader.findMany({ where: { eventId: id, roleName: newName }, select: { id: true, email: true, roleName: true } }),
+      ])
+      const { dropIds } = leaderRenamePlan(moving, atTarget)
+      if (dropIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: dropIds } } })
+      await tx.sectorLeader.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
+      return atTarget.filter((l) => dropIds.includes(l.id))
     })
     for (const s of shifts) {
       await logEvent({
@@ -115,9 +131,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         changes: { roleName: { from: decodedRole, to: newName } },
       })
     }
-    await updateGroupLinks(db, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
-    // Questions attached to the role (#984, part 3) follow it: their changes keep reaching its leaders.
-    await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
+    // Same person already leading a poste of the new name: their row there gave way to the renamed one.
+    for (const l of droppedLeaders) {
+      await logEvent({
+        eventId: id, actor, action: "sectorleader.removed", entityType: "SectorLeader", entityId: l.id,
+        changes: { roleName: { from: l.roleName, to: null } },
+      })
+    }
   }
 
   if (colorKey !== undefined) {
@@ -241,6 +261,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   }
   await updateGroupLinks(db, id, decodedRole, (names) => removeRoleFromLink(names, decodedRole))
   // Questions attached to the role (#984, part 3) go back to the organisers, as a deleted reference would.
+  // Its sector leaders stay: deleting a poste cancels its shifts, which keep their name, and the
+  // leaders stay attached to it until removed from « Responsables de secteur » (#1001).
   await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: null } })
 
   return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })

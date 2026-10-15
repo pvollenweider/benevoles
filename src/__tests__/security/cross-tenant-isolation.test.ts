@@ -780,6 +780,50 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } }, data: { overlapAllowed: true } })
   })
 
+  it("PATCH /api/admin/events/[id]/roles/[roleName] rename (#1001) returns 404 for an org-B event, touching no sector leader", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const $transaction = vi.fn()
+    const updateMany = vi.fn()
+    const db = setupGuard() // event.findFirst → null
+    Object.assign(db, { $transaction, sectorLeader: { findMany: vi.fn(), updateMany, deleteMany: vi.fn() } })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { name: "Buvette" }),
+      { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(404)
+    expect($transaction).not.toHaveBeenCalled()
+    expect(updateMany).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] rename (#1001) moves only the leaders of the checked event", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const leaderUpdateMany = vi.fn().mockResolvedValue({ count: 1 })
+    const leaderFindMany = vi.fn().mockResolvedValue([])
+    const db = setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      shift: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", colorKey: null, capacity: 2, minVolunteers: null, status: "open", maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, _count: { registrations: 0 } }]),
+        findFirst: vi.fn().mockResolvedValue(null),
+        updateMany: vi.fn().mockResolvedValue({ count: 1 }),
+      },
+      eventGroupLink: { findMany: vi.fn().mockResolvedValue([]) },
+    })
+    Object.assign(db, {
+      eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
+      sectorLeader: { findMany: leaderFindMany, updateMany: leaderUpdateMany, deleteMany: vi.fn() },
+      $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
+    })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { name: "Buvette" }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(leaderFindMany.mock.calls.every((c) => c[0].where.eventId === "evt-a")).toBe(true)
+    expect(leaderUpdateMany).toHaveBeenCalledWith({ where: { eventId: "evt-a", roleName: "Bar" }, data: { roleName: "Buvette" } })
+  })
+
   it("POST /api/admin/shifts returns 404 for an org-B event, reading no role setting of it (#986)", async () => {
     const { POST } = await import("@/app/api/admin/shifts/route")
     const create = vi.fn()
