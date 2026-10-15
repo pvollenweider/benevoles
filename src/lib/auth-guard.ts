@@ -3,11 +3,12 @@
 
 import { hasLevel, OWNER_ONLY_MESSAGE, type Level } from "./permissions"
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { getOrgClient } from "./prisma-org"
 import { prisma } from "./prisma"
+import { adminEventIdFromPath, orgSwitchUrl, REQUEST_PATH_HEADER } from "./admin-next"
 
 type GuardError = NextResponse
 
@@ -33,6 +34,22 @@ export async function resolveSuperAdminOrg(): Promise<string | null> {
 }
 
 export const SUPER_ADMIN_ORG_PICKER = "/super-admin/organizations"
+
+/**
+ * An admin event page (/admin/events/<id>/...) opened by a super admin whose picked organization
+ * is missing or another one than the event's, typically from a link in an email: the switch to
+ * the event's organization that lands back on the same page. Null when there is nothing to switch
+ * (not an event page, unknown event, already in its organization).
+ */
+export async function superAdminEventOrgSwitch(pickedOrgId: string | null): Promise<string | null> {
+  const headerStore = await headers()
+  const path = headerStore.get(REQUEST_PATH_HEADER)
+  const eventId = adminEventIdFromPath(path)
+  if (!path || !eventId) return null
+  const event = await prisma.event.findUnique({ where: { id: eventId }, select: { organizationId: true } })
+  if (!event || event.organizationId === pickedOrgId) return null
+  return orgSwitchUrl(event.organizationId, path)
+}
 
 async function isOrgActive(organizationId: string): Promise<boolean> {
   const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { active: true } })
@@ -83,6 +100,9 @@ export async function getOrgContext() {
   let organizationId = session.user.organizationId
   if (!organizationId && session.user.role === "super_admin") {
     organizationId = await resolveSuperAdminOrg()
+    // An event page opens in the event's organization, whichever one was picked (email links).
+    const orgSwitch = await superAdminEventOrgSwitch(organizationId)
+    if (orgSwitch) redirect(orgSwitch)
     // Admin pages are only reachable for a super admin once an org is picked.
     if (!organizationId) redirect(SUPER_ADMIN_ORG_PICKER)
   }
