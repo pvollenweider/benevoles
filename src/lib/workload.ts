@@ -8,11 +8,13 @@
  *
  * Times are real instants in the organisation's time zone, so a shift across a daylight saving
  * change lasts what it really lasts. A shift crossing midnight counts in the daily total of the
- * day it starts; continuity is measured on absolute time, across midnight. Pure.
+ * day it starts; continuity is measured on absolute time, across midnight. Parallel shifts (#986)
+ * count their common time once. Pure.
  */
 import { toMin, toMinEnd } from "./gantt-utils"
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { localDateTimeToUtc } from "./time-zone"
+import { unionLength } from "./interval-union"
 
 export const WORKLOAD_LIMITS = {
   /** Above this total on one day, a warning. */
@@ -73,11 +75,12 @@ export function workloadWarnings(shifts: WorkloadShift[], timeZone: string, limi
   }
   flush()
 
-  // Daily totals, on the day each shift starts.
+  // Daily totals, on the day each shift starts; time spent on two shifts at once (a role cumulable
+  // with another shift, #986) counts once.
   const byDay = new Map<string, Interval[]>()
   for (const s of all) byDay.set(s.day, [...(byDay.get(s.day) ?? []), s])
   for (const [day, list] of byDay) {
-    const minutes = Math.round(list.reduce((n, s) => n + (s.end - s.start), 0) / MIN)
+    const minutes = Math.round(unionLength(list) / MIN)
     if (minutes > limits.dailyMinutes) warnings.push({ kind: "daily", day, minutes, shiftIds: list.map((s) => s.id) })
   }
 

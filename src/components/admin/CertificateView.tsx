@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useMemo, useRef, useState } from "react"
-import { eventHourSummaries, withinPeriod, type HourEntry } from "@/lib/volunteer-hours"
+import { certificateTotals, eventHourSummaries, hasParallelShifts, withinPeriod, type HourEntry } from "@/lib/volunteer-hours"
 import { fmtDuration } from "@/lib/signup-recap"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailableNextFrame, isFocusDropped } from "@/lib/focus-return"
@@ -55,8 +55,13 @@ export default function CertificateView({ memberId, memberName, organizationName
   const summaries = useMemo(() => eventHourSummaries(filtered), [filtered])
   const unattested = useMemo(() => filtered.filter((e) => !e.attested), [filtered])
 
-  const totalAttested = summaries.reduce((n, s) => n + s.attestedMinutes, 0)
-  const totalPlanned = summaries.reduce((n, s) => n + s.plannedWithoutPresenceMinutes, 0)
+  // Time on two shifts at once (a role cumulable with another shift, #986) counts once, also
+  // between two events: the totals are the union, not the sum of the rows.
+  const totals = useMemo(() => certificateTotals(filtered), [filtered])
+  // On what the document shows: without the planned hours, only attested shifts can share time.
+  const parallel = useMemo(() => hasParallelShifts(includePlanned ? filtered : filtered.filter((e) => e.attested)), [filtered, includePlanned])
+  const totalAttested = totals.attestedMinutes
+  const totalPlanned = totals.plannedWithoutPresenceMinutes
   const totalShifts = summaries.reduce((n, s) => n + s.shiftsCount, 0)
 
   // Announced after the period or the planned-hours checkbox changes, never on first render
@@ -71,7 +76,7 @@ export default function CertificateView({ memberId, memberName, organizationName
     const shiftsLabel = totalShifts > 1 ? `${totalShifts} créneaux confirmés` : `${totalShifts} créneau confirmé`
     const attestedLabel = `${fmtDuration(totalAttested)} ${totalAttested === 60 ? "attestée" : "attestées"}`
     announce(setPeriodStatus, `${shiftsLabel}, ${attestedLabel}, du ${fmtDay(period.from)} au ${fmtDay(period.to)}.`)
-  }, [period.from, period.to, includePlanned, totalShifts, totalAttested])
+  }, [period.from, period.to, includePlanned, totalShifts, totalAttested, totalPlanned])
 
   // After the print dialog closes, focus can land nowhere (most browsers) or on <body>/<main>
   // (#554 convention, isFocusDropped): bring it back to the button that opened it.
@@ -244,6 +249,9 @@ export default function CertificateView({ memberId, memberName, organizationName
               </tr>
             </tfoot>
           </table>
+        )}
+        {summaries.length > 0 && parallel && (
+          <p className="text-sm text-gray-800 mt-4">Certains créneaux se sont déroulés en même temps (missions assurées en parallèle) : ce temps n&apos;est compté qu&apos;une fois dans les heures.</p>
         )}
 
         {note.trim() && (

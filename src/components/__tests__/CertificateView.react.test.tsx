@@ -49,6 +49,36 @@ describe("CertificateView", () => {
     expect(screen.getByRole("columnheader", { name: /planifiées/ })).toBeInTheDocument()
   })
 
+  // Parallel shifts (#986): the total is the union, and the document says why it is below the rows.
+  it("counts parallel time once in the total and says so, only when there is some", () => {
+    const h = 3_600_000
+    const at = (hour: number) => Date.UTC(2026, 4, 2, hour)
+    const parallel = [
+      entry({ registrationId: "r1", shiftId: "s1", roleName: "Buvette", label: "Buvette", minutes: 240, startMs: at(8), endMs: at(8) + 4 * h }),
+      entry({ registrationId: "r2", shiftId: "s2", roleName: "Secours", label: "Secours", minutes: 480, startMs: at(7), endMs: at(7) + 8 * h }),
+    ]
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={parallel} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    const total = screen.getByRole("rowheader", { name: "Total" }).closest("tr")!
+    expect(within(total).getByText("8 h")).toBeInTheDocument()
+    expect(screen.getByText(/Certains créneaux se sont déroulés en même temps .* compté qu'une fois dans les heures/)).toBeInTheDocument()
+    cleanup()
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry()]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    expect(screen.queryByText(/se sont déroulés en même temps/)).not.toBeInTheDocument()
+  })
+
+  it("shows the note only for time the document counts: an unattested parallel shift needs the planned hours", () => {
+    const h = 3_600_000
+    const at = (hour: number) => Date.UTC(2026, 4, 2, hour)
+    const mixed = [
+      entry({ registrationId: "r1", shiftId: "s1", minutes: 240, startMs: at(8), endMs: at(8) + 4 * h }),
+      entry({ registrationId: "r2", shiftId: "s2", roleName: "Secours", label: "Secours", minutes: 480, attested: false, startMs: at(7), endMs: at(7) + 8 * h }),
+    ]
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={mixed} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    expect(screen.queryByText(/se sont déroulés en même temps/)).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures planifiées/ }))
+    expect(screen.getByText(/se sont déroulés en même temps/)).toBeInTheDocument()
+  })
+
   it("warns, on screen only, about confirmed shifts without a recorded presence", () => {
     const planned = entry({ registrationId: "reg-2", attested: false, shiftId: "shift-2" })
     render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[planned]} defaultPeriod={period} generatedAt="4 octobre 2026" />)

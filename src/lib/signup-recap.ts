@@ -3,6 +3,7 @@
 
 import { crossesMidnight, fmtRange, toMin, toMinEnd } from "./gantt-utils"
 import { shiftsClash } from "./shift-overlap"
+import { unionLength } from "./interval-union"
 
 /**
  * The recap shown before « Confirmer mon inscription » (#373): each selected shift with its day
@@ -146,8 +147,8 @@ export function personalDataLines(opts: { requirePhone: boolean; phoneGiven: boo
   return lines
 }
 
-/** « 2 créneaux, 5 h au total » */
+/** « 2 créneaux, 5 h au total »: time on two shifts at once (a cumulable role, #986) counts once. */
 export function totalLabel(sorted: RecapShift[]): string {
-  const minutes = sorted.reduce((n, s) => n + (s.endAbs - s.startAbs), 0)
+  const minutes = unionLength(sorted.map((s) => ({ start: s.startAbs, end: s.endAbs })))
   return `${sorted.length} créneau${sorted.length > 1 ? "x" : ""}, ${fmtDuration(minutes)} au total`
 }

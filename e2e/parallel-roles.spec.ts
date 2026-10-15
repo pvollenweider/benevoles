@@ -62,6 +62,8 @@ test("a cumulable role lets a volunteer sign up to two overlapping shifts, an or
   await page.getByRole("button", { name: /^Continuer/ }).click()
   await expect(page.getByText("c'est possible, l'un des deux postes se cumule avec un autre créneau").first()).toBeVisible()
   await expect(page.getByText("deux de tes créneaux se chevauchent")).toHaveCount(0)
+  // Parallel time counted once in the recap's total (#986, part 2): 8 h, not 12 h.
+  await expect(page.getByText("2 créneaux, 8 h au total").first()).toBeVisible()
   await page.getByLabel("Prénom *", { exact: true }).fill("E2E")
   await page.getByLabel("Nom *", { exact: true }).fill(`Cumul${stamp}`)
   await page.getByLabel("Email *", { exact: true }).fill(`e2e-cumul-ui-${stamp}@example.com`)
