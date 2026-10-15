@@ -5,6 +5,8 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
+
 import AdminDayTimeline, { type AdminShift } from "../admin/AdminDayTimeline"
 
 // The admin day timeline (#587): bars named in words, and the deletion recap from a bar keeps the

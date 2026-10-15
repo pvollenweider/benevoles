@@ -5,6 +5,8 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
 
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
+
 import ShiftEditor from "../admin/shifts/ShiftEditor"
 import ShiftPopover from "../admin/day-timeline/ShiftPopover"
 import ShiftSeriesForm from "../admin/ShiftSeriesForm"

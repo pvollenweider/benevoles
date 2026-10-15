@@ -203,9 +203,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     setSelected(id)
   }
 
-  async function handlePatch(id: string, data: Partial<AdminShift>) {
+  // Resolves to whether the change was saved: the popover stays open on a failure (#991).
+  async function handlePatch(id: string, data: Partial<AdminShift>): Promise<boolean> {
     const orig = shifts.find(s => s.id === id)
-    if (!orig) return
+    if (!orig) return false
     const patch = { ...data, label: data.label?.trim() || orig.roleName }
     const outcome = await requestJson(() => fetch(`/api/admin/shifts/${id}`, {
       method: "PATCH",
@@ -213,6 +214,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
       body: JSON.stringify(patch),
     }), "Modification non enregistrée.")
     if (outcome.ok) { onUpdated({ ...orig, ...patch }); showToast("Enregistré") } else showToast(outcome.error, "error")
+    return outcome.ok
   }
 
   // Deletion asks first (#379): the popover closes, focus goes back to the bar so that the

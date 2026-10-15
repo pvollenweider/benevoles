@@ -317,3 +317,44 @@ test("list view: « Modifier » and « Supprimer » are named with their shift, 
   await expect(confirm).toContainText("Mardi 1 octobre, de 10h à 12h.")
   await confirm.getByRole("button", { name: "Annuler" }).click()
 })
+
+// #991: « Voir les inscriptions » saved nothing; the places typed just before were lost.
+test("Frise popover, « Voir les inscriptions » with the keyboard: saves the places first, stays put when the save fails", async ({ page }) => {
+  await openShiftsPage(page)
+  const shiftsUrl = page.url()
+  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  await bar.focus()
+  await page.keyboard.press("Enter")
+  const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
+  await popover.getByLabel("Places").fill("6")
+  const link = popover.getByRole("link", { name: "Voir les inscriptions" })
+
+  // A failed save: no navigation, the error is shown, focus and the edit stay in the popover.
+  await page.route("**/api/admin/shifts/*", route => route.request().method() === "PATCH"
+    ? route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: "Panne simulée." }) })
+    : route.fallback())
+  await link.focus()
+  await page.keyboard.press("Enter")
+  await expect(page.getByText("Panne simulée.", { exact: true }).first()).toBeVisible()
+  await expect(page).toHaveURL(shiftsUrl)
+  await expect(link).toBeFocused()
+  await expect(link).not.toHaveAttribute("aria-disabled")
+  await expect(popover.getByLabel("Places")).toHaveValue("6")
+
+  // Places under the confirmed people would be lost too: focus goes to the field, which says why.
+  await page.unroute("**/api/admin/shifts/*")
+  await popover.getByLabel("Places").fill("0")
+  await link.focus()
+  await page.keyboard.press("Enter")
+  await expect(popover.getByLabel("Places")).toBeFocused()
+  await expect(popover.getByLabel("Places")).toHaveAttribute("aria-invalid", "true")
+  await expect(page).toHaveURL(shiftsUrl)
+
+  await popover.getByLabel("Places").fill("6")
+  await link.focus()
+  await page.keyboard.press("Enter")
+  await expect(page).toHaveURL(/\/registrations\?shift=/)
+  await page.goBack()
+  await expect(page).toHaveURL(shiftsUrl)
+  await expect(bar).toContainText("0/6")
+})
