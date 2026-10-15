@@ -12,6 +12,7 @@ import { AVAILABILITY_PERIODS, type AvailabilityPeriod } from "./availability"
 import { clockTime, crossesMidnight, toMin, toMinEnd } from "./gantt-utils"
 import { memberMayTake } from "./role-reservation"
 import { shiftsTooYoungFor } from "./utils"
+import { shiftsClash } from "./shift-overlap"
 
 export const OPEN_SHIFTS_MAX_SHIFTS = 20
 export const OPEN_SHIFTS_MAX_RECIPIENTS = 200
@@ -23,7 +24,9 @@ export const OPEN_SHIFTS_SUBJECT = "On cherche encore du monde"
 type DateLike = Date | string
 
 /** A shift of the event, as the overlap and the labels need it. `date` is Shift.date (UTC midnight) or "YYYY-MM-DD". */
-export type EventShiftRef = { id: string; roleName: string; label: string; date: DateLike; startTime: string; endTime: string }
+export type EventShiftRef = { id: string; roleName: string; label: string; date: DateLike; startTime: string; endTime: string
+  /** Its role may overlap another shift (#986): its overlaps are not refused. */
+  overlapAllowed?: boolean }
 
 /** An underfilled shift the organizer picked: places left, and the tags its role is reserved to (#470). */
 export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[]
@@ -115,7 +118,8 @@ export type ShiftFit = {
   shiftId: string
   /**
    * offer: the email lists it. registered: already on it (any live status). overlap: one of the
-   * member's registrations on the event overlaps it, even by a few minutes; sign-up would refuse it.
+   * member's registrations on the event overlaps it, even by a few minutes, neither of a cumulable
+   * role (#986); sign-up would refuse it.
    * reserved: its role is reserved to tags the member doesn't carry. too_young: their known birth
    * date is under the shift's minimum age on its day (#869); sign-up would refuse it.
    */
@@ -197,7 +201,8 @@ export function findCandidates(input: {
         const other = eventShifts.get(r.shiftId)
         if (!other) continue
         const minutes = overlapMinutes(other, shift)
-        if (minutes > 0 && (!overlap || minutes > overlap.minutes)) overlap = { shift: other, minutes, status: r.status }
+        // A cumulable role (#986) on either side: sign-up accepts it, so it is offered.
+        if (minutes > 0 && shiftsClash(other, shift) && (!overlap || minutes > overlap.minutes)) overlap = { shift: other, minutes, status: r.status }
       }
       if (overlap) return { shiftId: shift.id, status: "overlap", overlap, availability }
       return { shiftId: shift.id, status: "offer", availability }

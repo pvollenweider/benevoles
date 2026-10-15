@@ -75,7 +75,7 @@ Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscription
 
 ## Changer de créneau
 
-Il n'y a pas de bouton pour échanger un créneau contre un autre : le changement se fait en deux temps. Inscris-toi d'abord au nouveau créneau sur la page de l'événement (le lien **S'inscrire à d'autres créneaux**, sous tes créneaux, t'y ramène et te reconnaît), puis reviens ici annuler l'ancien avec **Annuler**. Si les deux créneaux se chevauchent, le nouveau ne peut pas être sélectionné : annule alors d'abord l'ancien, en sachant que sa place est aussitôt proposée à la liste d'attente. Le champ « Un mot pour l'organisation ? » de l'annulation te permet de prévenir l'organisation du changement.
+Il n'y a pas de bouton pour échanger un créneau contre un autre : le changement se fait en deux temps. Inscris-toi d'abord au nouveau créneau sur la page de l'événement (le lien **S'inscrire à d'autres créneaux**, sous tes créneaux, t'y ramène et te reconnaît), puis reviens ici annuler l'ancien avec **Annuler**. Si les deux créneaux se chevauchent (et qu'aucun des deux postes ne se cumule avec un autre créneau), le nouveau ne peut pas être sélectionné : annule alors d'abord l'ancien, en sachant que sa place est aussitôt proposée à la liste d'attente. Le champ « Un mot pour l'organisation ? » de l'annulation te permet de prévenir l'organisation du changement.
 
 ## Ajouter mes créneaux à mon calendrier
 

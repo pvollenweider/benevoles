@@ -746,6 +746,53 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with overlapAllowed (#986) returns 404 for an org-B event, updating nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const updateMany = vi.fn()
+    const db = setupGuard({ shift: { updateMany } }) // event.findFirst → null
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { overlapAllowed: true }),
+      { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(updateMany).not.toHaveBeenCalled()
+    expect(prismaMock.shift.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with overlapAllowed (#986) scopes the shifts it updates to the org", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 })
+    setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      shift: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", colorKey: null, capacity: 2, minVolunteers: null, status: "open", maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, _count: { registrations: 0 } }]),
+        updateMany,
+      },
+    })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { overlapAllowed: true }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } }, data: { overlapAllowed: true } })
+  })
+
+  it("POST /api/admin/shifts returns 404 for an org-B event, reading no role setting of it (#986)", async () => {
+    const { POST } = await import("@/app/api/admin/shifts/route")
+    const create = vi.fn()
+    const db = setupGuard({ shift: { create } }) // event.findFirst → null
+
+    const res = await POST(makeRequest("/api/admin/shifts", "POST", {
+      eventId: "evt-b", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 2,
+    }))
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(create).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/events/[id]/message returns 404 for an org-B event, sending nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/message/route")
     setupGuard() // event.findFirst → null

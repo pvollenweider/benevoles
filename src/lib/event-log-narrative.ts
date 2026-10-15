@@ -41,6 +41,8 @@ const FIELD_LABELS: Record<string, string> = {
   label: "libellé",
   waitlistEnabled: "liste d'attente",
   requiresApproval: "sur validation",
+  // « Cumulable avec un autre créneau » (#986).
+  overlapAllowed: "cumulable avec un autre créneau",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",

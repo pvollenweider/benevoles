@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { shiftsOverlap, shiftsTooYoungFor } from "./utils"
+import { shiftsTooYoungFor } from "./utils"
+import { shiftsClash } from "./shift-overlap"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 /**
@@ -19,6 +20,8 @@ export type SignupShift = {
   status: string
   waitlistEnabled: boolean
   minAge: number | null
+  /** Its role may overlap another shift (#986): never a conflict. */
+  overlapAllowed?: boolean
 }
 
 export type MyRegistration = {
@@ -66,13 +69,13 @@ export function isShiftSelectable(shift: SignupShift | undefined, myShiftIds: Se
   return !myShiftIds.has(shift.id)
 }
 
-/** Shifts that overlap something already selected or registered, so they can't be picked too. */
+/** Shifts that clash with something already selected or registered, so they can't be picked too (#986: a cumulable role never clashes). */
 export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected: Set<string>, myShiftIds: Set<string>): Set<string> {
   const taken = shifts.filter((s) => selected.has(s.id) || myShiftIds.has(s.id))
   return new Set(
     shifts
       .filter((s) => !selected.has(s.id) && !myShiftIds.has(s.id))
-      .filter((candidate) => taken.some((ref) => shiftsOverlap(candidate, ref)))
+      .filter((candidate) => taken.some((ref) => shiftsClash(candidate, ref)))
       .map((s) => s.id),
   )
 }

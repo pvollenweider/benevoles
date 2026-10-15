@@ -82,6 +82,8 @@ type Shift = {
   maxPerVolunteer?: number | null
   /** Reserved to some members (#470); which tags is never sent to the page. */
   reserved?: boolean
+  /** Its role may overlap another shift (#986): never shown as a conflict. */
+  overlapAllowed?: boolean
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }

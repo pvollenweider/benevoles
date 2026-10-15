@@ -51,7 +51,7 @@ const VOLUNTEER_SELECT = {
   organizationId: true, mergedIntoId: true, erasedAt: true,
 } as const
 
-const SHIFT_SELECT = { id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, minAge: true, maxPerVolunteer: true, reservedTags: true } as const
+const SHIFT_SELECT = { id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, minAge: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true } as const
 
 export interface MemberMergeResult {
   keepId: string

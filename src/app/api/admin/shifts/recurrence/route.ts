@@ -10,6 +10,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { generateRecurrence, recurrenceProblem, type RecurrenceInput } from "@/lib/shift-recurrence"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
+import { roleOverlapSetting } from "@/lib/role-overlap-setting"
 
 const schema = z.object({
   eventId: z.string(),
@@ -62,6 +63,8 @@ export async function POST(req: Request) {
 
   const { shifts: slots } = generateRecurrence(input)
   const shiftLabel = label?.trim() || roleName
+  // Shifts added to a cumulable role are cumulable too (#986).
+  const overlapAllowed = await roleOverlapSetting(db, eventId, roleName)
   const { rule, count } = await db.$transaction(async (tx) => {
     const rule = await tx.shiftRecurrence.create({
       data: {
@@ -81,6 +84,7 @@ export async function POST(req: Request) {
         endTime: slot.endTime,
         status: "open",
         recurrenceId: rule.id,
+        overlapAllowed,
       })),
     })
     return { rule, count: created.count }

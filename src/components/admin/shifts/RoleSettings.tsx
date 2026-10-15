@@ -202,6 +202,96 @@ export function RoleLimitForm({
   )
 }
 
+/** Announced once a role's « Cumul » option is saved (#986). */
+export function overlapAnnouncement(role: string, overlapAllowed: boolean): string {
+  return overlapAllowed
+    ? `Poste « ${role} » : cumulable avec un autre créneau.`
+    : `Poste « ${role} » : ne se cumule plus avec un autre créneau.`
+}
+
+export function RoleOverlapForm({
+  eventId, autoFocus = true, role, index, overlapAllowed, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+}: {
+  eventId:          string
+  /** Focus the checkbox on mount; false when the panel is reopened with this editor still open. */
+  autoFocus?:       boolean
+  role:             string
+  /** Position of the role in the panel, for the ids. */
+  index:            number
+  /** The role's saved value. */
+  overlapAllowed:   boolean
+  /** The checkbox, kept by the panel while it is closed. */
+  value:            boolean
+  onValueChange:    (value: boolean) => void
+  /** The role an action is running on, if any: a save waits for it. */
+  busyRole:         string | null
+  onBusyRoleChange: (role: string | null) => void
+  onActionError:    (error: string | null) => void
+  /** Closes the form and returns the focus to its « Cumul » button. */
+  onClose:          (role: string) => void
+  setShifts:        SetShifts
+  onAnnounce:       (text: string) => void
+}) {
+  const i = index
+  const isBusy = busyRole === role
+
+  // « Enregistrer » keeps focus during the request (aria-disabled); a failure leaves the form open.
+  async function saveOverlap(role: string, next: boolean) {
+    if (busyRole) return
+    if (next === overlapAllowed) {
+      onClose(role)
+      onAnnounce(`Poste « ${role} » : aucune modification.`)
+      return
+    }
+    onActionError(null)
+    onBusyRoleChange(role)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ overlapAllowed: next }),
+    }), "Erreur lors de l'enregistrement.")
+    onBusyRoleChange(null)
+    if (!outcome.ok) {
+      onActionError(outcome.error)
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, overlapAllowed: next } : s))
+    onClose(role)
+    onAnnounce(overlapAnnouncement(role, next))
+  }
+
+  return (
+    <form
+      id={`overlap-form-${i}`}
+      noValidate
+      onSubmit={(e) => { e.preventDefault(); saveOverlap(role, value) }}
+      // Escape waits for a running save, whose success closes the form and moves focus itself.
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!isBusy) onClose(role) } }}
+      className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
+    >
+      <div className="flex-1 min-w-48 min-h-6 flex items-center gap-2">
+        <input
+          id={`overlap-${i}`}
+          type="checkbox"
+          checked={value}
+          autoFocus={autoFocus}
+          onChange={(e) => onValueChange(e.target.checked)}
+          aria-describedby={`overlap-help-${i}`}
+          className="w-4 h-4 flex-shrink-0"
+        />
+        <label htmlFor={`overlap-${i}`} className="text-xs font-medium text-gray-700">Poste « {role} » cumulable avec un autre créneau</label>
+      </div>
+      <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+        {isBusy ? "Enregistrement…" : "Enregistrer"}
+      </button>
+      <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
+      <p id={`overlap-help-${i}`} className="basis-full text-xs text-gray-600">
+        Une personne inscrite à un créneau de ce poste peut prendre en même temps un autre créneau, de ce poste ou d&apos;un autre, par exemple assurer les premiers secours tout en tenant la buvette. Sans cette option, une personne ne peut pas s&apos;inscrire à deux créneaux qui se chevauchent. Si vous la retirez, les inscriptions déjà faites sont conservées ; vous pouvez toujours ajouter quelqu&apos;un à la main.
+      </p>
+    </form>
+  )
+}
+
 export function RoleColorPicker({
   eventId, role, index, colorKey, busy, onClose, onBusyRoleChange, onActionError, setShifts, onAnnounce,
 }: {

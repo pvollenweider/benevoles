@@ -3,7 +3,7 @@
 
 import { fold } from "./text-fold"
 
-import { shiftsOverlap } from "./utils"
+import { shiftsClash } from "./shift-overlap"
 import { clockTime } from "./gantt-utils"
 import { matchesGroupFilter, type RegistrationGroupFilter } from "./group-links"
 
@@ -16,6 +16,8 @@ import { matchesGroupFilter, type RegistrationGroupFilter } from "./group-links"
 export type ShiftRef = {
   id: string; roleName: string; label: string; date: string
   startTime: string; endTime: string; capacity: number; registrationCount: number
+  /** Its role may overlap another shift (#986): no overlap warning. */
+  overlapAllowed?: boolean
 }
 
 type ListRegistration = {
@@ -113,15 +115,15 @@ export function memberResultsSentence(found: number): string {
 export function addConflictMessage(selected: ShiftRef | null, volunteerShifts: ShiftRef[] | undefined): string | null {
   if (!selected || !volunteerShifts) return null
   if (volunteerShifts.some((e) => e.id === selected.id)) return "Ce bénévole est déjà inscrit à ce créneau."
-  if (volunteerShifts.some((e) => shiftsOverlap(selected, e))) return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
+  if (volunteerShifts.some((e) => shiftsClash(selected, e))) return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
   return null
 }
 
-/** Shifts (not already held) that overlap one of `existing`. */
+/** Shifts (not already held) that clash with one of `existing` (#986: not with a cumulable role). */
 export function overlappingShiftIds(shifts: ShiftRef[], existing: ShiftRef[] | undefined): Set<string> {
   if (!existing) return new Set()
   const held = new Set(existing.map((s) => s.id))
-  return new Set(shifts.filter((s) => !held.has(s.id) && existing.some((e) => shiftsOverlap(s, e))).map((s) => s.id))
+  return new Set(shifts.filter((s) => !held.has(s.id) && existing.some((e) => shiftsClash(s, e))).map((s) => s.id))
 }
 
 /** Roles a volunteer is registered on, to offer when making them sector leader. */
@@ -173,7 +175,7 @@ export function manualAddManyAnnouncement(person: string, shifts: Pick<ShiftRef,
 /** A shift chosen in the add form that overlaps another one chosen in the same form (#918). */
 export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: ShiftRef[]): string | null {
   if (!selected) return null
-  return otherChosen.some((o) => o.id !== selected.id && shiftsOverlap(selected, o))
+  return otherChosen.some((o) => o.id !== selected.id && shiftsClash(selected, o))
     ? "Ce créneau chevauche un autre créneau choisi dans ce formulaire."
     : null
 }

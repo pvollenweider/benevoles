@@ -23,7 +23,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true, overlapAllowed: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, status: true } },
         },
       },
@@ -42,7 +42,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   ])
 
   const eventShifts: EventShiftRef[] = event.shifts.map((s) => ({
-    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime,
+    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, overlapAllowed: s.overlapAllowed,
   }))
   const summary = staffingSummary(
     event.shifts.map((s) => ({
@@ -55,11 +55,12 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
     [],
   )
   const minAgeOf = new Map(event.shifts.map((s) => [s.id, s.minAge]))
+  const overlapAllowedOf = new Map(event.shifts.map((s) => [s.id, s.overlapAllowed]))
   // Reserved roles (#470): one set of tags per role, whichever shift carries it.
   const reserved = reservedRoles(event.shifts)
   // Underfilled shifts in time order: the order the email and the picker read best in.
   const openShifts: OpenShift[] = summary.underfilled
-    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null,
+    .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null, overlapAllowed: overlapAllowedOf.get(s.id) ?? false,
       // The state against the minimum (#949), for the organizer's list only: never in the email.
       staffingState: staffingStateText(s, s.state ?? "open"), spokenStaffingState: spokenStaffingState(s, s.state ?? "open") }))
     .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr"))

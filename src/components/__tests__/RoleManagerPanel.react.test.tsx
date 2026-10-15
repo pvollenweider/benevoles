@@ -137,6 +137,40 @@ describe("RoleManagerPanel", () => {
     await waitFor(() => expect(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })).toHaveFocus())
   })
 
+  // « Cumul » (#986): the same disclosure as « Limite » and « Accès ».
+  it("opens the « Cumul » editor, saves it, shows « Cumul : oui » and returns the focus to it", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    const cumul = screen.getByRole("button", { name: "Cumul : non, poste « Bar » non cumulable avec un autre créneau" })
+    expect(cumul).toHaveTextContent("Cumul : non")
+    expect(cumul).not.toHaveAttribute("aria-controls")
+    fireEvent.click(cumul)
+    expect(cumul).toHaveAttribute("aria-expanded", "true")
+    expect(cumul).toHaveAttribute("aria-controls", "overlap-form-0")
+    expect(document.getElementById("overlap-form-0")).toBeInTheDocument()
+    const box = screen.getByRole("checkbox", { name: "Poste « Bar » cumulable avec un autre créneau" })
+    expect(box).toHaveFocus()
+    fireEvent.click(box)
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(spies.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : cumulable avec un autre créneau."))
+    const after = screen.getByRole("button", { name: "Cumul : oui, poste « Bar » cumulable avec un autre créneau" })
+    await waitFor(() => expect(after).toHaveFocus())
+    expect(screen.getByRole("button", { name: "Cumul : non, poste « Accueil » non cumulable avec un autre créneau" })).toBeInTheDocument()
+  })
+
+  it("closes the « Cumul » editor on Escape, back on its button, and when another editor opens", async () => {
+    render(<Harness spies={makeSpies()} />)
+    const cumul = screen.getByRole("button", { name: /^Cumul : non, poste « Bar »/ })
+    fireEvent.click(cumul)
+    fireEvent.keyDown(screen.getByRole("checkbox"), { key: "Escape" })
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument()
+    await waitFor(() => expect(cumul).toHaveFocus())
+    fireEvent.click(cumul)
+    fireEvent.click(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" }))
+    expect(screen.queryByRole("checkbox")).not.toBeInTheDocument()
+  })
+
   it("keeps an open inline editor and its typed value while closed and reopened", () => {
     const spies = makeSpies()
     const { rerender } = render(<Harness spies={spies} />)

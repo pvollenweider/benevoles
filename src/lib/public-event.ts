@@ -64,6 +64,8 @@ export function toPublicEvent(event: PublicEventRow) {
     minAge: shift.minAge,
     colorKey: shift.colorKey,
     maxPerVolunteer: shift.maxPerVolunteer,
+    // Role cumulable with another shift (#986): the page does not mark its overlaps as conflicts.
+    overlapAllowed: shift.overlapAllowed,
     // Reserved to some members (#470): the public page says so, never which tags.
     reserved: (shift.reservedTags ?? []).length > 0,
     }

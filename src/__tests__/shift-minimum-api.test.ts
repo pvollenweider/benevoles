@@ -26,7 +26,7 @@ describe("POST /api/admin/shifts with a minimum", () => {
     vi.clearAllMocks()
     create.mockImplementation(async ({ data }: { data: object }) => ({ id: "s1", ...data }))
     requireOrgSessionMock.mockResolvedValue({
-      db: { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", startDate: new Date("2026-07-04"), endDate: new Date("2026-07-05") }) }, shift: { create } },
+      db: { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", startDate: new Date("2026-07-04"), endDate: new Date("2026-07-05") }) }, shift: { findMany: vi.fn().mockResolvedValue([]), create } },
       organizationId: "org-a", session: {},
     })
   })
