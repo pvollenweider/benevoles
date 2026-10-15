@@ -286,7 +286,7 @@ export function RoleOverlapForm({
       </button>
       <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
       <p id={`overlap-help-${i}`} className="basis-full text-xs text-gray-600">
-        Une personne inscrite à un créneau de ce poste peut prendre en même temps un autre créneau, de ce poste ou d&apos;un autre, par exemple assurer les premiers secours tout en tenant la buvette. Sans cette option, une personne ne peut pas s&apos;inscrire à deux créneaux qui se chevauchent. Si vous la retirez, les inscriptions déjà faites sont conservées ; vous pouvez toujours ajouter quelqu&apos;un à la main.
+        Une personne inscrite à un créneau de ce poste peut prendre en même temps un autre créneau, de ce poste ou d&apos;un autre, par exemple assurer les premiers secours tout en tenant la buvette ; le temps passé sur deux créneaux à la fois ne compte qu&apos;une fois dans ses heures. Sans cette option, une personne ne peut pas s&apos;inscrire à deux créneaux qui se chevauchent. Si vous la retirez, les inscriptions déjà faites sont conservées ; vous pouvez toujours ajouter quelqu&apos;un à la main.
       </p>
     </form>
   )

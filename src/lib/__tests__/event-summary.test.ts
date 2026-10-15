@@ -66,14 +66,14 @@ describe("eventSummary", () => {
   })
 
   it("planned is the total (attested + unattested), attested its subset (owner decision, #557)", () => {
-    const registrations = [reg({ id: "r1", checkedInAt: new Date("2026-05-02T19:00:00Z") }), reg({ id: "r2", checkedInAt: null, shift: { id: "shift-2" } })]
+    const registrations = [reg({ id: "r1", checkedInAt: new Date("2026-05-02T19:00:00Z") }), reg({ id: "r2", checkedInAt: null, shift: { id: "shift-2", startTime: "14:00", endTime: "18:00" } })]
     const summary = eventSummary(registrations, new Set(), [shift(), shift({ id: "shift-2" })], [], TZ)
     expect(summary.attestedMinutes).toBe(240)
     expect(summary.plannedMinutes).toBe(480)
   })
 
   it("attested equals planned, not 0 h, when every confirmed shift has a presence", () => {
-    const registrations = [reg({ id: "r1" }), reg({ id: "r2", shift: { id: "shift-2" } })]
+    const registrations = [reg({ id: "r1" }), reg({ id: "r2", shift: { id: "shift-2", startTime: "14:00", endTime: "18:00" } })]
     const summary = eventSummary(registrations, new Set(), [shift(), shift({ id: "shift-2" })], [], TZ)
     expect(summary.plannedMinutes).toBe(480)
     expect(summary.attestedMinutes).toBe(480)

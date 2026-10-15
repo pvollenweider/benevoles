@@ -37,7 +37,7 @@ Quand l'organisation les a renseignées, le récapitulatif montre sous chaque cr
 
 La **personne de contact** et son téléphone ne sont jamais affichés sur la page publique : tu les reçois après ton inscription, dans l'email de confirmation, les rappels et sur ta page personnelle, sous **Contact pour ce créneau**. Si le créneau n'a pas de contact et que l'organisation a indiqué un **Contact le jour J** pour l'événement, c'est lui qui apparaît dans les rappels, sur ta page personnelle et sur le planning individuel imprimé, pour tes places confirmées, avec un rappel : en cas d'urgence, appelle les numéros d'urgence officiels, ce contact ne les remplace pas.
 
-Si tes créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes, le récapitulatif le signale sous **Journée chargée**, en comptant aussi les créneaux que tu as déjà. C'est un conseil : tu peux confirmer quand même.
+Si tes créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes, le récapitulatif le signale sous **Journée chargée**, en comptant aussi les créneaux que tu as déjà. Le temps de deux créneaux qui ont lieu en même temps n'y compte qu'une fois, comme dans le total des heures du récapitulatif. C'est un conseil : tu peux confirmer quand même.
 
 Clique sur **Confirmer mon inscription**.
 

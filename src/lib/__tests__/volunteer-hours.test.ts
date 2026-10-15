@@ -109,7 +109,7 @@ describe("volunteerHourEntries", () => {
 describe("eventHourSummaries", () => {
   it("groups entries per event with roles, shift count and an attested/planned split", () => {
     const attested = reg({ shift: { id: "s1", roleName: "Bar", label: "Bar" } })
-    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2", roleName: "Caisse", label: "Caisse" } })
+    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2", roleName: "Caisse", label: "Caisse", date: "2026-05-03" } })
     const entries = volunteerHourEntries([attested, planned], TZ)
     const [summary] = eventHourSummaries(entries)
     expect(summary.eventId).toBe("event-1")
@@ -140,7 +140,7 @@ describe("eventHourSummaries", () => {
 describe("totalMinutes", () => {
   it("sums attested-only or every counted entry", () => {
     const attested = reg()
-    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2" } })
+    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2", date: "2026-05-03" } })
     const entries = volunteerHourEntries([attested, planned], TZ)
     expect(totalMinutes(entries, true)).toBe(240)
     expect(totalMinutes(entries, false)).toBe(480)
@@ -182,7 +182,7 @@ describe("pastEntries (#557)", () => {
 describe("splitMinutes (#557)", () => {
   it("planned is the total of every counted entry, attested entries included (owner decision)", () => {
     const attested = reg()
-    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2" } })
+    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2", date: "2026-05-03" } })
     const entries = volunteerHourEntries([attested, planned], TZ)
     const { plannedMinutes, attestedMinutes } = splitMinutes(entries)
     expect(attestedMinutes).toBe(240)
@@ -192,7 +192,7 @@ describe("splitMinutes (#557)", () => {
 
   it("attested equals planned when every counted shift has a recorded presence — never 0 h planned", () => {
     const r1 = reg()
-    const r2 = reg({ id: "reg-2", shift: { id: "s2" } })
+    const r2 = reg({ id: "reg-2", shift: { id: "s2", date: "2026-05-03" } })
     const entries = volunteerHourEntries([r1, r2], TZ)
     const { plannedMinutes, attestedMinutes } = splitMinutes(entries)
     expect(attestedMinutes).toBe(480)
@@ -225,7 +225,7 @@ describe("memberHourTotals (#557)", () => {
   it("groups entries per volunteer with distinct event count, shift count and the planned/attested split", () => {
     const entries: HourEntry[] = [
       ...volunteerHourEntries([reg({ volunteerId: "vol-1" })], TZ),
-      ...volunteerHourEntries([reg({ id: "reg-2", volunteerId: "vol-1", checkedInAt: null, event: { id: "event-2", title: "Marché de Noël" }, shift: { id: "s2" } })], TZ),
+      ...volunteerHourEntries([reg({ id: "reg-2", volunteerId: "vol-1", checkedInAt: null, event: { id: "event-2", title: "Marché de Noël" }, shift: { id: "s2", date: "2026-05-03" } })], TZ),
       ...volunteerHourEntries([reg({ id: "reg-3", volunteerId: "vol-2", shift: { id: "s3" } })], TZ),
     ]
     const totals = memberHourTotals(entries)

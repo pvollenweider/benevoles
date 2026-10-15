@@ -28,8 +28,14 @@
  *      `plannedWithoutPresenceMinutes`, which is deliberately a non-overlapping complement
  *      ("planned, as opposed to attested") for its own table — the field name says so, so the two
  *      are never confused by a shared `plannedMinutes` name.
+ *
+ * Parallel time (#986): a role « Cumulable avec un autre créneau » lets one person hold two shifts
+ * at the same time. Every per-person total here is the union of that person's shift instants, never
+ * their sum (`personMinutes`), so the time is counted once; per-shift lines (one entry, one export
+ * row) keep each shift's own duration, and an event's total is the sum of its volunteers' totals.
  */
 import { shiftInstants } from "./ics"
+import { unionLength, type Interval } from "./interval-union"
 
 export type HourRegistration = {
   id: string
@@ -66,6 +72,10 @@ export type HourEntry = {
   minutes: number
   /** A recorded presence (`checkedInAt`), as opposed to a confirmed shift with none. */
   attested: boolean
+  /** The shift's real instants (ms since epoch), for the union of a person's time (#986). Set by
+   * `volunteerHourEntries`; an entry without them counts its `minutes` as time of its own. */
+  startMs?: number
+  endMs?: number
 }
 
 export type EventHourSummary = {
@@ -134,6 +144,8 @@ export function volunteerHourEntries(registrations: HourRegistration[], timeZone
       localDate,
       minutes,
       attested: r.checkedInAt != null,
+      startMs: start.getTime(),
+      endMs: end.getTime(),
     })
   }
   return entries.sort((a, b) => a.localDate.localeCompare(b.localDate) || a.eventTitle.localeCompare(b.eventTitle, "fr"))
@@ -160,15 +172,47 @@ export function eventHourSummaries(entries: HourEntry[]): EventHourSummary[] {
       eventTitle: list[0].eventTitle,
       roles,
       shiftsCount: list.length,
-      attestedMinutes: list.filter((e) => e.attested).reduce((n, e) => n + e.minutes, 0),
-      plannedWithoutPresenceMinutes: list.filter((e) => !e.attested).reduce((n, e) => n + e.minutes, 0),
+      // Parallel time once (#986): the attested union, then what the other shifts add to it.
+      attestedMinutes: personMinutes(list.filter((e) => e.attested)),
+      plannedWithoutPresenceMinutes: personMinutes(list) - personMinutes(list.filter((e) => e.attested)),
       noCheckIn: !list.some((e) => e.attested),
     }
   })
 }
 
+/**
+ * Minutes given by the people of `entries` (#986): for each volunteer (`volunteerId`, or one person
+ * when it is not set), the union of their shift instants, so two shifts held at the same time count
+ * their common time once; then the sum over the volunteers.
+ */
+export function personMinutes(entries: HourEntry[]): number {
+  const byPerson = new Map<string, HourEntry[]>()
+  for (const e of entries) byPerson.set(e.volunteerId ?? "", [...(byPerson.get(e.volunteerId ?? "") ?? []), e])
+  let total = 0
+  for (const list of byPerson.values()) {
+    const intervals: Interval[] = []
+    for (const e of list) {
+      if (e.startMs != null && e.endMs != null) intervals.push({ start: e.startMs, end: e.endMs })
+      else total += e.minutes
+    }
+    total += Math.round(unionLength(intervals) / 60_000)
+  }
+  return total
+}
+
 export const totalMinutes = (entries: HourEntry[], attestedOnly: boolean): number =>
-  entries.filter((e) => !attestedOnly || e.attested).reduce((n, e) => n + e.minutes, 0)
+  personMinutes(entries.filter((e) => !attestedOnly || e.attested))
+
+/** Totals of the certificate table (#556), parallel time once over all its events (#986). */
+export function certificateTotals(entries: HourEntry[]): { attestedMinutes: number; plannedWithoutPresenceMinutes: number } {
+  const attestedMinutes = personMinutes(entries.filter((e) => e.attested))
+  return { attestedMinutes, plannedWithoutPresenceMinutes: personMinutes(entries) - attestedMinutes }
+}
+
+/** Some of these shifts of one person ran at the same time (#986): their totals count it once. */
+export function hasParallelShifts(entries: HourEntry[]): boolean {
+  return personMinutes(entries) < entries.reduce((n, e) => n + e.minutes, 0)
+}
 
 /** Entries whose shift starts on or before `today` ("YYYY-MM-DD", local) — #557: a future, merely
  * confirmed shift is not yet "planned hours given", it just hasn't happened. */
