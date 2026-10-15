@@ -2,7 +2,7 @@
 roles: [benevole]
 group: apres-inscription
 order: 10
-summary: Ta page personnelle : ton prochain créneau, tes infos pratiques, d'autres créneaux, changer ou annuler, ton calendrier, tes disponibilités.
+summary: Ta page personnelle : prochain créneau, infos pratiques, tes réponses, d'autres créneaux, changer ou annuler, calendrier, disponibilités.
 related: [lien-personnel, rappels, revenir-sur-la-page-d-inscription]
 legacy: [benevole#gerer-son-inscription]
 aliases: []
@@ -41,6 +41,12 @@ Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'enca
 Encore un peu de temps ? Sous tes créneaux, le lien **S'inscrire à d'autres créneaux** t'emmène sur la page d'inscription de l'événement, qui te reconnaît : choisis-y de nouveaux créneaux comme la première fois. Si tu t'étais inscrit par le lien d'un groupe (ton club, ton équipe), tu retrouves ses postes.
 
 Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand elles sont fermées ou que l'événement est passé, il disparaît, et le lien en bas de la page s'appelle **Voir la page de l'événement** (ou **Retour à l'accueil**, vers la page de l'organisation, si l'événement n'est plus en ligne).
+
+## Mes réponses
+
+![Encadré « Mes réponses » : « Taille de t-shirt » avec la réponse M, puis « Régime alimentaire (repas des bénévoles) » et « Permis de conduire », chacune avec « Pas de réponse »](/doc-img/public-my-answers.png)
+
+Si l'organisation a posé des questions à l'inscription (taille de t-shirt, repas, permis…), l'encadré **Mes réponses**, sous tes créneaux, reprend chacune d'elles dans l'ordre du formulaire, avec ce que tu as répondu ; **Pas de réponse** pour une question à laquelle tu n'as pas répondu. Tu y vois seulement tes propres réponses. Elles ne se modifient pas depuis cette page : pour en changer une, écris à l'organisation (le lien **Écrire à l'organisation** de l'encadré, quand l'organisation a donné son adresse).
 
 ## Annuler un créneau
 

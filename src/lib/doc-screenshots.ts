@@ -26,6 +26,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "public-waitlist-selection": ["src/app/[eventSlug]/page.tsx"],
   "public-my-page": ["src/app/my/[token]/page.tsx"],
   "public-personal-link": ["src/app/my/[token]/page.tsx"],
+  "public-my-answers": ["src/app/my/[token]/page.tsx"],
   "public-link-invalid": ["src/app/my/[token]/page.tsx"],
   "public-signup": ["src/app/inscription/page.tsx"],
   "leader-page": ["src/app/leader/[token]/page.tsx"],

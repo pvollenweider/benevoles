@@ -6,7 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const findFirst = vi.hoisted(() => vi.fn())
 const findMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, findMany } } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, findMany }, eventQuestion: { findMany: async () => [] } } }))
 vi.mock("@/lib/urls", () => ({
   orgBaseUrl: () => "http://localhost:3000",
   eventPublicUrl: (org: string, slug: string) => `http://localhost:3000/${slug}?org=${org}`,

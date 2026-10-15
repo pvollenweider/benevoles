@@ -6,6 +6,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
+import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { logEvent } from "@/lib/event-log"
@@ -68,6 +69,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
 
+  // « Mes réponses » (#984): the event's questions with this volunteer's own answers only, the
+  // volunteer being the one of the link's registration.
+  const questions = await prisma.eventQuestion.findMany(myAnswersQuery(registration.eventId, registration.volunteerId))
+
   const orgSlug = registration.event.organization.slug
   const baseUrl = orgBaseUrl(orgSlug)
   const eventUrl = `${baseUrl}/${registration.event.slug}`
@@ -92,6 +97,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       pages: event.publicStatus === "published" ? event.pages.map((p) => ({ title: p.title, url: `${eventUrl}/${p.slug}` })) : [],
     },
     confirmationMessage: registration.event.confirmationMessage ?? null,
+    answers: myAnswerRows(questions),
     orgHomeUrl: baseUrl,
     eventUrl,
     eventPageUrl: event.publicStatus === "published" ? publicUrl : null,

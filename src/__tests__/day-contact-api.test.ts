@@ -17,6 +17,7 @@ vi.mock("next/headers", () => ({ headers: () => Promise.resolve({ get: getHeader
 const prismaMock = vi.hoisted(() => ({
   event: { findMany: vi.fn(), findFirst: vi.fn() },
   registration: { findFirst: vi.fn(), findMany: vi.fn() },
+  eventQuestion: { findMany: async () => [] },
 }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.example`, eventPublicUrl: (org: string, slug: string) => `https://${org}.example/${slug}` }))

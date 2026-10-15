@@ -15,7 +15,8 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
 export type ShiftSpec = { label: string; startTime: string; endTime: string; capacity?: number }
-export type PublicEvent = { eventId: string; slug: string; date: string; shifts: { id: string; label: string }[] }
+export type QuestionSpec = { label: string; type: "text" | "yesno" | "single" | "multiple"; options?: string[] }
+export type PublicEvent = { eventId: string; slug: string; date: string; shifts: { id: string; label: string }[]; questions: { id: string; label: string }[] }
 
 /** A random private client address, so that each test gets its own rate-limit bucket. */
 export function randomIp(): string {
@@ -31,8 +32,8 @@ async function login(page: Page) {
   await expect(page).toHaveURL(/\/admin\/events/)
 }
 
-/** A published event on one day with these shifts (one role per shift, named after its label). */
-export async function createPublicEvent(browser: Browser, title: string, shifts: ShiftSpec[], date = "2030-10-01"): Promise<PublicEvent> {
+/** A published event on one day with these shifts (one role per shift, named after its label), and these optional questions. */
+export async function createPublicEvent(browser: Browser, title: string, shifts: ShiftSpec[], date = "2030-10-01", questions: QuestionSpec[] = []): Promise<PublicEvent> {
   const page = await browser.newPage()
   await login(page)
   const post = async (url: string, body: unknown) => {
@@ -49,19 +50,24 @@ export async function createPublicEvent(browser: Browser, title: string, shifts:
     })
     created.push({ id: shift.id, label: s.label })
   }
+  const asked: { id: string; label: string }[] = []
+  for (const q of questions) {
+    const question = await post(`/api/admin/events/${event.id}/questions`, { label: q.label, type: q.type, options: q.options ?? [] })
+    asked.push({ id: question.id, label: q.label })
+  }
   const publish = await page.request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: "published" } })
   expect(publish.ok(), await publish.text()).toBeTruthy()
   await page.close()
-  return { eventId: event.id, slug: event.slug, date, shifts: created }
+  return { eventId: event.id, slug: event.slug, date, shifts: created, questions: asked }
 }
 
-/** Signs a new volunteer up for `shiftIds` through the public form's API; returns their /my token. */
-export async function publicSignUp(page: Page, event: PublicEvent, shiftIds: string[]): Promise<string> {
+/** Signs a new volunteer up for `shiftIds` through the public form's API, with these answers by question id; returns their /my token. */
+export async function publicSignUp(page: Page, event: PublicEvent, shiftIds: string[], answers?: Record<string, unknown>): Promise<string> {
   const stamp = `${Date.now()}${Math.floor(Math.random() * 1000)}`
   const email = `e2e-my-${stamp}@example.com`
   const res = await page.request.post("/api/public/registrations", {
     headers: { "x-forwarded-for": randomIp() },
-    data: { eventId: event.eventId, shiftIds, firstName: "E2E", lastName: `Perso${stamp}`, email, consent: true, charterAccepted: true },
+    data: { eventId: event.eventId, shiftIds, firstName: "E2E", lastName: `Perso${stamp}`, email, consent: true, charterAccepted: true, answers },
   })
   expect(res.ok(), `sign-up: ${res.status()} ${await res.text()}`).toBeTruthy()
   const mail = await waitForMessage(`to:"${email}"`)

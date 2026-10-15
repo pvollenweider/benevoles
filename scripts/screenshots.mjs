@@ -160,6 +160,12 @@ async function run() {
     await settle(p)
     await save(p, "public-personal-link", { target: p.getByRole("region", { name: "Ton lien personnel" }) })
   })
+  // « Mes réponses » (#984): the volunteer's answers to the event's questions, under the registrations.
+  await shot("public-my-answers", async () => {
+    await p.goto(withOrg(`/my/${TOKENS.volunteer}`))
+    await settle(p)
+    await save(p, "public-my-answers", { target: p.getByRole("region", { name: "Mes réponses" }) })
+  })
   await shot("public-link-invalid", async () => {
     await p.goto(withOrg("/my/demo-unknown-link-0000"))
     await settle(p)

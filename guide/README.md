@@ -44,7 +44,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 ### Après l'inscription
 
-- [Ma page personnelle](ma-page-personnelle.md) : Ta page personnelle : ton prochain créneau, tes infos pratiques, d'autres créneaux, changer ou annuler, ton calendrier, tes disponibilités. Pour : bénévoles.
+- [Ma page personnelle](ma-page-personnelle.md) : Ta page personnelle : prochain créneau, infos pratiques, tes réponses, d'autres créneaux, changer ou annuler, calendrier, disponibilités. Pour : bénévoles.
 - [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau si tu l'as perdu, et que faire s'il ne marche plus. Pour : bénévoles.
 - [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md) : Retrouver tes inscriptions en rouvrant la page de l'événement, et quitter la session sur un appareil partagé. Pour : bénévoles.
 - [Rappels et changements de créneau](rappels.md) : Les rappels envoyés avant chaque journée de créneaux, par email ou notification sur le téléphone, et les messages quand un créneau change ou est annulé. Pour : organisateurs, bénévoles.

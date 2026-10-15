@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const findFirst = vi.hoisted(() => vi.fn())
 const findMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, findMany } } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, findMany }, eventQuestion: { findMany: async () => [] } } }))
 vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.example`, eventPublicUrl: (org: string, slug: string) => `https://${org}.example/${slug}` }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn() }))

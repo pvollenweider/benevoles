@@ -10,7 +10,8 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
  * Withdrawing from the personal page (/my) with the keyboard (#534): the confirmation takes focus,
  * Escape and « Non, garder » give it back to the trigger, a withdrawal moves focus to a neighbouring
  * card and announces the result once, a failure keeps the page and says so under the card. Also axe
- * on the page, confirmation closed and open, and the cards at 320 px.
+ * on the page, confirmation closed and open, the cards at 320 px, and « Mes réponses » (#984): the
+ * volunteer's own answers to the event's questions, read-only.
  */
 
 let event: PublicEvent
@@ -19,9 +20,15 @@ const title = `E2E Page perso ${Date.now()}`
 test.beforeAll(async ({ browser }) => {
   test.setTimeout(120_000)
   event = await createPublicEvent(browser, title, [
-    { label: "Bar", startTime: "10:00", endTime: "12:00" },
-    { label: "Accueil", startTime: "14:00", endTime: "16:00" },
-    { label: "Vestiaire", startTime: "17:00", endTime: "19:00" },
+    // Room for every test's sign-up, the other member's of « Mes réponses » included.
+    { label: "Bar", startTime: "10:00", endTime: "12:00", capacity: 10 },
+    { label: "Accueil", startTime: "14:00", endTime: "16:00", capacity: 10 },
+    { label: "Vestiaire", startTime: "17:00", endTime: "19:00", capacity: 10 },
+  ], undefined, [
+    { label: "Repas du soir ?", type: "yesno" },
+    { label: "Taille de t-shirt ?", type: "single", options: ["S", "M", "L"] },
+    { label: "Transport ?", type: "multiple", options: ["Voiture", "Vélo", "Train"] },
+    { label: "Remarque ?", type: "text" },
   ])
 })
 
@@ -32,8 +39,8 @@ test.beforeEach(async ({ page }) => {
 })
 
 /** Signs up for every shift of the event and opens the personal page, hydrated. */
-async function openMyPage(page: Page) {
-  const token = await publicSignUp(page, event, event.shifts.map((s) => s.id))
+async function openMyPage(page: Page, answers?: Record<string, unknown>) {
+  const token = await publicSignUp(page, event, event.shifts.map((s) => s.id), answers)
   await page.goto(`/my/${token}`)
   await expect(page.getByRole("heading", { level: 1, name: "Mes inscriptions" })).toBeVisible()
   await waitForHydration(trigger(page, "Bar"))
@@ -141,6 +148,25 @@ test("a failed withdrawal keeps the page, says so under the card and gives focus
   await expect(page.getByRole("heading", { level: 1, name: "Mes inscriptions" })).toBeVisible()
   await expect(page.getByText("Ce lien ne fonctionne pas")).toHaveCount(0)
   await expect(pageStatus(page)).toHaveText("")
+})
+
+test("« Mes réponses » shows the volunteer's own answers in form order, read-only (#984)", async ({ page }) => {
+  const [meal, size, transport, note] = event.questions
+  // Another member of the same event, with other answers: never on this page.
+  await publicSignUp(page, event, [event.shifts[0].id], { [meal.id]: "Non", [size.id]: "L", [note.id]: "Réponse de quelqu'un d'autre" })
+  await openMyPage(page, { [meal.id]: "Oui", [transport.id]: ["Vélo", "Train"] })
+
+  const answers = page.getByRole("region", { name: "Mes réponses" })
+  await expect(answers).toBeVisible()
+  await expect(answers.getByRole("term")).toHaveText(["Repas du soir ?", "Taille de t-shirt ?", "Transport ?", "Remarque ?"])
+  await expect(answers.getByRole("definition")).toHaveText(["Oui", "Pas de réponse", "Vélo, Train", "Pas de réponse"])
+  await expect(answers.getByText("Réponse de quelqu'un d'autre")).toHaveCount(0)
+  // Read-only: nothing to change here.
+  await expect(answers.getByRole("button")).toHaveCount(0)
+  await expect(answers.getByRole("textbox")).toHaveCount(0)
+  // Under the registrations, as the page's other sections, below its title.
+  await expect(page.getByRole("heading", { level: 2, name: "Mes réponses" })).toBeVisible()
+  expect.soft(await seriousViolations(page)).toEqual([])
 })
 
 test("/my has no serious axe violation, confirmation closed and open", async ({ page }) => {
