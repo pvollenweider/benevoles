@@ -18,11 +18,16 @@ describe("notFoundLinks", () => {
     ])
   })
 
-  it("on an organization's host: back to its events, at the root of that host", () => {
+  // The site's pages on the site's address: from the organisation's host, a relative one is a 308.
+  it("on an organization's host: back to its events, at the root of that host, the site's pages on its address", () => {
     const { primary, note, links } = notFoundLinks({ slug: "festival" }, "festival.benevol.app", SITE)
     expect(primary).toEqual({ href: "/", label: "Voir les événements" })
     expect(note).toMatch(/e-mail de confirmation/)
-    expect(links.map((l) => l.href)).toEqual(["/doc/benevole", "/doc", "/videos", "/admin/login"])
+    expect(links.map((l) => l.href)).toEqual(["https://www.benevol.app/doc/benevole", "https://www.benevol.app/doc", "https://www.benevol.app/videos", "https://www.benevol.app/admin/login"])
+  })
+
+  it("an organization on localhost (?org=) keeps relative links to the site's pages", () => {
+    expect(notFoundLinks({ slug: "festival" }, "localhost:3000", "http://localhost:3000").links.map((l) => l.href)).toEqual(["/doc/benevole", "/doc", "/videos", "/admin/login"])
   })
 
   it("an organization without its subdomain (localhost, ?org=) keeps it in the link", () => {

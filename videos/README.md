@@ -518,7 +518,7 @@ Depuis le 2026-10-07, la bibliothèque est publique et référencée (`src/lib/v
 
 - une vidéo publiée **et** jouable (`VIDEO_MEDIA_BASE_URL` défini, la même condition que le
   lecteur) est indexée ; une vidéo « À venir » garde `noindex` ;
-- canonique absolue `https://www.benevol.app/videos/<ID>` (jamais le slug ni `?from=doc`),
+- canonique absolue `https://www.benevol.app/videos/<ID>` (jamais le slug, ni un paramètre, ni un fragment),
   construite sur `NEXT_PUBLIC_APP_URL` lu à l'exécution (pages rendues à la requête) ;
 - données structurées `VideoObject` (titre, résumé, affiches, date `updatedAt`, durée ISO 8601,
   MP4, langue, transcription, éditeur) et `BreadcrumbList` ; sur la galerie, `CollectionPage` et
@@ -619,9 +619,11 @@ vidéo et cette révision (au mieux). Les réponses sont effacées après la dur
 `RETENTION_DAYS.videoFeedback` (`src/lib/retention.ts`, `docs/retention.md`).
 
 Contexte de lecture : `masterclass` par défaut ; `documentation` quand la page est ouverte avec
-`?from=doc`, à ajouter aux liens des guides vers une vidéo (#645), par exemple
-`/videos/EVENT_CREATE_BLANK?from=doc` (`FROM_DOC_PARAM`, `FROM_DOC_VALUE` dans
-`src/lib/video-feedback.ts` ; le paramètre est gardé lors de la redirection d'un slug). Le lecteur
+le fragment `#doc`, que portent les liens des guides vers une vidéo (#645), par exemple
+`/videos/EVENT_CREATE_BLANK#doc` (`FROM_DOC_FRAGMENT` dans `src/lib/video-feedback.ts`, lu dans le
+navigateur au moment de répondre). Un fragment et non un paramètre : il n'arrive pas au serveur et
+les robots l'ignorent, la vidéo garde une seule URL. L'ancien `?from=doc` est redirigé (308) vers
+`/videos/<ID>#doc`. Le fragment est gardé lors de la redirection d'un slug. Le lecteur
 ouvert sur place dans une fiche de documentation (`/doc/<fiche>`) répond directement en
 `documentation`.
 

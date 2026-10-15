@@ -8,7 +8,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import { useHydrated } from "@/lib/use-hydrated"
 import type { Audience } from "@/lib/video-catalog"
-import { feedbackStorageKey, feedbackWording, type FeedbackContext } from "@/lib/video-feedback"
+import { feedbackContextSent, feedbackStorageKey, feedbackWording, type FeedbackContext } from "@/lib/video-feedback"
 
 type State = "idle" | "sending" | "thanks"
 
@@ -93,7 +93,8 @@ export default function VideoFeedback({
       const res = await fetch("/api/public/video-feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoId, revision, useful, context }),
+        // Opened from a guide (`#doc`, src/lib/video-feedback.ts): read when answering, in the browser.
+        body: JSON.stringify({ videoId, revision, useful, context: feedbackContextSent(context, window.location.hash) }),
       })
       if (res.ok) {
         rememberAnswered(storageKey, useful)

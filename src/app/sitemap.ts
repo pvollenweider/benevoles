@@ -3,7 +3,7 @@ import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { apexBaseUrl, isKnownHost, orgBaseUrl } from "@/lib/urls"
-import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { ORG_SITEMAP_EVENTS_WHERE } from "@/lib/sitemap-index"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { loadBlogPosts } from "@/lib/blog"
@@ -43,8 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!resolved || resolved.redirectUrl) return []
 
   const events = await prisma.event.findMany({
-    // Listed events only (#414): an unlisted event and its pages stay out of the sitemap.
-    where: { organizationId: resolved.org.id, ...PUBLIC_LIST_WHERE },
+    // Listed events only (#414): an unlisted event and its pages stay out of the sitemap. The same
+    // rule decides whether the apex index lists this sitemap at all (src/lib/sitemap-index.ts).
+    where: { organizationId: resolved.org.id, ...ORG_SITEMAP_EVENTS_WHERE },
     select: {
       slug: true,
       updatedAt: true,

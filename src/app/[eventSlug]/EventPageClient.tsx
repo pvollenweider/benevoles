@@ -47,7 +47,7 @@ import { useHydrated } from "@/lib/use-hydrated"
 import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
 import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
 import { heldKinds } from "@/lib/public-timeline"
-import PublicFooter from "@/components/PublicFooter"
+import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
@@ -140,7 +140,7 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * « Continuer » bar is not fixed (a resized frame is as tall as its content) and the page's height
  * is posted to the site around it (EmbedFrame).
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" }, embed = false }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF, groupFilter = { kind: "none" }, embed = false, footerSite }: {
   /** The consent's privacy link, from the server (#760: the operator page on another instance). */
   privacyHref?: string
   orgSlug: string
@@ -149,6 +149,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   initialEvent?: EventData
   groupFilter?: GroupFilter
   embed?: boolean
+  /** The footer's links to the site's pages and its name, from the server (src/lib/urls.ts, `orgPageFooterSite`). */
+  footerSite?: FooterSite
 }) {
   const previewEventId = preview?.eventId ?? null
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
@@ -1308,7 +1310,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       {/* Below lg the fixed « Continuer » bar covers the bottom of the page: room under the
           footer so a focused footer link is never hidden behind it (WCAG 2.4.11). */}
       <div className={`px-4 ${fixedMobileCta ? "pb-28 lg:pb-0" : ""}`}>
-        <PublicFooter variant={embed ? "embed" : "event"} />
+        <PublicFooter variant={embed ? "embed" : "event"} site={footerSite} />
       </div>
     </div>
   )

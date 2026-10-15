@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { eventPageMetadata } from "@/lib/event-share"
 import { publicEventInclude, publicEventPayload } from "@/lib/public-event"
-import { apexBaseUrl, eventPublicUrl } from "@/lib/urls"
+import { apexBaseUrl, eventPublicUrl, orgPageFooterSite } from "@/lib/urls"
+import { apexHref } from "@/lib/apex-links"
 import EventPageClient, { type EventData } from "./EventPageClient"
 import { consentPrivacyHref } from "@/lib/public-signup"
 import { GROUP_PARAM, parseGroupCode, resolveGroupFilter } from "@/lib/group-links"
@@ -81,9 +82,12 @@ export default async function EventPage({ params, searchParams }: {
     : null
   const groupFilter = resolveGroupFilter(rawGroup === undefined ? null : (groupCode ?? ""), groupLink, [...new Set(event.shifts.map((s) => s.roleName))])
 
+  const footerSite = orgPageFooterSite()
   return (
     <EventPageClient
-      privacyHref={consentPrivacyHref()}
+      // On the organisation's host, the privacy page is linked on the site's address (no 308).
+      privacyHref={apexHref(consentPrivacyHref(), footerSite.apexBase)}
+      footerSite={footerSite}
       orgSlug={resolved.org.slug}
       eventSlug={eventSlug}
       initialEvent={publicEventPayload(event) as EventData}

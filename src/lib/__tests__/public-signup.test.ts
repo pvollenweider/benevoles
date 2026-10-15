@@ -139,7 +139,8 @@ describe("sign-up consent (#706)", () => {
     expect(path).toBe("/legal/privacy")
     expect(read("src/app/legal/privacy/page.tsx")).toContain(`id="${anchor}"`)
     expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("privacyHref = CONSENT_PRIVACY_HREF")
-    expect(read("src/app/[eventSlug]/page.tsx")).toContain("privacyHref={consentPrivacyHref()}")
+    // On the site's address from the organisation's host (src/lib/apex-links.ts).
+    expect(read("src/app/[eventSlug]/page.tsx")).toContain("privacyHref={apexHref(consentPrivacyHref(), footerSite.apexBase)}")
   })
 })
 

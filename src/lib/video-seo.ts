@@ -72,7 +72,7 @@ export function videoLibraryUrl(siteBase: string): string {
   return `${trimBase(siteBase)}${VIDEO_LIBRARY_PATH}`
 }
 
-/** The canonical URL of a video: its stable id, never the slug nor `?from=doc`. */
+/** The canonical URL of a video: its stable id, never the slug, a query nor a fragment. */
 export function videoPageUrl(siteBase: string, id: string): string {
   return `${videoLibraryUrl(siteBase)}/${encodeURIComponent(id)}`
 }

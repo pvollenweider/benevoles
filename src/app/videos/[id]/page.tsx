@@ -24,7 +24,7 @@ import { videoSeoContext } from "@/lib/video-seo-context"
 import VideoPlayer from "@/components/videos/VideoPlayer"
 import AutoplayLink from "@/components/videos/AutoplayLink"
 import VideoFeedback from "@/components/videos/VideoFeedback"
-import { feedbackContextFrom, FROM_DOC_PARAM, FROM_DOC_VALUE } from "@/lib/video-feedback"
+import { FROM_DOC_FRAGMENT, isLegacyFromDoc, LEGACY_FROM_DOC_PARAM } from "@/lib/video-feedback"
 import FreshnessNote from "@/components/public/FreshnessNote"
 
 type Params = { id: string }
@@ -52,19 +52,21 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { video } = findVideo(loadVideoCatalog(), id)
   if (!video) return { robots: { index: false, follow: false } }
   // Indexed only when published with a render to play (src/lib/video-seo.ts); canonical is always
-  // the absolute /videos/<ID>, without `?from=doc` and for the slug alias too.
+  // the absolute /videos/<ID>, without the `#doc` fragment and for the slug alias too.
   return videoDetailMetadata(video, videoSeoContext())
 }
 
 export default async function VideoDetailPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<SearchParams> }) {
   const { id } = await params
-  // Reading context of the « utile ? » answer (#646): `?from=doc` when a guide links here (#645),
-  // the video library otherwise. Kept across the slug → id redirect.
-  const fromDoc = feedbackContextFrom((await searchParams)[FROM_DOC_PARAM]) === "documentation"
+  // Reading context of the « utile ? » answer (#646): a guide links here with the fragment `#doc`
+  // (#645), read by VideoFeedback in the browser; the video library otherwise. A fragment survives
+  // the slug → id redirect by itself. The former `?from=doc`, still in shared and crawled links, is
+  // sent to the video's one URL with the fragment, so the variant URL leaves the index.
+  const legacyFromDoc = isLegacyFromDoc((await searchParams)[LEGACY_FROM_DOC_PARAM])
   const catalog = loadVideoCatalog()
   const { video, isSlug } = findVideo(catalog, id)
   if (!video) notFound()
-  if (isSlug) permanentRedirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
+  if (isSlug || legacyFromDoc) permanentRedirect(`/videos/${video.id}${legacyFromDoc ? `#${FROM_DOC_FRAGMENT}` : ""}`)
 
   const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL, video.render)
   // The poster is this page's largest element (#773, Lighthouse LCP): `<video>` has no
@@ -99,7 +101,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         </div>
       </div>
 
-      <VideoFeedback videoId={video.id} revision={video.revision} audience={video.audience} context={fromDoc ? "documentation" : "masterclass"} />
+      <VideoFeedback videoId={video.id} revision={video.revision} audience={video.audience} context="masterclass" />
 
       {/* Viewer-facing content (#644 owner feedback): what the video explains, written from its
           narration — never the internal editorial script (Utilité/Démonstration/Résultat

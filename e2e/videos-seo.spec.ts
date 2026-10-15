@@ -57,8 +57,10 @@ test.describe("with the media host online", () => {
   })
 
   test("a published video page is indexed with an absolute canonical, a VideoObject and og:video", async ({ page }) => {
-    // From the documentation: the canonical drops `?from=doc`.
+    // The former `?from=doc` (Search Console: a second URL per video) is sent to the video's one
+    // URL, the documentation context kept in the fragment; the canonical is that URL.
     await page.goto("/videos/EVENT_CREATE_BLANK?from=doc")
+    await expect(page).toHaveURL(/\/videos\/EVENT_CREATE_BLANK#doc$/)
     expect(await robotsMeta(page)).not.toContain("noindex")
     expect(await page.locator('link[rel="canonical"]').getAttribute("href")).toMatch(/^https?:\/\/[^/?]+\/videos\/EVENT_CREATE_BLANK$/)
 

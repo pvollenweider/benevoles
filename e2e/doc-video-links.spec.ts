@@ -5,7 +5,7 @@ import { seriousViolations } from "./helpers/axe"
  * Videos referenced from the documentation (#645): a `<!-- video: ID -->` line of a unit of guide/
  * (#649) renders as the button « Voir la vidéo : <titre> (<durée>) », which opens the player in
  * place, without leaving the documentation (a disclosure: aria-expanded, aria-controls); before
- * hydration it is a plain link to /videos/<ID>?from=doc. A guide (/doc/admin) keeps the plain link.
+ * hydration it is a plain link to /videos/<ID>#doc. A guide (/doc/admin) keeps the plain link.
  * Only when the video can play: VIDEO_MEDIA_BASE_URL must be set (it isn't in the default e2e
  * environment, where the unit shows no video at all). The rendering rules themselves are
  * unit-tested in src/lib/__tests__/doc-video-references.test.ts and
@@ -39,7 +39,7 @@ test.describe("with VIDEO_MEDIA_BASE_URL", () => {
     const page = await context.newPage()
     await page.goto("/doc/premiers-pas")
     const link = page.getByRole("link", { name: ORG_LABEL })
-    await expect(link).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
+    await expect(link).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS#doc")
     await expect(link).not.toHaveAttribute("target", /.*/)
     await expect(page.locator("video")).toHaveCount(0)
     await context.close()
@@ -81,7 +81,7 @@ test.describe("with VIDEO_MEDIA_BASE_URL", () => {
     await expect(video.locator("source")).toHaveAttribute("src", /^https:\/\/[^/]+\/([a-z0-9-]+)\/\1\.mp4$/)
     await expect(region.getByRole("group", { name: "Cette vidéo vous a-t-elle été utile ?" })).toBeVisible()
     await expect(region.locator("summary", { hasText: /^\W*Transcription$/ })).toBeVisible()
-    await expect(region.getByRole("link", { name: "Ouvrir dans la bibliothèque" })).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
+    await expect(region.getByRole("link", { name: "Ouvrir dans la bibliothèque" })).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS#doc")
 
     await button.click()
     await expect(button).toHaveAttribute("aria-expanded", "false")
@@ -112,7 +112,7 @@ test.describe("with VIDEO_MEDIA_BASE_URL", () => {
 
   test("a guide keeps the plain link to the library", async ({ page }) => {
     await page.goto("/doc/admin")
-    await expect(page.locator("main p[data-doc-video] a").first()).toHaveAttribute("href", /^\/videos\/[A-Z0-9_]+\?from=doc$/)
+    await expect(page.locator("main p[data-doc-video] a").first()).toHaveAttribute("href", /^\/videos\/[A-Z0-9_]+#doc$/)
   })
 
   for (const colorScheme of ["light", "dark"] as const) {

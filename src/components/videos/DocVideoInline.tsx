@@ -38,7 +38,7 @@ function PlayIcon() {
  * gallery's session autoplay intent is never read or consumed here.
  *
  * Progressive enhancement: the server HTML (and a page whose JavaScript failed) is the plain link to
- * /videos/<ID>?from=doc in the same card, the button replaces it once hydrated (src/lib/use-hydrated.ts),
+ * /videos/<ID>#doc in the same card, the button replaces it once hydrated (src/lib/use-hydrated.ts),
  * with the same text in the same paragraph, so the line doesn't move. A reader who had already
  * focused the link (Tab before hydration) gets the focus on the button that replaces it, never on
  * <body> (DESIGN.md, « Retour du focus »).

@@ -78,7 +78,7 @@ describe("docVideoLink", () => {
 
   it("links a published video with a render to /videos/<ID>, its title and duration in the label", () => {
     expect(docVideoLink("ORG_FIRST_STEPS", catalog, rendered)).toEqual({
-      href: "/videos/ORG_FIRST_STEPS?from=doc",
+      href: "/videos/ORG_FIRST_STEPS#doc",
       label: "Voir la vidéo\u00a0: Bien démarrer avec une nouvelle organisation (3 min)",
     })
   })
@@ -97,7 +97,10 @@ describe("docVideoLink", () => {
 
   it("keeps the documentation context in the href only, never in the visible text", () => {
     const link = docVideoLink("ORG_FIRST_STEPS", catalog, rendered)!
-    expect(new URL(link.href, "https://x.test").searchParams.get("from")).toBe("doc")
+    // A fragment, not a query parameter (Search Console counted `#doc` as a second URL).
+    const url = new URL(link.href, "https://x.test")
+    expect(url.hash).toBe("#doc")
+    expect(url.search).toBe("")
     expect(link.label).not.toContain("doc")
   })
 
@@ -148,7 +151,7 @@ describe("renderEventPageMarkdown with videoCard", () => {
   // The sanitizer serializes the non-breaking space as &nbsp;.
   it("renders a published video as a card with an ordinary link, the marker kept by the sanitizer", () => {
     const html = renderEventPageMarkdown(md("ORG_FIRST_STEPS"), { shiftHeadings: false, headingIds: true, videoCard: card(rendered) })
-    expect(html).toContain('<p data-doc-video="true"><a href="/videos/ORG_FIRST_STEPS?from=doc">Voir la vidéo&nbsp;: Bien démarrer avec une nouvelle organisation (3 min)</a></p>')
+    expect(html).toContain('<p data-doc-video="true"><a href="/videos/ORG_FIRST_STEPS#doc">Voir la vidéo&nbsp;: Bien démarrer avec une nouvelle organisation (3 min)</a></p>')
     expect(html).not.toMatch(/target=|autoplay/)
   })
 
@@ -188,7 +191,7 @@ describe("docVideoPlayer", () => {
       id: "ORG_FIRST_STEPS",
       title: "Bien démarrer avec une nouvelle organisation",
       label: "Voir la vidéo\u00a0: Bien démarrer avec une nouvelle organisation (3 min)",
-      libraryHref: "/videos/ORG_FIRST_STEPS?from=doc",
+      libraryHref: "/videos/ORG_FIRST_STEPS#doc",
       revision: 1,
       audience: ["organisateur"],
       media: {
@@ -259,7 +262,7 @@ describe("splitAtDocVideoSlots", () => {
   })
 
   it("never treats the guides' link card as a slot", () => {
-    const card = renderDocVideoCard({ href: "/videos/ORG_FIRST_STEPS?from=doc", label: "Voir" })
+    const card = renderDocVideoCard({ href: "/videos/ORG_FIRST_STEPS#doc", label: "Voir" })
     expect(splitAtDocVideoSlots(card, players)).toEqual([{ kind: "html", html: card }])
   })
 })
@@ -345,7 +348,7 @@ describe("video references in the public sources", () => {
       const published = refs.filter((r) => catalog.find((v) => v.id === r.id)?.published)
       const { html } = renderPublicSource(source, "x", "https://medias.example.org")
       expect(html.match(/data-doc-video="true"/g) ?? [], source).toHaveLength(published.length)
-      for (const r of published) expect(html, `${source} ${r.id}`).toContain(`href="/videos/${r.id}?from=doc"`)
+      for (const r of published) expect(html, `${source} ${r.id}`).toContain(`href="/videos/${r.id}#doc"`)
       expect(html).not.toContain("<!--")
     }
   })

@@ -333,7 +333,8 @@ Le domaine principal sert :
 - `/robots.txt` : moteurs de recherche et assistants IA autorisés sur les pages publiques
   (`src/lib/crawlers.ts`), zones privées exclues, et l'adresse de l'index des sitemaps ;
 - `/sitemap-index.xml` : le sitemap de `www` (accueil, fonctionnalités, documentation, pages
-  légales), puis celui de chaque organisation active (`<slug>.benevol.app/sitemap.xml`) ;
+  légales), puis celui de chaque organisation active qui a au moins un événement publié et répertorié
+  (`<slug>.benevol.app/sitemap.xml`) ;
 - `/llms.txt` et `/llms-full.txt` : le site résumé pour les assistants IA ;
 - `/og-image.png/<chemin>` : l'image d'aperçu de chaque page publique.
 
