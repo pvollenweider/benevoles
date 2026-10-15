@@ -21,6 +21,7 @@ import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/
 import MissionBriefCard from "@/components/public/MissionBriefCard"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import type { MyAnswerRow } from "@/lib/my-answers"
+import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { SIGN_UP_MORE_LABEL, bottomLink, emptyPageLink } from "@/lib/personal-page-links"
@@ -74,6 +75,8 @@ type PageData = {
   confirmationMessage: string | null
   /** « Mes réponses » (#984): the event's questions with this volunteer's answers, in form order. */
   answers?: MyAnswerRow[]
+  /** Whether they can still change from this page (#984): the withdrawals' lock. */
+  answersEdit?: AnswersEditState
 }
 
 const LIST_TITLE_ID = "my-registrations-title"
@@ -460,8 +463,9 @@ export default function MyRegistrationPage() {
           )}
         </section>
 
-        {/* The answers to the event's questions (#984), read-only, under the registrations. */}
-        <MyAnswersCard rows={data.answers ?? []} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
+        {/* The answers to the event's questions (#984), under the registrations: editable while
+            the volunteer can still withdraw online. */}
+        <MyAnswersCard rows={data.answers ?? []} edit={data.answersEdit} token={token} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
 
         <PersonalLinkPanel
           token={token}

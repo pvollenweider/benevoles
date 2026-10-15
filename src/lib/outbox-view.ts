@@ -153,6 +153,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   org_inactivity_deactivated: "Espace désactivé faute d'activité",
   open_shifts: "Créneaux à compléter proposés à des membres",
   milestone_owner_reminder: "Rappel au responsable d'un jalon",
+  answers_changed: "Réponses aux questions modifiées par un bénévole",
 }
 
 export function kindLabel(kind: string): string {

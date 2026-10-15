@@ -36,6 +36,7 @@ import {
   type ErasureInput,
 } from "./member-erasure"
 import { erasureEmailHash, registerLine } from "./member-erasure-register"
+import { ANSWER_CHANGED_ACTION, ANSWER_LOG_FIELD } from "./answer-changes"
 
 export class MemberErasureConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -169,6 +170,11 @@ export async function runMemberErasure(
     // 2. Rows only the person gave or owns.
     const del = plan.delete
     if (del.answerIds.length) await tx.questionAnswer.deleteMany({ where: { id: { in: del.answerIds } } })
+    // The answers they changed from their personal page (#984) also sit in the event log, by
+    // question: the answer goes, the question and the fact that it changed stay. Records merged
+    // into this one (tombstones) wrote under their own id.
+    const authors = [id, ...del.tombstoneIds]
+    await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE action = ${ANSWER_CHANGED_ACTION} AND "actorType" = 'volunteer' AND "actorId" = ANY(${authors}::text[])`
     if (del.inviteIds.length) await tx.memberInvite.deleteMany({ where: { id: { in: del.inviteIds } } })
     if (del.pushSubscriptionIds.length) await tx.pushSubscription.deleteMany({ where: { id: { in: del.pushSubscriptionIds }, volunteerId: id } })
     if (del.sectorLeaderIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: del.sectorLeaderIds } } })

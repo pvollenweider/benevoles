@@ -62,7 +62,7 @@ describe("GET /api/public/registrations/[token] — the volunteer's answers (#98
   beforeEach(() => { vi.clearAllMocks(); stub() })
 
   it("sends the link volunteer's own answers, in form order, without the archived questions", async () => {
-    expect((await body()).answers).toEqual([
+    expect((await body()).answers.map(({ id, label, answer }: { id: string; label: string; answer: string | null }) => ({ id, label, answer }))).toEqual([
       { id: "q1", label: "Repas du soir ?", answer: null },
       { id: "q2", label: "Taille de t-shirt ?", answer: "M" },
     ])
@@ -77,9 +77,16 @@ describe("GET /api/public/registrations/[token] — the volunteer's answers (#98
     expect(JSON.stringify(b)).not.toContain("Autre événement")
   })
 
+  it("sends what the edit form needs, and whether editing is still open (#984, part 2)", async () => {
+    const b = await body()
+    expect(b.answers[1]).toMatchObject({ id: "q2", values: ["M"], required: false })
+    // The shift is in 2099: the volunteer can still withdraw online, so change answers.
+    expect(b.answersEdit).toEqual({ allowed: true })
+  })
+
   it("an event without questions sends an empty list", async () => {
     questionFindMany.mockResolvedValue([])
-    expect((await body()).answers).toEqual([])
+    expect((await body()).answers.map(({ id, label, answer }: { id: string; label: string; answer: string | null }) => ({ id, label, answer }))).toEqual([])
   })
 
   it("an unknown link reads no question", async () => {

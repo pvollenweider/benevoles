@@ -65,6 +65,8 @@ const FIELD_LABELS: Record<string, string> = {
   groupLink: "lien de groupe",
   // A milestone's owner (#985).
   ownerId: "responsable",
+  // A volunteer's answer changed from the personal page (#984); `question` names it in the sentence.
+  answer: "réponse",
 }
 
 /**
@@ -84,7 +86,7 @@ const FIELD_LABELS: Record<string, string> = {
 export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?: Record<string, ShiftLabel>, entityType?: string): string[] {
   if (!changes) return []
   return Object.entries(changes)
-    .filter(([field, { from, to }]) => field !== "shiftId" || from !== to)
+    .filter(([field, { from, to }]) => (field !== "shiftId" && field !== "question") || from !== to)
     .map(([field, { from, to }]) => {
       const label = FIELD_LABELS[field] ?? field
       const fmt = (v: unknown) =>
@@ -92,6 +94,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
         // An admin account deleted since: its id says nothing to the reader.
         : field === "ownerId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? "compte supprimé"
         : field === "isListed" ? listingChangeLabel(v)
+        : field === "answer" && (v === null || v === undefined) ? "pas de réponse"
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })
@@ -140,6 +143,7 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "question.created": (a) => `${a} a ajouté une question`,
   "question.updated": (a) => `${a} a modifié une question`,
   "question.removed": (a) => `${a} a retiré une question`,
+  "question.answer_changed": (a) => `${a} a modifié sa réponse à une question`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,
@@ -169,9 +173,16 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.requested", "registration.accepted", "registration.refused",
 ])
 
+/** The question an answer change is about (#984), named by its label at the time: « … à « Repas ? » ». */
+function questionPhrase(entry: Pick<EventLogEntry, "action" | "actorLabel" | "changes">): string | null {
+  const label = entry.changes?.question?.to
+  return typeof label === "string" && label ? `${entry.actorLabel} a modifié sa réponse à « ${label} »` : null
+}
+
 function buildSentence(entry: Pick<EventLogEntry, "action" | "actorLabel" | "changes">, shiftLabels?: Record<string, ShiftLabel>): string {
   const verb = ACTION_VERB[entry.action]
-  const base = verb ? verb(entry.actorLabel) : `${entry.actorLabel} : ${entry.action}`
+  const named = entry.action === "question.answer_changed" ? questionPhrase(entry) : null
+  const base = named ?? (verb ? verb(entry.actorLabel) : `${entry.actorLabel} : ${entry.action}`)
   const suffix = SHIFT_AWARE_ACTIONS.has(entry.action) ? shiftPhrase(entry, shiftLabels) : ""
   return base + suffix
 }

@@ -11,7 +11,8 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
  * Escape and « Non, garder » give it back to the trigger, a withdrawal moves focus to a neighbouring
  * card and announces the result once, a failure keeps the page and says so under the card. Also axe
  * on the page, confirmation closed and open, the cards at 320 px, and « Mes réponses » (#984): the
- * volunteer's own answers to the event's questions, read-only.
+ * volunteer's own answers to the event's questions, then changing them (part 2), the organisers
+ * told by email (grouped; sent at once with DIGEST_DELAY_SECONDS=0, as in CI).
  */
 
 let event: PublicEvent
@@ -150,7 +151,7 @@ test("a failed withdrawal keeps the page, says so under the card and gives focus
   await expect(pageStatus(page)).toHaveText("")
 })
 
-test("« Mes réponses » shows the volunteer's own answers in form order, read-only (#984)", async ({ page }) => {
+test("« Mes réponses » shows the volunteer's own answers in form order (#984)", async ({ page }) => {
   const [meal, size, transport, note] = event.questions
   // Another member of the same event, with other answers: never on this page.
   await publicSignUp(page, event, [event.shifts[0].id], { [meal.id]: "Non", [size.id]: "L", [note.id]: "Réponse de quelqu'un d'autre" })
@@ -161,12 +162,70 @@ test("« Mes réponses » shows the volunteer's own answers in form order, read-
   await expect(answers.getByRole("term")).toHaveText(["Repas du soir ?", "Taille de t-shirt ?", "Transport ?", "Remarque ?"])
   await expect(answers.getByRole("definition")).toHaveText(["Oui", "Pas de réponse", "Vélo, Train", "Pas de réponse"])
   await expect(answers.getByText("Réponse de quelqu'un d'autre")).toHaveCount(0)
-  // Read-only: nothing to change here.
-  await expect(answers.getByRole("button")).toHaveCount(0)
+  // At rest: one button to change them, no field.
+  await expect(answers.getByRole("button")).toHaveText(["Modifier mes réponses"])
   await expect(answers.getByRole("textbox")).toHaveCount(0)
   // Under the registrations, as the page's other sections, below its title.
   await expect(page.getByRole("heading", { level: 2, name: "Mes réponses" })).toBeVisible()
   expect.soft(await seriousViolations(page)).toEqual([])
+})
+
+test("changing an answer: saved, shown, focus back on the button, the organisers told (#984, part 2)", async ({ page }) => {
+  await clearMailbox()
+  const [meal, size] = event.questions
+  await openMyPage(page, { [meal.id]: "Oui", [size.id]: "M" })
+  const answers = page.getByRole("region", { name: "Mes réponses" })
+  const edit = answers.getByRole("button", { name: "Modifier mes réponses" })
+
+  // Opening: the sign-up form's fields, prefilled, focus on the first one (the checked choice).
+  await edit.click()
+  const form = answers.getByRole("form", { name: "Modifier mes réponses" })
+  await expect(form.getByRole("radio", { name: "Oui" })).toBeFocused()
+  await expect(form.getByRole("radio", { name: "M" })).toBeChecked()
+  expect.soft(await seriousViolations(page)).toEqual([])
+
+  // Annuler: nothing saved, focus back on the button.
+  await form.getByRole("radio", { name: "Non" }).check()
+  await form.getByRole("button", { name: "Annuler" }).click()
+  await expect(edit).toBeFocused()
+  await expect(answers.getByRole("definition").first()).toHaveText("Oui")
+
+  // Changed and saved, with the keyboard for the text.
+  await edit.click()
+  await form.getByRole("radio", { name: "Non" }).check()
+  await form.getByRole("textbox", { name: /Remarque/ }).fill("J'arrive à 19h")
+  await form.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(answers.getByRole("status")).toHaveText("Réponses enregistrées.")
+  await expect(edit).toBeFocused()
+  await expect(answers.getByRole("definition")).toHaveText(["Non", "M", "Pas de réponse", "J'arrive à 19h"])
+
+  // Still there after a reload: saved on the server.
+  await page.reload()
+  await expect(page.getByRole("region", { name: "Mes réponses" }).getByRole("definition").first()).toHaveText("Non")
+
+  // The organisers' email, grouped like withdrawals.
+  const mail = await waitForMessage(`to:"${ORG_ADMIN_EMAIL}" subject:"Réponses modifiées"`)
+  const text = await getMessageText(mail.ID)
+  expect(text).toContain("« Repas du soir ? » : « Oui » → « Non »")
+  expect(text).toContain("« Remarque ? » : pas de réponse → « J'arrive à 19h »")
+})
+
+test("a required answer can't be cleared: the field says why and takes focus (#984, part 2)", async ({ page }) => {
+  const [, size] = event.questions
+  await openMyPage(page)
+  // The organiser makes a question required after the sign-up: the form asks for it.
+  await page.route("**/api/public/registrations/*/answers", (route) => route.fulfill({
+    status: 400, contentType: "application/json",
+    body: JSON.stringify({ error: "« Taille de t-shirt ? » est obligatoire.", questionErrors: [{ questionId: size.id, message: "« Taille de t-shirt ? » est obligatoire." }] }),
+  }))
+  const answers = page.getByRole("region", { name: "Mes réponses" })
+  await answers.getByRole("button", { name: "Modifier mes réponses" }).click()
+  await answers.getByRole("button", { name: "Enregistrer" }).click()
+  // Focus on the group's checked choice, as the browser's own arrow keys would start from.
+  const first = answers.getByRole("group", { name: /Taille de t-shirt/ }).getByRole("radio", { name: "Pas de réponse" })
+  await expect(first).toBeFocused()
+  await expect(first).toHaveAccessibleDescription("« Taille de t-shirt ? » est obligatoire.")
+  await expect(answers.getByRole("form")).toBeVisible()
 })
 
 test("/my has no serious axe violation, confirmation closed and open", async ({ page }) => {

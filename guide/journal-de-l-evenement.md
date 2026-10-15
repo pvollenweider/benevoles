@@ -20,7 +20,7 @@ L'historique complet de ce qui s'est passé sur un événement : créneaux cré�
 - **Rejouer** : reconstitue l'état d'un créneau ou d'une inscription à un instant donné
 - **Récit** : raconte en une phrase la suite des événements liés (ex. une annulation qui déclenche une offre de liste d'attente)
 
-Le contenu des pages personnalisées et les coordonnées des bénévoles n'apparaissent jamais dans le journal : seuls les champs modifiés sont indiqués.
+Le contenu des pages personnalisées et les coordonnées des bénévoles n'apparaissent jamais dans le journal : seuls les champs modifiés sont indiqués. Exception : quand un bénévole modifie ses réponses aux questions depuis sa page personnelle, le journal indique la question, l'ancienne et la nouvelle réponse (« Camille Rochat a modifié sa réponse à « Repas du soir ? » », puis « réponse : Oui → Non ») ; la réponse en est retirée si la fiche du bénévole est effacée ou quand les données de l'événement sont anonymisées.
 
 **Générer l'état initial** : le journal ne trace que ce qui s'est passé depuis sa mise en place. Pour un événement plus ancien, ce bouton (au-dessus des onglets) ajoute une entrée de départ pour chaque créneau et chaque inscription déjà existants, afin de ne pas laisser le journal vide. Ces entrées sont affichées en gris avec la mention « Généré, pas une action réelle ». Relancer la génération ne crée pas de doublon ; une fois faite, le bouton n'est plus proposé sur ce navigateur.
 

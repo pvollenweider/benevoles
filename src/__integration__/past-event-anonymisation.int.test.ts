@@ -57,6 +57,11 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     await prisma.memberInvite.create({ data: { eventId: old.id, volunteerId: alice.id, ...linkToken.data(`${tag}-invite`) } })
     await prisma.sectorLeader.create({ data: { eventId: old.id, roleName: "Bar", name: "Chef Bar", email: `${tag}-chef@example.org`, ...linkToken.data(`${tag}-leader`) } })
     await prisma.eventLog.create({ data: { eventId: old.id, actorType: "volunteer", actorId: alice.id, action: "registration.cancelled", entityType: "Registration", entityId: oldA.id } })
+    // An answer changed from the personal page (#984): on the old event it goes with the answers,
+    // on the recent one it stays.
+    const answerLog = (eventId: string) => prisma.eventLog.create({ data: { eventId, actorType: "volunteer", actorId: alice.id, action: "question.answer_changed", entityType: "EventQuestion", entityId: question.id, changes: { question: { from: "Taille de t-shirt", to: "Taille de t-shirt" }, answer: { from: "S", to: "M" } } } })
+    const oldChange = await answerLog(old.id)
+    const recentChange = await answerLog(recent.id)
     const membersBefore = await prisma.platformCounter.findUnique({ where: { metric: "members" } })
 
     expect((await loadPastEventOrganizations(NOW)).find((o) => o.id === orgId)).toMatchObject({ concernedEvents: 1, pastEventNoticeAt: null })
@@ -90,7 +95,9 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     expect(await prisma.memberInvite.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.sectorLeader.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.eventLog.count({ where: { eventId: old.id, actorId: alice.id } })).toBe(0)
-    expect(await prisma.eventLog.count({ where: { eventId: old.id, actorId: a.volunteerId } })).toBe(1)
+    expect(await prisma.eventLog.count({ where: { eventId: old.id, actorId: a.volunteerId } })).toBe(2)
+    expect((await prisma.eventLog.findUniqueOrThrow({ where: { id: oldChange.id } })).changes).toEqual({ question: { from: "Taille de t-shirt", to: "Taille de t-shirt" } })
+    expect((await prisma.eventLog.findUniqueOrThrow({ where: { id: recentChange.id } })).changes).toMatchObject({ answer: { from: "S", to: "M" } })
     expect(await prisma.eventLog.count({ where: { eventId: old.id, action: "event.personal_data_anonymized" } })).toBe(1)
     expect((await prisma.event.findUniqueOrThrow({ where: { id: old.id } })).personalDataAnonymizedAt).toEqual(NOW)
     expect((await prisma.event.findUniqueOrThrow({ where: { id: recent.id } })).personalDataAnonymizedAt).toBeNull()

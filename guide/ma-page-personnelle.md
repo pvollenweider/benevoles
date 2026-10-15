@@ -44,9 +44,13 @@ Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand e
 
 ## Mes réponses
 
-![Encadré « Mes réponses » : « Taille de t-shirt » avec la réponse M, puis « Régime alimentaire (repas des bénévoles) » et « Permis de conduire », chacune avec « Pas de réponse »](/doc-img/public-my-answers.png)
+![Encadré « Mes réponses » : « Taille de t-shirt » avec la réponse M, puis « Régime alimentaire (repas des bénévoles) » et « Permis de conduire », chacune avec « Pas de réponse », et le bouton « Modifier mes réponses »](/doc-img/public-my-answers.png)
 
-Si l'organisation a posé des questions à l'inscription (taille de t-shirt, repas, permis…), l'encadré **Mes réponses**, sous tes créneaux, reprend chacune d'elles dans l'ordre du formulaire, avec ce que tu as répondu ; **Pas de réponse** pour une question à laquelle tu n'as pas répondu. Tu y vois seulement tes propres réponses. Elles ne se modifient pas depuis cette page : pour en changer une, écris à l'organisation (le lien **Écrire à l'organisation** de l'encadré, quand l'organisation a donné son adresse).
+Si l'organisation a posé des questions à l'inscription (taille de t-shirt, repas, permis…), l'encadré **Mes réponses**, sous tes créneaux, reprend chacune d'elles dans l'ordre du formulaire, avec ce que tu as répondu ; **Pas de réponse** pour une question à laquelle tu n'as pas répondu. Tu y vois seulement tes propres réponses.
+
+Tu as changé d'avis (tu ne restes finalement pas au repas, par exemple) ? **Modifier mes réponses** ouvre les mêmes champs que le formulaire d'inscription, remplis avec tes réponses. Change ce que tu veux, puis **Enregistrer** ; **Annuler** referme sans rien changer. Une question facultative à choix propose aussi **Pas de réponse**, pour retirer ta réponse ; une question obligatoire ne peut pas rester vide. L'organisation est prévenue par email de ce que tu as changé (si tu modifies plusieurs fois en quelques minutes, elle reçoit un seul email avec ta réponse finale).
+
+Tu peux modifier tes réponses aussi longtemps que tu peux annuler un de tes créneaux toi-même (voir [Jusqu'à quand annuler](#jusqu-a-quand-annuler)). Ensuite, le bouton disparaît et la page dit pourquoi : pour changer une réponse, écris alors à l'organisation (le lien de l'encadré, quand l'organisation a donné son adresse).
 
 ## Annuler un créneau
 

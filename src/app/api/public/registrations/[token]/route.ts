@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
 import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { answersEditState } from "@/lib/answer-changes"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { logEvent } from "@/lib/event-log"
@@ -98,6 +99,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     },
     confirmationMessage: registration.event.confirmationMessage ?? null,
     answers: myAnswerRows(questions),
+    // Whether the answers can still change from this page (#984): the withdrawals' lock (#946).
+    answersEdit: answersEditState({ registrations: allRegistrations, setting: event, timeZone, now }),
     orgHomeUrl: baseUrl,
     eventUrl,
     eventPageUrl: event.publicStatus === "published" ? publicUrl : null,

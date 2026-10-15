@@ -38,6 +38,11 @@ export function adminFindReplacementUrl(eventId: string, shiftId: string): strin
   return `${BASE_URL}/admin/events/${eventId}/staffing/search?shift=${encodeURIComponent(shiftId)}`
 }
 
+/** The event's questions and the summary of their answers (#686), linked from #984's email. */
+export function adminQuestionsUrl(eventId: string): string {
+  return `${BASE_URL}/admin/events/${eventId}/questions`
+}
+
 export function adminStaffingUrl(eventId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/staffing`
 }

@@ -6,6 +6,9 @@ import { openPayload, sealPayload } from "./outbox"
 import type { NotificationKind, Recipient } from "./types"
 export { digestDelayMs } from "./digest-items"
 
+/** One line of a digest as stored: `mergeKey` only for items that merge (see `merge`). */
+type DigestEntry<Item> = { key: string; value: Item; mergeKey?: string }
+
 /**
  * One email for several events of the same kind, to the same person, about the same subject
  * (#869): each new item joins the pending, never-tried outbox row of its group and pushes it back
@@ -26,6 +29,13 @@ export async function queueDigestItem<Item>(input: {
   itemKey: string
   now: Date
   delayMs: number
+  /**
+   * Items that update an earlier one instead of adding a line (#984: a volunteer changing their
+   * answers twice): while the email waits, the item with the same `key` is replaced by
+   * `combine(earlier, new)`, or removed when that is null (and the email with it when it was the
+   * only one). Without it, every item is a line of its own.
+   */
+  merge?: { key: string; combine: (previous: Item, next: Item) => Item | null }
 }): Promise<string | null> {
   const sendAt = new Date(input.now.getTime() + input.delayMs)
   const due = input.delayMs <= 0
@@ -38,13 +48,29 @@ export async function queueDigestItem<Item>(input: {
       select: { id: true, payload: true },
     })
     if (pending) {
-      const previous = openPayload(pending.payload).data as { items?: { key: string; value: Item }[] }
+      const previous = openPayload(pending.payload).data as { items?: DigestEntry<Item>[] }
       const items = previous.items ?? []
       if (items.some((i) => i.key === input.itemKey)) return due ? pending.id : null
+      const merge = input.merge
+      const earlier = merge ? items.findIndex((i) => i.mergeKey === merge.key) : -1
+      let next: DigestEntry<Item>[]
+      if (merge && earlier >= 0) {
+        const combined = merge.combine(items[earlier].value, input.item)
+        next = combined === null
+          ? items.filter((_, i) => i !== earlier)
+          : items.map((entry, i) => (i === earlier ? { ...entry, value: combined } : entry))
+      } else {
+        next = [...items, { key: input.itemKey, value: input.item, ...(merge ? { mergeKey: merge.key } : {}) }]
+      }
+      // Nothing left to say (a change undone before the email left): the email is dropped.
+      if (next.length === 0) {
+        await tx.notificationOutbox.delete({ where: { id: pending.id } })
+        return null
+      }
       await tx.notificationOutbox.update({
         where: { id: pending.id },
         data: {
-          payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: [...items, { key: input.itemKey, value: input.item }] } }),
+          payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: next } }),
           nextAttemptAt: sendAt,
         },
       })
@@ -53,7 +79,7 @@ export async function queueDigestItem<Item>(input: {
     // An item already sent in an earlier email keeps its key: queued again, it is skipped.
     await tx.notificationOutbox.createMany({
       data: [{
-        payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item }] } }),
+        payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item, ...(input.merge ? { mergeKey: input.merge.key } : {}) }] } }),
         dedupeKey: `${prefix}${input.itemKey}`,
         organizationId: input.organizationId,
         nextAttemptAt: sendAt,

@@ -533,6 +533,8 @@ describe("Members — cross-tenant isolation", () => {
     const none = () => vi.fn().mockResolvedValue([])
     const tx = {
       $queryRaw: vi.fn().mockResolvedValue([{ id: "x" }]),
+      // The answers kept by the event log of a change from the personal page (#984).
+      $executeRaw: vi.fn().mockResolvedValue(0),
       volunteer: { findFirst: vi.fn().mockResolvedValue(member), findMany: none(), update: writes.volunteerUpdate, deleteMany: writes.volunteerDeleteMany },
       registration: { findMany: none(), updateMany: writes.registrationUpdateMany, update: vi.fn() },
       memberInvite: { findMany: none(), deleteMany: vi.fn(), count: vi.fn().mockResolvedValue(0) },
@@ -571,6 +573,10 @@ describe("Members — cross-tenant isolation", () => {
     const res = await POST(makeRequest("/api/admin/members/mem-a/erase", "POST"), params("mem-a"))
     expect(res.status).toBe(200)
     expect(writes.volunteerUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "mem-a" } }))
+    // Only this member's logged answers are removed (#984): their id is the one bound.
+    const scrub = tx.$executeRaw.mock.calls[0]
+    expect(scrub[0].join("?")).toContain(`"actorId" = ANY(`)
+    expect(scrub.slice(1)).toContainEqual(["mem-a"])
     expect(tx.notificationOutbox.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: ORG_A }) }))
     expect(writes.outcomeDeleteMany).toHaveBeenCalledWith({ where: expect.objectContaining({ organizationId: ORG_A }) })
     expect(writes.registerUpsert).toHaveBeenCalledWith(expect.objectContaining({ create: expect.objectContaining({ organizationId: ORG_A, volunteerId: "mem-a" }) }))

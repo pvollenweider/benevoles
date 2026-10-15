@@ -41,6 +41,6 @@ describe("personal-link rate limits (#609)", () => {
 
   it("thresholds are the agreed ones", () => {
     expect(TOKEN_MISS_LIMIT).toBe(20)
-    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, availability: 30 })
+    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, availability: 30, answers: 30 })
   })
 })

@@ -23,7 +23,7 @@ Quand une personne demande l'effacement de ses données, ouvrez sa page **Activi
 La fenêtre de confirmation récapitule, avec les nombres de cette fiche :
 
 - **Effacé de la fiche** : nom, prénom, email, téléphone, date de naissance, notes, étiquettes et disponibilités. La fiche s'appelle désormais « Bénévole effacé » et est désactivée.
-- **Supprimé** : ses invitations (et leur réponse « pas disponible »), ses réponses aux questions des événements, ses abonnements aux notifications, ses désignations comme responsable de secteur faites avec son adresse, les emails en attente ou déjà envoyés qui la concernent ou la nomment, les suivis d'envoi d'email, et les anciennes fiches fusionnées dans la sienne.
+- **Supprimé** : ses invitations (et leur réponse « pas disponible »), ses réponses aux questions des événements (aussi celles que le journal de l'événement a notées quand elle les a modifiées depuis sa page personnelle), ses abonnements aux notifications, ses désignations comme responsable de secteur faites avec son adresse, les emails en attente ou déjà envoyés qui la concernent ou la nomment, les suivis d'envoi d'email, et les anciennes fiches fusionnées dans la sienne.
 - **Conservé sans identité** : ses inscriptions (créneau, statut, présence), pour que les effectifs, les heures et l'historique des événements restent justes. Le commentaire et le téléphone laissés à l'inscription sont effacés, et ses liens personnels ne fonctionnent plus. Les attestations de bénévolat et les exports d'heures ne la nomment plus.
 
 Si la personne a encore des inscriptions à venir, le récapitulatif le signale : elles restent comptées dans les effectifs, retirez-les d'abord si elle ne viendra pas. Aucun email n'est envoyé.

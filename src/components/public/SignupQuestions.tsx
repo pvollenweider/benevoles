@@ -7,16 +7,24 @@ import { NO, TEXT_ANSWER_MAX, YES, type Question } from "@/lib/event-questions"
 
 export type Answers = Record<string, string | string[]>
 
+/** The choice that clears an optional answer, on the personal page (`clearable`). */
+export const NO_ANSWER_CHOICE = "Pas de réponse"
+
 /**
  * The event's custom questions on the sign-up form (#483): labelled fields, choices grouped in
  * fieldsets, required ones marked, errors tied to their field. The server checks everything again.
  */
-export default function SignupQuestions({ questions, answers, onChange, errors }: {
+export default function SignupQuestions({ questions, answers, onChange, errors, clearable = false }: {
   questions: Question[]
   answers: Answers
   onChange: (id: string, value: string | string[]) => void
   /** The last check's message per refused question, shown under it and read with its fields. */
   errors: Map<string, string>
+  /**
+   * A « Pas de réponse » choice for an optional yes/no or single-choice question (#984): a radio
+   * can't be unchecked, so changing an answer from the personal page needs a way back to none.
+   */
+  clearable?: boolean
 }) {
   if (questions.length === 0) return null
   const star = (q: Question) => (q.required ? <>{" *"}{" "}<span className="sr-only">(obligatoire)</span></> : null)
@@ -38,17 +46,19 @@ export default function SignupQuestions({ questions, answers, onChange, errors }
             </div>
           )
         }
-        const choices = q.type === "yesno" ? [YES, NO] : q.options
         const multiple = q.type === "multiple"
+        const choices = q.type === "yesno" ? [YES, NO] : q.options
+        // "" is « no answer » for the server's check, as an untouched radio group.
+        const withNone = clearable && !multiple && !q.required
         const current = answers[q.id]
         return (
           <fieldset key={q.id} className={bad ? "rounded-xl border border-red-600 p-2" : ""}>
             <legend className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}{multiple && <>{" "}<span className="text-gray-500 font-normal">(plusieurs choix possibles)</span></>}</legend>
             <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {choices.map((c, i) => {
-                const checked = multiple ? Array.isArray(current) && current.includes(c) : current === c
+              {[...choices, ...(withNone ? [""] : [])].map((c, i) => {
+                const checked = multiple ? Array.isArray(current) && current.includes(c) : c === "" ? !current : current === c
                 return (
-                  <label key={c} htmlFor={`${fieldId}-${i}`} className="flex items-center gap-2 text-sm text-gray-800 min-h-8">
+                  <label key={c || "none"} htmlFor={`${fieldId}-${i}`} className="flex items-center gap-2 text-sm text-gray-800 min-h-8">
                     <input
                       id={`${fieldId}-${i}`}
                       type={multiple ? "checkbox" : "radio"}
@@ -64,7 +74,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors }
                       }}
                       className="h-4 w-4 border-gray-300 text-blue-600"
                     />
-                    {c}
+                    {c || NO_ANSWER_CHOICE}
                   </label>
                 )
               })}
