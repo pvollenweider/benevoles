@@ -10,12 +10,15 @@
  * one answers 404, although the sign-up went through.
  */
 import { embedFlowParams } from "./embed"
+import { setUpdatedParams, type SignupUpdates } from "./signup-updates"
 
 export interface SignupResult {
   editToken?: string | null
   onWaitlist?: boolean
   requestedShifts?: number | string | null
   activeShifts?: number | string | null
+  /** What a sign-up from the personal page updated (#1013), said by the confirmation. */
+  updated?: SignupUpdates | null
 }
 
 export function successPath(eventSlug: string, result: SignupResult, current: URLSearchParams, embed: boolean): string {
@@ -28,6 +31,7 @@ export function successPath(eventSlug: string, result: SignupResult, current: UR
     params.set("requested", String(result.requestedShifts))
     params.set("active", String(result.activeShifts ?? 0))
   }
+  setUpdatedParams(params, result.updated)
   // Embedded (#948): the frame keeps its group link, organisation and `embed=1` on the confirmation.
   if (embed) embedFlowParams(current).forEach((value, key) => params.set(key, value))
   const query = params.toString()

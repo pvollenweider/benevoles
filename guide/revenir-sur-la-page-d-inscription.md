@@ -12,6 +12,6 @@ aliases: []
 
 Si tu rouvres la page de l'événement depuis le même navigateur (et que tu n'as pas vidé son cache), ta session est reconnue automatiquement : tes inscriptions existantes sont prises en compte et ton nom est affiché en haut à droite. Pour t'inscrire à de nouveaux créneaux, choisis-les comme la première fois ; un créneau déjà pris ne peut pas être choisi une seconde fois.
 
-Depuis ta page personnelle, le lien **S'inscrire à d'autres créneaux**, sous tes créneaux, te ramène directement sur la page de l'événement, qui te reconnaît, tant que les inscriptions sont ouvertes.
+Depuis ta page personnelle, le lien **S'inscrire à d'autres créneaux**, sous tes créneaux, te ramène directement sur la page de l'événement, qui te reconnaît, tant que les inscriptions sont ouvertes. Le formulaire reprend alors tes réponses aux questions de l'événement, et ce que tu y modifies (nom, téléphone, réponses) est enregistré pour tous tes créneaux.
 
 Pour te déconnecter de cette session (par exemple sur un appareil partagé), clique sur **Quitter la session** en haut à droite : le navigateur oublie aussi tes coordonnées, qui ne seront plus proposées pour un autre événement.

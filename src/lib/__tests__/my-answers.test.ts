@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { myAnswerRows, myAnswersQuery, NO_ANSWER_TEXT, type MyAnswerQuestion } from "../my-answers"
+import { myAnswerRows, myAnswersQuery, NO_ANSWER_TEXT, startingAnswers, type MyAnswerQuestion } from "../my-answers"
 
 // « Mes réponses » on the personal page (#984): the volunteer's own answers, in form order.
 
@@ -50,5 +50,25 @@ describe("myAnswersQuery", () => {
     expect(args.where).toEqual({ eventId: "e1", archivedAt: null })
     expect(args.select.answers).toEqual({ where: { volunteerId: "v1" }, select: { values: true } })
     expect(args.orderBy[0]).toEqual({ position: "asc" })
+  })
+})
+
+describe("startingAnswers (#1013: the sign-up for more shifts starts from them)", () => {
+  const row = (id: string, type: string, values: string[], options: string[] = []) => ({ id, type, values, options })
+
+  it("one entry per question, as the form's fields hold them", () => {
+    expect(startingAnswers([
+      row("t", "text", ["Végétarien"]), row("y", "yesno", ["Oui"]), row("s", "single", ["M"], ["S", "M"]),
+      row("m", "multiple", ["Vélo", "Train"], ["Voiture", "Vélo", "Train"]), row("n", "single", [], ["S", "M"]),
+    ])).toEqual({ t: "Végétarien", y: "Oui", s: "M", m: ["Vélo", "Train"], n: "" })
+  })
+
+  it("leaves out an answer that is no longer a choice of its question (option renamed or removed)", () => {
+    expect(startingAnswers([row("s", "single", ["XL"], ["S", "M"]), row("m", "multiple", ["Vélo", "Bus"], ["Vélo"]), row("y", "yesno", ["Peut-être"])])).toEqual({})
+  })
+
+  it("from the personal page's rows: archived questions are not there", () => {
+    const rows = myAnswerRows([q("a", 0, ["Oui"]), q("b", 1, ["M"], { archivedAt: new Date("2026-10-01") })])
+    expect(Object.keys(startingAnswers(rows))).toEqual(["a"])
   })
 })
