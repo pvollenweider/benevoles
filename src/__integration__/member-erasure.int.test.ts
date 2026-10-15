@@ -126,6 +126,12 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const outboxOther = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: `${tag}-paul@example.org` }, volunteerId: other.id, data: {} }) } })
     const outboxSameAddressOtherOrg = await prisma.notificationOutbox.create({ data: { organizationId: orgBId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: v.email }, volunteerId: elsewhere.id, data: {} }) } })
     await prisma.eventLog.create({ data: { eventId, actorType: "volunteer", actorId: x.id, action: "registration.created", entityType: "Registration", entityId: regPast.id } })
+    // Answers changed from the personal page (#984): by X, by the record merged into X, and by
+    // someone else, whose answer stays.
+    const answerLog = (actorId: string, to: string) => prisma.eventLog.create({ data: { eventId, actorType: "volunteer", actorId, action: "question.answer_changed", entityType: "EventQuestion", entityId: questionId, changes: { question: { from: "Taille", to: "Taille" }, answer: { from: null, to } } } })
+    const changedByX = await answerLog(x.id, v.answer)
+    const changedByTombstone = await answerLog(tombstone.id, v.answer)
+    const changedByOther = await answerLog(other.id, `autre-${tag}`)
     await prisma.orgLog.create({ data: { organizationId: orgId, actorType: "admin", actorId: "adm-test", action: "member.created", entityType: "Member", entityId: x.id } })
 
     const before = { tokenPast: (await prisma.registration.findUniqueOrThrow({ where: { id: regPast.id } })).editTokenHash }
@@ -157,7 +163,12 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     expect(past.editTokenHash).not.toBe(before.tokenPast)
     expect(await prisma.registration.findFirst({ where: registrationToken.where(`${tag}-tok-past`) })).toBeNull()
     expect(await prisma.memberInvite.findUnique({ where: { id: invite.id } })).toBeNull()
-    expect(await prisma.eventLog.count({ where: { eventId, actorId: x.id } })).toBe(1)
+    expect(await prisma.eventLog.count({ where: { eventId, actorId: x.id } })).toBe(2)
+    // The logged answer changes stay, without the answer; someone else's keeps it.
+    for (const id of [changedByX.id, changedByTombstone.id]) {
+      expect((await prisma.eventLog.findUniqueOrThrow({ where: { id } })).changes).toEqual({ question: { from: "Taille", to: "Taille" } })
+    }
+    expect((await prisma.eventLog.findUniqueOrThrow({ where: { id: changedByOther.id } })).changes).toEqual({ question: { from: "Taille", to: "Taille" }, answer: { from: null, to: `autre-${tag}` } })
     expect(await prisma.orgLog.count({ where: { organizationId: orgId, entityId: x.id, action: "member.created" } })).toBe(1)
 
     // 4. Outbox: the person's rows and the one naming them are gone; the sent one was counted first.

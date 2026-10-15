@@ -16,7 +16,10 @@ export const notificationSettingsSchema = z.object({
     j1: z.boolean().default(true),
     dd: z.boolean().default(true),
   }).default({ j2: true, j1: true, dd: true }),
-  /** Email to every admin of the organization at each public sign-up. */
+  /**
+   * Email to every admin of the organization at each public sign-up, and when a volunteer changes
+   * their answers from the personal page (#984, grouped).
+   */
   signupAdminEmail: z.boolean().default(true),
   /**
    * Email to the organization's admins and the role's sector leaders when a volunteer withdraws
@@ -94,7 +97,7 @@ export function notificationSummary(s: NotificationSettings, replyToEmail: strin
   const on = (Object.keys(s.reminders) as ReminderKey[]).filter((k) => s.reminders[k]).map((k) => REMINDER_LABELS[k].label)
   const parts = [
     on.length === 0 ? "Aucun rappel automatique." : on.length === 3 ? "Les trois rappels sont envoyés." : `Rappels envoyés : ${on.join(", ")}.`,
-    s.signupAdminEmail ? "Les admins reçoivent un email à chaque inscription." : "Pas d'email aux admins à l'inscription.",
+    s.signupAdminEmail ? "Les admins reçoivent un email à chaque inscription et quand un bénévole modifie ses réponses." : "Pas d'email aux admins à l'inscription ni quand un bénévole modifie ses réponses.",
     s.withdrawalAdminEmail ? "Les admins et les responsables de poste reçoivent un email à chaque désistement." : "Pas d'email aux admins ni aux responsables de poste en cas de désistement.",
     s.addressesToVerifyAdminEmail ? "Les admins reçoivent un résumé quotidien si des adresses sont à vérifier." : "Pas de résumé quotidien des adresses à vérifier.",
     replyToEmail ? `Les réponses des bénévoles arrivent à ${replyToEmail}.` : "Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.",

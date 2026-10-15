@@ -53,7 +53,7 @@ En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/l
 
 <!-- image: TARGETED_MESSAGES | Les modèles de messages : un briefing réutilisable, avec le prénom du bénévole et le nom de l'événement remplis à l'envoi. -->
 
-- **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux et ses réponses à vos questions, en prendre d'autres tant que les inscriptions sont ouvertes, les annuler ou les ajouter à son calendrier. L'annulation reste possible jusqu'au début du créneau, ou jusqu'au délai que vous fixez (par exemple 2 jours avant) ; ensuite, le bénévole voit qui prévenir.
+- **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux et ses réponses à vos questions (et les corriger, vous êtes prévenu par email), en prendre d'autres tant que les inscriptions sont ouvertes, les annuler ou les ajouter à son calendrier. L'annulation reste possible jusqu'au début du créneau, ou jusqu'au délai que vous fixez (par exemple 2 jours avant) ; ensuite, le bénévole voit qui prévenir.
 - **Des rappels automatiques** deux jours avant, la veille et le jour même. Quand un bénévole a plusieurs créneaux le même jour pour le même événement, un seul rappel les regroupe.
 - **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois.
 - **Les inscrits sont prévenus** par email si un créneau change d'horaire ou est annulé.

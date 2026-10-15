@@ -19,6 +19,7 @@ import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-
 import { renderOpenShifts } from "./open-shifts"
 import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated, renderMilestoneOwnerReminder } from "./administration"
 import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
+import { renderAnswersChanged } from "./answers-changed"
 
 export type { RenderedEmail } from "./shared"
 
@@ -111,5 +112,7 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderOpenShifts(payload)
     case "milestone_owner_reminder":
       return renderMilestoneOwnerReminder(payload)
+    case "answers_changed":
+      return renderAnswersChanged(payload)
   }
 }

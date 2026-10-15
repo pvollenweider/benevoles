@@ -8,7 +8,7 @@
  *    to an anonymous record (« Bénévole effacé », no email or phone, `erasedAt` set): one per member
  *    and per batch, with no link back to the member, so the hours, the attendance and the distinct
  *    volunteers of the event summary (#557) stay right;
- * 2. its answers to questions, member invites and sector leaders are deleted;
+ * 2. its answers to questions (also those the log kept of a change, #984), member invites and sector leaders are deleted;
  * 3. its log entries made by a volunteer point to that anonymous record instead;
  * 4. the event itself stays (title, dates, shifts, totals), marked `personalDataAnonymizedAt`.
  * The member records stay: a member whose whole history was old is listed to the organisation as
@@ -27,6 +27,7 @@ import { pastEventCutoff, type PastEventBatchCounts } from "./past-event-retenti
 import { loadSummaryRecipients } from "./delivery-summary-data"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { orgTimeZone } from "./time-zone"
+import { ANSWER_CHANGED_ACTION, ANSWER_LOG_FIELD } from "./answer-changes"
 
 /** Events of an organisation the rule concerns today: ended before the cutoff, not done yet. */
 export function concernedEventsWhere(organizationId: string, now: Date) {
@@ -84,6 +85,8 @@ export async function anonymisePastEvent(
       await tx.eventLog.updateMany({ where: { eventId, actorType: "volunteer", actorId: volunteerId }, data: { actorId: anonymousIds.get(volunteerId)! } })
     }
     const answers = await tx.questionAnswer.deleteMany({ where: { eventId } })
+    // Answers changed from a personal page (#984) are in the log too: they go with the answers.
+    await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE "eventId" = ${eventId} AND action = ${ANSWER_CHANGED_ACTION}`
     const invites = await tx.memberInvite.deleteMany({ where: { eventId } })
     const sectorLeaders = await tx.sectorLeader.deleteMany({ where: { eventId } })
     await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
