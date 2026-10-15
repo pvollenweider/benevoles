@@ -5,7 +5,7 @@
 
 import { useLayoutEffect, useState } from "react"
 import { orgContactHref } from "@/lib/mission-brief"
-import { MY_ANSWERS_TITLE, NO_ANSWER_TEXT, type MyAnswerRow } from "@/lib/my-answers"
+import { MY_ANSWERS_TITLE, NO_ANSWER_TEXT, startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { ORG_CONTACT_LABEL } from "@/lib/shift-info"
 import { checkAnswers, type Question } from "@/lib/event-questions"
 import {
@@ -22,11 +22,6 @@ const EDIT_BUTTON_ID = "my-answers-edit"
 const FORM_ID = "my-answers-form"
 const FORM_TITLE_ID = "my-answers-form-title"
 const CLOSED_ID = "my-answers-closed"
-
-/** The form's starting values: the stored answers, as the sign-up form's fields hold them. */
-function startingAnswers(rows: MyAnswerRow[]): Answers {
-  return Object.fromEntries(rows.map((r) => [r.id, r.type === "multiple" ? r.values : (r.values[0] ?? "")]))
-}
 
 const asQuestions = (rows: MyAnswerRow[]): Question[] => rows.map((r) => ({ id: r.id, label: r.label, type: r.type, options: r.options, required: r.required }))
 

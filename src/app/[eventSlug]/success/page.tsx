@@ -12,6 +12,7 @@ import { confirmationVariables } from "@/lib/message-variables"
 import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import EmbedFrame from "@/components/public/EmbedFrame"
+import { readUpdatedParams, updatedNotice } from "@/lib/signup-updates"
 import { EMBED_PARAM, EMBED_PERSONAL_LINK_NOTE, NEW_TAB_HINT, embedFlowParams, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
 
 type RegistrationData = {
@@ -38,6 +39,8 @@ function SuccessContent() {
   // Only requests, no place yet (#484): no celebration, no confirmation message.
   const onlyRequests = outcome.requested > 0 && outcome.active === 0
   const notice = requestNotice(outcome)
+  // What a sign-up from the personal page updated (#1013), from the address: there at first render.
+  const updatedLine = updatedNotice(readUpdatedParams(params))
 
   const [regData, setRegData] = useState<RegistrationData | null>(null)
   const [fetching, setFetching] = useState(!!token)
@@ -78,6 +81,7 @@ function SuccessContent() {
           {notice && (
             <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-4">{notice}</p>
           )}
+          {updatedLine && <p className="text-sm text-gray-700 mb-4">{updatedLine}</p>}
 
           {isWaitlist ? (
             <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900 text-left mb-6">

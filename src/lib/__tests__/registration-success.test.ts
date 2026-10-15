@@ -33,3 +33,14 @@ describe("successPath", () => {
     expect(Object.fromEntries(q)).toEqual({ org: "a", token: "tok", groupe: "abcd2345", embed: "1" })
   })
 })
+
+describe("successPath, from the personal page (#1013)", () => {
+  it("carries what was updated, keys and count only", () => {
+    const q = query(successPath("fete", { editToken: "tok", updated: { contact: ["phone"], answers: 1 } }, new URLSearchParams(), false))
+    expect(Object.fromEntries(q)).toEqual({ token: "tok", updated: "phone", updatedAnswers: "1" })
+  })
+
+  it("nothing updated: nothing carried", () => {
+    expect(successPath("fete", { updated: { contact: [], answers: 0 } }, new URLSearchParams(), false)).toBe("/fete/success")
+  })
+})

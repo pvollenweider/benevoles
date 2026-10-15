@@ -49,6 +49,12 @@ import { touchOrgActivity } from "@/lib/org-activity"
 import { parseGroupCode } from "@/lib/group-links"
 import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
+import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
+import { contactPhone } from "@/lib/contact-phone"
+import { myAnswersQuery } from "@/lib/my-answers"
+import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer-changes"
+import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
+import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
 
 const schema = z.object({
   eventId: z.string(),
@@ -71,6 +77,12 @@ const schema = z.object({
   answers: z.record(z.string(), z.unknown()).optional(),
   /** Code of the share link per group (#947) the page was opened with; resolved below, never an id. */
   groupCode: z.string().max(64).optional(),
+  /**
+   * The personal link of the volunteer's session on this event (#1013), when they come from their
+   * personal page for more shifts: proof they own their address, so what they change in the form
+   * (name, phone, answers) is saved. Resolved below, for this event and this address only.
+   */
+  personalToken: z.string().max(200).optional(),
 })
 
 export async function POST(req: Request) {
@@ -96,7 +108,7 @@ export async function POST(req: Request) {
     return validationError(parsed.error)
   }
 
-  const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken } = parsed.data
+  const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken, personalToken } = parsed.data
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: PUBLIC_ORG_WHERE },
@@ -184,6 +196,10 @@ export async function POST(req: Request) {
     select: { id: true },
   })
   let ownsEmail = false
+  // The personal link of this very member on this event (#1013): what the form started from (name,
+  // phone as the personal page shows it), to save what changed. Another member's link, another
+  // event's or a cancelled one proves nothing: the sign-up then follows the rules above.
+  let personal: { stored: { firstName: string; lastName: string; phone: string | null } } | null = null
   if (existing) {
     if (inviteToken) {
       const invite = await prisma.memberInvite.findFirst({
@@ -191,6 +207,23 @@ export async function POST(req: Request) {
         select: { id: true },
       })
       ownsEmail = invite != null
+    }
+    if (personalToken && !(await tokenLookupsBlocked(req))) {
+      const link = await prisma.registration.findFirst({
+        where: { ...registrationToken.where(personalToken), eventId, status: { in: [...LIVE_STATUSES] } },
+        select: { volunteerId: true, phone: true, volunteer: { select: { firstName: true, lastName: true, phone: true } } },
+      })
+      if (!link) await recordTokenMiss(req)
+      else if (link.volunteerId === existing.id) {
+        const others = await prisma.registration.findMany({
+          where: { volunteerId: existing.id, eventId, status: { in: [...LIVE_STATUSES] } },
+          select: { phone: true },
+        })
+        // Same phone as the personal page shows (GET /api/public/registrations/[token]).
+        const shownPhone = contactPhone({ phone: link.phone?.trim() || others.find((r) => r.phone?.trim())?.phone, volunteer: link.volunteer })
+        personal = { stored: { firstName: link.volunteer.firstName, lastName: link.volunteer.lastName, phone: shownPhone } }
+        ownsEmail = true
+      }
     }
 
     const existingRegs = await prisma.registration.findMany({
@@ -237,7 +270,11 @@ export async function POST(req: Request) {
     tokens,
   })
 
-  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; matchErased: boolean; outboxIds: string[] }
+  let outcome: {
+    registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; matchErased: boolean; outboxIds: string[]
+    /** Saved from the personal link's form (#1013); null without one. */
+    updates: { contact: ContactChange[]; answers: AnswerChange[] } | null
+  }
   try {
     outcome = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
@@ -326,6 +363,14 @@ export async function POST(req: Request) {
         )
       }
       const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId), tx, { organizationId: event.organizationId })
+      // From the personal link (#1013): the member is the link's, locked and not erased. Only what
+      // changed is written, as on the personal page (#997).
+      if (personal && !createdNow && !matchErased) {
+        const updates = await savePersonalChanges(tx, {
+          eventId, volunteerId, event, stored: personal.stored, submitted: { firstName, lastName, phone }, raw: parsed.data.answers ?? {}, values: answerCheck.values,
+        })
+        return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates }
+      }
       // Answers (#483): replaced only with proof the submitter owns the address, as for the
       // profile below; otherwise only missing answers are added (see planAnswerWrites).
       // An invite of an erased record proves nothing about the new one (#516).
@@ -346,7 +391,7 @@ export async function POST(req: Request) {
       if (writes.clear.length > 0) {
         await tx.questionAnswer.deleteMany({ where: { volunteerId, questionId: { in: writes.clear } } })
       }
-      return { registrations: created, volunteerId, createdNow, matchErased, outboxIds }
+      return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates: null }
     })
   } catch (e) {
     if (e instanceof ShiftFullError) return refuse(fullShift(e.shiftId, e.label))
@@ -364,17 +409,28 @@ export async function POST(req: Request) {
     throw e
   }
 
-  const { registrations, volunteerId, createdNow, matchErased, outboxIds } = outcome
+  const { registrations, volunteerId, createdNow, matchErased, outboxIds, updates } = outcome
   if (matchErased) ownsEmail = false
 
   // Only once the registration went through, and only with proof of ownership (see above):
   // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.
-  if (ownsEmail && !createdNow) {
+  // From the personal link (#1013), what changed is already saved, in the transaction.
+  if (ownsEmail && !createdNow && !updates) {
     await prisma.volunteer.update({
       where: { id: volunteerId },
       // Keep the profile's existing birthDate if this submission didn't provide one (most
       // registrations aren't age-gated), rather than clearing it.
       data: { firstName, lastName, phone, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
+    })
+  }
+
+  // The answers changed from the personal link (#1013): logged and told as from the personal page.
+  if (updates && updates.answers.length > 0) {
+    await recordAnswerChanges({
+      event: { id: event.id, title: event.title, organizationId: event.organizationId },
+      volunteerId,
+      volunteerName: `${firstName} ${lastName}`,
+      changes: updates.answers,
     })
   }
 
@@ -440,7 +496,65 @@ export async function POST(req: Request) {
     // Requests waiting for the organizer's decision (#484), not places.
     requestedShifts: requestedRegs.length,
     activeShifts: activeRegs.length,
+    // What the sign-up from the personal link saved (#1013), said by the confirmation.
+    ...(updates ? { updated: { contact: updates.contact.map((c) => c.field), answers: updates.answers.length } satisfies SignupUpdates } : {}),
   }, { status: 201 })
+}
+
+type PersonalTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
+
+/**
+ * What a sign-up from the personal link changes (#1013), inside the sign-up's transaction, once its
+ * registrations exist:
+ * - the name and phone that differ from what the form started from: the member's profile, and the
+ *   phone of their live registrations on the event too, the one the personal page, the organisers
+ *   and the sector leaders read first (`contactPhone`);
+ * - the answers, with the personal page's rules (#997): only the questions sent are compared, and
+ *   only while one of the volunteer's registrations on the event can still be withdrawn online
+ *   (`answersEditState`, the new ones included). Otherwise, as an anonymous sign-up: only the
+ *   answers the volunteer has not given yet are added.
+ * Nothing is written when nothing changed.
+ */
+async function savePersonalChanges(tx: PersonalTx, input: {
+  eventId: string
+  volunteerId: string
+  event: { cancelDeadlineDays: number | null; cancelDeadlineHours: number | null; organization: { timeZone: string | null } }
+  stored: { firstName: string; lastName: string; phone: string | null }
+  submitted: { firstName: string; lastName: string; phone?: string }
+  raw: Record<string, unknown>
+  values: Map<string, string[]>
+}): Promise<{ contact: ContactChange[]; answers: AnswerChange[] }> {
+  const { eventId, volunteerId } = input
+  const contact = contactChanges(input.stored, { ...input.submitted, phone: input.submitted.phone ?? "" })
+  if (contact.length > 0) {
+    const value = (f: ContactChange["field"]) => contact.find((c) => c.field === f)?.to
+    const profile: { firstName?: string; lastName?: string; phone?: string | null } = {}
+    if (contact.some((c) => c.field === "firstName")) profile.firstName = value("firstName")!
+    if (contact.some((c) => c.field === "lastName")) profile.lastName = value("lastName")!
+    if (contact.some((c) => c.field === "phone")) profile.phone = value("phone") ?? null
+    await tx.volunteer.update({ where: { id: volunteerId }, data: profile })
+    if ("phone" in profile) {
+      await tx.registration.updateMany({ where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } }, data: { phone: profile.phone } })
+    }
+  }
+
+  const questions = await tx.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
+  const live = await tx.registration.findMany({
+    where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } },
+    select: { status: true, shift: { select: { date: true, startTime: true, endTime: true } } },
+  })
+  const edit = answersEditState({ registrations: live, setting: input.event, timeZone: orgTimeZone(input.event.organization), now: new Date() })
+  if (!edit.allowed) {
+    const missing = [...input.values].filter(([id]) => !questions.find((q) => q.id === id)?.answers[0]?.values.length)
+    if (missing.length > 0) {
+      await tx.questionAnswer.createMany({ data: missing.map(([questionId, values]) => ({ questionId, eventId, volunteerId, values })), skipDuplicates: true })
+    }
+    return { contact, answers: [] }
+  }
+  const submitted = new Set(questions.filter((q) => Object.hasOwn(input.raw, q.id)).map((q) => q.id))
+  const answers = answerChanges(questions, submitted, input.values)
+  await writeAnswerChanges(tx, { eventId, volunteerId, changes: answers })
+  return { contact, answers }
 }
 
 class OverlapError extends Error {

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { randomUUID } from "node:crypto"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
@@ -11,11 +10,8 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { orgTimeZone } from "@/lib/time-zone"
 import { checkAnswers } from "@/lib/event-questions"
 import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
-import { answerChangeLog, answerChanges, answersClosedText, answersEditState } from "@/lib/answer-changes"
-import { logEvent } from "@/lib/event-log"
-import { queueAnswerChangeNotifications } from "@/lib/answer-change-notifications"
-import { deliverAfterResponse } from "@/lib/notifications/outbox"
-import { reportError } from "@/lib/report-error"
+import { answerChanges, answersClosedText, answersEditState } from "@/lib/answer-changes"
+import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives. Réessaie dans quelques minutes." }, { status: 429 })
 const notFound = () => NextResponse.json({ error: "Lien invalide ou inscription annulée." }, { status: 404 })
@@ -85,45 +81,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   const written = await prisma.$transaction(async (tx) => {
     const still = await tx.volunteer.findFirst({ where: { id: volunteerId, erasedAt: null }, select: { id: true } })
     if (!still) return false
-    for (const c of changes) {
-      if (c.to.length === 0) {
-        await tx.questionAnswer.deleteMany({ where: { questionId: c.questionId, volunteerId } })
-      } else {
-        await tx.questionAnswer.upsert({
-          where: { questionId_volunteerId: { questionId: c.questionId, volunteerId } },
-          create: { questionId: c.questionId, eventId, volunteerId, values: c.to },
-          update: { values: c.to },
-        })
-      }
-    }
+    await writeAnswerChanges(tx, { eventId, volunteerId, changes })
     return true
   })
   if (!written) return notFound()
 
-  for (const c of changes) {
-    await logEvent({
-      eventId,
-      actor: { type: "volunteer", id: volunteerId },
-      action: "question.answer_changed",
-      entityType: "EventQuestion",
-      entityId: c.questionId,
-      changes: answerChangeLog(c),
-    })
-  }
-
-  // Best-effort: the answers are saved, a failed email must not say otherwise.
-  try {
-    const dueIds = await queueAnswerChangeNotifications({
-      event: { id: event.id, title: event.title, organizationId: event.organizationId },
-      volunteerId,
-      volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
-      changes,
-      changeId: randomUUID(),
-    }, now)
-    deliverAfterResponse(dueIds)
-  } catch (e) {
-    reportError("answers.notify")(e)
-  }
+  // Logged per question, the organisers or the poste's leaders told by a grouped email (#998).
+  await recordAnswerChanges({
+    event: { id: event.id, title: event.title, organizationId: event.organizationId },
+    volunteerId,
+    volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
+    changes,
+  }, now)
 
   const fresh = await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
   return NextResponse.json({ answers: myAnswerRows(fresh), changed: changes.length })

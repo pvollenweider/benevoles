@@ -56,6 +56,8 @@ import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
 import RequiredMark from "@/components/RequiredMark"
+import { startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
+import { SESSION_EMAIL_HINT, sessionFormNote, type SignupUpdates } from "@/lib/signup-updates"
 
 
 type Shift = {
@@ -180,6 +182,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // The day of the refused shift: the visible note sits under that day's schedule, where the click was.
   const [limitNoticeDay, setLimitNoticeDay] = useState<string | null>(null)
   const [myRegistrations, setMyRegistrations] = useState<MyReg[]>([])
+  // The personal link of this device's session on the event (#1013): sent with a sign-up for more
+  // shifts, so what the volunteer changes in the form (name, phone, answers) is saved.
+  const [sessionToken, setSessionToken] = useState<string | null>(null)
   // The withdrawal confirmation of a held shift (#584), its request and its failure.
   const [pendingCancel, setPendingCancel] = useState<{ token: string; shiftId: string; label: string; status: string } | null>(null)
   const [withdrawing, setWithdrawing] = useState(false)
@@ -349,7 +354,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
         if (!data?.registrations) return
         const regs = toMyRegistrations(data.registrations)
         setMyRegistrations(regs)
+        setSessionToken(token)
         if (data.volunteer) setForm((f) => prefillContact(f, data.volunteer, "source"))
+        // Their answers for this event (#1013), as « Mes réponses » shows them: once, what was
+        // already typed wins.
+        if (Array.isArray(data.answers)) setAnswers((a) => ({ ...startingAnswers(data.answers as MyAnswerRow[]), ...a }))
         setSelectedShifts((prev) => {
           const next = new Set(prev)
           regs.forEach((r: MyReg) => next.add(r.shiftId))
@@ -383,6 +392,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const month = months ? (months.find((m) => m.key === chosenMonth) ?? months[0]) : null
   const daysOnPage = month ? month.days : shownDays
   const hasAvailableShift = anyShiftAvailable(shownShifts)
+  // Coming back with the session of a sign-up on this event (#1013): the form starts from it.
+  const inSession = !previewEventId && !!sessionToken && myRegistrations.length > 0
 
   function toggleGroupFilter() {
     if (groupFilter.kind !== "filtered") return
@@ -487,6 +498,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
           groupCode: attributionCode(groupFilter) ?? undefined,
+          // From the personal page (#1013): the changes made here are saved.
+          personalToken: inSession ? sessionToken! : undefined,
         }),
       })
     } catch {
@@ -529,7 +542,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     // submitter owns it: the management link then only goes out by email (#285).
     saveRememberedContact(form)
     if (data.editToken) writeStored(storageKey, data.editToken)
-    router.push(successPath(eventSlug, data, searchParams, embed))
+    router.push(successPath(eventSlug, { ...data, updated: (data as unknown as { updated?: SignupUpdates }).updated }, searchParams, embed))
   }
 
   function quitSession() {
@@ -537,8 +550,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     forgetRememberedContact()
     setUsedRemembered(false)
     setMyRegistrations([])
+    setSessionToken(null)
     setSelectedShifts(new Set())
     setForm(EMPTY_SIGNUP_FORM)
+    setAnswers({})
+    setQuestionErrors(new Map())
     requestAnimationFrame(() => titleRef.current?.focus())
   }
 
@@ -1083,6 +1099,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+                {inSession && (
+                  <p className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-700">{sessionFormNote((event.questions ?? []).length > 0)}</p>
+                )}
                 {usedRemembered && myRegistrations.length === 0 && (
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl bg-gray-50 border border-gray-200 px-3 py-2">
                     <p className="text-sm text-gray-700">Coordonnées reprises de ta dernière inscription sur cet appareil.</p>
@@ -1128,10 +1147,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     type="email"
                     required
                     autoComplete="email"
+                    aria-describedby={inSession ? "reg-email-hint" : undefined}
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                     className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
+                  {inSession && <p id="reg-email-hint" className="text-xs text-gray-600 mt-1">{SESSION_EMAIL_HINT}</p>}
                 </div>
                 <div>
                   <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">
@@ -1176,6 +1197,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     setQuestionErrors((m) => { if (!m.has(qid)) return m; const n = new Map(m); n.delete(qid); return n })
                   }}
                   errors={questionErrors}
+                  clearable={inSession}
                 />
                 <div>
                   <label htmlFor="reg-comment" className="block text-sm font-medium text-gray-700 mb-1">Commentaire <span className="text-gray-500 font-normal">(facultatif)</span></label>
