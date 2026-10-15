@@ -26,6 +26,7 @@ export const ADMIN_HELP_LINKS = {
   "/admin/events/[id]/message": { unit: "ecrire-aux-benevoles" },
   "/admin/events/[id]/staffing": { unit: "ou-manque-t-il-du-monde" },
   "/admin/events/[id]/day-of": { unit: "presences-le-jour-j" },
+  "/admin/events/[id]/sector-leaders": { unit: "responsables-de-secteur" },
   "/admin/settings/admins": { unit: "equipe-admin" },
   "/admin/settings/notifications": { unit: "reglages-et-suivi-des-emails" },
 } as const satisfies Record<string, AdminHelpTarget>

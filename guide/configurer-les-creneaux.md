@@ -26,8 +26,8 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Libellé | Intitulé spécifique (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
 | Date | Jour du créneau |
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` (voir [Horaires et créneaux de nuit](horaires-et-nuit.md)) |
-| Capacité | Nombre maximum de bénévoles |
-| Minimum (optionnel) | Nombre de personnes sous lequel le créneau ne peut pas tourner, de 1 à la capacité (ex. : `2` pour un bar prévu à 4). Vide : le créneau a besoin de toutes ses places. Voir [Minimum de personnes](#minimum-de-personnes). |
+| Places | Nombre maximum de bénévoles |
+| Minimum (optionnel) | Nombre de personnes sous lequel le créneau ne peut pas tourner, de 1 au nombre de places (ex. : `2` pour un bar prévu à 4). Vide : le créneau a besoin de toutes ses places. Voir [Minimum de personnes](#minimum-de-personnes). |
 | Description | Texte court, qui n'est affiché ni sur la page publique ni dans les emails. Ce n'est pas un champ confidentiel : pour ce qui doit rester à l'organisation, utilisez les notes internes ; pour ce que les bénévoles doivent savoir, les infos pratiques |
 | Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page publique d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page personnelle), jamais affichée publiquement, sous le libellé « Contact pour ce créneau ». Sans contact sur le créneau, les bénévoles confirmés voient le **Contact le jour J** de l'événement, s'il est renseigné. Facultatifs, courts : pas de fiche de mission. |
 | Notes internes | Jamais montrées aux bénévoles |

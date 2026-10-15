@@ -9,6 +9,7 @@ import { requestJson } from "@/lib/use-submit"
 import { broadcastRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { renderMarkdown } from "@/lib/markdown"
+import RequiredMark from "@/components/RequiredMark"
 
 export type ProductUpdateSendRow = {
   id: string
@@ -112,7 +113,7 @@ export default function ProductUpdatesManager({
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
           <h2 className="text-sm font-semibold text-gray-900">Nouveau message</h2>
           <div>
-            <label htmlFor={subjectId} className="block text-xs font-medium text-gray-600 mb-1">Objet *</label>
+            <label htmlFor={subjectId} className="block text-xs font-medium text-gray-600 mb-1">Objet<RequiredMark /></label>
             <input
               id={subjectId}
               type="text"

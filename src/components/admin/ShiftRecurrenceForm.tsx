@@ -194,12 +194,12 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   return (
     <section id={panelId} aria-labelledby={`${id}-title`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <div>
-        <h3 id={`${id}-title`} ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">
+        <h2 id={`${id}-title`} ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">
           Répéter un créneau chaque semaine
-        </h3>
+        </h2>
         <p className="text-xs text-gray-600 mt-0.5">
           Pour une permanence qui revient (mercredi après-midi, samedi matin…) : décrivez-la une fois, toutes les dates de la période sont créées, jours fériés et fermetures exclus. Chaque date reste modifiable ensuite.
-          Les champs marqués d&apos;un astérisque (*) sont obligatoires.
+          <span aria-hidden="true">{" "}Les champs marqués d&apos;un astérisque (*) sont obligatoires.</span>
         </p>
       </div>
 
@@ -231,7 +231,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       </div>
 
       <fieldset aria-describedby={invalid("weekdays") ? errorIdOf("weekdays") : undefined}>
-        <legend className={labelClass("weekdays")}>Jours <span aria-hidden="true">*</span><span className="sr-only"> (obligatoire)</span></legend>
+        <legend className={labelClass("weekdays")}>Jours <span aria-hidden="true">*</span><span className="sr-only"> (au moins un choix)</span></legend>
         <div className="flex flex-wrap gap-2">
           {WEEKDAYS.map((w) => (
             <label key={w.value} htmlFor={`${id}-wd-${w.value}`} className="inline-flex items-center gap-2 min-h-11 px-3 rounded-xl border border-gray-300 text-sm text-gray-800 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 cursor-pointer">
@@ -277,7 +277,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label htmlFor={fieldId("capacity")} className={labelClass("capacity")}>Personnes par créneau <span aria-hidden="true">*</span></label>
+          <label htmlFor={fieldId("capacity")} className={labelClass("capacity")}>Places par créneau <span aria-hidden="true">*</span></label>
           <input id={fieldId("capacity")} type="number" min={1} required value={capacity} aria-invalid={invalid("capacity") || undefined} aria-describedby={describedBy("capacity")} onChange={(e) => setCapacity(e.target.value === "" ? "" : Number(e.target.value))} className={fieldClass("capacity")} />
           {fieldMessage("capacity")}
         </div>

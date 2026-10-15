@@ -322,11 +322,19 @@ describe("ShiftsManager list view", () => {
     for (const cls of ["text-blue-500", "text-red-400", "text-orange-500", "text-emerald-600"]) {
       expect(container.querySelector(`.${cls}`), cls).toBeNull()
     }
-    // gray-500 on the gray-100 of the « Fermé » badge is 4.4:1.
-    expect(within(screen.getByRole("row", { name: /Accueil/ })).getByText("Fermé")).toHaveClass("text-gray-700")
-    const fullRow = screen.getByRole("row", { name: /Modifier le créneau Bar, Soir/ })
-    expect(within(fullRow).getByText("Complet", { selector: "p" })).toHaveClass("text-orange-800")
+    // gray-500 on the gray-100 of the « Fermé » badge is 4.4:1: the DESIGN.md pair is gray-600.
+    expect(within(screen.getByRole("row", { name: /Accueil/ })).getByText("Fermé")).toHaveClass("text-gray-600")
     expect(screen.getAllByText("2 libres")[0]).toHaveClass("text-green-800")
+  })
+
+  it("shows one status per row, « Complet » in the DESIGN.md blue pair, never next to « Ouvert » (regression)", () => {
+    renderList()
+    const fullRow = screen.getByRole("row", { name: /Modifier le créneau Bar, Soir/ })
+    expect(within(fullRow).getByText("Complet", { selector: "span" })).toHaveClass("bg-blue-100", "text-blue-700")
+    // Said once: the badge, not the places column too (which shows the plain count).
+    expect(within(fullRow).getAllByText("Complet")).toHaveLength(1)
+    expect(within(fullRow).queryByText("Ouvert")).toBeNull()
+    expect(fullRow.querySelector(".bg-orange-100, .text-orange-700, .text-orange-800")).toBeNull()
   })
 
   it("the deletion recap from the list says the shift in words", () => {

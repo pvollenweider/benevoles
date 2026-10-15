@@ -37,7 +37,7 @@ Les jours fériés suivent le pays de l'organisation (France ou Suisse, selon so
 | Jours | Un ou plusieurs jours de la semaine |
 | Rythme | Chaque semaine, ou une semaine sur deux (à partir de la semaine de la date de début) |
 | Début, fin, découpage | La plage horaire de chaque jour : un seul créneau sur toute la plage, ou des créneaux d'une heure à quatre heures qui se suivent |
-| Personnes par créneau, **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
+| **Places par créneau**, **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
 | Jours fériés exclus | France (jours fériés nationaux) ou Suisse (jours fériés communs à la plupart des cantons) ; ceux d'un seul canton ou d'une seule région s'ajoutent comme fermetures |
 | Fermetures | Les dates sans permanence (vacances, fermeture du local) |
 
@@ -53,7 +53,7 @@ Les permanences de l'événement sont listées sous **Permanences récurrentes**
 
 ![Liste « Permanences récurrentes » de la saison d'une épicerie, toutes du 19 octobre 2026 au 17 janvier 2027 : Caisse et accueil le mardi et le jeudi, Caisse et accueil le samedi, Mise en rayon le samedi et Réception des livraisons le mercredi, chacune avec ses horaires, son nombre de dates à venir et les boutons « Modifier à partir d'une date » et « Arrêter à partir d'une date »](/doc-img/admin-recurrences.png)
 
-- **Modifier à partir d'une date** : le nombre de personnes par créneau, et les horaires pour une permanence d'un seul créneau par jour, changent sur toutes les dates à partir du jour choisi. Les dates précédentes et les créneaux annulés ne bougent pas. Les bénévoles inscrits reçoivent un email si l'horaire change. Un nombre de personnes plus petit que les inscrits d'une date est refusé, et ces dates sont listées.
+- **Modifier à partir d'une date** : les **Places par créneau**, et les horaires pour une permanence d'un seul créneau par jour, changent sur toutes les dates à partir du jour choisi. Les dates précédentes et les créneaux annulés ne bougent pas. Les bénévoles inscrits reçoivent un email si l'horaire change. Un nombre de personnes plus petit que les inscrits d'une date est refusé, et ces dates sont listées.
 - **Arrêter à partir d'une date** : les dates sans inscrit sont supprimées. Si des dates ont déjà des inscrits, elles sont d'abord listées avec leur nombre d'inscrits, et rien ne change ; elles ne sont annulées, avec un email à chaque personne, que si vous confirmez. Arrêter à partir de la première date retire la permanence de la liste.
 
 Pour changer une seule date, modifiez ou supprimez son créneau comme n'importe quel autre.

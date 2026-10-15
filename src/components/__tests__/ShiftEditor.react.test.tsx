@@ -68,7 +68,7 @@ describe("ShiftEditor", () => {
     expect(screen.getByLabelText("Début *")).toHaveAccessibleDescription("Indiquez l'heure de début.")
     expect(screen.getByLabelText("Fin *")).toHaveAttribute("aria-invalid", "true")
     expect(screen.getByLabelText("Libellé")).not.toHaveAttribute("aria-invalid")
-    expect(screen.getByLabelText("Capacité *")).not.toHaveAttribute("aria-invalid")
+    expect(screen.getByRole("spinbutton", { name: "Places" })).not.toHaveAttribute("aria-invalid")
     // A visible reminder, not live: the field errors are reached by focus, so no alert at all.
     expect(screen.getByText("À remplir : le poste, l'heure de début et l'heure de fin.")).toBeInTheDocument()
     expect(spokenAlerts()).toHaveLength(0)
@@ -95,7 +95,7 @@ describe("ShiftEditor", () => {
   // itself says « obligatoire » (required).
   it("names the required fields without their asterisk, which stays visible", () => {
     setup({ dates: ["2026-07-04", "2026-07-05"], initial: {} })
-    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["spinbutton", "Capacité"]] as const) {
+    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["spinbutton", "Places"]] as const) {
       const field = screen.getByRole(role, { name })
       expect(field).toBeRequired()
       const label = document.querySelector(`label[for="${field.id}"]`)!
@@ -118,11 +118,11 @@ describe("ShiftEditor", () => {
 
   it("refuses a blank role and an empty capacity", async () => {
     setup({ initial: { roleName: "   ", date: "2026-07-04", startTime: "10:00", endTime: "11:00" } })
-    fireEvent.change(screen.getByLabelText("Capacité *"), { target: { value: "" } })
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Places" }), { target: { value: "" } })
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.getByLabelText("Capacité *")).toHaveAccessibleDescription("Indiquez la capacité.")
-    expect(screen.getByText("À remplir : le poste et la capacité.")).toBeInTheDocument()
+    expect(screen.getByRole("spinbutton", { name: "Places" })).toHaveAccessibleDescription("Indiquez le nombre de places.")
+    expect(screen.getByText("À remplir : le poste et le nombre de places.")).toBeInTheDocument()
     await waitFor(() => expect(screen.getByLabelText("Poste *")).toHaveFocus())
   })
 

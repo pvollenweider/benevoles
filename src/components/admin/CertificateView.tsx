@@ -165,7 +165,7 @@ export default function CertificateView({ memberId, memberName, organizationName
             className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
           />
           <div>
-            <label htmlFor={`${id}-planned`} className="text-sm font-medium text-gray-800">Inclure les heures planifiées sans présence saisie</label>
+            <label htmlFor={`${id}-planned`} className="text-sm font-medium text-gray-800">Inclure les heures prévues sans présence saisie</label>
             <p id={`${id}-planned-hint`} className="text-xs text-gray-600 mt-0.5">Décoché par défaut : seules les heures attestées par une présence enregistrée valent comme preuve. Si coché, les créneaux confirmés sans présence apparaissent en plus, clairement distingués.</p>
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function CertificateView({ memberId, memberName, organizationName
                 <th scope="col" className="text-left py-1 pr-2">Postes</th>
                 <th scope="col" className="text-right py-1 pr-2">Créneaux</th>
                 <th scope="col" className="text-right py-1 pr-2">Heures attestées</th>
-                {includePlanned && <th scope="col" className="text-right py-1">Heures planifiées (sans présence)</th>}
+                {includePlanned && <th scope="col" className="text-right py-1">Heures prévues (sans présence)</th>}
               </tr>
             </thead>
             <tbody>

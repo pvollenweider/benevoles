@@ -5,6 +5,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { statusBoxClass } from "@/lib/status-message"
 
 /**
  * Publish / unpublish an event. In a space awaiting validation (#810) the button becomes
@@ -46,7 +47,7 @@ export default function PublishToggle({ eventId, currentStatus, awaitingValidati
         >
           {requested ? "Demande envoyée" : "Demander la publication"}{loading && <span className="sr-only"> (en cours)</span>}
         </button>
-        <p id={`publish-request-${eventId}`} role="status" className={requested ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{requested ?? ""}</p>
+        <p id={`publish-request-${eventId}`} role="status" className={requested ? statusBoxClass("success") : "sr-only"}>{requested ?? ""}</p>
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
       </div>
     )

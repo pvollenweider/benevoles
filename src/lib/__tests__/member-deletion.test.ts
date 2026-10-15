@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { memberDeletionEligibility, MEMBER_DELETION_REASON } from "../member-deletion"
+import { memberDeletionBlockedText, memberDeletionEligibility, MEMBER_DELETION_REASON } from "../member-deletion"
 
 describe("memberDeletionEligibility (#667)", () => {
   it("is eligible for an inactive record with no registration at all", () => {
@@ -25,5 +25,15 @@ describe("memberDeletionEligibility (#667)", () => {
 
   it("the tombstone reason wins even if the tombstone were somehow still active", () => {
     expect(memberDeletionEligibility({ active: true, mergedIntoId: "vol-keep" }, 0)).toEqual({ eligible: false, reason: MEMBER_DELETION_REASON.tombstone })
+  })
+})
+
+describe("memberDeletionBlockedText", () => {
+  it("never puts a capital after a colon: the reason is its own sentence", () => {
+    for (const reason of Object.values(MEMBER_DELETION_REASON)) {
+      const text = memberDeletionBlockedText(reason)
+      expect(text).toBe(`Suppression impossible. ${reason}`)
+      expect(text).not.toMatch(/: [A-ZÉ]/)
+    }
   })
 })

@@ -32,7 +32,7 @@ type Props = {
 }
 
 /** 24px targets (#557 axe target-size) on every link/button here, including the empty-state ones. */
-const LINK_CLASS = "inline-flex items-center min-h-6 px-1 -mx-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const LINK_CLASS = "inline-flex items-center gap-1 min-h-6 px-1 -mx-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 const pairKey = (p: { memberIdA: string; memberIdB: string }) => `${p.memberIdA}\u0000${p.memberIdB}`
 const fullName = (m: MemberView) => `${m.firstName} ${m.lastName}${m.active ? "" : " (inactif)"}`
@@ -111,7 +111,7 @@ export default function MemberDuplicatesManager({ initialPairs, isOwner, prefilt
 
       <div className="space-y-1">
         <Link href="/admin/members" className={LINK_CLASS}>
-          <span aria-hidden="true">← </span>Retour aux membres
+          <span aria-hidden="true">←</span>Retour aux membres
         </Link>
         <h1 className="text-xl font-bold text-gray-900">Doublons possibles</h1>
         <p className="text-sm text-gray-700">

@@ -134,7 +134,7 @@ export default function OrgSlugForm({
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-      <h2 className="text-sm font-semibold text-gray-900">Identifiant public (slug)</h2>
+      <h2 className="text-sm font-semibold text-gray-900">Adresse de votre espace</h2>
 
       <form onSubmit={handleSubmit} className="space-y-2">
         <label htmlFor={inputId} className="block text-sm text-gray-800">
@@ -168,7 +168,7 @@ export default function OrgSlugForm({
             ref={submitRef}
             type="submit"
             disabled={saving}
-            className={`bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-60 ${focusRing}`}
+            className={`bg-blue-600 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-60 ${focusRing}`}
           >
             {saving ? "Enregistrement…" : "Modifier"}
           </button>

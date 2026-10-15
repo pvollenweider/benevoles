@@ -11,7 +11,8 @@ import { assignLanes, clamp, fromMin, toMin, toMinEnd } from "./gantt-utils"
 // ── Layout constants ──────────────────────────────────────────────────────────
 export const PX_PER_MIN = 2.5
 export const SNAP       = 15
-export const ROW_H      = 48
+// 56, not 48: room for three lines of 12/11 px text in a bar (42 px tall inside a dashed frame).
+export const ROW_H      = 56
 export const LANE_GAP   = 4
 export const GAP        = 8
 // 112, not 92: long role names ("Chauffeurs artistes", "Techniciens de scène"…) were truncated

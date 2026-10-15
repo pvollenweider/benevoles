@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { getBarClasses } from "@/lib/roles"
-import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, type GanttShow } from "@/lib/gantt-utils"
+import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 
 export { fmt }
@@ -146,8 +146,8 @@ export default function DayTimeline({
                 key={i}
                 className="absolute inset-y-0 bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
                 style={{
-                  left:  `${pct(toMin(show.startTime))}%`,
-                  width: `${pctW(toMin(show.startTime), toMin(show.endTime))}%`,
+                  left:  `${pct(showSpan(show).start)}%`,
+                  width: `${pctW(showSpan(show).start, showSpan(show).end)}%`,
                 }}
               />
             ))}
@@ -340,12 +340,12 @@ export default function DayTimeline({
                   key={i}
                   className="absolute inset-y-0 bg-indigo-100 rounded-sm flex items-center overflow-hidden px-1"
                   style={{
-                    left:  `${pct(toMin(show.startTime))}%`,
-                    width: `${pctW(toMin(show.startTime), toMin(show.endTime))}%`,
+                    left:  `${pct(showSpan(show).start)}%`,
+                    width: `${pctW(showSpan(show).start, showSpan(show).end)}%`,
                   }}
                 >
                   <span className="text-xs text-indigo-700 font-medium truncate whitespace-nowrap">
-                    🎪 {show.name}
+                    <span aria-hidden="true">🎪 </span>{show.name}
                   </span>
                 </div>
               ))}

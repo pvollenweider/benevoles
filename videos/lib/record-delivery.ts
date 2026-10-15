@@ -165,7 +165,7 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       const currentMember = await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })
       assert(currentMember.organizationId === "video-delivery" && currentMember.firstName === "Léa")
       await at("Corrigeons son email et enregistrons.")
-      await tap(page, page.getByRole("button", { name: `Éditer ${currentMember.firstName} ${currentMember.lastName}`, exact: true }))
+      await tap(page, page.getByRole("button", { name: `Modifier ${currentMember.firstName} ${currentMember.lastName}`, exact: true }))
       const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
       await write(dialog.getByLabel("Email", { exact: true }), "video.delivery.corrected@example.org")
       await tap(page, dialog.getByRole("button", { name: "Enregistrer", exact: true }))

@@ -80,7 +80,7 @@ test("event summary on Rapports, members list columns, and the hours-by-voluntee
   await page.goto("/admin/members")
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
   const table = page.getByRole("table", { name: "Liste des membres" })
-  await expect(table.getByRole("columnheader", { name: "Heures planifiées" })).toBeVisible()
+  await expect(table.getByRole("columnheader", { name: "Heures prévues" })).toBeVisible()
   await expect(table.getByRole("columnheader", { name: "Heures attestées" })).toBeVisible()
   const lastParticipationHeader = table.getByRole("columnheader", { name: "Dernière participation" })
   await expect(lastParticipationHeader).toBeVisible()
@@ -111,6 +111,6 @@ test("event summary on Rapports, members list columns, and the hours-by-voluntee
   expect(path).toBeTruthy()
   const content = fs.readFileSync(path!, "utf-8")
   const header = content.split("\r\n")[0]
-  expect(header).toContain("Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées")
+  expect(header).toContain("Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
   expect(content).toContain(`SummaryA${stamp}`)
 })

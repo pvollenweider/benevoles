@@ -47,7 +47,7 @@ async function main() {
     const repeated = await page.request.post(`${base}/api/admin/settings/notifications/${before.id}/retry`)
     assert.equal(repeated.status(), 404)
     await page.goto(`${base}/admin/members`)
-    await page.getByRole("button", { name: "Éditer Léa Exemple", exact: true }).click()
+    await page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }).click()
     const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
     await dialog.getByLabel("Email", { exact: true }).fill("video.delivery.corrected@example.org")
     const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/members/${member.id}`) && response.request().method() === "PATCH")

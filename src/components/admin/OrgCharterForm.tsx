@@ -48,7 +48,7 @@ export default function OrgCharterForm({
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-4">
       <div>
-        <h2 id={titleId} className="text-sm font-semibold text-gray-800">Convention des Bénévoles</h2>
+        <h2 id={titleId} className="text-sm font-semibold text-gray-800">Charte des bénévoles</h2>
         <p className="text-xs text-gray-500 mt-0.5">
           Ce texte est présenté aux bénévoles lors de l'inscription.
         </p>
@@ -97,7 +97,7 @@ export default function OrgCharterForm({
           onClick={() => { setText(buildVolunteerCharter({ hasOrgInsurance })); setSuccess(false) }}
           className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
         >
-          Réinitialiser la convention par défaut
+          Réinitialiser la charte par défaut
         </button>
         <div className="flex items-center gap-3">
           {success && <span className="text-xs text-green-600">Enregistré ✓</span>}

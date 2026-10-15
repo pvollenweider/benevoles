@@ -46,14 +46,14 @@ describe("attentionItems", () => {
     const late = [{ title: "Louer la tente", ownerName: "Samira Diallo" }, { title: "Commander les t-shirts", ownerName: null }]
     const items = attentionItems({ now, events: [ev({ overdueMilestones: late, unansweredInvites: 3 })], offers: [] })
     expect(ids(items)).toEqual(["milestones:e1", "invites:e1"])
-    expect(items[0].message).toBe("2 jalons sont en retard : « Louer la tente » (responsable : Samira Diallo), « Commander les t-shirts ».")
+    expect(items[0].message).toBe("2 jalons sont en retard : « Louer la tente » (qui s'en occupe : Samira Diallo), « Commander les t-shirts ».")
     expect(items[1].href).toBe("/admin/events/e1/message?audience=invited")
     expect(items[1].message).toMatch(/aucun créneau confirmé/)
   })
 
   it("names one overdue milestone, its owner, and counts beyond three (#985)", () => {
     expect(overdueMilestonesMessage([{ title: "Louer la tente", ownerName: "Samira Diallo" }]))
-      .toBe("1 jalon est en retard : « Louer la tente » (responsable : Samira Diallo).")
+      .toBe("1 jalon est en retard : « Louer la tente » (qui s'en occupe : Samira Diallo).")
     const five = ["A", "B", "C", "D", "E"].map((title) => ({ title, ownerName: null }))
     expect(overdueMilestonesMessage(five)).toBe("5 jalons sont en retard : « A », « B », « C » et 2 autres.")
     expect(overdueMilestonesMessage(five.slice(0, 4))).toBe("4 jalons sont en retard : « A », « B », « C » et 1 autre.")

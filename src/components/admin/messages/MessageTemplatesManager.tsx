@@ -9,6 +9,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
 import { TEMPLATE_LIMIT, TEMPLATE_NAME_MAX, unknownVariables, VARIABLES } from "@/lib/message-template"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX } from "@/lib/targeted-message"
+import RequiredMark from "@/components/RequiredMark"
 
 type Template = { id: string; name: string; subject: string; body: string }
 type Field = "name" | "subject" | "body"
@@ -156,19 +157,19 @@ export default function MessageTemplatesManager({ initialTemplates }: { initialT
           className="bg-white rounded-2xl border border-blue-200 p-4 space-y-4"
         >
           <h2 id={`${id}-form-title`} className="text-sm font-semibold text-gray-800">{editing === "new" ? "Nouveau modèle" : `Modifier le modèle « ${editingName} »`}</h2>
-          <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+          <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
           <div>
-            <label htmlFor={`${id}-name`} className="block text-sm font-medium text-gray-800 mb-1">Nom du modèle *</label>
+            <label htmlFor={`${id}-name`} className="block text-sm font-medium text-gray-800 mb-1">Nom du modèle<RequiredMark /></label>
             <input id={`${id}-name`} type="text" required value={form.name} maxLength={TEMPLATE_NAME_MAX} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} aria-invalid={invalid("name")} aria-describedby={describedBy("name", `${id}-name-hint`)} className="input" />
             <p id={`${id}-name-hint`} className="text-xs text-gray-600 mt-1">Pour vous seulement, les bénévoles ne le voient pas.</p>
           </div>
           <div>
-            <label htmlFor={`${id}-subject`} className="block text-sm font-medium text-gray-800 mb-1">Objet *</label>
+            <label htmlFor={`${id}-subject`} className="block text-sm font-medium text-gray-800 mb-1">Objet<RequiredMark /></label>
             <input id={`${id}-subject`} type="text" required value={form.subject} maxLength={MESSAGE_SUBJECT_MAX} onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))} aria-invalid={invalid("subject") || (subjectUnknown.length > 0 ? true : undefined)} aria-describedby={describedBy("subject", `${id}-vars${subjectUnknown.length > 0 ? ` ${id}-subject-unknown` : ""}`)} className="input" />
             {subjectUnknown.length > 0 && <p id={`${id}-subject-unknown`} className="text-xs text-red-700 mt-1">{subjectUnknown.join(" ")}</p>}
           </div>
           <div>
-            <label htmlFor={`${id}-body`} className="block text-sm font-medium text-gray-800 mb-1">Message *</label>
+            <label htmlFor={`${id}-body`} className="block text-sm font-medium text-gray-800 mb-1">Message<RequiredMark /></label>
             <textarea id={`${id}-body`} rows={7} required value={form.body} maxLength={MESSAGE_BODY_MAX} onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))} aria-invalid={invalid("body") || (bodyUnknown.length > 0 ? true : undefined)} aria-describedby={describedBy("body", `${id}-vars${bodyUnknown.length > 0 ? ` ${id}-body-unknown` : ""}`)} className="input" />
             {bodyUnknown.length > 0 && <p id={`${id}-body-unknown`} className="text-xs text-red-700 mt-1">{bodyUnknown.join(" ")}</p>}
           </div>

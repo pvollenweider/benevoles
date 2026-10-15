@@ -157,7 +157,7 @@ export default function NewOrgForm() {
       </div>
 
       <form onSubmit={submit} noValidate className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 max-w-lg">
-        <p className="text-xs text-gray-600">* champ obligatoire</p>
+        <p aria-hidden="true" className="text-xs text-gray-600">* champ obligatoire</p>
         <div>
           <p className="text-xs font-semibold text-gray-600 mb-3">Organisation</p>
           <Field

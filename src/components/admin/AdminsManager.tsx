@@ -153,7 +153,7 @@ export default function AdminsManager({
           {canManage && <button
             ref={inviteButtonRef}
             onClick={() => { setShowForm(true); setInviteUrl(null); reset() }}
-            className="text-xs bg-gray-900 text-white px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-xl hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
             <span aria-hidden="true">+ </span>Inviter
           </button>}

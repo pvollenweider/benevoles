@@ -152,7 +152,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   org_inactivity_notice: "« Souhaitez-vous conserver votre espace ? » et ses rappels",
   org_inactivity_deactivated: "Espace désactivé faute d'activité",
   open_shifts: "Créneaux à compléter proposés à des membres",
-  milestone_owner_reminder: "Rappel au responsable d'un jalon",
+  milestone_owner_reminder: "Rappel à qui s'occupe d'un jalon",
   answers_changed: "Réponses aux questions modifiées par un bénévole",
   sector_leader_answers_changed: "Réponse modifiée, aux responsables du poste de la question",
 }

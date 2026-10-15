@@ -54,3 +54,11 @@ export function parseTagList(input: string): string[] {
   }
   return [...seen.values()].slice(0, 10)
 }
+
+/** « réservé aux membres « sécurité » ou « secouriste » »: who may take a reserved role, in words. */
+export function reservedForText(tags: string[]): string {
+  return `réservé aux membres ${tags.map((t) => `« ${t} »`).join(" ou ")}`
+}
+
+/** The hint under a member's tags: what they are for (#470), so they are not just labels. */
+export const MEMBER_TAGS_HINT = "Elles donnent accès aux postes réservés : un poste réservé à « sécurité » ne se prend qu'avec le lien d'invitation d'un membre qui a cette étiquette."

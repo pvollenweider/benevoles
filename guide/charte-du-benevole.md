@@ -12,15 +12,15 @@ aliases: []
 
 <!-- video: ORG_TIMEZONE_CHARTER -->
 
-Dans l'interface, la charte s'appelle « Convention des Bénévoles ».
+Dans les paramètres, elle s'appelle « Charte des bénévoles » ; sur la page d'inscription, les bénévoles la voient sous le nom « convention des bénévoles ».
 
-**Paramètres**, puis la section **Convention des Bénévoles** (réservé aux propriétaires)
+**Paramètres**, puis la section **Charte des bénévoles** (réservé aux propriétaires)
 
 La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
 
 - Le commutateur **Assurance RC fournie par l'organisation** choisit la variante du texte par défaut : couverture par l'assurance responsabilité civile de l'organisation, ou couverture accidents personnelle à la charge de chaque bénévole. Changer le commutateur remplace le texte affiché dans la zone de saisie par la variante correspondante ; les modifications non enregistrées sont perdues.
 - Modifier le texte dans la zone de saisie et cliquer sur **Enregistrer**
-- Cliquer sur **Réinitialiser la convention par défaut** pour revenir au texte standard
+- Cliquer sur **Réinitialiser la charte par défaut** pour revenir au texte standard
 
 Dans le formulaire d'inscription, les bénévoles cochent la case « J'ai lu et j'accepte la convention des bénévoles ». Le lien « convention des bénévoles » ouvre une fenêtre « Convention des Bénévoles » avec le texte complet et un bouton « J'ai lu et j'accepte », qui coche la case.
 

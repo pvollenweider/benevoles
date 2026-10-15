@@ -82,7 +82,7 @@ export function isEligibleMilestoneOwner(
 }
 
 /** Answer of the API (422) to an owner that is not, or no longer, an active admin of the organisation. */
-export const MILESTONE_OWNER_UNAVAILABLE = "Choisissez un responsable parmi les membres actifs de l'équipe."
+export const MILESTONE_OWNER_UNAVAILABLE = "Choisissez qui s'en occupe parmi les membres actifs de l'équipe."
 
 export type OwnerOption = { id: string; name: string; inactive?: boolean }
 

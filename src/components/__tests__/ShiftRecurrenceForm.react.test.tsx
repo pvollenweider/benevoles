@@ -92,7 +92,7 @@ describe("ShiftRecurrenceForm", () => {
   it("requires at least one person per shift", () => {
     setup()
     fill()
-    const capacity = screen.getByLabelText(/Personnes par créneau/)
+    const capacity = screen.getByLabelText(/Places par créneau/)
     fireEvent.change(capacity, { target: { value: "" } })
     fireEvent.click(screen.getByRole("button", { name: /Créer/ }))
     expect(capacity).toHaveFocus()

@@ -24,14 +24,14 @@ function fmtValue(v: unknown): string {
   return String(v)
 }
 
-/** One line per changed field, e.g. "capacité : 3 → 4". Field names get a French label when known. */
+/** One line per changed field, e.g. "places : 3 → 4". Field names get a French label when known. */
 const FIELD_LABELS: Record<string, string> = {
   // Anonymisation of a past event (#813): counts only, never a name.
   registrations: "inscriptions anonymisées",
   answers: "réponses aux questions",
   invites: "invitations",
   sectorLeaders: "responsables de secteur",
-  capacity: "capacité",
+  capacity: "places",
   minVolunteers: "minimum de personnes",
   status: "statut",
   date: "date",
@@ -66,7 +66,9 @@ const FIELD_LABELS: Record<string, string> = {
   hideFull: "créneaux complets masqués",
   groupLink: "lien de groupe",
   // A milestone's owner (#985).
-  ownerId: "responsable",
+  ownerId: "qui s'en occupe",
+  // A check-in (#399): the time it was recorded, « enregistrée » for an undone one (stored as "set").
+  checkedInAt: "présence",
   // A volunteer's answer changed from the personal page (#984); `question` names it in the sentence.
   answer: "réponse",
 }
@@ -97,6 +99,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
         : field === "ownerId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? "compte supprimé"
         : field === "isListed" ? listingChangeLabel(v)
         : field === "answer" && (v === null || v === undefined) ? "pas de réponse"
+        : field === "checkedInAt" && v === "set" ? "enregistrée"
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })

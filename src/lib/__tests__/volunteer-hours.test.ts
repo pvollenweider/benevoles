@@ -8,6 +8,7 @@ import {
   lastParticipation,
   localToday,
   memberHourTotals,
+  memberListHours,
   pastEntries,
   registrationCounts,
   returningVolunteerIds,
@@ -176,6 +177,31 @@ describe("pastEntries (#557)", () => {
     )
     const past = pastEntries(entries, "2026-05-02")
     expect(past.map((e) => e.registrationId).sort()).toEqual(["reg-past", "reg-today"])
+  })
+})
+
+describe("memberListHours", () => {
+  it("counts upcoming confirmed shifts in « Heures prévues », never « — » for a member signed up ahead", () => {
+    const entries = volunteerHourEntries([reg({ id: "reg-future", checkedInAt: null, shift: { id: "s-future", date: "2026-06-10" } })], TZ)
+    expect(memberListHours(entries, "2026-05-02")).toEqual({ plannedMinutes: 240, attestedMinutes: 0, lastShiftDate: null, lastPresenceDate: null })
+  })
+
+  it("adds past and upcoming shifts; attested stays a subset; the last participation is a past one", () => {
+    const entries = volunteerHourEntries([
+      reg({ id: "reg-past" }),
+      reg({ id: "reg-future", checkedInAt: null, shift: { id: "s-future", date: "2026-06-10" } }),
+    ], TZ)
+    const hours = memberListHours(entries, "2026-05-20")
+    expect(hours).toEqual({ plannedMinutes: 480, attestedMinutes: 240, lastShiftDate: "2026-05-02", lastPresenceDate: "2026-05-02" })
+    expect(hours.attestedMinutes).toBeLessThanOrEqual(hours.plannedMinutes)
+  })
+
+  it("counts two shifts held at the same time once (#986)", () => {
+    const entries = volunteerHourEntries([
+      reg({ id: "a", checkedInAt: null, shift: { id: "sa", date: "2026-06-10", startTime: "10:00", endTime: "18:00" } }),
+      reg({ id: "b", checkedInAt: null, shift: { id: "sb", date: "2026-06-10", startTime: "12:00", endTime: "16:00" } }),
+    ], TZ)
+    expect(memberListHours(entries, "2026-05-02").plannedMinutes).toBe(480)
   })
 })
 

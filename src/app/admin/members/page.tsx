@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import MembersManager from "@/components/admin/MembersManager"
-import { defaultPeriod, lastParticipation, localToday, pastEntries, splitMinutes, volunteerHourEntries } from "@/lib/volunteer-hours"
+import { defaultPeriod, localToday, memberListHours, volunteerHourEntries } from "@/lib/volunteer-hours"
 import { orgTimeZone } from "@/lib/time-zone"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
@@ -75,13 +75,9 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     <MembersManager
       initialMembers={volunteers.map((v) => {
         const entries = volunteerHourEntries(v.registrations, timeZone)
-        const past = pastEntries(entries, today)
-        // « Heures planifiées » (#557): past confirmed shifts only, real local instants — distinct
-        // from « Heures attestées » (a recorded presence among those same past shifts); the two
-        // never overlap. A future confirmed shift isn't "planned hours given" yet, it just hasn't
-        // happened (the bug tracked separately as #571, fixed here by scoping to the past).
-        const { plannedMinutes, attestedMinutes } = splitMinutes(past)
-        const { lastShiftDate, lastPresenceDate } = lastParticipation(past)
+        // « Heures prévues » over every confirmed shift, past and upcoming; « Heures attestées » the
+        // ones with a presence; « Dernière participation » on the past ones (memberListHours).
+        const { plannedMinutes, attestedMinutes, lastShiftDate, lastPresenceDate } = memberListHours(entries, today)
         return {
           id: v.id,
           firstName: v.firstName,

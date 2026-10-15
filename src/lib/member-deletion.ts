@@ -27,6 +27,11 @@ export const MEMBER_DELETION_REASON = {
   hasRegistrations: "Cette fiche a des inscriptions, quel que soit leur statut : elles doivent rester dans l'historique des événements.",
 } as const
 
+/** What the member page says when the member can't be deleted: a sentence, then the reason (a sentence too). */
+export function memberDeletionBlockedText(reason: string): string {
+  return `Suppression impossible. ${reason}`
+}
+
 export interface MemberDeletionSubject {
   active: boolean
   mergedIntoId: string | null

@@ -171,7 +171,7 @@ function ChangeForm({ panelId, rule, defaultFrom, oneShiftPerDay, onCancel, onDo
           </>
         )}
         <div>
-          <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Personnes par créneau</label>
+          <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Places par créneau</label>
           <input id={`${id}-capacity`} type="number" min={1} value={capacity} aria-invalid={badCapacity || undefined} aria-describedby={badCapacity ? `${id}-error` : undefined} onChange={(e) => setCapacity(e.target.value === "" ? "" : Number(e.target.value))} className="input" />
         </div>
       </div>
@@ -265,7 +265,7 @@ function StopForm({ panelId, rule, defaultFrom, onCancel, onDone }: {
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => submit(false)} aria-disabled={saving || undefined} className="min-h-11 bg-gray-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-800 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          <button type="button" onClick={() => submit(false)} aria-disabled={saving || undefined} className="min-h-11 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
             {saving ? "Arrêt…" : "Arrêter la permanence"}
           </button>
           <button type="button" onClick={onCancel} className="min-h-11 text-gray-700 px-3 py-2 text-sm hover:text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>

@@ -159,3 +159,16 @@ export function timelineBarPlaces(s: { registrationCount: number; capacity: numb
 export function deleteShiftRecapFor(s: ShiftWords & { registrationCount: number }): ActionRecap {
   return deleteShiftRecap({ name: spokenShiftName(s), when: shiftWhen(s.date, s.startTime, s.endTime), registered: s.registrationCount })
 }
+
+export type ShiftListStatus = "open" | "full" | "closed"
+
+/**
+ * The one status of a row in the list view: « Fermé » for a closed shift, « Complet » once its
+ * places are taken (even while it is still stored as open, which used to show « Ouvert » next to
+ * « Complet »), « Ouvert » otherwise.
+ */
+export function shiftListStatus(s: { status?: string | null; registrationCount: number; capacity: number }): ShiftListStatus {
+  if (s.status === "closed") return "closed"
+  if (s.status === "full" || s.registrationCount >= s.capacity) return "full"
+  return "open"
+}

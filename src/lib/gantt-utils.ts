@@ -31,6 +31,15 @@ export function toMinEnd(end: string, start: string): number {
   return e <= s ? e + 1440 : e
 }
 
+/**
+ * Start and end minutes of a show (or any timed item) on its day's axis: an end at or before the
+ * start is the next day (« Bal populaire » 21:00–01:00 ends at 1500, not 60), so its band spans
+ * the four hours instead of collapsing to a sliver. `toMin(end) - toMin(start)` went negative.
+ */
+export function showSpan(show: { startTime: string; endTime: string }): { start: number; end: number } {
+  return { start: toMin(show.startTime), end: toMinEnd(show.endTime, show.startTime) }
+}
+
 // Minutes since the start of the day as a wall-clock time. The clock wraps at
 // midnight (1440 -> 00:00, 1560 -> 02:00) and never goes negative.
 export function fromMin(n: number): string {

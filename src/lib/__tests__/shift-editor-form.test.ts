@@ -53,7 +53,7 @@ describe("missingFieldsSummary", () => {
 
   it("lists all five fields", () => {
     expect(missingFieldsSummary(["roleName", "date", "startTime", "endTime", "capacity"]))
-      .toBe("À remplir : le poste, la date, l'heure de début, l'heure de fin et la capacité.")
+      .toBe("À remplir : le poste, la date, l'heure de début, l'heure de fin et le nombre de places.")
   })
 
   it("is empty when nothing is missing", () => {

@@ -15,6 +15,17 @@ const shift = (id: string, over: Partial<TimelineShift> = {}): TimelineShift => 
 describe("DayTimeline", () => {
   afterEach(cleanup)
 
+  // A show past midnight (21:00–01:00) collapsed to its minimum width on the public frise.
+  it("draws an overnight show over its four hours", () => {
+    const { container } = render(<DayTimeline shifts={[shift("a", { startTime: "20:00", endTime: "23:00" })]} shows={[{ name: "Bal populaire", date: "2026-07-04", startTime: "21:00", endTime: "01:00" }]} selected={new Set()} onToggle={() => {}} />)
+    // The axis runs 20:00–01:00 (300 min): the show is 240 of them, from 60.
+    const band = container.querySelector<HTMLElement>(".bg-indigo-50.border-x")!
+    expect(parseFloat(band.style.left)).toBeCloseTo(20)
+    expect(parseFloat(band.style.width)).toBeCloseTo(80)
+    const label = screen.getByText(/Bal populaire/).closest("div") as HTMLElement
+    expect(parseFloat(label.style.width)).toBeCloseTo(80)
+  })
+
   it("offers each open shift as a toggle while registrations are open", () => {
     const onToggle = vi.fn()
     render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={onToggle} />)

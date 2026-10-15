@@ -144,19 +144,25 @@ export default function OrgLogoForm({ initialLogo, organizationName }: { initial
 
       <form onSubmit={upload} noValidate className="space-y-3">
         <div>
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-800 mb-1">
-            {logo ? "Remplacer par une autre image" : "Choisir une image"}
-          </label>
-          <input
-            ref={inputRef}
-            id={inputId}
-            type="file"
-            accept={LOGO_ACCEPT}
-            onChange={(e) => choose(e.target.files?.[0] ?? null)}
-            aria-describedby={error ? `${errorId} ${hintId}` : hintId}
-            aria-invalid={error ? true : undefined}
-            className="block w-full text-sm text-gray-800 file:mr-3 file:rounded-xl file:border file:border-gray-300 file:bg-white file:px-4 file:py-2 file:text-sm file:font-medium file:text-gray-800 hover:file:bg-gray-50 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-          />
+          {/* The browser's own button reads « Choose File / No file chosen »: the input stays, transparent
+              over its label (the French button, which shows the focus outline, like a pill radio), and
+              the chosen file is said next to it (announced when the picker closes). */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <label className="relative inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-blue-700">
+              <span>{logo ? "Remplacer par une autre image" : "Choisir une image"}</span>
+              <input
+                ref={inputRef}
+                id={inputId}
+                type="file"
+                accept={LOGO_ACCEPT}
+                onChange={(e) => choose(e.target.files?.[0] ?? null)}
+                aria-describedby={`${inputId}-name ${error ? `${errorId} ${hintId}` : hintId}`}
+                aria-invalid={error ? true : undefined}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              />
+            </label>
+            <p id={`${inputId}-name`} aria-live="polite" className="text-sm text-gray-700 break-all">{chosen ? chosen.file.name : "Aucune image choisie"}</p>
+          </div>
           <p id={hintId} className="mt-1 text-xs text-gray-600">{LOGO_HINT}</p>
           {error && <p id={errorId} role="alert" className="mt-1 text-sm font-medium text-red-700">{error}</p>}
         </div>
@@ -173,7 +179,7 @@ export default function OrgLogoForm({ initialLogo, organizationName }: { initial
           <button
             type="submit"
             aria-disabled={loading || undefined}
-            className={`bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors aria-disabled:opacity-50 ${BUTTON_FOCUS}`}
+            className={`bg-blue-600 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors aria-disabled:opacity-50 ${BUTTON_FOCUS}`}
           >
             {loading && !confirming ? "Envoi…" : "Enregistrer le logo"}
           </button>

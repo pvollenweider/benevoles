@@ -56,11 +56,12 @@ export default function LinkRequestForm() {
         {INVALID_LINK_STEPS.map((s) => <li key={s}>{s}</li>)}
       </ol>
       <form onSubmit={submit} noValidate className="space-y-2">
-        <label htmlFor={`${id}-email`} className="block text-sm font-medium text-gray-700">Adresse email utilisée pour t&apos;inscrire <span aria-hidden="true">*</span><span className="sr-only"> (obligatoire)</span></label>
+        <label htmlFor={`${id}-email`} className="block text-sm font-medium text-gray-700">Adresse email utilisée pour t&apos;inscrire <span aria-hidden="true">*</span></label>
         <input
           id={`${id}-email`}
           ref={inputRef}
           type="email"
+          required
           autoComplete="email"
           inputMode="email"
           value={email}

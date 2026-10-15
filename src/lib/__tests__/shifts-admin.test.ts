@@ -9,6 +9,7 @@ import {
   renameRole,
   roleDeletionWarning,
   roleOrder,
+  shiftListStatus,
   sortShifts,
   spokenPlaces,
   timelineBarName,
@@ -149,5 +150,15 @@ describe("timelineBarPlaces", () => {
   it("puts the minimum age first when the shift has one, so a narrow bar keeps it", () => {
     expect(timelineBarPlaces({ registrationCount: 2, capacity: 4, minAge: 18 })).toBe("18 ans min. · 2/4 inscrits · 2 libres")
     expect(timelineBarPlaces({ registrationCount: 2, capacity: 4, minAge: null })).toBe("2/4 inscrits · 2 libres")
+  })
+})
+
+describe("shiftListStatus", () => {
+  it("derives one status per row: never « Ouvert » for a shift whose places are taken", () => {
+    expect(shiftListStatus({ status: "open", registrationCount: 4, capacity: 4 })).toBe("full")
+    expect(shiftListStatus({ status: "open", registrationCount: 5, capacity: 4 })).toBe("full")
+    expect(shiftListStatus({ status: "full", registrationCount: 2, capacity: 4 })).toBe("full")
+    expect(shiftListStatus({ status: "open", registrationCount: 1, capacity: 4 })).toBe("open")
+    expect(shiftListStatus({ status: "closed", registrationCount: 4, capacity: 4 })).toBe("closed")
   })
 })

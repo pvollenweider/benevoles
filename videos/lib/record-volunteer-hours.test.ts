@@ -38,7 +38,7 @@ test("record-volunteer-hours guards", async () => {
     assert.throws(() => assertHoursScenario(changed, product, now))
   }
   assert.throws(() => assertHoursScenario(fixture(), product, new Date("2026-12-01T12:00:00Z")))
-  const header = "Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées\r\n"
+  const header = "Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées\r\n"
   const base = "Benoît;Favre;1;1;2;0\r\nAline;Mercier;1;2;4;2\r\n"
   const total = "Total;;;3;6;2\r\n"
   assertHoursCsv(`\uFEFF${header}${base}${total}`, false)

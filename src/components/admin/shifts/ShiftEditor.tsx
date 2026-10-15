@@ -118,7 +118,7 @@ export default function ShiftEditor({
 
   return (
     <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
-      <h3 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
+      <h2 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h2>
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor={`roleName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Poste <span aria-hidden="true">*</span></label>
@@ -197,7 +197,7 @@ export default function ShiftEditor({
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         <div>
-          <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité <span aria-hidden="true">*</span></label>
+          <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Places <span aria-hidden="true">*</span></label>
           <input id={`capacity-${sfx}`} type="number" min="1" required {...capacityField.invalidProps} {...(minimumInvalid && !capacityField.invalidProps["aria-describedby"] ? { "aria-describedby": `minVolunteers-error-${sfx}` } : {})} value={form.capacity} onChange={e => setField("capacity", e.target.value)} className={`input ${capacityField.border}`} />
           {capacityField.message}
         </div>

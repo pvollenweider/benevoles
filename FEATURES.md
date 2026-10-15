@@ -69,7 +69,7 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 - **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne. Ceux qui n'ont pas encore leur minimum passent en tête : « 2/4 · minimum atteint » ne se confond plus avec « 0/4 ».
 - **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois. C'est vous qui choisissez, l'outil ne classe ni ne présélectionne personne. Sous chaque créneau, leur email propose **Je prends ce créneau**, qui l'ouvre prêt à confirmer.
 - **Un désistement, un remplaçant** : l'email qui vous prévient propose **Trouver un remplaçant** pour le créneau resté vide, et plusieurs désistements du même événement à quelques minutes d'intervalle arrivent dans un seul email. Un désistement moins de 24 heures avant le début vous parvient tout de suite, marqué « dernière minute ». Une annulation faite par erreur se rétablit depuis les inscriptions.
-- **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard avec leur responsable, prévenu par email trois jours avant l'échéance.
+- **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard avec la personne qui s'en occupe, prévenue par email trois jours avant l'échéance.
 - **Une recherche globale** (Ctrl + K, ou Cmd + K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.
 
 <!-- video: STAFFING_GAPS -->
@@ -91,7 +91,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapp
 
 ## Après l'événement
 
-- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures planifiées et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
+- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures prévues et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
 - **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures ; deux créneaux tenus en même temps n'y comptent qu'une fois.
 - **Les heures par bénévole** sur une période, dans un fichier CSV, pour le rapport annuel.
 - **Tout est noté** : le journal d'activité de chaque événement retrace qui a fait quoi, et quand.

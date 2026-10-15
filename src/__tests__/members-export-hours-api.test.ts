@@ -44,7 +44,7 @@ describe("GET /api/admin/members/export-hours (#557)", () => {
     const res = await GET(get("?from=2026-01-01&to=2026-06-30"))
     expect(res.status).toBe(200)
     const text = await res.text()
-    expect(text).toContain("Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées")
+    expect(text).toContain("Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
   })
 
   it("falls back to the default period and still returns 200 without query params", async () => {

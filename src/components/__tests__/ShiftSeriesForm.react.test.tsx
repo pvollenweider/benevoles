@@ -92,7 +92,7 @@ describe("ShiftSeriesForm", () => {
 
   it("names the required fields without their asterisk, which stays visible; none on a one-day date", () => {
     setup(["2026-07-04", "2026-07-05"])
-    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["combobox", "Durée d'un créneau"], ["spinbutton", "Personnes par créneau"]] as const) {
+    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["combobox", "Durée d'un créneau"], ["spinbutton", "Places par créneau"]] as const) {
       const field = screen.getByRole(role, { name })
       expect(field).toBeRequired()
       expect(document.querySelector(`label[for="${field.id}"] [aria-hidden="true"]`)).toHaveTextContent("*")
@@ -116,7 +116,7 @@ describe("ShiftSeriesForm", () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => created })
     const { onCreated } = setup()
     fill()
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Personnes par créneau" }), { target: { value: "3" } })
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Places par créneau" }), { target: { value: "3" } })
     fireEvent.click(screen.getByRole("checkbox", { name: "Activer la liste d'attente" }))
     fireEvent.click(screen.getByRole("button", { name: "Créer 6 créneaux" }))
 

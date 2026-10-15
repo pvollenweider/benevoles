@@ -16,10 +16,10 @@ Ces réglages sont sur la page **Paramètres** et réservés aux propriétaires.
 
 ## Nom et adresse de l'organisation
 
-Sections **Nom de l'organisation** et **Identifiant public (slug)** :
+Sections **Nom de l'organisation** et **Adresse de votre espace** :
 
 - **Nom de l'organisation** : 2 à 100 caractères. Affiché dans l'administration, dans les emails et au-dessus du titre de la page publique.
-- **Identifiant public** : l'adresse de votre espace (`identifiant.benevol.app`), 2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin. Si des événements sont publiés, une confirmation est demandée avant le changement. Après l'enregistrement, vous êtes redirigé(e) vers la nouvelle adresse.
+- **Adresse de votre espace** : l'**Identifiant** qui forme l'adresse (`identifiant.benevol.app`, affichée sous le champ pendant la saisie), 2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin. Si des événements sont publiés, une confirmation est demandée avant le changement. Après l'enregistrement, vous êtes redirigé(e) vers la nouvelle adresse.
 - **Anciens identifiants** : ils continuent de rediriger vers l'adresse actuelle, pour que les liens déjà partagés fonctionnent. **Supprimer** un ancien identifiant arrête cette redirection : les liens qui l'utilisent ne fonctionnent plus.
 
 ## Logo de l'organisation

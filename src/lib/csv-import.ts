@@ -27,7 +27,7 @@ const HEADER_ALIASES: Record<Exclude<keyof ParsedMemberRow, "line">, string[]> =
   lastName: ["lastname", "last_name", "last name", "nom", "famille", "last", "name", "nom de famille"],
   email: ["email", "e-mail", "mail", "courriel", "adresse email", "adresse mail"],
   phone: ["phone", "telephone", "téléphone", "tel", "mobile", "portable", "numero", "numéro"],
-  tags: ["tags", "tag", "labels", "label", "groupes", "categories", "catégories"],
+  tags: ["tags", "tag", "étiquettes", "étiquette", "labels", "label", "groupes", "categories", "catégories"],
 }
 
 function normalize(s: string): string {

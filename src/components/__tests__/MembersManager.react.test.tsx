@@ -38,12 +38,12 @@ describe("MembersManager — deep-linked edit modal (?edit=id), no opener record
     />,
   )
 
-  it("« Annuler » (cancel) returns focus to the row's « Éditer » button — nothing was clicked to open it", async () => {
+  it("« Annuler » (cancel) returns focus to the row's « Modifier » button — nothing was clicked to open it", async () => {
     setup()
     expect(await screen.findByRole("dialog", { name: "Modifier le membre" })).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
     expect(screen.queryByRole("dialog")).toBeNull()
-    expect(screen.getByRole("button", { name: "Éditer Alice Verify" })).toHaveFocus()
+    expect(screen.getByRole("button", { name: "Modifier Alice Verify" })).toHaveFocus()
   })
 
   it("Escape does the same", async () => {
@@ -51,7 +51,7 @@ describe("MembersManager — deep-linked edit modal (?edit=id), no opener record
     const dialog = await screen.findByRole("dialog", { name: "Modifier le membre" })
     fireEvent.keyDown(dialog, { key: "Escape" })
     expect(screen.queryByRole("dialog")).toBeNull()
-    expect(screen.getByRole("button", { name: "Éditer Alice Verify" })).toHaveFocus()
+    expect(screen.getByRole("button", { name: "Modifier Alice Verify" })).toHaveFocus()
   })
 
   it("falls back to the page heading when the row isn't there any more", async () => {
@@ -170,7 +170,7 @@ describe("MembersManager — deleting a member", () => {
     // Simulates router.refresh() landing with the member gone (members is a direct prop, not
     // internal state — a real refresh would re-render this component with a new prop the same way).
     rerender(<MembersManager initialMembers={[members[1]]} allTags={[]} defaultHoursPeriod={period} />)
-    expect(screen.getByRole("button", { name: "Éditer Alice Deux" })).toHaveFocus()
+    expect(screen.getByRole("button", { name: "Modifier Alice Deux" })).toHaveFocus()
   })
 
   it("falls back to the page heading when no row remains", async () => {
@@ -262,7 +262,7 @@ describe("MembersManager — row actions wrap instead of overflowing", () => {
     const table = screen.getByRole("table", { name: "Liste des membres" })
     expect(table).toHaveClass("min-w-[56rem]")
     expect(table).not.toHaveClass("min-w-[64rem]")
-    const edit = screen.getByRole("button", { name: "Éditer Alice Martin" })
+    const edit = screen.getByRole("button", { name: "Modifier Alice Martin" })
     const row = edit.parentElement!
     expect(row).toHaveClass("flex", "flex-wrap", "gap-1")
     expect(row.closest("td")).not.toHaveClass("whitespace-nowrap")

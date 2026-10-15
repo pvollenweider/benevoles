@@ -12,6 +12,7 @@ import {
   OPEN_SHIFTS_MAX_RECIPIENTS, OPEN_SHIFTS_NOTE_MAX,
   type EventShiftRef, type InviteRef, type LiveRegistration, type OpenShift, type PoolMember,
 } from "@/lib/open-shifts"
+import { reservedForText } from "@/lib/role-reservation"
 
 type Props = {
   eventId: string
@@ -185,7 +186,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
                 <p id={`${id}-shift-${s.id}-detail`} className="text-gray-700">
                   {placesLeftLabel(s.placesLeft)}
                   {s.staffingState && <>, <span aria-hidden="true">{s.staffingState}</span><span className="sr-only">{s.spokenStaffingState ?? s.staffingState}</span></>}
-                  {(s.reservedTags ?? []).length > 0 && `, poste réservé aux tags ${s.reservedTags!.join(", ")}`}
+                  {(s.reservedTags ?? []).length > 0 && `, ${reservedForText(s.reservedTags!)}`}
                 </p>
               </div>
             </li>
@@ -204,7 +205,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
           <>
             <div className="flex flex-wrap items-end gap-3">
               <div>
-                <label htmlFor={`${id}-tag`} className="block text-sm font-medium text-gray-700 mb-1">Tag</label>
+                <label htmlFor={`${id}-tag`} className="block text-sm font-medium text-gray-700 mb-1">Étiquette</label>
                 <select id={`${id}-tag`} value={tag} onChange={(e) => setTag(e.target.value)} className="input min-w-40">
                   <option value="">Tous les membres</option>
                   {tags.map((t) => <option key={t} value={t}>{t}</option>)}

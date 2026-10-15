@@ -22,13 +22,18 @@ function entry(overrides: Partial<EventLogEntry>): EventLogEntry {
 describe("describeChanges", () => {
   it("names a milestone's owner by its account's current name, or says the account is gone (#985)", () => {
     const labels = { "adm-2": { compact: "Samira Diallo", prose: "Samira Diallo" } }
-    expect(describeChanges({ ownerId: { from: null, to: "adm-2" } }, labels, "EventMilestone")).toEqual(["responsable : — → Samira Diallo"])
-    expect(describeChanges({ ownerId: { from: "adm-old", to: null } }, labels, "EventMilestone")).toEqual(["responsable : compte supprimé → —"])
+    expect(describeChanges({ ownerId: { from: null, to: "adm-2" } }, labels, "EventMilestone")).toEqual(["qui s'en occupe : — → Samira Diallo"])
+    expect(describeChanges({ ownerId: { from: "adm-old", to: null } }, labels, "EventMilestone")).toEqual(["qui s'en occupe : compte supprimé → —"])
   })
 
   it("renders each changed field with its French label", () => {
     const lines = describeChanges({ capacity: { from: 3, to: 4 }, status: { from: "open", to: "full" } }, undefined, "Shift")
-    expect(lines).toEqual(["capacité : 3 → 4", "statut : ouvert → complet"])
+    expect(lines).toEqual(["places : 3 → 4", "statut : ouvert → complet"])
+  })
+
+  it("reads a check-in and its undo in French, never the stored field name or « set »", () => {
+    expect(describeChanges({ checkedInAt: { from: null, to: "2026-07-04T09:00:00.000Z" } }, undefined, "Registration")).toEqual(["présence : — → 4 juillet"])
+    expect(describeChanges({ checkedInAt: { from: "set", to: null } }, undefined, "Registration")).toEqual(["présence : enregistrée → —"])
   })
 
   it("shows a registration status change in French, not the stored values (#929)", () => {

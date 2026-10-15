@@ -12,6 +12,7 @@ import { fmtHour } from "@/lib/registrations-list"
 import { dayOfBoard, dayOfDateRange, isEventDay, localDay, type DayOfShift } from "@/lib/day-of"
 import DayOfBoard from "@/components/admin/DayOfBoard"
 import HelpLink from "@/components/admin/HelpLink"
+import { statusBoxClass } from "@/lib/status-message"
 
 export const dynamic = "force-dynamic"
 
@@ -84,14 +85,14 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <Link href={base} className={`inline-flex min-h-11 items-center text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
+        <Link href={base} className={`inline-flex min-h-11 items-center gap-1 text-sm ${linkClass}`}><span aria-hidden="true">←</span>Retour à {event.title}</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Jour J</h1>
         <p className="text-sm text-gray-700">{event.title}</p>
         <HelpLink route="/admin/events/[id]/day-of" />
       </div>
 
       {!eventDay && (
-        <p className="text-sm text-gray-800 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
+        <p className={`${statusBoxClass("info")} px-4 py-3`}>
           {formatShortDate(event.startDate) === formatShortDate(event.endDate)
             ? `L'événement a lieu le ${formatShortDate(event.startDate)}.`
             : `L'événement a lieu du ${formatShortDate(event.startDate)} au ${formatShortDate(event.endDate)}.`}

@@ -8,6 +8,7 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
 
 import AdminDayTimeline, { type AdminShift } from "../admin/AdminDayTimeline"
+import { PX_PER_MIN } from "@/lib/day-timeline"
 
 // The admin day timeline (#587): bars named in words, and the deletion recap from a bar keeps the
 // minutes (it passed « 10h30 », which the recap read as 10:00) and says « Bar, Soir ».
@@ -23,6 +24,24 @@ describe("AdminDayTimeline", () => {
   const setup = (shifts: AdminShift[]) => render(
     <AdminDayTimeline eventId="evt-1" date="2026-07-04" shifts={shifts} onCreated={vi.fn()} onUpdated={vi.fn()} onDeleted={vi.fn()} />,
   )
+
+  // The overnight demo show (« Bal populaire » 21:00–01:00) was a 2 px sliver: its width was
+  // toMin(end) - toMin(start), negative past midnight.
+  it("draws an overnight show over its whole span, band and label", () => {
+    render(
+      <AdminDayTimeline eventId="evt-1" date="2026-07-04" shifts={[shift({ startTime: "20:00", endTime: "23:00" })]}
+        shows={[{ name: "Bal populaire", date: "2026-07-04", startTime: "21:00", endTime: "01:00" }]}
+        onCreated={vi.fn()} onUpdated={vi.fn()} onDeleted={vi.fn()} />,
+    )
+    const label = screen.getByText(/Bal populaire/).closest("div") as HTMLElement
+    expect(parseFloat(label.style.width)).toBe(4 * 60 * PX_PER_MIN)
+    const band = Array.from(document.querySelectorAll<HTMLElement>(".bg-indigo-50.border-x"))
+    expect(band).toHaveLength(1)
+    expect(parseFloat(band[0].style.width)).toBeGreaterThan(60 * PX_PER_MIN)
+    expect(parseFloat(band[0].style.width)).toBe(4 * 60 * PX_PER_MIN)
+    // Read in words, saying it ends the next day; the « 21h–01h » stays visual only.
+    expect(label).toHaveTextContent("de 21h à 1h, jusqu'au lendemain")
+  })
 
   it("names each bar with the role first, then the time and places in words", () => {
     setup([shift(), shift({ id: "s2", label: "Bar", startTime: "14:00", endTime: "16:00", registrationCount: 2, capacity: 2 })])

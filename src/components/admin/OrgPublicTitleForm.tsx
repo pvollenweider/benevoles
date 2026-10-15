@@ -96,7 +96,7 @@ export default function OrgPublicTitleForm({ initialTitle }: { initialTitle: str
         <button
           type="submit"
           disabled={loading}
-          className="bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+          className="bg-blue-600 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {loading ? "Enregistrement…" : "Enregistrer"}
         </button>

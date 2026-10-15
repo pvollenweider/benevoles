@@ -26,7 +26,7 @@ type Result = {
 }
 
 const ACTION_LABEL = { create: "Créer", update: "Mettre à jour", skip: "Ignorer (déjà présent)" } as const
-const COLUMN_LABEL: Record<string, string> = { firstName: "Prénom", lastName: "Nom", email: "Email", phone: "Téléphone", tags: "Tags" }
+const COLUMN_LABEL: Record<string, string> = { firstName: "Prénom", lastName: "Nom", email: "Email", phone: "Téléphone", tags: "Étiquettes" }
 
 /**
  * Member import in two steps (#464): the file is analysed without writing anything, the admin reads
@@ -127,10 +127,10 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
           </p>
           <dl className="text-sm text-gray-700 space-y-1">
             {analysis.plan.newTags.length > 0 && (
-              <div><dt className="inline font-medium">Tags ajoutés : </dt><dd className="inline">{analysis.plan.newTags.join(", ")}</dd></div>
+              <div><dt className="inline font-medium">Étiquettes ajoutées : </dt><dd className="inline">{analysis.plan.newTags.join(", ")}</dd></div>
             )}
             {analysis.plan.reusedTags.length > 0 && (
-              <div><dt className="inline font-medium">Tags existants réutilisés : </dt><dd className="inline">{analysis.plan.reusedTags.join(", ")}</dd></div>
+              <div><dt className="inline font-medium">Étiquettes existantes réutilisées : </dt><dd className="inline">{analysis.plan.reusedTags.join(", ")}</dd></div>
             )}
             <div>
               <dt className="inline font-medium">Colonnes reconnues : </dt>
@@ -149,7 +149,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
                     <th scope="col" className="text-left font-medium px-3 py-1.5">Ligne</th>
                     <th scope="col" className="text-left font-medium px-3 py-1.5">Nom</th>
                     <th scope="col" className="text-left font-medium px-3 py-1.5">Email</th>
-                    <th scope="col" className="text-left font-medium px-3 py-1.5">Tags</th>
+                    <th scope="col" className="text-left font-medium px-3 py-1.5">Étiquettes</th>
                     <th scope="col" className="text-left font-medium px-3 py-1.5">Action</th>
                   </tr>
                 </thead>
@@ -192,19 +192,28 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
       {!result && (
         <form onSubmit={analyse} hidden={!!analysis} className="space-y-4">
           <div>
-            <label htmlFor={`${id}-file`} className="block text-sm text-gray-700 mb-1">Fichier CSV ou Excel</label>
-            <input
-              ref={fileRef}
-              id={`${id}-file`}
-              type="file"
-              accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              aria-describedby={`${id}-file-help${error ? ` ${id}-error` : ""}`}
-              aria-invalid={error && !file ? true : undefined}
-              className="text-sm w-full"
-            />
+            {/* The browser's own file button reads « Choose File / No file chosen » in English: the
+                input stays, transparent over its label (a French button that shows the focus
+                outline, like a pill radio; a direct tap reaches the input, also with VoiceOver on
+                iOS), and the chosen file is said next to it (announced when the picker closes). */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <label className="relative inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-blue-600">
+                <span>Choisir un fichier CSV ou Excel</span>
+                <input
+                  ref={fileRef}
+                  id={`${id}-file`}
+                  type="file"
+                  accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  aria-describedby={`${id}-file-name ${id}-file-help${error ? ` ${id}-error` : ""}`}
+                  aria-invalid={error && !file ? true : undefined}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
+              </label>
+              <p id={`${id}-file-name`} aria-live="polite" className="text-sm text-gray-700 break-all">{file ? file.name : "Aucun fichier choisi"}</p>
+            </div>
             <p id={`${id}-file-help`} className="text-xs text-gray-600 mt-1">
-              Colonnes attendues : prénom, nom, email, téléphone, tags. Les variantes courantes sont reconnues. 2 Mo et 5000 lignes au plus. Vous verrez ce qui sera créé ou mis à jour avant de confirmer.
+              Colonnes attendues : prénom, nom, email, téléphone, étiquettes (ou « tags »). Les variantes courantes sont reconnues. 2 Mo et 5000 lignes au plus. Vous verrez ce qui sera créé ou mis à jour avant de confirmer.
             </p>
           </div>
           <fieldset>

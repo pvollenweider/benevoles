@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes, fmtHours } from "../gantt-utils"
+import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes, fmtHours, showSpan } from "../gantt-utils"
 
 describe("resolveNewShiftDisplayOrder", () => {
   it("inherits the existing role's displayOrder instead of a hardcoded 0 (#215 regression)", () => {
@@ -86,5 +86,20 @@ describe("fmtHours", () => {
   it("carries a rounded 60 minutes into the next hour", () => {
     // 1h59m59.9s rounds to 2h00, not 1h60.
     expect(fmtHours(1 + 59.999 / 60)).toBe("2h")
+  })
+})
+
+describe("showSpan", () => {
+  it("spans a same-day show from its start to its end", () => {
+    expect(showSpan({ startTime: "17:00", endTime: "18:30" })).toEqual({ start: 1020, end: 1110 })
+  })
+  it("carries an overnight show past midnight instead of a negative width (« Bal populaire » 21:00–01:00)", () => {
+    expect(showSpan({ startTime: "21:00", endTime: "01:00" })).toEqual({ start: 1260, end: 1500 })
+  })
+  it("ends a show at exactly midnight at 1440", () => {
+    expect(showSpan({ startTime: "22:00", endTime: "00:00" })).toEqual({ start: 1320, end: 1440 })
+  })
+  it("keeps a show starting at 00:00 on the same day", () => {
+    expect(showSpan({ startTime: "00:00", endTime: "02:00" })).toEqual({ start: 0, end: 120 })
   })
 })

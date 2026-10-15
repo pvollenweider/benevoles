@@ -125,7 +125,7 @@ export default function ChangePasswordForm({ email }: { email: string }) {
       <button
         type="submit"
         disabled={!canSubmit || loading}
-        className="bg-gray-900 text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 disabled:opacity-40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+        className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-blue-700 disabled:opacity-40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
       >
         {loading ? "Enregistrement…" : "Changer le mot de passe"}
       </button>

@@ -43,10 +43,10 @@ describe("CertificateView", () => {
   it("shows attested hours only by default, and labels planned hours separately once the checkbox is checked", () => {
     const planned = entry({ registrationId: "reg-2", attested: false, shiftId: "shift-2" })
     render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry(), planned]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
-    expect(screen.queryByRole("columnheader", { name: /planifiées/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole("columnheader", { name: /prévues/ })).not.toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures planifiées/ }))
-    expect(screen.getByRole("columnheader", { name: /planifiées/ })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures prévues/ }))
+    expect(screen.getByRole("columnheader", { name: /prévues/ })).toBeInTheDocument()
   })
 
   // Parallel shifts (#986): the total is the union, and the document says why it is below the rows.
@@ -75,7 +75,7 @@ describe("CertificateView", () => {
     ]
     render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={mixed} defaultPeriod={period} generatedAt="4 octobre 2026" />)
     expect(screen.queryByText(/se sont déroulés en même temps/)).not.toBeInTheDocument()
-    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures planifiées/ }))
+    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures prévues/ }))
     expect(screen.getByText(/se sont déroulés en même temps/)).toBeInTheDocument()
   })
 
@@ -162,7 +162,7 @@ describe("CertificateView", () => {
     const statusesOnMount = screen.getAllByRole("status").map((el) => el.textContent)
     expect(statusesOnMount.every((t) => !t)).toBe(true)
 
-    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures planifiées/ }))
+    fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures prévues/ }))
     await waitFor(() => {
       const announced = screen.getAllByRole("status").map((el) => el.textContent).find((t) => t && /créneau/.test(t))
       expect(announced).toBe("1 créneau confirmé, 4 h attestées, du 1 mai 2025 au 31 mai 2026.")

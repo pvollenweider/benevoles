@@ -296,7 +296,7 @@ export function candidateReasons(c: Candidate, shifts: OpenShift[]): string[] {
   const byId = new Map(shifts.map((s) => [s.id, s]))
   const single = shifts.length === 1
   const out: string[] = []
-  if (c.member.tags.length > 0) out.push(`Tags : ${c.member.tags.join(", ")}`)
+  if (c.member.tags.length > 0) out.push(`Étiquettes : ${c.member.tags.join(", ")}`)
 
   // Not availabilityLabel: its « · » separator stays out of this copy.
   const periods = AVAILABILITY_PERIODS.filter((p) => c.member.availabilityPeriods?.includes(p.id)).map((p) => p.label.toLocaleLowerCase("fr"))
@@ -349,7 +349,7 @@ export function exclusionSentence(e: Exclusions): string | null {
     e.noEmail > 0 ? plural(e.noEmail, "membre sans email", "membres sans email") : null,
     e.declined > 0 ? `${plural(e.declined, "membre qui a", "membres qui ont")} répondu « pas disponible »` : null,
     e.alreadyOnShifts > 0 ? `${plural(e.alreadyOnShifts, "membre déjà inscrit", "membres déjà inscrits")} sur ces créneaux` : null,
-    e.reserved > 0 ? `${plural(e.reserved, "membre", "membres")} sans le tag des postes réservés` : null,
+    e.reserved > 0 ? `${plural(e.reserved, "membre", "membres")} sans l'étiquette des postes réservés` : null,
     e.tooYoung > 0 ? `${plural(e.tooYoung, "membre", "membres")} sous l'âge minimum` : null,
   ].filter(Boolean)
   return parts.length > 0 ? `Non proposés : ${parts.join(", ")}.` : null
