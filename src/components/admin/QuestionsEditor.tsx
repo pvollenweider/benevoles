@@ -10,6 +10,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
 import { QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, type QuestionType } from "@/lib/event-questions"
 import { NO_ROLES_HINT, QUESTION_ROLE_HINT, QUESTION_ROLE_LABEL, questionErrorField, questionRoleOptions, questionRoleText, type QuestionRoleChoice } from "@/lib/question-role"
+import RequiredMark from "@/components/RequiredMark"
 
 type Q = { id: string; label: string; type: string; options: string[]; required: boolean; roleName: string | null; answers: number }
 type Draft = { label: string; type: QuestionType; options: string; required: boolean; roleName: string }
@@ -180,9 +181,9 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
       {editing && (
         <form onSubmit={save} noValidate aria-labelledby={`${id}-form-title`} className="bg-white rounded-2xl border border-blue-200 p-4 space-y-4">
           <h2 id={`${id}-form-title`} className="text-sm font-semibold text-gray-800">{editing === "new" ? "Nouvelle question" : "Modifier la question"}</h2>
-          <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+          <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
           <div>
-            <label htmlFor={`${id}-label`} className="block text-sm font-medium text-gray-800 mb-1">Question posée aux bénévoles *</label>
+            <label htmlFor={`${id}-label`} className="block text-sm font-medium text-gray-800 mb-1">Question posée aux bénévoles<RequiredMark /></label>
             <input id={`${id}-label`} type="text" required maxLength={120} value={draft.label} onChange={(e) => setDraft((d) => ({ ...d, label: e.target.value }))} aria-invalid={editor.isInvalid("label")} aria-describedby={describedBy("label", `${id}-label-hint`)} className="input" placeholder="ex. Taille de t-shirt" />
             <p id={`${id}-label-hint`} className="text-xs text-gray-600 mt-1">Seulement le nécessaire, rien de sensible (santé, religion, opinions…).</p>
           </div>
@@ -195,8 +196,8 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
           </div>
           {isChoice(draft.type) && (
             <div>
-              <label htmlFor={`${id}-options`} className="block text-sm font-medium text-gray-800 mb-1">Choix proposés *</label>
-              <textarea id={`${id}-options`} rows={4} value={draft.options} onChange={(e) => setDraft((d) => ({ ...d, options: e.target.value }))} aria-invalid={editor.isInvalid("options")} aria-describedby={describedBy("options", `${id}-options-hint`)} className="input" />
+              <label htmlFor={`${id}-options`} className="block text-sm font-medium text-gray-800 mb-1">Choix proposés<RequiredMark /></label>
+              <textarea id={`${id}-options`} rows={4} required value={draft.options} onChange={(e) => setDraft((d) => ({ ...d, options: e.target.value }))} aria-invalid={editor.isInvalid("options")} aria-describedby={describedBy("options", `${id}-options-hint`)} className="input" />
               <p id={`${id}-options-hint`} className="text-xs text-gray-600 mt-1">Un choix par ligne, au moins deux, douze au plus.{answered > 0 ? " Les choix déjà retenus par des bénévoles ne peuvent pas être retirés." : ""}</p>
             </div>
           )}

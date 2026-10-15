@@ -19,7 +19,7 @@ export const SHIFT_FIELD_ERRORS: Record<ShiftField, string> = {
   date:      "Choisissez la date.",
   startTime: "Indiquez l'heure de début.",
   endTime:   "Indiquez l'heure de fin.",
-  capacity:  "Indiquez la capacité.",
+  capacity:  "Indiquez le nombre de places.",
 }
 
 const FIELD_NOUNS: Record<ShiftField, string> = {
@@ -27,7 +27,7 @@ const FIELD_NOUNS: Record<ShiftField, string> = {
   date:      "la date",
   startTime: "l'heure de début",
   endTime:   "l'heure de fin",
-  capacity:  "la capacité",
+  capacity:  "le nombre de places",
 }
 
 type RequiredValues = Record<ShiftField, string | number | null | undefined>

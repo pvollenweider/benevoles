@@ -129,7 +129,7 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
       adminFindFirst.mockResolvedValueOnce(candidate)
       const res = await PATCH(patch({ ownerId: "adm-x" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
       expect(res.status).toBe(422)
-      expect(await res.json()).toEqual({ error: "Choisissez un responsable parmi les membres actifs de l'équipe.", field: "ownerId" })
+      expect(await res.json()).toEqual({ error: "Choisissez qui s'en occupe parmi les membres actifs de l'équipe.", field: "ownerId" })
     }
     expect(update).not.toHaveBeenCalled()
   })

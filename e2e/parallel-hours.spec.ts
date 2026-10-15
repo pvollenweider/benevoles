@@ -47,7 +47,7 @@ test("a volunteer's parallel time is counted once in their hours", async ({ page
   await expect(summary).toContainText("0 sur 2 créneaux confirmés")
   await expect(summary).toContainText("8 h planifiées")
 
-  // Members list: 8h in « Heures planifiées », not 12h.
+  // Members list: 8h in « Heures prévues (passées) », not 12h.
   await page.goto("/admin/members")
   const row = page.getByRole("table", { name: "Liste des membres" }).getByRole("row", { name: new RegExp(lastName) })
   await expect(row).toContainText("8h")

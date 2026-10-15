@@ -157,7 +157,7 @@ describe("findCandidates", () => {
     const { candidates } = findCandidates({ ...base, shifts: [open(bar)] })
     const ana = candidates.find((c) => c.member.id === "ana")!
     expect(candidateReasons(ana, [open(bar)])).toEqual([
-      "Tags : Bar",
+      "Étiquettes : Bar",
       "Disponibilité générale (indicative) : Soir, compatible avec l'horaire de ce créneau",
       "Déjà invité à cet événement",
     ])

@@ -9,8 +9,10 @@ import AvailabilityFields from "@/components/AvailabilityFields"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { parseTags, type Member } from "@/lib/members-list"
+import { MEMBER_TAGS_HINT as TAGS_HINT } from "@/lib/role-reservation"
 import type { AvailabilityPeriod } from "@/lib/availability"
 import type { FocusCandidate } from "@/lib/focus-return"
+import RequiredMark from "@/components/RequiredMark"
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -73,14 +75,14 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
   return (
     <ModalShell title="Modifier le membre" busy={busy} onClose={() => { if (!busy) onClose() }} fallbackFocusOnClose={fallbackFocusOnClose}>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
-        <p className="text-xs text-gray-600">* champ obligatoire</p>
+        <p aria-hidden="true" className="text-xs text-gray-600">* champ obligatoire</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Prénom" required value={firstName} onChange={setFirstName} inputRef={firstNameRef} invalid={isInvalid("firstName")} errorId={errorId} autoComplete="off" />
           <Field label="Nom" required value={lastName} onChange={setLastName} inputRef={lastNameRef} invalid={isInvalid("lastName")} errorId={errorId} autoComplete="off" />
         </div>
         <Field label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off" />
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
-        <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" />
+        <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" hint={TAGS_HINT} />
         <Field label="Notes" value={notes} onChange={setNotes} multiline />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         <div className="flex items-center gap-2">
@@ -134,14 +136,14 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
   return (
     <ModalShell title="Nouveau membre" busy={busy} onClose={() => { if (!busy) onClose() }}>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
-        <p className="text-xs text-gray-600">* champ obligatoire</p>
+        <p aria-hidden="true" className="text-xs text-gray-600">* champ obligatoire</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Prénom" required value={firstName} onChange={setFirstName} inputRef={firstNameRef} invalid={isInvalid("firstName")} errorId={errorId} autoComplete="off" />
           <Field label="Nom" required value={lastName} onChange={setLastName} inputRef={lastNameRef} invalid={isInvalid("lastName")} errorId={errorId} autoComplete="off" />
         </div>
         <Field label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off" />
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
-        <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" />
+        <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" hint={TAGS_HINT} />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         <FormStatus error={error} errorId={errorId} />
         <Actions busy={busy} onClose={onClose} label="Créer" />
@@ -168,9 +170,11 @@ function Actions({ busy, onClose, label }: { busy: boolean; onClose: () => void;
 }
 
 function Field({
-  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete,
+  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint,
 }: {
   label: string
+  /** A short help line under the field, read with it (aria-describedby). */
+  hint?: string
   value: string
   onChange: (v: string) => void
   type?: string
@@ -187,7 +191,7 @@ function Field({
   return (
     <div>
       <label htmlFor={id} className="block text-sm text-gray-700 mb-1">
-        {label}{required && <><span aria-hidden="true"> *</span><span className="sr-only"> (obligatoire)</span></>}
+        {label}{required && <RequiredMark />}
       </label>
       {multiline ? (
         <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className={cls} />
@@ -200,11 +204,13 @@ function Field({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          required={required}
           aria-invalid={invalid}
-          aria-describedby={invalid && errorId ? errorId : undefined}
+          aria-describedby={[hint ? `${id}-hint` : null, invalid && errorId ? errorId : null].filter(Boolean).join(" ") || undefined}
           className={cls}
         />
       )}
+      {hint && <p id={`${id}-hint`} className="text-xs text-gray-600 mt-1">{hint}</p>}
     </div>
   )
 }

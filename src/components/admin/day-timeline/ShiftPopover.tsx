@@ -179,7 +179,7 @@ export default function ShiftPopover({
     if (ok === false) return
     announce(minimumValue != null
       ? `${capacity} places et un minimum de ${minimumValue} appliqués au poste « ${shift.roleName} ».`
-      : `Capacité de ${capacity} appliquée au poste « ${shift.roleName} ».`)
+      : `${capacity} place${capacity > 1 ? "s" : ""} appliquée${capacity > 1 ? "s" : ""} au poste « ${shift.roleName} ».`)
   }
 
   const registrationsHref = `/admin/events/${eventId}/registrations?shift=${shift.id}`

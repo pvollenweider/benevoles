@@ -18,7 +18,7 @@ function ok(data: unknown) {
 
 const renderSection = (milestones: MilestoneRow[] = MILESTONES) =>
   render(<MilestonesSection eventId="evt-1" initialMilestones={milestones} team={TEAM} timeZone="Europe/Zurich" />)
-const ownerSelect = () => screen.getByRole("combobox", { name: /^Responsable/ })
+const ownerSelect = () => screen.getByRole("combobox", { name: /^Qui s'en occupe/ })
 // jsdom drops the space before the sr-only span; browsers keep it.
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 const editButton = (title: string) => screen.getByRole("button", { name: new RegExp(`^Modifier ?le jalon « ${escape(title)} »$`) })
@@ -29,6 +29,14 @@ describe("MilestonesSection — edit a milestone", () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  it("deletes with a visible « Supprimer » named with its milestone, not a bare « × » (regression)", () => {
+    renderSection()
+    const remove = screen.getByRole("button", { name: /^Supprimer ?le jalon « Fermer les inscriptions »$/ })
+    expect(remove).toHaveTextContent(/^Supprimer le jalon « Fermer les inscriptions »$/)
+    expect(remove).not.toHaveAttribute("aria-label")
+    expect(document.body.textContent).not.toContain("×")
   })
 
   it("names each « Modifier » with its milestone and opens a prefilled form with the focus on the title", () => {
@@ -155,7 +163,7 @@ describe("MilestonesSection — owner", () => {
   it("offers « Aucun » by default, then the team by name, marked optional", () => {
     renderSection()
     fireEvent.click(screen.getByRole("button", { name: "+ Ajouter un jalon" }))
-    expect(ownerSelect()).toHaveAccessibleName("Responsable (facultatif)")
+    expect(ownerSelect()).toHaveAccessibleName("Qui s'en occupe (facultatif)")
     expect(ownerSelect()).toHaveValue("")
     expect(ownerSelect()).not.toBeRequired()
     expect(within(ownerSelect()).getAllByRole("option").map((o) => o.textContent)).toEqual(["Aucun", "Colette Favre", "Samira Diallo"])
@@ -171,10 +179,10 @@ describe("MilestonesSection — owner", () => {
     fireEvent.change(ownerSelect(), { target: { value: "a-sam" } })
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
 
-    await waitFor(() => expect(screen.getByText("Responsable : Samira Diallo")).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText("Qui s'en occupe : Samira Diallo")).toBeInTheDocument())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ title: "Louer la tente", dueDate: "2026-09-05", ownerId: "a-sam" })
     // The checkbox is still named by the title alone.
-    expect(screen.getByRole("checkbox", { name: "Louer la tente" })).toHaveAccessibleDescription("Responsable : Samira Diallo")
+    expect(screen.getByRole("checkbox", { name: "Louer la tente" })).toHaveAccessibleDescription("Qui s'en occupe : Samira Diallo")
   })
 
   it("changes and removes the owner of an existing milestone, sending only that", async () => {
@@ -182,14 +190,14 @@ describe("MilestonesSection — owner", () => {
     const fetchMock = vi.fn().mockResolvedValue(ok({ ...withOwner[0], ownerId: null, owner: null }))
     vi.stubGlobal("fetch", fetchMock)
     renderSection(withOwner)
-    expect(screen.getByText("Responsable : Samira Diallo")).toBeInTheDocument()
+    expect(screen.getByText("Qui s'en occupe : Samira Diallo")).toBeInTheDocument()
     fireEvent.click(editButton("Commander les t-shirts"))
     expect(ownerSelect()).toHaveValue("a-sam")
     fireEvent.change(ownerSelect(), { target: { value: "" } })
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
     await waitFor(() => expect(editButton("Commander les t-shirts")).toHaveFocus())
     expect(fetchMock.mock.calls[0][1].body).toBe(JSON.stringify({ ownerId: null }))
-    expect(screen.queryByText(/^Responsable :/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/^Qui s'en occupe :/)).not.toBeInTheDocument()
   })
 
   it("keeps a deactivated owner as a choice, and does not send it when unchanged", async () => {
@@ -197,7 +205,7 @@ describe("MilestonesSection — owner", () => {
     const fetchMock = vi.fn().mockResolvedValue(ok({ ...formerOwner[0], title: "Commander les polos", owner: { id: "a-gone", name: "Léa Parti" } }))
     vi.stubGlobal("fetch", fetchMock)
     renderSection(formerOwner)
-    expect(screen.getByText("Responsable : Léa Parti (compte désactivé)")).toBeInTheDocument()
+    expect(screen.getByText("Qui s'en occupe : Léa Parti (compte désactivé)")).toBeInTheDocument()
     fireEvent.click(editButton("Commander les t-shirts"))
     expect(ownerSelect()).toHaveValue("a-gone")
     expect(within(ownerSelect()).getByRole("option", { name: "Léa Parti (compte désactivé)" })).toBeEnabled()
@@ -208,14 +216,14 @@ describe("MilestonesSection — owner", () => {
   })
 
   it("puts the server's refusal of the owner on the select", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 422, json: async () => ({ error: "Choisissez un responsable parmi les membres actifs de l'équipe.", field: "ownerId" }) }))
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 422, json: async () => ({ error: "Choisissez qui s'en occupe parmi les membres actifs de l'équipe.", field: "ownerId" }) }))
     renderSection()
     fireEvent.click(editButton("Commander les t-shirts"))
     fireEvent.change(ownerSelect(), { target: { value: "a-col" } })
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Choisissez un responsable parmi les membres actifs de l'équipe."))
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Choisissez qui s'en occupe parmi les membres actifs de l'équipe."))
     expect(ownerSelect()).toHaveAttribute("aria-invalid", "true")
-    expect(ownerSelect()).toHaveAccessibleDescription("Choisissez un responsable parmi les membres actifs de l'équipe.")
+    expect(ownerSelect()).toHaveAccessibleDescription("Choisissez qui s'en occupe parmi les membres actifs de l'équipe.")
     expect(ownerSelect()).toHaveFocus()
     expect(screen.getByRole("textbox", { name: "Titre" })).not.toHaveAttribute("aria-invalid")
   })

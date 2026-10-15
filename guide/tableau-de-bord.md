@@ -22,7 +22,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours, sauf si tous ceux-là ont atteint leur minimum de personnes), avec le nombre de créneaux sous leur minimum ; le lien mène alors à **Où manque-t-il du monde ?** ;
 - demandes d'inscription à accepter ou refuser, sur les créneaux sur validation (urgent) ;
 - places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
-- jalons en retard, avec leur titre et leur responsable (les trois premiers, puis le nombre des autres) ;
+- jalons en retard, avec leur titre et la personne qui s'en occupe (les trois premiers, puis le nombre des autres) ;
 - personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé ni répondu ne pas être disponibles (avec un lien pour leur écrire) ;
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
 - bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;

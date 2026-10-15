@@ -69,7 +69,7 @@ test("a permanently rejected address shows « Adresse à vérifier », the filte
   await expect(page.getByText("Aucun membre ne correspond aux filtres.")).toHaveCount(0)
 
   // Edit the address: the status disappears, and the save is announced once.
-  await page.getByRole("button", { name: `Éditer E2E ${lastName}` }).click()
+  await page.getByRole("button", { name: `Modifier E2E ${lastName}` }).click()
   const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
   await expect(dialog).toBeVisible()
   const emailField = dialog.getByLabel("Email")
@@ -108,5 +108,5 @@ test("the member page's « Modifier l'adresse » link deep-links to the edit for
   // still land focus somewhere sensible, not drop it back to <body>.
   await dialog.getByRole("button", { name: "Annuler" }).click()
   await expect(dialog).toHaveCount(0)
-  await expect(page.getByRole("button", { name: `Éditer E2E ${lastName}` })).toBeFocused()
+  await expect(page.getByRole("button", { name: `Modifier E2E ${lastName}` })).toBeFocused()
 })

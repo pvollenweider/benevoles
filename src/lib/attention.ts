@@ -40,11 +40,11 @@ export type OverdueMilestone = { title: string; ownerName: string | null }
 /** Titles named in the message; the rest are counted (« et 2 autres »). */
 export const OVERDUE_MILESTONES_LISTED = 3
 
-/** « 2 jalons sont en retard : « A » (responsable : Samira Diallo), « B ». » */
+/** « 2 jalons sont en retard : « A » (qui s'en occupe : Samira Diallo), « B ». » */
 export function overdueMilestonesMessage(milestones: OverdueMilestone[]): string {
   const n = milestones.length
   const named = milestones.slice(0, OVERDUE_MILESTONES_LISTED)
-    .map((m) => `« ${m.title} »${m.ownerName ? ` (responsable : ${m.ownerName})` : ""}`)
+    .map((m) => `« ${m.title} »${m.ownerName ? ` (qui s'en occupe : ${m.ownerName})` : ""}`)
   const rest = n - named.length
   const list = rest > 0 ? `${named.join(", ")} et ${rest} ${plural(rest, "autre", "autres")}` : named.join(", ")
   return `${n} ${plural(n, "jalon est en retard", "jalons sont en retard")} : ${list}.`

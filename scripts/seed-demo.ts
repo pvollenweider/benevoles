@@ -323,7 +323,7 @@ async function main() {
       { eventId: event.id, actorType: "volunteer", actorId: camille.id, action: "registration.created", entityType: "Registration", entityId: camilleAccueil.id, changes: { shiftId: { from: null, to: accueil1.id }, source: { from: null, to: "public_form" } }, createdAt: at(-5, 18) },
       { eventId: event.id, actorType: "admin", actorId: admin.id, action: "registration.created", entityType: "Registration", entityId: inesAccueil.id, changes: { shiftId: { from: null, to: accueil1.id }, source: { from: null, to: "admin_manual" } }, createdAt: at(-4, 11) },
       { eventId: event.id, actorType: "volunteer", actorId: julien.id, action: "registration.cancelled", entityType: "Registration", entityId: "demo-cancelled-registration", changes: { shiftId: { from: securite.id, to: securite.id }, status: { from: "active", to: "cancelled" } }, createdAt: at(-3, 16) },
-      { eventId: event.id, actorType: "admin", actorId: admin.id, action: "registration.checked_in", entityType: "Registration", entityId: camilleAccueil.id, changes: { shiftId: { from: accueil1.id, to: accueil1.id }, status: { from: "active", to: "present" } }, createdAt: at(-1, 9) },
+      { eventId: event.id, actorType: "admin", actorId: admin.id, action: "registration.checked_in", entityType: "Registration", entityId: camilleAccueil.id, changes: { checkedInAt: { from: null, to: at(-1, 9).toISOString() }, shiftId: { from: accueil1.id, to: accueil1.id } }, createdAt: at(-1, 9) },
       { eventId: event.id, actorType: "admin", actorId: admin.id, action: "event.updated", entityType: "Event", entityId: event.id, changes: { publicInstructions: { from: null, to: "Point de rendez-vous ajouté" } }, createdAt: at(-1, 15) },
     ],
   })

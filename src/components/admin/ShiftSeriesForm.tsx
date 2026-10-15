@@ -122,9 +122,9 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   return (
     <section id={panelId} aria-labelledby={`${id}-title`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <div>
-        <h3 id={`${id}-title`} ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">
+        <h2 id={`${id}-title`} ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">
           Créer une série de créneaux
-        </h3>
+        </h2>
         <p className="text-xs text-gray-600 mt-0.5">
           Un poste, une plage horaire et une durée : les créneaux sont créés d&apos;un coup, puis modifiables un par un.
           Les champs marqués d&apos;un astérisque (*) sont obligatoires.
@@ -216,7 +216,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
         <div>
-          <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-600 mb-1">Personnes par créneau <span aria-hidden="true">*</span></label>
+          <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-600 mb-1">Places par créneau <span aria-hidden="true">*</span></label>
           <input id={`${id}-capacity`} type="number" min={1} required value={capacity} aria-invalid={capacity < 1 ? true : undefined} aria-describedby={minimumInvalid ? `${id}-minimum-error` : undefined} onChange={(e) => setCapacity(Number(e.target.value))} className="input" />
         </div>
         <div>

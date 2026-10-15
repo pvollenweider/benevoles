@@ -32,6 +32,7 @@ import {
   resendAnnouncement,
   type ShiftRef,
 } from "@/lib/registrations-list"
+import { statusBoxClass } from "@/lib/status-message"
 
 /** Typing in the search box: its count is announced once typing has paused this long. */
 const SEARCH_ANNOUNCE_MS = 500
@@ -418,7 +419,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       )}
       {/* The one live region of the page, one message at a time: an action's result (visible) or the
           count after a filter change (screen readers only, the box hidden). */}
-      <p role="status" aria-live="polite" className={status.text && !status.count ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
+      <p role="status" aria-live="polite" className={status.text && !status.count ? `${statusBoxClass("success")} flex flex-wrap items-center gap-x-3 gap-y-1` : "sr-only"}>
         {status.text && <span>{status.text}</span>}
         {status.text && !status.count && lastLogLink && (
           <Link href={lastLogLink} className="font-medium text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir cette action dans le journal</Link>

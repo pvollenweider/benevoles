@@ -9,6 +9,7 @@ import ModalShell from "./ModalShell"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX, type Audience } from "@/lib/targeted-message"
 import { templateProblems, VARIABLES } from "@/lib/message-template"
 import { announce } from "@/lib/announce"
+import RequiredMark from "@/components/RequiredMark"
 
 type Props = {
   eventId: string
@@ -245,7 +246,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
       )}
 
       <div>
-        <label htmlFor={`${id}-subject`} className={`block text-sm font-medium mb-1 ${attempted && subjectMissing ? "text-red-700" : "text-gray-800"}`}>Objet *</label>
+        <label htmlFor={`${id}-subject`} className={`block text-sm font-medium mb-1 ${attempted && subjectMissing ? "text-red-700" : "text-gray-800"}`}>Objet<RequiredMark /></label>
         <input id={`${id}-subject`} type="text" value={subject} maxLength={MESSAGE_SUBJECT_MAX} required aria-invalid={subjectProblems.length > 0 || (attempted && subjectMissing) ? true : undefined} aria-describedby={`${id}-subject-hint${subjectProblems.length > 0 ? ` ${id}-subject-problems` : ""}`} onChange={(e) => setSubject(e.target.value)} className={inputClass(subjectMissing, subjectProblems.length > 0)} />
         <p id={`${id}-subject-hint`} className="text-xs text-gray-600 mt-1">Le titre de l&apos;événement est ajouté après l&apos;objet. {subject.length}/{MESSAGE_SUBJECT_MAX} caractères.</p>
         {subjectProblems.length > 0 && (
@@ -256,7 +257,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
       </div>
 
       <div>
-        <label htmlFor={`${id}-message`} className={`block text-sm font-medium mb-1 ${attempted && messageMissing ? "text-red-700" : "text-gray-800"}`}>Message *</label>
+        <label htmlFor={`${id}-message`} className={`block text-sm font-medium mb-1 ${attempted && messageMissing ? "text-red-700" : "text-gray-800"}`}>Message<RequiredMark /></label>
         <textarea id={`${id}-message`} rows={6} value={message} maxLength={MESSAGE_BODY_MAX} required aria-invalid={messageProblems.length > 0 || (attempted && messageMissing) ? true : undefined} aria-describedby={`${id}-message-hint${messageProblems.length > 0 ? ` ${id}-message-problems` : ""}`} onChange={(e) => setMessage(e.target.value)} className={inputClass(messageMissing, messageProblems.length > 0)} />
         <p id={`${id}-message-hint`} className="text-xs text-gray-600 mt-1">
           Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères. Variables possibles : {Object.keys(VARIABLES).map((k) => `{${k}}`).join(", ")}.

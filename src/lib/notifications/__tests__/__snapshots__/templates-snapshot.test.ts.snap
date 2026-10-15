@@ -561,7 +561,7 @@ exports[`render — snapshot of every notification kind > milestone_owner_remind
     "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
     "",
     "    <p>Bonjour Samira Diallo,</p>",
-    "    <p>Vous êtes responsable du jalon <strong>« Confirmer la location de la tente »</strong> de <strong>Fête du village</strong>. Son échéance est le samedi 17 octobre, dans 3 jours.</p>",
+    "    <p>Vous vous occupez du jalon <strong>« Confirmer la location de la tente »</strong> de <strong>Fête du village</strong>. Son échéance est le samedi 17 octobre, dans 3 jours.</p>",
     "    <p>Une fois fait, cochez-le dans la section Jalons de la page de l'événement : l'équipe voit qu'il est fait, et il n'apparaîtra pas en retard sur le tableau de bord.</p>",
     "    <p style="margin-top:1.25em"><a href="https://www.benevol.app/admin/events/evt-1" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Ouvrir l'événement</a></p>",
     "  ",
@@ -578,7 +578,7 @@ exports[`render — snapshot of every notification kind > milestone_owner_remind
   "text": [
     "Bonjour Samira Diallo,",
     "",
-    "Vous êtes responsable du jalon « Confirmer la location de la tente » de Fête du village. Son échéance est le samedi 17 octobre, dans 3 jours.",
+    "Vous vous occupez du jalon « Confirmer la location de la tente » de Fête du village. Son échéance est le samedi 17 octobre, dans 3 jours.",
     "",
     "Une fois fait, cochez-le dans la section Jalons de la page de l'événement : l'équipe voit qu'il est fait, et il n'apparaîtra pas en retard sur le tableau de bord.",
     "",

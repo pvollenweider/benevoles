@@ -112,9 +112,9 @@ test("a volunteer signs up inside an iframe of another site, storage blocked, he
 
   const stamp = Date.now()
   const email = `e2e-embed-${stamp}@example.com`
-  await frame.getByLabel("Prénom *", { exact: true }).fill("E2E")
-  await frame.getByLabel("Nom *", { exact: true }).fill(`Integre${stamp}`)
-  await frame.getByLabel("Email *", { exact: true }).fill(email)
+  await frame.getByLabel("Prénom", { exact: true }).fill("E2E")
+  await frame.getByLabel("Nom", { exact: true }).fill(`Integre${stamp}`)
+  await frame.getByLabel("Email", { exact: true }).fill(email)
   await frame.getByRole("button", { name: "convention des bénévoles" }).click()
   await frame.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
   await frame.getByLabel(/J.accepte que l.association/).check()

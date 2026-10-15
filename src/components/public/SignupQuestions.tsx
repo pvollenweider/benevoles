@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NO, TEXT_ANSWER_MAX, YES, type Question } from "@/lib/event-questions"
+import RequiredMark from "@/components/RequiredMark"
 
 export type Answers = Record<string, string | string[]>
 
@@ -27,7 +28,11 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
   clearable?: boolean
 }) {
   if (questions.length === 0) return null
-  const star = (q: Question) => (q.required ? <>{" *"}{" "}<span className="sr-only">(obligatoire)</span></> : null)
+  // The « * » is decorative (#1003): a text field and a radio group say « obligatoire » through
+  // `required`; a checkbox group has no such state (required on each box would demand all of them),
+  // so its legend says it in visible words: « (un choix ou plus) » instead of « (plusieurs choix
+  // possibles) ».
+  const star = (q: Question) => (q.required ? <RequiredMark /> : null)
   const optional = (q: Question) => (q.required ? null : <>{" "}<span className="text-gray-500 font-normal">(facultatif)</span></>)
   return (
     <>
@@ -53,7 +58,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
         const current = answers[q.id]
         return (
           <fieldset key={q.id} className={bad ? "rounded-xl border border-red-600 p-2" : ""}>
-            <legend className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}{multiple && <>{" "}<span className="text-gray-500 font-normal">(plusieurs choix possibles)</span></>}</legend>
+            <legend className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}{multiple && <>{" "}<span className="text-gray-500 font-normal">{q.required ? "(un choix ou plus)" : "(plusieurs choix possibles)"}</span></>}</legend>
             <div className="flex flex-wrap gap-x-4 gap-y-2">
               {[...choices, ...(withNone ? [""] : [])].map((c, i) => {
                 const checked = multiple ? Array.isArray(current) && current.includes(c) : c === "" ? !current : current === c

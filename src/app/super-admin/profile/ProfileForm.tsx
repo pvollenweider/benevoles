@@ -91,7 +91,7 @@ export default function ProfileForm({ currentEmail }: { currentEmail: string }) 
 
   return (
     <form onSubmit={handleSubmit} noValidate className="bg-white border border-gray-200 rounded-2xl p-6 space-y-5">
-      <p className="text-xs text-gray-600">* Champ obligatoire</p>
+      <p aria-hidden="true" className="text-xs text-gray-600">* Champ obligatoire</p>
 
       <div>
         <label htmlFor={emailId} className="block text-sm font-medium text-gray-700 mb-1">Email</label>

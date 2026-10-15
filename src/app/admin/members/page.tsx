@@ -76,7 +76,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       initialMembers={volunteers.map((v) => {
         const entries = volunteerHourEntries(v.registrations, timeZone)
         const past = pastEntries(entries, today)
-        // « Heures planifiées » (#557): past confirmed shifts only, real local instants — distinct
+        // « Heures prévues (passées) » (#557): past confirmed shifts only, real local instants — distinct
         // from « Heures attestées » (a recorded presence among those same past shifts); the two
         // never overlap. A future confirmed shift isn't "planned hours given" yet, it just hasn't
         // happened (the bug tracked separately as #571, fixed here by scoping to the past).

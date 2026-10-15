@@ -35,7 +35,7 @@ test("a milestone with an owner: added, shown, removed in place; a foreign owner
   const form = page.getByRole("form", { name: "Nouveau jalon" })
   await form.getByRole("textbox", { name: "Titre" }).fill("Louer la tente")
   await form.getByLabel(/^Échéance/).fill("2030-09-20")
-  const owner = form.getByRole("combobox", { name: /^Responsable/ })
+  const owner = form.getByRole("combobox", { name: /^Qui s'en occupe/ })
   await expect(owner).toHaveValue("")
   await expect(owner.getByRole("option").first()).toHaveText("Aucun")
   // The signed-in admin is an active admin of the organisation: one of the choices.
@@ -45,7 +45,7 @@ test("a milestone with an owner: added, shown, removed in place; a foreign owner
   await form.getByRole("button", { name: "Ajouter" }).click()
 
   const row = page.getByRole("listitem").filter({ hasText: "Louer la tente" })
-  await expect(row.getByText(`Responsable : ${me}`)).toBeVisible()
+  await expect(row.getByText(`Qui s'en occupe : ${me}`)).toBeVisible()
   await expect(row.getByRole("checkbox", { name: "Louer la tente" })).toBeVisible()
   expect.soft(await seriousViolations(page), "list with an owner").toEqual([])
   // 320 px: the owner wraps under the title, nothing scrolls sideways.
@@ -56,10 +56,10 @@ test("a milestone with an owner: added, shown, removed in place; a foreign owner
   // Back to « Aucun », in place.
   await row.getByRole("button", { name: /^Modifier\W+le jalon\W+Louer la tente\W+$/ }).click()
   const editForm = page.getByRole("form", { name: /^Modifier le jalon/ })
-  await editForm.getByRole("combobox", { name: /^Responsable/ }).selectOption("")
+  await editForm.getByRole("combobox", { name: /^Qui s'en occupe/ }).selectOption("")
   await editForm.getByRole("button", { name: "Enregistrer" }).click()
   await expect(page.getByRole("button", { name: /^Modifier\W+le jalon\W+Louer la tente\W+$/ })).toBeFocused()
-  await expect(page.getByRole("listitem").filter({ hasText: "Louer la tente" }).getByText(/^Responsable/)).toHaveCount(0)
+  await expect(page.getByRole("listitem").filter({ hasText: "Louer la tente" }).getByText(/^Qui s'en occupe/)).toHaveCount(0)
 
   // An id that is no active admin of this organisation is refused, nothing created.
   const res = await page.request.post(`/api/admin/events/${event.eventId}/milestones`, {

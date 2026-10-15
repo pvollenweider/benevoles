@@ -20,7 +20,7 @@ Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de
 | Date, début, fin | La plage à couvrir ; une fin plus petite que le début passe minuit |
 | Durée d'un créneau | Choix courant (30 min à 4 h) ou saisie en minutes (15 au minimum) |
 | Pause entre deux créneaux | Facultative, en minutes |
-| Personnes par créneau, **Minimum par créneau** (optionnel, voir [Minimum de personnes](configurer-les-creneaux.md#minimum-de-personnes)), **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
+| **Places par créneau**, **Minimum par créneau** (optionnel, voir [Minimum de personnes](configurer-les-creneaux.md#minimum-de-personnes)), **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
 
 L'aperçu se met à jour au fur et à mesure : nombre de créneaux, horaires de chacun. Si la plage ne se divise pas exactement, le dernier créneau est plus court (indiqué dans l'aperçu) ; supprimez-le ensuite s'il ne sert pas. Les créneaux qui commencent après minuit sont datés du lendemain. Une série compte au plus 48 créneaux.
 

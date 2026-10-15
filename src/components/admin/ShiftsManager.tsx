@@ -30,9 +30,11 @@ import {
   eventDates,
   fmtLongDate as fmtDate,
   roleOrder,
+  shiftListStatus,
   sortShifts,
   spokenPlaces,
 } from "@/lib/shifts-admin"
+import StatusBadge from "./StatusBadge"
 
 const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page publique n'est plus accessible."
 
@@ -269,13 +271,6 @@ export default function ShiftsManager({
   // The legend explains the minimum (#949) only when a shift has one: otherwise nothing changes.
   const usesMinimum = shifts.some((s) => s.status !== "cancelled" && s.minVolunteers != null)
 
-  const statusCls: Record<string, string> = {
-    open:   "bg-green-100 text-green-700",
-    full:   "bg-orange-100 text-orange-700",
-    closed: "bg-gray-100 text-gray-700",
-  }
-  const statusLabel: Record<string, string> = { open: "Ouvert", full: "Complet", closed: "Fermé" }
-
   return (
     <div className="space-y-8">
       {/* Top bar */}
@@ -498,7 +493,7 @@ export default function ShiftsManager({
                       <span className="sr-only">{spokenPlaces(s.registrationCount, s.capacity)}</span>
                     </p>
                     {s.registrationCount >= s.capacity
-                      ? <p className="text-[11px] text-orange-800">Complet</p>
+                      ? <p className="text-[11px] font-medium text-gray-900">Complet</p>
                       : <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
                     }
                     {/* Against the minimum (#949), only for a shift that has one and isn't full. */}
@@ -507,9 +502,9 @@ export default function ShiftsManager({
                     )}
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-700"}`}>
-                      {statusLabel[s.status] ?? s.status}
-                    </span>
+                    {/* One status per row, in the DESIGN.md pair (Complet in blue): a full shift still
+                        stored as open no longer shows « Ouvert » next to « Complet ». */}
+                    <StatusBadge status={shiftListStatus(s)} />
                   </td>
                   {/* On a phone the two actions stack, so the row fits the screen (#987). */}
                   <td className="px-2 sm:px-4 py-2 whitespace-nowrap">

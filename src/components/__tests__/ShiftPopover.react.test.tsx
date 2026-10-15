@@ -24,6 +24,7 @@ vi.mock("next/link", () => ({
 }))
 
 import ShiftPopover from "../admin/day-timeline/ShiftPopover"
+import { ROW_H } from "@/lib/day-timeline"
 import type { AdminShift } from "../admin/AdminDayTimeline"
 
 // Quick edits from the schedule (#398).
@@ -53,7 +54,7 @@ describe("ShiftPopover", () => {
     }
     const { unmount } = render(<ShiftPopover {...props} anchor={{ x: 100, y: 100, w: 80 }} />)
     const below = screen.getByRole("dialog")
-    expect(parseFloat(below.style.top)).toBe(100 + 48 + 6)
+    expect(parseFloat(below.style.top)).toBe(100 + ROW_H + 6)
     expect(parseFloat(below.style.top) + parseFloat(below.style.maxHeight)).toBeLessThanOrEqual(vh)
     unmount()
     render(<ShiftPopover {...props} anchor={{ x: 100, y: vh - 60, w: 80 }} />)
@@ -87,7 +88,7 @@ describe("ShiftPopover", () => {
       const y = vh - 260
       render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyCapacity={vi.fn()} />)
       // Unmeasured, the larger side (above) would be taken; 100 px fit in the 206 px below.
-      expect(parseFloat(screen.getByRole("dialog").style.top)).toBe(y + 48 + 6)
+      expect(parseFloat(screen.getByRole("dialog").style.top)).toBe(y + ROW_H + 6)
     } finally {
       if (descriptor) Object.defineProperty(HTMLElement.prototype, "offsetHeight", descriptor)
     }
@@ -166,7 +167,7 @@ describe("ShiftPopover", () => {
     fireEvent.change(screen.getByLabelText("Places"), { target: { value: "5" } })
     fireEvent.click(screen.getByRole("button", { name: "Appliquer à tout le poste" }))
     await waitFor(() => expect(p.onApplyCapacity).toHaveBeenCalledWith("Bar", 5))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Capacité de 5 appliquée au poste « Bar »."))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("5 places appliquées au poste « Bar »."))
   })
 
   it("refuses a capacity under the confirmed people: flagged, not applied, not saved on close", () => {

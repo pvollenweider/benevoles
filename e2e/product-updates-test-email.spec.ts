@@ -27,8 +27,8 @@ test("sending a test defaults to the super admin's own address", async ({ page }
   const stamp = Date.now()
   await page.goto("/super-admin/product-updates")
   // Typed before hydration, the controlled fields would be emptied and the test never sent (#592).
-  await waitForHydration(page.getByLabel("Objet *"))
-  await page.getByLabel("Objet *").fill(`E2E test email ${stamp}`)
+  await waitForHydration(page.getByLabel("Objet"))
+  await page.getByLabel("Objet").fill(`E2E test email ${stamp}`)
   await page.locator("textarea").fill("Contenu de test.")
   const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")
   await page.getByRole("button", { name: "Envoyer un test" }).click()
@@ -50,8 +50,8 @@ test("sending a test to a custom address delivers it there instead", async ({ pa
   const customEmail = `e2e-custom-test-${stamp}@example.com`
   await page.goto("/super-admin/product-updates")
   // Typed before hydration, the controlled fields would be emptied and the test never sent (#592).
-  await waitForHydration(page.getByLabel("Objet *"))
-  await page.getByLabel("Objet *").fill(`E2E custom email ${stamp}`)
+  await waitForHydration(page.getByLabel("Objet"))
+  await page.getByLabel("Objet").fill(`E2E custom email ${stamp}`)
   await page.locator("textarea").fill("Contenu de test.")
   await page.getByLabel(/Adresse du test/).fill(customEmail)
   const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")

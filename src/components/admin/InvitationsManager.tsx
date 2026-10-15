@@ -233,7 +233,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <th className="text-left px-4 py-2 font-medium">Membre</th>
-                <th className="text-left px-4 py-2 font-medium">Tags</th>
+                <th className="text-left px-4 py-2 font-medium">Étiquettes</th>
                 <th className="text-left px-4 py-2 font-medium">Invité le</th>
                 <th className="text-left px-4 py-2 font-medium">Statut</th>
               </tr>
@@ -404,12 +404,12 @@ function InviteModal({
             className="flex-1 min-w-[180px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
           />
           <select
-            aria-label="Filtrer par tag"
+            aria-label="Filtrer par étiquette"
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
             className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
           >
-            <option value="">Tous les tags</option>
+            <option value="">Toutes les étiquettes</option>
             {allTags.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
           <label className="text-xs text-gray-600 flex items-center gap-1">

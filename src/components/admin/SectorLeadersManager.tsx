@@ -10,6 +10,7 @@ import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { slugify } from "@/lib/utils"
 import { leaderDesignatedAnnouncement, leaderRemovedAnnouncement } from "@/lib/registrations-list"
+import { outcomeClass } from "@/lib/status-message"
 
 export type SectorLeaderRow = {
   id: string
@@ -155,7 +156,7 @@ export default function SectorLeadersManager({
         ref={outcomeRef}
         tabIndex={-1}
         role={outcome?.kind === "error" ? "alert" : "status"}
-        className={outcome ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${outcome.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+        className={`${outcomeClass(outcome)} focus:outline-none`}
       >
         {outcome?.text ?? ""}
       </p>

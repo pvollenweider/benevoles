@@ -55,6 +55,7 @@ import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnouncement, shiftsForGroup, type GroupFilter } from "@/lib/group-links"
+import RequiredMark from "@/components/RequiredMark"
 
 
 type Shift = {
@@ -1096,7 +1097,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 )}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="reg-firstname" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                    <label htmlFor="reg-firstname" className="block text-sm font-medium text-gray-700 mb-1">Prénom<RequiredMark /></label>
                     <input
                       id="reg-firstname"
                       type="text"
@@ -1108,7 +1109,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     />
                   </div>
                   <div>
-                    <label htmlFor="reg-lastname" className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                    <label htmlFor="reg-lastname" className="block text-sm font-medium text-gray-700 mb-1">Nom<RequiredMark /></label>
                     <input
                       id="reg-lastname"
                       type="text"
@@ -1121,7 +1122,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                  <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">Email<RequiredMark /></label>
                   <input
                     id="reg-email"
                     type="email"
@@ -1135,7 +1136,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 <div>
                   <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">
                     {event?.requirePhone
-                      ? "Téléphone *"
+                      ? <>Téléphone<RequiredMark /></>
                       : <>Téléphone <span className="text-gray-500 font-normal">(facultatif, mais super utile)</span></>}
                   </label>
                   <input
@@ -1150,7 +1151,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 </div>
                 {ageGatedSelectedShifts.length > 0 && (
                   <div>
-                    <label htmlFor="reg-birthdate" className="block text-sm font-medium text-gray-700 mb-1">Date de naissance *</label>
+                    <label htmlFor="reg-birthdate" className="block text-sm font-medium text-gray-700 mb-1">Date de naissance<RequiredMark /></label>
                     <input
                       id="reg-birthdate"
                       type="date"

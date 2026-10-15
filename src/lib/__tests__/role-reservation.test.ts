@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { allowedReservedRoles, memberMayTake, parseTagList, reservationRefusal, reservedRoles } from "../role-reservation"
+import { allowedReservedRoles, memberMayTake, parseTagList, reservationRefusal, reservedForText, reservedRoles } from "../role-reservation"
 
 // Roles reserved to members with a tag (#470).
 describe("reservedRoles", () => {
@@ -34,5 +34,12 @@ describe("parseTagList and messages", () => {
   it("explains the refusal without naming tags", () => {
     expect(reservationRefusal("Sécurité", false)).toBe("Le poste « Sécurité » est réservé aux membres invités : utilise le lien personnel reçu par email.")
     expect(reservationRefusal("Sécurité", true)).toMatch(/ton invitation n'y donne pas accès/)
+  })
+})
+
+describe("reservedForText", () => {
+  it("names who may take a reserved role with « Étiquettes » wording, never « tags »", () => {
+    expect(reservedForText(["sécurité"])).toBe("réservé aux membres « sécurité »")
+    expect(reservedForText(["sécurité", "secouriste"])).toBe("réservé aux membres « sécurité » ou « secouriste »")
   })
 })

@@ -36,7 +36,7 @@ test.describe("public pages", () => {
     expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first().click()
     await page.getByRole("button", { name: /^Continuer/ }).click()
-    await expect(page.getByLabel("Prénom *", { exact: true })).toBeVisible()
+    await expect(page.getByLabel("Prénom", { exact: true })).toBeVisible()
     expect.soft(await seriousViolations(page)).toEqual([])
   })
 })

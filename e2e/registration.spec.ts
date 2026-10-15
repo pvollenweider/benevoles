@@ -31,9 +31,9 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
   await select.click()
   await page.getByRole("button", { name: /^Continuer/ }).click()
 
-  await page.getByLabel("Prénom *", { exact: true }).fill("E2E")
-  await page.getByLabel("Nom *", { exact: true }).fill("Test")
-  await page.getByLabel("Email *", { exact: true }).fill(volunteerEmail)
+  await page.getByLabel("Prénom", { exact: true }).fill("E2E")
+  await page.getByLabel("Nom", { exact: true }).fill("Test")
+  await page.getByLabel("Email", { exact: true }).fill(volunteerEmail)
 
   await page.getByRole("button", { name: "convention des bénévoles" }).click()
   await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()

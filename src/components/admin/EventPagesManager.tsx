@@ -13,6 +13,8 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { requestJson, useSubmit } from "@/lib/use-submit"
 import ModalShell from "./ModalShell"
+import RequiredMark from "@/components/RequiredMark"
+import { outcomeClass } from "@/lib/status-message"
 
 export type EventPageRow = {
   id: string
@@ -156,7 +158,7 @@ export default function EventPagesManager({ eventId, initialPages }: { eventId: 
         ref={outcomeRef}
         tabIndex={-1}
         role={outcome?.kind === "error" ? "alert" : "status"}
-        className={outcome ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${outcome.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+        className={`${outcomeClass(outcome)} focus:outline-none`}
       >
         {outcome?.text ?? ""}
       </p>
@@ -271,10 +273,11 @@ function PageFormModal({
     <ModalShell title={page ? "Modifier la page" : "Nouvelle page"} busy={saving} onClose={() => { if (!saving) onClose() }} panelClassName="max-w-2xl">
       <form onSubmit={submit} noValidate className="space-y-4">
         <div>
-          <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre *</label>
+          <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre<RequiredMark /></label>
           <input
             id={titleId}
             type="text"
+            required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             aria-invalid={isInvalid("title")}

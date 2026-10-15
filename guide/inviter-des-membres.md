@@ -19,7 +19,7 @@ Les invitations permettent d'envoyer des emails personnalisés aux membres de vo
 ## Envoyer des invitations
 
 1. Cliquer sur **+ Inviter des membres**
-2. Sélectionner les membres par nom ou par tag
+2. Sélectionner les membres par nom ou par **Étiquette**
 3. Optionnel : ajouter un message personnalisé (visible dans l'email)
 4. Cliquer sur **Envoyer N invitation(s)**
 

@@ -14,6 +14,7 @@ import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
+import RequiredMark from "@/components/RequiredMark"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -309,7 +310,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
         <div>
-          <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+          <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titre<RequiredMark /></label>
           <input id="event-title" type="text" required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
         </div>
 
@@ -332,11 +333,11 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Date début *</label>
+            <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Date début<RequiredMark /></label>
             <input id="event-start" type="date" required value={form.startDate} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
           </div>
           <div>
-            <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Date fin *</label>
+            <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Date fin<RequiredMark /></label>
             <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
           </div>
         </div>
@@ -345,7 +346,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         {form.startDate && form.endDate && (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-gray-700">Spectacles</h3>
+            <h2 className="text-sm font-semibold text-gray-700">Spectacles</h2>
             {!addingShow && (
               <button type="button" onClick={() => { setNewShow({ ...emptyShow, date: form.startDate }); setAddingShow(true) }} className="text-xs text-blue-600 hover:underline">
                 + Ajouter
@@ -394,7 +395,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                   </div>
                 ) : (
                   <div key={i} className="flex items-center gap-3 bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-2">
-                    <span className="text-[11px] text-indigo-400 font-mono whitespace-nowrap">
+                    <span className="text-xs text-indigo-800 font-mono whitespace-nowrap">
                       {show.date.split("-").reverse().join(".")} · {show.startTime}–{show.endTime}
                     </span>
                     <span className="flex-1 text-sm text-indigo-800 truncate">{show.name}</span>

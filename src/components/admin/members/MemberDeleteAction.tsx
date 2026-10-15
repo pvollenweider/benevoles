@@ -7,7 +7,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { deleteMemberRecap } from "@/lib/action-recap"
-import type { MemberDeletionEligibility } from "@/lib/member-deletion"
+import { memberDeletionBlockedText, type MemberDeletionEligibility } from "@/lib/member-deletion"
 
 type Props = {
   memberId: string
@@ -28,7 +28,7 @@ export default function MemberDeleteAction({ memberId, memberName, deletion }: P
   const [error, setError] = useState<string | null>(null)
 
   if (!deletion.eligible) {
-    return <p className="text-sm text-gray-700 mt-2">Cette fiche ne peut pas être supprimée : {deletion.reason}</p>
+    return <p className="text-sm text-gray-700 mt-2">{memberDeletionBlockedText(deletion.reason)}</p>
   }
 
   async function runDelete() {

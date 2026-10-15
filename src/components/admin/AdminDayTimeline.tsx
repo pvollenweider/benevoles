@@ -258,14 +258,14 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(minVolunteers !== undefined ? { capacity, minVolunteers } : { capacity }),
-    }), "Capacité non appliquée.")
+    }), "Places non appliquées.")
     if (!outcome.ok) { showToast(outcome.error, "error"); return false }
     for (const s of shifts) {
       if (s.roleName === roleName && s.status !== "cancelled") {
         onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount), ...(minVolunteers !== undefined ? { minVolunteers } : {}) })
       }
     }
-    showToast(minVolunteers != null ? "Places et minimum appliqués au poste" : "Capacité appliquée au poste")
+    showToast(minVolunteers != null ? "Places et minimum appliqués au poste" : "Places appliquées au poste")
     return true
   }
 
@@ -328,7 +328,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   style={{ height: roleHeight[role], marginBottom: GAP }}
                 >
                   <span
-                    className="text-[10px] text-gray-500 line-clamp-2 text-right leading-tight max-w-full"
+                    className="text-[11px] text-gray-600 line-clamp-2 text-right leading-tight max-w-full"
                     title={role}
                   >
                     {role.split(" &")[0].trim()}
@@ -338,7 +338,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               <div style={{ height: AXIS_H }} />
               {hasShows && (
                 <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
-                  <span className="text-[9px] text-indigo-800">Spectacles</span>
+                  <span className="text-[11px] text-indigo-800">Spectacles</span>
                 </div>
               )}
             </div>
@@ -400,19 +400,22 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                         onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
                       >
-                        <div className="flex flex-col justify-center px-2 overflow-hidden w-full">
-                          <span
-                            className="text-white text-[9px] font-bold leading-none truncate"
-                            style={{ textShadow: "0 1px 2px rgba(0,0,0,.3)" }}
-                          >
+                        {/* The full visible text as a tooltip, for a narrow bar that cuts it: on this
+                            inner box, not on the bar, whose title would be read after its name
+                            (the bar's children are presentational, so this one is not exposed). */}
+                        <div
+                          className="flex flex-col justify-center px-2 overflow-hidden w-full"
+                          title={[`${fmt(shift.startTime)}–${fmt(shift.endTime)}`, hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
+                        >
+                          <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
                             {fmt(shift.startTime)}–{fmt(shift.endTime)}
                           </span>
                           {hasLabel && (
-                            <span className="text-white text-[8px] leading-none truncate mt-0.5">
+                            <span className="text-white text-[11px] leading-none truncate mt-0.5">
                               {shift.label}
                             </span>
                           )}
-                          <span className="text-white text-[8px] leading-none truncate mt-0.5">
+                          <span className="text-white text-[11px] leading-none truncate mt-0.5">
                             {timelineBarPlaces(shift)}
                           </span>
                         </div>
@@ -441,16 +444,15 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   {/* Ghost bar during create */}
                   {draft?.roleName === role && (
                     <div
-                      className="absolute rounded-lg border-2 border-blue-400 border-dashed pointer-events-none flex items-center justify-center"
+                      className="absolute rounded-lg border-2 border-blue-400 border-dashed bg-blue-400/25 pointer-events-none flex items-center justify-center"
                       style={{
                         left:  px(draft.startMin),
                         width: Math.max((draft.endMin - draft.startMin) * PX_PER_MIN, 2),
                         top:   6,
                         height: ROW_H - 12,
-                        background: "rgba(96,165,250,0.25)",
                       }}
                     >
-                      <span className="text-[9px] text-blue-700 font-medium px-1 truncate">
+                      <span className="text-[11px] text-blue-700 font-medium px-1 truncate">
                         {fmt(fromMin(draft.startMin))}–{fmt(fromMin(draft.endMin))}
                       </span>
                     </div>
@@ -467,7 +469,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               {hours.map(h => (
                 <div
                   key={h}
-                  className="absolute top-1 text-[10px] text-gray-700 leading-none"
+                  className="absolute top-1 text-[11px] text-gray-700 leading-none"
                   style={{
                     left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN,
                     transform: "translateX(-50%)",
@@ -484,13 +486,13 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                 {shows.map((show, i) => (
                   <div
                     key={i}
-                    className="absolute inset-y-1 flex items-center px-1.5 rounded-md bg-indigo-50 text-[9px] text-indigo-700 truncate pointer-events-none"
+                    className="absolute inset-y-1 flex items-center px-1.5 rounded-md bg-indigo-50 text-[11px] text-indigo-700 truncate pointer-events-none"
                     style={{
                       left:  LABEL_W + px(toMin(show.startTime)),
                       width: Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 48),
                     }}
                   >
-                    🎪 {show.name} · {fmt(show.startTime)}–{fmt(show.endTime)}
+                    <span aria-hidden="true">🎪 </span>{show.name} · {fmt(show.startTime)}–{fmt(show.endTime)}
                   </div>
                 ))}
               </div>

@@ -54,7 +54,7 @@ describe("ModalShell trap", () => {
     }
     vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, status: 200, json: async () => analysis })))
     render(<ImportModal onClose={() => {}} onImported={() => {}} />)
-    const input = screen.getByLabelText("Fichier CSV ou Excel")
+    const input = screen.getByLabelText("Choisir un fichier CSV ou Excel")
     fireEvent.change(input, { target: { files: [new File(["email\nchloe@example.com"], "membres.csv", { type: "text/csv" })] } })
     fireEvent.submit(input.closest("form")!)
     const importer = await screen.findByRole("button", { name: "Importer 1 membre" })

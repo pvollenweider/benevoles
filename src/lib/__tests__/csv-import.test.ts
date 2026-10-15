@@ -104,3 +104,13 @@ describe("parseCsv — email normalization (#310)", () => {
     expect(result.rows[0].email).toBe("alice.martin@example.com")
   })
 })
+
+describe("parseCsv — « Étiquettes » column", () => {
+  it("reads an « Étiquettes » column as the members' tags, with or without the accent", () => {
+    for (const header of ["Étiquettes", "etiquettes", "Étiquette"]) {
+      const result = parseCsv(`prenom,nom,email,${header}\nAlice,Martin,alice@x.com,bar`)
+      expect(result.detectedColumns.tags).toBe(header)
+      expect(result.rows[0].tags).toEqual(["bar"])
+    }
+  })
+})

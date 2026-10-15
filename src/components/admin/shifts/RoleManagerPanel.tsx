@@ -306,7 +306,7 @@ export default function RoleManagerPanel({
     <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
-        <h3 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h3>
+        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
         <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
       </div>
       {roleActionError && (

@@ -76,4 +76,16 @@ describe("QuestionsEditor: poste of a question", () => {
     expect(screen.queryByRole("combobox", { name: "Poste concerné" })).toBeNull()
     expect(screen.getByText("Ajoutez des créneaux à l'événement pour rattacher cette question à un poste.")).toBeInTheDocument()
   })
+
+  // #1003: « * » was read « étoile » before the field's own « obligatoire ».
+  it("keeps the asterisk of required fields out of their names; the fields say « obligatoire » by their state", () => {
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[]} roles={roles} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter une question" }))
+    const label = screen.getByRole("textbox", { name: "Question posée aux bénévoles" })
+    expect(label).toBeRequired()
+    fireEvent.change(screen.getByRole("combobox", { name: "Type de réponse" }), { target: { value: "single" } })
+    const options = screen.getByRole("textbox", { name: "Choix proposés" })
+    expect(options).toBeRequired()
+    expect(screen.getByText("Choix proposés").textContent).toBe("Choix proposés *")
+  })
 })

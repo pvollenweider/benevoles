@@ -173,7 +173,7 @@ export default function OrgLogoForm({ initialLogo, organizationName }: { initial
           <button
             type="submit"
             aria-disabled={loading || undefined}
-            className={`bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors aria-disabled:opacity-50 ${BUTTON_FOCUS}`}
+            className={`bg-blue-600 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors aria-disabled:opacity-50 ${BUTTON_FOCUS}`}
           >
             {loading && !confirming ? "Envoi…" : "Enregistrer le logo"}
           </button>

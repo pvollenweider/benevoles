@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
+import HelpLink from "@/components/admin/HelpLink"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
@@ -52,6 +53,7 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
       <div>
         <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
         <h1 className="text-xl font-bold text-gray-900 mt-1">Responsables de secteur</h1>
+        <HelpLink route="/admin/events/[id]/sector-leaders" />
         <p className="text-sm text-gray-500">
           Un ou plusieurs bénévoles responsables d&apos;un poste : ils reçoivent un lien personnel pour voir qui est inscrit (nom, email, téléphone), sans accès admin au reste de l&apos;événement.
         </p>

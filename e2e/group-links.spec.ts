@@ -104,9 +104,9 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   const lastName = `Groupe${Date.now()}`
   await visitor.getByRole("button", { name: /Bar.*: sélectionner/ }).click()
   await visitor.getByRole("button", { name: /^Continuer/ }).first().click()
-  await visitor.getByLabel("Prénom *", { exact: true }).fill("E2E")
-  await visitor.getByLabel("Nom *", { exact: true }).fill(lastName)
-  await visitor.getByLabel("Email *", { exact: true }).fill(`e2e-groupe-${Date.now()}@example.com`)
+  await visitor.getByLabel("Prénom", { exact: true }).fill("E2E")
+  await visitor.getByLabel("Nom", { exact: true }).fill(lastName)
+  await visitor.getByLabel("Email", { exact: true }).fill(`e2e-groupe-${Date.now()}@example.com`)
   await visitor.getByRole("button", { name: "convention des bénévoles" }).click()
   await visitor.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
   await visitor.getByLabel(/J.accepte que l.association/).check()

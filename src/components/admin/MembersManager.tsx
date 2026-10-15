@@ -17,6 +17,7 @@ import { AddMemberModal, EditMemberModal } from "./members/MemberFormModals"
 import ImportModal from "./members/ImportModal"
 import SortTh from "./members/SortTh"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
+import { outcomeClass } from "@/lib/status-message"
 
 type Props = {
   initialMembers: Member[]
@@ -175,7 +176,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   // Saving an edit (#599): focus the status line at once, synchronously (a layout effect, like
   // ModalShell's own documented "a parent that moves focus when the dialog closes wins" escape
   // hatch) — it would otherwise be a losing race against ModalShell's own "return focus to the
-  // opener" (the row's « Éditer » button), landing focus there first and then, moments later once
+  // opener" (the row's « Modifier » button), landing focus there first and then, moments later once
   // router.refresh() resolves, somewhere else again: two hops to two different places. Parking on
   // the status line first, predictably, means only one hop whatever happens next: either nothing
   // (an unrelated action happens) or the live region's own text updates in place, read without
@@ -319,7 +320,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         ref={actionRef}
         tabIndex={-1}
         role={actionMessage?.kind === "error" ? "alert" : "status"}
-        className={actionMessage ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${actionMessage.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+        className={`${outcomeClass(actionMessage)} focus:outline-none`}
       >
         {actionMessage?.text ?? ""}
       </p>
@@ -431,7 +432,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
             onChange={(e) => setTagFilter(e.target.value)}
             className="ml-1.5 border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
           >
-            <option value="">Tous les tags</option>
+            <option value="">Toutes les étiquettes</option>
             {allTags.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
@@ -501,8 +502,8 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                 <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
-                <th scope="col" className="text-left px-4 py-2 font-medium">Tags</th>
-                <SortTh col="hoursTotal" label="Heures planifiées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <th scope="col" className="text-left px-4 py-2 font-medium">Étiquettes</th>
+                <SortTh col="hoursTotal" label="Heures prévues (passées)" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="hoursAttested" label="Heures attestées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="lastShiftDate" label="Dernière participation" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-right px-4 py-2 font-medium">
@@ -575,10 +576,9 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                       <button
                         data-edit-trigger={m.id}
                         onClick={() => startEditing(m)}
-                        aria-label={`Éditer ${m.firstName} ${m.lastName}`}
                         className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                       >
-                        Éditer
+                        Modifier{" "}<span className="sr-only">{m.firstName} {m.lastName}</span>
                       </button>
                       {m.addressStatus.kind === "to_verify" && (
                         <button
@@ -629,7 +629,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           onClose={() => setEditingMember(null)}
           onSaved={() => handleEditSaved(editingMember)}
           // Deep-linked (?edit=id, #599): nothing was clicked to open it, so ModalShell has no
-          // opener to restore focus to on cancel/Escape. Its row's « Éditer » button if the row is
+          // opener to restore focus to on cancel/Escape. Its row's « Modifier » button if the row is
           // still there (it normally is: cancelling changes nothing), else the page heading.
           fallbackFocusOnClose={() => document.querySelector<HTMLElement>(`[data-edit-trigger="${editingMember.id}"]`) ?? headingRef.current}
         />

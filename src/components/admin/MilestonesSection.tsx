@@ -12,6 +12,7 @@ import { dueDateInputValue, isMilestoneOverdue, milestoneChanges, MILESTONE_TITL
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { requestJson, useSubmit } from "@/lib/use-submit"
+import { outcomeClass } from "@/lib/status-message"
 
 export type MilestoneRow = {
   id: string
@@ -164,7 +165,7 @@ function MilestoneForm({ eventId, milestone, team, onSaved, onCancel }: {
       </div>
       <div>
         <label htmlFor={`${id}-owner`} className="block text-sm font-medium text-gray-700 mb-1">
-          Responsable <span className="text-gray-500 font-normal">(facultatif)</span>
+          Qui s&apos;en occupe <span className="text-gray-500 font-normal">(facultatif)</span>
         </label>
         <select
           ref={ownerRef}
@@ -295,7 +296,7 @@ export default function MilestonesSection({
         ref={outcomeRef}
         tabIndex={-1}
         role={outcome?.kind === "error" ? "alert" : "status"}
-        className={outcome ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${outcome.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+        className={`${outcomeClass(outcome)} focus:outline-none`}
       >
         {outcome?.text ?? ""}
       </p>
@@ -341,7 +342,7 @@ export default function MilestonesSection({
                   </label>
                   {m.ownerName && (
                     <p id={`${checkboxId}-owner`} className="text-xs text-gray-600 break-words">
-                      Responsable : {m.ownerName}{ownerInactive ? " (compte désactivé)" : ""}
+                      Qui s&apos;en occupe : {m.ownerName}{ownerInactive ? " (compte désactivé)" : ""}
                     </p>
                   )}
                 </div>
@@ -364,10 +365,10 @@ export default function MilestonesSection({
                     <button
                       type="button"
                       onClick={() => handleRemove(m)}
-                      aria-label={`Supprimer le jalon ${m.title}`}
-                      className="inline-flex items-center justify-center min-h-6 min-w-6 rounded text-xs text-gray-500 hover:text-red-600 transition-colors"
+                      className="inline-flex items-center min-h-6 px-1.5 rounded text-xs text-red-700 hover:text-red-900 transition-colors"
                     >
-                      ×
+                      {/* Named with the milestone (#587), like « Modifier »: a bare « × » said nothing. */}
+                      Supprimer<span className="sr-only"> le jalon « {m.title} »</span>
                     </button>
                   </span>
                 </span>

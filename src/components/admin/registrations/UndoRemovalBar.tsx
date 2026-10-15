@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useRef, type RefObject } from "react"
+import { statusBoxClass } from "@/lib/status-message"
 
 export type HoldReason = "focus" | "pointer"
 
@@ -31,7 +32,7 @@ export default function UndoRemovalBar({ count, secondsLeft, undoButtonRef, onUn
       onBlur={(e) => { if (!undoBarRef.current?.contains(e.relatedTarget as Node | null)) onRelease("focus") }}
       onPointerEnter={() => onHold("pointer")}
       onPointerLeave={() => onRelease("pointer")}
-      className="text-sm text-gray-900 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1"
+      className={`${statusBoxClass("warning")} flex flex-wrap items-center gap-x-3 gap-y-1`}
     >
       <span id={undoTextId}>
         {count} {count > 1 ? "bénévoles seront retirés" : "bénévole sera retiré"} de {count > 1 ? "leur" : "son"} créneau

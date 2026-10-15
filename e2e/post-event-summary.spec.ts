@@ -80,7 +80,7 @@ test("event summary on Rapports, members list columns, and the hours-by-voluntee
   await page.goto("/admin/members")
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
   const table = page.getByRole("table", { name: "Liste des membres" })
-  await expect(table.getByRole("columnheader", { name: "Heures planifiées" })).toBeVisible()
+  await expect(table.getByRole("columnheader", { name: "Heures prévues (passées)" })).toBeVisible()
   await expect(table.getByRole("columnheader", { name: "Heures attestées" })).toBeVisible()
   const lastParticipationHeader = table.getByRole("columnheader", { name: "Dernière participation" })
   await expect(lastParticipationHeader).toBeVisible()

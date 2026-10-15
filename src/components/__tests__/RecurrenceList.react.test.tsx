@@ -59,7 +59,7 @@ describe("RecurrenceList", () => {
   it("changes the capacity from a date and shows the dates that refuse it", async () => {
     const props = setup()
     fireEvent.click(screen.getByRole("button", { name: /^Modifier à partir d'une date\W+Accueil$/ }))
-    fireEvent.change(screen.getByLabelText("Personnes par créneau"), { target: { value: "1" } })
+    fireEvent.change(screen.getByLabelText("Places par créneau"), { target: { value: "1" } })
     fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ error: "Plus de 1 personne est déjà inscrite sur 1 date.", tooSmall: [{ date: "2026-09-16", startTime: "14:00", committed: 2 }] }), { status: 400 }))
     fireEvent.click(screen.getByRole("button", { name: "Modifier ces dates" }))
     expect(await screen.findByRole("alert")).toHaveTextContent("2 inscrits")
@@ -82,7 +82,7 @@ describe("RecurrenceList", () => {
   it("says so when the network fails, and lets the organiser try again", async () => {
     setup()
     fireEvent.click(screen.getByRole("button", { name: /^Modifier à partir d'une date\W+Accueil$/ }))
-    fireEvent.change(screen.getByLabelText("Personnes par créneau"), { target: { value: "3" } })
+    fireEvent.change(screen.getByLabelText("Places par créneau"), { target: { value: "3" } })
     fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
     fireEvent.click(screen.getByRole("button", { name: "Modifier ces dates" }))
     expect(await screen.findByRole("alert")).toHaveTextContent("Connexion impossible")
