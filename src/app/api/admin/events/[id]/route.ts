@@ -9,6 +9,7 @@ import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
+import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
@@ -65,7 +66,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     where: { id },
     include: {
       shifts: {
-        include: { registrations: { where: { status: "active" }, include: { volunteer: true } } },
+        // Never the personal link's token (#1009).
+        include: { registrations: { where: { status: "active" }, select: { ...REGISTRATION_ADMIN_SELECT, volunteer: true } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
     },

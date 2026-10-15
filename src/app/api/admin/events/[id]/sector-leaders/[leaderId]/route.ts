@@ -15,7 +15,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const leader = await db.sectorLeader.findFirst({ where: { id: leaderId, eventId } })
+  const leader = await db.sectorLeader.findFirst({ where: { id: leaderId, eventId }, select: { roleName: true, email: true } })
   if (!leader) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   await db.sectorLeader.delete({ where: { id: leaderId } })

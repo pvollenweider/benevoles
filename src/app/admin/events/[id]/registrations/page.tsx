@@ -43,7 +43,7 @@ export default async function RegistrationsPage({
         include: { volunteer: true, shift: true },
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
-      sectorLeaders: true,
+      sectorLeaders: { select: { roleName: true, email: true } },
       // Share links per group (#947), for the « Par lien de groupe » filter.
       groupLinks: { orderBy: { createdAt: "asc" }, select: { id: true, name: true } },
       organization: { select: { timeZone: true, volunteerCharter: true } },

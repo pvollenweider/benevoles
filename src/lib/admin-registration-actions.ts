@@ -12,6 +12,7 @@ import { linkToken, registrationToken } from "./token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import type { Send } from "./notifications/types"
 import { LIVE_STATUSES } from "./registration-capacity"
+import { SECTOR_LEADER_ADMIN_SELECT } from "./admin-row-selects"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -180,7 +181,7 @@ export async function addSectorLeader(
   ctx: { organizationId: string; actor: LogActor; event: { id: string; title: string; organization: { slug: string } } },
   input: LeaderInput,
 ) {
-  const existing = await db.sectorLeader.findFirst({ where: { eventId: ctx.event.id, roleName: input.roleName, email: input.email } })
+  const existing = await db.sectorLeader.findFirst({ where: { eventId: ctx.event.id, roleName: input.roleName, email: input.email }, select: SECTOR_LEADER_ADMIN_SELECT })
   if (existing) return { status: "exists" as const, leader: existing }
 
   // Clear token only in memory (the invite email needs it); the DB keeps hash + encrypted copy.
@@ -189,6 +190,8 @@ export async function addSectorLeader(
   const { leader, outboxIds } = await db.$transaction(async (tx) => {
     const leader = await tx.sectorLeader.create({
       data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, ...linkToken.data(token) },
+      // Returned to the admin by POST …/sector-leaders (#1009): never the stored token.
+      select: SECTOR_LEADER_ADMIN_SELECT,
     })
     const outboxIds = await enqueueNotifications([{
       kind: "sector_leader_invite",

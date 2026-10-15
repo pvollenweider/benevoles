@@ -10,6 +10,7 @@ import { cancelRegistrations } from "@/lib/admin-registration-actions"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { reportError } from "@/lib/report-error"
 import { validationError } from "@/lib/api-error"
+import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
 const schema = z.object({
   status: z.enum(["active", "cancelled", "deleted"]).optional(),
@@ -40,7 +41,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     registration = await db.registration.update({
       where: { id },
       data: parsed.data,
-      include: { shift: true },
+      // Returned to the admin: never the stored token (#1009).
+      select: { ...REGISTRATION_ADMIN_SELECT, shift: true },
     })
   } catch (e) {
     // Reactivating a cancelled registration while the volunteer already has a live one on the
