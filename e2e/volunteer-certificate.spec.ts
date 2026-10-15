@@ -54,16 +54,16 @@ test("open a member page, open the certificate, see the headings and the table, 
   await expect(table).toBeVisible()
   await expect(table.getByText(event.title)).toBeVisible()
   await expect(table.getByRole("columnheader", { name: "Heures attestées" })).toBeVisible()
-  await expect(table.getByRole("columnheader", { name: /planifiées/ })).toHaveCount(0)
+  await expect(table.getByRole("columnheader", { name: /prévues/ })).toHaveCount(0)
 
-  const checkbox = page.getByRole("checkbox", { name: /Inclure les heures planifiées/ })
+  const checkbox = page.getByRole("checkbox", { name: /Inclure les heures prévues/ })
   // The checkbox is a controlled input (checked={includePlanned}): before hydration, a click
   // reaches the DOM node but React hasn't attached its handler yet, so the state never flips.
   await waitForHydration(checkbox)
   await expect(checkbox).not.toBeChecked()
   await checkbox.check()
   await expect(checkbox).toBeChecked()
-  await expect(table.getByRole("columnheader", { name: /planifiées/ })).toBeVisible()
+  await expect(table.getByRole("columnheader", { name: /prévues/ })).toBeVisible()
 
   // Printed, the page holds only the certificate (#965): the admin navigation and the form stay
   // on screen, and the table stays inside the document's width with the planned-hours column on.

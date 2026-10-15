@@ -248,6 +248,17 @@ export function lastParticipation(entries: HourEntry[]): LastParticipation {
   return { lastShiftDate: maxDate(entries), lastPresenceDate: maxDate(entries.filter((e) => e.attested)) }
 }
 
+/**
+ * The hour columns of the members list, from every confirmed shift of the member: « Heures
+ * prévues » counts past AND upcoming shifts (a member signed up for next month is never « — »),
+ * « Heures attestées » the subset with a recorded presence (an upcoming shift has none), both with
+ * parallel shifts counted once (#986). « Dernière participation » stays on the past shifts only:
+ * an upcoming shift is not a participation yet.
+ */
+export function memberListHours(entries: HourEntry[], today: string): { plannedMinutes: number; attestedMinutes: number } & LastParticipation {
+  return { ...splitMinutes(entries), ...lastParticipation(pastEntries(entries, today)) }
+}
+
 export type MemberHourTotals = {
   volunteerId: string
   eventsCount: number

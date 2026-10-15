@@ -492,10 +492,10 @@ export default function ShiftsManager({
                       <span aria-hidden="true">{s.registrationCount}/{s.capacity}</span>
                       <span className="sr-only">{spokenPlaces(s.registrationCount, s.capacity)}</span>
                     </p>
-                    {s.registrationCount >= s.capacity
-                      ? <p className="text-[11px] font-medium text-gray-900">Complet</p>
-                      : <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
-                    }
+                    {/* A full row says « Complet » once, in its status badge: the count alone here. */}
+                    {s.registrationCount < s.capacity && (
+                      <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
+                    )}
                     {/* Against the minimum (#949), only for a shift that has one and isn't full. */}
                     {s.registrationCount < s.capacity && s.minVolunteers != null && (
                       <p className="text-[11px] text-gray-800 mt-0.5"><StaffingStateLabel s={s} state={shiftStaffingState({ ...s, active: s.registrationCount })} /></p>

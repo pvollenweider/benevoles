@@ -503,7 +503,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
                 <th scope="col" className="text-left px-4 py-2 font-medium">Étiquettes</th>
-                <SortTh col="hoursTotal" label="Heures prévues (passées)" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <SortTh col="hoursTotal" label="Heures prévues" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="hoursAttested" label="Heures attestées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="lastShiftDate" label="Dernière participation" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-right px-4 py-2 font-medium">

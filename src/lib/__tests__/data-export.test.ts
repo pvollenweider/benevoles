@@ -57,7 +57,7 @@ describe("csv", () => {
       { firstName: "=cmd", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 0, attestedHours: 2 },
     ])
     const lines = csv.split("\r\n")
-    expect(lines[0]).toBe("﻿Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées")
+    expect(lines[0]).toBe("﻿Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
     expect(lines[1]).toBe("Zoé;Roy;2;3;4.5;2")
     expect(lines[2]).toBe("'=cmd;Dupont;1;1;0;2")
     expect(lines[3]).toBe("Total;;;4;4.5;4")

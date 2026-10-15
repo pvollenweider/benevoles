@@ -94,7 +94,7 @@ export function memberHoursCsv(rows: MemberHoursExportRow[]): string {
     { shiftsCount: 0, plannedHours: 0, attestedHours: 0 },
   )
   return csvDocument(
-    ["Prénom", "Nom", "Événements", "Créneaux", "Heures planifiées", "Heures attestées"],
+    ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"],
     [
       ...rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours]),
       ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours],

@@ -59,7 +59,7 @@ export function nextSort(current: SortState, col: SortCol): SortState {
 const COL_LABELS: Record<SortCol, string> = {
   firstName: "prénom",
   lastName: "nom",
-  hoursTotal: "heures planifiées",
+  hoursTotal: "heures prévues",
   hoursAttested: "heures attestées",
   lastShiftDate: "dernière participation",
 }

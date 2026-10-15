@@ -223,7 +223,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           <div>
             <h3 className="text-sm font-semibold text-gray-900">Heures</h3>
             <p className="text-sm text-gray-800 mt-1">
-              <strong>{fmtDuration(summary.plannedMinutes)}</strong> planifiées, dont <strong>{fmtDuration(summary.attestedMinutes)}</strong> attestées (présence enregistrée).
+              <strong>{fmtDuration(summary.plannedMinutes)}</strong> prévues, dont <strong>{fmtDuration(summary.attestedMinutes)}</strong> attestées (présence enregistrée).
             </p>
           </div>
 

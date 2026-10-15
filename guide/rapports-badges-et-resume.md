@@ -41,7 +41,7 @@ Toujours depuis **Rapports**, la section **Résumé de l'événement** (juste av
 
 - nombre de bénévoles distincts avec un créneau confirmé, dont ceux de retour et ceux pour la première fois (pas d'inscription active sur un événement antérieur de l'organisation) ;
 - nombre de créneaux confirmés avec une présence enregistrée sur le total, avec une phrase explicite si le pointage n'a pas été utilisé ou seulement en partie ;
-- heures planifiées (le total des créneaux confirmés) et, parmi elles, les heures attestées (présence enregistrée), par exemple « 46 h planifiées, dont 38 h attestées » ; pour chaque bénévole, le temps de deux créneaux tenus en même temps (poste cumulable avec un autre créneau) n'est compté qu'une fois ;
+- heures prévues (le total des créneaux confirmés) et, parmi elles, les heures attestées (présence enregistrée), par exemple « 46 h prévues, dont 38 h attestées » ; pour chaque bénévole, le temps de deux créneaux tenus en même temps (poste cumulable avec un autre créneau) n'est compté qu'une fois ;
 - taux de remplissage global puis par poste, chiffres à l'appui (« 46 places occupées sur 52 ») ;
 - la liste des créneaux restés incomplets, avec ceux restés sous leur minimum de personnes.
 

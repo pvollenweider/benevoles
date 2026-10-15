@@ -91,7 +91,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapp
 
 ## Après l'événement
 
-- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures planifiées et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
+- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures prévues et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
 - **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures ; deux créneaux tenus en même temps n'y comptent qu'une fois.
 - **Les heures par bénévole** sur une période, dans un fichier CSV, pour le rapport annuel.
 - **Tout est noté** : le journal d'activité de chaque événement retrace qui a fait quoi, et quand.
