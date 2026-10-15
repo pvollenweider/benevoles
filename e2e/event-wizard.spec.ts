@@ -20,9 +20,9 @@ test("an admin creates and publishes an event through the three steps", async ({
   const steps = page.getByRole("navigation", { name: "Étapes de création de l'événement" })
   await expect(steps.getByRole("listitem").nth(0)).toHaveAttribute("aria-current", "step")
   const title = `E2E Assistant ${Date.now()}`
-  await page.getByLabel("Titre").fill(title)
-  await page.getByLabel("Date début").fill("2031-05-10")
-  await page.getByLabel("Date fin").fill("2031-05-10")
+  await page.getByLabel("Titre *").fill(title)
+  await page.getByLabel("Date début *").fill("2031-05-10")
+  await page.getByLabel("Date fin *").fill("2031-05-10")
   await page.getByRole("button", { name: /Créer/ }).click()
 
   // Step 2: shifts, with the assistant's indicator; a series of shifts.

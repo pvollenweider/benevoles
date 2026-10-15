@@ -48,7 +48,7 @@ export async function preparePrivacyRecording(page: Page, base: string, director
     if (created.status() !== 201) throw new Error("Actual dedicated leader creation failed")
     const leader = await db.sectorLeader.findFirstOrThrow({ where: { eventId: "video-privacy-a-event", roleName: "Accueil" } })
     await page.goto(`${base}/admin/members`)
-    await page.getByRole("button", { name: "Éditer Léa Exemple", exact: true }).waitFor()
+    await page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }).waitFor()
     return { cookiesA, cookiesB, leaderId: leader.id, leaderToken: linkToken.reveal(leader) }
   } finally { await other?.close(); await db.$disconnect() }
 }
@@ -206,7 +206,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Dans les inscriptions, il retrouve"); await lea.scrollIntoViewIfNeeded()
       if (!(await lea.innerText()).includes("Taille du t-shirt : M")) throw new Error("Actual answer missing from admin row")
       await at("Dans les membres, il peut"); await go("/admin/members")
-      await at("Regardons la fiche de Léa"); await tap(page, page.getByRole("button", { name: "Éditer Léa Exemple", exact: true }))
+      await at("Regardons la fiche de Léa"); await tap(page, page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }))
       if (await page.getByLabel("Notes", { exact: true }).inputValue() !== "Note interne fictive — organisation A") throw new Error("Dedicated internal note missing")
       await page.getByLabel("Notes", { exact: true }).scrollIntoViewIfNeeded()
       await at("Sa page personnelle ne montre"); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))

@@ -51,7 +51,7 @@ export function assertHoursScenario(scenario: HoursScenario, product: ProductBui
  * rather than silently parsing a different or potentially sensitive document. */
 export function assertHoursCsv(csv: string, includeAll: boolean) {
   const lines = csv.replace(/^\uFEFF/, "").trim().split(/\r?\n/).map(line => line.split(";"))
-  assert.deepEqual(lines[0], ["Prénom", "Nom", "Événements", "Créneaux", "Heures planifiées", "Heures attestées"])
+  assert.deepEqual(lines[0], ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"])
   assert.deepEqual(lines.slice(1), [
     ...(includeAll ? [["Clara", "Besson", "0", "0", "0", "0"]] : []),
     ["Benoît", "Favre", "1", "1", "2", "0"],
@@ -90,14 +90,14 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
   const row = () => page.getByRole("row").filter({ has: page.getByRole("link", { name: "Activité de Aline Mercier", exact: true }) })
   await go("/admin/members")
   await scene("hours-list", async () => {
-    await page.getByRole("columnheader", { name: "Heures planifiées", exact: true }).scrollIntoViewIfNeeded()
+    await page.getByRole("columnheader", { name: "Heures prévues", exact: true }).scrollIntoViewIfNeeded()
     await page.getByRole("columnheader", { name: "Heures attestées", exact: true }).waitFor()
     await row().scrollIntoViewIfNeeded()
     const cells = row().getByRole("cell")
     // Columns are read by their current header rather than a stale fixed index.
     const headers = (await page.getByRole("table", { name: "Liste des membres", exact: true }).getByRole("columnheader").allTextContents()).map(text => text.replace(/[↕↑↓]/g, "").trim())
-    assert(headers.includes("Heures planifiées") && headers.includes("Heures attestées"), "Current hours columns are required")
-    assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures planifiées")).innerText()).trim(), "8h")
+    assert(headers.includes("Heures prévues") && headers.includes("Heures attestées"), "Current hours columns are required")
+    assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures prévues")).innerText()).trim(), "8h")
     assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures attestées")).innerText()).trim(), "6h")
     await evidence("hours-list", { plannedHours: 8, attestedHours: 6, futureAndCancelledExcluded: true, attestedIsSubsetNotAdditional: true })
   })
@@ -179,10 +179,10 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const include = page.getByRole("checkbox", { name: "Inclure les heures planifiées sans présence saisie", exact: true })
     assert.equal(await include.isChecked(), false)
     const table = page.getByRole("table")
-    assert.equal(await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).count(), 0)
+    assert.equal(await table.getByRole("columnheader", { name: "Heures prévues (sans présence)", exact: true }).count(), 0)
     await table.getByRole("columnheader", { name: "Heures attestées", exact: true }).scrollIntoViewIfNeeded()
     await at("Regardons cette colonne, puis cochons"); await tap(page, include)
-    await table.getByRole("columnheader", { name: "Heures planifiées (sans présence)", exact: true }).waitFor()
+    await table.getByRole("columnheader", { name: "Heures prévues (sans présence)", exact: true }).waitFor()
     const total = table.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Total", exact: true }) })
     assert.match((await total.innerText()).replace(/\s+/g, " "), /6\s*h.*2\s*h/)
     await at("Pour Aline, nous retrouvons six heures")

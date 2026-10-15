@@ -77,7 +77,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await go(`${base}/admin/members`)
       await write(page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Zoé")
       await at("Ce renseignement aide à lui"); await page.getByRole("row").filter({ hasText: "Zoé Exemple" }).scrollIntoViewIfNeeded()
-      await at("il ne l'inscrit pas automatiquement"); await tap(page, page.getByRole("button", { name: "Éditer Zoé Exemple", exact: true }))
+      await at("il ne l'inscrit pas automatiquement"); await tap(page, page.getByRole("button", { name: "Modifier Zoé Exemple", exact: true }))
       const note = page.getByLabel(/Sauf \/ à savoir/)
       await note.scrollIntoViewIfNeeded()
       if (await note.inputValue() !== "Peut aussi aider en début d'après-midi après confirmation.") throw new Error("Actual availability note missing")

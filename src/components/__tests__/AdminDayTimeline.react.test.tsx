@@ -39,6 +39,8 @@ describe("AdminDayTimeline", () => {
     expect(band).toHaveLength(1)
     expect(parseFloat(band[0].style.width)).toBeGreaterThan(60 * PX_PER_MIN)
     expect(parseFloat(band[0].style.width)).toBe(4 * 60 * PX_PER_MIN)
+    // Read in words, saying it ends the next day; the « 21h–01h » stays visual only.
+    expect(label).toHaveTextContent("de 21h à 1h, jusqu'au lendemain")
   })
 
   it("names each bar with the role first, then the time and places in words", () => {

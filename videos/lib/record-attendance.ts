@@ -39,7 +39,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       await at("Il ne mesure pas l'heure"); await go(`${base}/admin/members?q=video.attendance.2%40example.org`)
       const member = page.getByRole("row").filter({ hasText: "video.attendance.2@example.org" })
       if (await member.count() !== 1) throw new Error("Member fixture ambiguous")
-      await page.getByRole("columnheader", { name: /Heures planifiées/ }).scrollIntoViewIfNeeded()
+      await page.getByRole("columnheader", { name: /Heures prévues/ }).scrollIntoViewIfNeeded()
       if (!(await member.innerText()).includes("4h")) throw new Error("Expected four planned hours, not attested hours")
       await at(0.53) /* mid-sentence */; await tap(page, member.getByRole("link", { name: /^Activité/ }))
       await page.getByRole("heading", { name: "Activité de Léa Exemple", exact: true }).waitFor()

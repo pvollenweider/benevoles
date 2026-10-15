@@ -276,7 +276,7 @@ async function run() {
     await form.getByRole("combobox", { name: "Date" }).selectOption({ index: 2 })
     await form.getByRole("textbox", { name: "Début" }).fill("10:00")
     await form.getByRole("textbox", { name: "Fin" }).fill("22:00")
-    await form.getByRole("spinbutton", { name: "Personnes par créneau" }).fill("3")
+    await form.getByRole("spinbutton", { name: "Places par créneau" }).fill("3")
     await form.getByRole("checkbox", { name: "Activer la liste d'attente" }).check()
     await a.evaluate(() => document.activeElement?.blur())
     await a.waitForTimeout(300)

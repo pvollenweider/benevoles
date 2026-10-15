@@ -6,7 +6,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
-import { dayLabel } from "@/lib/spoken-time"
+import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
 import { deleteShiftRecapFor, timelineBarName, timelineBarPlaces } from "@/lib/shifts-admin"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
@@ -492,7 +492,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                       width: Math.max((showSpan(show).end - showSpan(show).start) * PX_PER_MIN, 48),
                     }}
                   >
-                    <span aria-hidden="true">🎪 </span>{show.name} · {fmt(show.startTime)}–{fmt(show.endTime)}
+                    <span aria-hidden="true">🎪 </span>{show.name}<span aria-hidden="true"> · {fmt(show.startTime)}–{fmt(show.endTime)}</span><span className="sr-only">, {spokenTimeRange(show.startTime, show.endTime)}</span>
                   </div>
                 ))}
               </div>
