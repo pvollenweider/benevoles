@@ -31,7 +31,7 @@ describe("members import", () => {
     render(<ImportModal onClose={() => {}} onImported={() => {}} />)
     const input = screen.getByLabelText("Choisir un fichier CSV ou Excel")
     expect(input).toHaveAttribute("type", "file")
-    expect(input).toHaveClass("sr-only")
+    expect(input).toHaveClass("opacity-0")
     expect(input).toHaveAccessibleDescription(/^Aucun fichier choisi/)
     fireEvent.change(input, { target: { files: [new File(["email\na@example.com"], "membres.csv", { type: "text/csv" })] } })
     expect(input).toHaveAccessibleDescription(/^membres\.csv/)

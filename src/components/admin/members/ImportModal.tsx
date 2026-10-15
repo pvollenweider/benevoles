@@ -193,25 +193,22 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
         <form onSubmit={analyse} hidden={!!analysis} className="space-y-4">
           <div>
             {/* The browser's own file button reads « Choose File / No file chosen » in English: the
-                input stays focusable but visually hidden, its label is a French button, and the
-                chosen file is said below (announced when the picker closes). The input comes first,
-                for the label's peer-focus-visible outline. */}
+                input stays, transparent over its label (a French button that shows the focus
+                outline, like a pill radio; a direct tap reaches the input, also with VoiceOver on
+                iOS), and the chosen file is said next to it (announced when the picker closes). */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <input
-                ref={fileRef}
-                id={`${id}-file`}
-                type="file"
-                accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                aria-describedby={`${id}-file-name ${id}-file-help${error ? ` ${id}-error` : ""}`}
-                aria-invalid={error && !file ? true : undefined}
-                className="peer sr-only"
-              />
-              <label
-                htmlFor={`${id}-file`}
-                className="inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blue-600"
-              >
-                Choisir un fichier CSV ou Excel
+              <label className="relative inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-blue-600">
+                <span>Choisir un fichier CSV ou Excel</span>
+                <input
+                  ref={fileRef}
+                  id={`${id}-file`}
+                  type="file"
+                  accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  aria-describedby={`${id}-file-name ${id}-file-help${error ? ` ${id}-error` : ""}`}
+                  aria-invalid={error && !file ? true : undefined}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
               </label>
               <p id={`${id}-file-name`} aria-live="polite" className="text-sm text-gray-700 break-all">{file ? file.name : "Aucun fichier choisi"}</p>
             </div>

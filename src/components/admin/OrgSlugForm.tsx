@@ -174,7 +174,7 @@ export default function OrgSlugForm({
           </button>
         </div>
         <p id={helpId} className="text-xs text-gray-600">
-          Votre espace sera à l&apos;adresse <span className="font-mono break-all">{trimmed || "votre-identifiant"}.{baseDomain}</span>
+          Adresse de votre espace : <span className="font-mono break-all">{trimmed || "votre-identifiant"}.{baseDomain}</span>
           <span className="block">2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin.</span>
         </p>
       </form>

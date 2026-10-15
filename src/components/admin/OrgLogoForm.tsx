@@ -144,25 +144,22 @@ export default function OrgLogoForm({ initialLogo, organizationName }: { initial
 
       <form onSubmit={upload} noValidate className="space-y-3">
         <div>
-          {/* The browser's own button reads « Choose File / No file chosen »: the input stays
-              focusable but visually hidden, its label is the French button, and the chosen file
-              is said next to it (announced when the picker closes). Input first, for peer-focus. */}
+          {/* The browser's own button reads « Choose File / No file chosen »: the input stays, transparent
+              over its label (the French button, which shows the focus outline, like a pill radio), and
+              the chosen file is said next to it (announced when the picker closes). */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <input
-              ref={inputRef}
-              id={inputId}
-              type="file"
-              accept={LOGO_ACCEPT}
-              onChange={(e) => choose(e.target.files?.[0] ?? null)}
-              aria-describedby={`${inputId}-name ${error ? `${errorId} ${hintId}` : hintId}`}
-              aria-invalid={error ? true : undefined}
-              className="peer sr-only"
-            />
-            <label
-              htmlFor={inputId}
-              className="inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blue-700"
-            >
-              {logo ? "Remplacer par une autre image" : "Choisir une image"}
+            <label className="relative inline-flex items-center min-h-11 sm:min-h-9 cursor-pointer rounded-xl border border-blue-600 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-blue-700">
+              <span>{logo ? "Remplacer par une autre image" : "Choisir une image"}</span>
+              <input
+                ref={inputRef}
+                id={inputId}
+                type="file"
+                accept={LOGO_ACCEPT}
+                onChange={(e) => choose(e.target.files?.[0] ?? null)}
+                aria-describedby={`${inputId}-name ${error ? `${errorId} ${hintId}` : hintId}`}
+                aria-invalid={error ? true : undefined}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              />
             </label>
             <p id={`${inputId}-name`} aria-live="polite" className="text-sm text-gray-700 break-all">{chosen ? chosen.file.name : "Aucune image choisie"}</p>
           </div>
