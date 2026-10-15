@@ -19,6 +19,8 @@ import WithdrawMessageField from "@/components/public/WithdrawMessageField"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import MissionBriefCard from "@/components/public/MissionBriefCard"
+import MyAnswersCard from "@/components/public/MyAnswersCard"
+import type { MyAnswerRow } from "@/lib/my-answers"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { SIGN_UP_MORE_LABEL, bottomLink, emptyPageLink } from "@/lib/personal-page-links"
@@ -70,6 +72,8 @@ type PageData = {
   linkEmailedAt?: string | null
   contactEmail?: string | null
   confirmationMessage: string | null
+  /** « Mes réponses » (#984): the event's questions with this volunteer's answers, in form order. */
+  answers?: MyAnswerRow[]
 }
 
 const LIST_TITLE_ID = "my-registrations-title"
@@ -455,6 +459,9 @@ export default function MyRegistrationPage() {
             </div>
           )}
         </section>
+
+        {/* The answers to the event's questions (#984), read-only, under the registrations. */}
+        <MyAnswersCard rows={data.answers ?? []} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
 
         <PersonalLinkPanel
           token={token}

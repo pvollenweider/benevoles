@@ -56,7 +56,7 @@ test.beforeAll(async ({ browser }) => {
   const publish = await page.request.patch(`/api/admin/events/${created.id}`, { data: { publicStatus: "published" } })
   expect(publish.ok(), await publish.text()).toBeTruthy()
   await page.close()
-  event = { eventId: created.id, slug: created.slug, date: DATE, shifts: [{ id: bar.id, label: "Bar" }, { id: accueil.id, label: "Accueil" }] }
+  event = { eventId: created.id, slug: created.slug, date: DATE, shifts: [{ id: bar.id, label: "Bar" }, { id: accueil.id, label: "Accueil" }], questions: [] }
 })
 
 test.beforeEach(async ({ page }) => {

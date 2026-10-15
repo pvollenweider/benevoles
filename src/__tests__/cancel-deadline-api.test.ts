@@ -12,7 +12,7 @@ vi.mock("@/lib/event-log", () => ({ logEvent, adminActor: () => ({ type: "admin"
   for (const k of f) if (a[k] !== b[k]) out[k] = { from: a[k], to: b[k] }
   return Object.keys(out).length ? out : null
 } }))
-const prismaMock = vi.hoisted(() => ({ registration: { findFirst: vi.fn(), findMany: vi.fn() } }))
+const prismaMock = vi.hoisted(() => ({ registration: { findFirst: vi.fn(), findMany: vi.fn() }, eventQuestion: { findMany: async () => [] } }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.example`, eventPublicUrl: (org: string, slug: string) => `https://${org}.example/${slug}` }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn() }))
