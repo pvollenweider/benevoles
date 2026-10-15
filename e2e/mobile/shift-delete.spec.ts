@@ -6,7 +6,8 @@ import { waitForHydration } from "../helpers/hydration"
  * "webkit-iphone"). WebKit does not focus a tapped button: focus fell back to the admin's
  * `<main tabIndex={-1}>`, the Frise popover took that for focus leaving it and closed before the
  * tap's click, so « Supprimer le créneau » did nothing. In « Liste », the actions column was cut
- * off at the right edge of a phone screen.
+ * off at the right edge of a phone screen. A capacity typed just before tapping « Voir les
+ * inscriptions » is saved before the page changes (#991).
  */
 
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
@@ -100,6 +101,32 @@ test("Frise: after a tapped button, Escape still closes the popover and gives fo
   await page.keyboard.press("Escape")
   await expect(popover).toHaveCount(0)
   await expect(bar).toBeFocused()
+})
+
+test("Frise: a capacity typed before tapping « Voir les inscriptions » is saved (#991)", async ({ page }) => {
+  const { eventId, shiftIds: [barId] } = await createEvent(page, `E2E Places avant inscriptions ${Date.now()}`, [
+    { roleName: "Bar", startTime: "10:00", endTime: "12:00" },
+  ])
+  const shifts = `/admin/events/${eventId}/shifts`
+  await page.goto(shifts)
+  await waitForHydration(page.getByRole("button", { name: "Frise" }))
+  const bar = page.locator(`#shift-bar-${barId}`)
+  await bar.tap()
+  const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
+  await popover.getByLabel("Places").fill("7")
+  const sent: string[] = []
+  page.on("request", r => { if (r.url().includes(`/api/admin/shifts/${barId}`)) sent.push(r.method()) })
+  await popover.getByRole("link", { name: "Voir les inscriptions" }).tap()
+  await expect(page).toHaveURL(new RegExp(`/admin/events/${eventId}/registrations\\?shift=${barId}$`))
+  // One save, the same as closing, and only then the registrations page.
+  expect(sent).toEqual(["PATCH"])
+
+  await page.goBack()
+  await expect(page).toHaveURL(new RegExp(`${shifts}$`))
+  await waitForHydration(page.getByRole("button", { name: "Frise" }))
+  await expect(bar).toContainText("0/7")
+  await bar.tap()
+  await expect(popover.getByLabel("Places")).toHaveValue("7")
 })
 
 for (const width of [320, 390]) {

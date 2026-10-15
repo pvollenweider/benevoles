@@ -5,6 +5,24 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
 
+const router = vi.hoisted(() => ({ push: vi.fn(), refresh: vi.fn() }))
+// The hrefs the mocked Link went on to on its own (its navigation not prevented).
+const followed = vi.hoisted(() => [] as string[])
+vi.mock("next/navigation", () => ({ useRouter: () => router }))
+// Next's Link, as far as the popover relies on it: `onNavigate` for an in-app navigation only (not
+// with Ctrl, Cmd, Shift or Alt, which open a new tab or window), its preventDefault read at once.
+vi.mock("next/link", () => ({
+  default: ({ onNavigate, children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { onNavigate?: (e: { preventDefault(): void }) => void }) => (
+    <a {...rest} onClick={e => {
+      e.preventDefault() // jsdom does not navigate; what matters is whether onNavigate let it go
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return
+      let prevented = false
+      onNavigate?.({ preventDefault() { prevented = true } })
+      if (!prevented) followed.push(String(rest.href))
+    }}>{children}</a>
+  ),
+}))
+
 import ShiftPopover from "../admin/day-timeline/ShiftPopover"
 import type { AdminShift } from "../admin/AdminDayTimeline"
 
@@ -225,5 +243,90 @@ describe("ShiftPopover", () => {
   it("links to the shift's registrations as « Voir les inscriptions »", () => {
     setup()
     expect(screen.getByRole("link", { name: "Voir les inscriptions" })).toHaveAttribute("href", "/admin/events/evt-1/registrations?shift=s1")
+  })
+
+  // #991: following the link used to drop the label and places typed just before.
+  describe("« Voir les inscriptions » with pending edits", () => {
+    afterEach(() => { router.push.mockReset(); router.refresh.mockReset(); followed.length = 0 })
+    const link = () => screen.getByRole("link", { name: /Voir les inscriptions|Enregistrement…/ })
+
+    it("follows at once, without saving, when nothing was changed", () => {
+      const p = setup()
+      fireEvent.click(link())
+      expect(p.onPatch).not.toHaveBeenCalled()
+      expect(p.onClose).toHaveBeenCalled()
+      expect(followed).toEqual(["/admin/events/evt-1/registrations?shift=s1"])
+      expect(router.push).not.toHaveBeenCalled()
+    })
+
+    it("saves the places first, once, then closes and goes to the registrations", async () => {
+      const p = setup()
+      let resolve!: (ok: boolean) => void
+      p.onPatch.mockReturnValue(new Promise<boolean>(r => { resolve = r }))
+      fireEvent.change(screen.getByLabelText("Places"), { target: { value: "6" } })
+      fireEvent.click(link())
+      expect(p.onPatch).toHaveBeenCalledWith("s1", { label: "Bar", capacity: 6 })
+      expect(link()).toHaveTextContent("Enregistrement…")
+      expect(link()).toHaveAttribute("aria-disabled", "true")
+      expect(link()).toHaveAttribute("href", "/admin/events/evt-1/registrations?shift=s1")
+      expect(screen.getByRole("button", { name: "Fermer et enregistrer" })).toHaveAttribute("aria-disabled", "true")
+      // Neither a second activation nor a click outside or Escape saves again meanwhile.
+      fireEvent.click(link())
+      fireEvent.mouseDown(document.body)
+      fireEvent.keyDown(document, { key: "Escape" })
+      expect(p.onPatch).toHaveBeenCalledTimes(1)
+      expect(p.onClose).not.toHaveBeenCalled()
+      await act(async () => { resolve(true) })
+      expect(p.onClose).toHaveBeenCalledTimes(1)
+      expect(router.push).toHaveBeenCalledWith("/admin/events/evt-1/registrations?shift=s1")
+      expect(router.refresh).toHaveBeenCalled()
+      expect(followed).toEqual([])
+    })
+
+    it("stays open, focus on the link, when the save fails; closing saves again afterwards", async () => {
+      const p = setup()
+      p.onPatch.mockResolvedValueOnce(false)
+      fireEvent.change(screen.getByLabelText("Libellé"), { target: { value: "Bar soir" } })
+      link().focus()
+      fireEvent.click(link())
+      await waitFor(() => expect(link()).toHaveTextContent("Voir les inscriptions"))
+      expect(link()).not.toHaveAttribute("aria-disabled")
+      expect(link()).toHaveFocus()
+      expect(p.onClose).not.toHaveBeenCalled()
+      expect(router.push).not.toHaveBeenCalled()
+      expect(followed).toEqual([])
+      fireEvent.keyDown(document, { key: "Escape" })
+      expect(p.onPatch).toHaveBeenLastCalledWith("s1", { label: "Bar soir", capacity: 3 })
+      expect(p.onClose).toHaveBeenCalled()
+    })
+
+    it("moves focus to a changed value that cannot be saved, without leaving", () => {
+      const p = setup()
+      fireEvent.change(screen.getByLabelText("Places"), { target: { value: "1" } })
+      fireEvent.click(link())
+      const places = screen.getByLabelText("Places")
+      expect(places).toHaveFocus()
+      expect(places).toHaveAttribute("aria-invalid", "true")
+      expect(places).toHaveAccessibleDescription(/Au moins 2 : 2 personnes sont déjà inscrites/)
+      expect(p.onPatch).not.toHaveBeenCalled()
+      expect(p.onClose).not.toHaveBeenCalled()
+
+      fireEvent.change(places, { target: { value: "3" } })
+      fireEvent.change(screen.getByLabelText("Minimum"), { target: { value: "5" } })
+      fireEvent.click(link())
+      expect(screen.getByLabelText("Minimum")).toHaveFocus()
+      expect(p.onPatch).not.toHaveBeenCalled()
+      expect(followed).toEqual([])
+    })
+
+    it("keeps the popover and its edits for a Ctrl or Cmd click (new tab)", () => {
+      const p = setup()
+      fireEvent.change(screen.getByLabelText("Places"), { target: { value: "6" } })
+      fireEvent.click(link(), { ctrlKey: true })
+      fireEvent.click(link(), { metaKey: true })
+      expect(p.onClose).not.toHaveBeenCalled()
+      expect(p.onPatch).not.toHaveBeenCalled()
+      expect(screen.getByLabelText("Places")).toHaveValue(6)
+    })
   })
 })

@@ -5,12 +5,14 @@
 
 import { useState, useRef, useCallback, useEffect, useLayoutEffect, useId } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { getRoleAccent } from "@/lib/roles"
 import { fmt, clamp } from "@/lib/gantt-utils"
 import { ROW_H } from "@/lib/day-timeline"
 import { moveProblem } from "@/lib/shift-quick-edit"
 import { normalizeTime } from "@/lib/shifts-admin"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
+import { closingPatch, linkPlan } from "@/lib/shift-popover-edits"
 import { spokenTimeRange } from "@/lib/spoken-time"
 import { popoverPlacement } from "@/lib/popover-placement"
 import { focusLeftContainer } from "@/lib/focus-leave"
@@ -20,7 +22,8 @@ import type { AdminShift } from "../AdminDayTimeline"
 /**
  * Quick edits of one shift from the timeline (#398): label, capacity and minimum (#949, for this
  * shift or the whole role), times, status, duplicate, delete. Closing (click outside, Escape, ✕)
- * saves the label, capacity and minimum; the other actions save on their own button.
+ * saves the label, capacity and minimum, and so does « Voir les inscriptions » before it leaves the
+ * page (#991); the other actions save on their own button.
  */
 export default function ShiftPopover({
   shift, anchor, eventId, onClose, onPatch, onDelete, onDuplicate, onApplyCapacity, onNotSaved,
@@ -29,7 +32,8 @@ export default function ShiftPopover({
   anchor:   { x: number; y: number; w: number }
   eventId:  string
   onClose:  () => void
-  onPatch:  (id: string, data: Partial<AdminShift>) => Promise<void> | void
+  /** Resolves to `false` when the change was not saved (the parent says why). */
+  onPatch:  (id: string, data: Partial<AdminShift>) => Promise<boolean | void> | boolean | void
   onDelete: (id: string) => void
   onDuplicate: (id: string) => Promise<void> | void
   /** `minVolunteers` (#949): null removes it on the role, absent leaves each shift's own. */
@@ -38,6 +42,7 @@ export default function ShiftPopover({
   onNotSaved?: (message: string) => void
 }) {
   const id = useId()
+  const router = useRouter()
   const [label, setLabel]       = useState(shift.label === shift.roleName ? "" : shift.label)
   const [capacity, setCapacity] = useState(shift.capacity)
   // Minimum of people (#949), as typed: "" is none.
@@ -45,7 +50,7 @@ export default function ShiftPopover({
   const [status, setStatus]     = useState(shift.status)
   const [startTime, setStartTime] = useState(shift.startTime)
   const [endTime, setEndTime]     = useState(shift.endTime)
-  const [busy, setBusy] = useState<"move" | "duplicate" | "capacity" | null>(null)
+  const [busy, setBusy] = useState<"move" | "duplicate" | "capacity" | "navigate" | null>(null)
   const [message, setMessageState] = useState<string | null>(null)
   // Once shown, the status box keeps its place: re-announcing does not make the popover jump.
   const [statusShown, setStatusShown] = useState(false)
@@ -110,19 +115,10 @@ export default function ShiftPopover({
   const closeAndSave = useCallback((restoreFocus = true) => {
     if (closedRef.current) return
     closedRef.current = true
-    const capacity = capacityRef.current
-    const min = parseMinVolunteers(minimumRef.current)
-    const capacityOk = capacity >= Math.max(shift.registrationCount, 1)
-    // A minimum that doesn't fit the places (#949) saves neither: the shift keeps both.
-    const pairProblem = minVolunteersProblem(min, capacityOk ? capacity : shift.capacity)
-    const pairOk = pairProblem === null
-    const minChanged = min !== (shift.minVolunteers ?? null)
-    onPatch(shift.id, {
-      label: labelRef.current.trim() || shift.roleName,
-      // A capacity under the confirmed people isn't saved: the shift keeps its current one.
-      ...(capacityOk && pairOk ? { capacity } : {}),
-      ...(pairOk && minChanged ? { minVolunteers: min } : {}),
-    })
+    // A capacity under the confirmed people isn't saved, and a minimum that doesn't fit the places
+    // (#949) saves neither: the shift keeps its own.
+    const { patch, pairProblem } = closingPatch(shift, { label: labelRef.current, capacity: capacityRef.current, minimum: minimumRef.current })
+    onPatch(shift.id, patch)
     onClose()
     // The bar itself when what was focused at opening is gone (the bar is drawn again when a
     // duplicate adds a lane), was no control (WebKit, #987), or is the popover's own heading (the
@@ -133,7 +129,7 @@ export default function ShiftPopover({
     if (restoreFocus && opener?.isConnected) opener.focus()
     // The field's message is gone with the popover: the discarded pair is announced (3.3.1, 4.1.3).
     if (pairProblem) onNotSaved?.(`Places et minimum non enregistrés : ${pairProblem}`)
-  }, [shift.id, shift.roleName, shift.registrationCount, shift.capacity, shift.minVolunteers, onPatch, onClose, onNotSaved])
+  }, [shift, onPatch, onClose, onNotSaved])
 
   useEffect(() => {
     function onMD(e: MouseEvent) {
@@ -186,6 +182,41 @@ export default function ShiftPopover({
       : `Capacité de ${capacity} appliquée au poste « ${shift.roleName} ».`)
   }
 
+  const registrationsHref = `/admin/events/${eventId}/registrations?shift=${shift.id}`
+  const capacityInputRef = useRef<HTMLInputElement>(null)
+  const minimumInputRef = useRef<HTMLInputElement>(null)
+
+  // « Voir les inscriptions » (#991): what closing saves is saved first, and the page is left only
+  // once it is. Called by Next for an in-app navigation only: a new tab or window keeps the popover
+  // and its edits. Next reads preventDefault() synchronously, before any await.
+  function followRegistrations(e: { preventDefault(): void }) {
+    if (busy || closedRef.current) { e.preventDefault(); return }
+    const plan = linkPlan(shift, { label, capacity, minimum })
+    if (plan.kind === "follow") { onClose(); return }
+    e.preventDefault()
+    if (plan.kind === "fix") {
+      // The field says why through its description; focused now, within the tap (iOS keyboard).
+      ;(plan.field === "capacity" ? capacityInputRef : minimumInputRef).current?.focus()
+      return
+    }
+    // Closing is under way: a click outside, Escape or focus leaving does not save a second time.
+    closedRef.current = true
+    setBusy("navigate")
+    void (async () => {
+      const saved = await onPatch(shift.id, plan.patch)
+      if (saved === false) {
+        // The parent shows and announces the error; the popover stays, focus on the link.
+        closedRef.current = false
+        setBusy(null)
+        return
+      }
+      onClose()
+      // The page's copy in the router cache still has the old values: Back would show them.
+      router.refresh()
+      router.push(registrationsHref)
+    })()
+  }
+
   // The bar as it is now (after a scroll or a resize), else where it was when the popover opened.
   const bar = document.getElementById(`shift-bar-${shift.id}`)?.getBoundingClientRect()
   const barTop = bar ? bar.top : anchor.y
@@ -230,7 +261,7 @@ export default function ShiftPopover({
             <span className="sr-only">, {spokenTimeRange(shift.startTime, shift.endTime)}</span>
             <span aria-hidden="true" className="text-xs text-gray-600 flex-shrink-0">{fmt(shift.startTime)}–{fmt(shift.endTime)}</span>
           </h3>
-          <button type="button" onClick={() => closeAndSave()} aria-label="Fermer et enregistrer" className="text-gray-600 hover:text-gray-900 flex-shrink-0 rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+          <button type="button" onClick={() => closeAndSave()} aria-label="Fermer et enregistrer" aria-disabled={busy === "navigate" ? true : undefined} className="text-gray-600 hover:text-gray-900 flex-shrink-0 rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
             <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -248,11 +279,11 @@ export default function ShiftPopover({
         <div className="flex items-end gap-2">
           <div className="w-20">
             <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Places</label>
-            <input id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={minimumError ? `${id}-capacity-hint ${id}-minimum-hint` : `${id}-capacity-hint`} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
+            <input ref={capacityInputRef} id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={minimumError ? `${id}-capacity-hint ${id}-minimum-hint` : `${id}-capacity-hint`} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
           </div>
           <div className="w-24">
             <label htmlFor={`${id}-minimum`} className="block text-xs font-medium text-gray-700 mb-1">Minimum</label>
-            <input id={`${id}-minimum`} type="number" min={1} max={capacity} inputMode="numeric" value={minimum} placeholder="Aucun" aria-invalid={minimumError ? true : undefined} aria-describedby={`${id}-minimum-hint`} onChange={e => setMinimum(e.target.value)} className={`${field} text-center ${minimumError ? "!border-red-600" : ""}`} />
+            <input ref={minimumInputRef} id={`${id}-minimum`} type="number" min={1} max={capacity} inputMode="numeric" value={minimum} placeholder="Aucun" aria-invalid={minimumError ? true : undefined} aria-describedby={`${id}-minimum-hint`} onChange={e => setMinimum(e.target.value)} className={`${field} text-center ${minimumError ? "!border-red-600" : ""}`} />
           </div>
         </div>
         <p id={`${id}-minimum-hint`} className={`text-xs -mt-2 ${minimumError ? "text-red-700" : "text-gray-600"}`}>
@@ -294,12 +325,14 @@ export default function ShiftPopover({
           <select
             id={`${id}-status`}
             value={status}
+            aria-disabled={busy !== null ? true : undefined}
             onChange={e => {
+              if (busy) return
               setStatus(e.target.value)
               onPatch(shift.id, { status: e.target.value })
               announce(e.target.value === "closed" ? "Inscriptions fermées." : e.target.value === "open" ? "Inscriptions rouvertes." : "Statut enregistré.")
             }}
-            className={field}
+            className={`${field} ${busy ? "opacity-50" : ""}`}
           >
             <option value="open">Ouvertes</option>
             <option value="full">Complet</option>
@@ -319,16 +352,18 @@ export default function ShiftPopover({
             {busy === "duplicate" ? "Duplication…" : "Dupliquer"}
           </button>
           <Link
-            href={`/admin/events/${eventId}/registrations?shift=${shift.id}`}
-            className={`${action} text-center text-blue-700 hover:bg-blue-50`}
-            onClick={onClose}
+            href={registrationsHref}
+            aria-disabled={busy !== null ? true : undefined}
+            className={`${action} text-center text-blue-700 hover:bg-blue-50 ${busy ? "opacity-50" : ""}`}
+            onNavigate={followRegistrations}
           >
-            Voir les inscriptions
+            {busy === "navigate" ? "Enregistrement…" : "Voir les inscriptions"}
           </Link>
           <button
             type="button"
-            onClick={() => onDelete(shift.id)}
-            className={`${action} col-span-2 text-red-700 hover:bg-red-50`}
+            onClick={() => { if (!busy) onDelete(shift.id) }}
+            aria-disabled={busy !== null}
+            className={`${action} col-span-2 text-red-700 hover:bg-red-50 ${busy ? "opacity-50" : ""}`}
           >
             Supprimer le créneau
           </button>
