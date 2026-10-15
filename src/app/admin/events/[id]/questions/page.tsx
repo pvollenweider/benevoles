@@ -3,7 +3,6 @@
 
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import QuestionsEditor from "@/components/admin/QuestionsEditor"
 import AnswerSummary from "@/components/admin/AnswerSummary"
@@ -44,10 +43,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <Link href={`/admin/events/${id}`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          <span aria-hidden="true">← </span>{event.title}
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900 mt-1">Questions aux bénévoles</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Questions aux bénévoles</h1>
         <HelpLink route="/admin/events/[id]/questions" />
         <p className="text-sm text-gray-700 mt-1">
           Jusqu&apos;à {QUESTION_LIMIT} questions ajoutées au formulaire d&apos;inscription (taille de t-shirt, permis, régime…). Chaque bénévole y répond une fois pour l&apos;événement ; les réponses apparaissent dans les inscriptions et les exports.

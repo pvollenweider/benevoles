@@ -10,14 +10,16 @@ import { loadOrganizationsWithNewAddressesToVerify } from "./delivery-summary-da
 import { daysAgo, RETENTION_DAYS } from "./retention"
 import { isMilestoneOverdue } from "./milestones"
 
-/** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client.
+/** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client;
+ * with `eventId`, one event's only (its overview page's « À traiter »).
  * `organizationId` is also needed as such (not just through `db`): DeliveryOutcome isn't a tenant
  * model of the org-scoped client (#598), so its own loader takes the id explicitly (#599). */
-export async function loadAttention(db: OrgScopedPrisma, organizationId: string, now: Date = new Date()): Promise<AttentionItem[]> {
+export async function loadAttention(db: OrgScopedPrisma, organizationId: string, now: Date = new Date(), options: { eventId?: string } = {}): Promise<AttentionItem[]> {
+  const { eventId } = options
   const inviteCutoff = new Date(now.getTime() - INVITE_NUDGE_DAYS * 24 * 60 * 60 * 1000)
   const [events, offers, addressSummary] = await Promise.all([
     db.event.findMany({
-      where: { publicStatus: "published" },
+      where: { publicStatus: "published", ...(eventId ? { id: eventId } : {}) },
       select: {
         id: true, title: true, startDate: true, endDate: true,
         shifts: {
@@ -45,12 +47,13 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
       },
     }),
     db.registration.findMany({
-      where: { status: "offered", event: { publicStatus: "published" } },
+      where: { status: "offered", event: { publicStatus: "published" }, ...(eventId ? { eventId } : {}) },
       select: { eventId: true, waitingExpiresAt: true },
     }),
     // Full retention window, not just the last 24h (the daily summary email's own window, #599):
     // the dashboard shows every address still "to verify", however long ago it was flagged.
-    loadOrganizationsWithNewAddressesToVerify(daysAgo(now, RETENTION_DAYS.deliveryOutcome), now, organizationId),
+    // Org-wide, not one event's: left out of an event's own list.
+    eventId ? Promise.resolve([]) : loadOrganizationsWithNewAddressesToVerify(daysAgo(now, RETENTION_DAYS.deliveryOutcome), now, organizationId),
   ])
 
   return attentionItems({

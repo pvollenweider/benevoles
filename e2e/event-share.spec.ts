@@ -65,8 +65,8 @@ test("a published event has a rich link preview and a copyable link; a draft has
 
   // Admin: copy the public link, with a visible confirmation in the status region.
   await context.grantPermissions(["clipboard-read", "clipboard-write"])
-  await page.goto(`/admin/events/${event.id}`)
-  const section = page.getByRole("region", { name: "Partager l'événement" })
+  await page.goto(`/admin/events/${event.id}/share`)
+  const section = page.getByRole("region", { name: "Lien de l'événement" })
   await expect(section.getByText(canonical!)).toBeVisible()
   await section.getByRole("button", { name: "Copier le lien" }).click()
   await expect(section.getByRole("status").first()).toHaveText("Lien copié.")

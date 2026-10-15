@@ -10,7 +10,7 @@ aliases: []
 
 # Pages personnalisées de l'événement
 
-**Événements**, puis l'événement, puis **Pages**
+**Événements**, puis l'événement, puis l'onglet **Partage**, et **Pages d'information** dans ses pages
 
 En complément du champ unique « instructions publiques », ajoutez autant de pages libres que nécessaire à un événement : règlement, FAQ, accès et lieu, ce qu'il faut apporter…
 

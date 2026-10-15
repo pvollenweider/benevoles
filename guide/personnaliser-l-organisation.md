@@ -24,7 +24,7 @@ Sections **Nom de l'organisation** et **Adresse de votre espace** :
 
 ## Logo de l'organisation
 
-Section **Logo de l'organisation**. Le logo apparaît en haut de la page publique de l'organisation et de chaque événement, sur les feuilles à imprimer des **Rapports**, sur les badges, sur les attestations de bénévolat et en haut des emails envoyés au nom de l'organisation. Le nom de l'organisation reste toujours écrit à côté : le logo ne le remplace jamais.
+Section **Logo de l'organisation**. Le logo apparaît en haut de la page publique de l'organisation et de chaque événement, sur les feuilles à imprimer des **Documents à imprimer**, sur les badges, sur les attestations de bénévolat et en haut des emails envoyés au nom de l'organisation. Le nom de l'organisation reste toujours écrit à côté : le logo ne le remplace jamais.
 
 - **Choisir une image** : un fichier PNG ou JPEG de 2 Mo au plus (pas de SVG). Un aperçu s'affiche avant l'envoi ; cliquez sur **Enregistrer le logo**. L'image est réduite à 512 pixels de côté au plus et ses métadonnées (date, appareil, position) sont retirées.
 - Le logo est affiché sur fond blanc et souvent imprimé en noir et blanc (feuilles, badges en noir et blanc, attestations) : préférez une version foncée sur fond clair ou transparent. Un logo blanc sur fond transparent ne se verrait pas.
@@ -40,4 +40,4 @@ Section **Titre de la page publique**. Le titre affiché en haut de la page publ
 
 ## Fuseau horaire
 
-Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Rapports**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
+Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Documents à imprimer**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.

@@ -87,7 +87,7 @@ En savoir plus : [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md),
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapports, badges et résumé](guide/rapports-badges-et-resume.md), [les responsables de secteur](guide/responsables-de-secteur.md).
+En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [documents à imprimer, badges et résumé](guide/rapports-badges-et-resume.md), [les responsables de secteur](guide/responsables-de-secteur.md).
 
 ## Après l'événement
 
@@ -98,7 +98,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapp
 
 <!-- video: EVENT_REPORTS -->
 
-En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.md), [le journal de l'événement](guide/journal-de-l-evenement.md).
+En savoir plus : [documents à imprimer, badges et résumé](guide/rapports-badges-et-resume.md), [le journal de l'événement](guide/journal-de-l-evenement.md).
 
 ## Vos membres et leurs données
 

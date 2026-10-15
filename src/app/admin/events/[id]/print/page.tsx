@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
+import HelpLink from "@/components/admin/HelpLink"
 import { getOrgContext } from "@/lib/auth-guard"
 import { SHEET_VIEWS } from "@/lib/print-sheets"
 import { reprintOptions } from "@/lib/print-badges"
@@ -15,7 +15,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { StaffingStateSuffix } from "@/components/admin/StaffingShiftLine"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Rapports" }
+export const metadata: Metadata = { title: "Documents à imprimer" }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -126,10 +126,10 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <Link href={`/admin/events/${event.id}`} className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Rapports</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Documents à imprimer</h1>
+        <HelpLink route="/admin/events/[id]/print" />
         <p className="text-sm text-gray-700 mt-1">
-          Des documents lisibles en noir et blanc, à imprimer ou enregistrer en PDF depuis le navigateur. Les rapports s&apos;ouvrent dans un nouvel onglet ; l&apos;archive se télécharge. Les heures planifiées des membres ne figurent dans aucun de ces documents.
+          Des documents lisibles en noir et blanc, à imprimer ou enregistrer en PDF depuis le navigateur. Les documents s&apos;ouvrent dans un nouvel onglet ; l&apos;archive se télécharge. Les heures planifiées des membres ne figurent dans aucun de ces documents.
         </p>
       </div>
 

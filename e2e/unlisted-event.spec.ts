@@ -31,8 +31,10 @@ test("an unlisted event stays off the public page but works by direct link", asy
   const listed = await make(`E2E Listed ${stamp}`, true)
   const unlisted = await make(`E2E Unlisted ${stamp}`, false)
 
-  // Admin shows the state.
+  // Admin shows the state: a chip in the event header, the explanation on the Partage tab.
   await page.goto(`/admin/events/${unlisted.id}`)
+  await expect(page.getByText("non répertorié", { exact: true })).toBeVisible()
+  await page.goto(`/admin/events/${unlisted.id}/share`)
   await expect(page.getByText("Publié, non répertorié.")).toBeVisible()
 
   // Public home page: only the listed one.

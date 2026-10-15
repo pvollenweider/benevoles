@@ -8,15 +8,15 @@ legacy: [admin#exports, admin#rapports, admin#badges, admin#resume-de-l-evenemen
 aliases: []
 ---
 
-# Rapports, badges et résumé
+# Documents à imprimer, badges et résumé
 
 <!-- video: EVENT_REPORTS -->
 
-## Rapports
+## Documents à imprimer
 
-**Événements**, puis l'événement, puis **Rapports**. Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
+**Événements**, puis l'événement, puis l'onglet **Documents**. Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
 
-![Page « Rapports » d'un événement : les plannings à remettre aux bénévoles (par jour, par poste, individuel), puis la section réservée aux organisateurs, qui commence par l'export complet](/doc-img/admin-print.png)
+![Page « Documents à imprimer » d'un événement : les plannings à remettre aux bénévoles (par jour, par poste, individuel), puis la section réservée aux organisateurs, qui commence par l'export complet](/doc-img/admin-print.png)
 
 | Document | Contenu | Pour qui |
 |---|---|---|
@@ -33,11 +33,11 @@ Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous
 
 ## Badges
 
-Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Le logo de l'organisation, s'il y en a un, figure dans un coin de chaque badge (en gris avec le bandeau noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
+Dans l'onglet **Documents**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Le logo de l'organisation, s'il y en a un, figure dans un coin de chaque badge (en gris avec le bandeau noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
 
 ## Résumé de l'événement
 
-Toujours depuis **Rapports**, la section **Résumé de l'événement** (juste avant l'archive) donne de quoi faire le bilan et préparer la prochaine édition :
+Toujours dans l'onglet **Documents**, la section **Résumé de l'événement** (juste avant l'archive, et le bouton **Voir le résumé** en haut des pages de l'événement une fois celui-ci passé) donne de quoi faire le bilan et préparer la prochaine édition :
 
 - nombre de bénévoles distincts avec un créneau confirmé, dont ceux de retour et ceux pour la première fois (pas d'inscription active sur un événement antérieur de l'organisation) ;
 - nombre de créneaux confirmés avec une présence enregistrée sur le total, avec une phrase explicite si le pointage n'a pas été utilisé ou seulement en partie ;

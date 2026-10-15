@@ -76,13 +76,13 @@ export function lifecycleNotes(f: LifecycleFacts, eventId: string): LifecycleNot
       }
     case "finished":
       return {
-        needs: [{ before: "L'événement est passé : archivez-le (bouton Archiver, en haut) pour le clore." }],
+        needs: [{ before: "L'événement est passé : archivez-le (bouton « Autres actions », en haut, puis Archiver) pour le clore." }],
         consequences: ["Toujours visible pour les bénévoles tant qu'il n'est pas archivé.", "La suppression définitive n'est possible qu'une fois archivé."],
       }
     case "archived":
       return {
         needs: [],
-        consequences: ["Invisible pour les bénévoles, inscriptions fermées, aucun rappel.", "La suppression définitive est possible, en bas de cette page."],
+        consequences: ["Invisible pour les bénévoles, inscriptions fermées, aucun rappel.", "La suppression définitive est possible, en bas de ses réglages."],
       }
   }
 }

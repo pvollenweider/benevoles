@@ -1,5 +1,5 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
@@ -15,6 +15,7 @@ import RecentCancellations from "@/components/admin/registrations/RecentCancella
 import { loadRecentCancellations } from "@/lib/recent-cancellations-data"
 
 export const dynamic = "force-dynamic"
+export const metadata: Metadata = { title: "Inscriptions" }
 
 export default async function RegistrationsPage({
   params,
@@ -71,9 +72,8 @@ export default async function RegistrationsPage({
   return (
     <div className="space-y-6">
       <div>
-        <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
         <div className="flex items-start justify-between gap-3 flex-wrap">
-          <h1 className="text-xl font-bold text-gray-900 mt-1">Inscriptions</h1>
+          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Inscriptions</h1>
           <a
             href={`/api/admin/events/${id}/export/attendance`}
             className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

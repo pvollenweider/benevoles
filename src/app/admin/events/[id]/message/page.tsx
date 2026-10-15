@@ -12,13 +12,21 @@ import MessageHistory from "@/components/admin/messages/MessageHistory"
 import { loadMessageHistory } from "@/lib/message-history-data"
 import { orgTimeZone } from "@/lib/time-zone"
 import HelpLink from "@/components/admin/HelpLink"
+import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
+import SendReminderButton from "@/components/admin/SendReminderButton"
+import { remindersSummary } from "@/lib/automatic-reminders"
+import { parseNotificationSettings } from "@/lib/notification-settings"
+import { hasUpcomingShift } from "@/lib/event-wizard"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Écrire aux bénévoles" }
+export const metadata: Metadata = { title: "Communication" }
 
 const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 
-/** « Écrire aux bénévoles » (#396): one message to the event, a role, a shift or the waitlist. */
+/**
+ * « Communication »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
+ * the waitlist; the automatic reminders (#705) and the manual reminder; the messages sent (#467).
+ */
 export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
@@ -28,8 +36,8 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   const event = await ctx.db.event.findFirst({
     where: { id },
     select: {
-      id: true, title: true,
-      organization: { select: { timeZone: true } },
+      id: true, title: true, publicStatus: true, remindersEnabled: true, reminderMessage: true, reminderSentAt: true,
+      organization: { select: { timeZone: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
@@ -38,7 +46,22 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     },
   })
   if (!event) notFound()
+  const timeZone = orgTimeZone(event.organization)
   const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
+  // One reminder email per person: the unique volunteers with a confirmed shift.
+  const confirmed = await ctx.db.registration.findMany({
+    where: { eventId: event.id, status: "active", shift: { status: { not: "cancelled" } } },
+    select: { volunteerId: true },
+    distinct: ["volunteerId"],
+  })
+  // What the reminders cron will actually send for this event (#705), as on the review page (#565).
+  const reminders = remindersSummary({
+    eventId: event.id,
+    published: event.publicStatus === "published",
+    eventEnabled: event.remindersEnabled,
+    organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
+    upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), new Date(), timeZone),
+  })
   const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, subject: true, body: true } })
 
   const roles = Array.from(new Set(event.shifts.map((s) => s.roleName)))
@@ -57,21 +80,33 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <Link href={`/admin/events/${event.id}`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-          <span aria-hidden="true">← </span>Retour à {event.title}
-        </Link>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Écrire aux bénévoles</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Communication</h1>
         <HelpLink route="/admin/events/[id]/message" />
-        <p className="text-sm text-gray-700 mt-1">
-          Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
-        </p>
       </div>
+      <section aria-labelledby="message-write" className="space-y-4">
+        <div>
+          <h2 id="message-write" className="text-base font-semibold text-gray-900">Écrire aux bénévoles</h2>
+          <p className="text-sm text-gray-700 mt-1">
+            Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
+          </p>
+        </div>
       <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} />
       <p className="text-sm text-gray-600">
         Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
       </p>
-      <MessageHistory eventId={event.id} items={history} timeZone={orgTimeZone(event.organization)} />
+      </section>
+      <section aria-labelledby="message-reminders" className="space-y-3">
+        <h2 id="message-reminders" className="text-base font-semibold text-gray-900">Rappels</h2>
+        <AutomaticRemindersBox summary={reminders} />
+        <SendReminderButton
+          eventId={event.id}
+          hasMessage={!!event.reminderMessage?.trim()}
+          volunteerCount={confirmed.length}
+          lastSentAt={event.reminderSentAt?.toISOString() ?? null}
+        />
+      </section>
+      <MessageHistory eventId={event.id} items={history} timeZone={timeZone} />
     </div>
   )
 }

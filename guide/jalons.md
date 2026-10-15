@@ -2,7 +2,7 @@
 roles: [admin]
 group: preparer
 order: 120
-summary: Des dates clés à cocher sur la page de l'événement, chacune confiée à quelqu'un si besoin ; les jalons en retard sont mis en évidence.
+summary: Des dates clés à cocher dans l'aperçu de l'événement, chacune confiée à quelqu'un si besoin ; les jalons en retard sont mis en évidence.
 related: [tableau-de-bord, ou-manque-t-il-du-monde]
 legacy: [admin#jalons-de-l-evenement]
 aliases: []
@@ -12,9 +12,9 @@ aliases: []
 
 <!-- video: EVENT_MILESTONES -->
 
-Section **Jalons** sur la page de l'événement (**Événements**, puis l'événement).
+Section **Jalons** de l'onglet **Aperçu** de l'événement (**Événements**, puis l'événement).
 
-Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, la personne qui s'en occupe si vous en choisissez une, coché ou non. Cocher un jalon ne déclenche aucune action automatique. Un jalon non coché est en retard dès le lendemain de son échéance, dans le fuseau horaire de l'organisation : il est alors mis en évidence sur la page de l'événement et dans **Ce qui demande votre attention** du [tableau de bord](tableau-de-bord.md), avec son titre et la personne qui s'en occupe.
+Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, la personne qui s'en occupe si vous en choisissez une, coché ou non. Cocher un jalon ne déclenche aucune action automatique. Un jalon non coché est en retard dès le lendemain de son échéance, dans le fuseau horaire de l'organisation : il est alors signalé dans **À traiter**, dans l'aperçu de l'événement, et dans **Ce qui demande votre attention** du [tableau de bord](tableau-de-bord.md), avec son titre et la personne qui s'en occupe.
 
 ## Qui s'occupe d'un jalon
 
@@ -34,4 +34,4 @@ Les jalons ne sont jamais copiés lors d'une duplication.
 
 ### Comment je sais si mon événement va bien se passer avant le jour J, sans tout vérifier à la main ?
 
-Les jalons (échéances clés comme « Fermer les inscriptions » ou « Envoyer les rappels ») et le récap global (créneaux, places, inscrits, restants) sur la page de l'événement donnent un état des lieux en un coup d'œil, et un jalon dépassé non coché saute aux yeux. Pour le détail des places à pourvoir, voir [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md).
+Dans l'onglet **Aperçu** de l'événement, **Où manque-t-il du monde ?** dit en phrases les places encore libres, **À traiter** ce qui attend une décision, et les jalons (échéances clés comme « Fermer les inscriptions » ou « Envoyer les rappels ») complètent cet état des lieux, et un jalon dépassé non coché saute aux yeux. Pour le détail des places à pourvoir, voir [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md).

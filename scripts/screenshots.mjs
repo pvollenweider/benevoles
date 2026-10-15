@@ -211,13 +211,13 @@ async function run() {
   await shot("admin-dashboard", async () => { await visit(`${BASE}/admin/dashboard`); await save(a, "admin-dashboard") })
   await shot("admin-event-overview", async () => { await visit(ev()); await save(a, "admin-event-overview") })
   await shot("admin-group-links", async () => {
-    await visit(ev())
-    await save(a, "admin-group-links", { target: a.getByRole("region", { name: "Partager l'événement" }) })
+    await visit(ev("/share"))
+    await save(a, "admin-group-links", { target: a.getByRole("main") })
   })
   // « Intégrer à votre site » (#948), opened: options, code, copy and preview buttons, instructions.
   await shot("admin-embed", async () => {
-    await visit(ev())
-    const section = a.getByRole("region", { name: "Partager l'événement" })
+    await visit(ev("/share"))
+    const section = a.getByRole("region", { name: "Liens par groupe et intégration" })
     await section.getByRole("button", { name: "Code d'intégration" }).click()
     const panel = section.getByRole("heading", { name: "Intégrer à votre site" }).locator("xpath=../..")
     await save(a, "admin-embed", { target: panel })
@@ -284,7 +284,7 @@ async function run() {
   })
   await shot("admin-invitations", async () => { await visit(ev("/invitations")); await save(a, "admin-invitations") })
   await shot("admin-reminders", async () => {
-    await visit(ev())
+    await visit(ev("/message"))
     await save(a, "admin-reminders", { target: a.getByRole("region", { name: "Rappels automatiques activés" }) })
   })
   await shot("admin-event-archive", async () => {

@@ -143,7 +143,7 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
       items.push({
         id: `milestones:${e.id}`, severity: "high", eventTitle: e.title,
         message: overdueMilestonesMessage(e.overdueMilestones),
-        action: "Voir les jalons", href: base,
+        action: "Voir les jalons", href: `${base}#jalons`,
       })
     }
 
@@ -188,4 +188,17 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
 
   const rank = { high: 0, medium: 1, low: 2 }
   return items.sort((a, b) => rank[a.severity] - rank[b.severity])
+}
+
+/** What the event page's « À traiter » leaves to its other blocks: the coming shifts to complete
+ * are « Où manque-t-il du monde ? », and « L'événement commence » is the header's « Jour J ». */
+const COVERED_ON_EVENT_PAGE = new Set(["underfilled", "starting"])
+
+/** The items of one event, for its overview page: the dashboard's list, without what that page
+ * already says elsewhere. */
+export function eventAttentionItems(items: AttentionItem[], eventId: string): AttentionItem[] {
+  return items.filter((i) => {
+    const [kind, id] = i.id.split(":")
+    return id === eventId && !COVERED_ON_EVENT_PAGE.has(kind)
+  })
 }

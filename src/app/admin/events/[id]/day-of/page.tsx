@@ -16,16 +16,8 @@ import { statusBoxClass } from "@/lib/status-message"
 
 export const dynamic = "force-dynamic"
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const ctx = await getOrgContext()
-  if (!ctx) return { title: "Jour J" }
-  const { id } = await params
-  const event = await ctx.db.event.findFirst({ where: { id }, select: { title: true } })
-  return { title: event ? `Jour J, ${event.title}` : "Jour J" }
-}
+export const metadata: Metadata = { title: "Jour J" }
 
-const linkClass =
-  "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 const navLinkClass =
   "inline-flex items-center min-h-11 px-4 rounded-xl border border-gray-300 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
@@ -85,9 +77,7 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <Link href={base} className={`inline-flex min-h-11 items-center gap-1 text-sm ${linkClass}`}><span aria-hidden="true">←</span>Retour à {event.title}</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Jour J</h1>
-        <p className="text-sm text-gray-700">{event.title}</p>
         <HelpLink route="/admin/events/[id]/day-of" />
       </div>
 

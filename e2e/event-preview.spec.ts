@@ -23,7 +23,9 @@ test("an admin previews an event as a volunteer and comes back", async ({ page }
   await page.goto(eventHref!)
   const eventUrl = page.url()
 
-  await page.getByRole("link", { name: "Prévisualiser comme un bénévole" }).click()
+  // Partage tab, then its « Aperçu bénévole » page.
+  await page.getByRole("navigation", { name: "Sections de l'événement" }).getByRole("link", { name: "Partage" }).click()
+  await page.getByRole("navigation", { name: "Pages de la section Partage" }).getByRole("link", { name: "Aperçu bénévole" }).click()
   await expect(page).toHaveURL(/\/preview$/)
   await expect(page.getByText(/la page telle que la verront les bénévoles/)).toBeVisible()
   await expect(page.locator("h1").last()).toBeVisible()

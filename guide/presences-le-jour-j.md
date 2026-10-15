@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-Pendant les dates de l'événement, sa page principale affiche un encadré **C'est le jour J** avec le bouton **Ouvrir le jour J**. Cette page est faite pour le téléphone, sur place :
+De la veille du premier jour au dernier jour de l'événement, ses pages affichent un onglet **Jour J** et, pour un événement publié, le bouton principal **Ouvrir le jour J** en haut. Cette page est faite pour le téléphone, sur place :
 
 - **En cours** : les créneaux commencés et pas encore terminés, y compris un créneau de nuit commencé la veille. **Dans les 3 prochaines heures** : ceux qui commencent bientôt, même après minuit. Les heures sont celles du fuseau de l'organisation. Les créneaux sont regroupés par heure de début, puis par poste.
 - **Plus tôt aujourd'hui** : les créneaux déjà terminés, repliés ; touchez la ligne pour les afficher, par exemple pour marquer une arrivée oubliée.

@@ -30,7 +30,7 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 - **Heures attestées** : parmi ces créneaux, la durée de ceux où une présence a été enregistrée (pointage à l'arrivée), toujours incluse dans les heures prévues, jamais en plus : un membre présent à chaque créneau passé a autant d'heures attestées que d'heures prévues sur ces créneaux ; un créneau à venir n'a pas encore d'heures attestées.
 - **Dernière participation** : la date du dernier créneau passé sur lequel le membre a une inscription confirmée ; un indice sous la date précise celle de la dernière présence enregistrée, ou signale qu'aucune présence n'a été saisie. Rien n'en découle automatiquement (pas de désactivation, pas d'étiquette) : ce sont des faits à votre disposition.
 
-Ces colonnes n'apparaissent que dans cette page ; elles ne sont jamais incluses dans les **Rapports**, potentiellement partagés avec les bénévoles.
+Ces colonnes n'apparaissent que dans cette page ; elles ne sont jamais incluses dans les **Documents à imprimer** des événements, potentiellement partagés avec les bénévoles.
 
 ## Heures par bénévole, pour une période (CSV)
 

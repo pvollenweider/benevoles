@@ -1,34 +1,34 @@
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
-import { hasLevel } from "@/lib/permissions"
-import { formatShortDate } from "@/lib/utils"
 import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/staffing"
-import { eventPublicUrl } from "@/lib/urls"
-import StatusBadge from "@/components/admin/StatusBadge"
-import PublishToggle from "@/components/admin/PublishToggle"
-import { canPublish as orgCanPublish } from "@/lib/org-approval"
-import ArchiveButton from "@/components/admin/ArchiveButton"
-import DeleteEventSection from "@/components/admin/DeleteEventSection"
-import SendReminderButton from "@/components/admin/SendReminderButton"
 import MilestonesSection from "@/components/admin/MilestonesSection"
-import { isUnlistedPublic, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
-import EventShareLink from "@/components/admin/EventShareLink"
-import GroupLinksManager from "@/components/admin/GroupLinksManager"
-import { liveRoleNames, loadAdminGroupLinks } from "@/lib/group-links-data"
-import EventActions from "@/components/admin/EventActions"
+import ReviewChecklist from "@/components/admin/ReviewChecklist"
 import { orgTimeZone } from "@/lib/time-zone"
 import { eligibleOwnerWhere } from "@/lib/milestones"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
-import { isEventDay } from "@/lib/day-of"
+import { localDay } from "@/lib/day-of"
 import { hasUpcomingShift } from "@/lib/event-wizard"
 import { parseNotificationSettings } from "@/lib/notification-settings"
-import { remindersSummary } from "@/lib/automatic-reminders"
-import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
+import { remindersState, remindersSummary } from "@/lib/automatic-reminders"
+import { loadAttention } from "@/lib/attention-data"
+import { eventAttentionItems } from "@/lib/attention"
+import { loadReviewChecks } from "@/lib/review-checks-data"
+import { lastMessageSentence, nextAutomaticReminder, placesSentence } from "@/lib/event-overview"
 
 export const dynamic = "force-dynamic"
 
+const linkClass =
+  "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const sectionClass = "space-y-2"
+const h2Class = "text-base font-semibold text-gray-900"
+
+/**
+ * The overview of an event (« Aperçu »), in task order: where people are missing, what to handle,
+ * the next steps and milestones, then the communication. The header (title, stage, primary
+ * action, « ⋯ », tabs) comes from the layout.
+ */
 export default async function AdminEventPage({ params }: { params: Promise<{ id: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
@@ -39,13 +39,13 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const event = await db.event.findFirst({
     where: { id },
     include: {
-      organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
+      organization: { select: { timeZone: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
           registrations: {
             where: { status: { in: [...LIVE_STATUSES] } },
-            select: { id: true, status: true, volunteerId: true },
+            select: { id: true, status: true },
           },
         },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
@@ -57,38 +57,29 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
   if (!event) notFound()
 
-  // Everything that permanent deletion would erase (all statuses, cancelled
-  // shifts included), only computed for an archived event.
-  const isArchived = event.publicStatus === "archived"
-  const [shiftTotal, registrationTotal, invitationTotal] = isArchived
-    ? await Promise.all([
-        db.shift.count({ where: { eventId: id } }),
-        db.registration.count({ where: { eventId: id } }),
-        db.memberInvite.count({ where: { eventId: id } }),
-      ])
-    : [0, 0, 0]
+  const now = new Date()
+  const timeZone = orgTimeZone(event.organization)
+  const published = event.publicStatus === "published"
+  const isDraft = event.publicStatus === "draft"
 
-  // Share links per group (#947), with the roles a link can show.
   // The possible owners of a milestone (#985): the organisation's active admin accounts.
-  const [groupLinks, roles, team] = await Promise.all([
-    loadAdminGroupLinks(db, event),
-    liveRoleNames(db, event.id),
+  // « À traiter » (#372) for this event only; the checklist (#401) while it is a draft.
+  const [team, attention, review, lastMessage] = await Promise.all([
     db.adminUser.findMany({ where: eligibleOwnerWhere(organizationId), select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    published ? loadAttention(db, organizationId, now, { eventId: id }).then((items) => eventAttentionItems(items, id)) : Promise.resolve([]),
+    isDraft ? loadReviewChecks(db, id, now) : Promise.resolve(null),
+    db.targetedMessage.findFirst({ where: { eventId: id }, orderBy: { createdAt: "desc" }, select: { subject: true, createdAt: true, recipientCount: true } }),
   ])
 
+  const count = (status: string) => event.shifts.reduce((n, sh) => n + sh.registrations.filter((r) => r.status === status).length, 0)
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
-  const totalRegistered = event.shifts.reduce(
-    (s, sh) => s + sh.registrations.filter((r) => r.status === "active").length,
-    0
-  )
   // Requests (#484) and waitlist offers hold their spot: the spots left are those the public
   // form would still give, not capacity minus the confirmed.
-  const totalRequested = event.shifts.reduce((s, sh) => s + sh.registrations.filter((r) => r.status === "requested").length, 0)
   const totalHeld = event.shifts.reduce(
     (s, sh) => s + sh.registrations.filter((r) => (OCCUPYING_STATUSES as readonly string[]).includes(r.status)).length,
     0
   )
-  const totalLeft = Math.max(0, totalCapacity - totalHeld)
+  const places = placesSentence({ capacity: totalCapacity, confirmed: count("active"), requested: count("requested"), left: Math.max(0, totalCapacity - totalHeld) })
   const staffing = staffingSummary(
     event.shifts.map((sh) => ({
       id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),
@@ -99,139 +90,94 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     })),
     event.sectorLeaders.map((l) => l.roleName),
   )
-
-  // « Jour J » (#561): offered on the event's days, in the organization's time zone.
-  const eventDay = isEventDay(
-    { startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() },
-    new Date(),
-    orgTimeZone(event.organization),
-  )
+  const belowMinimum = belowMinimumSentence(staffing.belowMinimum.length)
 
   // What the reminders cron will actually send for this event (#705), as on the review page (#565).
-  const reminders = remindersSummary({
-    eventId: event.id,
-    published: event.publicStatus === "published",
+  const shiftTimes = event.shifts.map((sh) => ({ date: sh.date.toISOString().slice(0, 10), startTime: sh.startTime, endTime: sh.endTime }))
+  const reminderFacts = {
     eventEnabled: event.remindersEnabled,
     organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
-    upcomingShifts: hasUpcomingShift(
-      event.shifts.map((sh) => ({ date: sh.date.toISOString().slice(0, 10), startTime: sh.startTime })),
-      new Date(),
-      orgTimeZone(event.organization),
-    ),
-  })
+    upcomingShifts: hasUpcomingShift(shiftTimes, now, timeZone),
+  }
+  const reminders = remindersSummary({ ...reminderFacts, eventId: event.id, published })
+  const state = remindersState(reminderFacts)
+  const nextReminder = published && "on" in state ? nextAutomaticReminder(shiftTimes, state.on, now, timeZone) : null
+  const day = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
 
-  // Unique volunteers across all shifts (one reminder email per person)
-  const uniqueVolunteerIds = new Set<string>()
-  for (const sh of event.shifts)
-    for (const r of sh.registrations)
-      if (r.status === "active") uniqueVolunteerIds.add(r.volunteerId)
+  const base = `/admin/events/${event.id}`
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">{event.title}</h1>
-          <p className="text-sm text-gray-500">
-            {formatShortDate(event.startDate)}
-            {event.location && ` · ${event.location}`}
-          </p>
-        </div>
-        <div className="flex items-center gap-3 flex-wrap">
-          <StatusBadge status={event.publicStatus} />
-          {isUnlistedPublic(event) && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-900">
-              non répertorié
-            </span>
-          )}
-          <PublishToggle eventId={event.id} currentStatus={event.publicStatus} awaitingValidation={!orgCanPublish(event.organization)} />
-          <ArchiveButton eventId={event.id} currentStatus={event.publicStatus} />
-          <Link
-            href={`/admin/events/${event.id}/edit`}
-            className="text-sm border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors"
-          >
-            Modifier
-          </Link>
-          <Link
-            href={`/admin/events/${event.id}/preview`}
-            className="text-sm border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors"
-          >
-            Prévisualiser comme un bénévole
-          </Link>
-          {event.publicStatus === "published" && (
-            <Link
-              href={eventPublicUrl(event.organization.slug, event.slug)}
-              target="_blank"
-              className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
-            >
-              Vue publique <span aria-hidden="true">↗</span>
-              <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
-            </Link>
-          )}
-        </div>
-      </div>
-
-      <EventLifecycleBar
-        eventId={event.id}
-        facts={{
-          publicStatus: event.publicStatus,
-          isListed: event.isListed,
-          endDate: event.endDate.toISOString().slice(0, 10),
-          // « Terminé » flips at midnight in the organization's time zone, not UTC.
-          today: new Date().toLocaleDateString("sv-SE", { timeZone: orgTimeZone(event.organization) }),
-          shiftCount: event.shifts.length,
-          confirmationMessage: event.confirmationMessage,
-          remindersEnabled: event.remindersEnabled,
-        }}
-      />
-
-      {eventDay && (
-        <section aria-labelledby="event-day-of-heading" className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <div>
-            <h2 id="event-day-of-heading" className="text-sm font-semibold text-gray-900">C&apos;est le jour J</h2>
-            <p className="text-sm text-gray-800">Créneaux en cours et à venir, arrivées et présences, sur votre téléphone.</p>
-          </div>
-          <Link
-            href={`/admin/events/${event.id}/day-of`}
-            className="inline-flex items-center min-h-11 bg-blue-600 text-white rounded-xl px-4 text-sm font-semibold hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            Ouvrir le jour J
-          </Link>
-        </section>
-      )}
-
-      {isUnlistedPublic(event) && (
-        <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
-          <strong>{visibilityLabel(event)}.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
+    <div className="space-y-8">
+      <section aria-labelledby="overview-staffing" className={sectionClass}>
+        <h2 id="overview-staffing" className={h2Class}>Où manque-t-il du monde ?</h2>
+        <p className="text-sm text-gray-800">
+          {staffingHeadline(staffing.totals)}
+          {belowMinimum && ` ${belowMinimum}`}
+          {staffing.totals.waiting > 0 && ` ${staffing.totals.waiting} personne${staffing.totals.waiting > 1 ? "s" : ""} en liste d'attente.`}
         </p>
-      )}
+        {places && <p className="text-sm text-gray-800">{places}</p>}
+        <p className="text-sm">
+          {staffing.totals.shifts > 0 ? (
+            <Link href={`${base}/staffing`} className={linkClass}>
+              {staffing.underfilled.length > 0 ? `Voir les créneaux à compléter (${staffing.underfilled.length})` : "Voir le détail des créneaux"}
+            </Link>
+          ) : (
+            <Link href={`${base}/shifts`} className={linkClass}>Ajouter des créneaux</Link>
+          )}
+        </p>
+      </section>
 
-      {/* The public link once published; the links per group (#947) can be prepared before. */}
-      {(event.publicStatus === "published" || event.publicStatus === "draft") && (
-        <section aria-labelledby="event-share-heading" className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
-          <h2 id="event-share-heading" className="text-sm font-semibold text-gray-700">Partager l&apos;événement</h2>
-          {event.publicStatus === "published" && <EventShareLink url={eventPublicUrl(event.organization.slug, event.slug)} />}
-          <GroupLinksManager
-            eventId={event.id}
-            roles={roles}
-            initialLinks={groupLinks}
-            published={event.publicStatus === "published"}
-            embed={{ publicUrl: eventPublicUrl(event.organization.slug, event.slug), eventTitle: event.title, eventSlug: event.slug }}
-          />
+      {published && (
+        <section aria-labelledby="overview-todo" className={sectionClass}>
+          <h2 id="overview-todo" className={h2Class}>À traiter</h2>
+          {attention.length === 0 ? (
+            <p className="text-sm text-gray-700">Rien à traiter pour l&apos;instant : ni demande en attente, ni place proposée qui expire, ni jalon en retard.</p>
+          ) : (
+            // role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets.
+            <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
+              {attention.map((item) => (
+                <li key={item.id} className="px-4 py-3 text-sm flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="min-w-0 text-gray-900">
+                    {item.severity === "high" && <span className="font-semibold text-red-800">Urgent : </span>}
+                    {item.message}
+                  </p>
+                  <Link href={item.href} className={linkClass}>{item.action}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <StatCard label="Créneaux" value={event.shifts.length} />
-        <StatCard label="Places" value={totalCapacity} />
-        <StatCard label="Inscrits" value={totalRegistered} note={totalRequested > 0 ? `+ ${totalRequested} demande${totalRequested > 1 ? "s" : ""} à traiter` : undefined} />
-        <StatCard label="Restants" value={totalLeft} highlight={totalLeft === 0 || (totalCapacity > 0 && totalLeft / totalCapacity <= 0.15)} />
-      </div>
+      <section aria-labelledby="overview-next" className={sectionClass}>
+        <h2 id="overview-next" className={h2Class}>Prochaines étapes</h2>
+        {review ? (
+          <>
+            <ReviewChecklist checks={review.checks} />
+            <p className="text-sm">
+              <Link href={`${base}/review`} className={linkClass}>Vérifier avant publication</Link>
+              <span className="text-gray-700"> : la même liste, l&apos;aperçu bénévole et la publication.</span>
+            </p>
+          </>
+        ) : (
+          <EventLifecycleBar
+            eventId={event.id}
+            facts={{
+              publicStatus: event.publicStatus,
+              isListed: event.isListed,
+              endDate: event.endDate.toISOString().slice(0, 10),
+              // « Terminé » flips at midnight in the organization's time zone, not UTC.
+              today: localDay(now, timeZone),
+              shiftCount: event.shifts.length,
+              confirmationMessage: event.confirmationMessage,
+              remindersEnabled: event.remindersEnabled,
+            }}
+          />
+        )}
+      </section>
 
-      <EventActions eventId={event.id} />
-
-      <div className="border-t border-gray-200 pt-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Jalons</h2>
+      <section aria-labelledby="jalons" className={sectionClass}>
+        <h2 id="jalons" tabIndex={-1} className={`${h2Class} focus:outline-none scroll-mt-4`}>Jalons</h2>
         <MilestonesSection
           eventId={event.id}
           initialMilestones={event.milestones.map((m) => ({
@@ -243,72 +189,28 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
             ownerName: m.owner?.name ?? null,
           }))}
           team={team}
-          timeZone={orgTimeZone(event.organization)}
+          timeZone={timeZone}
         />
-      </div>
+      </section>
 
-      <div className="border-t border-gray-200 pt-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Communications</h2>
-        <div className="mb-4">
-          <Link
-            href={`/admin/events/${event.id}/message`}
-            className="inline-block bg-white border border-gray-300 text-gray-800 rounded-full px-4 py-2 text-sm font-medium hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            Écrire aux bénévoles
-          </Link>
-          <p className="text-xs text-gray-600 mt-1">Un email à tous les inscrits, à un poste, à un créneau ou à la liste d&apos;attente, avec objet, aperçu et nombre de destinataires.</p>
-        </div>
-        <div className="mb-4">
-          <AutomaticRemindersBox summary={reminders} />
-        </div>
-        <SendReminderButton
-          eventId={event.id}
-          hasMessage={!!event.reminderMessage?.trim()}
-          volunteerCount={uniqueVolunteerIds.size}
-          lastSentAt={event.reminderSentAt?.toISOString() ?? null}
-        />
-      </div>
-
-      <div className="border-t border-gray-200 pt-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-2">Où manque-t-il du monde ?</h2>
-        <p className="text-sm text-gray-800">
-          {staffingHeadline(staffing.totals)}
-          {belowMinimumSentence(staffing.belowMinimum.length) && ` ${belowMinimumSentence(staffing.belowMinimum.length)}`}
-          {staffing.totals.waiting > 0 && ` ${staffing.totals.waiting} personne${staffing.totals.waiting > 1 ? "s" : ""} en liste d'attente.`}
+      <section aria-labelledby="overview-communication" className={sectionClass}>
+        <h2 id="overview-communication" className={h2Class}>Communication</h2>
+        <ul role="list" className="text-sm text-gray-800 space-y-1">
+          <li>
+            <span className="font-medium text-gray-900">Dernier message : </span>
+            {lastMessage ? lastMessageSentence(lastMessage, timeZone) : "aucun message envoyé pour l'instant."}
+          </li>
+          <li>
+            {nextReminder
+              ? <><span className="font-medium text-gray-900">Prochain rappel automatique : </span>{nextReminder.label}, le {day(nextReminder.day)}, pour les inscrits.</>
+              : <>{reminders.title}.{!published && " Ils ne partent qu'une fois l'événement publié."}</>}
+          </li>
+        </ul>
+        <p className="text-sm">
+          <Link href={`${base}/message`} className={linkClass}>Ouvrir la communication</Link>
+          <span className="text-gray-700"> : écrire aux bénévoles, rappels et messages envoyés.</span>
         </p>
-        {staffing.totals.shifts > 0 && (
-          <Link href={`/admin/events/${event.id}/staffing`} className="inline-block mt-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            {staffing.underfilled.length > 0 ? `Voir les créneaux à compléter (${staffing.underfilled.length})` : "Voir le détail des créneaux"}
-          </Link>
-        )}
-      </div>
-
-      <div className="border-t border-gray-200 pt-4">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Suppression définitive</h2>
-        {!hasLevel(ctx.session.user?.role, "owner") ? (
-          // Permanent deletion is for owners (#469); the route refuses it too.
-          <p className="text-sm text-gray-600">Seul un propriétaire de l&apos;organisation peut supprimer définitivement cet événement.</p>
-        ) : isArchived ? (
-          <DeleteEventSection
-            eventId={event.id}
-            title={event.title}
-            counts={{ shifts: shiftTotal, registrations: registrationTotal, invitations: invitationTotal }}
-            exportUrl={`/api/admin/events/${event.id}/export/pdf`}
-          />
-        ) : (
-          <p className="text-sm text-gray-600">Archivez cet événement pour pouvoir le supprimer.</p>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function StatCard({ label, value, highlight, note }: { label: string; value: number; highlight?: boolean; note?: string }) {
-  return (
-    <div className={`rounded-xl border p-4 text-center ${highlight ? "bg-orange-50 border-orange-200" : "bg-white border-gray-200"}`}>
-      <p className={`text-2xl font-bold ${highlight ? "text-orange-700" : "text-gray-900"}`}>{value}</p>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
-      {note && <p className="text-xs text-amber-900 mt-0.5">{note}</p>}
+      </section>
     </div>
   )
 }

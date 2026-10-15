@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_DUPLICATE -->
 
-**Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou la page de l'événement, ouvre une page de choix :
+**Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou le bouton **⋯** (**Autres actions**) en haut des pages de l'événement, ouvre une page de choix :
 
 - le **titre** de la copie (« (copie) » par défaut) ;
 - le **premier jour** de la copie : toutes les dates (fin, créneaux, spectacles) sont décalées du même nombre de jours ;

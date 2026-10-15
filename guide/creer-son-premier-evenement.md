@@ -32,20 +32,20 @@ Il faut au moins un créneau pour publier. Cliquez ensuite sur **Continuer : vé
 
 ## 4. Ouvrir les inscriptions
 
-La page **Vérification et publication** indique si les inscriptions seront ouvertes. Un événement créé depuis une page blanche les ouvre dès sa publication ; depuis un modèle, elles sont fermées : le lien **Modifier** de la ligne « Inscriptions » mène à la case **Inscriptions ouvertes**. Voir [Ouvrir et fermer les inscriptions](ouvrir-et-fermer-les-inscriptions.md).
+La page **Vérifier avant publication** indique si les inscriptions seront ouvertes. Un événement créé depuis une page blanche les ouvre dès sa publication ; depuis un modèle, elles sont fermées : le lien **Modifier** de la ligne « Inscriptions » mène à la case **Inscriptions ouvertes**. Voir [Ouvrir et fermer les inscriptions](ouvrir-et-fermer-les-inscriptions.md).
 
 ## 5. Publier
 
-**Prévisualiser comme un bénévole** montre la page d'inscription et l'email de confirmation, sans rien enregistrer. Quand tout est prêt, **Publier** : la page d'inscription devient accessible à qui a le lien. Voir [Publier un événement](publier-un-evenement.md).
+**Prévisualiser comme un bénévole**, sur la page de vérification (ou **Aperçu bénévole** dans l'onglet **Partage**), montre la page d'inscription et l'email de confirmation, sans rien enregistrer. Quand tout est prêt, **Publier** (aussi en haut de chaque page de l'événement) : la page d'inscription devient accessible à qui a le lien. Voir [Publier un événement](publier-un-evenement.md).
 
 ## 6. Faire une inscription de test
 
-Sur la page de l'événement, **Vue publique** ouvre la page d'inscription. Inscrivez-vous sur un créneau avec votre propre adresse, comme un bénévole, et vérifiez que l'email de confirmation arrive. Voir [S'inscrire](s-inscrire.md).
+Dans l'onglet **Partage** de l'événement, **Ouvrir la page publique** ouvre la page d'inscription. Inscrivez-vous sur un créneau avec votre propre adresse, comme un bénévole, et vérifiez que l'email de confirmation arrive. Voir [S'inscrire](s-inscrire.md).
 
 ## 7. Partager le lien
 
-Sur la page de l'événement, la section **Partager l'événement** propose **Copier le lien** et, sur la plupart des téléphones, **Partager**. Pour une affiche, téléchargez le **QR code**. Voir [Partager le lien de l'événement](partager-le-lien.md), et [Inviter des membres à un événement](inviter-des-membres.md) pour écrire directement à votre équipe.
+L'onglet **Partage** de l'événement (bouton **Partager le lien**, en haut de ses pages) propose **Copier le lien** et, sur la plupart des téléphones, **Partager**. Pour une affiche, téléchargez le **QR code**, une autre page du même onglet. Voir [Partager le lien de l'événement](partager-le-lien.md), et [Inviter des membres à un événement](inviter-des-membres.md) pour écrire directement à votre équipe.
 
 ## 8. Suivre les inscriptions
 
-**Voir les inscriptions** (**Inscriptions** sur un téléphone), sur la page de l'événement, liste chaque inscription avec ses coordonnées et son créneau. Pour retirer votre inscription de test, cochez sa ligne, puis **Retirer de leur créneau**. Voir [Suivre les inscriptions](suivre-les-inscriptions.md), et [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md) pour repérer les créneaux à compléter.
+L'onglet **Inscriptions** de l'événement liste chaque inscription avec ses coordonnées et son créneau. Pour retirer votre inscription de test, cochez sa ligne, puis **Retirer de leur créneau**. Voir [Suivre les inscriptions](suivre-les-inscriptions.md), et [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md) pour repérer les créneaux à compléter.

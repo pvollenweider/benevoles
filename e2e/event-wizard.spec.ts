@@ -52,12 +52,12 @@ test("an admin creates and publishes an event through the three steps", async ({
   await expect(page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.")).toBeVisible()
   // Once published, the coverage line and its link to the staffing page.
   await expect(review.getByRole("link", { name: "Voir les créneaux incomplets : 0 place occupée sur 4, 2 créneaux incomplets" })).toHaveAttribute("href", /\/staffing$/)
-  await expect(page.getByRole("link", { name: /Ouvrir la page de l'événement/ })).toBeVisible()
+  await expect(page.getByRole("link", { name: "Aperçu de l'événement" })).toBeVisible()
 
-  // The event page's reminders box (#705) states what goes out, with the timing of the cron.
+  // The Communication tab's reminders box (#705) states what goes out, with the timing of the cron.
   const reviewUrl = page.url()
   const eventUrl = reviewUrl.replace(/\/review$/, "")
-  await page.goto(eventUrl)
+  await page.goto(`${eventUrl}/message`)
   const box = page.getByRole("region", { name: /Rappels automatiques|Aucun rappel automatique/ })
   await expect(box).toBeVisible()
   await expect(box.getByRole("link", { name: "Rappels automatiques de l'événement" })).toHaveAttribute("href", /\/edit#event-reminders$/)
@@ -70,7 +70,9 @@ test("an admin creates and publishes an event through the three steps", async ({
   await review.getByRole("link", { name: /Rappels automatiques coupés pour cet événement/ }).click()
   await expect(page).toHaveURL(/\/edit#event-reminders$/)
   await expect(page.getByRole("checkbox", { name: "Rappels automatiques" })).toBeFocused()
-  // The event page says so too, whatever the organization's settings.
-  await page.goto(eventUrl)
+  // The Communication tab says so too, whatever the organization's settings, and the overview.
+  await page.goto(`${eventUrl}/message`)
   await expect(page.getByRole("region", { name: "Rappels automatiques coupés pour cet événement" })).toBeVisible()
+  await page.goto(eventUrl)
+  await expect(page.getByRole("region", { name: "Communication" })).toContainText("Rappels automatiques coupés pour cet événement.")
 })

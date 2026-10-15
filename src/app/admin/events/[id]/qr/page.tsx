@@ -1,9 +1,11 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { eventPublicUrl } from "@/lib/urls"
 import QrPrintView from "@/components/admin/QrPrintView"
 
 export const dynamic = "force-dynamic"
+export const metadata: Metadata = { title: "QR code" }
 
 export default async function EventQrPage({
   params,
@@ -32,7 +34,6 @@ export default async function EventQrPage({
       startDate={event.startDate.toISOString()}
       endDate={event.endDate.toISOString()}
       publicUrl={publicUrl}
-      backHref={`/admin/events/${event.id}`}
     />
   )
 }

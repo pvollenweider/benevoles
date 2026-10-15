@@ -1,5 +1,5 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
 import HelpLink from "@/components/admin/HelpLink"
@@ -7,6 +7,7 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 
 export const dynamic = "force-dynamic"
+export const metadata: Metadata = { title: "Responsables de secteur" }
 
 export default async function SectorLeadersPage({ params }: { params: Promise<{ id: string }> }) {
   const ctx = await getOrgContext()
@@ -51,8 +52,7 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
   return (
     <div className="space-y-6">
       <div>
-        <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
-        <h1 className="text-xl font-bold text-gray-900 mt-1">Responsables de secteur</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Responsables de secteur</h1>
         <HelpLink route="/admin/events/[id]/sector-leaders" />
         <p className="text-sm text-gray-500">
           Un ou plusieurs bénévoles responsables d&apos;un poste : ils reçoivent un lien personnel pour voir qui est inscrit (nom, email, téléphone), sans accès admin au reste de l&apos;événement.

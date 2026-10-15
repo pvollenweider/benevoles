@@ -48,7 +48,7 @@ describe("lifecycleNotes", () => {
 
   it("finished and archived: archive to close, delete only once archived", () => {
     const fin = lifecycleNotes({ ...base, publicStatus: "published", today: "2026-08-01" }, "e1")
-    expect(fin.needs[0]).toEqual({ before: "L'événement est passé : archivez-le (bouton Archiver, en haut) pour le clore." })
+    expect(fin.needs[0]).toEqual({ before: "L'événement est passé : archivez-le (bouton « Autres actions », en haut, puis Archiver) pour le clore." })
     expect(fin.needs[0].action).toBeUndefined()
     expect(fin.consequences[1]).toContain("suppression définitive")
     const arch = lifecycleNotes({ ...base, publicStatus: "archived" }, "e1")
