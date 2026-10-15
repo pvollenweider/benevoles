@@ -101,12 +101,14 @@ async function main() {
     where: { organizationId: org.id, email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" },
     select: { passwordHash: true },
   })
-  await prisma.adminUser.createMany({
+  const team = await prisma.adminUser.createManyAndReturn({
     data: [
       { organizationId: org.id, name: "Colette Favre", email: "colette.owner@example.org", passwordHash: demoAdmin.passwordHash, role: "admin", isActive: true },
       { organizationId: org.id, name: "Samira Diallo", email: "sam.organizer@example.org", passwordHash: demoAdmin.passwordHash, role: "organizer", isActive: true },
     ],
+    select: { id: true, email: true },
   })
+  const teamId = (email: string) => team.find((a) => a.email === email)!.id
 
   // Clean slate: every recording may create copies, series and disposable events. Keeping any of
   // them makes the next take depend on production order (and the recorder can open an old copy
@@ -245,8 +247,9 @@ async function main() {
   await prisma.eventMilestone.createMany({
     data: [
       { eventId: event.id, title: "Commander les t-shirts", dueDate: day(-10), done: true },
-      { eventId: event.id, title: "Confirmer la location de la tente", dueDate: day(-1), done: false },
-      { eventId: event.id, title: "Envoyer le planning aux responsables", dueDate: day(3), done: false },
+      // With an owner (#985): shown on the event page and in the dashboard's overdue item.
+      { eventId: event.id, title: "Confirmer la location de la tente", dueDate: day(-1), done: false, ownerId: teamId("sam.organizer@example.org") },
+      { eventId: event.id, title: "Envoyer le planning aux responsables", dueDate: day(3), done: false, ownerId: teamId("colette.owner@example.org") },
     ],
   })
 

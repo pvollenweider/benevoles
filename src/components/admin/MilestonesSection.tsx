@@ -8,7 +8,7 @@ import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
 import { deleteMilestoneRecap } from "@/lib/action-recap"
 import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
-import { dueDateInputValue, milestoneChanges, MILESTONE_TITLE_MAX, replaceMilestone, sortMilestones, validateMilestoneInput } from "@/lib/milestones"
+import { dueDateInputValue, isMilestoneOverdue, milestoneChanges, MILESTONE_TITLE_MAX, ownerOptionLabel, ownerOptions, replaceMilestone, sortMilestones, validateMilestoneInput, type OwnerOption } from "@/lib/milestones"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { requestJson, useSubmit } from "@/lib/use-submit"
@@ -18,17 +18,24 @@ export type MilestoneRow = {
   title: string
   dueDate: string
   done: boolean
+  /** The owner (#985): an admin account of the organisation, or none. */
+  ownerId: string | null
+  ownerName: string | null
 }
 
+/** An active admin account of the organisation: who can be chosen as owner (#985). */
+export type TeamMember = { id: string; name: string }
+
+/** The API answers with the owner as a relation; the list keeps its id and name. */
+type MilestoneResponse = Omit<MilestoneRow, "ownerName"> & { owner?: { id: string; name: string } | null }
+
+function toRow(m: MilestoneResponse): MilestoneRow {
+  return { id: m.id, title: m.title, dueDate: m.dueDate, done: m.done, ownerId: m.ownerId ?? null, ownerName: m.owner?.name ?? null }
+}
+
+// The due day as picked (stored at midnight UTC), whatever the browser's zone.
 function fmtDate(iso: string) {
-  return new Date(iso).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
-}
-
-function isOverdue(m: MilestoneRow) {
-  if (m.done) return false
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  return new Date(m.dueDate) < today
+  return new Date(iso).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })
 }
 
 const primaryButton =
@@ -41,17 +48,22 @@ const quietButton =
  * checks and messages both ways. Escape cancels, except while the request runs (nor does
  * « Annuler »: the form would close under the answer).
  */
-function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
+function MilestoneForm({ eventId, milestone, team, onSaved, onCancel }: {
   eventId: string
   milestone?: MilestoneRow
+  team: TeamMember[]
   onSaved: (milestone: MilestoneRow) => void
   onCancel: () => void
 }) {
   const id = useId()
   const titleRef = useRef<HTMLInputElement>(null)
   const dateRef = useRef<HTMLInputElement>(null)
+  const ownerRef = useRef<HTMLSelectElement>(null)
   const [title, setTitle] = useState(milestone?.title ?? "")
   const [dueDate, setDueDate] = useState(milestone ? dueDateInputValue(milestone.dueDate) : "")
+  const [ownerId, setOwnerId] = useState(milestone?.ownerId ?? "")
+  // A deactivated current owner stays a choice (« compte désactivé »): saving keeps it unless changed.
+  const options: OwnerOption[] = ownerOptions(team, milestone?.ownerId && milestone.ownerName ? { id: milestone.ownerId, name: milestone.ownerName } : null)
   const { submit, busy, error, fail, isInvalid } = useSubmit()
   const errorId = `${id}-error`
 
@@ -70,7 +82,7 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const checked = validateMilestoneInput({ title, dueDate })
+    const checked = validateMilestoneInput({ title, dueDate, ownerId })
     if (!checked.ok) {
       fail(checked.message, checked.field, checked.field === "title" ? titleRef.current : dateRef.current)
       return
@@ -79,7 +91,7 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
       const changes = milestoneChanges(milestone, checked.value)
       if (Object.keys(changes).length === 0) { onSaved(milestone); return }
     }
-    const outcome = await submit<MilestoneRow>(() => fetch(
+    const outcome = await submit<MilestoneResponse>(() => fetch(
       milestone ? `/api/admin/events/${eventId}/milestones/${milestone.id}` : `/api/admin/events/${eventId}/milestones`,
       {
         method: milestone ? "PATCH" : "POST",
@@ -89,10 +101,12 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
     ), { silent: true })
     if (!outcome.ok) {
       if (!outcome.error) return // a second click while the first request runs
+      // 422: the owner is no longer an active admin of the organisation (the only 422 of these routes).
+      if (outcome.status === 422) { fail(outcome.error, "ownerId", ownerRef.current); return }
       fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? titleRef.current : null)
       return
     }
-    onSaved(outcome.data)
+    onSaved(toRow(outcome.data))
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLFormElement>) {
@@ -104,6 +118,7 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
 
   const titleInvalid = isInvalid("title")
   const dateInvalid = isInvalid("dueDate")
+  const ownerInvalid = isInvalid("ownerId")
 
   return (
     <form
@@ -147,6 +162,25 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
           className={`input w-full ${dateInvalid ? "!border-red-600" : ""}`}
         />
       </div>
+      <div>
+        <label htmlFor={`${id}-owner`} className="block text-sm font-medium text-gray-700 mb-1">
+          Responsable <span className="text-gray-500 font-normal">(facultatif)</span>
+        </label>
+        <select
+          ref={ownerRef}
+          id={`${id}-owner`}
+          value={ownerId}
+          onChange={(e) => setOwnerId(e.target.value)}
+          aria-invalid={ownerInvalid}
+          aria-describedby={ownerInvalid ? errorId : undefined}
+          className={`input w-full ${ownerInvalid ? "!border-red-600" : ""}`}
+        >
+          <option value="">Aucun</option>
+          {options.map((o) => (
+            <option key={o.id} value={o.id}>{ownerOptionLabel(o)}</option>
+          ))}
+        </select>
+      </div>
       <FormStatus error={error} errorId={errorId} />
       <p role="status" className="sr-only">{busy ? "Enregistrement en cours…" : ""}</p>
       <div className="flex flex-wrap justify-end gap-2">
@@ -162,10 +196,14 @@ function MilestoneForm({ eventId, milestone, onSaved, onCancel }: {
 }
 
 export default function MilestonesSection({
-  eventId, initialMilestones,
+  eventId, initialMilestones, team, timeZone,
 }: {
   eventId: string
   initialMilestones: MilestoneRow[]
+  /** Active admin accounts of the organisation, the possible owners (#985). */
+  team: TeamMember[]
+  /** The organisation's zone: a milestone is late once its due day is over there (#985). */
+  timeZone: string
 }) {
   const [milestones, setMilestones] = useState(initialMilestones)
   const [announcement, setAnnouncement] = useState("")
@@ -275,13 +313,15 @@ export default function MilestonesSection({
                   <MilestoneForm
                     eventId={eventId}
                     milestone={m}
+                    team={team}
                     onSaved={edited}
                     onCancel={() => closeForm([editButtonOf(m.id), () => addButtonRef.current])}
                   />
                 </li>
               )
             }
-            const overdue = isOverdue(m)
+            const overdue = isMilestoneOverdue(m, new Date(), timeZone)
+            const ownerInactive = m.ownerId !== null && !team.some((t) => t.id === m.ownerId)
             const checkboxId = `${checkboxIdPrefix}-done-${m.id}`
             return (
               // On a narrow screen the date and the actions wrap under the title instead of squeezing it.
@@ -291,11 +331,20 @@ export default function MilestonesSection({
                   type="checkbox"
                   checked={m.done}
                   onChange={() => toggleDone(m)}
+                  aria-describedby={m.ownerName ? `${checkboxId}-owner` : undefined}
                   className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                 />
-                <label htmlFor={checkboxId} className={`flex-1 min-w-[10rem] break-words text-sm cursor-pointer ${m.done ? "text-gray-500 line-through" : "text-gray-800"}`}>
-                  {m.title}
-                </label>
+                {/* The owner under the title (#985): it wraps with it on a narrow screen. */}
+                <div className="flex-1 min-w-[10rem]">
+                  <label htmlFor={checkboxId} className={`block break-words text-sm cursor-pointer ${m.done ? "text-gray-500 line-through" : "text-gray-800"}`}>
+                    {m.title}
+                  </label>
+                  {m.ownerName && (
+                    <p id={`${checkboxId}-owner`} className="text-xs text-gray-600 break-words">
+                      Responsable : {m.ownerName}{ownerInactive ? " (compte désactivé)" : ""}
+                    </p>
+                  )}
+                </div>
                 <span className="ml-auto flex items-center gap-3 flex-shrink-0">
                   <span className={`text-xs whitespace-nowrap ${overdue ? "text-red-600 font-medium" : "text-gray-500"}`}>
                     {overdue && <span aria-hidden="true">⚠ </span>}
@@ -329,7 +378,7 @@ export default function MilestonesSection({
       )}
 
       {editing === "new" ? (
-        <MilestoneForm eventId={eventId} onSaved={added} onCancel={() => closeForm([() => addButtonRef.current])} />
+        <MilestoneForm eventId={eventId} team={team} onSaved={added} onCancel={() => closeForm([() => addButtonRef.current])} />
       ) : (
         <button
           ref={addButtonRef}

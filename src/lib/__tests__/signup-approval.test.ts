@@ -65,7 +65,7 @@ describe("what the organizer sees", () => {
     const items = attentionItems({
       now,
       offers: [],
-      events: [{ id: "e1", title: "Fête", startDate: new Date("2026-07-04"), endDate: new Date("2026-07-05"), shifts: [], leaderRoles: [], overdueMilestones: 0, unansweredInvites: 0, pendingRequests: 2 }],
+      events: [{ id: "e1", title: "Fête", startDate: new Date("2026-07-04"), endDate: new Date("2026-07-05"), shifts: [], leaderRoles: [], overdueMilestones: [], unansweredInvites: 0, pendingRequests: 2 }],
     })
     expect(items[0]).toMatchObject({ id: "requests:e1", severity: "high", href: "/admin/events/e1/registrations?demandes=1" })
     expect(items[0].message).toContain("2 demandes d'inscription attendent")

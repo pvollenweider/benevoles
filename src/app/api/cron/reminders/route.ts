@@ -18,6 +18,7 @@ import { registrationToken } from "@/lib/token-vault"
 import { orgTimeZone } from "@/lib/time-zone"
 import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
+import { sendMilestoneOwnerReminders } from "@/lib/milestone-reminders"
 
 export const dynamic = "force-dynamic"
 
@@ -179,6 +180,12 @@ async function run(req: Request) {
     return null
   })
 
+  // Milestone owners whose due day approaches (#985): queued here, delivered just below.
+  const milestoneOwners = await sendMilestoneOwnerReminders(now).catch((e) => {
+    reportError("milestones.owner_reminders")(e)
+    return null
+  })
+
   // Retry notifications whose immediate delivery failed (outbox, #293).
   const outbox = await deliverOutbox().catch((e) => {
     reportError("outbox.cron_deliver")(e)
@@ -199,6 +206,7 @@ async function run(req: Request) {
     totals,
     expiredOffers: expiredOffers.length,
     waitlist,
+    milestoneOwners,
     outbox,
     outboxStatus,
   })

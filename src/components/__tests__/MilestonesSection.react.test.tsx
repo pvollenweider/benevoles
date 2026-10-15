@@ -7,15 +7,18 @@ import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-li
 import MilestonesSection, { type MilestoneRow } from "../admin/MilestonesSection"
 
 const MILESTONES: MilestoneRow[] = [
-  { id: "m1", title: "Commander les t-shirts", dueDate: "2026-09-01T00:00:00.000Z", done: false },
-  { id: "m2", title: "Fermer les inscriptions", dueDate: "2026-09-10T00:00:00.000Z", done: false },
+  { id: "m1", title: "Commander les t-shirts", dueDate: "2026-09-01T00:00:00.000Z", done: false, ownerId: null, ownerName: null },
+  { id: "m2", title: "Fermer les inscriptions", dueDate: "2026-09-10T00:00:00.000Z", done: false, ownerId: null, ownerName: null },
 ]
+const TEAM = [{ id: "a-sam", name: "Samira Diallo" }, { id: "a-col", name: "Colette Favre" }]
 
 function ok(data: unknown) {
   return { ok: true, status: 200, json: async () => data }
 }
 
-const renderSection = () => render(<MilestonesSection eventId="evt-1" initialMilestones={MILESTONES} />)
+const renderSection = (milestones: MilestoneRow[] = MILESTONES) =>
+  render(<MilestonesSection eventId="evt-1" initialMilestones={milestones} team={TEAM} timeZone="Europe/Zurich" />)
+const ownerSelect = () => screen.getByRole("combobox", { name: /^Responsable/ })
 // jsdom drops the space before the sr-only span; browsers keep it.
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 const editButton = (title: string) => screen.getByRole("button", { name: new RegExp(`^Modifier ?le jalon « ${escape(title)} »$`) })
@@ -138,5 +141,95 @@ describe("MilestonesSection — edit a milestone", () => {
     fireEvent.keyDown(screen.getByRole("textbox", { name: "Titre" }), { key: "Escape" })
     expect(screen.queryByRole("form")).not.toBeInTheDocument()
     expect(screen.getByRole("button", { name: "+ Ajouter un jalon" })).toHaveFocus()
+  })
+})
+
+// #985: an optional owner, among the organisation's active admins.
+describe("MilestonesSection — owner", () => {
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+    vi.useRealTimers()
+  })
+
+  it("offers « Aucun » by default, then the team by name, marked optional", () => {
+    renderSection()
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter un jalon" }))
+    expect(ownerSelect()).toHaveAccessibleName("Responsable (facultatif)")
+    expect(ownerSelect()).toHaveValue("")
+    expect(ownerSelect()).not.toBeRequired()
+    expect(within(ownerSelect()).getAllByRole("option").map((o) => o.textContent)).toEqual(["Aucun", "Colette Favre", "Samira Diallo"])
+  })
+
+  it("creates a milestone with an owner and shows the owner under its title", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(ok({ id: "m3", title: "Louer la tente", dueDate: "2026-09-05T00:00:00.000Z", done: false, ownerId: "a-sam", owner: { id: "a-sam", name: "Samira Diallo" } }))
+    vi.stubGlobal("fetch", fetchMock)
+    renderSection()
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter un jalon" }))
+    fireEvent.change(screen.getByRole("textbox", { name: "Titre" }), { target: { value: "Louer la tente" } })
+    fireEvent.change(screen.getByLabelText(/^Échéance/), { target: { value: "2026-09-05" } })
+    fireEvent.change(ownerSelect(), { target: { value: "a-sam" } })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+
+    await waitFor(() => expect(screen.getByText("Responsable : Samira Diallo")).toBeInTheDocument())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ title: "Louer la tente", dueDate: "2026-09-05", ownerId: "a-sam" })
+    // The checkbox is still named by the title alone.
+    expect(screen.getByRole("checkbox", { name: "Louer la tente" })).toHaveAccessibleDescription("Responsable : Samira Diallo")
+  })
+
+  it("changes and removes the owner of an existing milestone, sending only that", async () => {
+    const withOwner: MilestoneRow[] = [{ ...MILESTONES[0], ownerId: "a-sam", ownerName: "Samira Diallo" }]
+    const fetchMock = vi.fn().mockResolvedValue(ok({ ...withOwner[0], ownerId: null, owner: null }))
+    vi.stubGlobal("fetch", fetchMock)
+    renderSection(withOwner)
+    expect(screen.getByText("Responsable : Samira Diallo")).toBeInTheDocument()
+    fireEvent.click(editButton("Commander les t-shirts"))
+    expect(ownerSelect()).toHaveValue("a-sam")
+    fireEvent.change(ownerSelect(), { target: { value: "" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(editButton("Commander les t-shirts")).toHaveFocus())
+    expect(fetchMock.mock.calls[0][1].body).toBe(JSON.stringify({ ownerId: null }))
+    expect(screen.queryByText(/^Responsable :/)).not.toBeInTheDocument()
+  })
+
+  it("keeps a deactivated owner as a choice, and does not send it when unchanged", async () => {
+    const formerOwner: MilestoneRow[] = [{ ...MILESTONES[0], ownerId: "a-gone", ownerName: "Léa Parti" }]
+    const fetchMock = vi.fn().mockResolvedValue(ok({ ...formerOwner[0], title: "Commander les polos", owner: { id: "a-gone", name: "Léa Parti" } }))
+    vi.stubGlobal("fetch", fetchMock)
+    renderSection(formerOwner)
+    expect(screen.getByText("Responsable : Léa Parti (compte désactivé)")).toBeInTheDocument()
+    fireEvent.click(editButton("Commander les t-shirts"))
+    expect(ownerSelect()).toHaveValue("a-gone")
+    expect(within(ownerSelect()).getByRole("option", { name: "Léa Parti (compte désactivé)" })).toBeEnabled()
+    fireEvent.change(screen.getByRole("textbox", { name: "Titre" }), { target: { value: "Commander les polos" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(editButton("Commander les polos")).toHaveFocus())
+    expect(fetchMock.mock.calls[0][1].body).toBe(JSON.stringify({ title: "Commander les polos" }))
+  })
+
+  it("puts the server's refusal of the owner on the select", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 422, json: async () => ({ error: "Choisissez un responsable parmi les membres actifs de l'équipe.", field: "ownerId" }) }))
+    renderSection()
+    fireEvent.click(editButton("Commander les t-shirts"))
+    fireEvent.change(ownerSelect(), { target: { value: "a-col" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Choisissez un responsable parmi les membres actifs de l'équipe."))
+    expect(ownerSelect()).toHaveAttribute("aria-invalid", "true")
+    expect(ownerSelect()).toHaveAccessibleDescription("Choisissez un responsable parmi les membres actifs de l'équipe.")
+    expect(ownerSelect()).toHaveFocus()
+    expect(screen.getByRole("textbox", { name: "Titre" })).not.toHaveAttribute("aria-invalid")
+  })
+
+  it("marks a milestone late from the day after its due day, in the organisation's zone", () => {
+    vi.useFakeTimers({ toFake: ["Date"] })
+    // 23:30 on 1 September in Zurich, the due day of « Commander les t-shirts »: not late yet.
+    vi.setSystemTime(new Date("2026-09-01T21:30:00Z"))
+    renderSection()
+    expect(screen.queryByText("(dépassé)")).not.toBeInTheDocument()
+    cleanup()
+    // 00:30 on 2 September in Zurich (still 1 September in UTC).
+    vi.setSystemTime(new Date("2026-09-01T22:30:00Z"))
+    renderSection()
+    expect(screen.getAllByText("(dépassé)")).toHaveLength(1)
   })
 })

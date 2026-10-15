@@ -1232,6 +1232,46 @@ describe("Milestones — cross-tenant isolation", () => {
     expect(db.eventMilestone.update).not.toHaveBeenCalled()
   })
 
+  // #985: the owner is an admin account, a model the scoped client does not filter by itself.
+  // Even if a read returned another organisation's admin, the route checks the row and refuses.
+  const ORG_B_ADMIN = { organizationId: "org-b", isActive: true }
+
+  it("POST /api/admin/events/[id]/milestones refuses an owner from another organisation (#985)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/milestones/route")
+    const create = vi.fn()
+    const db = setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      adminUser: { findFirst: vi.fn().mockResolvedValue(ORG_B_ADMIN) },
+      eventMilestone: { create },
+    })
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-a/milestones", "POST", { title: "Louer la tente", dueDate: "2026-09-20", ownerId: "adm-b" }),
+      params("evt-a"),
+    )
+    expect(res.status).toBe(422)
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true } }))
+    expect(create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/milestones/[milestoneId] refuses an owner from another organisation (#985)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    const db = setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      adminUser: { findFirst: vi.fn().mockResolvedValue(ORG_B_ADMIN) },
+      eventMilestone: { findFirst: vi.fn().mockResolvedValue({ id: "m-a", eventId: "evt-a", title: "Tente", dueDate: new Date("2026-09-20"), done: false, ownerId: null }) },
+    })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/milestones/m-a", "PATCH", { ownerId: "adm-b" }),
+      { params: Promise.resolve({ id: "evt-a", milestoneId: "m-a" }) },
+    )
+    expect(res.status).toBe(422)
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true } }))
+    expect(db.eventMilestone.update).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.findUnique).not.toHaveBeenCalled()
+  })
+
   it("DELETE /api/admin/events/[id]/milestones/[milestoneId] returns 404 for org-B event", async () => {
     const { DELETE } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
     setupGuard()

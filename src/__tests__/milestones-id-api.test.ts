@@ -9,8 +9,9 @@ const findFirst = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 const del = vi.hoisted(() => vi.fn())
 const logCreate = vi.hoisted(() => vi.fn())
+const adminFindFirst = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { eventMilestone: { findFirst, update, delete: del }, eventLog: { create: logCreate } },
+  prisma: { eventMilestone: { findFirst, update, delete: del }, eventLog: { create: logCreate }, adminUser: { findFirst: adminFindFirst } },
 }))
 
 function patch(body: unknown) {
@@ -68,7 +69,12 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
     const res = await PATCH(patch({ title: "Clore les inscriptions", dueDate: "2026-09-25" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
     expect(res.status).toBe(200)
-    expect(update).toHaveBeenCalledWith({ where: { id: "m1" }, data: { title: "Clore les inscriptions", dueDate: new Date("2026-09-25") } })
+    // A new due date clears the owner's reminder mark (#985).
+    expect(update).toHaveBeenCalledWith({
+      where: { id: "m1" },
+      data: { title: "Clore les inscriptions", dueDate: new Date("2026-09-25"), ownerRemindedAt: null },
+      include: { owner: { select: { id: true, name: true } } },
+    })
     expect(logCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
@@ -97,6 +103,48 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
     await PATCH(patch({ done: false }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
     expect(logCreate).not.toHaveBeenCalled()
+  })
+
+  const base = { id: "m1", eventId: "evt-1", title: "Louer la tente", dueDate: new Date("2026-09-20"), done: false, ownerId: null as string | null, ownerRemindedAt: null }
+
+  it("PATCH sets an active admin of the organisation as owner, clears the reminder mark and logs the id (#985)", async () => {
+    findFirst.mockResolvedValue(base)
+    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: true })
+    update.mockResolvedValue({ ...base, ownerId: "adm-2", owner: { id: "adm-2", name: "Samira Diallo" } })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    const res = await PATCH(patch({ ownerId: "adm-2" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
+    expect(res.status).toBe(200)
+    expect((await res.json()).owner).toEqual({ id: "adm-2", name: "Samira Diallo" })
+    expect(adminFindFirst).toHaveBeenCalledWith({ where: { id: "adm-2", organizationId: "org-a", isActive: true }, select: { organizationId: true, isActive: true } })
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: { ownerId: "adm-2", ownerRemindedAt: null } }))
+    expect(logCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ action: "eventmilestone.updated", changes: { ownerId: { from: null, to: "adm-2" } } }),
+    }))
+  })
+
+  it("PATCH refuses a deactivated or unknown owner with 422 and changes nothing (#985)", async () => {
+    findFirst.mockResolvedValue(base)
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    for (const candidate of [null, { organizationId: "org-a", isActive: false }]) {
+      adminFindFirst.mockResolvedValueOnce(candidate)
+      const res = await PATCH(patch({ ownerId: "adm-x" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
+      expect(res.status).toBe(422)
+      expect(await res.json()).toEqual({ error: "Choisissez un responsable parmi les membres actifs de l'équipe.", field: "ownerId" })
+    }
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH removes the owner without checking anyone, and does not re-check an unchanged owner (#985)", async () => {
+    findFirst.mockResolvedValue({ ...base, ownerId: "adm-gone" })
+    update.mockResolvedValue({ ...base, ownerId: null, owner: null })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    expect((await PATCH(patch({ ownerId: null }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })).status).toBe(200)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: { ownerId: null, ownerRemindedAt: null } }))
+
+    update.mockResolvedValue({ ...base, ownerId: "adm-gone", done: true })
+    expect((await PATCH(patch({ ownerId: "adm-gone", done: true }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })).status).toBe(200)
+    expect(adminFindFirst).not.toHaveBeenCalled()
+    expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ data: { done: true, ownerId: "adm-gone" } }))
   })
 
   it("DELETE 404s when the milestone doesn't belong to this event", async () => {

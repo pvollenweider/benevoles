@@ -132,17 +132,28 @@ const SHIFT_SELECT = { id: true, roleName: true, label: true, date: true, startT
  */
 async function resolveShiftLabels(rows: EventLogRow[]): Promise<Record<string, ShiftLabel>> {
   const shiftIds = new Set<string>()
+  const ownerIds = new Set<string>()
   for (const row of rows) {
     const changes = row.changes as Record<string, { from: unknown; to: unknown }> | null
-    const value = changes?.shiftId
-    if (!value) continue
-    if (typeof value.from === "string") shiftIds.add(value.from)
-    if (typeof value.to === "string") shiftIds.add(value.to)
+    for (const [field, ids] of [["shiftId", shiftIds], ["ownerId", ownerIds]] as const) {
+      const value = changes?.[field]
+      if (!value) continue
+      if (typeof value.from === "string") ids.add(value.from)
+      if (typeof value.to === "string") ids.add(value.to)
+    }
   }
-  if (shiftIds.size === 0) return {}
+  if (shiftIds.size === 0 && ownerIds.size === 0) return {}
 
-  const shifts = await prisma.shift.findMany({ where: { id: { in: [...shiftIds] } }, select: SHIFT_SELECT })
-  return Object.fromEntries(shifts.map((s) => [s.id, formatShiftLabel(s)]))
+  const [shifts, owners] = await Promise.all([
+    shiftIds.size ? prisma.shift.findMany({ where: { id: { in: [...shiftIds] } }, select: SHIFT_SELECT }) : Promise.resolve([]),
+    // A milestone's owner (#985) is an admin account: its current name, like the actors' (the log
+    // stores only the id). Ids are cuids, so they never collide with a shift's in the same map.
+    ownerIds.size ? prisma.adminUser.findMany({ where: { id: { in: [...ownerIds] } }, select: { id: true, name: true } }) : Promise.resolve([]),
+  ])
+  return Object.fromEntries([
+    ...shifts.map((s) => [s.id, formatShiftLabel(s)] as const),
+    ...owners.map((o) => [o.id, { compact: o.name, prose: o.name }] as const),
+  ])
 }
 
 export interface ReplayCandidate {

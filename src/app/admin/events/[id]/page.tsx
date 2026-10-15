@@ -19,6 +19,7 @@ import GroupLinksManager from "@/components/admin/GroupLinksManager"
 import { liveRoleNames, loadAdminGroupLinks } from "@/lib/group-links-data"
 import EventActions from "@/components/admin/EventActions"
 import { orgTimeZone } from "@/lib/time-zone"
+import { eligibleOwnerWhere } from "@/lib/milestones"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { isEventDay } from "@/lib/day-of"
 import { hasUpcomingShift } from "@/lib/event-wizard"
@@ -31,7 +32,7 @@ export const dynamic = "force-dynamic"
 export default async function AdminEventPage({ params }: { params: Promise<{ id: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
-  const { db } = ctx
+  const { db, organizationId } = ctx
 
   const { id } = await params
 
@@ -49,7 +50,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
-      milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }] },
+      milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }], include: { owner: { select: { name: true } } } },
       sectorLeaders: { select: { roleName: true } },
     },
   })
@@ -68,7 +69,12 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     : [0, 0, 0]
 
   // Share links per group (#947), with the roles a link can show.
-  const [groupLinks, roles] = await Promise.all([loadAdminGroupLinks(db, event), liveRoleNames(db, event.id)])
+  // The possible owners of a milestone (#985): the organisation's active admin accounts.
+  const [groupLinks, roles, team] = await Promise.all([
+    loadAdminGroupLinks(db, event),
+    liveRoleNames(db, event.id),
+    db.adminUser.findMany({ where: eligibleOwnerWhere(organizationId), select: { id: true, name: true }, orderBy: { name: "asc" } }),
+  ])
 
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
   const totalRegistered = event.shifts.reduce(
@@ -233,7 +239,11 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
             title: m.title,
             dueDate: m.dueDate.toISOString(),
             done: m.done,
+            ownerId: m.ownerId,
+            ownerName: m.owner?.name ?? null,
           }))}
+          team={team}
+          timeZone={orgTimeZone(event.organization)}
         />
       </div>
 

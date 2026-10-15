@@ -574,3 +574,43 @@ export function renderOrgInactivityDeactivated(p: NotificationPayload): Rendered
 
   return { subject, html, text }
 }
+
+// ── Rappel au responsable d'un jalon (#985) ──────────────────────────────────────────────────
+
+export function renderMilestoneOwnerReminder(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    ownerName: string
+    eventId: string
+    eventTitle: string
+    milestoneTitle: string
+    /** « samedi 17 octobre », the due day as picked. */
+    dueDateLabel: string
+    /** 0 on the due day, up to MILESTONE_REMINDER_DAYS before. */
+    daysLeft: number
+  }
+  const when = d.daysLeft <= 0 ? "aujourd'hui" : d.daysLeft === 1 ? "demain" : `dans ${d.daysLeft} jours`
+  const subject = `Jalon à faire ${when} : ${d.milestoneTitle}`
+  const eventUrl = `${BASE_URL}/admin/events/${d.eventId}`
+  const intro = `Vous êtes responsable du jalon « ${d.milestoneTitle} » de ${d.eventTitle}. Son échéance est le ${d.dueDateLabel}, ${when}.`
+  const next = "Une fois fait, cochez-le dans la section Jalons de la page de l'événement : l'équipe voit qu'il est fait, et il n'apparaîtra pas en retard sur le tableau de bord."
+
+  const text = [
+    `Bonjour ${d.ownerName},`,
+    ``,
+    intro,
+    ``,
+    next,
+    ``,
+    `Ouvrir l'événement :`,
+    eventUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <p>Bonjour ${escapeHtml(d.ownerName)},</p>
+    <p>Vous êtes responsable du jalon <strong>« ${escapeHtml(d.milestoneTitle)} »</strong> de <strong>${escapeHtml(d.eventTitle)}</strong>. Son échéance est le ${escapeHtml(d.dueDateLabel)}, ${escapeHtml(when)}.</p>
+    <p>${escapeHtml(next)}</p>
+    <p style="margin-top:1.25em">${btn(eventUrl, "Ouvrir l'événement")}</p>
+  `, `Jalon « ${d.milestoneTitle} » : échéance ${when}.`)
+
+  return { subject, html, text }
+}

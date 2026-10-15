@@ -264,8 +264,10 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, fait / pas fait
 - « Modifier » sur chaque ligne (#989) : titre et échéance corrigés sur place, mêmes contrôles et messages qu'à l'ajout (`src/lib/milestones.ts`), Échap annule, le focus revient sur « Modifier » ; la liste reste triée par échéance
-- Purement informatif, aucune automatisation (une échéance ne déclenche rien elle-même)
-- Un jalon dépassé et non coché est mis en évidence
+- **Responsable** facultatif (#985) : un compte admin actif de l'organisation (propriétaire ou organisateur), pas un responsable de secteur (sans compte, ne voit pas les jalons) ; `EventMilestone.ownerId` → `AdminUser`, `onDelete: SetNull` ; l'API vérifie l'organisation et le compte actif (`src/lib/milestones.ts`, `src/lib/milestone-owner.ts`, 422 sinon) ; un compte désactivé reste affiché « (compte désactivé) » tant qu'on ne le change pas ; nom affiché sous le titre, journalisé par id (nom résolu à la lecture du journal)
+- Rappel au responsable (#985) : un email `milestone_owner_reminder` trois jours avant l'échéance (jusqu'au jour même), une seule fois, par le cron horaire des rappels via l'outbox (`src/lib/milestone-reminders.ts`, `ownerRemindedAt` + clé de dédoublonnage) ; remis à zéro quand le responsable ou l'échéance change ; jamais pour un jalon coché, un événement archivé ou un compte désactivé
+- Cocher un jalon ne déclenche rien d'autre
+- Un jalon non coché est en retard dès le lendemain de son échéance dans le fuseau de l'organisation (`isMilestoneOverdue`), même règle sur la page de l'événement et au tableau de bord, qui nomme les trois premiers avec leur responsable
 - Visible par les admins de l'organisation uniquement, pas par les responsables de secteur (#186)
 - Chaque ajout, modification et suppression est tracé dans le journal d'événement
 

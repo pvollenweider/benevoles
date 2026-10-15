@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Un responsable par jalon** (#985) : sur la page de l'événement, le champ facultatif **Responsable** confie un jalon à un membre de l'équipe admin ; son nom s'affiche sous le jalon et dans les jalons en retard du tableau de bord, et il reçoit un email de rappel trois jours avant l'échéance si le jalon n'est pas coché. Un jalon n'est plus compté en retard au tableau de bord dès le matin de son échéance : comme sur la page de l'événement, il l'est le lendemain, dans le fuseau horaire de l'organisation.
 - **Modifier un jalon** (#989) : sur la page de l'événement, **Modifier** sur la ligne d'un jalon corrige son titre et son échéance sans avoir à le supprimer et le recréer ; la liste reste triée par échéance.
 - **S'inscrire à d'autres créneaux depuis sa page personnelle** (#988) : sous « Tous mes créneaux », un lien ramène le bénévole sur la page d'inscription de l'événement, tant que les inscriptions sont ouvertes, en gardant le lien de groupe par lequel il s'est inscrit. Le lien du bas de la page dit maintenant où il mène : « Voir la page de l'événement », ou « Retour à l'accueil » vers la page de l'organisation quand l'événement n'est plus en ligne.
 - **Le blog** (`/blog`) : les newsletters de benevol.app archivées, la plus récente en premier, chacune sur sa page avec sa date et sa version, et un flux Atom pour suivre les prochaines. Lien « Blog » dans l'en-tête et le pied de page des pages publiques.

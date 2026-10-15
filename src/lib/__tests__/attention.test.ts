@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { attentionItems, type AttentionEvent } from "../attention"
+import { attentionItems, overdueMilestonesMessage, type AttentionEvent } from "../attention"
 
 // « Ce qui demande votre attention » (#372): what an admin should act on, from the data.
 
@@ -8,7 +8,7 @@ const day = (offset: number) => new Date(Date.UTC(2030, 5, 10 + offset))
 
 const ev = (over: Partial<AttentionEvent> = {}): AttentionEvent => ({
   id: "e1", title: "Fête", startDate: day(30), endDate: day(31),
-  shifts: [], leaderRoles: [], overdueMilestones: 0, unansweredInvites: 0, ...over,
+  shifts: [], leaderRoles: [], overdueMilestones: [], unansweredInvites: 0, ...over,
 })
 const ids = (items: ReturnType<typeof attentionItems>) => items.map((i) => i.id)
 
@@ -43,11 +43,20 @@ describe("attentionItems", () => {
   })
 
   it("flags overdue milestones as urgent and unused invitations", () => {
-    const items = attentionItems({ now, events: [ev({ overdueMilestones: 2, unansweredInvites: 3 })], offers: [] })
+    const late = [{ title: "Louer la tente", ownerName: "Samira Diallo" }, { title: "Commander les t-shirts", ownerName: null }]
+    const items = attentionItems({ now, events: [ev({ overdueMilestones: late, unansweredInvites: 3 })], offers: [] })
     expect(ids(items)).toEqual(["milestones:e1", "invites:e1"])
-    expect(items[0].message).toBe("2 jalons sont en retard.")
+    expect(items[0].message).toBe("2 jalons sont en retard : « Louer la tente » (responsable : Samira Diallo), « Commander les t-shirts ».")
     expect(items[1].href).toBe("/admin/events/e1/message?audience=invited")
     expect(items[1].message).toMatch(/aucun créneau confirmé/)
+  })
+
+  it("names one overdue milestone, its owner, and counts beyond three (#985)", () => {
+    expect(overdueMilestonesMessage([{ title: "Louer la tente", ownerName: "Samira Diallo" }]))
+      .toBe("1 jalon est en retard : « Louer la tente » (responsable : Samira Diallo).")
+    const five = ["A", "B", "C", "D", "E"].map((title) => ({ title, ownerName: null }))
+    expect(overdueMilestonesMessage(five)).toBe("5 jalons sont en retard : « A », « B », « C » et 2 autres.")
+    expect(overdueMilestonesMessage(five.slice(0, 4))).toBe("4 jalons sont en retard : « A », « B », « C » et 1 autre.")
   })
 
   it("flags roles without a leader only once the event uses sector leaders", () => {
@@ -69,7 +78,7 @@ describe("attentionItems", () => {
   })
 
   it("suggests archiving an ended event, and nothing else about it", () => {
-    const ended = ev({ startDate: day(-5), endDate: day(-3), overdueMilestones: 1 })
+    const ended = ev({ startDate: day(-5), endDate: day(-3), overdueMilestones: [{ title: "Louer la tente", ownerName: null }] })
     expect(ids(attentionItems({ now, events: [ended], offers: [] }))).toEqual(["ended:e1"])
   })
 
@@ -78,7 +87,7 @@ describe("attentionItems", () => {
       now,
       events: [
         ev({ id: "a", startDate: day(3), endDate: day(4) }),
-        ev({ id: "b", overdueMilestones: 1 }),
+        ev({ id: "b", overdueMilestones: [{ title: "Louer la tente", ownerName: null }] }),
       ],
       offers: [],
     })

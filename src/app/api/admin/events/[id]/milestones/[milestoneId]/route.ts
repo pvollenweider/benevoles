@@ -6,17 +6,20 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { checkMilestoneOwner, MILESTONE_OWNER_SELECT } from "@/lib/milestone-owner"
 
 const patchSchema = z.object({
   title: z.string().min(1).max(140).optional(),
   dueDate: z.coerce.date().optional(),
   done: z.boolean().optional(),
+  // An admin account of the organisation (#985), null to remove the owner.
+  ownerId: z.string().min(1).max(64).nullable().optional(),
 })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; milestoneId: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
-  const { db } = guard
+  const { db, organizationId } = guard
 
   const { id: eventId, milestoneId } = await params
   const body = await req.json()
@@ -29,9 +32,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const before = await db.eventMilestone.findFirst({ where: { id: milestoneId, eventId } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const after = await db.eventMilestone.update({ where: { id: milestoneId }, data: parsed.data })
+  // Only an owner actually sent is checked: an unchanged edit never re-checks a former owner.
+  const { ownerId, ...fields } = parsed.data
+  if (ownerId && ownerId !== before.ownerId) {
+    const refused = await checkMilestoneOwner(db, organizationId, ownerId)
+    if (refused) return refused
+  }
+  const ownerChanged = ownerId !== undefined && ownerId !== before.ownerId
+  const dueDateChanged = fields.dueDate !== undefined && fields.dueDate.getTime() !== before.dueDate.getTime()
 
-  const changes = diffFields(before, after, ["title", "dueDate", "done"])
+  const after = await db.eventMilestone.update({
+    where: { id: milestoneId },
+    data: {
+      ...fields,
+      ...(ownerId !== undefined ? { ownerId } : {}),
+      // A new owner or a new date gets its own reminder (#985).
+      ...(ownerChanged || dueDateChanged ? { ownerRemindedAt: null } : {}),
+    },
+    include: { owner: MILESTONE_OWNER_SELECT },
+  })
+
+  const changes = diffFields(before, after, ["title", "dueDate", "done", "ownerId"])
   if (changes) {
     await logEvent({
       eventId,

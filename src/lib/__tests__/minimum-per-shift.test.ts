@@ -65,7 +65,7 @@ describe("Dashboard « Ce qui demande votre attention »", () => {
   const now = new Date("2030-06-10T10:00:00Z")
   const day = (offset: number) => new Date(Date.UTC(2030, 5, 10 + offset))
   const ev = (shifts: AttentionEvent["shifts"]): AttentionEvent => ({
-    id: "e1", title: "Fête", startDate: day(30), endDate: day(31), shifts, leaderRoles: [], overdueMilestones: 0, unansweredInvites: 0,
+    id: "e1", title: "Fête", startDate: day(30), endDate: day(31), shifts, leaderRoles: [], overdueMilestones: [], unansweredInvites: 0,
   })
 
   it("names the shifts below their minimum and links to « Où manque-t-il du monde ? »", () => {
