@@ -18,7 +18,7 @@ test.describe("role management", () => {
     await expect(page).toHaveURL(/\/admin\/events/)
   })
 
-  test("renaming a role updates every one of its shifts", async ({ page }) => {
+  test("renaming a role updates every one of its shifts and carries its sector leader (#1001)", async ({ page }) => {
     const stamp = Date.now()
     const eventRes = await page.request.post("/api/admin/events", {
       data: { title: `E2E Role Rename ${stamp}`, startDate: "2030-09-01", endDate: "2030-09-01", publicStatus: "draft" },
@@ -31,12 +31,19 @@ test.describe("role management", () => {
       })
       expect(res.ok()).toBeTruthy()
     }
+    const leaderRes = await page.request.post(`/api/admin/events/${event.id}/sector-leaders`, {
+      data: { roleName: "Bar", name: "Marc Dupont", email: `marc-${stamp}@example.org` },
+    })
+    expect(leaderRes.status()).toBe(201)
 
     const renameRes = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Bar")}`, {
       data: { name: "Buvette" },
     })
     expect(renameRes.ok()).toBeTruthy()
     expect((await renameRes.json()).updated).toBe(2)
+
+    const leaders: { roleName: string }[] = await (await page.request.get(`/api/admin/events/${event.id}/sector-leaders`)).json()
+    expect(leaders.map((l) => l.roleName)).toEqual(["Buvette"])
 
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
     expect(detail.shifts.every((s: { roleName: string }) => s.roleName === "Buvette")).toBe(true)
