@@ -4,24 +4,31 @@ import { NextResponse } from "next/server"
 const { authMock } = vi.hoisted(() => ({ authMock: vi.fn() }))
 vi.mock("@/auth", () => ({ auth: authMock }))
 
-const { firstOrgMock, findUniqueOrgMock } = vi.hoisted(() => ({
+const { firstOrgMock, findUniqueOrgMock, findUniqueEventMock } = vi.hoisted(() => ({
   firstOrgMock: vi.fn(),
   findUniqueOrgMock: vi.fn(),
+  findUniqueEventMock: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
     $extends: () => ({ __scoped: true }),
     organization: { findFirst: firstOrgMock, findUnique: findUniqueOrgMock },
+    event: { findUnique: findUniqueEventMock },
   },
 }))
 
-const { cookiesMock } = vi.hoisted(() => ({ cookiesMock: vi.fn() }))
-vi.mock("next/headers", () => ({ cookies: cookiesMock }))
+const { cookiesMock, headersMock } = vi.hoisted(() => ({ cookiesMock: vi.fn(), headersMock: vi.fn() }))
+vi.mock("next/headers", () => ({ cookies: cookiesMock, headers: headersMock }))
 
 const { redirectMock } = vi.hoisted(() => ({
   redirectMock: vi.fn((url: string) => { throw new Error(`NEXT_REDIRECT:${url}`) }),
 }))
 vi.mock("next/navigation", () => ({ redirect: redirectMock }))
+
+/** The page being rendered, as src/proxy.ts passes it (x-benevoles-path). */
+function onPage(path: string | null) {
+  headersMock.mockResolvedValue(new Headers(path ? { "x-benevoles-path": path } : {}))
+}
 
 function withSaCookie(value: string | undefined) {
   cookiesMock.mockResolvedValue({ get: (name: string) => (name === "sa-org-id" && value ? { value } : undefined) })
@@ -134,7 +141,10 @@ describe("getOrgContext (SSR helper)", () => {
     firstOrgMock.mockReset()
     findUniqueOrgMock.mockReset()
     findUniqueOrgMock.mockResolvedValue({ active: true })
+    findUniqueEventMock.mockReset()
+    findUniqueEventMock.mockResolvedValue(null)
     cookiesMock.mockResolvedValue({ get: () => undefined })
+    onPage(null)
   })
 
   it("returns null when the admin's organization is disabled", async () => {
@@ -178,5 +188,64 @@ describe("getOrgContext (SSR helper)", () => {
     expect(result).not.toBeNull()
     expect(result?.organizationId).toBe("org-B")
     expect(result?.db).toBeDefined()
+  })
+
+  // An admin email link (e.g. /admin/events/<id>/questions) opened by the super admin.
+  describe("super admin on an event page", () => {
+    const page = "/admin/events/ev1/questions?x=1"
+    const switchTo = `/api/super-admin/use-org/org-event?next=${encodeURIComponent(page)}`
+
+    beforeEach(() => {
+      authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+      findUniqueEventMock.mockResolvedValue({ organizationId: "org-event" })
+      onPage(page)
+      redirectMock.mockClear()
+    })
+
+    it("switches to the event's organization when none is picked", async () => {
+      await expect(getOrgContext()).rejects.toThrow(`NEXT_REDIRECT:${switchTo}`)
+      expect(findUniqueEventMock).toHaveBeenCalledWith({ where: { id: "ev1" }, select: { organizationId: true } })
+    })
+
+    it("switches to the event's organization when another one is picked", async () => {
+      withSaCookie("org-other")
+      findUniqueOrgMock.mockResolvedValue({ id: "org-other" })
+      await expect(getOrgContext()).rejects.toThrow(`NEXT_REDIRECT:${switchTo}`)
+    })
+
+    it("stays when the event's organization is already picked", async () => {
+      withSaCookie("org-event")
+      findUniqueOrgMock.mockResolvedValue({ id: "org-event" })
+      const result = await getOrgContext()
+      expect(result?.organizationId).toBe("org-event")
+      expect(redirectMock).not.toHaveBeenCalledWith(expect.stringContaining("use-org"))
+    })
+
+    it("keeps the picker for an unknown event without a picked organization", async () => {
+      findUniqueEventMock.mockResolvedValue(null)
+      await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/super-admin/organizations")
+    })
+
+    it("keeps the picked organization for an unknown event (the page answers not found)", async () => {
+      findUniqueEventMock.mockResolvedValue(null)
+      withSaCookie("org-other")
+      findUniqueOrgMock.mockResolvedValue({ id: "org-other" })
+      const result = await getOrgContext()
+      expect(result?.organizationId).toBe("org-other")
+    })
+
+    it("keeps the picker on an admin page that is not an event's", async () => {
+      onPage("/admin/members?verify=1")
+      await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/super-admin/organizations")
+      expect(findUniqueEventMock).not.toHaveBeenCalled()
+    })
+
+    it("does not look the event up for an org admin, even on another org's event", async () => {
+      authMock.mockResolvedValue({ user: { role: "admin", organizationId: "org-B" } })
+      const result = await getOrgContext()
+      expect(result?.organizationId).toBe("org-B")
+      expect(findUniqueEventMock).not.toHaveBeenCalled()
+      expect(headersMock).not.toHaveBeenCalled()
+    })
   })
 })

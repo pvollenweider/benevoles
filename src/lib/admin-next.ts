@@ -1,0 +1,55 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+/**
+ * Where a super admin lands after switching organization, and how an admin page knows its own
+ * address. Pure, no Prisma: also imported by src/proxy.ts.
+ */
+
+/** The page path and query of the request, set by src/proxy.ts on admin pages (a client value is dropped). */
+export const REQUEST_PATH_HEADER = "x-benevoles-path"
+
+export const DEFAULT_ADMIN_NEXT = "/admin/events"
+
+const MAX_NEXT_LENGTH = 2048
+
+/**
+ * `next` of /api/super-admin/use-org/[id] when it is a same-origin admin page, the events list
+ * otherwise: never an absolute or protocol-relative URL (open redirect), never outside /admin/.
+ * Anything ambiguous (backslashes, control characters or spaces, encoded slashes, backslashes or
+ * dots, dot segments) is refused rather than normalised. The fragment is dropped.
+ */
+export function safeAdminNext(raw: string | null | undefined): string {
+  if (typeof raw !== "string" || raw.length === 0 || raw.length > MAX_NEXT_LENGTH) return DEFAULT_ADMIN_NEXT
+  if (!raw.startsWith("/admin/")) return DEFAULT_ADMIN_NEXT
+  // Backslashes (read as slashes by browsers), whitespace and control characters.
+  if (/[\\\s\x00-\x1f\x7f]/.test(raw)) return DEFAULT_ADMIN_NEXT
+  // Encoded slash, backslash or dot, and percent-encoded percent (double encoding).
+  if (/%(2f|5c|2e|25)/i.test(raw)) return DEFAULT_ADMIN_NEXT
+  const path = raw.split(/[?#]/, 1)[0]
+  if (path.split("/").some((segment) => segment === "." || segment === "..")) return DEFAULT_ADMIN_NEXT
+
+  let url: URL
+  try {
+    url = new URL(raw, "https://same-origin.invalid")
+  } catch {
+    return DEFAULT_ADMIN_NEXT
+  }
+  if (url.origin !== "https://same-origin.invalid" || !url.pathname.startsWith("/admin/")) return DEFAULT_ADMIN_NEXT
+  return `${url.pathname}${url.search}`
+}
+
+/** The event id of an admin event page (/admin/events/<id> and its sub-pages), null otherwise. */
+export function adminEventIdFromPath(path: string | null | undefined): string | null {
+  if (!path) return null
+  const match = /^\/admin\/events\/([^/?#]+)(?:[/?#]|$)/.exec(path)
+  if (!match) return null
+  const id = match[1]
+  if (id === "new" || !/^[A-Za-z0-9_-]+$/.test(id)) return null
+  return id
+}
+
+/** The organization switch that opens `path` in the organization `orgId`. */
+export function orgSwitchUrl(orgId: string, path: string): string {
+  return `/api/super-admin/use-org/${encodeURIComponent(orgId)}?next=${encodeURIComponent(safeAdminNext(path))}`
+}

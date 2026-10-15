@@ -5,7 +5,12 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
+import { safeAdminNext } from "@/lib/admin-next"
 
+/**
+ * Picks the organization a super admin works in (sa-org-id cookie), then opens `next` when it is a
+ * same-origin admin page (an email link to an event, see auth-guard.ts), the events list otherwise.
+ */
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
   if (guard instanceof NextResponse) return guard
@@ -18,11 +23,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   cookieStore.set("sa-org-id", id, {
     path: "/",
     httpOnly: true,
-    sameSite: "strict",
+    // Lax, like the session cookie: an admin link opened from a webmail (a top-level cross-site
+    // GET) must carry it. Every state-changing admin route is POST/PATCH/DELETE, which Lax does not
+    // send cross-site.
+    sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   })
 
   const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost:3000"
   const proto = req.headers.get("x-forwarded-proto") ?? "http"
-  return NextResponse.redirect(`${proto}://${host}/admin/events`)
+  const next = safeAdminNext(new URL(req.url).searchParams.get("next"))
+  return NextResponse.redirect(`${proto}://${host}${next}`)
 }

@@ -13,6 +13,7 @@ import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { findBlogPost, loadBlogPosts } from "@/lib/blog"
 import { reportError } from "@/lib/report-error"
+import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
 
 const { auth } = NextAuth(authConfig)
 
@@ -89,6 +90,10 @@ export default auth((req) => {
   // [orgSlug].benevol.app (or ?org= without an org subdomain) → x-org-slug for pages and API
   // routes; a value sent by the client is always dropped first (#541).
   const requestHeaders = withOrgHeader(req.headers, host, req.nextUrl.searchParams.get("org"))
+  // The admin page's own address, for the super admin's switch to an event's organization
+  // (auth-guard.ts, superAdminEventOrgSwitch); never the client's value.
+  requestHeaders.delete(REQUEST_PATH_HEADER)
+  if (isAdminPath) requestHeaders.set(REQUEST_PATH_HEADER, `${pathname}${req.nextUrl.search}`)
 
   // --- A 404 rendered on the server (#935): what is known missing here is answered by the
   // not-found page itself, whose HTML carries the page; `notFound()` during a page's render only
