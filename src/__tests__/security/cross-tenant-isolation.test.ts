@@ -889,6 +889,30 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(del).not.toHaveBeenCalled()
   })
 
+  it("a question's poste must be one of this event's, read through the scoped client: another event's or org's is refused (#984, part 3)", async () => {
+    const list = await import("@/app/api/admin/events/[id]/questions/route")
+    const one = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const create = vi.fn(), update = vi.fn()
+    // Event A is the caller's; its only poste is « Bar ». « Cuisine » exists on event B (other org).
+    const shiftFindMany = vi.fn().mockResolvedValue([{ roleName: "Bar" }])
+    const db = {
+      ...mockScopedDb({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { findMany: shiftFindMany } }),
+      eventQuestion: {
+        findFirst: vi.fn().mockResolvedValue({ id: "q-a", label: "X", type: "text", options: [], required: false, roleName: null, answers: [] }),
+        count: vi.fn().mockResolvedValue(0), create, update,
+      },
+    }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const p = { params: Promise.resolve({ id: "evt-a", questionId: "q-a" }) }
+    expect((await list.POST(makeRequest("/api/admin/events/evt-a/questions", "POST", { label: "X", type: "text", roleName: "Cuisine" }), p)).status).toBe(400)
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-a/questions/q-a", "PATCH", { label: "X", type: "text", roleName: "Cuisine" }), p)).status).toBe(400)
+    // Postes read for this event only, through the scoped db, never the raw client.
+    for (const call of shiftFindMany.mock.calls) expect(call[0].where.eventId).toBe("evt-a")
+    expect(prismaMock.shift.findFirst).not.toHaveBeenCalled()
+    expect(create).not.toHaveBeenCalled()
+    expect(update).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

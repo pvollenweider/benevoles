@@ -34,6 +34,7 @@ function makeDb() {
       update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ id: "link-1", code: "abcd2345", name: "Amicale", roleNames: ["Bar"], hideFull: false, ...data })),
       delete: vi.fn().mockResolvedValue({ id: "link-1" }),
     },
+    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
   }
 }
 
@@ -192,6 +193,8 @@ describe("roles renamed or deleted are carried into the links", () => {
     expect(res.status).toBe(200)
     expect(db.eventGroupLink.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-1", roleNames: { has: "Bar" } } }))
     expect(db.eventGroupLink.update).toHaveBeenCalledWith({ where: { id: "link-1" }, data: { roleNames: ["Buvette", "Parking"] } })
+    // A question attached to the role (#984, part 3) follows the rename.
+    expect(db.eventQuestion.updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", roleName: "Bar" }, data: { roleName: "Buvette" } })
   })
 
   it("a deletion removes the role from the links, keeping the others", async () => {
@@ -201,6 +204,8 @@ describe("roles renamed or deleted are carried into the links", () => {
     const res = await DELETE(req("DELETE"), { params: Promise.resolve({ id: "evt-1", roleName: "Bar" }) })
     expect(res.status).toBe(200)
     expect(db.eventGroupLink.update).toHaveBeenCalledWith({ where: { id: "link-1" }, data: { roleNames: ["Parking"] } })
+    // A question attached to the deleted role (#984, part 3) goes back to the organisers.
+    expect(db.eventQuestion.updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", roleName: "Bar" }, data: { roleName: null } })
   })
 })
 

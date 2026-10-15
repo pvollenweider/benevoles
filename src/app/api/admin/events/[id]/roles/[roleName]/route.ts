@@ -114,6 +114,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       })
     }
     await updateGroupLinks(db, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
+    // Questions attached to the role (#984, part 3) follow it: their changes keep reaching its leaders.
+    await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
   }
 
   if (colorKey !== undefined) {
@@ -221,6 +223,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     unpublished ||= result.unpublished
   }
   await updateGroupLinks(db, id, decodedRole, (names) => removeRoleFromLink(names, decodedRole))
+  // Questions attached to the role (#984, part 3) go back to the organisers, as a deleted reference would.
+  await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: null } })
 
   return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })
 }

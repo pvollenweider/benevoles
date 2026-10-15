@@ -7,8 +7,11 @@ import { validationError } from "@/lib/api-error"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { QUESTION_LIMIT } from "@/lib/event-questions"
 import { questionSchema } from "@/lib/event-questions-schema"
+import { questionRoleProblem } from "@/lib/question-role"
+import { liveRoleNames } from "@/lib/question-role-data"
 
-const select = { id: true, label: true, type: true, options: true, required: true, position: true, _count: { select: { answers: true } } } as const
+const select = { id: true, label: true, type: true, options: true, required: true, roleName: true, position: true, _count: { select: { answers: true } } } as const
+
 
 /** The sign-up questions of an event (#483), active ones in order. */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -32,10 +35,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const parsed = questionSchema.safeParse(await req.json().catch(() => ({})))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
 
+  // A poste of this very event only (#984, part 3): never another event's, nor another organisation's.
+  const roleProblem = parsed.data.roleName ? questionRoleProblem(parsed.data.roleName, await liveRoleNames(db, id)) : null
+  if (roleProblem) return NextResponse.json({ error: roleProblem, field: "roleName" }, { status: 400 })
+
   const active = await db.eventQuestion.count({ where: { eventId: id, archivedAt: null } })
   if (active >= QUESTION_LIMIT) return NextResponse.json({ error: `${QUESTION_LIMIT} questions au plus par événement.` }, { status: 409 })
 
   const question = await db.eventQuestion.create({ data: { eventId: id, position: active, ...parsed.data }, select })
-  await logEvent({ eventId: id, actor: adminActor(guard.session), action: "question.created", entityType: "EventQuestion", entityId: question.id, changes: { label: { from: null, to: question.label } } })
+  await logEvent({ eventId: id, actor: adminActor(guard.session), action: "question.created", entityType: "EventQuestion", entityId: question.id, changes: { label: { from: null, to: question.label }, ...(question.roleName ? { roleName: { from: null, to: question.roleName } } : {}) } })
   return NextResponse.json(question, { status: 201 })
 }

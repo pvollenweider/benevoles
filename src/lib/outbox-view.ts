@@ -154,6 +154,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   open_shifts: "Créneaux à compléter proposés à des membres",
   milestone_owner_reminder: "Rappel au responsable d'un jalon",
   answers_changed: "Réponses aux questions modifiées par un bénévole",
+  sector_leader_answers_changed: "Réponse modifiée, aux responsables du poste de la question",
 }
 
 export function kindLabel(kind: string): string {

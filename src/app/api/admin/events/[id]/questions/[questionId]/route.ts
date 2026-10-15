@@ -7,6 +7,8 @@ import { validationError } from "@/lib/api-error"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { questionChangeProblem } from "@/lib/event-questions"
 import { questionSchema } from "@/lib/event-questions-schema"
+import { questionRoleProblem } from "@/lib/question-role"
+import { liveRoleNames } from "@/lib/question-role-data"
 
 type Params = { params: Promise<{ id: string; questionId: string }> }
 
@@ -15,7 +17,7 @@ type Guard = Exclude<Awaited<ReturnType<typeof requireOrgSession>>, NextResponse
 async function load(guard: Guard, id: string, questionId: string) {
   return guard.db.eventQuestion.findFirst({
     where: { id: questionId, eventId: id, archivedAt: null },
-    select: { id: true, label: true, type: true, options: true, required: true, answers: { select: { values: true } } },
+    select: { id: true, label: true, type: true, options: true, required: true, roleName: true, answers: { select: { values: true } } },
   })
 }
 
@@ -34,12 +36,21 @@ export async function PATCH(req: Request, { params }: Params) {
   const problem = questionChangeProblem(existing, parsed.data, used, existing.answers.length)
   if (problem) return NextResponse.json({ error: problem }, { status: 409 })
 
+  // A poste of this very event (#984, part 3); the one it already has stays allowed unchanged.
+  const { roleName } = parsed.data
+  const roleProblem = roleName && roleName !== existing.roleName ? questionRoleProblem(roleName, await liveRoleNames(guard.db, id), existing.roleName) : null
+  if (roleProblem) return NextResponse.json({ error: roleProblem, field: "roleName" }, { status: 400 })
+
   const question = await guard.db.eventQuestion.update({
     where: { id: questionId },
     data: parsed.data,
-    select: { id: true, label: true, type: true, options: true, required: true, position: true, _count: { select: { answers: true } } },
+    select: { id: true, label: true, type: true, options: true, required: true, roleName: true, position: true, _count: { select: { answers: true } } },
   })
-  await logEvent({ eventId: id, actor: adminActor(guard.session), action: "question.updated", entityType: "EventQuestion", entityId: questionId, changes: { label: { from: existing.label, to: question.label } } })
+  const roleChanged = (existing.roleName ?? null) !== (question.roleName ?? null)
+  await logEvent({
+    eventId: id, actor: adminActor(guard.session), action: "question.updated", entityType: "EventQuestion", entityId: questionId,
+    changes: { label: { from: existing.label, to: question.label }, ...(roleChanged ? { roleName: { from: existing.roleName ?? null, to: question.roleName ?? null } } : {}) },
+  })
   return NextResponse.json(question)
 }
 
