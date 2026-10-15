@@ -157,7 +157,7 @@ export default function MessageTemplatesManager({ initialTemplates }: { initialT
           className="bg-white rounded-2xl border border-blue-200 p-4 space-y-4"
         >
           <h2 id={`${id}-form-title`} className="text-sm font-semibold text-gray-800">{editing === "new" ? "Nouveau modèle" : `Modifier le modèle « ${editingName} »`}</h2>
-          <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+          <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
           <div>
             <label htmlFor={`${id}-name`} className="block text-sm font-medium text-gray-800 mb-1">Nom du modèle<RequiredMark /></label>
             <input id={`${id}-name`} type="text" required value={form.name} maxLength={TEMPLATE_NAME_MAX} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} aria-invalid={invalid("name")} aria-describedby={describedBy("name", `${id}-name-hint`)} className="input" />

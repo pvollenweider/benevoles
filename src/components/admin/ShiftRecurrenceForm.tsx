@@ -199,7 +199,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         </h2>
         <p className="text-xs text-gray-600 mt-0.5">
           Pour une permanence qui revient (mercredi après-midi, samedi matin…) : décrivez-la une fois, toutes les dates de la période sont créées, jours fériés et fermetures exclus. Chaque date reste modifiable ensuite.
-          Les champs marqués d&apos;un astérisque (*) sont obligatoires.
+          <span aria-hidden="true">{" "}Les champs marqués d&apos;un astérisque (*) sont obligatoires.</span>
         </p>
       </div>
 

@@ -2,7 +2,7 @@
 roles: [admin]
 group: preparer
 order: 120
-summary: Des dates clés à cocher sur la page de l'événement, chacune avec la personne qui s'en occupe si besoin ; les jalons en retard sont mis en évidence.
+summary: Des dates clés à cocher sur la page de l'événement, chacune confiée à quelqu'un si besoin ; les jalons en retard sont mis en évidence.
 related: [tableau-de-bord, ou-manque-t-il-du-monde]
 legacy: [admin#jalons-de-l-evenement]
 aliases: []

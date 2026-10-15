@@ -166,7 +166,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
 
   return (
     <form noValidate onSubmit={(e) => { e.preventDefault(); preview() }} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-5">
-      <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
+      <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium text-gray-800">Destinataires</legend>
         {([

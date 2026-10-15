@@ -79,7 +79,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Questions aux bénévoles](questions-aux-benevoles.md) : Ajouter jusqu'à 5 questions au formulaire d'inscription, puis compter les réponses pour passer commande. Pour : organisateurs.
 - [Pages personnalisées de l'événement](pages-personnalisees.md) : Ajouter à un événement des pages libres (règlement, accès, ce qu'il faut apporter), liées depuis sa page d'inscription. Pour : organisateurs.
 - [Responsables de secteur](responsables-de-secteur.md) : Désigner des bénévoles responsables d'un poste : un lien personnel, sans compte, leur montre qui est inscrit sur ce poste. Pour : organisateurs.
-- [Jalons de l'événement](jalons.md) : Des dates clés à cocher sur la page de l'événement, chacune avec la personne qui s'en occupe si besoin ; les jalons en retard sont mis en évidence. Pour : organisateurs.
+- [Jalons de l'événement](jalons.md) : Des dates clés à cocher sur la page de l'événement, chacune confiée à quelqu'un si besoin ; les jalons en retard sont mis en évidence. Pour : organisateurs.
 
 ### Publier et partager
 

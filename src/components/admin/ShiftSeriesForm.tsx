@@ -127,7 +127,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         </h2>
         <p className="text-xs text-gray-600 mt-0.5">
           Un poste, une plage horaire et une durée : les créneaux sont créés d&apos;un coup, puis modifiables un par un.
-          Les champs marqués d&apos;un astérisque (*) sont obligatoires.
+          <span aria-hidden="true">{" "}Les champs marqués d&apos;un astérisque (*) sont obligatoires.</span>
         </p>
       </div>
 
