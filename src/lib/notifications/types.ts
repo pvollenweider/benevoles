@@ -47,6 +47,7 @@ export type NotificationKind =
   | "signup_confirmation"
   | "signup_account_link"
   | "space_approved"
+  | "milestone_owner_reminder"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6

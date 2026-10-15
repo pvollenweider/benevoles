@@ -26,7 +26,8 @@ export type AttentionEvent = {
   endDate: Date
   shifts: (AttentionShift & { roleName: string })[]
   leaderRoles: string[]
-  overdueMilestones: number
+  /** Not done and past their due day in the organisation's zone (isMilestoneOverdue), by due date. */
+  overdueMilestones: OverdueMilestone[]
   /** Invited people (invited more than INVITE_NUDGE_DAYS ago) still without a confirmed shift (#481). */
   unansweredInvites: number
   /** Volunteers with a workload warning on this event (#465). */
@@ -34,6 +35,21 @@ export type AttentionEvent = {
   /** Sign-up requests waiting for a decision on « Sur validation » shifts (#484). */
   pendingRequests?: number
 }
+/** `ownerName`: the milestone's owner (#985), null when it has none. */
+export type OverdueMilestone = { title: string; ownerName: string | null }
+/** Titles named in the message; the rest are counted (« et 2 autres »). */
+export const OVERDUE_MILESTONES_LISTED = 3
+
+/** « 2 jalons sont en retard : « A » (responsable : Samira Diallo), « B ». » */
+export function overdueMilestonesMessage(milestones: OverdueMilestone[]): string {
+  const n = milestones.length
+  const named = milestones.slice(0, OVERDUE_MILESTONES_LISTED)
+    .map((m) => `« ${m.title} »${m.ownerName ? ` (responsable : ${m.ownerName})` : ""}`)
+  const rest = n - named.length
+  const list = rest > 0 ? `${named.join(", ")} et ${rest} ${plural(rest, "autre", "autres")}` : named.join(", ")
+  return `${n} ${plural(n, "jalon est en retard", "jalons sont en retard")} : ${list}.`
+}
+
 export type AttentionInput = {
   now: Date
   /** Published events only. */
@@ -123,10 +139,10 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
       })
     }
 
-    if (e.overdueMilestones > 0) {
+    if (e.overdueMilestones.length > 0) {
       items.push({
         id: `milestones:${e.id}`, severity: "high", eventTitle: e.title,
-        message: `${e.overdueMilestones} ${plural(e.overdueMilestones, "jalon est en retard", "jalons sont en retard")}.`,
+        message: overdueMilestonesMessage(e.overdueMilestones),
         action: "Voir les jalons", href: base,
       })
     }

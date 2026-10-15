@@ -539,6 +539,11 @@ const cases: [string, NotificationPayload][] = [
       editToken: null,
     },
   }],
+  ["milestone_owner_reminder", {
+    kind: "milestone_owner_reminder",
+    recipient: { email: "samira@example.org", name: "Samira Diallo" },
+    data: { ownerName: "Samira Diallo", eventId: "evt-1", eventTitle: "Fête du village", milestoneTitle: "Confirmer la location de la tente", dueDateLabel: "samedi 17 octobre", daysLeft: 3 },
+  }],
   ["space_approved", {
     kind: "space_approved",
     recipient: { email: "camille@example.org" },
@@ -677,6 +682,7 @@ describe("render — snapshot of every notification kind", () => {
       signup_confirmation: true,
       signup_account_link: true,
       space_approved: true,
+      milestone_owner_reminder: true,
       addresses_to_verify_summary: true,
       past_event_notice: true,
       org_reactivation: true,

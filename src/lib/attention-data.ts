@@ -8,6 +8,7 @@ import { workloadByVolunteer } from "./workload"
 import { selectInvitedWithoutShift } from "./targeted-message"
 import { loadOrganizationsWithNewAddressesToVerify } from "./delivery-summary-data"
 import { daysAgo, RETENTION_DAYS } from "./retention"
+import { isMilestoneOverdue } from "./milestones"
 
 /** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client.
  * `organizationId` is also needed as such (not just through `db`): DeliveryOutcome isn't a tenant
@@ -24,7 +25,13 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
           select: { date: true, capacity: true, minVolunteers: true, roleName: true, _count: { select: { registrations: { where: { status: "active" } } } } },
         },
         sectorLeaders: { select: { roleName: true } },
-        milestones: { where: { done: false, dueDate: { lt: now } }, select: { id: true } },
+        // `dueDate < now` only narrows the read: a milestone is late once its due day is over in
+        // the organisation's zone (isMilestoneOverdue, the event page's rule too, #985).
+        milestones: {
+          where: { done: false, dueDate: { lt: now } },
+          orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+          select: { title: true, dueDate: true, done: true, owner: { select: { name: true } } },
+        },
         // Invited more than INVITE_NUDGE_DAYS ago; those with a confirmed shift or who declined
         // are left out below (#481, #558).
         memberInvites: { where: { sentAt: { lt: inviteCutoff } }, select: { volunteerId: true, sentAt: true, declinedAt: true, volunteer: { select: { email: true } } } },
@@ -52,7 +59,9 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
       id: e.id, title: e.title, startDate: e.startDate, endDate: e.endDate,
       shifts: e.shifts.map((s) => ({ date: s.date, capacity: s.capacity, minVolunteers: s.minVolunteers, roleName: s.roleName, active: s._count.registrations })),
       leaderRoles: e.sectorLeaders.map((l) => l.roleName),
-      overdueMilestones: e.milestones.length,
+      overdueMilestones: e.milestones
+        .filter((m) => isMilestoneOverdue(m, now, orgTimeZone(e.organization)))
+        .map((m) => ({ title: m.title, ownerName: m.owner?.name ?? null })),
       unansweredInvites: selectInvitedWithoutShift(e.memberInvites, e.registrations).length,
       overloadedVolunteers: workloadByVolunteer(e.registrations, orgTimeZone(e.organization)).size,
       pendingRequests: e._count.registrations,

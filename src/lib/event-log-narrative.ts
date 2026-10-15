@@ -63,6 +63,8 @@ const FIELD_LABELS: Record<string, string> = {
   roleNames: "postes",
   hideFull: "créneaux complets masqués",
   groupLink: "lien de groupe",
+  // A milestone's owner (#985).
+  ownerId: "responsable",
 }
 
 /**
@@ -87,6 +89,8 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
       const label = FIELD_LABELS[field] ?? field
       const fmt = (v: unknown) =>
         field === "shiftId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? v
+        // An admin account deleted since: its id says nothing to the reader.
+        : field === "ownerId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? "compte supprimé"
         : field === "isListed" ? listingChangeLabel(v)
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`

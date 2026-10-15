@@ -261,12 +261,20 @@ model EventMilestone {
   title     String
   dueDate   DateTime
   done      Boolean  @default(false)
+  // Who is in charge (#985): an admin account of the event's organisation, active when chosen
+  // (checked by the API, src/lib/milestones.ts). Cleared when the account is deleted.
+  ownerId   String?
+  // When the owner was emailed that the due date approaches (cron reminders, #985). Reset when
+  // the owner or the due date changes, so the new owner or date gets its own reminder.
+  ownerRemindedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  owner AdminUser? @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
   @@index([eventId])
+  @@index([ownerId])
 }
 
 // Attached to the event, not to the entity it documents: it must survive the deletion of the
@@ -874,6 +882,7 @@ model AdminUser {
   updatedAt              DateTime  @updatedAt
 
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  milestones   EventMilestone[]
 
   @@index([organizationId])
   @@index([setupTokenHash])

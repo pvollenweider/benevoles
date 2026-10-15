@@ -17,7 +17,7 @@ import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualRemin
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
-import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated } from "./administration"
+import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderPastEventNotice, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved, renderOrgReactivation, renderOrgInactivityNotice, renderOrgInactivityDeactivated, renderMilestoneOwnerReminder } from "./administration"
 import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
 
 export type { RenderedEmail } from "./shared"
@@ -109,5 +109,7 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderOrgInactivityDeactivated(payload)
     case "open_shifts":
       return renderOpenShifts(payload)
+    case "milestone_owner_reminder":
+      return renderMilestoneOwnerReminder(payload)
   }
 }
