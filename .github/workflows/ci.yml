@@ -75,10 +75,19 @@ jobs:
   e2e:
     name: E2E (Playwright)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pull the mirrored service images from GHCR.
+      packages: read
 
     services:
       postgres:
-        image: public.ecr.aws/docker/library/postgres:16-alpine
+        # Mirrored by mirror-ci-images.yml, pulled with the job token: anonymous ECR Public pulls hit
+        # « toomanyrequests: Data limit exceeded » (shared quota across runner IPs).
+        image: ghcr.io/pvollenweider/benevoles-ci/postgres:16-alpine
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           POSTGRES_DB: benevoles_e2e
           POSTGRES_USER: benevoles
@@ -90,7 +99,10 @@ jobs:
           --health-timeout 5s
           --health-retries 10
       mailpit:
-        image: ghcr.io/axllent/mailpit:latest
+        image: ghcr.io/pvollenweider/benevoles-ci/mailpit:latest
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         ports: ["1025:1025", "8025:8025"]
         env:
           MP_SMTP_AUTH_ACCEPT_ANY: 1
@@ -167,13 +179,22 @@ jobs:
   lighthouse:
     name: Lighthouse
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Pull the mirrored service images from GHCR.
+      packages: read
 
     # Same database and seed as the E2E job, against `next build` + `next start` (#773).
     # Fails below the thresholds of lighthouserc.cjs (100 in accessibility, best practices and SEO,
     # 95 in desktop performance); mobile performance and the video library's SEO only warn.
     services:
       postgres:
-        image: public.ecr.aws/docker/library/postgres:16-alpine
+        # Mirrored by mirror-ci-images.yml, pulled with the job token: anonymous ECR Public pulls hit
+        # « toomanyrequests: Data limit exceeded » (shared quota across runner IPs).
+        image: ghcr.io/pvollenweider/benevoles-ci/postgres:16-alpine
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           POSTGRES_DB: benevoles_e2e
           POSTGRES_USER: benevoles
