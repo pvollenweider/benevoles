@@ -12,7 +12,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
 import { shiftStaffingState } from "@/lib/staffing"
-import { toMin, toMinEnd, fromMin, fmt, hourLabel, type GanttShow } from "@/lib/gantt-utils"
+import { toMin, toMinEnd, fromMin, fmt, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import {
   AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SHOW_H,
   dayRange, draftEnd, draftStart, hourTicks, layoutRoles, offsetToMin, resizedTimes,
@@ -113,7 +113,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
       shiftId:   shift.id,
       side,
       origStart: toMin(shift.startTime),
-      origEnd:   toMin(shift.endTime),
+      origEnd:   toMinEnd(shift.endTime, shift.startTime),
     })
   }
 
@@ -304,8 +304,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                 key={i}
                 className="absolute top-0 bottom-0 bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
                 style={{
-                  left:  LABEL_W + px(toMin(show.startTime)),
-                  width: Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 2),
+                  left:  LABEL_W + px(showSpan(show).start),
+                  width: Math.max((showSpan(show).end - showSpan(show).start) * PX_PER_MIN, 2),
                 }}
               />
             ))}
@@ -488,8 +488,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     key={i}
                     className="absolute inset-y-1 flex items-center px-1.5 rounded-md bg-indigo-50 text-[11px] text-indigo-700 truncate pointer-events-none"
                     style={{
-                      left:  LABEL_W + px(toMin(show.startTime)),
-                      width: Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 48),
+                      left:  LABEL_W + px(showSpan(show).start),
+                      width: Math.max((showSpan(show).end - showSpan(show).start) * PX_PER_MIN, 48),
                     }}
                   >
                     <span aria-hidden="true">🎪 </span>{show.name} · {fmt(show.startTime)}–{fmt(show.endTime)}
