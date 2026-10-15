@@ -9,14 +9,18 @@ import FormStatus from "@/components/FormStatus"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
 import { QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, type QuestionType } from "@/lib/event-questions"
+import { NO_ROLES_HINT, QUESTION_ROLE_HINT, QUESTION_ROLE_LABEL, questionErrorField, questionRoleOptions, questionRoleText, type QuestionRoleChoice } from "@/lib/question-role"
 
-type Q = { id: string; label: string; type: string; options: string[]; required: boolean; answers: number }
-type Draft = { label: string; type: QuestionType; options: string; required: boolean }
-const EMPTY: Draft = { label: "", type: "text", options: "", required: false }
+type Q = { id: string; label: string; type: string; options: string[]; required: boolean; roleName: string | null; answers: number }
+type Draft = { label: string; type: QuestionType; options: string; required: boolean; roleName: string }
+const EMPTY: Draft = { label: "", type: "text", options: "", required: false, roleName: "" }
 const isChoice = (t: string) => t === "single" || t === "multiple"
 
-/** Edit the custom questions of an event's sign-up form (#483). */
-export default function QuestionsEditor({ eventId, initialQuestions }: { eventId: string; initialQuestions: Q[] }) {
+/**
+ * Edit the custom questions of an event's sign-up form (#483), each optionally attached to one of
+ * the event's postes (`roles`, #984 part 3) so a change of its answer reaches that poste's leaders.
+ */
+export default function QuestionsEditor({ eventId, initialQuestions, roles = [] }: { eventId: string; initialQuestions: Q[]; roles?: QuestionRoleChoice[] }) {
   const [questions, setQuestions] = useState(initialQuestions)
   const [editing, setEditing] = useState<string | "new" | null>(null)
   const [draft, setDraft] = useState<Draft>(EMPTY)
@@ -36,7 +40,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
     editor.reset()
     list.reset()
     setEditing(q ? q.id : "new")
-    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required } : EMPTY)
+    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, roleName: q.roleName ?? "" } : EMPTY)
     requestAnimationFrame(() => document.getElementById(`${id}-label`)?.focus())
   }
 
@@ -55,10 +59,17 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
     const outcome = await editor.submit<Q & { _count: { answers: number } }>(() => fetch(isNew ? base : `${base}/${editing}`, {
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required }),
-    }), { fallback: "Impossible d'enregistrer la question." })
-    if (!outcome.ok) return
-    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, answers: outcome.data._count.answers }
+      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, roleName: draft.roleName || null }),
+    }), { fallback: "Impossible d'enregistrer la question.", silent: true })
+    if (!outcome.ok) {
+      // A refused poste marks and focuses its field; any other refusal is shown as before.
+      if (outcome.error) {
+        const field = questionErrorField(outcome.error)
+        editor.fail(outcome.error, field ?? undefined, field ? document.getElementById(`${id}-${field}`) : undefined)
+      }
+      return
+    }
+    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, roleName: outcome.data.roleName ?? null, answers: outcome.data._count.answers }
     setQuestions((prev) => (isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
     list.setStatus(isNew ? `Question « ${saved.label} » ajoutée.` : `Question « ${saved.label} » enregistrée.`)
     close()
@@ -93,6 +104,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
 
   const full = questions.length >= QUESTION_LIMIT
   const answered = editing && editing !== "new" ? (questions.find((q) => q.id === editing)?.answers ?? 0) : 0
+  const roleOptions = questionRoleOptions(roles, editing && editing !== "new" ? questions.find((q) => q.id === editing)?.roleName : null)
   const describedBy = (field: string, extra: string) => [extra, editor.invalidField === field ? `${id}-editor-error` : null].filter(Boolean).join(" ") || undefined
 
   return (
@@ -125,6 +137,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
                     {QUESTION_TYPE_LABEL[q.type as QuestionType] ?? q.type}
                     {isChoice(q.type) ? ` : ${q.options.join(", ")}` : ""}
                     {` · ${q.answers} réponse${q.answers > 1 ? "s" : ""}`}
+                    {q.roleName ? ` · ${questionRoleText(q.roleName)}` : ""}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 flex-shrink-0 justify-end">
@@ -191,6 +204,17 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
             <input id={`${id}-required`} type="checkbox" checked={draft.required} onChange={(e) => setDraft((d) => ({ ...d, required: e.target.checked }))} className="h-4 w-4 rounded border-gray-300" />
             <label htmlFor={`${id}-required`} className="text-sm text-gray-800">Réponse obligatoire</label>
           </div>
+          {roleOptions.length > 1 ? (
+            <div>
+              <label htmlFor={`${id}-role`} className="block text-sm font-medium text-gray-800 mb-1">{QUESTION_ROLE_LABEL}</label>
+              <select id={`${id}-role`} value={draft.roleName} onChange={(e) => setDraft((d) => ({ ...d, roleName: e.target.value }))} aria-invalid={editor.isInvalid("role")} aria-describedby={describedBy("role", `${id}-role-hint`)} className="input">
+                {roleOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              <p id={`${id}-role-hint`} className="text-xs text-gray-600 mt-1">{QUESTION_ROLE_HINT}</p>
+            </div>
+          ) : (
+            <p className="text-xs text-gray-600">{NO_ROLES_HINT}</p>
+          )}
           <FormStatus error={editor.error} errorId={`${id}-editor-error`} />
           <div className="flex gap-3">
             <button type="submit" aria-disabled={editor.busy || undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${editor.busy ? "opacity-60 cursor-wait" : ""}`}>

@@ -562,6 +562,26 @@ const cases: [string, NotificationPayload][] = [
       ],
     },
   }],
+  // The same, for the sector leaders of the poste the questions are attached to (#984, part 3).
+  ["sector_leader_answers_changed", {
+    kind: "sector_leader_answers_changed",
+    recipient: { email: "chef-cuisine@example.org", name: "Marc Dupont" },
+    data: {
+      eventId: "evt-1", eventTitle: "Fête du village", leaderName: "Marc Dupont", roleName: "Cuisine", orgSlug: "fete", token: "lead-tok",
+      items: [{ key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Julie Martin", changes: [{ questionId: "q1", label: "Repas du soir ?", from: "Oui", to: "Non" }] } }],
+    },
+  }],
+  ["sector_leader_answers_changed (several volunteers)", {
+    kind: "sector_leader_answers_changed",
+    recipient: { email: "chef-cuisine@example.org", name: "Marc Dupont" },
+    data: {
+      eventId: "evt-1", eventTitle: "Fête du village", leaderName: "Marc Dupont", roleName: "Cuisine", orgSlug: "fete", token: "lead-tok",
+      items: [
+        { key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Julie Martin", changes: [{ questionId: "q1", label: "Repas du soir ?", from: "Oui", to: "Non" }] } },
+        { key: "c2", mergeKey: "volunteer:v2", value: { volunteerName: "Paul <Roy>", changes: [{ questionId: "q1", label: "Repas du soir ?", from: null, to: "Oui" }] } },
+      ],
+    },
+  }],
   ["milestone_owner_reminder", {
     kind: "milestone_owner_reminder",
     recipient: { email: "samira@example.org", name: "Samira Diallo" },
@@ -707,6 +727,7 @@ describe("render — snapshot of every notification kind", () => {
       space_approved: true,
       milestone_owner_reminder: true,
       answers_changed: true,
+      sector_leader_answers_changed: true,
       addresses_to_verify_summary: true,
       past_event_notice: true,
       org_reactivation: true,

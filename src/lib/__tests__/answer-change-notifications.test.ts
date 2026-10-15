@@ -6,7 +6,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 const orgFindUnique = vi.hoisted(() => vi.fn())
 const adminFindMany = vi.hoisted(() => vi.fn())
 const queueDigestItem = vi.hoisted(() => vi.fn())
-vi.mock("../prisma", () => ({ prisma: { organization: { findUnique: orgFindUnique }, adminUser: { findMany: adminFindMany } } }))
+const leaderFindMany = vi.hoisted(() => vi.fn())
+vi.mock("../prisma", () => ({ prisma: { organization: { findUnique: orgFindUnique }, adminUser: { findMany: adminFindMany }, sectorLeader: { findMany: leaderFindMany } } }))
+vi.mock("../token-vault", () => ({ linkToken: { reveal: (r: { tokenLegacy: string | null }) => r.tokenLegacy } }))
 vi.mock("../notifications/digest", () => ({ queueDigestItem, digestDelayMs: (ms: number) => ms }))
 
 import { queueAnswerChangeNotifications } from "../answer-change-notifications"
@@ -24,7 +26,8 @@ const now = new Date("2026-06-04T08:00:00Z")
 describe("queueAnswerChangeNotifications", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    orgFindUnique.mockResolvedValue({ notificationSettings: null })
+    orgFindUnique.mockResolvedValue({ notificationSettings: null, slug: "fete" })
+    leaderFindMany.mockResolvedValue([])
     adminFindMany.mockResolvedValue([{ email: "A@org.ch", name: "Anne" }, { email: "b@org.ch", name: "Bob" }])
     queueDigestItem.mockResolvedValue(null)
   })
@@ -65,6 +68,43 @@ describe("queueAnswerChangeNotifications", () => {
     await queueAnswerChangeNotifications(input, now)
     expect(queueDigestItem).toHaveBeenCalledTimes(1)
     expect(queueDigestItem.mock.calls[0][0].recipient).toEqual({ email: "fallback@x.ch", name: "Admin" })
+  })
+
+  it("reads no sector leader when no question is attached to a poste", async () => {
+    await queueAnswerChangeNotifications(input, now)
+    expect(leaderFindMany).not.toHaveBeenCalled()
+  })
+
+  it("a question attached to a poste: its leaders, with their personal link, instead of the admins (#984, part 3)", async () => {
+    leaderFindMany.mockResolvedValue([{ id: "l1", roleName: "Cuisine", name: "Marc Dupont", email: "marc@x.ch", tokenEnc: null, tokenLegacy: "lead-tok" }])
+    const changes = [{ ...input.changes[0], roleName: "Cuisine" }, { questionId: "size", label: "Taille ?", from: ["M"], to: ["L"], roleName: null }]
+    await queueAnswerChangeNotifications({ ...input, changes }, now)
+    expect(leaderFindMany.mock.calls[0][0].where).toEqual({ eventId: "e1", roleName: { in: ["Cuisine"] } })
+    const calls = queueDigestItem.mock.calls.map((c) => c[0])
+    // The admins only get the unattached question.
+    expect(calls.filter((c) => c.kind === "answers_changed").map((c) => c.item.changes.map((x: { questionId: string }) => x.questionId))).toEqual([["size"], ["size"]])
+    const leader = calls.find((c) => c.kind === "sector_leader_answers_changed")
+    expect(leader).toMatchObject({
+      groupKey: "sector_leader_answers_changed:e1:l1",
+      recipient: { email: "marc@x.ch", name: "Marc Dupont" },
+      organizationId: "org-1",
+      base: { eventId: "e1", eventTitle: "Fête", leaderName: "Marc Dupont", roleName: "Cuisine", orgSlug: "fete", token: "lead-tok" },
+      item: { volunteerName: "Julie Martin", changes: [{ questionId: "meal", label: "Repas ?", from: "Oui", to: "Non" }] },
+      itemKey: "c-1",
+      merge: { key: "volunteer:v1", combine: mergeAnswerChangeItems },
+    })
+  })
+
+  it("a poste without leader: the admins get the change, as before", async () => {
+    await queueAnswerChangeNotifications({ ...input, changes: [{ ...input.changes[0], roleName: "Cuisine" }] }, now)
+    expect(queueDigestItem.mock.calls.map((c) => c[0].kind)).toEqual(["answers_changed", "answers_changed"])
+  })
+
+  it("the « à chaque inscription » switch also cuts the leaders' email, as for withdrawals", async () => {
+    orgFindUnique.mockResolvedValue({ notificationSettings: { signupAdminEmail: false }, slug: "fete" })
+    leaderFindMany.mockResolvedValue([{ id: "l1", roleName: "Cuisine", name: "Marc", email: "marc@x.ch", tokenEnc: null, tokenLegacy: "t" }])
+    expect(await queueAnswerChangeNotifications({ ...input, changes: [{ ...input.changes[0], roleName: "Cuisine" }] }, now)).toEqual([])
+    expect(queueDigestItem).not.toHaveBeenCalled()
   })
 
   it("nothing to say, nothing read", async () => {

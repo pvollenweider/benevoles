@@ -49,6 +49,7 @@ export type NotificationKind =
   | "space_approved"
   | "milestone_owner_reminder"
   | "answers_changed"
+  | "sector_leader_answers_changed"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6

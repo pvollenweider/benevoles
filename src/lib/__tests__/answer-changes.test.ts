@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  answerChangeAudience, answerChangeGroupKey, answerChangeItem, answerChangeLog, answerChangeMergeKey, answerChanges,
+  answerChangeAudience, answerChangeRoles, leaderAnswerChangeGroupKey, answerChangeGroupKey, answerChangeItem, answerChangeLog, answerChangeMergeKey, answerChanges,
   answersClosedText, answersEditState, mergeAnswerChangeItems, type AnswerChangeItem,
 } from "../answer-changes"
 import { describeChanges, describeEntry } from "../event-log-narrative"
@@ -58,16 +58,21 @@ describe("answerChanges", () => {
   it("keeps only the questions sent whose answer differs, in form order", () => {
     const values = new Map([["size", ["M"]], ["meal", ["Non"]], ["car", ["Voiture", "Vélo"]]])
     expect(answerChanges(questions, new Set(["meal", "size", "car", "note"]), values)).toEqual([
-      { questionId: "meal", label: "Repas ?", from: ["Oui"], to: ["Non"] },
-      { questionId: "size", label: "Taille ?", from: [], to: ["M"] },
+      { questionId: "meal", label: "Repas ?", from: ["Oui"], to: ["Non"], roleName: null },
+      { questionId: "size", label: "Taille ?", from: [], to: ["M"], roleName: null },
       // Sent empty: cleared.
-      { questionId: "note", label: "Remarque ?", from: ["Rien"], to: [] },
+      { questionId: "note", label: "Remarque ?", from: ["Rien"], to: [], roleName: null },
     ])
   })
 
   it("leaves a question that was not sent as it is, and finds nothing when nothing changed", () => {
     expect(answerChanges(questions, new Set(["meal"]), new Map([["meal", ["Oui"]]]))).toEqual([])
-    expect(answerChanges(questions, new Set(["meal"]), new Map())).toEqual([{ questionId: "meal", label: "Repas ?", from: ["Oui"], to: [] }])
+    expect(answerChanges(questions, new Set(["meal"]), new Map())).toEqual([{ questionId: "meal", label: "Repas ?", from: ["Oui"], to: [], roleName: null }])
+  })
+
+  it("carries the poste a question is attached to (#984, part 3)", () => {
+    const attached = [{ id: "meal", label: "Repas ?", roleName: "Cuisine", answers: [{ values: ["Oui"] }] }]
+    expect(answerChanges(attached, new Set(["meal"]), new Map([["meal", ["Non"]]]))).toEqual([{ questionId: "meal", label: "Repas ?", from: ["Oui"], to: ["Non"], roleName: "Cuisine" }])
   })
 })
 
@@ -135,5 +140,60 @@ describe("answerChangeAudience: who is told", () => {
 
   it("nobody when nothing changed", () => {
     expect(answerChangeAudience([], { admins })).toEqual([])
+  })
+})
+
+describe("answerChangeAudience: a question attached to a poste (#984, part 3)", () => {
+  const admins = [{ email: "a@org.ch", name: "A" }]
+  const meal = { questionId: "meal", label: "Repas ?", from: ["Oui"], to: ["Non"], roleName: "Cuisine" }
+  const size = { questionId: "size", label: "Taille ?", from: ["M"], to: ["L"], roleName: null }
+  const park = { questionId: "park", label: "Parking ?", from: [], to: ["Oui"], roleName: "Parking" }
+  const marc = { id: "l1", roleName: "Cuisine", email: "marc@x.ch", name: "Marc" }
+  const lea = { id: "l2", roleName: "Cuisine", email: "lea@x.ch", name: "Léa" }
+
+  it("goes to each leader of the poste instead of the organisers", () => {
+    expect(answerChangeAudience([meal], { admins, leaders: [marc, lea] })).toEqual([
+      { recipient: { email: "marc@x.ch", name: "Marc" }, changes: [meal], leader: marc },
+      { recipient: { email: "lea@x.ch", name: "Léa" }, changes: [meal], leader: lea },
+    ])
+  })
+
+  it("falls back to the organisers when the poste has no leader, or none with an address", () => {
+    expect(answerChangeAudience([meal], { admins, leaders: [] })).toEqual([{ recipient: admins[0], changes: [meal] }])
+    expect(answerChangeAudience([meal], { admins, leaders: [{ ...marc, email: " " }] })).toEqual([{ recipient: admins[0], changes: [meal] }])
+    // A leader of another poste does not take it.
+    expect(answerChangeAudience([meal], { admins, leaders: [{ ...marc, roleName: "Bar" }] })).toEqual([{ recipient: admins[0], changes: [meal] }])
+    // Nor the platform's fallback address is lost: with no admin either, it gets the change.
+    expect(answerChangeAudience([meal], { admins: [], fallbackEmail: "f@x.ch", leaders: [] })).toEqual([{ recipient: { email: "f@x.ch", name: "Admin" }, changes: [meal] }])
+  })
+
+  it("splits one save between the organisers and the leaders, nobody twice", () => {
+    const out = answerChangeAudience([meal, size, park], { admins, leaders: [marc] })
+    expect(out).toEqual([
+      // The organisers: the unattached question, and the one whose poste has no leader.
+      { recipient: admins[0], changes: [size, park] },
+      { recipient: { email: "marc@x.ch", name: "Marc" }, changes: [meal], leader: marc },
+    ])
+  })
+
+  it("the organisers get nothing when every change has its leaders", () => {
+    expect(answerChangeAudience([meal], { admins, leaders: [marc] }).some((e) => !e.leader)).toBe(false)
+  })
+
+  it("a person leading two postes gets each poste's changes on its own row", () => {
+    const marcParking = { ...marc, id: "l3", roleName: "Parking" }
+    expect(answerChangeAudience([meal, park], { admins, leaders: [marc, marcParking] })).toEqual([
+      { recipient: { email: "marc@x.ch", name: "Marc" }, changes: [meal], leader: marc },
+      { recipient: { email: "marc@x.ch", name: "Marc" }, changes: [park], leader: marcParking },
+    ])
+  })
+
+  it("names the postes to read leaders for, none without", () => {
+    expect(answerChangeRoles([meal, size, park, { ...meal, questionId: "x" }])).toEqual(["Cuisine", "Parking"])
+    expect(answerChangeRoles([size])).toEqual([])
+  })
+
+  it("one leader email per event and leader row", () => {
+    expect(leaderAnswerChangeGroupKey("e1", "l1")).toBe("sector_leader_answers_changed:e1:l1")
   })
 })

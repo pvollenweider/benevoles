@@ -25,7 +25,13 @@ export const questionSchema = z
     type: z.enum(QUESTION_TYPES),
     options: z.array(z.string().trim().min(1).max(60)).max(12).default([]),
     required: z.boolean().default(false),
+    /** Poste the question concerns (#984, part 3); "" or null for none, absent to keep it on an edit. */
+    roleName: z.string().trim().max(100).nullable().optional(),
   })
-  .transform((q) => ({ ...q, options: q.type === "single" || q.type === "multiple" ? firstSpellings(q.options) : [] }))
+  .transform((q) => ({
+    ...q,
+    options: q.type === "single" || q.type === "multiple" ? firstSpellings(q.options) : [],
+    ...(q.roleName !== undefined ? { roleName: q.roleName || null } : {}),
+  }))
   .refine((q) => !(q.type === "single" || q.type === "multiple") || q.options.length >= 2, { message: "Donnez au moins deux choix.", path: ["options"] })
 export type QuestionInput = z.infer<typeof questionSchema>

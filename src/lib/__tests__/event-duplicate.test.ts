@@ -104,8 +104,19 @@ describe("duplicateSummary", () => {
   it("copies the active custom questions with the settings, never their answers (#483)", () => {
     const q = { label: "Taille", type: "single", options: ["S", "M"], required: true, position: 0 }
     const withQ = { ...source, questions: [q] }
-    expect(duplicatePlan(withQ, {}).questions).toEqual([q])
+    expect(duplicatePlan(withQ, {}).questions).toEqual([{ ...q, roleName: null }])
     expect(duplicatePlan(withQ, { copy: { settings: false } }).questions).toEqual([])
+  })
+
+  it("a question's poste follows when the copy has that poste, cleared otherwise (#984, part 3)", () => {
+    const role = source.shifts[0].roleName
+    const withQ = { ...source, questions: [
+      { label: "Repas ?", type: "yesno", options: [], required: false, position: 0, roleName: role },
+      { label: "Parking ?", type: "yesno", options: [], required: false, position: 1, roleName: "Poste disparu" },
+    ] }
+    expect(duplicatePlan(withQ, {}).questions.map((q) => q.roleName)).toEqual([role, null])
+    // Without the shifts, the copy has no poste at all.
+    expect(duplicatePlan(withQ, { copy: { shifts: false } }).questions.map((q) => q.roleName)).toEqual([null, null])
   })
 })
 

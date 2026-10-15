@@ -51,8 +51,11 @@ export const ANSWERS_SAVE_FAILED_TEXT = "Enregistrement impossible. Réessaie pl
 
 // ── What changed ────────────────────────────────────────────────────────────
 
-/** One question whose answer changed: values as stored (empty = no answer). */
-export type AnswerChange = { questionId: string; label: string; from: string[]; to: string[] }
+/**
+ * One question whose answer changed: values as stored (empty = no answer), and the poste the
+ * question is attached to (part 3), null or absent when it concerns the organisers.
+ */
+export type AnswerChange = { questionId: string; label: string; from: string[]; to: string[]; roleName?: string | null }
 
 const same = (a: string[], b: string[]) => a.length === b.length && a.every((v, i) => v === b[i])
 
@@ -62,7 +65,7 @@ const same = (a: string[], b: string[]) => a.length === b.length && a.every((v, 
  * questions the volunteer sent are compared (`submitted` holds their ids).
  */
 export function answerChanges(
-  questions: { id: string; label: string; answers: { values: string[] }[] }[],
+  questions: { id: string; label: string; roleName?: string | null; answers: { values: string[] }[] }[],
   submitted: Set<string>,
   values: Map<string, string[]>,
 ): AnswerChange[] {
@@ -71,7 +74,7 @@ export function answerChanges(
     if (!submitted.has(q.id)) continue
     const from = q.answers[0]?.values ?? []
     const to = values.get(q.id) ?? []
-    if (!same(from, to)) out.push({ questionId: q.id, label: q.label, from, to })
+    if (!same(from, to)) out.push({ questionId: q.id, label: q.label, from, to, roleName: q.roleName ?? null })
   }
   return out
 }
@@ -131,21 +134,48 @@ export function mergeAnswerChangeItems(previous: AnswerChangeItem, next: AnswerC
 
 export type AnswerChangeRecipient = { email: string; name: string }
 
+/** A sector leader of the event (#186): one row per poste they lead, each with its own link. */
+export type AnswerChangeLeader = { id: string; roleName: string; email: string; name: string }
+
 /**
- * Who is told of a volunteer's changes, and which changes each person gets. Today the event's
- * organisers, i.e. the organisation's active admins (or the platform's fallback address when it has
- * none, as for a sign-up), each with every change. The one place to route a question elsewhere
- * (part 3: a question attached to a role goes to that role's sector leaders).
+ * Who receives which changes: the organisers (`leader` absent), or one sector leader of the poste
+ * the question is attached to (`leader` set: their row, for their personal link).
+ */
+export type AnswerChangeAudienceEntry = { recipient: AnswerChangeRecipient; changes: AnswerChange[]; leader?: AnswerChangeLeader }
+
+/**
+ * Who is told of a volunteer's changes, and which changes each person gets. The one place that
+ * routes them:
+ * - a change to a question attached to a poste (#984, part 3) goes to that poste's sector leaders
+ *   only, each with the changes of their poste;
+ * - a change to any other question, or to one whose poste has no leader with an address, goes to
+ *   the organisers, i.e. the organisation's active admins (or the platform's fallback address when
+ *   it has none, as for a sign-up): nothing is lost when a poste has nobody to tell.
+ * One save can do both: the organisers get their part, the leaders theirs, nobody twice.
  */
 export function answerChangeAudience(
   changes: AnswerChange[],
-  people: { admins: AnswerChangeRecipient[]; fallbackEmail?: string | null },
-): { recipient: AnswerChangeRecipient; changes: AnswerChange[] }[] {
+  people: { admins: AnswerChangeRecipient[]; fallbackEmail?: string | null; leaders?: AnswerChangeLeader[] },
+): AnswerChangeAudienceEntry[] {
   if (changes.length === 0) return []
+  const leadersOf = (roleName: string | null | undefined) =>
+    roleName ? (people.leaders ?? []).filter((l) => l.roleName === roleName && l.email.trim() !== "") : []
+  const forOrganisers = changes.filter((c) => leadersOf(c.roleName).length === 0)
   const admins = people.admins.length > 0
     ? people.admins
     : people.fallbackEmail ? [{ email: people.fallbackEmail, name: "Admin" }] : []
-  return admins.map((recipient) => ({ recipient, changes }))
+  const out: AnswerChangeAudienceEntry[] = forOrganisers.length > 0 ? admins.map((recipient) => ({ recipient, changes: forOrganisers })) : []
+  for (const leader of people.leaders ?? []) {
+    if (leader.email.trim() === "") continue
+    const theirs = changes.filter((c) => c.roleName === leader.roleName)
+    if (theirs.length > 0) out.push({ recipient: { email: leader.email, name: leader.name }, changes: theirs, leader })
+  }
+  return out
+}
+
+/** The postes the changes concern, for reading their leaders: none, no read. */
+export function answerChangeRoles(changes: AnswerChange[]): string[] {
+  return [...new Set(changes.map((c) => c.roleName).filter((r): r is string => !!r))]
 }
 
 /** How long the organisers' email waits for more changes on the event: same as withdrawals (#869). */
@@ -154,6 +184,14 @@ export const ANSWER_CHANGE_DIGEST_DELAY_MS = 5 * 60 * 1000
 /** One email per kind, event and recipient: changes of several volunteers share it. */
 export function answerChangeGroupKey(eventId: string, recipientEmail: string): string {
   return `answers_changed:${eventId}:${recipientEmail.toLowerCase()}`
+}
+
+/**
+ * A sector leader's email (part 3): one per event and leader row, so a person leading two postes
+ * gets each poste's changes with that poste's link.
+ */
+export function leaderAnswerChangeGroupKey(eventId: string, leaderId: string): string {
+  return `sector_leader_answers_changed:${eventId}:${leaderId}`
 }
 
 /** A volunteer's line in that email: their later changes merge into it while it waits. */

@@ -105,7 +105,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         <input id={`${id}-signup`} type="checkbox" checked={settings.signupAdminEmail} onChange={(e) => setSettings((s) => ({ ...s, signupAdminEmail: e.target.checked }))} aria-describedby={`${id}-signup-help`} className={checkboxClass} />
         <div>
           <label htmlFor={`${id}-signup`} className="text-sm font-medium text-gray-800">Prévenir les administrateurs à chaque inscription</label>
-          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque administrateur actif quand un bénévole s&apos;inscrit depuis la page publique, et quand il modifie ses réponses aux questions depuis sa page personnelle (plusieurs modifications rapprochées en un seul email).</p>
+          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque administrateur actif quand un bénévole s&apos;inscrit depuis la page publique, et quand il modifie ses réponses aux questions depuis sa page personnelle (plusieurs modifications rapprochées en un seul email). Une question rattachée à un poste prévient ses responsables à la place ; ce réglage coupe aussi leur email.</p>
         </div>
       </div>
 

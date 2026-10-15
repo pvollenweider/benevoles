@@ -4,6 +4,7 @@
 import { z } from "zod"
 import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type RecurrenceInput, type Weekday } from "./shift-recurrence"
 import { civilDateSchema } from "./civil-date"
+import { duplicatedQuestionRole } from "./question-role"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -98,7 +99,7 @@ export type DuplicableEvent = {
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
-  questions?: { label: string; type: string; options: string[]; required: boolean; position: number }[]
+  questions?: { label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null }[]
   leaders: { roleName: string; name: string; email: string }[]
   recurrences?: DuplicableRecurrence[]
 }
@@ -162,6 +163,12 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
   const copy = resolveChoices(options.copy)
   const offsetDays = dayOffset(source.startDate, options.startDate)
   const shows = Array.isArray(source.showSchedule) ? source.showSchedule.filter(isShow) : []
+  // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
+  // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
+  const shifts = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
+  const recurrences = copy.shifts ? duplicatedRecurrences(source, offsetDays) : []
+  // A question's poste (#984, part 3) follows when the copy has that poste, by the same name.
+  const copiedRoles = new Set([...shifts.map((s) => s.roleName), ...recurrences.flatMap((r) => r.shifts.map((s) => s.roleName))])
   return {
     copy,
     offsetDays,
@@ -189,12 +196,10 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       cancelDeadlineHours: copy.settings ? source.cancelDeadlineHours ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
     },
-    // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
-    // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
-    shifts: copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],
-    recurrences: copy.shifts ? duplicatedRecurrences(source, offsetDays) : [],
+    shifts,
+    recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
-    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position })) : [],
+    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position, roleName: duplicatedQuestionRole(q.roleName, copiedRoles) })) : [],
     leaders: copy.leaders ? source.leaders : [],
   }
 }

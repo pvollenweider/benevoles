@@ -5,6 +5,7 @@ import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./h
 import { clearMailbox, waitForMessage, getMessageText } from "./helpers/mailpit"
 
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
+const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
 /**
  * Withdrawing from the personal page (/my) with the keyboard (#534): the confirmation takes focus,
@@ -12,7 +13,8 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
  * card and announces the result once, a failure keeps the page and says so under the card. Also axe
  * on the page, confirmation closed and open, the cards at 320 px, and « Mes réponses » (#984): the
  * volunteer's own answers to the event's questions, then changing them (part 2), the organisers
- * told by email (grouped; sent at once with DIGEST_DELAY_SECONDS=0, as in CI).
+ * told by email (grouped; sent at once with DIGEST_DELAY_SECONDS=0, as in CI), and a question
+ * attached to a poste (part 3), whose changes reach that poste's sector leader instead.
  */
 
 let event: PublicEvent
@@ -226,6 +228,59 @@ test("a required answer can't be cleared: the field says why and takes focus (#9
   await expect(first).toBeFocused()
   await expect(first).toHaveAccessibleDescription("« Taille de t-shirt ? » est obligatoire.")
   await expect(answers.getByRole("form")).toBeVisible()
+})
+
+test("a question attached to a poste: its change goes to the poste's leader, the others to the organisers (#984, part 3)", async ({ page, browser }) => {
+  const [, size, transport] = event.questions
+  const leaderEmail = `e2e-chef-accueil-${Date.now()}@example.com`
+
+  // The organiser names a leader for « Accueil », then attaches « Transport ? » to that poste.
+  // Its own context: axe needs one (not browser.newPage()).
+  const adminContext = await browser.newContext()
+  const admin = await adminContext.newPage()
+  await admin.goto("/admin/login")
+  await admin.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await admin.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await admin.getByRole("button", { name: "Se connecter" }).click()
+  await expect(admin).toHaveURL(/\/admin\/events/)
+  const lead = await admin.request.post(`/api/admin/events/${event.eventId}/sector-leaders`, { data: { roleName: "Accueil", name: "Chef Accueil", email: leaderEmail } })
+  expect(lead.ok(), await lead.text()).toBeTruthy()
+  await admin.goto(`/admin/events/${event.eventId}/questions`)
+  await waitForHydration(admin.getByRole("button", { name: "Modifier la question « Transport ? »" }))
+  await admin.getByRole("button", { name: "Modifier la question « Transport ? »" }).click()
+  const role = admin.getByRole("combobox", { name: "Poste concerné" })
+  await expect(role).toHaveValue("")
+  await expect(role).toHaveAccessibleDescription(/aux responsables de ce poste au lieu de vous/)
+  await role.selectOption("Accueil")
+  await admin.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(admin.getByText("Question « Transport ? » enregistrée.")).toBeVisible()
+  await expect(admin.getByText(/Poste : Accueil/)).toBeVisible()
+  expect.soft(await seriousViolations(admin)).toEqual([])
+  await adminContext.close()
+
+  // The volunteer changes both answers in one save.
+  await clearMailbox()
+  await openMyPage(page, { [size.id]: "M", [transport.id]: ["Vélo"] })
+  const answers = page.getByRole("region", { name: "Mes réponses" })
+  await answers.getByRole("button", { name: "Modifier mes réponses" }).click()
+  const form = answers.getByRole("form", { name: "Modifier mes réponses" })
+  await form.getByRole("radio", { name: "L" }).check()
+  await form.getByRole("checkbox", { name: "Train" }).check()
+  await form.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(answers.getByRole("status")).toHaveText("Réponses enregistrées.")
+
+  // The leader gets the poste's question, with their personal link, not the admin pages.
+  const toLeader = await waitForMessage(`to:"${leaderEmail}" subject:"Réponse modifiée"`)
+  expect(toLeader.Subject).toBe("Réponse modifiée — Accueil")
+  const leaderText = await getMessageText(toLeader.ID)
+  expect(leaderText).toContain("« Transport ? » : « Vélo » → « Vélo, Train »")
+  expect(leaderText).not.toContain("Taille")
+  expect(leaderText).toMatch(/\/leader\/[\w-]+/)
+  // The organisers get the other one only.
+  const toAdmin = await waitForMessage(`to:"${ORG_ADMIN_EMAIL}" subject:"Réponse modifiée"`)
+  const adminText = await getMessageText(toAdmin.ID)
+  expect(adminText).toContain("« Taille de t-shirt ? » : « M » → « L »")
+  expect(adminText).not.toContain("Transport")
 })
 
 test("/my has no serious axe violation, confirmation closed and open", async ({ page }) => {

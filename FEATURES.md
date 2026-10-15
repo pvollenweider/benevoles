@@ -83,7 +83,7 @@ En savoir plus : [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md),
 - **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, ou son numéro pour l'appeler.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
-- **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte.
+- **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 

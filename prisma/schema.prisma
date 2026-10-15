@@ -756,6 +756,12 @@ model EventQuestion {
   type       String
   options    String[]  @default([])
   required   Boolean   @default(false)
+  // Poste the question concerns (#984, part 3): a volunteer's later change of their answer goes to
+  // that role's sector leaders instead of the organisers. Roles have no table (they are the
+  // roleName shared by shifts), so this is the name, kept in step like EventGroupLink.roleNames:
+  // renamed with the role, cleared when the role is deleted (src/app/api/admin/events/[id]/roles/
+  // [roleName]/route.ts). Null = the organisers, as before. The question stays asked to everyone.
+  roleName   String?
   archivedAt DateTime?
   createdAt  DateTime  @default(now())
 

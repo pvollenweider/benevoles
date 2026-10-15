@@ -18,6 +18,8 @@ const db = (over: Record<string, unknown> = {}) => ({
     delete: vi.fn().mockResolvedValue(q),
     ...over,
   },
+  // The event's live shifts (#984, part 3): its postes.
+  shift: { findMany: vi.fn().mockResolvedValue([{ roleName: "Cuisine" }, { roleName: "Bar" }]) },
   $transaction: vi.fn(async (ops: unknown[]) => ops),
 })
 const json = (method: string, body?: unknown) => new Request("http://localhost/x", { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
@@ -68,6 +70,58 @@ describe("questions admin API", () => {
     guard.mockResolvedValue({ db: { ...db(), event: { findFirst: vi.fn().mockResolvedValue(null) } }, session: {} })
     const { GET } = await import("@/app/api/admin/events/[id]/questions/route")
     expect((await GET(json("GET"), params)).status).toBe(404)
+  })
+
+  it("attaches a question to one of the event's postes, refusing any other (#984, part 3)", async () => {
+    const d = db({ create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...q, ...data })) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    const ok = await POST(json("POST", { label: "Repas ?", type: "yesno", roleName: "Cuisine" }), params)
+    expect(ok.status).toBe(201)
+    expect(d.shift.findMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", status: { not: "cancelled" } }, select: { roleName: true }, distinct: ["roleName"] })
+    expect(d.eventQuestion.create.mock.calls[0][0].data).toMatchObject({ roleName: "Cuisine" })
+    expect(logEvent.mock.calls[0][0].changes).toMatchObject({ roleName: { from: null, to: "Cuisine" } })
+
+    const refused = await POST(json("POST", { label: "Repas ?", type: "yesno", roleName: "Accueil" }), params)
+    expect(refused.status).toBe(400)
+    expect(await refused.json()).toEqual({ error: "Ce poste n'existe pas dans cet événement : choisissez-en un dans la liste.", field: "roleName" })
+    expect(d.eventQuestion.create).toHaveBeenCalledTimes(1)
+  })
+
+  it("no poste, or an empty one, is none: no shift read", async () => {
+    const d = db()
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    expect((await POST(json("POST", { label: "Repas ?", type: "yesno", roleName: "" }), params)).status).toBe(201)
+    expect(d.eventQuestion.create.mock.calls[0][0].data.roleName).toBeNull()
+    expect(d.shift.findMany).not.toHaveBeenCalled()
+  })
+
+  it("an edit keeps a poste no shift carries any more, changes or clears it, and logs the change", async () => {
+    const d = db({
+      findFirst: vi.fn().mockResolvedValue({ ...q, roleName: "Ancien", answers: [] }),
+      update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...q, roleName: "Ancien", ...data })),
+    })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const body = { label: "Taille", type: "single", options: ["S", "M"] }
+    // Unchanged: accepted without reading the postes, nothing logged about it.
+    expect((await PATCH(json("PATCH", { ...body, roleName: "Ancien" }), params)).status).toBe(200)
+    expect(d.shift.findMany).not.toHaveBeenCalled()
+    expect(logEvent.mock.calls[0][0].changes.roleName).toBeUndefined()
+    // Absent: kept as it is.
+    await PATCH(json("PATCH", body), params)
+    expect(d.eventQuestion.update.mock.calls[1][0].data).not.toHaveProperty("roleName")
+    // To another of the event's postes, then to none.
+    expect((await PATCH(json("PATCH", { ...body, roleName: "Bar" }), params)).status).toBe(200)
+    expect(logEvent.mock.calls[2][0].changes.roleName).toEqual({ from: "Ancien", to: "Bar" })
+    expect((await PATCH(json("PATCH", { ...body, roleName: null }), params)).status).toBe(200)
+    expect(d.eventQuestion.update.mock.calls[3][0].data.roleName).toBeNull()
+    // A poste the event doesn't have: refused, not written.
+    const refused = await PATCH(json("PATCH", { ...body, roleName: "Accueil" }), params)
+    expect(refused.status).toBe(400)
+    expect((await refused.json()).field).toBe("roleName")
+    expect(d.eventQuestion.update).toHaveBeenCalledTimes(4)
   })
 
   it("reorders only with the full current list", async () => {

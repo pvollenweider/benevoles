@@ -21,6 +21,8 @@ export type MyAnswerQuestion = {
   type?: string
   options?: string[]
   required?: boolean
+  /** The poste the question is attached to (part 3): routes a change's email, never shown here. */
+  roleName?: string | null
   /** The answers to this question, as read for one volunteer: at most one. */
   answers: { values: string[] }[]
 }
@@ -49,7 +51,7 @@ export function myAnswersQuery(eventId: string, volunteerId: string) {
     where: { eventId, archivedAt: null },
     orderBy: [{ position: "asc" as const }, { createdAt: "asc" as const }],
     select: {
-      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true,
+      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, roleName: true,
       answers: { where: { volunteerId }, select: { values: true } },
     },
   }
