@@ -21,16 +21,37 @@ export const FEEDBACK_CONTEXTS = ["masterclass", "documentation"] as const
 export type FeedbackContext = (typeof FEEDBACK_CONTEXTS)[number]
 
 /**
- * Query parameter a documentation link adds to /videos/[id] so the answer is counted under
- * « documentation » (#645): `/videos/EVENT_CREATE_BLANK?from=doc`. Any other value, or none, is
- * the video library (« masterclass »).
+ * Fragment a documentation link adds to /videos/[id] so the answer is counted under
+ * « documentation » (#645): `/videos/EVENT_CREATE_BLANK#doc`. A fragment, not a query parameter:
+ * it never reaches the server and crawlers drop it, so the documentation's links point at the
+ * video's one URL (`?from=doc` gave Search Console a second URL per video). Read by the page's
+ * feedback in the browser (VideoFeedback). Any other fragment, or none, is the video library
+ * (« masterclass »).
  */
-export const FROM_DOC_PARAM = "from"
-export const FROM_DOC_VALUE = "doc"
+export const FROM_DOC_FRAGMENT = "doc"
 
-export function feedbackContextFrom(from: string | string[] | undefined | null): FeedbackContext {
+export function feedbackContextFromHash(hash: string | null | undefined): FeedbackContext {
+  return (hash ?? "").replace(/^#/, "") === FROM_DOC_FRAGMENT ? "documentation" : "masterclass"
+}
+
+/**
+ * The former query parameter, `?from=doc`: links already shared or crawled with it are sent to the
+ * video's one URL with the fragment (a 308, src/app/videos/[id]/page.tsx).
+ */
+export const LEGACY_FROM_DOC_PARAM = "from"
+
+export function isLegacyFromDoc(from: string | string[] | undefined | null): boolean {
   const value = Array.isArray(from) ? from[0] : from
-  return value === FROM_DOC_VALUE ? "documentation" : "masterclass"
+  return value === FROM_DOC_FRAGMENT
+}
+
+/**
+ * The context an answer is sent with: the one the page gives, upgraded to « documentation » when
+ * the library page was opened from a guide (`#doc`). A documentation unit's own player already says
+ * « documentation ».
+ */
+export function feedbackContextSent(context: FeedbackContext, hash: string | null | undefined): FeedbackContext {
+  return context === "masterclass" ? feedbackContextFromHash(hash) : context
 }
 
 /** A posted answer, as checked by `feedbackBodySchema` (src/lib/video-feedback-schema.ts). */

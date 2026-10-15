@@ -5,6 +5,7 @@ import { useParams } from "next/navigation"
 import { fmtRange } from "@/lib/gantt-utils"
 import { slugify } from "@/lib/utils"
 import PublicFooter from "@/components/PublicFooter"
+import { orgPageFooterSite } from "@/lib/urls"
 import { spokenStaffingState, staffingStateText, type StaffingState } from "@/lib/staffing"
 
 type RegistrationItem = {
@@ -182,7 +183,7 @@ export default function SectorLeaderPage() {
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
-    <div className="px-4"><PublicFooter /></div>
+    <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
     </>
   )
 }

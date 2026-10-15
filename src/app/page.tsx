@@ -10,7 +10,7 @@ import GitHubMark from "@/components/GitHubMark"
 import PublicFooter from "@/components/PublicFooter"
 import OrgLogoImage from "@/components/OrgLogoImage"
 import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
-import { apexBaseUrl, orgBaseUrl } from "@/lib/urls"
+import { apexBaseUrl, orgBaseUrl, orgPageFooterSite } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { CONTACT_EMAIL, LANDING_FAQ_SOURCE, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
@@ -165,7 +165,7 @@ export default async function HomePage() {
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
-    <div className="px-4"><PublicFooter /></div>
+    <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
     </>
   )
 }

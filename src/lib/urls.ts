@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { apexLinkBase } from "@/lib/apex-links"
+import { siteName } from "@/lib/site"
+
 /**
  * NEXT_PUBLIC_APP_URL as the running server sees it, read on every call. Never a module constant
  * and never `process.env.NEXT_PUBLIC_APP_URL` written out: the build inlines that expression (even
@@ -21,6 +24,19 @@ function appUrl(): string {
 /** NEXT_PUBLIC_APP_URL when the running server has one, else undefined (no localhost default). */
 export function configuredAppUrl(): string | undefined {
   return runtimeEnv("NEXT_PUBLIC_APP_URL") || undefined
+}
+
+/**
+ * The base of the links from an organisation's pages to the site's own pages (src/lib/apex-links.ts):
+ * the configured address, or null locally (one host, relative links).
+ */
+export function orgPageApexBase(): string | null {
+  return apexLinkBase(configuredAppUrl())
+}
+
+/** What an organisation's footer (PublicFooter, `event` and `embed`) needs from the server. */
+export function orgPageFooterSite(): { apexBase: string | null; name: string } {
+  return { apexBase: orgPageApexBase(), name: siteName() }
 }
 
 /** The apex (marketing and documentation) base URL, e.g. https://www.benevol.app. */

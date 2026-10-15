@@ -3,6 +3,7 @@
 
 import { parseVideoReference, resolveVideoReference, videoMediaUrls, type Audience, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
 import { videoFrame, type VideoFrame } from "@/lib/video-frame"
+import { FROM_DOC_FRAGMENT } from "@/lib/video-feedback"
 
 /**
  * Videos referenced from the documentation by their stable id (#645). A source (GUIDE_ADMIN.md,
@@ -61,10 +62,11 @@ export function docVideoDuration(durationMs: number): string {
 }
 
 /**
- * Query string on the card's link only (never in its text): the video page's feedback (#646)
- * records that the viewer came from the documentation. Ignored by the page until then.
+ * Fragment on the card's link only (never in its text): the video page's feedback (#646) records
+ * that the viewer came from the documentation. A fragment, so the link is the video's one URL for
+ * crawlers (src/lib/video-feedback.ts).
  */
-export const DOC_VIDEO_FROM = "from=doc"
+export const DOC_VIDEO_FROM = `#${FROM_DOC_FRAGMENT}`
 
 /**
  * The link a reference renders, or null when it renders nothing: unknown id, video not published,
@@ -75,7 +77,7 @@ export function docVideoLink(id: string, catalog: Video[], hasRender: (video: Vi
   const video = resolveVideoReference(id, catalog)
   if (!video || !video.published || !hasRender(video)) return null
   // Non-breaking space before the colon (French typography): the colon never starts a line.
-  return { href: `/videos/${video.id}?${DOC_VIDEO_FROM}`, label: `Voir la vidéo\u00a0: ${video.title} (${docVideoDuration(video.durationMs)})` }
+  return { href: `/videos/${video.id}${DOC_VIDEO_FROM}`, label: `Voir la vidéo\u00a0: ${video.title} (${docVideoDuration(video.durationMs)})` }
 }
 
 function escapeHtml(text: string): string {
@@ -108,7 +110,7 @@ export type DocVideoPlayer = {
   title: string
   /** « Voir la vidéo : <titre> (<durée>) », the button's and the fallback link's text. */
   label: string
-  /** /videos/<ID>?from=doc */
+  /** /videos/<ID>#doc */
   libraryHref: string
   revision: number
   audience: Audience[]

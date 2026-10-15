@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, afterEach } from "vitest"
+import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import PublicFooter, { footerSiteColumns } from "../PublicFooter"
@@ -92,6 +92,50 @@ describe("PublicFooter", () => {
       expect(screen.queryByRole("link", { name: "Tutoriels vidéo" })).toBeNull()
     })
 
+    // Search Console: on an organisation's host, /doc, /legal, /accessibilite and /admin answer a 308
+    // to the site's address; the footer links there directly.
+    it("links the site's pages on the site's address when given one", () => {
+      render(<PublicFooter variant="event" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      expect(columns()).toEqual({
+        "Aide": [["Guide bénévole", "https://www.benevol.app/doc/benevole"], ["Espace organisateur", "https://www.benevol.app/admin/login"]],
+        "Informations légales": [
+          ["Confidentialité", "https://www.benevol.app/legal/privacy"],
+          ["CGU", "https://www.benevol.app/legal/terms"],
+          ["Accessibilité", "https://www.benevol.app/accessibilite"],
+        ],
+      })
+      // Same tab, as before.
+      for (const link of within(screen.getByRole("navigation")).getAllByRole("link")) expect(link).not.toHaveAttribute("target")
+    })
+
+    it("links the site's home, « Propulsé par » the instance, same tab, outside the nav", () => {
+      render(<PublicFooter variant="event" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      const home = screen.getByRole("link", { name: "Propulsé par benevol.app" })
+      expect(home).toHaveAttribute("href", "https://www.benevol.app/")
+      expect(home).not.toHaveAttribute("target")
+      expect(home).not.toHaveAttribute("rel")
+      expect(screen.getByRole("navigation").contains(home)).toBe(false)
+      expect(screen.getByRole("contentinfo").contains(home)).toBe(true)
+    })
+
+    // #760: another instance names itself and links its own pages, its operator page for legal.
+    it("follows the instance: its name, its address, its operator page", () => {
+      vi.stubEnv("HOSTED_SERVICE", "false")
+      try {
+        render(<PublicFooter variant="event" site={{ apexBase: "https://benevoles.asso.example", name: "Bénévoles Asso" }} />)
+        expect(screen.getByRole("link", { name: "Propulsé par Bénévoles Asso" })).toHaveAttribute("href", "https://benevoles.asso.example/")
+        expect(screen.getByRole("link", { name: "Exploitant de cette instance" })).toHaveAttribute("href", "https://benevoles.asso.example/legal/exploitant")
+      } finally {
+        vi.unstubAllEnvs()
+      }
+    })
+
+    it("keeps relative links and the home at / without an address (localhost, ?org=)", () => {
+      render(<PublicFooter variant="event" />)
+      expect(screen.getByRole("link", { name: "Guide bénévole" })).toHaveAttribute("href", "/doc/benevole")
+      expect(screen.getByRole("link", { name: /^Propulsé par / })).toHaveAttribute("href", "/")
+    })
+
     // Footer (#494): the name, the version and the code on GitHub are one link, with the GitHub mark.
     it("ends with the name and version of the tool, one link to its code", () => {
       render(<PublicFooter variant="event" />)
@@ -102,6 +146,17 @@ describe("PublicFooter", () => {
       expect(mark).toHaveAttribute("aria-hidden", "true")
       expect(mark).toHaveAttribute("focusable", "false")
       expect(screen.getByRole("navigation").contains(link)).toBe(false)
+    })
+  })
+
+  describe("embed variant (#948)", () => {
+    it("links the legal pages on the site's address, in a new tab, and no home link", () => {
+      render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      const privacy = screen.getByRole("link", { name: "Confidentialité (ouvre dans un nouvel onglet)" })
+      expect(privacy).toHaveAttribute("href", "https://www.benevol.app/legal/privacy")
+      expect(privacy).toHaveAttribute("target", "_blank")
+      expect(screen.getByRole("link", { name: "CGU (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "https://www.benevol.app/legal/terms")
+      expect(screen.queryByRole("link", { name: /Propulsé par/ })).toBeNull()
     })
   })
 

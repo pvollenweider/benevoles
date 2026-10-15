@@ -43,9 +43,9 @@ test("says « tu » on a volunteer-only video", async ({ page }) => {
   await expect(feedbackRegion(page, "Cette vidéo t'a-t-elle été utile ?").getByRole("button", { name: "Non" })).toBeVisible()
 })
 
-test("counts a video opened from the documentation (?from=doc), kept across the slug redirect", async ({ page }) => {
-  await page.goto("/videos/volunteer-calendar?from=doc")
-  await expect(page).toHaveURL(/\/videos\/VOLUNTEER_CALENDAR\?from=doc$/)
+test("counts a video opened from the documentation (#doc), kept across the slug redirect", async ({ page }) => {
+  await page.goto("/videos/volunteer-calendar#doc")
+  await expect(page).toHaveURL(/\/videos\/VOLUNTEER_CALENDAR#doc$/)
   const no = feedbackRegion(page, "Cette vidéo t'a-t-elle été utile ?").getByRole("button", { name: "Non" })
   await waitForHydration(no)
   const request = page.waitForRequest((r) => r.url().endsWith("/api/public/video-feedback") && r.method() === "POST")

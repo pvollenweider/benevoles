@@ -6,6 +6,7 @@ import { outcomeHeading, readOutcome, requestNotice } from "@/lib/signup-outcome
 import Link from "next/link"
 import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
+import { orgPageFooterSite } from "@/lib/urls"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
 import { dayLabel } from "@/lib/spoken-time"
@@ -152,7 +153,7 @@ function SuccessContent() {
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
-    <div className="px-4"><PublicFooter variant={embed ? "embed" : "event"} /></div>
+    <div className="px-4"><PublicFooter variant={embed ? "embed" : "event"} site={orgPageFooterSite()} /></div>
     </>
   )
   return embed ? <EmbedFrame>{content}</EmbedFrame> : content

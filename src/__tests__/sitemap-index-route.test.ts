@@ -18,11 +18,11 @@ describe("GET /sitemap-index.xml", () => {
   })
   afterEach(() => vi.unstubAllEnvs())
 
-  it("lists the www sitemap, the video sitemap and every active organisation's", async () => {
+  it("lists the www sitemap, the video sitemap and every public organisation's that lists an event", async () => {
     request("www.benevol.app")
     m.findMany.mockResolvedValue([
       { slug: "lausanne-rocks", updatedAt: new Date("2026-09-01T00:00:00Z"), events: [{ updatedAt: new Date("2026-10-01T00:00:00Z") }] },
-      { slug: "fete-du-village", updatedAt: new Date("2026-08-01T00:00:00Z"), events: [] },
+      { slug: "fete-du-village", updatedAt: new Date("2026-08-01T00:00:00Z"), events: [{ updatedAt: new Date("2026-08-02T00:00:00Z") }] },
     ])
     const { GET } = await import("@/app/sitemap-index.xml/route")
     const res = await GET()
@@ -37,6 +37,25 @@ describe("GET /sitemap-index.xml", () => {
     ])
     expect(xml).toContain("<lastmod>2026-10-01T00:00:00.000Z</lastmod>")
     expect(m.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { active: true, publicationApprovedAt: { not: null } } }))
+    // The events counted are the ones the organisation's own sitemap lists.
+    expect(m.findMany.mock.calls[0][0].select.events.where).toEqual({ publicStatus: "published", isListed: true })
+  })
+
+  // Search Console listed test spaces whose sitemap held their root page alone.
+  it("leaves out an organisation with no published, listed event", async () => {
+    request("www.benevol.app")
+    m.findMany.mockResolvedValue([
+      { slug: "ape-amandine", updatedAt: new Date("2026-09-01T00:00:00Z"), events: [{ updatedAt: new Date("2026-10-01T00:00:00Z") }] },
+      { slug: "joceanedev", updatedAt: new Date("2026-10-10T00:00:00Z"), events: [] },
+    ])
+    const { GET } = await import("@/app/sitemap-index.xml/route")
+    const xml = await (await GET()).text()
+    expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((x) => x[1])).toEqual([
+      "https://www.benevol.app/sitemap.xml",
+      "https://www.benevol.app/video-sitemap.xml",
+      "https://ape-amandine.benevol.app/sitemap.xml",
+    ])
+    expect(xml).not.toContain("joceanedev")
   })
 
   it("is a 404 on an organisation's host, on staging and on an unknown host", async () => {

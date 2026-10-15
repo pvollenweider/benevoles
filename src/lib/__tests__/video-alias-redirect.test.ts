@@ -11,7 +11,8 @@ describe("video slug alias redirect", () => {
   const page = fs.readFileSync(path.join(process.cwd(), "src/app/videos/[id]/page.tsx"), "utf-8")
 
   it("is permanent (308), not temporary", () => {
-    expect(page).toMatch(/if \(isSlug\) permanentRedirect\(/)
+    // The slug alias and the former `?from=doc` (one redirect to the video's one URL).
+    expect(page).toMatch(/if \(isSlug \|\| legacyFromDoc\) permanentRedirect\(/)
     expect(page).not.toMatch(/(?<![A-Za-z])redirect\(/)
   })
 })

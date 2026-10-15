@@ -5,6 +5,7 @@ import Link from "next/link"
 import { APP_VERSION } from "@/lib/app-version"
 import GitHubMark from "./GitHubMark"
 import { INSTANCE_OPERATOR_PATH, isHostedService, siteName, supportUrl } from "@/lib/site"
+import { apexHomeHref, apexHref } from "@/lib/apex-links"
 
 /**
  * Footer links: underlined (grey links must not rely on colour alone), the underline quiet at
@@ -18,6 +19,19 @@ const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
 
 type FooterLink = { href: string; label: string; external?: boolean; github?: boolean; newTab?: boolean }
 type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
+
+/**
+ * What an organisation's footer needs from the server: the site's address for the links to the
+ * site's own pages (src/lib/apex-links.ts, null locally) and the instance's name for « Propulsé
+ * par ». Passed down rather than read here: the event page renders this footer from a client
+ * component, where the server's environment is not readable (`orgPageFooterSite`, src/lib/urls.ts).
+ */
+export type FooterSite = { apexBase: string | null; name: string }
+
+/** On an organisation's host, the site's own pages are linked on the site's address (no redirect hop, #933). */
+function onApex(links: readonly FooterLink[], apexBase: string | null): FooterLink[] {
+  return links.map((l) => (l.external ? l : { ...l, href: apexHref(l.href, apexBase) }))
+}
 
 /** The hosted service's legal pages, or the instance's operator page elsewhere (#760). */
 function legalColumn(hosted: boolean = isHostedService()): FooterColumn {
@@ -74,24 +88,25 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
   ]
 }
 
-/** An organisation's pages: what its volunteers (and its organisers) need, then legal. */
-export function footerEventColumns(): readonly FooterColumn[] {
-  return [
-    {
-      id: "help",
-      title: "Aide",
-      links: [
-        { href: "/doc/benevole", label: "Guide bénévole" },
-        { href: "/admin/login", label: "Espace organisateur" },
-      ],
-    },
-    legalColumn(),
-  ]
+/**
+ * An organisation's pages: what its volunteers (and its organisers) need, then legal. Every one of
+ * these is a page of the site, linked on its address (`apexBase`) from the organisation's host.
+ */
+export function footerEventColumns(apexBase: string | null = null): readonly FooterColumn[] {
+  const help: FooterColumn = {
+    id: "help",
+    title: "Aide",
+    links: [
+      { href: "/doc/benevole", label: "Guide bénévole" },
+      { href: "/admin/login", label: "Espace organisateur" },
+    ],
+  }
+  return [help, legalColumn()].map((col) => ({ ...col, links: onApex(col.links, apexBase) }))
 }
 
 /** The embedded sign-up (#948): legal links only, each in a new tab, the flow stays in the frame. */
-export function footerEmbedLinks(): readonly FooterLink[] {
-  return legalColumn().links.map((l) => ({ ...l, newTab: true }))
+export function footerEmbedLinks(apexBase: string | null = null): readonly FooterLink[] {
+  return onApex(legalColumn().links, apexBase).map((l) => ({ ...l, newTab: true }))
 }
 
 function FooterAnchor({ link }: { link: FooterLink }) {
@@ -102,6 +117,8 @@ function FooterAnchor({ link }: { link: FooterLink }) {
       </a>
     )
   }
+  // A page of the site from an organisation's host is on another origin: a plain link.
+  if (!link.external && /^https?:/.test(link.href)) return <a href={link.href} className={linkClass}>{link.label}</a>
   if (!link.external) return <Link href={link.href} className={linkClass}>{link.label}</Link>
   return (
     <a href={link.href} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
@@ -125,15 +142,18 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  *   side by side from `md`, two per row below;
  * - `event` (default), the pages an organisation's audience sees (its events, a registration, a
  *   personal or sector leader link): Aide (volunteers' guide, organisers' sign-in) and
- *   Informations légales, then the name and version of the tool on a small line; no support
- *   appeal nor platform news, they come for someone else's event.
+ *   Informations légales, then a small line outside the nav: « Propulsé par <instance> » to the
+ *   site's home (same tab) and the name and version of the tool to its code; no support appeal
+ *   nor platform news, they come for someone else's event. Its links to the site's pages carry
+ *   the site's address (`site.apexBase`): on the organisation's host a relative one was a 308.
  * The page puts it after its `</main>`: `site` inside the site container (SITE_CONTAINER_CLASS,
  * src/components/public/site-container.ts), whose width it takes, so its edges line up with the
  * header and the content; `event` at `max-w-xl`, with `px-4` when the page has no container.
  */
-export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" | "embed" }) {
-  if (variant === "embed") return <EmbedFooter />
-  const columns = variant === "site" ? footerSiteColumns() : footerEventColumns()
+export default function PublicFooter({ variant = "event", site }: { variant?: "site" | "event" | "embed"; site?: FooterSite }) {
+  const apexBase = site?.apexBase ?? null
+  if (variant === "embed") return <EmbedFooter apexBase={apexBase} />
+  const columns = variant === "site" ? footerSiteColumns() : footerEventColumns(apexBase)
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>
@@ -150,7 +170,9 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
         ))}
       </nav>
       {variant === "event" && (
-        <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
+        <p className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+          {/* The whole phrase is the link: its name never starts like the code link's (« benevol.app v… »). */}
+          <a href={apexHomeHref(apexBase)} className={linkClass}>Propulsé par {site?.name ?? siteName()}</a>
           <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
             <GitHubMark className="w-3.5 h-3.5" />
             benevol.app v{APP_VERSION}
@@ -167,12 +189,12 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
  * tool's name, every link in a new tab (the site around the frame stays where it is). Still one
  * `<footer>` and one `<nav>` « Liens utiles », after the `</main>`.
  */
-function EmbedFooter() {
+function EmbedFooter({ apexBase }: { apexBase: string | null }) {
   return (
     <footer className="max-w-6xl mx-auto mt-6 pt-4 pb-4 border-t border-gray-200 text-xs text-gray-600">
       <nav aria-label="Liens utiles">
         <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          {footerEmbedLinks().map((l) => (
+          {footerEmbedLinks(apexBase).map((l) => (
             <li key={l.href}><FooterAnchor link={l} /></li>
           ))}
           <li>

@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest"
 import {
   checkFeedbackTarget,
-  feedbackContextFrom,
+  feedbackContextFromHash,
+  feedbackContextSent,
+  isLegacyFromDoc,
   feedbackDay,
   feedbackLanguage,
   feedbackStorageKey,
@@ -42,13 +44,35 @@ describe("feedbackBodySchema", () => {
   })
 })
 
-describe("feedbackContextFrom", () => {
-  it("is « documentation » only for ?from=doc, the video library otherwise", () => {
-    expect(feedbackContextFrom("doc")).toBe("documentation")
-    expect(feedbackContextFrom(["doc", "x"])).toBe("documentation")
-    expect(feedbackContextFrom(undefined)).toBe("masterclass")
-    expect(feedbackContextFrom(null)).toBe("masterclass")
-    expect(feedbackContextFrom("gallery")).toBe("masterclass")
+describe("feedbackContextFromHash", () => {
+  it("is « documentation » only for #doc, the video library otherwise", () => {
+    expect(feedbackContextFromHash("#doc")).toBe("documentation")
+    expect(feedbackContextFromHash("doc")).toBe("documentation")
+    expect(feedbackContextFromHash("")).toBe("masterclass")
+    expect(feedbackContextFromHash(undefined)).toBe("masterclass")
+    expect(feedbackContextFromHash(null)).toBe("masterclass")
+    expect(feedbackContextFromHash("#docs")).toBe("masterclass")
+    expect(feedbackContextFromHash("#main")).toBe("masterclass")
+  })
+})
+
+describe("feedbackContextSent", () => {
+  it("upgrades the library page to « documentation » when opened from a guide", () => {
+    expect(feedbackContextSent("masterclass", "#doc")).toBe("documentation")
+    expect(feedbackContextSent("masterclass", "")).toBe("masterclass")
+    // A documentation unit's own player is already « documentation », whatever the page's fragment.
+    expect(feedbackContextSent("documentation", "")).toBe("documentation")
+  })
+})
+
+// Search Console: `?from=doc` was a second URL per video; links still carrying it are redirected.
+describe("isLegacyFromDoc", () => {
+  it("recognises the former ?from=doc only", () => {
+    expect(isLegacyFromDoc("doc")).toBe(true)
+    expect(isLegacyFromDoc(["doc", "x"])).toBe(true)
+    expect(isLegacyFromDoc(undefined)).toBe(false)
+    expect(isLegacyFromDoc(null)).toBe(false)
+    expect(isLegacyFromDoc("gallery")).toBe(false)
   })
 })
 

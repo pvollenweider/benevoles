@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { orgSlugFromHost } from "./org-subdomain"
+import { apexHref, apexLinkBase } from "./apex-links"
 import { SITE_NAME } from "@/lib/seo-metadata"
 
 /** The <title> of the 404 page (src/app/not-found.tsx, NotFoundTitle). */
@@ -56,9 +57,11 @@ export function notFoundLinks(org: NotFoundOrg | null, host: string, apexUrl: st
     }
   }
   const onOrgHost = orgSlugFromHost(host) !== null
+  // The site's pages, on the site's address from the organisation's host (src/lib/apex-links.ts).
+  const apexBase = onOrgHost ? apexLinkBase(apexUrl) : null
   return {
     primary: { href: onOrgHost ? "/" : `/?org=${encodeURIComponent(org.slug)}`, label: "Voir les événements" },
     note: "Pour retrouver ses inscriptions, le lien personnel se trouve dans l'e-mail de confirmation.",
-    links: [GUIDE_BENEVOLE, DOCUMENTATION, VIDEOS, ORGANIZER_SPACE],
+    links: [GUIDE_BENEVOLE, DOCUMENTATION, VIDEOS, ORGANIZER_SPACE].map((link) => ({ ...link, href: apexHref(link.href, apexBase) })),
   }
 }

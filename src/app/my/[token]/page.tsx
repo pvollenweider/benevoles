@@ -8,6 +8,7 @@ import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
+import { orgPageFooterSite } from "@/lib/urls"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
 import { dayLabel } from "@/lib/spoken-time"
@@ -510,7 +511,7 @@ export default function MyRegistrationPage() {
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
-    <div className="px-4"><PublicFooter /></div>
+    <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
     </>
   )
 }

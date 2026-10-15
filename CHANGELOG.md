@@ -33,6 +33,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Pages d'une organisation** : le pied de page propose « Propulsé par benevol.app », un lien vers l'accueil du site. Le guide bénévole, les pages légales, l'accessibilité et l'espace organisateur s'ouvrent directement sur www.benevol.app, sans redirection. L'index des sitemaps ne liste plus les organisations qui n'ont aucun événement publié, et les liens des guides vers une vidéo n'ajoutent plus `?from=doc` à son adresse.
 - **Des captures d'écran dans dix autres guides** : créer son espace, publier un événement, série de créneaux, permanences récurrentes, liste d'attente, invitations, rappels, présences le jour J, lien personnel et export des données montrent désormais l'écran décrit, à côté de leur vidéo.
 - **Origine du projet** : la page d'accueil, la page Fonctionnalités et la FAQ disent que benevol.app est développé en Suisse, à côté de l'hébergement en France.
 - **Pages des tutoriels vidéo** : la vidéo vient juste sous le titre, avant sa description. « Les étapes », « À retenir » et la transcription sont réunies sous « Pour aller plus loin », fermées par défaut, avec leur nombre d'éléments.

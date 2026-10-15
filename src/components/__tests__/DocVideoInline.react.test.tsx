@@ -22,7 +22,7 @@ const player: DocVideoPlayer = {
   id: "ORG_FIRST_STEPS",
   title: "Bien démarrer",
   label: "Voir la vidéo : Bien démarrer (3 min)",
-  libraryHref: "/videos/ORG_FIRST_STEPS?from=doc",
+  libraryHref: "/videos/ORG_FIRST_STEPS#doc",
   revision: 2,
   audience: ["organisateur"],
   media: {
@@ -40,7 +40,7 @@ const button = () => screen.getByRole("button", { name: "Voir la vidéo : Bien 
 describe("DocVideoInline", () => {
   it("renders the plain link to the library on the server (no JavaScript), no button and no video", () => {
     const html = renderToString(<DocVideoInline player={player} />)
-    expect(html).toContain('href="/videos/ORG_FIRST_STEPS?from=doc"')
+    expect(html).toContain('href="/videos/ORG_FIRST_STEPS#doc"')
     expect(html).toContain("data-doc-video")
     expect(html).not.toContain("<button")
     expect(html).not.toContain("<video")
@@ -112,7 +112,7 @@ describe("DocVideoInline", () => {
     expect(screen.getByText("Transcription")).toBeInTheDocument()
     expect(screen.getByText("Second passage.")).toBeInTheDocument()
     const library = screen.getByRole("link", { name: /^Ouvrir dans la bibliothèque/ })
-    expect(library).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
+    expect(library).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS#doc")
     // Several players on one page: each library link names its video, not only « Ouvrir dans la bibliothèque ».
     expect(library.textContent).toMatch(/^Ouvrir dans la bibliothèque : \S/)
   })
