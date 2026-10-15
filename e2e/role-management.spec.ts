@@ -203,6 +203,33 @@ test.describe("role management", () => {
     expect(afterReset.shifts.every((s: { colorKey: string | null }) => s.colorKey === null)).toBe(true)
   })
 
+  test("a shift added to an existing role through the form takes its colour, limit and reserved access (#1002)", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E Role Settings ${stamp}`, startDate: "2030-09-09", endDate: "2030-09-09", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-09-09", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+    const settings = { colorKey: "fuchsia", maxPerVolunteer: 2, reservedTags: ["bar"] }
+    const roleRes = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Bar")}`, { data: settings })
+    expect(roleRes.ok()).toBeTruthy()
+
+    await page.goto(`/admin/events/${event.id}/shifts`)
+    await page.getByRole("button", { name: "+ Ajouter un créneau" }).click()
+    await page.getByPlaceholder("ex. Billetterie").fill("Bar")
+    await page.getByPlaceholder("HH:MM").first().fill("14:00")
+    await page.getByRole("button", { name: "Ajouter", exact: true }).click()
+    await expect.poll(async () => {
+      const d = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+      return d.shifts.filter((s: { roleName: string }) => s.roleName === "Bar").length
+    }).toBe(2)
+
+    const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    for (const s of detail.shifts) expect(s).toMatchObject(settings)
+  })
+
   test("rejects a color that isn't in the curated palette", async ({ page }) => {
     const stamp = Date.now()
     const eventRes = await page.request.post("/api/admin/events", {

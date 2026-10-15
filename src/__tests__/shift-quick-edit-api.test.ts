@@ -18,7 +18,8 @@ describe("POST /api/admin/shifts/[id]/duplicate", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     create.mockImplementation(async ({ data }: { data: object }) => ({ id: "s2", ...data }))
-    requireOrgSessionMock.mockResolvedValue({ db: { shift: { findFirst: vi.fn().mockResolvedValue(source), create } }, organizationId: "org-a", session: {} })
+    // The poste's live shifts (#1002): here the source alone, so its own settings.
+    requireOrgSessionMock.mockResolvedValue({ db: { shift: { findFirst: vi.fn().mockResolvedValue(source), findMany: vi.fn().mockResolvedValue([source]), create } }, organizationId: "org-a", session: {} })
   })
 
   it("copies every setting, right after the original, open and empty", async () => {

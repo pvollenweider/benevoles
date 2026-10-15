@@ -15,7 +15,7 @@ import { collectNotifications, deliverAfterResponse, enqueueNotifications } from
 import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
-import { roleOverlapSetting } from "@/lib/role-overlap-setting"
+import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -83,11 +83,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const { notifyVolunteers, ...rest } = parsed.data
   const updateData: Record<string, unknown> = { ...rest }
-  // A shift moved to another role takes that role's « cumulable » option (#986); a role new to the
-  // event keeps the shift's own, so renaming a lone shift's role does not drop it.
+  // A shift moved to an existing poste takes its settings (#986, #1002): colour, limit, access,
+  // cumulable and order, over the order the form sends. A poste new to the event keeps the shift's
+  // own, so renaming a lone shift's poste drops none of them.
   if (rest.roleName !== undefined && rest.roleName !== before.roleName) {
-    const target = await db.shift.count({ where: { eventId: before.eventId, roleName: rest.roleName, status: { not: "cancelled" } } })
-    if (target > 0) updateData.overlapAllowed = await roleOverlapSetting(db, before.eventId, rest.roleName)
+    const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(before.eventId, rest.roleName), select: ROLE_SETTINGS_SELECT }), rest.roleName)
+    if (poste) Object.assign(updateData, poste)
   }
   if (rest.date) updateData.date = new Date(rest.date)
 

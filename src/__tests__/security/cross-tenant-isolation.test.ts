@@ -721,6 +721,18 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("PATCH /api/admin/shifts/[id] moving an org-B shift to another poste returns 404, reading no poste setting (#1002)", async () => {
+    const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
+    const db = setupGuard() // shift.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await PATCH(makeRequest("/api/admin/shifts/shift-b", "PATCH", { roleName: "Sécurité" }), params("shift-b"))
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect($transaction).not.toHaveBeenCalled()
+  })
+
   it("PATCH /api/admin/shifts/[id] with a minimum (#949) returns 404 for org-B shift, updating nothing", async () => {
     const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
     const db = setupGuard() // shift.findFirst → null
@@ -1031,6 +1043,8 @@ describe("Shifts — cross-tenant isolation", () => {
     const res = await POST(makeRequest("/api/admin/shifts/shift-b/duplicate", "POST"), params("shift-b"))
     expect(res.status).toBe(404)
     expect(create).not.toHaveBeenCalled()
+    // Nor the settings of its poste (#1002).
+    expect(db.shift.findMany).not.toHaveBeenCalled()
   })
 
   it("DELETE /api/admin/shifts/[id] returns 404 for org-B shift (cascade cancel blocked)", async () => {

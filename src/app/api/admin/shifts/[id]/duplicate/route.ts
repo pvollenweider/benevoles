@@ -5,11 +5,13 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { slotAfter } from "@/lib/shift-quick-edit"
+import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
 
 /**
  * POST /api/admin/shifts/[id]/duplicate (#398): a copy of the shift right after it, same length,
  * open, without registrations. Every setting is copied (label, capacity, minimum of people,
- * waitlist, minimum age, practical info, notes, colour).
+ * waitlist, minimum age, practical info, notes); the settings of the poste (colour, limit, access,
+ * cumulable, order) are the poste's (#1002), or the source's when it is its poste's only shift.
  */
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -20,6 +22,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const source = await db.shift.findFirst({ where: { id } })
   if (!source) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
 
+  const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(source.eventId, source.roleName), select: ROLE_SETTINGS_SELECT }), source.roleName)
   const slot = slotAfter({ date: source.date.toISOString().slice(0, 10), startTime: source.startTime, endTime: source.endTime })
   const shift = await db.shift.create({
     data: {
@@ -48,6 +51,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       maxPerVolunteer: source.maxPerVolunteer,
       reservedTags: source.reservedTags,
       overlapAllowed: source.overlapAllowed,
+      ...poste,
     },
   })
 

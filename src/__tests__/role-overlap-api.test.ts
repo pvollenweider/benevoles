@@ -108,16 +108,17 @@ describe("a shift created in a cumulable role takes its option", () => {
     expect(create.mock.calls[0][0].data.overlapAllowed).toBe(true)
     expect(findMany.mock.calls[0][0].where).toEqual({ eventId: "evt-a", roleName: "Secours", status: { not: "cancelled" } })
 
+    // A new role: nothing set, the column's default (off) applies.
     findMany.mockResolvedValueOnce([])
     await POST(request("/api/admin/shifts", "POST", { ...shiftBody, roleName: "Nouveau" }))
-    expect(create.mock.calls[1][0].data.overlapAllowed).toBe(false)
+    expect(create.mock.calls[1][0].data).not.toHaveProperty("overlapAllowed")
   })
 
   it("ignores an overlapAllowed sent with the shift: the role decides", async () => {
     const { POST } = await import("@/app/api/admin/shifts/route")
     findMany.mockResolvedValueOnce([])
     await POST(request("/api/admin/shifts", "POST", { ...shiftBody, overlapAllowed: true }))
-    expect(create.mock.calls[0][0].data.overlapAllowed).toBe(false)
+    expect(create.mock.calls[0][0].data).not.toHaveProperty("overlapAllowed")
   })
 
   it("POST /api/admin/shifts/series sets it on every shift of the series", async () => {
@@ -139,14 +140,13 @@ describe("a shift moved to another role, or duplicated", () => {
     event: { id: "evt-a", title: "Fête", slug: "fete", organizationId: "org-a", startDate: new Date("2026-07-04"), endDate: new Date("2026-07-05"), organization: { slug: "o" } },
     registrations: [],
   }
-  const count = vi.fn()
   const findMany = vi.fn()
   beforeEach(() => {
     vi.clearAllMocks()
     update.mockImplementation(async ({ data }: { data: object }) => ({ ...before, ...data }))
     create.mockImplementation(async ({ data }: { data: object }) => ({ id: "copy", ...data }))
     requireOrgSessionMock.mockResolvedValue({
-      db: { shift: { findFirst: vi.fn().mockResolvedValue(before), count, findMany, create }, $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }) },
+      db: { shift: { findFirst: vi.fn().mockResolvedValue(before), findMany, create }, $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }) },
       organizationId: "org-a", session: {},
     })
   })
@@ -154,7 +154,6 @@ describe("a shift moved to another role, or duplicated", () => {
 
   it("takes the option of the role it joins", async () => {
     const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
-    count.mockResolvedValueOnce(3)
     findMany.mockResolvedValueOnce([{ roleName: "Secours", overlapAllowed: true }])
     expect((await PATCH(request("/api/admin/shifts/s1", "PATCH", { roleName: "Secours" }), params)).status).toBe(200)
     expect(update.mock.calls[0][0].data).toMatchObject({ roleName: "Secours", overlapAllowed: true })
@@ -162,11 +161,11 @@ describe("a shift moved to another role, or duplicated", () => {
 
   it("keeps its own option when the role is new to the event, and when the role does not change", async () => {
     const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
-    count.mockResolvedValueOnce(0)
+    findMany.mockResolvedValueOnce([])
     await PATCH(request("/api/admin/shifts/s1", "PATCH", { roleName: "Nouveau" }), params)
     expect(update.mock.calls[0][0].data).not.toHaveProperty("overlapAllowed")
     await PATCH(request("/api/admin/shifts/s1", "PATCH", { roleName: "Buvette", capacity: 3 }), params)
-    expect(count).toHaveBeenCalledTimes(1)
+    expect(findMany).toHaveBeenCalledTimes(1)
     expect(update.mock.calls[1][0].data).not.toHaveProperty("overlapAllowed")
   })
 
@@ -174,6 +173,7 @@ describe("a shift moved to another role, or duplicated", () => {
     const { POST } = await import("@/app/api/admin/shifts/[id]/duplicate/route")
     const db = (await requireOrgSessionMock()).db
     db.shift.findFirst.mockResolvedValueOnce({ ...before, overlapAllowed: true, reservedTags: [] })
+    findMany.mockResolvedValueOnce([{ roleName: "Buvette", overlapAllowed: true }])
     expect((await POST(request("/api/admin/shifts/s1/duplicate", "POST"), params)).status).toBe(201)
     expect(create.mock.calls[0][0].data.overlapAllowed).toBe(true)
   })
