@@ -54,6 +54,8 @@ export default function EventHeader({ facts, title, dates, location, stage, unli
   useLayoutEffect(() => {
     if (shownPath.current === pathname) return
     shownPath.current = pathname
+    // A link to an anchor (« Supprimer définitivement… »): the anchor's heading takes the focus.
+    if (window.location.hash && document.getElementById(window.location.hash.slice(1))) return
     if (isFocusDropped(document.activeElement)) document.getElementById("page-heading")?.focus()
   }, [pathname])
 

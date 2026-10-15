@@ -73,7 +73,7 @@ export default function PublishToggle({
         >
           {requested ? "Demande envoyée" : "Demander la publication"}{loading && <span className="sr-only"> (en cours)</span>}
         </button>
-        <p id={`publish-request-${eventId}`} role="status" className={requested ? statusBoxClass("success") : "sr-only"}>{requested ?? ""}</p>
+        <p id={`publish-request-${eventId}`} aria-live="polite" aria-atomic="true" className={requested ? statusBoxClass("success") : "sr-only"}>{requested ?? ""}</p>
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
       </div>
     )

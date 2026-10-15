@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 
 /**
@@ -17,10 +17,10 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
   const [confirming, setConfirming] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState("")
   const openerRef = useRef<HTMLButtonElement>(null)
   const confirmRef = useRef<HTMLButtonElement>(null)
   const restoreFocus = useRef(false)
+  const id = useId()
 
   const isArchived = currentStatus === "archived"
 
@@ -49,7 +49,6 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
       })
       if (!res.ok) throw new Error()
       setConfirming(false)
-      setMessage("Événement archivé.")
       onDone?.("Événement archivé.")
       router.refresh()
     } catch {
@@ -65,16 +64,16 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
         (confirming ? (
           <div
             role="alertdialog"
-            aria-labelledby="archive-confirm-label"
-            aria-describedby="archive-confirm-desc"
+            aria-labelledby={`${id}-label`}
+            aria-describedby={`${id}-desc`}
             onKeyDown={(e) => {
               // preventDefault: the « ⋯ » panel around leaves an Escape already handled here alone.
               if (e.key === "Escape") { e.preventDefault(); cancel() }
             }}
             className="flex flex-col gap-2 bg-yellow-50 border border-yellow-300 rounded-xl px-3 py-2"
           >
-            <span id="archive-confirm-label" className="text-sm text-yellow-900 font-semibold">Archiver cet événement ?</span>
-            <span id="archive-confirm-desc" className="text-xs text-yellow-900">
+            <span id={`${id}-label`} className="text-sm text-yellow-900 font-semibold">Archiver cet événement ?</span>
+            <span id={`${id}-desc`} className="text-xs text-yellow-900">
               Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement depuis ses réglages.
             </span>
             <div className="flex items-center gap-2">
@@ -83,7 +82,7 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
                 type="button"
                 onClick={() => { if (!loading) void archive() }}
                 aria-disabled={loading || undefined}
-                className="text-sm min-h-9 bg-yellow-700 text-white px-3 py-1 rounded-full font-medium hover:bg-yellow-800 aria-disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+                className="text-sm min-h-9 bg-yellow-800 text-white px-3 py-1 rounded-full font-medium hover:bg-yellow-900 aria-disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
                 {loading ? "Archivage…" : "Confirmer"}
               </button>
@@ -107,7 +106,6 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
             Archiver
           </button>
         ))}
-      <p role="status" className="sr-only">{message}</p>
       {error && <p role="alert" className="text-xs text-red-700">{error}</p>}
     </div>
   )

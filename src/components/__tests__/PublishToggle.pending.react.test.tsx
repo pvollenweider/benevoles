@@ -21,7 +21,8 @@ describe("PublishToggle in a space awaiting validation (#810)", () => {
     const button = screen.getByRole("button", { name: "Demander la publication" })
     button.focus()
     fireEvent.click(button)
-    expect(await screen.findByText(PUBLICATION_REQUESTED_MESSAGE)).toHaveAttribute("role", "status")
+    // A polite live region, not role="status": in the event header it must not add a second status region to the page.
+    expect(await screen.findByText(PUBLICATION_REQUESTED_MESSAGE)).toHaveAttribute("aria-live", "polite")
     expect(fetch).toHaveBeenCalledWith("/api/admin/events/evt-a/publication-request", { method: "POST" })
     expect(button).toHaveFocus()
     expect(button).toHaveAccessibleName("Demande envoyée")
