@@ -97,6 +97,28 @@ describe("PATCH /api/public/registrations/[token]/answers", () => {
     expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
   })
 
+  it("a parent changed to « Non » clears its follow-up, sent or not, logged like any change (#1016)", async () => {
+    const guests = { id: "guests", eventId: "e1", label: "Combien de personnes ?", type: "number", options: [], required: true, position: 1, archivedAt: null, parentId: "meal", showIfValues: ["Oui"], answers: [{ volunteerId: "v1", values: ["3"] }] }
+    questionFindMany.mockImplementation(async (args: Args) => [...database(args), { ...guests, answers: guests.answers.map(({ values }) => ({ values })) }])
+    const res = await patch({ answers: { meal: "Non" } })
+    expect(res.status).toBe(200)
+    expect((await res.json()).changed).toBe(2)
+    expect(deleteMany).toHaveBeenCalledWith({ where: { questionId: "guests", volunteerId: "v1" } })
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ entityId: "guests", changes: { question: { from: "Combien de personnes ?", to: "Combien de personnes ?" }, answer: { from: "3", to: null } } }))
+    // Sent with a forged value while hidden: ignored, still cleared, never refused for being required.
+    vi.clearAllMocks()
+    findFirst.mockResolvedValue(linkRegistration)
+    findMany.mockResolvedValue([liveShift])
+    volunteerFindFirst.mockResolvedValue({ id: "v1" })
+    queueAnswerChangeNotifications.mockResolvedValue(["n1"])
+    const forged = await patch({ answers: { meal: "Non", guests: "7" } })
+    expect(forged.status).toBe(200)
+    expect(upsert).not.toHaveBeenCalledWith(expect.objectContaining({ where: { questionId_volunteerId: { questionId: "guests", volunteerId: "v1" } } }))
+    // Only the follow-up sent: judged on the stored « Oui », its required answer enforced.
+    const empty = await patch({ answers: { guests: "" } })
+    expect(empty.status).toBe(400)
+  })
+
   it("clears an optional answer, and only touches the questions sent", async () => {
     const res = await patch({ answers: { meal: "" } })
     expect(res.status).toBe(200)

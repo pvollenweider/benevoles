@@ -5,6 +5,7 @@ import { z } from "zod"
 import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type RecurrenceInput, type Weekday } from "./shift-recurrence"
 import { civilDateSchema } from "./civil-date"
 import { duplicatedQuestionRole } from "./question-role"
+import { duplicatedParent } from "./question-follow-up"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -101,7 +102,7 @@ export type DuplicableEvent = {
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
-  questions?: { label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null }[]
+  questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[] }[]
   leaders: { roleName: string; name: string; email: string }[]
   recurrences?: DuplicableRecurrence[]
 }
@@ -162,7 +163,11 @@ export function resolveChoices(copy: DuplicateOptions["copy"]): CopyChoices {
 }
 
 /** Everything the route writes for the copy, and the counts the form shows beforehand. */
-export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions) {
+/**
+ * `newId` gives each copied question its id beforehand, so that a follow-up (#1016) points to the
+ * copy of its parent in the same insert.
+ */
+export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions, newId: () => string = () => globalThis.crypto.randomUUID()) {
   const copy = resolveChoices(options.copy)
   const offsetDays = dayOffset(source.startDate, options.startDate)
   const shows = Array.isArray(source.showSchedule) ? source.showSchedule.filter(isShow) : []
@@ -202,9 +207,28 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     shifts,
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
-    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position, minValue: q.minValue ?? null, maxValue: q.maxValue ?? null, roleName: duplicatedQuestionRole(q.roleName, copiedRoles) })) : [],
+    questions: copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId) : [],
     leaders: copy.leaders ? source.leaders : [],
   }
+}
+
+/**
+ * The copied questions (#483), with their poste when the copy has it (#984) and each follow-up
+ * (#1016) pointing to the copy of its parent; a follow-up whose parent is not copied is left out,
+ * as it would be asked to everyone without the question it depends on.
+ */
+function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]>, copiedRoles: Set<string>, newId: () => string) {
+  const ids = new Map(questions.filter((q) => q.id).map((q) => [q.id!, newId()]))
+  return questions
+    .filter((q) => !q.parentId || ids.has(q.parentId))
+    .map((q) => ({
+      id: q.id ? ids.get(q.id)! : newId(),
+      label: q.label, type: q.type, options: q.options, required: q.required, position: q.position,
+      minValue: q.minValue ?? null, maxValue: q.maxValue ?? null,
+      roleName: duplicatedQuestionRole(q.roleName, copiedRoles),
+      parentId: duplicatedParent(q.parentId, ids),
+      showIfValues: q.parentId ? (q.showIfValues ?? []) : [],
+    }))
 }
 
 export type DuplicateCounts = { shifts: number; pages: number; leaders: number; hasSettings: boolean }

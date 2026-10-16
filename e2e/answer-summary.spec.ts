@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { randomIp } from "./helpers/public-signup"
 import { waitForHydration } from "./helpers/hydration"
+import { getMessageText, waitForMessage } from "./helpers/mailpit"
 
 /**
  * « Synthèse des réponses » of an event's Questions page (#686): one captioned table per question,
@@ -147,4 +148,101 @@ test("a « Nombre » question is summed: one volunteer answers 3, another 2, the
   const lines = (await csv.text()).replace(/^﻿/, "").split("\r\n")
   expect(lines).toContain("Combien de personnes ?;Total;5;0")
   expect(lines).toContain("Combien de personnes ?;Nombre de réponses;2;0")
+})
+
+test("a follow-up « Nombre » shown only after « Oui », summed for those concerned, cleared on /my after « Non » (#1016)", async ({ page }) => {
+  test.setTimeout(150_000)
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events/)
+
+  const stamp = Date.now()
+  const post = async (url: string, body: unknown) => {
+    const res = await page.request.post(url, { data: body })
+    expect(res.ok(), `${url}: ${res.status()} ${await res.text()}`).toBeTruthy()
+    return res.json()
+  }
+  const event = await post("/api/admin/events", { title: `E2E Suivi ${stamp}`, startDate: "2030-10-03", endDate: "2030-10-03", publicStatus: "draft" })
+  await post("/api/admin/shifts", { eventId: event.id, roleName: "Cuisine", label: "Cuisine", date: "2030-10-03", startTime: "10:00", endTime: "12:00", capacity: 5 })
+  await post(`/api/admin/events/${event.id}/questions`, { label: "Tu manges avec nous vendredi soir ?", type: "yesno", required: true })
+
+  // The organiser adds the follow-up in the editor: a number, shown only after « Oui ».
+  await page.goto(`/admin/events/${event.id}/questions`)
+  const add = page.getByRole("button", { name: "Ajouter une question" })
+  await waitForHydration(add)
+  await add.click()
+  await page.getByLabel(/Question posée aux bénévoles/).fill("Combien de personnes ?")
+  await page.getByLabel("Type de réponse").selectOption({ label: "Nombre" })
+  await page.getByLabel("Réponse obligatoire").check()
+  await page.getByRole("combobox", { name: "Afficher seulement si…" }).selectOption({ label: "Tu manges avec nous vendredi soir ?" })
+  await page.getByRole("group", { name: /Réponses qui affichent cette question/ }).getByRole("checkbox", { name: "Oui" }).check()
+  await page.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "placée après" })).toContainText("Elle est placée après « Tu manges avec nous vendredi soir ? »")
+  await expect(page.getByText("Question de suivi · Si « Oui » à « Tu manges avec nous vendredi soir ? »")).toBeVisible()
+  expect(await seriousViolations(page)).toEqual([])
+  const publish = await page.request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: "published" } })
+  expect(publish.ok(), await publish.text()).toBeTruthy()
+
+  /** A volunteer on the public form: the follow-up appears after « Oui » only. */
+  async function signUp(who: string, meal: "Oui" | "Non", guests?: string): Promise<string> {
+    const volunteer = await page.context().browser()!.newPage({ extraHTTPHeaders: { "x-forwarded-for": randomIp() }, locale: "fr-CH" })
+    await volunteer.goto(`/${event.slug}?org=default`)
+    const pick = volunteer.getByRole("button", { name: /Cuisine.*: sélectionner/ }).first()
+    await waitForHydration(pick)
+    await pick.click()
+    await volunteer.getByRole("button", { name: /^Continuer/ }).first().click()
+    const email = `e2e-suivi-${who.toLowerCase()}-${stamp}@example.com`
+    await volunteer.getByLabel("Prénom *", { exact: true }).fill("E2E")
+    await volunteer.getByLabel("Nom *", { exact: true }).fill(`${who}${stamp}`)
+    await volunteer.getByLabel("Email *", { exact: true }).fill(email)
+    const followUp = volunteer.getByRole("textbox", { name: "Combien de personnes ?" })
+    await expect(followUp).toHaveCount(0)
+    await volunteer.getByRole("radio", { name: meal, exact: true }).check()
+    if (meal === "Oui") {
+      await expect(followUp).toBeVisible()
+      await followUp.fill(guests ?? "")
+    } else {
+      await expect(followUp).toHaveCount(0)
+    }
+    await volunteer.getByRole("button", { name: "convention des bénévoles" }).click()
+    await volunteer.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
+    await volunteer.getByLabel(/J.accepte que l.association/).check()
+    await volunteer.getByRole("button", { name: "Confirmer mon inscription" }).click()
+    await expect(volunteer).toHaveURL(new RegExp(`/${event.slug}/success`))
+    await volunteer.close()
+    const mail = await waitForMessage(`to:"${email}"`)
+    return (await getMessageText(mail.ID)).match(/\/my\/([\w-]+)/)?.[1] ?? ""
+  }
+  const alice = await signUp("Alice", "Oui", "3")
+  await signUp("Bruno", "Non")
+
+  await page.goto(`/admin/events/${event.id}/questions`)
+  const summary = page.getByRole("region", { name: "Synthèse des réponses" })
+  const table = summary.getByRole("table", { name: /^Combien de personnes \?/ })
+  await expect(table).toContainText("Posée seulement si « Oui » à « Tu manges avec nous vendredi soir ? » : 1 bénévole confirmé concerné.")
+  // Bruno said « Non »: not counted as « Sans réponse ».
+  await expect(table.getByRole("row")).toHaveText([/Réponse/, /^Total\s*3$/, /^Nombre de réponses\s*1$/, /^Sans réponse\s*0$/])
+  expect(await seriousViolations(page)).toEqual([])
+
+  // Alice changes « Oui » to « Non » on her personal page: the follow-up goes, and its answer with it.
+  expect(alice).toBeTruthy()
+  await page.goto(`/my/${alice}`)
+  const answers = page.getByRole("region", { name: "Mes réponses" })
+  await expect(answers.getByRole("definition")).toHaveText(["Oui", "3"])
+  const edit = answers.getByRole("button", { name: "Modifier mes réponses" })
+  await waitForHydration(edit)
+  await edit.click()
+  await expect(answers.getByRole("textbox", { name: "Combien de personnes ?" })).toHaveValue("3")
+  await answers.getByRole("radio", { name: "Non", exact: true }).check()
+  await expect(answers.getByRole("textbox", { name: "Combien de personnes ?" })).toHaveCount(0)
+  await answers.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(answers.getByRole("status")).toHaveText("Réponses enregistrées.")
+  await expect(answers.getByRole("definition")).toHaveText(["Non"])
+
+  await page.goto(`/admin/events/${event.id}/questions`)
+  await expect(page.getByRole("table", { name: /^Combien de personnes \?/ }).getByRole("row")).toHaveText([/Réponse/, /^Total\s*0$/, /^Nombre de réponses\s*0$/, /^Sans réponse\s*0$/])
+  const questions = await (await page.request.get(`/api/admin/events/${event.id}/questions`)).json()
+  expect(questions.find((q: { label: string }) => q.label === "Combien de personnes ?")._count.answers).toBe(0)
 })

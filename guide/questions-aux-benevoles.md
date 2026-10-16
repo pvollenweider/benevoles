@@ -34,6 +34,19 @@ Rattacher une question à un poste ne change pas le formulaire : elle reste pos�
 
 Une question qui a déjà des réponses garde son type, et les choix déjà retenus ne peuvent pas être retirés (créez une nouvelle question si besoin). **Retirer** une question qui a des réponses la sort du formulaire, mais ses réponses restent dans les inscriptions et les exports jusqu'à la suppression de l'événement ; sans réponse, elle est simplement supprimée. Une copie de l'événement reprend les questions (sans les réponses) avec les réglages, type et bornes compris ; une question rattachée à un poste le reste si la copie reprend les créneaux de ce poste.
 
+## Question de suivi
+
+Une question peut n'être posée qu'après une réponse donnée à une autre question, par exemple « Est-ce que tu manges avec nous le vendredi soir ? », puis seulement si « Oui », « Combien de personnes ? ». Dans **Modifier** (ou à l'ajout), choisissez la question sous **Afficher seulement si…**, puis cochez sous **Réponses qui affichent cette question** la ou les réponses qui la font apparaître. Par défaut, **Toujours (question posée à tous)**.
+
+- Seule une question **oui / non**, **choix unique** ou **choix multiple** du même événement peut afficher une question de suivi. Pour un choix multiple, il suffit que le bénévole ait coché l'une des réponses choisies.
+- Un seul niveau : une question de suivi ne peut pas avoir elle-même de question de suivi, et une question qui en a une ne peut pas dépendre d'une autre.
+- Sur le formulaire, la question de suivi apparaît juste après sa question, légèrement en retrait, dès que la réponse correspond ; sinon elle reste cachée et n'est pas obligatoire, même cochée **Réponse obligatoire**.
+- Si le bénévole change ensuite sa réponse, depuis sa page personnelle ou en s'inscrivant à d'autres créneaux, et que la question de suivi ne s'applique plus, sa réponse à la question de suivi est effacée. Ce changement est noté dans l'historique et signalé comme les autres modifications de réponses.
+- Dans la liste, la question de suivi est placée sous sa question, avec sa condition. **Monter** et **Descendre** déplacent une question avec ses questions de suivi ; une question de suivi ne change de place que parmi celles de la même question.
+- **Retirer** une question retire aussi ses questions de suivi (leurs réponses restent dans les exports, comme celles de la question).
+- Tant qu'une question a une question de suivi, elle reste une question oui / non ou à choix et garde les réponses qui l'affichent. Une question de suivi qui a déjà des réponses garde sa question : vous pouvez seulement ajouter des réponses qui l'affichent, ou la poser à tous.
+- Les questions de suivi comptent dans la limite de 5 questions. Une copie de l'événement les reprend avec leur condition.
+
 Ne demandez que ce qui est nécessaire à l'organisation, et pas d'information sensible (santé, religion, opinions…) : les réponses sont des données personnelles.
 
 ## Synthèse des réponses
@@ -44,6 +57,8 @@ Sous la liste des questions, **Synthèse des réponses** compte les réponses, p
 - **oui / non** : les deux totaux, puis **Sans réponse** ;
 - **nombre** : le **Total** (la somme des nombres indiqués), le **Nombre de réponses**, puis **Sans réponse**. Les bénévoles en attente ont leur propre total, dans la colonne **En attente** ;
 - **texte court** : les réponses regroupées sans tenir compte des majuscules, des accents ni des espaces autour (« Végétarien » et « vegetarien » comptent ensemble, sous l'orthographe la plus saisie), la plus fréquente en premier, puis **Sans réponse**.
+
+Une question de suivi a son tableau juste après celui de sa question. Elle ne compte que les bénévoles à qui elle a été posée (ceux dont la réponse l'affiche) : sa légende en donne le nombre, et **Sans réponse** n'y compte pas ceux qui ont répondu « Non ». Dans le fichier CSV, sa condition suit son libellé.
 
 Qui est compté : chaque bénévole qui a au moins un créneau confirmé sur l'événement, une seule fois quel que soit son nombre de créneaux. Les bénévoles sans créneau confirmé mais en liste d'attente, avec une place proposée ou une demande à valider sont comptés à part, dans la colonne **En attente** : une marge pour la commande. Les inscriptions annulées ou refusées ne comptent pas, même si la réponse reste enregistrée. Un choix retiré de la question après avoir été retenu reste compté, après les choix actuels, avec la mention « (choix retiré) ». Les questions retirées n'apparaissent pas.
 

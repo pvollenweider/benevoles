@@ -772,11 +772,20 @@ model EventQuestion {
   // renamed with the role, cleared when the role is deleted (src/app/api/admin/events/[id]/roles/
   // [roleName]/route.ts). Null = the organisers, as before. The question stays asked to everyone.
   roleName   String?
+  // Follow-up question (#1016): shown only when the volunteer's answer to the parent question (a
+  // yes/no or choice question of the same event, itself not a follow-up) is one of showIfValues;
+  // hidden and not required otherwise, its stored answer cleared when the parent answer stops
+  // matching. One level only. Removing a parent removes its follow-ups too (deleted when
+  // unanswered, archived otherwise), in the API: SetNull is only the database's safety net.
+  parentId     String?
+  showIfValues String[]  @default([])
   archivedAt DateTime?
   createdAt  DateTime  @default(now())
 
-  event   Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  answers QuestionAnswer[]
+  event     Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  parent    EventQuestion?   @relation("QuestionFollowUps", fields: [parentId], references: [id], onDelete: SetNull)
+  followUps EventQuestion[]  @relation("QuestionFollowUps")
+  answers   QuestionAnswer[]
 
   @@index([eventId, position])
 }

@@ -62,7 +62,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       isListed: true,
       shifts: { create: plan.shifts },
       pages: { create: plan.pages },
-      questions: { create: plan.questions },
+      // One insert: a follow-up (#1016) points to its parent's copy, whose id the plan gave.
+      questions: { createMany: { data: plan.questions } },
     },
   })
 

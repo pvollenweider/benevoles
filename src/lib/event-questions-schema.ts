@@ -30,6 +30,10 @@ export const questionSchema = z
     maxValue: z.number({ error: "Le maximum doit être un nombre entier." }).int("Le maximum doit être un nombre entier.").min(0, "Le maximum ne peut pas être négatif.").max(NUMBER_ANSWER_MAX, `Le maximum ne peut pas dépasser ${NUMBER_ANSWER_MAX}.`).nullable().optional(),
     /** Poste the question concerns (#984, part 3); "" or null for none, absent to keep it on an edit. */
     roleName: z.string().trim().max(100).nullable().optional(),
+    /** Parent question of a follow-up (#1016); "" or null for none, absent to keep it on an edit. */
+    parentId: z.string().trim().max(40).nullable().optional(),
+    /** The parent's answers that show the follow-up; checked against the parent by the route. */
+    showIfValues: z.array(z.string().trim().min(1).max(60)).max(12).optional(),
   })
   .transform((q) => ({
     ...q,
@@ -38,6 +42,8 @@ export const questionSchema = z
     minValue: q.type === "number" ? (q.minValue ?? 0) : null,
     maxValue: q.type === "number" ? (q.maxValue ?? null) : null,
     ...(q.roleName !== undefined ? { roleName: q.roleName || null } : {}),
+    // Without a parent, no accepted values; absent, both kept as they are on an edit.
+    ...(q.parentId !== undefined ? { parentId: q.parentId || null, showIfValues: q.parentId ? [...new Set(q.showIfValues ?? [])] : [] } : { showIfValues: undefined }),
   }))
   .refine((q) => !(q.type === "single" || q.type === "multiple") || q.options.length >= 2, { message: "Donnez au moins deux choix.", path: ["options"] })
   .refine((q) => q.maxValue === null || q.minValue === null || q.minValue <= q.maxValue, { message: "Le maximum doit être au moins égal au minimum.", path: ["maxValue"] })

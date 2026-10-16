@@ -53,13 +53,82 @@ describe("questions admin API", () => {
     const answered = db({ findFirst: vi.fn().mockResolvedValue({ ...q, answers: [{ values: ["S"] }] }) })
     guard.mockResolvedValue({ db: answered, session: {} })
     const { DELETE } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
-    expect(await (await DELETE(json("DELETE"), params)).json()).toEqual({ archived: true })
+    expect(await (await DELETE(json("DELETE"), params)).json()).toEqual({ archived: true, followUps: [] })
     expect(answered.eventQuestion.update.mock.calls[0][0].data.archivedAt).toBeInstanceOf(Date)
     expect(answered.eventQuestion.delete).not.toHaveBeenCalled()
     const empty = db()
     guard.mockResolvedValue({ db: empty, session: {} })
-    expect(await (await DELETE(json("DELETE"), params)).json()).toEqual({ archived: false })
+    expect(await (await DELETE(json("DELETE"), params)).json()).toEqual({ archived: false, followUps: [] })
     expect(empty.eventQuestion.delete).toHaveBeenCalled()
+  })
+
+  it("creates a follow-up of a yes/no question, placed right after it and logged with its condition (#1016)", async () => {
+    const active = [
+      { id: "meal", label: "Repas ?", type: "yesno", options: [], parentId: null, showIfValues: [], position: 0 },
+      { id: "size", label: "Taille", type: "single", options: ["S", "M"], parentId: null, showIfValues: [], position: 1 },
+    ]
+    const created = { ...q, id: "count", label: "Combien ?", type: "number", options: [], parentId: "meal", showIfValues: ["Oui"], position: 2 }
+    const findMany = vi.fn().mockResolvedValueOnce(active).mockResolvedValueOnce([...active, created])
+    const d = db({ count: vi.fn().mockResolvedValue(2), findMany, create: vi.fn().mockResolvedValue(created), findFirst: vi.fn().mockResolvedValue({ ...created, position: 1 }) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    const res = await POST(json("POST", { label: "Combien ?", type: "number", parentId: "meal", showIfValues: ["Oui", "Oui"] }), params)
+    expect(res.status).toBe(201)
+    expect(d.eventQuestion.create.mock.calls[0][0].data).toMatchObject({ parentId: "meal", showIfValues: ["Oui"] })
+    // Positions rewritten: the follow-up second, « Taille » third.
+    expect(d.eventQuestion.update.mock.calls.map((c: { where: { id: string }; data: { position: number } }[]) => [c[0].where.id, c[0].data.position])).toEqual([["count", 1], ["size", 2]])
+    expect(logEvent.mock.calls[0][0].changes.condition).toEqual({ from: null, to: "Si « Oui » à « Repas ? »" })
+  })
+
+  it("refuses a follow-up of a follow-up, of a text question, or without an accepted answer (#1016)", async () => {
+    const active = [
+      { id: "meal", label: "Repas ?", type: "yesno", options: [], parentId: null, showIfValues: [], position: 0 },
+      { id: "count", label: "Combien ?", type: "number", options: [], parentId: "meal", showIfValues: ["Oui"], position: 1 },
+      { id: "note", label: "Remarque", type: "text", options: [], parentId: null, showIfValues: [], position: 2 },
+    ]
+    const d = db({ findMany: vi.fn().mockResolvedValue(active) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    for (const body of [{ parentId: "count", showIfValues: ["Oui"] }, { parentId: "note", showIfValues: ["x"] }, { parentId: "meal", showIfValues: [] }, { parentId: "meal", showIfValues: ["Peut-être"] }]) {
+      expect((await POST(json("POST", { label: "X", type: "text", ...body }), params)).status).toBe(400)
+    }
+    expect(d.eventQuestion.create).not.toHaveBeenCalled()
+  })
+
+  it("a parent keeps its type and the choices its follow-ups use; an answered follow-up keeps its parent (#1016)", async () => {
+    const parent = { ...q, id: "size", type: "single", options: ["S", "M"], parentId: null, showIfValues: [], answers: [], followUps: [{ id: "f", label: "Combien ?", showIfValues: ["S"], _count: { answers: 0 } }] }
+    guard.mockResolvedValue({ db: db({ findFirst: vi.fn().mockResolvedValue(parent) }), session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    expect((await PATCH(json("PATCH", { label: "Taille", type: "text" }), params)).status).toBe(409)
+    expect((await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["M", "L"] }), params)).status).toBe(409)
+    expect((await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["S", "M", "L"] }), params)).status).toBe(200)
+    const answered = { ...q, id: "f", type: "number", options: [], parentId: "size", showIfValues: ["S"], answers: [{ values: ["2"] }], followUps: [] }
+    const active = [{ id: "size", label: "Taille", type: "single", options: ["S", "M"], parentId: null, showIfValues: [], position: 0 }, { id: "meal", label: "Repas ?", type: "yesno", options: [], parentId: null, showIfValues: [], position: 1 }]
+    guard.mockResolvedValue({ db: db({ findFirst: vi.fn().mockResolvedValue(answered), findMany: vi.fn().mockResolvedValue(active) }), session: {} })
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "meal", showIfValues: ["Oui"] }), params)).status).toBe(400)
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "size", showIfValues: ["M"] }), params)).status).toBe(400)
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "size", showIfValues: ["S", "M"] }), params)).status).toBe(200)
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: null }), params)).status).toBe(200)
+  })
+
+  it("removing a parent removes its follow-ups: deleted when unanswered, archived otherwise (#1016)", async () => {
+    const parent = { ...q, id: "meal", answers: [{ values: ["Oui"] }], followUps: [{ id: "count", label: "Combien ?", showIfValues: ["Oui"], _count: { answers: 2 } }, { id: "diet", label: "Régime ?", showIfValues: ["Oui"], _count: { answers: 0 } }] }
+    const d = db({ findFirst: vi.fn().mockResolvedValue(parent) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { DELETE } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const res = await DELETE(json("DELETE"), params)
+    expect(await res.json()).toEqual({ archived: true, followUps: [{ id: "count", label: "Combien ?", archived: true }, { id: "diet", label: "Régime ?", archived: false }] })
+    expect(d.eventQuestion.update.mock.calls.map((c: { where: { id: string } }[]) => c[0].where.id)).toEqual(["count", "q1"])
+    expect(d.eventQuestion.delete.mock.calls.map((c: { where: { id: string } }[]) => c[0].where.id)).toEqual(["diet"])
+    expect(logEvent).toHaveBeenCalledTimes(3)
+  })
+
+  it("reorders keeping each follow-up right after its parent (#1016)", async () => {
+    const d = db({ findMany: vi.fn().mockResolvedValue([{ id: "a", parentId: null }, { id: "p", parentId: null }, { id: "f", parentId: "p" }]) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/reorder/route")
+    const res = await POST(json("POST", { ids: ["f", "a", "p"] }), params)
+    expect((await res.json()).ids).toEqual(["a", "p", "f"])
   })
 
   it("answers 404 for a question or event of another organisation (scoped client)", async () => {

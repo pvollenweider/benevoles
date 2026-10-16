@@ -24,7 +24,7 @@ import {
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
-import { checkAnswers, planAnswerWrites } from "@/lib/event-questions"
+import { checkAnswers, consistentAdditions, planAnswerWrites } from "@/lib/event-questions"
 import { reservedRoles } from "@/lib/role-reservation"
 import {
   answersRefusal,
@@ -51,7 +51,7 @@ import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
-import { myAnswersQuery } from "@/lib/my-answers"
+import { myAnswersQuery, storedAnswers } from "@/lib/my-answers"
 import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
@@ -171,7 +171,7 @@ export async function POST(req: Request) {
   // Custom questions (#483), checked here whatever the page did; stored with the registration.
   const questions = await prisma.eventQuestion.findMany({
     where: { eventId, archivedAt: null },
-    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true },
   })
   const answerCheck = checkAnswers(questions, parsed.data.answers)
   if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
@@ -367,7 +367,7 @@ export async function POST(req: Request) {
       // changed is written, as on the personal page (#997).
       if (personal && !createdNow && !matchErased) {
         const updates = await savePersonalChanges(tx, {
-          eventId, volunteerId, event, stored: personal.stored, submitted: { firstName, lastName, phone }, raw: parsed.data.answers ?? {}, values: answerCheck.values,
+          eventId, volunteerId, event, stored: personal.stored, submitted: { firstName, lastName, phone }, raw: parsed.data.answers ?? {}, values: answerCheck.values, hidden: answerCheck.hidden,
         })
         return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates }
       }
@@ -382,9 +382,14 @@ export async function POST(req: Request) {
           update: { values },
         })
       }
-      if (writes.addMissing.length > 0) {
+      // A follow-up (#1016) is added only when the member's stored parent answer, which an
+      // unproven sign-up doesn't replace, shows it.
+      const additions = writes.addMissing.length > 0 && questions.some((q) => q.parentId)
+        ? consistentAdditions(questions, writes.addMissing, await storedAnswerMap(tx, eventId, volunteerId))
+        : writes.addMissing
+      if (additions.length > 0) {
         await tx.questionAnswer.createMany({
-          data: writes.addMissing.map(([questionId, values]) => ({ questionId, eventId, volunteerId, values })),
+          data: additions.map(([questionId, values]) => ({ questionId, eventId, volunteerId, values })),
           skipDuplicates: true,
         })
       }
@@ -503,6 +508,12 @@ export async function POST(req: Request) {
 
 type PersonalTx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
 
+/** A member's stored answers on the event, by question id (#1016). */
+async function storedAnswerMap(tx: PersonalTx, eventId: string, volunteerId: string): Promise<Map<string, string[]>> {
+  const rows = await tx.questionAnswer.findMany({ where: { eventId, volunteerId }, select: { questionId: true, values: true } })
+  return new Map(rows.filter((r) => r.values.length > 0).map((r) => [r.questionId, r.values]))
+}
+
 /**
  * What a sign-up from the personal link changes (#1013), inside the sign-up's transaction, once its
  * registrations exist:
@@ -523,6 +534,8 @@ async function savePersonalChanges(tx: PersonalTx, input: {
   submitted: { firstName: string; lastName: string; phone?: string }
   raw: Record<string, unknown>
   values: Map<string, string[]>
+  /** Follow-ups (#1016) the checked answers don't show: their stored answer is cleared. */
+  hidden: string[]
 }): Promise<{ contact: ContactChange[]; answers: AnswerChange[] }> {
   const { eventId, volunteerId } = input
   const contact = contactChanges(input.stored, { ...input.submitted, phone: input.submitted.phone ?? "" })
@@ -545,14 +558,19 @@ async function savePersonalChanges(tx: PersonalTx, input: {
   })
   const edit = answersEditState({ registrations: live, setting: input.event, timeZone: orgTimeZone(input.event.organization), now: new Date() })
   if (!edit.allowed) {
-    const missing = [...input.values].filter(([id]) => !questions.find((q) => q.id === id)?.answers[0]?.values.length)
+    const stored = storedAnswers(questions)
+    const missing = consistentAdditions(questions, [...input.values].filter(([id]) => !stored.has(id)), stored)
     if (missing.length > 0) {
       await tx.questionAnswer.createMany({ data: missing.map(([questionId, values]) => ({ questionId, eventId, volunteerId, values })), skipDuplicates: true })
     }
     return { contact, answers: [] }
   }
   const submitted = new Set(questions.filter((q) => Object.hasOwn(input.raw, q.id)).map((q) => q.id))
-  const answers = answerChanges(questions, submitted, input.values)
+  // Judged again against the stored answers of the questions the form left out (#1016): a
+  // follow-up whose parent wasn't sent follows the stored parent answer.
+  const recheck = checkAnswers(questions, input.raw, { keep: storedAnswers(questions) })
+  const { values, hidden } = recheck.ok ? recheck : { values: input.values, hidden: input.hidden }
+  const answers = answerChanges(questions, new Set([...submitted, ...hidden]), values)
   await writeAnswerChanges(tx, { eventId, volunteerId, changes: answers })
   return { contact, answers }
 }

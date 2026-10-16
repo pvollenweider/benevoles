@@ -46,9 +46,9 @@ describe("POST /api/admin/events/[id]/duplicate: questions' postes", () => {
     guard.mockResolvedValue({ db, organizationId: "org-a", session: {} })
     const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
     expect((await POST(post({}), params)).status).toBe(201)
-    const data = db.event.create.mock.calls[0][0].data as { shifts: { create: { roleName: string }[] }; questions: { create: { label: string; roleName: string | null }[] } }
+    const data = db.event.create.mock.calls[0][0].data as { shifts: { create: { roleName: string }[] }; questions: { createMany: { data: { label: string; roleName: string | null }[] } } }
     expect(data.shifts.create.map((s) => s.roleName)).toEqual(["Cuisine"])
-    expect(data.questions.create.map((q) => [q.label, q.roleName])).toEqual([["Repas ?", "Cuisine"], ["Taille ?", null]])
+    expect(data.questions.createMany.data.map((q) => [q.label, q.roleName])).toEqual([["Repas ?", "Cuisine"], ["Taille ?", null]])
   })
 
   it("clears it when the copy takes no shifts", async () => {
@@ -56,7 +56,7 @@ describe("POST /api/admin/events/[id]/duplicate: questions' postes", () => {
     guard.mockResolvedValue({ db, organizationId: "org-a", session: {} })
     const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
     expect((await POST(post({ copy: { shifts: false } }), params)).status).toBe(201)
-    const data = db.event.create.mock.calls[0][0].data as { questions: { create: { roleName: string | null }[] } }
-    expect(data.questions.create.map((q) => q.roleName)).toEqual([null, null])
+    const data = db.event.create.mock.calls[0][0].data as { questions: { createMany: { data: { roleName: string | null }[] } } }
+    expect(data.questions.createMany.data.map((q) => q.roleName)).toEqual([null, null])
   })
 })

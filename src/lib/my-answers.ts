@@ -8,7 +8,7 @@
  * form (archived) are not asked any more and are left out; a question without an answer says so.
  * Pure and client-safe (no Prisma): the API builds the rows, the page renders them.
  */
-import { NO, YES, answerText } from "./event-questions"
+import { NO, YES, answerText, formOrder } from "./event-questions"
 
 export const MY_ANSWERS_TITLE = "Mes réponses"
 export const NO_ANSWER_TEXT = "Pas de réponse"
@@ -26,6 +26,9 @@ export type MyAnswerQuestion = {
   maxValue?: number | null
   /** The poste the question is attached to (part 3): routes a change's email, never shown here. */
   roleName?: string | null
+  /** Follow-up question (#1016): its parent and the parent's answers that show it. */
+  parentId?: string | null
+  showIfValues?: string[]
   /** The answers to this question, as read for one volunteer: at most one. */
   answers: { values: string[] }[]
 }
@@ -44,6 +47,9 @@ export type MyAnswerRow = {
   /** Bounds of a number question (#1015), null or absent for the other types. */
   minValue?: number | null
   maxValue?: number | null
+  /** Follow-up question (#1016): shown only when the parent's answer is one of showIfValues. */
+  parentId?: string | null
+  showIfValues?: string[]
   values: string[]
 }
 
@@ -57,23 +63,48 @@ export function myAnswersQuery(eventId: string, volunteerId: string) {
     where: { eventId, archivedAt: null },
     orderBy: [{ position: "asc" as const }, { createdAt: "asc" as const }],
     select: {
-      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true,
+      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true,
       answers: { where: { volunteerId }, select: { values: true } },
     },
   }
 }
 
-/** The rows of « Mes réponses », in form order, without the archived questions. */
+/**
+ * The rows of « Mes réponses », in form order (each follow-up right after its parent, #1016),
+ * without the archived questions.
+ */
 export function myAnswerRows(questions: MyAnswerQuestion[]): MyAnswerRow[] {
-  return questions
+  const sorted = questions
     .filter((q) => !q.archivedAt)
     .map((q, i) => ({ q, i }))
     .sort((a, b) => a.q.position - b.q.position || a.i - b.i)
-    .map(({ q }) => {
-      const values = q.answers[0]?.values ?? []
-      const text = answerText(values).trim()
-      return { id: q.id, label: q.label, answer: text || null, type: q.type ?? "text", options: q.options ?? [], required: !!q.required, minValue: q.minValue ?? null, maxValue: q.maxValue ?? null, values: text ? values : [] }
-    })
+    .map(({ q }) => q)
+  return formOrder(sorted).map((q) => {
+    const values = q.answers[0]?.values ?? []
+    const text = answerText(values).trim()
+    return {
+      id: q.id, label: q.label, answer: text || null, type: q.type ?? "text", options: q.options ?? [], required: !!q.required, minValue: q.minValue ?? null, maxValue: q.maxValue ?? null,
+      parentId: q.parentId ?? null, showIfValues: q.showIfValues ?? [], values: text ? values : [],
+    }
+  })
+}
+
+/** The stored answers by question id, as `checkAnswers` keeps the questions not sent (#1016). */
+export function storedAnswers(questions: { id: string; answers: { values: string[] }[] }[]): Map<string, string[]> {
+  return new Map(questions.filter((q) => (q.answers[0]?.values.length ?? 0) > 0).map((q) => [q.id, q.answers[0].values]))
+}
+
+/**
+ * The rows « Mes réponses » shows (#1016): a follow-up only when the stored answer of its parent
+ * shows it. The edit form starts from every row and hides follow-ups as the answers change.
+ */
+export function shownRows<T extends { id: string; parentId?: string | null; showIfValues?: string[]; values: string[] }>(rows: T[]): T[] {
+  const byId = new Map(rows.map((r) => [r.id, r]))
+  return rows.filter((r) => {
+    if (!r.parentId) return true
+    const parent = byId.get(r.parentId)
+    return !!parent && parent.values.some((v) => (r.showIfValues ?? []).includes(v))
+  })
 }
 
 /** Whether stored values are still choices of the question (an option renamed or removed is not). */

@@ -8,21 +8,27 @@ import { useRouter } from "next/navigation"
 import FormStatus from "@/components/FormStatus"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
-import { NUMBER_ANSWER_MAX, QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, numberRangeText, parseWholeNumber, type QuestionType } from "@/lib/event-questions"
+import { NUMBER_ANSWER_MAX, QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, formOrder, numberRangeText, parentChoices, parseWholeNumber, type QuestionType } from "@/lib/event-questions"
+import {
+  ALWAYS_LABEL, FOLLOW_UP_HINT, FOLLOW_UP_LABEL, FOLLOW_UP_LOCKED_HINT, FOLLOW_UP_VALUES_LEGEND, HAS_FOLLOW_UPS_HINT, NO_PARENT_HINT, VALUES_EMPTY,
+  canMove, followUpErrorField, followUpText, moveInGroups, moveStatus, parentCandidates, removalLines,
+} from "@/lib/question-follow-up"
 import { NO_ROLES_HINT, QUESTION_ROLE_HINT, QUESTION_ROLE_LABEL, questionErrorField, questionRoleOptions, questionRoleText, type QuestionRoleChoice } from "@/lib/question-role"
 import RequiredMark from "@/components/RequiredMark"
 
-type Q = { id: string; label: string; type: string; options: string[]; required: boolean; minValue?: number | null; maxValue?: number | null; roleName: string | null; answers: number }
-type Draft = { label: string; type: QuestionType; options: string; required: boolean; min: string; max: string; roleName: string }
-const EMPTY: Draft = { label: "", type: "text", options: "", required: false, min: "", max: "", roleName: "" }
+type Q = { id: string; label: string; type: string; options: string[]; required: boolean; minValue?: number | null; maxValue?: number | null; roleName: string | null; parentId?: string | null; showIfValues?: string[]; answers: number }
+type Draft = { label: string; type: QuestionType; options: string; required: boolean; min: string; max: string; roleName: string; parentId: string; showIf: string[] }
+const EMPTY: Draft = { label: "", type: "text", options: "", required: false, min: "", max: "", roleName: "", parentId: "", showIf: [] }
 const isChoice = (t: string) => t === "single" || t === "multiple"
 
 /**
  * Edit the custom questions of an event's sign-up form (#483), each optionally attached to one of
- * the event's postes (`roles`, #984 part 3) so a change of its answer reaches that poste's leaders.
+ * the event's postes (`roles`, #984 part 3) so a change of its answer reaches that poste's leaders,
+ * and optionally shown only for some answers of another question (a follow-up, #1016): listed in
+ * a nested list under its parent, moved with it, removed with it.
  */
 export default function QuestionsEditor({ eventId, initialQuestions, roles = [] }: { eventId: string; initialQuestions: Q[]; roles?: QuestionRoleChoice[] }) {
-  const [questions, setQuestions] = useState(initialQuestions)
+  const [questions, setQuestions] = useState(() => formOrder(initialQuestions))
   const [editing, setEditing] = useState<string | "new" | null>(null)
   const [draft, setDraft] = useState<Draft>(EMPTY)
   const [pendingDelete, setPendingDelete] = useState<Q | null>(null)
@@ -41,7 +47,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     editor.reset()
     list.reset()
     setEditing(q ? q.id : "new")
-    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, min: q.minValue ? String(q.minValue) : "", max: q.maxValue == null ? "" : String(q.maxValue), roleName: q.roleName ?? "" } : EMPTY)
+    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, min: q.minValue ? String(q.minValue) : "", max: q.maxValue == null ? "" : String(q.maxValue), roleName: q.roleName ?? "", parentId: q.parentId ?? "", showIf: q.showIfValues ?? [] } : EMPTY)
     requestAnimationFrame(() => document.getElementById(`${id}-label`)?.focus())
   }
 
@@ -66,49 +72,61 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
       if (bad(maxValue)) { editor.fail(`Le maximum doit être un nombre entier entre 0 et ${NUMBER_ANSWER_MAX}.`, "max", document.getElementById(`${id}-max`)); return }
       if (maxValue !== null && maxValue < (minValue ?? 0)) { editor.fail(`Le maximum doit être égal ou supérieur au minimum (${minValue ?? 0}).`, "max", document.getElementById(`${id}-max`)); return }
     }
+    // A follow-up (#1016) needs at least one answer of its parent that shows it.
+    if (draft.parentId && draft.showIf.length === 0) { editor.fail(VALUES_EMPTY, "showif", document.getElementById(`${id}-showif-0`)); return }
     const isNew = editing === "new"
     const outcome = await editor.submit<Q & { _count: { answers: number } }>(() => fetch(isNew ? base : `${base}/${editing}`, {
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, minValue, maxValue, roleName: draft.roleName || null }),
+      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, minValue, maxValue, roleName: draft.roleName || null, parentId: draft.parentId || null, showIfValues: draft.parentId ? draft.showIf : [] }),
     }), { fallback: "Impossible d'enregistrer la question.", silent: true })
     if (!outcome.ok) {
       // A refused poste marks and focuses its field; any other refusal is shown as before.
       if (outcome.error) {
-        const field = questionErrorField(outcome.error)
-        editor.fail(outcome.error, field ?? undefined, field ? document.getElementById(`${id}-${field}`) : undefined)
+        const field = questionErrorField(outcome.error) ?? followUpErrorField(outcome.error)
+        editor.fail(outcome.error, field ?? undefined, field ? document.getElementById(field === "showif" ? `${id}-showif-0` : `${id}-${field}`) : undefined)
       }
       return
     }
-    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, minValue: outcome.data.minValue ?? null, maxValue: outcome.data.maxValue ?? null, roleName: outcome.data.roleName ?? null, answers: outcome.data._count.answers }
-    setQuestions((prev) => (isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
-    list.setStatus(isNew ? `Question « ${saved.label} » ajoutée.` : `Question « ${saved.label} » enregistrée.`)
+    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, minValue: outcome.data.minValue ?? null, maxValue: outcome.data.maxValue ?? null, roleName: outcome.data.roleName ?? null, parentId: outcome.data.parentId ?? null, showIfValues: outcome.data.showIfValues ?? [], answers: outcome.data._count.answers }
+    // A follow-up takes its place right after its parent, as the server put it.
+    const before = isNew ? null : questions.find((q) => q.id === saved.id)
+    setQuestions((prev) => formOrder(isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
+    const parent = saved.parentId && saved.parentId !== before?.parentId ? questions.find((q) => q.id === saved.parentId) : null
+    const placed = parent ? ` Elle est placée après « ${parent.label} ».` : ""
+    list.setStatus(isNew ? `Question « ${saved.label} » ajoutée.${placed}` : `Question « ${saved.label} » enregistrée.${placed}`)
     close()
     router.refresh()
   }
 
-  async function move(index: number, delta: -1 | 1, trigger: HTMLElement) {
-    const target = index + delta
-    if (list.busy || target < 0 || target >= questions.length) return
-    const next = [...questions]
-    ;[next[index], next[target]] = [next[target], next[index]]
-    const outcome = await list.submit(() => fetch(`${base}/reorder`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids: next.map((q) => q.id) }) }), { fallback: "Impossible de changer l'ordre." })
+  /**
+   * Moves a question up or down (#483): a question with follow-ups moves with them, over the whole
+   * previous or next block; a follow-up only among its parent's follow-ups (#1016).
+   */
+  async function move(q: Q, delta: -1 | 1, trigger: HTMLElement) {
+    const next = moveInGroups(questions, q.id, delta)
+    if (list.busy || !next) return
+    const outcome = await list.submit(() => fetch(`${base}/reorder`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids: next.map((x) => x.id) }) }), { fallback: "Impossible de changer l'ordre." })
     if (!outcome.ok) return
     setQuestions(next)
     router.refresh()
-    list.setStatus(`« ${questions[index].label} » est maintenant en position ${target + 1} sur ${next.length}.`)
+    list.setStatus(moveStatus(q.label, next.filter((x) => x.parentId === q.id).length, next.findIndex((x) => x.id === q.id) + 1, next.length))
     // The button moved with its row: keep the focus on the same action of the same question.
     const kind = trigger.dataset.move
-    requestAnimationFrame(() => document.querySelector<HTMLElement>(`[data-move="${kind}"][data-q="${questions[index].id}"]`)?.focus())
+    requestAnimationFrame(() => document.querySelector<HTMLElement>(`[data-move="${kind}"][data-q="${q.id}"]`)?.focus())
   }
 
   async function remove(q: Q) {
-    const outcome = await list.submit<{ archived: boolean }>(() => fetch(`${base}/${q.id}`, { method: "DELETE" }), { fallback: "Impossible de retirer la question.", silent: true })
+    const outcome = await list.submit<{ archived: boolean; followUps?: { id: string; label: string }[] }>(() => fetch(`${base}/${q.id}`, { method: "DELETE" }), { fallback: "Impossible de retirer la question.", silent: true })
     if (!outcome.ok) return
+    // Its follow-ups (#1016) went with it.
+    const gone = new Set([q.id, ...(outcome.data.followUps ?? []).map((f) => f.id)])
     setPendingDelete(null)
-    if (editing === q.id) setEditing(null)
-    setQuestions((prev) => prev.filter((x) => x.id !== q.id))
-    list.setStatus(outcome.data.archived ? `Question « ${q.label} » retirée du formulaire ; ses réponses restent dans les exports.` : `Question « ${q.label} » supprimée.`)
+    if (editing && gone.has(editing)) setEditing(null)
+    setQuestions((prev) => prev.filter((x) => !gone.has(x.id) && !(x.parentId && gone.has(x.parentId))))
+    const removedFollowUps = (outcome.data.followUps ?? []).length
+    const also = removedFollowUps > 1 ? ` Ses ${removedFollowUps} questions de suivi sont retirées aussi.` : removedFollowUps === 1 ? " Sa question de suivi est retirée aussi." : ""
+    list.setStatus((outcome.data.archived ? `Question « ${q.label} » retirée du formulaire ; ses réponses restent dans les exports.` : `Question « ${q.label} » supprimée.`) + also)
     headingRef.current?.focus()
     router.refresh()
   }
@@ -116,7 +134,54 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
   const full = questions.length >= QUESTION_LIMIT
   const answered = editing && editing !== "new" ? (questions.find((q) => q.id === editing)?.answers ?? 0) : 0
   const roleOptions = questionRoleOptions(roles, editing && editing !== "new" ? questions.find((q) => q.id === editing)?.roleName : null)
+  // The follow-up's condition (#1016): which questions can show it, and what it may still change.
+  const editingId = editing && editing !== "new" ? editing : null
+  const current = editingId ? questions.find((q) => q.id === editingId) : undefined
+  const hasFollowUps = !!editingId && questions.some((q) => q.parentId === editingId)
+  const candidates = parentCandidates(questions, editingId)
+  // Once answered, a follow-up keeps its parent (it may be asked to everyone); an answered question
+  // asked to everyone can't become a follow-up.
+  const parentOptions = answered > 0 ? candidates.filter((c) => c.id === current?.parentId) : candidates
+  const parentLocked = answered > 0 && !current?.parentId
+  const chosenParent = questions.find((q) => q.id === draft.parentId)
+  const followUpsOf = (q: Q) => questions.filter((x) => x.parentId === q.id)
   const describedBy = (field: string, extra: string) => [extra, editor.invalidField === field ? `${id}-editor-error` : null].filter(Boolean).join(" ") || undefined
+
+  /** One question of the list: its label, its details, and its actions. */
+  function row(q: Q) {
+    const condition = followUpText(q, questions)
+    const up = canMove(questions, q.id, -1)
+    const down = canMove(questions, q.id, 1)
+    return (
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-gray-900 break-words">{q.label}{q.required ? " (obligatoire)" : ""}</p>
+          <p className="text-xs text-gray-700 break-words">
+            {QUESTION_TYPE_LABEL[q.type as QuestionType] ?? q.type}
+            {isChoice(q.type) ? ` : ${q.options.join(", ")}` : ""}
+            {q.type === "number" ? ` : ${numberRangeText(q)}` : ""}
+            {` · ${q.answers} réponse${q.answers > 1 ? "s" : ""}`}
+            {q.roleName ? ` · ${questionRoleText(q.roleName)}` : ""}
+          </p>
+          {condition && <p className="text-xs text-gray-700 break-words">Question de suivi · {condition}</p>}
+        </div>
+        <div className="flex flex-wrap gap-2 flex-shrink-0 justify-end">
+          <button type="button" data-move="up" data-q={q.id} onClick={(e) => void move(q, -1, e.currentTarget)} aria-disabled={!up || undefined} className={`text-xs font-medium text-gray-700 hover:text-gray-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${!up ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Monter{" "}<span className="sr-only">« {q.label} »</span>
+          </button>
+          <button type="button" data-move="down" data-q={q.id} onClick={(e) => void move(q, 1, e.currentTarget)} aria-disabled={!down || undefined} className={`text-xs font-medium text-gray-700 hover:text-gray-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${!down ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Descendre{" "}<span className="sr-only">« {q.label} »</span>
+          </button>
+          <button type="button" onClick={(e) => open(q, e.currentTarget)} className="text-xs font-medium text-blue-700 hover:text-blue-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Modifier{" "}<span className="sr-only">la question « {q.label} »</span>
+          </button>
+          <button type="button" onClick={(e) => { triggerRef.current = e.currentTarget; list.reset(); setPendingDelete(q) }} className="text-xs font-medium text-red-700 hover:text-red-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+            Retirer{" "}<span className="sr-only">la question « {q.label} »</span>
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">
@@ -140,32 +205,15 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
           <p className="px-4 py-3 text-sm text-gray-700">Aucune question : le formulaire demande seulement les informations habituelles.</p>
         ) : (
           <ol role="list" className="divide-y divide-gray-100">
-            {questions.map((q, i) => (
-              <li key={q.id} className="px-4 py-3 flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{q.label}{q.required ? " (obligatoire)" : ""}</p>
-                  <p className="text-xs text-gray-700">
-                    {QUESTION_TYPE_LABEL[q.type as QuestionType] ?? q.type}
-                    {isChoice(q.type) ? ` : ${q.options.join(", ")}` : ""}
-                    {q.type === "number" ? ` : ${numberRangeText(q)}` : ""}
-                    {` · ${q.answers} réponse${q.answers > 1 ? "s" : ""}`}
-                    {q.roleName ? ` · ${questionRoleText(q.roleName)}` : ""}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2 flex-shrink-0 justify-end">
-                  <button type="button" data-move="up" data-q={q.id} onClick={(e) => void move(i, -1, e.currentTarget)} aria-disabled={i === 0 || undefined} className={`text-xs font-medium text-gray-700 hover:text-gray-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${i === 0 ? "opacity-50 cursor-not-allowed" : ""}`}>
-                    Monter{" "}<span className="sr-only">« {q.label} »</span>
-                  </button>
-                  <button type="button" data-move="down" data-q={q.id} onClick={(e) => void move(i, 1, e.currentTarget)} aria-disabled={i === questions.length - 1 || undefined} className={`text-xs font-medium text-gray-700 hover:text-gray-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${i === questions.length - 1 ? "opacity-50 cursor-not-allowed" : ""}`}>
-                    Descendre{" "}<span className="sr-only">« {q.label} »</span>
-                  </button>
-                  <button type="button" onClick={(e) => open(q, e.currentTarget)} className="text-xs font-medium text-blue-700 hover:text-blue-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                    Modifier{" "}<span className="sr-only">la question « {q.label} »</span>
-                  </button>
-                  <button type="button" onClick={(e) => { triggerRef.current = e.currentTarget; list.reset(); setPendingDelete(q) }} className="text-xs font-medium text-red-700 hover:text-red-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
-                    Retirer{" "}<span className="sr-only">la question « {q.label} »</span>
-                  </button>
-                </div>
+            {questions.filter((q) => !q.parentId || !questions.some((p) => p.id === q.parentId)).map((q) => (
+              <li key={q.id} className="px-4 py-3">
+                {row(q)}
+                {/* Its follow-ups (#1016): a nested list, so the dependency is in the structure too. */}
+                {followUpsOf(q).length > 0 && (
+                  <ol role="list" className="mt-3 pl-6 space-y-3">
+                    {followUpsOf(q).map((f) => <li key={f.id}>{row(f)}</li>)}
+                  </ol>
+                )}
               </li>
             ))}
           </ol>
@@ -176,9 +224,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
         <ConfirmActionModal
           recap={{
             title: `Retirer la question « ${pendingDelete.label} » ?`,
-            lines: pendingDelete.answers > 0
-              ? [`Elle disparaît du formulaire. Ses ${pendingDelete.answers} réponse${pendingDelete.answers > 1 ? "s" : ""} restent dans les inscriptions et les exports, jusqu'à la suppression de l'événement.`]
-              : ["Elle disparaît du formulaire. Personne n'y a encore répondu."],
+            lines: removalLines(pendingDelete, followUpsOf(pendingDelete)),
             confirmLabel: "Retirer",
             danger: true,
           }}
@@ -204,10 +250,11 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
               // Leaving « Nombre » removes its fields: no error may stay tied to them.
               if (editor.invalidField === "min" || editor.invalidField === "max") editor.reset()
               setDraft((d) => ({ ...d, type: e.target.value as QuestionType }))
-            }} disabled={answered > 0} aria-describedby={answered > 0 ? `${id}-type-locked` : undefined} className="input">
+            }} disabled={answered > 0} aria-describedby={[answered > 0 ? `${id}-type-locked` : null, hasFollowUps ? `${id}-type-parent` : null].filter(Boolean).join(" ") || undefined} className="input">
               {QUESTION_TYPES.map((t) => <option key={t} value={t}>{QUESTION_TYPE_LABEL[t]}</option>)}
             </select>
             {answered > 0 && <p id={`${id}-type-locked`} className="text-xs text-gray-600 mt-1">Cette question a déjà des réponses : son type ne peut plus changer.</p>}
+            {hasFollowUps && <p id={`${id}-type-parent`} className="text-xs text-gray-600 mt-1">Cette question a une question de suivi : elle reste une question Oui / non ou à choix, et garde les choix qui l&apos;affichent.</p>}
           </div>
           {isChoice(draft.type) && (
             <div>
@@ -236,6 +283,57 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
             <input id={`${id}-required`} type="checkbox" checked={draft.required} onChange={(e) => setDraft((d) => ({ ...d, required: e.target.checked }))} className="h-4 w-4 rounded border-gray-300" />
             <label htmlFor={`${id}-required`} className="text-sm text-gray-800">Réponse obligatoire</label>
           </div>
+          {hasFollowUps ? (
+            <p className="text-xs text-gray-600">{HAS_FOLLOW_UPS_HINT}</p>
+          ) : candidates.length === 0 && !draft.parentId ? (
+            <p className="text-xs text-gray-600">{NO_PARENT_HINT}</p>
+          ) : (
+            <div className="space-y-3">
+              <div>
+                <label htmlFor={`${id}-parent`} className="block text-sm font-medium text-gray-800 mb-1">{FOLLOW_UP_LABEL}</label>
+                <select
+                  id={`${id}-parent`}
+                  value={draft.parentId}
+                  disabled={parentLocked}
+                  onChange={(e) => {
+                    if (editor.invalidField === "parent" || editor.invalidField === "showif") editor.reset()
+                    // Another parent has other answers: none ticked until chosen again.
+                    setDraft((d) => ({ ...d, parentId: e.target.value, showIf: [] }))
+                  }}
+                  aria-invalid={editor.isInvalid("parent")}
+                  aria-describedby={describedBy("parent", parentLocked ? `${id}-parent-locked` : `${id}-parent-hint`)}
+                  className="input"
+                >
+                  <option value="">{ALWAYS_LABEL}</option>
+                  {parentOptions.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                </select>
+                {parentLocked
+                  ? <p id={`${id}-parent-locked`} className="text-xs text-gray-600 mt-1">{FOLLOW_UP_LOCKED_HINT}</p>
+                  : <p id={`${id}-parent-hint`} className="text-xs text-gray-600 mt-1">{FOLLOW_UP_HINT}</p>}
+              </div>
+              {chosenParent && (
+                <fieldset>
+                  <legend className="block text-sm font-medium text-gray-800 mb-1">{FOLLOW_UP_VALUES_LEGEND}<RequiredMark /></legend>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2">
+                    {parentChoices(chosenParent).map((c, i) => (
+                      <label key={c} htmlFor={`${id}-showif-${i}`} className="flex items-center gap-2 text-sm text-gray-800 min-h-8">
+                        <input
+                          id={`${id}-showif-${i}`}
+                          type="checkbox"
+                          checked={draft.showIf.includes(c)}
+                          onChange={(e) => setDraft((d) => ({ ...d, showIf: e.target.checked ? [...d.showIf, c] : d.showIf.filter((v) => v !== c) }))}
+                          aria-invalid={editor.isInvalid("showif")}
+                          aria-describedby={editor.invalidField === "showif" ? `${id}-editor-error` : undefined}
+                          className="h-4 w-4 rounded border-gray-300"
+                        />
+                        {c}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+            </div>
+          )}
           {roleOptions.length > 1 ? (
             <div>
               <label htmlFor={`${id}-role`} className="block text-sm font-medium text-gray-800 mb-1">{QUESTION_ROLE_LABEL}</label>

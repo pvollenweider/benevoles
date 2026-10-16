@@ -54,7 +54,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
       </div>
       <QuestionsEditor
         eventId={id}
-        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, minValue, maxValue, roleName }) => ({ id, label, type, options, required, minValue, maxValue, roleName, answers: _count.answers }))}
+        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues }) => ({ id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues, answers: _count.answers }))}
         roles={event.shifts.map((s) => ({ roleName: s.roleName, leaders: event.sectorLeaders.filter((l) => l.roleName === s.roleName).length }))}
       />
       <AnswerSummary

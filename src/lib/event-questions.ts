@@ -31,6 +31,12 @@ export type Question = {
   /** Bounds of a "number" question (#1015): null or absent minValue means 0, maxValue no bound. */
   minValue?: number | null
   maxValue?: number | null
+  /**
+   * Follow-up question (#1016): the parent question it depends on, and the parent's answers that
+   * show it. Null or absent parentId: asked to everyone.
+   */
+  parentId?: string | null
+  showIfValues?: string[]
 }
 
 // ── Number questions (#1015) ────────────────────────────────────────────────
@@ -83,16 +89,108 @@ function numberProblem(q: Question, n: number): string | null {
 }
 
 
+// ── Follow-up questions (#1016) ─────────────────────────────────────────────
+
+/** The types a follow-up can depend on: their answers are a fixed list of choices. */
+export const PARENT_TYPES = ["yesno", "single", "multiple"] as const
+export const FOLLOW_UP_TERM = "question de suivi"
+
+/** Whether a question is a follow-up of another one. */
+export function isFollowUp(q: { parentId?: string | null }): boolean {
+  return !!q.parentId
+}
+
+/** The choices of a yes/no or choice question, the values a follow-up's condition picks from. */
+export function parentChoices(q: { type: string; options: string[] }): string[] {
+  if (q.type === "yesno") return [YES, NO]
+  return q.type === "single" || q.type === "multiple" ? q.options : []
+}
+
+/** Whether a question can be the parent of a follow-up: a choice question that isn't one itself. */
+export function canBeParent(q: { type: string; parentId?: string | null }): boolean {
+  return (PARENT_TYPES as readonly string[]).includes(q.type) && !isFollowUp(q)
+}
+
+/**
+ * Whether a follow-up is asked, given its parent's answer: one of the accepted values chosen (any
+ * of them for a multiple choice). A question without a parent is always asked.
+ */
+export function followUpApplies(q: { parentId?: string | null; showIfValues?: string[] }, parentValues: string[] | undefined): boolean {
+  if (!q.parentId) return true
+  const accepted = q.showIfValues ?? []
+  return (parentValues ?? []).some((v) => accepted.includes(v))
+}
+
+/**
+ * The questions in form order: each question followed right away by its follow-ups, both kept in
+ * their relative order. A follow-up whose parent is not in the list (removed) stays where it is.
+ */
+export function formOrder<T extends { id: string; parentId?: string | null }>(questions: T[]): T[] {
+  const ids = new Set(questions.map((q) => q.id))
+  const children = new Map<string, T[]>()
+  for (const q of questions) if (q.parentId && ids.has(q.parentId)) (children.get(q.parentId) ?? children.set(q.parentId, []).get(q.parentId)!).push(q)
+  const out: T[] = []
+  for (const q of questions) {
+    if (q.parentId && ids.has(q.parentId)) continue
+    out.push(q, ...(children.get(q.id) ?? []))
+  }
+  return out
+}
+
+/** A form's answer as the parent check reads it: the chosen values, empty when none. */
+function rawValues(v: unknown): string[] {
+  if (Array.isArray(v)) return v.filter((x): x is string => typeof x === "string" && x !== "")
+  if (v === true) return [YES]
+  if (v === false) return [NO]
+  return typeof v === "string" && v !== "" ? [v] : []
+}
+
+/**
+ * The questions a form shows for the answers being typed (#1016): every question, except a
+ * follow-up whose parent's answer doesn't match (or whose parent isn't on the form), in form order.
+ */
+export function visibleQuestions<T extends Question>(questions: T[], answers: RawAnswers): T[] {
+  const ids = new Set(questions.map((q) => q.id))
+  return formOrder(questions).filter((q) => !q.parentId || (ids.has(q.parentId) && followUpApplies(q, rawValues(answers[q.parentId]))))
+}
+
+/** « Si « Oui » à « Tu manges avec nous ? » », or with several answers « Si « Oui » ou « Peut-être » à … ». */
+export function conditionText(showIfValues: string[], parentLabel: string): string {
+  return `Si ${showIfValues.map((v) => `« ${v} »`).join(" ou ")} à « ${parentLabel} »`
+}
+
 /** Raw answers as posted: text, "Oui"/"Non", one option, a list of options, or a number. */
 export type RawAnswers = Record<string, unknown>
 
-export type AnswerCheck = { ok: true; values: Map<string, string[]> } | { ok: false; errors: { questionId: string; message: string }[] }
+/**
+ * `hidden`: the follow-ups (#1016) not asked for these answers. They are never refused nor
+ * required, nothing of them is in `values`, and the callers clear what they had stored.
+ */
+export type AnswerCheck = { ok: true; values: Map<string, string[]>; hidden: string[] } | { ok: false; errors: { questionId: string; message: string }[] }
 
-/** The answers the server stores, or what is wrong with them. Unknown question ids are ignored. */
-export function checkAnswers(questions: Question[], raw: RawAnswers | undefined): AnswerCheck {
+/**
+ * The answers the server stores, or what is wrong with them. Unknown question ids are ignored.
+ * `keep` (the personal page, which sends only some questions): the stored answers of the questions
+ * absent from `raw`, taken as they are, unchecked, so that a follow-up is judged on its parent's
+ * actual answer. Without it, a question absent from `raw` is not answered.
+ * A follow-up (#1016) is checked only when its parent's answer, checked first, shows it; one whose
+ * parent is not among `questions` (removed) is never asked.
+ */
+export function checkAnswers(questions: Question[], raw: RawAnswers | undefined, opts: { keep?: Map<string, string[]> } = {}): AnswerCheck {
   const values = new Map<string, string[]>()
   const errors: { questionId: string; message: string }[] = []
-  for (const q of questions) {
+  const hidden: string[] = []
+  const ids = new Set(questions.map((q) => q.id))
+  const order = new Map(questions.map((q, i) => [q.id, i]))
+  // Parents before follow-ups: a follow-up reads its parent's checked answer.
+  const sorted = [...questions].sort((a, b) => Number(isFollowUp(a)) - Number(isFollowUp(b)))
+  for (const q of sorted) {
+    if (q.parentId && (!ids.has(q.parentId) || !followUpApplies(q, values.get(q.parentId)))) { hidden.push(q.id); continue }
+    if (opts.keep && !(raw && Object.hasOwn(raw, q.id))) {
+      const kept = opts.keep.get(q.id) ?? []
+      if (kept.length > 0) values.set(q.id, kept)
+      continue
+    }
     const v = raw?.[q.id]
     let vals: string[] = []
     if (q.type === "text") {
@@ -124,7 +222,25 @@ export function checkAnswers(questions: Question[], raw: RawAnswers | undefined)
     if (q.required && vals.length === 0) { errors.push({ questionId: q.id, message: `« ${q.label} » est obligatoire.` }); continue }
     if (vals.length > 0) values.set(q.id, vals)
   }
-  return errors.length > 0 ? { ok: false, errors } : { ok: true, values }
+  errors.sort((a, b) => order.get(a.questionId)! - order.get(b.questionId)!)
+  return errors.length > 0 ? { ok: false, errors } : { ok: true, values, hidden }
+}
+
+/**
+ * The answers an unproven sign-up may add (#483 `addMissing`) once the follow-ups are taken into
+ * account (#1016): the member's stored parent answer wins over the one typed, so a follow-up is
+ * added only when that effective answer shows it. An anonymous form never unlocks a follow-up
+ * against a stored « Non ».
+ */
+export function consistentAdditions(questions: Question[], additions: [string, string[]][], stored: Map<string, string[]>): [string, string[]][] {
+  const added = new Map(additions)
+  const byId = new Map(questions.map((q) => [q.id, q]))
+  const effective = (id: string) => (stored.get(id)?.length ? stored.get(id) : added.get(id))
+  return additions.filter(([id]) => {
+    const q = byId.get(id)
+    if (!q?.parentId) return true
+    return byId.has(q.parentId) && followUpApplies(q, effective(q.parentId))
+  })
 }
 
 /**

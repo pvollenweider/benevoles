@@ -3,7 +3,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { NO, TEXT_ANSWER_MAX, YES, numberHint, type Question } from "@/lib/event-questions"
+import { Fragment } from "react"
+import { NO, TEXT_ANSWER_MAX, YES, numberHint, visibleQuestions, type Question } from "@/lib/event-questions"
 import RequiredMark from "@/components/RequiredMark"
 
 export type Answers = Record<string, string | string[]>
@@ -14,6 +15,9 @@ export const NO_ANSWER_CHOICE = "Pas de réponse"
 /**
  * The event's custom questions on the sign-up form (#483): labelled fields, choices grouped in
  * fieldsets, required ones marked, errors tied to their field. The server checks everything again.
+ * A follow-up question (#1016) is shown right after its parent, set in, only while the parent's
+ * answer shows it: no focus move and no announcement (arrowing through radios would repeat it),
+ * the next Tab or reading step reaches it. Hidden, it is neither required nor sent as needed.
  */
 export default function SignupQuestions({ questions, answers, onChange, errors, clearable = false }: {
   questions: Question[]
@@ -36,7 +40,18 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
   const optional = (q: Question) => (q.required ? null : <>{" "}<span className="text-gray-500 font-normal">(facultatif)</span></>)
   return (
     <>
-      {questions.map((q) => {
+      {visibleQuestions(questions, answers).map((q) => {
+        const field = renderField(q)
+        // Set in under its parent; a sibling, not inside the parent's fieldset, whose legend would
+        // be read again with each of its fields.
+        return q.parentId
+          ? <div key={q.id} data-follow-up className="pl-5 sm:pl-6">{field}</div>
+          : <Fragment key={q.id}>{field}</Fragment>
+      })}
+    </>
+  )
+
+  function renderField(q: Question) {
         const fieldId = `q-${q.id}`
         const message = errors.get(q.id)
         const bad = !!message
@@ -112,7 +127,5 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
             {errorLine}
           </fieldset>
         )
-      })}
-    </>
-  )
+  }
 }

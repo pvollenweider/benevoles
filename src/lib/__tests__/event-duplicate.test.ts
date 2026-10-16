@@ -104,13 +104,13 @@ describe("duplicateSummary", () => {
   it("copies the active custom questions with the settings, never their answers (#483)", () => {
     const q = { label: "Taille", type: "single", options: ["S", "M"], required: true, position: 0 }
     const withQ = { ...source, questions: [q] }
-    expect(duplicatePlan(withQ, {}).questions).toEqual([{ ...q, roleName: null, minValue: null, maxValue: null }])
+    expect(duplicatePlan(withQ, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, minValue: null, maxValue: null, parentId: null, showIfValues: [] }])
     expect(duplicatePlan(withQ, { copy: { settings: false } }).questions).toEqual([])
   })
 
   it("copies a number question with its type and bounds (#1015)", () => {
     const q = { label: "Combien de personnes ?", type: "number", options: [], required: false, position: 0, minValue: 1, maxValue: 8 }
-    expect(duplicatePlan({ ...source, questions: [q] }, {}).questions).toEqual([{ ...q, roleName: null }])
+    expect(duplicatePlan({ ...source, questions: [q] }, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, parentId: null, showIfValues: [] }])
   })
 
   it("a question's poste follows when the copy has that poste, cleared otherwise (#984, part 3)", () => {

@@ -29,7 +29,8 @@ export const publicEventInclude = {
   questions: {
     where: { archivedAt: null },
     orderBy: { position: "asc" },
-    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true },
+    // A follow-up (#1016) carries its parent and the answers that show it: the page hides it otherwise.
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true },
   },
 } satisfies Prisma.EventInclude
 

@@ -71,6 +71,8 @@ const FIELD_LABELS: Record<string, string> = {
   checkedInAt: "présence",
   // A volunteer's answer changed from the personal page (#984); `question` names it in the sentence.
   answer: "réponse",
+  // A follow-up question's condition (#1016): « Si « Oui » à « … » », or none.
+  condition: "affichée seulement",
 }
 
 /**
