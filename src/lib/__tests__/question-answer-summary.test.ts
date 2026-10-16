@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { answerSummary, answerSummaryCsv, countedPeople, rowLabel, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
+import { answerSummary, answerSummaryCsv, countedPeople, numberNote, rowLabel, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
 
 const sizes: SummaryQuestion = {
   id: "q1", label: "Taille de t-shirt", type: "single", options: ["S", "M", "L"],
@@ -104,6 +104,36 @@ describe("answerSummary (#686)", () => {
     expect(lines[0]).toBe("Question;Réponse;Confirmés;En attente")
     expect(lines.slice(1, 5)).toEqual(["Taille de t-shirt;S;0;1", "Taille de t-shirt;M;1;0", "Taille de t-shirt;L;1;0", "Taille de t-shirt;Sans réponse;1;0"])
     expect(lines[5]).toBe("Remarque;'=1+1;1;0")
+  })
+
+  it("sums a number question (#1015): total, then how many answered, apart for the waiting people", () => {
+    const guests: SummaryQuestion = {
+      id: "q6", label: "Combien de personnes ?", type: "number", options: [],
+      answers: [
+        { volunteerId: "alice", values: ["3"] },
+        { volunteerId: "bob", values: ["2"] },
+        { volunteerId: "carla", values: ["9"] }, // cancelled: not counted
+        { volunteerId: "dan", values: ["4"] }, // waitlist only
+        { volunteerId: "eve", values: [""] }, // confirmed, no answer
+      ],
+    }
+    const s = answerSummary([guests], registrations)
+    expect(rows(s.questions[0])).toEqual(["Total:5/4", "Nombre de réponses:2/1", "Sans réponse:1/0"])
+    expect(s.questions[0].rows.map((r) => r.kind)).toEqual(["total", "count", "none"])
+  })
+
+  it("a number question nobody answered totals 0; a zero answer counts as an answer (#1015)", () => {
+    const q: SummaryQuestion = { id: "q7", label: "Combien ?", type: "number", options: [], answers: [{ volunteerId: "alice", values: ["0"] }] }
+    expect(rows(answerSummary([{ ...q, answers: [] }], registrations).questions[0])).toEqual(["Total:0/0", "Nombre de réponses:0/0", "Sans réponse:3/1"])
+    expect(rows(answerSummary([q], registrations).questions[0])).toEqual(["Total:0/0", "Nombre de réponses:1/0", "Sans réponse:2/1"])
+  })
+
+  it("exports the total of a number question in the CSV (#1015)", () => {
+    const q: SummaryQuestion = { id: "q8", label: "Combien ?", type: "number", options: [], answers: [{ volunteerId: "alice", values: ["3"] }, { volunteerId: "bob", values: ["2"] }] }
+    const lines = answerSummaryCsv(answerSummary([q], registrations)).replace(/^\uFEFF/, "").split("\r\n")
+    expect(lines.slice(1, 4)).toEqual(["Combien ?;Total;5;0", "Combien ?;Nombre de réponses;2;0", "Combien ?;Sans réponse;1;1"])
+    expect(numberNote(true)).toMatch(/séparément/)
+    expect(numberNote(false)).toBe("Somme des nombres indiqués par les bénévoles confirmés.")
   })
 
   it("says when it was computed, in the organization's time zone", () => {

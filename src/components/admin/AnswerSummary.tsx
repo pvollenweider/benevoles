@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary as Summary } from "@/lib/question-answer-summary"
+import { confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary as Summary } from "@/lib/question-answer-summary"
 
 const linkClass =
   "text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -55,6 +55,7 @@ export default function AnswerSummary({ eventId, summary, stamp }: { eventId: st
                   <caption className="text-left text-sm font-semibold text-gray-900 mb-1">
                     {q.label}
                     {q.type === "multiple" && <span className="block text-xs font-normal text-gray-600">{MULTIPLE_NOTE}</span>}
+                    {q.type === "number" && <span className="block text-xs font-normal text-gray-600">{numberNote(waiting)}</span>}
                   </caption>
                   <thead>
                     <tr className="border-b-2 border-gray-400">
@@ -66,9 +67,9 @@ export default function AnswerSummary({ eventId, summary, stamp }: { eventId: st
                   <tbody>
                     {q.rows.map((r) => (
                       <tr key={`${r.kind}:${r.answer}`} className="border-b border-gray-200 last:border-b-0">
-                        <th scope="row" className={`text-left font-normal py-1 pr-2 break-words ${r.kind === "none" || r.kind === "removed" ? "text-gray-700 italic" : "text-gray-900"}`}>{rowLabel(r)}</th>
-                        <td className="text-right tabular-nums py-1 pl-2">{r.confirmed}</td>
-                        {waiting && <td className="text-right tabular-nums py-1 pl-2">{r.waiting}</td>}
+                        <th scope="row" className={`text-left py-1 pr-2 break-words ${r.kind === "none" || r.kind === "removed" ? "font-normal text-gray-700 italic" : r.kind === "total" ? "font-semibold text-gray-900" : "font-normal text-gray-900"}`}>{rowLabel(r)}</th>
+                        <td className={`text-right tabular-nums py-1 pl-2 ${r.kind === "total" ? "font-semibold" : ""}`}>{r.confirmed}</td>
+                        {waiting && <td className={`text-right tabular-nums py-1 pl-2 ${r.kind === "total" ? "font-semibold" : ""}`}>{r.waiting}</td>}
                       </tr>
                     ))}
                   </tbody>

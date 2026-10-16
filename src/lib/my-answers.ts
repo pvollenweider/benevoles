@@ -21,6 +21,9 @@ export type MyAnswerQuestion = {
   type?: string
   options?: string[]
   required?: boolean
+  /** Bounds of a number question (#1015). */
+  minValue?: number | null
+  maxValue?: number | null
   /** The poste the question is attached to (part 3): routes a change's email, never shown here. */
   roleName?: string | null
   /** The answers to this question, as read for one volunteer: at most one. */
@@ -38,6 +41,9 @@ export type MyAnswerRow = {
   type: string
   options: string[]
   required: boolean
+  /** Bounds of a number question (#1015), null or absent for the other types. */
+  minValue?: number | null
+  maxValue?: number | null
   values: string[]
 }
 
@@ -51,7 +57,7 @@ export function myAnswersQuery(eventId: string, volunteerId: string) {
     where: { eventId, archivedAt: null },
     orderBy: [{ position: "asc" as const }, { createdAt: "asc" as const }],
     select: {
-      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, roleName: true,
+      id: true, label: true, position: true, archivedAt: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true,
       answers: { where: { volunteerId }, select: { values: true } },
     },
   }
@@ -66,13 +72,15 @@ export function myAnswerRows(questions: MyAnswerQuestion[]): MyAnswerRow[] {
     .map(({ q }) => {
       const values = q.answers[0]?.values ?? []
       const text = answerText(values).trim()
-      return { id: q.id, label: q.label, answer: text || null, type: q.type ?? "text", options: q.options ?? [], required: !!q.required, values: text ? values : [] }
+      return { id: q.id, label: q.label, answer: text || null, type: q.type ?? "text", options: q.options ?? [], required: !!q.required, minValue: q.minValue ?? null, maxValue: q.maxValue ?? null, values: text ? values : [] }
     })
 }
 
 /** Whether stored values are still choices of the question (an option renamed or removed is not). */
 function stillValid(r: Pick<MyAnswerRow, "type" | "options" | "values">): boolean {
   if (r.type === "text") return true
+  // A number (#1015) is shown as typed: the field takes any whole number, the server its bounds.
+  if (r.type === "number") return r.values.every((v) => /^\d+$/.test(v))
   const choices = r.type === "yesno" ? [YES, NO] : r.options
   return r.values.every((v) => choices.includes(v))
 }

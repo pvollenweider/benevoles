@@ -121,6 +121,20 @@ describe("PATCH /api/public/registrations/[token]/answers", () => {
     expect(upsert).not.toHaveBeenCalled()
   })
 
+  it("a number answer (#1015): checked against its bounds, stored as digits, logged as the number", async () => {
+    const guests = { id: "guests", eventId: "e1", label: "Combien ?", type: "number", options: [], required: false, minValue: 1, maxValue: 8, position: 0, archivedAt: null, answers: [{ values: ["3"] }] }
+    questionFindMany.mockResolvedValue([guests])
+    const refused = await patch({ answers: { guests: "9" } })
+    expect(refused.status).toBe(400)
+    expect((await refused.json()).questionErrors).toEqual([{ questionId: "guests", message: "« Combien ? » : entre 1 et 8." }])
+    expect((await patch({ answers: { guests: "2,5" } })).status).toBe(400)
+    expect(upsert).not.toHaveBeenCalled()
+    expect((await patch({ answers: { guests: " 04 " } })).status).toBe(200)
+    expect(upsert).toHaveBeenCalledWith(expect.objectContaining({ update: { values: ["4"] } }))
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ changes: { question: { from: "Combien ?", to: "Combien ?" }, answer: { from: "3", to: "4" } } }))
+    expect(queueAnswerChangeNotifications.mock.calls[0][0]).toMatchObject({ changes: [{ questionId: "guests", from: ["3"], to: ["4"] }] })
+  })
+
   it("refuses a body without answers", async () => {
     expect((await patch({})).status).toBe(400)
     expect((await patch("not json")).status).toBe(400)

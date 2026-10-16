@@ -74,6 +74,28 @@ describe("MyAnswersCard", () => {
     expect(editButton()).toHaveFocus()
   })
 
+  it("a number answer (#1015): prefilled, checked against its bounds before sending, sent as typed", async () => {
+    const guests: MyAnswerRow = { id: "guests", label: "Combien ?", answer: "3", type: "number", options: [], required: false, minValue: 1, maxValue: 8, values: ["3"] }
+    const fetchMock = reply(200, { changed: 1, answers: [{ ...guests, answer: "4", values: ["4"] }] })
+    vi.stubGlobal("fetch", fetchMock)
+    card({ rows: [guests] })
+    expect(screen.getByRole("definition")).toHaveTextContent("3")
+    fireEvent.click(editButton())
+    const field = screen.getByRole("textbox", { name: "Combien ? (facultatif)" })
+    expect(field).toHaveValue("3")
+    expect(field).toHaveFocus()
+    fireEvent.change(field, { target: { value: "12" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(field).toHaveAttribute("aria-invalid", "true"))
+    expect(field).toHaveAccessibleDescription("Un nombre entier, de 1 à 8. « Combien ? » : entre 1 et 8.")
+    expect(fetchMock).not.toHaveBeenCalled()
+    fireEvent.change(field, { target: { value: "4" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Réponses enregistrées."))
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ answers: { guests: "4" } })
+    expect(screen.getByRole("definition")).toHaveTextContent("4")
+  })
+
   it("nothing changed: says so", async () => {
     vi.stubGlobal("fetch", reply(200, { changed: 0, answers: rows }))
     card()

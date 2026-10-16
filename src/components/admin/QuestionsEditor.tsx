@@ -8,13 +8,13 @@ import { useRouter } from "next/navigation"
 import FormStatus from "@/components/FormStatus"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
-import { QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, type QuestionType } from "@/lib/event-questions"
+import { NUMBER_ANSWER_MAX, QUESTION_LIMIT, QUESTION_TYPE_LABEL, QUESTION_TYPES, numberRangeText, parseWholeNumber, type QuestionType } from "@/lib/event-questions"
 import { NO_ROLES_HINT, QUESTION_ROLE_HINT, QUESTION_ROLE_LABEL, questionErrorField, questionRoleOptions, questionRoleText, type QuestionRoleChoice } from "@/lib/question-role"
 import RequiredMark from "@/components/RequiredMark"
 
-type Q = { id: string; label: string; type: string; options: string[]; required: boolean; roleName: string | null; answers: number }
-type Draft = { label: string; type: QuestionType; options: string; required: boolean; roleName: string }
-const EMPTY: Draft = { label: "", type: "text", options: "", required: false, roleName: "" }
+type Q = { id: string; label: string; type: string; options: string[]; required: boolean; minValue?: number | null; maxValue?: number | null; roleName: string | null; answers: number }
+type Draft = { label: string; type: QuestionType; options: string; required: boolean; min: string; max: string; roleName: string }
+const EMPTY: Draft = { label: "", type: "text", options: "", required: false, min: "", max: "", roleName: "" }
 const isChoice = (t: string) => t === "single" || t === "multiple"
 
 /**
@@ -41,7 +41,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     editor.reset()
     list.reset()
     setEditing(q ? q.id : "new")
-    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, roleName: q.roleName ?? "" } : EMPTY)
+    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, min: q.minValue ? String(q.minValue) : "", max: q.maxValue == null ? "" : String(q.maxValue), roleName: q.roleName ?? "" } : EMPTY)
     requestAnimationFrame(() => document.getElementById(`${id}-label`)?.focus())
   }
 
@@ -56,11 +56,21 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     const options = draft.options.split("\n").map((o) => o.trim()).filter(Boolean)
     if (!draft.label.trim()) { editor.fail("La question est obligatoire.", "label", document.getElementById(`${id}-label`)); return }
     if (isChoice(draft.type) && options.length < 2) { editor.fail("Donnez au moins deux choix, un par ligne.", "options", document.getElementById(`${id}-options`)); return }
+    // Bounds of a number question (#1015): whole numbers 0 or more, empty for none; the server checks again.
+    const isNumber = draft.type === "number"
+    const minValue = isNumber ? parseWholeNumber(draft.min) : null
+    const maxValue = isNumber ? parseWholeNumber(draft.max) : null
+    if (isNumber) {
+      const bad = (n: number | null) => n !== null && (Number.isNaN(n) || n < 0 || n > NUMBER_ANSWER_MAX)
+      if (bad(minValue)) { editor.fail(`Le minimum doit être un nombre entier entre 0 et ${NUMBER_ANSWER_MAX}.`, "min", document.getElementById(`${id}-min`)); return }
+      if (bad(maxValue)) { editor.fail(`Le maximum doit être un nombre entier entre 0 et ${NUMBER_ANSWER_MAX}.`, "max", document.getElementById(`${id}-max`)); return }
+      if (maxValue !== null && maxValue < (minValue ?? 0)) { editor.fail(`Le maximum doit être égal ou supérieur au minimum (${minValue ?? 0}).`, "max", document.getElementById(`${id}-max`)); return }
+    }
     const isNew = editing === "new"
     const outcome = await editor.submit<Q & { _count: { answers: number } }>(() => fetch(isNew ? base : `${base}/${editing}`, {
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, roleName: draft.roleName || null }),
+      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, minValue, maxValue, roleName: draft.roleName || null }),
     }), { fallback: "Impossible d'enregistrer la question.", silent: true })
     if (!outcome.ok) {
       // A refused poste marks and focuses its field; any other refusal is shown as before.
@@ -70,7 +80,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
       }
       return
     }
-    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, roleName: outcome.data.roleName ?? null, answers: outcome.data._count.answers }
+    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, minValue: outcome.data.minValue ?? null, maxValue: outcome.data.maxValue ?? null, roleName: outcome.data.roleName ?? null, answers: outcome.data._count.answers }
     setQuestions((prev) => (isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
     list.setStatus(isNew ? `Question « ${saved.label} » ajoutée.` : `Question « ${saved.label} » enregistrée.`)
     close()
@@ -137,6 +147,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
                   <p className="text-xs text-gray-700">
                     {QUESTION_TYPE_LABEL[q.type as QuestionType] ?? q.type}
                     {isChoice(q.type) ? ` : ${q.options.join(", ")}` : ""}
+                    {q.type === "number" ? ` : ${numberRangeText(q)}` : ""}
                     {` · ${q.answers} réponse${q.answers > 1 ? "s" : ""}`}
                     {q.roleName ? ` · ${questionRoleText(q.roleName)}` : ""}
                   </p>
@@ -189,7 +200,11 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
           </div>
           <div>
             <label htmlFor={`${id}-type`} className="block text-sm font-medium text-gray-800 mb-1">Type de réponse</label>
-            <select id={`${id}-type`} value={draft.type} onChange={(e) => setDraft((d) => ({ ...d, type: e.target.value as QuestionType }))} disabled={answered > 0} aria-describedby={answered > 0 ? `${id}-type-locked` : undefined} className="input">
+            <select id={`${id}-type`} value={draft.type} onChange={(e) => {
+              // Leaving « Nombre » removes its fields: no error may stay tied to them.
+              if (editor.invalidField === "min" || editor.invalidField === "max") editor.reset()
+              setDraft((d) => ({ ...d, type: e.target.value as QuestionType }))
+            }} disabled={answered > 0} aria-describedby={answered > 0 ? `${id}-type-locked` : undefined} className="input">
               {QUESTION_TYPES.map((t) => <option key={t} value={t}>{QUESTION_TYPE_LABEL[t]}</option>)}
             </select>
             {answered > 0 && <p id={`${id}-type-locked`} className="text-xs text-gray-600 mt-1">Cette question a déjà des réponses : son type ne peut plus changer.</p>}
@@ -200,6 +215,22 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
               <textarea id={`${id}-options`} rows={4} required value={draft.options} onChange={(e) => setDraft((d) => ({ ...d, options: e.target.value }))} aria-invalid={editor.isInvalid("options")} aria-describedby={describedBy("options", `${id}-options-hint`)} className="input" />
               <p id={`${id}-options-hint`} className="text-xs text-gray-600 mt-1">Un choix par ligne, au moins deux, douze au plus.{answered > 0 ? " Les choix déjà retenus par des bénévoles ne peuvent pas être retirés." : ""}</p>
             </div>
+          )}
+          {draft.type === "number" && (
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-800 mb-1">Valeurs acceptées</legend>
+              <div className="flex flex-wrap gap-4">
+                <div>
+                  <label htmlFor={`${id}-min`} className="block text-sm text-gray-800 mb-1">Minimum <span className="text-gray-600">(facultatif)</span></label>
+                  <input id={`${id}-min`} type="text" inputMode="numeric" autoComplete="off" value={draft.min} onChange={(e) => setDraft((d) => ({ ...d, min: e.target.value }))} aria-invalid={editor.isInvalid("min")} aria-describedby={describedBy("min", `${id}-bounds-hint`)} className="input w-32 tabular-nums" />
+                </div>
+                <div>
+                  <label htmlFor={`${id}-max`} className="block text-sm text-gray-800 mb-1">Maximum <span className="text-gray-600">(facultatif)</span></label>
+                  <input id={`${id}-max`} type="text" inputMode="numeric" autoComplete="off" value={draft.max} onChange={(e) => setDraft((d) => ({ ...d, max: e.target.value }))} aria-invalid={editor.isInvalid("max")} aria-describedby={describedBy("max", `${id}-bounds-hint`)} className="input w-32 tabular-nums" />
+                </div>
+              </div>
+              <p id={`${id}-bounds-hint`} className="text-xs text-gray-600 mt-1">Nombres entiers, 0 ou plus. Sans minimum, les réponses partent de 0 ; sans maximum, pas de limite. La synthèse additionne les réponses.{answered > 0 ? " Les nombres déjà donnés par des bénévoles doivent rester acceptés." : ""}</p>
+            </fieldset>
           )}
           <div className="flex items-center gap-2">
             <input id={`${id}-required`} type="checkbox" checked={draft.required} onChange={(e) => setDraft((d) => ({ ...d, required: e.target.checked }))} className="h-4 w-4 rounded border-gray-300" />

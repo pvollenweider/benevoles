@@ -59,4 +59,30 @@ describe("SignupQuestions", () => {
       expect(radio).toBeRequired()
     }
   })
+
+  it("a number question (#1015): numeric keypad, no pattern, its range always described, the error added", () => {
+    const onChange = vi.fn()
+    const count = { id: "guests", label: "Combien de personnes ?", type: "number", options: [], required: true, minValue: 1, maxValue: 10 }
+    const { rerender } = render(<SignupQuestions questions={[count]} answers={{}} onChange={onChange} errors={new Map()} />)
+    const field = screen.getByRole("textbox", { name: "Combien de personnes ?" })
+    expect(field).toHaveAttribute("inputmode", "numeric")
+    expect(field).toHaveAttribute("type", "text")
+    expect(field).not.toHaveAttribute("pattern")
+    expect(field).not.toHaveAttribute("maxlength")
+    expect(field).toBeRequired()
+    expect(field).toHaveAccessibleDescription("Un nombre entier, de 1 à 10.")
+    fireEvent.change(field, { target: { value: "3" } })
+    expect(onChange).toHaveBeenCalledWith("guests", "3")
+    rerender(<SignupQuestions questions={[count]} answers={{ guests: "12" }} onChange={onChange} errors={new Map([["guests", "« Combien de personnes ? » : entre 1 et 10."]])} />)
+    expect(field).toHaveAttribute("aria-invalid", "true")
+    expect(field).toHaveAccessibleDescription("Un nombre entier, de 1 à 10. « Combien de personnes ? » : entre 1 et 10.")
+  })
+
+  it("an optional number question says so in its label, 0 or more by default (#1015)", () => {
+    render(<SignupQuestions questions={[{ id: "kids", label: "Enfants", type: "number", options: [], required: false }]} answers={{ kids: "2" }} onChange={() => {}} errors={new Map()} clearable />)
+    const field = screen.getByRole("textbox", { name: "Enfants (facultatif)" })
+    expect(field).toHaveValue("2")
+    expect(field).not.toBeRequired()
+    expect(field).toHaveAccessibleDescription("Un nombre entier, 0 ou plus.")
+  })
 })

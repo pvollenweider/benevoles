@@ -168,6 +168,17 @@ describe("print sheets", () => {
     expect(noWaitlist).not.toContain("En attente")
   })
 
+  it("answers (#1015): a number question shows its total, in bold, with its note", () => {
+    const answers = answerSummary(
+      [{ id: "q3", label: "Combien de personnes ?", type: "number", options: [], answers: [{ volunteerId: "a", values: ["3"] }, { volunteerId: "b", values: ["2"] }] }],
+      [{ volunteerId: "a", status: "active" }, { volunteerId: "b", status: "active" }],
+    )
+    const html = renderSheet("answers", { ...data, shifts: [], answers })
+    expect(html).toContain('<caption>Combien de personnes ?<span class="caption-note">Somme des nombres indiqués par les bénévoles confirmés.</span></caption>')
+    expect(html).toMatch(/<th scope="row" class="total">Total<\/th>\s*<td class="num mono">5<\/td>/)
+    expect(html).toMatch(/<th scope="row">Nombre de réponses<\/th>\s*<td class="num mono">2<\/td>/)
+  })
+
   it("answers: says so when there is no question or no confirmed volunteer", () => {
     expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 0, questions: [] } })).toContain("Aucune question posée aux bénévoles")
     const q = { id: "q", label: "Q", type: "text", rows: [] }

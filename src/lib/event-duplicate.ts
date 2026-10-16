@@ -101,7 +101,7 @@ export type DuplicableEvent = {
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
-  questions?: { label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null }[]
+  questions?: { label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null }[]
   leaders: { roleName: string; name: string; email: string }[]
   recurrences?: DuplicableRecurrence[]
 }
@@ -202,7 +202,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     shifts,
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
-    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position, roleName: duplicatedQuestionRole(q.roleName, copiedRoles) })) : [],
+    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position, minValue: q.minValue ?? null, maxValue: q.maxValue ?? null, roleName: duplicatedQuestionRole(q.roleName, copiedRoles) })) : [],
     leaders: copy.leaders ? source.leaders : [],
   }
 }

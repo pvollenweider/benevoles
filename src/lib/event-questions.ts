@@ -2,29 +2,88 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Custom questions of an event's sign-up form (#483): text, yes/no, single or multiple choice,
- * required or not, a few per event. The server validates the answers (the page only helps);
+ * Custom questions of an event's sign-up form (#483): text, yes/no, single or multiple choice, or a
+ * whole number between optional bounds (#1015), required or not, a few per event. The server validates the answers (the page only helps);
  * a question with answers is archived rather than deleted, and its type or used options can't
  * change under existing answers. Pure, and free of zod: the public sign-up page imports it (#773);
  * the question schema of the admin API is in event-questions-schema.ts.
  */
 export const QUESTION_LIMIT = 5
-export const QUESTION_TYPES = ["text", "yesno", "single", "multiple"] as const
+export const QUESTION_TYPES = ["text", "yesno", "single", "multiple", "number"] as const
 export type QuestionType = (typeof QUESTION_TYPES)[number]
 export const QUESTION_TYPE_LABEL: Record<QuestionType, string> = {
   text: "Texte court",
   yesno: "Oui / non",
   single: "Choix unique",
   multiple: "Choix multiple",
+  number: "Nombre",
 }
 export const TEXT_ANSWER_MAX = 200
 export const YES = "Oui"
 export const NO = "Non"
 
-export type Question = { id: string; label: string; type: string; options: string[]; required: boolean }
+export type Question = {
+  id: string
+  label: string
+  type: string
+  options: string[]
+  required: boolean
+  /** Bounds of a "number" question (#1015): null or absent minValue means 0, maxValue no bound. */
+  minValue?: number | null
+  maxValue?: number | null
+}
+
+// ── Number questions (#1015) ────────────────────────────────────────────────
+
+/**
+ * The largest answer or bound of a number question: six digits, enough for a head count or an
+ * amount, and a sum that stays exact. Whole numbers 0 or more only: the numeric keypad of phones
+ * has no minus key.
+ */
+export const NUMBER_ANSWER_MAX = 999999
+
+/** The bounds an answer must respect: the minimum (0 by default) and the maximum, null for none. */
+export function numberBounds(q: { minValue?: number | null; maxValue?: number | null }): { min: number; max: number | null } {
+  return { min: q.minValue ?? 0, max: q.maxValue ?? null }
+}
+
+/** The accepted range for people: « de 1 à 10 », « 0 ou plus », « 5 au plus ». */
+export function numberRangeText(q: { minValue?: number | null; maxValue?: number | null }): string {
+  const { min, max } = numberBounds(q)
+  if (max === null) return `${min} ou plus`
+  return min === 0 ? `${max} au plus` : `de ${min} à ${max}`
+}
+
+/** The hint under a number field, for volunteers: « Un nombre entier, de 1 à 10. » */
+export function numberHint(q: { minValue?: number | null; maxValue?: number | null }): string {
+  return `Un nombre entier, ${numberRangeText(q)}.`
+}
+
+/**
+ * A typed number: its value, null when empty, NaN when not a whole number. Spaces are ignored
+ * (« 1 000 »); a sign is read so that « -2 » is refused for its value, not its spelling.
+ */
+export function parseWholeNumber(v: unknown): number | null {
+  if (v === undefined || v === null) return null
+  if (typeof v === "number") return Number.isInteger(v) ? v : NaN
+  if (typeof v !== "string") return NaN
+  const t = v.replace(/[\s\u00a0\u202f]/g, "")
+  if (t === "") return null
+  return /^-?\d{1,9}$/.test(t) ? Number(t) : NaN
+}
+
+/** Why a number answer is refused, or null when it fits the question. */
+function numberProblem(q: Question, n: number): string | null {
+  if (Number.isNaN(n)) return `« ${q.label} » : indique un nombre entier, sans virgule.`
+  const { min, max } = numberBounds(q)
+  const top = max ?? NUMBER_ANSWER_MAX
+  if (n >= min && n <= top) return null
+  if (max !== null) return min === 0 ? `« ${q.label} » : au plus ${max}.` : `« ${q.label} » : entre ${min} et ${max}.`
+  return n < min ? `« ${q.label} » : au moins ${min}.` : `« ${q.label} » : au plus ${NUMBER_ANSWER_MAX}.`
+}
 
 
-/** Raw answers as posted: text, "Oui"/"Non", one option, or a list of options. */
+/** Raw answers as posted: text, "Oui"/"Non", one option, a list of options, or a number. */
 export type RawAnswers = Record<string, unknown>
 
 export type AnswerCheck = { ok: true; values: Map<string, string[]> } | { ok: false; errors: { questionId: string; message: string }[] }
@@ -53,6 +112,14 @@ export function checkAnswers(questions: Question[], raw: RawAnswers | undefined)
       const list = Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []
       if (list.some((x) => !q.options.includes(x))) { errors.push({ questionId: q.id, message: `« ${q.label} » : choix inconnu.` }); continue }
       vals = q.options.filter((o) => list.includes(o))
+    } else if (q.type === "number") {
+      const n = parseWholeNumber(v)
+      if (n !== null) {
+        const problem = numberProblem(q, n)
+        if (problem) { errors.push({ questionId: q.id, message: problem }); continue }
+        // Stored in one spelling, « 3 » whatever was typed (« 03 », « 3 »): the sum reads it back.
+        vals = [String(n)]
+      }
     }
     if (q.required && vals.length === 0) { errors.push({ questionId: q.id, message: `« ${q.label} » est obligatoire.` }); continue }
     if (vals.length > 0) values.set(q.id, vals)
@@ -95,12 +162,28 @@ export function answerText(values: string[] | undefined): string {
 }
 
 /**
- * Why an edit of a question can't be saved while it has answers: its type can't change, and an
- * option somebody chose can't disappear. Null when the edit is safe.
+ * Why an edit of a question can't be saved while it has answers: its type can't change, an option
+ * somebody chose can't disappear, and the bounds of a number question can't leave out an answer
+ * given (#1015). Null when the edit is safe.
  */
-export function questionChangeProblem(before: { type: string; options: string[] }, after: { type: string; options: string[] }, usedOptions: string[], answerCount: number): string | null {
+export function questionChangeProblem(
+  before: { type: string; options: string[] },
+  after: { type: string; options: string[]; minValue?: number | null; maxValue?: number | null },
+  usedOptions: string[],
+  answerCount: number,
+): string | null {
   if (answerCount === 0) return null
   if (before.type !== after.type) return "Cette question a déjà des réponses : son type ne peut plus changer. Créez-en une nouvelle."
+  if (after.type === "number") {
+    const given = usedOptions.map(parseWholeNumber).filter((n): n is number => n !== null && !Number.isNaN(n))
+    if (given.length === 0) return null
+    const { min, max } = numberBounds(after)
+    const lowest = Math.min(...given)
+    const highest = Math.max(...given)
+    if (lowest < min) return `Un bénévole a répondu ${lowest} : le minimum ne peut pas dépasser ${lowest}.`
+    if (max !== null && highest > max) return `Un bénévole a répondu ${highest} : le maximum ne peut pas être inférieur à ${highest}.`
+    return null
+  }
   const removed = usedOptions.filter((o) => !after.options.includes(o))
   if (removed.length > 0) return `Des bénévoles ont choisi ${removed.map((o) => `« ${o} »`).join(", ")} : ces choix ne peuvent pas être retirés.`
   return null

@@ -23,7 +23,7 @@ const FORM_ID = "my-answers-form"
 const FORM_TITLE_ID = "my-answers-form-title"
 const CLOSED_ID = "my-answers-closed"
 
-const asQuestions = (rows: MyAnswerRow[]): Question[] => rows.map((r) => ({ id: r.id, label: r.label, type: r.type, options: r.options, required: r.required }))
+const asQuestions = (rows: MyAnswerRow[]): Question[] => rows.map((r) => ({ id: r.id, label: r.label, type: r.type, options: r.options, required: r.required, minValue: r.minValue, maxValue: r.maxValue }))
 
 /** The field a question's focus goes to: the text field, the checked choice, or the first one. */
 function fieldOf(id: string): () => HTMLElement | null {

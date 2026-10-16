@@ -124,6 +124,33 @@ describe("questions admin API", () => {
     expect(d.eventQuestion.update).toHaveBeenCalledTimes(4)
   })
 
+  it("creates a number question with its bounds, 0 as default minimum, refuses crossed bounds (#1015)", async () => {
+    const d = db({ create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...q, ...data })) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    const ok = await POST(json("POST", { label: "Combien ?", type: "number", maxValue: 6 }), params)
+    expect(ok.status).toBe(201)
+    expect(d.eventQuestion.create.mock.calls[0][0].data).toMatchObject({ type: "number", options: [], minValue: 0, maxValue: 6 })
+    expect(d.eventQuestion.create.mock.calls[0][0].select).toMatchObject({ minValue: true, maxValue: true })
+    const crossed = await POST(json("POST", { label: "Combien ?", type: "number", minValue: 5, maxValue: 2 }), params)
+    expect(crossed.status).toBe(400)
+    expect((await crossed.json()).error).toBe("Le maximum doit être au moins égal au minimum.")
+    expect((await POST(json("POST", { label: "Combien ?", type: "number", minValue: -1 }), params)).status).toBe(400)
+  })
+
+  it("bounds of an answered number question can widen, never leave out an answer given (#1015)", async () => {
+    const n = { ...q, type: "number", options: [], minValue: 0, maxValue: 10, answers: [{ values: ["2"] }, { values: ["7"] }] }
+    const d = db({ findFirst: vi.fn().mockResolvedValue(n) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const tooLow = await PATCH(json("PATCH", { label: "Combien ?", type: "number", minValue: 0, maxValue: 5 }), params)
+    expect(tooLow.status).toBe(409)
+    expect((await tooLow.json()).error).toBe("Un bénévole a répondu 7 : le maximum ne peut pas être inférieur à 7.")
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", minValue: 3 }), params)).status).toBe(409)
+    expect((await PATCH(json("PATCH", { label: "Combien ?", type: "number", minValue: 1, maxValue: 20 }), params)).status).toBe(200)
+    expect(d.eventQuestion.update.mock.calls[0][0].data).toMatchObject({ minValue: 1, maxValue: 20 })
+  })
+
   it("reorders only with the full current list", async () => {
     const d = db()
     guard.mockResolvedValue({ db: d, session: {} })

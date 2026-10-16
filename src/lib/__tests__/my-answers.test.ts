@@ -23,7 +23,7 @@ describe("myAnswerRows", () => {
   })
 
   it("an unanswered question has no answer (the page says « Pas de réponse »)", () => {
-    expect(myAnswerRows([q("a", 0)])).toEqual([{ id: "a", label: "Question a ?", answer: null, type: "text", options: [], required: false, values: [] }])
+    expect(myAnswerRows([q("a", 0)])).toEqual([{ id: "a", label: "Question a ?", answer: null, type: "text", options: [], required: false, minValue: null, maxValue: null, values: [] }])
     expect(myAnswerRows([q("a", 0, [])])[0].answer).toBeNull()
     expect(myAnswerRows([q("a", 0, ["  "])])[0].answer).toBeNull()
     expect(NO_ANSWER_TEXT).toBe("Pas de réponse")
@@ -35,8 +35,11 @@ describe("myAnswerRows", () => {
       q("yesno", 1, ["Non"]),
       q("single", 2, ["M"]),
       q("multiple", 3, ["Voiture", "Vélo"]),
+      q("number", 4, ["3"], { type: "number", minValue: 1, maxValue: 8 }),
     ])
-    expect(rows.map((r) => r.answer)).toEqual(["Végétarien", "Non", "M", "Voiture, Vélo"])
+    expect(rows.map((r) => r.answer)).toEqual(["Végétarien", "Non", "M", "Voiture, Vélo", "3"])
+    // A number question keeps its bounds for the edit form (#1015).
+    expect(rows[4]).toMatchObject({ type: "number", minValue: 1, maxValue: 8, values: ["3"] })
   })
 
   it("no question, no row", () => {
@@ -65,6 +68,11 @@ describe("startingAnswers (#1013: the sign-up for more shifts starts from them)"
 
   it("leaves out an answer that is no longer a choice of its question (option renamed or removed)", () => {
     expect(startingAnswers([row("s", "single", ["XL"], ["S", "M"]), row("m", "multiple", ["Vélo", "Bus"], ["Vélo"]), row("y", "yesno", ["Peut-être"])])).toEqual({})
+  })
+
+  it("a number answer starts as its digits; an unreadable one is left out (#1015)", () => {
+    expect(startingAnswers([row("n", "number", ["3"]), row("e", "number", [])])).toEqual({ n: "3", e: "" })
+    expect(startingAnswers([row("x", "number", ["trois"])])).toEqual({})
   })
 
   it("from the personal page's rows: archived questions are not there", () => {

@@ -10,7 +10,7 @@ import { questionSchema } from "@/lib/event-questions-schema"
 import { questionRoleProblem } from "@/lib/question-role"
 import { liveRoleNames } from "@/lib/question-role-data"
 
-const select = { id: true, label: true, type: true, options: true, required: true, roleName: true, position: true, _count: { select: { answers: true } } } as const
+const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, position: true, _count: { select: { answers: true } } } as const
 
 
 /** The sign-up questions of an event (#483), active ones in order. */
