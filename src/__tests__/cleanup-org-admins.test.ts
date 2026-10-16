@@ -20,6 +20,7 @@ vi.mock("@/lib/prisma", () => {
     adminUser: { findMany: m.adminFindMany, deleteMany: m.adminDeleteMany, updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
     notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     targetedMessage: { update: vi.fn(), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    scheduledMessage: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
   }
   return {
     prisma: {

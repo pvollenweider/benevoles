@@ -8,6 +8,7 @@ import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/re
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }) }))
 
 import TargetedMessageForm from "../admin/TargetedMessageForm"
+import { localNow } from "@/lib/scheduled-message"
 
 // « Écrire aux bénévoles » (#396): audience, live count, preview, confirmation, one send.
 
@@ -121,5 +122,97 @@ describe("TargetedMessageForm", () => {
     fetchMock.mockResolvedValueOnce(json({ error: "Trop de messages envoyés cette heure. Réessayez plus tard." }, false))
     fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
     expect(await screen.findByRole("alert")).toHaveTextContent("Trop de messages envoyés cette heure.")
+  })
+
+  // « Programmer l'envoi » (#1019): a date and time of the organisation's zone, checked like on
+  // the server, a preview and a confirmation that say when and that the count is recalculated.
+  describe("scheduled send", () => {
+    const zone = "Europe/Zurich"
+    const tomorrow = () => localNow(new Date(Date.now() + 24 * 3600 * 1000), zone).date
+    const yesterday = () => localNow(new Date(Date.now() - 24 * 3600 * 1000), zone).date
+    const fillText = () => {
+      fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "Parking" } })
+      fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "Entrée par la rue Basse." } })
+    }
+
+    it("shows the date and time fields only once « Programmer l'envoi » is chosen, and says the count is recalculated", async () => {
+      setup()
+      await screen.findByText("12 personnes recevront ce message.")
+      expect(screen.queryByLabelText(/Date d'envoi/)).not.toBeInTheDocument()
+      fireEvent.click(screen.getByRole("radio", { name: "Programmer l'envoi" }))
+      expect(screen.getByLabelText("Date d'envoi *")).toHaveAttribute("type", "date")
+      expect(screen.getByLabelText("Heure d'envoi (Europe/Zurich) *")).toHaveAccessibleDescription(/Les destinataires sont calculés au moment de l'envoi/)
+      expect(screen.getByText("12 personnes aujourd'hui ; le nombre est recalculé au moment de l'envoi.")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Voir l'aperçu et programmer" })).toBeInTheDocument()
+      fireEvent.click(screen.getByRole("radio", { name: "Maintenant" }))
+      expect(screen.queryByLabelText(/Date d'envoi/)).not.toBeInTheDocument()
+    })
+
+    it("refuses a missing or past date on the field itself, and focuses it", async () => {
+      setup()
+      await screen.findByText(/12 personnes/)
+      fillText()
+      fireEvent.click(screen.getByRole("radio", { name: "Programmer l'envoi" }))
+      fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et programmer" }))
+      const dateField = screen.getByLabelText("Date d'envoi *")
+      expect(dateField).toHaveAttribute("aria-invalid", "true")
+      expect(dateField).toHaveFocus()
+      expect(screen.getByRole("alert")).toHaveTextContent("À corriger : date d'envoi.")
+      expect(dateField).toHaveAccessibleDescription(/Indiquez la date d'envoi./)
+
+      fireEvent.change(dateField, { target: { value: yesterday() } })
+      fireEvent.change(screen.getByLabelText(/Heure d'envoi/), { target: { value: "10:00" } })
+      expect(dateField).toHaveAccessibleDescription(/Cette date est passée/)
+      expect(fetchMock.mock.calls.filter(([url]) => String(url).includes("scheduled-messages"))).toHaveLength(0)
+    })
+
+    it("previews, confirms with the date and the count, schedules once, then points to the list", async () => {
+      setup({ kind: "role", roleName: "Bar" })
+      await screen.findByText(/3 personnes/)
+      fillText()
+      fireEvent.click(screen.getByRole("radio", { name: "Programmer l'envoi" }))
+      fireEvent.change(screen.getByLabelText("Date d'envoi *"), { target: { value: tomorrow() } })
+      fireEvent.change(screen.getByLabelText(/Heure d'envoi/), { target: { value: "18:00" } })
+      fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et programmer" }))
+
+      const preview = await screen.findByRole("dialog", { name: "Aperçu de l'email" })
+      expect(preview).toHaveTextContent(/Programmer l'email pour le .+ à 18:00 \(Europe\/Zurich\), à 3 personnes \(aud:role, nombre actuel, recalculé au moment de l'envoi\)/)
+      fetchMock.mockResolvedValueOnce(json({ id: "sm-1", when: "samedi 17 octobre à 18:00 (Europe/Zurich)", audience: "aud:role", recipients: 3 }))
+      fireEvent.click(screen.getByRole("button", { name: "Programmer pour 3 personnes" }))
+      const confirm = await screen.findByRole("dialog", { name: "Confirmer la programmation" })
+      expect(confirm).toHaveTextContent("Vous pourrez l'annuler jusque-là dans « Messages programmés »")
+      fireEvent.click(screen.getByRole("button", { name: "Confirmer la programmation" }))
+
+      const done = await screen.findByRole("heading", { name: "Message programmé pour le samedi 17 octobre à 18:00 (Europe/Zurich)" })
+      await waitFor(() => expect(done).toHaveFocus())
+      expect(screen.getByRole("link", { name: "Messages programmés" })).toHaveAttribute("href", "#scheduled-messages-heading")
+      const schedules = fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/scheduled-messages"))
+      expect(schedules).toHaveLength(1)
+      expect(JSON.parse(schedules[0][1].body)).toEqual({ audience: { kind: "role", roleName: "Bar" }, subject: "Parking", message: "Entrée par la rue Basse.", push: false, date: tomorrow(), time: "18:00" })
+    })
+
+    it("brings a time refused by the server back on its field, focused", async () => {
+      setup()
+      await screen.findByText(/12 personnes/)
+      fillText()
+      fireEvent.click(screen.getByRole("radio", { name: "Programmer l'envoi" }))
+      fireEvent.change(screen.getByLabelText("Date d'envoi *"), { target: { value: tomorrow() } })
+      fireEvent.change(screen.getByLabelText(/Heure d'envoi/), { target: { value: "09:00" } })
+      fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et programmer" }))
+      await screen.findByRole("dialog", { name: "Aperçu de l'email" })
+      fireEvent.click(screen.getByRole("button", { name: "Programmer pour 12 personnes" }))
+      fetchMock.mockResolvedValueOnce(json({ error: "Cette heure est passée : choisissez une heure après 09:02 (heure de Europe/Zurich).", field: "time" }, false))
+      fireEvent.click(await screen.findByRole("button", { name: "Confirmer la programmation" }))
+      const timeField = screen.getByLabelText(/Heure d'envoi/)
+      await waitFor(() => expect(timeField).toHaveFocus())
+      expect(timeField).toHaveAttribute("aria-invalid", "true")
+      expect(timeField).toHaveAccessibleDescription(/choisissez une heure après 09:02/)
+    })
+
+    it("offers no scheduling on an archived event", async () => {
+      render(<TargetedMessageForm eventId="evt-1" roles={[]} shifts={[]} initialAudience={{ kind: "event" }} canSchedule={false} />)
+      await screen.findByText(/12 personnes/)
+      expect(screen.queryByRole("radio", { name: "Programmer l'envoi" })).not.toBeInTheDocument()
+    })
   })
 })

@@ -4,12 +4,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX, type Audience } from "@/lib/targeted-message"
 import { templateProblems, VARIABLES } from "@/lib/message-template"
 import { announce } from "@/lib/announce"
 import RequiredMark from "@/components/RequiredMark"
+import { formatScheduledFor, localNow, scheduledInstant, scheduleProblem, SCHEDULE_DELAY_MINUTES, type ScheduleProblem } from "@/lib/scheduled-message"
 
 type Props = {
   eventId: string
@@ -18,6 +20,10 @@ type Props = {
   initialAudience: Audience
   /** The organisation's message templates (#482). */
   templates?: { id: string; name: string; subject: string; body: string }[]
+  /** The organisation's time zone: a scheduled send (#1019) is chosen in it. */
+  timeZone?: string
+  /** « Programmer l'envoi » is offered (not on an archived event). */
+  canSchedule?: boolean
 }
 
 type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; declinedExcluded?: number; audience: string; preview: { subject: string; html: string } | null; addressesToVerify?: number }
@@ -26,7 +32,7 @@ type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number;
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
  * number of people written to (#396). Sending goes through the outbox on the server.
  */
-export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience, templates = [] }: Props) {
+export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience, templates = [], timeZone = "Europe/Zurich", canSchedule = true }: Props) {
   const router = useRouter()
   const id = useId()
   const [kind, setKind] = useState<Audience["kind"]>(initialAudience.kind)
@@ -48,6 +54,14 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const [templateId, setTemplateId] = useState("")
   const [beforeTemplate, setBeforeTemplate] = useState<{ subject: string; message: string } | null>(null)
   const [attempted, setAttempted] = useState(false)
+  // « Quand l'envoyer ? » (#1019): now, or on a date and time of the organisation's zone.
+  const [when, setWhen] = useState<"now" | "later">("now")
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
+  // A date or time refused by the server (it can pass while the dialogs are open).
+  const [serverWhen, setServerWhen] = useState<ScheduleProblem | null>(null)
+  const [scheduled, setScheduled] = useState<{ when: string; audience: string; recipients: number } | null>(null)
+  const errorRef = useRef<HTMLParagraphElement>(null)
   const cancelRef = useRef<HTMLButtonElement>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
 
@@ -59,6 +73,13 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const messageProblems = templateProblems(message, kind)
   const subjectMissing = subject.trim().length === 0
   const messageMissing = message.trim().length === 0
+  const later = when === "later"
+  // Checked with the same rule as the server, only once « Programmer l'envoi » is chosen (the
+  // clock is read on the client then, never during the first render).
+  const whenProblem: ScheduleProblem | null = later ? (serverWhen ?? scheduleProblem({ date, time }, timeZone, new Date())) : null
+  const dateProblem = attempted && whenProblem?.field === "date" ? whenProblem.message : null
+  const timeProblem = attempted && whenProblem?.field === "time" ? whenProblem.message : null
+  const whenLabel = later && !whenProblem ? `${formatScheduledFor(scheduledInstant(date, time, timeZone), timeZone, new Date())} (${timeZone})` : ""
 
   // Recipient count for the chosen audience; the subject and message are placeholders here, the
   // count doesn't depend on them.
@@ -78,7 +99,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const dry = counting ? null : dryFor?.data ?? null
 
   const [restartCount, setRestartCount] = useState(0)
-  useEffect(() => { if (sent) resultRef.current?.focus() }, [sent])
+  useEffect(() => { if (sent || scheduled) resultRef.current?.focus() }, [sent, scheduled])
   // After « Écrire un autre message » the clicked button is gone: land on the subject field.
   useEffect(() => { if (restartCount > 0) document.getElementById(`${id}-subject`)?.focus() }, [restartCount, id])
 
@@ -90,6 +111,10 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
     }
     if (subjectMissing || messageMissing) {
       document.getElementById(subjectMissing ? `${id}-subject` : `${id}-message`)?.focus()
+      return
+    }
+    if (whenProblem) {
+      document.getElementById(whenProblem.field === "date" ? `${id}-date` : `${id}-time`)?.focus()
       return
     }
     if (counting || recipients === 0) return
@@ -105,8 +130,38 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
     setShowPreview(true)
   }
 
+  async function schedule() {
+    if (sending) return
+    setSending(true)
+    setError(null)
+    const res = await fetch(`/api/admin/events/${eventId}/scheduled-messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ audience, subject, message, push, date, time }),
+    }).catch(() => null)
+    const d = res ? await res.json().catch(() => ({})) : {}
+    setSending(false)
+    if (!res || !res.ok) {
+      const text = typeof d?.error === "string" ? d.error : "La programmation n'a pas pu être enregistrée."
+      // The time passed meanwhile, or the date is refused: back on the field, with the reason.
+      if (d?.field === "date" || d?.field === "time") {
+        flushSync(() => { setConfirming(false); setServerWhen({ field: d.field, message: text }) })
+        document.getElementById(d.field === "date" ? `${id}-date` : `${id}-time`)?.focus()
+        return
+      }
+      flushSync(() => { setConfirming(false); setError(text) })
+      errorRef.current?.focus()
+      return
+    }
+    setConfirming(false)
+    setScheduled({ when: d.when, audience: d.audience, recipients: d.recipients })
+    // « Messages programmés » below shows it, with « Annuler l'envoi »; client state is kept.
+    router.refresh()
+  }
+
   async function send() {
     if (sending) return
+    if (later) return schedule()
     setSending(true)
     setError(null)
     const res = await fetch(`/api/admin/events/${eventId}/message`, {
@@ -138,14 +193,36 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const addressesToVerifyWarning = addressesToVerify > 0
     ? `${addressesToVerify} ${addressesToVerify > 1 ? "destinataires ont une adresse à vérifier (un précédent message leur a été définitivement refusé)" : "destinataire a une adresse à vérifier (un précédent message lui a été définitivement refusé)"}.`
     : null
+  const restart = () => { setSent(null); setScheduled(null); setSubject(""); setMessage(""); setPush(false); setTemplateId(""); setTemplateNotice(""); setBeforeTemplate(null); setAttempted(false); setWhen("now"); setDate(""); setTime(""); setServerWhen(null); setRestartCount((n) => n + 1) }
   const inputClass = (missing: boolean, hasProblems = false) => `input ${(attempted && missing) || hasProblems ? "!border-red-600" : ""}`
+
+  if (scheduled) {
+    return (
+      <section aria-labelledby={`${id}-done`} className="bg-white rounded-2xl border border-green-200 p-5 space-y-3">
+        <h3 id={`${id}-done`} ref={resultRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">
+          Message programmé pour le {scheduled.when}
+        </h3>
+        <p className="text-sm text-gray-700">
+          Destinataires : {scheduled.audience}, {plural(scheduled.recipients)} aujourd&apos;hui. Ils sont recalculés au moment de l&apos;envoi, qui part dans les {SCHEDULE_DELAY_MINUTES} minutes suivant l&apos;heure choisie.
+          Vous pouvez l&apos;annuler jusque-là dans <a href="#scheduled-messages-heading" className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">Messages programmés</a>, plus bas sur cette page.
+        </p>
+        <button
+          type="button"
+          onClick={restart}
+          className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          Écrire un autre message
+        </button>
+      </section>
+    )
+  }
 
   if (sent) {
     return (
       <section aria-labelledby={`${id}-done`} className="bg-white rounded-2xl border border-green-200 p-5 space-y-3">
-        <h2 id={`${id}-done`} ref={resultRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">
+        <h3 id={`${id}-done`} ref={resultRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">
           Message envoyé à {plural(sent.sent)}
-        </h2>
+        </h3>
         <p className="text-sm text-gray-700">Destinataires : {sent.audience}. L&apos;envoi se fait dans la minute ; un email qui échoue est renvoyé automatiquement.</p>
         {(sent.declinedExcluded ?? 0) > 0 && (
           <p className="text-sm text-gray-700">{sent.declinedExcluded} {sent.declinedExcluded! > 1 ? "personnes pas disponibles n'ont" : "personne pas disponible n'a"} rien reçu.</p>
@@ -155,7 +232,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           : <p className="text-sm text-gray-700">Aucune notification envoyée : aucun de ces destinataires n&apos;a activé les notifications.</p>)}
         <button
           type="button"
-          onClick={() => { setSent(null); setSubject(""); setMessage(""); setPush(false); setTemplateId(""); setTemplateNotice(""); setBeforeTemplate(null); setAttempted(false); setRestartCount((n) => n + 1) }}
+          onClick={restart}
           className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           Écrire un autre message
@@ -201,7 +278,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           </div>
         )}
         <p id={`${id}-count`} aria-live="polite" aria-atomic="true" className="text-sm text-gray-700 pt-1">
-          {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : `${plural(recipients)} recevr${recipients > 1 ? "ont" : "a"} ce message${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""}.`) : ""}
+          {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : later
+            ? `${plural(recipients)} aujourd'hui${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""} ; le nombre est recalculé au moment de l'envoi.`
+            : `${plural(recipients)} recevr${recipients > 1 ? "ont" : "a"} ce message${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""}.`) : ""}
           {!counting && dry && kind === "invited_without_shift" && (dry.declinedExcluded ?? 0) > 0 ? ` ${dry.declinedExcluded} personne${dry.declinedExcluded! > 1 ? "s ont" : " a"} indiqué ne pas être disponible${dry.declinedExcluded! > 1 ? "s" : ""} et ne reçoi${dry.declinedExcluded! > 1 ? "vent" : "t"} rien.` : ""}
         </p>
         {counting && <p aria-hidden="true" className="text-sm text-gray-600">Comptage…</p>}
@@ -280,10 +359,56 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         </div>
       </div>
 
-      {attempted && (subjectMissing || messageMissing) && (
-        <p role="alert" className="text-sm text-red-700">Champs obligatoires manquants : {[subjectMissing && "objet", messageMissing && "message"].filter(Boolean).join(", ")}.</p>
+      {canSchedule && (
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium text-gray-800">Quand l&apos;envoyer ?</legend>
+          {([["now", "Maintenant"], ["later", "Programmer l'envoi"]] as const).map(([k, label]) => (
+            <div key={k} className="flex items-center gap-2 min-h-8">
+              <input id={`${id}-when-${k}`} type="radio" name={`${id}-when`} value={k} checked={when === k} onChange={() => setWhen(k)} className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+              <label htmlFor={`${id}-when-${k}`} className="text-sm text-gray-800">{label}</label>
+            </div>
+          ))}
+          {later && (
+            <div className="pl-6 space-y-3">
+              <div className="flex flex-wrap gap-4">
+                <div>
+                  <label htmlFor={`${id}-date`} className={`block text-xs font-medium mb-1 ${dateProblem ? "text-red-700" : "text-gray-600"}`}>Date d&apos;envoi<RequiredMark /></label>
+                  <input
+                    id={`${id}-date`} type="date" lang="fr-FR" value={date} required min={localNow(new Date(), timeZone).date}
+                    onChange={(e) => { setDate(e.target.value); setServerWhen(null) }}
+                    aria-invalid={dateProblem ? true : undefined}
+                    aria-describedby={`${id}-when-hint${dateProblem ? ` ${id}-date-error` : ""}`}
+                    className={`input ${dateProblem ? "!border-red-600" : ""}`}
+                  />
+                  {dateProblem && <p id={`${id}-date-error`} className="text-xs text-red-700 mt-1">{dateProblem}</p>}
+                </div>
+                <div>
+                  <label htmlFor={`${id}-time`} className={`block text-xs font-medium mb-1 ${timeProblem ? "text-red-700" : "text-gray-600"}`}>Heure d&apos;envoi ({timeZone})<RequiredMark /></label>
+                  <input
+                    id={`${id}-time`} type="time" lang="fr-FR" value={time} required
+                    onChange={(e) => { setTime(e.target.value); setServerWhen(null) }}
+                    aria-invalid={timeProblem ? true : undefined}
+                    aria-describedby={`${id}-when-hint${timeProblem ? ` ${id}-time-error` : ""}`}
+                    className={`input ${timeProblem ? "!border-red-600" : ""}`}
+                  />
+                  {timeProblem && <p id={`${id}-time-error`} className="text-xs text-red-700 mt-1">{timeProblem}</p>}
+                </div>
+              </div>
+              <p id={`${id}-when-hint`} className="text-xs text-gray-600">
+                Le message part dans les {SCHEDULE_DELAY_MINUTES} minutes qui suivent. Les destinataires sont calculés au moment de l&apos;envoi : une personne inscrite d&apos;ici là le reçoit aussi, une personne désinscrite ne le reçoit pas. Vous pouvez l&apos;annuler jusque-là.
+              </p>
+            </div>
+          )}
+        </fieldset>
       )}
-      {error && <p role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</p>}
+
+      {attempted && (subjectMissing || messageMissing) ? (
+        <p role="alert" className="text-sm text-red-700">Champs obligatoires manquants : {[subjectMissing && "objet", messageMissing && "message"].filter(Boolean).join(", ")}.</p>
+      ) : attempted && whenProblem ? (
+        // The reason is under the field; the summary names the field, like the missing ones.
+        <p role="alert" className="text-sm text-red-700">À corriger : {whenProblem.field === "date" ? "date d'envoi" : "heure d'envoi"}.</p>
+      ) : null}
+      {error && <p ref={errorRef} tabIndex={-1} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 focus:outline-none">{error}</p>}
 
       <div className="flex gap-3 flex-wrap">
         <button
@@ -292,7 +417,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           aria-describedby={`${id}-count`}
           className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${counting || recipients === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          Voir l&apos;aperçu et envoyer
+          {later ? "Voir l'aperçu et programmer" : "Voir l'aperçu et envoyer"}
         </button>
       </div>
 
@@ -302,7 +427,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
             <p className="text-sm text-gray-700">Tel que le recevra la première personne de la liste ; chacun voit ses propres créneaux.</p>
             <p className="text-sm"><span className="font-medium">Objet :</span> {dry.preview.subject}</p>
             <iframe title="Contenu de l'email" sandbox="" srcDoc={dry.preview.html} className="w-full h-[50vh] max-h-[28rem] border border-gray-200 rounded-lg bg-white" />
-            <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){declinedPart}{pushPart} ?</p>
+            {later
+              ? <p className="text-sm text-gray-800">Programmer l&apos;email pour le <strong>{whenLabel}</strong>, à <strong>{plural(recipients)}</strong> ({dry.audience}, nombre actuel, recalculé au moment de l&apos;envoi){declinedPart}{pushPart} ?</p>
+              : <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){declinedPart}{pushPart} ?</p>}
             {addressesToVerifyWarning && (
               <p id={`${id}-preview-warning`} className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
                 <span aria-hidden="true">⚠ </span>{addressesToVerifyWarning} L&apos;envoi reste possible.
@@ -315,7 +442,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
                 onClick={() => { setShowPreview(false); setConfirming(true) }}
                 className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
-                Envoyer à {plural(recipients)}
+                {later ? `Programmer pour ${plural(recipients)}` : `Envoyer à ${plural(recipients)}`}
               </button>
             </div>
           </div>
@@ -324,16 +451,23 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
 
       {confirming && (
         <ModalShell
-          title="Confirmer l'envoi"
+          title={later ? "Confirmer la programmation" : "Confirmer l'envoi"}
           onClose={() => { if (!sending) setConfirming(false) }}
+          busy={sending}
           initialFocusRef={cancelRef}
           describedBy={addressesToVerifyWarning ? `${id}-confirm-text ${id}-confirm-warning` : `${id}-confirm-text`}
           closeOnBackdrop={false}
         >
           <div className="space-y-4" aria-busy={sending}>
-            <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
-              « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){declinedPart}{pushPart}. Cet envoi ne peut pas être annulé.
-            </p>
+            {later ? (
+              <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
+                « {subject} » partira le <strong>{whenLabel}</strong> à <strong>{plural(recipients)}</strong> ({dry?.audience}, nombre actuel, recalculé au moment de l&apos;envoi){declinedPart}{pushPart}. Vous pourrez l&apos;annuler jusque-là dans « Messages programmés », plus bas sur cette page.
+              </p>
+            ) : (
+              <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
+                « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){declinedPart}{pushPart}. Cet envoi ne peut pas être annulé.
+              </p>
+            )}
             {addressesToVerifyWarning && (
               <p id={`${id}-confirm-warning`} className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
                 <span aria-hidden="true">⚠ </span>{addressesToVerifyWarning} L&apos;envoi reste possible.
@@ -342,7 +476,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" aria-disabled={sending} onClick={() => { if (!sending) setConfirming(false) }} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
               <button type="button" aria-disabled={sending} onClick={send} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${sending ? "opacity-50" : ""}`}>
-                {sending ? "Envoi…" : "Confirmer l'envoi"}
+                {later ? (sending ? "Programmation…" : "Confirmer la programmation") : (sending ? "Envoi…" : "Confirmer l'envoi")}
               </button>
             </div>
           </div>

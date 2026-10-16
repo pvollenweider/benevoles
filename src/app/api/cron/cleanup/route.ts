@@ -149,6 +149,10 @@ async function run(req: Request) {
   const deletedMessages = await prisma.targetedMessage.deleteMany({
     where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.targetedMessage) } },
   })
+  // Scheduled messages (#1019) that went, were cancelled or skipped: kept as long, then deleted.
+  const deletedScheduled = await prisma.scheduledMessage.deleteMany({
+    where: { status: { in: ["sent", "cancelled", "skipped"] }, scheduledFor: { lt: daysAgo(now, RETENTION_DAYS.targetedMessage) } },
+  })
 
   // --- 6. Expired rate limit windows (#322) ---
   const deletedRateLimits = await prisma.rateLimit.deleteMany({ where: { resetAt: { lt: now } } })
@@ -284,6 +288,7 @@ async function run(req: Request) {
     deleted: {
       notificationOutbox: deletedOutbox.count,
       targetedMessages: deletedMessages.count,
+    scheduledMessages: deletedScheduled.count,
       rateLimits: deletedRateLimits.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       videoFeedback: deletedVideoFeedback.count,

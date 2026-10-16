@@ -996,6 +996,30 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.notificationOutbox.updateMany).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events/[id]/scheduled-messages returns 404 for an org-B event, storing nothing (#1019)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/scheduled-messages/route")
+    const create = vi.fn()
+    const db = { ...mockScopedDb(), scheduledMessage: { create } } // event.findFirst → null
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/scheduled-messages", "POST", { audience: { kind: "event" }, subject: "Hi", message: "Hello", date: "2099-01-01", time: "10:00" }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+    expect(create).not.toHaveBeenCalled()
+    expect(db.registration.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/scheduled-messages/[scheduledId]/cancel returns 404 for an org-B scheduled message (#1019)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/scheduled-messages/[scheduledId]/cancel/route")
+    const updateMany = vi.fn()
+    const db = { ...mockScopedDb(), scheduledMessage: { findFirst: vi.fn().mockResolvedValue(null), updateMany } }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/scheduled-messages/sm-b/cancel", "POST"), { params: Promise.resolve({ id: "evt-b", scheduledId: "sm-b" }) })
+    expect(res.status).toBe(404)
+    expect(updateMany).not.toHaveBeenCalled()
+  })
+
   it("PATCH/DELETE /api/admin/settings/message-templates/[id] return 404 for an org-B template (#482)", async () => {
     const mod = await import("@/app/api/admin/settings/message-templates/[id]/route")
     const update = vi.fn(), del = vi.fn()

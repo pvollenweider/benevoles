@@ -9,7 +9,8 @@ import { fmtRange } from "@/lib/gantt-utils"
 import { audienceFromQuery } from "@/lib/targeted-message"
 import TargetedMessageForm from "@/components/admin/TargetedMessageForm"
 import MessageHistory from "@/components/admin/messages/MessageHistory"
-import { loadMessageHistory } from "@/lib/message-history-data"
+import ScheduledMessages from "@/components/admin/messages/ScheduledMessages"
+import { loadMessageHistory, loadScheduledMessages } from "@/lib/message-history-data"
 import { orgTimeZone } from "@/lib/time-zone"
 import HelpLink from "@/components/admin/HelpLink"
 import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
@@ -25,7 +26,8 @@ const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekda
 
 /**
  * « Communication »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
- * the waitlist; the automatic reminders (#705) and the manual reminder; the messages sent (#467).
+ * the waitlist, now or on a chosen date and time (#1019); the automatic reminders (#705) and the
+ * manual reminder; the scheduled messages (#1019) and the messages sent (#467).
  */
 export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string }> }) {
   const ctx = await getOrgContext()
@@ -48,6 +50,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   if (!event) notFound()
   const timeZone = orgTimeZone(event.organization)
   const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
+  const scheduled = await loadScheduledMessages(ctx.db, event.id, timeZone, new Date())
   // One reminder email per person: the unique volunteers with a confirmed shift.
   const confirmed = await ctx.db.registration.findMany({
     where: { eventId: event.id, status: "active", shift: { status: { not: "cancelled" } } },
@@ -90,7 +93,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
             Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
           </p>
         </div>
-      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} />
+      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
       <p className="text-sm text-gray-600">
         Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
@@ -106,6 +109,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
           lastSentAt={event.reminderSentAt?.toISOString() ?? null}
         />
       </section>
+      <ScheduledMessages eventId={event.id} items={scheduled} timeZone={timeZone} />
       <MessageHistory eventId={event.id} items={history} timeZone={timeZone} />
     </div>
   )
