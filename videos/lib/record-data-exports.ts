@@ -82,7 +82,7 @@ export async function recordDataExports(options: { page: Page; base: string; dir
   })
   await go(`/admin/events/${prepared.eventId}`)
   await scene("archive", async at => {
-    await at("Pour conserver un événement complet"); await tap(page, page.getByRole("link", { name: "Rapports", exact: true })); await settle(page)
+    await at("Pour conserver un événement complet"); await tap(page, page.getByRole("link", { name: "Documents", exact: true })); await settle(page)
     await at("Pour conserver un événement complet"); await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
     await page.waitForTimeout(700)
     await at("Le lien Archive de l’événement"); archiveFile = await download(page.getByRole("link", { name: /^Archive de l'événement \(JSON\)/ }), "event-archive-capture.json")
@@ -127,7 +127,7 @@ export async function recordDataExports(options: { page: Page; base: string; dir
     await at("Pour relire les actions de"); await go("/admin/settings/activity")
     await at("Pour conserver un événement et"); await go(`/admin/events/${prepared.eventId}/print`)
     await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
-    await at("Les plannings et les listes"); await page.getByRole("heading", { name: "Rapports", exact: true }).scrollIntoViewIfNeeded()
+    await at("Les plannings et les listes"); await page.getByRole("heading", { name: "Documents à imprimer", exact: true }).scrollIntoViewIfNeeded()
     await page.getByRole("heading", { name: "À afficher ou à remettre aux bénévoles", exact: true }).waitFor({ state: "visible" })
   })
   const files = await Promise.all([membersFile, journalFile, archiveFile].map(async file => ({ file: path.basename(file), sha256: createHash("sha256").update(await readFile(file)).digest("hex") })))

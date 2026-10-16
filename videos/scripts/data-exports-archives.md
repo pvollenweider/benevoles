@@ -11,7 +11,7 @@ Vidéo autonome 50, identifiant `DATA_EXPORTS_ARCHIVES`. Une narration continue 
 3. Ouvrir les quatorze colonnes du fichier réel, défiler jusqu'aux disponibilités et notes internes. Une ligne par membre ; nombre d'inscriptions actives, jamais heures attestées. Expliquer « Derniers envois (résultat) » : date, type, résultat et raison normalisée, sans réponse SMTP brute. Expliquer « Convention acceptée (dernière fois) » : la dernière acceptation réelle liée aux inscriptions ; une case vide ne prouve aucune acceptation. Montrer des valeurs issues d'un vrai envoi local et d'une inscription publique avec convention, jamais un horodatage fabriqué.
 4. Montrer des accents, un téléphone `+41…`, et une valeur fictive `=1+1` réellement enregistrée puis exportée avec apostrophe. Pas d'exécution de formule ni faux écran Excel. Vérifier les bytes UTF-8, point-virgule, guillemets et apostrophe ; ne pas modifier le téléchargement pour la capture.
 5. Journal : téléchargement depuis une liste filtrée, sept colonnes et totalité des entrées, ordre ancien→récent.
-6. Rapports : télécharger l'archive JSON depuis le vrai lien. Distinguer son contenu d'un export global de l'organisation, d'un PDF et d'une duplication d'événement.
+6. Documents : télécharger l'archive JSON depuis le vrai lien. Distinguer son contenu d'un export global de l'organisation, d'un PDF et d'une duplication d'événement.
 7. Visualiseur explicitement en lecture seule du fichier : réglages, créneaux, inscriptions/bénévoles, pages, questions/réponses, responsables, jalons et journal. Afficher de vrais éléments dans chaque collection, pas une série vide. Comparer au jeu en base, compteurs compris ; vérifier récursivement l'absence des clés secrètes et des valeurs de jetons connues, sans les afficher.
 8. Copie figée : préserver son empreinte pendant une modification réelle dans la base dédiée, puis constater que la copie n'a pas changé. Lire les durées actuelles dans le guide. Ne pas supprimer les données d'une autre capture, ne pas inventer une fonction de restauration.
 9. Revenir aux vrais écrans et rappeler quel export choisir, pourquoi et pour qui.
@@ -47,3 +47,14 @@ Le seed dédié est exécuté, sans modifier les autres organisations de démons
 Le recorder dédié a terminé ses neuf chapitres ; le MP4 est assemblé et le validateur des durées/narration passe. Les vrais fichiers sont téléchargés pendant la prise, avec une recherche membre et un filtre du journal actifs. Les douze colonnes du CSV et les collections du JSON sont ouvertes en lecture seule, dans des vues clairement distinguées de l'application. Une modification réelle du téléphone est enregistrée dans la fiche ; le fichier téléchargé auparavant conserve son empreinte et son ancienne valeur. Rapport `export-capture-checks.json`.
 
 Les neuf chapitres passent la transcription indépendante de l'audio du MP4. Les 36 images de contrôle ont été inspectées, y compris l'image individuelle du chapitre conservation : les listes, fichiers réels, anciennes/nouvelles valeurs et documents sont visibles. Aucune revue audiovisuelle intégrale revendiquée. Le recorder modifie une fiche : refaire le seed dédié et le précontrôle avant toute nouvelle prise. Rien n'est publié.
+
+
+## Révision du 2026-10-16 — lot 22-6
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 (onglets), #1022 (correction #1013). Navigation par onglets, libellés et repères de phrases contrôlés.
+
+WAITING TTS — plafond mensuel connu, aucun appel : régénérer la narration ENTIÈRE avec la même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+- Pour conserver un événement complet, ouvrez Documents et descendez tout en bas, dans Archive.
+- Les plannings et les listes à remettre sur place se choisissent dans Documents : ils répondent à un autre besoin.
+
+Bilan final du lot 22-6 (2026-10-16) : WAITING TTS ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Répétition complète réussie, anciens WAV entiers archivés ; aucun tournage final avec une narration obsolète. Régénération continue intégrale requise avant les étapes finales.

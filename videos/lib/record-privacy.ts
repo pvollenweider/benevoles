@@ -39,7 +39,7 @@ export async function preparePrivacyRecording(page: Page, base: string, director
     other = await page.context().browser()!.newContext({ locale: "fr-CH", timezoneId: "Europe/Zurich" })
     const b = await other.newPage()
     await b.goto(`${base}/admin/login`)
-    await b.getByLabel("Email", { exact: true }).fill("video.privacy.b.owner@example.org")
+    await b.getByLabel(/^Email(?:\s|$)/).fill("video.privacy.b.owner@example.org")
     await b.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await b.getByRole("button", { name: "Se connecter", exact: true }).click()
     await b.waitForURL(/\/admin\/events/)
@@ -114,9 +114,9 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const before = await ids()
       await at("Jules choisit un créneau et"); await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
-      await write(page.getByLabel("Prénom *", { exact: true }), "Jules")
-      await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
-      await write(page.getByLabel("Email *", { exact: true }), "video.privacy.a.new@example.org")
+      await write(page.getByLabel(/^Prénom(?:\s|$)/), "Jules")
+      await write(page.getByLabel(/^Nom(?:\s|$)/), "Exemple")
+      await write(page.getByLabel(/^Email(?:\s|$)/), "video.privacy.a.new@example.org")
       await write(page.getByLabel(/^Téléphone/), "+41 79 000 1999")
       await at("Il accepte ensuite les conditions")
       await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
@@ -128,6 +128,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const { status, data } = await sent
       if (status !== 201 || data.editToken !== null || data.linkSentByEmail !== true) throw new Error("Anonymous signup unexpectedly disclosed an access link")
       await page.waitForURL(/\/fete-des-liens\/success/); await settle(page)
+      await page.getByRole("heading", { name: "Inscription confirmée !", exact: true }).waitFor()
       if (await page.getByRole("link", { name: "Accéder à mon inscription", exact: true }).count()) throw new Error("Personal link revealed on anonymous success screen")
       await at("Ouvrons donc le vrai message"); signupMail = await openMail(before, "video.privacy.a.new@example.org", "personal")
       personalPath = signupMail.localPath
@@ -180,7 +181,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await go(`${mail.localPath}&org=formation-confidentialite-a`)
       await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
-      if (await page.getByLabel("Prénom *", { exact: true }).inputValue() !== "Zoé" || await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.privacy.a.member.3@example.org") throw new Error("Actual invitation did not prefill its recipient")
+      if (await page.getByLabel(/^Prénom(?:\s|$)/).inputValue() !== "Zoé" || await page.getByLabel(/^Email(?:\s|$)/).inputValue() !== "video.privacy.a.member.3@example.org") throw new Error("Actual invitation did not prefill its recipient")
       checks.invitationPrefill = true
     })
     await scene("leader", async at => {
@@ -239,12 +240,21 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await page.goto(url.href); await settle(page)
       const body = await page.locator("body").innerText()
       if (body.includes("Note interne fictive") || body.includes("video.privacy.a.member.0@example.org")) throw new Error("Stand report contains private member fields")
-      await at("ce fichier comporte notamment des"); await go("/admin/members")
+      await at("Comparons-le au CSV des membres"); await go("/admin/members")
       const pending = page.waitForEvent("download"); await tap(page, page.getByRole("link", { name: /^Exporter les membres/ }))
       const file = path.join(directory, "privacy-members.csv"); await (await pending).saveAs(file)
-      await at("Il n'est donc pas à"); const csv = await showMembersCsv(page, file)
+      const csv = await showMembersCsv(page, file)
       if (csv.rows.length !== 6 || !csv.rows.some(row => row.includes("Note interne fictive — organisation A"))) throw new Error("Actual member CSV lacks expected private fields")
-      await at("Choisissez le document adapté à"); await page.locator(".scroll").evaluate(element => { element.scrollLeft = element.scrollWidth })
+      // Current CSV has long delivery/charter columns after Notes; far-right hides the named evidence.
+      await at("ce fichier comporte notamment des")
+      await page.getByRole("columnheader", { name: "Notes", exact: true }).scrollIntoViewIfNeeded()
+      const note = page.getByRole("cell", { name: "Note interne fictive — organisation A", exact: true })
+      await note.scrollIntoViewIfNeeded()
+      await note.waitFor()
+      const visibleNote = await note.boundingBox()
+      if (!visibleNote || visibleNote.x < 0 || visibleNote.x + visibleNote.width > 1280) throw new Error("CSV internal note is outside the captured viewport")
+      await at("Il n'est donc pas à")
+      await at("Choisissez le document adapté à")
       checks.actualReportVsMemberCsv = true
       checks.memberCsvSha256 = csv.sha256
     })

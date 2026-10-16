@@ -21,7 +21,10 @@ async function main() {
     // Public, deterministic fixture material, NOT a secret for any deployed app.
     // All tools reading this take must use this wrapper to read its encrypted rows.
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"),
-    TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
+    TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "",
+    CRON_SECRET: process.env.CRON_SECRET || "local-video-fixture-cron-only",
+    SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false",
+    SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" }
   let commandArgs: string[]
   let childWorkingDirectory: string | undefined
   let serving: { proof: ProductBuild; port: number } | undefined
@@ -67,18 +70,27 @@ async function main() {
     allowed.add("videos/tools/prepare-member-merge-v4.ts")
     allowed.add("videos/tools/prepare-member-merge-v5.ts")
     allowed.add("videos/tools/prepare-data-exports.ts")
+    allowed.add("videos/tools/prepare-org-activity.ts")
+    allowed.add("videos/tools/check-org-activity-export.ts")
     allowed.add("videos/tools/prepare-event-questions.ts")
     allowed.add("videos/tools/prepare-volunteer-hours.ts")
     allowed.add("videos/tools/prepare-navigation.ts")
     allowed.add("videos/tools/inspect-navigation.ts")
     allowed.add("videos/tools/prepare-search.ts")
+    allowed.add("videos/tools/prepare-event-log.ts")
     allowed.add("videos/tools/prepare-foundation.ts")
+    allowed.add("videos/tools/prepare-first-steps.ts")
     allowed.add("videos/tools/prepare-demo.ts")
+    allowed.add("videos/tools/verify-badges.ts")
+    allowed.add("videos/tools/prepare-registration-mailbox.ts")
+    allowed.add("videos/tools/verify-last-minute.ts")
+    allowed.add("videos/tools/flush-last-minute-outbox.ts")
     allowed.add("videos/tools/prepare-import-baseline.ts")
     allowed.add("videos/tools/review-main-ui.ts")
     allowed.add("videos/tools/verify-reports.ts")
     allowed.add("videos/tools/inspect-foundation.ts")
     allowed.add("videos/tools/verify-accessibility-picker.ts")
+    allowed.add("videos/tools/verify-accessibility-current-pages.ts")
     allowed.add("videos/tools/verify-registration-errors.ts")
     allowed.add("videos/tools/verify-registration-invitation-success.ts")
     allowed.add("videos/tools/check-registration-error-reset-guard.ts")
@@ -90,11 +102,13 @@ async function main() {
       Object.assign(env, { NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", VIDEO_ORG: "formation-livraisons", ORG_ADMIN_EMAIL: "video.delivery.owner@example.org", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
-      const commonTake = ["EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", ...memberTakes].includes(rest[0])
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      const commonTake = ["VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
+      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      if (rest[0] === "ORG_FIRST_STEPS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.firststeps.owner@example.org", VIDEO_ORG: "formation-premiers-pas" })
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "GLOBAL_SEARCH") Object.assign(env, { ORG_ADMIN_EMAIL: "video.search.owner@example.org", VIDEO_ORG: "formation-recherche", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "ATTENDANCE_CHECK_IN") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", ORG_ADMIN_EMAIL: "video.dayof.owner@example.org", VIDEO_ORG: "formation-jour-j", VIDEO_EVENT_SLUG: "atelier-pointage" })
+      if (rest[0] === "ORGANIZATION_ACTIVITY_LOG") Object.assign(env, { ORG_ADMIN_EMAIL: "video.org-activity.owner@example.org", VIDEO_ORG: "formation-journal", VIDEO_EVENT_SLUG: "atelier-journal" })
       if (rest[0] === "DATA_EXPORTS_ARCHIVES") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43102", VIDEO_BASE_URL: "http://localhost:43102", ORG_ADMIN_EMAIL: "video.exports.owner@example.org", VIDEO_ORG: "formation-exports", VIDEO_EVENT_SLUG: "fete-des-archives" })
       if (rest[0] === "MEMBERS_DUPLICATES_MERGE") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Merge recording requires isolated local wrapper")
@@ -111,7 +125,7 @@ async function main() {
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
       const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && rest[2] === "--quick-rehearse")
-      if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
+      if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "EVENT_ACTIVITY_LOG" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES" || rest[0] === "ORGANIZATION_ACTIVITY_LOG") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
       if (memberTakes.includes(rest[0])) Object.assign(env, { VIDEO_ORG: "default", VIDEO_EVENT_SLUG: rest[0] === "REMINDERS_CHANGES" ? "atelier-rappels" : "fete-du-village" })
     } else if (script === "videos/tools/migrate-private-identities.ts") {
       if (mode !== "run" || url.port !== "45433" || rest.length !== 2 || !["delivery", "merge"].includes(rest[0]) || !["--check-only", "--apply-exact-owned"].includes(rest[1])) throw new Error("Only exact private identity migration or read-only preflight accepted")
@@ -146,11 +160,20 @@ async function main() {
     } else if (script === "videos/tools/prepare-day-of.ts") {
       if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated Jour J preparation or explicit owned reset accepted")
       await verifyProductBuild("http://localhost:43108")
+    } else if (script === "videos/tools/prepare-event-log.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only exact event-log preparation accepted")
+      await verifyProductBuild("http://localhost:43102")
     } else if (script === "scripts/seed-video-scenario.ts") {
-      if (rest.length !== 1 || !["last-minute-changes", "privacy-personal-links", "event-reports", "data-exports-archives", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
-      if (rest[0] === "data-exports-archives") {
+      if (rest.length !== 1 || !["last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
+      if (["data-exports-archives", "event-activity-log"].includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Exports require the isolated video DB")
         await verifyProductBuild("http://localhost:43102")
+      }
+      if (["last-minute-changes", "reminders-changes"].includes(rest[0])) {
+        await new Promise<void>((resolve, reject) => {
+          const cleanup = spawn(process.execPath, ["--import", "tsx", "videos/tools/prepare-registration-mailbox.ts", rest[0]], { env, stdio: "inherit" })
+          cleanup.on("error", reject); cleanup.on("exit", code => code === 0 ? resolve() : reject(new Error(`Owned reminder/imprevu mailbox cleanup failed (${code})`)))
+        })
       }
       if (memberSeeds.includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Member seeds require isolated common video DB and server")
@@ -173,6 +196,8 @@ async function main() {
       }
     } else if (script === "videos/tools/verify-registration-invitation-success.ts") {
       if (rest.length && !(rest.length === 1 && rest[0] === "--finish-readonly")) throw new Error("Only explicit read-only completion accepted")
+    } else if (script === "videos/tools/prepare-registration-mailbox.ts") {
+      if (rest.length !== 1 || !["registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(rest[0])) throw new Error("Only identified batch registration fixture mail accepted")
     } else if (script === "videos/tools/prepare-foundation.ts") {
       if (rest.length !== 1 || !["charter", "identity", "milestones", "pages", "email", "team", "blank", "template", "planning"].includes(rest[0])) throw new Error("Only explicit owned foundation scenario accepted")
     } else if (rest.length) throw new Error("Unexpected tool arguments")

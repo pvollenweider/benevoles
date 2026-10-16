@@ -62,7 +62,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous ouvrez « Où manque-t-il du monde ? » pour repérer les postes et créneaux à compléter, et vous agissez directement depuis ce rapport.",
     "steps": [
-      "Depuis l'événement, ouvrez « Où manque-t-il du monde ? » et comparez les places pourvues à la capacité.",
+      "Dans Aperçu, suivez « Voir les créneaux à compléter » pour ouvrir « Où manque-t-il du monde ? » et comparer les places pourvues à la capacité.",
       "Repérez les postes sans personne et ouvrez-les pour vérifier dates, horaires et mission.",
       "Parcourez les créneaux à compléter, du plus dégarni au plus proche du complet, et ouvrez la liste filtrée des inscriptions.",
       "Suivez les demandes à traiter et les listes d'attente pour décider en connaissance de cause.",
@@ -75,5 +75,6 @@
       "Le rapport n'inscrit personne automatiquement sur un autre créneau.",
       "Complet ne veut dire ni que tout le monde est présent, ni que toutes les décisions sont prises."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

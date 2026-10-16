@@ -47,7 +47,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     const message = "Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide !"
     await scene("manual-message", async at => {
       await go(`${eventUrl}/edit`)
-      await at(0.15)
+      await at("Écrivons une consigne simple")
       const saved = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${eventId}`) && r.request().method() === "PATCH" && r.ok() && r.request().postDataJSON().reminderMessage === message)
       await write(page.getByPlaceholder("Consignes vestimentaires, point de RDV, accès, parking…"), message)
       await saved
@@ -58,20 +58,20 @@ export async function recordReminders(options: { page: Page; base: string; event
       checks.messageAutoSaved = true
     })
     await scene("manual-send", async at => {
-      await go(eventUrl)
+      await go(`${eventUrl}/message`)
       const prior = new Set((await inbox()).map(m => m.ID))
       await tap(page, page.getByRole("button", { name: /Envoyer le rappel \(/ }))
       const dialog = page.getByRole("dialog", { name: "Envoyer le rappel ?" })
-      await at(0.15); await tap(page, dialog.getByRole("button", { name: "Annuler", exact: true }))
+      await at("Nous annulons une première fois"); await tap(page, dialog.getByRole("button", { name: "Annuler", exact: true }))
       if ((await inbox()).some(m => !prior.has(m.ID)) || (await db.event.findUniqueOrThrow({ where: { id: eventId } })).reminderSentAt) throw new Error("Cancel sent a reminder")
-      await at(0.25); await tap(page, page.getByRole("button", { name: /Envoyer le rappel \(/ }))
-      await at(0.32)
+      await at(0.25) /* mid-sentence: reprise après annulation, dans la même phrase */; await tap(page, page.getByRole("button", { name: /Envoyer le rappel \(/ }))
+      await at(0.32) /* mid-sentence: confirmer la reprise annoncée */
       const response = page.waitForResponse(r => r.url().endsWith("/send-reminder") && r.request().method() === "POST")
       await tap(page, dialog.getByRole("button", { name: "Envoyer", exact: true }))
       const sent = await response; const result = await sent.json()
       if (!sent.ok() || result.sent !== 3 || result.failed) throw new Error("Manual reminder delivery failed")
       await dialog.getByText("3 rappels envoyés", { exact: true }).waitFor()
-      await at(0.43)
+      await at("Ouvrons l'email de Léa")
       const mails = (await inbox()).filter(m => !prior.has(m.ID))
       if (mails.length !== 3 || mails.some(m => m.To.some(t => /request|waiting/.test(t.Address)))) throw new Error("Manual reminder audience incorrect")
       await openMail(mails, "video.reminder.dd@example.org", ["Prends une gourde", ...activeLea.flatMap(r => [r.shift.startTime, r.shift.endTime])])
@@ -125,7 +125,7 @@ export async function recordReminders(options: { page: Page; base: string; event
       const second = await run()
       if ((await inbox()).filter(m => !prior.has(m.ID) && m.Subject.includes("Atelier des rappels") && /J-2|Demain|aujourd'hui/i.test(m.Subject)).length !== 3) throw new Error("Duplicate automatic reminder")
       for (const [index, email] of ["video.reminder.j2@example.org", "video.reminder.j1@example.org", "video.reminder.dd@example.org"].entries()) {
-        await at(0.53 + index * 0.15)
+        await at("Voici les trois emails réellement reçus")
         const shift = event.registrations.find(r => r.status === "active" && r.volunteer.email === email)!.shift
         // J-2 includes the range; J-1/day-of templates show the start only.
         await openMail(mails, email, ["Stand d'information", shift.startTime, ...(index === 0 ? [shift.endTime] : [])])
@@ -136,8 +136,8 @@ export async function recordReminders(options: { page: Page; base: string; event
       await go(`${eventUrl}/registrations`)
       const search = page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
       await write(search, "Lucas")
-      await at(0.25); await write(search, "Anna")
-      await at(0.48); await go(`${eventUrl}/shifts`)
+      await at("elle ne reçoit pas ces rappels"); await write(search, "Anna")
+      await at("En revanche, fermer un créneau"); await go(`${eventUrl}/shifts`)
       await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
       await page.getByRole("row").filter({ hasText: "Accueil — 24 heures" }).getByText("Fermé", { exact: true }).scrollIntoViewIfNeeded()
       const regs = await db.registration.findMany({ where: { event: { organizationId: "default", slug: { in: ["atelier-rappels", "atelier-rappels-brouillon", "atelier-rappels-coupes"] } } }, include: { event: true, volunteer: true, shift: true } })
@@ -149,18 +149,18 @@ export async function recordReminders(options: { page: Page; base: string; event
       const prior = new Set((await inbox()).map(m => m.ID))
       const newStart = addMinutes(changed.startTime, 30), newEnd = addMinutes(changed.endTime, 30)
       await tap(page, page.getByRole("row").filter({ hasText: changed.label }).getByRole("button", { name: /^Modifier le créneau / }))
-      await write(page.getByLabel("Début *", { exact: true }), newStart)
-      await at(0.25); await write(page.getByLabel("Fin *", { exact: true }), newEnd)
+      await write(page.getByLabel(/^Début(?: \*)?$/), newStart)
+      await at("Nous décalons son début et sa fin"); await write(page.getByLabel(/^Fin(?: \*)?$/), newEnd)
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${changed.id}`) && r.request().method() === "PATCH")
-      await at(0.40); await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+      await at("Nous décalons son début et sa fin"); await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
       const result = await response
       if (!result.ok() || (await result.json()).notified !== 1) throw new Error("Wrong change notification count")
       await page.getByRole("row").filter({ hasText: changed.label }).getByText(`${newStart}–${newEnd}`, { exact: true }).waitFor()
       let mails: Mail[] = []
       for (let i = 0; i < 30; i++) { mails = (await inbox()).filter(m => !prior.has(m.ID)); if (mails.length) break; await page.waitForTimeout(250) }
       if (mails.length !== 1) throw new Error("Expected one received change email")
-      await at(0.44); await openMail(mails, "video.reminder.dd@example.org", [newStart, newEnd, "Préparation"])
-      await at(0.78); await go(`${eventUrl}/shifts`)
+      await at("Voici l'email réellement reçu"); await openMail(mails, "video.reminder.dd@example.org", [newStart, newEnd, "Préparation"])
+      await at("Vérifions donc le résultat"); await go(`${eventUrl}/shifts`)
       await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
       await page.getByRole("row").filter({ hasText: changed.label }).getByText(`${newStart}–${newEnd}`, { exact: true }).scrollIntoViewIfNeeded()
       checks.changed = { notified: 1, pendingRequestExcluded: true, mailId: mails[0].ID }
@@ -170,18 +170,18 @@ export async function recordReminders(options: { page: Page; base: string; event
       const prior = new Set((await inbox()).map(m => m.ID))
       await tap(page, page.getByRole("row").filter({ hasText: cancelled.label }).getByRole("button", { name: /^Supprimer le créneau / }))
       const dialog = page.getByRole("alertdialog")
-      await dialog.waitFor(); await at(0.23)
+      await dialog.waitFor(); await at("Dans notre exemple, une inscription confirmée")
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${cancelled.id}`) && r.request().method() === "DELETE")
       await tap(page, dialog.getByRole("button", { name: /^Supprimer/ }))
       if (!(await response).ok()) throw new Error("Cancellation failed")
       let mails: Mail[] = []
       for (let i = 0; i < 30; i++) { mails = (await inbox()).filter(m => !prior.has(m.ID)); if (mails.length === 2) break; await page.waitForTimeout(250) }
       if (mails.length !== 2) throw new Error("Expected two actual cancellation emails")
-      await at(0.42); await openMail(mails, "video.reminder.j2@example.org", ["Caisse"])
-      await at(0.52); await openMail(mails, "video.reminder.request@example.org", ["Caisse"])
+      await at("Ouvrons les messages reçus"); await openMail(mails, "video.reminder.j2@example.org", ["Caisse"])
+      await at("Ouvrons les messages reçus"); await openMail(mails, "video.reminder.request@example.org", ["Caisse"])
       const after = await db.shift.findUniqueOrThrow({ where: { id: cancelled.id }, include: { registrations: true } })
       if (after.status !== "cancelled" || after.registrations.length !== 2 || after.registrations.some(r => r.status !== "cancelled")) throw new Error("Cancelled shift registrations incorrect")
-      await at(0.62); await go(`${eventUrl}/shifts`)
+      await at("Rappeler, modifier, annuler"); await go(`${eventUrl}/shifts`)
       checks.cancelled = { registrations: 2, includesPendingRequest: true, mailIds: mails.map(m => m.ID) }
     })
     await writeFile(path.join(directory, "reminder-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))

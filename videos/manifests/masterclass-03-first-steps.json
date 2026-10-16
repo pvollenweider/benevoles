@@ -6,7 +6,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous suivez la liste Premiers pas pour mettre en place votre organisation jusqu'à une première inscription testée.",
     "steps": [
-      "Donnez un titre accueillant à votre page publique et relisez la Convention des Bénévoles complète.",
+      "Donnez un titre accueillant à votre page publique et relisez la Charte des bénévoles complète.",
       "Vérifiez le fuseau horaire de votre organisation.",
       "Créez votre premier événement depuis une page blanche : titre, lieu et dates.",
       "Ajoutez un créneau avec un poste, des horaires et un nombre de places.",
@@ -41,7 +41,7 @@
     },
     {
       "id": "identity",
-      "transcript": "Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la Convention des Bénévoles complète. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Gardons toutes ses clauses : dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.",
+      "transcript": "Commençons par ce que verront les bénévoles. Dans les paramètres, donnez à la page publique un titre accueillant, puis lisez la Charte des bénévoles complète. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Gardons toutes ses clauses : dans cette démonstration, nous ne remplaçons pas la convention par une phrase raccourcie. Enregistrons le texte entier, que vous pouvez relire avant de le personnaliser.",
       "fallbackDurationMs": 22000
     },
     {

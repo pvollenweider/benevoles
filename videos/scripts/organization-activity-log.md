@@ -31,3 +31,15 @@ Script et manifeste préparés le 5 octobre 2026. Une narration Kore unique est 
 `check-org-activity-export.ts` télécharge le vrai CSV depuis une liste filtrée et compare ses 61 lignes et sept colonnes à l'historique complet retourné par l'API, dans l'ordre inverse de la liste affichée. Le fichier reste inchangé. Ce précontrôle crée aussi, via les routes locales, un événement, un créneau et une inscription d'Aline ; son activité contient donc un fait réel à montrer. Il ne prouve pas encore le cas d'une valeur commençant par un caractère de formule, ni une revue audiovisuelle complète.
 
 Le recorder dédié a terminé ses neuf chapitres et le MP4 est assemblé. Le validateur des durées et de la narration source passe ; une reconnaissance indépendante de l'audio du MP4 passe aussi sur les neuf chapitres. La planche de 36 images a été inspectée : auteurs distincts, activité d'Aline avec inscription, filtres, pagination et vrai CSV sont présents. Le visualiseur du CSV est explicitement distingué de l'application. Revue audiovisuelle intégrale et contrôle natif dans un tableur non revendiqués. Rien n'est publié.
+
+
+## Révision du 2026-10-16 — lot 22-6
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 (onglets), #1022 (correction #1013). Navigation par onglets, libellés et repères de phrases contrôlés.
+
+Texte de narration conservé ; réutilisation soumise au contrôle des empreintes ou à une reconnaissance indépendante du WAV restauré.
+
+Reprise de synchronisation du 2026-10-16 : deuxième et dernière prise autorisée. Le filtre vide attend « Si une sélection ne donne aucune ligne » ; retour à Tous les types au milieu de la même phrase, après un état vide lisible. Narration inchangée. Première prise conservée séparément.
+
+Bilan final du lot 22-6 (2026-10-16) : READY ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Durée 291.0 s, musique 14.7–19.4 LU sous la voix, zéro tutoiement du spectateur dans le VTT final. Voir le rapport et les preuves du rendu local.
+

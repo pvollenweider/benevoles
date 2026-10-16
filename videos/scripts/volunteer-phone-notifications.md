@@ -76,3 +76,8 @@ La narration `delivery` décrit le fonctionnement sans prétendre que la récept
 ## Préparation restant à réaliser
 
 Créer la fixture dédiée, configurer le profil/appareil et le serveur actuel, implémenter le recorder natif et les vérifications sans exposer de jetons, puis intégrer l'identifiant au catalogue et à la matrice documentaire. Ce document et le manifeste seuls ne constituent ni un recorder, ni une prise, ni une validation.
+
+
+## Révision du 2026-10-16 — lot 22-8
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les nouvelles réponses modifiables et le lien d’ajout de créneaux ne contredisent pas le parcours existant. Narration conservée ; audio restauré à vérifier avant réutilisation. Les trois vidéos bénévoles gardent le tutoiement autorisé, confidentialité reste au vouvoiement.

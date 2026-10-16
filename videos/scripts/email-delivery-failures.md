@@ -151,3 +151,18 @@ Le serveur temporaire 43106 a ensuite été arrêté.
 Après ce renforcement, le contrôle TypeScript complet du projet a également
 réussi (`@typescript/native/bin/tsc --noEmit --incremental false`). Ce résultat
 ne remplace pas les contrôles de narration et de synchronisation à effectuer.
+
+
+## Révision du 2026-10-16 — lot 22-6
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 (onglets), #1022 (correction #1013). Navigation par onglets, libellés et repères de phrases contrôlés.
+
+Texte de narration conservé ; réutilisation soumise au contrôle des empreintes ou à une reconnaissance indépendante du WAV restauré.
+
+Préparation du lot 22-6 : la fixture locale de livraison était absente. `prepare-delivery.ts` crée désormais aussi son seul événement « Atelier des emails », son créneau et les deux inscriptions fictives attendues via un seed gardé ; les états et tentatives restent produits par le vrai worker et le SMTP contrôlé. Aucune entrée de livraison ni aucun email ne sont fabriqués. Les anciennes preuves d’identité appartiennent à une autre génération de fixture et restent dans l’archive ; elles ne sont pas réattribuées à la nouvelle.
+
+Reprise du 2026-10-16, deuxième et dernière prise : connexion réelle de Marc dès « Connectons-nous maintenant », saisie de son email à 55 ms par touche ; historique, texte envoyé et rechargement sur leurs phrases d’annonce. Narration inchangée. La première prise et son ASR restent archivés séparément.
+
+Contrôle des sous-titres : « avec une heure » est conservé littéralement ; ce repère de date/heure ne devient plus la durée « 1 h ». Correction du formateur et test de régression, mêmes bornes de cues et même MP4. Aucun changement de narration.
+
+Bilan final du lot 22-6 (2026-10-16) : READY ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Durée 295.12 s, musique 14.1–19.4 LU sous la voix, zéro tutoiement du spectateur dans le VTT final. Voir le rapport et les preuves du rendu local.

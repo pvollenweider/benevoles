@@ -25,7 +25,7 @@
     },
     {
       "id": "preview",
-      "transcript": "Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.",
+      "transcript": "Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les étiquettes sont également indiquées. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.",
       "fallbackDurationMs": 37000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "confirm",
-      "transcript": "Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Fermez la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
+      "transcript": "Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Fermez la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes. Importer une personne ne l'inscrit à aucun créneau.",
       "fallbackDurationMs": 39000
     },
     {
@@ -62,7 +62,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous importez une liste de bénévoles depuis un fichier CSV ou Excel, vous vérifiez l'analyse, puis vous confirmez seulement les bonnes fiches.",
     "steps": [
-      "Préparez un fichier CSV ou Excel dont la première ligne donne les colonnes : prénom, nom, email, téléphone et tags.",
+      "Préparez un fichier CSV ou Excel dont la première ligne donne les colonnes : prénom, nom, email, téléphone et étiquettes.",
       "Cliquez sur « Importer CSV/Excel », choisissez le fichier et l'option pour les emails déjà présents, puis cliquez sur « Analyser le fichier ».",
       "Lisez le récapitulatif : créations prévues, personnes déjà présentes et lignes en erreur.",
       "Corrigez les erreurs dans le fichier d'origine, puis relancez l'analyse.",

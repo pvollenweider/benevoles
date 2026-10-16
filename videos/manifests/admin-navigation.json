@@ -41,7 +41,7 @@
     },
     {
       "id": "event-navigation",
-      "transcript": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.",
+      "transcript": "Ouvrez un événement. Les onglets donnent accès à Aperçu, Créneaux, Inscriptions, Communication, Partage, Documents et Réglages. Jour J apparaît à l’approche de l’événement. Partage rassemble le lien public, le QR code et les pages d’information. Réglages donne accès aux questions et aux responsables de secteur. Le menu Autres actions contient notamment le journal et la duplication. Dans l’aperçu, les besoins de personnel viennent en premier, suivis des éléments à traiter, des prochaines étapes, des jalons et du résumé de communication. Le lien Événements vous ramène à la liste de l’association.",
       "fallbackDurationMs": 28000
     },
     {
@@ -64,5 +64,6 @@
       "transcript": "Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
       "fallbackDurationMs": 19000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

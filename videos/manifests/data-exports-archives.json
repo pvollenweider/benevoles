@@ -51,7 +51,7 @@
     },
     {
       "id": "archive",
-      "transcript": "Pour conserver un événement complet, ouvrez Rapports et descendez tout en bas, dans Archive. Le lien Archive de l’événement, JSON, télécharge le fichier. Faites cette copie avant de quitter l’outil ou de supprimer l’événement. Le JSON n’est pas une feuille à afficher au stand : c’est un format structuré pour conserver ou traiter les données. Il est limité à cet événement, sans inclure tous les autres événements ni tout l’annuaire de l’organisation. Le téléchargement ne crée pas une nouvelle édition de la fête.",
+      "transcript": "Pour conserver un événement complet, ouvrez Documents et descendez tout en bas, dans Archive. Le lien Archive de l’événement, JSON, télécharge le fichier. Faites cette copie avant de quitter l’outil ou de supprimer l’événement. Le JSON n’est pas une feuille à afficher au stand : c’est un format structuré pour conserver ou traiter les données. Il est limité à cet événement, sans inclure tous les autres événements ni tout l’annuaire de l’organisation. Le téléchargement ne crée pas une nouvelle édition de la fête.",
       "fallbackDurationMs": 49000
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "id": "result",
-      "transcript": "Pour travailler sur les fiches, prenez le CSV des membres. Pour relire les actions de l'organisation, prenez le CSV du journal. Pour conserver un événement et ses données liées, prenez son archive JSON. Les plannings et les listes à remettre sur place se choisissent dans Rapports : ils répondent à un autre besoin. Nous avons téléchargé, ouvert et vérifié chaque type de fichier. Le bon export, au bon endroit et pour les bonnes personnes : c'est une manière simple de garder la maîtrise de vos données.",
+      "transcript": "Pour travailler sur les fiches, prenez le CSV des membres. Pour relire les actions de l'organisation, prenez le CSV du journal. Pour conserver un événement et ses données liées, prenez son archive JSON. Les plannings et les listes à remettre sur place se choisissent dans Documents : ils répondent à un autre besoin. Nous avons téléchargé, ouvert et vérifié chaque type de fichier. Le bon export, au bon endroit et pour les bonnes personnes : c'est une manière simple de garder la maîtrise de vos données.",
       "fallbackDurationMs": 50000
     }
   ],

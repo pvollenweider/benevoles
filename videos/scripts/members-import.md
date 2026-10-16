@@ -34,3 +34,13 @@ Le texte `=1+1` de l'exemple à vérifier est une valeur littérale, pas une for
 ## État
 
 Prévisualisation MP4 générée. Neuf paragraphes contrôlés indépendamment, capture et assemblage terminés, durées validées et planche examinée. Analyse CSV/Excel, erreurs, 38 créations et deux mises à jour vérifiées par les réponses réelles ; réanalyse montrant 39 fiches ignorées et une création sans email, annulée sans confirmation. Visionnage audiovisuel intégral encore à effectuer.
+
+
+## Révision du 2026-10-16 — lot 22-5
+
+Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased] et PR fusionnées #990 à #1012, #1021 (onglets lot 2), #1022 (#1013). Étiquettes, Modifier, Heures prévues, navigation Inscriptions / Invitations et Documents à imprimer vérifiées dans les scénarios.
+
+WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+
+- Les colonnes reconnues et les étiquettes sont également indiquées.
+- Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes.

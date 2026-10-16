@@ -105,5 +105,6 @@
       "Un indicateur de sauvegarde ne prouve pas qu'une restauration a été testée.",
       "Une diffusion ne touche que les comptes actifs abonnés aux communications."
     ]
-  }
+  },
+  "musicGainDb": 1.2
 }

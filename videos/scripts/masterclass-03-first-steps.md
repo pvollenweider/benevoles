@@ -9,7 +9,7 @@ parcours réellement vécu par les bénévoles.
 ## Démonstration
 
 1. Lire la progression et distinguer les étapes obligatoires des réglages facultatifs.
-2. Personnaliser le titre public et la Convention des Bénévoles.
+2. Personnaliser le titre public et la Charte des bénévoles.
 3. Choisir le fuseau horaire de l’organisation.
 4. Revenir à la checklist et constater les coches calculées automatiquement.
 5. Créer un événement minimal en brouillon.
@@ -35,3 +35,8 @@ parcours réellement vécu par les bénévoles.
 - Un propriétaire peut masquer la checklist plus tôt pour toute l’équipe ; cela ne réalise pas les
   étapes à sa place.
 - L’inscription fictive peut être annulée après le test.
+
+
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+
+La capture utilise son espace de formation dédié (réinitialisation des seules données fictives du parcours), et le vrai média publié est servi localement pour démontrer le lecteur de la documentation.

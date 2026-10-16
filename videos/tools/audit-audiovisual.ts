@@ -60,7 +60,7 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
@@ -101,6 +101,14 @@ async function main() {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
       if (fixture.name !== "Fêtes de Montvert" || !fixture.events.some(event => event.slug === "fete-du-village") || fixture.admins.some(admin => !admin.email.endsWith("@example.org") && admin.email !== "org-admin@localhost")) throw new Error("Common training organization changed")
       if (fixture.events.some(event => event.sectorLeaders.some(leader => !leader.email.endsWith("@example.org")) || event.registrations.some(registration => !registration.volunteer.email?.endsWith("@example.org")))) throw new Error("Common demo contains non-synthetic recipients")
+    } else if (manifest.id === "ORG_FIRST_STEPS") {
+      const url = new URL(process.env.DATABASE_URL!)
+      assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-first-steps-batch22" }, include: { admins: true, volunteers: true, events: { include: { registrations: true } } } })
+      assert(fixture.slug === "formation-premiers-pas" && fixture.name === "Association Les Amis du Parc")
+      assert(fixture.admins.length === 1 && fixture.admins[0].email === "video.firststeps.owner@example.org")
+      assert(fixture.events.length === 1 && fixture.events[0].title === "Fête du parc" && fixture.events[0].registrations.length === 1)
+      assert(fixture.volunteers.length === 1 && fixture.volunteers[0].email === "alex.masterclass@example.org")
     } else if (manifest.id === "ADMIN_NAVIGATION") {
       const url = new URL(process.env.DATABASE_URL!)
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Navigation review requires isolated video database")
@@ -200,7 +208,10 @@ async function main() {
       method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY }, signal: AbortSignal.timeout(120_000),
       body: JSON.stringify({ model, input: [{ type: "text", text: prompt + reviewRules }, { type: "video", data: bytes.toString("base64"), mime_type: "video/mp4" }] }),
     })
-    if (!response.ok) throw new Error(`${cue.id}: audiovisual review HTTP ${response.status}`)
+    if (!response.ok) {
+      const detail = await response.json().catch(() => null) as { error?: { message?: string } } | null
+      throw new Error(`${cue.id}: audiovisual review HTTP ${response.status}: ${detail?.error?.message?.slice(0, 1200) ?? "no service detail"}`)
+    }
     const body = await response.json() as { steps?: { content?: { type?: string; text?: string }[] }[] }
     const text = body.steps?.flatMap(s => s.content ?? []).filter(c => c.type === "text").map(c => c.text ?? "").join("\n").trim()
     if (!text) throw new Error(`${cue.id}: no audiovisual review returned`)

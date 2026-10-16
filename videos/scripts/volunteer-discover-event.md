@@ -28,3 +28,10 @@ Comprendre un événement et ses missions avant de choisir un créneau, sur ordi
 - Une invitation personnelle ne doit pas être partagée.
 - Les couleurs renforcent les libellés mais ne remplacent jamais le texte des états.
 - Le planning mobile se parcourt horizontalement au lieu de masquer des heures ou des missions.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.

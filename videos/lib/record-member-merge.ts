@@ -225,6 +225,11 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     await at("Retournez à la fiche conservée"); await tap(page, page.getByRole("link", { name: `Retour à la fiche de ${name}`, exact: true }))
     await settle(page)
     await at("Dans la liste des membres"); await page.goto(`${baseUrl}/admin/members?q=${encodeURIComponent(before.keep.email!)}`); await settle(page)
+    // ?q= deliberately includes inactive members in current main. This cue
+    // promises the active list, so visibly select that real product filter.
+    const inactive = page.getByRole("checkbox", { name: "Inclure inactifs", exact: true })
+    if (await inactive.isChecked()) await tap(page, inactive)
+    check(!(await inactive.isChecked()), "result cue must show the active members list")
     check(await page.locator("tbody tr").filter({ hasText: before.keep.email! }).count() === 1, "retained member not unique in the real members list")
     await at("les faits enregistrés sous l’ancienne"); await page.goto(`${baseUrl}/admin/members/${before.keep.id}`); await settle(page)
     await page.getByRole("heading", { name: `Activité de ${name}`, exact: true }).waitFor()

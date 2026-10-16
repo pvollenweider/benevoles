@@ -51,3 +51,22 @@ reportées rétroactivement sur une ancienne capture.
 
 L'intégration et les tests purs ne prouvent pas encore la validité de la fixture en
 base ni l'exécution des sélecteurs. Aucune vidéo de ce parcours n'est encore livrée.
+
+
+## Révision du 2026-10-16 — lot 22-5
+
+Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased] et PR fusionnées #990 à #1012, #1021 (onglets lot 2), #1022 (#1013). Étiquettes, Modifier, Heures prévues, navigation Inscriptions / Invitations et Documents à imprimer vérifiées dans les scénarios.
+
+WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+
+- Dans la liste des membres, regardons les heures prévues et les heures attestées.
+- Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six correspondent à une présence saisie.
+- Ces six heures font partie des douze : elles ne s'ajoutent pas.
+- Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois.
+- Il compte les créneaux confirmés non annulés de cette période, avec les heures prévues et attestées séparées.
+- Le total indique six heures prévues, dont deux attestées.
+- Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie.
+- Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres.
+- Pour Aline, nous retrouvons six heures attestées et deux heures prévues sans présence.
+- Enfin, ouvrons Documents pour la Fête de septembre.
+- Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste.

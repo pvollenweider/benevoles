@@ -12,6 +12,7 @@ import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { privateIdentities, readPrivateIdentityVersion } from "../lib/private-identity-version"
 import { videoAdminEmail } from "../lib/public-hosts"
+import { seedVideoDeliveryClassroom } from "../../scripts/seed-video-delivery-classroom"
 
 /** Resolve worker, aliases and generated Prisma from the actual verified main snapshot. */
 export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" | "http://localhost:43106") {
@@ -122,6 +123,7 @@ async function main() {
     const surname = (label: string) => identityV2 ? identities.members[label as keyof typeof identities.members] : "Exemple"
     assert(previousPeople.every(person => Object.keys(names).some(label => person.id === `video-delivery-member-${label}` && person.firstName === names[label] && person.lastName === surname(label) && [ `video.delivery.${label}@example.org`, ...(label === "wrong" ? ["video.delivery.corrected@example.org"] : []) ].includes(person.email ?? ""))))
     for (const [label, firstName] of Object.entries(names)) await db.volunteer.upsert({ where: { id: `video-delivery-member-${label}` }, create: { id: `video-delivery-member-${label}`, organizationId: orgId, firstName, lastName: surname(label), email: `video.delivery.${label}@example.org`, notes: "Données fictives pour la démonstration des livraisons." }, update: { email: `video.delivery.${label}@example.org` } })
+    await seedVideoDeliveryClassroom(db)
     const snapshots: { id: string; recipient: string; now: string; status: string; attempts: number; nextAttemptAt: string; outcome: unknown }[] = []
     const ids: Record<string, string> = {}
     async function create(label: string) {

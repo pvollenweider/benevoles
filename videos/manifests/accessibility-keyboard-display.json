@@ -27,7 +27,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Une souris n'est pas indispensable pour organiser une fête. Le clavier peut aussi rendre les gestes plus confortables. Dans notre organisation fictive, commençons par Tab : le contour indique où nous sommes. Le lien d'évitement permet de rejoindre directement le contenu avec Entrée. Tab avance, Majuscule et Tab reviennent au contrôle précédent. Les touches affichées correspondent aux gestes réellement effectués. Prends ton temps : ce repère sert à savoir quel bouton ou quel champ va réagir.",
+      "transcript": "Une souris n'est pas indispensable pour organiser une fête. Le clavier peut aussi rendre les gestes plus confortables. Dans notre organisation fictive, commençons par Tab : le contour indique où nous sommes. Le lien d'évitement permet de rejoindre directement le contenu avec Entrée. Tab avance, Majuscule et Tab reviennent au contrôle précédent. Les touches affichées correspondent aux gestes réellement effectués. Prenez votre temps : ce repère sert à savoir quel bouton ou quel champ va réagir.",
       "fallbackDurationMs": 60000
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "id": "mobile",
-      "transcript": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention Déjà inscrit et les conflits d'horaire. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire : une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne ton usage, décris l'écran et le geste dans ton retour. Cette simulation ne remplace pas un essai sur ton appareil.",
+      "transcript": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention Déjà inscrit et les conflits d'horaire. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire : une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne votre usage, décrivez l'écran et le geste dans votre retour. Cette simulation ne remplace pas un essai sur votre appareil.",
       "fallbackDurationMs": 85000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "limits",
-      "transcript": "Pour connaître le périmètre des essais et les limites connues, ouvrons Accessibilité depuis le pied de page. La page décrit une évaluation partielle, pas une promesse que tout fonctionne partout. Tu rencontres une difficulté ? Le lien de contact permet de la signaler. Indique la page, le geste tenté, le résultat attendu, le navigateur et, si tu en utilises un, le lecteur d'écran. Nous n'envoyons pas de message dans cette démonstration. Un retour précis aide à rendre l'outil plus confortable pour tout le monde, petit à petit.",
+      "transcript": "Pour connaître le périmètre des essais et les limites connues, ouvrons Accessibilité depuis le pied de page. La page décrit une évaluation partielle, pas une promesse que tout fonctionne partout. Vous rencontrez une difficulté ? Le lien de contact permet de la signaler. Indiquez la page, le geste tenté, le résultat attendu, le navigateur et, si vous en utilisez un, le lecteur d'écran. Nous n'envoyons pas de message dans cette démonstration. Un retour précis aide à rendre l'outil plus confortable pour tout le monde, petit à petit.",
       "fallbackDurationMs": 80000
     }
   ],

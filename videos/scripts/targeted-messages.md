@@ -10,7 +10,7 @@ Expliquer comment sélectionner les bonnes personnes, préparer un message perso
 
 ## Démonstration
 
-1. **Choisir à qui écrire.** Ouvrir la page de message de l'événement. Expliquer les cinq audiences et cliquer successivement sur chacune : tous les inscrits, un poste, un créneau, la liste d'attente et les invités sans créneau confirmé. Laisser le compteur se mettre à jour avant chaque explication. Les demandes ne sont pas des inscriptions confirmées. Les personnes sans email ne sont pas destinataires de ces emails.
+1. **Choisir à qui écrire.** Ouvrir Communication dans l'événement. Expliquer les cinq audiences et cliquer successivement sur chacune : tous les inscrits, un poste, un créneau, la liste d'attente et les invités sans créneau confirmé. Laisser le compteur se mettre à jour avant chaque explication. Les demandes ne sont pas des inscriptions confirmées. Les personnes sans email ne sont pas destinataires de ces emails.
 2. **Comprendre le compteur.** Choisir un poste avec une personne inscrite sur deux horaires. Montrer qu'elle compte comme une personne et reçoit un seul message. Comparer avec un créneau précis. Les personnes en attente ou avec une offre se trouvent dans l'audience liste d'attente, pas parmi les confirmations.
 3. **Créer un modèle réutilisable.** Aller dans les modèles de l'organisation. Cliquer sur Nouveau modèle ; saisir lentement un nom interne, un objet et le texte. Expliquer que le nom du modèle n'est pas envoyé aux bénévoles. Enregistrer et montrer la nouvelle ligne.
 4. **Expliquer les quatre variables.** Utiliser `{prénom}` et `{événement}` pour tous les publics ; `{poste}` seulement pour un poste ou un créneau ; `{créneau}` seulement pour un créneau. Ces variables remplacent du texte, elles ne sont pas un éditeur HTML. Montrer une erreur `{lieu}`, puis sa correction, sans aucun envoi. Montrer également une variable valide mais incompatible avec l'audience choisie.
@@ -78,3 +78,14 @@ Commande de contrôle : `node --env-file=.env.video.e2e --import tsx videos/tool
 Troisième répétition complète réussie le 5 octobre 2026 à 15:30 UTC : douze chapitres, prise brute de 501,16 secondes, marquée `rehearsal`. Les cinq audiences, la déduplication, les deux erreurs de variables, l'application/restauration du modèle, l'aperçu personnalisé, l'annulation sans envoi et la suppression du modèle avec conservation de l'historique sont vérifiés. Cinq vrais emails sont reçus dans Mailpit, dont une seule copie pour Léa ; deux destinataires ont été comparés pour la personnalisation. Rapport : `videos/output/targeted-messages/targeted-message-checks.json`. La réception push n'est pas validée.
 
 Inspection visuelle de 36 images de cette prise : les formulaires, erreurs, aperçu, confirmations, emails reçus et gestion du modèle apparaissent dans leurs chapitres. Planche et index séparés dans `videos/output/targeted-messages/rehearsal-review-frames`. Cette inspection par échantillons ne valide ni toutes les manipulations ni une synchronisation avec une voix absente. Les intertitres ajoutés au manifeste après le début de cette prise restent à vérifier lors de la prochaine capture. Le montage et la validation finale refusent explicitement cette répétition sans narration.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration à régénérer intégralement, même voix, une seule passe, `continuousPauseTags: false`. WAITING TTS : plafond mensuel du projet connu, aucun nouvel appel. Phrases révisées :
+
+- Commencez par le public.
+- Pour un poste, choisissez par exemple la buvette ; pour un créneau, précisez aussi la date et l'horaire.
+- Regardez le compteur après chaque choix.

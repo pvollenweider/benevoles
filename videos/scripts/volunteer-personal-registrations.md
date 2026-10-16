@@ -15,7 +15,7 @@ Retrouver ses engagements sans compte, lire les informations du jour J et préve
 5. Quitter la liste d'attente, lire les conséquences et confirmer : plus de proposition de place pour ce créneau.
 6. Refuser la place offerte, lire que la place passe à la personne suivante et constater la disparition de l'offre. Ne pas laisser penser qu'une offre vaut inscription confirmée.
 7. Retirer la demande en attente de validation : la place réservée est libérée. Montrer le résultat dans la page personnelle.
-8. Après le dernier retrait, montrer « Toutes tes inscriptions ont été annulées ». Utiliser « Retour à l'accueil » et vérifier la destination réelle : la page de l'événement permet de choisir un autre créneau.
+8. Après le dernier retrait, montrer « Toutes tes inscriptions ont été annulées ». Utiliser « S’inscrire à d’autres créneaux » et vérifier la destination réelle : la page de l'événement permet de choisir un autre créneau.
 
 ## Résultat visible
 
@@ -34,3 +34,10 @@ Une seule personne, Camille, avec quatre statuts simultanés sur des créneaux n
 - Le résultat vide après le dernier retrait est vérifié dans la page ouverte et par comptage direct des quatre statuts dans la base vidéo, pas en essayant de relire un lien devenu invalide.
 - Routage de démonstration : le retour à l'événement est enrichi de `?org=default` par le réseau du recorder sur localhost. Le lien de production utilise le domaine de l'organisation ; ne pas présenter le 404 sans contexte d'organisation de l'environnement local comme un défaut de production.
 - Nouvelle prise avec consignes courtes : huit paragraphes contrôlés indépendamment. Capture et assemblage terminés après correction de la vérification serveur finale et du contexte d'organisation au retour sur localhost. Planche contrôlée : quatre statuts, confirmations, retrait progressif, état vide et retour à l'événement visibles. Le visionnage audiovisuel intégral reste à faire avant livraison.
+
+
+## Révision du 2026-10-16 — lot 22-8
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les nouvelles réponses modifiables et le lien d’ajout de créneaux ne contredisent pas le parcours existant. Narration conservée ; audio restauré à vérifier avant réutilisation. Les trois vidéos bénévoles gardent le tutoiement autorisé, confidentialité reste au vouvoiement.
+
+Correction après répétition sur le produit actuel : le dernier lien est « S’inscrire à d’autres créneaux », y compris après le retrait final. La phrase « Le lien Retour à l’accueil ramène à la page de l’événement. » devient « Le lien S’inscrire à d’autres créneaux ramène à la page de l’événement. ». WAITING TTS : narration Kore entière à régénérer en une passe, `continuousPauseTags: false`. Aucun appel, plafond mensuel connu ; aucun tournage final avec l’ancien libellé.

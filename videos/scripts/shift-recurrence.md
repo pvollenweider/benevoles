@@ -29,3 +29,14 @@ Une activité qui revient chaque semaine (épicerie participative, accueil, dist
 
 - Les dates dépendent du jour de la prise : la narration ne cite ni date ni jour férié précis.
 - Les jours fériés de la période varient selon la saison filmée ; seule la fermeture ajoutée est garantie dans l'aperçu.
+
+
+## Révision du 2026-10-15 — lot 22-3
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête partagé et onglets, Frise agrandie, Places / Places par créneau, statut unique et Complet bleu, Cumul dans Gérer les postes. Les pages personnelles peuvent afficher Mes réponses et S’inscrire à d’autres créneaux. Les réglages du poste sont hérités par les nouveaux créneaux.
+
+Narration conservée : aucun libellé cité ni comportement décrit ne contredit l’écran actuel. Les WAV référencés par les anciennes métadonnées sont absents de cette copie ; ne pas prétendre avoir réutilisé un audio disponible.
+
+## Révision du 2026-10-16 — lot 22-14
+
+Nouvelle narration Puck intégrale, sans mélange de phrases. La première prise est écartée avant tournage : deux reconnaissances indépendantes et un contrôle ciblé lisent « café accueil » au lieu de « Caisse et accueil ». La phrase devient « Pour le poste, écrivons Caisse et accueil. », avec une nouvelle génération complète et un nouvel audit. Le repère final du recorder utilise « Pour la saison suivante », qui figure réellement dans la narration.

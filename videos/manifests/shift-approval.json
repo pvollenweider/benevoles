@@ -34,7 +34,7 @@
     },
     {
       "id": "setup",
-      "transcript": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
+      "transcript": "Dans le créneau, activez Sur validation. Ajoutez aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
       "fallbackDurationMs": 26000
     },
     {
@@ -62,5 +62,6 @@
       "transcript": "Le mode sur validation évite donc une affectation risquée sans transformer l’inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l’examen, la décision est traçable et la personne reçoit une réponse claire.",
       "fallbackDurationMs": 23000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

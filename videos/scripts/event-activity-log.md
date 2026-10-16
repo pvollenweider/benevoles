@@ -6,10 +6,10 @@ Vidéo autonome 48. Une narration continue Puck, souriante et posée. Sources fo
 
 ## Parcours à filmer
 
-1. Ouvrir le journal depuis un événement fictif dont l'historique est fourni. Lire type, horodatage, origine, action et changements. Distinguer l'auteur de la personne concernée ; montrer au moins une action bénévole, admin et système.
+1. Ouvrir Autres actions > Journal depuis un événement fictif dont l'historique est fourni. Lire type, horodatage, origine, action et changements. Distinguer l'auteur de la personne concernée ; montrer au moins une action bénévole, admin et système.
 2. Filtrer réellement Type d'élément, Qui et Action, puis réinitialiser. Le filtre Qui est un type d'auteur, pas une recherche de prénom. Montrer les autres familles disponibles : invitations, pages, responsables de secteur et jalons.
 3. Renseigner Depuis et Jusqu'à, montrer un résultat réduit et un résultat vide expliqué par la période, puis revenir à la liste. Prévoir assez d'entrées pour montrer Charger plus sans fabriquer le bouton.
-4. Rejouer un créneau avec plusieurs étapes vérifiables : point de départ, capacité modifiée, autre modification. Lire les différences enregistrées avant/après : l'écran ne reconstitue pas un état complet du planning. Utiliser précédent, suivant, curseur et Changer d'élément. Vérifier en base que cette lecture ne modifie aucun créneau.
+4. Rejouer un créneau avec plusieurs étapes vérifiables : point de départ, nombre de places modifié, autre modification. Lire les différences enregistrées avant/après : l'écran ne reconstitue pas un état complet du planning. Utiliser précédent, suivant, curseur et Changer d'élément. Vérifier en base que cette lecture ne modifie aucun créneau.
 5. Montrer une véritable chaîne causale : une annulation faite par la route normale, une place libérée et une offre de liste d'attente effectivement produite. Vérifier `causedByLogId`, le nouvel état de l'inscription et l'email dans Mailpit. Ne pas fabriquer ce lien entre deux entrées indépendantes.
 6. Sur un second événement possédant des éléments sans historique, générer réellement l'état initial. Lire la mention « Généré, pas une action réelle ». Vérifier les entités couvertes, puis refaire une requête autorisée de contrôle et vérifier l'absence de doublons. Ne pas faire croire que le bouton récupère des actions passées.
 7. Montrer une modification de page ou de coordonnées sans afficher leur contenu dans les changements du journal. Expliquer les droits et le fait que des noms d'auteurs restent visibles.
@@ -39,3 +39,16 @@ ne satisfait donc pas le scénario d'historique sur deux semaines.
 Le rapport `coverage-check.json` marque explicitement ce manque. Ce contrôle
 ne constitue pas un garde-fou complet pour envoyer la vidéo à un service
 externe et n'autorise aucun upload. Aucun horodatage n'a été réécrit.
+
+## Révision du 15 octobre 2026 — lot 22-2
+
+Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Réglages ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
+
+
+## Révision du 16 octobre 2026 — lot 22-9
+
+Relecture PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (issue #1013), CHANGELOG Unreleased et parcours actuel. Les ajouts facultatifs de narration sont retirés pour conserver la prise audio restaurée quand le texte initial reste exact. Segments nécessitant une nouvelle narration : aucun. Navigation et repères adaptés aux onglets actuels. Toute correction conservée attend une narration intégrale, même voix, sans pause tags.
+
+Précision du lot 22-9 : l’historique de cette démonstration est créé aujourd’hui par les routes réelles. Les filtres Depuis/Jusqu’à montrent la période courante puis une période future vide et la pagination réelle. Le film ne revendique pas un historique de deux semaines ; l’ancienne note de couverture ci-dessus reste une limite de ce scénario élargi, sans réécriture des horodatages. Le rejeu et la chaîne causale sont contrôlés sur les entrées effectivement produites.
+
+Lot22-9 : WAITING TTS. Le son restauré de period/privacy/result garde le tutoiement malgré le manifeste au vouvoiement. Trois reconnaissances indépendantes concordent. La prise finale est rejetée, conservée dans `previous-20261016-032034` ; réutiliser cette bande serait faux. Refaire toute la narration Puck en une seule passe, continuousPauseTags false. Répétition propre disponible.

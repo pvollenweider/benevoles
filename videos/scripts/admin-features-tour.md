@@ -12,7 +12,7 @@ Souriant, sympathique et concret. La narration ressemble à une visite faite par
 
 ## Parcours
 
-1. Identité publique, slug, sous-domaine, fuseau horaire et Convention des Bénévoles.
+1. Identité publique, slug, sous-domaine, fuseau horaire et Charte des bénévoles.
 2. Propriétaire, organisateur et responsable de secteur ; périmètre du lien personnel du responsable.
 3. Cycle de vie, visibilité et ouverture programmée des inscriptions.
 4. Apparence, lieu et coordonnées OpenStreetMap.
@@ -25,7 +25,12 @@ Souriant, sympathique et concret. La narration ressemble à une visite faite par
 11. Pages publiques : titre et contenu, enregistrement, puis ordre avec les flèches Monter / Descendre.
 12. Messages ciblés, modèles et variables.
 13. Rappels automatiques.
-14. Rapports, listes et badges : filtre Poste et sélection Bénévole (réimpression), sans filtre par créneau.
+14. Documents à imprimer, listes et badges : filtre Poste et sélection Bénévole (réimpression), sans filtre par créneau.
 15. Journal d’activité et recherche globale.
 
 Toutes les données montrées sont fictives et locales. Toute la narration utilise une seule nouvelle prise continue ; aucun ancien audio n’est repris.
+
+
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+
+La phrase d’adresse reste générale (« votre sous-domaine sur benevol point app ») pour éviter une lecture ambiguë des tirets. La dernière prise complète remplace intégralement la précédente.

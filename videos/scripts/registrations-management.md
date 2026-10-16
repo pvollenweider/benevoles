@@ -52,3 +52,17 @@ Les anciens champs ressaisis et l’affirmation d’absence d’email sont rempl
 NOT READY local : 344,320 secondes, même build `e44004c` / `EEyJJLNfRQviqfGUxjSM7`, narration auditée réutilisée sans régénération. Les anciens messages des fixtures Montvert sont supprimés par identifiant avant la prise, les autres conservés ; aucune ancienne confirmation en attente pour Camille ne reste. Mailpit s’ouvre via le résultat de recherche et vérifie les identifiants réellement visibles. Frames finales : une seule confirmation à 172 s, puis 2, 3 et 4 emails, tous de cette prise. ASR source/MP4, sous-titres, effets (57 clics/29 frappes), posters et validation passent ; musique 13,5–19,7 LU.
 
 La revue confirme néanmoins un choix de créneau compatible tardif : phrase de 143,145 à 145,723 s, choix effectif à 147,644 s. Source corrigée : l’action attend maintenant `at("Choisissons plutôt un horaire compatible")` dans le chapitre de vérification, avant le chapitre de résultat. Selon la consigne du batch, aucune nouvelle prise après cette correction de timing ; le MP4 actuel conserve le retard et reste NOT READY. Les autres alertes sur le menu, le badge et le journal sont réfutées par frames et repères mesurés, sans effacer leurs rapports. Aucune publication.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration à régénérer intégralement, même voix, une seule passe, `continuousPauseTags: false`. WAITING TTS : plafond mensuel du projet connu, aucun nouvel appel. Phrases révisées :
+
+- Regardez toujours le nombre sélectionné.
+- Confirmez seulement après l'avoir lu.
+- Pour désigner un responsable depuis une inscription, sélectionnez la personne puis Rendre responsable.
+- Vérifiez le poste et l'adresse qui recevra le lien, puis confirmez.
+- Pour retirer quelqu'un d'un horaire, lisez d'abord la confirmation : inscription annulée, place libérée, email éventuel et liste d'attente.
+- Discutez avec la personne avant de lui proposer davantage.

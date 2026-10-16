@@ -42,7 +42,7 @@
     },
     {
       "id": "resize",
-      "transcript": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvre ensuite les actions rapides : l’heure de fin a bien changé. Vérifie-la avant de fermer.",
+      "transcript": "Pour corriger une durée, attrapez le bord droit du créneau et déplacez-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvrez ensuite les actions rapides : l’heure de fin a bien changé. Vérifiez-la avant de fermer.",
       "fallbackDurationMs": 24000
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "id": "copy",
-      "transcript": "Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donne-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.",
+      "transcript": "Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donnez-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.",
       "fallbackDurationMs": 32000
     },
     {

@@ -8,7 +8,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { openPayload } from "../../src/lib/notifications/outbox"
 
 const scenario = process.argv[2]
-assert(["registrations-place-member", "registrations-management"].includes(scenario))
+assert(["registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(scenario))
 const url = new URL(process.env.DATABASE_URL ?? "")
 assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
@@ -26,6 +26,29 @@ const inventory = async () => {
 }
 async function main() {
   try {
+    if (["last-minute-changes", "reminders-changes"].includes(scenario)) {
+      const lastMinute = scenario === "last-minute-changes"
+      const org = await db.organization.findUniqueOrThrow({ where: { id: lastMinute ? "video-last-minute" : "default" } })
+      assert.equal(org.name, lastMinute ? "Formation — imprévus" : "Fêtes de Montvert")
+      const titles = lastMinute ? ["Fête des imprévus"] : ["Atelier des rappels", "Atelier en brouillon", "Atelier sans rappels"]
+      const address = lastMinute ? /^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/ : /^video\.reminder\.[a-z0-9.-]+@example\.org$/
+      const before = await inventory()
+      const owned: Message[] = []
+      for (const m of before) {
+        const recipients = [...m.To, ...(m.Cc ?? []), ...(m.Bcc ?? [])]
+        if (!recipients.length || !recipients.every(r => address.test(r.Address))) continue
+        const detail = await (await fetch(`${mailbox}/api/v1/message/${m.ID}`)).json() as { Text: string }
+        if (titles.some(t => m.Subject.includes(t) || detail.Text.includes(t))) owned.push(m)
+      }
+      for (const m of owned) { const response = await fetch(`${mailbox}/api/v1/messages`, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ IDs: [m.ID] }) }); assert(response.ok) }
+      const ids = new Set(owned.map(m => m.ID)), after = await inventory()
+      assert(before.filter(m => !ids.has(m.ID)).every(m => after.some(a => a.ID === m.ID)))
+      assert(!after.some(m => ids.has(m.ID)))
+      const dir = `videos/output/${scenario}`; await mkdir(dir, { recursive: true })
+      await writeFile(`${dir}/mailbox-reset-${Date.now()}.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scenario, exactEventTitles: titles, deletedMessages: owned, preservedIds: after.map(m => m.ID) }, null, 2))
+      console.log(`Exact ${scenario} fixture mail cleared (${owned.length}); unrelated messages preserved (${after.length})`)
+      return
+    }
     const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true } } } })
     assert.equal(fixture.name, "Fêtes de Montvert")
     const event = fixture.events.find(e => e.slug === "fete-du-village")
@@ -40,6 +63,13 @@ async function main() {
       const recipients = [...m.To, ...(m.Cc ?? []), ...(m.Bcc ?? [])]
       return m.Subject.includes(event.title) && recipients.length > 0 && recipients.every(r => ownsAddress(r.Address))
     })
+    // Campaigns and leader notifications can name the event only in their body.
+    for (const m of before.filter(m => !owned.some(row => row.ID === m.ID))) {
+      const recipients = [...m.To, ...(m.Cc ?? []), ...(m.Bcc ?? [])]
+      if (!recipients.length || !recipients.every(r => ownsAddress(r.Address))) continue
+      const detail = await (await fetch(`${mailbox}/api/v1/message/${m.ID}`)).json() as { Text: string }
+      if (detail.Text.includes(event.title)) owned.push(m)
+    }
     // Never use DELETE-all or DELETE-search: every deletion names an inspected ID.
     for (const message of owned) {
       const response = await fetch(`${mailbox}/api/v1/messages`, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ IDs: [message.ID] }) })
@@ -55,13 +85,13 @@ async function main() {
     const obsolete = pending.filter(row => {
       const payload = openPayload(row.payload)
       const data = payload.data as { eventTitle?: string }
-      return payload.kind === "registration_added_by_organizer" && payload.recipient.email === recipient && data.eventTitle === event.title
+      return !!payload.recipient.email && ownsAddress(payload.recipient.email) && data.eventTitle === event.title
     })
     for (const row of obsolete) await db.notificationOutbox.deleteMany({ where: { id: row.id, organizationId: "default", status: "pending" } })
     const dir = `videos/output/${scenario}`
     await mkdir(dir, { recursive: true })
     await writeFile(`${dir}/mailbox-reset-proof.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scenario, eventName: event.title, recipient, deletedMessages: owned, preservedMessageIds: after.map(m => m.ID), deletedPendingIds: obsolete.map(r => r.id), remainingPreviousPending: await db.notificationOutbox.count({ where: { id: { in: obsolete.map(r => r.id) }, status: "pending" } }) }, null, 2))
-    console.log(`✓ Mailpit: ${owned.length} exact fixture messages deleted; ${after.length} unrelated messages preserved; ${obsolete.length} prior pending confirmations removed`)
+    console.log(`✓ Mailpit: ${owned.length} exact fixture messages deleted; ${after.length} unrelated messages preserved; ${obsolete.length} prior pending fixture notifications removed`)
   } finally { await db.$disconnect() }
 
 }

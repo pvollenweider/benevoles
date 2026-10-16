@@ -50,22 +50,22 @@
     },
     {
       "id": "selection",
-      "transcript": "Les cases permettent de sélectionner une inscription, ou plusieurs. La barre propose les actions applicables : présence, responsable, lien personnel ou retrait. Une sélection reste active quand une recherche masque ses lignes ; un filtre n'est donc pas une nouvelle sélection. Regarde toujours le nombre sélectionné. Désélectionner remet ce nombre à zéro avant de préparer une autre action.",
+      "transcript": "Les cases permettent de sélectionner une inscription, ou plusieurs. La barre propose les actions applicables : présence, responsable, lien personnel ou retrait. Une sélection reste active quand une recherche masque ses lignes ; un filtre n'est donc pas une nouvelle sélection. Regardez toujours le nombre sélectionné. Désélectionner remet ce nombre à zéro avant de préparer une autre action.",
       "fallbackDurationMs": 34000
     },
     {
       "id": "resend",
-      "transcript": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel pour accéder à son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
+      "transcript": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirmez seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel pour accéder à son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "leader",
-      "transcript": "Pour désigner un responsable depuis une inscription, sélectionne la personne puis Rendre responsable. Ici, Sarah prend le relais à l'accueil. Vérifie le poste et l'adresse qui recevra le lien, puis confirme. L'email donne accès à la vue de son équipe, pas à l'administration entière. Après rechargement, le badge Responsable apparaît sur ses inscriptions du poste concerné.",
+      "transcript": "Pour désigner un responsable depuis une inscription, sélectionnez la personne puis Rendre responsable. Ici, Sarah prend le relais à l'accueil. Vérifiez le poste et l'adresse qui recevra le lien, puis confirmez. L'email donne accès à la vue de son équipe, pas à l'administration entière. Après rechargement, le badge Responsable apparaît sur ses inscriptions du poste concerné.",
       "fallbackDurationMs": 36000
     },
     {
       "id": "undo",
-      "transcript": "Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription annulée, place libérée, email éventuel et liste d'attente. Après confirmation, une barre laisse dix secondes pour annuler. Le délai attend tant que le pointeur ou le focus est sur cette barre. Nous utilisons Annuler le retrait : la ligne revient, sans annulation enregistrée ni email de retrait envoyé.",
+      "transcript": "Pour retirer quelqu'un d'un horaire, lisez d'abord la confirmation : inscription annulée, place libérée, email éventuel et liste d'attente. Après confirmation, une barre laisse dix secondes pour annuler. Le délai attend tant que le pointeur ou le focus est sur cette barre. Nous utilisons Annuler le retrait : la ligne revient, sans annulation enregistrée ni email de retrait envoyé.",
       "fallbackDurationMs": 38000
     },
     {
@@ -75,7 +75,7 @@
     },
     {
       "id": "workload",
-      "transcript": "Une autre vérification utile : la charge prévue. Noah a le montage, la buvette du matin et celle du soir, avec de vraies pauses entre les horaires. Cela représente dix heures sur la journée. L'alerte Charge élevée conseille l'organisateur ; elle ne signifie pas un chevauchement, une présence attestée ou un refus automatique. Discute avec la personne avant de lui proposer davantage.",
+      "transcript": "Une autre vérification utile : la charge prévue. Noah a le montage, la buvette du matin et celle du soir, avec de vraies pauses entre les horaires. Cela représente dix heures sur la journée. L'alerte Charge élevée conseille l'organisateur ; elle ne signifie pas un chevauchement, une présence attestée ou un refus automatique. Discutez avec la personne avant de lui proposer davantage.",
       "fallbackDurationMs": 37000
     },
     {

@@ -1,6 +1,6 @@
 # Des badges lisibles pour accueillir son équipe
 
-Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. La reprise de phrases isolées décrite pour cette ancienne révision est abandonnée pour le lot 22-5 : toute modification exige une nouvelle narration entière, même voix, une seule passe sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
 
 Vidéo autonome 45. Prévisualisation narrée avec une seule voix Puck souriante. Le badge est un outil d'identification sur place, pas un contrôle d'accès ni un justificatif de présence.
 
@@ -14,7 +14,7 @@ Reconnaître les personnes et leur équipe à l'accueil, puis réimprimer un bad
 
 ## Démonstration
 
-1. **Pourquoi un badge.** Depuis l'événement, ouvrir Rapports et la section Badges. Montrer les options avant de générer. Le prénom, le nom, le poste et les créneaux aident à accueillir les personnes et à savoir à quelle équipe elles appartiennent.
+1. **Pourquoi un badge.** Depuis l'événement, ouvrir Documents et la section Badges. Montrer les options avant de générer. Le prénom, le nom, le poste et les créneaux aident à accueillir les personnes et à savoir à quelle équipe elles appartiennent.
 2. **Tous les inscrits.** Garder Tous les postes et Tous les bénévoles, puis ouvrir les badges dans le vrai nouvel onglet. Lire celui d'une personne sur deux postes : un badge pour cette personne, pas un badge par inscription. Montrer une seconde feuille et les dix emplacements par page A4.
 3. **Seulement un poste.** Revenir au formulaire, choisir Buvette et générer. Les personnes retenues ont une inscription confirmée sur ce poste ; leurs autres créneaux ne figurent pas sur ce badge filtré. Comparer le badge d'une bénévole multi-postes avec sa version précédente.
 4. **Réimpression individuelle.** Choisir une personne dans Bénévole (réimpression). Les noms identiques sont distingués par leur adresse dans la sélection, pas par une adresse imprimée sur le badge. Avec un poste encore filtré, seuls ses créneaux de ce poste sont inclus. Revenir à Tous les postes pour son badge complet.
@@ -55,3 +55,12 @@ Le recorder est raccordé au catalogue et au lanceur. Il utilise le vrai formula
 Cette revue par échantillonnage ne valide ni chaque image, ni la synchronisation avec une narration absente. Le chapitre impression montre le document HTML imprimable : il ne doit pas être présenté comme un lecteur PDF ni comme une manipulation de la boîte native d'impression. Les PDF produits séparément servent au contrôle des pages finales. La capture narrée et le contrôle audiovisuel complet restent requis.
 
 Les crédits ont été rétablis et la narration est générée avec `gemini-3.8-flash-tts`. Les premières prises ont été écartées : phrase omise, ajout non demandé ou consigne de pause prononcée. Le manifeste désactive maintenant les balises de pause, sans changer de voix ni découper la génération en prises séparées. La nouvelle prise Puck a été recalée à partir de fenêtres audio courtes puis ses neuf chapitres ont passé la transcription indépendante. Les différences restantes sont des variantes de transcription, pas des phrases déplacées. La capture contre ces durées et la revue du MP4 restent requises ; la répétition silencieuse ne constitue pas le livrable final.
+
+
+## Révision du 2026-10-16 — lot 22-5
+
+Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased] et PR fusionnées #990 à #1012, #1021 (onglets lot 2), #1022 (#1013). Étiquettes, Modifier, Heures prévues, navigation Inscriptions / Invitations et Documents à imprimer vérifiées dans les scénarios.
+
+WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+
+- Depuis Documents, ouvrons les options des badges.

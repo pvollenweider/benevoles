@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé. Une relance peut les aider à retrouver leur lien, sans leur mettre la pression. Dans Invitations, regarde d'abord la date d'envoi et les statuts. Une ancienne invitation ne prouve pas que la personne a oublié de répondre. Peut-être attend-elle simplement de connaître ses disponibilités.",
+      "transcript": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé. Une relance peut les aider à retrouver leur lien, sans leur mettre la pression. Dans Invitations, regardez d'abord la date d'envoi et les statuts. Une ancienne invitation ne prouve pas que la personne a oublié de répondre. Peut-être attend-elle simplement de connaître ses disponibilités.",
       "fallbackDurationMs": 33000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "send",
-      "transcript": "Une fois le groupe et le texte vérifiés, confirme l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
+      "transcript": "Une fois le groupe et le texte vérifiés, confirmez l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
       "fallbackDurationMs": 34000
     },
     {
@@ -70,5 +70,6 @@
       "Un email envoyé n'est pas une preuve de lecture.",
       "Si une personne vous a dit qu'elle ne peut pas venir, respectez sa réponse."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

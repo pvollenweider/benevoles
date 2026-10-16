@@ -13,7 +13,9 @@ export function captionDisplayText(text: string): string {
     const y = /^20\d{2}$/.test(year) ? Number(year) : 2020 + (value(year.replace(/^deux mille vingt[- ]?/i, "")) ?? 0)
     return d === undefined ? full : `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${y}`
   })
-  result = result.replace(new RegExp(`\\b(${numeral}) heures?(?: (trente|quinze))?\\b`, "gi"), (full, hour: string, minutes?: string) => {
+  result = result.replace(new RegExp(`\\b(${numeral}) heures?(?: (trente|quinze))?\\b`, "gi"), (full, hour: string, minutes: string | undefined, offset: number) => {
+    // « Envoyé avec une heure » describes a displayed timestamp, not a one-hour duration.
+    if (hour.toLowerCase() === "une" && !minutes && /\bavec $/i.test(result.slice(0, offset))) return full
     const h = value(hour), m = minutes ? value(minutes) : undefined
     return h === undefined || h > 24 ? full : `${h} h${m === undefined ? "" : ` ${String(m).padStart(2, "0")}`}`
   })

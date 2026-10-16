@@ -72,7 +72,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous désignez un responsable de poste et découvrez ce qu'il voit de son équipe depuis son lien personnel.",
     "steps": [
-      "Dans l'événement, ouvrez les responsables et ajoutez une personne.",
+      "Dans l'événement, ouvrez Réglages, puis Responsables de secteur, et ajoutez une personne.",
       "Choisissez le poste, puis indiquez son nom et son email, en vérifiant bien l'adresse.",
       "Si elle est déjà inscrite, reprenez ses coordonnées depuis la liste des inscrits.",
       "Envoyez-lui son lien personnel : elle l'ouvre sans compte ni mot de passe.",
@@ -84,5 +84,6 @@
       "L'espace du responsable est en lecture seule et ne montre que son poste.",
       "Être responsable ne remplace pas une inscription et ne publie pas ses coordonnées comme contact du créneau."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

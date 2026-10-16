@@ -28,3 +28,12 @@ Composer un planning réaliste avant de transmettre ses informations, en compren
 - Le serveur revérifie capacités, chevauchements, accès et quotas à la confirmation.
 - Quitter le planning ou retirer une sélection nouvelle n’annule pas un engagement existant.
 - Une invitation personnelle ne doit pas être partagée.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
+
+WAITING TTS — ASR indépendante du WAV restauré : le chapitre conflict prononce encore « Accueil de neuf à midi […] Navette de huit à midi ». Le manifeste actuel exige « Ici, Accueil de quinze à dix-huit heures empêche la Navette de quatorze à dix-huit heures. ». Régénérer toute la narration Kore en une seule passe, sans balises de pause ; aucun appel sous le plafond mensuel.

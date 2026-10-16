@@ -36,7 +36,7 @@ export async function recordEventLog(options: { page: Page; base: string; eventI
     await go(url)
     await scene("welcome", async at => {
       await page.screencast.showChapter(title, { duration: 2400 })
-      await at(0.25); await tap(page, page.getByRole("link", { name: "Journal", exact: true }))
+      await at("ouvrons le Journal"); await tap(page, page.getByRole("button", { name: "Autres actions", exact: true })); await tap(page, page.getByRole("link", { name: "Journal", exact: true }))
       await page.locator("#panel-explore > div > div").first().waitFor()
     })
     await scene("read", async at => {

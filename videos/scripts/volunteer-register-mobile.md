@@ -94,3 +94,10 @@ Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans
 - Aucun lien personnel n’est révélé sur la page de succès d’une inscription anonyme.
 - La vidéo reste compréhensible sans le son.
 - La voix reste compréhensible sans regarder l’image.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.

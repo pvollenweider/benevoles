@@ -30,7 +30,7 @@
     },
     {
       "id": "group",
-      "transcript": "Pour un groupe, utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à votre sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste votre repère. Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
+      "transcript": "Pour un groupe, utilisez le filtre d’étiquettes. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à votre sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste votre repère. Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
       "fallbackDurationMs": 37000
     },
     {
@@ -69,7 +69,7 @@
     "steps": [
       "Dans Invitations, envoyez d'abord un email de test à votre adresse pour vérifier la présentation.",
       "Cliquez sur « Inviter des membres », recherchez une personne et cochez sa fiche.",
-      "Pour un groupe, filtrez par tag, sélectionnez les membres visibles et vérifiez le compteur ; « Effacer » vide la sélection.",
+      "Pour un groupe, filtrez par étiquette, sélectionnez les membres visibles et vérifiez le compteur ; « Effacer » vide la sélection.",
       "Ajoutez si besoin un court message, puis envoyez : chaque personne reçoit son propre email et son lien personnel.",
       "Suivez dans le tableau qui a une participation confirmée.",
       "Gardez « Cacher déjà invités » coché pour éviter d'inviter deux fois les mêmes personnes."
@@ -80,5 +80,6 @@
       "Un poste réservé à un tag n'est accessible que si la personne porte toujours ce tag au moment de s'inscrire.",
       "Une fiche sans email ne reçoit rien : contactez la personne autrement."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

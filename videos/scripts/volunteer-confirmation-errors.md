@@ -149,3 +149,12 @@ locale `benevoles_contact`, puis ouvre le formulaire. Il conserve les cookies
 organisateur nécessaires aux vérifications et le préremplissage de l'invitation
 personnelle d'Aline. Aucune notice « Coordonnées reprises » n'est montrée.
 Le transcript de main reste inchangé.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
+
+WAITING TTS — revue finale du 2026-10-16 : le WAV restauré prononce « Votre sélection n’est plus disponible », alors que le manifeste et le produit disent « Ta sélection n’est plus disponible ». Le score WER initial avait laissé passer ce mot ; cet écart de citation invalide la réutilisation. Phrase à produire : « La confirmation répond Ta sélection n'est plus disponible. » Toute la narration Kore doit être régénérée en une passe, `continuousPauseTags: false`, sans mélange de phrases. Aucun appel TTS sous le plafond mensuel. La répétition est propre ; la prise avec cet audio est rejetée et conservée comme preuve, sans livraison.

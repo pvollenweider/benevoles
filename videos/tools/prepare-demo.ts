@@ -91,6 +91,15 @@ try {
   await db.organization.update({ where: { id: "default" }, data: { slug: "default" } })
   console.log(`Verified synthetic common fixture: ${fixture.events.length} events, ${fixture.volunteers.length} members. Reset confined to default training organization; other organizations preserved.`)
 } finally { await db.$disconnect() }
-await import("../../scripts/seed-demo")
+// Seed with the current verified product client, whose additive fields may
+// be newer than the tooling checkout's generated Prisma client.
+const { verifyProductBuild } = await import("../lib/product-build")
+const product = await verifyProductBuild("http://localhost:43102")
+const { spawn } = await import("node:child_process")
+await new Promise<void>((resolve, reject) => {
+  const child = spawn(process.execPath, ["--import", "tsx", "scripts/seed-demo.ts"], { cwd: product.snapshot, env: process.env, stdio: "inherit" })
+  child.on("error", reject)
+  child.on("exit", code => code === 0 ? resolve() : reject(new Error(`Current product demo seed failed (${code})`)))
+})
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) main().catch(error => { console.error(error instanceof Error ? error.message : "Demo fixture preparation failed"); process.exitCode = 1 })

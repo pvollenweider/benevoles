@@ -23,7 +23,7 @@ export function assertHoursScenario(scenario: HoursScenario, product: ProductBui
   assert(scenario.product.commit === product.commit && scenario.product.buildId === product.buildId && scenario.product.productSourceSha256 === product.productSourceSha256, "Current compiled hours fixture required")
   assert(now.toISOString().slice(0, 10) > "2026-09-12" && now.toISOString().slice(0, 10) < "2026-11-28", "Re-date and revalidate this training scenario before another period")
   assert.equal(scenario.members.length, 3)
-  for (const [name, planned, attested] of [["aline", 480, 360], ["benoit", 120, 0], ["clara", 0, 0]] as const) {
+  for (const [name, planned, attested] of [["aline", 720, 360], ["benoit", 120, 0], ["clara", 0, 0]] as const) {
     const member = scenario.members.find(m => m.id === `video-hours-${name}`)
     assert(member && member.firstName === ({ aline: "Aline", benoit: "Benoît", clara: "Clara" }[name]) && member.lastName === HOURS_LAST_NAMES[name] && member.email === `video.hours.${name}@example.org`)
     assert.equal(member.plannedMinutes, planned); assert.equal(member.attestedMinutes, attested)
@@ -97,9 +97,9 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     // Columns are read by their current header rather than a stale fixed index.
     const headers = (await page.getByRole("table", { name: "Liste des membres", exact: true }).getByRole("columnheader").allTextContents()).map(text => text.replace(/[↕↑↓]/g, "").trim())
     assert(headers.includes("Heures prévues") && headers.includes("Heures attestées"), "Current hours columns are required")
-    assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures prévues")).innerText()).trim(), "8h")
+    assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures prévues")).innerText()).trim(), "12h")
     assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures attestées")).innerText()).trim(), "6h")
-    await evidence("hours-list", { plannedHours: 8, attestedHours: 6, futureAndCancelledExcluded: true, attestedIsSubsetNotAdditional: true })
+    await evidence("hours-list", { plannedHours: 12, attestedHours: 6, futureIncludedCancelledExcluded: true, attestedIsSubsetNotAdditional: true })
   })
   await scene("last-participation", async at => {
     const table = page.getByRole("table", { name: "Liste des membres", exact: true })
@@ -176,7 +176,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     await evidence("certificate-settings", { actualLivePreview: true, period: "MayToSeptember2026", actualNoteEntered: true, actualLogoLoaded: true, actualPrintGrayscaleComputed: true })
   })
   await scene("certificate-presence", async at => {
-    const include = page.getByRole("checkbox", { name: "Inclure les heures planifiées sans présence saisie", exact: true })
+    const include = page.getByRole("checkbox", { name: "Inclure les heures prévues sans présence saisie", exact: true })
     assert.equal(await include.isChecked(), false)
     const table = page.getByRole("table")
     assert.equal(await table.getByRole("columnheader", { name: "Heures prévues (sans présence)", exact: true }).count(), 0)
@@ -216,7 +216,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     await section.getByRole("heading", { name: "Résumé de l'événement", exact: true }).scrollIntoViewIfNeeded()
     const text = (await section.innerText()).replace(/\s+/g, " ")
     assert(text.includes("2 bénévoles distincts") && text.includes("1 pour la première fois") && text.includes("1 de retour"))
-    assert(text.includes("Présences saisies pour 1 sur 3 créneaux confirmés") && text.includes("6 h planifiées, dont 2 h attestées"))
+    assert(text.includes("Présences saisies pour 1 sur 3 créneaux confirmés") && text.includes("6 h prévues, dont 2 h attestées"))
     await section.getByRole("table", { name: "Remplissage par poste", exact: true }).scrollIntoViewIfNeeded()
     await evidence("event-summary", { distinctPeopleNotRegistrations: true, partialCheckInNotAbsenceClaim: true, plannedHours: 6, attestedHours: 2, currentRealReportsSummary: true })
   })

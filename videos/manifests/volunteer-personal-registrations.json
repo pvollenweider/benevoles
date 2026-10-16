@@ -50,7 +50,7 @@
     },
     {
       "id": "return",
-      "transcript": "Le lien Retour à l'accueil ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "transcript": "Le lien S'inscrire à d'autres créneaux ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
       "fallbackDurationMs": 30000
     }
   ],
@@ -70,5 +70,6 @@
       "Si tu annules près du début de la mission, préviens aussi le contact sur place.",
       "Retirer une inscription ne supprime pas ton profil de membre de l'association."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

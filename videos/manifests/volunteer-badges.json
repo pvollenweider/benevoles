@@ -26,7 +26,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapports, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
+      "transcript": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Documents, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
       "fallbackDurationMs": 33000
     },
     {
@@ -71,9 +71,9 @@
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous générez depuis Rapports une série de badges pour l'équipe, filtrez un poste, réimprimez le badge d'une personne et contrôlez les feuilles avant de les découper.",
+    "summary": "Dans cette vidéo, vous générez depuis Documents une série de badges pour l'équipe, filtrez un poste, réimprimez le badge d'une personne et contrôlez les feuilles avant de les découper.",
     "steps": [
-      "Dans Rapports, ouvrez les options des badges et générez la série pour tous les postes et tous les bénévoles.",
+      "Dans Documents, ouvrez les options des badges et générez la série pour tous les postes et tous les bénévoles.",
       "Choisissez un poste pour ne préparer que les badges de cette équipe.",
       "Pour un badge perdu, choisissez la personne à réimprimer, en vous aidant de l'adresse email affichée pour distinguer les homonymes.",
       "Choisissez la couleur du bandeau : celle du poste, celle de l'événement, ou noir et blanc.",

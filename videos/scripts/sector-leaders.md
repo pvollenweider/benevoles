@@ -10,7 +10,7 @@ Déléguer le suivi d'une équipe sur le terrain sans donner accès à toute l'a
 
 ## Démonstration
 
-1. Montrer la liste des responsables de l'événement, avec Accueil et Buvette déjà renseignés.
+1. Depuis l'événement, ouvrir Réglages, puis Responsables de secteur ; montrer Accueil et Buvette déjà renseignés.
 2. Nommer manuellement une personne pour un autre poste. Saisir lentement nom et email fictifs, puis envoyer le lien.
 3. Reprendre les coordonnées d'une personne inscrite via la liste proposée ; vérifier le poste et confirmer.
 4. Ouvrir l'email réellement émis dans Mailpit et son lien. Ne pas simuler une boîte remplie par une capture statique.
@@ -35,3 +35,12 @@ Liste des responsables mise à jour, vrais emails de démonstration, vue personn
 - Audit indépendant des paroles : une frontière de la nouvelle prise a été corrigée. Les onze paragraphes passent la comparaison de transcription (différences mineures de graphie comprises) ; nouvelle capture faite avec ces durées.
 - Avant livraison : vérifier la concordance de chaque phrase avec les actions et l'intonation. Le contrôle de transcription ne remplace pas ce visionnage audiovisuel.
 - Ancien décalage inscription/notification corrigé : la scène de notification commence à 162,322 s sur l'email déjà ouvert ; image contrôlée à 164 s, destinataire Élodie Rochat, Nora Perrin et Buvette dimanche 10–14 visibles.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration textuelle conservée : aucun changement de style. Réutilisation conditionnée à la concordance exacte du texte et des WAV restaurés, contrôlée séparément.
+
+Contrôle final du 2026-10-16 : READY local, 218.000 s, BUILD_ID U6k2mHLHd9xriq2897-tj, narration Puck restaurée conservée après concordance d’empreinte et ASR indépendant. Une seule prise finale ; seconde révision du montage pour le padding du recorder après redimensionnement, sans refaire la prise ni modifier le produit. Onze chapitres et vingt repères examinés, musique 13,8–18,7 LU, zéro tutoiement spectateur dans le VTT et l’ASR final. Pas de publication. Preuves : videos/output/sector-leaders/review/final-review-approved.json.

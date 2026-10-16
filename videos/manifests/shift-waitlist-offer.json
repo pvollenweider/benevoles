@@ -45,7 +45,7 @@
     },
     {
       "id": "release",
-      "transcript": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.",
+      "transcript": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures au maximum, sans dépasser le début du créneau, pour accepter depuis son lien personnel. Une place libérée moins d’une heure avant le début n’est plus proposée.",
       "fallbackDurationMs": 24000
     },
     {
@@ -60,8 +60,9 @@
     },
     {
       "id": "result",
-      "transcript": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
+      "transcript": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifiez la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.",
       "fallbackDurationMs": 21000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }
