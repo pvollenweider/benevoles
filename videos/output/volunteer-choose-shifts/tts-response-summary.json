@@ -1,8 +1,8 @@
 {
-  "receivedAt": "2026-10-11T19:55:24.920Z",
+  "receivedAt": "2026-10-16T03:56:53.500Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 4269,
+    "total_tokens": 4358,
     "total_input_tokens": 619,
     "input_tokens_by_modality": [
       {
@@ -11,84 +11,15 @@
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 3650,
+    "total_output_tokens": 3739,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 3650
+        "tokens": 3739
       }
     ],
     "total_tool_use_tokens": 0,
-    "total_thought_tokens": 0,
-    "raw_prompt_token": 727,
-    "model_invocation_token_counts": [
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 753
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1197
-          }
-        ]
-      },
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1026
-          },
-          {
-            "modality": "audio",
-            "tokens": 201
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 2457
-          }
-        ]
-      }
-    ],
-    "non_grounding_model_invocation_token_counts": [
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 753
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1197
-          }
-        ]
-      },
-      {
-        "prompt_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 1026
-          },
-          {
-            "modality": "audio",
-            "tokens": 201
-          }
-        ],
-        "candidates_tokens_details": [
-          {
-            "modality": "text",
-            "tokens": 2457
-          }
-        ]
-      }
-    ]
+    "total_thought_tokens": 0
   },
   "steps": [
     {
@@ -96,7 +27,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 9352152
+          "encodedLength": 9577432
         }
       ]
     }

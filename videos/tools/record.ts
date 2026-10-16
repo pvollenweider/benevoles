@@ -1149,7 +1149,8 @@ async function main() {
       })
       await scene("draw", async (at) => {
         const before = await quickRegion.locator('[data-shift-bar="1"]').evaluateAll(elements => elements.map(el => el.id))
-        const row = quickRegion.locator(".cursor-crosshair").last()
+        // Buvette spans both seeded days, exposing the real day/event apply choice.
+        const row = quickRegion.locator(".cursor-crosshair").nth(2)
         await row.scrollIntoViewIfNeeded()
         const from = await row.evaluate((el) => {
           const rect = el.getBoundingClientRect()
@@ -1174,6 +1175,7 @@ async function main() {
         await at("Donnez-lui un libellé, ajustez les")
         await tap(page, page.getByRole("dialog").getByLabel("Places", { exact: true }))
         await page.getByRole("dialog").getByLabel("Places", { exact: true }).fill("3")
+        await page.waitForTimeout(650) // Keep the changed number readable before closing.
         await at(0.81) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
         await createdBar.getByText(drawnLabel, { exact: true }).waitFor()
@@ -1215,6 +1217,11 @@ async function main() {
         await at(0.09) /* mid-sentence */
         await tap(page, createdBar)
         await page.getByRole("dialog").waitFor()
+        await at("Le choix Appliquer au poste")
+        const scope = page.getByRole("group", { name: /Appliquer au poste/ })
+        await scope.scrollIntoViewIfNeeded()
+        await scope.getByRole("button", { name: "Ce jour", exact: true }).waitFor()
+        await scope.getByRole("button", { name: "Tout l’événement", exact: true }).or(scope.getByRole("button", { name: "Tout l'événement", exact: true })).waitFor()
         await at("C’est le bon endroit pour")
         await page.getByLabel("Inscriptions").scrollIntoViewIfNeeded()
       })
@@ -1253,7 +1260,7 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Liste" }))
         const row = page.locator("tbody tr").filter({ hasText: duplicateLabel })
         await row.scrollIntoViewIfNeeded()
-        await at("Pour ajouter une consigne à cette relève")
+        await at(0.16) /* mid-sentence: « puis cliquez sur Modifier » in the opening sentence */
         await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
         await at("Ici, saisissez Venir dix minutes avant")
@@ -1281,7 +1288,8 @@ async function main() {
         const copied = page.locator("tbody tr").filter({ hasText: duplicateLabel })
         if (await original.count() !== 1 || await copied.count() !== 1) throw new Error("Saved List must contain both independent shifts exactly once")
         if (!(await copied.innerText()).includes(`${duplicateStart}–${duplicateEnd}`)) throw new Error("Reloaded List does not show the copied shift's saved hours")
-        await original.scrollIntoViewIfNeeded()
+        // Future take: center the adjacent saved rows before the opening result claim.
+        await original.evaluate(element => element.scrollIntoView({ block: "center" }))
         await at("L’original conserve son libellé, et")
         await copied.scrollIntoViewIfNeeded()
         await copied.getByText("0/3", { exact: true }).waitFor()
@@ -1390,6 +1398,8 @@ async function main() {
       })
       await scene("describe", async (at) => {
         await typeNaturally(page, form.getByLabel(/^Poste/), "Caisse et accueil")
+        await at("Le texte sous le champ rappelle")
+        await form.locator("p[id$='-role-hint']").filter({ hasText: /Les réglages du poste/ }).waitFor()
         await at("Cochez les jours")
         await tap(page, form.getByRole("checkbox", { name: "mardi", exact: true }))
         await tap(page, form.getByRole("checkbox", { name: "jeudi", exact: true }))
@@ -1831,7 +1841,7 @@ async function main() {
         const age = page.getByLabel("Âge minimum (optionnel)", { exact: true })
         await age.scrollIntoViewIfNeeded()
         if (await age.inputValue() !== "18") throw new Error("Evening Buvette must genuinely require eighteen years")
-        await at("La limite et les tags")
+        await at("La limite et les étiquettes")
         await tap(page, page.getByRole("button", { name: "Annuler" }))
         await tap(page, page.getByRole("button", { name: "Gérer les postes" }))
         await page.getByRole("heading", { name: "Gérer les postes" }).waitFor()
@@ -1875,11 +1885,16 @@ async function main() {
         await limited.waitFor()
         await at("les autres créneaux restent visibles")
         await limited.scrollIntoViewIfNeeded()
-        const quotaText = await limited.innerText()
+        const quotaText = await limited.locator("..").innerText()
         await page.screenshot({ path: path.join(dir, "review", "product-quota-frise.png") })
-        await writeFile(path.join(dir, "review", "product-quota-frise.json"), JSON.stringify({ url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), visibleBarText: quotaText, accessibleName: await limited.getAttribute("aria-label"), issue: "Quota reason must be visibly explained in Frise; do not switch views to conceal a product defect" }, null, 2))
+        await writeFile(path.join(dir, "review", "product-quota-frise.json"), JSON.stringify({ url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), visibleBarText: quotaText, accessibleName: await limited.getAttribute("aria-label"), check: "Quota reason checked in the visible label under the bar, with the button accessible name checked separately" }, null, 2))
         if (!/limite/i.test(quotaText)) throw new Error("Product bug: Frise quota reached is only in the accessible name, absent from visible bar text; exact frame/URL in review/product-quota-frise.*")
         await at("Elle peut d’abord retirer un")
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        const listQuota = page.getByRole("button", { name: /Buvette.*Limite de 2 créneaux par personne atteinte/i }).first()
+        await listQuota.scrollIntoViewIfNeeded()
+        if (!/Limite de 2 créneaux par personne atteinte/i.test(await listQuota.innerText())) throw new Error("Quota explanation missing from actual Liste")
+        await page.screenshot({ path: path.join(dir, "review", "product-quota-liste.png") })
       })
 
       await scene("reserved", async (at) => {
@@ -1891,7 +1906,7 @@ async function main() {
         if (!await reserved.isDisabled()) throw new Error("Reserved shift must expose its unavailable state")
         await at(0.62) /* mid-sentence */
         await page.getByText(/Les postes marqués « Réservé » sont réservés à certains membres/).scrollIntoViewIfNeeded()
-        await at("Une invitation sans le bon")
+        await at("Une invitation sans la bonne")
         await page.goto(`${publicPlanning}&token=demo-invite-emma-no-security-0001`); await settleEligibility()
         await page.getByRole("button", { name: /Sécurité.*réservé à certains membres/ }).first().scrollIntoViewIfNeeded()
       })
@@ -2131,6 +2146,8 @@ async function main() {
       await scene("limit", async (at) => {
         const limited = page.getByRole("button", { name: /Buvette.*limite de 2 créneaux par personne atteinte/ }).first()
         await limited.scrollIntoViewIfNeeded()
+        const quotaLabel = await limited.locator("..").innerText()
+        if (!/Limite (atteinte|de 2 créneaux par personne atteinte)/.test(quotaLabel)) throw new Error("Public Frise must visibly explain the reached quota")
         await at("les autres plages restent visibles")
         await limited.focus()
         await at("Elle doit d’abord annuler une")
@@ -2527,20 +2544,28 @@ async function main() {
           await page.getByLabel("Partir d'un modèle", { exact: true }).selectOption({ label: modelName })
           if (await page.getByLabel(/^Objet(?: \*)?$/).inputValue() !== "Merci pour ton aide") throw new Error("Selection replaced text prematurely")
           await at("L'objet et le texte changent"); await tap(page, page.getByRole("button", { name: "Utiliser ce modèle", exact: true }))
-          await at("Si ce n'est pas ce"); await tap(page, page.getByRole("button", { name: "Rétablir le texte précédent", exact: true }))
+          await at("Si ce n'est pas ce")
+          await at(0.60) /* mid-sentence: wait until « Rétablir le texte précédent » is actually named */
+          await tap(page, page.getByRole("button", { name: "Rétablir le texte précédent", exact: true }))
           if (await page.getByLabel(/^Objet(?: \*)?$/).inputValue() !== "Merci pour ton aide") throw new Error("Text restore failed")
           await at("Appliquons de nouveau notre briefing"); await tap(page, page.getByRole("button", { name: "Utiliser ce modèle", exact: true })); await chooseShift()
           checks.modelApplyAndRestore = true
         })
         await scene("context", async at => {
+          await at("Si nous choisissons ce public")
           await tap(page, page.getByRole("radio", { name: "Tous les bénévoles inscrits", exact: true }))
-          await page.getByLabel(/^Message(?: \*)?$/).scrollIntoViewIfNeeded()
+          await page.getByText("{créneau} ne s'utilise qu'avec les destinataires « Les bénévoles d'un créneau ».", { exact: true }).evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
           if (await page.getByLabel(/^Message(?: \*)?$/).getAttribute("aria-invalid") !== "true") throw new Error("Context error not exposed")
-          await at(0.57) /* mid-sentence */; await chooseShift()
+          await at("Revenons à un seul créneau."); await chooseShift()
           if (await page.getByLabel(/^Message(?: \*)?$/).getAttribute("aria-invalid") === "true") throw new Error("Context error not cleared")
           checks.contextVariableErrorVisible = true
         })
         await scene("preview", async at => {
+          const now = page.getByRole("radio", { name: "Maintenant", exact: true })
+          await now.scrollIntoViewIfNeeded()
+          if (!(await now.isChecked())) throw new Error("Briefing must be sent immediately")
+          await page.getByRole("radio", { name: "Programmer l'envoi", exact: true }).waitFor()
+          await at("Ouvrons maintenant l'aperçu.")
           await preview()
           const text = await page.frameLocator('iframe[title="Contenu de l\'email"]').locator("body").innerText()
           const previewRecipient = recipients.find(recipient => text.includes(`Bonjour ${recipient.volunteer.firstName},`))
@@ -2587,11 +2612,13 @@ async function main() {
           for (const [index, recipient] of recipients.slice(0, 2).entries()) {
             await at("Dans notre boîte de test, ouvrons les emails")
             const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
-            await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
+            await openRegistrationTakeMailbox(page, dir, mail.ID, 'subject:"Ton briefing pour Buvette" "Fête du village de Montvert"')
             const text = await page.frameLocator("iframe").locator("body").innerText()
             if (!text.includes(recipient.volunteer.firstName) || !text.includes("Prends aussi une gourde")) throw new Error("Actual personalized mail missing content")
           }
-          await at("L'historique conserve ensuite le message et son audience"); await page.goto(url); await settle(page); await page.getByRole("heading", { name: "Messages envoyés", exact: true }).scrollIntoViewIfNeeded()
+          await at("La section Messages programmés est séparée"); await page.goto(url); await settle(page)
+          await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()
+          await at("L'historique conserve ensuite le message et son audience"); await page.getByRole("heading", { name: "Messages envoyés", exact: true }).scrollIntoViewIfNeeded()
           checks.realEmailsPersonalizedAndDeduplicated = true
         })
         await scene("maintain", async at => {
@@ -2600,8 +2627,8 @@ async function main() {
           await writeField(page.getByLabel(/^Nom du modèle(?: \*)?$/), modelName + " — équipe")
           await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
           await at("La suppression demande une confirmation"); await tap(page, page.getByRole("button", { name: `Supprimer le modèle « ${modelName} — équipe »`, exact: true }))
-          await at("Pour chaque nouveau briefing, gardez"); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Annuler", exact: true }))
-          await at("choisir les bonnes personnes, vérifier"); await tap(page, page.getByRole("button", { name: `Supprimer le modèle « ${modelName} — équipe »`, exact: true }))
+          await at("Vous pouvez encore annuler."); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Annuler", exact: true }))
+          await at("Un modèle n'est pas l'historique d'un message déjà envoyé."); await tap(page, page.getByRole("button", { name: `Supprimer le modèle « ${modelName} — équipe »`, exact: true }))
           await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Supprimer", exact: true }))
           if (await db.targetedMessage.count({ where: { eventId: featureEventId } }) !== historyBefore + 1) throw new Error("Deleting model changed campaign history")
           await at("Des consignes simples et un"); await page.goto(url); await settle(page); await page.getByRole("heading", { name: "Messages envoyés", exact: true }).scrollIntoViewIfNeeded()
@@ -5064,9 +5091,10 @@ async function main() {
       await page.screencast.showChapter("Préparer l’événement", { description: "Publication, inscriptions et apparence", duration: 1_400 })
       await scene("lifecycle", async (at) => {
         await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
-        await at("Même publié, il peut rester")
+        await at("Un événement suit un cycle")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
         await page.getByText("Visibilité", { exact: true }).scrollIntoViewIfNeeded()
+        await at("Même publié, il peut rester")
         await at("Les inscriptions peuvent être immédiates")
         await page.getByText("Inscriptions", { exact: true }).last().scrollIntoViewIfNeeded()
       })
@@ -5084,8 +5112,10 @@ async function main() {
       })
 
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/duplicate`); await settle(page)
-      await scene("duplicate", async () => {
+      await scene("duplicate", async (at) => {
         await page.getByRole("heading", { name: "Dupliquer l'événement" }).waitFor()
+        await at("Vous choisissez ce qui est repris")
+        await page.getByRole("checkbox", { name: /Les responsables de secteur/ }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`)
@@ -5170,7 +5200,9 @@ async function main() {
         await at(0.54) /* mid-sentence */
         await page.getByLabel("Type de réponse").selectOption("single")
         await page.getByLabel("Choix proposés *").fill("S\nM\nL\nXL")
-        await at(0.78) /* mid-sentence */
+        await at("Une question de suivi peut")
+        await page.getByLabel(/^Afficher seulement si/).scrollIntoViewIfNeeded()
+        await at("Vous décidez si la réponse")
         await page.getByLabel("Réponse obligatoire").scrollIntoViewIfNeeded()
       })
 
@@ -5202,10 +5234,11 @@ async function main() {
         await at("Les modèles réutilisables acceptent des")
         await page.goto(`${baseUrl}/admin/settings/message-templates`); await settle(page)
         await page.getByRole("heading", { name: "Modèles de messages" }).waitFor()
-        await at("Vous prévisualisez toujours le résultat")
+        await at("Vous choisissez un envoi immédiat")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
-        const preview = page.getByText(/aperçu/i).first()
-        if (await preview.isVisible()) await preview.scrollIntoViewIfNeeded()
+        await page.getByRole("group", { name: "Quand l'envoyer ?", exact: true }).scrollIntoViewIfNeeded()
+        await at("La section Messages programmés permet")
+        await page.getByRole("heading", { name: "Messages programmés", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
@@ -5219,6 +5252,8 @@ async function main() {
         await page.getByRole("heading", { name: "Documents à imprimer" }).waitFor()
         await at(0.12) /* mid-sentence */
         await page.getByRole("heading", { name: "À afficher ou à remettre aux bénévoles" }).scrollIntoViewIfNeeded()
+        await at(0.30) /* mid-sentence: presence sheet and organizer-only list in the opening sentence */
+        await page.getByRole("heading", { name: "Pour les organisateurs seulement", exact: true }).evaluate((element) => element.scrollIntoView({ block: "center" }))
         await at("Les badges se génèrent en")
         await page.getByRole("heading", { name: "Badges" }).scrollIntoViewIfNeeded()
       })

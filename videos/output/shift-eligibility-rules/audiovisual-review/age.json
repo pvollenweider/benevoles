@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:50:40.964Z",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
+  "reviewedAt": "2026-10-16T08:50:18.260Z",
+  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
   "promptSha256": "b2a9c9822bf1d0e1a4995e07fe08d7d521ec996cf24cd8d99824eeaff8b8e07d",
-  "clipSha256": "ef8fa65a044446a6f12ce17b36bb8fb18e873014fa12bd3ae20a424e990ae0e4",
+  "clipSha256": "498425e87d827f589b8c9abb7d47316d4964514b63eab66dd584eb1133cd8a47",
   "scene": "age",
   "review": {
-    "heardOpening": "Sur le planning public",
+    "heardOpening": "Sur le planning public, la Buvette du soir annonce",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum",
-        "visibleSeconds": 1,
-        "visible": "Planning public affichant le créneau Buvette du soir avec la mention de 18 ans minimum",
+        "spokenSeconds": 1.8,
+        "spoken": "la Buvette du soir annonce 18 ans minimum avant toute sélection",
+        "visibleSeconds": 2,
+        "visible": "Le créneau orange Buvette 18h-22h affiche la mention 18 ans min. sur la frise",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 6,
         "spoken": "La date de naissance demandée dans le formulaire",
         "visibleSeconds": 6.8,
-        "visible": "Affichage du formulaire d'informations avec le champ obligatoire Date de naissance",
+        "visible": "Transition vers le formulaire « Tes informations » avec le champ Date de naissance",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 10.2,
         "spoken": "modifier le navigateur ou masquer le texte ne permet donc pas de la contourner",
-        "visibleSeconds": 9.5,
-        "visible": "Saisie de la date de naissance dans le formulaire",
+        "visibleSeconds": 10.8,
+        "visible": "Saisie d'une date de naissance valide (24/11/1995) dans le champ dédié",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le déroulement à l'écran."
+      "observation": "Voix off posée, claire et parfaitement audible tout au long de l'extrait."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

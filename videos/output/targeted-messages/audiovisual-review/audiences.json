@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:11:41.501Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
-  "promptSha256": "5975b16c5732b794a993d63a7262abfc567c74493933bc48f8d92fb1f78b21e6",
-  "clipSha256": "b5d6e1df19945f51cc85f5b5246168bf508786b6c316dac14411b9c5196a6e1e",
+  "reviewedAt": "2026-10-16T11:57:31.325Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
+  "promptSha256": "ffe5c6c5c000d92ba26d09a18a7d6d99fa6e694a867bf94c255a025d2c0a5cc6",
+  "clipSha256": "eb6f381fe9051f978e3f3c25f1561305725c81116d7c01a062745d41aad89326",
   "scene": "audiences",
   "review": {
-    "heardOpening": "Commençons par le public",
+    "heardOpening": "Commencez par le public. Tous les bénévoles inscrits",
     "checkpoints": [
       {
-        "spokenSeconds": 4.9,
-        "spoken": "Pour un poste, choisis par exemple la buvette",
-        "visibleSeconds": 5.1,
-        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec le poste « Buvette »",
+        "spokenSeconds": 2.2,
+        "spoken": "Tous les bénévoles inscrits vise les inscriptions confirmées.",
+        "visibleSeconds": 2,
+        "visible": "Option « Tous les bénévoles inscrits » cochée avec le compteur « 22 personnes recevront ce message ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Pour un créneau, précise aussi la date et l'horaire",
-        "visibleSeconds": 9.1,
-        "visible": "Sélection de l'option « Les bénévoles d'un créneau » avec date et horaire affichés",
+        "spokenSeconds": 6,
+        "spoken": "Pour un poste, choisissez par exemple la buvette",
+        "visibleSeconds": 6.5,
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec le menu déroulant affichant « Buvette ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
+        "spokenSeconds": 8.5,
+        "spoken": "pour un créneau, précisez aussi la date et l'horaire.",
+        "visibleSeconds": 8.8,
+        "visible": "Sélection de l'option « Les bénévoles d'un créneau » avec le créneau Buvette du 24 oct. 10:00-14:00.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
         "spoken": "La liste d'attente vise les personnes qui attendent une place",
-        "visibleSeconds": 13,
-        "visible": "Sélection de « Les personnes en liste d'attente »",
+        "visibleSeconds": 11.8,
+        "visible": "Sélection de « Les personnes en liste d'attente » et compteur à 3 personnes.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 17,
         "spoken": "les invités sans créneau confirmé permettent de reprendre contact",
-        "visibleSeconds": 18.2,
-        "visible": "Sélection de « Les invités sans créneau confirmé »",
+        "visibleSeconds": 17,
+        "visible": "Sélection de « Les invités sans créneau confirmé » et affichage du compteur correspondant.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien synchronisée avec les manipulations à l'écran."
+      "observation": "Voix de synthèse claire, posée et parfaitement synchronisée avec la manipulation des filtres de destinataires."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

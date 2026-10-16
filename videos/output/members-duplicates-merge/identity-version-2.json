@@ -12,18 +12,18 @@
     }
   },
   "product": {
-    "commit": "773c33e301f87e586ee2b3859ff7287b6f8b8978",
-    "sourceTree": "6bd88ba443f7d5ee07d2901c2716c26c9e295066",
-    "productSourceSha256": "760923bf907b82f394b0fd73f5126b0ab9fb3191ae0733a02658aa2af7869cf9",
-    "buildId": "OhhZ18Mt5GDfG-UR4mrkT",
-    "snapshot": "/tmp/benevoles-video-production.batch10",
-    "builtAt": "2026-10-12T02:25:28.637Z"
+    "commit": "43c1aae776430702dd155711b25f4f0a1331fce5",
+    "sourceTree": "4c2a896ad370003503607a6842614d4e9ed25faf",
+    "productSourceSha256": "274b889385308398378395c43da6d0f41c694b2cd56256f0441749b20d58803a",
+    "buildId": "83SMHxp7Hlyw1m4I1iY1U",
+    "snapshot": "/tmp/benevoles-video-production.Batch225",
+    "builtAt": "2026-10-15T22:50:47.377Z"
   },
-  "evidenceSha256": "463126194dfb35b8787cad3787fa09e40b1de41ccd2d66725e7e2eb12e24d95c",
+  "evidenceSha256": "9db80b9116d0c894c126dedf99545a89bf288053ef7ebca218073dd9ef51eb56",
   "evidenceFile": "identity-v1-evidence.json",
-  "migratedAt": "2026-10-12T03:44:37.684Z",
-  "protectedBeforeSha256": "35c389a0b08e047edbeae983b895983ed0d7df1da70b3360739c197af870f4cd",
-  "protectedAfterSha256": "35c389a0b08e047edbeae983b895983ed0d7df1da70b3360739c197af870f4cd",
+  "migratedAt": "2026-10-15T22:52:43.932Z",
+  "protectedBeforeSha256": "dc2c9407cce6d6a4d8ee733c494075606db91d82f2a28af90e00b9d08ba5c525",
+  "protectedAfterSha256": "dc2c9407cce6d6a4d8ee733c494075606db91d82f2a28af90e00b9d08ba5c525",
   "changedMemberIds": [
     "video-member-merge-a",
     "video-member-merge-b"
@@ -32,6 +32,6 @@
     "video-member-merge-owner"
   ],
   "changedAuthorHistoryIds": [],
-  "organizationCreatedAt": "2026-10-12T03:44:35.736Z",
+  "organizationCreatedAt": "2026-10-15T22:52:42.130Z",
   "note": "Encrypted sent payloads, erased tombstones, tokens, results, logs and fixture-generation ownership are preserved."
 }

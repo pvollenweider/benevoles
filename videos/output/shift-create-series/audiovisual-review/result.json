@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T18:08:22.816Z",
-  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
-  "promptSha256": "3601e080f80e425456115dc99d206b0975cf09f13ec5e27cd19c7ce08a64c35d",
-  "clipSha256": "473359c3a0384283437323724b92ee1dbfb90d6c860bbe0a968cfe272d28d9f5",
+  "reviewedAt": "2026-10-16T08:43:54.869Z",
+  "videoSha256": "d63e945f72e966aa9050165fcf3b69bfe831bf238a859ba8dfc20f71eb455b88",
+  "promptSha256": "7b6a5f659626530cd9eeef4ec64c6646d0aa98c2bc232145cf7020c93caaf664",
+  "clipSha256": "7c895b374aebeb25e40f0f1aa6cbddfecbdf4e9046309a868b0d55ab8cc406bf",
   "scene": "result",
   "review": {
     "heardOpening": "Le résultat est bien enregistré",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.6,
         "spoken": "Le résultat est bien enregistré",
-        "visibleSeconds": 0.5,
-        "visible": "La liste affiche les créneaux créés sous le libellé « Buvette série »",
+        "visibleSeconds": 0,
+        "visible": "Tableau récapitulatif des créneaux affichant les lignes de la Buvette série",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "quatre places pour la première relève, et toujours trois pour les suivantes",
-        "visibleSeconds": 2.5,
-        "visible": "Le créneau 10:00–12:00 affiche 0/4 places libres et les suivants indiquent 0/3",
+        "visibleSeconds": 0,
+        "visible": "Premier créneau de Buvette série (10:00-12:00) à 0/4 places, suivi de créneaux à 0/3 places",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
+        "spokenSeconds": 6.3,
         "spoken": "Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture",
-        "visibleSeconds": 6.5,
-        "visible": "Vue d'ensemble statique des créneaux avec leurs plages horaires respectives",
+        "visibleSeconds": 6.3,
+        "visible": "Vue d'ensemble stable des horaires et des intitulés de créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Une série bien découpée facilite le choix des bénévoles",
+        "visibleSeconds": 10.3,
+        "visible": "Affichage fixe de la liste découpée en tranches régulières de 2 heures",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Enregistrement vocal clair, fluide et posé, en parfaite adéquation avec le script."
+      "observation": "Voix masculine claire, posée et parfaitement intelligible, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

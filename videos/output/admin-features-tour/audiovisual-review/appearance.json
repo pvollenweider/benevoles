@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T03:22:46.201Z",
-  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "reviewedAt": "2026-10-16T10:36:24.114Z",
+  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
   "promptSha256": "a7180648bfad2e37efa7114b00ecbcdc0fd77a3c62ce2fc6cff0dd286dd4b096",
-  "clipSha256": "bb38da525e2451f12067c6150adef379c59d9227bfcf061081901becc3d08289",
+  "clipSha256": "27dba3a84fd853d00df5d86154d3dfab86f24078169d892e85d2a8163073226d",
   "scene": "appearance",
   "review": {
-    "heardOpening": "Dans ses paramètres, vous réglez le titre",
+    "heardOpening": "Dans ses paramètres",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "vous réglez le titre, les dates",
-        "visibleSeconds": 1,
-        "visible": "Affichage du formulaire 'Modifier l'événement' avec les champs Titre et Dates",
+        "spokenSeconds": 1.2,
+        "spoken": "vous réglez le titre, les dates, les messages",
+        "visibleSeconds": 1.1,
+        "visible": "Page Réglages affichant le champ Titre ainsi que les paramètres de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "et une couleur d'en-tête accessible",
-        "visibleSeconds": 4.8,
-        "visible": "Défilement vers la sélection des couleurs d'en-tête et aperçu avec Émeraude sélectionné",
+        "spokenSeconds": 3.8,
+        "spoken": "et une couleur d’en-tête accessible",
+        "visibleSeconds": 4.2,
+        "visible": "Défilement vers la section Couleur de la page publique avec palette de couleurs et aperçu",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,15 @@
         "spokenSeconds": 6.8,
         "spoken": "Le lieu peut recevoir des coordonnées",
         "visibleSeconds": 7,
-        "visible": "Retour en haut de page affichant le champ Lieu et les coordonnées GPS avec la mention OpenStreetMap",
+        "visible": "Affichage des champs Lieu et Coordonnées GPS ou lien de carte avec coordonnées renseignées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel",
+        "visibleSeconds": 9,
+        "visible": "Texte explicatif sous le champ coordonnées mentionnant le lien OpenStreetMap sur la page d'inscription, dans les emails et sur la page personnelle",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les sections présentées à l'écran."
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les éléments à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

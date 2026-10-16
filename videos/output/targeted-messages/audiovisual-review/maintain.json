@@ -1,51 +1,69 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:12:25.047Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:59:27.461Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "95ed5c2ec31ba24a7744499fdd6f172f1cf60cedb1dc074daabaec6f63be3cca",
-  "clipSha256": "c13c680673cc6f4c613eef75da5bebb7ad6eb14907bd61ca7f46e588d9c214a0",
+  "clipSha256": "c4a38d75e456fe1e774000d14a36d55f15887aa8016698955385abd5c2d4cc18",
   "scene": "maintain",
   "review": {
     "heardOpening": "Les modèles peuvent évoluer avec votre organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 2.9,
         "spoken": "Ouvrez Modifier",
-        "visibleSeconds": 1.5,
-        "visible": "Clic sur Modifier et ouverture du formulaire d'édition du modèle",
+        "visibleSeconds": 1.7,
+        "visible": "Clic sur Modifier en face de Briefing avant le créneau et affichage du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "ajustez le nom ou le texte et enregistrez",
-        "visibleSeconds": 6.3,
-        "visible": "Ajout de « — équipe » dans le nom puis clic sur Enregistrer",
+        "spokenSeconds": 4.1,
+        "spoken": "ajustez le nom ou le texte",
+        "visibleSeconds": 4,
+        "visible": "Modification du champ Nom du modèle par l'ajout de « - équipe »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 5.9,
+        "spoken": "et enregistrez.",
+        "visibleSeconds": 6.1,
+        "visible": "Clic sur Enregistrer et confirmation « Modèle modifié »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
         "spoken": "La suppression demande une confirmation",
-        "visibleSeconds": 7.7,
-        "visible": "Ouverture de la modale de confirmation « Supprimer le modèle »",
+        "visibleSeconds": 8,
+        "visible": "Ouverture de la fenêtre modale « Supprimer le modèle »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.9,
-        "spoken": "puis consulter le résultat",
+        "spokenSeconds": 9.3,
+        "spoken": "vous pouvez encore annuler.",
+        "visibleSeconds": 11.5,
+        "visible": "Clic effectif sur Supprimer (le modèle est supprimé, pas annulé)",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Puis consulter le résultat.",
         "visibleSeconds": 23.5,
-        "visible": "Affichage de la page de rédaction avec l'historique des « Messages envoyés »",
+        "visible": "Transition vers la page Événements > Communication avec la liste des messages envoyés",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:09 - 00:12 : La voix mentionne « vous pouvez encore annuler » alors que le curseur clique directement sur « Supprimer »."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, fluide, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix off masculine fluide, posée et claire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

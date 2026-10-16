@@ -1,13 +1,9 @@
 STATUS: READY
-ID: SHIFT_CREATE_SERIES
-COMMIT: d1482d273bc0c97c3efff59e76dc57205e0a2995
-BUILD_ID: Ur_-usFFdKv05dBCDAbrt
-DURATION: 115.88 seconds
-MUSIC: smallest 12.8 / largest 18 LU
-PROBLEMS: None; all objective checks and seven final audiovisual chapter reviews pass.
-SOURCE CHANGES: None.
-VALIDATION: []; sentence anchors checked: 10
-FINAL AUDIO: [('welcome', 0, False), ('range', 0, False), ('duration', 0, False), ('preview', 0, False), ('create', 0, False), ('adjust', 0.02, False), ('result', 0, False)]
-CAPTIONS/EFFECTS: transcript match True; marker counts True; exact synthesized bytes True; clicks 12, keys 0.
-REVIEW: final MP4 chapter sheets and flagged one-second sequences inspected; sentence timings, input markers and audiovisual checkpoints compared. Evidence: review/inspection.json, review/objective-evidence.json, review/*-sheet.png, review/*-seconds.png, review-frames/index.json, audiovisual-review/*.json, narration-audit-video.json, validation.json, audio-levels.json. French dates, current UI labels, Frise, no localhost/old admin/dev overlay checked.
-LIMIT: no real-time subjective listening available; this alone does not affect readiness.
+SHIFT_CREATE_SERIES — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 105.36 s. Music 14.4–18.9 LU under voice.
+Existing whole narration reused after text/hash checks.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Six créneaux de deux heures de 10h à 22h, trois places, pause zéro et aperçu relus ; passage en Liste, première relève portée à quatre places et autres conservées à trois après rechargement. Sept chapitres audiovisuels sans signalement ; deux ASR complets sans mots ajoutés ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

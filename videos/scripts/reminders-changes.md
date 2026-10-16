@@ -91,3 +91,8 @@ Correction de citation du 2026-10-16 : la consigne bénévole est reproduite exa
 - Écrivons une consigne simple : « Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide ! »
 
 Cette phrase fait partie de la nouvelle prise continue entière en attente du TTS ; aucun audio ancien n’est monté. Les manipulations, le texte saisi et les ancres de la répétition restent identiques.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.

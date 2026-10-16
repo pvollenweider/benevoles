@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:12:13.421Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:58:46.900Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "cbe7d599130b3911542b4b81c1726e71064fcb1a2c68faefb34a1b3cd55e36df",
-  "clipSha256": "a3909b0b8411873ccf8aa180eb939db301ab6770992c9737b3a86b3fc9cb4816",
+  "clipSha256": "c6f5b88d008394ae1df844f96ef25b97f3e5d17b313b0fd574701860002be5b7",
   "scene": "push",
   "review": {
     "heardOpening": "Vous pouvez aussi demander une notification",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur.",
-        "visibleSeconds": 0,
-        "visible": "Option « Envoyer aussi une notification (téléphone ou ordinateur) » cochée à l'écran",
+        "spokenSeconds": 0.8,
+        "spoken": "demander une notification sur téléphone ou ordinateur",
+        "visibleSeconds": 0.6,
+        "visible": "La case à cocher « Envoyer aussi une notification (téléphone ou ordinateur) » est activée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "L'objet sert de titre, et la première ligne non vide du message sert de texte court.",
-        "visibleSeconds": 10,
-        "visible": "Champs Objet et Message affichés avec le modèle de texte",
+        "spokenSeconds": 12.8,
+        "spoken": "L'objet sert de titre, et la première ligne non vide du message sert de texte court",
+        "visibleSeconds": 13,
+        "visible": "Le texte explicatif sous l'option précise la reprise de l'objet et de la première ligne, visibles dans le formulaire au-dessus",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
-        "spoken": "Le nombre d'appareils n'est donc pas le nombre de personnes.",
-        "visibleSeconds": 16,
-        "visible": "Section Messages envoyés avec les mentions « 22 personnes » et « 22 appareils »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 21,
-        "spoken": "vérifiez ce qui sera envoyé.",
-        "visibleSeconds": 21,
-        "visible": "Bouton « Voir l'aperçu et envoyer » présent sous le formulaire",
+        "spokenSeconds": 21.6,
+        "spoken": "Gardez les informations utiles au début et vérifiez ce qui sera envoyé",
+        "visibleSeconds": 22,
+        "visible": "Le bouton « Voir l'aperçu et envoyer » est affiché au bas du formulaire",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:10 : Changement inattendu de voix et de locuteur en cours d'explication (voix féminine de 00:00 à 00:10, puis voix masculine à partir de 00:10)"
-    ],
+    "issues": [],
     "voice": {
-      "consistent": false,
+      "consistent": true,
       "warm": true,
-      "observation": "Rupture de continuité vocale : voix féminine sur la première moitié, puis voix masculine à partir de 10 secondes."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

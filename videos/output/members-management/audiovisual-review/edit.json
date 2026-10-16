@@ -1,31 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:26:22.034Z",
-  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
-  "promptSha256": "903e61dea3cb7f040bff000c2c160f1271eba76a128ee96eb8e2a2a605d78d18",
-  "clipSha256": "7114410e23f13dab0105d631ea78578594b961a6beb9f68a776a4b0980d077c7",
+  "reviewedAt": "2026-10-16T11:41:34.314Z",
+  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "promptSha256": "71b03a894fead55c49cc90ec2e044f8b208bf1f7677a497ae4ae3ee179e2b9d9",
+  "clipSha256": "ceecf1dd34b5f73bdabd0ceb8a5d47d19ece7a719a1fb246926763e90e3fc789",
   "scene": "edit",
   "review": {
-    "heardOpening": "Avec Éditer, vous pouvez corriger la fiche",
+    "heardOpening": "Avec Modifier, vous pouvez corriger la fiche",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations.",
-        "visibleSeconds": 0.6,
+        "spokenSeconds": 0.5,
+        "spoken": "Avec Modifier, vous pouvez corriger la fiche et ajouter des informations",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le lien Modifier de la ligne de Maya Berger et ouverture de la fenêtre modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b.",
-        "visibleSeconds": 3,
+        "spokenSeconds": 8.5,
+        "spoken": "comme accueil ou permis b",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie des étiquettes accueil, permis-b dans le champ correspondant",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.8,
-        "spoken": "Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
-        "visibleSeconds": 17.5,
+        "spokenSeconds": 18.8,
+        "spoken": "Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés",
+        "visibleSeconds": 19.5,
+        "visible": "Clic sur le bouton Enregistrer, fermeture de la fenêtre puis réouverture immédiate avec le bouton Modifier",
         "sync": "aligned",
         "severity": "none"
       }
@@ -34,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix off masculine claire, posée et bien articulée, avec un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

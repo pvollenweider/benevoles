@@ -1,53 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:47:11.660Z",
-  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
-  "promptSha256": "b264f243f94e3b4da1f7eefdb3d0ef26ceb3ad07845b6c1883f22f4aa82814b9",
-  "clipSha256": "519ae8a1a5bf8752541d0e15678dc496ed52ea150969340b4b9eb46fba519053",
+  "reviewedAt": "2026-10-16T10:29:49.152Z",
+  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
+  "promptSha256": "e694aadaefccbf035303c02f970e39eefd739eab3a3bbbe243228920b0284457",
+  "clipSha256": "04772984008adb5885ebfeea78f0376c26a303a7c38e42e9f60f2e016c19103b",
   "scene": "resize",
   "review": {
     "heardOpening": "Pour corriger une durée",
     "checkpoints": [
       {
-        "spokenSeconds": 1.3,
-        "spoken": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le.",
-        "visibleSeconds": 3.8,
-        "visible": "Le curseur se dirige vers le créneau mais la fenêtre des actions rapides s'ouvre directement sans déplacement visible du bord.",
-        "sync": "missing",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 5.4,
-        "spoken": "Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes.",
-        "visibleSeconds": 5.5,
-        "visible": "L'allongement progressif n'est pas montré : la fenêtre des actions rapides reste ouverte au premier plan jusqu'à 00:08.",
-        "sync": "missing",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 8.8,
-        "spoken": "Rouvre ensuite les actions rapides : l’heure de fin a bien changé.",
-        "visibleSeconds": 9.5,
-        "visible": "Le volet des actions rapides est réouvert et affiche bien l'horaire mis à jour (06h15 - 07h45).",
+        "spokenSeconds": 1.5,
+        "spoken": "attrapez le bord droit du créneau et déplacez-le.",
+        "visibleSeconds": 2,
+        "visible": "Le bord droit du créneau orange est étiré vers la droite jusqu'à 07h45.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.4,
-        "spoken": "Vérifie-la avant de fermer.",
-        "visibleSeconds": 12.5,
-        "visible": "Le champ Fin à 07:45 reste visible à l'écran.",
+        "spokenSeconds": 5,
+        "spoken": "Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes.",
+        "visibleSeconds": 2.5,
+        "visible": "L'allongement du créneau de 07h00 à 07h45 a été réalisé juste avant.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Rouvrez ensuite les actions rapides : l’heure de fin a bien changé.",
+        "visibleSeconds": 9.5,
+        "visible": "Le panneau latéral du créneau s'ouvre, affichant l'heure de fin à 07:45.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Vérifiez-la avant de fermer.",
+        "visibleSeconds": 12,
+        "visible": "Le volet reste ouvert avec l'horaire de fin affiché.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "Entre 00:03 et 00:08 : l'étirement du bord droit du créneau par pas de 15 minutes n'est pas filmé ; à la place, la fenêtre des actions rapides s'ouvre prématurément puis se referme."
+      "Entre 00:03 et 00:07, le volet des actions rapides s'ouvre brièvement puis est refermé pendant l'explication sur l'allongement de la barre, avant d'être rouvert à 00:09."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, sans bruit parasite."
+      "observation": "Voix off claire, fluide et posée, bien synchronisée avec les actions principales."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

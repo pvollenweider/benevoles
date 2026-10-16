@@ -1,405 +1,115 @@
-[
-  {
-    "id": "welcome",
-    "startMs": 18,
-    "sentences": [
-      {
-        "text": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà.",
-        "startMs": 249,
-        "endMs": 3612,
-        "method": "silence",
-        "absoluteStartMs": 267
-      },
-      {
-        "text": "Depuis ton lien personnel, tu télécharges un fichier calendrier, puis tu l'importes dans ton agenda.",
-        "startMs": 4365,
-        "endMs": 9078,
-        "method": "silence",
-        "absoluteStartMs": 4383
-      },
-      {
-        "text": "Ici, Camille a trois créneaux confirmés, dont un de nuit, et une inscription en attente.",
-        "startMs": 10082,
-        "endMs": 14872,
-        "method": "silence",
-        "absoluteStartMs": 10100
-      },
-      {
-        "text": "Nous allons voir ce qui est ajouté et comment reprendre un horaire après une modification.",
-        "startMs": 15310,
-        "endMs": 19556,
-        "method": "silence",
-        "absoluteStartMs": 15328
-      }
-    ],
-    "inputs": []
+{
+  "videoSha256": "92ebe3c6a20ce3330f88a983b91600634cef4b3e218f1aba4cbc70ddaa5ed8ff",
+  "product": {
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
-  {
-    "id": "one",
-    "startMs": 20578,
-    "sentences": [
-      {
-        "text": "Sous le créneau Accueil, Ajouter à mon calendrier télécharge uniquement ce créneau.",
-        "startMs": 548,
-        "endMs": 5504,
-        "method": "silence",
-        "absoluteStartMs": 21126
-      },
-      {
-        "text": "Le fichier porte l'extension point i c s :",
-        "startMs": 6233,
-        "endMs": 7780,
-        "method": "silence",
-        "absoluteStartMs": 26811
-      },
-      {
-        "text": "c'est un format que les applications de calendrier peuvent lire.",
-        "startMs": 7909,
-        "endMs": 11734,
-        "method": "silence",
-        "absoluteStartMs": 28487
-      },
-      {
-        "text": "Ce téléchargement ne crée pas une nouvelle inscription dans Benevol.",
-        "startMs": 12497,
-        "endMs": 15379,
-        "method": "silence",
-        "absoluteStartMs": 33075
-      },
-      {
-        "text": "Il prépare simplement un événement à ajouter à ton propre agenda.",
-        "startMs": 15526,
-        "endMs": 18744,
-        "method": "silence",
-        "absoluteStartMs": 36104
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 21063
-      }
-    ]
-  },
-  {
-    "id": "all",
-    "startMs": 40296,
-    "sentences": [
-      {
-        "text": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à mon calendrier permet de récupérer un seul fichier pour l'ensemble.",
-        "startMs": 523,
-        "endMs": 8003,
-        "method": "silence",
-        "absoluteStartMs": 40819
-      },
-      {
-        "text": "Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche.",
-        "startMs": 8695,
-        "endMs": 11998,
-        "method": "silence",
-        "absoluteStartMs": 48991
-      },
-      {
-        "text": "L'inscription en liste d'attente n'y figure pas :",
-        "startMs": 12331,
-        "endMs": 13382,
-        "method": "silence",
-        "absoluteStartMs": 52627
-      },
-      {
-        "text": "elle n'est pas encore confirmée.",
-        "startMs": 14093,
-        "endMs": 17486,
-        "method": "silence",
-        "absoluteStartMs": 54389
-      },
-      {
-        "text": "Les offres et les demandes en cours de validation sont également exclues.",
-        "startMs": 18240,
-        "endMs": 21133,
-        "method": "silence",
-        "absoluteStartMs": 58536
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 40761
-      }
-    ]
-  },
-  {
-    "id": "import",
-    "startMs": 62440,
-    "sentences": [
-      {
-        "text": "Le fichier est prêt à être ouvert dans ton application de calendrier.",
-        "startMs": 562,
-        "endMs": 3123,
-        "method": "silence",
-        "absoluteStartMs": 63002
-      },
-      {
-        "text": "L'import n'est pas réalisé dans cette démonstration :",
-        "startMs": 3953,
-        "endMs": 7313,
-        "method": "silence",
-        "absoluteStartMs": 66393
-      },
-      {
-        "text": "il dépend de ton application.",
-        "startMs": 8096,
-        "endMs": 8765,
-        "method": "silence",
-        "absoluteStartMs": 70536
-      },
-      {
-        "text": "Selon celle-ci, tu verras une fenêtre d'import ou une proposition d'ajout.",
-        "startMs": 8887,
-        "endMs": 11801,
-        "method": "silence",
-        "absoluteStartMs": 71327
-      },
-      {
-        "text": "Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres.",
-        "startMs": 12735,
-        "endMs": 16482,
-        "method": "silence",
-        "absoluteStartMs": 75175
-      },
-      {
-        "text": "Vérifie le calendrier choisi et les horaires avant de confirmer.",
-        "startMs": 17294,
-        "endMs": 19944,
-        "method": "silence",
-        "absoluteStartMs": 79734
-      }
-    ],
-    "inputs": []
-  },
-  {
-    "id": "details",
-    "startMs": 83408,
-    "sentences": [
-      {
-        "text": "Le fichier contient le nom de la fête et le poste, ainsi que les informations pratiques que nous voyons ici dans Benevol :",
-        "startMs": 572,
-        "endMs": 7381,
-        "method": "silence",
-        "absoluteStartMs": 83980
-      },
-      {
-        "text": "le lieu, les consignes et le contact lorsqu'il est renseigné.",
-        "startMs": 7814,
-        "endMs": 10304,
-        "method": "silence",
-        "absoluteStartMs": 91222
-      },
-      {
-        "text": "Un lien permet de revenir à tes inscriptions.",
-        "startMs": 11150,
-        "endMs": 12780,
-        "method": "silence",
-        "absoluteStartMs": 94558
-      },
-      {
-        "text": "Garde ce fichier pour toi :",
-        "startMs": 13831,
-        "endMs": 14857,
-        "method": "silence",
-        "absoluteStartMs": 97239
-      },
-      {
-        "text": "il contient ton lien personnel, ce n'est pas un planning collectif à publier.",
-        "startMs": 15104,
-        "endMs": 18793,
-        "method": "silence",
-        "absoluteStartMs": 98512
-      }
-    ],
-    "inputs": []
-  },
-  {
-    "id": "night",
-    "startMs": 103131,
-    "sentences": [
-      {
-        "text": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures.",
-        "startMs": 480,
-        "endMs": 4576,
-        "method": "silence",
-        "absoluteStartMs": 103611
-      },
-      {
-        "text": "L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer.",
-        "startMs": 5102,
-        "endMs": 10804,
-        "method": "silence",
-        "absoluteStartMs": 108233
-      },
-      {
-        "text": "Les horaires sont calculés avec le fuseau de l'organisation.",
-        "startMs": 11871,
-        "endMs": 14355,
-        "method": "silence",
-        "absoluteStartMs": 115002
-      },
-      {
-        "text": "Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil :",
-        "startMs": 15047,
-        "endMs": 18483,
-        "method": "silence",
-        "absoluteStartMs": 118178
-      },
-      {
-        "text": "vérifie ce réglage.",
-        "startMs": 19032,
-        "endMs": 19931,
-        "method": "silence",
-        "absoluteStartMs": 122163
-      }
-    ],
-    "inputs": []
-  },
-  {
-    "id": "change",
-    "startMs": 124087,
-    "sentences": [
-      {
-        "text": "Ce fichier n'est pas un abonnement au planning.",
-        "startMs": 561,
-        "endMs": 2588,
-        "method": "silence",
-        "absoluteStartMs": 124648
-      },
-      {
-        "text": "L'organisateur décale maintenant le début du Rangement à vingt-trois heures.",
-        "startMs": 3585,
-        "endMs": 6930,
-        "method": "silence",
-        "absoluteStartMs": 127672
-      },
-      {
-        "text": "L'ancien fichier conserve vingt-deux heures :",
-        "startMs": 7808,
-        "endMs": 9820,
-        "method": "silence",
-        "absoluteStartMs": 131895
-      },
-      {
-        "text": "il ne se met pas à jour tout seul.",
-        "startMs": 10490,
-        "endMs": 11961,
-        "method": "silence",
-        "absoluteStartMs": 134577
-      },
-      {
-        "text": "Si ton créneau change, l'organisation te prévient par email.",
-        "startMs": 12701,
-        "endMs": 15715,
-        "method": "silence",
-        "absoluteStartMs": 136788
-      },
-      {
-        "text": "Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
-        "startMs": 16472,
-        "endMs": 21216,
-        "method": "silence",
-        "absoluteStartMs": 140559
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 125739
-      },
-      {
-        "kind": "click",
-        "atMs": 126554
-      },
-      {
-        "kind": "click",
-        "atMs": 127387
-      },
-      {
-        "kind": "click",
-        "atMs": 135054
-      }
-    ]
-  },
-  {
-    "id": "reimport",
-    "startMs": 146231,
-    "sentences": [
-      {
-        "text": "Télécharge à nouveau le planning pour récupérer l'horaire actuel.",
-        "startMs": 487,
-        "endMs": 3219,
-        "method": "silence",
-        "absoluteStartMs": 146718
-      },
-      {
-        "text": "Le fichier conserve le même identifiant pour chaque inscription.",
-        "startMs": 3964,
-        "endMs": 6696,
-        "method": "silence",
-        "absoluteStartMs": 150195
-      },
-      {
-        "text": "Lorsque tu l'importes dans ton agenda, le remplacement ou l'ajout dépend de ton application et de la méthode utilisée.",
-        "startMs": 7463,
-        "endMs": 13311,
-        "method": "silence",
-        "absoluteStartMs": 153694
-      },
-      {
-        "text": "Cette étape n'est pas filmée ici :",
-        "startMs": 14123,
-        "endMs": 15375,
-        "method": "silence",
-        "absoluteStartMs": 160354
-      },
-      {
-        "text": "vérifie le nouvel horaire et l'absence de doublon dans ton agenda avant de t'y fier.",
-        "startMs": 16145,
-        "endMs": 20224,
-        "method": "silence",
-        "absoluteStartMs": 162376
-      }
-    ],
-    "inputs": [
-      {
-        "kind": "click",
-        "atMs": 146710
-      }
-    ]
-  },
-  {
-    "id": "result",
-    "startMs": 167350,
-    "sentences": [
-      {
-        "text": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions.",
-        "startMs": 498,
-        "endMs": 5554,
-        "method": "silence",
-        "absoluteStartMs": 167848
-      },
-      {
-        "text": "Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés.",
-        "startMs": 6426,
-        "endMs": 12327,
-        "method": "silence",
-        "absoluteStartMs": 173776
-      },
-      {
-        "text": "Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
-        "startMs": 13294,
-        "endMs": 19857,
-        "method": "silence",
-        "absoluteStartMs": 180644
-      }
-    ],
-    "inputs": []
-  }
-]
+  "chapters": [
+    {
+      "id": "welcome",
+      "startMs": 46,
+      "endMs": 19469
+    },
+    {
+      "id": "one",
+      "startMs": 19921,
+      "endMs": 37608
+    },
+    {
+      "id": "all",
+      "startMs": 38061,
+      "endMs": 56997
+    },
+    {
+      "id": "import",
+      "startMs": 57449,
+      "endMs": 76531
+    },
+    {
+      "id": "details",
+      "startMs": 76982,
+      "endMs": 94386
+    },
+    {
+      "id": "night",
+      "startMs": 94838,
+      "endMs": 112760
+    },
+    {
+      "id": "change",
+      "startMs": 113214,
+      "endMs": 133708
+    },
+    {
+      "id": "reimport",
+      "startMs": 134160,
+      "endMs": 152892
+    },
+    {
+      "id": "result",
+      "startMs": 153344,
+      "endMs": 172233
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "one",
+      "phrase": "Ce téléchargement ne crée pas",
+      "startMs": 11358,
+      "endMs": 14084,
+      "cueMs": 31283,
+      "frame": "review/sentence-frames/00-one.png",
+      "frameSeconds": 32.783,
+      "nextActualInputs": []
+    },
+    {
+      "segmentId": "all",
+      "phrase": "L'inscription en liste d'attente n'y",
+      "startMs": 12281,
+      "endMs": 14135,
+      "cueMs": 50343,
+      "frame": "review/sentence-frames/01-all.png",
+      "frameSeconds": 51.843,
+      "nextActualInputs": []
+    },
+    {
+      "segmentId": "details",
+      "phrase": "le lieu, les consignes et",
+      "startMs": 6352,
+      "endMs": 9833,
+      "cueMs": 83336,
+      "frame": "review/sentence-frames/02-details.png",
+      "frameSeconds": 84.836,
+      "nextActualInputs": []
+    },
+    {
+      "segmentId": "details",
+      "phrase": "Garde ce fichier pour toi",
+      "startMs": 12593,
+      "endMs": 13622,
+      "cueMs": 89576,
+      "frame": "review/sentence-frames/03-details.png",
+      "frameSeconds": 91.076,
+      "nextActualInputs": []
+    },
+    {
+      "segmentId": "change",
+      "phrase": "il ne se met pas",
+      "startMs": 9548,
+      "endMs": 10706,
+      "cueMs": 122762,
+      "frame": "review/sentence-frames/04-change.png",
+      "frameSeconds": 124.262,
+      "nextActualInputs": [
+        {
+          "kind": "click",
+          "atMs": 123257
+        }
+      ]
+    }
+  ]
+}

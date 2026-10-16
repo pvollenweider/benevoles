@@ -44,3 +44,15 @@ Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées 
 Narration textuelle conservée : aucun changement de style. Réutilisation conditionnée à la concordance exacte du texte et des WAV restaurés, contrôlée séparément.
 
 Contrôle final du 2026-10-16 : READY local, 218.000 s, BUILD_ID U6k2mHLHd9xriq2897-tj, narration Puck restaurée conservée après concordance d’empreinte et ASR indépendant. Une seule prise finale ; seconde révision du montage pour le padding du recorder après redimensionnement, sans refaire la prise ni modifier le produit. Onze chapitres et vingt repères examinés, musique 13,8–18,7 LU, zéro tutoiement spectateur dans le VTT et l’ASR final. Pas de publication. Preuves : videos/output/sector-leaders/review/final-review-approved.json.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+Contrôle final 23-2 : NOT READY. Rupture de timbre dans `remove` à +11.8 s, confirmée par comparaison audio seule avec l’ouverture. Même génération Puck source, mais continuité audible défaillante ; aucun remplacement partiel ni reprise non autorisée. Preuves locales : `review/rejection.json`, `voice-review/remove.json`.
+
+
+## Contrôle du lot 23-3 — 2026-10-16
+
+READY : narration Puck complète régénérée, sans balises, tous les chapitres vérifiés en audio seul avant tournage. Première génération rejetée pour rupture de timbre, seconde retenue. Onze chapitres du MP4 relus ; souffle naturel à +11,8 s de registered contre-vérifié sans impact. BUILD_ID `gHYEjPtpdQYUNytuIhMkh`, main `89a884c8d58c22dda6800481e1238bdc4e219dff`.

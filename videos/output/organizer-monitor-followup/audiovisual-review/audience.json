@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:15.490Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:05:16.399Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "244f9ab0963359ff398fe9f7031b281f84d927cfcb54aad15bc3a87b5bf4d74f",
-  "clipSha256": "5ae25d4950a8f2773b6f90ab3df0e1c93e321c9d4c8d38af76bd07d3c06a05df",
+  "clipSha256": "0cf18b0cb11f5ac607f080e96de713ab99969afb0c43d0b6fda9068fb8451692",
   "scene": "audience",
   "review": {
     "heardOpening": "Pour une relance",
     "checkpoints": [
       {
-        "spokenSeconds": 3.4,
-        "spoken": "tous les inscrits",
-        "visibleSeconds": 3,
-        "visible": "L'option « Tous les bénévoles inscrits » est sélectionnée",
+        "spokenSeconds": 0.8,
+        "spoken": "Pour une relance, choisissez précisément les destinataires : tous les inscrits",
+        "visibleSeconds": 1,
+        "visible": "Section Destinataires avec l'option « Tous les bénévoles inscrits » cochée par défaut",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 4.2,
         "spoken": "un poste",
         "visibleSeconds": 4,
-        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec choix du poste",
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec le champ de sélection du poste « Montage »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "la liste d’attente",
+        "spokenSeconds": 6.3,
+        "spoken": "la liste d'attente",
         "visibleSeconds": 6,
-        "visible": "Sélection de l'option « Les personnes en liste d'attente »",
+        "visible": "Sélection du bouton radio « Les personnes en liste d'attente »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.5,
-        "spoken": "les invités qui n’ont encore aucun créneau confirmé",
-        "visibleSeconds": 7,
-        "visible": "Sélection de l'option « Les invités sans créneau confirmé »",
+        "spoken": "ou les invités qui n’ont encore aucun créneau confirmé",
+        "visibleSeconds": 7.5,
+        "visible": "Sélection du bouton radio « Les invités sans créneau confirmé »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 11.5,
         "spoken": "Le nombre de personnes est recalculé avant l’envoi",
-        "visibleSeconds": 12,
-        "visible": "Le texte indique le décompte recalculé de destinataires suite au changement d'option",
+        "visibleSeconds": 13,
+        "visible": "Clic sur une autre option mettant à jour dynamiquement le compteur de destinataires (« 3 personnes recevront ce message »)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
+      "observation": "Voix féminine posée, fluide et très claire, avec un débit régulier en adéquation avec les manipulations."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

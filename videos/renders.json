@@ -1,318 +1,318 @@
 {
   "admin-features-tour": {
-    "durationMs": 286680,
+    "durationMs": 331240,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "admin-navigation": {
-    "durationMs": 128000,
+    "durationMs": 138720,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "attendance-check-in": {
-    "durationMs": 401800,
+    "durationMs": 407920,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "data-exports-archives": {
-    "durationMs": 299680,
+    "durationMs": 300320,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "email-delivery-failures": {
-    "durationMs": 295200,
+    "durationMs": 295120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-activity-log": {
-    "durationMs": 259960,
+    "durationMs": 266560,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-archive-delete": {
-    "durationMs": 100480,
+    "durationMs": 100560,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-create-blank": {
-    "durationMs": 154720,
+    "durationMs": 152040,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-create-template": {
-    "durationMs": 122720,
+    "durationMs": 117320,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-duplicate": {
-    "durationMs": 154960,
+    "durationMs": 149480,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-milestones": {
-    "durationMs": 90320,
+    "durationMs": 92280,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-program-pages-qr": {
-    "durationMs": 150880,
+    "durationMs": 165080,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-questions": {
-    "durationMs": 520640,
+    "durationMs": 539800,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-reports": {
-    "durationMs": 290600,
+    "durationMs": 336120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-review-publish": {
-    "durationMs": 140600,
+    "durationMs": 128120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "event-visibility-registration-window": {
-    "durationMs": 143960,
+    "durationMs": 127000,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "global-search": {
-    "durationMs": 91160,
+    "durationMs": 91120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "last-minute-changes": {
-    "durationMs": 338720,
+    "durationMs": 345360,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "masterclass-03-first-steps": {
-    "durationMs": 204840,
+    "durationMs": 201680,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-duplicates-merge": {
-    "durationMs": 218760,
+    "durationMs": 221560,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-import": {
-    "durationMs": 220920,
+    "durationMs": 214960,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-invitations": {
-    "durationMs": 234040,
+    "durationMs": 239200,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-management": {
-    "durationMs": 230760,
+    "durationMs": 235360,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "members-reminders": {
-    "durationMs": 202560,
+    "durationMs": 199680,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "org-email-settings": {
-    "durationMs": 189200,
+    "durationMs": 199120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "org-public-identity": {
-    "durationMs": 160800,
+    "durationMs": 162240,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "org-team-permissions": {
-    "durationMs": 132120,
+    "durationMs": 144800,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "org-timezone-charter": {
-    "durationMs": 130480,
+    "durationMs": 133480,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "organization-activity-log": {
-    "durationMs": 271440,
+    "durationMs": 291000,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "organizer-create-publish": {
-    "durationMs": 187280,
+    "durationMs": 184880,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "organizer-monitor-followup": {
-    "durationMs": 198280,
+    "durationMs": 197480,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "platform-internal-administration": {
-    "durationMs": 474600,
+    "durationMs": 474640,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "privacy-personal-links": {
-    "durationMs": 365520,
+    "durationMs": 365960,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "registrations-management": {
-    "durationMs": 344320,
+    "durationMs": 347080,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "registrations-place-member": {
-    "durationMs": 93840,
+    "durationMs": 95640,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "reminders-changes": {
-    "durationMs": 249880,
+    "durationMs": 252080,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "sector-leaders": {
-    "durationMs": 213800,
+    "durationMs": 217560,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-approval": {
-    "durationMs": 119560,
+    "durationMs": 118960,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-create-edit-detail": {
-    "durationMs": 135800,
+    "durationMs": 132200,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-create-series": {
-    "durationMs": 115880,
+    "durationMs": 105360,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-eligibility-rules": {
-    "durationMs": 118720,
+    "durationMs": 122400,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-night-dst": {
-    "durationMs": 111320,
+    "durationMs": 106240,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-recurrence": {
-    "durationMs": 120960,
+    "durationMs": 142480,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-timeline-quick-actions": {
-    "durationMs": 124040,
+    "durationMs": 128120,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shift-waitlist-offer": {
-    "durationMs": 100200,
+    "durationMs": 108840,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "shifts-roles-views": {
-    "durationMs": 86640,
+    "durationMs": 86720,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "staffing-gaps": {
-    "durationMs": 221040,
+    "durationMs": 218000,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "targeted-messages": {
-    "durationMs": 302440,
+    "durationMs": 337720,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-badges": {
-    "durationMs": 220320,
+    "durationMs": 252840,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-calendar": {
-    "durationMs": 198360,
+    "durationMs": 182520,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-choose-shifts": {
-    "durationMs": 162280,
+    "durationMs": 164720,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-confirmation-errors": {
-    "durationMs": 308520,
+    "durationMs": 304320,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-discover-event": {
-    "durationMs": 179000,
+    "durationMs": 183480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -324,25 +324,25 @@
     "poster": true
   },
   "volunteer-hours-certificate": {
-    "durationMs": 278095,
+    "durationMs": 280320,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-personal-registrations": {
-    "durationMs": 173400,
+    "durationMs": 172040,
     "width": 1280,
     "height": 800,
     "poster": true
   },
   "volunteer-register-mobile": {
-    "durationMs": 53800,
+    "durationMs": 50640,
     "width": 390,
     "height": 844,
     "poster": true
   },
   "volunteer-session-availability": {
-    "durationMs": 174560,
+    "durationMs": 184200,
     "width": 1280,
     "height": 800,
     "poster": true

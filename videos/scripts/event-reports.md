@@ -37,3 +37,15 @@ Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et o
 Relecture PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (issue #1013), CHANGELOG Unreleased et parcours actuel. Les ajouts facultatifs de narration sont retirés pour conserver la prise audio restaurée quand le texte initial reste exact. Segments nécessitant une nouvelle narration : welcome. Navigation et repères adaptés aux onglets actuels. Toute correction conservée attend une narration intégrale, même voix, sans pause tags.
 
 Lot 22-9 : WAITING TTS ; répétition propre conservée. Correction(s) obligatoire(s) : Ouvrons Documents : la page s’intitule Documents à imprimer. Aucun tournage final avec l’ancien audio.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+Batch 23-2 final: NOT READY. Contacts opening names the telephone list while the previous attendance sheet remains visible for ~4 s. Allowed cue retake already used. Source prepares phone document before chapter in a future take.
+
+
+## Contrôle du lot 23-3 — 2026-10-16
+
+READY : vraie liste avec téléphones ouverte avant le chapitre Contacts, visible dès 200,003 s. Dix chapitres et documents PDF réels revus. Référence : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, BUILD_ID `gHYEjPtpdQYUNytuIhMkh`. Preuves locales dans `videos/output/event-reports/review/` et `review-report.txt`.

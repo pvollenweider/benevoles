@@ -1,50 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:21.808Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
-  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
-  "clipSha256": "42545235949f014b6e3c2574761566fc83af35921a054fb9783b9106a5e90da6",
+  "reviewedAt": "2026-10-16T12:15:20.987Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
+  "promptSha256": "b96b6e8b3dc6fe21c6f2f35765ecfcaf04094e71f44c7b66e850330c47d17b68",
+  "clipSha256": "dd2bf85c2e5c6b6dea910342635dc73196fed99ed3b76ba0305f203b78eb81c7",
   "scene": "create-single",
   "review": {
-    "heardOpening": "Commençons par la taille du t-shirt.",
+    "heardOpening": "Commençons par la taille du t-shirt",
     "checkpoints": [
       {
-        "spokenSeconds": 2.7,
+        "spokenSeconds": 2.5,
         "spoken": "Cliquons sur Ajouter une question",
-        "visibleSeconds": 3.7,
-        "visible": "Ouverture du formulaire d'ajout d'une nouvelle question",
+        "visibleSeconds": 3.4,
+        "visible": "Clic sur le lien Ajouter une question et affichage du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 4.6,
         "spoken": "puis saisissons son intitulé",
-        "visibleSeconds": 5.9,
+        "visibleSeconds": 5.2,
         "visible": "Saisie de « Taille de t-shirt » dans le champ intitulé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "Dans Type de réponse, choisissons Choix unique",
-        "visibleSeconds": 8.9,
-        "visible": "Sélection de « Choix unique » dans le menu déroulant",
+        "spokenSeconds": 11.5,
+        "spoken": "choisissons Choix unique",
+        "visibleSeconds": 12,
+        "visible": "Sélection de Choix unique dans la liste déroulante Type de réponse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 25.1,
+        "spokenSeconds": 19.3,
+        "spoken": "Voici S, M, L et XL",
+        "visibleSeconds": 19.5,
+        "visible": "Apparition des options S, M, L et XL ligne par ligne dans le champ Choix proposés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.8,
         "spoken": "cochons Réponse obligatoire",
-        "visibleSeconds": 25.4,
-        "visible": "Coche de la case « Réponse obligatoire »",
+        "visibleSeconds": 28.5,
+        "visible": "Coche de la case Réponse obligatoire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 27.2,
+        "spokenSeconds": 30.5,
         "spoken": "Enregistrons",
-        "visibleSeconds": 27.1,
-        "visible": "Clic sur le bouton Enregistrer et affichage de la question enregistrée dans la liste",
+        "visibleSeconds": 30.1,
+        "visible": "Clic sur Enregistrer et affichage de la question enregistrée dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

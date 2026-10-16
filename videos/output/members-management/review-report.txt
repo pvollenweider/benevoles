@@ -1,21 +1,8 @@
 STATUS: READY
-{
-  "id": "MEMBERS_MANAGEMENT",
-  "status": "READY",
-  "duration": 230.76,
-  "buildId": "Ro9VdxUayqlTAULEvQpY0",
-  "music": {
-    "voicedWindows": 216,
-    "musicOnlyWindows": 7,
-    "smallestGapLu": 14.5,
-    "largestGapLu": 19.5,
-    "quietestMusicOnlyLufs": -34.1,
-    "loudestMusicOnlyLufs": -33,
-    "medianVoiceLufs": -16.7
-  },
-  "problems": "60 images revues ; AV10/10,ASR10/10,validate,ancres,VTT,effets,musique passent ; sauvegarde disponibilité et réactivation alignées ; vraies fiches Maya/René,seed36v2 audit accepté. Dates françaises,aucune adresse interdite/overlay. Nit connu : actions Membres nécessitent défilement horizontal à1280px.",
-  "sourceChanges": "Aucune ; narration lot10 réutilisée,aucun re-film.",
-  "report": "videos/output/members-management/review-report.txt",
-  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+MEMBERS_MANAGEMENT — batch 23-3 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 235.36 s; music 13.3–19.4 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration regenerated in one pass with original voice; boundaries measured and independently audited.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Whole Puck narration regenerated in one pass, continuousPauseTags false; first newly generated drifted take archived, retained whole take passes all nine opening/chapter audio-only comparisons before filming. All ten final audiovisual chapters and seven chapter/anchor sheets pass, including result; create, availability, no-email, search, filter, deactivate/reactivate and history verified. Whole final multilingual ASRs have no informal viewer address; ending countercheck confirms no subtitle-credit narration (Whisper music-tail hallucination). No blocking issue.
+No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.

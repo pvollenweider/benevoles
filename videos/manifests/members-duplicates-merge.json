@@ -67,7 +67,7 @@
     },
     {
       "id": "result",
-      "transcript": "Fusion effectuée : le résultat indique ce qui a été déplacé. Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies. Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne. L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables depuis la fiche conservée. Si un responsable de secteur utilisait l’adresse abandonnée, son adresse doit être vérifiée séparément.",
+      "transcript": "Fusion effectuée : le résultat indique ce qui a été déplacé. Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies. Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne. La fiche absorbée se retrouve avec Inclure les fiches fusionnées ou effacées, un filtre distinct d’Inclure inactifs. L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables depuis la fiche conservée. Si un responsable de secteur utilisait l’adresse abandonnée, son adresse doit être vérifiée séparément.",
       "fallbackDurationMs": 39000
     },
     {

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:06:13.625Z",
-  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
-  "promptSha256": "107b077444b0f19dc60fe8eaded97cebf28ef03b5872b53258003845b8123a03",
-  "clipSha256": "deacedc11407bfbdb1c1bc735fa10965977082f1787fd479da9207952f9f6076",
+  "reviewedAt": "2026-10-16T11:21:45.573Z",
+  "videoSha256": "86c151c6935a101a5001b46c068475ced7f2edc6fe4924e5a34ef8f6502cd8b0",
+  "promptSha256": "88947ccae352435b9bab4ef5c5a66b59587f25fa1654970ae372be381b3d51d2",
+  "clipSha256": "f79fd3b94404018b6a65523cbe83316fb4c9b28aea610e0e1dc55ee0f38a80e9",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Au stand d’accueil",
+    "heardOpening": "Au stand d'accueil, un document clair",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Ouvrons Rapports.",
-        "visibleSeconds": 5.2,
-        "visible": "Clic sur le bouton Rapports et chargement de la page correspondante",
+        "spokenSeconds": 5,
+        "spoken": "Ouvrons Documents",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur l'onglet Documents et affichage de la page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier.",
-        "visibleSeconds": 6.2,
-        "visible": "Affichage de la section « À afficher ou à remettre aux bénévoles » en haut de page",
+        "spokenSeconds": 7,
+        "spoken": "la page s’intitule Documents à imprimer",
+        "visibleSeconds": 6,
+        "visible": "Titre « Documents à imprimer » affiché en haut de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
-        "spoken": "Les documents réservés à l’organisation viennent ensuite, puis les badges",
-        "visibleSeconds": 11.2,
-        "visible": "Défilement dévoilant les sections « Pour les organisateurs seulement » et « Badges »",
+        "spokenSeconds": 10.5,
+        "spoken": "Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier",
+        "visibleSeconds": 6.5,
+        "visible": "Section « À afficher ou à remettre aux bénévoles » visible à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.4,
-        "spoken": "le résumé de l’événement et l’archive.",
-        "visibleSeconds": 14.8,
-        "visible": "Sections « Résumé de l'événement » et « Archive » visibles en bas de page",
+        "spokenSeconds": 14.5,
+        "spoken": "Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive",
+        "visibleSeconds": 15,
+        "visible": "Défilement montrant successivement les organisateurs, les badges, le résumé puis l'archive",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et posée, bien synchronisée avec le défilement des rubriques."
+      "observation": "Voix naturelle, chaleureuse et parfaitement intelligible, bien calée sur la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

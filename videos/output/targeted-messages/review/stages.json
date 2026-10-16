@@ -1,5 +1,33 @@
 [
   {
+    "stage": "rehearse-prepare-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "mailbox",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal-frames",
+    "exitCode": 0
+  },
+  {
+    "stage": "capture-prepare-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "mailbox",
+    "exitCode": 0
+  },
+  {
+    "stage": "capture",
+    "exitCode": 0
+  },
+  {
     "stage": "assemble",
     "exitCode": 0
   },
@@ -8,11 +36,7 @@
     "exitCode": 0
   },
   {
-    "stage": "frames",
-    "exitCode": 0
-  },
-  {
-    "stage": "final-audio",
+    "stage": "final-frames",
     "exitCode": 0
   },
   {

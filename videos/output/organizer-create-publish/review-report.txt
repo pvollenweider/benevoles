@@ -1,20 +1,9 @@
 STATUS: READY
-EVENT_CREATE_PUBLISH_OVERVIEW — batch 18, one narrated take, no retake.
-Product commit: 3a2ee752986f41652560ed5f7a1f80bb3a02a57c
-BUILD_ID: pNdKfvSuEWlaFsKM4WH1j. Duration: 187.40 s.
-
-Register: all organiser narration and imperatives use vous. Final independent multilingual MP4 ASR and actual VTT contain zero tu/ton/ta/tes/toi/t'. No added English speech or pause instructions. Volunteer-facing preview and the personalised invitation retain their actual tu text on screen; it is not spoken as viewer address.
-Audio: 20 changed sentences regenerated only, in Kore with the same delivery instructions, continuousPauseTags false. Unchanged sentences are retained from the independently audited original. Explicit sentence-revision metadata; not a claim of a single new continuous TTS generation. Narration duration total delta +0.014 s. The initial clause cut omitted L'événement reste en brouillon; full-sentence regeneration repaired it before rehearsal/capture. Failed interim audit retained. All 14 current source and actual-final-MP4 audits pass, reviewed for wording and register.
-
-All 14 full-chapter audiovisual reports pass with a consistent warm voice. All 84 real MP4 frames inspected (six per scene), including chapter starts/ends, with measured sentence/action evidence. No cross-scene delays, omissions or late cues established. QR page navigation is preparatory: page visible before the spoken opening instruction (AV labels early with severity none); content held throughout the explanation. No retake needed.
-Current UI: blank/model choice, real title/description/location and French dates, 2 Accueil shifts, manual Livraison with 18+/permis B, Caisse validation, programme opening/closing, real 4 shifts / 3 roles / 8 places recap, preview with no actual registration/email, publication, correct benevol.app QR, actual 12-member import (24→36) and single invitation to Sophie. Final public planning matches all constraints. No localhost, org-admin@localhost, Timeline or dev overlay. No product layout defect observed. The preview's Hello Alex and tu-facing text are actual application copy, left unchanged.
-Six captured sentence anchors pass; no overlaps or audio truncation. Zero between-scene gaps over 500 ms in this scenario; transitions are covered by sampled chapter edges.
-Music 13.8–19.3 LU below narration, all 181 voiced windows pass. Effects 47 clicks and 69 keys match markers and actual mix hashes. 46 final caption cues equal formatter output; final VTT/register and audio hash-bound. Posters: --metadata-output review/renders-generated.json only.
-
-True SMTP invitation verified read-only in Mailpit: exactly one message to sophie.roch@example.org for Fête des voisins, with Bonjour Sophie, peux-tu nous aider à la caisse ? and actual benevol.app invitation link. Token/full body omitted from proof. Rehearsal's real invitation removed by exact fixture ID before reset; mailbox empty before narrated take. No fake emails, no external recipients.
-Prior artifacts archived under previous-20261013T163329Z. Guarded common-fixture reset before rehearsal and capture. Shared pinned build; no src change, no videos/renders.json change, no other video's content changed.
-Sources: organiser register in manifest and matching script revision note; same scene IDs/durations and updated Donnez-lui / Choisissez / Filtrez sentence-anchor wording. Shared videos-only sentence revision generation/provenance and guarded AV review support.
-Real-time subjective listening unavailable; actual final MP4 independent ASR/AV and visual inspection performed. No claim of human listening. No publication/push/commit.
-MP4 SHA-256: eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3
-doc-img: unchanged
-Final shared-source checks: 191 explicit video sources type-check; 865 targeted tests pass; new provenance/tool/test lint and git diff --check pass. Extended lint has only pre-existing onboardingEventId warning outside these scenarios. No src or renders.json diff.
+EVENT_CREATE_PUBLISH_OVERVIEW — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 184.88 s. Music 14.6–18.9 LU under voice.
+Existing whole narration reused after text/hash checks.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Quatorze chapitres revus sans signalement : page blanche, quatre créneaux sur trois postes, permis et âge minimum, Caisse sur validation, horaires d’inscription, aperçu sans écriture ni envoi, publication, QR, analyse de douze membres et invitation individuelle. Dates françaises et liens benevol.app vérifiés ; narration inchangée et empreintes confirmées, deux ASR finaux sans ajout ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

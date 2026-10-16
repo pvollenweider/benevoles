@@ -1,53 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:18:22.287Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "b621959b5304e99be7c1a92cb0469c8f3ddd65878db89aa7e9eb57efa68582dc",
-  "clipSha256": "89e0bfd218facbe2bfb8063b96441334791a39e2cd085bb988ba35ff29dbe156",
+  "reviewedAt": "2026-10-16T10:55:17.317Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "5e50bbd4144e2e05878c48ef65359b3d9658e64e9dd2b9c2cf54c5abd2e5f359",
+  "clipSha256": "60e68a94d550394ecc98a2b5252165050a850431f8d2161784dbb63025415d01",
   "scene": "changed",
   "review": {
-    "heardOpening": "Si un horaire change, ouvrez le créneau concerné.",
+    "heardOpening": "Si un horaire change, ouvrez le créneau concerné",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
-        "spoken": "ouvrez le créneau concerné",
-        "visibleSeconds": 0.5,
-        "visible": "Clic sur Modifier et ouverture du formulaire de modification du créneau",
+        "spokenSeconds": 1.2,
+        "spoken": "Si un horaire change, ouvrez le créneau concerné.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire « Modifier le créneau ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "Nous décalons son début et sa fin, puis enregistrons",
-        "visibleSeconds": 2,
-        "visible": "Modification de l'heure de début à 18:41 puis de fin à 20:41 et enregistrement",
+        "spokenSeconds": 4.1,
+        "spoken": "Nous décalons son début et sa fin, puis enregistrons.",
+        "visibleSeconds": 4.8,
+        "visible": "Modification des heures de début (13:19) et de fin (15:19) puis enregistrement de la modification.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 12.5,
-        "spoken": "Voici l'email réellement reçu avec le nouvel horaire",
+        "spoken": "Voici l'email réellement reçu avec le nouvel horaire.",
         "visibleSeconds": 12,
-        "visible": "Affichage de la boîte Mailpit avec l'e-mail de changement d'horaire indiquant 18:41–20:41",
+        "visible": "Affichage de la boîte de réception Mailpit montrant l'e-mail de notification avec l'horaire mis à jour (13:19 - 15:19).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21,
+        "spokenSeconds": 20.3,
         "spoken": "Vérifions donc le résultat dans le planning et dans la boîte mail",
-        "visibleSeconds": 21,
-        "visible": "Retour à l'interface de gestion des créneaux affichant les horaires modifiés",
+        "visibleSeconds": 20.1,
+        "visible": "Retour à la vue planning (frise puis liste des créneaux).",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:12 - Date en anglais dans l'interface externe de test Mailpit (Sun, 11 Oct 2026), non imputable à l'application."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec la démonstration."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

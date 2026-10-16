@@ -1,59 +1,67 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:47.090Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:16:30.388Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
-  "clipSha256": "de70e880dcd56b2cd42635c4bdc131b7f5c2c2369b029c6d9f32c700649ffd65",
+  "clipSha256": "9ab835d956f7bc373078990b219fba79e3a8010556922af81065ccba005607f0",
   "scene": "volunteer-form",
   "review": {
     "heardOpening": "Répondons maintenant.",
     "checkpoints": [
       {
-        "spokenSeconds": 2,
+        "spokenSeconds": 2.6,
         "spoken": "Aline choisit M pour son t-shirt",
-        "visibleSeconds": 2.5,
-        "visible": "Sélection de la taille M parmi les options de t-shirt",
+        "visibleSeconds": 2.6,
+        "visible": "La case radio M est sélectionnée pour Taille de t-shirt",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 4.7,
+        "spoken": "puis Oui pour le permis",
+        "visibleSeconds": 4.6,
+        "visible": "Le bouton radio Oui est coché pour Permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
         "spoken": "elle coche Vélo et Remorque",
-        "visibleSeconds": 6.8,
-        "visible": "Cochage successif des cases Vélo puis Remorque",
+        "visibleSeconds": 7.4,
+        "visible": "Les cases Vélo et Remorque sont cochées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 11.7,
         "spoken": "écrivons Entrée nord",
-        "visibleSeconds": 11.8,
-        "visible": "Saisie du texte « Entrée nord » dans le champ Point de rendez-vous préféré",
+        "visibleSeconds": 12.7,
+        "visible": "Le texte 'Entrée nord' est saisi dans Point de rendez-vous préféré",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
+        "spokenSeconds": 15.4,
         "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
-        "visibleSeconds": 19,
-        "visible": "Remontée sur la page affichant le bloc latéral « Transmis à l'organisation »",
+        "visibleSeconds": 15,
+        "visible": "Le panneau latéral 'Transmis à l'organisation' est visible",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.5,
-        "spoken": "confirmons réellement l'inscription",
-        "visibleSeconds": 23.5,
-        "visible": "Clic sur le bouton « Confirmer mon inscription » puis affichage de l'écran « Inscription confirmée ! »",
-        "sync": "aligned",
-        "severity": "none"
+        "spokenSeconds": 23.1,
+        "spoken": "puis confirmons réellement l'inscription",
+        "visibleSeconds": 22.1,
+        "visible": "La page affiche 'Inscription confirmée !'",
+        "sync": "early",
+        "severity": "minor"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix off fluide, claire et bien articulée, avec un débit naturel."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

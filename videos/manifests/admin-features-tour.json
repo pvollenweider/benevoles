@@ -82,7 +82,7 @@
     },
     {
       "id": "questions",
-      "transcript": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de choix unique ou de cases à cocher. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
+      "transcript": "Le formulaire peut poser quelques questions utiles : taille de t-shirt, régime alimentaire ou permis de conduire, sous forme de texte, de nombre, de choix unique ou de cases à cocher. Une question de suivi peut s’afficher seulement pour certaines réponses à une question précédente. Vous décidez si la réponse est obligatoire, en évitant les données sensibles inutiles.",
       "fallbackDurationMs": 16000
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "id": "messages",
-      "transcript": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Vous prévisualisez toujours le résultat avant l’envoi.",
+      "transcript": "Les messages ciblent tous les inscrits, un poste, un créneau, la liste d’attente ou les invités sans créneau. Les modèles réutilisables acceptent des variables comme le prénom, l’événement, les créneaux ou le lien personnel. Vous choisissez un envoi immédiat ou programmé et prévisualisez toujours le résultat avant l’envoi. La section Messages programmés permet de suivre les envois à venir.",
       "fallbackDurationMs": 17000
     },
     {

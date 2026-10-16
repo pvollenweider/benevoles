@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:44.659Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:01:10.240Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "b854c3741ce09209cc4b3032c418665c6906f616a1f1c8f7b3f6de8e7a111071",
-  "clipSha256": "abc9477b13c3c5e0e34be542cbc4dc3bf62b8c7275c0dc1fe2f1a4c6603e808b",
+  "clipSha256": "73ccf721a6aba0345d2bc769f1ac833d9e8378f6ca753e1503dc4bb69bd5d030",
   "scene": "preview",
   "review": {
     "heardOpening": "Avant de publier",
@@ -12,39 +12,39 @@
         "spokenSeconds": 1.2,
         "spoken": "ouvrez l'aperçu bénévole",
         "visibleSeconds": 1,
-        "visible": "Ouverture de la page d'aperçu bénévole suite au clic sur Prévisualiser",
+        "visible": "Ouverture de l'onglet Aperçu bénévole",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.6,
+        "spokenSeconds": 4.1,
         "spoken": "Choisissez un créneau",
-        "visibleSeconds": 6.1,
-        "visible": "Clic et sélection du créneau Accueil 10h-12h",
+        "visibleSeconds": 4.8,
+        "visible": "Sélection du créneau de 9h à 12h sur la frise",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 6.2,
         "spoken": "renseignez les coordonnées du bénévole",
-        "visibleSeconds": 8.5,
-        "visible": "Saisie des informations du bénévole (Alex Martin et adresse e-mail)",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie du prénom, nom et email du bénévole Alex Martin",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
-        "spoken": "et confirmez ses choix",
-        "visibleSeconds": 11.2,
-        "visible": "Cochage des conditions et clic sur le bouton Voir la confirmation (aperçu)",
+        "spokenSeconds": 8.5,
+        "spoken": "confirmez ses choix",
+        "visibleSeconds": 10.8,
+        "visible": "Clic sur le bouton Voir la confirmation (aperçu)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.2,
+        "spokenSeconds": 11.2,
         "spoken": "vérifier tout le parcours qu'il verra",
-        "visibleSeconds": 12.8,
-        "visible": "Affichage de la page Aperçu de la confirmation avec récapitulatif",
+        "visibleSeconds": 11.8,
+        "visible": "Affichage de la page d'aperçu de confirmation de l'inscription",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,26 +1,9 @@
 STATUS: READY
-
-Batch 16 — LAST_MINUTE_CHANGES
-Commit: 80a00bcf7842ce5f23db1042cc319bce74cb310f
-BUILD_ID: MGm3Rsx8eH8bmTLMCUaJ6
-Duration: 354.00 s
-MP4 SHA256: c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2
-
-One narrated take, after successful rehearsal, with current cancellation sentence anchor. No second take needed. Previous artifacts retained under previous-20261013T110847Z/. Audited audio reused unchanged; no TTS generation.
-
-All objective checks pass: 10 chapter durations, 33 sentence anchors, final-MP4 independent narration in all 10 chapters (schedule 0% word difference), music gap 14.0–19.4 LU, 73 actual VTT cues, 30 click and 192 key markers/effects, verified pinned product provenance. Sixty sampled final frames, ten chapter sheets and precise cancellation/result frames inspected.
-
-Nine actual SMTP messages verified against current outbox and Mailpit; none suppressed. Pending schedule request excluded; active and requested cancellation delivered; prior attendance preserved. Fixture mailbox cleanup preceded rehearsal and narrated take. Real compiled cron delivered delayed notifications; no fabricated emails.
-
-welcome: Introduction and public benevol.app event address inspected; title readable and held.
-withdrawal: Actual personal withdrawal, active cancellation, offered Nicolas row and real offer email/deadline aligned.
-offer: Actual offer acceptance and Place confirmée; active Nicolas registration visible after return.
-coverage: Accueil full; Logistique manque 1; pending reservation and totals visible at their explanations.
-availability: Zoé morning availability and remark visible in member row before detailed dialog; evening registration shown on activity page.
-message: One Emma recipient, exact preview and received SMTP mail; Zoé existing identity, correct Logistique selection/addition and filled coverage aligned.
-schedule: Editor date and both hours, save, received old/new-hour email, and return to modified planning aligned. Final MP4 ASR passes at 0% word difference.
-cancel: Opening anchor 262.644 s; click visible 263.0 s; full dialog/caption visible 264.0 s. Independent audiovisual review observes speech 6.3 s/dialog 6.8 s relative to chapter. Confirmation aligned. Journal cancellation state is prepared before Vérifions le statut and remains readable; minor preparatory lead is acceptable. Actual active+requested cancellation and preserved prior attendance verified.
-journal: Actual withdrawal/offer/acceptance, changed hours and cancellation records visible; Récit explanation followed by actual causal story. General explanation of mode precedes selection, with no missing action.
-result: Nicolas accepted and Zoé correct shift visible at 328/329/330 s. Demandes à traiter checkbox is unchecked. Automated missing-Nicolas/filter claim contradicted by these exact final MP4 frames. Modified hours shown in list and cancelled Caisse excluded from coverage.
-
-Known nit: Mailpit English dates. No product layout defect identified in inspected frames. Automated result false flag retained unchanged with evidence disposition in review-result.json. Real-time subjective listening unavailable; not a NOT READY reason. No src changes, renders.json changes, commit, push or publication.
+LAST_MINUTE_CHANGES — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 345.36 s. Music 14.2–19.5 LU under voice.
+Existing whole narration reused after text/hash checks.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Retrait, offre acceptée, aide ciblée, accord supposé explicite, ajout réel de Zoé, décalage 14h–16h vers 14h30–16h30, annulation et journal causal vérifiés. Neuf réceptions SMTP finales, présence antérieure conservée. Alertes automatiques levées par les frames 71,850 s (lien Prendre la place) et 322,000 s (Nicolas actif, Aline annulée, nouvel horaire déjà visible) ; détails review/automated-counterchecks.json. Dix chapitres revus et deux ASR complets sans ajout ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

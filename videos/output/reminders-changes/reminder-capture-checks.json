@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-11T16:16:09.426Z",
+  "checkedAt": "2026-10-16T10:53:24.095Z",
   "audiovisualValidation": false,
   "pushReceptionVerified": false,
   "perEventToggleAvailableInForm": true,
@@ -9,22 +9,22 @@
     "cancelledWithoutEmail": true,
     "twoShiftsInOneEmail": true,
     "mailIds": [
-      "3tpFVpX5DSYVl5rPxROYqd",
-      "1FhiQfFYIlVjMFZ2kvrSPu",
-      "7HiDEnvy6PHX4snkUbmbJ2"
+      "1XV16DfIAjPuFQ0sebmrjA",
+      "5Hgb5La14JmIoXSlvJ0v2n",
+      "6rJDdYbvlxCxovnN9BSvBq"
     ]
   },
   "organizationSavedOffThenOn": true,
   "perEventSavedOffThenOn": true,
   "automaticReminders": {
     "mailIds": [
-      "7kEiIyFQPuup4TlTH381vG",
-      "4UfSN0HFbEEwXvLjGj5NCT",
-      "2e33f362DjyR5QEyKoNPXT"
+      "2I5iIyLjIhlNuhrZYlEnyU",
+      "5SMKbLOrBZB4ZbRt1iTadt",
+      "22T62MYrJRRv93KfEqDHlj"
     ],
     "noDuplicate": true,
     "first": {
-      "runAt": "2026-10-11T16:14:15.995Z",
+      "runAt": "2026-10-16T10:51:31.414Z",
       "totals": {
         "reminder_j2": {
           "eligible": 1,
@@ -50,23 +50,27 @@
         "shifts": 2,
         "offered": 1
       },
+      "milestoneOwners": {
+        "eligible": 1,
+        "enqueued": 1
+      },
       "outbox": {
-        "sent": 1,
+        "sent": 2,
         "retried": 0,
         "failed": 0,
         "cancelled": 0,
         "held": 0
       },
       "outboxStatus": {
-        "failedLastDay": 0,
+        "failedLastDay": 1,
         "oldestPendingMinutes": null,
         "staleClaims": 0,
-        "healthy": true,
+        "healthy": false,
         "stuck": false
       }
     },
     "second": {
-      "runAt": "2026-10-11T16:14:16.169Z",
+      "runAt": "2026-10-16T10:51:31.665Z",
       "totals": {
         "reminder_j2": {
           "eligible": 0,
@@ -92,6 +96,10 @@
         "shifts": 1,
         "offered": 0
       },
+      "milestoneOwners": {
+        "eligible": 0,
+        "enqueued": 0
+      },
       "outbox": {
         "sent": 0,
         "retried": 0,
@@ -100,10 +108,10 @@
         "held": 0
       },
       "outboxStatus": {
-        "failedLastDay": 0,
+        "failedLastDay": 1,
         "oldestPendingMinutes": null,
         "staleClaims": 0,
-        "healthy": true,
+        "healthy": false,
         "stuck": false
       }
     }
@@ -112,14 +120,14 @@
   "changed": {
     "notified": 1,
     "pendingRequestExcluded": true,
-    "mailId": "7e2Jmwoq35jsSxhdDe7hnU"
+    "mailId": "5ujfe5mhcG6IhiSOymUh9I"
   },
   "cancelled": {
     "registrations": 2,
     "includesPendingRequest": true,
     "mailIds": [
-      "6iqzufT9C4qnPX3Xjo5rJE",
-      "1W0MzagardRlFUYtnXNVvq"
+      "5R9R7arsbUQS0k8p1JLDaD",
+      "1YPDFSf9OxW24ft3qQJNSy"
     ]
   }
 }

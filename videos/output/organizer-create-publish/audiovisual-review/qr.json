@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:56.390Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:01:42.933Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "9bff7e29a31dccfa023d9f49a02086b5e6f2392966492460e68846fde3c02fe7",
-  "clipSha256": "939af378b1fef8fe3cb53283de1b68b1c761fed96363f2e57822a2cee6dec8d3",
+  "clipSha256": "0e8d6e73ecc7b520b70141b9ae57d7721989b12fcb0373a8f8c4b7de7c2f18dc",
   "scene": "qr",
   "review": {
-    "heardOpening": "Pour une affiche",
+    "heardOpening": "Pour une affiche, un comptoir ou les réseaux sociaux",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.3,
         "spoken": "ouvrez le QR code",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page dédiée au QR code pour l'événement Fête des voisins",
-        "sync": "early",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 4.8,
-        "spoken": "télécharger en PNG ou en SVG",
-        "visibleSeconds": 1,
-        "visible": "Options 'Télécharger PNG' et 'Télécharger SVG' visibles en haut à droite",
+        "visible": "L'onglet Partage et le sous-onglet QR code s'affichent à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.7,
+        "spokenSeconds": 5.4,
+        "spoken": "télécharger en PNG ou en SVG",
+        "visibleSeconds": 5.4,
+        "visible": "Boutons « Télécharger PNG » et « Télécharger SVG » bien visibles au-dessus du QR code",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
         "spoken": "imprimer directement cette fiche prête à être scannée",
-        "visibleSeconds": 1,
-        "visible": "Bouton 'Imprimer' affiché en haut à droite avec la fiche imprimable au centre",
+        "visibleSeconds": 8,
+        "visible": "Bouton bleu « Imprimer » et fiche avec QR code et mention « Scanner pour s'inscrire » visibles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et engageante, accompagnée d'un fond sonore discret."
+      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

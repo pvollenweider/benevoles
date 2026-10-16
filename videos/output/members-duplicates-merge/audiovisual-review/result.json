@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:23.949Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
-  "promptSha256": "3d20f0a23e0d73cc6f4359d14b5436ac2a62a718c075e02832adb36774802ce0",
-  "clipSha256": "09393c972c270e9350c28fe5afaa81fb1581056c774387ee4a4a509312fa371c",
+  "reviewedAt": "2026-10-16T09:51:17.829Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
+  "promptSha256": "199a2046632a1f7250ba14d5321429bf16887a476343e64c1baada07e5f59653",
+  "clipSha256": "38be8b298d3a31e0e83fcfcfba369d0fcc9ad150d054f0cdd8797c58664cb9dc",
   "scene": "result",
   "review": {
-    "heardOpening": "Fusion effectuée le résultat indique",
+    "heardOpening": "Fusion effectuée, le résultat indique",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Fusion effectuée : le résultat indique ce qui a été déplacé.",
         "visibleSeconds": 0,
-        "visible": "Page de confirmation de fusion affichant le récapitulatif des éléments déplacés.",
+        "visible": "Page 'Fusionner Robin Favre' affichant 'Fusion effectuée' avec 2 inscriptions déplacées et 1 invitation déplacée.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4,
-        "spoken": "Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies.",
-        "visibleSeconds": 5,
-        "visible": "Affichage de la page Activité de Robin Favre avec les inscriptions consolidées.",
+        "spokenSeconds": 4.1,
+        "spoken": "Retournez à la fiche conservée pour retrouver son activité",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le lien de retour et affichage de la page 'Activité de Robin Favre'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 9.4,
         "spoken": "Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne.",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage de la liste des membres montrant une seule ligne pour Robin Favre.",
+        "visibleSeconds": 9.7,
+        "visible": "Affichage de la liste des membres filtrée, montrant une seule ligne pour Robin Favre.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
+        "spokenSeconds": 14.1,
+        "spoken": "La fiche absorbée se retrouve avec Inclure les fiches fusionnées ou effacées",
+        "visibleSeconds": 14.6,
+        "visible": "Case 'Inclure les fiches fusionnées ou effacées (1)' cochée et apparition de la fiche fusionnée en dessous.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.6,
         "spoken": "L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables",
-        "visibleSeconds": 14.5,
-        "visible": "Retour à l'activité montrant les événements historiques tracés avec mention de la fusion.",
+        "visibleSeconds": 22.5,
+        "visible": "Retour sur la page d'activité de Robin Favre avec le détail chronologique des inscriptions et fusions.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la navigation."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:36:19.868Z",
-  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "reviewedAt": "2026-10-16T08:41:10.015Z",
+  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
   "promptSha256": "b7cd6ec6f0374632024805dd5b71c6e9d6240cfcc7bd9201cb221daef4382f1c",
-  "clipSha256": "9e273f2fc6d9e26b90b2509937de415ed3b19d328a6bc7e00d49d5819d953a0f",
+  "clipSha256": "b54d3d720d28c06e8c3f3079945d5953d26ae863a85d3a88831da070f14607df",
   "scene": "practical",
   "review": {
     "heardOpening": "Renseignons d'abord le lieu de rendez-vous",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 2.5,
         "spoken": "entrée artistes, portail nord",
-        "visibleSeconds": 1.1,
-        "visible": "Saisie de « Entrée artistes, portail Nord » dans le champ Lieu du rendez-vous",
+        "visibleSeconds": 1,
+        "visible": "Le texte « entrée artistes, portail nord » est renseigné dans le champ Lieu de rendez-vous",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées",
-        "visibleSeconds": 5.6,
-        "visible": "Saisie de la consigne « Venir dix minutes avant avec des chaussures fermées » dans le champ Consigne pratique",
+        "spokenSeconds": 6.5,
+        "spoken": "venir dix minutes avant avec des chaussures fermées",
+        "visibleSeconds": 6,
+        "visible": "Le texte « venir dix minutes avant avec des chaussures fermées » apparaît dans Consigne pratique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
+        "spokenSeconds": 12.8,
         "spoken": "ici Léa, accueil artistes, et son téléphone de démonstration",
-        "visibleSeconds": 12,
-        "visible": "Champs Personne de contact et Téléphone du contact remplis avec Léa, accueil artistes et 079 000 01 24",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie de « Léa, accueil artistes » et du numéro de téléphone dans les champs de contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 17.2,
         "spoken": "Les coordonnées GPS placent ce rendez-vous sur la carte",
         "visibleSeconds": 17.5,
-        "visible": "Coordonnées GPS renseignées dans le champ dédié avec lien Vérifier sur la carte",
+        "visible": "Des coordonnées GPS sont renseignées dans le champ Coordonnées GPS ou lien de carte",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, articulation nette et rythme parfaitement calé sur l'apparition des données à l'écran."
+      "observation": "Voix off féminine claire, posée et bien synchronisée avec les remplissages de formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:40:00.136Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:16:55.347Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "7a43ffa810bd2e72968a60d2731da2a1a7ccacc342149321f861aa2731a3fb1f",
-  "clipSha256": "aaee705b631b546736c1afbfc97d103b6c50f509d08436d2ce71b1c1567021b8",
+  "clipSha256": "47834d8afef7aade2eead82208a68c65a636fb5e415a99c2c3ddd90fe2baae3c",
   "scene": "admin-read",
   "review": {
-    "heardOpening": "Revenons côté organisation",
+    "heardOpening": "Revenons côté organisation, dans les inscriptions.",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Revenons côté organisation, dans les inscriptions.",
-        "visibleSeconds": 0,
-        "visible": "Page Inscriptions affichée avec la ligne d'Aline Mercier et ses détails de réponses.",
+        "visibleSeconds": 0.5,
+        "visible": "Onglet Inscriptions de l'événement affiché avec la liste des inscrits",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 4.5,
+        "spoken": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel.",
+        "visibleSeconds": 4.5,
+        "visible": "Fiche d'Aline Mercier avec les réponses détaillées (taille M, vélo, remorque, camion)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
         "spoken": "Ouvrons ensuite Questions",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage de la page « Questions aux bénévoles ».",
+        "visibleSeconds": 10.5,
+        "visible": "Navigation vers Réglages > Questions puis défilement vers la Synthèse des réponses",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 12,
         "spoken": "la Synthèse des réponses compte les choix.",
-        "visibleSeconds": 11,
-        "visible": "Section « Synthèse des réponses » visible avec les tableaux récapitulatifs par question.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 19.5,
-        "spoken": "Pour un choix multiple, elle apparaît dans plusieurs lignes",
-        "visibleSeconds": 19.5,
-        "visible": "Tableau « Matériel de transport » affichant 1 pour Vélo et 1 pour Remorque.",
+        "visibleSeconds": 12.5,
+        "visible": "Tableau de synthèse des réponses avec les totaux par choix",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec la démonstration."
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

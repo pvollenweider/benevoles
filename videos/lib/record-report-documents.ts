@@ -29,7 +29,11 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     await at(0.12) /* mid-sentence */; await open("Export complet", "pdf")
     await at("Lisons une journée, puis retrouvons"); await page.getByText("Buvette", { exact: true }).first().scrollIntoViewIfNeeded()
     // The complete report renders first and last names in separate cells.
-    await at(0.70) /* mid-sentence */; await page.getByText("Léa", { exact: true }).last().scrollIntoViewIfNeeded()
+    await at(0.54) /* mid-sentence: « puis retrouvons Léa » */
+    const leaName = page.getByText("Léa", { exact: true }).last()
+    await leaName.scrollIntoViewIfNeeded(); await tap(page, leaName)
+    await at("Les effectifs indiquent où il manque du monde")
+    await page.getByRole("heading", { name: "Récap par poste", exact: true }).scrollIntoViewIfNeeded()
   })
   // Opening the real popup and navigating can exceed the first spoken sentence.
   // Prepare Saturday in the transition so both days are visible in spoken order.
@@ -69,8 +73,9 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     await at("En revanche, cocher une case"); await present.first().scrollIntoViewIfNeeded()
     await at(0.73) /* mid-sentence */; await page.locator(".attendance").last().scrollIntoViewIfNeeded()
   })
+  // Prepare the named document before its opening claim, in the chapter transition.
+  await open("Liste avec téléphones", "sheets/phones")
   await scene("contacts", async at => {
-    await at("Elle permet de retrouver une"); await open("Liste avec téléphones", "sheets/phones")
     await at("Cette liste contient des coordonnées")
     const number = page.getByText("+41 79 000 99 99", { exact: true }).first()
     await number.scrollIntoViewIfNeeded(); await tap(page, number)

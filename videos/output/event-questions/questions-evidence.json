@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-12T04:37:07.002Z",
+  "recordedAt": "2026-10-16T12:14:07.637Z",
   "product": {
-    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
-    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
-    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
-    "buildId": "Ro9VdxUayqlTAULEvQpY0",
-    "snapshot": "/tmp/benevoles-video-production.batch11",
-    "builtAt": "2026-10-12T04:25:58.799Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "welcome": {
     "ownedEmptyEvent": true,
@@ -49,7 +49,7 @@
     "fourAnswersStored": true
   },
   "freshEmail": {
-    "mailId": "5Ft1YqlIZA8WhJWKI6XTaV",
+    "mailId": "4q96WX1YVTlfpqnTKsYIPo",
     "exactRecipient": "video.questions.aline@example.org",
     "messageProducedDuringThisTake": true,
     "trainingDomainReplayedLocally": true

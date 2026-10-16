@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:26:49.733Z",
-  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
+  "reviewedAt": "2026-10-16T11:42:45.004Z",
+  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
   "promptSha256": "95d3da6ee32c0191d5bd1ee2715160682f0e65b3796d2de57cf0d3f93c1019ca",
-  "clipSha256": "dc459819aa14e31d8efeff9043ca3013cda55647edc3b7921a397863f94122e8",
+  "clipSha256": "15291ef4704029174d8ce037dc7db4c2190adbc00427b88bb5b9913a5b8358cb",
   "scene": "activity",
   "review": {
-    "heardOpening": "Le lien Activité ouvre",
+    "heardOpening": "Le lien Activité ouvre l'historique",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
+        "spokenSeconds": 0.5,
         "spoken": "Le lien Activité ouvre l'historique factuel d'une personne",
-        "visibleSeconds": 1.8,
-        "visible": "Clic sur le lien Activité et ouverture de la page Activité de Camille Rochat",
+        "visibleSeconds": 1.3,
+        "visible": "Clic sur le lien Activité sur la ligne de Camille Rochat",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 4.2,
         "spoken": "Pour Camille, la page est déjà renseignée",
-        "visibleSeconds": 2.2,
-        "visible": "La page Activité de Camille Rochat est affichée avec plusieurs entrées",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page « Activité de Camille Rochat » contenant l'historique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "leurs dates et l'événement concerné",
-        "visibleSeconds": 2.5,
-        "visible": "Affichage des dates et du nom de l'événement Fête du village de Montvert sous chaque ligne",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 11.2,
-        "spoken": "Cette vue rassemble notamment les inscriptions",
-        "visibleSeconds": 2.5,
-        "visible": "Mentions Inscrit, En liste d'attente et autres actions visibles dans la liste",
+        "spokenSeconds": 6.5,
+        "spoken": "on peut parcourir les faits enregistrés, leurs dates et l'événement concerné",
+        "visibleSeconds": 3,
+        "visible": "Liste des faits affichée avec statuts d'inscription, horodatages précis et liens vers les événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés."
+      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

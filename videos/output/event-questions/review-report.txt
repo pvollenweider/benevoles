@@ -1,21 +1,8 @@
 STATUS: READY
-{
-  "id": "EVENT_QUESTIONS",
-  "status": "READY",
-  "duration": 520.64,
-  "buildId": "Ro9VdxUayqlTAULEvQpY0",
-  "music": {
-    "voicedWindows": 470,
-    "musicOnlyWindows": 2,
-    "smallestGapLu": 12.1,
-    "largestGapLu": 19.6,
-    "quietestMusicOnlyLufs": -34.2,
-    "loudestMusicOnlyLufs": -33.1,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "96 images finales et 5 images précises revues ; 16 chapitres AV, ASR final, validation, ancres, VTT et effets passent. Signalement L présélectionné réfuté : cases vides à 4/9/10.5s, L sélectionné après ancre10.84s (image12s), confirmation18.3s sur phrase17.88s. Synthèse visible pendant explication. Dates françaises, Frise, aucune adresse interdite/overlay. Nit connu : dates anglaises Mailpit.",
-  "sourceChanges": "Aucune ; narration du lot10 acceptée sans régénération, aucun re-film.",
-  "report": "videos/output/event-questions/review-report.txt",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+EVENT_QUESTIONS — batch 23-4 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 539.8 s; music 14.6–20 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Première prise retenue sur deux autorisées. Les 16 chapitres audiovisuels ne signalent aucun problème ; huit planches de chapitres et quatre de repères inspectées. Rechargement visible à 194,82 s avec ordre conservé ; sauvegarde réelle à 487,852 s, résultat à 488,3 s, alignée avec Enregistrons selon la revue du son. Narration inchangée, deux ASR intégraux sans mots ajoutés ni tutoiement. Les 1 021 tests vidéo et le contrôle de types passent. Aucun changement source supplémentaire ; corrections existantes conservées.
+No product edit, commit, push or publication in batch 23-4. Real-time subjective listening unavailable as permitted.

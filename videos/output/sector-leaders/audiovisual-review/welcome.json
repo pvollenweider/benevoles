@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:25.367Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:48:53.231Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
-  "clipSha256": "dd5a91633d4c744458bc149dbb442ca810e1a7321d25e0acd8f85a9c730ed805",
+  "clipSha256": "e3bad3cebefde6e1b2beb81358acbf6e4fe32877d46d5e86a9baa4e73dcc678e",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Le jour de la fête",
+    "heardOpening": "Le jour de la fête, vous n'avez pas besoin de tout coordonner",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
-        "visibleSeconds": 0,
-        "visible": "Titre d'introduction « Responsable de poste : accompagner son équipe » affiché au premier plan.",
+        "visibleSeconds": 0.5,
+        "visible": "Cartouche titre affiché : « Responsable de poste : accompagner son équipe » au centre de la page de l'événement.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.1,
         "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
-        "visibleSeconds": 3,
-        "visible": "Page « Responsables de secteur » affichant les responsables désignés pour l'Accueil et la Buvette avec leurs adresses e-mail.",
+        "visibleSeconds": 3.5,
+        "visible": "Le cartouche d'introduction disparaît pour laisser place à la vue Aperçu de l'événement « Fête du village de Montvert ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
+        "spokenSeconds": 9.3,
         "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
-        "visibleSeconds": 9.8,
-        "visible": "Vue d'ensemble stable de la page des responsables avec le bouton « + Ajouter un responsable » (annonce au futur du déroulé de la formation).",
+        "visibleSeconds": 9.5,
+        "visible": "Écran stable sur l'onglet Aperçu présentant l'état des besoins et la section À traiter (annonce des étapes à venir).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.1,
+        "spokenSeconds": 15,
         "spoken": "Aucun accès à toute l'administration n'est nécessaire.",
-        "visibleSeconds": 15.1,
-        "visible": "Le sous-titre de la page mentionne explicitement « sans accès admin au reste de l'événement ».",
+        "visibleSeconds": 15,
+        "visible": "Vue d'ensemble de l'événement toujours visible en arrière-plan sans modification.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée, bien articulée et parfaitement synchronisée avec l'affichage de présentation."
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec cette séquence d'introduction."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

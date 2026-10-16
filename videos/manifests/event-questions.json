@@ -2,7 +2,7 @@
   "id": "EVENT_QUESTIONS",
   "slug": "event-questions",
   "title": "Poser les bonnes questions à ses bénévoles",
-  "description": "Créer les quatre types de questions, lire les réponses et les préserver quand le formulaire évolue.",
+  "description": "Créer quatre exemples de questions, découvrir Nombre et les questions de suivi, lire et préserver les réponses.",
   "viewer": {
     "summary": "Dans cette vidéo, vous ajoutez des questions au formulaire d'inscription d'un événement, suivez les réponses d'un bénévole et faites évoluer le formulaire sans perdre les réponses déjà reçues.",
     "steps": [
@@ -57,12 +57,12 @@
     },
     {
       "id": "create-single",
-      "transcript": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question, puis saisissons son intitulé. Dans Type de réponse, choisissons Choix unique : la personne pourra sélectionner une seule taille. Les choix s'écrivent un par ligne. Voici S, M, L et XL. Il en faut au moins deux, et douze au maximum. Pour notre commande, cette information est nécessaire : cochons Réponse obligatoire. Enregistrons. La question est maintenant dans la liste, avec ses choix et son caractère obligatoire.",
+      "transcript": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question, puis saisissons son intitulé. La liste propose aussi Nombre pour une quantité. Dans Type de réponse, choisissons Choix unique : la personne pourra sélectionner une seule taille. Les choix s'écrivent un par ligne. Voici S, M, L et XL. Il en faut au moins deux, et douze au maximum. Pour notre commande, cette information est nécessaire : cochons Réponse obligatoire. Enregistrons. La question est maintenant dans la liste, avec ses choix et son caractère obligatoire.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "create-yesno",
-      "transcript": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
+      "transcript": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Le réglage Afficher seulement si permet de préparer une question de suivi selon une réponse précédente. Ici, nous gardons une question affichée à tout le monde. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
       "fallbackDurationMs": 39000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "create-text",
-      "transcript": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons Point de rendez-vous préféré. Conservons Texte court : la personne écrira sa réponse plutôt que de choisir dans une liste. Cette question reste facultative. Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous. Enregistrons. Nous avons maintenant nos quatre types de questions, avec deux réponses obligatoires et deux facultatives.",
+      "transcript": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons Point de rendez-vous préféré. Conservons Texte court : la personne écrira sa réponse plutôt que de choisir dans une liste. Cette question reste facultative. Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous. Enregistrons. Nous avons maintenant nos quatre exemples de questions, avec deux réponses obligatoires et deux facultatives.",
       "fallbackDurationMs": 38000
     },
     {
@@ -131,5 +131,6 @@
       "fallbackDurationMs": 52000
     }
   ],
-  "musicGainDb": -0.2
+  "musicGainDb": 0.1,
+  "narrationStaticNormalization": true
 }

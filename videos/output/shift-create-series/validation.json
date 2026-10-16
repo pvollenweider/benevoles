@@ -1,23 +1,24 @@
 {
   "id": "SHIFT_CREATE_SERIES",
   "slug": "shift-create-series",
-  "validatedAt": "2026-10-11T18:07:23.399Z",
+  "validatedAt": "2026-10-16T09:25:17.743Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 115880,
+  "captureMs": 105360,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 12899,
+      "visualMs": 12896,
       "audioMs": 12896,
-      "driftMs": 3
+      "driftMs": 0
     },
     {
       "id": "range",
-      "visualMs": 11448,
+      "visualMs": 11446,
       "audioMs": 11446,
-      "driftMs": 2
+      "driftMs": 0
     },
     {
       "id": "duration",
@@ -27,38 +28,38 @@
     },
     {
       "id": "preview",
-      "visualMs": 12533,
+      "visualMs": 12531,
       "audioMs": 12530,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "create",
-      "visualMs": 12603,
+      "visualMs": 12608,
       "audioMs": 12603,
-      "driftMs": 0
+      "driftMs": 5
     },
     {
       "id": "adjust",
-      "visualMs": 19278,
+      "visualMs": 19276,
       "audioMs": 19276,
-      "driftMs": 2
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 15351,
+      "visualMs": 15350,
       "audioMs": 15349,
-      "driftMs": 2
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 10,
   "music": {
-    "voicedWindows": 101,
-    "musicOnlyWindows": 6,
-    "smallestGapLu": 12.8,
-    "largestGapLu": 18,
-    "quietestMusicOnlyLufs": -33.2,
-    "loudestMusicOnlyLufs": -31.8,
-    "medianVoiceLufs": -16.9
+    "voicedWindows": 99,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.4,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.8
   },
   "issues": []
 }

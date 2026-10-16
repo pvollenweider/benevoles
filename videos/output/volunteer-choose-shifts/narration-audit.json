@@ -1,14 +1,14 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-11T19:56:47.055Z",
-  "revalidatedAt": "2026-10-11T21:50:39.384Z",
+  "auditedAt": "2026-10-16T04:00:15.242Z",
+  "revalidatedAt": "2026-10-16T09:40:52.629Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "23c6e5089c36e78682bb3972cb08ea77c29a88119d91d238122dea812580ec50",
+      "audioSha256": "450cc3838ad7bfa529ae19b750a4074d5db2955b58bffd012800ebe84fc0c966",
       "recognized": "Choisir ses créneaux, c'est construire un engagement réaliste avant de donner ses coordonnées. Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer. L'inscription ne partira qu'après le formulaire et sa confirmation.",
       "expected": "Choisir ses créneaux, c’est construire un engagement réaliste avant de donner ses coordonnées. Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer. L’inscription ne partira qu’après le formulaire et sa confirmation.",
       "wordErrorRate": 0,
@@ -18,7 +18,7 @@
     },
     {
       "id": "select",
-      "audioSha256": "60dc8f237a3c63500726f1f9baa3fc2f4aba7078b874719ad338b49fc8074494",
+      "audioSha256": "7e2a68aec10da36383831edf81f2eee1c46f7da2ff9681278883f8576e9d61ce",
       "recognized": "Clique sur une mission disponible pour la sélectionner. Elle change d'état et rejoint le récapitulatif à droite. Tu peux en ajouter plusieurs, même sur deux journées. Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif. Aucune place n'a encore été réservée.",
       "expected": "Clique sur une mission disponible pour la sélectionner. Elle change d’état et rejoint le récapitulatif à droite. Tu peux en ajouter plusieurs, même sur deux journées. Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif : aucune place n’a encore été réservée.",
       "wordErrorRate": 0,
@@ -28,7 +28,7 @@
     },
     {
       "id": "capacity",
-      "audioSha256": "fdcc7721561b416db6723669f5b7eb490b81fff4f806134709979857c129f82d",
+      "audioSha256": "65ac552d412c237643aa05d3c2e5e1557a56327baa1fef3772ce9c5cf2446b11",
       "recognized": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur trois signifie qu'il reste une place. Un créneau complet sans liste d'attente ne peut plus être choisi. S'il reste important pour toi, contacte l'association plutôt que de remplacer quelqu'un ou de partager une invitation.",
       "expected": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur trois signifie qu’il reste une place. Un créneau complet sans liste d’attente ne peut plus être choisi. S’il reste important pour toi, contacte l’association plutôt que de remplacer quelqu’un ou de partager une invitation.",
       "wordErrorRate": 0,
@@ -38,7 +38,7 @@
     },
     {
       "id": "waitlist",
-      "audioSha256": "71401aa86faef6c92c18258599a517870da2ed51441fcd95140f47b92c5bec23",
+      "audioSha256": "edd3086378dfe4ad242e29b74d51c347d1887af7a8853eefc2e8dafdc0c0cccb",
       "recognized": "Quand l'organisateur a activé une liste d'attente, un créneau complet reste cliquable. Le choix devient en attente et le récapitulatif le distingue d'une place confirmable. Reclique pour le retirer. La position et une éventuelle offre de place n'existeront qu'après l'envoi du formulaire.",
       "expected": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste cliquable. Le choix devient En attente et le récapitulatif le distingue d’une place confirmable. Reclique pour le retirer. La position et une éventuelle offre de place n’existeront qu’après l’envoi du formulaire.",
       "wordErrorRate": 0,
@@ -48,8 +48,8 @@
     },
     {
       "id": "approval-reserved",
-      "audioSha256": "55f614459ebf67e17ffbffac7aeeeb90a45be4bed1b1a5fe05dc5d3a83c1e6e1",
-      "recognized": "D'autres missions ont une règle particulière. Chauffeur navette affiche sur validation. Tu peux la demander, puis l'organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet et ils ne produisent pas le même suivi.",
+      "audioSha256": "1661a6f8d3554f25bb6956ae99d529a4c94227c6741a45b495397adb88e0d3a4",
+      "recognized": "D'autres missions ont une règle particulière : Chauffeur navette affiche sur validation, tu peux la demander, puis l'organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet, et ils ne produisent pas le même suivi.",
       "expected": "D’autres missions ont une règle particulière. Chauffeur navette affiche Sur validation : tu peux la demander, puis l’organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet, et ils ne produisent pas le même suivi.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -58,7 +58,7 @@
     },
     {
       "id": "conflict",
-      "audioSha256": "b97cf0b23f1522ebcc65f7714e70a92ae78f1b6baf57890590c2baee34959b90",
+      "audioSha256": "d7c2793f87c9896030eb0c8a6700ca611082eae79f2467b942de8d81f38f06cd",
       "recognized": "Dès qu'un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, accueil de quinze à dix-huit heures empêche la navette de quatorze à dix-huit heures. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
       "expected": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, Accueil de quinze à dix-huit heures empêche la Navette de quatorze à dix-huit heures. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
       "wordErrorRate": 0,
@@ -68,7 +68,7 @@
     },
     {
       "id": "known",
-      "audioSha256": "ef1a0a9a6889bedf689035679ffd9487894dfde5612a580754146d9aed007f50",
+      "audioSha256": "aeee540f8d6d67451e71a6fdf487522e8192bb555403cb8952125268ca547d77",
       "recognized": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu'elle possède déjà. Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois. Elle peut ajouter une autre mission, mais l'annulation d'un engagement existant demande une confirmation séparée pour éviter un clic accidentel.",
       "expected": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède déjà. Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois. Elle peut ajouter une autre mission, mais l’annulation d’un engagement existant demande une confirmation séparée pour éviter un clic accidentel.",
       "wordErrorRate": 0,
@@ -78,7 +78,7 @@
     },
     {
       "id": "limit",
-      "audioSha256": "4cd62920a6ac84f0e70569a36f34403ddb9723d3089973ddd92c7e80dbf640d3",
+      "audioSha256": "a1cb59911970c7404a3fe1bb44ac5a3566bd544db4825212bc0420ff272b9bb8",
       "recognized": "La buvette est limitée à deux créneaux par personne. Camille a déjà atteint ce maximum. Les autres plages restent visibles mais annoncent la limite et ne peuvent pas être ajoutées. Elle doit d'abord annuler une buvette existante ou demander à l'organisateur de corriger son planning.",
       "expected": "La Buvette est limitée à deux créneaux par personne. Camille a déjà atteint ce maximum : les autres plages restent visibles, mais annoncent la limite et ne peuvent pas être ajoutées. Elle doit d’abord annuler une Buvette existante, ou demander à l’organisateur de corriger son planning.",
       "wordErrorRate": 0,
@@ -88,8 +88,8 @@
     },
     {
       "id": "result",
-      "audioSha256": "15dfa9a6f20afc882ad9835e8c85679e83adb922c046deb89a9a1b8e486b73ae",
-      "recognized": "Avant de continuer, relis le récapitulatif. Jour, heure, mission, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton continuer ouvre le formulaire. Il ne confirme toujours rien tant que tu n'as pas validé la dernière étape.",
+      "audioSha256": "1f24004614d48e7c2c8da6c2b99917d01e676c73073ed2eb4dfae036e8553925",
+      "recognized": "Avant de continuer, relis le récapitulatif : jour, heure, mission, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire. Il ne confirme toujours rien tant que tu n'as pas validé la dernière étape.",
       "expected": "Avant de continuer, relis le récapitulatif : jours, heures, missions, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire ; il ne confirme toujours rien tant que tu n’as pas validé la dernière étape.",
       "wordErrorRate": 0.061224489795918366,
       "needsReview": false,

@@ -4,7 +4,7 @@ Voici comment préparer et partager un planning bénévole. Pour démarrer, vous
 
 Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que vous n’avez pas terminé votre planning.
 
-Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.
+Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et le nombre de places, et les créneaux sont préparés automatiquement.
 
 Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.
 
@@ -22,8 +22,8 @@ Quand tout est prêt, publiez le planning. La page d’inscription devient acces
 
 Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code. Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.
 
-Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.
+Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les étiquettes et les doublons, puis montre exactement ce qui sera créé avant confirmation.
 
-Retournez ensuite dans les invitations de l’événement. Filtrez les membres par tag et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.
+Retournez ensuite dans les invitations de l’événement. Filtrez les membres par étiquette et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.
 
 Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !

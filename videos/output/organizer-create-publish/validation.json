@@ -1,107 +1,107 @@
 {
   "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
   "slug": "organizer-create-publish",
-  "validatedAt": "2026-10-13T16:56:06.700Z",
-  "continuousNarration": false,
-  "sentenceRevision": true,
+  "validatedAt": "2026-10-16T09:25:22.932Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 187400,
+  "captureMs": 184880,
   "scenes": [
     {
       "id": "overview",
-      "visualMs": 12992,
-      "audioMs": 12989,
-      "driftMs": 3
+      "visualMs": 12558,
+      "audioMs": 12556,
+      "driftMs": 2
     },
     {
       "id": "basics",
-      "visualMs": 9453,
-      "audioMs": 9451,
-      "driftMs": 2
+      "visualMs": 10322,
+      "audioMs": 10318,
+      "driftMs": 4
     },
     {
       "id": "series",
-      "visualMs": 15069,
-      "audioMs": 15066,
-      "driftMs": 3
+      "visualMs": 13689,
+      "audioMs": 13688,
+      "driftMs": 1
     },
     {
       "id": "delivery",
-      "visualMs": 12836,
-      "audioMs": 12833,
-      "driftMs": 3
-    },
-    {
-      "id": "cash",
-      "visualMs": 11790,
-      "audioMs": 11788,
+      "visualMs": 12315,
+      "audioMs": 12313,
       "driftMs": 2
     },
     {
+      "id": "cash",
+      "visualMs": 10464,
+      "audioMs": 10463,
+      "driftMs": 1
+    },
+    {
       "id": "registration",
-      "visualMs": 11675,
-      "audioMs": 11675,
+      "visualMs": 11629,
+      "audioMs": 11629,
       "driftMs": 0
     },
     {
       "id": "review",
-      "visualMs": 10120,
-      "audioMs": 10118,
-      "driftMs": 2
+      "visualMs": 9774,
+      "audioMs": 9774,
+      "driftMs": 0
     },
     {
       "id": "preview",
-      "visualMs": 16578,
-      "audioMs": 16578,
-      "driftMs": 0
+      "visualMs": 14270,
+      "audioMs": 14268,
+      "driftMs": 2
     },
     {
       "id": "preview-result",
-      "visualMs": 12518,
-      "audioMs": 12515,
-      "driftMs": 3
+      "visualMs": 12356,
+      "audioMs": 12352,
+      "driftMs": 4
     },
     {
       "id": "publish",
-      "visualMs": 10565,
-      "audioMs": 10563,
-      "driftMs": 2
+      "visualMs": 10280,
+      "audioMs": 10279,
+      "driftMs": 1
     },
     {
       "id": "qr",
-      "visualMs": 10693,
-      "audioMs": 10693,
-      "driftMs": 0
+      "visualMs": 11215,
+      "audioMs": 11214,
+      "driftMs": 1
     },
     {
       "id": "import",
-      "visualMs": 17097,
-      "audioMs": 17095,
-      "driftMs": 2
+      "visualMs": 16636,
+      "audioMs": 16635,
+      "driftMs": 1
     },
     {
       "id": "invite",
-      "visualMs": 14445,
-      "audioMs": 14442,
+      "visualMs": 15845,
+      "audioMs": 15842,
       "driftMs": 3
     },
     {
       "id": "public",
-      "visualMs": 12049,
-      "audioMs": 12048,
-      "driftMs": 1
+      "visualMs": 13237,
+      "audioMs": 13230,
+      "driftMs": 7
     }
   ],
   "anchorsChecked": 6,
   "music": {
-    "voicedWindows": 181,
+    "voicedWindows": 178,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 13.8,
-    "largestGapLu": 19.3,
+    "smallestGapLu": 14.6,
+    "largestGapLu": 18.9,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.1
+    "medianVoiceLufs": -16.3
   },
   "issues": []
 }

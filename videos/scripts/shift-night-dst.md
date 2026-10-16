@@ -26,3 +26,18 @@ Narration à régénérer intégralement en une passe avec la même voix, `conti
 
 - `autumn` : Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures prévues et évite de sous-estimer l’engagement d’une personne présente toute la nuit.
 - `result` : Pour une permanence de nuit, indiquez clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.
+
+
+## Révision du 2026-10-16 — lot 23-1
+
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+
+Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
+
+- `welcome` : Les événements du soir posent deux questions différentes : comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change. Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.
+- `ordinary` : Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Ouvrons maintenant le créneau. Les heures affichées vont de vingt-deux heures à deux heures : la fin se situe donc le lendemain. Vérifions bien cet horaire.
+- `spring` : Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.
+- `autumn` : Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures prévues et évite de sous-estimer l’engagement d’une personne présente toute la nuit.
+- `timezone` : Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels : une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.
+- `calendar` : Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.
+- `result` : Pour une permanence de nuit, indiquez clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.

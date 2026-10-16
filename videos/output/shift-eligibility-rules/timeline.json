@@ -1,18 +1,18 @@
 {
   "slug": "shift-eligibility-rules",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-12T04:49:45.661Z",
+  "recordedAt": "2026-10-16T08:49:16.421Z",
   "video": "capture.webm",
   "product": {
-    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
-    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
-    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
-    "buildId": "Ro9VdxUayqlTAULEvQpY0",
-    "snapshot": "/tmp/benevoles-video-production.batch11",
-    "builtAt": "2026-10-12T04:25:58.799Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "SHIFT_ELIGIBILITY_RULES",
@@ -26,35 +26,31 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 15508
+      "atMs": 16382
     },
     {
       "kind": "click",
-      "atMs": 18624
+      "atMs": 19416
     },
     {
       "kind": "click",
-      "atMs": 20908
+      "atMs": 21499
     },
     {
       "kind": "click",
-      "atMs": 21706
+      "atMs": 22281
     },
     {
       "kind": "click",
-      "atMs": 23274
+      "atMs": 24051
     },
     {
       "kind": "click",
-      "atMs": 29691
+      "atMs": 28920
     },
     {
       "kind": "click",
-      "atMs": 30473
-    },
-    {
-      "kind": "click",
-      "atMs": 38518
+      "atMs": 29729
     },
     {
       "kind": "click",
@@ -62,176 +58,184 @@
     },
     {
       "kind": "click",
-      "atMs": 42336
+      "atMs": 41117
     },
     {
       "kind": "click",
-      "atMs": 56218
+      "atMs": 44329
     },
     {
       "kind": "click",
-      "atMs": 64856
+      "atMs": 53551
     },
     {
       "kind": "click",
-      "atMs": 81512
+      "atMs": 63178
     },
     {
       "kind": "click",
-      "atMs": 85228
+      "atMs": 83963
     },
     {
       "kind": "click",
-      "atMs": 88544
+      "atMs": 89328
     },
     {
       "kind": "click",
-      "atMs": 106720
+      "atMs": 93144
     },
     {
       "kind": "click",
-      "atMs": 108352
+      "atMs": 99153
     },
     {
       "kind": "click",
-      "atMs": 114550
+      "atMs": 110811
+    },
+    {
+      "kind": "click",
+      "atMs": 112442
+    },
+    {
+      "kind": "click",
+      "atMs": 118609
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1106,
-      "endMs": 14587
+      "startMs": 574,
+      "endMs": 15458
     },
     {
       "id": "settings",
-      "startMs": 15043,
-      "endMs": 32664
+      "startMs": 15909,
+      "endMs": 33249
     },
     {
       "id": "age",
-      "startMs": 33118,
-      "endMs": 46291
+      "startMs": 33701,
+      "endMs": 47856
     },
     {
       "id": "quota",
-      "startMs": 48455,
-      "endMs": 62770
+      "startMs": 50021,
+      "endMs": 65889
     },
     {
       "id": "reserved",
-      "startMs": 63224,
-      "endMs": 78356
+      "startMs": 66342,
+      "endMs": 81852
     },
     {
       "id": "eligible",
-      "startMs": 78811,
-      "endMs": 92435
+      "startMs": 82307,
+      "endMs": 97552
     },
     {
       "id": "result",
-      "startMs": 92889,
-      "endMs": 118276
+      "startMs": 98003,
+      "endMs": 121940
     }
   ],
   "anchors": [
     {
       "segmentId": "settings",
       "phrase": "L’âge minimum appartient au créneau.",
-      "startMs": 3111,
-      "endMs": 4684,
-      "cueMs": 18156
+      "startMs": 3021,
+      "endMs": 4848,
+      "cueMs": 18932
     },
     {
       "segmentId": "settings",
-      "phrase": "La limite et les tags",
-      "startMs": 5375,
-      "endMs": 13903,
-      "cueMs": 20421
+      "phrase": "La limite et les étiquettes",
+      "startMs": 5089,
+      "endMs": 12349,
+      "cueMs": 21000
     },
     {
       "segmentId": "settings",
       "phrase": "Ici, Buvette est limitée à",
-      "startMs": 14176,
-      "endMs": 17619,
-      "cueMs": 29221
+      "startMs": 12472,
+      "endMs": 16939,
+      "cueMs": 28390
     },
     {
       "segmentId": "age",
       "phrase": "La date de naissance demandée",
-      "startMs": 4933,
-      "endMs": 8560,
-      "cueMs": 38053
+      "startMs": 5893,
+      "endMs": 9820,
+      "cueMs": 39594
     },
     {
       "segmentId": "age",
       "phrase": "modifier le navigateur ou masquer",
-      "startMs": 8714,
-      "endMs": 13171,
-      "cueMs": 41833
+      "startMs": 10136,
+      "endMs": 13842,
+      "cueMs": 43837
     },
     {
       "segmentId": "quota",
       "phrase": "En revenant au planning depuis",
-      "startMs": 2818,
-      "endMs": 6752,
-      "cueMs": 51275
+      "startMs": 3053,
+      "endMs": 7620,
+      "cueMs": 53074
     },
     {
       "segmentId": "quota",
       "phrase": "les autres créneaux restent visibles",
-      "startMs": 7290,
-      "endMs": 10714,
-      "cueMs": 55747
+      "startMs": 8216,
+      "endMs": 12101,
+      "cueMs": 58237
     },
     {
       "segmentId": "quota",
       "phrase": "Elle peut d’abord retirer un",
-      "startMs": 11169,
-      "endMs": 13930,
-      "cueMs": 59625
+      "startMs": 12687,
+      "endMs": 15520,
+      "cueMs": 62709
     },
     {
       "segmentId": "reserved",
       "phrase": "Le message ne révèle pas",
-      "startMs": 5758,
-      "endMs": 6067,
-      "cueMs": 68983
+      "startMs": 4299,
+      "endMs": 5559,
+      "cueMs": 70642
     },
     {
       "segmentId": "reserved",
-      "phrase": "Une invitation sans le bon",
-      "startMs": 11709,
-      "endMs": 15130,
-      "cueMs": 74935
+      "phrase": "Une invitation sans la bonne",
+      "startMs": 11896,
+      "endMs": 15228,
+      "cueMs": 78240
     },
     {
       "segmentId": "eligible",
       "phrase": "le lien prouve quel membre",
-      "startMs": 5944,
-      "endMs": 10501,
-      "cueMs": 84756
+      "startMs": 6555,
+      "endMs": 11767,
+      "cueMs": 88862
     },
     {
       "segmentId": "result",
       "phrase": "Vérifions aussi le téléphone obligatoire",
-      "startMs": 6660,
-      "endMs": 10461,
-      "cueMs": 99551
+      "startMs": 6894,
+      "endMs": 10880,
+      "cueMs": 104898
     },
     {
       "segmentId": "result",
       "phrase": "Pour corriger un profil, retrouvons",
-      "startMs": 12061,
-      "endMs": 16953,
-      "cueMs": 104952
+      "startMs": 11659,
+      "endMs": 16531,
+      "cueMs": 109664
     },
     {
       "segmentId": "result",
       "phrase": "Ici, nous vérifions la fiche",
-      "startMs": 21189,
-      "endMs": 25091,
-      "cueMs": 114080
+      "startMs": 20141,
+      "endMs": 23669,
+      "cueMs": 118145
     }
   ]
 }

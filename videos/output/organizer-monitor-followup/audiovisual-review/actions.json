@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:04.676Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:04:57.672Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "c9b658073de91193b7f422fe50a6b4a4cb51738dc4c01e5da9dfdc3124222698",
-  "clipSha256": "e73f44d188f4f6d1b6213a58d7b8867a0c1672112f2aeb850407a967d970182d",
+  "clipSha256": "f05668c4fce7cc8e8106fe70d2110b0ff75c355253ed55dca2ea8e4c54336312",
   "scene": "actions",
   "review": {
     "heardOpening": "Vous pouvez agir sur une inscription",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "agir sur une inscription, par exemple renvoyer son lien personnel",
-        "visibleSeconds": 0.8,
-        "visible": "Une case est cochée et la barre d'actions s'affiche avec l'option Renvoyer le lien",
+        "spokenSeconds": 0.8,
+        "spoken": "agir sur une inscription",
+        "visibleSeconds": 0.9,
+        "visible": "Une case à cocher est sélectionnée sur la première ligne et la barre d'actions apparaît avec « 1 sélectionnée »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 2.3,
+        "spoken": "renvoyer son lien personnel",
+        "visibleSeconds": 2,
+        "visible": "Le bouton d'action « Renvoyer le lien » est visible dans la barre contextuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
         "spoken": "sélectionner plusieurs lignes pour appliquer une action groupée",
-        "visibleSeconds": 5.2,
-        "visible": "Une deuxième ligne est cochée, affichant 2 sélectionnées pour les actions groupées",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 9.5,
-        "spoken": "le bénévole peut consulter ou modifier ses choix sans créer de compte",
-        "visibleSeconds": 10.3,
-        "visible": "Clic sur Désélectionner et affichage de la liste générale des inscriptions",
+        "visibleSeconds": 5.6,
+        "visible": "Une deuxième ligne est cochée, affichant « 2 sélectionnées » avec les actions groupées disponibles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, naturelle et parfaitement synchronisée avec les actions montrées à l'écran."
+      "observation": "Voix féminine naturelle, posée et claire, parfaitement audible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

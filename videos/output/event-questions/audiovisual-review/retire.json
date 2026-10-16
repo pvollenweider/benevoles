@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:40:21.812Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:18:07.601Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
-  "clipSha256": "0fb489eef30ca6632a30ce1f4b8dc460109a18b1963d8fefcf0404430811a039",
+  "clipSha256": "7adf17a707a1dfd39e0925a7371cf9ce32095f7d68ef22799dd12e44842d5274",
   "scene": "retire",
   "review": {
     "heardOpening": "Nous n'avons plus besoin de demander la taille",
@@ -11,32 +11,40 @@
       {
         "spokenSeconds": 4.1,
         "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
-        "visibleSeconds": 4.5,
-        "visible": "Une modale de confirmation s'ouvre : 'Retirer la question Taille de t-shirt ?'",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur Retirer pour la taille de t-shirt et apparition de la boîte de dialogue explicative",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.8,
+        "spokenSeconds": 13,
         "spoken": "Confirmons.",
         "visibleSeconds": 13.5,
-        "visible": "Clic sur le bouton rouge Retirer et affichage du message de confirmation",
+        "visible": "Clic sur le bouton rouge Retirer dans la fenêtre modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.4,
+        "spokenSeconds": 14.8,
         "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
-        "visibleSeconds": 14.6,
-        "visible": "Page des Inscriptions affichant l'inscription d'Aline avec la ligne 'Taille de t-shirt (question retirée) : L'",
+        "visibleSeconds": 15.6,
+        "visible": "Affichage de l'onglet Inscriptions où Aline présente la ligne Taille de t-shirt (question retirée) : L",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.3,
-        "spoken": "Ouvrons enfin un autre créneau public : la question n'est plus proposée",
-        "visibleSeconds": 21.6,
-        "visible": "Formulaire d'inscription publique ouvert sans la question sur la taille de t-shirt",
+        "spokenSeconds": 21,
+        "spoken": "Ouvrons enfin un autre créneau public",
+        "visibleSeconds": 22.8,
+        "visible": "Sélection d'un créneau sur la frise publique puis passage au formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.8,
+        "spoken": "la question n'est plus proposée, les autres le sont toujours.",
+        "visibleSeconds": 24.3,
+        "visible": "Affichage du formulaire d'inscription sans la question de taille",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien synchronisée avec les actions affichées à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

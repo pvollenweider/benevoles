@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:18:48.075Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "1b7bb2f1bfa1540b779ab0172e4eaca32ed87ce7717b20074e33abac5e627585",
-  "clipSha256": "15104e04427aace5bf2a1ffac84ff5d7d9d530f39580b5114f278a285b40357e",
+  "reviewedAt": "2026-10-16T10:55:04.716Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "62466f337ee5280c831b8c14040ca4ac5c7d53986fc10482e58d6fa8892f3b5a",
+  "clipSha256": "7a098400911ea1f5aacde667590d4702ca3cbe93a99e61077e3af2eab170d280",
   "scene": "exclusions",
   "review": {
     "heardOpening": "Une demande à valider",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.8,
         "spoken": "Une demande à valider",
-        "visibleSeconds": 2,
-        "visible": "Filtre sur Lucas montrant les inscriptions avec le statut Demande à traiter",
+        "visibleSeconds": 2.2,
+        "visible": "Recherche de Lucas affichant des inscriptions avec le statut « Demande à traiter »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "ou une place en attente",
-        "visibleSeconds": 6.5,
-        "visible": "Filtre sur Anna affichant la demande avec le statut Place proposée",
+        "spokenSeconds": 2.8,
+        "spoken": "ou une place en attente n'est pas une inscription confirmée",
+        "visibleSeconds": 5.9,
+        "visible": "Recherche d'Anna affichant le statut « Place proposée »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 12.3,
         "spoken": "fermer un créneau aux nouvelles inscriptions ne l'annule pas",
-        "visibleSeconds": 14,
-        "visible": "Basculement sur l'onglet Liste de Créneaux avec un créneau au statut Fermé bien visible",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 20.5,
-        "spoken": "Un second passage du traitement ne renvoie pas les rappels déjà marqués comme envoyés",
-        "visibleSeconds": 20.5,
-        "visible": "Vue stable de la liste des créneaux servant de support à l'explication",
+        "visibleSeconds": 13.5,
+        "visible": "Onglet Créneaux en vue Liste affichant un créneau au statut « Fermé »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et parfaitement audible, avec un débit régulier en accord avec la navigation."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les exemples affichés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

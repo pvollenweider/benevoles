@@ -1,43 +1,46 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T03:23:13.747Z",
-  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
-  "promptSha256": "a57989f7b0bb2d03b3ee030bc13815992449c509b6e1257e713b2e7a42c30e31",
-  "clipSha256": "9f06c4021d961b4d58e87da4a54f5248122e135d69b9633655840bb334ede279",
+  "reviewedAt": "2026-10-16T10:37:49.084Z",
+  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
+  "promptSha256": "9b588d79ff74793010e4d10d7635c5aee65fd3b5a815189218bf22169117e1d3",
+  "clipSha256": "fb76258fd495de604077f2b03608810f517dde21d21c0f73546cca0cd2baeba6",
   "scene": "members",
   "review": {
     "heardOpening": "La liste des membres rassemble",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "La liste des membres rassemble inscrits et personnes importées",
-        "visibleSeconds": 0.5,
-        "visible": "Page Membres affichant le tableau des inscrits et personnes enregistrées",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Membres avec le tableau récapitulatif des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.2,
-        "spoken": "avec coordonnées, étiquettes, notes, disponibilités, heures planifiées et activité",
-        "visibleSeconds": 4.2,
-        "visible": "Colonnes du tableau des membres affichant Contact, Tags, Heures planifiées et les options d'actions",
-        "sync": "aligned",
-        "severity": "none"
+        "spokenSeconds": 4.5,
+        "spoken": "avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activité",
+        "visibleSeconds": 4.5,
+        "visible": "Colonnes Contact, Étiquettes, Heures prévues et liens Activité visibles dans le tableau, mais aucune colonne Notes ou Disponibilités",
+        "sync": "uncertain",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 10.3,
-        "spoken": "La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre",
-        "visibleSeconds": 10.3,
-        "visible": "L'écran reste stable sur la vue d'ensemble de la liste des membres sans ouvrir de fiche individuelle",
-        "sync": "aligned",
-        "severity": "none"
+        "spokenSeconds": 11.5,
+        "spoken": "La fiche d’une personne retrace ses invitations, inscriptions et présences",
+        "visibleSeconds": 11.5,
+        "visible": "L'écran reste statique sur le tableau des membres sans ouvrir la fiche individuelle mentionnée",
+        "sync": "missing",
+        "severity": "minor"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:05 - Les informations de notes et de disponibilités ne sont pas visibles dans les colonnes du tableau affiché.",
+      "00:12 - La fiche d'une personne n'est pas ouverte à l'écran pour illustrer le suivi des invitations, inscriptions et présences."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, avec un niveau sonore et un débit constants."
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

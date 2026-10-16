@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:11.536Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
+  "reviewedAt": "2026-10-16T09:50:40.585Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
   "promptSha256": "b57868132dc29bbd659231c1323f74e8e2317cad66dc125a0198a5bf5b05b912",
-  "clipSha256": "cdd769cc2faec8897fee975fc2a91b2059b20b38062d4c9fa97695e42281e749",
+  "clipSha256": "f70379c418732e040eb0246c6cc0c769501c4d8e0fca31433dfb1c2195c9c745",
   "scene": "fields",
   "review": {
     "heardOpening": "Pour chaque information différente",
     "checkpoints": [
       {
-        "spokenSeconds": 6.8,
-        "spoken": "on prend le téléphone de l'autre fiche",
-        "visibleSeconds": 7.4,
-        "visible": "Sélection de l'option radio pour le second numéro de téléphone",
+        "spokenSeconds": 4.1,
+        "spoken": "Ici, on conserve la bonne adresse email et on prend le téléphone de l’autre fiche.",
+        "visibleSeconds": 4.1,
+        "visible": "Sélection du bouton radio pour le deuxième numéro de téléphone sous la section Téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
+        "spokenSeconds": 8.7,
         "spoken": "Les notes internes peuvent aussi être mises à la suite",
-        "visibleSeconds": 10.4,
-        "visible": "Sélection de l'option radio « Mettre les deux notes à la suite »",
+        "visibleSeconds": 10.6,
+        "visible": "Sélection de l'option 'Mettre les deux notes à la suite' sous Notes internes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.5,
-        "spoken": "Le tableau récapitule les inscriptions, les invitations et les réponses concernées",
-        "visibleSeconds": 16.8,
-        "visible": "Défilement vers le bas affichant le tableau récapitulatif « Ce qui sera déplacé »",
+        "spokenSeconds": 16.4,
+        "spoken": "Le tableau récapitule les inscriptions, les invitations et les réponses concernées.",
+        "visibleSeconds": 16.5,
+        "visible": "Défilement vers le bas affichant le tableau 'Ce qui sera déplacé' détaillant les inscriptions et réponses",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.4,
+        "spoken": "les abonnements aux notifications du navigateur ne sont jamais déplacés.",
+        "visibleSeconds": 22,
+        "visible": "Ligne 'Abonnements aux notifications du navigateur (supprimés, jamais déplacés)' visible dans le tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec les interactions à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

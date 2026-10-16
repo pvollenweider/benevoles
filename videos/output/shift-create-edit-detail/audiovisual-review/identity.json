@@ -1,34 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:36:10.849Z",
-  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
-  "promptSha256": "533e6007cc4b0cce0a11c31e8ddd86ce18928a3d8819d3cec9e75ac43614570f",
-  "clipSha256": "9f292421800e68e9673c39c717261e34c5bec816cba703f8355035c5c215a348",
+  "reviewedAt": "2026-10-16T08:40:47.744Z",
+  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
+  "promptSha256": "dc1fae1999b45f93c424070cf4d8893402c38036ed042c3c8877b19fd7146d5f",
+  "clipSha256": "f3941bf0a8b10f01c34caee24b5ab3284337c2dfc30597bae3cf158b7b368408",
   "scene": "identity",
   "review": {
     "heardOpening": "Choisissez d'abord le poste",
     "checkpoints": [
       {
         "spokenSeconds": 0.6,
-        "spoken": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis.",
-        "visibleSeconds": 1.5,
-        "visible": "Le poste 'Accueil' est sélectionné et le libellé 'Accueil des artistes' est saisi dans le formulaire Nouveau créneau.",
+        "spoken": "Choisissez d'abord le poste",
+        "visibleSeconds": 1.6,
+        "visible": "Sélection du poste « Accueil » dans le formulaire Nouveau créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "spokenSeconds": 2.5,
+        "spoken": "et, si nécessaire, un libellé plus précis",
+        "visibleSeconds": 3.4,
+        "visible": "Saisie du libellé « Accueil des artistes »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "le texte sous le champ rappelle que ses réglages s'appliquent",
         "visibleSeconds": 5.5,
-        "visible": "La date 'samedi 17 octobre', l'heure de début '18:00' et l'heure de fin '21:30' sont successivement renseignées.",
+        "visible": "Mention explicative sous le poste « Accueil » visible à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
-        "visibleSeconds": 10.8,
-        "visible": "Le champ Capacité est modifié pour passer à la valeur 8.",
+        "spokenSeconds": 10.7,
+        "spoken": "La date, l'heure de début et l'heure de fin",
+        "visibleSeconds": 11.2,
+        "visible": "Sélection de la date (samedi 24 octobre), saisie de 18:00 et 21:30",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "La capacité indique combien de personnes",
+        "visibleSeconds": 15.8,
+        "visible": "Modification du champ Places (capacité) avec la valeur 3",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, articulée et bien calée sur les saisies à l'écran."
+      "observation": "Voix féminine calme et intelligible, bon mixage avec la musique de fond."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

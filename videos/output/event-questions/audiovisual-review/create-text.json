@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:32.990Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
-  "promptSha256": "ce74e892aec4fb02ca695945deebb62b619f3f1d6f709912c09025f031a3bfd9",
-  "clipSha256": "9b48f244bace92dc5f5c892c050479548910c25859396ca4867abc110f479771",
+  "reviewedAt": "2026-10-16T12:15:55.974Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
+  "promptSha256": "34169567692a6415ece42f544b387430b3dba8a0d6541960ef52ba8b14b2349d",
+  "clipSha256": "79787d6515c8b4048342228872702ea23cade90771e1813c5928302cecca82b4",
   "scene": "create-text",
   "review": {
     "heardOpening": "Pour une préférence de rendez-vous, laissons un peu de liberté.",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 3.7,
         "spoken": "Ajoutons Point de rendez-vous préféré.",
-        "visibleSeconds": 4.8,
-        "visible": "Clic sur Ajouter une question puis saisie de « Point de rendez-vous préféré »",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture du formulaire d'ajout et saisie de « Point de rendez-vous préféré »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "Conservons Texte court",
-        "visibleSeconds": 9.2,
-        "visible": "Le champ Type de réponse reste sur Texte court",
+        "spokenSeconds": 7,
+        "spoken": "Conservons Texte court : la personne écrira sa réponse plutôt que de choisir dans une liste.",
+        "visibleSeconds": 8,
+        "visible": "Le menu déroulant « Type de réponse » est bien positionné sur « Texte court »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.8,
+        "spokenSeconds": 18.7,
         "spoken": "Enregistrons.",
-        "visibleSeconds": 22.3,
-        "visible": "Clic sur le bouton Enregistrer et affichage de la 4e question dans la liste",
+        "visibleSeconds": 19.3,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Nous avons maintenant nos quatre exemples de questions, avec deux réponses obligatoires et deux facultatives.",
+        "visibleSeconds": 20.8,
+        "visible": "Affichage de la liste récapitulative contenant 4 questions (2 obligatoires, 2 facultatives)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

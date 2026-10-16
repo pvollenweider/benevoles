@@ -1,76 +1,77 @@
 {
   "id": "VOLUNTEER_CHOOSE_SHIFTS",
   "slug": "volunteer-choose-shifts",
-  "validatedAt": "2026-10-11T21:54:05.360Z",
+  "validatedAt": "2026-10-16T10:20:42.510Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 162280,
+  "captureMs": 164720,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13263,
-      "audioMs": 13261,
-      "driftMs": 2
+      "visualMs": 13856,
+      "audioMs": 13856,
+      "driftMs": 0
     },
     {
       "id": "select",
-      "visualMs": 16280,
-      "audioMs": 16278,
-      "driftMs": 2
-    },
-    {
-      "id": "capacity",
-      "visualMs": 15512,
-      "audioMs": 15508,
-      "driftMs": 4
-    },
-    {
-      "id": "waitlist",
-      "visualMs": 15850,
-      "audioMs": 15849,
+      "visualMs": 16711,
+      "audioMs": 16710,
       "driftMs": 1
     },
     {
-      "id": "approval-reserved",
-      "visualMs": 16926,
-      "audioMs": 16923,
+      "id": "capacity",
+      "visualMs": 15534,
+      "audioMs": 15533,
+      "driftMs": 1
+    },
+    {
+      "id": "waitlist",
+      "visualMs": 16376,
+      "audioMs": 16373,
       "driftMs": 3
     },
     {
+      "id": "approval-reserved",
+      "visualMs": 17043,
+      "audioMs": 17022,
+      "driftMs": 21
+    },
+    {
       "id": "conflict",
-      "visualMs": 16121,
-      "audioMs": 16119,
+      "visualMs": 15916,
+      "audioMs": 15914,
       "driftMs": 2
     },
     {
       "id": "known",
-      "visualMs": 16718,
-      "audioMs": 16717,
+      "visualMs": 17916,
+      "audioMs": 17915,
       "driftMs": 1
     },
     {
       "id": "limit",
-      "visualMs": 15570,
-      "audioMs": 15567,
-      "driftMs": 3
+      "visualMs": 16570,
+      "audioMs": 16570,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 19781,
-      "audioMs": 19779,
-      "driftMs": 2
+      "visualMs": 19628,
+      "audioMs": 19627,
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 12,
   "music": {
-    "voicedWindows": 145,
+    "voicedWindows": 150,
     "musicOnlyWindows": 2,
-    "smallestGapLu": 12.2,
-    "largestGapLu": 19.6,
-    "quietestMusicOnlyLufs": -32.9,
-    "loudestMusicOnlyLufs": -32.4,
-    "medianVoiceLufs": -16.5
+    "smallestGapLu": 14.6,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -33.6,
+    "medianVoiceLufs": -16.3
   },
   "issues": []
 }

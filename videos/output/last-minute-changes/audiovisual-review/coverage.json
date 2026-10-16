@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:20:02.422Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T08:58:48.216Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "89dc6c86291ffd8cdcb0702a76030c16dac146dc0f864111bb9017553e41b290",
-  "clipSha256": "b59ceaa5fb37f55bb445dbea7ad26a1c999ecdfb4ea20e7dc7b3e53af89806ff",
+  "clipSha256": "8c5eb10c2df1324cbae756576b8cd2caed93b367b93cc991df30b4b8b1b31ff9",
   "scene": "coverage",
   "review": {
-    "heardOpening": "Où manque-t-il encore du monde",
+    "heardOpening": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture",
     "checkpoints": [
       {
         "spokenSeconds": 2.5,
         "spoken": "Ouvrons la vue de couverture de l'événement.",
-        "visibleSeconds": 1,
-        "visible": "La vue 'Où manque-t-il du monde ?' est déjà ouverte et défile pour faire apparaître les créneaux.",
+        "visibleSeconds": 0.5,
+        "visible": "La vue « Où manque-t-il du monde ? » est déjà affichée avec un léger défilement vers les créneaux.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.2,
         "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
-        "visibleSeconds": 5,
-        "visible": "Les sections 'Créneaux complets' (avec l'Accueil) et 'Créneaux à compléter' sont visibles à l'écran.",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage des sections « Créneaux à compléter » (logistique, préparation) et « Créneaux complets » (accueil).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
+        "spokenSeconds": 10.4,
         "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
-        "visibleSeconds": 10,
-        "visible": "Les lignes de créneaux affichent clairement les intitulés, dates, plages horaires et mentions 'manque 1'.",
+        "visibleSeconds": 10.5,
+        "visible": "Les informations détaillées (intitulé, date, créneau horaire, mention « manque 1 ») sont lisibles à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
-        "spoken": "Une demande à valider réserve déjà une place",
+        "spokenSeconds": 15.6,
+        "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
         "visibleSeconds": 16,
-        "visible": "L'indication '1 demande à traiter' est lisible sur la ligne 'Préparation - Réception du matériel'.",
+        "visible": "La mention « 1 demande à traiter » apparaît sur la jauge du créneau de préparation.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, posée et parfaitement intelligible."
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

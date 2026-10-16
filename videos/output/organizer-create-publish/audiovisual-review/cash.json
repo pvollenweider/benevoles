@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:30.192Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:00:34.937Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "93ad545a199134e1772391baaede3999c7a292153db3470353f8872be07306ac",
-  "clipSha256": "a217a50d00d7f47ab5a380ff990ce2fbcb231625e4e32d224d60d9a50e4a4549",
+  "clipSha256": "a13b30a1a78835af68ed2c8cc951af76b2e8ba0584c4a2d6c26e6580b7c10841",
   "scene": "cash",
   "review": {
-    "heardOpening": "Pour un poste sensible comme la Caisse",
+    "heardOpening": "Pour un poste sensible comme la caisse",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Pour un poste sensible comme la Caisse",
-        "visibleSeconds": 0.8,
-        "visible": "Ouverture du formulaire Nouveau créneau",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire 'Nouveau créneau' avec sélection du poste Caisse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.7,
+        "spokenSeconds": 2.2,
         "spoken": "activez l'inscription sur validation",
-        "visibleSeconds": 2.9,
-        "visible": "Cochage de la case Sur validation puis clic sur Ajouter",
+        "visibleSeconds": 2.5,
+        "visible": "Coche de l'option 'Sur validation' puis clic sur 'Ajouter'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "l'organisateur accepte ou refuse la demande avant de la confirmer",
-        "visibleSeconds": 7.3,
-        "visible": "Affichage du planning des créneaux enregistré",
+        "spokenSeconds": 4.5,
+        "spoken": "Chaque personne peut proposer son aide, mais l'organisateur accepte ou refuse",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la grille des créneaux avec le nouveau créneau Caisse ajouté",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix naturelle, claire et posée, bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

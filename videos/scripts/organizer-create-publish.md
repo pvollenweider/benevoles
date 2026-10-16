@@ -56,3 +56,25 @@ L’application ne vérifie pas administrativement la validité d’un permis. L
 
 
 Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+
+
+## Révision du 2026-10-16 — lot 23-1
+
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+
+Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
+
+- `overview` : Voici comment préparer et partager un planning bénévole. Pour démarrer, vous pouvez choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.
+- `basics` : Donnez-lui un nom clair, ajoutez une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que vous n’avez pas terminé votre planning.
+- `series` : Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et le nombre de places, et les créneaux sont préparés automatiquement.
+- `delivery` : Ajoutez ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.
+- `cash` : Pour un poste sensible comme la Caisse, activez l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.
+- `registration` : Vous pouvez aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de votre organisation. Si vous ne programmez pas de date d’ouverture, elles seront disponibles dès la publication.
+- `review` : L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne.
+- `preview` : Avant de publier, ouvrez l’aperçu bénévole et simulez une vraie inscription. Choisissez un créneau, renseignez les coordonnées du bénévole et confirmez ses choix. Vous pouvez ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.
+- `preview-result` : L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.
+- `publish` : Quand tout est prêt, publiez le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : vous gardez la main sur sa diffusion.
+- `qr` : Pour une affiche, un comptoir ou les réseaux sociaux, ouvrez le QR code. Vous pouvez le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.
+- `import` : Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les étiquettes et les doublons, puis montre exactement ce qui sera créé avant confirmation.
+- `invite` : Retournez ensuite dans les invitations de l’événement. Filtrez les membres par étiquette et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.
+- `public` : Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !

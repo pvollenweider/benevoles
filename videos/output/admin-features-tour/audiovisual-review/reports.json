@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T03:23:28.569Z",
-  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
-  "promptSha256": "fad71c64f2027e24a02ef39373a883925089a981def703af2afd75bcf3846cce",
-  "clipSha256": "06aea545cf55e0815fec635f53263f6c2cfdeb7c2f594d181c7e7360b041173a",
+  "reviewedAt": "2026-10-16T10:38:54.193Z",
+  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
+  "promptSha256": "f9d31f2d03c2a494a19d2d741f2746193b20a5e8d05f0a65fc8363cc823abbc9",
+  "clipSha256": "ca18c55a650c68a7dd2e08e021dd3f6915f72e2e3b616116984ab4cc3301037a",
   "scene": "reports",
   "review": {
-    "heardOpening": "Pour le terrain, les rapports proposent",
+    "heardOpening": "Pour le terrain, Documents à imprimer propose le planning complet",
     "checkpoints": [
       {
-        "spokenSeconds": 1.7,
-        "spoken": "le planning complet, une vue par poste, une vue par bénévole",
-        "visibleSeconds": 1.5,
-        "visible": "Page Rapports affichant les liens Planning par jour, Planning par poste et Planning individuel",
+        "spokenSeconds": 1.6,
+        "spoken": "Documents à imprimer propose le planning complet",
+        "visibleSeconds": 1.6,
+        "visible": "Page Documents affichant la section Documents à imprimer et le lien Planning par jour",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "la feuille de présence et la liste avec téléphones réservée aux organisateurs",
-        "visibleSeconds": 10,
-        "visible": "Défilement vers le bas révélant la section Pour les organisateurs seulement avec Feuille de présence et Liste avec téléphones",
+        "spokenSeconds": 4.7,
+        "spoken": "une vue par poste, une vue par bénévole",
+        "visibleSeconds": 5.6,
+        "visible": "Liens Planning par poste et Planning individuel visibles à l'écran lors du défilement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
+        "spokenSeconds": 7.3,
+        "spoken": "la feuille de présence et la liste avec téléphones",
+        "visibleSeconds": 7.8,
+        "visible": "Section Pour les organisateurs seulement avec liens Feuille de présence et Liste avec téléphones",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
         "spoken": "Les badges se génèrent en PDF",
-        "visibleSeconds": 11.5,
-        "visible": "Section Badges avec la mention du format PDF et le bouton Ouvrir les badges",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 13.5,
-        "spoken": "avec un filtre par poste et une sélection de bénévole pour la réimpression",
-        "visibleSeconds": 13.5,
-        "visible": "Champs de sélection Poste (Tous les postes) et Bénévole (réimpression) affichés à l'écran",
+        "visibleSeconds": 12.2,
+        "visible": "Section Badges avec options de filtrage et bouton Ouvrir les badges",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off claire, posée et bien synchronisée avec le défilement et le contenu de la page."
+      "observation": "Voix off fluide, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

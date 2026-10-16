@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T03:23:22.117Z",
-  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "reviewedAt": "2026-10-16T10:38:46.463Z",
+  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
   "promptSha256": "1026cc6d63cb97a6a75ee4a2e792d88eb2dc6e50bc58cade78f7026b257a0e47",
-  "clipSha256": "d113c698e1d95050585c3230a0d1c867b71310246f5011704323234d2081374a",
+  "clipSha256": "f5e0b56eb2cae205167f018b1c9733678ed9626b7e5144928346ed5b099a67f1",
   "scene": "reminders",
   "review": {
-    "heardOpening": "Les rappels automatiques peuvent partir deux jours avant",
+    "heardOpening": "Les rappels automatiques peuvent partir",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Les rappels automatiques peuvent partir deux jours avant, la veille et le jour même",
+        "spokenSeconds": 1.8,
+        "spoken": "deux jours avant, la veille et le jour même",
         "visibleSeconds": 0,
-        "visible": "Section 'Rappels automatiques aux bénévoles inscrits' avec les options Rappel J-2, Rappel J-1 et Rappel du jour affichées et cochées",
+        "visible": "Options « Rappel J-2 », « Rappel J-1 » et « Rappel du jour » affichées dans la section Réglages des emails",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 7.7,
         "spoken": "où arrivent les réponses",
         "visibleSeconds": 0,
-        "visible": "Champ de saisie 'Adresse de réponse' visible sous les options de notification",
+        "visible": "Champ « Adresse de réponse » affiché avec l'adresse paramétrée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.7,
-        "spoken": "et si ses admins doivent être prévenus à chaque nouvelle inscription",
+        "spokenSeconds": 9.5,
+        "spoken": "si ses admins doivent être prévenus à chaque nouvelle inscription",
         "visibleSeconds": 0,
-        "visible": "Option 'Prévenir les administrateurs à chaque inscription' visible et cochée",
+        "visible": "Case à cocher « Prévenir les administrateurs à chaque inscription » visible et cochée",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'un fond musical discret."
+      "observation": "Voix féminine claire, posée et naturelle, accompagnée d'un fond sonore discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

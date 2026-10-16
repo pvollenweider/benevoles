@@ -4,11 +4,11 @@ La Frise n’est pas seulement une vue de lecture. Elle permet aussi de construi
 
 Dans la ligne d’un poste, cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée. Le créneau est créé, et ses actions rapides s’ouvrent avec les horaires calculés. Donnez-lui un libellé, ajustez les places, puis fermez avec Fermer et enregistrer.
 
-Pour corriger une durée, attrape le bord droit du créneau et déplace-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvre ensuite les actions rapides : l’heure de fin a bien changé. Vérifie-la avant de fermer.
+Pour corriger une durée, attrapez le bord droit du créneau et déplacez-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvrez ensuite les actions rapides : l’heure de fin a bien changé. Vérifiez-la avant de fermer.
 
-Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.
+Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. Le choix Appliquer au poste propose Ce jour ou Tout l’événement pour étendre les réglages au poste sur la période choisie. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.
 
-Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donne-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.
+Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donnez-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.
 
 Pour ajouter une consigne à cette relève, passez en Liste, puis cliquez sur Modifier. L’éditeur détaillé contient aussi le lieu, le contact, l’âge minimum et les règles d’inscription. Ici, saisissez Venir dix minutes avant dans Consigne pratique, puis enregistrez. Ce conseil appartient à la copie, sans modifier l’original.
 

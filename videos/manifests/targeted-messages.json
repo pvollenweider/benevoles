@@ -64,7 +64,7 @@
     },
     {
       "id": "preview",
-      "transcript": "Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prenez le temps de le lire comme si vous le receviez. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
+      "transcript": "Quand l'envoyer permet de choisir Maintenant ou de programmer le message. Pour ce briefing, gardons l’envoi immédiat. Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prenez le temps de le lire comme si vous le receviez. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
       "fallbackDurationMs": 40000
     },
     {
@@ -79,7 +79,7 @@
     },
     {
       "id": "result",
-      "transcript": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
+      "transcript": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. La section Messages programmés est séparée des messages déjà envoyés. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
       "fallbackDurationMs": 42000
     },
     {

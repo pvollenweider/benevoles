@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:19:41.689Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T08:58:04.964Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
-  "clipSha256": "1073b383955914deab42cfd288ae9e43a584fe00ec0be7d22052c002f51b7ea9",
+  "clipSha256": "dbc2d520bd74bcb6a9237d1ae0be73679ae84b92eef53f3ae0dd55beff002a88",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Un désistement, un horaire",
+    "heardOpening": "Un désistement, un horaire qui bouge",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Un désistement, un horaire qui bouge",
+        "spokenSeconds": 0.5,
+        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
         "visibleSeconds": 0,
-        "visible": "Encart de titre affiché : Gérer un imprévu sans perdre le fil",
+        "visible": "Encart central affichant le titre 'Gérer un imprévu sans perdre le fil' et le sous-titre 'Vérifier, prévenir, contrôler le résultat'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
-        "spoken": "Le plus important, c'est de vérifier les faits",
+        "spokenSeconds": 9.2,
+        "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
         "visibleSeconds": 11.2,
-        "visible": "Disparition du bandeau d'introduction et affichage de la page Fête des imprévus — démonstration",
+        "visible": "L'encart se ferme, découvrant la vue d'ensemble de l'événement 'Fête des imprévus — démonstration'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
-        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
-        "visibleSeconds": 15.6,
-        "visible": "Vue d'ensemble de l'événement de démonstration en attente des actions annoncées",
+        "spokenSeconds": 15.5,
+        "spoken": "nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un",
+        "visibleSeconds": 15.5,
+        "visible": "Page d'aperçu de l'événement stable présentant les sections 'Où manque-t-il du monde ?' et 'À traiter'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et bien articulée, avec un débit régulier et adapté à une introduction."
+      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible avec fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

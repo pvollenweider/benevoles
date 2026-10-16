@@ -1,53 +1,62 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:20:32.012Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T09:00:20.180Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
-  "clipSha256": "829ed31a7ff226166ce3cde0cc42cdef3cf1c32d3e838c0517914dc007fae92b",
+  "clipSha256": "24235dbaed752b2435f1ea935c3122609aa0815c8d8693f6ac140404463f2b43",
   "scene": "result",
   "review": {
-    "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour",
+    "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour.",
     "checkpoints": [
       {
         "spokenSeconds": 1,
-        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la vue de couverture 'Où manque-t-il du monde ?' puis bascule vers la page 'Inscriptions' à 03.8s",
+        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de l'onglet Inscriptions avec la liste des bénévoles et demandes.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
-        "spoken": "Nicolas a accepté sa place, Zoé est sur le créneau convenu",
-        "visibleSeconds": 4,
-        "visible": "Liste des inscriptions affichée avec Zoé Exemple visible, mais Nicolas n'apparaît pas dans la liste filtrée",
-        "sync": "aligned",
+        "spoken": "Nicolas a accepté sa place",
+        "visibleSeconds": 4.8,
+        "visible": "Nicolas Exemple apparaît uniquement dans la section 'Annulations récentes' avec la mention 'la place a été reprise', et non parmi les inscriptions confirmées.",
+        "sync": "uncertain",
         "severity": "minor"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir",
-        "visibleSeconds": 11.5,
-        "visible": "Affichage du planning des créneaux en frise puis passage en vue liste à 13.5s",
+        "spokenSeconds": 6.4,
+        "spoken": "Zoé est sur le créneau convenu",
+        "visibleSeconds": 6.5,
+        "visible": "Zoé Exemple est visible sur les créneaux Logistique et Accueil du soir.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.8,
-        "spoken": "Nous avons vérifié les résultats, pas seulement cliqué sur des boutons",
-        "visibleSeconds": 15.5,
-        "visible": "Retour sur la vue de couverture 'Où manque-t-il du monde ?' pour le récapitulatif",
+        "spokenSeconds": 8.9,
+        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
+        "visibleSeconds": 14.5,
+        "visible": "Affichage du planning des créneaux en vue liste avec les horaires et statuts mis à jour.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "et un dernier contrôle du planning.",
+        "visibleSeconds": 18,
+        "visible": "Retour sur la vue de couverture 'Où manque-t-il du monde ?'.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "À 00:04, la voix mentionne que Nicolas a accepté sa place, mais seul le prénom de Zoé et d'autres bénévoles apparaissent à l'écran (le filtre 'Demandes à traiter' est coché)."
+      "À 00:04, la mention 'Nicolas a accepté sa place' ne correspond pas à l'écran où Nicolas Exemple figure sous 'Annulations récentes' pour une place reprise par un tiers.",
+      "À 00:08, l'annonce du nouvel horaire et de la mission devance de quelques secondes la navigation vers l'onglet Créneaux (affiché à partir de 00:13)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible."
+      "observation": "Voix off féminine naturelle, claire et posée, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

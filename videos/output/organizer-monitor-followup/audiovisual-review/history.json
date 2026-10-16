@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:30.373Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:06:11.216Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "3765d7ae2c6214707443b245c14ca1fcdcd12b3e5f938f9dc1631b13fadad948",
-  "clipSha256": "832fe1457476aefaf6f9658265de1a94eb9a895f9f94890b6354d5d35f3a38dd",
+  "clipSha256": "e24ffce1003f64eca21b5b409d84108e19c198516764f04dfc7c277ca3012385",
   "scene": "history",
   "review": {
-    "heardOpening": "Enfin, le journal d'activité",
+    "heardOpening": "Enfin, le journal d'activité permet de comprendre",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Enfin, le journal d’activité permet de comprendre ce qui a changé",
+        "spokenSeconds": 0.5,
+        "spoken": "le journal d'activité permet de comprendre ce qui a changé",
         "visibleSeconds": 0,
-        "visible": "Affichage de la page 'Journal' présentant l'historique des actions sur l'événement",
+        "visible": "L'onglet Journal est affiché avec son interface de filtres et le journal d'activité de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel",
-        "visibleSeconds": 3.8,
-        "visible": "Liste des entrées visibles détaillant les types d'actions (paramètres, inscriptions, annulations)",
+        "spokenSeconds": 3.7,
+        "spoken": "publication, nouvelle inscription, désinscription, modification d’un créneau",
+        "visibleSeconds": 3.5,
+        "visible": "Les différentes entrées du journal affichent des badges de catégories (Événement, Inscription) et des descriptions d'actions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 9.7,
         "spoken": "Chaque action est datée, avec son origine",
         "visibleSeconds": 9.5,
-        "visible": "Défilement de la liste montrant les dates précises et les mentions d'origine pour chaque entrée",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12,
-        "spoken": "Vous gardez ainsi le fil, même à plusieurs organisateurs",
-        "visibleSeconds": 12,
-        "visible": "Vue du journal mentionnant différents intervenants (Élodie Rochat, Julien Favre, Camille Rochat)",
+        "visible": "Défilement de la liste montrant les dates détaillées (15 oct., 13 oct., etc.) et les mentions d'origine (manuel, formulaire)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et naturelle, synchronisée avec l'animation de défilement."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec le défilement de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

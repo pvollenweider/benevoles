@@ -1,101 +1,101 @@
 {
   "id": "REGISTRATION_MONITOR_FOLLOWUP",
   "slug": "organizer-monitor-followup",
-  "validatedAt": "2026-10-13T17:04:35.266Z",
-  "continuousNarration": false,
-  "sentenceRevision": true,
+  "validatedAt": "2026-10-16T09:25:23.902Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 192040,
+  "captureMs": 197480,
   "scenes": [
     {
       "id": "overview",
-      "visualMs": 11843,
-      "audioMs": 11839,
-      "driftMs": 4
+      "visualMs": 11739,
+      "audioMs": 11737,
+      "driftMs": 2
     },
     {
       "id": "coverage",
-      "visualMs": 13724,
-      "audioMs": 13722,
-      "driftMs": 2
+      "visualMs": 13769,
+      "audioMs": 13766,
+      "driftMs": 3
     },
     {
       "id": "registrations",
-      "visualMs": 16363,
-      "audioMs": 16361,
-      "driftMs": 2
-    },
-    {
-      "id": "requests",
-      "visualMs": 14250,
-      "audioMs": 14249,
+      "visualMs": 16698,
+      "audioMs": 16697,
       "driftMs": 1
     },
     {
+      "id": "requests",
+      "visualMs": 14136,
+      "audioMs": 14134,
+      "driftMs": 2
+    },
+    {
       "id": "filters",
-      "visualMs": 11883,
-      "audioMs": 11882,
+      "visualMs": 12264,
+      "audioMs": 12263,
       "driftMs": 1
     },
     {
       "id": "actions",
-      "visualMs": 12806,
-      "audioMs": 12805,
-      "driftMs": 1
-    },
-    {
-      "id": "audience",
-      "visualMs": 14093,
-      "audioMs": 14091,
-      "driftMs": 2
-    },
-    {
-      "id": "message",
-      "visualMs": 13222,
-      "audioMs": 13220,
-      "driftMs": 2
-    },
-    {
-      "id": "channels",
-      "visualMs": 12606,
-      "audioMs": 12604,
-      "driftMs": 2
-    },
-    {
-      "id": "reminders",
-      "visualMs": 10887,
-      "audioMs": 10885,
-      "driftMs": 2
-    },
-    {
-      "id": "reports",
-      "visualMs": 9972,
-      "audioMs": 9970,
-      "driftMs": 2
-    },
-    {
-      "id": "history",
-      "visualMs": 15331,
-      "audioMs": 15331,
+      "visualMs": 13891,
+      "audioMs": 13891,
       "driftMs": 0
     },
     {
-      "id": "done",
-      "visualMs": 11975,
-      "audioMs": 11974,
+      "id": "audience",
+      "visualMs": 14595,
+      "audioMs": 14594,
       "driftMs": 1
+    },
+    {
+      "id": "message",
+      "visualMs": 13234,
+      "audioMs": 13234,
+      "driftMs": 0
+    },
+    {
+      "id": "channels",
+      "visualMs": 13347,
+      "audioMs": 13344,
+      "driftMs": 3
+    },
+    {
+      "id": "reminders",
+      "visualMs": 10938,
+      "audioMs": 10937,
+      "driftMs": 1
+    },
+    {
+      "id": "reports",
+      "visualMs": 10699,
+      "audioMs": 10698,
+      "driftMs": 1
+    },
+    {
+      "id": "history",
+      "visualMs": 15873,
+      "audioMs": 15872,
+      "driftMs": 1
+    },
+    {
+      "id": "done",
+      "visualMs": 12553,
+      "audioMs": 12553,
+      "driftMs": 0
     }
   ],
   "anchorsChecked": 14,
   "music": {
-    "voicedWindows": 163,
-    "musicOnlyWindows": 1,
-    "smallestGapLu": 15.1,
-    "largestGapLu": 19.2,
-    "quietestMusicOnlyLufs": -33.2,
+    "voicedWindows": 168,
+    "musicOnlyWindows": 3,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.8,
+    "quietestMusicOnlyLufs": -34.2,
     "loudestMusicOnlyLufs": -33.2,
-    "medianVoiceLufs": -16.2
+    "medianVoiceLufs": -16.4
   },
   "issues": []
 }

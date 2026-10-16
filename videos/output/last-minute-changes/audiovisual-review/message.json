@@ -1,58 +1,74 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:20:07.733Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T08:59:14.838Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "0ab1fef9018dc9ebf48cbce3c2af803be558dd4ccd80d5ab235c8797cdd0c511",
-  "clipSha256": "b25ebc80dfdd811b8414a6fc17ef423075a5c42a0c6877034bdcc034eb82ed19",
+  "clipSha256": "5c365388f45b82daaba2d715e2d6767154c3e9cdcbac346e8a04b8bcc34dee6d",
   "scene": "message",
   "review": {
-    "heardOpening": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau",
+    "heardOpening": "Depuis les messages de l'événement, choisissons",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel",
+        "spokenSeconds": 2.2,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel.",
         "visibleSeconds": 2,
-        "visible": "Option « Les bénévoles d'un créneau » cochée et sélection de « Logistique - Installation du matériel »",
+        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' et affichage du créneau Logistique - Installation du matériel",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 25.1,
-        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi",
-        "visibleSeconds": 25.6,
-        "visible": "Ouverture de la modale d'aperçu de l'email adressé à Emma, puis validation de la confirmation d'envoi",
+        "spokenSeconds": 12,
+        "spoken": "Écrivons un objet clair et une courte demande.",
+        "visibleSeconds": 11.5,
+        "visible": "L'objet et le texte de la demande sont saisis dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 29.4,
-        "spoken": "Ouvrons le vrai email reçu",
-        "visibleSeconds": 31.3,
-        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail reçu ouvert",
+        "spokenSeconds": 24.3,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
+        "visibleSeconds": 25.1,
+        "visible": "Ouverture de la fenêtre modale d'aperçu de l'email adressé à Emma puis confirmation de l'envoi",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 37.8,
-        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel",
-        "visibleSeconds": 39.5,
-        "visible": "Page des inscriptions affichée puis clic sur le bouton « + Ajouter manuellement »",
+        "spokenSeconds": 28.5,
+        "spoken": "Ouvrons le vrai email reçu.",
+        "visibleSeconds": 30.2,
+        "visible": "Affichage de la boîte de réception Mailpit avec le courriel reçu par Emma",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 46.8,
-        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la",
-        "visibleSeconds": 48.8,
-        "visible": "Sélection du créneau Logistique 12h-14h dans le menu déroulant et validation de l'ajout",
+        "spokenSeconds": 36.8,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
+        "visibleSeconds": 37.6,
+        "visible": "Retour sur l'onglet Inscriptions et clic sur '+ Ajouter manuellement'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 52.5,
-        "spoken": "revenons à la couverture : le poste est rempli",
-        "visibleSeconds": 52.8,
-        "visible": "Retour à la page « Où manque-t-il du monde ? » avec l'état de couverture mis à jour",
+        "spokenSeconds": 41.2,
+        "spoken": "Saisissons son prénom, son nom et la même adresse email",
+        "visibleSeconds": 41.8,
+        "visible": "Saisie des informations de Zoé Exemple avec son adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 46.2,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
+        "visibleSeconds": 47.5,
+        "visible": "Sélection du créneau 12h-14h Installation du matériel et clic sur Ajouter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 51,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
+        "visibleSeconds": 49.8,
+        "visible": "Affichage de l'écran 'Où manque-t-il du monde ?' montrant la mise à jour des besoins",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +77,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine posée, fluide et parfaitement intelligible tout au long de l'extrait."
+      "observation": "Voix claire, posée, parfaitement intelligible et synchronisée avec le déroulement des actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

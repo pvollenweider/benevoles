@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:40:06.347Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:17:20.436Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
-  "clipSha256": "36c5d2f5025707e3384bb6ebe7f3eb91f84bd576822f3b52fcf91a52eda5f9a3",
+  "clipSha256": "c5d940607e007c9d5513e81b6a31f7df6d36a5bda39d22d856fe2a34811b9d50",
   "scene": "invited-update",
   "review": {
-    "heardOpening": "Aline se réinscrit maintenant",
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "pour un deuxième créneau",
+        "spokenSeconds": 1,
+        "spoken": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau.",
         "visibleSeconds": 2.5,
-        "visible": "Sélection du créneau 12h-14h et clic sur Continuer",
+        "visible": "Sélection du créneau 12h-14h puis clic sur Continuer",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10,
-        "spoken": "Choisissons L au lieu de M",
-        "visibleSeconds": 10,
-        "visible": "L'option L est déjà cochée sur le formulaire sans manipulation visible",
-        "sync": "aligned",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 17,
-        "spoken": "Confirmons",
-        "visibleSeconds": 17.7,
-        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "spoken": "Choisissons L au lieu de M.",
+        "visibleSeconds": 10.8,
+        "visible": "Sélection de la taille de t-shirt L à la place de M",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
-        "spoken": "La nouvelle taille remplace l'ancienne",
-        "visibleSeconds": 19,
-        "visible": "Affichage de la page Inscription confirmée",
+        "spokenSeconds": 17.6,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 18.2,
+        "visible": "Clic sur le bouton Confirmer mon inscription puis affichage de la confirmation",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:10, la voix annonce « Choisissons L au lieu de M », mais la taille L est déjà présélectionnée dès le chargement du formulaire à 00:04, sans clic ni changement effectif visible."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les étapes présentées."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

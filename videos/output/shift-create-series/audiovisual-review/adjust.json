@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T18:08:22.829Z",
-  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
-  "promptSha256": "d580408d3fcb87a264de9002c85115b8c5ba03b5ee695e2512aec45a76c30800",
-  "clipSha256": "1133cf9f7229f029c52cabdafcd4bf67caace8eadb9141ff8a23fc3e79a1411b",
+  "reviewedAt": "2026-10-16T08:43:41.953Z",
+  "videoSha256": "d63e945f72e966aa9050165fcf3b69bfe831bf238a859ba8dfc20f71eb455b88",
+  "promptSha256": "4a1fe3eff6ab1fb9193249561f3eebe03f6383f3bbcaff46f118b7d2392d2127",
+  "clipSha256": "c332fdfe8e5205e854d52ea7c21feaed7cec8b3947550ffb35806f41ce87e45a",
   "scene": "adjust",
   "review": {
-    "heardOpening": "Après la création, passons en Liste",
+    "heardOpening": "Après la création, passons en Liste et ouvrons un seul créneau.",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
-        "spoken": "passons en Liste et ouvrons un seul créneau.",
-        "visibleSeconds": 1.7,
-        "visible": "Affichage de la vue Liste puis ouverture de la page « Modifier le créneau »",
+        "spoken": "passons en Liste et ouvrons un seul créneau",
+        "visibleSeconds": 1.2,
+        "visible": "Basculement sur l'affichage Liste puis clic sur Modifier pour ouvrir le créneau Buvette série",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "faisons passer sa capacité de trois à quatre personnes.",
-        "visibleSeconds": 7.7,
-        "visible": "Le champ Capacité passe de 3 à 4",
+        "spokenSeconds": 6.2,
+        "spoken": "faisons passer sa capacité de trois à quatre personnes",
+        "visibleSeconds": 7.5,
+        "visible": "La valeur du champ Places passe de 3 à 4",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "Enregistrons.",
-        "visibleSeconds": 10.6,
-        "visible": "Clic sur le bouton Enregistrer et retour à la liste des créneaux",
+        "spokenSeconds": 9.5,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 10,
+        "visible": "Clic sur le bouton Enregistrer en bas du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.8,
+        "spokenSeconds": 11.5,
         "spoken": "Cette modification concerne seulement cette plage, pas ses voisines",
-        "visibleSeconds": 12,
-        "visible": "Le créneau 10:00-12:00 affiche 0/4 places, tandis que les suivants restent à 0/3",
+        "visibleSeconds": 11.5,
+        "visible": "Retour à la liste avec le créneau 10h-12h affiché à 4 places tandis que les créneaux suivants restent à 3 places",
         "sync": "aligned",
         "severity": "none"
       }

@@ -1,22 +1,9 @@
 STATUS: READY
-ID: SHIFT_NIGHT_DST
-Commit: 538a7f9494012c8ab9f86d71d3b2a09fb57fdc50
-BUILD_ID: ivxjXmRYPnZg3PpogRvW3
-Duration: 111.320 seconds
-Music smallest/largest gap: 13.6 / 17.6 LU; 105 voiced windows, no music-only windows, no rule issues.
-
-Previous root artifacts archived in pass-3/ before work. Fresh verified product build shared with the operator video; build-main-product.ts used unchanged without --commit. Actual standalone listener and build proof checked by capture and validation. Guarded synthetic seed run before rehearsal and final capture; admin rename verified. Rehearsal passed. Latest unchanged narration recovered from pass-2/audio after detecting stale tracked metadata at root; durations measured from recovered WAVs, new independent audit passed every chapter. Root audio-recovery.json records recovery; unused regenerated audio was not filmed. Narrated final capture, assembly, posters (--metadata-output review/renders-generated.json), npm run video:validate and independent final-MP4 speech audit all pass. videos/renders.json unchanged.
-
-Final-MP4 review: all seven review/*-seconds.png sheets examined, alongside sentence times, recorded input markers, full-resolution anchor frames and settings-address.png. inspection.json binds evidence to the final MP4 hash.
-- welcome: current three-night Frise and clear chapter title, no wrong screen.
-- ordinary: Ouvrons sentence 27.78–28.66; actual opening click 28.25, popover present by 28.58 (ordinary-anchor-0-after.png). 22:00–02:00 and midnight labels correct.
-- spring: Un créneau sentence 41.94–44.95; click 42.41; spring-anchor-0-after.png displays 01:00–05:00. Prior editor closes as a transition.
-- autumn: Le même créneau sentence 56.45–59.15; click 56.93; autumn-anchor-0-after.png proves the fully visible editor. popover-checks.json: x=579, y=102, width=280, height=560 within 1280×800, fullyInsideViewport=true, same commit/build.
-- timezone: first sentence 66.83–70.94; selector click 67.98, Europe/Zurich visible. settings-address.png extracted at 68.00 s shows « Adresse de votre espace : default.benevol.app ». No localhost exception present.
-- calendar: download click 83.61 within download instruction 80.20–84.73; real .ics export verified by recorder. Personal page remains visible through ensuing explanation.
-- result: list/detail navigation 97.50/98.33 within 96.40–101.28 instruction; full editor shows correct departure date, 22:00–02:00 and next-day arrival/finish instructions.
-
-Labels: Frise, Créneaux, Fuseau horaire; French dates dimanche 29 mars, samedi 4 juillet, dimanche 25 octobre. No stale Timeline, localhost, org-admin@localhost or development overlay observed. Fictional identities only. Effects match reconstructed click/key WAV bytes exactly; counts and SHA-256 retained in inspection.json/audio-mix.json. VTT/TXT text matches manifest exactly; independent final-MP4 ASR passes all chapters, including last words; caption-check.json records timing method. Music rule passes and levels are tied to this MP4 hash.
-
-Problems: none in final render. No cue correction needed; no failed filmed take repeated.
-Local source changes: seven recorder lines measure/assert autumn geometry and write popover-checks.json. Product unchanged. doc-img: unchanged. No publication, push, commit or PR.
+SHIFT_NIGHT_DST — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 106.24 s. Music 14.9–18.3 LU under voice.
+Existing whole narration reused after text/hash checks.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Nuit 22h–02h, trois heures réelles au printemps et cinq à l’automne, fuseau Europe/Zurich et consigne datée vérifiés. Aucun panneau hors fenêtre (popover-checks.json). Alerte automatique « pas de téléchargement » levée : clic réel à 78,456 s, repère visible à 78,500 s, événement download et contenu ICS contrôlés par le recorder ; voir review/calendar-countercheck.json. Deux ASR complets sans instruction parasite ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

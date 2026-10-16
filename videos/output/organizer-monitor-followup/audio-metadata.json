@@ -1,395 +1,72 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-13T16:48:55.770Z",
-  "sentenceRevision": {
-    "version": 1,
-    "unit": "sentence",
-    "baseline": {
-      "id": "REGISTRATION_MONITOR_FOLLOWUP",
-      "slug": "organizer-monitor-followup",
-      "title": "Suivre les inscriptions et relancer au bon moment",
-      "description": "Contrôler la couverture du planning, traiter les demandes, cibler les relances et préparer le jour J.",
-      "viewer": {
-        "summary": "Dans cette vidéo, vous suivez les inscriptions d'un événement publié et relancez les bonnes personnes au bon moment.",
-        "steps": [
-          "Vérifiez la couverture du planning : créneaux remplis, places restantes, liste d'attente.",
-          "Consultez les inscriptions, avec les réponses aux questions liées à chaque bénévole.",
-          "Traitez les demandes sur validation en acceptant ou refusant chaque candidature.",
-          "Filtrez par poste, créneau ou statut pour isoler un groupe précis.",
-          "Choisissez les destinataires d'une relance, adaptez le message, puis vérifiez l'aperçu avant l'envoi.",
-          "Consultez le journal d'activité pour comprendre ce qui a changé et par qui."
-        ],
-        "remember": [
-          "Les rappels automatiques utilisent les horaires locaux de votre organisation.",
-          "Un aperçu du message est toujours disponible avant l'envoi.",
-          "Les liens personnels restent individuels : chaque bénévole gère son inscription sans créer de compte."
-        ]
-      },
-      "language": "fr-CH",
-      "voice": "Kore",
-      "continuousNarration": true,
-      "voiceStyle": "Speak with an audible smile throughout. Sound warm, practical and reassuring, like an experienced association organizer helping a colleague keep an event under control. Use natural conversational French, clear articulation and a medium pace. Preserve exactly the same vocal identity, smile, pitch, pace and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
-      "viewport": {
-        "width": 1280,
-        "height": 800,
-        "deviceScaleFactor": 1
-      },
-      "segments": [
-        {
-          "id": "overview",
-          "transcript": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.",
-          "fallbackDurationMs": 12500
-        },
-        {
-          "id": "coverage",
-          "transcript": "Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Tu sais ainsi où concentrer tes efforts.",
-          "fallbackDurationMs": 14500
-        },
-        {
-          "id": "registrations",
-          "transcript": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
-          "fallbackDurationMs": 15500
-        },
-        {
-          "id": "requests",
-          "transcript": "Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.",
-          "fallbackDurationMs": 14500
-        },
-        {
-          "id": "filters",
-          "transcript": "Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t’intéresse.",
-          "fallbackDurationMs": 13000
-        },
-        {
-          "id": "actions",
-          "transcript": "Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.",
-          "fallbackDurationMs": 14500
-        },
-        {
-          "id": "audience",
-          "transcript": "Pour une relance, choisis précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.",
-          "fallbackDurationMs": 15500
-        },
-        {
-          "id": "message",
-          "transcript": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvre l’aperçu : tu contrôles le rendu exact et le nombre de destinataires.",
-          "fallbackDurationMs": 15000
-        },
-        {
-          "id": "channels",
-          "transcript": "L’email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.",
-          "fallbackDurationMs": 14500
-        },
-        {
-          "id": "reminders",
-          "transcript": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
-          "fallbackDurationMs": 12500
-        },
-        {
-          "id": "reports",
-          "transcript": "À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.",
-          "fallbackDurationMs": 14000
-        },
-        {
-          "id": "history",
-          "transcript": "Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Tu gardes ainsi le fil, même à plusieurs organisateurs.",
-          "fallbackDurationMs": 15000
-        },
-        {
-          "id": "done",
-          "transcript": "Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu’au jour de l’événement.",
-          "fallbackDurationMs": 12500
-        }
-      ]
-    },
-    "baseGenerationSha256": "ed942aa34fb536df91d5e8c4770a4cff588d2ed47055b5a42df79ae4e62d7d24",
-    "chapters": {
-      "overview": {
-        "sourceAudioSha256": "31c2dcd4c9cf9f1412d4e6221b926be7ba4e6157bc4087640eef401eaa224367",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Depuis l’événement, vous retrouvez tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.",
-            "generationSha256": "6d7651a40a6465115658a67650a9f96fda14175ce1715ad956f76e38cb4fe845",
-            "audioSha256": "3a66cd1ee78e86965ad43820a11df476d35d264021e53d7eaa96023bb6961c49"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          5226,
-          11849.25
-        ]
-      },
-      "coverage": {
-        "sourceAudioSha256": "7625c9d3688d5341941243c23aa4f142e070dac5cca5b286b7a6b951506be10d",
-        "sentences": [
-          {
-            "index": 0,
-            "transcript": "Commencez par regarder la couverture du planning.",
-            "generationSha256": "796cf1a2acd17d7aa3de9a65eddb454430f03c9c3d3c2b71623a37affe89ae0e",
-            "audioSha256": "e94820ff2caa2dc22aed536458953f6a5f73ff874c3294aa94b405e7cc9b83bd"
-          },
-          {
-            "index": 2,
-            "transcript": "Vous savez ainsi où concentrer vos efforts.",
-            "generationSha256": "b767c2a94f74b43e9749bd0d5111871a0b83db49e998339d16d89ef2a0295796",
-            "audioSha256": "4cf63f6839a498903a842f6473593ee4d6340042bb2dbec77a88412b7073dfc0"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          2787.5,
-          10549.5,
-          13721.917
-        ]
-      },
-      "registrations": {
-        "sourceAudioSha256": "870847eb94154278cd5c35148518278b3317cf1e328e91aa45c28706e8ffec42",
-        "sentences": []
-      },
-      "requests": {
-        "sourceAudioSha256": "7958954a9f60c545f0245302a22278731eb1879888d34bc2f4d39e499f8cb688",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Ouvrez une demande pour vérifier la personne, le créneau et ses réponses, puis acceptez-la ou refusez-la.",
-            "generationSha256": "a13ba2f1b957599d3fb97fa83c5ce6df25cf5c0904b0232140ec004c695f9994",
-            "audioSha256": "1cf317cc0bae27dc326f1ce2f73bde39d98d1000cd28cd93857f727edca17449"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          3166,
-          9073,
-          14233.625
-        ]
-      },
-      "filters": {
-        "sourceAudioSha256": "a3f424ca2404f32180b076b5b1f845e344eca8e8df83efec4918f3102c79e50b",
-        "sentences": [
-          {
-            "index": 0,
-            "transcript": "Quand la liste grandit, filtrez par poste, par créneau ou par statut, puis utilisez la recherche pour retrouver un nom ou une adresse.",
-            "generationSha256": "8ab7618b7ce260723abe6a2256d3a0be2fa944352a59e2ba91a011e1d4e7ecc3",
-            "audioSha256": "fecd64ad16c470f86baf581d38d0a5b8055c9425c31fe433f12bd4354cb3bf21"
-          },
-          {
-            "index": 1,
-            "transcript": "En quelques secondes, vous isolez exactement le groupe qui vous intéresse.",
-            "generationSha256": "7c9eb2e7440c3258bbcd0bd730b927ddabdfa5670f5c17c4c753242a674486a2",
-            "audioSha256": "541e44c1b200c0684d49d77d9ebc767100e297c78fd0e0d861d8b3bd635b813c"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          7802.5,
-          11849.292
-        ]
-      },
-      "actions": {
-        "sourceAudioSha256": "cac9a3ed62fa43c39034bd834c6b337fbcc469c873b4c349b5a7cc3519508102",
-        "sentences": [
-          {
-            "index": 0,
-            "transcript": "Vous pouvez agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée.",
-            "generationSha256": "afd322136024b208e7378ba411b92d31f0e5027992a74b834e7d676c51c89a4d",
-            "audioSha256": "b7073a2615fdb974436d10228ad1912fa9ec958401053fc32cb09be04a58d4c3"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          7601.5,
-          12798.167
-        ]
-      },
-      "audience": {
-        "sourceAudioSha256": "08d7063d91bd23c129d36d0f76f725d0a4bbe31e75462ff56fd126190dddee2c",
-        "sentences": [
-          {
-            "index": 0,
-            "transcript": "Pour une relance, choisissez précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé.",
-            "generationSha256": "8711473af122661c594e0e208c49e34daa9abc955d8dade841983b9c8ceb34bd",
-            "audioSha256": "4c71b1a50ce438ae8ff0e3ec7b4501b08c7428a5adab0fbe3902367a9a2d51b9"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          10750.5,
-          14085.542
-        ]
-      },
-      "message": {
-        "sourceAudioSha256": "741d774920b65736575b71b67a2d0e3e6f3309105151c7a90d792e53fe76963e",
-        "sentences": [
-          {
-            "index": 0,
-            "transcript": "Vous pouvez partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux.",
-            "generationSha256": "d54670ef5f79d5944854de04fdf03d91b94950b7a5c1979637fe3ee76c9ebf97",
-            "audioSha256": "164bf13527533afce35378d0366cf1dea5cf887e6399aca191128621334ced5c"
-          },
-          {
-            "index": 1,
-            "transcript": "Avant d’envoyer quoi que ce soit, ouvrez l’aperçu : vous contrôlez le rendu exact et le nombre de destinataires.",
-            "generationSha256": "40f2537cd4a72ed7b0bee16f70fc410ba95dc0f68562ccc2ac24dc854dc262e0",
-            "audioSha256": "88f66a97a909ea8cc019df601c9c31b43049112119170e2ceb39d6c5b7037421"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          7040,
-          13223.958
-        ]
-      },
-      "channels": {
-        "sourceAudioSha256": "0a4781e11b23693355599a15b44fdd3e0c403feb81aaefe31ab14b9f207bcc5b",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Pour une information urgente, vous pouvez ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée.",
-            "generationSha256": "7fafe11d5683a5dc8561595245cce4457fd1383423ad8da6225c025a519c5c0f",
-            "audioSha256": "4765e3c571cf23eaf943d351ed618ce329f6c4a8d8cf4968ccba7404c8585455"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          2253,
-          9295,
-          12591.292
-        ]
-      },
-      "reminders": {
-        "sourceAudioSha256": "2bb8614db34b1978136691f0c8f9e81e850707456aea4e8942b7bc3c58e2bb59",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Vous choisissez lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
-            "generationSha256": "7f15b3051d0add84ffbcb8061b89875ce3ee7b0529820482bfa18f475df2d5f9",
-            "audioSha256": "a0a344980f9367ad74d845b0f739333e5c293e3888a903dc370151e701a0743d"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          3313,
-          10879.667
-        ]
-      },
-      "reports": {
-        "sourceAudioSha256": "f6f7882011ef547d584c6d58bd6568e69a502162ef78796252f2846b5da120a5",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Vous générez seulement les documents dont votre équipe a besoin.",
-            "generationSha256": "d5ae0411647fc3f0742a8e3174bb75c21de0793b43c7e82d17ef35988c741ab7",
-            "audioSha256": "dd3da3e252c12f58204929fa16d0843c95dc345bff2e96102672bb22be4ef1df"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          7180.5,
-          9808.667
-        ]
-      },
-      "history": {
-        "sourceAudioSha256": "2a5f0b8cd6794557657b560371bf1e62a18e685fb6ab1bc56c0062db108170ab",
-        "sentences": [
-          {
-            "index": 2,
-            "transcript": "Vous gardez ainsi le fil, même à plusieurs organisateurs.",
-            "generationSha256": "7b3a9f99861cad85875595a447e2b415780749c134255d3359eb2e2e7dcf609f",
-            "audioSha256": "b65688467cbf7905d5c6d0a718c5c2dd40bc61a4fd11d92def8a28f84690cbf4"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          9359.5,
-          12197.5,
-          15316.042
-        ]
-      },
-      "done": {
-        "sourceAudioSha256": "4ba6196a35546d40e3de96493bad431d97fc0b14ce37312d97e224e344b2136c",
-        "sentences": [
-          {
-            "index": 1,
-            "transcript": "Votre planning reste lisible jusqu’au jour de l’événement.",
-            "generationSha256": "73dfe9b10f12099608a31c910df367d017dd79ec38211cbb83c702c5cb4dbe0b",
-            "audioSha256": "90ab53c71db9dac79431d49326717d9d378e07662e329fbb3b84d920f0096320"
-          }
-        ],
-        "boundariesMs": [
-          0,
-          8970.5,
-          11961.458
-        ]
-      }
-    }
-  },
+  "generatedAt": "2026-10-16T02:26:30.879Z",
   "segments": {
     "overview": {
       "file": "audio/overview.wav",
-      "durationMs": 11839,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 11737,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "coverage": {
       "file": "audio/coverage.wav",
-      "durationMs": 13722,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 13766,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "registrations": {
       "file": "audio/registrations.wav",
-      "durationMs": 16361,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 16697,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "requests": {
       "file": "audio/requests.wav",
-      "durationMs": 14249,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 14134,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "filters": {
       "file": "audio/filters.wav",
-      "durationMs": 11882,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 12263,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "actions": {
       "file": "audio/actions.wav",
-      "durationMs": 12805,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 13891,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "audience": {
       "file": "audio/audience.wav",
-      "durationMs": 14091,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 14594,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "message": {
       "file": "audio/message.wav",
-      "durationMs": 13220,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 13234,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "channels": {
       "file": "audio/channels.wav",
-      "durationMs": 12604,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 13344,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "reminders": {
       "file": "audio/reminders.wav",
-      "durationMs": 10885,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 10937,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "reports": {
       "file": "audio/reports.wav",
-      "durationMs": 9970,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 10698,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "history": {
       "file": "audio/history.wav",
-      "durationMs": 15331,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 15872,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     },
     "done": {
       "file": "audio/done.wav",
-      "durationMs": 11974,
-      "generationSha256": "8dc6c6994dc887e38ccc63d3bfe5151b956526ce79315c6c743438bbfeb45df7"
+      "durationMs": 12553,
+      "generationSha256": "4ab166c3385b9bfcc15af2ed2530eb523529b01d3fe322c0e3b3a806dc423037"
     }
   }
 }

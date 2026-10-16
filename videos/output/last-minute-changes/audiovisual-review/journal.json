@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:20:26.163Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T08:59:58.362Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
-  "clipSha256": "4a58fa09848f5338c037425dd28c6b2d1362b811e554b71e44fda73d057e3ec8",
+  "clipSha256": "827b813a83e1bdf5de2f664f9dc0e7f32e274db3da03a4a97fc3d3ea80b30528",
   "scene": "journal",
   "review": {
     "heardOpening": "Pour comprendre l'imprévu après coup",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 3,
         "spoken": "ouvrons le journal de l'événement",
-        "visibleSeconds": 1,
-        "visible": "L'onglet Journal de l'événement est déjà ouvert avec la vue Explorer et les filtres",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Journal de l'événement est déjà affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 6,
         "spoken": "Retrouvons le retrait, l'offre et son acceptation",
-        "visibleSeconds": 6.5,
-        "visible": "Défilement de la liste chronologique montrant les libérations de place, propositions et confirmations",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement montrant les lignes d'offre de place libérée et de confirmation d'inscription",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.5,
         "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
-        "visibleSeconds": 16,
-        "visible": "Clic sur l'onglet Récit puis sélection de l'enchaînement pour Aline Exemple",
+        "visibleSeconds": 15,
+        "visible": "Clic sur l'onglet Récit dans le journal",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
-        "spoken": "Le journal aide l'équipe à se coordonner",
-        "visibleSeconds": 20.5,
-        "visible": "Affichage complet du récit causal montrant l'enchaînement des événements",
+        "spokenSeconds": 16.5,
+        "spoken": "Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause",
+        "visibleSeconds": 19.5,
+        "visible": "Sélection du récit montrant l'enchaînement des étapes suite à l'annulation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée, au débit régulier et parfaitement audible."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

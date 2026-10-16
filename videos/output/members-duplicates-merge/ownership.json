@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "scenario": "members-duplicates-merge",
   "organizationId": "video-member-merge",
-  "organizationCreatedAt": "2026-10-12T03:44:35.736Z",
-  "preparedAt": "2026-10-12T05:50:35.653Z",
+  "organizationCreatedAt": "2026-10-15T22:52:42.130Z",
+  "preparedAt": "2026-10-16T09:46:02.304Z",
   "fixtureSchemaSha256": "af1e81027e27cfe9d8e9634a820b1e9305109210e79dd38fb8e12f3145012750",
   "owned": {
     "organizationId": "video-member-merge",

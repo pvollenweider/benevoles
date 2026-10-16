@@ -1,12 +1,12 @@
 {
-  "checkedAt": "2026-10-13T06:59:18.312Z",
+  "checkedAt": "2026-10-16T11:15:09.249Z",
   "product": {
-    "commit": "7e0069bba916e06d82b7009efff283aeface6afc",
-    "sourceTree": "a1e9ab6856fff66fc754c2641dc7c206bc868fd8",
-    "productSourceSha256": "4231523d58e1b106017fd8747170865a01dada0c18f9748a36d026d46615d205",
-    "buildId": "B8kWoz3CnvzJpJCwHaAPH",
-    "snapshot": "/tmp/benevoles-video-production.batch14resume",
-    "builtAt": "2026-10-13T04:30:00.658Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "scope": "actual report links, live HTML and generated PDFs; PDF pagination and visual review still required",
   "pdfVisualReview": false,

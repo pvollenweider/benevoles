@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:40:07.741Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:17:31.069Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
-  "clipSha256": "f4068296733ecaabd06e6e7dd02b226074ef3d24724ab8c320d6c7496eb0984b",
+  "clipSha256": "f7d1095a7d9d349667075b6467f14f2c0a3356f5b77a8dee58d9c4fd6140b665",
   "scene": "unverified-update",
   "review": {
-    "heardOpening": "Comparons avec une inscription depuis le simple formulaire public",
+    "heardOpening": "Comparons avec une inscription",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Comparons avec une inscription depuis le simple formulaire public, sans invitation.",
-        "visibleSeconds": 2.2,
-        "visible": "Sélection d'un créneau puis validation pour accéder au formulaire public d'inscription",
+        "spokenSeconds": 1.2,
+        "spoken": "depuis le simple formulaire public, sans invitation",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection du créneau Accueil - passage 3 puis ouverture de la page Tes informations",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "Saisissons la même adresse pour un troisième créneau,",
-        "visibleSeconds": 6.8,
-        "visible": "Saisie de l'adresse email video.questions.aline@example.org dans le formulaire",
+        "spokenSeconds": 6.1,
+        "spoken": "Saisissons la même adresse pour un troisième créneau",
+        "visibleSeconds": 7,
+        "visible": "Saisie de l'adresse email dans le champ Email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.3,
+        "spokenSeconds": 9.4,
         "spoken": "mais choisissons S.",
-        "visibleSeconds": 10.1,
-        "visible": "Sélection de la taille de t-shirt S",
+        "visibleSeconds": 10.2,
+        "visible": "Sélection de la taille S sous Taille de t-shirt",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.6,
-        "spoken": "L'inscription peut être créée,",
+        "spokenSeconds": 11.2,
+        "spoken": "L'inscription peut être créée",
         "visibleSeconds": 13.5,
-        "visible": "Clic sur 'Confirmer mon inscription' et affichage de l'écran 'Inscription confirmée !'",
+        "visible": "Clic sur Confirmer mon inscription puis affichage de l'écran Inscription confirmée",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration visuelle."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

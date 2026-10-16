@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T18:08:00.457Z",
-  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
-  "promptSha256": "3ff136ca3271e24db6827f2982d3f12cd3b4e882c4591b3f7ce4c37cb6240769",
-  "clipSha256": "5408325210c8442793fc8bf4d4b1660a8c85eba982ac9518a1d385b8d0b317b4",
+  "reviewedAt": "2026-10-16T08:42:42.887Z",
+  "videoSha256": "d63e945f72e966aa9050165fcf3b69bfe831bf238a859ba8dfc20f71eb455b88",
+  "promptSha256": "2a4e65884d018d4062e51abba85725d095ecdd7e6716da49056d1837f9c9046a",
+  "clipSha256": "a4e948a2b40a78577dcb8f1f0504fcd58701677a8ef64bb318b119e0146b6789",
   "scene": "welcome",
   "review": {
     "heardOpening": "Créer une série est idéal lorsqu'un même poste",
     "checkpoints": [
       {
         "spokenSeconds": 0,
-        "spoken": "Créer une série est idéal lorsqu'un même poste doit être couvert toute la journée",
+        "spoken": "Créer une série est idéal",
         "visibleSeconds": 0,
-        "visible": "Titre d'introduction « Créer une série de créneaux - Découper une longue journée en relèves » sur la vue frise des créneaux",
+        "visible": "Carton titre « Créer une série de créneaux : Découper une longue journée en relèves »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6,
         "spoken": "Au lieu de saisir chaque plage séparément",
-        "visibleSeconds": 6.2,
-        "visible": "Le curseur clique sur le bouton « Créer une série »",
+        "visibleSeconds": 6.1,
+        "visible": "Clic sur le bouton « Créer une série »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.8,
+        "spokenSeconds": 8,
         "spoken": "on définit une règle commune",
-        "visibleSeconds": 7.2,
-        "visible": "Ouverture du formulaire modal « Créer une série de créneaux » affichant les champs de paramétrage",
+        "visibleSeconds": 7.4,
+        "visible": "Ouverture du formulaire « Créer une série de créneaux »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec l'affichage."
+      "observation": "Voix masculine claire, fluide et posée, bien synchronisée avec les transitions et l'apparition du formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

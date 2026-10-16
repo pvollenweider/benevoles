@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:34.123Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:15:44.773Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
-  "clipSha256": "1088113424db32cf8686d594c54dfc8e49039d4a7995f98152fede364d6ea0a4",
+  "clipSha256": "5a4e2a0433bd5f7f82e71492756e56b96f51cd122c561620b02a6bc97ee4178f",
   "scene": "create-multiple",
   "review": {
-    "heardOpening": "Passons au matériel de transport",
+    "heardOpening": "Passons au matériel de transport.",
     "checkpoints": [
       {
         "spokenSeconds": 2.2,
-        "spoken": "Créons la question, puis choisissons Choix multiple.",
-        "visibleSeconds": 3,
-        "visible": "Ouverture du formulaire d'ajout et sélection du type Choix multiple",
+        "spoken": "Créons la question",
+        "visibleSeconds": 2.6,
+        "visible": "Clic sur 'Ajouter une question' et ouverture du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
-        "spoken": "Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne.",
-        "visibleSeconds": 8.8,
-        "visible": "Saisie des options Vélo, Remorque et Voiture dans le champ Choix proposés",
+        "spokenSeconds": 3.9,
+        "spoken": "puis choisissons Choix multiple.",
+        "visibleSeconds": 5.4,
+        "visible": "Sélection du type 'Choix multiple' dans le menu déroulant",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.6,
-        "spoken": "Laissons Réponse obligatoire décochée.",
-        "visibleSeconds": 22,
-        "visible": "Case Réponse obligatoire visible et laissée décochée",
+        "spokenSeconds": 6.3,
+        "spoken": "Saisissons Vélo, Remorque et Voiture",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie des options 'Vélo', 'Remorque', 'Voiture' dans le champ Choix proposés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.8,
+        "spokenSeconds": 24.5,
         "spoken": "Enregistrons et vérifions les trois choix dans la liste.",
-        "visibleSeconds": 24.2,
-        "visible": "Clic sur Enregistrer et affichage de la question avec ses trois choix dans la liste",
+        "visibleSeconds": 25.4,
+        "visible": "Clic sur Enregistrer et affichage de la question 'Matériel de transport' avec ses choix dans la liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée, parfaitement synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

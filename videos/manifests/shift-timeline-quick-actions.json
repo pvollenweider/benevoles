@@ -47,7 +47,7 @@
     },
     {
       "id": "popover",
-      "transcript": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+      "transcript": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. Le choix Appliquer au poste propose Ce jour ou Tout l’événement pour étendre les réglages au poste sur la période choisie. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
       "fallbackDurationMs": 21000
     },
     {

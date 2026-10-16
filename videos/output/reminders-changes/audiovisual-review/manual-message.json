@@ -1,34 +1,31 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:17:48.940Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "59b289e34970adc0c7bbb32d5f535234941099fbfb20f2d98a6bc4d83a64c153",
-  "clipSha256": "8d4af71614e63fc77fc48f2c996bc55d330c1eeeddf557d037c7729f3e4fcc36",
+  "reviewedAt": "2026-10-16T10:54:06.681Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "e268240b1c8070643d2a82249729a99889cabad16be8ee0eb05f827cdadb346b",
+  "clipSha256": "4abef4669ebb552c54754ea14e468edc6342b0e43009bb9e604913e45c4d4e7d",
   "scene": "manual-message",
   "review": {
-    "heardOpening": "Dans les réglages de l'événement",
+    "heardOpening": "Dans les réglages de l'événement,",
     "checkpoints": [
       {
         "spokenSeconds": 2.2,
-        "spoken": "le Message de rappel complète le récapitulatif des créneaux",
-        "visibleSeconds": 3.8,
-        "visible": "Défilement vers le bas jusqu'au champ Message de rappel",
+        "spoken": "le Message de rappel complète le récapitulatif des créneaux.",
+        "visibleSeconds": 5.5,
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Écrivons une consigne simple : retrouve-nous au stand",
-        "visibleSeconds": 5,
-        "visible": "Saisie des consignes dans le champ Message de rappel",
+        "spokenSeconds": 6.8,
+        "spoken": "Écrivons une consigne simple : « Retrouve-nous au stand quinze minutes avant ton horaire.",
+        "visibleSeconds": 7.3,
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "attendez la confirmation Modifications enregistrées avant de quitter la page",
-        "visibleSeconds": 15,
-        "visible": "Remontée de page et affichage de la mention Modifications enregistrées à 18h10",
+        "spokenSeconds": 16.3,
+        "spoken": "attendez la confirmation Modifications enregistrées avant de quitter la page.",
+        "visibleSeconds": 17.2,
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +34,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, bien posée et parfaitement intelligible."
+      "observation": "Voix féminine posée, claire et dynamique, parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

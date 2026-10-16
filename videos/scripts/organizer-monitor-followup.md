@@ -1,6 +1,6 @@
 # Suivre les inscriptions et relancer au bon moment
 
-Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Seules les phrases modifiées sont renarrées, avec la même voix que la prise d’origine et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+Révision rédactionnelle du 13 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Toute modification de phrase impose une régénération intégrale en une passe, avec la même voix et sans balises de pause. Les anciennes preuves ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
 
 ## Objectif
 
@@ -57,3 +57,24 @@ Contrôle des WAV restaurés le 2026-10-16 : la reconnaissance indépendante ret
 - Vous générez seulement les documents dont votre équipe a besoin.
 - Vous gardez ainsi le fil, même à plusieurs organisateurs.
 - Votre planning reste lisible jusqu’au jour de l’événement.
+
+
+## Révision du 2026-10-16 — lot 23-1
+
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+
+Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
+
+- `overview` : Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, vous retrouvez tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.
+- `coverage` : Commencez par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Vous savez ainsi où concentrer vos efforts.
+- `registrations` : Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.
+- `requests` : Les postes sur validation sont clairement signalés. Ouvrez une demande pour vérifier la personne, le créneau et ses réponses, puis acceptez-la ou refusez-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.
+- `filters` : Quand la liste grandit, filtrez par poste, par créneau ou par statut, puis utilisez la recherche pour retrouver un nom ou une adresse. En quelques secondes, vous isolez exactement le groupe qui vous intéresse.
+- `actions` : Vous pouvez agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.
+- `audience` : Pour une relance, choisissez précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.
+- `message` : Vous pouvez partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvrez l’aperçu : vous contrôlez le rendu exact et le nombre de destinataires.
+- `channels` : L’email part à toutes les personnes ciblées. Pour une information urgente, vous pouvez ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.
+- `reminders` : Les rappels automatiques prennent ensuite le relais avant les créneaux. Vous choisissez lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.
+- `reports` : À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Vous générez seulement les documents dont votre équipe a besoin.
+- `history` : Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Vous gardez ainsi le fil, même à plusieurs organisateurs.
+- `done` : Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Votre planning reste lisible jusqu’au jour de l’événement.

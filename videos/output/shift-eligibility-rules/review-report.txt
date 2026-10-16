@@ -1,21 +1,9 @@
 STATUS: READY
-{
-  "id": "SHIFT_ELIGIBILITY_RULES",
-  "status": "READY",
-  "duration": 118.72,
-  "buildId": "Ro9VdxUayqlTAULEvQpY0",
-  "music": {
-    "voicedWindows": 110,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 13.7,
-    "largestGapLu": 18.8,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "42 images et quota-exact1.5/2.5s revus ; deux engagements Buvette visibles pendant première phrase, Liste montre limite à ancre7.29s. AV7/7, ASR final, validate, ancres,VTT,effets,musique passent ; dates françaises, Frise,aucune adresse interdite/overlay. Nits connus : quota Frise sans explication visible ; actions Membres hors1280px.",
-  "sourceChanges": "Recorder : retour explicite Frise pour Julien après Liste persistante (répétition échouée puis corrigée), alignement haut de la région Tous mes créneaux. Unique re-film du lot, provenance même build acceptée. Audio réutilisé.",
-  "report": "videos/output/shift-eligibility-rules/review-report.txt",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+SHIFT_ELIGIBILITY_RULES — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 122.4 s. Music 15.5–19.3 LU under voice.
+Existing whole narration reused after text/hash checks.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Âge 18 ans, limite deux par personne et accès par étiquette sécurité relus. Motif Limite atteinte réellement visible sous la barre et motif complet Limite de 2 créneaux par personne atteinte en Liste ; captures product-quota-frise.png et product-quota-liste.png. Invitations non autorisée puis Julien vérifiées, téléphone obligatoire et fiche membre consultés sans modification. Sept chapitres audiovisuels sans signalement ; deux ASR complets sans ajout ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

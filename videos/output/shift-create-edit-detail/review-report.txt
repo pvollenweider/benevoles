@@ -1,19 +1,9 @@
 STATUS: READY
-{
-  "id": "SHIFT_CREATE_EDIT_DETAIL",
-  "status": "READY",
-  "duration": 135.8,
-  "buildId": "RnrUED_grQJ_YgINLz6Tf",
-  "music": {
-    "voicedWindows": 114,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 12.3,
-    "largestGapLu": 19,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.6
-  },
-  "problems": "42 images et preuves69.7/86.4 revues. Libellé21.538 durant phrase18.714–23.423 ; capacité28.888 vs28.392 ; GPS69.187 vs68.682. Créneau18h–21h30 et0/3 visible86.4 ; valeurs persistées dans éditeur rouvert104.297 vs phrase103.817. AV7/7 sans problème (capacité8 prétendue par AV identity, images montrent3 et assertion réelle3, erreur visuelle écartée). Validation,ASR final7/7,VTT,effets19clics/0touches,musique passent. Dates françaises/Frise/aucune adresse interdite/overlay. Défaut produit disposition : colonne des noms de postes admin Frise défile hors champ quand on va vers18h (saved-bar86.4) ; AdminDayTimeline colonne commentée Sticky mais position absolute dans scroller, aucun masquage vidéo.",
-  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté. Défaut de disposition colonne des postes signalé, non corrigé dans le lot.",
-  "report": "videos/output/shift-create-edit-detail/review-report.txt"
-}
+SHIFT_CREATE_EDIT_DETAIL — batch 23-1 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 132.2 s. Music 14.8–18.6 LU under voice.
+Whole narration regenerated in one consistent pass, original voice; paragraph cuts verified independently.
+Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
+Final VTT viewer « tu » count 0.
+Rappel des réglages du poste Accueil visible sous le champ ; dates françaises, horaires 18h–21h30, trois places, liste d’attente et validation, lieu/consigne/contact/carte puis fiche enregistrée vérifiés. Sept chapitres audiovisuels sans signalement ; deux ASR complets concordent avec la narration, sans consigne ajoutée ni tutoiement.
+Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.
