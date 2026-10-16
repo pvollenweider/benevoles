@@ -130,6 +130,9 @@ jobs:
       MAILPIT_URL: http://localhost:8025
       # Grouped emails (#869) leave at once here: the specs read them without waiting for a cron.
       DIGEST_DELAY_SECONDS: "0"
+      # Throwaway, CI-only: scheduled-message.spec.ts invokes the outbox cron route (#1019), which
+      # `next start` (production mode) refuses without a secret.
+      CRON_SECRET: ci-e2e-only-cron-not-used-anywhere-else
       NEXT_PUBLIC_APP_URL: http://localhost:3100
       AUTH_URL: http://localhost:3100
       AUTH_TRUST_HOST: "true"

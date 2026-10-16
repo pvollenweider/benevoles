@@ -5,24 +5,18 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { rateLimit } from "@/lib/rate-limit"
-import { registrationToken } from "@/lib/token-vault"
 import { render } from "@/lib/notifications/templates"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import type { NotificationPayload } from "@/lib/notifications/types"
 import { adminActor, logEvent } from "@/lib/event-log"
-import { fmtRange } from "@/lib/gantt-utils"
-import { audienceLabel, countDeclinedExcluded, messagePushPayload, messageSchema, selectInvitedWithoutShift, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
-import { linkToken } from "@/lib/token-vault"
+import { messagePushPayload, messageSchema, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { buildTargetedMessage } from "@/lib/targeted-message-build"
 import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
-import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
-
-const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
 
 /**
  * POST /api/admin/events/[id]/message (#396): a subject and a message to the volunteers of the
@@ -51,74 +45,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (!shift) return NextResponse.json({ error: "Créneau introuvable dans cet événement." }, { status: 400 })
   }
 
-  const regs = await db.registration.findMany({
-    where: { eventId: id, status: { in: [...LIVE_STATUSES] } },
-    include: { volunteer: true, shift: true },
-    orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
-  })
-  // One entry per person to write to, whatever the audience: their shifts in it, and the link the
-  // email carries (personal page, or the invitation link for invited people without a shift, #481).
-  type Target = { volunteerId: string; firstName: string; email: string | null; shifts: { label: string; date: string; startTime: string; endTime: string }[]; editToken?: string; signupUrl?: string; waitlistOnly?: boolean }
-  let targets: Target[]
-  let declinedExcluded = 0
-  if (audience.kind === "invited_without_shift") {
-    const invites = await db.memberInvite.findMany({
-      where: { eventId: id },
-      select: { volunteerId: true, sentAt: true, declinedAt: true, tokenEnc: true, tokenLegacy: true, volunteer: { select: { firstName: true, email: true } } },
-    })
-    // Left out because they answered « pas disponible » (#558); said in the preview and the confirmation.
-    declinedExcluded = countDeclinedExcluded(invites, regs)
-    targets = selectInvitedWithoutShift(invites, regs).map(({ volunteerId, invite, waitlistOnly }) => {
-      const url = new URL(eventPublicUrl(event.organization.slug, event.slug))
-      const link = linkToken.reveal(invite)
-      if (link) url.searchParams.set("token", link)
-      return { volunteerId, firstName: invite.volunteer.firstName, email: invite.volunteer.email, shifts: [], signupUrl: url.toString(), waitlistOnly }
-    })
-  } else {
-    targets = selectRecipients(regs, audience).map((r) => ({
-      volunteerId: r.volunteerId,
-      firstName: r.volunteer.firstName,
-      email: r.volunteer.email,
-      shifts: audience.kind === "waitlist" ? [] : r.registrations.map((x) => ({
-        label: x.shift.label, date: fmtDate(x.shift.date), startTime: x.shift.startTime, endTime: x.shift.endTime,
-      })),
-      // The personal page only opens live confirmed registrations: a waitlist entry's link
-      // would land on « introuvable », so the waitlist gets no link at all.
-      editToken: audience.kind === "waitlist" ? undefined : registrationToken.reveal(r.registrations[0]),
-    }))
-  }
-  const recipients = targets
-
-  const shiftName = audience.kind === "shift"
-    ? (() => { const s = regs.find((r) => r.shiftId === audience.shiftId)?.shift; return s ? `${s.label} (${fmtDate(s.date)}, ${fmtRange(s.startTime, s.endTime)})` : undefined })()
-    : undefined
-  const label = audienceLabel(audience, shiftName)
+  const { recipients, label, declinedExcluded, vars, payloadFor: buildPayload } = await buildTargetedMessage(db, event, audience, subject, message)
+  type Target = (typeof recipients)[number]
 
   // Template variables (#482): refused before anything is sent when unknown or out of place, then
   // replaced per recipient. The history keeps the text as written, variables included.
   const problems = templateProblems(`${subject}\n${message}`, audience.kind)
   if (problems.length > 0) return NextResponse.json({ error: problems.join(" ") }, { status: 400 })
-  const roleOfAudience = audience.kind === "role" ? audience.roleName : audience.kind === "shift" ? regs.find((x) => x.shiftId === audience.shiftId)?.shift.roleName : undefined
-  const vars = (r: Target) => ({ prénom: r.firstName, événement: event.title, poste: roleOfAudience, créneau: shiftName })
-
-  const payloadFor = (r: Target, batchId: string): NotificationPayload => ({
-    kind: "targeted_message",
-    dedupeKey: `message:${batchId}:${r.volunteerId}`,
-    recipient: { email: r.email, name: r.firstName },
-    volunteerId: r.volunteerId,
-    organizationId: event.organizationId,
-    data: {
-      volunteerName: r.firstName,
-      organizationName: event.organization.name,
-      orgSlug: event.organization.slug,
-      eventTitle: event.title,
-      subject: renderVariables(subject, vars(r)),
-      message: renderVariables(message, vars(r)),
-      shifts: r.shifts,
-      editToken: r.editToken,
-      signupUrl: r.signupUrl,
-    },
-  })
+  const payloadFor = (r: Target, batchId: string) => buildPayload(r, `message:${batchId}:${r.volunteerId}`)
 
   if (dryRun) {
     const preview = recipients[0]

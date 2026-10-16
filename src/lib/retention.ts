@@ -121,7 +121,7 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Événement supprimé par un administrateur",
     purpose: "—",
-    duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal",
+    duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et programmés et son journal",
     trigger: "suppression définitive d'un événement archivé",
     mechanism: "suppression en cascade",
     backups: inBackups,
@@ -204,6 +204,16 @@ export const RETENTION: readonly RetentionEntry[] = [
     purpose: "Historique des communications de l'événement",
     duration: `${d.targetedMessage} jours, ou avec l'événement`,
     trigger: "envoi du message",
+    mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    // #1019: a scheduled message keeps its text until it goes; then the history row above holds it.
+    data: "Messages programmés (objet, texte, public, heure prévue)",
+    purpose: "Envoyer le message à l'heure choisie, puis garder la trace d'un envoi annulé ou non envoyé",
+    duration: `${d.targetedMessage} jours après l'heure prévue, ou avec l'événement`,
+    trigger: "programmation du message",
     mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: true,

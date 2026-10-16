@@ -76,6 +76,7 @@ model Organization {
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
+  scheduledMessages ScheduledMessage[]
   messageTemplates MessageTemplate[]
   duplicateDismissals DuplicateDismissal[]
   charterVersions CharterVersion[]
@@ -168,6 +169,7 @@ model Event {
   sectorLeaders SectorLeader[]
   milestones    EventMilestone[]
   targetedMessages TargetedMessage[]
+  scheduledMessages   ScheduledMessage[]
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
   groupLinks       EventGroupLink[]
@@ -837,9 +839,49 @@ model TargetedMessage {
   organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
   outbox       NotificationOutbox[]
+  scheduled    ScheduledMessage?
 
   @@index([eventId, createdAt])
   @@index([createdAt])
+}
+
+// A targeted message scheduled for a chosen date and time (#1019). It stores the organiser's
+// intent (audience selector, text, push option), not the recipients: they are computed when it
+// goes, like an immediate send. The outbox cron (every 5 minutes, src/app/api/cron/outbox) picks
+// the due ones, claims each with a conditional update, then in one transaction creates the
+// TargetedMessage history row, queues its emails (dedupe key per scheduled message and person)
+// and marks this row "sent": it goes once. A cancelled one never goes; one whose event is archived,
+// whose shift is gone or whose audience is empty when due is "skipped", with the reason. Kept as
+// long as targeted messages (12 months), deleted with the event.
+model ScheduledMessage {
+  id                String           @id @default(cuid())
+  organizationId    String
+  eventId           String
+  authorId          String?
+  authorName        String
+  subject           String
+  message           String
+  // The audience selector of src/lib/targeted-message.ts (audienceSchema), and its label at
+  // scheduling time for the list.
+  audience          Json
+  audienceLabel     String
+  push              Boolean          @default(false)
+  scheduledFor      DateTime        
+  status            String           @default("scheduled") // "scheduled" | "sending" | "sent" | "cancelled" | "skipped"
+  claimedAt         DateTime?       
+  skipReason        String?
+  cancelledAt       DateTime?       
+  cancelledByName   String?
+  // The history row created when it went.
+  targetedMessageId String?          @unique
+  createdAt         DateTime         @default(now())
+
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  event           Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  targetedMessage TargetedMessage? @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
+
+  @@index([status, scheduledFor])
+  @@index([eventId, scheduledFor])
 }
 
 // Rate limit counters (#322), shared by every app replica: one fixed window per "<route>:<key>",
@@ -848,7 +890,7 @@ model TargetedMessage {
 model RateLimit {
   key     String   @id
   count   Int
-  resetAt DateTime @db.Timestamptz(3)
+  resetAt DateTime
 
   @@index([resetAt])
 }

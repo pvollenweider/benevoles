@@ -33,6 +33,9 @@ export type AdminRole = (typeof ADMIN_ROLES)[number]
 export const OUTBOX_STATUSES = ["pending", "sending", "sent", "failed", "cancelled"] as const
 export type OutboxStatus = (typeof OUTBOX_STATUSES)[number]
 
+// Scheduled messages (#1019), see src/lib/scheduled-message.ts.
+export const SCHEDULED_MESSAGE_STATUSES = ["scheduled", "sending", "sent", "cancelled", "skipped"] as const
+
 export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const
 export const ORG_LOG_ACTOR_TYPES = ["admin", "system"] as const
 
@@ -48,4 +51,5 @@ export const CHECKED_COLUMNS = {
   "OrgLog.actorType": ORG_LOG_ACTOR_TYPES,
   // Question types (#483), widened for « Nombre » (#1015).
   "EventQuestion.type": QUESTION_TYPES,
+  "ScheduledMessage.status": SCHEDULED_MESSAGE_STATUSES,
 } as const

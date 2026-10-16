@@ -52,7 +52,7 @@ L'encadré des rappels automatiques, dans l'onglet **Communication** de l'évén
 
 ![Encadré « Rappels automatiques activés » de l'onglet Communication : Rappel J-2 environ 48 h avant le premier créneau du jour, Rappel J-1 environ 24 h avant, Rappel du jour 2 à 4 h avant, une phrase sur le regroupement en un seul email par jour, et les liens « Rappels automatiques de l'événement » et « Réglages des emails de l'organisation »](/doc-img/admin-reminders.png)
 
-Pour envoyer vous-même un rappel à tous les inscrits, voir [Rappel manuel](ecrire-aux-benevoles.md#rappel-manuel).
+Pour envoyer vous-même un rappel à tous les inscrits, voir [Rappel manuel](ecrire-aux-benevoles.md#rappel-manuel). Pour un rappel à une date et une heure que vous choisissez, en plus des rappels automatiques, voir [Programmer l'envoi](ecrire-aux-benevoles.md#programmer-l-envoi).
 
 ### Un bénévole inscrit sur plusieurs créneaux le même jour reçoit-il beaucoup de rappels ?
 

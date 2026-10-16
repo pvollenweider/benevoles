@@ -31,6 +31,12 @@ export default function MessageHistory({ eventId, items, timeZone }: { eventId: 
                 <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
                   <dt className="text-gray-600">Envoyé</dt>
                   <dd className="text-gray-900">le <time dateTime={m.createdAt.toISOString()}>{when(m.createdAt, timeZone)}</time>, par {m.authorName}</dd>
+                  {m.scheduledFor && (
+                    <>
+                      <dt className="text-gray-600">Programmé</dt>
+                      <dd className="text-gray-900">pour le <time dateTime={m.scheduledFor.toISOString()}>{when(m.scheduledFor, timeZone)}</time></dd>
+                    </>
+                  )}
                   <dt className="text-gray-600">À</dt>
                   <dd className="text-gray-900">{m.audienceLabel}, {m.recipientCount} personne{m.recipientCount > 1 ? "s" : ""}</dd>
                   <dt className="text-gray-600">Remise</dt>

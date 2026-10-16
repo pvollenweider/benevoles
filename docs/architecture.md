@@ -169,7 +169,7 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 
 ### Purge
 
-`/api/cron/cleanup` s'exécute chaque nuit à 02:00 UTC : organisations désactivées depuis 30 jours avec leurs admins, invitations d'admin non acceptées, bénévoles orphelins, jetons de réinitialisation expirés, lignes de l'outbox envoyées et échecs de plus de 30 jours, messages ciblés de plus de 12 mois, fenêtres de limitation expirées, chiffrement des jetons encore en clair. Durées et justification : [retention.md](retention.md).
+`/api/cron/cleanup` s'exécute chaque nuit à 02:00 UTC : organisations désactivées depuis 30 jours avec leurs admins, invitations d'admin non acceptées, bénévoles orphelins, jetons de réinitialisation expirés, lignes de l'outbox envoyées et échecs de plus de 30 jours, messages ciblés et messages programmés terminés de plus de 12 mois, fenêtres de limitation expirées, chiffrement des jetons encore en clair. Durées et justification : [retention.md](retention.md).
 
 ## Notifications
 

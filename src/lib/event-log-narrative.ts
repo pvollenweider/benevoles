@@ -58,6 +58,8 @@ const FIELD_LABELS: Record<string, string> = {
   recipients: "nombre de destinataires",
   subject: "objet",
   resent: "envois relancés",
+  scheduledFor: "envoi prévu",
+  reason: "raison",
   personalLink: "lien personnel",
   confirmationEmail: "email de confirmation",
   // Share links per group (#947).
@@ -147,6 +149,10 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "event.personal_data_anonymized": () => "les données personnelles des bénévoles ont été anonymisées, 3 ans après la fin de l'événement",
   "message.sent": (a) => `${a} a envoyé un message`,
   "message.resent": (a) => `${a} a relancé les emails non distribués d'un message`,
+  // Scheduled messages (#1019): programmed, cancelled before it went, or not sent when due.
+  "message.scheduled": (a) => `${a} a programmé un message`,
+  "message.schedule_cancelled": (a) => `${a} a annulé un message programmé`,
+  "message.schedule_skipped": () => "un message programmé n'est pas parti",
   "question.created": (a) => `${a} a ajouté une question`,
   "question.updated": (a) => `${a} a modifié une question`,
   "question.removed": (a) => `${a} a retiré une question`,
