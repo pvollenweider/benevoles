@@ -6,6 +6,7 @@ import { mkdir, writeFile } from "node:fs/promises"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { openPayload } from "../../src/lib/notifications/outbox"
+import { expectedMemberV2 } from "../lib/member-fixture-v2"
 
 const scenario = process.argv[2]
 assert(["registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(scenario))
@@ -56,7 +57,9 @@ async function main() {
     const addresses = new Set([...fixture.volunteers.map(v => v.email), ...fixture.admins.map(a => a.email), ...fixture.events.flatMap(e => e.sectorLeaders.map(l => l.email))].filter((email): email is string => !!email && email.endsWith("@example.org")))
     // Recorder-owned historical identities no longer present after reseeding.
     for (const email of ["lea.giroud@example.org", "test.invitation@example.org", "nora.team@example.org", "samira.perrin@example.org"]) addresses.add(email)
-    const ownsAddress = (email: string) => addresses.has(email) || /^video\.membre\.\d+@example\.org$/.test(email) || /^alex\.martin\.video\.\d+@example\.org$/.test(email)
+    // Both variants of the natural member fixture (members-invitations renames index 3).
+    for (let index = 0; index < 36; index++) for (const invitation of [false, true]) { const email = expectedMemberV2(index, invitation).email; if (email) addresses.add(email) }
+    const ownsAddress = (email: string) => addresses.has(email) || /^video\.membre\.\d+@example\.org$/.test(email) /* pre-#1037 fixture */ || /^alex\.martin\.video\.\d+@example\.org$/.test(email)
     assert(addresses.has("sarah.jaquet@example.org") && addresses.has("camille.rochat@example.org"))
     const before = await inventory()
     const owned = before.filter(m => {

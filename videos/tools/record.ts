@@ -3266,12 +3266,12 @@ async function main() {
         await typeNaturally(page, dialog().getByLabel("Message (optionnel)", { exact: true }), "Merci pour ton aide !")
         await at("Envoyer deux invitations déclenche des")
         checks.group = await send(2)
-        nicolasLink = await mail("video.membre.4@example.org")
+        nicolasLink = await mail("nicolas.renaud@example.org")
         await at("La remise à cette boîte")
-        await mail("video.membre.8@example.org")
+        await mail("sebastien.perret@example.org")
       })
       await scene("personal-link", async at => {
-        alineLink = await mail("video.membre.3@example.org")
+        alineLink = await mail("aline.mercier@example.org")
         await at("Ouvrons le lien reçu par")
         await page.goto(alineLink); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         // Spoken "regarder les horaires, choisir un créneau" begins near 6.5s.
@@ -3280,7 +3280,7 @@ async function main() {
         await tap(page, page.getByRole("button", { name: /, Démontage[^:]* : sélectionner/ }).first())
         await at(0.34) /* mid-sentence */
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        if (await page.getByRole("textbox", { name: "Email", exact: true }).inputValue() !== "video.membre.3@example.org") throw new Error("Invitation form not prefilled")
+        if (await page.getByRole("textbox", { name: "Email", exact: true }).inputValue() !== "aline.mercier@example.org") throw new Error("Invitation form not prefilled")
         await at(0.42) /* mid-sentence */
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
@@ -3303,7 +3303,7 @@ async function main() {
         await tap(page, page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first())
         await at("les tags actuels sont revérifiés")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        if (await page.getByRole("textbox", { name: "Email", exact: true }).inputValue() !== "video.membre.4@example.org") throw new Error("Reserved invitation identity missing")
+        if (await page.getByRole("textbox", { name: "Email", exact: true }).inputValue() !== "nicolas.renaud@example.org") throw new Error("Reserved invitation identity missing")
       })
       await scene("status", async at => {
         await page.goto(adminUrl); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
@@ -3314,7 +3314,7 @@ async function main() {
         const response = await page.request.get(`${baseUrl}/api/admin/events/${featureEventId}/invitations`)
         if (!response.ok()) throw new Error("Cannot verify the unconfirmed invitation fixture")
         const data = await response.json()
-        const nicolas = data.invites.filter((invite: { volunteer: { email: string }; state: string; registrations: unknown[] }) => invite.volunteer.email === "video.membre.4@example.org")
+        const nicolas = data.invites.filter((invite: { volunteer: { email: string }; state: string; registrations: unknown[] }) => invite.volunteer.email === "nicolas.renaud@example.org")
         if (nicolas.length !== 1 || nicolas[0].state !== "no_answer" || nicolas[0].registrations.length !== 0) throw new Error("Nicolas must remain genuinely unconfirmed, not merely display a matching label")
         await page.getByRole("row").filter({ hasText: "Nicolas Renaud" }).getByText("Sans réponse", { exact: true }).scrollIntoViewIfNeeded()
       })
