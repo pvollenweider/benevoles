@@ -41,6 +41,15 @@ describe("retention policy", () => {
     expect(RETENTION.find((e) => e.data.startsWith("Journaux techniques"))?.mechanism).toMatch(/procédure manuelle/)
   })
 
+  it("keeps a merged-away record for history only, never for old links (#600 regenerates them)", () => {
+    const merged = RETENTION.find((e) => e.data.startsWith("Fiche absorbée par une fusion"))
+    expect(merged).toBeDefined()
+    for (const text of [merged!.data, merged!.purpose]) {
+      expect(text).toMatch(/historique/i)
+      expect(text).not.toMatch(/liens?/i)
+    }
+  })
+
   it("lists data in plain words, without ticket numbers or field names", () => {
     for (const e of RETENTION) {
       for (const text of [e.data, e.duration, e.mechanism]) {

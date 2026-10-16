@@ -21,7 +21,9 @@ export const RETENTION_DAYS = {
   /** A notification that failed for good, kept to investigate. */
   failedNotification: 30,
   /** Absorbed record of a member merge (#600): an inactive tombstone (`mergedIntoId` set, every
-   * personal field cleared) kept only so old ids keep resolving through the merge mapping. */
+   * personal field cleared) kept only so history recorded under its id (event log, organisation
+   * log) still resolves to the kept record. Its personal links do not survive the merge: moved
+   * registrations and invites get new tokens (member-merge-transaction.ts). */
   mergedMemberTombstone: 30,
   /** Per-recipient SMTP outcome (#598): same window as a failed notification, for both failures
    * and the accepted outcomes kept alongside them (needed so #599 can tell a later send to the
@@ -137,8 +139,8 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Fiche absorbée par une fusion de membres : fiche inactive sans donnée personnelle, le temps que les anciens identifiants restent résolus",
-    purpose: "Historique de l'organisation et liens personnels déjà envoyés",
+    data: "Fiche absorbée par une fusion de membres : fiche inactive sans donnée personnelle, gardée pour que l'historique enregistré sous son ancien identifiant reste rattaché à la fiche conservée",
+    purpose: "Historique de l'organisation, rattaché à la fiche conservée",
     duration: `${d.mergedMemberTombstone} jours après la fusion`,
     trigger: "fusion de deux fiches membre",
     mechanism: "nettoyage quotidien (cron cleanup) ; les résultats d'envoi encore liés à cette fiche sont effacés avec elle",
