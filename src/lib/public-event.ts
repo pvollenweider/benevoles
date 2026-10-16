@@ -29,7 +29,7 @@ export const publicEventInclude = {
   questions: {
     where: { archivedAt: null },
     orderBy: { position: "asc" },
-    select: { id: true, label: true, type: true, options: true, required: true },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true },
   },
 } satisfies Prisma.EventInclude
 

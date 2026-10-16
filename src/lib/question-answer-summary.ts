@@ -11,10 +11,11 @@
  * - « en attente »: no confirmed registration, but at least one on the waitlist, offered a spot or
  *   waiting for the organizer's approval, shown apart as a margin for the order;
  * - cancelled (or refused) only: not counted.
- * Archived questions are left out. Pure, no Prisma: also used by the print sheets.
+ * Archived questions are left out. A number question (#1015) is summed instead of counted by answer:
+ * its total, then how many people answered. Pure, no Prisma: also used by the print sheets.
  */
 import { csvDocument } from "./data-export"
-import { NO, YES } from "./event-questions"
+import { NO, YES, parseWholeNumber } from "./event-questions"
 import { fmtHour } from "./registrations-list"
 
 export type SummaryQuestion = {
@@ -27,8 +28,11 @@ export type SummaryQuestion = {
 }
 export type SummaryRegistration = { volunteerId: string; status: string }
 
-/** "option": a current choice; "removed": a choice no longer offered; "text": a group of short texts; "none": no answer. */
-export type SummaryRowKind = "option" | "removed" | "text" | "none"
+/**
+ * "option": a current choice; "removed": a choice no longer offered; "text": a group of short texts;
+ * "total": the sum of a number question's answers; "count": how many people answered it; "none": no answer.
+ */
+export type SummaryRowKind = "option" | "removed" | "text" | "total" | "count" | "none"
 export type SummaryRow = { answer: string; kind: SummaryRowKind; confirmed: number; waiting: number }
 export type QuestionSummary = { id: string; label: string; type: string; rows: SummaryRow[] }
 export type AnswerSummary = { confirmedCount: number; waitingCount: number; questions: QuestionSummary[] }
@@ -39,6 +43,8 @@ const WAITING_STATUSES = new Set(["waiting", "offered", "requested"])
 
 export const NO_ANSWER = "Sans réponse"
 export const REMOVED_SUFFIX = " (choix retiré)"
+export const NUMBER_TOTAL = "Total"
+export const NUMBER_COUNT = "Nombre de réponses"
 
 /** Trimmed, inner spaces collapsed, without accents nor case: « Végétarien » and « vegetarien » match. */
 export function textKey(s: string): string {
@@ -92,7 +98,20 @@ function summarizeQuestion(q: SummaryQuestion, people: Map<string, "confirmed" |
   const none: Tally = { confirmed: 0, waiting: 0 }
   let rows: SummaryRow[]
 
-  if (q.type === "text") {
+  if (q.type === "number") {
+    const total: Tally = { confirmed: 0, waiting: 0 }
+    const count: Tally = { confirmed: 0, waiting: 0 }
+    for (const [volunteerId, who] of people) {
+      const n = parseWholeNumber(answers.get(volunteerId)?.[0])
+      if (n === null || Number.isNaN(n)) { bump(none, who); continue }
+      total[who] += n
+      bump(count, who)
+    }
+    rows = [
+      { answer: NUMBER_TOTAL, kind: "total", ...total },
+      { answer: NUMBER_COUNT, kind: "count", ...count },
+    ]
+  } else if (q.type === "text") {
     const groups = new Map<string, Tally & { spellings: Map<string, number> }>()
     for (const [volunteerId, who] of people) {
       const value = answers.get(volunteerId)?.[0]
@@ -169,6 +188,13 @@ export function stateAt(d: Date, timeZone: string): string {
 
 /** Under a multiple choice: why the counts can exceed the number of people. */
 export const MULTIPLE_NOTE = "Plusieurs choix possibles : le total peut dépasser le nombre de bénévoles."
+
+/** Under a number question: what its total is, and that the waiting people have their own (#1015). */
+export function numberNote(waiting: boolean): string {
+  return waiting
+    ? "Somme des nombres indiqués, séparément pour les confirmés et les personnes en attente."
+    : "Somme des nombres indiqués par les bénévoles confirmés."
+}
 
 /** The summary as CSV, one line per answer, to send to a supplier as is. */
 export function answerSummaryCsv(summary: AnswerSummary): string {

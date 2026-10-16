@@ -12,6 +12,8 @@
  * previous code during a rolling update, and a constraint can be widened without rewriting it.
  */
 
+import { QUESTION_TYPES } from "./event-questions"
+
 export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "cancelled", "refused", "deleted"] as const
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number]
 
@@ -44,4 +46,6 @@ export const CHECKED_COLUMNS = {
   "NotificationOutbox.status": OUTBOX_STATUSES,
   "EventLog.actorType": EVENT_LOG_ACTOR_TYPES,
   "OrgLog.actorType": ORG_LOG_ACTOR_TYPES,
+  // Question types (#483), widened for « Nombre » (#1015).
+  "EventQuestion.type": QUESTION_TYPES,
 } as const

@@ -29,7 +29,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
         // counts; who counts comes from the registrations, not from the stored answers.
         questions: {
           ...answerSummarySelect.questions,
-          select: { ...answerSummarySelect.questions.select, required: true, roleName: true, _count: { select: { answers: true } } },
+          select: { ...answerSummarySelect.questions.select, required: true, minValue: true, maxValue: true, roleName: true, _count: { select: { answers: true } } },
         },
         registrations: answerSummarySelect.registrations,
         // The postes a question can be attached to (#984, part 3), with their sector leaders.
@@ -54,7 +54,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
       </div>
       <QuestionsEditor
         eventId={id}
-        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, roleName }) => ({ id, label, type, options, required, roleName, answers: _count.answers }))}
+        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, minValue, maxValue, roleName }) => ({ id, label, type, options, required, minValue, maxValue, roleName, answers: _count.answers }))}
         roles={event.shifts.map((s) => ({ roleName: s.roleName, leaders: event.sectorLeaders.filter((l) => l.roleName === s.roleName).length }))}
       />
       <AnswerSummary

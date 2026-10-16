@@ -55,7 +55,13 @@ export function duplicatedQuestionRole(roleName: string | null | undefined, copi
   return roleName && copiedRoles.has(roleName) ? roleName : null
 }
 
-/** The editor's field an API refusal is about, to mark and focus it: the poste's refusal only. */
-export function questionErrorField(error: string): "role" | null {
-  return error === QUESTION_ROLE_PROBLEM ? "role" : null
+/**
+ * The editor's field an API refusal is about, to mark and focus it: the poste, or a bound of a
+ * number question (#1015), whose messages name « le minimum » or « le maximum ».
+ */
+export function questionErrorField(error: string): "role" | "min" | "max" | null {
+  if (error === QUESTION_ROLE_PROBLEM) return "role"
+  if (/\ble minimum\b/i.test(error)) return "min"
+  if (/\ble maximum\b/i.test(error)) return "max"
+  return null
 }

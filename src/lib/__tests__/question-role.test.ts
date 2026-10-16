@@ -48,6 +48,13 @@ describe("questionErrorField", () => {
     expect(questionErrorField(QUESTION_ROLE_PROBLEM)).toBe("role")
     expect(questionErrorField("La question est obligatoire.")).toBeNull()
   })
+
+  it("a refused bound of a number question marks its field (#1015)", () => {
+    expect(questionErrorField("Un bénévole a répondu 2 : le minimum ne peut pas dépasser 2.")).toBe("min")
+    expect(questionErrorField("Un bénévole a répondu 5 : le maximum ne peut pas être inférieur à 5.")).toBe("max")
+    expect(questionErrorField("Le maximum doit être au moins égal au minimum.")).toBe("max")
+    expect(questionErrorField("Le minimum ne peut pas être négatif.")).toBe("min")
+  })
 })
 
 describe("questionRoleText and duplicatedQuestionRole", () => {

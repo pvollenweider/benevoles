@@ -171,7 +171,7 @@ export async function POST(req: Request) {
   // Custom questions (#483), checked here whatever the page did; stored with the registration.
   const questions = await prisma.eventQuestion.findMany({
     where: { eventId, archivedAt: null },
-    select: { id: true, label: true, type: true, options: true, required: true },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true },
   })
   const answerCheck = checkAnswers(questions, parsed.data.answers)
   if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)

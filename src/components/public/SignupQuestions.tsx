@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { NO, TEXT_ANSWER_MAX, YES, type Question } from "@/lib/event-questions"
+import { NO, TEXT_ANSWER_MAX, YES, numberHint, type Question } from "@/lib/event-questions"
 import RequiredMark from "@/components/RequiredMark"
 
 export type Answers = Record<string, string | string[]>
@@ -47,6 +47,31 @@ export default function SignupQuestions({ questions, answers, onChange, errors, 
             <div key={q.id}>
               <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}</label>
               <input id={fieldId} type="text" maxLength={TEXT_ANSWER_MAX} required={q.required} value={(answers[q.id] as string) ?? ""} onChange={(e) => onChange(q.id, e.target.value)} {...aria} className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`} />
+              {errorLine}
+            </div>
+          )
+        }
+        if (q.type === "number") {
+          // A whole number (#1015): a text field with the phones' numeric keypad, not type="number"
+          // (no wheel or arrow changes, nothing silently dropped), and no pattern: the server's
+          // message, tied to the field, says what is wrong. The range hint is always read with it.
+          const hintId = `${fieldId}-hint`
+          return (
+            <div key={q.id}>
+              <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}</label>
+              <input
+                id={fieldId}
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                required={q.required}
+                value={(answers[q.id] as string) ?? ""}
+                onChange={(e) => onChange(q.id, e.target.value)}
+                aria-invalid={bad || undefined}
+                aria-describedby={[hintId, bad ? `${fieldId}-error` : null].filter(Boolean).join(" ")}
+                className={`w-full sm:w-40 border rounded-xl px-3 py-3 text-sm tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`}
+              />
+              <p id={hintId} className="text-xs text-gray-600 mt-1">{numberHint(q)}</p>
               {errorLine}
             </div>
           )

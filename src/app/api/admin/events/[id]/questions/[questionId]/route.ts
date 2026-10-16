@@ -17,7 +17,7 @@ type Guard = Exclude<Awaited<ReturnType<typeof requireOrgSession>>, NextResponse
 async function load(guard: Guard, id: string, questionId: string) {
   return guard.db.eventQuestion.findFirst({
     where: { id: questionId, eventId: id, archivedAt: null },
-    select: { id: true, label: true, type: true, options: true, required: true, roleName: true, answers: { select: { values: true } } },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, answers: { select: { values: true } } },
   })
 }
 
@@ -44,7 +44,7 @@ export async function PATCH(req: Request, { params }: Params) {
   const question = await guard.db.eventQuestion.update({
     where: { id: questionId },
     data: parsed.data,
-    select: { id: true, label: true, type: true, options: true, required: true, roleName: true, position: true, _count: { select: { answers: true } } },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, position: true, _count: { select: { answers: true } } },
   })
   const roleChanged = (existing.roleName ?? null) !== (question.roleName ?? null)
   await logEvent({

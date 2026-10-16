@@ -4,7 +4,7 @@
 import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
-import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
+import { confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
 
 /**
@@ -287,11 +287,11 @@ function answersView(d: SheetData): string {
     ${a.questions.map((q) => `
     <section class="block">
       <table class="detail answers">
-        <caption>${esc(q.label)}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}</caption>
+        <caption>${esc(q.label)}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
         <thead><tr><th scope="col">Réponse</th><th scope="col" class="num">Confirmés</th>${waiting ? `<th scope="col" class="num">En attente</th>` : ""}</tr></thead>
         <tbody>
           ${q.rows.map((r) => `<tr>
-            <th scope="row"${r.kind === "none" || r.kind === "removed" ? ` class="muted"` : ""}>${esc(rowLabel(r))}</th>
+            <th scope="row"${r.kind === "none" || r.kind === "removed" ? ` class="muted"` : r.kind === "total" ? ` class="total"` : ""}>${esc(rowLabel(r))}</th>
             <td class="num mono">${r.confirmed}</td>${waiting ? `<td class="num mono">${r.waiting}</td>` : ""}
           </tr>`).join("")}
         </tbody>
@@ -383,6 +383,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .answers tbody tr:nth-child(even) th { background: var(--band); }
     .answers .num { width: 7em; }
     .answers thead th.num { text-align: right; }
+    .answers tbody th.total { font-weight: 700; }
     .answers .caption-note { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
 
     /* ── Cards (individual sheet) ────────────────────────────────────────── */

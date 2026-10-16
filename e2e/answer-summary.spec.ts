@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { randomIp } from "./helpers/public-signup"
+import { waitForHydration } from "./helpers/hydration"
 
 /**
  * « Synthèse des réponses » of an event's Questions page (#686): one captioned table per question,
@@ -70,4 +71,80 @@ test("counts confirmed volunteers once, pending apart, and exports the summary",
   const html = await sheet.text()
   expect(html).toContain("<caption>Taille de t-shirt</caption>")
   expect(html).not.toContain(`Alice${stamp}`)
+})
+
+test("a « Nombre » question is summed: one volunteer answers 3, another 2, the summary shows 5 (#1015)", async ({ page }) => {
+  test.setTimeout(120_000)
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events/)
+
+  const stamp = Date.now()
+  const post = async (url: string, body: unknown, headers?: Record<string, string>) => {
+    const res = await page.request.post(url, { data: body, headers })
+    expect(res.ok(), `${url}: ${res.status()} ${await res.text()}`).toBeTruthy()
+    return res.json()
+  }
+  const event = await post("/api/admin/events", { title: `E2E Nombre ${stamp}`, startDate: "2030-10-02", endDate: "2030-10-02", publicStatus: "draft" })
+  const bar = await post("/api/admin/shifts", { eventId: event.id, roleName: "Buvette", label: "Buvette", date: "2030-10-02", startTime: "10:00", endTime: "12:00", capacity: 5 })
+
+  // The organiser adds the question in the editor.
+  await page.goto(`/admin/events/${event.id}/questions`)
+  const add = page.getByRole("button", { name: "Ajouter une question" })
+  await waitForHydration(add)
+  await add.click()
+  await page.getByLabel(/Question posée aux bénévoles/).fill("Combien de personnes ?")
+  await page.getByLabel("Type de réponse").selectOption({ label: "Nombre" })
+  await page.getByRole("textbox", { name: "Maximum (facultatif)" }).fill("10")
+  await page.getByRole("button", { name: "Enregistrer" }).click()
+  await expect(page.getByText("Nombre : 10 au plus · 0 réponse")).toBeVisible()
+  const questions = await (await page.request.get(`/api/admin/events/${event.id}/questions`)).json()
+  const guests = questions.find((q: { label: string }) => q.label === "Combien de personnes ?")
+  expect(guests).toMatchObject({ type: "number", minValue: 0, maxValue: 10 })
+  const publish = await page.request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: "published" } })
+  expect(publish.ok(), await publish.text()).toBeTruthy()
+
+  // A volunteer answers on the public form: over the maximum is refused on the field, 3 goes through.
+  const volunteer = await page.context().browser()!.newPage({ extraHTTPHeaders: { "x-forwarded-for": randomIp() } })
+  await volunteer.goto(`/${event.slug}?org=default`)
+  const pick = volunteer.getByRole("button", { name: /Buvette.*: sélectionner/ }).first()
+  await waitForHydration(pick)
+  await pick.click()
+  await volunteer.getByRole("button", { name: /^Continuer/ }).first().click()
+  await volunteer.getByLabel("Prénom *", { exact: true }).fill("E2E")
+  await volunteer.getByLabel("Nom *", { exact: true }).fill(`Trois${stamp}`)
+  await volunteer.getByLabel("Email *", { exact: true }).fill(`e2e-num-3-${stamp}@example.com`)
+  const field = volunteer.getByRole("textbox", { name: "Combien de personnes ? (facultatif)" })
+  await expect(field).toHaveAttribute("inputmode", "numeric")
+  await expect(field).toHaveAccessibleDescription("Un nombre entier, 10 au plus.")
+  await field.fill("12")
+  await volunteer.getByRole("button", { name: "convention des bénévoles" }).click()
+  await volunteer.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
+  await volunteer.getByLabel(/J.accepte que l.association/).check()
+  await volunteer.getByRole("button", { name: "Confirmer mon inscription" }).click()
+  await expect(field).toHaveAttribute("aria-invalid", "true")
+  await expect(field).toHaveAccessibleDescription(/au plus 10/)
+  await field.fill("3")
+  await volunteer.getByRole("button", { name: "Confirmer mon inscription" }).click()
+  await expect(volunteer).toHaveURL(new RegExp(`/${event.slug}/success`))
+  await volunteer.close()
+
+  // Another one answers 2 through the API.
+  await post("/api/public/registrations", {
+    eventId: event.id, shiftIds: [bar.id], firstName: "E2E", lastName: `Deux${stamp}`, email: `e2e-num-2-${stamp}@example.com`, consent: true, charterAccepted: true, answers: { [guests.id]: "2" },
+  }, { "x-forwarded-for": randomIp() })
+
+  await page.goto(`/admin/events/${event.id}/questions`)
+  const summary = page.getByRole("region", { name: "Synthèse des réponses" })
+  const table = summary.getByRole("table", { name: /^Combien de personnes \?/ })
+  await expect(table.getByRole("row")).toHaveText([/Réponse/, /^Total\s*5$/, /^Nombre de réponses\s*2$/, /^Sans réponse\s*0$/])
+  await expect(table).toContainText("Somme des nombres indiqués par les bénévoles confirmés.")
+  expect(await seriousViolations(page)).toEqual([])
+
+  const csv = await page.request.get(`/api/admin/events/${event.id}/export/answers`)
+  const lines = (await csv.text()).replace(/^﻿/, "").split("\r\n")
+  expect(lines).toContain("Combien de personnes ?;Total;5;0")
+  expect(lines).toContain("Combien de personnes ?;Nombre de réponses;2;0")
 })
