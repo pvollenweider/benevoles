@@ -383,7 +383,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .answers tbody tr:nth-child(even) th { background: var(--band); }
     .answers .num { width: 7em; }
     .answers thead th.num { text-align: right; }
-    .answers tbody th.total { font-weight: 700; }
+    .answers tbody th.total, .answers tbody th.total ~ td { font-weight: 700; }
     .answers .caption-note { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
 
     /* ── Cards (individual sheet) ────────────────────────────────────────── */
