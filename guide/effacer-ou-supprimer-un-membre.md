@@ -12,7 +12,7 @@ aliases: []
 
 ## Supprimer une fiche
 
-Une fiche se supprime définitivement quand elle est **inactive** et n'a **aucune inscription**, quel que soit son statut (confirmée, en liste d'attente, proposée, demandée, annulée, refusée) : rien, dans l'historique d'aucun événement, ne pointe plus vers elle. Une fiche avec des inscriptions ne se supprime pas : ses données personnelles s'effacent (section suivante) ; une fiche fusionnée dans une autre (voir [Doublons et fusion de fiches](doublons-et-fusion.md)) n'est jamais proposée à la suppression non plus, elle disparaît de son côté par la purge de rétention.
+Une fiche se supprime définitivement quand elle est **inactive** et n'a **aucune inscription**, quel que soit son statut (confirmée, en liste d'attente, proposée, demandée, annulée, refusée) : rien, dans l'historique d'aucun événement, ne pointe plus vers elle. Une fiche avec des inscriptions ne se supprime pas : ses données personnelles s'effacent (section suivante) ; une fiche fusionnée dans une autre (voir [Doublons et fusion de fiches](doublons-et-fusion.md)) n'est jamais proposée à la suppression non plus : elle est supprimée automatiquement 30 jours après la fusion.
 
 Le bouton **Supprimer** n'apparaît, sur la ligne de la fiche dans la liste des membres et sur sa page **Activité**, que lorsqu'elle remplit ces deux conditions ; sinon la page **Activité** explique en mots pourquoi elle ne peut pas être supprimée (fiche encore active, ou inscriptions à conserver). La confirmation nomme la personne, précise que l'action est **irréversible** et liste ce qui disparaît avec la fiche : ses invitations, ses réponses aux questions des événements, ses abonnements aux notifications du navigateur, les suivis d'envoi d'email la concernant et les doublons possibles écartés qui la citaient. Aucun email n'est envoyé. L'action est journalisée dans le journal d'activité de l'organisation ; l'activité des autres fiches n'est pas affectée.
 
@@ -31,3 +31,7 @@ Si la personne a encore des inscriptions à venir, le récapitulatif le signale 
 Pour confirmer, saisissez le mot **effacer** puis **Effacer**. L'action est **irréversible** : rien ne peut être récupéré. La page reste ouverte et indique que les données ont été effacées ; la fiche ne peut plus être modifiée, fusionnée ni effacée une seconde fois. Le journal d'activité de l'organisation indique qu'un effacement a eu lieu, sans dire qui ; les journaux des événements gardent leurs entrées, la personne y apparaît comme « Bénévole effacé ».
 
 L'effacement vaut pour votre organisation seulement : si la même personne est aussi membre d'une autre organisation sur benevol.app, sa fiche y reste intacte. S'il lui arrive de s'inscrire à nouveau plus tard, une nouvelle fiche est créée.
+
+### Pourquoi la fiche effacée reste dans la liste
+
+Une fiche effacée n'est pas supprimée, parce que ses inscriptions comptent encore : sans elle, les effectifs des créneaux passés, les heures données à l'organisation et l'historique des événements seraient faussés. Elle ne contient plus rien qui permette de reconnaître la personne. Elle n'est pas comptée dans le nombre de membres, et n'apparaît dans la liste qu'en cochant **Inclure les fiches fusionnées ou effacées**, avec la mention « Données effacées · gardée pour l'historique (effectifs et heures) ». Elle reste tant que l'organisation existe.

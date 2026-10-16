@@ -9,7 +9,7 @@ import { deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
-import { addressesToVerifyCount, filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
+import { addressesToVerifyCount, archivedCount as countArchived, filterMembers, isArchived, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
 import { addressStatusSentence } from "@/lib/address-status"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable } from "@/lib/focus-return"
@@ -18,6 +18,8 @@ import ImportModal from "./members/ImportModal"
 import SortTh from "./members/SortTh"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { outcomeClass } from "@/lib/status-message"
+import { ERASED_ROW, formatRecordDay, mergedRowSentence, recordDisplayName, recordSubject } from "@/lib/member-record-state"
+import MergedSentenceView from "./members/MergedSentenceView"
 
 type Props = {
   initialMembers: Member[]
@@ -49,10 +51,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [tagFilter, setTagFilter] = useState<string>("")
   const [showInactive, setShowInactive] = useState(Boolean(initialSearch))
   const [addressToVerify, setAddressToVerify] = useState(Boolean(initialAddressToVerify))
+  // Absorbed and erased records (#1014): their own toggle, independent of « Inclure inactifs ».
+  const [showArchived, setShowArchived] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [editingMember, setEditingMember] = useState<Member | null>(
-    initialEditId ? initialMembers.find((m) => m.id === initialEditId) ?? null : null,
+    // Never an absorbed or erased record (#1014): neither can be edited.
+    initialEditId ? initialMembers.find((m) => m.id === initialEditId && !isArchived(m)) ?? null : null,
   )
   const [sortCol, setSortCol] = useState<SortCol | null>(null)
   const [sortDir, setSortDir] = useState<SortDir>("asc")
@@ -62,6 +67,9 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [hoursTo, setHoursTo] = useState(defaultHoursPeriod.to)
   const hoursRangeValid = hoursFrom <= hoursTo
   const toVerifyCount = useMemo(() => addressesToVerifyCount(members), [members])
+  const archivedCount = useMemo(() => countArchived(members), [members])
+  // The header counts people, not the archived records kept for history (#1014).
+  const memberCount = members.length - archivedCount
 
   function toggleSort(col: SortCol) {
     const next = nextSort({ col: sortCol, dir: sortDir }, col)
@@ -72,10 +80,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
 
   const filtered = useMemo(
     () => sortMembers(
-      filterMembers(members, { search, tag: tagFilter, showInactive, addressToVerify }),
+      filterMembers(members, { search, tag: tagFilter, showInactive, addressToVerify, showArchived }),
       { col: sortCol, dir: sortDir },
     ),
-    [members, search, tagFilter, showInactive, addressToVerify, sortCol, sortDir],
+    [members, search, tagFilter, showInactive, addressToVerify, showArchived, sortCol, sortDir],
   )
 
   const [resultAnnouncement, setResultAnnouncement] = useState("")
@@ -88,10 +96,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     // same short delay just reads as a brief, acceptable pause before the result is announced.
     const t = setTimeout(() => {
       const n = filtered.length
-      announce(setResultAnnouncement, n === 0 ? "Aucun membre ne correspond." : `${n} membre${n > 1 ? "s" : ""} affiché${n > 1 ? "s" : ""}.`)
+      // « fiches » once absorbed or erased records can be among them (#1014): they aren't members,
+      // and the header's member count leaves them out.
+      const noun = showArchived ? "fiche" : "membre"
+      announce(setResultAnnouncement, n === 0 ? "Aucun membre ne correspond." : `${n} ${noun}${n > 1 ? "s" : ""} affiché${noun === "fiche" ? "e" : ""}${n > 1 ? "s" : ""}.`)
     }, 400)
     return () => clearTimeout(t)
-  }, [search, tagFilter, showInactive, addressToVerify, filtered.length])
+  }, [search, tagFilter, showInactive, addressToVerify, showArchived, filtered.length])
 
   function refresh() {
     startTransition(() => router.refresh())
@@ -327,7 +338,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Membres</h1>
-          <p className="text-sm text-gray-500">{members.length} membre{members.length > 1 ? "s" : ""}</p>
+          <p className="text-sm text-gray-500">{memberCount} membre{memberCount > 1 ? "s" : ""}</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           {duplicatesCount > 0 && (
@@ -446,6 +457,15 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           <input type="checkbox" checked={addressToVerify} onChange={(e) => setAddressToVerify(e.target.checked)} />
           Adresses à vérifier{toVerifyCount > 0 ? ` (${toVerifyCount})` : ""}
         </label>
+        {/* Only when there is at least one (#1014): absorbed records (deleted automatically after
+            the merge delay) and erased ones (kept for staffing counts and hours). Adds rows, like
+            « Inclure inactifs », hence the same « Inclure » wording. */}
+        {archivedCount > 0 && (
+          <label className="text-sm text-gray-600 flex items-center gap-1.5">
+            <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
+            Inclure les fiches fusionnées ou effacées ({archivedCount})
+          </label>
+        )}
       </div>
 
       {/* One result-count announcement for every filter (search, tag, inactif, adresses à
@@ -454,7 +474,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       <div role="status" aria-live="polite" className="sr-only">{resultAnnouncement}</div>
 
       {filtered.length === 0 ? (
-        members.length === 0 ? (
+        memberCount === 0 ? (
           <div className="text-center py-20 px-4">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 mb-5">
               <svg aria-hidden="true" className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -512,13 +532,30 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
               </tr>
             </thead>
             <tbody>
-              {filtered.map((m) => (
+              {filtered.map((m) => {
+                const record = m.record ?? { kind: "ordinary" as const }
+                const archived = record.kind !== "ordinary"
+                const subject = recordSubject(record, m.firstName, m.lastName, formatRecordDay)
+                return (
                 <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "bg-gray-50" : ""}`}>
-                  <td className="px-4 py-3">
-                    <div className="font-medium text-gray-900">{m.firstName}</div>
-                    {!m.active && <div className="text-xs text-gray-600">inactif</div>}
+                  {/* An absorbed or erased record (#1014) has no first/last name pair to split: one
+                      identity cell over both name columns, wide enough for the sentence saying why
+                      it is still listed, read with the record; the « · » is decorative. */}
+                  <td className="px-4 py-3" colSpan={archived ? 2 : undefined}>
+                    <div className="font-medium text-gray-900">{archived ? recordDisplayName(record, m.firstName, m.lastName) : m.firstName}</div>
+                    {record.kind === "merged" ? (
+                      <div className="text-xs text-gray-700 mt-0.5">
+                        <MergedSentenceView sentence={mergedRowSentence(record, formatRecordDay)} keptId={record.keptId} deletionDay={record.deletionDay} />
+                      </div>
+                    ) : record.kind === "erased" ? (
+                      <div className="text-xs text-gray-700 mt-0.5">
+                        {ERASED_ROW.status}<span aria-hidden="true"> · </span>{ERASED_ROW.reason}
+                      </div>
+                    ) : (
+                      !m.active && <div className="text-xs text-gray-600">inactif</div>
+                    )}
                   </td>
-                  <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>
+                  {!archived && <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>}
                   <td className="px-4 py-3 text-gray-600">
                     {m.email && <div className="text-xs">{m.email}</div>}
                     {m.phone && <div className="text-xs text-gray-500">{m.phone}</div>}
@@ -571,16 +608,17 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                         href={`/admin/members/${m.id}`}
                         className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                       >
-                        Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
+                        Activité{" "}<span className="sr-only">de {subject}</span>
                       </Link>
-                      <button
+                      {/* Absorbed and erased records can't be edited, deactivated or merged (#1014): no dead buttons. */}
+                      {!archived && <button
                         data-edit-trigger={m.id}
                         onClick={() => startEditing(m)}
                         className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                       >
                         Modifier{" "}<span className="sr-only">{m.firstName} {m.lastName}</span>
-                      </button>
-                      {m.addressStatus.kind === "to_verify" && (
+                      </button>}
+                      {!archived && m.addressStatus.kind === "to_verify" && (
                         <button
                           onClick={() => searchForDuplicate(m.id)}
                           aria-label={`Doublon ? Voir les doublons possibles de ${m.firstName} ${m.lastName}`}
@@ -589,7 +627,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                           Doublon ?
                         </button>
                       )}
-                      {m.active && (
+                      {!archived && m.active && (
                         <button
                           onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
                           aria-label={`Désactiver ${m.firstName} ${m.lastName}`}
@@ -600,7 +638,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                       )}
                       {/* Only for an eligible record (#667): inactive, no registration at all, not a
                           merged tombstone — never a dead button for the others. */}
-                      {m.deletion.eligible && (
+                      {!archived && m.deletion.eligible && (
                         <button
                           onClick={() => askDelete(m.id, `${m.firstName} ${m.lastName}`)}
                           aria-label={`Supprimer ${m.firstName} ${m.lastName}`}
@@ -614,7 +652,8 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     </div>
                   </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>

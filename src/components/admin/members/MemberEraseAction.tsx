@@ -8,6 +8,7 @@ import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { eraseMemberRecap, ERASURE_CHALLENGE, type ErasureCounts } from "@/lib/member-erasure"
+import { ERASED_PAGE_TEXT } from "@/lib/member-record-state"
 
 export type MemberErasureState =
   | { kind: "eligible"; counts: ErasureCounts }
@@ -28,7 +29,6 @@ const formatDay = (iso: string, timeZone: string) =>
 /** « C'est … » read after a colon: lower-case first letter. */
 const afterColon = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 
-const ERASED_TEXT = "Les données personnelles de cette fiche ont été effacées. Ses inscriptions restent dans l'historique des événements, sans identité."
 
 /**
  * The member page's « Effacer les données personnelles » action (#516): a confirmation listing what
@@ -49,10 +49,10 @@ export default function MemberEraseAction({ memberId, memberName, erasure, timeZ
   // focus put on it survives the refresh.
   const erasedAt = erasure.kind === "erased" ? erasure.erasedAt : doneAt
   if (erasedAt) {
-    const on = ` Effacement du ${formatDay(erasedAt, timeZone)}.`
+    // One paragraph, all of it read when it takes the focus (#1014: why the record stays).
     return (
       <p ref={noticeRef} tabIndex={-1} className="text-sm text-gray-800 bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 forced-colors:border-[CanvasText] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-        {ERASED_TEXT}{on}
+        Les données personnelles de cette fiche ont été effacées le {formatDay(erasedAt, timeZone)}. {ERASED_PAGE_TEXT}
       </p>
     )
   }

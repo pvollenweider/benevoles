@@ -4,6 +4,7 @@
 import { fold } from "./text-fold"
 import type { AddressStatusView } from "./address-status"
 import type { MemberDeletionEligibility } from "./member-deletion"
+import type { MemberRecordState } from "./member-record-state"
 
 /**
  * Pure logic of the admin members page (MembersManager, #291): filtering, the three-state column
@@ -32,7 +33,13 @@ export type MemberRow = {
   // Whether the member's current address needs checking (#599), computed server-side (one extra
   // query for the whole list, delivery-outcomes-data.ts's loadAddressStatuses).
   addressStatus: AddressStatusView
+  // Ordinary, absorbed by a merge, or erased (#1014), computed server-side (member-record-state.ts).
+  // Optional for older call sites and tests: absent means ordinary.
+  record?: MemberRecordState
 }
+
+/** Absorbed or erased record (#1014): an archive, not a member the organiser can reactivate. */
+export const isArchived = (m: Pick<MemberRow, "record">): boolean => !!m.record && m.record.kind !== "ordinary"
 
 export type Member = MemberRow & {
   id: string
@@ -79,14 +86,20 @@ export function sortAnnouncement({ col, dir }: SortState): string {
   return `Trié par ${COL_LABELS[col]}, ${dir === "asc" ? "croissant" : "décroissant"}`
 }
 
-/** Members matching the search (name, email, phone), the tag and the inactive toggle. */
+/**
+ * Members matching the search (name, email, phone), the tag and the toggles. Absorbed and erased
+ * records (#1014) follow their own toggle, `showArchived`, never « Inclure inactifs »: the two
+ * add independent sets of rows.
+ */
 export function filterMembers<M extends MemberRow>(
   members: M[],
-  { search, tag, showInactive, addressToVerify = false }: { search: string; tag: string; showInactive: boolean; addressToVerify?: boolean },
+  { search, tag, showInactive, addressToVerify = false, showArchived = false }: { search: string; tag: string; showInactive: boolean; addressToVerify?: boolean; showArchived?: boolean },
 ): M[] {
   const q = fold(search.trim())
   return members.filter((m) => {
-    if (!showInactive && !m.active) return false
+    if (isArchived(m)) {
+      if (!showArchived) return false
+    } else if (!showInactive && !m.active) return false
     if (tag && !m.tags.includes(tag)) return false
     if (addressToVerify && m.addressStatus.kind !== "to_verify") return false
     if (!q) return true
@@ -101,10 +114,14 @@ export function filterMembers<M extends MemberRow>(
   })
 }
 
-/** Members sorted by a column (names in French collation), or unchanged without a sort. */
+/** Members sorted by a column (names in French collation), or unchanged without a sort. Absorbed
+ * and erased records (#1014) always stay after the ordinary ones, whatever the direction: an
+ * absorbed record has no name left to sort by. */
 export function sortMembers<M extends MemberRow>(members: M[], { col, dir }: SortState): M[] {
   if (!col) return members
   return [...members].sort((a, b) => {
+    const archivedCmp = Number(isArchived(a)) - Number(isArchived(b))
+    if (archivedCmp !== 0) return archivedCmp
     const cmp = NUMERIC_COLS.has(col)
       ? a[col as "hoursTotal" | "hoursAttested"] - b[col as "hoursTotal" | "hoursAttested"]
       : col === "lastShiftDate"
@@ -118,6 +135,11 @@ export function sortMembers<M extends MemberRow>(members: M[], { col, dir }: Sor
  * count for the filter's own label, computed once from the same list the page already has. */
 export function addressesToVerifyCount<M extends MemberRow>(members: M[]): number {
   return members.filter((m) => m.addressStatus.kind === "to_verify").length
+}
+
+/** How many absorbed or erased records there are (#1014), for their own filter's label. */
+export function archivedCount<M extends MemberRow>(members: M[]): number {
+  return members.filter(isArchived).length
 }
 
 /** "bénévole, bar, " → ["bénévole", "bar"]. */

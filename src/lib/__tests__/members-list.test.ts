@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { addressesToVerifyCount, filterMembers, nextSort, parseTags, sortAnnouncement, sortMembers } from "../members-list"
+import { addressesToVerifyCount, archivedCount, filterMembers, nextSort, parseTags, sortAnnouncement, sortMembers } from "../members-list"
 import type { AddressStatusView } from "../address-status"
 
 const m = (
@@ -119,5 +119,39 @@ describe("parseTags", () => {
     expect(parseTags("bénévole, bar, ")).toEqual(["bénévole", "bar"])
     expect(parseTags(" parent CM2 ,,bar")).toEqual(["parent CM2", "bar"])
     expect(parseTags("")).toEqual([])
+  })
+})
+
+// #1014: absorbed and erased records have their own toggle, apart from « Inclure inactifs ».
+describe("absorbed and erased records", () => {
+  const merged = { ...m("t", { firstName: "", lastName: "", active: false }), record: { kind: "merged" as const, keptId: "a", keptName: "Élodie Zbinden", deletionDay: "2026-11-14" } }
+  const erased = { ...m("e", { firstName: "Bénévole", lastName: "effacé", active: false, hoursTotal: 99 }), record: { kind: "erased" as const, erasedDay: "2026-03-03" } }
+  const list = [...members, merged, erased]
+  const ids = (rows: { id: string }[]) => rows.map((r) => r.id)
+
+  it("are hidden by default, and « Inclure inactifs » does not bring them back", () => {
+    expect(ids(filterMembers(list, all))).toEqual(["a", "b"])
+    expect(ids(filterMembers(list, { ...all, showInactive: true }))).toEqual(["a", "b", "c"])
+  })
+
+  it("their own toggle adds them, independently of the inactive one", () => {
+    expect(ids(filterMembers(list, { ...all, showArchived: true }))).toEqual(["a", "b", "t", "e"])
+    expect(ids(filterMembers(list, { ...all, showInactive: true, showArchived: true }))).toEqual(["a", "b", "c", "t", "e"])
+  })
+
+  it("an explicit ordinary record behaves like one without a record", () => {
+    const ordinary = { ...m("o", { active: false }), record: { kind: "ordinary" as const } }
+    expect(ids(filterMembers([ordinary], { ...all, showInactive: true }))).toEqual(["o"])
+  })
+
+  it("stay after the ordinary records whatever the sort", () => {
+    const shown = filterMembers(list, { ...all, showInactive: true, showArchived: true })
+    expect(ids(sortMembers(shown, { col: "firstName", dir: "asc" })).slice(-2).sort()).toEqual(["e", "t"])
+    expect(ids(sortMembers(shown, { col: "hoursTotal", dir: "desc" })).slice(-2).sort()).toEqual(["e", "t"])
+  })
+
+  it("are counted for their filter's label", () => {
+    expect(archivedCount(list)).toBe(2)
+    expect(archivedCount(members)).toBe(0)
   })
 })

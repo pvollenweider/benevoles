@@ -16,14 +16,18 @@ import { loadMemberDeletionEligibility } from "@/lib/member-deletion-data"
 import MemberDeleteAction from "@/components/admin/members/MemberDeleteAction"
 import MemberEraseAction, { type MemberErasureState } from "@/components/admin/members/MemberEraseAction"
 import { loadMemberErasurePreview } from "@/lib/member-erasure-transaction"
+import { loadMemberRecordState } from "@/lib/member-record-state-data"
+import { activityTitle, formatRecordDay, mergedPageSentence, recordSubject } from "@/lib/member-record-state"
+import MergedSentenceView from "@/components/admin/members/MergedSentenceView"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const ctx = await getOrgContext()
   if (!ctx) return { title: "Activité d'un membre" }
   const { id } = await params
-  const m = await ctx.db.volunteer.findFirst({ where: { id }, select: { firstName: true, lastName: true } })
-  return { title: m ? `Activité de ${m.firstName} ${m.lastName}` : "Activité d'un membre" }
+  const m = await ctx.db.volunteer.findFirst({ where: { id }, select: { firstName: true, lastName: true, mergedIntoId: true } })
+  // An absorbed record has no name left (#1014).
+  return { title: m ? (m.mergedIntoId ? "Activité de la fiche fusionnée" : `Activité de ${m.firstName} ${m.lastName}`) : "Activité d'un membre" }
 }
 
 /** A member's factual chronology (#488): no score, only what happened, with the event. */
@@ -39,6 +43,12 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
   const when = (d: Date) => d.toLocaleString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })
   const fmtDay = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric" })
   const { member } = data
+  // Absorbed by a merge or erased (#1014): said in one sentence below the heading.
+  const record = (await loadMemberRecordState(ctx.db, member.id, timeZone)) ?? { kind: "ordinary" as const }
+  const merged = record.kind === "merged" ? record : null
+  const title = merged
+    ? activityTitle(recordSubject(record, member.firstName, member.lastName, formatRecordDay))
+    : activityTitle(`${member.firstName} ${member.lastName}`)
 
   // Whether the member's current address needs checking (#599), same rule as the members list.
   const statuses = await loadAddressStatuses(ctx.organizationId, [
@@ -63,9 +73,16 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         <Link href="/admin/members" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <span aria-hidden="true">← </span>Membres
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 mt-1">Activité de {member.firstName} {member.lastName}</h1>
-        <p className="text-sm text-gray-700 mt-1">{member.email ?? "Sans email"}{member.active ? "" : " · fiche désactivée"}</p>
+        <h1 className="text-2xl font-bold text-gray-900 mt-1">{title}</h1>
+        {/* The contact line says nothing useful on an archived record (#1014): the block below does. */}
+        {record.kind === "ordinary" && <p className="text-sm text-gray-700 mt-1">{member.email ?? "Sans email"}{member.active ? "" : " · fiche désactivée"}</p>}
         <p className="text-sm text-gray-700 mt-2">{activitySummary(data.sources)}</p>
+        {merged && (
+          // Static page content, not role="status" (same reasoning as the address block below).
+          <p className="mt-3 rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-800 forced-colors:border-[CanvasText]">
+            <MergedSentenceView sentence={mergedPageSentence(merged, formatRecordDay)} keptId={merged.keptId} deletionDay={merged.deletionDay} />
+          </p>
+        )}
         {statusSentence && (
           // Not role="status": this block is part of the page's own initial content, read in
           // document order like the rest — role="status" is for a region whose content changes
@@ -91,7 +108,7 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         <p className="text-xs text-gray-600 mt-2">
           Les faits enregistrés par l&apos;application (invitations, inscriptions, présences, responsabilités, modifications de la fiche), sans appréciation. Les notes internes sont sur la fiche du membre. Ces données disparaissent avec les événements et la fiche.
         </p>
-        {!erased && <p className="mt-3 space-x-4">
+        {!erased && !merged && <p className="mt-3 space-x-4">
           <Link href={`/admin/members/${member.id}/certificate`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Attestation de bénévolat
           </Link>
@@ -101,14 +118,15 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         </p>}
         {/* Permanent deletion (#667): a button only when eligible, a plain-words explanation
             otherwise — never a dead button. */}
-        {!erased && <div className="mt-3">
+        {/* An absorbed record (#1014): neither deleted nor erased by hand, the sentence above says why. */}
+        {!erased && !merged && <div className="mt-3">
           <MemberDeleteAction memberId={member.id} memberName={`${member.firstName} ${member.lastName}`} deletion={deletion} />
         </div>}
         {/* Erasure of personal data (#516): always in this same slot, so the notice that replaces
             the button after an erasure keeps the focus across the page refresh. */}
-        <div className="mt-3">
+        {!merged && <div className="mt-3">
           <MemberEraseAction memberId={member.id} memberName={`${member.firstName} ${member.lastName}`} erasure={erasure} timeZone={timeZone} />
-        </div>
+        </div>}
       </div>
       <h2 id="chronologie" className="sr-only">Chronologie</h2>
       {facts.length === 0 ? (

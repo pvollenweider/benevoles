@@ -66,7 +66,7 @@ test("erase a member with history: anonymised in place, the registration kept, t
   await dialog.getByRole("button", { name: "Effacer les données", exact: true }).click()
 
   // The notice replaces the button and takes the focus; the page refreshes around it.
-  const notice = page.getByText("Les données personnelles de cette fiche ont été effacées.", { exact: false })
+  const notice = page.getByText("Les données personnelles de cette fiche ont été effacées le", { exact: false })
   await expect(notice).toBeVisible()
   await expect(notice).toBeFocused()
   await expect(page.getByRole("heading", { level: 1, name: "Activité de Bénévole effacé" })).toBeVisible()
@@ -79,7 +79,16 @@ test("erase a member with history: anonymised in place, the registration kept, t
   await expect(page.getByText(`mot-${stamp}`)).toHaveCount(0)
   await expect(page.getByText(email)).toHaveCount(0)
 
-  // Editing the erased record is refused: the data can't be typed back in.
+  // #1014: in the members list, behind its own filter, with why it stays.
+  await page.goto("/admin/members")
+  const archivedBox = page.getByRole("checkbox", { name: /^Inclure les fiches fusionnées ou effacées \(\d+\)$/ })
+  await waitForHydration(archivedBox)
+  await archivedBox.check()
+  const erasedRow = page.getByRole("row").filter({ has: page.locator(`a[href="/admin/members/${member.id}"]`) })
+  await expect(erasedRow).toContainText("Données effacées · gardée pour l'historique (effectifs et heures)")
+  await expect(erasedRow.getByRole("button")).toHaveCount(0)
+
+    // Editing the erased record is refused: the data can't be typed back in.
   const patch = await page.request.patch(`/api/admin/members/${member.id}`, { data: { firstName: "Zoé" } })
   expect(patch.status()).toBe(409)
 

@@ -11,6 +11,7 @@ import { env } from "@/lib/env"
 import { countDuplicatePairs } from "@/lib/member-duplicates-data"
 import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
 import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
+import { memberRecordState } from "@/lib/member-record-state"
 
 export const dynamic = "force-dynamic"
 
@@ -71,6 +72,10 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     volunteers.map((v) => ({ id: v.id, active: v.active, mergedIntoId: v.mergedIntoId })),
   )
 
+  // Absorbed or erased records (#1014): what they are, and for an absorbed one the record it went
+  // into (end of the merge chain) and the day the daily cleanup deletes it.
+  const byId = new Map(volunteers.map((v) => [v.id, v]))
+
   return (
     <MembersManager
       initialMembers={volunteers.map((v) => {
@@ -95,6 +100,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           lastPresenceDate,
           addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),
           deletion: deletionEligibilities.get(v.id) ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
+          record: memberRecordState(v, byId, timeZone),
         }
       })}
       allTags={allTags}

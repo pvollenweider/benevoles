@@ -29,9 +29,15 @@ Quand deux fiches du répertoire désignent en fait la même personne (une adres
 3. **Points à vérifier** : si les deux fiches étaient inscrites au même créneau, l'inscription la plus avancée est gardée et l'autre annulée (avec une trace dans le journal de l'événement) ; les autres points (chevauchement de créneaux, sauf avec un poste cumulable avec un autre créneau, limite de postes, âge minimum, poste réservé) sont seulement signalés, pas bloqués, puisque vous avez déjà placé ces personnes en connaissance de cause. Une réponse différente à une même question, ou une invitation au même événement des deux côtés quand ce n'est pas déjà tranché par « déjà utilisée en premier », demande un choix explicite avant de pouvoir confirmer.
 4. **Confirmer** : la fusion est **irréversible**. La fiche absorbée est désactivée et vidée de ses informations personnelles (nom, email, téléphone, notes, date de naissance, étiquettes). Les liens personnels (inscriptions, invitations) déplacés depuis la fiche absorbée sont régénérés : une case à cocher permet d'envoyer aussi les nouveaux liens à l'adresse conservée. Les anciens liens affichent la page « lien plus valide » habituelle.
 
+La fiche absorbée n'est pas supprimée tout de suite : elle est gardée **30 jours** après la fusion, le temps que l'historique enregistré sous son ancien identifiant (journal des événements, journal de l'organisation) reste rattaché à la fiche conservée, puis le nettoyage automatique quotidien la supprime. Pendant ces 30 jours, elle ne compte pas dans le nombre de membres et n'apparaît dans la liste qu'en cochant **Inclure les fiches fusionnées ou effacées**, avec la mention « Fusionnée dans *nom de la fiche conservée* · supprimée automatiquement à partir du *date* » et un lien vers la fiche conservée. Vous n'avez rien à faire : elle ne peut être ni modifiée ni supprimée à la main.
+
 L'historique (journal de l'événement, journal de l'organisation) n'est jamais réécrit ; la page **Activité** de la fiche conservée continue à montrer les faits enregistrés sous l'ancienne fiche. Les responsables de secteur sont repérés par email, pas déplacés automatiquement : s'ils correspondent à l'adresse abandonnée, mettez-les à jour à la main.
 
 ## Questions fréquentes
+
+### J'ai fusionné deux fiches, mais la fiche absorbée apparaît encore.
+
+C'est normal : elle est gardée 30 jours après la fusion, puis supprimée automatiquement. Elle n'est visible qu'en cochant **Inclure les fiches fusionnées ou effacées** dans la liste des membres, où elle indique dans quelle fiche elle a été fusionnée et à partir de quand elle sera supprimée.
 
 ### Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.
 
