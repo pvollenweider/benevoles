@@ -123,6 +123,18 @@ Liste exhaustive des fonctionnalités de l'application.
 - Ce qui est public : `[Unreleased]` jamais ; un titre de version sans numéro ou sans date valide est ignoré avec son contenu ; seules les sections « En bref », « Ajouté », « Modifié », « Amélioré », « Corrigé », « Corrections notables », « Supprimé », « Sécurité », « Accessibilité », « Fonctionnalités » (« Mise à jour depuis … », « Infrastructure », « Refactoring », « Documentation » restent sur GitHub) ; une puce terminée par `<!-- interne -->` est écartée. Convention décrite dans `CONTRIBUTING.md`
 - `releaseMarkdown` redonne le contenu public d'une version en Markdown, point de départ prévu pour l'email de nouveautés (#762)
 
+### Blog (`/blog`, #944)
+
+- Les newsletters de benevol.app archivées, la plus récente en premier : un fichier Markdown par article dans `blog/` (`AAAA-MM-JJ-slug.md`, en-tête titre, date, résumé, version facultative), rendu à `/blog/<slug>` avec sa date, sa version (lien vers `/nouveautes#x.y.0`) et les liens « précédent / suivant » (`src/lib/blog.ts`)
+- Flux Atom `/blog/feed.xml`, annoncé par chaque page du blog ; liens du site rendus absolus dans le flux
+- Lien « Blog » dans l'en-tête et le pied de page des pages publiques ; chaque lien d'un article vers une fiche, une ancre ou une vidéo est vérifié par les tests (`src/lib/__tests__/blog.test.ts`)
+
+### Pour qui ? et Tarifs (`/pour-qui`, `/tarifs`, #872, #950)
+
+- `/pour-qui` réunit une page par situation (`/benevoles-fete-de-village`, `/benevoles-festival`, `/benevoles-manifestation-sportive`, `/planning-permanences-benevoles`), chacune avec une édition ou une saison type, les guides et tutoriels qui la concernent et ses questions fréquentes (données structurées FAQPage) ; l'en-tête des pages publiques les liste sous « Pour qui ? »
+- `/tarifs` (`TARIFS.md`) distingue le logiciel libre du service hébergé, gratuit, et dit comment le projet est financé
+- Déclarées dans `src/lib/doc-pages.ts` ; sur une autre instance, les liens vers ces pages de présentation du service hébergé mènent à benevol.app
+
 ### Fonctionnalités et accessibilité (`/fonctionnalites`, `/accessibilite`)
 
 - `/fonctionnalites` rend `FEATURES.md` (page de décision, par besoins), mise en page par `src/lib/features-page.ts` : le titre et l'ouverture, chaque `## ` en section avec son ancre et un sommaire « Sur cette page », une liste numérotée « **Titre.** texte » dessinée en étapes ; trois conventions en commentaires HTML (invisibles sur GitHub) : `<!-- video: ID -->` (lecteur sur place), `<!-- image: ID | texte alternatif -->` (affiche du tutoriel, seulement si la vidéo est publiée avec une affiche et `VIDEO_MEDIA_BASE_URL` défini, jamais d'image cassée) et `<!-- actions -->` suivi d'une liste de liens (boutons ; le premier, principal, « Demander un espace » par un email pré-rempli, en haut et en bas de page) ; `/logiciel-planning-benevoles` rend `LOGICIEL-PLANNING-BENEVOLES.md` (page éditoriale pour la recherche « logiciel planning bénévoles », #767) avec la même mise en page, plus une section de questions (`## Questions fréquentes` faite uniquement de `### Question ?` suivies de leur réponse, `parseFaq`) affichée ouverte et reprise mot pour mot en données structurées `FAQPage` (`plainAnswer`, `faqPageNode` de `src/lib/structured-data.ts`), liée depuis l'accueil et `/fonctionnalites`, hors de la navigation d'en-tête; `/accessibilite` rend `ACCESSIBILITE.md` (déclaration d'accessibilité : ce qui est testé, limites connues) ; pages déclarées dans `src/lib/doc-pages.ts` (métadonnées, navigation, sitemap), fichiers sources copiés dans l'image
