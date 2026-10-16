@@ -40,7 +40,7 @@ import ModalShell from "@/components/admin/ModalShell"
 import WithdrawDialog from "@/components/public/WithdrawDialog"
 import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
-import { checkAnswers, type Question } from "@/lib/event-questions"
+import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
@@ -1064,7 +1064,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={(event.questions ?? []).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="sidebar"
@@ -1090,7 +1090,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={(event.questions ?? []).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="card"

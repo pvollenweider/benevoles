@@ -5,9 +5,9 @@
 
 import { useLayoutEffect, useState } from "react"
 import { orgContactHref } from "@/lib/mission-brief"
-import { MY_ANSWERS_TITLE, NO_ANSWER_TEXT, startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
+import { MY_ANSWERS_TITLE, NO_ANSWER_TEXT, shownRows, startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { ORG_CONTACT_LABEL } from "@/lib/shift-info"
-import { checkAnswers, type Question } from "@/lib/event-questions"
+import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
 import {
   ANSWERS_SAVED_TEXT, ANSWERS_SAVE_FAILED_TEXT, ANSWERS_UNCHANGED_TEXT, EDIT_ANSWERS_LABEL, answersClosedText,
   type AnswersEditState,
@@ -23,7 +23,7 @@ const FORM_ID = "my-answers-form"
 const FORM_TITLE_ID = "my-answers-form-title"
 const CLOSED_ID = "my-answers-closed"
 
-const asQuestions = (rows: MyAnswerRow[]): Question[] => rows.map((r) => ({ id: r.id, label: r.label, type: r.type, options: r.options, required: r.required, minValue: r.minValue, maxValue: r.maxValue }))
+const asQuestions = (rows: MyAnswerRow[]): Question[] => rows.map((r) => ({ id: r.id, label: r.label, type: r.type, options: r.options, required: r.required, minValue: r.minValue, maxValue: r.maxValue, parentId: r.parentId, showIfValues: r.showIfValues }))
 
 /** The field a question's focus goes to: the text field, the checked choice, or the first one. */
 function fieldOf(id: string): () => HTMLElement | null {
@@ -88,7 +88,9 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
   /** Marks the refused fields and puts focus on the first; their message is read with the field. */
   function refuse(list: { questionId: string; message: string }[]) {
     setErrors(new Map(list.map((e) => [e.questionId, e.message])))
-    const first = list.find((e) => rows.some((r) => r.id === e.questionId))
+    // Only a field on screen: a follow-up (#1016) hidden by its parent's answer has none.
+    const shown = visibleQuestions(asQuestions(rows), answers)
+    const first = list.find((e) => shown.some((r) => r.id === e.questionId))
     const target = first ? fieldOf(first.questionId) : () => document.getElementById(`${FORM_ID}-submit`)
     // Focus already there (Enter in the refused field): moving it would voice nothing, the alert does.
     const already = target() === document.activeElement
@@ -193,8 +195,9 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
       ) : (
         <>
           <dl className="space-y-2 text-sm text-gray-800">
-            {rows.map((row) => (
-              <div key={row.id}>
+            {/* A follow-up (#1016) only when the answer to its parent shows it, set in under it. */}
+            {shownRows(rows).map((row) => (
+              <div key={row.id} className={row.parentId ? "pl-5 sm:pl-6" : undefined}>
                 <dt className="font-medium text-gray-900 break-words">{row.label}</dt>
                 <dd className="break-words">{row.answer ?? <span className="italic text-gray-600">{NO_ANSWER_TEXT}</span>}</dd>
               </div>

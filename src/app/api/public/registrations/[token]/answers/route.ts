@@ -9,7 +9,7 @@ import { registrationToken } from "@/lib/token-vault"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { orgTimeZone } from "@/lib/time-zone"
 import { checkAnswers } from "@/lib/event-questions"
-import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { myAnswerRows, myAnswersQuery, storedAnswers } from "@/lib/my-answers"
 import { answerChanges, answersClosedText, answersEditState } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 
@@ -64,16 +64,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
     return NextResponse.json({ error: answersClosedText(edit.reason), code: "answers_closed", reason: edit.reason }, { status: 409 })
   }
 
-  // The event's active questions with this volunteer's stored answers; only those sent are checked.
+  // The event's active questions with this volunteer's stored answers; only those sent are checked,
+  // the others kept as stored. A follow-up (#1016) whose parent's answer no longer shows it is
+  // cleared, sent or not: it counts as a change, logged and told like the others.
   const questions = await prisma.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
   const raw = parsed.data.answers
   const submitted = new Set(questions.filter((q) => Object.hasOwn(raw, q.id)).map((q) => q.id))
-  const check = checkAnswers(questions.filter((q) => submitted.has(q.id)), raw)
+  const check = checkAnswers(questions, raw, { keep: storedAnswers(questions) })
   if (!check.ok) {
     return NextResponse.json({ error: check.errors.map((e) => e.message).join(" "), questionErrors: check.errors }, { status: 400 })
   }
 
-  const changes = answerChanges(questions, submitted, check.values)
+  const changes = answerChanges(questions, new Set([...submitted, ...check.hidden]), check.values)
   if (changes.length === 0) return NextResponse.json({ answers: myAnswerRows(questions), changed: 0 })
 
   // Conditional on the record not being erased (#516): a link resolved just before an erasure

@@ -1047,6 +1047,33 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(update).not.toHaveBeenCalled()
   })
 
+  it("a follow-up's parent must be an active question of this very event, read through the scoped client (#1016)", async () => {
+    const list = await import("@/app/api/admin/events/[id]/questions/route")
+    const one = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const create = vi.fn(), update = vi.fn()
+    // Event A has one question; « q-b » (a yes/no question of event B, other org) is never found.
+    const questionFindMany = vi.fn().mockResolvedValue([{ id: "q-a2", label: "Repas ?", type: "yesno", options: [], parentId: null, showIfValues: [], position: 0 }])
+    const db = {
+      ...mockScopedDb({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) } }),
+      eventQuestion: {
+        findFirst: vi.fn().mockResolvedValue({ id: "q-a", label: "X", type: "text", options: [], required: false, roleName: null, parentId: null, showIfValues: [], answers: [], followUps: [] }),
+        findMany: questionFindMany, count: vi.fn().mockResolvedValue(1), create, update,
+      },
+    }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const p = { params: Promise.resolve({ id: "evt-a", questionId: "q-a" }) }
+    const body = { label: "Combien ?", type: "number", parentId: "q-b", showIfValues: ["Oui"] }
+    const created = await list.POST(makeRequest("/api/admin/events/evt-a/questions", "POST", body), p)
+    expect(created.status).toBe(400)
+    expect((await created.json()).field).toBe("parentId")
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-a/questions/q-a", "PATCH", body), p)).status).toBe(400)
+    // Questions read for this event only, active ones, through the scoped db.
+    expect(questionFindMany).toHaveBeenCalled()
+    for (const call of questionFindMany.mock.calls) expect(call[0].where).toMatchObject({ eventId: "evt-a", archivedAt: null })
+    expect(create).not.toHaveBeenCalled()
+    expect(update).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

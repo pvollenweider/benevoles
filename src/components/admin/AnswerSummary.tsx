@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary as Summary } from "@/lib/question-answer-summary"
+import { conditionLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary as Summary } from "@/lib/question-answer-summary"
 
 const linkClass =
   "text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -50,10 +50,12 @@ export default function AnswerSummary({ eventId, summary, stamp }: { eventId: st
           </ul>
           <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100">
             {summary.questions.map((q) => (
-              <div key={q.id} className="px-4 py-3">
+              // A follow-up (#1016) right after its parent, set in; its caption says whom it was asked to.
+              <div key={q.id} className={q.condition ? "py-3 pl-8 pr-4" : "px-4 py-3"}>
                 <table className="w-full text-sm border-collapse">
                   <caption className="text-left text-sm font-semibold text-gray-900 mb-1">
                     {q.label}
+                    {q.condition && <span className="block text-xs font-normal text-gray-600">{conditionLine(q.condition, waiting)}</span>}
                     {q.type === "multiple" && <span className="block text-xs font-normal text-gray-600">{MULTIPLE_NOTE}</span>}
                     {q.type === "number" && <span className="block text-xs font-normal text-gray-600">{numberNote(waiting)}</span>}
                   </caption>

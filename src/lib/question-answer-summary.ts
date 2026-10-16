@@ -12,10 +12,12 @@
  *   waiting for the organizer's approval, shown apart as a margin for the order;
  * - cancelled (or refused) only: not counted.
  * Archived questions are left out. A number question (#1015) is summed instead of counted by answer:
- * its total, then how many people answered. Pure, no Prisma: also used by the print sheets.
+ * its total, then how many people answered. A follow-up question (#1016) comes right after its
+ * parent and counts only the people it was asked to (their parent answer shows it), « Sans
+ * réponse » included. Pure, no Prisma: also used by the print sheets.
  */
 import { csvDocument } from "./data-export"
-import { NO, YES, parseWholeNumber } from "./event-questions"
+import { NO, YES, conditionText, followUpApplies, formOrder, parseWholeNumber } from "./event-questions"
 import { fmtHour } from "./registrations-list"
 
 export type SummaryQuestion = {
@@ -24,6 +26,9 @@ export type SummaryQuestion = {
   type: string
   options: string[]
   archivedAt?: Date | string | null
+  /** Follow-up question (#1016): its parent and the parent's answers that show it. */
+  parentId?: string | null
+  showIfValues?: string[]
   answers: { volunteerId: string; values: string[] }[]
 }
 export type SummaryRegistration = { volunteerId: string; status: string }
@@ -34,7 +39,9 @@ export type SummaryRegistration = { volunteerId: string; status: string }
  */
 export type SummaryRowKind = "option" | "removed" | "text" | "total" | "count" | "none"
 export type SummaryRow = { answer: string; kind: SummaryRowKind; confirmed: number; waiting: number }
-export type QuestionSummary = { id: string; label: string; type: string; rows: SummaryRow[] }
+/** A follow-up's condition (#1016), « Si « Oui » à « … » », and how many people it was asked to. */
+export type SummaryCondition = { text: string; confirmed: number; waiting: number }
+export type QuestionSummary = { id: string; label: string; type: string; rows: SummaryRow[]; condition?: SummaryCondition }
 export type AnswerSummary = { confirmedCount: number; waitingCount: number; questions: QuestionSummary[] }
 
 const CONFIRMED_STATUSES = new Set(["active"])
@@ -60,7 +67,7 @@ export const answerSummarySelect = {
   questions: {
     where: { archivedAt: null },
     orderBy: { position: "asc" as const },
-    select: { id: true, label: true, type: true, options: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } },
+    select: { id: true, label: true, type: true, options: true, archivedAt: true, parentId: true, showIfValues: true, answers: { select: { volunteerId: true, values: true } } },
   },
   registrations: {
     where: { status: { in: [...CONFIRMED_STATUSES, ...WAITING_STATUSES] }, shift: { status: { not: "cancelled" } } },
@@ -151,14 +158,49 @@ function summarizeQuestion(q: SummaryQuestion, people: Map<string, "confirmed" |
   return { id: q.id, label: q.label, type: q.type, rows }
 }
 
+/**
+ * The people a follow-up (#1016) was asked to: those whose answer to the parent shows it. Nobody
+ * when the parent is not among the active questions.
+ */
+function concerned(q: SummaryQuestion, parent: SummaryQuestion | undefined, people: Map<string, "confirmed" | "waiting">): Map<string, "confirmed" | "waiting"> {
+  if (!parent) return new Map()
+  const answers = new Map(parent.answers.map((a) => [a.volunteerId, a.values]))
+  return new Map([...people].filter(([volunteerId]) => followUpApplies(q, answers.get(volunteerId))))
+}
+
 export function answerSummary(questions: SummaryQuestion[], registrations: SummaryRegistration[]): AnswerSummary {
   const people = countedPeople(registrations)
   const counts = [...people.values()]
+  const active = formOrder(questions.filter((q) => !q.archivedAt))
+  const byId = new Map(active.map((q) => [q.id, q]))
   return {
     confirmedCount: counts.filter((w) => w === "confirmed").length,
     waitingCount: counts.filter((w) => w === "waiting").length,
-    questions: questions.filter((q) => !q.archivedAt).map((q) => summarizeQuestion(q, people)),
+    questions: active.map((q) => {
+      if (!q.parentId) return summarizeQuestion(q, people)
+      const parent = byId.get(q.parentId)
+      const asked = concerned(q, parent, people)
+      const whos = [...asked.values()]
+      return {
+        ...summarizeQuestion(q, asked),
+        condition: {
+          text: conditionText(q.showIfValues ?? [], parent?.label ?? ""),
+          confirmed: whos.filter((w) => w === "confirmed").length,
+          waiting: whos.filter((w) => w === "waiting").length,
+        },
+      }
+    }),
   }
+}
+
+/**
+ * Under a follow-up (#1016): whom it was asked to. « Posée seulement si « Oui » à « … » :
+ * 3 bénévoles confirmés concernés », with the waiting people when the summary has them.
+ */
+export function conditionLine(c: SummaryCondition, waiting: boolean): string {
+  const text = c.text.replace(/^Si /, "Posée seulement si ")
+  const confirmed = `${c.confirmed} bénévole${c.confirmed > 1 ? "s" : ""} confirmé${c.confirmed > 1 ? "s" : ""} concerné${c.confirmed > 1 ? "s" : ""}`
+  return `${text} : ${confirmed}${waiting ? `, ${c.waiting} en attente` : ""}.`
 }
 
 /** An answer as shown and exported: a removed choice says so. */
@@ -200,6 +242,7 @@ export function numberNote(waiting: boolean): string {
 export function answerSummaryCsv(summary: AnswerSummary): string {
   return csvDocument(
     ["Question", "Réponse", "Confirmés", "En attente"],
-    summary.questions.flatMap((q) => q.rows.map((r) => [q.label, rowLabel(r), r.confirmed, r.waiting])),
+    // A follow-up (#1016) says its condition next to its label: the file is read on its own.
+    summary.questions.flatMap((q) => q.rows.map((r) => [q.condition ? `${q.label} (${q.condition.text.replace(/^Si /, "si ")})` : q.label, rowLabel(r), r.confirmed, r.waiting])),
   )
 }

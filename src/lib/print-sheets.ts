@@ -4,7 +4,7 @@
 import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
-import { confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
+import { conditionLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
 
 /**
@@ -285,9 +285,9 @@ function answersView(d: SheetData): string {
   return `
     <p class="meta">Chaque bénévole compte une fois, quel que soit son nombre de créneaux : <strong>${esc(confirmedLine(a.confirmedCount))}</strong>${waiting ? `, et ${esc(waitingLine(a.waitingCount))}` : ""}. Les inscriptions annulées ne comptent pas, ni les questions retirées.</p>
     ${a.questions.map((q) => `
-    <section class="block">
+    <section class="block${q.condition ? " follow-up" : ""}">
       <table class="detail answers">
-        <caption>${esc(q.label)}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
+        <caption>${esc(q.label)}${q.condition ? `<span class="caption-note">${esc(conditionLine(q.condition, waiting))}</span>` : ""}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
         <thead><tr><th scope="col">Réponse</th><th scope="col" class="num">Confirmés</th>${waiting ? `<th scope="col" class="num">En attente</th>` : ""}</tr></thead>
         <tbody>
           ${q.rows.map((r) => `<tr>
@@ -385,6 +385,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .answers thead th.num { text-align: right; }
     .answers tbody th.total, .answers tbody th.total ~ td { font-weight: 700; }
     .answers .caption-note { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
+    .block.follow-up { margin-left: 1.5em; }
 
     /* ── Cards (individual sheet) ────────────────────────────────────────── */
     .card { border: 1px solid var(--rule); padding: 6px 10px; margin: 6px 0; page-break-inside: avoid; break-inside: avoid; }

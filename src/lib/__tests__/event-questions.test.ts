@@ -55,13 +55,13 @@ describe("number questions (#1015)", () => {
   })
 
   it("stores one spelling of the number", () => {
-    expect(checkAnswers([count], { n: " 03 " })).toEqual({ ok: true, values: new Map([["n", ["3"]]]) })
-    expect(checkAnswers([count], { n: 0 })).toEqual({ ok: true, values: new Map([["n", ["0"]]]) })
+    expect(checkAnswers([count], { n: " 03 " })).toEqual({ ok: true, values: new Map([["n", ["3"]]]), hidden: [] })
+    expect(checkAnswers([count], { n: 0 })).toEqual({ ok: true, values: new Map([["n", ["0"]]]), hidden: [] })
   })
 
   it("an empty optional answer is no answer; an empty required one is refused", () => {
-    expect(checkAnswers([count], { n: "" })).toEqual({ ok: true, values: new Map() })
-    expect(checkAnswers([count], {})).toEqual({ ok: true, values: new Map() })
+    expect(checkAnswers([count], { n: "" })).toEqual({ ok: true, values: new Map(), hidden: [] })
+    expect(checkAnswers([count], {})).toEqual({ ok: true, values: new Map(), hidden: [] })
     expect(checkAnswers([{ ...count, required: true }], { n: "" })).toEqual({ ok: false, errors: [{ questionId: "n", message: "« Combien de personnes ? » est obligatoire." }] })
   })
 
@@ -104,7 +104,7 @@ describe("number questions (#1015)", () => {
 describe("checkAnswers", () => {
   it("accepts valid answers and keeps multiple choices in the question's order", () => {
     const r = checkAnswers(qs, { size: "M", licence: "Oui", diet: ["Sans gluten", "Végétarien"], note: "  Deux festivals  " })
-    expect(r).toEqual({ ok: true, values: new Map([["size", ["M"]], ["licence", ["Oui"]], ["diet", ["Végétarien", "Sans gluten"]], ["note", ["Deux festivals"]]]) })
+    expect(r).toEqual({ ok: true, values: new Map([["size", ["M"]], ["licence", ["Oui"]], ["diet", ["Végétarien", "Sans gluten"]], ["note", ["Deux festivals"]]]), hidden: [] })
   })
 
   it("refuses a missing required answer, an unknown choice, a too long text", () => {
@@ -116,7 +116,7 @@ describe("checkAnswers", () => {
   })
 
   it("stores nothing for unanswered optional questions and ignores unknown ids", () => {
-    expect(checkAnswers(qs, { size: "S", other: "x" })).toEqual({ ok: true, values: new Map([["size", ["S"]]]) })
+    expect(checkAnswers(qs, { size: "S", other: "x" })).toEqual({ ok: true, values: new Map([["size", ["S"]]]), hidden: [] })
   })
 })
 

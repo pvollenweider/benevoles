@@ -23,7 +23,7 @@ describe("myAnswerRows", () => {
   })
 
   it("an unanswered question has no answer (the page says « Pas de réponse »)", () => {
-    expect(myAnswerRows([q("a", 0)])).toEqual([{ id: "a", label: "Question a ?", answer: null, type: "text", options: [], required: false, minValue: null, maxValue: null, values: [] }])
+    expect(myAnswerRows([q("a", 0)])).toEqual([{ id: "a", label: "Question a ?", answer: null, type: "text", options: [], required: false, minValue: null, maxValue: null, parentId: null, showIfValues: [], values: [] }])
     expect(myAnswerRows([q("a", 0, [])])[0].answer).toBeNull()
     expect(myAnswerRows([q("a", 0, ["  "])])[0].answer).toBeNull()
     expect(NO_ANSWER_TEXT).toBe("Pas de réponse")
