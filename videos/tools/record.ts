@@ -1871,7 +1871,7 @@ async function main() {
         await at("En revenant au planning depuis")
         await tap(page, page.getByRole("link", { name: "S'inscrire à d'autres créneaux", exact: true }))
         await settleEligibility()
-        const limited = page.getByRole("button", { name: /Buvette.*limite de 2 par personne atteinte/ }).first()
+        const limited = page.getByRole("button", { name: /Buvette.*limite de 2 créneaux par personne atteinte/ }).first()
         await limited.waitFor()
         await at("les autres créneaux restent visibles")
         await limited.scrollIntoViewIfNeeded()
@@ -2129,7 +2129,7 @@ async function main() {
       })
 
       await scene("limit", async (at) => {
-        const limited = page.getByRole("button", { name: /Buvette.*limite de 2 par personne atteinte/ }).first()
+        const limited = page.getByRole("button", { name: /Buvette.*limite de 2 créneaux par personne atteinte/ }).first()
         await limited.scrollIntoViewIfNeeded()
         await at("les autres plages restent visibles")
         await limited.focus()

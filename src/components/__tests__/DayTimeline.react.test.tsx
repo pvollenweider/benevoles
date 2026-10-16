@@ -67,9 +67,30 @@ describe("DayTimeline", () => {
 
   it("says on a bar that the role's limit per person is reached (#466), without disabling it", () => {
     render(<DayTimeline shifts={[shift("a"), shift("b", { roleName: "Loge", label: "Loge" })]} shows={[]} selected={new Set()} onToggle={() => {}} limitReachedRoles={new Map([["Loge", 2]])} />)
-    const loge = screen.getByRole("button", { name: /^18h–20h \d+\/\d+, Loge : sélectionner.*\(limite de 2 par personne atteinte\)$/ })
+    const loge = screen.getByRole("button", { name: "18h–20h 2/5, Loge : sélectionner (3 places libres sur 5) (limite de 2 créneaux par personne atteinte)" })
     expect(loge).toBeEnabled()
     expect(screen.getByRole("button", { name: /, Bar : sélectionner/ }).getAttribute("aria-label")).not.toMatch(/limite/)
+  })
+
+  // #1023: the reason was only in the name; it is shown under the bar too, short on a narrow bar.
+  it("shows the limit under the bar, in the name's words, without announcing it twice", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { roleName: "Loge", label: "Loge", minAge: 18 })]} shows={[]} selected={new Set()} onToggle={() => {}} limitReachedRoles={new Map([["Loge", 2]])} />)
+    const loge = screen.getByRole("button", { name: /Loge/ })
+    const line = loge.parentElement!.querySelector<HTMLElement>("[aria-hidden='true']")!
+    expect(line).toHaveTextContent("Limite atteinte")
+    expect(line).toHaveTextContent("Limite de 2 créneaux par personne atteinte")
+    expect(line).toHaveTextContent("18+")
+    expect(screen.getByText("Limite atteinte").className).toMatch(/@min-\[260px\]:hidden/)
+    expect(screen.getByText("Limite de 2 créneaux par personne atteinte").className).toMatch(/\bhidden @min-\[260px\]:inline/)
+    expect(loge.getAttribute("aria-label")!.toLowerCase()).toContain("limite de 2 créneaux par personne atteinte")
+    // The bar of another role, and the selected bar of this one, say nothing of it.
+    expect(screen.queryAllByText(/Limite/)).toHaveLength(2)
+  })
+
+  it("drops the limit from a selected bar of the role", () => {
+    render(<DayTimeline shifts={[shift("b", { roleName: "Loge", label: "Loge" })]} shows={[]} selected={new Set(["b"])} onToggle={() => {}} limitReachedRoles={new Map([["Loge", 1]])} />)
+    expect(screen.queryByText(/Limite/)).toBeNull()
+    expect(screen.getByRole("button", { name: /Loge : désélectionner/ }).getAttribute("aria-label")).not.toMatch(/limite/)
   })
 
   it("shows a reserved role's bars in words and doesn't offer them (#470)", () => {

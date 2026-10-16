@@ -26,7 +26,7 @@ describe("one rule for the timeline and the list (#808)", () => {
     expect(text(shift({ startTime: "22:00", endTime: "02:00", minAge: 18, requiresApproval: true }))).toMatchObject({ title: "22h–02h (jusqu'au lendemain) · Bar", details: "18 ans minimum · Sur validation" })
     expect(text(shift(), { held: "requested" }).status).toBe("Demande envoyée")
     expect(text(shift({ status: "full", waitlistEnabled: true })).status).toBe("Complet · file d'attente")
-    expect(text(shift(), {}, { locked: false, limitReached: 2 }).status).toBe("Limite de 2 par personne atteinte · 2 places libres sur 3")
+    expect(text(shift(), {}, { locked: false, limitReached: 2 }).status).toBe("Limite de 2 créneaux par personne atteinte · 2 places libres sur 3")
     expect(text(shift(), {}, { locked: true }).status).toBe("Inscriptions fermées · 2 places libres sur 3")
   })
 

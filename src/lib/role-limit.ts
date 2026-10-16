@@ -49,6 +49,17 @@ export function roleLimitMessage(b: RoleLimitBreach): string {
   return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : tu en as déjà ${b.held}, tu peux en ajouter ${b.max - b.held}.`
 }
 
+/**
+ * On the public page, before a click (#1023): why one more shift of the role can't be added, its
+ * limit being reached by the shifts held and selected. The timeline's name and wide-bar tag and the
+ * list's status say it in these words; a narrow bar shows the short form.
+ */
+export function roleLimitReachedText(max: number): string {
+  return `Limite de ${shiftsWord(max)} par personne atteinte`
+}
+
+export const ROLE_LIMIT_REACHED_SHORT = "Limite atteinte"
+
 /** On the public page, when one more shift of the role is refused at selection. */
 export function roleLimitSelectionMessage(b: RoleLimitBreach): string {
   return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : ce créneau n'est pas ajouté.`

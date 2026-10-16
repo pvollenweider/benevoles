@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest"
+import { roleLimitReachedText } from "../role-limit"
 import { barText, heldKinds, type BarTextInput, type HeldKind, type TimelineShift } from "../public-timeline"
 
 const shift = (over: Partial<TimelineShift> = {}): TimelineShift => ({
@@ -87,7 +88,7 @@ describe("barText for a shift not held", () => {
 
   it("drops the action verb when locked, and the limit only on bars not selected", () => {
     expect(text({ locked: true, shift: shift({ minAge: 16 }) }).ariaLabel).toBe("10h–12h 2/5, Bar (16 ans minimum) (3 places libres sur 5)")
-    expect(text({ limitReached: 2 }).ariaLabel).toMatch(/\(limite de 2 par personne atteinte\)$/)
+    expect(text({ limitReached: 2 }).ariaLabel).toMatch(/\(limite de 2 créneaux par personne atteinte\)$/)
     expect(text({ limitReached: 2, selected: true }).ariaLabel).not.toMatch(/limite/)
   })
 
@@ -117,5 +118,65 @@ describe("barText for a conflicting shift", () => {
     const shift = { id: "s", roleName: "Bar", label: "Bar", startTime: "10:00", endTime: "12:00", status: "open", capacity: 3, registered: 1, spotsLeft: 2 }
     expect(barText({ shift, selected: false, reserved: false, locked: false, conflict: true }).ariaLabel).toBe("10h–12h 1/3, Bar : chevauche un créneau déjà choisi")
     expect(barText({ shift: { ...shift, status: "full", registered: 3, spotsLeft: 0 }, selected: false, reserved: false, locked: false, conflict: true }).ariaLabel).toBe("Complet, Bar 10h–12h")
+  })
+})
+
+// The role's limit per person reached (#466): said under the bar too, not only in its name (#1023).
+describe("barText when the role's limit per person is reached", () => {
+  it("words the limit, singular and plural", () => {
+    expect(roleLimitReachedText(1)).toBe("Limite de 1 créneau par personne atteinte")
+    expect(roleLimitReachedText(2)).toBe("Limite de 2 créneaux par personne atteinte")
+  })
+
+  it("shows the limit first under the bar, with the same words as the name", () => {
+    const t = text({ limitReached: 2 })
+    expect(t.tag).toBe("Limite de 2 créneaux par personne atteinte")
+    expect(t.tagShort).toBe("Limite atteinte")
+    expect(t.subLabel).toBeNull()
+    expect(t.ariaLabel).toBe("10h–12h 2/5, Bar : sélectionner (3 places libres sur 5) (limite de 2 créneaux par personne atteinte)")
+  })
+
+  it("says nothing when the limit is not reached", () => {
+    const t = text()
+    expect(t.tag).toBeNull()
+    expect(t.tagShort).toBeNull()
+    expect(t.ariaLabel).not.toMatch(/limite/i)
+  })
+
+  it("keeps the bar's own details after the limit", () => {
+    const t = text({ limitReached: 2, shift: shift({ minAge: 18 }) })
+    expect(t.tag).toBe("Limite de 2 créneaux par personne atteinte")
+    expect(t.subLabel).toBe("18+")
+    const waitlist = text({ limitReached: 2, shift: shift({ status: "full", waitlistEnabled: true, spotsLeft: 0 }) })
+    expect(waitlist.tag).toBe("Limite de 2 créneaux par personne atteinte")
+    expect(waitlist.subLabel).toBe("Complet · file d'attente")
+    expect(waitlist.ariaLabel).toBe("10h–12h 2/5, Bar : rejoindre la file d'attente (limite de 2 créneaux par personne atteinte)")
+  })
+
+  it("gives way to a reason the bar already shows: selected, held, full, closed, reserved, conflict, locked", () => {
+    const others: Partial<BarTextInput>[] = [
+      { selected: true },
+      { held: "active" },
+      { shift: shift({ status: "full", spotsLeft: 0 }) },
+      { shift: shift({ status: "closed" }) },
+      { reserved: true },
+      { conflict: true },
+      { locked: true },
+    ]
+    for (const over of others) {
+      const t = text({ limitReached: 2, ...over })
+      expect(t.tag ?? "", JSON.stringify(over)).not.toMatch(/Limite/)
+      expect(t.tagShort, JSON.stringify(over)).toBeNull()
+      expect(t.ariaLabel, JSON.stringify(over)).not.toMatch(/limite/i)
+    }
+  })
+
+  it("shows the tag exactly when the name says the limit", () => {
+    const states: Partial<BarTextInput>[] = [{}, { selected: true }, { held: "waiting" }, { reserved: true }, { conflict: true }, { locked: true },
+      { shift: shift({ status: "full", waitlistEnabled: true, spotsLeft: 0 }) }, { shift: shift({ status: "closed" }) }]
+    for (const over of states) {
+      const t = text({ limitReached: 3, ...over })
+      expect(t.tag === roleLimitReachedText(3), JSON.stringify(over)).toBe(t.ariaLabel.endsWith("(limite de 3 créneaux par personne atteinte)"))
+    }
   })
 })

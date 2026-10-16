@@ -3,6 +3,7 @@
 
 import { fmt, crossesMidnight } from "@/lib/gantt-utils"
 import { RESERVED_LABEL } from "@/lib/role-reservation"
+import { ROLE_LIMIT_REACHED_SHORT, roleLimitReachedText } from "@/lib/role-limit"
 
 /** One shift as the public timeline (DayTimeline) draws it. */
 export type TimelineShift = {
@@ -69,8 +70,10 @@ export type BarTextInput = {
 export type BarText = {
   /** The button's accessible name. */
   ariaLabel: string
-  /** Held state in a word, shown first under the bar (aria-hidden: the name says it). */
+  /** Held state in a word, or the role's limit reached, shown first under the bar (aria-hidden: the name says it). */
   tag: string | null
+  /** A shorter tag for a narrow bar, when the tag has one (the role's limit, #1023). */
+  tagShort: string | null
   /** The rest of the line under the bar (label, age, approval, waitlist), or null. */
   subLabel: string | null
 }
@@ -94,6 +97,7 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
     return {
       ariaLabel: `${timeShown}, ${roleLabel} : ${HELD_NAME[held]}`,
       tag: HELD_TAG[held],
+      tagShort: null,
       subLabel: hasLabel ? shift.label : null,
     }
   }
@@ -110,7 +114,10 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
   const minAgeSuffix = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "")
   // Skipped once full: the « Complet » / waitlist wording already says all that matters.
   const spotsSuffix = unavail ? "" : ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})`
-  const limitSuffix = !selected && limitReached !== undefined ? ` (limite de ${limitReached} par personne atteinte)` : ""
+  // Said only where the bar can otherwise be taken: a bar that can't says its own reason.
+  const limitShown = !selected && !reserved && !unavail && !conflict && !locked && limitReached !== undefined
+  const limitText = limitShown ? roleLimitReachedText(limitReached) : null
+  const limitSuffix = limitText ? ` (${limitText.charAt(0).toLowerCase()}${limitText.slice(1)})` : ""
   // The « inscrits/places » count the bar shows while it can still be taken.
   const count = `${shift.registered}/${shift.capacity}`
 
@@ -134,7 +141,7 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
     needsApproval ? "Sur validation" : null,
   ].filter(Boolean).join(" · ")
 
-  return { ariaLabel, tag: null, subLabel: details || null }
+  return { ariaLabel, tag: limitText, tagShort: limitText ? ROLE_LIMIT_REACHED_SHORT : null, subLabel: details || null }
 }
 
 /** What the visitor can do with one shift (#808): the same answer for the timeline and the list. */
@@ -197,7 +204,7 @@ export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: 
               : opts.locked
                 ? `Inscriptions fermées · ${places}`
                 : opts.limitReached !== undefined
-                  ? `Limite de ${opts.limitReached} par personne atteinte · ${places}`
+                  ? `${roleLimitReachedText(opts.limitReached)} · ${places}`
                   : places
   const details = [
     shift.minAge != null ? `${shift.minAge} ans minimum` : null,
