@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:26:27.595Z",
-  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
+  "reviewedAt": "2026-10-16T11:41:20.318Z",
+  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
   "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
-  "clipSha256": "8f44e0a84393225c0b428361e6085b3441e1807c3776c0a7e0213690c639c8cb",
+  "clipSha256": "2fc50a5ddf09f003cbcf31888583e82482de4248b0fbf7152e816de544ccc4fd",
   "scene": "create",
   "review": {
-    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
+    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 1.2,
         "spoken": "cliquez sur Nouveau membre",
-        "visibleSeconds": 0.8,
-        "visible": "Ouverture du formulaire modal Nouveau membre",
+        "visibleSeconds": 1,
+        "visible": "La fenêtre modale « Nouveau membre » s'affiche à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.8,
         "spoken": "Saisissez son prénom et son nom",
         "visibleSeconds": 2.5,
-        "visible": "Saisie du prénom Maya et du nom Berger",
+        "visible": "Saisie de « Maya » dans le prénom puis de « Berger » dans le nom",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "puis son email et son téléphone si vous les connaissez",
-        "visibleSeconds": 5.2,
-        "visible": "Saisie de l'adresse email puis du numéro de téléphone dans les champs dédiés",
+        "spokenSeconds": 5.8,
+        "spoken": "puis son email et son téléphone",
+        "visibleSeconds": 6,
+        "visible": "Saisie de l'adresse email puis du numéro de téléphone de démonstration",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 19.2,
         "spoken": "Après la création, Maya apparaît dans la liste",
-        "visibleSeconds": 18.5,
-        "visible": "Clic sur le bouton Créer et apparition de Maya Berger dans la liste des membres",
+        "visibleSeconds": 19.5,
+        "visible": "La modale se ferme et la ligne de Maya Berger s'affiche dans le tableau des membres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien articulée, parfaitement synchronisée avec la démonstration."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

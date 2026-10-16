@@ -1,18 +1,18 @@
 {
   "slug": "admin-features-tour",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-14T03:21:57.991Z",
+  "recordedAt": "2026-10-16T10:34:52.748Z",
   "video": "capture.webm",
   "product": {
-    "commit": "0ad1a7d71fe7b28d88dd7ce4b9673d24dd080fdc",
-    "sourceTree": "3f6018d8171e81766b3a2d4dc7e7e9dcd21b72af",
-    "productSourceSha256": "f3857cc85552ab2cb8ca4c3b9107c546fb73a92c502274bc4c7a9efb1d39913e",
-    "buildId": "Pef0qFtQGGE6GvN9qeIJS",
-    "snapshot": "/tmp/benevoles-video-production.batch19",
-    "builtAt": "2026-10-14T03:13:34.926Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "ADMIN_FEATURES_OVERVIEW",
@@ -26,304 +26,339 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 109156
+      "atMs": 112546
     },
     {
       "kind": "click",
-      "atMs": 111138
+      "atMs": 115372
     },
     {
       "kind": "click",
-      "atMs": 111989
+      "atMs": 116205
     },
     {
       "kind": "click",
-      "atMs": 112789
+      "atMs": 117022
     },
     {
       "kind": "click",
-      "atMs": 113588
+      "atMs": 117908
     },
     {
       "kind": "click",
-      "atMs": 114371
+      "atMs": 118711
     },
     {
       "kind": "click",
-      "atMs": 115373
+      "atMs": 119986
     },
     {
       "kind": "click",
-      "atMs": 115820
+      "atMs": 120623
     },
     {
       "kind": "click",
-      "atMs": 117554
+      "atMs": 122721
     },
     {
       "kind": "click",
-      "atMs": 119205
+      "atMs": 124430
     },
     {
       "kind": "click",
-      "atMs": 123838
+      "atMs": 130130
     },
     {
       "kind": "click",
-      "atMs": 185365
+      "atMs": 199390
     },
     {
       "kind": "click",
-      "atMs": 186725
+      "atMs": 202836
     },
     {
       "kind": "click",
-      "atMs": 202331
+      "atMs": 224202
     },
     {
       "kind": "click",
-      "atMs": 205865
+      "atMs": 227901
     },
     {
       "kind": "click",
-      "atMs": 207547
+      "atMs": 229584
     },
     {
       "kind": "click",
-      "atMs": 209181
+      "atMs": 231217
     },
     {
       "kind": "click",
-      "atMs": 209981
+      "atMs": 233017
     },
     {
       "kind": "click",
-      "atMs": 290995
+      "atMs": 326814
     },
     {
       "kind": "click",
-      "atMs": 291810
+      "atMs": 327630
     },
     {
       "kind": "key",
-      "atMs": 292120
+      "atMs": 327938
     },
     {
       "kind": "key",
-      "atMs": 292218
+      "atMs": 328036
     },
     {
       "kind": "key",
-      "atMs": 292315
+      "atMs": 328135
     },
     {
       "kind": "key",
-      "atMs": 292413
+      "atMs": 328233
     },
     {
       "kind": "key",
-      "atMs": 292510
+      "atMs": 328331
     },
     {
       "kind": "key",
-      "atMs": 292609
+      "atMs": 328428
     },
     {
       "kind": "key",
-      "atMs": 292705
+      "atMs": 328526
     },
     {
       "kind": "key",
-      "atMs": 292987
+      "atMs": 328807
     }
   ],
   "cues": [
     {
       "id": "intro",
-      "startMs": 0,
-      "endMs": 13345
+      "startMs": 1,
+      "endMs": 14109
     },
     {
       "id": "organization",
-      "startMs": 16689,
-      "endMs": 32523
+      "startMs": 17440,
+      "endMs": 33604
     },
     {
       "id": "team",
-      "startMs": 32976,
-      "endMs": 51774
+      "startMs": 34059,
+      "endMs": 53640
     },
     {
       "id": "lifecycle",
-      "startMs": 55111,
-      "endMs": 74415
+      "startMs": 57021,
+      "endMs": 77277
     },
     {
       "id": "appearance",
-      "startMs": 74868,
-      "endMs": 90033
+      "startMs": 77732,
+      "endMs": 92759
     },
     {
       "id": "duplicate",
-      "startMs": 91641,
-      "endMs": 103731
+      "startMs": 94492,
+      "endMs": 106584
     },
     {
       "id": "shift-methods",
-      "startMs": 107083,
-      "endMs": 122923
+      "startMs": 110097,
+      "endMs": 129197
     },
     {
       "id": "shift-fields",
-      "startMs": 123377,
-      "endMs": 141972
+      "startMs": 129650,
+      "endMs": 151975
     },
     {
       "id": "registrations",
-      "startMs": 145356,
-      "endMs": 162078
+      "startMs": 155389,
+      "endMs": 174010
     },
     {
       "id": "members",
-      "startMs": 163770,
-      "endMs": 180015
+      "startMs": 175715,
+      "endMs": 193760
     },
     {
       "id": "questions",
-      "startMs": 181641,
-      "endMs": 196826
+      "startMs": 195495,
+      "endMs": 218310
     },
     {
       "id": "pages",
-      "startMs": 198448,
-      "endMs": 215408
+      "startMs": 219995,
+      "endMs": 238667
     },
     {
       "id": "messages",
-      "startMs": 218697,
-      "endMs": 236085
+      "startMs": 242102,
+      "endMs": 269907
     },
     {
       "id": "reminders",
-      "startMs": 237640,
-      "endMs": 250591
+      "startMs": 271570,
+      "endMs": 284931
     },
     {
       "id": "reports",
-      "startMs": 253929,
-      "endMs": 273545
+      "startMs": 288369,
+      "endMs": 309413
     },
     {
       "id": "activity",
-      "startMs": 276888,
-      "endMs": 294519
+      "startMs": 312790,
+      "endMs": 330439
     }
   ],
   "anchors": [
     {
       "segmentId": "team",
       "phrase": "Les responsables de secteur reçoivent",
-      "startMs": 9786,
-      "endMs": 18189,
-      "cueMs": 42764
+      "startMs": 9939,
+      "endMs": 19047,
+      "cueMs": 43999
+    },
+    {
+      "segmentId": "lifecycle",
+      "phrase": "Un événement suit un cycle",
+      "startMs": 530,
+      "endMs": 2821,
+      "cueMs": 57556
     },
     {
       "segmentId": "lifecycle",
       "phrase": "Même publié, il peut rester",
-      "startMs": 9534,
-      "endMs": 13732,
-      "cueMs": 64645
+      "startMs": 8789,
+      "endMs": 15140,
+      "cueMs": 65811
     },
     {
       "segmentId": "lifecycle",
       "phrase": "Les inscriptions peuvent être immédiates",
-      "startMs": 14221,
-      "endMs": 18731,
-      "cueMs": 69333
+      "startMs": 15630,
+      "endMs": 19922,
+      "cueMs": 72654
     },
     {
       "segmentId": "appearance",
       "phrase": "Le lieu peut recevoir des",
-      "startMs": 6797,
-      "endMs": 8755,
-      "cueMs": 81668
+      "startMs": 6933,
+      "endMs": 8881,
+      "cueMs": 84667
+    },
+    {
+      "segmentId": "duplicate",
+      "phrase": "Vous choisissez ce qui est repris",
+      "startMs": 6081,
+      "endMs": 7541,
+      "cueMs": 100574
     },
     {
       "segmentId": "shift-methods",
       "phrase": "ajouter un créneau depuis la",
-      "startMs": 3554,
-      "endMs": 11062,
-      "cueMs": 110643
+      "startMs": 4783,
+      "endMs": 12826,
+      "cueMs": 114882
     },
     {
       "segmentId": "shift-methods",
       "phrase": "ajouter un créneau depuis la",
-      "startMs": 3554,
-      "endMs": 11062,
-      "cueMs": 111450
+      "startMs": 4783,
+      "endMs": 12826,
+      "cueMs": 115694
     },
     {
       "segmentId": "shift-methods",
       "phrase": "Pour des horaires répétitifs, la",
-      "startMs": 11446,
-      "endMs": 15564,
-      "cueMs": 118717
+      "startMs": 13044,
+      "endMs": 18687,
+      "cueMs": 123935
     },
     {
       "segmentId": "shift-fields",
       "phrase": "La liste d’attente et l’inscription",
-      "startMs": 14455,
-      "endMs": 17835,
-      "cueMs": 137833
+      "startMs": 18321,
+      "endMs": 21650,
+      "cueMs": 147973
     },
     {
       "segmentId": "questions",
       "phrase": "taille de t-shirt, régime alimentaire",
-      "startMs": 3250,
-      "endMs": 9700,
-      "cueMs": 184891
+      "startMs": 3415,
+      "endMs": 11276,
+      "cueMs": 198911
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "Une question de suivi peut",
+      "startMs": 12309,
+      "endMs": 16957,
+      "cueMs": 207827
+    },
+    {
+      "segmentId": "questions",
+      "phrase": "Vous décidez si la réponse",
+      "startMs": 17618,
+      "endMs": 22256,
+      "cueMs": 213114
     },
     {
       "segmentId": "pages",
       "phrase": "Donnez un titre et rédigez",
-      "startMs": 6908,
-      "endMs": 10658,
-      "cueMs": 205357
+      "startMs": 7391,
+      "endMs": 11677,
+      "cueMs": 227387
     },
     {
       "segmentId": "pages",
       "phrase": "Puis organisez leur ordre avec",
-      "startMs": 11049,
-      "endMs": 13329,
-      "cueMs": 209498
+      "startMs": 12551,
+      "endMs": 14715,
+      "cueMs": 232547
     },
     {
       "segmentId": "messages",
       "phrase": "Les modèles réutilisables acceptent des",
-      "startMs": 7117,
-      "endMs": 13638,
-      "cueMs": 225815
+      "startMs": 8988,
+      "endMs": 15626,
+      "cueMs": 251091
     },
     {
       "segmentId": "messages",
-      "phrase": "Vous prévisualisez toujours le résultat",
-      "startMs": 13996,
-      "endMs": 16694,
-      "cueMs": 232695
+      "phrase": "Vous choisissez un envoi immédiat",
+      "startMs": 16540,
+      "endMs": 22504,
+      "cueMs": 258643
+    },
+    {
+      "segmentId": "messages",
+      "phrase": "La section Messages programmés permet",
+      "startMs": 23528,
+      "endMs": 27245,
+      "cueMs": 265631
     },
     {
       "segmentId": "reports",
       "phrase": "Les badges se génèrent en",
-      "startMs": 10899,
-      "endMs": 19443,
-      "cueMs": 264830
+      "startMs": 12264,
+      "endMs": 20686,
+      "cueMs": 300634
     },
     {
       "segmentId": "activity",
       "phrase": "La recherche globale permet ensuite",
-      "startMs": 13627,
-      "endMs": 17420,
-      "cueMs": 290516
+      "startMs": 13527,
+      "endMs": 17222,
+      "cueMs": 326319
     }
   ]
 }

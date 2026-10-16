@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:32.786Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
+  "reviewedAt": "2026-10-16T09:51:27.800Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
   "promptSha256": "d4d9e0e77e8a922f80de144e8bac3baad1c8f034c93d74f5b79066a94f85d587",
-  "clipSha256": "dbac9854a9781fd1a57da9ed77002ea012555922d80570dc5382a2548fca6e32",
+  "clipSha256": "ed3fb9335db3b9408c0a794ba8146cf8c02f7c2acf531f9298930ba25592b191",
   "scene": "links",
   "review": {
-    "heardOpening": "Vérifions enfin les liens.",
+    "heardOpening": "Vérifions enfin les liens. L'ancien lien personnel",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
-        "spoken": "L'ancien lien personnel de la fiche absorbée ne fonctionne plus",
+        "spokenSeconds": 0,
+        "spoken": "Vérifions enfin les liens.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page Activité de Robin Favre dans l'espace Membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2,
+        "spoken": "L’ancien lien personnel de la fiche absorbée ne fonctionne plus",
         "visibleSeconds": 2,
-        "visible": "Affichage de la page d'erreur 'Ce lien ne fonctionne pas - Inscription introuvable ou déjà annulée.'",
+        "visible": "Affichage de la page 'Ce lien ne fonctionne pas / Inscription introuvable ou déjà annulée'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée",
-        "visibleSeconds": 8,
-        "visible": "Affichage de la page 'Mes inscriptions' pour Robin Favre avec l'adresse conservée",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12.2,
-        "spoken": "Une inscription annulée parce qu'elle faisait doublon ne redevient pas active",
-        "visibleSeconds": 12,
-        "visible": "Vue détaillée des créneaux actifs sur la page 'Mes inscriptions'",
+        "spokenSeconds": 8.5,
+        "spoken": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée.",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page 'Mes inscriptions' pour Robin Favre",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec les transitions d'écran."
+      "observation": "Voix off fluide, claire et bien calée sur les changements d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

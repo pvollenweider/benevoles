@@ -1,38 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:11.606Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
+  "reviewedAt": "2026-10-16T09:50:21.186Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
   "promptSha256": "c8a8543634d07616f9c471b82288b1817513cd9611e3bfc44de978ae92909c5c",
-  "clipSha256": "e244b47093aa29d777cdba499e69e3c46ec230f2f0b1f31583fe0d7ced77ad81",
+  "clipSha256": "73802e40a0221ec08fcf190efb2e1822552d13f021ce718b0996f02097681cf6",
   "scene": "duplicates",
   "review": {
     "heardOpening": "Deux fiches pour une seule personne",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Dans Membres, ouvrez Doublons possibles",
-        "visibleSeconds": 2.9,
+        "spokenSeconds": 3.4,
+        "spoken": "ouvrez Doublons possibles",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de la page Doublons possibles avec la suggestion de doublon",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 12,
         "spoken": "Comparer et fusionner ouvre un aperçu",
-        "visibleSeconds": 12.8,
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de l'écran Aperçu de la fusion avec Robin Favre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.8,
+        "spokenSeconds": 16.5,
         "spoken": "Revenons aux suggestions",
-        "visibleSeconds": 17.2,
+        "visibleSeconds": 16,
+        "visible": "Retour sur la liste des suggestions de doublons",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
+        "spokenSeconds": 18.2,
         "spoken": "Ignorer retire simplement la paire de cette liste",
-        "visibleSeconds": 19.2,
+        "visibleSeconds": 18,
+        "visible": "Clic sur Ignorer et message Aucune paire possible en double pour l'instant",
         "sync": "aligned",
         "severity": "none"
       }
@@ -41,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisation parfaite avec les actions à l'écran."
+      "observation": "Voix féminine naturelle, claire et engageante, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

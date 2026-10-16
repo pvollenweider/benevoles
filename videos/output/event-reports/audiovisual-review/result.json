@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:06:43.911Z",
-  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "reviewedAt": "2026-10-16T11:23:34.836Z",
+  "videoSha256": "86c151c6935a101a5001b46c068475ced7f2edc6fe4924e5a34ef8f6502cd8b0",
   "promptSha256": "e00985a8b590da6e92e9901c82716311f48b215aba0fe9e4c15b090d950d624e",
-  "clipSha256": "7ed5c20754f6b7ff1d894e83390f88b03c85c6d1bd79eefc954218faa671e88c",
+  "clipSha256": "88b438cc7c7ccdf727c79e3058f6a7f75e24f6e4d63479b29f21d29093d7346a",
   "scene": "result",
   "review": {
-    "heardOpening": "Nous avons maintenant une feuille adaptée à l'accueil",
+    "heardOpening": "Nous avons maintenant",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste",
-        "visibleSeconds": 0,
-        "visible": "Page Rapports avec les liens 'Planning par jour' et 'Planning par poste'",
+        "spokenSeconds": 1.2,
+        "spoken": "une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel",
+        "visibleSeconds": 1,
+        "visible": "Section 'À afficher ou à remettre aux bénévoles' avec Planning par jour, Planning par poste et Planning individuel",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "un planning personnel et une liste de contacts réservée à l'organisation",
-        "visibleSeconds": 4.5,
-        "visible": "Présence de 'Planning individuel' et de la section 'Pour les organisateurs seulement' avec la liste de contacts",
+        "spokenSeconds": 6.8,
+        "spoken": "et une liste de contacts réservée à l'organisation",
+        "visibleSeconds": 6.2,
+        "visible": "Défilement affichant la section 'Pour les organisateurs seulement' avec le lien 'Liste avec téléphones'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
-        "spoken": "Si le planning change, générez une nouvelle version et remplacez les anciennes copies.",
-        "visibleSeconds": 13,
-        "visible": "Écran stable récapitulatif sur la page des rapports",
+        "spokenSeconds": 13.5,
+        "spoken": "Si le planning change, générez une nouvelle version et remplacez les anciennes copies",
+        "visibleSeconds": 13.5,
+        "visible": "Page Documents visible avec les différents exports disponibles pendant les conseils d'organisation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec ce récapitulatif final."
+      "observation": "Voix fluide, chaleureuse et parfaitement intelligible tout au long de la conclusion."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

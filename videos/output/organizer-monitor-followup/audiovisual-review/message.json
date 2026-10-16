@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:12.723Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:05:29.656Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "74ffbbb8c585e1c5bddb0a659e141c74b12a0f5c637adbc8def6626eff94dd5d",
-  "clipSha256": "aadff1e7e6dcdf363a928394caf159d26a24a9a7edc95e2da87f26dc7ccb23f5",
+  "clipSha256": "c02375677c7177254febb92cd8ba390a11bc178545fbb82da5bcdd56d8fe2e13",
   "scene": "message",
   "review": {
     "heardOpening": "Vous pouvez partir d'un modèle",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Vous pouvez partir d'un modèle",
-        "visibleSeconds": 1.2,
-        "visible": "Un modèle est sélectionné dans la liste et le bouton « Utiliser ce modèle » est cliqué",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection d'un modèle prédéfini et clic sur 'Utiliser ce modèle'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "adapter l'objet et le texte, puis utiliser des variables comme le prénom ou les créneaux",
-        "visibleSeconds": 3,
-        "visible": "L'objet et le corps du message s'affichent avec les balises de variables {prenom} et {creneau}",
+        "spokenSeconds": 2.2,
+        "spoken": "adapter l'objet et le texte, puis utiliser des variables",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage des champs d'objet, de corps du message et des tags de variables dynamiques",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 7.5,
         "spoken": "ouvrez l'aperçu",
-        "visibleSeconds": 7.5,
-        "visible": "Clic sur le bouton « Voir l'aperçu et envoyer », ouvrant la fenêtre modale « Aperçu de l'email »",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur 'Voir l'aperçu avant envoi' et ouverture de la fenêtre modale d'aperçu",
         "sync": "aligned",
         "severity": "none"
       },
@@ -36,7 +36,7 @@
         "spokenSeconds": 9.5,
         "spoken": "vous contrôlez le rendu exact et le nombre de destinataires",
         "visibleSeconds": 9.5,
-        "visible": "L'aperçu montre le rendu personnalisé (« Hello Camille ! ») et la mention d'envoi à 3 personnes",
+        "visible": "La fenêtre modale affiche le rendu personnalisé ainsi que la mention 'Envoyer l'email à 3 personnes'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+      "observation": "Voix naturelle, chaleureuse et fluide, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

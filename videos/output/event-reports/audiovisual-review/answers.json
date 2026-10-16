@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:06:34.790Z",
-  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "reviewedAt": "2026-10-16T11:23:11.699Z",
+  "videoSha256": "86c151c6935a101a5001b46c068475ced7f2edc6fe4924e5a34ef8f6502cd8b0",
   "promptSha256": "2ad908a465f15e43360f62e9bf7fed6bbf5f01d4826e4f9d14b6179169364b7c",
-  "clipSha256": "a7c3feb97dcd5c7a83513e3b50a472499d58a7791027cdde30350dc8318850ca",
+  "clipSha256": "7b28975b1855277cad97ce015bf18e1ae0d2f61e0b07b4a137d5a01dcba8d4f2",
   "scene": "answers",
   "review": {
     "heardOpening": "Pour préparer les t-shirts et les repas",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 3.2,
         "spoken": "ouvrez Questions aux bénévoles, puis la Synthèse des réponses",
-        "visibleSeconds": 2,
-        "visible": "Page 'Questions aux bénévoles' affichée avec la section 'Synthèse des réponses'",
+        "visibleSeconds": 0,
+        "visible": "L'écran affiche déjà la page Questions et la section Synthèse des réponses",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.3,
-        "spoken": "télécharger cette synthèse en CSV pour travailler avec les chiffres, ou ouvrir sa version imprimable",
-        "visibleSeconds": 21,
-        "visible": "Liens 'Télécharger la synthèse (CSV)' et 'Imprimer la synthèse' visibles",
+        "spokenSeconds": 11.2,
+        "spoken": "Lisons les tailles et les régimes renseignés",
+        "visibleSeconds": 11,
+        "visible": "Défilement de la page montrant le tableau Taille du t-shirt et Régime alimentaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.1,
+        "spokenSeconds": 23.9,
+        "spoken": "ouvrir sa version imprimable",
+        "visibleSeconds": 24.2,
+        "visible": "Clic sur Imprimer la synthèse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
         "spoken": "Regardons ce vrai document",
-        "visibleSeconds": 26.5,
-        "visible": "Affichage de la version imprimable de la synthèse des réponses",
+        "visibleSeconds": 25.5,
+        "visible": "Affichage de la page Fête des associations — documents terrain (Synthèse des réponses)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien articulée, synchronisée avec l'affichage."
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

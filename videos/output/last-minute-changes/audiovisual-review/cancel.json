@@ -1,59 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:20:17.019Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
+  "reviewedAt": "2026-10-16T08:59:43.799Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
   "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
-  "clipSha256": "50705e88a2151a2d51d19b94be879b02089cf360c4c525cf8ead502e58b44ed3",
+  "clipSha256": "3b4455eccf138fca295293080b94211b0f0e573d777510e881cc9a54ee2a13c2",
   "scene": "cancel",
   "review": {
-    "heardOpening": "Une mission n'a plus lieu",
+    "heardOpening": "Une mission n'a plus lieu ?",
     "checkpoints": [
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 6.6,
         "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
-        "visibleSeconds": 6.8,
-        "visible": "Ouverture de la modale « Supprimer le créneau « Caisse, Caisse de la petite scène » ? » détaillant les conséquences",
+        "visibleSeconds": 6,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » détaillant les conséquences de l'annulation"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 10.7,
         "spoken": "Après confirmation, les inscriptions concernées sont annulées",
-        "visibleSeconds": 12.3,
-        "visible": "Clic sur « Supprimer » et disparition du créneau de la liste",
+        "visibleSeconds": 11.5,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Clic sur le bouton Supprimer et disparition du créneau dans la liste"
       },
       {
-        "spokenSeconds": 20.1,
-        "spoken": "Vérifions le statut",
-        "visibleSeconds": 17,
-        "visible": "Page Journal affichant les lignes d'annulation des inscriptions",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 16.5,
+        "spoken": "Une demande en attente de validation est aussi concernée.",
+        "visibleSeconds": 16.2,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Affichage de l'onglet Journal montrant l'annulation d'une inscription confirmée et d'une demande à valider"
       },
       {
-        "spokenSeconds": 21.3,
+        "spokenSeconds": 20.8,
         "spoken": "puis le vrai email reçu.",
-        "visibleSeconds": 21.6,
-        "visible": "Affichage de la messagerie Mailpit avec le mail de notification d'annulation",
+        "visibleSeconds": 21,
         "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 29.3,
-        "spoken": "Annuler n'est pas simplement fermer les nouvelles inscriptions.",
-        "visibleSeconds": 29.8,
-        "visible": "Affichage de la page Inscriptions avec le filtre « Demandes à traiter »",
-        "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail informant de l'annulation du créneau"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, parfaitement intelligible."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

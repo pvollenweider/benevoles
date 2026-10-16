@@ -1,21 +1,8 @@
 STATUS: READY
-{
-  "id": "SECTOR_LEADERS",
-  "status": "READY",
-  "duration": 213.8,
-  "buildId": "RNDQIXzICnt5M_573dvDi",
-  "music": {
-    "voicedWindows": 204,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 14.4,
-    "largestGapLu": 19.3,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "66 images finales revues, AV11/11, ASR final11/11, provenance, validate, ancres, VTT, effets et musique passent. Formulaire de remplacement visible à12.8s pour phrase12.3s ; révocation visible à4s. Nora et contact correctement cadrés ; Frise, dates françaises, aucune adresse interdite/overlay. Nit : dates Mailpit anglaises.",
-  "sourceChanges": "record.ts : retour Ajouter un responsable sur at(\"Vous pouvez ensuite désigner la nouvelle personne\"). Unique re-film du batch utilisé, provenance même commit/build acceptée. Audio cohérent batch11 conservé sans régénération.",
-  "report": "videos/output/sector-leaders/review-report.txt",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+SECTOR_LEADERS — batch 23-3 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 217.56 s; music 14.1–19.4 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration regenerated in one pass with original voice; boundaries measured and independently audited.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Whole Puck narration regenerated in one pass with continuousPauseTags false; first drifted generation archived, retained whole take passes all ten audio-only opening/chapter comparisons before filming. Eleven audiovisual chapters, eight chapter/anchor sheets, real nomination and signup emails with take-only sidebars, mobile roster, scope and invalidated leader link reviewed. Flag at registered +11.8–12.1 s is a natural breath with negligible impact per independent source-audio countercheck, not laughter, added words or voice discontinuity. Whole final ASRs agree; no informal viewer address or blocking issue.
+No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.

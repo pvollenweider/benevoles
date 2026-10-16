@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:40:09.462Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:17:42.412Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "25531fd130d559ea51f55e05ae0392b019f60b3428468116e859983bc9f29f6d",
-  "clipSha256": "cd04ae6572d029938e8e9e1e7e42576f4be583d9990bbfaa782a8c5eeff1684b",
+  "clipSha256": "e8fc03ce5cb6b6609a9551c57e20b2956dd4bfa9fc7067c117067c5dae62661d",
   "scene": "answered-lock",
   "review": {
     "heardOpening": "Le formulaire a maintenant des réponses",
     "checkpoints": [
       {
-        "spokenSeconds": 1.8,
-        "spoken": "revenons modifier la taille du t-shirt",
-        "visibleSeconds": 1.8,
-        "visible": "Clic sur le lien Modifier en face de Taille de t-shirt, ouvrant le formulaire de modification",
+        "spokenSeconds": 3.2,
+        "spoken": "revenons modifier la taille du t-shirt.",
+        "visibleSeconds": 2,
+        "visible": "Ouverture du formulaire de modification pour la question Taille de t-shirt",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.3,
-        "spoken": "Le type est verrouillé",
-        "visibleSeconds": 4.3,
-        "visible": "Le champ Type de réponse est grisé et verrouillé avec la mention explicative",
+        "spokenSeconds": 6.2,
+        "spoken": "Le type est verrouillé.",
+        "visibleSeconds": 6.2,
+        "visible": "Le champ Type de réponse est grisé et verrouillé avec message explicatif",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.8,
-        "spoken": "retirer L des choix proposés",
-        "visibleSeconds": 12.2,
-        "visible": "Suppression de l'option L dans le champ Choix proposés puis clic sur Enregistrer",
+        "spokenSeconds": 13.5,
+        "spoken": "Essayons aussi de retirer L des choix proposés.",
+        "visibleSeconds": 14.1,
+        "visible": "Suppression de la lettre L dans la liste des choix proposés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "L'application refuse",
-        "visibleSeconds": 14.5,
-        "visible": "Message d'erreur affiché : Des bénévoles ont choisi « L » : ce choix ne peut pas être retiré",
+        "spokenSeconds": 16.6,
+        "spoken": "L'application refuse, car cette taille a déjà été retenue.",
+        "visibleSeconds": 16.5,
+        "visible": "Message d'erreur rouge : Des bénévoles ont choisi « L » : ce choix ne peut pas être retiré",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.9,
-        "spoken": "Annulons cette modification",
-        "visibleSeconds": 19.4,
-        "visible": "Clic sur Annuler et retour à la page précédente montrant la réponse L confirmée",
+        "spokenSeconds": 21,
+        "spoken": "Annulons cette modification.",
+        "visibleSeconds": 22.3,
+        "visible": "Clic sur Annuler et fermeture du formulaire de modification",
         "sync": "aligned",
         "severity": "none"
       }

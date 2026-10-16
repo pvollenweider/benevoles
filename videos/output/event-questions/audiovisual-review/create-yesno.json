@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:26.034Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
-  "promptSha256": "3b8e98e90e0bb79b66bb3f7ccf16c5af9a2a70130d59c91abf8ca39cad2e1143",
-  "clipSha256": "0f4f94dd81c7c7c07109a48701c5819d153ff420b1c8d076cd755c479c1053b5",
+  "reviewedAt": "2026-10-16T12:15:31.532Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
+  "promptSha256": "18845e88a93d010d45f6dfd80e54714f8b4a41428761d310dd3a057d83d94ff1",
+  "clipSha256": "510c6b6e0e537e0e4f2647ab7ed1e1b4ff2232c130578e8aab15771cb0a8368a",
   "scene": "create-yesno",
   "review": {
-    "heardOpening": "Pour le permis de conduire",
+    "heardOpening": "Pour le permis de conduire, une réponse simple suffit",
     "checkpoints": [
       {
         "spokenSeconds": 3.4,
         "spoken": "Ajoutons une nouvelle question",
-        "visibleSeconds": 3.6,
-        "visible": "Clic sur le lien « Ajouter une question » et ouverture du formulaire",
+        "visibleSeconds": 4.1,
+        "visible": "Clic sur le bouton Ajouter une question et affichage du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 5.2,
         "spoken": "puis écrivons Permis de conduire",
-        "visibleSeconds": 5.7,
-        "visible": "Saisie de « Permis de conduire » dans le champ de la question",
+        "visibleSeconds": 5.9,
+        "visible": "Le texte Permis de conduire apparaît dans le champ Question posée aux bénévoles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.3,
+        "spokenSeconds": 7.3,
         "spoken": "Choisissons Oui ou non dans le type de réponse",
-        "visibleSeconds": 8.3,
-        "visible": "La valeur « Oui ou non » est déjà positionnée par défaut dans le type de réponse",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de l'option Oui ou non dans la liste déroulante Type de réponse",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.8,
+        "spokenSeconds": 24.1,
         "spoken": "rendons aussi la réponse obligatoire, puis enregistrons",
-        "visibleSeconds": 16,
-        "visible": "Coche de « Réponse obligatoire » puis clic sur « Enregistrer », ajoutant la question à la liste",
+        "visibleSeconds": 25.1,
+        "visible": "Coche de la case Réponse obligatoire puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix de synthèse claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,8 +1,8 @@
 STATUS: READY
-ID: VOLUNTEER_CALENDAR
-Product commit: ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8; BUILD_ID: urE8YE_Qy4c7ji_FfJcAe
-Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
-Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 14.4 / 18.8 LU. Effects vs input events: {'click': 7, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
-Review observations: All54MP4frames reviewed; download controls, exclusion of waitlist, practical details, overnight22h→02h+1, change23h and updateddownload align with sentences. ActualICS3events/stableIDs/ZurichUTC/originalunchanged checks pass. Native calendar import explicitly not demonstrated. All9finalASR/VTT/effects7clicks/currentlabels/Frenchdates/no forbiddenaddressoverlay/validate/music14.4–18.8 pass.
-Local source changes: record.ts selector Modifier le créneau updated during rehearsal; audio reused; one narrated capture.
-Real-time subjective listening unavailable; not used as a failure reason.
+VOLUNTEER_CALENDAR — batch 23-2 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 182.52 s; music 14.1–19 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 6 (volunteer-only, allowed).
+Overnight start changed 22:00→23:00 while end remains 02:00 next day; both real ICS downloads preserve registration UIDs and contain exactly three confirmations. All chapter/action frames and whole final ASR checked; opening/result voice countercheck consistent. Native calendar import remains explicitly excluded in narration.
+No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.

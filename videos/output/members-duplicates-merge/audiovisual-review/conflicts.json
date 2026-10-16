@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:23.251Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
+  "reviewedAt": "2026-10-16T09:50:53.246Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
   "promptSha256": "4022bc0d3e0da98be8a6800766d80443fbba999c82022bf1b4cc6c2496779b09",
-  "clipSha256": "511e67da29ac9fa7dc7f77ceb9a49eaa66a3e3c8f0c4f0718980f4c7dbe46c42",
+  "clipSha256": "dd16e8c37a6486cf3b4f7ddc71c8599898a64a0fb9313579ae08f46c314b3145",
   "scene": "conflicts",
   "review": {
     "heardOpening": "Les points à vérifier évitent les surprises",
     "checkpoints": [
       {
-        "spokenSeconds": 20.3,
+        "spokenSeconds": 18.8,
         "spoken": "Ici, on garde la réponse de la fiche absorbée.",
-        "visibleSeconds": 22,
-        "visible": "Sélection du bouton radio 'Prendre la réponse de la fiche absorbée'",
+        "visibleSeconds": 19.8,
+        "visible": "Sélection du bouton radio « Prendre la réponse de la fiche absorbée »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.6,
+        "spokenSeconds": 21,
         "spoken": "On choisit aussi son invitation.",
-        "visibleSeconds": 23.5,
-        "visible": "Sélection du bouton radio 'Prendre l'invitation de la fiche absorbée'",
+        "visibleSeconds": 22.2,
+        "visible": "Sélection du bouton radio « Prendre l'invitation de la fiche absorbée »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 24.8,
+        "spokenSeconds": 24.3,
         "spoken": "la confirmation devient disponible.",
-        "visibleSeconds": 24.2,
-        "visible": "Le bouton rouge 'Fusionner les deux fiches' s'active une fois les deux choix renseignés",
+        "visibleSeconds": 23.5,
+        "visible": "Le bouton rouge « Fusionner les deux fiches » devient cliquable sans message de blocage",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

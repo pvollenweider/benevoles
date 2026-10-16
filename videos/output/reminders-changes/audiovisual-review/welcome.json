@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:17:42.380Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "49e382c146f6021e2ce30c036d5e4145cd0485c853159ea94d8ba1d8d1a43c6a",
-  "clipSha256": "c86df01205c2860e220e1d04580d6a5f68e29f8de1843e728b2ba149b5353e99",
+  "reviewedAt": "2026-10-16T10:53:56.551Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "55137b0b044b60c29f09d88dfca3f2d106def21ed4b329481f8e13fafacbfcc3",
+  "clipSha256": "df3fbd0c24fbbf6f2c5e7cf7e633026b866e6ff014ad8f54f3c5989f6b9ce342",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Un petit rappel aide les bénévoles",
+    "heardOpening": "Un petit rappel aide les bénévoles à retrouver",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous.",
         "visibleSeconds": 0,
-        "visible": "Titre d'introduction affiché : Rappeler le rendez-vous et prévenir quand le planning change",
+        "visible": "Titre superposé au centre : « Rappeler le rendez-vous et prévenir quand le planning change ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "Ici, nous allons distinguer trois choses : le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement.",
+        "spokenSeconds": 3.5,
+        "spoken": "Et si l'horaire change, mieux vaut les prévenir clairement.",
         "visibleSeconds": 3,
-        "visible": "Page de gestion de l'événement affichée avec ses indicateurs et options",
+        "visible": "L'encart de titre disparaît pour afficher l'onglet Aperçu de l'événement « Atelier des rappels ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "Nous utiliserons un événement de démonstration et sa vraie boîte mail de test",
-        "visibleSeconds": 14.8,
-        "visible": "Fiche de l'événement de test Atelier des rappels visible à l'écran",
+        "spokenSeconds": 15.5,
+        "spoken": "Nous utiliserons un événement de démonstration",
+        "visibleSeconds": 15.5,
+        "visible": "L'événement de démonstration « Atelier des rappels » reste affiché à l'écran en support d'introduction.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement intelligible, sans bruits parasites."
+      "observation": "Voix claire, posée et bien articulée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

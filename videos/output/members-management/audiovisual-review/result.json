@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:26:59.860Z",
-  "videoSha256": "5d6b2d30c9d5de0e17537532ce17063303d391f883900817d2a9258f50b0cb76",
-  "promptSha256": "88b4ea5f79643a33c2761d68d3660817c219652ddf46b954f1a6232b3806d090",
-  "clipSha256": "96f81286d0e32d9359fd8294ffce08cb38316fa3b183951db9de434277bea128",
+  "reviewedAt": "2026-10-16T11:42:57.015Z",
+  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "promptSha256": "8f635a9d3e9c42da6116cb6029caa0bb57bb647d902198e552e1daa7e8dd9c07",
+  "clipSha256": "254914cb6f09095d92780b1f217a96ad5d01d30056600f888af00364f3523240",
   "scene": "result",
   "review": {
-    "heardOpening": "Une liste bien entretenue",
+    "heardOpening": "Une liste bien entretenue, ce sont les bonnes coordonnées",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
-        "spoken": "ce sont les bonnes coordonnées",
-        "visibleSeconds": 2.1,
-        "visible": "Affichage de la liste des membres avec les colonnes Prénom, Nom et Contact",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 3.8,
-        "spoken": "quelques catégories utiles",
-        "visibleSeconds": 3.8,
-        "visible": "Colonne Étiquette montrant des catégories telles que habitat, accueil ou logistique",
+        "spokenSeconds": 0.8,
+        "spoken": "Une liste bien entretenue, ce sont les bonnes coordonnées",
+        "visibleSeconds": 0.8,
+        "visible": "Page Membres affichant la liste des bénévoles avec leurs coordonnées et étiquettes",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7,
-        "spoken": "Mets les fiches à jour quand une personne te signale un changement",
+        "spoken": "Mettez les fiches à jour quand une personne vous signale un changement",
         "visibleSeconds": 7,
-        "visible": "Liste des membres avec les options d'action (Éditer) sur un écran stable de synthèse",
+        "visible": "Écran stable de la liste des membres avec les actions Modifier sur chaque ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Et gardez seulement les notes nécessaires",
+        "visibleSeconds": 14.5,
+        "visible": "Vue d'ensemble de la gestion des membres servant de support à la conclusion",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off claire, posée et bienveillante, énonçant des recommandations générales sur un écran de synthèse."
+      "observation": "Voix claire, posée et bien articulée, débit régulier pour cette conclusion."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

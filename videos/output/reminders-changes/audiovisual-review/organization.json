@@ -1,61 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:18:01.289Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "bdac9d221f775a402f1e2ce231bfbb39d6c93a9cc4b29dc92cfeed44f084c326",
-  "clipSha256": "cbab6de7a90c386d43d0adc44e4f36bb3c409eae4571d100db1761def3c560d1",
+  "reviewedAt": "2026-10-16T10:54:31.962Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "8d576cab854a204d8f74660c76022278476c7b2e1f3534477d6e24e739fd383f",
+  "clipSha256": "dcf6d5d26aea2867d30214a5312761c6c8c8579d9752847bd16fc24519204bea",
   "scene": "organization",
   "review": {
-    "heardOpening": "Dans Paramètres, puis Emails",
+    "heardOpening": "Dans Paramètres puis Emails",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Dans Paramètres, puis Emails, vous choisissez les rappels automatiques",
-        "visibleSeconds": 0,
-        "visible": "Page Réglages des emails sous l'onglet Paramètres",
+        "visibleSeconds": 0.5,
+        "visible": "Page Paramètres > Emails affichée avec la section Réglages des emails et les options de rappels automatiques",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "J moins deux, J moins un et le rappel du jour",
-        "visibleSeconds": 5.4,
-        "visible": "Options cochées pour Rappel J-2, Rappel J-1 et Rappel du jour",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 10.8,
-        "spoken": "il faut enregistrer le changement",
-        "visibleSeconds": 13,
-        "visible": "Défilement vers le bas affichant le bouton Enregistrer",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12.8,
+        "spokenSeconds": 12,
         "spoken": "Nous coupons celui de la veille, enregistrons, puis le réactivons",
-        "visibleSeconds": 14,
-        "visible": "Aucune case n'est décochée ni réactivée et aucun clic sur Enregistrer n'est effectué",
+        "visibleSeconds": 13.5,
+        "visible": "Aucune case n'est décochée ni réactivée ; la page effectue seulement un défilement vers le bas",
         "sync": "missing",
         "severity": "major"
       },
       {
-        "spokenSeconds": 17.2,
+        "spokenSeconds": 17,
         "spoken": "Vous trouvez aussi l'adresse de réponse",
-        "visibleSeconds": 17,
-        "visible": "Champ Adresse de réponse visible à l'écran",
+        "visibleSeconds": 14,
+        "visible": "Le champ Adresse de réponse est visible après le défilement",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "À 00:13, l'action annoncée « Nous coupons celui de la veille, enregistrons, puis le réactivons » n'est pas effectuée : la case reste cochée et aucun enregistrement n'a lieu."
+      "À 00:12, l'action annoncée (« Nous coupons celui de la veille, enregistrons, puis le réactivons ») n'est pas réalisée à l'écran : le curseur n'interagit pas avec les cases et la page défile simplement vers le bas."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, avec un fond musical discret."
+      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

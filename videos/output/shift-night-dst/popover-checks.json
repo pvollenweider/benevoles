@@ -1,23 +1,32 @@
 {
-  "checkedAt": "2026-10-11T11:35:39.863Z",
-  "chapter": "autumn",
-  "bounds": {
-    "x": 579,
-    "y": 102,
-    "width": 280,
-    "height": 560
+  "ordinary": {
+    "top": 82,
+    "bottom": 738,
+    "height": 656,
+    "viewportHeight": 800,
+    "clientHeight": 654,
+    "scrollHeight": 654,
+    "overflowY": "auto",
+    "outsideViewport": false
   },
-  "viewport": {
-    "width": 1280,
-    "height": 800
+  "spring": {
+    "top": 8,
+    "bottom": 546,
+    "height": 538,
+    "viewportHeight": 800,
+    "clientHeight": 536,
+    "scrollHeight": 670,
+    "overflowY": "auto",
+    "outsideViewport": false
   },
-  "fullyInsideViewport": true,
-  "product": {
-    "commit": "538a7f9494012c8ab9f86d71d3b2a09fb57fdc50",
-    "sourceTree": "83b7764a488e9c7ee887407aefd967a00b3e48b1",
-    "productSourceSha256": "2edf691a7eec77bd67fbe630a0b1db9836fc5551c1f7f086ce448e71c9096342",
-    "buildId": "ivxjXmRYPnZg3PpogRvW3",
-    "snapshot": "/tmp/benevoles-video-production.C3fhyfsN",
-    "builtAt": "2026-10-11T11:32:08.394Z"
+  "autumn": {
+    "top": 8,
+    "bottom": 651,
+    "height": 643,
+    "viewportHeight": 800,
+    "clientHeight": 641,
+    "scrollHeight": 670,
+    "overflowY": "auto",
+    "outsideViewport": false
   }
 }

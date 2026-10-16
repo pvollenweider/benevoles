@@ -1,240 +1,247 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:04.764
+00:00:00.001 --> 00:00:05.039
 Voici une visite complète de
 l’administration, dans l’ordre où vous
 
-00:00:04.764 --> 00:00:09.052
+00:00:05.039 --> 00:00:09.574
 l’utiliserez vraiment : préparer votre
 organisation, construire un événement,
 
-00:00:09.052 --> 00:00:13.340
+00:00:09.574 --> 00:00:14.108
 accueillir les bénévoles, communiquer,
 puis préparer le jour J.
 
-00:00:16.689 --> 00:00:20.647
+00:00:17.440 --> 00:00:22.058
 Tout commence avec l’identité de
-l’organisation. Son identifiant public
+l’organisation. L’adresse de votre espace
 
-00:00:20.647 --> 00:00:25.485
-forme une adresse comme fetes-de-montvert
-point benevol point app. Vous choisissez
+00:00:22.058 --> 00:00:27.599
+détermine votre sous-domaine sur benevol
+point app. Vous choisissez aussi le nom
 
-00:00:25.485 --> 00:00:31.642
-aussi le nom affiché, le fuseau horaire et
-la Convention des Bénévoles que chacun
+00:00:27.599 --> 00:00:33.602
+affiché, le fuseau horaire et la Charte
+des bénévoles que chacun devra accepter.
 
-00:00:31.642 --> 00:00:32.522
-devra accepter.
-
-00:00:32.976 --> 00:00:37.248
+00:00:34.059 --> 00:00:38.508
 Côté équipe, le propriétaire administre
 l’organisation et ses accès. Les
 
-00:00:37.248 --> 00:00:41.521
+00:00:38.508 --> 00:00:42.958
 organisateurs préparent les événements,
 les membres et les communications. Les
 
-00:00:41.521 --> 00:00:47.075
+00:00:42.958 --> 00:00:48.742
 responsables de secteur reçoivent un lien
 personnel limité à leur poste, avec les
 
-00:00:47.075 --> 00:00:51.774
+00:00:48.742 --> 00:00:53.636
 noms et coordonnées des inscrits, sans
 accès au reste de l’administration.
 
-00:00:55.111 --> 00:01:00.039
+00:00:57.021 --> 00:01:02.192
 Un événement suit un cycle clair :
 brouillon pendant la préparation, publié
 
-00:01:00.039 --> 00:01:06.200
+00:01:02.192 --> 00:01:08.657
 quand la page est prête, puis archivé une
 fois terminé. Même publié, il peut rester
 
-00:01:06.200 --> 00:01:11.128
+00:01:08.657 --> 00:01:13.828
 non répertorié et accessible seulement par
 son lien. Les inscriptions peuvent être
 
-00:01:11.128 --> 00:01:14.414
+00:01:13.828 --> 00:01:17.276
 immédiates, fermées, ou programmées à une
 date précise.
 
-00:01:14.868 --> 00:01:20.311
+00:01:17.732 --> 00:01:23.127
 Dans ses paramètres, vous réglez le titre,
 les dates, les messages et une couleur
 
-00:01:20.311 --> 00:01:24.588
+00:01:23.127 --> 00:01:27.365
 d’en-tête accessible. Le lieu peut
 recevoir des coordonnées : les bénévoles
 
-00:01:24.588 --> 00:01:29.642
+00:01:27.365 --> 00:01:32.375
 obtiennent alors un lien OpenStreetMap
 dans la page, les emails et leur espace
 
-00:01:29.642 --> 00:01:30.031
+00:01:32.375 --> 00:01:32.760
 personnel.
 
-00:01:31.641 --> 00:01:35.809
+00:01:34.492 --> 00:01:38.661
 Pour repartir d’une édition précédente,
 dupliquez l’événement et décalez toutes
 
-00:01:35.809 --> 00:01:41.645
+00:01:38.661 --> 00:01:44.498
 les dates. Vous choisissez ce qui est
 repris : les créneaux, les réglages, les
 
-00:01:41.645 --> 00:01:43.729
+00:01:44.498 --> 00:01:46.583
 pages d’information et les responsables.
 
-00:01:47.083 --> 00:01:51.231
+00:01:50.097 --> 00:01:55.099
 Pour construire le planning, trois
 méthodes se complètent : ajouter un
 
-00:01:51.231 --> 00:01:56.134
+00:01:55.099 --> 00:02:01.011
 créneau depuis la liste, copier un créneau
 existant, ou dessiner directement sa plage
 
-00:01:56.134 --> 00:02:01.036
+00:02:01.011 --> 00:02:06.923
 sur la frise puis l’élargir. Pour des
 horaires répétitifs, la création en série
 
-00:02:01.036 --> 00:02:02.922
+00:02:06.923 --> 00:02:09.197
 prépare plusieurs créneaux d’un coup.
 
-00:02:03.377 --> 00:02:09.162
+00:02:09.650 --> 00:02:16.300
 Chaque créneau peut préciser le poste, le
-libellé, la date, les horaires et la
+libellé, la date, les horaires et le
 
-00:02:09.162 --> 00:02:14.121
-capacité, mais aussi une description, un
-lieu de rendez-vous, une carte, un
+00:02:16.300 --> 00:02:22.000
+nombre de places, mais aussi une
+description, un lieu de rendez-vous, une
 
-00:02:14.121 --> 00:02:19.906
-contact, une consigne, des notes internes
-et un âge minimum. La liste d’attente et
+00:02:22.000 --> 00:02:28.650
+carte, un contact, une consigne, des notes
+internes et un âge minimum. La liste
 
-00:02:19.906 --> 00:02:21.972
-l’inscription sur validation s’activent
-ici.
+00:02:28.650 --> 00:02:31.975
+d’attente et l’inscription sur validation
+s’activent ici.
 
-00:02:25.356 --> 00:02:31.681
+00:02:35.389 --> 00:02:41.929
 La vue des inscriptions montre qui est
-inscrit, sur quel créneau et par quel
+inscrit, sur quel créneau et par
 
-00:02:31.681 --> 00:02:35.748
-moyen. Vous pouvez filtrer, ajouter
+00:02:41.929 --> 00:02:46.960
+quel moyen. Vous pouvez filtrer, ajouter
 quelqu’un manuellement, accepter une
 
-00:02:35.748 --> 00:02:40.718
+00:02:46.960 --> 00:02:52.495
 demande, renvoyer son lien, désigner un
 responsable, retirer une inscription et
 
-00:02:40.718 --> 00:02:42.073
+00:02:52.495 --> 00:02:54.004
 noter les présences.
 
-00:02:43.770 --> 00:02:49.354
+00:02:55.715 --> 00:03:01.917
 La liste des membres rassemble inscrits et
 personnes importées, avec coordonnées,
 
-00:02:49.354 --> 00:02:54.430
+00:03:01.917 --> 00:03:07.556
 étiquettes, notes, disponibilités, heures
-planifiées et activité. La fiche d’une
+prévues et activité. La fiche d’une
 
-00:02:54.430 --> 00:02:59.506
+00:03:07.556 --> 00:03:13.194
 personne retrace ses invitations,
 inscriptions et présences d’un événement à
 
-00:02:59.506 --> 00:03:00.014
+00:03:13.194 --> 00:03:13.758
 l’autre.
 
-00:03:01.641 --> 00:03:05.618
+00:03:15.495 --> 00:03:19.821
 Le formulaire peut poser quelques
 questions utiles : taille de t-shirt,
 
-00:03:05.618 --> 00:03:11.041
+00:03:19.821 --> 00:03:25.328
 régime alimentaire ou permis de conduire,
-sous forme de texte, de choix unique ou de
+sous forme de texte, de nombre, de choix
 
-00:03:11.041 --> 00:03:16.102
-cases à cocher. Vous décidez si la réponse
-est obligatoire, en évitant les données
+00:03:25.328 --> 00:03:30.834
+unique ou de cases à cocher. Une question
+de suivi peut s’afficher seulement pour
 
-00:03:16.102 --> 00:03:16.825
+00:03:30.834 --> 00:03:35.554
+certaines réponses à une question
+précédente. Vous décidez si la réponse est
+
+00:03:35.554 --> 00:03:38.307
+obligatoire, en évitant les données
 sensibles inutiles.
 
-00:03:18.448 --> 00:03:22.970
+00:03:39.995 --> 00:03:44.974
 Vous pouvez aussi créer des pages
 publiques pour l’accès, le parking, la
 
-00:03:22.970 --> 00:03:27.870
+00:03:44.974 --> 00:03:50.367
 foire aux questions ou le règlement.
 Donnez un titre et rédigez le contenu,
 
-00:03:27.870 --> 00:03:33.146
+00:03:50.367 --> 00:03:56.176
 puis enregistrez la page. Puis organisez
 leur ordre avec les flèches : ces pages
 
-00:03:33.146 --> 00:03:35.407
+00:03:56.176 --> 00:03:58.665
 apparaissent directement avec la page
 d’inscription.
 
-00:03:38.697 --> 00:03:44.634
+00:04:02.102 --> 00:04:08.699
 Les messages ciblent tous les inscrits, un
 poste, un créneau, la liste d’attente ou
 
-00:03:44.634 --> 00:03:48.875
+00:04:08.699 --> 00:04:13.411
 les invités sans créneau. Les modèles
 réutilisables acceptent des variables
 
-00:03:48.875 --> 00:03:53.964
+00:04:13.411 --> 00:04:19.537
 comme le prénom, l’événement, les créneaux
-ou le lien personnel. Vous prévisualisez
+ou le lien personnel. Vous choisissez un
 
-00:03:53.964 --> 00:03:56.084
-toujours le résultat avant l’envoi.
+00:04:19.537 --> 00:04:24.249
+envoi immédiat ou programmé et
+prévisualisez toujours le résultat avant
 
-00:03:57.640 --> 00:04:02.742
+00:04:24.249 --> 00:04:29.904
+l’envoi. La section Messages programmés
+permet de suivre les envois à venir.
+
+00:04:31.570 --> 00:04:36.834
 Les rappels automatiques peuvent partir
 deux jours avant, la veille et le jour
 
-00:04:02.742 --> 00:04:07.059
+00:04:36.834 --> 00:04:41.288
 même. L’organisation choisit lesquels
 activer, où arrivent les réponses, et si
 
-00:04:07.059 --> 00:04:10.591
+00:04:41.288 --> 00:04:44.932
 ses admins doivent être prévenus à chaque
 nouvelle inscription.
 
-00:04:13.929 --> 00:04:19.109
-Pour le terrain, les rapports proposent le
-planning complet, une vue par poste, une
+00:04:48.369 --> 00:04:53.435
+Pour le terrain, Documents à imprimer
+propose le planning complet, une vue par
 
-00:04:19.109 --> 00:04:24.289
-vue par bénévole, la feuille de présence
-et la liste avec téléphones réservée aux
+00:04:53.435 --> 00:04:58.891
+poste, une vue par bénévole, la feuille de
+présence et la liste avec téléphones
 
-00:04:24.289 --> 00:04:29.469
-organisateurs. Les badges se génèrent en
-PDF, avec un filtre par poste et une
+00:04:58.891 --> 00:05:04.347
+réservée aux organisateurs. Les badges se
+génèrent en PDF, avec un filtre par poste
 
-00:04:29.469 --> 00:04:33.169
-sélection de bénévole pour la
+00:05:04.347 --> 00:05:09.023
+et une sélection de bénévole pour la
 réimpression, prêts à imprimer et
 
-00:04:33.169 --> 00:04:33.539
+00:05:09.023 --> 00:05:09.413
 découper.
 
-00:04:36.888 --> 00:04:42.177
+00:05:12.790 --> 00:05:18.084
 Enfin, le journal d’activité garde la
 chronologie : création et modification des
 
-00:04:42.177 --> 00:04:45.703
+00:05:18.084 --> 00:05:21.614
 créneaux, inscriptions, désinscriptions,
 invitations et actions des organisateurs.
 
-00:04:45.703 --> 00:04:52.313
+00:05:21.614 --> 00:05:28.231
 On sait ce qui s’est passé, qui l’a fait
 et quand. La recherche globale permet
 
-00:04:52.313 --> 00:04:54.517
+00:05:28.231 --> 00:05:30.437
 ensuite de tout retrouver rapidement.
 

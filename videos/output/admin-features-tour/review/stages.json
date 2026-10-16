@@ -1,38 +1,50 @@
 [
   {
+    "stage": "rehearse-prepare-0",
+    "exitCode": 1
+  },
+  {
+    "stage": "rehearse-prepare-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "mailbox",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal-frames",
+    "exitCode": 0
+  },
+  {
+    "stage": "capture-prepare-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "mailbox",
+    "exitCode": 0
+  },
+  {
+    "stage": "capture",
+    "exitCode": 0
+  },
+  {
+    "stage": "assemble",
+    "exitCode": 0
+  },
+  {
     "stage": "posters",
     "exitCode": 0
   },
   {
-    "stage": "frames",
-    "exitCode": 0
-  },
-  {
-    "stage": "evidence",
-    "exitCode": 0
-  },
-  {
-    "stage": "transitions",
-    "exitCode": 0
-  },
-  {
-    "stage": "final-audio",
-    "exitCode": 0
-  },
-  {
-    "stage": "audiovisual",
+    "stage": "final-frames",
     "exitCode": 0
   },
   {
     "stage": "validate",
-    "exitCode": 0
-  },
-  {
-    "stage": "register-check",
-    "exitCode": 0
-  },
-  {
-    "stage": "objective",
     "exitCode": 0
   }
 ]

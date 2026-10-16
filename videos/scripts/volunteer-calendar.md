@@ -41,3 +41,8 @@ Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unre
 Contrôle du lot 22-8 : assertions du fichier ICS calculées avec le fuseau de l’organisation et les dates de la fixture, y compris le changement d’heure de Zurich du 25 octobre 2026. Aucun décalage UTC d’été figé. Les sélecteurs du formulaire suivent les libellés actuels ; la narration reste identique.
 
 État du lot 22-8 : NOT READY. Défaut produit observé à 118,329 s ([preuve](../evidence/volunteer-calendar/batch22-overnight-end.png)), `/admin/events/cmva87t2100025da58s698zc3/shifts` : changer le début nocturne de 22 h à 23 h ramène aussi la fin de 02 h à 00 h. Le fichier modifié le confirme (fin UTC 20261024T220000Z au lieu de 20261025T010000Z). Aucun contournement ni seconde prise. Assertion ajoutée pour exiger que la fin reste inchangée lors d’une prochaine production après correction du produit.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:50:44.713Z",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
-  "promptSha256": "c72a80aeb574bd7a9ab8c871bf73dc70c40ede0fc4ccfc627723bacfe4674113",
-  "clipSha256": "60c585bc9bc9e22f28430e80eb7e2bbca12fcec1c79a5c5a900b5a30c81a95ff",
+  "reviewedAt": "2026-10-16T08:50:08.552Z",
+  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "promptSha256": "9fd1595eda0218653ecb5015f87744a974a798b39bb38e211ec03b047ef683d9",
+  "clipSha256": "253e1a0cf2404f5b6a55503a22d7b0e804b7a053249986ca7e70ddc8b482ebff",
   "scene": "settings",
   "review": {
-    "heardOpening": "Les règles se configurent au bon niveau",
+    "heardOpening": "Les règles se configurent",
     "checkpoints": [
       {
         "spokenSeconds": 2.8,
-        "spoken": "L’âge minimum appartient au créneau.",
-        "visibleSeconds": 3.8,
-        "visible": "Ouverture du formulaire du créneau avec le champ Âge minimum configuré à 18 ans.",
+        "spoken": "L'âge minimum appartient au créneau.",
+        "visibleSeconds": 3.7,
+        "visible": "Ouverture du formulaire du créneau affichant le champ Âge minimum configuré à 18.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "La limite et les tags réservés appartiennent au poste entier",
-        "visibleSeconds": 6.8,
-        "visible": "Ouverture de la fenêtre « Gérer les postes » affichant les colonnes Limite et Accès par poste.",
+        "spokenSeconds": 5.4,
+        "spoken": "La limite et les étiquettes réservées appartiennent au poste entier",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage de la section Gérer les postes avec les colonnes Limite et Accès par poste.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 11.4,
         "spoken": "Ici, Buvette est limitée à deux créneaux",
-        "visibleSeconds": 8.5,
-        "visible": "Champ « Nombre maximal de créneaux « Buvette » par personne » renseigné à 2.",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la ligne Buvette avec la mention Limite : 2 accès.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
-        "spoken": "et Sécurité exige le tag sécurité.",
-        "visibleSeconds": 15.6,
-        "visible": "Ouverture de la configuration d'accès pour Sécurité avec l'étiquette « sécurité ».",
+        "spokenSeconds": 13.5,
+        "spoken": "Sécurité exige l'étiquette sécurité.",
+        "visibleSeconds": 14.1,
+        "visible": "Dépliage des étiquettes d'accès pour Sécurité avec la valeur sécurité renseignée.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse féminine fluide, naturelle et parfaitement intelligible."
+      "observation": "Voix off posée, claire et bien synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

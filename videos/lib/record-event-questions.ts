@@ -5,6 +5,17 @@ import { readFile } from "node:fs/promises"
 import type { Locator, Page } from "playwright"
 import type { Cue } from "./sentence-timing"
 
+export const questionMultipleCues = {
+  type: "Créons la question, puis choisissons",
+  choices: "Saisissons Vélo, Remorque et Voiture",
+}
+export const questionSingleCues = {
+  number: "La liste propose aussi Nombre",
+  type: "Dans Type de réponse, choisissons Choix unique",
+  choices: "Les choix s'écrivent un par ligne",
+}
+export const questionFollowUpCue = "Le réglage Afficher seulement si"
+
 type QuestionKind = "text" | "yesno" | "single" | "multiple"
 export const trainingQuestions: { label: string; type: QuestionKind; required: boolean; options: string[] }[] = [
   { label: "Taille de t-shirt", type: "single", required: true, options: ["S", "M", "L", "XL"] },
@@ -79,7 +90,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   const admin = `${base}/admin/events/${eventId}`
   const publicUrl = `${base}/${publicSlug}?org=formation-questions`
   const go = async (url: string) => { await page.goto(url); await settle(page) }
-  const write = async (field: Locator, text: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(text, { delay: 95 }) }
+  const write = async (field: Locator, text: string, delay = 95) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(text, { delay }) }
   const questionForm = () => page.getByRole("form", { name: /^(Nouvelle question|Modifier la question)$/ })
   const mutate = async (method: string, path: string, action: () => Promise<void>, expectedStatus?: number) => {
     const waiting = page.waitForResponse(response => response.request().method() === method && new URL(response.url()).pathname === path)
@@ -111,10 +122,29 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
       await at(timing.open)
       await tap(page, page.getByRole("button", { name: "Ajouter une question", exact: true }))
       const form = questionForm(); await form.waitFor()
-      await write(form.getByLabel(/^Question posée aux bénévoles/), question.label)
-      await at(0.24) /* shared helper: scene-independent */; await tap(page, form.getByLabel("Type de réponse", { exact: true }))
-      await form.getByLabel("Type de réponse", { exact: true }).selectOption(question.type)
-      if (question.options.length) await write(form.getByLabel(/^Choix proposés/), question.options.join("\n"))
+      // Keep the short type-selection clause reachable after the real title keystrokes.
+      await write(form.getByLabel(/^Question posée aux bénévoles/), question.label, question.type === "multiple" ? 25 : 95)
+      const responseType = form.getByLabel("Type de réponse", { exact: true })
+      if (question.type === "single") {
+        await at(questionSingleCues.number)
+        await tap(page, responseType); await responseType.selectOption("number")
+        assert.equal(await responseType.inputValue(), "number")
+        await at(questionSingleCues.type)
+      } else if (question.type === "multiple") {
+        await at(questionMultipleCues.type)
+      } else await at(0.24) /* shared helper: scene-independent */
+      await tap(page, responseType); await responseType.selectOption(question.type)
+      if (question.options.length) {
+        if (question.type === "single") await at(questionSingleCues.choices)
+        if (question.type === "multiple") await at(questionMultipleCues.choices)
+        await write(form.getByLabel(/^Choix proposés/), question.options.join("\n"))
+      }
+      if (question.type === "yesno") {
+        await at(questionFollowUpCue)
+        const followUp = form.getByLabel(/Afficher seulement si/)
+        await followUp.scrollIntoViewIfNeeded()
+        assert.equal(await followUp.inputValue(), "", "This example remains unconditional")
+      }
       await at(timing.required)
       const required = form.getByLabel("Réponse obligatoire", { exact: true })
       assert.equal(await required.isChecked(), false)
@@ -132,7 +162,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   await scene("order", async at => {
     await at(0.2) /* mid-sentence */
     await mutate("POST", `/api/admin/events/${eventId}/questions/reorder`, () => tap(page, page.getByRole("button", { name: "Monter « Permis de conduire »", exact: true })))
-    await at("Les bénévoles retrouveront cet ordre")
+    await at("Rechargeons la page")
     await page.reload(); await settle(page)
     assert.equal((await read()).questions.filter(item => item.active)[0]?.label, "Permis de conduire")
     await page.getByRole("button", { name: "Modifier la question « Permis de conduire »", exact: true }).scrollIntoViewIfNeeded()
@@ -176,8 +206,8 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
       await tap(page, note); await note.press("ControlOrMeta+A"); await note.press("Backspace")
     }
   }
-  const openSignup = async (url: string, shiftIndex: number, fillIdentity = true) => {
-    await go(publicUrl)
+  const openSignup = async (url: string, shiftIndex: number, fillIdentity = true, publicPrepared = false) => {
+    if (!publicPrepared) await go(publicUrl)
     const quit = page.getByRole("button", { name: "Quitter la session", exact: true })
     if (await quit.count()) { await tap(page, quit); await quit.waitFor({ state: "hidden" }) }
     if (url !== publicUrl) await go(url)
@@ -196,10 +226,13 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert.equal(payload.consent, true)
     return response
   }
+  await go(publicUrl)
   await scene("required-validation", async at => {
-    await page.evaluate(() => document.getElementById("video-questions-reload-note")?.remove())
+    await at("Choisissons le premier créneau et continuons")
+    await openSignup(publicUrl, 0, false, true)
     await at("Renseignons son identité et les")
-    await openSignup(publicUrl, 0)
+    await completeVolunteerForm(page)
+    assert.equal(await page.getByLabel(/^Email/).inputValue(), email)
     let submissions = 0
     const observed = (request: import("playwright").Request) => {
       if (request.method() === "POST" && new URL(request.url()).pathname === "/api/public/registrations") submissions++
@@ -224,12 +257,12 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   await scene("volunteer-form", async at => {
     assert.equal(await page.getByRole("group", { name: /^Permis de conduire/ }).getByRole("radio", { name: "Oui", exact: true }).isChecked(), false, "Native validation focus must not be mistaken for an already selected answer")
     await fillAnswers(false, false, at)
-    await at("Vérifions, puis confirmons réellement l'inscription.")
+    await at("Avant l’envoi, le récapitulatif Transmis à l’organisation")
     const recap = page.getByText("Transmis à l'organisation", { exact: true }).filter({ visible: true }).first().locator("..")
     await recap.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
     const box = await recap.boundingBox(); const viewport = page.viewportSize()!
     assert(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width && box.y + box.height <= viewport.height, "Actual transmitted-data recap must be fully visible before submit")
-    await at("Ces réponses sont enregistrées une")
+    await at("Vérifions, puis confirmons réellement l'inscription.")
     const response = await submit(); const result = await response.json()
     // Member already exists: without an invitation its access link belongs only in email.
     assert.equal(result.editToken, null); assert.equal(result.linkSentByEmail, true)
@@ -326,6 +359,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await write(form.getByLabel(/^Choix proposés/), "S\nM\nL\nXL\nXXL")
     const questionId = (await read()).questions.find(q => q.label === "Taille de t-shirt")!.id
     await at("Enregistrons.")
+    await at(0.44) /* mid-sentence: measured spoken « Enregistrons », future take after batch23-2 */
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${questionId}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })))
     await form.waitFor({ state: "hidden" })
     assert.deepEqual((await read()).questions.find(q => q.id === questionId)?.options, ["S", "M", "L", "XL", "XXL"])

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:57:03.158Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
-  "promptSha256": "fdbd1e07e1f8dfa0819be96643a0d93ef2568d74029f8a98c67a5c3c4dec053a",
-  "clipSha256": "6018f3868ccd5481bdd2972e764d44895f3bbfbfb25bf652b2e2cacdfbc5c532",
+  "reviewedAt": "2026-10-16T09:01:55.319Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
+  "promptSha256": "c9b3718733e916e1458e14bb75c7e4e28970d78e356ea6e5a5ad585623d1a047",
+  "clipSha256": "d0eac7c844e4a9f10d4bde30ffedcb4def5eeb4e837e9edae49e509e6d1bb99c",
   "scene": "import",
   "review": {
-    "heardOpening": "Si c'est la première fois que vous utilisez l'application",
+    "heardOpening": "Si c'est la première fois",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel",
+        "spokenSeconds": 1,
+        "spoken": "l'import permet de constituer rapidement votre liste de membres",
         "visibleSeconds": 1,
-        "visible": "Ouverture de la fenêtre modale « Importer des membres » avec un fichier CSV sélectionné",
+        "visible": "Ouverture de la fenêtre modale Importer des membres avec le fichier prêt",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "L’application analyse les colonnes, les tags et les doublons",
-        "visibleSeconds": 9.5,
-        "visible": "Clic sur « Analyser le fichier » et affichage du compte rendu de détection des colonnes et tags",
+        "spokenSeconds": 9.2,
+        "spoken": "L'application analyse les colonnes, les étiquettes et les doublons",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur Analyser le fichier et affichage des étiquettes et colonnes détectées",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 12.8,
         "spoken": "puis montre exactement ce qui sera créé avant confirmation",
-        "visibleSeconds": 12,
-        "visible": "Tableau prévisionnel listant les 12 membres à créer avec le bouton « Importer 12 membres »",
+        "visibleSeconds": 10.5,
+        "visible": "Tableau de prévisualisation détaillant les membres et l'action Créer avant le clic d'importation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

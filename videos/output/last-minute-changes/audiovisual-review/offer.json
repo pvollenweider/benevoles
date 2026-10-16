@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:19:44.571Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
-  "promptSha256": "aa98864be2a6cee3720a475690bff3cd5579af6ab6c5d9d8ac317e66d6550292",
-  "clipSha256": "d69d112ebade8c11b4064c2f6f1226580d1825eecb292a1188b9c671c7276f4a",
+  "reviewedAt": "2026-10-16T08:58:32.005Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "promptSha256": "d1c3441fbcb7b39363c5765c03105f1db5be827fcf99c1898445761654f50599",
+  "clipSha256": "e98dc0703ae20a9f597471b46c30a8fd37e25b18b67f4a7d608d9e94a0d0c724",
   "scene": "offer",
   "review": {
     "heardOpening": "Une place proposée n'est pas encore",
     "checkpoints": [
       {
-        "spokenSeconds": 6.8,
-        "spoken": "acceptons la place dans cet exemple",
-        "visibleSeconds": 7,
-        "visible": "Clic sur le bouton Prendre la place puis affichage de l'écran de confirmation Place confirmée",
+        "spokenSeconds": 0.5,
+        "spoken": "Une place proposée n'est pas encore une personne confirmée.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Mes inscriptions avec le badge jaune « Une place t'est proposée » pour Nicolas Exemple.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.7,
-        "spoken": "Puis vérifions le statut dans les inscriptions",
-        "visibleSeconds": 13.2,
-        "visible": "Affichage de la page de gestion des Inscriptions",
+        "spokenSeconds": 6.3,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 6.8,
+        "visible": "Transition directe vers l'écran « Place confirmée ! » sans montrer le clic d'acceptation.",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 12.1,
+        "visible": "Affichage de la liste des inscriptions dans l'interface d'administration de l'événement.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.9,
-        "spoken": "Maintenant seulement, sa participation est confirmée",
-        "visibleSeconds": 14.5,
-        "visible": "Ligne de Nicolas Exemple visible dans la liste des bénévoles pour le créneau Accueil du matin",
+        "spokenSeconds": 13,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 13.5,
+        "visible": "Ligne de Nicolas Exemple présente dans le tableau des inscriptions confirmées.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "À 00:06, l'action d'ouverture du lien et de clic sur l'acceptation n'est pas montrée à l'écran, la vidéo coupe directement sur l'écran de confirmation."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine naturelle, claire et bien articulée."
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec le déroulé du didacticiel."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

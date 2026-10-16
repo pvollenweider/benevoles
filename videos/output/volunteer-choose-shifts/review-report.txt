@@ -1,8 +1,8 @@
 STATUS: READY
-ID: VOLUNTEER_CHOOSE_SHIFTS
-Product commit: 42ca641bda58d3daae3dcd8f3cf7f997d9dcfef9; BUILD_ID: y5HTtrg_9cOS9PQo5uo57
-Verified commit product build shared by batch; capture provenance checked without uncommitted product sources. Previous attempts preserved; audio reused except changed generation fingerprints explicitly described below.
-Objective evidence: 54 actual MP4 frames; sentence-action-evidence.json and caption-check.json. Music smallest/largest gap: 12.2 / 19.6 LU. Effects vs input events: {'click': 9, 'key': 0}; counts match: True. OCR flags: []. Validation and final narration audit logs are in review/. Posters metadata only in review/renders-generated.json.
-Review observations: All54 final frames reviewed: capacity focus shows09h–12h2/3; waitlist removal59.856 vs59.360; conflict removal95.638 vs95.141; known recap navigation at106.563 sentence with retained commitments. French dates/Frise/publichost/currentlabels/nooverlay; finalASR/VTT/exact9click effects/music pass. Scenario has no signup; fresh recording profile, no remembered-contact notice expected.
-Local source changes: None; audited narration reused.
-Real-time subjective listening unavailable; not used as a failure reason.
+VOLUNTEER_CHOOSE_SHIFTS — batch 23-2 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 164.72 s; music 14.6–19.3 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 5 (volunteer-only, allowed).
+Visible reached-quota reason verified on actual public Frise. All chapter/action frames and whole final multilingual ASR reviewed; audio-only opening/result voice check consistent. Known chapter explains possible adding/cancellation rules without promising those actions there; actual extra selection is shown in the final chapter (countercheck saved).
+No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.

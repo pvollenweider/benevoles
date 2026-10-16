@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T18:08:03.635Z",
-  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
-  "promptSha256": "df75b9e8e36b4d468e926911f6948c72f8d5fbc75c45f8cda6451eb700fb4b67",
-  "clipSha256": "5ab5411de0ef690da83c63e66db90dfe7d5ed90b9ea6e1810b88f42dedd4888f",
+  "reviewedAt": "2026-10-16T08:43:10.456Z",
+  "videoSha256": "d63e945f72e966aa9050165fcf3b69bfe831bf238a859ba8dfc20f71eb455b88",
+  "promptSha256": "a14cc54261beeb8ecf092ecd1b294cd5a7132f709c9cf945c94e8daa4c9e1242",
+  "clipSha256": "dcae73b0162146bd64840adfeb8bdd1796c5ad603b199c8c4f7dcdf6d6c8ebd8",
   "scene": "duration",
   "review": {
     "heardOpening": "La durée découpe la plage",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La durée découpe la plage en équipes de deux heures.",
-        "visibleSeconds": 1,
-        "visible": "Le champ Durée du créneau est défini sur 2 h (120 minutes).",
+        "spokenSeconds": 0,
+        "spoken": "La durée découpe la plage en équipes de deux heures",
+        "visibleSeconds": 0,
+        "visible": "Le formulaire affiche une durée de créneau réglée sur 2 h (120 minutes)",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.5,
-        "spoken": "avec trois places, chaque relève accueille trois bénévoles.",
+        "spoken": "avec trois places, chaque relève accueille trois bénévoles",
         "visibleSeconds": 4,
-        "visible": "Le champ Personnes par créneau passe à 3 et l'aperçu indique 3 personnes par créneau.",
+        "visible": "Le champ 'Places par créneau' contient la valeur 3 et l'aperçu confirme 3 personnes par créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.5,
-        "spoken": "Ici, choisissons zéro minute",
-        "visibleSeconds": 10,
-        "visible": "Le champ Pause entre deux créneaux (min) est sélectionné avec la valeur 0.",
+        "spoken": "Ici, choisissons zéro minute : les créneaux se suivent sans interruption",
+        "visibleSeconds": 4,
+        "visible": "L'aperçu des créneaux montre des plages consécutives (10h-12h, 12h-14h...) sans pause",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, fluide et naturelle, bien synchronisée avec les réglages du formulaire."
+      "observation": "Voix off masculine claire, fluide et posée, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

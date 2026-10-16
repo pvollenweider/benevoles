@@ -5,7 +5,8 @@
  * Fixture of the SHIFT_RECURRENCE video (#866): a season of a grocery in the demo organization,
  * 13 weeks from the coming Monday, with one permanence already described (« Réception des
  * livraisons », every Wednesday) and two volunteers on two of its later dates, so stopping it
- * lists dates with people. The video then adds « Caisse et accueil » itself.
+ * lists dates with people. An ordinary « Caisse et accueil » opening provides an existing
+ * poste; the video then adds its recurrence and demonstrates the inheritance hint.
  *
  * Dates are relative to the take (never a fixed day): the video does not rot. Called through
  * scripts/seed-video-scenario.ts shift-recurrence, after scripts/seed-demo.ts.
@@ -67,6 +68,13 @@ export async function seedVideoRecurrence(prisma: PrismaClient) {
     })
     await prisma.shift.createMany({ data: shifts.map((s) => ({ ...s, eventId: event.id, date: new Date(s.date), status: "open", recurrenceId: created.id })) })
   }
+
+  // Existing ordinary opening: the recorder demonstrates joining this poste and its
+  // real inheritance hint before adding the seasonal recurrence. No extra recurrence.
+  await prisma.shift.create({ data: {
+    eventId: event.id, roleName: "Caisse et accueil", label: "Ouverture exceptionnelle",
+    date: new Date(start), startTime: "09:00", endTime: "10:00", capacity: 2, status: "open",
+  } })
 
   const people = [
     { id: "video-recurrence-aline", firstName: "Aline", lastName: "Dupraz", email: "video.recurrence.aline@example.org" },

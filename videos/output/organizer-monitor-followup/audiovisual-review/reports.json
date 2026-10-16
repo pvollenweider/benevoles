@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:25.245Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:06:00.096Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "55267fff3420123d1c7bd01d81241b6f7741030057951b6926c92255693b5699",
-  "clipSha256": "d7ed22cea74268f1d08e7e4b46a68a165180094646a307f949f744da03121739",
+  "clipSha256": "e03119b28663ad487b380f7646fb5dff90a336dff67108106ab222d8c2cbb670",
   "scene": "reports",
   "review": {
-    "heardOpening": "À l'approche du jour J, les rapports",
+    "heardOpening": "À l'approche du jour J",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
+        "spokenSeconds": 2.2,
         "spoken": "les listes à afficher sur les stands",
-        "visibleSeconds": 1,
-        "visible": "Section « À afficher ou à remettre aux bénévoles » avec Planning par jour et Planning par poste",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'À afficher ou à remettre aux bénévoles' avec Planning par jour et Planning par poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
+        "spokenSeconds": 4.2,
         "spoken": "les plannings individuels",
-        "visibleSeconds": 2,
-        "visible": "Lien « Planning individuel » affiché sous la section",
+        "visibleSeconds": 0.5,
+        "visible": "Option 'Planning individuel' affichée à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 5.8,
         "spoken": "les réponses aux questions et les badges",
-        "visibleSeconds": 6.8,
-        "visible": "Défilement vers le bas affichant « Synthèse des réponses » et la section « Badges »",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement vers le bas dévoilant 'Synthèse des réponses' et la section 'Badges'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec la présentation générale des rapports à l'écran."
+      "observation": "Voix off féminine claire, fluide et posée, parfaitement synchronisée avec l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:50:41.287Z",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
+  "reviewedAt": "2026-10-16T08:49:55.601Z",
+  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
   "promptSha256": "d087171a16979b7e6a63a1ee43b96a3a40e9443e9da0587e0a2d4b781df8bb8f",
-  "clipSha256": "9e5a799a7d38f8d4dd25bcc72caa91df89f4b8fe421ac003d66a56ec03049ce7",
+  "clipSha256": "f2dd4374d7429cf755325df3bb58017d7b4b4dd4ff8faf377e2b7e58ce509d5d",
   "scene": "welcome",
   "review": {
     "heardOpening": "Certaines missions demandent une règle simple",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Certaines missions demandent une règle simple",
-        "visibleSeconds": 0,
-        "visible": "Bandeau d'introduction 'Âge, quotas et postes réservés' affiché en surimpression",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre affichant « Âge, quotas et postes réservés - Des règles simples, expliquées avant l'inscription »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 3,
         "spoken": "un âge minimum, un nombre maximum de créneaux",
-        "visibleSeconds": 2.8,
-        "visible": "Retrait du bandeau d'introduction révélant la vue frise du calendrier des créneaux",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 7.8,
-        "spoken": "Ces contrôles évitent les affectations impossibles",
-        "visibleSeconds": 8,
-        "visible": "Affichage stable du planning des créneaux de l'événement",
+        "visibleSeconds": 3,
+        "visible": "Disparition de l'encart et affichage de la grille de gestion des créneaux de l'événement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +29,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation du module."
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec l'affichage de l'introduction."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

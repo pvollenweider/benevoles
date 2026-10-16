@@ -1,19 +1,8 @@
 STATUS: READY
-{
-  "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
-  "status": "READY",
-  "duration": 124.04,
-  "buildId": "RnrUED_grQJ_YgINLz6Tf",
-  "music": {
-    "voicedWindows": 113,
-    "musicOnlyWindows": 1,
-    "smallestGapLu": 14.6,
-    "largestGapLu": 18.7,
-    "quietestMusicOnlyLufs": -31.8,
-    "loudestMusicOnlyLufs": -31.8,
-    "medianVoiceLufs": -16.3
-  },
-  "problems": "Une reprise videos-only acceptée. Première prise : popover ouvert automatiquement au relâchement redimensionnement avant Rouvre ensuite. Reprise : vraie fermeture37.705 ; image39.0 fermé ; réouverture42.155 après phrase41.683,image42.7. Preuves31.9 fermé avant fin chapitre,35.0 fin7h15,35.8 fin7h30,36.7 fin7h45 prouvent glissement réel ; AV prétend geste absent/fermeture manquante, contredit par images et marqueurs. Liste85.070 et Modifier85.902 après début phrase84.575, même phrase composite (AV compare des mots ultérieurs, pas début de phrase). Copie69.9 après phrase69.44, consigne97.38 après96.88. 42 images finales revues ;45min,duplication,décalage15min,3places,valeursAPI et Liste rechargée conformes. Popover placé dans fenêtre et scrollable. Validation,ASR final7/7,VTT,effets,musique passent. Frise/dates françaises/aucune adresse interdite/overlay. Défaut disposition connu observé ici aussi : noms postes Frise horschamp horizontal. Ouverture automatique après resize signalée, pas masquée : fermeture réelle filmée.",
-  "sourceChanges": "record.ts : fermer visiblement le popover ouvert par le produit après resize puis rouvrir sur ancre existante ; Liste/Modifier sur Pour ajouter une consigne à cette relève. Audio batch8 inchangé accepté. Types et795tests ancres passent.",
-  "report": "videos/output/shift-timeline-quick-actions/review-report.txt"
-}
+SHIFT_TIMELINE_QUICK_ACTIONS — batch 23-2 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 128.12 s; music 14.3–18.7 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Result cue corrected and verified: both saved rows visible at +0.6 s, before the narration claim. Seven audiovisual chapters reviewed; the brief natural quick-action pane during resize does not hide the saved 07:45 result (countercheck with exact frames). Full chapter/anchor sheets and both whole-soundtrack ASRs checked; no stray words or informal viewer address.
+No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.

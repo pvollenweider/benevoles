@@ -1,18 +1,18 @@
 {
   "slug": "members-duplicates-merge",
   "capturePurpose": "rehearsal",
-  "recordedAt": "2026-10-12T05:50:34.871Z",
+  "recordedAt": "2026-10-16T09:37:37.204Z",
   "video": "capture.webm",
   "product": {
-    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
-    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
-    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
-    "buildId": "Ro9VdxUayqlTAULEvQpY0",
-    "snapshot": "/tmp/benevoles-video-production.batch11",
-    "builtAt": "2026-10-12T04:25:58.799Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "formation-fusion",
     "scenario": "MEMBERS_DUPLICATES_MERGE",
@@ -26,35 +26,27 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 4094
+      "atMs": 4235
     },
     {
       "kind": "click",
-      "atMs": 4926
+      "atMs": 5062
     },
     {
       "kind": "click",
-      "atMs": 6226
+      "atMs": 6359
     },
     {
       "kind": "click",
-      "atMs": 10494
+      "atMs": 10678
     },
     {
       "kind": "click",
-      "atMs": 11278
+      "atMs": 11475
     },
     {
       "kind": "key",
-      "atMs": 11585
-    },
-    {
-      "kind": "key",
-      "atMs": 11683
-    },
-    {
-      "kind": "key",
-      "atMs": 11782
+      "atMs": 11783
     },
     {
       "kind": "key",
@@ -70,176 +62,192 @@
     },
     {
       "kind": "key",
-      "atMs": 12178
+      "atMs": 12173
     },
     {
       "kind": "key",
-      "atMs": 12281
+      "atMs": 12271
     },
     {
       "kind": "key",
-      "atMs": 12383
+      "atMs": 12370
     },
     {
       "kind": "key",
-      "atMs": 12487
+      "atMs": 12467
     },
     {
       "kind": "key",
-      "atMs": 12590
+      "atMs": 12565
     },
     {
       "kind": "key",
-      "atMs": 12690
+      "atMs": 12663
     },
     {
       "kind": "key",
-      "atMs": 12792
+      "atMs": 12761
     },
     {
       "kind": "key",
-      "atMs": 12892
+      "atMs": 12857
     },
     {
       "kind": "key",
-      "atMs": 12997
+      "atMs": 12955
     },
     {
       "kind": "key",
-      "atMs": 13099
+      "atMs": 13052
     },
     {
       "kind": "key",
-      "atMs": 13201
+      "atMs": 13153
     },
     {
       "kind": "key",
-      "atMs": 13305
+      "atMs": 13252
     },
     {
       "kind": "key",
-      "atMs": 13406
+      "atMs": 13351
     },
     {
       "kind": "key",
-      "atMs": 13507
+      "atMs": 13453
     },
     {
       "kind": "key",
-      "atMs": 13611
+      "atMs": 13555
     },
     {
       "kind": "key",
-      "atMs": 13715
+      "atMs": 13651
     },
     {
       "kind": "key",
-      "atMs": 13817
+      "atMs": 13753
     },
     {
       "kind": "key",
-      "atMs": 13919
+      "atMs": 13850
     },
     {
       "kind": "key",
-      "atMs": 14020
+      "atMs": 13954
     },
     {
       "kind": "key",
-      "atMs": 14120
+      "atMs": 14051
     },
     {
       "kind": "key",
-      "atMs": 14218
+      "atMs": 14148
     },
     {
       "kind": "key",
-      "atMs": 14317
+      "atMs": 14246
     },
     {
       "kind": "key",
-      "atMs": 14419
+      "atMs": 14348
+    },
+    {
+      "kind": "key",
+      "atMs": 14446
+    },
+    {
+      "kind": "key",
+      "atMs": 14553
     },
     {
       "kind": "click",
-      "atMs": 14993
+      "atMs": 15126
     },
     {
       "kind": "click",
-      "atMs": 15775
+      "atMs": 15910
     },
     {
       "kind": "click",
-      "atMs": 18858
+      "atMs": 23801
     },
     {
       "kind": "click",
-      "atMs": 19643
+      "atMs": 24611
     },
     {
       "kind": "click",
-      "atMs": 22760
+      "atMs": 27743
     },
     {
       "kind": "click",
-      "atMs": 23542
+      "atMs": 28560
     },
     {
       "kind": "click",
-      "atMs": 26642
+      "atMs": 31660
     },
     {
       "kind": "click",
-      "atMs": 27425
+      "atMs": 32459
     },
     {
       "kind": "click",
-      "atMs": 28243
+      "atMs": 33309
     },
     {
       "kind": "click",
-      "atMs": 29026
+      "atMs": 34109
     },
     {
       "kind": "click",
-      "atMs": 32192
+      "atMs": 37264
+    },
+    {
+      "kind": "click",
+      "atMs": 39725
+    },
+    {
+      "kind": "click",
+      "atMs": 41659
     }
   ],
   "cues": [
     {
       "id": "duplicates",
-      "startMs": 2386,
-      "endMs": 6560
+      "startMs": 2504,
+      "endMs": 6696
     },
     {
       "id": "compare",
-      "startMs": 8825,
-      "endMs": 16110
+      "startMs": 8970,
+      "endMs": 21059
     },
     {
       "id": "fields",
-      "startMs": 18382,
-      "endMs": 19975
+      "startMs": 23317,
+      "endMs": 24957
     },
     {
       "id": "conflicts",
-      "startMs": 22240,
-      "endMs": 23854
+      "startMs": 27216,
+      "endMs": 28875
     },
     {
       "id": "confirm",
-      "startMs": 26128,
-      "endMs": 29331
+      "startMs": 31134,
+      "endMs": 34416
     },
     {
       "id": "result",
-      "startMs": 31679,
-      "endMs": 35307
+      "startMs": 36738,
+      "endMs": 43155
     },
     {
       "id": "links",
-      "startMs": 37572,
-      "endMs": 39886
+      "startMs": 45416,
+      "endMs": 47777
     }
   ],
   "anchors": [
@@ -248,175 +256,182 @@
       "phrase": "Dans Membres, ouvrez Doublons possibles.",
       "startMs": 3308,
       "endMs": 7058,
-      "cueMs": 3627
+      "cueMs": 3742
     },
     {
       "segmentId": "duplicates",
       "phrase": "Comparer et fusionner ouvre un",
       "startMs": 19078,
       "endMs": 25584,
-      "cueMs": 4423
+      "cueMs": 4574
     },
     {
       "segmentId": "duplicates",
       "phrase": "Revenons aux suggestions.",
       "startMs": 25584,
       "endMs": 28010,
-      "cueMs": 5234
+      "cueMs": 5368
     },
     {
       "segmentId": "duplicates",
       "phrase": "Ignorer retire simplement la paire",
       "startMs": 28010,
       "endMs": 32642,
-      "cueMs": 5754
+      "cueMs": 5898
     },
     {
       "segmentId": "compare",
       "phrase": "Fusionner avec un autre membre",
       "startMs": 11024,
       "endMs": 18189,
-      "cueMs": 10013
+      "cueMs": 10215
     },
     {
       "segmentId": "compare",
       "phrase": "Recherchez précisément l’adresse de la",
       "startMs": 18189,
       "endMs": 27228,
-      "cueMs": 10799
+      "cueMs": 10984
     },
     {
       "segmentId": "compare",
       "phrase": "Celle-ci sera absorbée.",
       "startMs": 27228,
       "endMs": 29323,
-      "cueMs": 14518
+      "cueMs": 14652
     },
     {
       "segmentId": "compare",
       "phrase": "L’aperçu permet maintenant de comparer",
       "startMs": 29323,
       "endMs": 36598,
-      "cueMs": 15300
+      "cueMs": 15434
     },
     {
       "segmentId": "compare",
       "phrase": "Vérifiez bien quelle fiche vous",
       "startMs": 36598,
       "endMs": 42000,
-      "cueMs": 16083
+      "cueMs": 21030
     },
     {
       "segmentId": "fields",
       "phrase": "Ici, on conserve la bonne",
       "startMs": 6140,
       "endMs": 12791,
-      "cueMs": 18382
+      "cueMs": 23317
     },
     {
       "segmentId": "fields",
       "phrase": "Ici, on conserve la bonne",
       "startMs": 6140,
       "endMs": 12791,
-      "cueMs": 18384
+      "cueMs": 23319
     },
     {
       "segmentId": "fields",
       "phrase": "Les notes internes peuvent aussi",
       "startMs": 12791,
       "endMs": 17395,
-      "cueMs": 19169
+      "cueMs": 24111
     },
     {
       "segmentId": "fields",
       "phrase": "Le tableau récapitule les inscriptions",
       "startMs": 25888,
       "endMs": 33153,
-      "cueMs": 19950
+      "cueMs": 24926
     },
     {
       "segmentId": "conflicts",
       "phrase": "Ici, on garde la réponse",
       "startMs": 32693,
       "endMs": 36823,
-      "cueMs": 22276
+      "cueMs": 27242
     },
     {
       "segmentId": "conflicts",
       "phrase": "On choisit aussi son invitation.",
       "startMs": 36823,
       "endMs": 39920,
-      "cueMs": 23070
+      "cueMs": 28056
     },
     {
       "segmentId": "confirm",
       "phrase": "Cette case permet d’envoyer les",
       "startMs": 0,
       "endMs": 7444,
-      "cueMs": 26156
+      "cueMs": 31173
     },
     {
       "segmentId": "confirm",
       "phrase": "Dans cette démonstration, on la",
       "startMs": 7444,
       "endMs": 11111,
-      "cueMs": 26952
+      "cueMs": 31971
     },
     {
       "segmentId": "confirm",
       "phrase": "Lisez le résumé avant de",
       "startMs": 13556,
       "endMs": 16778,
-      "cueMs": 27735
+      "cueMs": 32771
     },
     {
       "segmentId": "confirm",
       "phrase": "Fusionner les deux fiches ouvre",
       "startMs": 33556,
       "endMs": 39111,
-      "cueMs": 27757
+      "cueMs": 32808
     },
     {
       "segmentId": "confirm",
       "phrase": "Quand vous êtes vraiment sûr",
       "startMs": 39111,
       "endMs": 45000,
-      "cueMs": 28550
+      "cueMs": 33619
     },
     {
       "segmentId": "result",
       "phrase": "Retournez à la fiche conservée",
-      "startMs": 4992,
-      "endMs": 12688,
-      "cueMs": 31706
+      "startMs": 3966,
+      "endMs": 10081,
+      "cueMs": 36773
     },
     {
       "segmentId": "result",
       "phrase": "Dans la liste des membres",
-      "startMs": 12688,
-      "endMs": 19240,
-      "cueMs": 33002
+      "startMs": 10081,
+      "endMs": 15286,
+      "cueMs": 38073
+    },
+    {
+      "segmentId": "result",
+      "phrase": "La fiche absorbée se retrouve",
+      "startMs": 15286,
+      "endMs": 23301,
+      "cueMs": 40033
     },
     {
       "segmentId": "result",
       "phrase": "les faits enregistrés sous l’ancienne",
-      "startMs": 21840,
-      "endMs": 29952,
-      "cueMs": 34153
+      "startMs": 25367,
+      "endMs": 31811,
+      "cueMs": 41974
     },
     {
       "segmentId": "links",
       "phrase": "L’ancien lien personnel de la",
       "startMs": 2373,
       "endMs": 8088,
-      "cueMs": 37660
+      "cueMs": 45533
     },
     {
       "segmentId": "links",
       "phrase": "Le nouveau lien ouvre bien",
       "startMs": 13049,
       "endMs": 19196,
-      "cueMs": 38782
+      "cueMs": 46663
     }
   ]
 }

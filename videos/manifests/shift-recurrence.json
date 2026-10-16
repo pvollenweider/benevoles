@@ -38,7 +38,7 @@
     },
     {
       "id": "describe",
-      "transcript": "Pour le poste, écrivons Caisse et accueil. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.",
+      "transcript": "Pour le poste, écrivons Caisse et accueil. Le texte sous le champ rappelle que les réglages du poste s’appliquent aux nouveaux créneaux. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.",
       "fallbackDurationMs": 26000
     },
     {

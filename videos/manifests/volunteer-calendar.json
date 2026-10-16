@@ -74,5 +74,6 @@
       "Le fichier contient ton lien personnel : garde-le pour toi.",
       "Ta page personnelle reste la référence pour tes inscriptions."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

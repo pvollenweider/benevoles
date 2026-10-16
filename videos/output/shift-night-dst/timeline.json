@@ -1,18 +1,18 @@
 {
   "slug": "shift-night-dst",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-11T11:36:32.839Z",
+  "recordedAt": "2026-10-16T08:46:50.886Z",
   "video": "capture.webm",
   "product": {
-    "commit": "538a7f9494012c8ab9f86d71d3b2a09fb57fdc50",
-    "sourceTree": "83b7764a488e9c7ee887407aefd967a00b3e48b1",
-    "productSourceSha256": "2edf691a7eec77bd67fbe630a0b1db9836fc5551c1f7f086ce448e71c9096342",
-    "buildId": "ivxjXmRYPnZg3PpogRvW3",
-    "snapshot": "/tmp/benevoles-video-production.C3fhyfsN",
-    "builtAt": "2026-10-11T11:32:08.394Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "SHIFT_NIGHT_DST",
@@ -26,106 +26,106 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 28246
+      "atMs": 27739
     },
     {
       "kind": "click",
-      "atMs": 37128
+      "atMs": 35719
     },
     {
       "kind": "click",
-      "atMs": 42412
+      "atMs": 40499
     },
     {
       "kind": "click",
-      "atMs": 52144
+      "atMs": 49898
     },
     {
       "kind": "click",
-      "atMs": 56927
+      "atMs": 53732
     },
     {
       "kind": "click",
-      "atMs": 67985
+      "atMs": 64017
     },
     {
       "kind": "click",
-      "atMs": 83612
+      "atMs": 78456
     },
     {
       "kind": "click",
-      "atMs": 97501
+      "atMs": 91931
     },
     {
       "kind": "click",
-      "atMs": 98333
+      "atMs": 92746
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1193,
-      "endMs": 15351
+      "startMs": 1320,
+      "endMs": 15115
     },
     {
       "id": "ordinary",
-      "startMs": 15803,
-      "endMs": 36180
+      "startMs": 15566,
+      "endMs": 34795
     },
     {
       "id": "spring",
-      "startMs": 36633,
-      "endMs": 51232
+      "startMs": 35247,
+      "endMs": 48984
     },
     {
       "id": "autumn",
-      "startMs": 51684,
-      "endMs": 65751
+      "startMs": 49436,
+      "endMs": 61825
     },
     {
       "id": "timezone",
-      "startMs": 66207,
-      "endMs": 79210
+      "startMs": 62278,
+      "endMs": 74147
     },
     {
       "id": "calendar",
-      "startMs": 79662,
-      "endMs": 95448
+      "startMs": 74600,
+      "endMs": 89760
     },
     {
       "id": "result",
-      "startMs": 95900,
-      "endMs": 109625
+      "startMs": 90211,
+      "endMs": 104601
     }
   ],
   "anchors": [
     {
       "segmentId": "ordinary",
       "phrase": "Ouvrons maintenant le créneau",
-      "startMs": 11974,
-      "endMs": 12854,
-      "cueMs": 27778
+      "startMs": 11672,
+      "endMs": 12601,
+      "cueMs": 27239
     },
     {
       "segmentId": "spring",
       "phrase": "Un créneau affiché",
-      "startMs": 5305,
-      "endMs": 8322,
-      "cueMs": 41940
+      "startMs": 4757,
+      "endMs": 7903,
+      "cueMs": 40005
     },
     {
       "segmentId": "autumn",
       "phrase": "Le même créneau",
-      "startMs": 4767,
-      "endMs": 7469,
-      "cueMs": 56456
+      "startMs": 3824,
+      "endMs": 6572,
+      "cueMs": 53261
     },
     {
       "segmentId": "timezone",
       "phrase": "Ces calculs dépendent du fuseau horaire",
-      "startMs": 626,
-      "endMs": 4734,
-      "cueMs": 67523
+      "startMs": 468,
+      "endMs": 4225,
+      "cueMs": 63538
     }
   ]
 }

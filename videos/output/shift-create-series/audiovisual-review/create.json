@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T18:08:15.082Z",
-  "videoSha256": "1c6263fc885c22c4c6e0f75af171638e5be1b069338b643ee97eb685d575f4a7",
-  "promptSha256": "70ecf8c052193a66b3f5c01ae70f1a1f85ad0071bb23e0cad914977d923c9475",
-  "clipSha256": "57ef1942d2b409c4a17eeef6fe380fe07527a60574d4c8e90b50eec4d829cd99",
+  "reviewedAt": "2026-10-16T08:43:29.993Z",
+  "videoSha256": "d63e945f72e966aa9050165fcf3b69bfe831bf238a859ba8dfc20f71eb455b88",
+  "promptSha256": "d19d70192b868e699ed88a3ad31813ef4c203e70e97ef634476103e27346d088",
+  "clipSha256": "bd30769c2dbba189b384a2c21a6d17b246a70361601f1fbe6c5b61d3c8efef52",
   "scene": "create",
   "review": {
-    "heardOpening": "Créons la série",
+    "heardOpening": "Créons la série.",
     "checkpoints": [
       {
         "spokenSeconds": 0,
         "spoken": "Créons la série.",
-        "visibleSeconds": 0.1,
-        "visible": "Clic sur le bouton Créer 6 créneaux et fermeture du formulaire de création",
+        "visibleSeconds": 0.6,
+        "visible": "Clic sur le bouton « Créer 6 créneaux » qui valide le formulaire.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2,
-        "spoken": "Les nouvelles barres apparaissent dans la Frise avec le même poste, la même capacité et des horaires consécutifs.",
-        "visibleSeconds": 1.5,
-        "visible": "Affichage de la Frise avec la série consécutive de créneaux violets générés sur la ligne Navette de 10h à 22h",
+        "spokenSeconds": 2.1,
+        "spoken": "Les nouvelles barres apparaissent dans la Frise",
+        "visibleSeconds": 1.2,
+        "visible": "Retour à la vue Frise où les créneaux créés pour la buvette sont affichés.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
-        "spoken": "Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.",
+        "spokenSeconds": 7.3,
+        "spoken": "Elles restent pourtant indépendantes : chacune possède son propre effectif",
         "visibleSeconds": 7.5,
-        "visible": "Maintien de la vue Frise montrant les différents blocs de créneaux distincts",
+        "visible": "Défilement vers le bas révélant les différents créneaux et leurs jauges respectives.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine naturelle, claire et bien articulée."
+      "observation": "Voix masculine claire, fluide et naturelle, bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

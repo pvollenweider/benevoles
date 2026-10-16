@@ -1,50 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:47:16.516Z",
-  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
-  "promptSha256": "6ee1cac52b8af4694159db54f248121cc01d7cc66dc7a41145a2eeed556171f9",
-  "clipSha256": "3e186af87ec97a91d0d630e836ac5f7c8fa456bb1cf3990a6926857f70a328da",
+  "reviewedAt": "2026-10-16T10:30:57.135Z",
+  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
+  "promptSha256": "3903aa1c3df8b9930ad1c35c4f128e4698a8878cea3882dc2f0f279cb20cf2bf",
+  "clipSha256": "814897e075c0052829f3565c8cf35dae23a4f0d6486867ae0e763b13339089a7",
   "scene": "copy",
   "review": {
     "heardOpening": "Dupliquer reprend le poste",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.8,
         "spoken": "Dupliquer reprend le poste, la durée, la capacité",
-        "visibleSeconds": 2.5,
-        "visible": "Clic sur l'action Dupliquer et création du nouveau créneau consécutif",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton « Dupliquer » dans le volet du créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.1,
+        "spokenSeconds": 5.8,
+        "spoken": "La nouvelle plage commence juste après l’originale.",
+        "visibleSeconds": 4,
+        "visible": "Le créneau dupliqué 07h45-09h15 apparaît immédiatement à la suite sur la frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
         "spoken": "Ouvrez cette copie : elle est indépendante.",
-        "visibleSeconds": 9.7,
-        "visible": "Ouverture du volet d'édition du créneau dupliqué",
+        "visibleSeconds": 8.6,
+        "visible": "Clic sur le créneau dupliqué pour ouvrir son panneau de modification",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
-        "spoken": "Donne-lui le libellé Relève suivante",
-        "visibleSeconds": 13.5,
+        "spokenSeconds": 11.2,
+        "spoken": "Donnez-lui le libellé Relève suivante",
+        "visibleSeconds": 12.4,
         "visible": "Saisie de « Relève suivante » dans le champ Libellé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.6,
-        "spoken": "on la décale de quinze minutes avec le bouton Décaler",
-        "visibleSeconds": 17.8,
-        "visible": "Clic sur Décaler et mise à jour des horaires (08:00 - 09:30)",
+        "spokenSeconds": 15.8,
+        "spoken": "Ici, on la décale de quinze minutes avec le bouton Décaler.",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur le bouton Décaler, passant les horaires de 07:45-09:15 à 08:00-09:30",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.4,
+        "spokenSeconds": 19.4,
         "spoken": "Fermer et enregistrer conserve le nouveau libellé.",
-        "visibleSeconds": 20.8,
-        "visible": "Fermeture du volet et affichage du créneau avec le nouveau libellé",
+        "visibleSeconds": 19.3,
+        "visible": "Clic sur Fermer et enregistrer, le créneau affiche bien son libellé mis à jour sur la frise",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration."
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

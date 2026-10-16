@@ -1,53 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:47:06.164Z",
-  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "reviewedAt": "2026-10-16T10:29:23.987Z",
+  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
   "promptSha256": "b2900dc527cc36a25a384a24d8a97339928fb6a0e61b267119c03c9404161bee",
-  "clipSha256": "dd5e549df421ee00141fe2c61f97cd38bcf7cccfb19755f94d20a82d623c1a13",
+  "clipSha256": "25bec10d2912e8d8871aa73a18fe20e80a651010102a9781068ae746d4208908",
   "scene": "draw",
   "review": {
     "heardOpening": "Dans la ligne d'un poste",
     "checkpoints": [
       {
-        "spokenSeconds": 2.1,
-        "spoken": "cliquez dans une zone vide puis faites glisser jusqu'à l'heure de fin souhaitée",
-        "visibleSeconds": 2.5,
-        "visible": "Clic et glissement dans la ligne « Sécurité » de 06h15 à 07h00",
+        "spokenSeconds": 1.6,
+        "spoken": "cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée",
+        "visibleSeconds": 2.2,
+        "visible": "Le curseur clique dans la ligne Buvette puis étire un nouveau créneau de 06h15 à 07h00",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "ses actions rapides s'ouvrent avec les horaires calculés",
-        "visibleSeconds": 4.2,
-        "visible": "Ouverture de la fenêtre modale du créneau avec les horaires 06h15-07h00",
+        "spokenSeconds": 5.8,
+        "spoken": "Le créneau est créé, et ses actions rapides s’ouvrent avec les horaires calculés",
+        "visibleSeconds": 4.1,
+        "visible": "Le volet latéral d'actions rapides du créneau s'ouvre avec les horaires 06:15 - 07:00",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
+        "spokenSeconds": 10.2,
         "spoken": "Donnez-lui un libellé, ajustez les places",
-        "visibleSeconds": 12.2,
-        "visible": "Saisie du libellé « Relève dessinée » puis passage du nombre de places à 3",
+        "visibleSeconds": 11.2,
+        "visible": "Le libellé « Boissons descente » est saisi et le nombre de places passe à 3",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.8,
+        "spokenSeconds": 13,
         "spoken": "puis fermez avec Fermer et enregistrer",
-        "visibleSeconds": 15.5,
-        "visible": "La vidéo se termine sans que la fermeture via « Fermer et enregistrer » ne soit effectuée",
-        "sync": "missing",
-        "severity": "minor"
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur le bouton Fermer et enregistrer, le volet se ferme et la notification Enregistré apparaît",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:15 - L'action de fermeture (« Fermer et enregistrer ») n'est pas montrée avant la fin de l'extrait vidéo."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, fluide et naturelle, bien articulée."
+      "observation": "Voix off fluide, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

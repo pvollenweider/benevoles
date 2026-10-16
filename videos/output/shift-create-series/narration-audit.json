@@ -1,8 +1,8 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-06T17:23:11.505Z",
-  "revalidatedAt": "2026-10-11T18:04:54.691Z",
+  "auditedAt": "2026-10-16T08:23:35.766Z",
+  "revalidatedAt": "2026-10-16T08:23:35.767Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
@@ -29,7 +29,7 @@
     {
       "id": "duration",
       "audioSha256": "ad3a4bb100c33974751c55835892065c705ac15a9cdbb14172d04455c5faec1f",
-      "recognized": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s'applique à chaque créneau : avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute. Les créneaux se suivent sans interruption pour garder la buvette couverte.",
+      "recognized": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s'applique à chaque créneau, avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute. Les créneaux se suivent sans interruption pour garder la buvette couverte.",
       "expected": "La durée découpe la plage en équipes de deux heures. Le nombre de personnes s’applique à chaque créneau : avec trois places, chaque relève accueille trois bénévoles. La pause ajoute un intervalle entre deux relèves. Ici, choisissons zéro minute : les créneaux se suivent sans interruption, pour garder la buvette couverte.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -39,9 +39,9 @@
     {
       "id": "preview",
       "audioSha256": "c506311790d3218963dcac1e68113c93e6fa2ac10e8a524069e53bd1f756cc69",
-      "recognized": "L'aperçu est la vérification essentielle. Dix heures midi, midi quatorze heures, puis les relèves suivantes jusqu'à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
+      "recognized": "L'aperçu et la vérification essentielle. Dix heures, midi, midi, quatorze heures, puis les relèves suivantes jusqu'à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
       "expected": "L’aperçu est la vérification essentielle : dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures. Si la plage ne se divise pas exactement, contrôlez le dernier créneau avant de confirmer.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.027777777777777776,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
@@ -59,7 +59,7 @@
     {
       "id": "adjust",
       "audioSha256": "fe8190cef135f35efa575c67558c023a3f55fcc92cb06cb7dbb719e51704cbd1",
-      "recognized": "Après la création, passons en liste et ouvrons un seul créneau. La première relève a besoin de renfort, faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines. La série accélère le départ sans enfermer le planning dans une règle rigide.",
+      "recognized": "Après la création, passons en liste et ouvrons un seul créneau. La première relève a besoin de renfort. Faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines. La série accélère le départ sans enfermer le planning dans une règle rigide.",
       "expected": "Après la création, passons en Liste et ouvrons un seul créneau. La première relève a besoin de renfort : faisons passer sa capacité de trois à quatre personnes. Enregistrons. Cette modification concerne seulement cette plage, pas ses voisines : la série accélère le départ, sans enfermer le planning dans une règle rigide.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -69,7 +69,7 @@
     {
       "id": "result",
       "audioSha256": "f9a6f0fa49e7a0347935a1c9cd0c0531af7e1a796f2bf4d1bddb51ada96b7442",
-      "recognized": "Le résultat est bien enregistré : quatre places pour la première relève et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
+      "recognized": "Le résultat est bien enregistré. Quatre places pour la première relève et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
       "expected": "Le résultat est bien enregistré : quatre places pour la première relève, et toujours trois pour les suivantes. Avant de publier, vérifiez les horaires, les éventuelles pauses et la fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.",
       "wordErrorRate": 0,
       "needsReview": false,

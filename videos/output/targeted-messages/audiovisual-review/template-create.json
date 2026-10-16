@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:11:57.476Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:57:55.019Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "9fbb2c01ab7a78f80b2c7a61608076414cb6fdd7947a7ee1a3ba0b97cb1a7391",
-  "clipSha256": "cf869f8fec72669dfe9684c4d8ffd3a32b8ed8a077a5f7866c229c21ee0204fc",
+  "clipSha256": "d521994ff6688ab986f584bee9d266e2a274177389fa41c493cd78548071e061",
   "scene": "template-create",
   "review": {
     "heardOpening": "Pour une consigne que vous réutilisez",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 5.5,
         "spoken": "puis Nouveau modèle",
-        "visibleSeconds": 1.5,
-        "visible": "Clic sur Nouveau modèle et ouverture du formulaire d'ajout",
-        "sync": "aligned",
+        "visibleSeconds": 2,
+        "visible": "Ouverture du formulaire de création Nouveau modèle",
+        "sync": "early",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
+        "spokenSeconds": 11.8,
         "spoken": "Prenons Briefing avant le créneau",
-        "visibleSeconds": 11.5,
+        "visibleSeconds": 13,
         "visible": "Saisie de « Briefing avant le créneau » dans le champ Nom du modèle",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
+        "spokenSeconds": 17.5,
         "spoken": "L'objet annonce le sujet de l'email",
-        "visibleSeconds": 17,
-        "visible": "Saisie de l'objet avec variable dans le champ Objet",
+        "visibleSeconds": 19.5,
+        "visible": "Saisie de l'objet dans le champ dédié",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 29.2,
+        "spokenSeconds": 30.5,
         "spoken": "Enregistrons",
-        "visibleSeconds": 30,
-        "visible": "Enregistrement du modèle et message de confirmation affiché",
+        "visibleSeconds": 31.5,
+        "visible": "Clic sur le bouton Enregistrer puis affichage de la liste avec le nouveau modèle",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, chaleureuse et parfaitement intelligible, débit régulier."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

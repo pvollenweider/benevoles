@@ -1,5 +1,65 @@
 [
   {
+    "stage": "prepare-rehearsal-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal",
+    "exitCode": 1
+  },
+  {
+    "stage": "prepare-rehearsal-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-rehearsal-1",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-rehearsal-2",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-rehearsal-3",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-rehearsal-4",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal",
+    "exitCode": 0
+  },
+  {
+    "stage": "rehearsal-frames",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-capture-0",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-capture-1",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-capture-2",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-capture-3",
+    "exitCode": 0
+  },
+  {
+    "stage": "prepare-capture-4",
+    "exitCode": 0
+  },
+  {
+    "stage": "capture",
+    "exitCode": 0
+  },
+  {
     "stage": "assemble",
     "exitCode": 0
   },
@@ -8,11 +68,7 @@
     "exitCode": 0
   },
   {
-    "stage": "frames",
-    "exitCode": 0
-  },
-  {
-    "stage": "final-audio",
+    "stage": "final-frames",
     "exitCode": 0
   },
   {

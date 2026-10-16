@@ -1,58 +1,66 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:49.234Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:50:10.998Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
-  "clipSha256": "25b232219a250fce2b843394eb5fae997331429fa4af9fdd5602c8e99cd61f55",
+  "clipSha256": "86e1f0ec0b5add8c426d36fcbace8ba1d392e6f89c442d1ac929e07e663c8851",
   "scene": "new-signup",
   "review": {
     "heardOpening": "Pour voir comment une équipe évolue",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
-        "spoken": "inscrivons une nouvelle personne à la Buvette du dimanche",
-        "visibleSeconds": 1.8,
-        "visible": "Sélection du créneau Buvette le dimanche 18 octobre (10h-14h)",
+        "spokenSeconds": 0.8,
+        "spoken": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche",
+        "visibleSeconds": 1.5,
+        "visible": "Page du planning avec le créneau Buvette dimanche sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "puis continue vers le formulaire",
-        "visibleSeconds": 5.6,
-        "visible": "Clic sur « Continuer » et ouverture de la page du formulaire « Tes informations »",
+        "spokenSeconds": 5.3,
+        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur Continuer et affichage de la page Tes informations",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.6,
-        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone",
-        "visibleSeconds": 8.5,
-        "visible": "Saisie successive des champs Prénom, Nom, Email et Téléphone",
+        "spokenSeconds": 8.8,
+        "spoken": "Elle renseigne son prénom et son nom",
+        "visibleSeconds": 10.3,
+        "visible": "Saisie de Nora Perrin dans les champs Prénom et Nom",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
+        "spokenSeconds": 11.7,
+        "spoken": "son adresse email et son téléphone",
+        "visibleSeconds": 15.8,
+        "visible": "Saisie de l'adresse email et du numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.7,
         "spoken": "Elle choisit une taille, accepte la convention",
-        "visibleSeconds": 17.2,
-        "visible": "Sélection de la taille M et cochage des cases de consentement",
+        "visibleSeconds": 16.8,
+        "visible": "Sélection taille S et coches des cases de consentement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
-        "spoken": "Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi",
-        "visibleSeconds": 21.4,
-        "visible": "Défilement vers le haut pour relire les coordonnées et le récapitulatif du créneau",
+        "spokenSeconds": 25.2,
+        "spoken": "Nous confirmons maintenant",
+        "visibleSeconds": 25.8,
+        "visible": "Clic sur Confirmer mon inscription (Envoi en cours)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 24.1,
-        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée",
-        "visibleSeconds": 25,
-        "visible": "Clic sur « Confirmer mon inscription » et affichage de l'écran « Inscription confirmée ! »",
+        "spokenSeconds": 27,
+        "spoken": "la page indique que son inscription est enregistrée",
+        "visibleSeconds": 27.4,
+        "visible": "Message Inscription confirmée affiché",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +69,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, en parfaite synchronisation avec le déroulement de la démonstration."
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

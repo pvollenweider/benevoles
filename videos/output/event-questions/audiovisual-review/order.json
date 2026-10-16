@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:39:35.673Z",
-  "videoSha256": "cbfd13b376de56a43401c46a76705e586e05e607c9a3534edc0c5317e42cd694",
+  "reviewedAt": "2026-10-16T12:16:08.941Z",
+  "videoSha256": "d78bda05077a5c8f476630c990ce60548b109eb1468932769820a32e026459c6",
   "promptSha256": "b2b9c2ae71eb60d4ea7f95f2aca66d0bada0016809cff476c4a776288de72c1e",
-  "clipSha256": "dcad659a13f6523a9853a64b98e7919ccfe1da515b3ca73b36db3ecdb239372d",
+  "clipSha256": "25ec87b943e72c87f498b03682d0da45e23ae7a0b079fd4825863b4ef52a125e",
   "scene": "order",
   "review": {
-    "heardOpening": "L'ordre compte aussi pour rendre le formulaire agréable.",
+    "heardOpening": "L'ordre compte aussi pour rendre le formulaire",
     "checkpoints": [
       {
-        "spokenSeconds": 4.3,
-        "spoken": "Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis.",
-        "visibleSeconds": 5.5,
-        "visible": "Clic sur le lien Monter de la ligne Permis de conduire, qui passe en première position.",
+        "spokenSeconds": 3.4,
+        "spoken": "Plaçons le permis avant la taille du t-shirt avec Monter",
+        "visibleSeconds": 4.6,
+        "visible": "Clic sur le bouton Monter sur la ligne Permis de conduire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
+        "spokenSeconds": 8.8,
         "spoken": "La question remonte d'une position.",
-        "visibleSeconds": 6,
-        "visible": "Affichage du message de confirmation « Permis de conduire est maintenant en position 1 sur 4. » et liste réordonnée.",
-        "sync": "aligned",
+        "visibleSeconds": 5.4,
+        "visible": "La question Permis de conduire passe en première position et un message de confirmation s'affiche",
+        "sync": "early",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15,
+        "spokenSeconds": 13.9,
         "spoken": "Rechargeons la page : le nouvel ordre est conservé.",
-        "visibleSeconds": 17.8,
-        "visible": "Bandeau informatif « Démonstration : après rechargement de la page, l'ordre est conservé. » sans rechargement effectif du navigateur.",
+        "visibleSeconds": 14.2,
+        "visible": "Affichage d'un bandeau explicatif confirmant la conservation de l'ordre après rechargement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et dynamique, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

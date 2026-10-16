@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:52.486Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:01:32.145Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "72f8e17f8c908bc762b48627a507eaec2bf0bf4e3b5ecf5dd7a461d7dc4f83a0",
-  "clipSha256": "0548405e9f12953f67393492d536c5ae23c443c6aa6eaf4356a98ca0d22aa3b5",
+  "clipSha256": "c0e8e7eae7f18eaf09f8b4d10e06fc5ac9bf23c4c755296860f63a77a308df1b",
   "scene": "publish",
   "review": {
-    "heardOpening": "Quand tout est prêt, publiez le planning.",
+    "heardOpening": "Quand tout est prêt",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1.2,
         "spoken": "publiez le planning",
-        "visibleSeconds": 0,
-        "visible": "Clic sur le bouton vert « Publier » dans la section Publication",
+        "visibleSeconds": 0.3,
+        "visible": "Clic sur le bouton bleu « Publier » dans la section Publication",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.1,
         "spoken": "La page d’inscription devient accessible",
-        "visibleSeconds": 1.5,
-        "visible": "Affichage de la mention « L'événement est publié : les bénévoles peuvent s'inscrire. »",
+        "visibleSeconds": 1.4,
+        "visible": "Le statut de l'événement passe à « Publié » avec le bouton « Partager le lien »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
-        "spoken": "aucun message n’est envoyé automatiquement",
-        "visibleSeconds": 5,
-        "visible": "Écran stable de confirmation de publication et liste de vérification",
+        "spokenSeconds": 5.7,
+        "spoken": "aucun message n’est envoyé automatiquement : vous gardez la main sur sa diffusion",
+        "visibleSeconds": 5.7,
+        "visible": "Écran stable confirmant l'état publié de l'événement et permettant le partage manuel",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la publication de l'événement."
+      "observation": "Voix fluide, claire et bien articulée, synchronisation naturelle avec l'action à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

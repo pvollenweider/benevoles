@@ -82,6 +82,7 @@ export async function recordReminders(options: { page: Page; base: string; event
       const checkbox = page.getByRole("checkbox", { name: "Rappel J-1", exact: true })
       const save = async (enabled: boolean) => {
         await tap(page, checkbox)
+        await page.waitForTimeout(500) // Let the changed check state be read before scrolling to Save.
         const response = page.waitForResponse(r => r.url().endsWith("/settings/notifications") && r.request().method() === "PATCH")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         const result = await response
@@ -149,6 +150,8 @@ export async function recordReminders(options: { page: Page; base: string; event
       const prior = new Set((await inbox()).map(m => m.ID))
       const newStart = addMinutes(changed.startTime, 30), newEnd = addMinutes(changed.endTime, 30)
       await tap(page, page.getByRole("row").filter({ hasText: changed.label }).getByRole("button", { name: /^Modifier le créneau / }))
+      await at("Nous décalons son début et sa fin")
+      await at(0.16) /* mid-sentence: measured « Nous décalons » onset, after opening the editor */
       await write(page.getByLabel(/^Début(?: \*)?$/), newStart)
       await at("Nous décalons son début et sa fin"); await write(page.getByLabel(/^Fin(?: \*)?$/), newEnd)
       const response = page.waitForResponse(r => r.url().endsWith(`/shifts/${changed.id}`) && r.request().method() === "PATCH")

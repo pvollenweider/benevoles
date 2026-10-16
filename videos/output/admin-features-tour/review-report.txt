@@ -1,45 +1,8 @@
-STATUS: NOT READY
-ADMIN_FEATURES_OVERVIEW — batch 19, one narrated take; no retake.
-Product commit: 0ad1a7d71fe7b28d88dd7ce4b9673d24dd080fdc
-BUILD_ID: Pef0qFtQGGE6GvN9qeIJS
-Duration: 295.32 s (4 min 55.32 s).
-MP4 SHA-256: c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1
-
-All three batch-18 defects corrected:
-1. Entire narration newly generated in ONE continuous Kore generation, continuousPauseTags=false, plain paragraph breaks, no pause tags and no old sentence/chapter audio reused. Short delivery style follows the current README. New continuous master fingerprint is recorded in continuous-generation-proof.json. A single incorrect intro/organization cut was moved to the measured silence at 13.339730 s and independently re-audited before capture. All 16 source chapter ASRs pass. All 16 latest full-chapter actual-MP4 AV reviews report consistent, warm voice, including intro at 5 s and questions enumeration at 2–6 s; no perceived narrator change reported.
-2. Pages: real modal title/content filled, Enregistrer clicked and dialog closed. The actual current UI button « Monter la page « Accès bénévoles » » is clicked, its real reorder POST succeeds, and the created page moves from third to second position. Final MP4 frames confirm the saved page and changed order. Final chapter AV aligns creation/save at about 7.3 s and reorder at 11.5 s, with the measured ordering sentence beginning at 11.049 s.
-3. Badge narration now describes a filter by Poste and a Bénévole selection for réimpression. No claim of a shift filter. Current form labels « Poste » / « Bénévole (réimpression) » are visible in the actual MP4, confirmed by source, frames and full chapter AV.
-
-Remaining readiness blocker (NOT a cue failure):
-At the duplication transition (~91.2–91.6 s absolute), the initial full-chapter AV recognition reports a stray 'one' and a short blind all-language ASR, including 400 ms before the chapter, reports 'One, two'. The independent latest full-chapter AV countercheck, a separate short audio countercheck, all 16 final chapter ASRs and a blind ASR of the entire 295.32 s MP4 do not reproduce those words. Music-only recognition reports English vocals with unstable wording, while the narration-only opening probe contains French only. These results remain contradictory: absence of stray English cannot be certified. The first AV result is retained under audiovisual-review/history/, all short/music/whole-film reports under review/. Do not silently dismiss the positive observations because video:validate passes. No audio substitution, alternative soundtrack or additional capture was made; the prescribed music file is unchanged. There was no off cue justifying the one permitted extra take.
-
-Full review performed:
-- 51 latest full-chapter AV checkpoints, all 16 current chapter reviews otherwise pass; initial duplicate flag and countercheck retained, not erased.
-- Blind all-language recognition of all final chapters AND entire final MP4 including transitions; zero viewer tu/ton/ta/tes/toi/t' in both final chapter ASR and entire-film ASR. The short music/transition recognition issue above is the blocker.
-- Final VTT: zero tu and zero other informal viewer forms; all 62 actual cues equal the caption formatter. Register/hash proof: review/register-check.json.
-- 96 actual-final-MP4 chapter frames and 12 between-scene gap frames inspected. Titles, actual current labels, Frise, populated reports, creation/save/reorder, badge selectors and final search results checked. No localhost, org-admin@localhost or dev overlay visible. Filled dates use day.month.year and French prose, never mm/dd.
-- Known nits retained: Chromium native file-upload control shows Choose File / No file chosen despite fr-FR browser context, --lang and French process LANG/LC_ALL; journal detail values retain ISO dates. No src changes or masking workaround.
-- Music: 14.3–19.4 LU below narration, all 244 voiced and 9 music-only windows pass; music-only -34.7 to -32.8 LUFS. Source: prescribed mixkit-tech-house-vibes-130.mp3. Level rule success does not resolve possible sampled English words.
-- Input effects: 20 clicks / 8 keys equal real timeline markers; effects, timeline and final mix hashes match. All 15 sentence anchors pass; scene/audio duration drift 0–6 ms.
-- Posters generated with --metadata-output review/renders-generated.json; videos/renders.json untouched.
-- Single clean product build verified 1559 inputs against the exact requested commit. Source snapshot metadata remained pinned to main; capture uses this video's corrected current narration/recorder. French browser context and process environment used. Only owned fictional default demo reset before rehearsal and narrated take. Exact fixture Mailpit cleanup per take; no fake emails.
-- Prior artifacts INCLUDING all previous audio archived to previous-20261014T031243Z/. Older previous-* archives preserved. No other video rendered or modified.
-- 967 videos Vitest tests passed, including sentence-anchors; 191 explicit video tool sources type-check. ESLint has no errors, only the pre-existing onboardingEventId warning elsewhere in record.ts. git diff --check passes.
-This is automated audiovisual recognition plus frame inspection, not a claim of human listening. Lack of real-time listening is NOT the reason for NOT READY; contradictory positive stray-English recognition is.
-
-Source changes:
-- videos/manifests/admin-features-tour.json: preserve complete vous rewrite, false pause tags, concise continuous delivery style, explicit page save/order wording, correct badge filters.
-- videos/tools/record.ts: preserve matching vous anchors; save page, anchor reorder to its sentence, perform real Monter action and verify actual saved order.
-- videos/scripts/admin-features-tour.md: whole-generation revision note and actual pages/badges workflow.
-No src, other video manifest/script or videos/renders.json changes. No publication, commit or push.
-doc-img: unchanged
-
-Capture server shutdown proof will be appended after PID verification.
-
-git diff --stat -- . ':!videos/output'
- videos/manifests/admin-features-tour.json |  6 +++---
- videos/scripts/admin-features-tour.md     |  8 ++++----
- videos/tools/record.ts                    | 17 +++++++++++++----
- 3 files changed, 20 insertions(+), 11 deletions(-)
-
-Capture server stopped by its exact owned PID 80850 (SIGTERM); lsof confirms no listener on 43102. Wrapper terminated after SIGTERM (exit 143). No pkill or unrelated process stop.
+STATUS: READY
+ADMIN_FEATURES_OVERVIEW — batch 23-2 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 331.24 s; music 14.1–19.6 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Sixteen chapters, all eight chapter sheets and both anchor sheets reviewed. Restricted document links are centered before the named phrase at 295.36 s (exact MP4 frame saved); prior late reveal fixed. Members passage describes available profile features without promising to open a profile; list and current profile capabilities verified. Full soundtrack transcriptions agree, no stray words or informal viewer address.
+No product edit, commit, push or publication in batch 23-2. Real-time subjective listening unavailable as permitted.

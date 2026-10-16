@@ -1,61 +1,62 @@
 {
   "id": "SHIFT_ELIGIBILITY_RULES",
   "slug": "shift-eligibility-rules",
-  "validatedAt": "2026-10-12T04:49:53.698Z",
+  "validatedAt": "2026-10-16T09:25:20.111Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 118720,
+  "captureMs": 122400,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13481,
-      "audioMs": 13479,
+      "visualMs": 14884,
+      "audioMs": 14882,
       "driftMs": 2
     },
     {
       "id": "settings",
-      "visualMs": 17621,
-      "audioMs": 17619,
+      "visualMs": 17340,
+      "audioMs": 17338,
       "driftMs": 2
     },
     {
       "id": "age",
-      "visualMs": 13173,
-      "audioMs": 13171,
-      "driftMs": 2
+      "visualMs": 14155,
+      "audioMs": 14155,
+      "driftMs": 0
     },
     {
       "id": "quota",
-      "visualMs": 14315,
-      "audioMs": 14314,
-      "driftMs": 1
+      "visualMs": 15868,
+      "audioMs": 15860,
+      "driftMs": 8
     },
     {
       "id": "reserved",
-      "visualMs": 15132,
-      "audioMs": 15130,
-      "driftMs": 2
+      "visualMs": 15510,
+      "audioMs": 15507,
+      "driftMs": 3
     },
     {
       "id": "eligible",
-      "visualMs": 13624,
-      "audioMs": 13622,
-      "driftMs": 2
+      "visualMs": 15245,
+      "audioMs": 15244,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 25387,
-      "audioMs": 25386,
-      "driftMs": 1
+      "visualMs": 23937,
+      "audioMs": 23934,
+      "driftMs": 3
     }
   ],
   "anchorsChecked": 14,
   "music": {
-    "voicedWindows": 110,
+    "voicedWindows": 113,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 13.7,
-    "largestGapLu": 18.8,
+    "smallestGapLu": 15.5,
+    "largestGapLu": 19.3,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
     "medianVoiceLufs": -16.4

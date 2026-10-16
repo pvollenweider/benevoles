@@ -1,18 +1,18 @@
 {
   "slug": "volunteer-calendar",
   "capturePurpose": "rehearsal",
-  "recordedAt": "2026-10-11T20:26:04.099Z",
+  "recordedAt": "2026-10-16T09:44:04.236Z",
   "video": "capture.webm",
   "product": {
-    "commit": "ba1c6cbdb4a41ce1f068c10cc0f62b03525ceeb8",
-    "sourceTree": "23ba01e27402446997388522a3ec64638a6b1261",
-    "productSourceSha256": "751d17d81d520c92115ef7b2aa770d5b820963239d95c5864bb56be56e75b420",
-    "buildId": "urE8YE_Qy4c7ji_FfJcAe",
-    "snapshot": "/tmp/benevoles-video-production.batch6",
-    "builtAt": "2026-10-11T19:07:45.780Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "VOLUNTEER_CALENDAR",
@@ -26,78 +26,78 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 3600
+      "atMs": 3627
     },
     {
       "kind": "click",
-      "atMs": 4850
+      "atMs": 4890
     },
     {
       "kind": "click",
-      "atMs": 8739
+      "atMs": 8306
     },
     {
       "kind": "click",
-      "atMs": 9539
+      "atMs": 9106
     },
     {
       "kind": "click",
-      "atMs": 10372
+      "atMs": 9937
     },
     {
       "kind": "click",
-      "atMs": 12004
+      "atMs": 11572
     },
     {
       "kind": "click",
-      "atMs": 14345
+      "atMs": 13389
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 39,
-      "endMs": 2662
+      "startMs": 51,
+      "endMs": 2677
     },
     {
       "id": "one",
-      "startMs": 3115,
-      "endMs": 3931
+      "startMs": 3129,
+      "endMs": 3970
     },
     {
       "id": "all",
-      "startMs": 4384,
-      "endMs": 5181
+      "startMs": 4421,
+      "endMs": 5219
     },
     {
       "id": "import",
-      "startMs": 5633,
-      "endMs": 5682
+      "startMs": 5670,
+      "endMs": 5719
     },
     {
       "id": "details",
-      "startMs": 6135,
-      "endMs": 6214
+      "startMs": 6170,
+      "endMs": 6253
     },
     {
       "id": "night",
-      "startMs": 6667,
-      "endMs": 6681
+      "startMs": 6704,
+      "endMs": 6731
     },
     {
       "id": "change",
-      "startMs": 7132,
-      "endMs": 13424
+      "startMs": 7183,
+      "endMs": 12452
     },
     {
       "id": "reimport",
-      "startMs": 13877,
-      "endMs": 14676
+      "startMs": 12905,
+      "endMs": 13719
     },
     {
       "id": "result",
-      "startMs": 15131,
-      "endMs": 15176
+      "startMs": 14171,
+      "endMs": 14219
     }
   ],
   "anchors": [
@@ -106,35 +106,35 @@
       "phrase": "Ce téléchargement ne crée pas",
       "startMs": 17416,
       "endMs": 23933,
-      "cueMs": 3906
+      "cueMs": 3934
     },
     {
       "segmentId": "all",
       "phrase": "L'inscription en liste d'attente n'y",
       "startMs": 21111,
       "endMs": 25333,
-      "cueMs": 5156
+      "cueMs": 5194
     },
     {
       "segmentId": "details",
       "phrase": "le lieu, les consignes et",
       "startMs": 11011,
       "endMs": 16517,
-      "cueMs": 6147
+      "cueMs": 6186
     },
     {
       "segmentId": "details",
       "phrase": "Garde ce fichier pour toi",
       "startMs": 20674,
       "endMs": 23034,
-      "cueMs": 6182
+      "cueMs": 6220
     },
     {
       "segmentId": "change",
       "phrase": "il ne se met pas",
       "startMs": 14777,
       "endMs": 17435,
-      "cueMs": 11534
+      "cueMs": 11099
     }
   ]
 }

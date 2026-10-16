@@ -1,405 +1,405 @@
 {
   "video": "sector-leaders",
   "source": "/private/tmp/codex-video/videos/output/sector-leaders/sector-leaders.mp4",
-  "sourceSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "sourceSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-12T07:10:15.644Z",
+  "extractedAt": "2026-10-16T11:48:40.960Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.032598065848093015,
-      "seconds": 0.6,
+      "fraction": 0.033489618218352314,
+      "seconds": 1.193,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-3.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 4.6015,
+      "seconds": 5.072,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.45,
-      "seconds": 8.2827,
+      "seconds": 8.6552,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-45.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 11.0436,
+      "seconds": 11.342600000000001,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 15.645100000000001,
+      "seconds": 15.8216,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-85.png"
     },
     {
       "scene": "welcome",
-      "fraction": 0.9837009670759534,
-      "seconds": 18.106,
+      "fraction": 0.9832551908908238,
+      "seconds": 18.209,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-end.png"
     },
     {
       "scene": "nominate",
-      "fraction": 0.02934989972117595,
-      "seconds": 19.459,
+      "fraction": 0.032706459525756335,
+      "seconds": 19.561,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-3.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.25,
-      "seconds": 23.96975,
+      "seconds": 23.54725,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-25.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.45,
-      "seconds": 28.058349999999997,
+      "seconds": 27.21625,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-45.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.6,
-      "seconds": 31.1248,
+      "seconds": 29.968,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-60.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.85,
-      "seconds": 36.23555,
+      "seconds": 34.55425,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-85.png"
     },
     {
       "scene": "nominate",
-      "fraction": 0.9853250501394121,
-      "seconds": 39.002,
+      "fraction": 0.9836467702371219,
+      "seconds": 37.006,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-end.png"
     },
     {
       "scene": "registered",
-      "fraction": 0.035635802102512326,
-      "seconds": 40.358,
+      "fraction": 0.036895830771122864,
+      "seconds": 38.365,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-4.png"
     },
     {
       "scene": "registered",
       "fraction": 0.25,
-      "seconds": 43.96725,
+      "seconds": 41.8305,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-25.png"
     },
     {
       "scene": "registered",
       "fraction": 0.45,
-      "seconds": 47.33465,
+      "seconds": 45.0829,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-45.png"
     },
     {
       "scene": "registered",
       "fraction": 0.6,
-      "seconds": 49.8602,
+      "seconds": 47.5222,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-60.png"
     },
     {
       "scene": "registered",
       "fraction": 0.85,
-      "seconds": 54.069449999999996,
+      "seconds": 51.5877,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-85.png"
     },
     {
       "scene": "registered",
-      "fraction": 0.9821820989487439,
-      "seconds": 56.295,
+      "fraction": 0.9815520846144385,
+      "seconds": 53.727,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-end.png"
     },
     {
       "scene": "email",
-      "fraction": 0.04042854255104104,
-      "seconds": 57.648,
+      "fraction": 0.04252906152537567,
+      "seconds": 58.298,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-4.png"
     },
     {
       "scene": "email",
       "fraction": 0.25,
-      "seconds": 60.75825,
+      "seconds": 61.225,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-25.png"
     },
     {
       "scene": "email",
       "fraction": 0.45,
-      "seconds": 63.72645,
+      "seconds": 64.0466,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-45.png"
     },
     {
       "scene": "email",
       "fraction": 0.6,
-      "seconds": 65.9526,
+      "seconds": 66.1628,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-60.png"
     },
     {
       "scene": "email",
       "fraction": 0.85,
-      "seconds": 69.66285,
+      "seconds": 69.6898,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-85.png"
     },
     {
       "scene": "email",
-      "fraction": 0.9797857287244794,
-      "seconds": 71.589,
+      "fraction": 0.9787354692373121,
+      "seconds": 71.506,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-end.png"
     },
     {
       "scene": "roster",
-      "fraction": 0.03194547971462038,
-      "seconds": 72.942,
+      "fraction": 0.03441353599082306,
+      "seconds": 73.403,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-3.png"
     },
     {
       "scene": "roster",
       "fraction": 0.25,
-      "seconds": 77.0375,
+      "seconds": 77.16175,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-25.png"
     },
     {
       "scene": "roster",
       "fraction": 0.45,
-      "seconds": 80.7939,
+      "seconds": 80.64875,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-45.png"
     },
     {
       "scene": "roster",
       "fraction": 0.6,
-      "seconds": 83.6112,
+      "seconds": 83.264,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-60.png"
     },
     {
       "scene": "roster",
       "fraction": 0.85,
-      "seconds": 88.30669999999999,
+      "seconds": 87.62275,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-85.png"
     },
     {
       "scene": "roster",
-      "fraction": 0.9840272601426898,
-      "seconds": 90.824,
+      "fraction": 0.9827932320045885,
+      "seconds": 89.938,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-end.png"
     },
     {
       "scene": "mobile",
-      "fraction": 0.032099293815536056,
-      "seconds": 92.177,
+      "fraction": 0.03285330997097958,
+      "seconds": 91.289,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-3.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.25,
-      "seconds": 96.25,
+      "seconds": 95.25475,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-25.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.45,
-      "seconds": 99.9884,
+      "seconds": 98.90735000000001,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-45.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.6,
-      "seconds": 102.7922,
+      "seconds": 101.6468,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-60.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.85,
-      "seconds": 107.4652,
+      "seconds": 106.21255000000001,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-85.png"
     },
     {
       "scene": "mobile",
-      "fraction": 0.983950353092232,
-      "seconds": 109.969,
+      "fraction": 0.9835733450145102,
+      "seconds": 108.652,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-end.png"
     },
     {
       "scene": "scope",
-      "fraction": 0.04331191799610193,
-      "seconds": 111.321,
+      "fraction": 0.043134435657800146,
+      "seconds": 110.004,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-4.png"
     },
     {
       "scene": "scope",
       "fraction": 0.25,
-      "seconds": 114.18425,
+      "seconds": 112.8815,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-25.png"
     },
     {
       "scene": "scope",
       "fraction": 0.45,
-      "seconds": 116.95485000000001,
+      "seconds": 115.6635,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-45.png"
     },
     {
       "scene": "scope",
       "fraction": 0.6,
-      "seconds": 119.03280000000001,
+      "seconds": 117.75,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-60.png"
     },
     {
       "scene": "scope",
       "fraction": 0.85,
-      "seconds": 122.49605,
+      "seconds": 121.2275,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-85.png"
     },
     {
       "scene": "scope",
-      "fraction": 0.978344041001949,
-      "seconds": 124.274,
+      "fraction": 0.9784327821711,
+      "seconds": 123.014,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-end.png"
     },
     {
       "scene": "new-signup",
-      "fraction": 0.02134927412467976,
-      "seconds": 125.626,
+      "fraction": 0.019948798084915384,
+      "seconds": 124.366,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-2.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.25,
-      "seconds": 132.052,
+      "seconds": 131.28525,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-25.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.45,
-      "seconds": 137.6728,
+      "seconds": 137.30065,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-45.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.6,
-      "seconds": 141.8884,
+      "seconds": 141.81220000000002,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-60.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.85,
-      "seconds": 148.9144,
+      "seconds": 149.33145000000002,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-85.png"
     },
     {
       "scene": "new-signup",
-      "fraction": 0.9893253629376602,
-      "seconds": 152.83,
+      "fraction": 0.9900256009575423,
+      "seconds": 153.543,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-end.png"
     },
     {
       "scene": "notification",
-      "fraction": 0.03134304967873374,
-      "seconds": 156.612,
+      "fraction": 0.02933411557641537,
+      "seconds": 158.11,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-3.png"
     },
     {
       "scene": "notification",
       "fraction": 0.25,
-      "seconds": 160.79775,
+      "seconds": 162.6235,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-25.png"
     },
     {
       "scene": "notification",
       "fraction": 0.45,
-      "seconds": 164.62635,
+      "seconds": 166.71429999999998,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-45.png"
     },
     {
       "scene": "notification",
       "fraction": 0.6,
-      "seconds": 167.49779999999998,
+      "seconds": 169.7824,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-60.png"
     },
     {
       "scene": "notification",
       "fraction": 0.85,
-      "seconds": 172.28355,
+      "seconds": 174.89589999999998,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-85.png"
     },
     {
       "scene": "notification",
-      "fraction": 0.9843284751606332,
-      "seconds": 174.855,
+      "fraction": 0.9853329422117924,
+      "seconds": 177.664,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-end.png"
     },
     {
       "scene": "contact",
-      "fraction": 0.03739016638624042,
-      "seconds": 176.21,
+      "fraction": 0.03571853792118109,
+      "seconds": 179.016,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-4.png"
     },
     {
       "scene": "contact",
       "fraction": 0.25,
-      "seconds": 179.62175,
+      "seconds": 182.6155,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-25.png"
     },
     {
       "scene": "contact",
       "fraction": 0.45,
-      "seconds": 182.83115,
+      "seconds": 185.9751,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-45.png"
     },
     {
       "scene": "contact",
       "fraction": 0.6,
-      "seconds": 185.2382,
+      "seconds": 188.4948,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-60.png"
     },
     {
       "scene": "contact",
       "fraction": 0.85,
-      "seconds": 189.24995,
+      "seconds": 192.6943,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-85.png"
     },
     {
       "scene": "contact",
-      "fraction": 0.9813049168068798,
-      "seconds": 191.357,
+      "fraction": 0.9821407310394095,
+      "seconds": 194.914,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-end.png"
     },
     {
       "scene": "remove",
-      "fraction": 0.030248033877797943,
-      "seconds": 192.71,
+      "fraction": 0.03006012024048096,
+      "seconds": 196.265,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-3.png"
     },
     {
       "scene": "remove",
       "fraction": 0.25,
-      "seconds": 197.069,
+      "seconds": 200.655,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-25.png"
     },
     {
       "scene": "remove",
       "fraction": 0.45,
-      "seconds": 201.0362,
+      "seconds": 204.647,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-45.png"
     },
     {
       "scene": "remove",
       "fraction": 0.6,
-      "seconds": 204.01160000000002,
+      "seconds": 207.641,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-60.png"
     },
     {
       "scene": "remove",
       "fraction": 0.85,
-      "seconds": 208.97060000000002,
+      "seconds": 212.631,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-85.png"
     },
     {
       "scene": "remove",
-      "fraction": 0.984875983061101,
-      "seconds": 211.646,
+      "fraction": 0.9849699398797596,
+      "seconds": 215.325,
       "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-end.png"
     }
   ]

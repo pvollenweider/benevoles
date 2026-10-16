@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:50.893Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:50:22.622Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
-  "clipSha256": "0af037efcf5f1ee1962389bec97642a2caaef613418e365e50f6451af8393582",
+  "clipSha256": "395e8f10ab179d7a8798959e83b6efbac5c6d592a12f8ef3872edc5b562d9d65",
   "scene": "notification",
   "review": {
     "heardOpening": "Côté responsable",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 0.5,
         "spoken": "voici l'email réellement reçu à la suite de cette inscription",
-        "visibleSeconds": 0.5,
-        "visible": "L'email de notification dans la boîte Mailpit est affiché à l'écran",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la boîte de messagerie avec l'email de notification de nouvelle inscription",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 4.5,
         "spoken": "Il indique le nom de Nora et le créneau de la Buvette du dimanche",
-        "visibleSeconds": 4,
-        "visible": "Le contenu du message mentionne Nora Perrin et la date du 18/10/2026 de 10:00 à 14:00",
+        "visibleSeconds": 4.5,
+        "visible": "Le corps de l'email indique l'inscription de Nora Perrin sur le créneau Buvette du 25/10/2026",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.6,
+        "spokenSeconds": 8.8,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 8.8,
+        "visible": "Bouton d'action 'Voir la liste complète' bien visible dans l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
         "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées",
-        "visibleSeconds": 10.5,
-        "visible": "Affichage de la page Responsable - Buvette avec Nora Perrin inscrite sous le créneau du dimanche 18 octobre",
+        "visibleSeconds": 11.5,
+        "visible": "Transition vers la page publique du planning où Nora Perrin figure avec son email et numéro sous la buvette du dimanche",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, naturelle et parfaitement synchronisée avec les affichages à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

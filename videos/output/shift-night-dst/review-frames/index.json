@@ -1,261 +1,261 @@
 {
   "video": "shift-night-dst",
   "source": "/private/tmp/codex-video/videos/output/shift-night-dst/shift-night-dst.mp4",
-  "sourceSha256": "da98cdc9443c85c274a4ba3f37934686e7cc52e86efc9a1dd62ca37b527d13cd",
+  "sourceSha256": "a7f8f793a9479871a32e314896426c00efbd0b2ddd2c4effa20068f0175399e5",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-11T11:37:35.135Z",
+  "extractedAt": "2026-10-16T08:47:01.752Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.04237886707162029,
-      "seconds": 1.793,
+      "fraction": 0.043494019572308806,
+      "seconds": 1.92,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-4.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 4.7325,
+      "seconds": 4.76875,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.45,
-      "seconds": 7.564100000000001,
+      "seconds": 7.52775,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-45.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 9.6878,
+      "seconds": 9.597,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 13.2273,
+      "seconds": 13.04575,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-85.png"
     },
     {
       "scene": "welcome",
-      "fraction": 0.9788105664641898,
-      "seconds": 15.051,
+      "fraction": 0.9782529902138456,
+      "seconds": 14.815,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/welcome-end.png"
     },
     {
       "scene": "ordinary",
-      "fraction": 0.029444962457672866,
-      "seconds": 16.403,
+      "fraction": 0.031202870664101098,
+      "seconds": 16.166,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-3.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.25,
-      "seconds": 20.89725,
+      "seconds": 20.37325,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-25.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.45,
-      "seconds": 24.97265,
+      "seconds": 24.219050000000003,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-45.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.6,
-      "seconds": 28.029199999999996,
+      "seconds": 27.1034,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-60.png"
     },
     {
       "scene": "ordinary",
       "fraction": 0.85,
-      "seconds": 33.12345,
+      "seconds": 31.91065,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-85.png"
     },
     {
       "scene": "ordinary",
-      "fraction": 0.9852775187711635,
-      "seconds": 35.88,
+      "fraction": 0.9843985646679495,
+      "seconds": 34.495,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/ordinary-end.png"
     },
     {
       "scene": "spring",
-      "fraction": 0.04109870539078019,
-      "seconds": 37.233,
+      "fraction": 0.04367765887748417,
+      "seconds": 35.847,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-4.png"
     },
     {
       "scene": "spring",
       "fraction": 0.25,
-      "seconds": 40.28275,
+      "seconds": 38.68125,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-25.png"
     },
     {
       "scene": "spring",
       "fraction": 0.45,
-      "seconds": 43.20255,
+      "seconds": 41.428650000000005,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-45.png"
     },
     {
       "scene": "spring",
       "fraction": 0.6,
-      "seconds": 45.3924,
+      "seconds": 43.4892,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-60.png"
     },
     {
       "scene": "spring",
       "fraction": 0.85,
-      "seconds": 49.04215,
+      "seconds": 46.923449999999995,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-85.png"
     },
     {
       "scene": "spring",
-      "fraction": 0.97945064730461,
-      "seconds": 50.932,
+      "fraction": 0.978161170561258,
+      "seconds": 48.684,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/spring-end.png"
     },
     {
       "scene": "autumn",
-      "fraction": 0.04265301770100235,
-      "seconds": 52.284,
-      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-4.png"
+      "fraction": 0.04843005892323836,
+      "seconds": 50.036,
+      "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-5.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.25,
-      "seconds": 55.20075,
+      "seconds": 52.53325,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-25.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.45,
-      "seconds": 58.01415,
+      "seconds": 55.011050000000004,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-45.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.6,
-      "seconds": 60.124199999999995,
+      "seconds": 56.8694,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-60.png"
     },
     {
       "scene": "autumn",
       "fraction": 0.85,
-      "seconds": 63.64095,
+      "seconds": 59.96665,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-85.png"
     },
     {
       "scene": "autumn",
-      "fraction": 0.9786734911494989,
-      "seconds": 65.451,
+      "fraction": 0.9757849705383809,
+      "seconds": 61.525,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/autumn-end.png"
     },
     {
       "scene": "timezone",
-      "fraction": 0.046143197723602244,
-      "seconds": 66.807,
+      "fraction": 0.050551857780773445,
+      "seconds": 62.878,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-5.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.25,
-      "seconds": 69.45775,
+      "seconds": 65.24525,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-25.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.45,
-      "seconds": 72.05835,
+      "seconds": 67.61905,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-45.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.6,
-      "seconds": 74.00880000000001,
+      "seconds": 69.3994,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-60.png"
     },
     {
       "scene": "timezone",
       "fraction": 0.85,
-      "seconds": 77.25955,
+      "seconds": 72.36664999999999,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-85.png"
     },
     {
       "scene": "timezone",
-      "fraction": 0.9769284011381989,
-      "seconds": 78.91,
+      "fraction": 0.9747240711096132,
+      "seconds": 73.847,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/timezone-end.png"
     },
     {
       "scene": "calendar",
-      "fraction": 0.03800836183960471,
-      "seconds": 80.262,
+      "fraction": 0.0395778364116095,
+      "seconds": 75.2,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-4.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.25,
-      "seconds": 83.6085,
+      "seconds": 78.39,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-25.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.45,
-      "seconds": 86.7657,
+      "seconds": 81.422,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-45.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.6,
-      "seconds": 89.1336,
+      "seconds": 83.696,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-60.png"
     },
     {
       "scene": "calendar",
       "fraction": 0.85,
-      "seconds": 93.0801,
+      "seconds": 87.486,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-85.png"
     },
     {
       "scene": "calendar",
-      "fraction": 0.9809958190801976,
-      "seconds": 95.148,
+      "fraction": 0.9802110817941952,
+      "seconds": 89.46,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/calendar-end.png"
     },
     {
       "scene": "result",
-      "fraction": 0.04371584699453552,
-      "seconds": 96.5,
+      "fraction": 0.04169562195969423,
+      "seconds": 90.811,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-4.png"
     },
     {
       "scene": "result",
       "fraction": 0.25,
-      "seconds": 99.33125,
+      "seconds": 93.8085,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-25.png"
     },
     {
       "scene": "result",
       "fraction": 0.45,
-      "seconds": 102.07625,
+      "seconds": 96.6865,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-45.png"
     },
     {
       "scene": "result",
       "fraction": 0.6,
-      "seconds": 104.135,
+      "seconds": 98.845,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-60.png"
     },
     {
       "scene": "result",
       "fraction": 0.85,
-      "seconds": 107.56625,
+      "seconds": 102.4425,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-85.png"
     },
     {
       "scene": "result",
-      "fraction": 0.9781420765027322,
-      "seconds": 109.325,
+      "fraction": 0.9791521890201529,
+      "seconds": 104.301,
       "file": "/private/tmp/codex-video/videos/output/shift-night-dst/review-frames/result-end.png"
     }
   ]

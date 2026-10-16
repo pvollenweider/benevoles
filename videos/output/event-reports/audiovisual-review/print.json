@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T07:06:40.360Z",
-  "videoSha256": "061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144",
+  "reviewedAt": "2026-10-16T11:23:23.552Z",
+  "videoSha256": "86c151c6935a101a5001b46c068475ced7f2edc6fe4924e5a34ef8f6502cd8b0",
   "promptSha256": "018ca1a9503eb4e8d9303cbe43dcd923eb9331b4b6186df12dd198aa240f6f9e",
-  "clipSha256": "34f631939d60935ff4dfe44ee3d5eb6264c7ec163c8dc725b119a37da39b621f",
+  "clipSha256": "9c0fc9f68362e4abcea4707e81bbe9f18dde96563db3d6d50720d2e6ff339417",
   "scene": "print",
   "review": {
     "heardOpening": "Avant d'imprimer toute la série",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Avant d'imprimer toute la série, vérifiez les pages réellement produites.",
-        "visibleSeconds": 0,
-        "visible": "Page web de synthèse des réponses avec le bouton Imprimer en haut à droite.",
+        "spokenSeconds": 8.5,
+        "spoken": "Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la vue 'Lecture du PDF réel — planning individuel, page 4'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
-        "spoken": "Voici le planning de Léa : regardons la frise, les marges",
-        "visibleSeconds": 13.5,
-        "visible": "Aperçu de la page 4 du PDF affichant le planning individuel de Léa Giroud avec la frise horaire.",
+        "spokenSeconds": 13.2,
+        "spoken": "Voici le planning de Léa : regardons la frise, les marges, puis les consignes plus bas.",
+        "visibleSeconds": 14.8,
+        "visible": "Défilement vers le bas affichant le bas du planning et les premières consignes de Léa Giroud",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
+        "spokenSeconds": 20.2,
         "spoken": "La dernière passe sur la page suivante.",
-        "visibleSeconds": 17.5,
-        "visible": "Affichage de la page 5 du PDF contenant le reste des consignes horaires de Léa.",
+        "visibleSeconds": 20,
+        "visible": "Transition vers la page 5 affichant la suite et fin des consignes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions du document."
+      "observation": "Voix féminine calme, claire et bien articulée, en bonne adéquation avec les éléments montrés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

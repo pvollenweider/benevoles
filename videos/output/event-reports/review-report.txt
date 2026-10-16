@@ -1,23 +1,8 @@
 STATUS: READY
-ID: EVENT_REPORTS
-Duration: 311.36
-BUILD_ID: B8kWoz3CnvzJpJCwHaAPH
-Commit: 7e0069bba916e06d82b7009efff283aeface6afc
-Music: {'voicedWindows': 268, 'musicOnlyWindows': 11, 'smallestGapLu': 14, 'largestGapLu': 19.8, 'quietestMusicOnlyLufs': -33.7, 'loudestMusicOnlyLufs': -32.7, 'medianVoiceLufs': -16.3}
-Problems: All objective video checks pass; answer-summary cues aligned. Product bug: documents/complete.pdf page 1 contains only Planning heading (rendered/complete/page-1.png); Frise starts page 2. #922 null not reproduced.
-Source changes: Pass 1 CSV/print sentence anchors retained; no additional source change; no third take.
-Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
-Real-time subjective listening unavailable; never used as a NOT READY reason.
-Subtitles match manifest text exactly: True
-MP4 frame evidence SHA256: 061508f60a7f8a8e66509edfe6bb55fba6411b2a681780f2d5f7219004220144
-All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 1.298–23.119 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-complete: 25.38–52.12 s; review/complete-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-day: 54.383–79.499 s; review/day-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-role: 81.761–107.43 s; review/role-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-individual: 113.769–143.975 s; review/individual-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-attendance: 150.223–178.508 s; review/attendance-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-contacts: 180.777–207.54 s; review/contacts-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-answers: 209.803–242.039 s; review/answers-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-print: 244.297–273.693 s; review/print-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-result: 277.113–304.857 s; review/result-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
+EVENT_REPORTS — batch 23-3 — 2026-10-16
+BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
+Duration 336.12 s; music 14.8–19.3 LU below voice. Music-only floor and real click/key effects validated.
+Whole narration reused after text/hash and independent audit verification.
+Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
+Contacts document is visible from chapter start (200.003 s), before its opening sentence; exact boundary frame saved. All ten audiovisual chapters and seven chapter/anchor sheets reviewed. Real PDFs, two-page Lea planning, attendance distinction and organizer-only phone list verified. Final Gemini whole-soundtrack ASR has no added words or informal address; Whisper subtitle-credit text appears only in the music tail after 335.56 s, absent from source narration and independent whole-final Gemini recognition.
+No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.

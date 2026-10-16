@@ -1,64 +1,65 @@
 {
   "id": "SHIFT_NIGHT_DST",
   "slug": "shift-night-dst",
-  "validatedAt": "2026-10-11T11:37:15.753Z",
+  "validatedAt": "2026-10-16T09:25:19.172Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 111320,
+  "captureMs": 106240,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14158,
-      "audioMs": 14157,
+      "visualMs": 13795,
+      "audioMs": 13794,
       "driftMs": 1
     },
     {
       "id": "ordinary",
-      "visualMs": 20377,
-      "audioMs": 20376,
+      "visualMs": 19229,
+      "audioMs": 19228,
       "driftMs": 1
     },
     {
       "id": "spring",
-      "visualMs": 14599,
-      "audioMs": 14599,
-      "driftMs": 0
+      "visualMs": 13737,
+      "audioMs": 13736,
+      "driftMs": 1
     },
     {
       "id": "autumn",
-      "visualMs": 14067,
-      "audioMs": 14057,
-      "driftMs": 10
+      "visualMs": 12389,
+      "audioMs": 12388,
+      "driftMs": 1
     },
     {
       "id": "timezone",
-      "visualMs": 13003,
-      "audioMs": 13002,
-      "driftMs": 1
+      "visualMs": 11869,
+      "audioMs": 11869,
+      "driftMs": 0
     },
     {
       "id": "calendar",
-      "visualMs": 15786,
-      "audioMs": 15785,
-      "driftMs": 1
+      "visualMs": 15160,
+      "audioMs": 15157,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 13725,
-      "audioMs": 13704,
-      "driftMs": 21
+      "visualMs": 14390,
+      "audioMs": 14388,
+      "driftMs": 2
     }
   ],
   "anchorsChecked": 4,
   "music": {
-    "voicedWindows": 105,
+    "voicedWindows": 100,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 13.6,
-    "largestGapLu": 17.6,
+    "smallestGapLu": 14.9,
+    "largestGapLu": 18.3,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.6
+    "medianVoiceLufs": -16.5
   },
   "issues": []
 }

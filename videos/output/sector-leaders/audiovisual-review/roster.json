@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:35.591Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:49:37.753Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "1d2d62b22d9ea7722de99fd68c6d428234a5a86f22114394c19ca95d2d557e33",
-  "clipSha256": "3b004d55064ca3b1eaa4de91fb907704ec3579ee74a809c96172899fbe4087eb",
+  "clipSha256": "4cb6701ff0d24c4f136ceab8f55bce2f84625ba47662172be7869122e83269d6",
   "scene": "roster",
   "review": {
     "heardOpening": "Sur ce lien, la responsable de la Buvette",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
-        "spoken": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste.",
-        "visibleSeconds": 0,
-        "visible": "En-tête affichant 'Responsable - Buvette' avec le décompte des bénévoles inscrits.",
+        "spoken": "la responsable de la Buvette retrouve uniquement les inscriptions de son poste",
+        "visibleSeconds": 0.5,
+        "visible": "Page intitulée « Responsable - Buvette » affichant les bénévoles inscrits pour ce poste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.9,
-        "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires.",
-        "visibleSeconds": 0,
-        "visible": "Blocs de créneaux affichés avec la date 'samedi 17 octobre' et les plages horaires '10:00-14:00' et '14:00-18:00'.",
+        "spokenSeconds": 4.5,
+        "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires",
+        "visibleSeconds": 4.5,
+        "visible": "En-têtes de créneaux visibles : « samedi 28 octobre, 10:00-14:00 » et « samedi 28 octobre, 14:00-18:00 »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8,
         "spoken": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné",
-        "visibleSeconds": 0,
-        "visible": "Lignes détaillées avec le nom complet du bénévole, son adresse email et son numéro de téléphone.",
+        "visibleSeconds": 8,
+        "visible": "Lignes de bénévoles affichant le nom, l'adresse email et le numéro de téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.1,
-        "spoken": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
-        "visibleSeconds": 0,
-        "visible": "Badges jaunes 'Liste d'attente' visibles en face de certaines inscriptions.",
+        "spokenSeconds": 13.5,
+        "spoken": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée",
+        "visibleSeconds": 13.5,
+        "visible": "Badges jaunes « Liste d'attente » visibles à droite de certains inscrits",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine claire, posée et parfaitement audible, en adéquation avec le contenu affiché."
+      "observation": "Voix off posée, claire et intelligible, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

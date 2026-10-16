@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T17:05:34.225Z",
-  "videoSha256": "f91428b7da19c748bc8539d393adef2a6c0cae2279fd18a265e4ec5e8a0bf4af",
+  "reviewedAt": "2026-10-16T09:06:23.445Z",
+  "videoSha256": "432efe2e18c4e73f7d01dd232e95cf81f3544a70e8e18b271510160ec6984624",
   "promptSha256": "69e0aef05af8a282ebf85adfa296202c4d699599e7b89fc49c9a9433df43b80b",
-  "clipSha256": "3a8d8037d29add87a376ab1fd612aadbfe397b8ecee8638ec3f3132b08178a43",
+  "clipSha256": "785c7fe6e2ef6e8b57c096eca69769c0b7b14dee0eb369d9ab6d57f62022c44d",
   "scene": "done",
   "review": {
-    "heardOpening": "Le résultat, c'est un suivi simple",
+    "heardOpening": "Le résultat, c’est un suivi simple",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le résultat, c'est un suivi simple",
+        "spokenSeconds": 0.8,
+        "spoken": "Le résultat, c’est un suivi simple",
         "visibleSeconds": 0.5,
-        "visible": "Bannière centrale « Un suivi clair jusqu'au jour J » affichée au centre de l'écran",
+        "visible": "Encart central affichant « Un suivi clair jusqu'au jour J » avec le sous-titre « voir, cibler, préparer »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.9,
+        "spokenSeconds": 5.7,
         "spoken": "retrouver l’historique sans jongler entre plusieurs outils",
-        "visibleSeconds": 5.9,
-        "visible": "Affichage complet du journal d'activité listant l'historique des inscriptions et modifications de créneaux",
+        "visibleSeconds": 3,
+        "visible": "Affichage complet de la liste d'historique des actions (modifications de paramètres, inscriptions, invitations, créneaux)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.9,
+        "spokenSeconds": 9.2,
         "spoken": "Votre planning reste lisible jusqu’au jour de l’événement",
-        "visibleSeconds": 8.9,
-        "visible": "Vue d'ensemble stable des entrées chronologiques du planning d'événements",
+        "visibleSeconds": 9,
+        "visible": "Page d'historique des événements et interventions toujours affichée en vue récapitulative",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec l'affichage de conclusion."
+      "observation": "Voix off féminine claire, fluide et posée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

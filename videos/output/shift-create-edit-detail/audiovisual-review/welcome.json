@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:36:09.998Z",
-  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "reviewedAt": "2026-10-16T08:40:35.378Z",
+  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
   "promptSha256": "de7aa6d347bd51845521732da68d915ead2fd994da8f8a7493ac25ea1751f589",
-  "clipSha256": "e633b2366755ade62649059b30646f04fa7c34180eac2b3e37e626d698347079",
+  "clipSha256": "e1c09a39e7b4c881b3c661d4a5a1abde6f8564543b32ae820174c006e9849042",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un créneau transforme un poste",
     "checkpoints": [
       {
-        "spokenSeconds": 0.6,
-        "spoken": "Un créneau transforme un poste en besoin concret.",
+        "spokenSeconds": 0.8,
+        "spoken": "Un créneau transforme un poste en besoin concret",
         "visibleSeconds": 0,
-        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en superposition sur la page de gestion des créneaux.",
+        "visible": "Titre 'Ajouter et modifier un créneau dans le détail' affiché en incrustation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Il dit quelle mission doit être assurée, quand, par combien de personnes",
-        "visibleSeconds": 3.4,
-        "visible": "Affichage de la frise des créneaux avec les missions, plages horaires et jauges de bénévoles.",
+        "spokenSeconds": 3.5,
+        "spoken": "Il dit quelle mission doit être assurée, quand",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition du titre et affichage du planning des créneaux pour Montage, Accueil et Buvette",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.9,
-        "spoken": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
-        "visibleSeconds": 11,
-        "visible": "Vue d'ensemble stable de la frise des créneaux en attendant le début du parcours détaillé.",
+        "spokenSeconds": 8.8,
+        "spoken": "Prenons le temps de parcourir chaque champ et son résultat côté bénévole",
+        "visibleSeconds": 9,
+        "visible": "Vue d'ensemble stable de l'onglet Créneaux avec le bouton '+ Ajouter un créneau'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine naturelle, claire, posée et de bonne qualité audio."
+      "observation": "Voix féminine claire, fluide et posée, bien synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

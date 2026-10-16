@@ -49,3 +49,15 @@ WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narr
 - Mettez les fiches à jour quand une personne vous signale un changement.
 - Utilisez les disponibilités pour dialoguer, pas pour décider à sa place.
 - Et gardez seulement les notes nécessaires : l'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.
+
+Contrôle final 23-2 : NOT READY. Rupture de timbre dans la conclusion à +14,2 s, sur « Et gardez seulement les notes nécessaires », signalée par la revue audiovisuelle et confirmée par comparaison audio seule avec l’ouverture. La narration Puck réutilisée est une seule génération ; cela ne suffit pas à établir sa continuité audible. Aucun remplacement partiel ni reprise vocale hors périmètre. Preuves locales : `review/rejection.json`, `voice-review/result.json`.
+
+
+## Contrôle du lot 23-3 — 2026-10-16
+
+READY : narration Puck complète régénérée en une passe sans balises, frontières mesurées, tous les chapitres comparés en audio seul avant capture. Première nouvelle génération rejetée pour rupture de voix ; seconde retenue. Revue audiovisuelle finale sans rupture. Référence : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, BUILD_ID `gHYEjPtpdQYUNytuIhMkh`. Preuves locales dans `videos/output/members-management/review/` et `review-report.txt`.

@@ -1,18 +1,18 @@
 {
   "slug": "shift-create-edit-detail",
   "capturePurpose": "rehearsal",
-  "recordedAt": "2026-10-12T01:32:44.636Z",
+  "recordedAt": "2026-10-16T08:23:57.829Z",
   "video": "capture.webm",
   "product": {
-    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
-    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
-    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
-    "buildId": "RnrUED_grQJ_YgINLz6Tf",
-    "snapshot": "/tmp/benevoles-video-production.batch9",
-    "builtAt": "2026-10-12T00:53:50.007Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "SHIFT_CREATE_EDIT_DETAIL",
@@ -26,116 +26,116 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 6493
+      "atMs": 6658
     },
     {
       "kind": "click",
-      "atMs": 7327
+      "atMs": 7501
     },
     {
       "kind": "click",
-      "atMs": 8542
+      "atMs": 8729
     },
     {
       "kind": "click",
-      "atMs": 9725
+      "atMs": 9914
     },
     {
       "kind": "click",
-      "atMs": 11058
+      "atMs": 11228
     },
     {
       "kind": "click",
-      "atMs": 12725
+      "atMs": 12895
     },
     {
       "kind": "click",
-      "atMs": 14408
+      "atMs": 14577
     },
     {
       "kind": "click",
-      "atMs": 17909
+      "atMs": 18062
     },
     {
       "kind": "click",
-      "atMs": 18724
+      "atMs": 18878
     },
     {
       "kind": "click",
-      "atMs": 21843
+      "atMs": 21995
     },
     {
       "kind": "click",
-      "atMs": 23074
+      "atMs": 23228
     },
     {
       "kind": "click",
-      "atMs": 24309
+      "atMs": 24443
     },
     {
       "kind": "click",
-      "atMs": 25524
+      "atMs": 25677
     },
     {
       "kind": "click",
-      "atMs": 26742
+      "atMs": 26894
     },
     {
       "kind": "click",
-      "atMs": 30241
+      "atMs": 30394
     },
     {
       "kind": "click",
-      "atMs": 31057
+      "atMs": 31228
     },
     {
       "kind": "click",
-      "atMs": 31875
+      "atMs": 32027
     },
     {
       "kind": "click",
-      "atMs": 36089
+      "atMs": 36344
     },
     {
       "kind": "click",
-      "atMs": 36922
+      "atMs": 37177
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1109,
-      "endMs": 3733
+      "startMs": 1247,
+      "endMs": 3882
     },
     {
       "id": "identity",
-      "startMs": 5995,
-      "endMs": 15125
+      "startMs": 6143,
+      "endMs": 15293
     },
     {
       "id": "availability",
-      "startMs": 17392,
-      "endMs": 19032
+      "startMs": 17549,
+      "endMs": 19185
     },
     {
       "id": "practical",
-      "startMs": 21294,
-      "endMs": 27460
+      "startMs": 21447,
+      "endMs": 27615
     },
     {
       "id": "save",
-      "startMs": 29722,
-      "endMs": 32207
+      "startMs": 29879,
+      "endMs": 32376
     },
     {
       "id": "change",
-      "startMs": 34471,
-      "endMs": 37271
+      "startMs": 34643,
+      "endMs": 37526
     },
     {
       "id": "result",
-      "startMs": 39534,
-      "endMs": 39569
+      "startMs": 39793,
+      "endMs": 39824
     }
   ],
   "anchors": [
@@ -143,85 +143,85 @@
       "segmentId": "identity",
       "phrase": "Choisissez d’abord le poste",
       "startMs": 0,
-      "endMs": 6659,
-      "cueMs": 8050
+      "endMs": 4448,
+      "cueMs": 8229
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 6659,
-      "endMs": 13795,
-      "cueMs": 9260
+      "startMs": 11755,
+      "endMs": 16520,
+      "cueMs": 9439
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 6659,
-      "endMs": 13795,
-      "cueMs": 10539
+      "startMs": 11755,
+      "endMs": 16520,
+      "cueMs": 10725
     },
     {
       "segmentId": "identity",
       "phrase": "La date, l’heure de début",
-      "startMs": 6659,
-      "endMs": 13795,
-      "cueMs": 12220
+      "startMs": 11755,
+      "endMs": 16520,
+      "cueMs": 12389
     },
     {
       "segmentId": "identity",
       "phrase": "La capacité indique combien de",
-      "startMs": 13795,
+      "startMs": 16520,
       "endMs": 22000,
-      "cueMs": 13887
+      "cueMs": 14067
     },
     {
       "segmentId": "availability",
       "phrase": "La liste d’attente recueille les",
       "startMs": 4889,
       "endMs": 12116,
-      "cueMs": 17423
+      "cueMs": 17576
     },
     {
       "segmentId": "availability",
       "phrase": "Le mode Sur validation transforme",
       "startMs": 12116,
       "endMs": 22000,
-      "cueMs": 18215
+      "cueMs": 18367
     },
     {
       "segmentId": "practical",
       "phrase": "Renseignons d’abord le lieu de rendez-vous",
       "startMs": 0,
       "endMs": 3942,
-      "cueMs": 21322
+      "cueMs": 21476
     },
     {
       "segmentId": "practical",
       "phrase": "Ajoutons une consigne",
       "startMs": 6758,
       "endMs": 8898,
-      "cueMs": 22559
+      "cueMs": 22708
     },
     {
       "segmentId": "practical",
       "phrase": "Le contact opérationnel indique",
       "startMs": 13854,
       "endMs": 19036,
-      "cueMs": 23791
+      "cueMs": 23944
     },
     {
       "segmentId": "practical",
       "phrase": "Les coordonnées GPS placent",
       "startMs": 24668,
       "endMs": 29849,
-      "cueMs": 26240
+      "cueMs": 26394
     },
     {
       "segmentId": "change",
       "phrase": "Rouvrir l’éditeur permet de corriger",
       "startMs": 8624,
       "endMs": 15297,
-      "cueMs": 36437
+      "cueMs": 36692
     }
   ]
 }

@@ -1,12 +1,12 @@
 {
-  "recordedAt": "2026-10-12T05:54:10.619Z",
+  "recordedAt": "2026-10-16T09:49:45.819Z",
   "productBuild": {
-    "commit": "71c681b58e385957c81471ef8c2847b45c4540ec",
-    "sourceTree": "71f7870cf857b12f99b9da4cdd59278197901fca",
-    "productSourceSha256": "5417989e5fff7906987a0f899dca100e16ee05057572a80d121207d0c098268a",
-    "buildId": "Ro9VdxUayqlTAULEvQpY0",
-    "snapshot": "/tmp/benevoles-video-production.batch11",
-    "builtAt": "2026-10-12T04:25:58.799Z"
+    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
+    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
+    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
+    "buildId": "gHYEjPtpdQYUNytuIhMkh",
+    "snapshot": "/tmp/benevoles-video-production.Batch231",
+    "builtAt": "2026-10-16T08:22:06.973Z"
   },
   "organizationId": "video-member-merge",
   "keepId": "video-member-merge-a",
@@ -16,19 +16,19 @@
       "kind": "registration",
       "entityId": "video-member-merge-registration-moved",
       "oldLinkSha256": "4b136836487dde208660f0de88eac10708d829afb287112424c564cbfdacb532",
-      "newLinkSha256": "504b27e4699e7851a848648adb7e2c72565cd513e4ef854f335cd2a935f2929b"
+      "newLinkSha256": "58f97c8321efe01984bfda71d3c8f5845a409ed54456f7381c865f5f9e726faf"
     },
     {
       "kind": "registration",
       "entityId": "video-member-merge-registration-same",
       "oldLinkSha256": "f1de4ab85d449a880bebef049b7c6cdcd4bc4793c6e98b9f9de9a6148dcfb58f",
-      "newLinkSha256": "31be6aaafe9254fea8a1070680d83edc0c07808b40ba081b5248f25333f65ce9"
+      "newLinkSha256": "a1932cb582182a6a07694b7c7f682d1d375963da887951d0fb4b846691452659"
     },
     {
       "kind": "invitation",
       "entityId": "video-member-merge-invite-absorb",
       "oldLinkSha256": "84972f32e7c8f85ee77d88b59caea692ce09118722d0714b2c6e86ef4211cb1d",
-      "newLinkSha256": "796e1dc91288d5181b49ec3185189d9354fe4393ffff7e79cf5d63068196b761"
+      "newLinkSha256": "33c195e21b8fd443970a8789cb2736fec213cfe0ec150483887175dfb4164448"
     }
   ],
   "linkChecks": [

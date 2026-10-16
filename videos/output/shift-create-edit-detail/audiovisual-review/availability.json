@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:36:09.385Z",
-  "videoSha256": "965dcf81ef76b4bd2769469beb3930bb12d671158489d1abc5156642e6eac114",
+  "reviewedAt": "2026-10-16T08:40:57.592Z",
+  "videoSha256": "5985c02daf6b6696b853f2aee8a153ff98b2bdd51d897e51e81fa1e29e5588f7",
   "promptSha256": "0045e5556f593bd051f6ea028684f39e030a9b54ed6280354a199489d59aba45",
-  "clipSha256": "6fb92b671816602cdd81658c38829ba7099efa7ce9e7172ae209fc0df9c242f3",
+  "clipSha256": "b3ebb32a812f4b137c67bc03e8360f72fe05e481be9fafb6a29ef67580c8e18d",
   "scene": "availability",
   "review": {
-    "heardOpening": "Deux options complètent",
+    "heardOpening": "Deux options complètent le fonctionnement du créneau",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.8,
         "spoken": "Deux options complètent le fonctionnement du créneau",
-        "visibleSeconds": 0,
-        "visible": "Formulaire visible avec les options 'Activer la liste d'attente' et 'Sur validation'",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage des options 'Activer la liste d'attente' et 'Sur validation' dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 2.8,
-        "spoken": "La liste d'attente recueille les volontaires",
-        "visibleSeconds": 3.3,
-        "visible": "Sélection et cochage de la case 'Activer la liste d'attente'",
+        "spoken": "La liste d'attente recueille les volontaires quand toutes les places sont prises",
+        "visibleSeconds": 3.6,
+        "visible": "Cochage de la case 'Activer la liste d'attente'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
         "spoken": "Le mode Sur validation transforme chaque inscription en demande",
-        "visibleSeconds": 8.5,
-        "visible": "Sélection et cochage de la case 'Sur validation'",
+        "visibleSeconds": 7.5,
+        "visible": "Cochage de la case 'Sur validation'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, fluide et naturelle, en adéquation avec les manipulations à l'écran."
+      "observation": "Voix féminine naturelle, claire et bien articulée, accompagnée d'un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

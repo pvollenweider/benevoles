@@ -7,14 +7,14 @@
     "summary": "Dans cette vidéo, vous configurez un âge minimum, une limite de créneaux ou un accès réservé à une équipe.",
     "steps": [
       "Réglez l'âge minimum sur le créneau concerné.",
-      "Réglez la limite de créneaux par personne et les tags réservés sur le poste entier.",
+      "Réglez la limite de créneaux par personne et les étiquettes réservées sur le poste entier.",
       "Vérifiez que le planning public annonce clairement l'âge minimum avant la sélection.",
       "Vérifiez qu'une personne ayant atteint sa limite voit les créneaux restants marqués comme indisponibles pour elle.",
       "Vérifiez qu'un poste réservé affiche un message neutre et demande le lien personnel reçu par email."
     ],
     "remember": [
       "L'âge minimum est vérifié par le serveur : il ne peut pas être contourné en modifiant le navigateur.",
-      "Les tags internes réservés ne sont jamais révélés dans le message affiché au bénévole.",
+      "Les étiquettes internes réservés ne sont jamais révélés dans le message affiché au bénévole.",
       "Indiquez toujours les critères dans la description et prévoyez une façon de corriger un profil ou une affectation."
     ]
   },
@@ -36,7 +36,7 @@
     },
     {
       "id": "settings",
-      "transcript": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+      "transcript": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les étiquettes réservées appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l’étiquette sécurité.",
       "fallbackDurationMs": 27000
     },
     {
@@ -51,17 +51,17 @@
     },
     {
       "id": "reserved",
-      "transcript": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "transcript": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les étiquettes internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans la bonne étiquette ne donne pas davantage accès.",
       "fallbackDurationMs": 26000
     },
     {
       "id": "eligible",
-      "transcript": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "transcript": "Julien possède l’étiquette sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses étiquettes au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
       "fallbackDurationMs": 24000
     },
     {
       "id": "result",
-      "transcript": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer : son tag sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "transcript": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Modifier : son étiquette sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
       "fallbackDurationMs": 34000
     }
   ]

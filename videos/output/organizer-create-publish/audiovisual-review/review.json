@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:42.616Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:01:00.197Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "6b0a0832ee31f3cd1d4f806b73ea4a232884ed7ce4ed21788788e55d76afae13",
-  "clipSha256": "fb4bcd1d461af8b9b3805accdba8720728c34eda8201764c04b67987d5f59ffa",
+  "clipSha256": "c0175a6ff5a26d4680b927980010115ae8b22e44889c7e588a2c04a5461434d4",
   "scene": "review",
   "review": {
     "heardOpening": "L'écran de vérification résume maintenant",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "L’écran de vérification résume maintenant",
-        "visibleSeconds": 0,
-        "visible": "Page '3 Vérification et publication' affichant la liste récapitulative des éléments de l'événement",
+        "spoken": "L'écran de vérification résume maintenant",
+        "visibleSeconds": 0.5,
+        "visible": "Page « Vérifier avant publication » active à l'étape « 3 Vérification et publication »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "les trois postes, les quatre créneaux et toutes les places",
-        "visibleSeconds": 0,
-        "visible": "Ligne de synthèse indiquant '4 créneaux, 3 postes, 8 places'",
+        "visibleSeconds": 2,
+        "visible": "Ligne récapitulative « 4 créneaux, 3 postes, 8 places » affichée dans la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 5.4,
         "spoken": "Vous pouvez encore revenir corriger un horaire, un effectif ou une consigne",
-        "visibleSeconds": 0,
-        "visible": "Liens 'Modifier' et 'Ajouter' disponibles en regard de chaque section",
+        "visibleSeconds": 5.5,
+        "visible": "Liens « Modifier » et « Ajouter » disponibles en face de chaque élément",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, parfaitement synchronisée avec la vue d'ensemble affichée."
+      "observation": "Voix féminine claire, posée et bien articulée, avec une musique de fond discrète et équilibrée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

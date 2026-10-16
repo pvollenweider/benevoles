@@ -1,51 +1,51 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-11T21:50:38.944Z",
+  "generatedAt": "2026-10-16T03:56:17.840Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 13261,
+      "durationMs": 13856,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "select": {
       "file": "audio/select.wav",
-      "durationMs": 16278,
+      "durationMs": 16710,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "capacity": {
       "file": "audio/capacity.wav",
-      "durationMs": 15508,
+      "durationMs": 15533,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "waitlist": {
       "file": "audio/waitlist.wav",
-      "durationMs": 15849,
+      "durationMs": 16373,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "approval-reserved": {
       "file": "audio/approval-reserved.wav",
-      "durationMs": 16923,
+      "durationMs": 17022,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "conflict": {
       "file": "audio/conflict.wav",
-      "durationMs": 16119,
+      "durationMs": 15914,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "known": {
       "file": "audio/known.wav",
-      "durationMs": 16717,
+      "durationMs": 17915,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "limit": {
       "file": "audio/limit.wav",
-      "durationMs": 15567,
+      "durationMs": 16570,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 19779,
+      "durationMs": 19627,
       "generationSha256": "12c8437a3e6143e34dcd0fd13e50d438e3bd9c566ddef5cae7b6900a6ce48c02"
     }
   }

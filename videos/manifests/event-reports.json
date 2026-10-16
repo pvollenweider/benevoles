@@ -26,7 +26,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Au stand d’accueil, un document clair fait gagner du temps à toute l’équipe. Ouvrons Rapports. Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier. Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive. Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
+      "transcript": "Au stand d’accueil, un document clair fait gagner du temps à toute l’équipe. Ouvrons Documents : la page s’intitule Documents à imprimer. Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier. Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive. Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
       "fallbackDurationMs": 35000
     },
     {
@@ -76,9 +76,9 @@
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous choisissez dans Rapports le bon document pour chaque usage sur le terrain, vous le lisez et vous vérifiez la version à imprimer.",
+    "summary": "Dans cette vidéo, vous choisissez dans Documents le bon document pour chaque usage sur le terrain, vous le lisez et vous vérifiez la version à imprimer.",
     "steps": [
-      "Ouvrez Rapports : les feuilles à afficher ou à remettre aux bénévoles arrivent en premier, les documents réservés à l'organisation ensuite.",
+      "Ouvrez Documents : les feuilles à afficher ou à remettre aux bénévoles arrivent en premier, les documents réservés à l'organisation ensuite.",
       "Pour une vue d'ensemble des créneaux et des effectifs, ouvrez « Export complet » dans la partie réservée aux organisateurs.",
       "Imprimez le planning par jour pour l'accueil et le planning par poste pour un relais sur le terrain.",
       "Générez le planning individuel d'un bénévole et remettez-lui toutes ses pages.",
@@ -92,5 +92,6 @@
       "Cocher une case au stylo ne met pas l'application à jour.",
       "La liste avec téléphones est réservée à l'organisation : les coordonnées ne vont jamais sur un panneau public."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

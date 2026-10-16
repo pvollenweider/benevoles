@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:41.025Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:50:02.677Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "9e1c41918bfb701f5c3241dcf92cbce881609e46930f5483d70ab476293d180e",
-  "clipSha256": "ec4c1e42593bca9f1e44a542422c83e6042b8e73bd79a39b01b1400744292f11",
+  "clipSha256": "cd5055df7a50df896f6862d73ccbcbf285e53956cf5a87ff41de3f7c3eca0347",
   "scene": "scope",
   "review": {
     "heardOpening": "Cet espace est en lecture seule",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.8,
         "spoken": "Cet espace est en lecture seule",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la page Responsable - Buvette avec liste des créneaux et bénévoles sans bouton d'édition",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Responsable - Buvette' présentant les créneaux et bénévoles en affichage passif sans boutons d'action",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 2.3,
+        "spoken": "le responsable ne modifie pas les créneaux et ne retire pas les inscriptions",
+        "visibleSeconds": 2,
+        "visible": "Détail des créneaux et des inscrits en consultation pure",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
         "spoken": "Il ne voit pas les équipes des autres postes",
-        "visibleSeconds": 6.3,
-        "visible": "Seuls les créneaux du poste Buvette sont listés à l'écran",
+        "visibleSeconds": 6,
+        "visible": "Seuls les créneaux et inscrits du poste 'Buvette' sont affichés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
+        "spokenSeconds": 8.5,
         "spoken": "Pour une modification du planning ou une décision d'inscription",
         "visibleSeconds": 8.5,
-        "visible": "Défilement vers le bas montrant les créneaux suivants et le pied de page",
+        "visible": "Défilement de la page montrant la suite des créneaux et le bas de page",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le défilement de la page."
+      "observation": "Voix off posée, claire et intelligible, parfaitement synchronisée avec la présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

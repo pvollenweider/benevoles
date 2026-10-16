@@ -37,3 +37,8 @@ Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unre
 Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
 
 WAITING TTS — ASR indépendante du WAV restauré : le chapitre conflict prononce encore « Accueil de neuf à midi […] Navette de huit à midi ». Le manifeste actuel exige « Ici, Accueil de quinze à dix-huit heures empêche la Navette de quatorze à dix-huit heures. ». Régénérer toute la narration Kore en une seule passe, sans balises de pause ; aucun appel sous le plafond mensuel.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.

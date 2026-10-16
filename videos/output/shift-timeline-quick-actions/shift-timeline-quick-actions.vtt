@@ -1,106 +1,113 @@
 WEBVTT
 
-00:00:01.108 --> 00:00:05.991
+00:00:01.198 --> 00:00:05.857
 La Frise n’est pas seulement une vue de
 lecture. Elle permet aussi de construire
 
-00:00:05.991 --> 00:00:10.177
+00:00:05.857 --> 00:00:09.850
 rapidement un planning visuel : dessiner
 une plage libre, ajuster sa durée,
 
-00:00:10.177 --> 00:00:15.060
+00:00:09.850 --> 00:00:14.509
 dupliquer une relève et ouvrir le détail
 sans quitter le contexte de la journée.
 
-00:00:15.513 --> 00:00:20.837
+00:00:14.962 --> 00:00:20.193
 Dans la ligne d’un poste, cliquez dans une
 zone vide puis faites glisser jusqu’à
 
-00:00:20.837 --> 00:00:25.781
+00:00:20.193 --> 00:00:25.050
 l’heure de fin souhaitée. Le créneau est
 créé, et ses actions rapides s’ouvrent
 
-00:00:25.781 --> 00:00:30.344
+00:00:25.050 --> 00:00:29.533
 avec les horaires calculés. Donnez-lui un
 libellé, ajustez les places, puis fermez
 
-00:00:30.344 --> 00:00:31.865
+00:00:29.533 --> 00:00:31.028
 avec Fermer et enregistrer.
 
-00:00:32.415 --> 00:00:37.557
-Pour corriger une durée, attrape le bord
-droit du créneau et déplace-le. Ici, la
+00:00:31.480 --> 00:00:36.675
+Pour corriger une durée, attrapez le bord
+droit du créneau et déplacez-le. Ici, la
 
-00:00:37.557 --> 00:00:41.964
+00:00:36.675 --> 00:00:41.128
 barre s’allonge de quarante-cinq minutes,
-par pas de quinze minutes. Rouvre ensuite
+par pas de quinze minutes. Rouvrez ensuite
 
-00:00:41.964 --> 00:00:47.106
+00:00:41.128 --> 00:00:46.323
 les actions rapides : l’heure de fin a
-bien changé. Vérifie-la avant de fermer.
+bien changé. Vérifiez-la avant de fermer.
 
-00:00:47.560 --> 00:00:52.794
+00:00:46.776 --> 00:00:51.757
 Un clic sur la barre ouvre ses actions
 rapides. On y retrouve les heures, l’état
 
-00:00:52.794 --> 00:00:57.330
+00:00:51.757 --> 00:00:56.074
 des inscriptions et les commandes utiles.
-C’est le bon endroit pour une petite
+Le choix Appliquer au poste propose Ce
 
-00:00:57.330 --> 00:00:59.423
+00:00:56.074 --> 00:01:00.723
+jour ou Tout l’événement pour étendre les
+réglages au poste sur la période choisie.
+
+00:01:00.723 --> 00:01:04.708
+C’est le bon endroit pour une petite
 correction, sans parcourir tout le
+
+00:01:04.708 --> 00:01:05.040
 formulaire.
 
-00:00:59.877 --> 00:01:05.609
+00:01:05.493 --> 00:01:10.972
 Dupliquer reprend le poste, la durée, la
 capacité et les informations du créneau.
 
-00:01:05.609 --> 00:01:11.341
+00:01:10.972 --> 00:01:16.451
 La nouvelle plage commence juste après
 l’originale. Ouvrez cette copie : elle est
 
-00:01:11.341 --> 00:01:16.631
-indépendante. Donne-lui le libellé Relève
+00:01:16.451 --> 00:01:21.509
+indépendante. Donnez-lui le libellé Relève
 suivante, puis ajustez ses heures. Ici, on
 
-00:01:16.631 --> 00:01:22.804
+00:01:21.509 --> 00:01:27.409
 la décale de quinze minutes avec le bouton
 Décaler. Fermer et enregistrer conserve le
 
-00:01:22.804 --> 00:01:23.686
+00:01:27.409 --> 00:01:28.252
 nouveau libellé.
 
-00:01:24.140 --> 00:01:30.154
+00:01:28.705 --> 00:01:34.326
 Pour ajouter une consigne à cette relève,
 passez en Liste, puis cliquez sur
 
-00:01:30.154 --> 00:01:35.244
+00:01:34.326 --> 00:01:39.083
 Modifier. L’éditeur détaillé contient
 aussi le lieu, le contact, l’âge minimum
 
-00:01:35.244 --> 00:01:40.333
+00:01:39.083 --> 00:01:43.840
 et les règles d’inscription. Ici,
 saisissez Venir dix minutes avant dans
 
-00:01:40.333 --> 00:01:45.422
+00:01:43.840 --> 00:01:48.596
 Consigne pratique, puis enregistrez. Ce
 conseil appartient à la copie, sans
 
-00:01:45.422 --> 00:01:46.347
+00:01:48.596 --> 00:01:49.461
 modifier l’original.
 
-00:01:48.754 --> 00:01:53.208
+00:01:51.878 --> 00:01:56.606
 De retour en Liste, les deux créneaux sont
 bien présents après rechargement.
 
-00:01:53.208 --> 00:01:58.033
+00:01:56.606 --> 00:02:01.729
 L’original conserve son libellé, et Relève
 suivante a ses propres horaires et trois
 
-00:01:58.033 --> 00:02:02.487
+00:02:01.729 --> 00:02:06.457
 places. Cette relecture permet de
 contrôler le résultat réel des gestes de
 
-00:02:02.487 --> 00:02:03.600
+00:02:06.457 --> 00:02:07.639
 Frise avant publication.
 

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:12:17.548Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:59:01.452Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "0a19b0f6ba2a2e13d97068c778d9e6a037b15772ab183b12a1cf2cdb468f2755",
-  "clipSha256": "0c5b149ca505480f2f377127ac308bb8d5efbd09c1de2e436f5b1e5a2a9b693b",
+  "clipSha256": "e62abdfaef65816cfb8963b9c8f75705d9b05fc7c9c456ff77dbefd4feb76a21",
   "scene": "confirm",
   "review": {
     "heardOpening": "Le bouton d'envoi dans l'aperçu",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation.",
+        "spokenSeconds": 2.5,
+        "spoken": "ouvre une seconde confirmation",
         "visibleSeconds": 4.5,
-        "visible": "Clic sur « Envoyer à 5 personnes » et ouverture de la fenêtre modale « Confirmer l'envoi »",
+        "visible": "Clic sur 'Envoyer à 5 personnes' dans l'aperçu et ouverture de la fenêtre modale 'Confirmer l'envoi'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 7.5,
         "spoken": "Nous annulons une première fois : aucun message n'est parti.",
-        "visibleSeconds": 9.5,
-        "visible": "Clic sur « Annuler » et fermeture de la modale de confirmation",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur 'Annuler' et fermeture de la fenêtre de confirmation sans envoi",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.2,
+        "spokenSeconds": 11.2,
         "spoken": "Reprenons ensuite le parcours et confirmons réellement notre briefing.",
-        "visibleSeconds": 15.7,
-        "visible": "Clic sur « Confirmer l'envoi », puis affichage de l'écran confirmant « Message envoyé à 5 personnes »",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer', puis 'Envoyer à 5 personnes' et validation finale avec 'Confirmer l'envoi'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Attendez le résultat plutôt que de relancer l'envoi immédiatement.",
+        "visibleSeconds": 17,
+        "visible": "Écran de communication mis à jour avec la mention 'Message envoyé à 5 personnes'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec le déroulement des actions à l'écran."
+      "observation": "Voix pédagogique, calme et claire, bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

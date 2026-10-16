@@ -1,76 +1,77 @@
 {
   "id": "REMINDERS_CHANGES",
   "slug": "reminders-changes",
-  "validatedAt": "2026-10-11T16:16:24.347Z",
+  "validatedAt": "2026-10-16T10:54:52.126Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 249880,
+  "captureMs": 252080,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 20685,
-      "audioMs": 20684,
-      "driftMs": 1
-    },
-    {
-      "id": "manual-message",
-      "visualMs": 26571,
-      "audioMs": 26569,
+      "visualMs": 21811,
+      "audioMs": 21809,
       "driftMs": 2
     },
     {
+      "id": "manual-message",
+      "visualMs": 29236,
+      "audioMs": 29237,
+      "driftMs": -1
+    },
+    {
       "id": "manual-send",
-      "visualMs": 24385,
-      "audioMs": 24383,
+      "visualMs": 25371,
+      "audioMs": 25369,
       "driftMs": 2
     },
     {
       "id": "organization",
-      "visualMs": 23438,
-      "audioMs": 23438,
+      "visualMs": 23268,
+      "audioMs": 23268,
       "driftMs": 0
     },
     {
       "id": "event-switch",
-      "visualMs": 25809,
-      "audioMs": 25808,
+      "visualMs": 24966,
+      "audioMs": 24965,
       "driftMs": 1
     },
     {
       "id": "timing",
-      "visualMs": 23614,
-      "audioMs": 23612,
-      "driftMs": 2
+      "visualMs": 25734,
+      "audioMs": 25734,
+      "driftMs": 0
     },
     {
       "id": "exclusions",
-      "visualMs": 25757,
-      "audioMs": 25756,
-      "driftMs": 1
+      "visualMs": 25089,
+      "audioMs": 25087,
+      "driftMs": 2
     },
     {
       "id": "changed",
-      "visualMs": 26799,
-      "audioMs": 26796,
-      "driftMs": 3
+      "visualMs": 26523,
+      "audioMs": 26522,
+      "driftMs": 1
     },
     {
       "id": "cancelled",
-      "visualMs": 31155,
-      "audioMs": 31155,
-      "driftMs": 0
+      "visualMs": 29290,
+      "audioMs": 29289,
+      "driftMs": 1
     }
   ],
-  "anchorsChecked": 6,
+  "anchorsChecked": 23,
   "music": {
-    "voicedWindows": 220,
+    "voicedWindows": 225,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 13.1,
-    "largestGapLu": 17.6,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.2,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.3
+    "medianVoiceLufs": -16.2
   },
   "issues": []
 }

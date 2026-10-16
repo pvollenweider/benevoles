@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:47:23.722Z",
-  "videoSha256": "bf4b20e9151a31c539d8d32ec24a7453eeecc170a435134ad4de9c52a10fa904",
+  "reviewedAt": "2026-10-16T10:31:39.890Z",
+  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
   "promptSha256": "2fe291ae7dfe618fa1f7acb3e4565994942e34006d42d095331b629cff43aa51",
-  "clipSha256": "3cbdf6639906de0f227474d3f2670edbf90d6ea6dd58ea49753274bad51509fb",
+  "clipSha256": "638741d2a5af180a08fe2d416d1e59fcdf22936b3a245375a7f19f307c3aa289",
   "scene": "result",
   "review": {
     "heardOpening": "De retour en Liste, les deux créneaux",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "De retour en Liste, les deux créneaux sont bien présents après rechargement",
+        "spoken": "De retour en Liste, les deux créneaux sont bien présents",
         "visibleSeconds": 0,
-        "visible": "Affichage de la vue Liste avec les créneaux créés visibles dans le tableau",
+        "visible": "L'onglet Liste est sélectionné et affiche la liste des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "L'original conserve son libellé",
+        "spokenSeconds": 4.1,
+        "spoken": "L’original conserve son libellé",
         "visibleSeconds": 0,
-        "visible": "Première ligne Sécurité avec le libellé « Relève dessinée » de 06:15 à 07:45",
+        "visible": "Le créneau Buvette de 08:00-09:30 est affiché avec son libellé d'origine",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
-        "spoken": "Relève suivante a ses propres horaires et trois places",
+        "spoken": "et Relève suivante a ses propres horaires et trois places",
         "visibleSeconds": 0,
-        "visible": "Ligne Sécurité « Relève suivante » visible avec les horaires 08:00–09:30 et 0/3 places",
+        "visible": "Le créneau Buvette « Relève suivante » est affiché de 06:15 à 07:45 avec 0/3 places (3 libres)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
-        "spoken": "Cette relecture permet de contrôler le résultat réel des gestes de Frise avant publication",
-        "visibleSeconds": 0,
-        "visible": "Écran stable récapitulant les créneaux en liste pour validation",
+        "spokenSeconds": 10.5,
+        "spoken": "Cette relecture permet de contrôler le résultat réel",
+        "visibleSeconds": 10.5,
+        "visible": "Écran fixe récapitulant la vérification des créneaux dans la vue Liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'état affiché à l'écran."
+      "observation": "Voix féminine claire, posée et parfaitement audible, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

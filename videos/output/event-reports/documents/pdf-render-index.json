@@ -1,5 +1,5 @@
 {
-  "renderedAt": "2026-10-13T06:59:26.450Z",
+  "renderedAt": "2026-10-16T11:15:18.092Z",
   "note": "Every page rendered; human/model visual review and pagination checks still required",
   "results": [
     {
@@ -19,15 +19,14 @@
     },
     {
       "pdf": "/private/tmp/codex-video/videos/output/event-reports/documents/complete.pdf",
-      "pages": 7,
+      "pages": 6,
       "images": [
         "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-1.png",
         "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-2.png",
         "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-3.png",
         "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-4.png",
         "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-5.png",
-        "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-6.png",
-        "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-7.png"
+        "/private/tmp/codex-video/videos/output/event-reports/documents/rendered/complete/page-6.png"
       ],
       "visualReview": false
     },

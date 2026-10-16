@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:11:58.665Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:58:01.616Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "f902ceaad790ef125d23a7bb94d9ac6756a3e2df76ae6d48d562116498ec9af2",
-  "clipSha256": "756ff9c64846b4b5c7c6e3631accc3ecc7f5e75b52b82aa4dde74013b7e6ef76",
+  "clipSha256": "95c6e4e56ba68830ecfc07c1296ad4072c66b24a0bc9f9cc9c115ffed011dcd5",
   "scene": "variables",
   "review": {
-    "heardOpening": "Les mots entre accolades sont remplacés pour chaque destinataire.",
+    "heardOpening": "Les mots entre accolades sont remplacés pour chaque destinataire",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Les mots entre accolades sont remplacés pour chaque destinataire.",
+        "spoken": "Les mots entre accolades sont remplacés",
         "visibleSeconds": 1,
-        "visible": "Affichage du formulaire de modification du modèle avec les champs contenant des variables entre accolades",
+        "visible": "Ouverture du formulaire 'Modifier le modèle - Briefing avant le créneau'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.2,
-        "spoken": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue.",
+        "spokenSeconds": 14.5,
+        "spoken": "si nous écrivons lieu entre accolades, l'application signale une variable inconnue",
         "visibleSeconds": 13.5,
-        "visible": "Saisie de {lieu} dans l'objet et affichage de l'alerte rouge « Variable inconnue: {lieu} »",
+        "visible": "Saisie de '{lieu}' dans le champ Objet et apparition du message d'erreur en rouge : 'Variable inconnue : {lieu}'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.1,
+        "spokenSeconds": 19.5,
         "spoken": "Corrigeons le texte.",
-        "visibleSeconds": 20.2,
-        "visible": "Remplacement de {lieu} par {poste} dans le champ Objet, effaçant le message d'erreur",
+        "visibleSeconds": 20,
+        "visible": "Effacement de '{lieu}' et saisie de '{poste}', puis enregistrement du modèle",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

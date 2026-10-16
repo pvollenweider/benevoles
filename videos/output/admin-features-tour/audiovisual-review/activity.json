@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T03:23:33.610Z",
-  "videoSha256": "c946e347adcfd74709a64b9e318c319c6d961551cf55c91ea6036403e46553a1",
+  "reviewedAt": "2026-10-16T10:39:03.402Z",
+  "videoSha256": "5b38dbf0d1b2c866536b574aec455698aa6a5fe9c52ac04e3d6c768d6d60b1cd",
   "promptSha256": "36163116f04c214c642289fc6921ea5d1dda4e961431b08c22289822f3f5c862",
-  "clipSha256": "45b56648ccf488e9b05aaa01704d4265cc674225fdc6b75591459900211d64cc",
+  "clipSha256": "84f2474afe761d90c2129e8819ea969884dbd0122d42986955f8e584f26aaef9",
   "scene": "activity",
   "review": {
-    "heardOpening": "Enfin, le journal d'activité",
+    "heardOpening": "Enfin, le journal d'activité garde la chronologie",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "le journal d'activité garde la chronologie",
+        "spokenSeconds": 1,
+        "spoken": "Enfin, le journal d’activité garde la chronologie",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page Journal avec l'historique chronologique des événements et actions",
+        "visible": "L'onglet Journal est affiché avec la liste chronologique des actions et filtres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
-        "spoken": "On sait ce qui s'est passé, qui l'a fait et quand.",
-        "visibleSeconds": 10.8,
-        "visible": "Lignes du journal détaillant l'auteur (Élodie Rochat), le type d'action et la date/heure",
+        "spokenSeconds": 11,
+        "spoken": "On sait ce qui s’est passé, qui l’a fait, et quand",
+        "visibleSeconds": 11,
+        "visible": "Lignes du journal visibles indiquant l'auteur, l'action, l'heure et la date",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.8,
-        "spoken": "La recherche globale permet ensuite de tout retrouver rapidement.",
-        "visibleSeconds": 14.5,
-        "visible": "Saisie dans le champ de recherche en haut à droite puis bascule vers la page Recherche affichant les résultats",
+        "spokenSeconds": 14,
+        "spoken": "La recherche globale permet ensuite de tout retrouver rapidement",
+        "visibleSeconds": 14.2,
+        "visible": "Clic dans la barre de recherche en haut, saisie de buvette et affichage de la page de résultats",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et posée, bien calée sur l'enchaînement visuel."
+      "observation": "Voix féminine claire, posée et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

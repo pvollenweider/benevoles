@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:11:57.328Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:50:33.606Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "fb41faee6480d77874c2003aa5b99d521c8de86e6ee34635f6a7f1f54e2dc137",
-  "clipSha256": "dfa5466e3f60c9a7e9a62fa8693bb3cb28c8898114fd4b029868299b3c3a9978",
+  "clipSha256": "5daa38ba4582fb2e8995e3e014b94f518baafa61fcab4da49f984ac66654e7e8",
   "scene": "contact",
   "review": {
     "heardOpening": "Attention à une autre distinction",
     "checkpoints": [
       {
-        "spokenSeconds": 1.8,
+        "spokenSeconds": 0.5,
+        "spoken": "Attention à une autre distinction",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du formulaire Nouveau créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
         "spoken": "le contact opérationnel indiqué sur un créneau",
-        "visibleSeconds": 1.9,
-        "visible": "Affichage du formulaire Nouveau créneau avec la section Infos pratiques pour les bénévoles",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de « Elodie Rochat » dans le champ Personne de contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 4.1,
         "spoken": "joindre sur place",
-        "visibleSeconds": 4,
-        "visible": "Saisie du nom Élodie Rochat puis du numéro de téléphone dans les champs de contact",
+        "visibleSeconds": 4.8,
+        "visible": "Saisie du numéro de téléphone dans Téléphone du contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
+        "spokenSeconds": 11.5,
         "spoken": "L'organisateur renseigne ce contact séparément dans le créneau",
-        "visibleSeconds": 6.5,
-        "visible": "Les coordonnées du contact opérationnel restent affichées renseignées dans le formulaire",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage des champs contact renseignés séparément dans la section Infos pratiques pour les bénévoles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, synchronisée avec l'illustration à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

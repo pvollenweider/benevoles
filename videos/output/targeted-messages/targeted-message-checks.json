@@ -1,18 +1,18 @@
 {
-  "checkedAt": "2026-10-13T09:09:45.394Z",
+  "checkedAt": "2026-10-16T11:56:36.865Z",
   "pushReceptionVerified": false,
   "fiveAudienceCounts": true,
   "multipleRegistrationsOneRecipient": true,
   "unknownVariableVisible": true,
   "modelApplyAndRestore": true,
   "contextVariableErrorVisible": true,
-  "previewRecipientId": "video-message-lea",
+  "previewRecipientId": "cmvawpb5b000sf3a55i1upng2",
   "personalizedPreviewVisible": true,
   "pushOptionExplainedNotReceipt": true,
   "cancelCreatedNoSend": true,
   "sent": {
     "sent": 5,
-    "audience": "les bénévoles du créneau Buvette (samedi 17 octobre, 10:00–14:00)",
+    "audience": "les bénévoles du créneau Buvette (samedi 24 octobre, 10:00–14:00)",
     "pushDevices": 0
   },
   "realEmailsPersonalizedAndDeduplicated": true,

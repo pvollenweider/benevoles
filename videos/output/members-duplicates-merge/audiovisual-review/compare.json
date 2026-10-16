@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T05:55:11.965Z",
-  "videoSha256": "a01152d1101216b2b65bd846a9cfbcd47b2afa74458300ac22dad5af7a0ffd23",
+  "reviewedAt": "2026-10-16T09:50:30.311Z",
+  "videoSha256": "9b0961315f3ff6ded04846b673a09c937ddc0ed9a6ecb1b543e2b7f23a8fcfad",
   "promptSha256": "8a4a48ddc874b4ee856f3bf36f5ca2c22b740ad3183ab6645dc2ee97928891de",
-  "clipSha256": "522675824809a382e8656f464775ca09ff861ff397032f0e2720b23a7e4cae7d",
+  "clipSha256": "7ba50e9905bd58e1db4926c5ec8e35f2634e910ab4618cc08ca72e44df9c564a",
   "scene": "compare",
   "review": {
-    "heardOpening": "Si vous savez que ces deux fiches",
+    "heardOpening": "Si vous savez que",
     "checkpoints": [
       {
-        "spokenSeconds": 3.7,
-        "spoken": "ouvrez l’activité de la fiche que vous voulez conserver",
-        "visibleSeconds": 1,
-        "visible": "La page Activité de Robin Favre est déjà affichée à l'écran",
+        "spokenSeconds": 5.9,
+        "spoken": "Fusionner avec un autre membre est réservé",
+        "visibleSeconds": 6.7,
+        "visible": "Clic sur le lien Fusionner avec un autre membre et ouverture de la page Choisir la fiche à absorber",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "Fusionner avec un autre membre est réservé au propriétaire",
-        "visibleSeconds": 7.6,
-        "visible": "Ouverture de la page Fusionner Robin Favre pour choisir la fiche à absorber",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12,
+        "spokenSeconds": 10.8,
         "spoken": "Recherchez précisément l’adresse de la seconde fiche",
-        "visibleSeconds": 14.5,
-        "visible": "L'adresse e-mail est saisie dans le champ de recherche puis validée",
+        "visibleSeconds": 12.1,
+        "visible": "Saisie de l'adresse email dans le champ de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
+        "spokenSeconds": 14.4,
         "spoken": "puis choisissez Fusionner avec cette fiche",
-        "visibleSeconds": 19.3,
-        "visible": "Clic sur le bouton Fusionner avec cette fiche à côté du résultat trouvé",
+        "visibleSeconds": 18.1,
+        "visible": "Clic sur le bouton Fusionner avec cette fiche affiché sous le résultat de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.8,
+        "spokenSeconds": 18.8,
         "spoken": "L’aperçu permet maintenant de comparer les informations",
-        "visibleSeconds": 20.5,
-        "visible": "Affichage de la page Aperçu de la fusion avec Robin Favre et ses options",
+        "visibleSeconds": 19.2,
+        "visible": "Affichage de la page Aperçu de la fusion avec la liste des champs à conserver",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+      "observation": "Voix posée, claire et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

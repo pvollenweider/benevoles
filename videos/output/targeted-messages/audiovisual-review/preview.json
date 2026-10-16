@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:12:10.902Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
-  "promptSha256": "74746a8a3eb5ce5604af305f47f24c2922451ebc6022c8bef0f62e1b0c04e3c9",
-  "clipSha256": "11a4ef0b83bbeebbd7b816e6cd21feed4dea13481a04df5fe9d4000f5fffa1a6",
+  "reviewedAt": "2026-10-16T11:58:35.358Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
+  "promptSha256": "e8051ce532a11cff2da59049558b85e16a1cca3c350adcf76c84539ea4cba748",
+  "clipSha256": "30a55d675cdfc3b42e554ba60612bf0866f12679a01b90bd1632be45d979ef3e",
   "scene": "preview",
   "review": {
-    "heardOpening": "Ouvrons maintenant l'aperçu",
+    "heardOpening": "Quand l'envoyer permet de choisir Maintenant",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Ouvrons maintenant l'aperçu",
-        "visibleSeconds": 1,
-        "visible": "Ouverture de la fenêtre modale « Aperçu de l'email »",
+        "spoken": "Quand l'envoyer permet de choisir Maintenant ou de programmer le message.",
+        "visibleSeconds": 0.5,
+        "visible": "La section 'Quand l'envoyer ?' est affichée avec les options 'Maintenant' sélectionnée et 'Programmer l'envoi'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
-        "spoken": "son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte",
-        "visibleSeconds": 1.5,
-        "visible": "Affichage des données variables : « Léa », « Fête du village de Montvert », « Buvette » et « samedi 17 octobre, 10:00–14:00 »",
+        "spokenSeconds": 6,
+        "spoken": "Ouvrons maintenant l'aperçu.",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le bouton bleu 'Voir l'aperçu et envoyer' et ouverture de la fenêtre modale 'Aperçu de l'email'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.4,
-        "spoken": "retournez au message",
-        "visibleSeconds": 14.8,
-        "visible": "Clic sur « Retour au message » et fermeture de l'aperçu pour revenir au formulaire",
+        "spokenSeconds": 8,
+        "spoken": "C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte.",
+        "visibleSeconds": 8.5,
+        "visible": "L'aperçu montre le message personnalisé pour Théo avec la mention de la Fête du village de Montvert et du créneau buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
+        "visibleSeconds": 22.2,
+        "visible": "Fermeture de l'aperçu, retour au formulaire et modification du texte dans le champ Message.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:51:04.309Z",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
-  "promptSha256": "012e91ac10a8ccdddfa24aa64195672dbb676f994b46939337a3636310dffae2",
-  "clipSha256": "da96c1b10f973bba498055d1b4c289d047f05c424f770d72621701566b4e2d8e",
+  "reviewedAt": "2026-10-16T08:51:11.500Z",
+  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "promptSha256": "2f4e91aaadced577d22986e075788d272b6fc1d01d322038a0ea5f850b4c7ed0",
+  "clipSha256": "1101cb258218ef1e328f2b25e4371de82cb3ba918bbb08a1ef5ab32f936ca173",
   "scene": "result",
   "review": {
     "heardOpening": "Ces règles doivent rester compréhensibles",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "la description permet d'expliquer les critères",
-        "visibleSeconds": 2,
-        "visible": "Page Modifier l'événement affichant le champ Description",
+        "spokenSeconds": 2.5,
+        "spoken": "Dans les paramètres de l'événement, la description permet d'expliquer les critères.",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture de l'onglet Réglages affichant le champ Description",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
-        "spoken": "Vérifions aussi le téléphone obligatoire",
+        "spoken": "Vérifions aussi le téléphone obligatoire si l'équipe doit appeler le jour J.",
         "visibleSeconds": 7,
-        "visible": "Défilement vers l'option Téléphone obligatoire à l'inscription cochée",
+        "visible": "Défilement vers l'option cochée Téléphone obligatoire à l'inscription",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 12,
         "spoken": "retrouvons Julien dans les membres",
-        "visibleSeconds": 14,
-        "visible": "Recherche de Julien Favre dans l'onglet Membres avec résultat filtré",
+        "visibleSeconds": 12.5,
+        "visible": "Navigation vers l'onglet Membres et filtrage sur Julien Favre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
-        "spoken": "puis ouvrons Éditer",
-        "visibleSeconds": 15.8,
-        "visible": "Clic sur Éditer et ouverture de la modale Modifier le membre",
+        "spokenSeconds": 14.2,
+        "spoken": "puis ouvrons Modifier : son étiquette sécurité est une information interne.",
+        "visibleSeconds": 14.8,
+        "visible": "Clic sur Modifier et ouverture de la fenêtre montrant l'étiquette sécurité",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.5,
-        "spoken": "puis nous annulons",
-        "visibleSeconds": 21.8,
-        "visible": "Clic sur Annuler et fermeture de la modale",
+        "spokenSeconds": 21,
+        "spoken": "puis nous annulons.",
+        "visibleSeconds": 20.8,
+        "visible": "Clic sur Annuler et fermeture de la fiche membre",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et parfaitement synchronisée avec les actions à l'écran, accompagnée d'un léger fond musical."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

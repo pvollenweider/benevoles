@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict"
-import { assertAnswer, assertQuestionFixture, assertQuestionConfiguration, trainingQuestions, type QuestionSnapshot } from "./record-event-questions"
+import { assertAnswer, assertQuestionFixture, assertQuestionConfiguration, trainingQuestions, questionMultipleCues, questionSingleCues, questionFollowUpCue, type QuestionSnapshot } from "./record-event-questions"
 import { test } from "vitest"
 
 test("record-event-questions guards", async () => {
@@ -29,4 +29,29 @@ test("record-event-questions guards", async () => {
   assertAnswer(retired, "Taille de t-shirt", "M")
   assert.throws(() => assertQuestionConfiguration(retired, 4))
   console.log("Question recorder helper guards passed; no browser or DB access")
+})
+
+// The creation loop uses a dynamic scene id, outside the static recorder scan.
+test("follow-up cue names the yes/no creation sentence", async () => {
+  const { readFile } = await import("node:fs/promises")
+  const { estimateSentences, sentenceFor } = await import("./sentence-timing")
+  const manifest = JSON.parse(await readFile("videos/manifests/event-questions.json", "utf8"))
+  const transcript = manifest.segments.find((s: { id: string }) => s.id === "create-yesno").transcript
+  assert(sentenceFor(estimateSentences(transcript, 10000), questionFollowUpCue))
+})
+
+test("single choice creation cues identify their current sentences", async () => {
+  const { readFile } = await import("node:fs/promises")
+  const { estimateSentences, sentenceFor } = await import("./sentence-timing")
+  const manifest = JSON.parse(await readFile("videos/manifests/event-questions.json", "utf8"))
+  const transcript = manifest.segments.find((s: { id: string }) => s.id === "create-single").transcript
+  for (const cue of Object.values(questionSingleCues)) assert(sentenceFor(estimateSentences(transcript, 10000), cue))
+})
+
+test("multiple choice cues identify their creation sentences", async () => {
+  const { estimateSentences, sentenceFor } = await import("./sentence-timing")
+  const { readFile } = await import("node:fs/promises")
+  const manifest = JSON.parse(await readFile("videos/manifests/event-questions.json", "utf8"))
+  const transcript = manifest.segments.find((s: { id: string }) => s.id === "create-multiple").transcript
+  for (const cue of Object.values(questionMultipleCues)) assert(sentenceFor(estimateSentences(transcript, 10000), cue))
 })

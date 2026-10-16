@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T11:19:59.417Z",
-  "videoSha256": "c6515fd169e65b148ef9c702da4b6e9892b7d9fa64d630226de8379a022c8cb2",
-  "promptSha256": "d5090e8ed8f467fcea7df97a27fcab3d3573abe57d11fdae22942937362eede2",
-  "clipSha256": "4153a5dd32108483f0411d6843be8384edb4338c4973c4b9bac8a8046fe00b7a",
+  "reviewedAt": "2026-10-16T08:58:59.091Z",
+  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "promptSha256": "f8ab8dc7ce542ab654b6e86b69f488379645a7bd5675ba8f6482e6ee728e97db",
+  "clipSha256": "90ca5e848412cff3af4d2a758c3745f0c32d48dc6f923bb5f13f15a3506b719a",
   "scene": "availability",
   "review": {
-    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
+    "heardOpening": "Pour chercher de l'aide",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "regardons les disponibilités générales dans les membres",
-        "visibleSeconds": 2.1,
-        "visible": "Recherche de 'Zoé' dans la liste des membres avec affichage de la mention de disponibilité",
+        "spokenSeconds": 1.5,
+        "spoken": "regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque.",
+        "visibleSeconds": 2.2,
+        "visible": "Filtrage sur « Zoé » affichant la fiche avec la mention « Matin » et la remarque associée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
-        "spoken": "Zoé a indiqué le matin avec une remarque",
-        "visibleSeconds": 10.9,
-        "visible": "Ouverture du formulaire 'Modifier le membre' affichant la case 'Matin' cochée et le texte d'information",
+        "spokenSeconds": 8,
+        "spoken": "Ce renseignement aide à lui proposer un créneau",
+        "visibleSeconds": 8.8,
+        "visible": "Ouverture de la fenêtre « Modifier le membre » détaillant les disponibilités générales et notes de Zoé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
-        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
-        "visibleSeconds": 18.6,
-        "visible": "Ouverture de la page 'Activité de Zoé Exemple' détaillant son inscription au 17 octobre",
+        "spokenSeconds": 15.3,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la page « Activité de Zoé Exemple » listant ses inscriptions à des événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

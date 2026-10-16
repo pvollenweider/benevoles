@@ -20,7 +20,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
   await page.goto(`${base}/admin/events/${eventId}`); await settle(page)
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { duration: 2400 })
-    await at("Les feuilles à afficher ou"); await tap(page, page.getByRole("link", { name: "Documents", exact: true }))
+    await at("Ouvrons Documents"); await tap(page, page.getByRole("link", { name: "Documents", exact: true }))
     await page.waitForURL(formUrl); await settle(page)
     const headings = await page.getByRole("heading").allTextContents()
     const expected = ["À afficher ou à remettre aux bénévoles", "Pour les organisateurs seulement", "Badges", "Résumé de l'événement", "Archive"]
@@ -35,9 +35,9 @@ export async function recordReports(options: { page: Page; base: string; eventId
     await at("Choisissons ensemble le bon document"); await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
   })
   await recordReportDocuments(options)
+  await page.goto(`${base}/admin/events/${eventId}/questions`); await settle(page)
+  await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
   await scene("answers", async at => {
-    await page.goto(`${base}/admin/events/${eventId}/questions`); await settle(page)
-    await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).scrollIntoViewIfNeeded()
     await page.getByText(/Chaque bénévole compte une fois/).waitFor()
     await at("Lisons les tailles et les régimes")
     await page.getByRole("table").last().scrollIntoViewIfNeeded()
@@ -52,7 +52,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
     const rows = parse(csv, { bom: true, delimiter: ";", columns: true }) as Record<string, string>[]
     const questionLabels = [...new Set(rows.map(row => row.Question))]
     if (questionLabels.length !== 2 || questionLabels.some(label => rows.filter(row => row.Question === label).reduce((sum, row) => sum + Number(row["Confirmés"]), 0) !== 80)) throw new Error("Summary must count 80 people, not 84 registrations, for each question")
-    await at("Regardons ce vrai document")
+    await at(0.74) /* mid-sentence: « ou ouvrir sa version imprimable » */
     const popupReady = page.waitForEvent("popup")
     await tap(page, page.getByRole("link", { name: /^Imprimer la synthèse/ }))
     const popup = await popupReady
@@ -60,8 +60,11 @@ export async function recordReports(options: { page: Page; base: string; eventId
     const url = new URL(popup.url())
     if (url.origin !== new URL(base).origin || !url.pathname.endsWith("/export/sheets/answers")) throw new Error("Unexpected answer summary destination")
     await popup.close()
-    await page.goto(url.href); await settle(page)
+    await page.goto(url.href); await page.bringToFront(); await settle(page)
+    if (!page.url().endsWith("/export/sheets/answers")) throw new Error("Actual answer document must be the visible main page")
+    await at("Regardons ce vrai document")
     await page.getByText(/Taille/).first().waitFor()
+    await page.screenshot({ path: path.join(directory, "review", "answers-document-open.png") })
   })
   await scene("print", async at => {
     // These PNGs are Poppler renders of the real application-generated PDFs.

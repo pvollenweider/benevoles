@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T16:18:05.612Z",
-  "videoSha256": "fadc542e4974e656fdbc6e00cf4963af08f0bf07eb7904750333efc4b0eef76d",
-  "promptSha256": "28629be4e46b21dd7ace18ff6f058c30ee39eba132727bb5e908a8f04f86f0fb",
-  "clipSha256": "783ad9396ce9580a216c9873342ad5560685fb78e37d11a849d8ac57da1bda0c",
+  "reviewedAt": "2026-10-16T10:54:55.410Z",
+  "videoSha256": "22d0851a29e4d4c920ff9e134e0ce9d781bf7a9a3a13e2d56740cae71f95d742",
+  "promptSha256": "cee914f28c8a8c07a1fc45917be19dff396e4684b69236431a590a97d30c9341",
+  "clipSha256": "d31f12c7447bbb43550f92bb9a34187875fad768df67740ec7624b1b4002e017",
   "scene": "timing",
   "review": {
-    "heardOpening": "Les rappels partent autour de",
+    "heardOpening": "Les rappels partent autour de deux jours avant",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 1.1,
         "spoken": "Les rappels partent autour de deux jours avant, autour de la veille",
-        "visibleSeconds": 0,
-        "visible": "Page Paramètres - Emails affichant les cases cochées pour Rappel J-2, Rappel J-1 et Rappel du jour",
+        "visibleSeconds": 1.1,
+        "visible": "Page Paramètres / Emails avec cases Rappel J-2, Rappel J-1 et Rappel du jour cochées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
+        "spokenSeconds": 11.7,
+        "spoken": "Les heures sont lues dans le fuseau de l'organisation, Europe Zurich ici.",
+        "visibleSeconds": 11.7,
+        "visible": "Page Paramètres / Emails toujours affichée (le réglage de fuseau horaire précis n'est pas affiché sur cet écran spécifique)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.8,
         "spoken": "Voici les trois emails réellement reçus pour nos trois échéances",
-        "visibleSeconds": 13,
-        "visible": "Affichage de la boîte Mailpit avec le premier courriel J-2 adressé à Aline, puis bascule vers le courriel de veille à 00:15",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18.5,
-        "spoken": "chacun retrouve son horaire local, le point de rendez-vous",
-        "visibleSeconds": 19.5,
-        "visible": "Affichage du troisième courriel du jour J pour Léa avec horaire, mission, lieu et consignes",
+        "visibleSeconds": 15.8,
+        "visible": "Transition vers l'interface Mailpit affichant les trois emails de rappel reçus",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien articulée, synchronisée avec les démonstrations à l'écran."
+      "observation": "Voix off posée, claire et dynamique, très bonne synchronisation avec le changement d'écran à 00:15."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

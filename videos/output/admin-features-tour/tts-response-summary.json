@@ -1,21 +1,21 @@
 {
-  "receivedAt": "2026-10-14T03:14:42.577Z",
+  "receivedAt": "2026-10-16T08:25:36.525Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 7495,
-    "total_input_tokens": 954,
+    "total_tokens": 8415,
+    "total_input_tokens": 999,
     "input_tokens_by_modality": [
       {
         "modality": "text",
-        "tokens": 954
+        "tokens": 999
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 6541,
+    "total_output_tokens": 7416,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 6541
+        "tokens": 7416
       }
     ],
     "total_tool_use_tokens": 0,
@@ -27,7 +27,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 16753112
+          "encodedLength": 18993112
         }
       ]
     }

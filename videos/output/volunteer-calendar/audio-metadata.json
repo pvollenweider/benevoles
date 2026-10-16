@@ -5,47 +5,47 @@
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 20105,
+      "durationMs": 19421,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "one": {
       "file": "audio/one.wav",
-      "durationMs": 19265,
+      "durationMs": 17686,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "all": {
       "file": "audio/all.wav",
-      "durationMs": 21690,
+      "durationMs": 18934,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "import": {
       "file": "audio/import.wav",
-      "durationMs": 20512,
+      "durationMs": 19082,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "details": {
       "file": "audio/details.wav",
-      "durationMs": 19269,
+      "durationMs": 17403,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "night": {
       "file": "audio/night.wav",
-      "durationMs": 20500,
+      "durationMs": 17920,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "change": {
       "file": "audio/change.wav",
-      "durationMs": 21690,
+      "durationMs": 20494,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "reimport": {
       "file": "audio/reimport.wav",
-      "durationMs": 20665,
+      "durationMs": 18731,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 20104,
+      "durationMs": 18889,
       "generationSha256": "fbddac5a7e0c7ba1452794d486ee0014ebc6afd2079b3a5c74fc90031fa96953"
     }
   }

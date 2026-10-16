@@ -1,58 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:11:52.097Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:58:13.918Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "f0bf28942702ed3bb7d2de52c8f7f6e91f1144fec4bedf584c13bf9320123a87",
-  "clipSha256": "27d796c7865252cecd27e4e98d9d97d37099b9a2ee0824bb9659d3b39ef49aed",
+  "clipSha256": "9952b7245c9e00e6985784a81e3c3ec9149781ef10b0cb8d4826b337c9587d56",
   "scene": "apply",
   "review": {
-    "heardOpening": "De retour dans le message",
+    "heardOpening": "De retour dans le message, voici une première version",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1.5,
         "spoken": "voici une première version écrite à la main",
-        "visibleSeconds": 1.5,
-        "visible": "Saisie dans les champs Objet ('Merci pour ton aide') et Message ('On se retrouve au stand d'accueil.')",
+        "visibleSeconds": 2,
+        "visible": "Saisie du texte dans les champs Objet et Message",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.7,
+        "spokenSeconds": 6.5,
         "spoken": "il faut cliquer sur Utiliser ce modèle",
-        "visibleSeconds": 8.8,
-        "visible": "Sélection de 'Briefing avant le créneau' puis clic sur 'Utiliser ce modèle'",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection du modèle dans la liste puis clic sur le bouton Utiliser ce modèle",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "L'objet et le texte changent alors ensemble",
-        "visibleSeconds": 9.6,
-        "visible": "Remplacement des champs Objet et Message par le texte du modèle",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12.8,
+        "spokenSeconds": 13,
         "spoken": "Rétablir le texte précédent récupère votre version",
-        "visibleSeconds": 12.4,
-        "visible": "Clic sur 'Rétablir le texte précédent' et réapparition du texte initial",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur Rétablir le texte précédent et réapparition de la version saisie manuellement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.9,
-        "spoken": "Appliquons de nouveau notre briefing",
-        "visibleSeconds": 15.8,
-        "visible": "Clic de nouveau sur 'Utiliser ce modèle'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18,
+        "spokenSeconds": 17.5,
         "spoken": "puis choisissons un créneau",
-        "visibleSeconds": 18.5,
-        "visible": "Sélection de l'option 'Les bénévoles d'un créneau' puis choix de 'Buvette - sam. 17 oct., 10:00-14:00'",
+        "visibleSeconds": 18,
+        "visible": "Sélection des bénévoles d'un créneau puis choix du créneau Buvette",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix masculine claire, naturelle, bien rythmée et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

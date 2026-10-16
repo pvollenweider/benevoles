@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T09:11:43.243Z",
-  "videoSha256": "baf288679bf51436e1b6febbf23593460f70b8f28932a4903e6c9b49ac99d934",
+  "reviewedAt": "2026-10-16T11:57:16.044Z",
+  "videoSha256": "f1cccbb5d152e31b841f71455562141317f529c7406e5fbed4a80cc545500a16",
   "promptSha256": "8d19f48f6a04e7a3969fa64d2bd68c2080cb9b5bca4381c9489024725cbb647b",
-  "clipSha256": "adf36faa2b6035cdd0fb2a1189910041ebe95220ad91a2a5e52079181084f59f",
+  "clipSha256": "f3b757501cc2c36633c9a8f3a4691cd1319019db23fea40b6cd8cfc8f5e812cd",
   "scene": "welcome",
   "review": {
     "heardOpening": "Une consigne pour toute l'équipe",
     "checkpoints": [
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 0.8,
+        "spoken": "Une consigne pour toute l'équipe",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre « Écrire aux bonnes personnes, avec un message qui leur parle » affiché en superposition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
         "spoken": "ouvrez la page des messages",
-        "visibleSeconds": 2.8,
-        "visible": "La page « Écrire aux bénévoles » est déjà ouverte et affichée",
+        "visibleSeconds": 9.3,
+        "visible": "Page Communication de l'événement déjà affichée en arrière-plan",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 12.5,
         "spoken": "Nous allons choisir les destinataires",
-        "visibleSeconds": 3,
-        "visible": "Section des destinataires avec boutons radio et options visible sur la page",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 14.5,
-        "spoken": "préparer un texte qui leur parle",
-        "visibleSeconds": 3,
-        "visible": "Champs de rédaction (modèle, objet) visibles dans le formulaire",
+        "visibleSeconds": 12.5,
+        "visible": "Formulaire affichant la liste à puces des destinataires possibles",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine fluide, chaleureuse et parfaitement intelligible."
+      "observation": "Voix masculine claire, naturelle et bien articulée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

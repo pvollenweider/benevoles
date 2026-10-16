@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-13T16:56:50.275Z",
-  "videoSha256": "eeea96def7462d13df0de592c43025a328eb10952c3d1991ec387577f00f92e3",
+  "reviewedAt": "2026-10-16T09:01:21.726Z",
+  "videoSha256": "bc5d43b75c24b3b24b9550c1b6f8f66e3b8b8f442ce23de99a1abc4b5b33ded9",
   "promptSha256": "903a54b88de7fa7afd82fa350ae201e5b9f6bd9d2e0548f76e2b05ddbfe7f588",
-  "clipSha256": "df2b63ebd79d759491d17325f9a14df7952804c39b69e3bc646fcfbd87d81877",
+  "clipSha256": "5f0a77b15532fe962bc9d28f86e9ec693465d60c64f037d85492d033dac90844",
   "scene": "preview-result",
   "review": {
     "heardOpening": "L'aperçu montre aussi le message affiché",
     "checkpoints": [
       {
-        "spokenSeconds": 0.1,
+        "spokenSeconds": 0,
         "spoken": "L'aperçu montre aussi le message affiché après l'inscription",
         "visibleSeconds": 0,
-        "visible": "La section 'Aperçu de la confirmation' présente le sous-titre 'Message affiché après l'inscription'",
+        "visible": "Page 'Aperçu de la confirmation' avec la section 'Message affiché après l'inscription'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "et l'email automatique qui serait envoyé, avec son objet, son contenu",
-        "visibleSeconds": 3.4,
-        "visible": "L'objet de l'email de confirmation et son modèle de message sont affichés à l'écran",
+        "spokenSeconds": 3.3,
+        "spoken": "et l'email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel.",
+        "visibleSeconds": 3.3,
+        "visible": "Aperçu de l'e-mail de confirmation affiché avec son objet, corps du message et bouton de gestion",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "Rien n'est réellement enregistré ni expédié pendant ce test.",
-        "visibleSeconds": 9.4,
-        "visible": "L'écran d'aperçu se ferme et revient sur la page de vérification et publication",
+        "spokenSeconds": 8.4,
+        "spoken": "Rien n’est réellement enregistré ni expédié pendant ce test.",
+        "visibleSeconds": 8.5,
+        "visible": "Retour à l'écran de synthèse 'Vérifier avant publication'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, naturelle et bien articulée."
+      "observation": "Voix féminine claire, naturelle et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

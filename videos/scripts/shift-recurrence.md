@@ -40,3 +40,24 @@ Narration conservée : aucun libellé cité ni comportement décrit ne contredit
 ## Révision du 2026-10-16 — lot 22-14
 
 Nouvelle narration Puck intégrale, sans mélange de phrases. La première prise est écartée avant tournage : deux reconnaissances indépendantes et un contrôle ciblé lisent « café accueil » au lieu de « Caisse et accueil ». La phrase devient « Pour le poste, écrivons Caisse et accueil. », avec une nouvelle génération complète et un nouvel audit. Le repère final du recorder utilise « Pour la saison suivante », qui figure réellement dans la narration.
+
+
+## Révision du 2026-10-16 — lot 23-1
+
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+
+Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
+
+- `welcome` : Une épicerie, un accueil ou une distribution reviennent chaque semaine, toute la saison. Plutôt que de créer chaque date, décrivez la permanence une fois : toutes ses dates sont créées, jours fériés et fermetures exclus. L’événement porte la saison : ici, treize semaines. Ouvrons Répéter chaque semaine.
+- `describe` : Pour le poste, écrivons Caisse et accueil. Le texte sous le champ rappelle que les réglages du poste s’appliquent aux nouveaux créneaux. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.
+- `exclusions` : Les jours fériés suisses sont proposés d’après le fuseau horaire de l’organisation. Ajoutons une fermeture : un mardi où le local reste fermé. L’aperçu donne le nombre de dates et de créneaux, les premières dates, puis chaque date exclue avec sa raison : jour férié ou fermeture.
+- `create` : Créons les créneaux. La permanence rejoint la liste Permanences récurrentes, avec son rythme, sa période et le nombre de dates à venir. Chaque date est un créneau ordinaire : les bénévoles s’y inscrivent et reçoivent leurs rappels comme d’habitude.
+- `change` : Finalement, la caisse a besoin de trois personnes. Modifier à partir d’une date change le nombre de personnes sur toutes les dates suivantes, sans toucher aux dates passées. Si l’horaire change, les bénévoles inscrits sont prévenus par email.
+- `stop` : La réception des livraisons s’arrête à partir de la cinquième semaine. Les dates sans inscrit sont supprimées. Ici, deux dates ont déjà des inscrits : elles sont d’abord listées, et rien ne change tant que vous ne confirmez pas. Confirmons : ces deux créneaux sont annulés et chaque personne est prévenue par email.
+- `volunteer` : Côté bénévoles, une saison de quatre semaines ou plus n’affiche plus les jours passés. À partir de huit dates, le planning se lit mois par mois : chaque bouton de mois indique son nombre de dates.
+- `result` : Une permanence se décrit une fois, se modifie ou s’arrête d’un seul geste, et chaque date reste modifiable seule. Pour la saison suivante, dupliquez l’événement : les permanences sont recréées sur les mêmes jours de la semaine.
+
+
+## Révision du 2026-10-16 — lot 23-2
+
+Référence produit : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Relire les nouveaux filtres de fiches fusionnées, Nombre et questions conditionnelles, la programmation des messages, la fin nocturne conservée et les limites visibles en Frise. Nouvelle prise sur ce build ; les anciennes restrictions de production ci-dessus restent des constats historiques.

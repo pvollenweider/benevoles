@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T04:50:52.232Z",
-  "videoSha256": "c024995e1578db9e90be527d657d959497b89dddcd27a1c040c39f6b44e8fe01",
-  "promptSha256": "bc748b51f66ceb9be0b0dfe9bb97f0dbc361e35d6f38932dbd6a530912de1a9f",
-  "clipSha256": "d1453f3c5c0812cb58a70029ee5a95eeeb448061e03646e980038b04284401c8",
+  "reviewedAt": "2026-10-16T08:50:45.857Z",
+  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "promptSha256": "e1dc0b2e15fd46e41dd4b39dfee0222dbc369ed154b0d3066924ee4de34d4463",
+  "clipSha256": "df15d6a2eb379808cab771a94b0cc82640a8bf3df0763e501a3d7d475a806caa",
   "scene": "reserved",
   "review": {
-    "heardOpening": "Sans invitation, le poste Sécurité reste visible",
+    "heardOpening": "Sans invitation, le poste Sécurité",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 1.5,
         "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
-        "visibleSeconds": 2,
-        "visible": "Défilement vers le créneau '20h-02h - Sécurité' affichant la mention 'réservé à certains membres'",
+        "visibleSeconds": 1.5,
+        "visible": "La ligne Sécurité est visible dans le planning avec le créneau hachuré annoté Réservé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.1,
-        "spoken": "Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email",
-        "visibleSeconds": 8.5,
-        "visible": "Remontée vers le bandeau d'information invitant à utiliser le lien personnel reçu par email",
+        "spokenSeconds": 7.5,
+        "spoken": "il demande simplement d’utiliser le lien personnel reçu par email",
+        "visibleSeconds": 7.5,
+        "visible": "Le texte explicatif en haut de page indique de s'inscrire avec le lien personnel reçu par email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "Une invitation sans le bon tag ne donne pas davantage accès",
-        "visibleSeconds": 12.5,
-        "visible": "Vue d'ensemble des créneaux où l'accès aux postes réservés demeure restreint",
+        "spokenSeconds": 12,
+        "spoken": "Une invitation sans la bonne étiquette ne donne pas davantage accès",
+        "visibleSeconds": 12,
+        "visible": "Écran stable montrant le planning où le poste reste verrouillé sous condition",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la navigation à l'écran."
+      "observation": "Voix féminine calme, intelligible et parfaitement calée sur les éléments textuels et visuels de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:12:00.288Z",
-  "videoSha256": "88242aefacfe2abfd0d4418034630bbeced0e04130eabaef2058524e088b90f5",
+  "reviewedAt": "2026-10-16T11:50:43.863Z",
+  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
   "promptSha256": "0963e0e8f9f2ae169306bd1acec0016e62cbc2ae7e030c1c674d9fd3e74320d9",
-  "clipSha256": "baa036c33a12c4593186a6695c1fd8531418f2d23fd37f8aa42495ec501fc9d7",
+  "clipSha256": "673eaca0b443bd7640cd4f6b5b92be9c35e914e221a1602ba8c1f8cebbde756e",
   "scene": "remove",
   "review": {
     "heardOpening": "Quand la responsabilité change",
     "checkpoints": [
       {
-        "spokenSeconds": 1.6,
+        "spokenSeconds": 1.7,
         "spoken": "retirez la personne de ce poste et confirmez",
-        "visibleSeconds": 1.7,
-        "visible": "Clic sur Retirer à côté d'Élodie Rochat puis confirmation dans la modale",
+        "visibleSeconds": 1,
+        "visible": "Boîte de dialogue de confirmation ouverte puis clic sur « Retirer » pour Élodie Rochat",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
+        "spokenSeconds": 4.6,
         "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
-        "visibleSeconds": 4,
-        "visible": "Affichage de la page d'erreur Lien introuvable",
+        "visibleSeconds": 5,
+        "visible": "Affichage d'une page blanche avec le message « Lien introuvable »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
+        "spokenSeconds": 12.2,
         "spoken": "désigner la nouvelle personne et lui envoyer son propre lien",
         "visibleSeconds": 12.8,
-        "visible": "Clic sur Ajouter un responsable et ouverture du formulaire avec bouton Ajouter et envoyer le lien",
+        "visible": "Affichage du formulaire d'ajout d'un responsable avec le bouton « Ajouter et envoyer le lien »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+      "observation": "Voix masculine claire, fluide et posée, respectant scrupuleusement le script."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
