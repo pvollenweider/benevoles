@@ -6,7 +6,8 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
-import { KNOWN_ROLES } from "@/lib/roles"
+import { matchingPoste, posteSuggestions } from "@/lib/poste-suggestions"
+import PosteHint from "@/components/admin/shifts/PosteHint"
 import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
@@ -29,7 +30,7 @@ type Props = {
   eventId: string
   /** Days of the event, "YYYY-MM-DD". */
   dates: string[]
-  existingShifts: { roleName: string; displayOrder: number }[]
+  existingShifts: { roleName: string; displayOrder: number; status?: string | null }[]
   onCreated: (shifts: AdminShift[]) => void
   onClose: () => void
 }
@@ -42,6 +43,11 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const id = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [roleName, setRoleName] = useState("")
+  // Poste field (#1018): typing an existing poste (case and spaces aside) joins it, under its
+  // stored spelling; the hint says its settings apply (#1002).
+  const poste = matchingPoste(existingShifts, roleName)
+  const sentRole = poste ?? roleName.trim()
+  const hintId = `${id}-role-hint`
   const [label, setLabel] = useState("")
   const [date, setDate] = useState(dates.length === 1 ? dates[0] : "")
   const [startTime, setStartTime] = useState("")
@@ -95,9 +101,9 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        eventId, roleName: roleName.trim(), label: label.trim() || undefined, date, startTime, endTime,
+        eventId, roleName: sentRole, label: label.trim() || undefined, date, startTime, endTime,
         slotMinutes, breakMinutes, capacity: Number(capacity), minVolunteers: minimumValue, waitlistEnabled, requiresApproval,
-        displayOrder: resolveNewShiftDisplayOrder(existingShifts, roleName.trim(), 0),
+        displayOrder: resolveNewShiftDisplayOrder(existingShifts, sentRole, 0),
       }),
     }), "Erreur lors de la création.")
     setSaving(false)
@@ -137,15 +143,16 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
           <input
             id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required
             aria-invalid={invalid("roleName") || undefined}
-            aria-describedby={describedBy("roleName")}
+            aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []))}
             onChange={(e) => setRoleName(e.target.value)} placeholder="ex. Buvette" className={fieldClass(missing.roleName)}
           />
           {fieldMessage("roleName")}
-          <datalist id={`${id}-roles`}>{KNOWN_ROLES.map((r) => <option key={r} value={r} />)}</datalist>
+          <PosteHint id={hintId} poste={poste} />
+          <datalist id={`${id}-roles`}>{posteSuggestions(existingShifts).map((r) => <option key={r} value={r} />)}</datalist>
         </div>
         <div>
           <label htmlFor={`${id}-label`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
-          <input id={`${id}-label`} type="text" value={label} onChange={(e) => setLabel(e.target.value)} placeholder={roleName || "ex. Bar principal"} className="input" />
+          <input id={`${id}-label`} type="text" value={label} onChange={(e) => setLabel(e.target.value)} placeholder={poste ?? (roleName || "ex. Bar principal")} className="input" />
         </div>
       </div>
 
