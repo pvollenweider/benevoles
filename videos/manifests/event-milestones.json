@@ -49,7 +49,7 @@
     },
     {
       "id": "dashboard",
-      "transcript": "Ouvrons le Tableau de bord de l’association. Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné. Les jalons à venir restent visibles sur la page de leur événement : ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+      "transcript": "Ouvrons le Tableau de bord de l’association. Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné. Les jalons à venir restent visibles sur la page de leur événement : ils ne ferment pas automatiquement les inscriptions. Si une personne s’en occupe, elle reçoit un rappel avant l’échéance.",
       "fallbackDurationMs": 24000
     },
     {
@@ -57,5 +57,6 @@
       "transcript": "Gardez cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
       "fallbackDurationMs": 19000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

@@ -22,3 +22,9 @@ test("display normalization cannot move any spoken cue boundary", () => {
     assert(display.every(c => c.text.split("\n").length <= 2 && c.text.split("\n").every(line => line.length <= 42)))
   }
 })
+
+test("a delivery timestamp mention is not rewritten as a one-hour duration", () => {
+  const text = "La ligne passe à Envoyé avec une heure."
+  assert.equal(captionDisplayText(text), text)
+  assert.equal(readableCaptions(text, 0, 4000).map(c => c.text).join(" ").replace(/\s+/g, " "), text)
+})

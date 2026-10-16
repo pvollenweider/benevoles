@@ -14,7 +14,7 @@ Savoir qui est arrivé à son créneau, éviter de pointer la mauvaise personne 
 
 Organisation `video-dayof`, identifiant public `formation-jour-j`, propriétaire fictif `video.dayof.owner@example.org`. Serveur dédié `http://localhost:43108`, même compilation propre de `main`, preuve vérifiée par le wrapper. Aucune réinitialisation de `default`.
 
-`prepare-day-of.ts` crée deux événements : huit inscriptions pour les chapitres de pointage historiques, et quatre créneaux de terrain relatifs à l'heure réelle Europe/Zurich. Le créneau courant a commencé il y a trente minutes ; la relève arrive dans une heure ; un créneau est terminé et un autre, commencé la veille, est encore en cours. Préparer entre 03h et 23h pour rendre les quatre cas réellement possibles. Ne pas trafiquer l'horloge du navigateur ni remplacer l'écran produit par une carte HTML.
+`prepare-day-of.ts` crée deux événements : huit inscriptions pour les chapitres de pointage historiques, et quatre créneaux de terrain relatifs à l'heure réelle Europe/Zurich. Le créneau courant a commencé il y a trente minutes, ou à minuit si la préparation se fait au début de la journée ; la relève arrive dans une heure ; un créneau est terminé et un autre, commencé la veille, est encore en cours. Préparer entre 00h06 et 23h pour rendre les quatre cas réellement possibles. Ne pas trafiquer l'horloge du navigateur ni remplacer l'écran produit par une carte HTML.
 
 ### Démonstration
 
@@ -38,7 +38,7 @@ La fixture doit être préparée juste avant la prise : un âge supérieur à qu
 3. **Plusieurs arrivées ensemble.** Sélectionner Nicolas et Léa, lire le nombre avant d'agir, puis « Marquer présents (2) ». Montrer les deux marques et le résumé actualisé. Garder une personne absente sans marque pour que la différence soit visible. Une demande à traiter n'est pas une confirmation à pointer : montrer ce cas séparément, sans le faire passer artificiellement pour une arrivée.
 4. **Corriger une erreur.** Sélectionner la ligne de Léa déjà pointée, cliquer « Annuler la présence (1) », puis montrer la disparition de la marque. Son inscription reste visible et sa place n'est pas libérée. Pointer à nouveau la personne réellement arrivée ; expliquer la différence avec « Retirer de leur créneau », qui est une autre action.
 5. **Une personne sur plusieurs horaires.** Rechercher Léa, montrer ses deux inscriptions. Pointer uniquement l'horaire du matin ; l'autre reste non pointé. Ne jamais annoncer qu'une action sélectionnant une ligne pointe toute la journée d'une personne.
-6. **Le pointage n'est pas un chronomètre.** Montrer l'horodatage disponible et la rubrique Heures planifiées dans la fiche membre. Expliquer qu'un retard est une heure de pointage, pas une durée de retard calculée automatiquement. Ne pas inventer de départ, de décompte d'heures attestées ou de certificat si l'interface actuelle ne les fournit pas.
+6. **Le pointage n'est pas un chronomètre.** Montrer l'horodatage disponible et la rubrique Heures prévues dans la fiche membre. Expliquer qu'un retard est une heure de pointage, pas une durée de retard calculée automatiquement. Ne pas inventer de départ, de décompte d'heures attestées ou de certificat si l'interface actuelle ne les fournit pas.
 7. **Annulation après pointage.** Utiliser un créneau dédié sur lequel une présence réelle vient d'être enregistrée. Avant d'annuler le créneau entier, conserver l'identifiant de l'inscription et son horodatage pour le contrôle. Montrer la confirmation puis l'état du planning. Vérifier que la donnée de pointage n'a pas été effacée. Expliquer la limite actuelle : les listes et l'export des présences ne retiennent que les inscriptions actives ; une présence conservée sur une inscription annulée n'apparaît donc pas automatiquement dans cet export. Ne pas prétendre qu'un écran signale ce conflit si aucun avertissement n'y existe.
 8. **Exporter le bilan.** Télécharger le véritable export des présences, montrer une ligne pointée et une ligne non pointée avec leurs créneaux et leurs horaires. Le fichier contient notamment Présent et Pointé le, pas des heures réellement travaillées. Montrer le format local du pointage et les réponses aux questions lorsqu'elles existent. Conclure : pointer la bonne ligne, corriger sans désinscrire, relire le bilan.
 
@@ -66,3 +66,13 @@ La répétition complète des huit chapitres a terminé avec succès dans Chromi
 Sarah a été réellement pointée avant la suppression de son créneau. Le contrôle compare un horodatage non nul identique avant/après et les statuts annulés, puis confirme son absence de la liste courante et du CSV actif. Le fichier réellement téléchargé contient cinq inscriptions, quatre personnes, trois lignes pointées et deux non pointées. Demande, attente et inscription annulée en sont absentes. Le visualiseur lit ses octets sans les modifier. Trente-deux images de la répétition ont été extraites et leur planche inspectée ; elles ne prouvent pas une synchronisation avec la voix.
 
 La prise Kore continue a été générée avec `gemini-3.8-flash-tts`. Trois frontières ont été corrigées, puis les huit chapitres ont passé la transcription indépendante. Le seed a été remis à zéro uniquement pour cet événement avant la capture narrée. Le montage et la revue audiovisuelle restent à faire.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration à régénérer intégralement, même voix, une seule passe, `continuousPauseTags: false`. WAITING TTS : plafond mensuel du projet connu, aucun nouvel appel. Phrases révisées :
+
+- Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir.
+- Les heures attestées reprennent les créneaux passés où une présence a été enregistrée.

@@ -9,6 +9,16 @@ import CoreGraphics
 import CryptoKit
 
 // Supplied by the verified-product launcher BEFORE recording. Never stamp old media.
+// Diagnose missing TCC grants before title lookup: CG can list window IDs while
+// withholding titles, which otherwise looks like a stale/missing window.
+guard CGPreflightScreenCaptureAccess() else {
+    fputs("Native capture unavailable: macOS Screen Recording permission is denied for this process (TCC). Window IDs alone do not authorize capture; no media recorded.\n", stderr)
+    exit(1)
+}
+guard AXIsProcessTrusted() else {
+    fputs("Native capture unavailable: macOS Accessibility permission is denied for this process. Native keyboard/VoiceOver operation cannot be verified; no media recorded.\n", stderr)
+    exit(1)
+}
 let env = ProcessInfo.processInfo.environment
 guard let proofPath = env["VIDEO_NATIVE_PRODUCT_PROOF"],
       let proofData = FileManager.default.contents(atPath: proofPath),

@@ -20,7 +20,7 @@ export async function recordReports(options: { page: Page; base: string; eventId
   await page.goto(`${base}/admin/events/${eventId}`); await settle(page)
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { duration: 2400 })
-    await at("Les feuilles à afficher ou"); await tap(page, page.getByRole("link", { name: "Rapports", exact: true }))
+    await at("Les feuilles à afficher ou"); await tap(page, page.getByRole("link", { name: "Documents", exact: true }))
     await page.waitForURL(formUrl); await settle(page)
     const headings = await page.getByRole("heading").allTextContents()
     const expected = ["À afficher ou à remettre aux bénévoles", "Pour les organisateurs seulement", "Badges", "Résumé de l'événement", "Archive"]
@@ -39,6 +39,8 @@ export async function recordReports(options: { page: Page; base: string; eventId
     await page.goto(`${base}/admin/events/${eventId}/questions`); await settle(page)
     await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).scrollIntoViewIfNeeded()
     await page.getByText(/Chaque bénévole compte une fois/).waitFor()
+    await at("Lisons les tailles et les régimes")
+    await page.getByRole("table").last().scrollIntoViewIfNeeded()
     await at("Vous pouvez télécharger cette synthèse")
     const ready = page.waitForEvent("download")
     await tap(page, page.getByRole("link", { name: /^Télécharger la synthèse/ }))

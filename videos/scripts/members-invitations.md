@@ -4,10 +4,10 @@ Vidéo autonome 36. Voix unique, souriante et patiente. L'invitation propose une
 
 ## Parcours complet à filmer
 
-1. Ouvrir l'onglet Invitations d'une fête publiée avec une liste de membres pertinente. Montrer les compteurs Invités, Inscrits et Sans créneau confirmé.
+1. Depuis l’onglet Inscriptions d’une fête publiée, ouvrir Invitations avec une liste de membres pertinente. Montrer les compteurs Invités, Inscrits et Sans créneau confirmé.
 2. Envoyer un exemple à une adresse de démonstration depuis « Tester l'envoi d'email ». Ouvrir le vrai message dans Mailpit. Ne pas annoncer que cela crée une invitation réelle pour ce destinataire.
 3. Ouvrir « Inviter des membres », rechercher une personne et sélectionner uniquement cette fiche. Saisir un court message ; envoyer l'invitation individuelle. Vérifier la réponse réelle et le message reçu.
-4. Rouvrir la fenêtre, filtrer les tags, sélectionner plusieurs personnes et montrer le nombre sélectionné. « Tout sélectionner » ajoute les membres visibles à la sélection existante : utiliser Effacer avant de changer de groupe dans la démonstration.
+4. Rouvrir la fenêtre, filtrer les étiquettes, sélectionner plusieurs personnes et montrer le nombre sélectionné. « Tout sélectionner » ajoute les membres visibles à la sélection existante : utiliser Effacer avant de changer de groupe dans la démonstration.
 5. Envoyer le lot avec un message court. Vérifier les résultats et les emails réels, puis ouvrir l'un d'eux. Les adresses des autres personnes ne sont pas affichées dans le message individuel.
 6. Ouvrir le lien personnel d'invitation dans une session bénévole séparée. Montrer les coordonnées préremplies et le choix de créneaux ; compléter une inscription réelle et vérifier la confirmation.
 7. Montrer un poste réservé à un tag et la différence entre accès public et invitation valide de la personne autorisée. Garder ce parcours distinct des postes soumis à validation de l'organisateur. Ne pas faire passer une invitation pour une inscription déjà acceptée.
@@ -32,6 +32,14 @@ Au moins 40 fiches fictives, tags accueil/permis-b/caisse/sécurité, une fiche 
 
 Prévisualisation MP4 générée : dix scènes, une narration continue Puck contrôlée indépendamment, durées vérifiées et planche de trente images examinée. `invitation-checks.json` consigne les réponses réelles des envois. L'inscription d'Aline et l'accès de Nicolas au poste réservé sont capturés. Visionnage audiovisuel intégral restant ; le parcours « déjà invités » montre le filtre, sans effectuer un second envoi réel.
 
-## Limite locale découverte pendant la capture
+## Liens et chargement
 
-Le rendu d'invitation ajoute `?token=` à `eventPublicUrl`, qui contient déjà `?org=` sur localhost. Le lecteur URL n'y trouve donc pas de paramètre token. Le recorder remplace uniquement ce second séparateur par `&`, sur les liens locaux, et conserve le jeton réel du message. Aucun code produit n'est corrigé ici. En production, l'adresse par sous-domaine ne contient pas le paramètre org ; son comportement n'a pas été vérifié par cette capture locale. Ne pas présenter cette adaptation comme une validation des liens en production.
+Le lien est lu dans le vrai email généré avec le domaine public de formation puis rejoué localement sans corriger ses paramètres. L’ancien remplacement du séparateur localhost est supprimé. La page publique attend son DOM puis ses contrôles réels ; une attente networkidle ne convient pas à ses requêtes de fond.
+
+## Révision du 2026-10-16 — lot 22-5
+
+Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased] et PR fusionnées #990 à #1012, #1021 (onglets lot 2), #1022 (#1013). Étiquettes, Modifier, Heures prévues, navigation Inscriptions / Invitations et Documents à imprimer vérifiées dans les scénarios.
+
+WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+
+- Pour un groupe, utilisez le filtre d’étiquettes.

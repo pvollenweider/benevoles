@@ -21,8 +21,8 @@
         "organisateur"
       ],
       "feature": "Navigation de l'administration",
-      "updatedAt": "2026-10-11",
-      "revision": 4,
+      "updatedAt": "2026-10-15",
+      "revision": 5,
       "level": "decouverte"
     },
     {
@@ -45,8 +45,8 @@
         "organisateur"
       ],
       "feature": "Recherche globale",
-      "updatedAt": "2026-10-12",
-      "revision": 4,
+      "updatedAt": "2026-10-16",
+      "revision": 5,
       "level": "decouverte"
     },
     {
@@ -69,8 +69,8 @@
         "organisateur"
       ],
       "feature": "Identité publique de l'organisation",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "decouverte"
     },
     {
@@ -93,8 +93,8 @@
         "organisateur"
       ],
       "feature": "Fuseau horaire et charte des bénévoles",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -117,8 +117,8 @@
         "organisateur"
       ],
       "feature": "Équipe et permissions",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -142,8 +142,8 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -167,8 +167,8 @@
         "organisateur"
       ],
       "feature": "Création d'un événement",
-      "updatedAt": "2026-10-11",
-      "revision": 5,
+      "updatedAt": "2026-10-15",
+      "revision": 6,
       "level": "essentiel"
     },
     {
@@ -193,8 +193,8 @@
         "organisateur"
       ],
       "feature": "Modèles d'événement",
-      "updatedAt": "2026-10-11",
-      "revision": 4,
+      "updatedAt": "2026-10-15",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -217,8 +217,8 @@
         "organisateur"
       ],
       "feature": "Publication d'un événement",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-15",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -241,8 +241,8 @@
         "organisateur"
       ],
       "feature": "Visibilité et période d'inscription",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -266,8 +266,8 @@
         "organisateur"
       ],
       "feature": "Duplication d'événement",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -291,8 +291,8 @@
         "organisateur"
       ],
       "feature": "Pages d'information et QR code",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -315,8 +315,8 @@
         "organisateur"
       ],
       "feature": "Jalons de préparation",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -339,8 +339,8 @@
         "organisateur"
       ],
       "feature": "Archivage et suppression",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -363,8 +363,8 @@
         "organisateur"
       ],
       "feature": "Questions aux bénévoles",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -388,8 +388,8 @@
         "organisateur"
       ],
       "feature": "Postes et vues du planning",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "decouverte"
     },
     {
@@ -413,8 +413,8 @@
         "organisateur"
       ],
       "feature": "Créneaux : création et détail",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -438,8 +438,8 @@
         "organisateur"
       ],
       "feature": "Séries de créneaux",
-      "updatedAt": "2026-10-11",
-      "revision": 4,
+      "updatedAt": "2026-10-16",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -463,8 +463,8 @@
         "organisateur"
       ],
       "feature": "Permanences récurrentes",
-      "updatedAt": "2026-10-10",
-      "revision": 1,
+      "updatedAt": "2026-10-16",
+      "revision": 2,
       "level": "essentiel",
       "added": "2026-10-10"
     },
@@ -488,8 +488,8 @@
         "organisateur"
       ],
       "feature": "Frise du planning",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -513,8 +513,8 @@
         "organisateur"
       ],
       "feature": "Créneaux de nuit et changement d'heure",
-      "updatedAt": "2026-10-11",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -539,8 +539,8 @@
         "organisateur"
       ],
       "feature": "Liste d'attente et offres de place",
-      "updatedAt": "2026-10-12",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -565,8 +565,8 @@
         "benevole"
       ],
       "feature": "Postes sur validation",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -617,8 +617,8 @@
         "benevole"
       ],
       "feature": "Page publique de l'événement",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -668,8 +668,8 @@
         "benevole"
       ],
       "feature": "Formulaire d'inscription et récapitulatif",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -692,8 +692,8 @@
         "benevole"
       ],
       "feature": "Confirmation de l'inscription",
-      "updatedAt": "2026-10-12",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -715,8 +715,8 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "themes": [
         "parcours-benevole"
       ]
@@ -762,8 +762,8 @@
       "audience": [
         "benevole"
       ],
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "themes": [
         "parcours-benevole"
       ]
@@ -812,8 +812,8 @@
         "benevole"
       ],
       "feature": "Inscription bénévole",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -836,8 +836,8 @@
         "organisateur"
       ],
       "feature": "Créer et publier un planning",
-      "updatedAt": "2026-10-13",
-      "revision": 3,
+      "updatedAt": "2026-10-15",
+      "revision": 4,
       "level": "decouverte"
     },
     {
@@ -858,8 +858,8 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-10-14",
-      "revision": 3,
+      "updatedAt": "2026-10-15",
+      "revision": 4,
       "level": "decouverte"
     },
     {
@@ -881,8 +881,8 @@
         "organisateur"
       ],
       "feature": "Suivi des inscriptions et relances",
-      "updatedAt": "2026-10-13",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -904,8 +904,8 @@
         "organisateur"
       ],
       "feature": "Premiers pas d'une organisation",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-15",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -929,8 +929,8 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -953,8 +953,8 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-12",
-      "revision": 4,
+      "updatedAt": "2026-10-16",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -978,8 +978,8 @@
         "organisateur"
       ],
       "feature": "Exports et archive d'un événement",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -1004,8 +1004,8 @@
         "organisateur"
       ],
       "feature": "Journal d'activité de l'organisation",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -1029,8 +1029,8 @@
         "organisateur"
       ],
       "feature": "Journal de l'événement",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -1053,8 +1053,8 @@
         "organisateur"
       ],
       "feature": "Pointage des présences",
-      "updatedAt": "2026-10-13",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1100,8 +1100,8 @@
         "organisateur"
       ],
       "feature": "Badges des bénévoles",
-      "updatedAt": "2026-10-13",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1125,8 +1125,8 @@
         "organisateur"
       ],
       "feature": "Rappels et messages de changement",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1150,8 +1150,8 @@
         "organisateur"
       ],
       "feature": "Messages ciblés et modèles",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1176,8 +1176,8 @@
         "organisateur"
       ],
       "feature": "Où manque-t-il du monde ?",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1199,9 +1199,9 @@
         "organisateur"
       ],
       "feature": "Placer un membre sur plusieurs créneaux",
-      "updatedAt": "2026-10-12",
+      "updatedAt": "2026-10-16",
       "added": "2026-10-12",
-      "revision": 1,
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1225,8 +1225,8 @@
         "organisateur"
       ],
       "feature": "Liste des inscriptions",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel",
       "updated": "2026-10-12"
     },
@@ -1251,8 +1251,8 @@
         "organisateur"
       ],
       "feature": "Relance des invités",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1275,8 +1275,8 @@
         "organisateur"
       ],
       "feature": "Invitations des membres",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1300,8 +1300,8 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-14",
-      "revision": 4,
+      "updatedAt": "2026-10-16",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -1323,8 +1323,8 @@
         "organisateur"
       ],
       "feature": "Doublons et fusion de membres",
-      "updatedAt": "2026-10-12",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -1347,8 +1347,8 @@
         "organisateur"
       ],
       "feature": "Heures de bénévolat et attestation",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -1396,8 +1396,8 @@
         "organisateur"
       ],
       "feature": "Suivi de livraison des emails",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -1419,8 +1419,8 @@
         "super-admin"
       ],
       "feature": "Administration de la plateforme",
-      "updatedAt": "2026-10-11",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "avance"
     },
     {
@@ -1445,8 +1445,8 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-14",
-      "revision": 3,
+      "updatedAt": "2026-10-16",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1471,8 +1471,8 @@
         "organisateur"
       ],
       "feature": "Gérer un imprévu",
-      "updatedAt": "2026-10-13",
-      "revision": 2,
+      "updatedAt": "2026-10-16",
+      "revision": 3,
       "level": "essentiel"
     }
   ]

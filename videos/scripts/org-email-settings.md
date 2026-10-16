@@ -36,3 +36,14 @@ faire revenir les réponses vers la bonne boîte.
 - Chaque rappel regroupe les créneaux d’une personne pour un événement et un jour ; les délais se calculent avant son premier créneau du jour.
 - Un échec définitif peut déclencher le résumé quotidien, pas un incident temporaire seul.
 - « Envoyé » prouve l’acceptation SMTP, pas la remise ni la lecture par le destinataire.
+
+
+## Révision du 2026-10-16 — lot 22-6
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 (onglets), #1022 (correction #1013). Navigation par onglets, libellés et repères de phrases contrôlés.
+
+WAITING TTS — plafond mensuel connu, aucun appel : régénérer la narration ENTIÈRE avec la même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
+- Son onglet Communication indique ce qui partira vraiment.
+
+Bilan final du lot 22-6 (2026-10-16) : WAITING TTS ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Répétition complète réussie, anciens WAV entiers archivés ; aucun tournage final avec une narration obsolète. Régénération continue intégrale requise avant les étapes finales.
+

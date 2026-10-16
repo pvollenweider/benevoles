@@ -42,7 +42,7 @@
     },
     {
       "id": "series",
-      "transcript": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+      "transcript": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indiquez la plage horaire, la durée et le nombre de places, et les créneaux sont préparés automatiquement.",
       "fallbackDurationMs": 14500
     },
     {
@@ -87,12 +87,12 @@
     },
     {
       "id": "import",
-      "transcript": "Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+      "transcript": "Si c’est la première fois que vous utilisez l’application, l’import permet de constituer rapidement votre liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les étiquettes et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
       "fallbackDurationMs": 15500
     },
     {
       "id": "invite",
-      "transcript": "Retournez ensuite dans les invitations de l’événement. Filtrez les membres par tag et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
+      "transcript": "Retournez ensuite dans les invitations de l’événement. Filtrez les membres par étiquette et sélectionnez les personnes concernées. Vous pouvez envoyer les invitations par lot, ou inviter une seule personne individuellement si vous le souhaitez, avec un petit mot personnalisé.",
       "fallbackDurationMs": 14500
     },
     {

@@ -31,7 +31,7 @@ async function main() {
     const value = (type: string) => parts.find(p => p.type === type)!.value
     const today = new Date(`${value("year")}-${value("month")}-${value("day")}T00:00:00Z`)
     const minute = Number(value("hour")) * 60 + Number(value("minute"))
-    assert(minute >= 180 && minute < 1380, "Prepare between 03:00 and 23:00 Zurich so all real today/overnight cases exist")
+    assert(minute >= 6 && minute < 1380, "Prepare between 00:06 and 23:00 Zurich so all real today/overnight cases exist")
     const idsElsewhere = await db.volunteer.count({ where: { id: { startsWith: "video-dayof-attendance-person-" }, organizationId: { not: orgId } } })
     assert.equal(idsElsewhere, 0, "Dedicated volunteer IDs belong to another organization")
     const dateOffset = (days: number) => new Date(today.getTime() + days * 86_400_000)
@@ -50,10 +50,10 @@ async function main() {
       for (let index = 0; index < 8; index++) await tx.registration.create({ data: { id: `video-dayof-registration-old-${index}`, eventId, volunteerId: `video-dayof-attendance-person-${index === 7 ? 2 : index}`, shiftId: `video-dayof-shift-old-${index === 7 ? 1 : index === 4 ? 2 : 0}`, status: index === 5 ? "requested" : index === 6 ? "waiting" : "active", checkedInAt: null, ...(index === 6 ? { waitingPosition: 1 } : {}), ...registrationToken.data(`demo-dayof-old-${index}`) } })
       await tx.event.create({ data: { id: liveId, organizationId: orgId, slug: "jour-j-terrain", title: "Jour J — équipe sur le terrain", description: "Données fictives de formation uniquement.", startDate: dateOffset(-1), endDate: dateOffset(1), publicStatus: "published", remindersEnabled: false } })
       for (const [key, role, label, timing, person] of [
-        ["running", "Accueil", "Accueil sur place", slot(minute - 30, minute + 90), 7],
+        ["running", "Accueil", "Accueil sur place", slot(Math.max(0, minute - 30), minute + 90), 7],
         ["upcoming", "Buvette", "Relève dans une heure", slot(minute + 60, minute + 120), 0],
-        ["earlier", "Logistique", "Installation terminée", slot(minute - 180, minute - 120), 1],
-        ["night", "Veille", "Veille commencée hier", { date: dateOffset(-1), startTime: "23:00", endTime: fmt(1440 + minute + 60) }, 3],
+        ["earlier", "Logistique", "Installation terminée", slot(Math.max(0, minute - 180), Math.max(1, minute - 120)), 1],
+        ["night", "Veille", "Veille commencée hier", { date: dateOffset(-1), startTime: "23:00", endTime: fmt(minute + 60) }, 3],
       ] as const) {
         const shiftId = `video-dayof-shift-${key}`
         await tx.shift.create({ data: { id: shiftId, eventId: liveId, roleName: role, label, ...timing, capacity: 3, contactName: "Élodie Exemple", contactPhone: "079 000 00 02" } })
@@ -62,7 +62,7 @@ async function main() {
     })
     const directory = path.resolve("videos/output/attendance-check-in")
     await mkdir(directory, { recursive: true })
-    await writeFile(path.join(directory, "dayof-preparation.json"), JSON.stringify({ preparedAt: now.toISOString(), organizationId: orgId, eventId, liveId, locale: "fr-FR", timeZone: "Europe/Zurich", currentServerWindow: true, captured: false }, null, 2))
+    await writeFile(path.join(directory, "dayof-preparation.json"), JSON.stringify({ preparedAt: now.toISOString(), organizationId: orgId, eventId, liveId, locale: "fr-CH", timeZone: "Europe/Zurich", currentServerWindow: true, captured: false }, null, 2))
     console.log("Independent fictional attendance/Jour J fixture prepared; no email or capture. Default untouched.")
   } finally { await db.$disconnect() }
 }

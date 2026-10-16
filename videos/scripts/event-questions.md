@@ -22,11 +22,24 @@ La preuve d'email sélectionne un nouvel ID Mailpit apparu après le début de l
 
 ## Résultats exigés
 
-- Quatre types réellement enregistrés ; obligatoire/facultatif ; ordre conservé après rechargement.
+- Réglages > Questions ; quatre types réellement enregistrés, Poste concerné laissé sans poste ; obligatoire/facultatif ; ordre conservé après rechargement.
 - Validation obligatoire sans inscription créée ; quatre réponses exactes puis confirmation réelle.
 - Email réellement reçu, réponses dans l'administration, synthèse CSV réellement téléchargée sans coordonnées.
-- Invitation : remplacement de M par L et effacement des facultatifs ; sans preuve : S ne remplace pas L.
+- Invitation : remplacement de M par L et effacement des facultatifs ; montrer ensuite Mes réponses et Modifier mes réponses via le vrai lien personnel. Sans preuve : S ne remplace pas L.
 - Type verrouillé, suppression de L refusée par 409, ajout de XXL enregistré sans perdre L.
 - Retrait archivé : L reste lisible dans les inscriptions, la question disparaît du nouveau formulaire.
 
 Ce parcours ne revendique pas la couverture des impressions, de l'archive complète, de la duplication des questions, du plafond de cinq questions ou de tous les cas d'attente. Ces sujets sont à illustrer dans les vidéos correspondantes.
+
+## Révision du 15 octobre 2026 — lot 22-2
+
+Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et onglets ; Dupliquer, Archiver et Journal via Autres actions ; pages et QR via Partage ; questions et suppression via Réglages ; Documents à imprimer. Libellés, narration et repères de phrases revus. Toute phrase changée impose une régénération intégrale, même voix, `continuousPauseTags: false`. Le manifeste reste le transcript canonique ; les anciennes preuves ne valident pas ce nouveau texte.
+
+
+## Révision du 16 octobre 2026 — lot 22-9
+
+Relecture PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (issue #1013), CHANGELOG Unreleased et parcours actuel. Les ajouts facultatifs de narration sont retirés pour conserver la prise audio restaurée quand le texte initial reste exact. Segments nécessitant une nouvelle narration : aucun. Navigation et repères adaptés aux onglets actuels. Toute correction conservée attend une narration intégrale, même voix, sans pause tags.
+
+Mix du lot 22-9 : musique abaissée de 0,2 dB après rejet d’une fenêtre à 11,9 LU. Même capture et mêmes WAV ; montage et revue finale entièrement refaits.
+
+Lot 22-9 : READY, 520.68 s sur BUILD_ID `03j7XCWy0WJORYSQg2WPB`. Narration restaurée inchangée vérifiée ; répétition, capture narrée, ASR multilingue final, VTT, images de chapitres et actions, musique et validation contrôlés. Rien publié.

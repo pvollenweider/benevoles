@@ -69,5 +69,6 @@
       "transcript": "Le résultat est un brouillon structuré, encore invisible au public : identité, dates, adresse, point sur la carte et messages sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
       "fallbackDurationMs": 23000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

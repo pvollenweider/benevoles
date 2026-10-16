@@ -11,7 +11,7 @@
       "Laissez les responsables de secteur décochés, sauf si vous voulez leur envoyer un nouveau lien personnel immédiatement.",
       "Vérifiez le récapitulatif : les inscriptions et les jalons ne sont jamais copiés.",
       "Créez la copie : elle s'ouvre en brouillon, avec les créneaux vides et les inscriptions fermées.",
-      "Relisez les horaires et les capacités, puis testez le parcours bénévole avant de publier."
+      "Relisez les horaires et les places, puis testez le parcours bénévole avant de publier."
     ],
     "remember": [
       "Les créneaux copiés reviennent ouverts et sans inscription.",
@@ -57,7 +57,7 @@
     },
     {
       "id": "create",
-      "transcript": "Créons la copie. Elle s’ouvre dans l’administration avec le statut Brouillon. Vérifions ses réglages : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
+      "transcript": "Créons la copie. Elle s’ouvre dans l’administration à l’étape Prêt à publier, mais reste un brouillon. Vérifions ses réglages : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
       "fallbackDurationMs": 25000
     },
     {

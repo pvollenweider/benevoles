@@ -278,6 +278,18 @@ Variables facultatives :
 - `VIDEO_ORG`, par défaut `default` ;
 - `VIDEO_EVENT_SLUG`, par défaut `fete-du-village`.
 
+### Inserts natifs d’accessibilité
+
+`ACCESSIBILITY_KEYBOARD_DISPLAY` exige les vraies prises Safari de zoom à 200/400 %
+et de VoiceOver, produites par `capture-accessibility-native.ts` sur le build vérifié.
+Le processus natif vérifie ses autorisations macOS avant de chercher le titre de fenêtre.
+Des identifiants de fenêtres visibles avec des titres absents ne prouvent pas une fenêtre
+fermée : `CGPreflightScreenCaptureAccess=false` et ScreenCaptureKit `-3801` indiquent
+un refus TCC. `AXIsProcessTrusted=false` bloque aussi les manipulations natives vérifiables.
+Dans ce cas, conserver `NOT READY`, sans MP4 final incomplet ; réaliser les inserts dans
+une session macOS autorisée avec le même build, puis refaire la répétition et la prise.
+Ne pas remplacer ces démonstrations natives par du zoom CSS ou une image fixe.
+
 ### Caler une action sur sa phrase
 
 Dans une scène, `at(0.42)` attend 42 % de la durée de sa narration ; `at("Créons les créneaux")`
@@ -416,6 +428,8 @@ La musique doit rester faible mais audible, sans jamais gêner la narration. L'a
 - nivelle d'abord la narration : chaque chapitre ramené à la même intensité (-18 LUFS), puis un compresseur doux égalise les phrases faibles et fortes d'un même chapitre, avant la normalisation de la voix à -16 LUFS. Sur PLATFORM_INTERNAL_ADMINISTRATION (479 s), la voix variait de 9,9 LU d'une fenêtre de 3 s à l'autre, plus que la bande de 8 LU qu'une musique constante peut tenir ; nivelée, 6,3 LU. Les gains par chapitre sont notés dans `audio-levels.json` ;
 - compresse le morceau puis le joue à un niveau constant, fondu au début (1,5 s) et à la fin (2 s). Le mix final n'est plus renormalisé (un `loudnorm` dynamique remontait la musique d'environ 5 LU dans chaque pause) : un limiteur de crête suffit. Pas d'atténuation sous la voix (ducking) : mesurée sur SHIFT_RECURRENCE, elle élargissait l'écart entre voix et musique au lieu de le tenir, en baissant davantage la musique sous les phrases fortes ;
 - mesure le résultat et refuse de terminer si la règle n'est pas tenue : par fenêtres de 3 s, là où la voix parle, la musique reste entre 12 et 20 LU sous la voix (comparées sur les instants où la voix parle) ; là où personne ne parle, le mix ne descend pas sous -36 LUFS et ne monte pas au-dessus de 12 LU sous le niveau médian de la voix (une pause ne doit pas sonner plus fort que la narration). Les niveaux sont relevés image par image selon leur horodatage : ffmpeg écrit « M: nan » sur un silence numérique, et ignorer ces lignes décalait toute la suite (6 s en fin de EVENT_CREATE_TEMPLATE). Les chiffres, fenêtre par fenêtre, vont dans `audio-levels.json`, lié au MP4 par son empreinte.
+
+Un manifeste peut activer `narrationStaticNormalization: true` si la normalisation dynamique crée une rampe de gain indésirable. L’assembleur mesure alors la voix nivelée et compressée avant d’appliquer un gain fixe vers -16 LUFS ; ce gain figure dans `audio-levels.json`. La règle musicale reste identique.
 
 `npm run video:validate` refait la même vérification à partir de `audio-levels.json` et échoue s'il manque ou s'il a été mesuré sur un autre rendu. Une vidéo assemblée avant cette règle doit donc être assemblée à nouveau. Vérifier les droits de diffusion avant toute publication.
 

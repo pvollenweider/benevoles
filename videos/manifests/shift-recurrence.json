@@ -24,7 +24,7 @@
   "voice": "Puck",
   "continuousNarration": true,
   "continuousPauseTags": false,
-  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful association coordinator. Natural conversational French, calm medium pace and clear articulation. Read every provided sentence verbatim, without omission, addition, paraphrase or summary. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -38,7 +38,7 @@
     },
     {
       "id": "describe",
-      "transcript": "Le poste est Caisse et accueil. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.",
+      "transcript": "Pour le poste, écrivons Caisse et accueil. Cochez les jours, le mardi et le jeudi, et gardez le rythme Chaque semaine ; une semaine sur deux convient par exemple à un repair café. La plage va de dix-sept heures à dix-neuf heures trente, en un seul créneau, avec deux personnes par créneau.",
       "fallbackDurationMs": 26000
     },
     {

@@ -37,7 +37,7 @@
     },
     {
       "id": "organization",
-      "transcript": "Tout commence avec l’identité de l’organisation. Son identifiant public forme une adresse comme fetes-de-montvert point benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Convention des Bénévoles que chacun devra accepter.",
+      "transcript": "Tout commence avec l’identité de l’organisation. L’adresse de votre espace détermine votre sous-domaine sur benevol point app. Vous choisissez aussi le nom affiché, le fuseau horaire et la Charte des bénévoles que chacun devra accepter.",
       "fallbackDurationMs": 15000
     },
     {
@@ -67,7 +67,7 @@
     },
     {
       "id": "shift-fields",
-      "transcript": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et la capacité, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d’attente et l’inscription sur validation s’activent ici.",
+      "transcript": "Chaque créneau peut préciser le poste, le libellé, la date, les horaires et le nombre de places, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d’attente et l’inscription sur validation s’activent ici.",
       "fallbackDurationMs": 18000
     },
     {
@@ -77,7 +77,7 @@
     },
     {
       "id": "members",
-      "transcript": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures planifiées et activité. La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
+      "transcript": "La liste des membres rassemble inscrits et personnes importées, avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activité. La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre.",
       "fallbackDurationMs": 15000
     },
     {
@@ -102,7 +102,7 @@
     },
     {
       "id": "reports",
-      "transcript": "Pour le terrain, les rapports proposent le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression, prêts à imprimer et découper.",
+      "transcript": "Pour le terrain, Documents à imprimer propose le planning complet, une vue par poste, une vue par bénévole, la feuille de présence et la liste avec téléphones réservée aux organisateurs. Les badges se génèrent en PDF, avec un filtre par poste et une sélection de bénévole pour la réimpression, prêts à imprimer et découper.",
       "fallbackDurationMs": 17000
     },
     {

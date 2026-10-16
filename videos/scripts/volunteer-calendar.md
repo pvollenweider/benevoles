@@ -32,3 +32,12 @@ Scénario `personal-calendar`, lancé après `demo` : Accueil samedi 9–12, Ran
 ## État
 
 Neuf paragraphes de narration contrôlés indépendamment ; capture Benevol, assemblage MP4 et validation des durées terminés. Visionnage audiovisuel intégral encore à effectuer. Import natif hors périmètre à la demande de Philippe ; aucun accès supplémentaire à Calendrier ne sera demandé pour cette vidéo.
+
+
+## Révision du 2026-10-16 — lot 22-8
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les nouvelles réponses modifiables et le lien d’ajout de créneaux ne contredisent pas le parcours existant. Narration conservée ; audio restauré à vérifier avant réutilisation. Les trois vidéos bénévoles gardent le tutoiement autorisé, confidentialité reste au vouvoiement.
+
+Contrôle du lot 22-8 : assertions du fichier ICS calculées avec le fuseau de l’organisation et les dates de la fixture, y compris le changement d’heure de Zurich du 25 octobre 2026. Aucun décalage UTC d’été figé. Les sélecteurs du formulaire suivent les libellés actuels ; la narration reste identique.
+
+État du lot 22-8 : NOT READY. Défaut produit observé à 118,329 s ([preuve](../evidence/volunteer-calendar/batch22-overnight-end.png)), `/admin/events/cmva87t2100025da58s698zc3/shifts` : changer le début nocturne de 22 h à 23 h ramène aussi la fin de 02 h à 00 h. Le fichier modifié le confirme (fin UTC 20261024T220000Z au lieu de 20261025T010000Z). Aucun contournement ni seconde prise. Assertion ajoutée pour exiger que la fin reste inchangée lors d’une prochaine production après correction du produit.

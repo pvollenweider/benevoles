@@ -4,18 +4,18 @@
   "title": "Reconnaître l'engagement, avec des heures et une attestation fiables",
   "description": "Comprendre les heures planifiées et attestées, exporter une période, imprimer une attestation et lire le résumé de l'événement.",
   "viewer": {
-    "summary": "Dans cette vidéo, vous lisez les heures planifiées et attestées de vos bénévoles, exportez un bilan par période et préparez une attestation de bénévolat.",
+    "summary": "Dans cette vidéo, vous lisez les heures prévues et attestées de vos bénévoles, exportez un bilan par période et préparez une attestation de bénévolat.",
     "steps": [
-      "Dans la liste des membres, comparez les heures planifiées et les heures attestées de chaque personne, puis triez ces heures ou la dernière participation.",
+      "Dans la liste des membres, comparez les heures prévues et les heures attestées de chaque personne, puis triez ces heures ou la dernière participation.",
       "Ouvrez l'activité d'un membre pour retrouver les faits enregistrés et les événements concernés.",
       "Dans « Heures par bénévole », choisissez une période et téléchargez le CSV, en incluant si besoin les membres sans créneau confirmé.",
       "Depuis l'activité du membre, ouvrez « Attestation de bénévolat », choisissez la période et ajoutez une remarque si vous le souhaitez : l'aperçu reprend le logo de votre organisation.",
-      "Cochez au besoin « Inclure les heures planifiées sans présence saisie », puis vérifiez l'aperçu.",
+      "Cochez au besoin « Inclure les heures prévues sans présence saisie », puis vérifiez l'aperçu.",
       "Cliquez sur « Générer et imprimer l'attestation », enregistrez-la en PDF puis complétez la signature.",
       "Dans les rapports de l'événement, lisez le résumé des personnes, des inscriptions et des heures."
     ],
     "remember": [
-      "Les heures attestées font partie des heures planifiées : elles ne s'y ajoutent pas.",
+      "Les heures attestées font partie des heures prévues : elles ne s'y ajoutent pas.",
       "Les heures reposent sur la durée des créneaux et la présence saisie, pas sur un temps chronométré.",
       "Une présence non saisie n'est pas une preuve d'absence, et aucun de ces repères ne désactive un membre à votre place.",
       "Les créneaux à venir et les inscriptions ou créneaux annulés ne comptent pas, sauf dates futures incluses dans la période choisie."
@@ -44,7 +44,7 @@
   "segments": [
     {
       "id": "hours-list",
-      "transcript": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures planifiées et les heures attestées. Pour Aline, huit heures étaient prévues sur ses créneaux confirmés passés, et six correspondent à une présence saisie. Ces six heures font partie des huit : elles ne s'ajoutent pas. Les créneaux à venir, les inscriptions annulées et les créneaux annulés ne gonflent pas ce bilan. Toutes les personnes et les données de cette démonstration sont fictives.",
+      "transcript": "Reconnaître l'engagement, c'est aussi disposer d'un bilan clair. Dans la liste des membres, regardons les heures prévues et les heures attestées. Pour Aline, douze heures sont prévues sur ses créneaux confirmés, passés et à venir, et six correspondent à une présence saisie. Ces six heures font partie des douze : elles ne s'ajoutent pas. Les inscriptions annulées et les créneaux annulés sont exclus, et les horaires qui se chevauchent ne sont comptés qu’une fois. Toutes les personnes et les données de cette démonstration sont fictives.",
       "fallbackDurationMs": 44000
     },
     {
@@ -59,7 +59,7 @@
     },
     {
       "id": "period-export",
-      "transcript": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par bénévole, pour une période. Choisissons le premier et le trente septembre. Téléchargeons le CSV. Il compte les créneaux confirmés non annulés de cette période, avec les heures planifiées et attestées séparées. Cochons maintenant l'option pour inclure les membres sans créneau confirmé, puis téléchargeons à nouveau. Dans ce vrai fichier, Clara apparaît avec des zéros. Le total indique six heures planifiées, dont deux attestées. La période choisie détermine le bilan : si elle contient des dates futures, ces créneaux peuvent aussi y figurer.",
+      "transcript": "Pour préparer un bilan, revenons aux membres et ouvrons Heures par bénévole, pour une période. Choisissons le premier et le trente septembre. Téléchargeons le CSV. Il compte les créneaux confirmés non annulés de cette période, avec les heures prévues et attestées séparées. Cochons maintenant l'option pour inclure les membres sans créneau confirmé, puis téléchargeons à nouveau. Dans ce vrai fichier, Clara apparaît avec des zéros. Le total indique six heures prévues, dont deux attestées. La période choisie détermine le bilan : si elle contient des dates futures, ces créneaux peuvent aussi y figurer.",
       "fallbackDurationMs": 54000
     },
     {
@@ -69,7 +69,7 @@
     },
     {
       "id": "certificate-presence",
-      "transcript": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures planifiées sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures planifiées de la liste des membres. Pour Aline, nous retrouvons six heures attestées et deux heures planifiées sans présence. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.",
+      "transcript": "Par défaut, l'attestation met en avant les heures attestées. Regardons cette colonne, puis cochons Inclure les heures prévues sans présence saisie. Attention à la lecture : cette nouvelle colonne est le complément, pas le total des heures prévues de la liste des membres. Pour Aline, nous retrouvons six heures attestées et deux heures prévues sans présence. Ce document ne prétend pas mesurer un temps de travail chronométré. Une présence non saisie n'est pas non plus une preuve d'absence.",
       "fallbackDurationMs": 44000
     },
     {
@@ -79,9 +79,10 @@
     },
     {
       "id": "event-summary",
-      "transcript": "Enfin, ouvrons les rapports de la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
+      "transcript": "Enfin, ouvrons Documents pour la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures prévues, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
       "fallbackDurationMs": 50000
     }
   ],
-  "posterAtMs": 175000
+  "posterAtMs": 175000,
+  "narrationStaticNormalization": true
 }

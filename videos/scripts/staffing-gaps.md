@@ -4,7 +4,7 @@ Vidéo autonome 40. Voix unique Kore, souriante et patiente. Le rapport est un o
 
 ## Parcours à capturer
 
-1. Depuis la page de l'événement, ouvrir le rapport des besoins.
+1. Dans Aperçu, suivre Voir les créneaux à compléter pour ouvrir le rapport Où manque-t-il du monde ?.
 2. Lire places pourvues/capacité, nombre de créneaux, attentes et demandes. Distinguer places et personnes différentes.
 3. Poste Photos vide : deux créneaux, six places ; ouvrir le vrai planning et vérifier ses horaires.
 4. Besoins triés, fermeture exclue ; suivre Buvette 18–22 vers les inscriptions filtrées et le message ciblé, sans envoyer ce message.
@@ -27,3 +27,24 @@ Source du rapport examinée, narration de neuf chapitres générée, seed exécu
 Le contrôle indépendant de narration est interrompu par HTTP 402 (crédits prépayés Gemini épuisés). Capture et MP4 restent à produire ; aucun audio nouveau n'est présenté comme contrôlé.
 
 Révision batch 14 : seuls les impératifs des chapitres overview, requests et full changent : « lisez aussi les attentes », « Suivez le lien des demandes… puis examinez leurs informations », « Lisez donc aussi les mentions ». Tous les autres mots du transcript sont conservés.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration textuelle conservée : aucun changement de style. Réutilisation conditionnée à la concordance exacte du texte et des WAV restaurés, contrôlée séparément.
+
+Contrôle des WAV restaurés le 2026-10-16 : la reconnaissance indépendante retrouve encore le tutoiement de l’ancienne prise. Le texte actuel au vouvoiement reste inchangé, mais cet audio ne lui correspond pas. WAITING TTS : régénération intégrale obligatoire, aucune combinaison de phrases anciennes et nouvelles. Phrases au vouvoiement à produire dans cette prise :
+
+- Depuis l'événement, ouvrez Où manque-t-il du monde.
+- Cette vue regroupe les besoins pour savoir où concentrer vos efforts, plutôt que de parcourir tout le planning.
+- La phrase de besoin et la barre donnent un aperçu, mais lisez aussi les attentes et les demandes.
+- Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission.
+- Avant de recruter, assurez-vous que la demande est claire : quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.
+- Suivez le lien des demandes pour retrouver Lucas et Marc, puis examinez leurs informations avant de décider.
+- Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place.
+- En cliquant, vous retrouvez les noms et leurs positions dans la liste.
+- Vous pouvez ensuite réfléchir à une place supplémentaire ou à un autre horaire ; ce rapport ne les inscrit pas automatiquement sur un créneau différent.
+- Lisez donc aussi les mentions de statut, pas seulement le ratio.
+- Vous pouvez vérifier le résultat, puis vous concentrer sur le besoin suivant.

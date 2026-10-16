@@ -72,9 +72,9 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
     const after = await entries().count()
     if (before !== 50 || after !== 61) throw new Error("Actual load-more must extend 50 entries to 61")
     await at("Si une sélection ne donne"); await entries().last().scrollIntoViewIfNeeded()
-    await at(0.59) /* mid-sentence */; await filter("NotificationOutbox")
+    await at("Si une sélection ne donne"); await filter("NotificationOutbox")
     await page.getByText("Aucune activité pour l'instant.", { exact: true }).waitFor()
-    await at("essayons Tous les types avant"); await filter("")
+    await at(0.62) /* mid-sentence: « essayons Tous les types », after showing the empty selection */; await filter("")
     checks.pagination = { before, after, emptyEmailFilterVerified: true }
   })
   await go(journal); await filter("AdminUser")

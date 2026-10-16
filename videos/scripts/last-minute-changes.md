@@ -35,3 +35,15 @@ La répétition accélérée a terminé les dix chapitres, avec les clics réels
 Contrôle SMTP local terminé : six notifications nouvelles reçues et rapprochées de la file d'envoi (`mail-checks.json`). L'offre, la confirmation, le message ciblé, le changement avec les deux horaires avant/après et les deux annulations sont présents ; la demande en attente ne reçoit pas le changement d'horaire. Ces preuves ne constituent ni une lecture par un bénévole ni une validation audiovisuelle. Les 43 fichiers d'outillage vidéo passent la vérification TypeScript. Aucun MP4 de ce parcours n'est encore produit.
 
 Script et manifeste écrits. Une prise continue Kore est générée, ses neuf frontières recalées et les dix chapitres passent la transcription indépendante. Le seed dédié contient six membres fictifs, cinq créneaux, huit inscriptions dans différents états, disponibilité de Zoé et présence préalable à la caisse. Les précontrôles par les vraies routes passent : retrait et offre, acceptation, message ciblé à un destinataire, ajout manuel remplissant le poste, changement d'horaire notifiant une confirmation, annulation des deux inscriptions et pointage conservé, chaîne causale du journal. Preuve : `functional-checks.json`. La remise à zéro traite désormais les profils et l'administrateur fictifs conservés sans organisation, après vérification de leur périmètre. Le jeu a été modifié par le contrôle : le réinitialiser avant capture. Lecture des emails, recorder, MP4 et revue audiovisuelle restent à faire. Capture désactivée, rien de publié.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration à régénérer intégralement, même voix, une seule passe, `continuousPauseTags: false`. WAITING TTS : plafond mensuel du projet connu, aucun nouvel appel. Phrases révisées :
+
+- Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.
+- Si une personne ne répond pas ou refuse, ne partez pas du principe qu'elle sera là.
+- Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne.
+- Si le changement est urgent, contactez aussi les personnes directement.

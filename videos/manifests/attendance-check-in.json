@@ -56,7 +56,7 @@
     },
     {
       "id": "limits",
-      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux passés. Les heures attestées reprennent, parmi elles, les créneaux où une présence a été enregistrée. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
+      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés où une présence a été enregistrée. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
       "fallbackDurationMs": 44000
     },
     {

@@ -69,5 +69,6 @@
       "transcript": "Vous avez un programme corrigé, des pages pratiques lisibles et deux fichiers QR téléchargés. Avant votre diffusion, scannez le code avec un vrai téléphone : ce contrôle reste à faire sur votre appareil. Vérifiez que la page attendue s’ouvre et que les inscriptions sont ouvertes au bon moment. Un QR code facilite l’accès ; il ne change pas les règles d’inscription.",
       "fallbackDurationMs": 31000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

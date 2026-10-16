@@ -33,3 +33,8 @@ d’atteindre une information précise sans parcourir tous les écrans.
 - « Aide » consulte la documentation sans modifier les données.
 - Changer le mot de passe déconnecte les autres sessions ; ouvrir Mon compte ne le fait pas.
 - La vidéo montre le bouton de déconnexion mais ne l’active pas, afin de poursuivre la visite.
+
+
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+
+Les nouveaux passages Partage, Réglages, Autres actions et Aperçu attendent chacun leur phrase (ancres textuelles). Le retour Événements suit son nom accessible sans la flèche décorative.

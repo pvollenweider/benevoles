@@ -23,20 +23,20 @@ Chaleureux, souriant et complice. La narration vient d’une personne habituée 
 9. **Publication** — publication sans envoi automatique.
 10. **QR code** — fiche imprimable et téléchargements PNG/SVG.
 11. **Import initial** — fichier CSV fictif de douze membres pour constituer rapidement sa première liste, analyse préalable, puis confirmation.
-12. **Invitations** — filtre sur le tag « caisse » ; les invitations peuvent partir par lot ou individuellement, avec un message d’accompagnement.
+12. **Invitations** — filtre sur l’étiquette « caisse » ; les invitations peuvent partir par lot ou individuellement, avec un message d’accompagnement.
 13. **Résultat public** — planning final vu par les bénévoles.
 
 ## Données fictives importées
 
 - Sophie Roch — tag `caisse` ;
-- Malik Diallo — tags `livraison`, `permis-b` ;
+- Malik Diallo — étiquettes `livraison`, `permis-b` ;
 - Ana Silva — tag `accueil`.
-- Léa Morel — tags `accueil`, `matin` ;
+- Léa Morel — étiquettes `accueil`, `matin` ;
 - Hugo Bernard — tag `logistique` ;
-- Camille Dubois — tags `caisse`, `soir` ;
+- Camille Dubois — étiquettes `caisse`, `soir` ;
 - Noah Petit — tag `accueil` ;
 - Emma Garcia — tag `logistique` ;
-- Lucas Robert — tags `livraison`, `permis-b` ;
+- Lucas Robert — étiquettes `livraison`, `permis-b` ;
 - Chloé Richard — tag `accueil` ;
 - Adam Durand — tag `caisse` ;
 - Inès Laurent — tag `logistique`.
@@ -52,4 +52,7 @@ L’application ne vérifie pas administrativement la validité d’un permis. L
 - Utiliser uniquement la base locale E2E et des données fictives.
 - Ne montrer aucun mot de passe : la connexion est effectuée avant la capture.
 - L’événement reste en brouillon jusqu’à la scène de publication.
-- La narration conserve la voix de la prise d’origine lors du remplacement des phrases révisées.
+- Toute la narration est régénérée en une seule prise continue avec la voix Kore, sans mélange d’extraits.
+
+
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.

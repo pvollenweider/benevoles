@@ -45,7 +45,7 @@
     },
     {
       "id": "result",
-      "transcript": "Choisis donc chaque état selon l’intention : brouillon pendant la préparation, publié répertorié pour recruter largement, publié non répertorié pour un partage par lien, fenêtre programmée pour maîtriser le calendrier, puis archive pour conserver sans encombrer.",
+      "transcript": "Choisissez donc chaque état selon l’intention : brouillon pendant la préparation, publié répertorié pour recruter largement, publié non répertorié pour un partage par lien, fenêtre programmée pour maîtriser le calendrier, puis archive pour conserver sans encombrer.",
       "fallbackDurationMs": 21000
     }
   ],
@@ -63,5 +63,6 @@
       "L'événement ne peut passer à Publié que s'il a au moins un créneau actif.",
       "Archiver conserve l'historique et les rapports dans l'administration."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

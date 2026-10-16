@@ -23,3 +23,13 @@ Le préparateur refuse tout écrasement implicite. Une prise complète fusionne 
 `record-member-merge.ts` reçoit les lecteurs de base réels de `member-merge-fixture.ts`. Ces lecteurs ne modifient rien. Toute mutation du parcours est effectuée par l’interface du produit compilé depuis `main`.
 
 La transcription prononcée est la source du manifest. Après capture : transcription multilingue, synchronisation voix/actions, mixage et revue audiovisuelle du MP4, puis revalidation de l’évolution de `main`. La présence du module ou d’un manifest n’est pas une preuve de livraison.
+
+
+## Révision du 2026-10-16 — lot 22-5
+
+Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased] et PR fusionnées #990 à #1012, #1021 (onglets lot 2), #1022 (#1013). Étiquettes, Modifier, Heures prévues, navigation Inscriptions / Invitations et Documents à imprimer vérifiées dans les scénarios.
+
+Narration conservée sans changement de style ; la réutilisation des WAV exige une vérification indépendante du texte et des empreintes.
+
+
+Revue de la première prise du 2026-10-16 : à 168,68 s, `review/sentence-frames/21-result.png`, la recherche `?q=` avait coché « Inclure inactifs » alors que la phrase annonçait la liste active. Correction du cue « Dans la liste des membres » : décocher réellement ce filtre et vérifier son état. Une seule reprise finale autorisée utilisée, sans modification de narration ni de produit. La première prise est conservée dans `previous-take1-*`.

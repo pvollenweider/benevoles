@@ -21,7 +21,7 @@ async function main() {
     if (!pages) throw new Error(`No pages: ${file}`)
     const folder = path.join(directory, "rendered", file.slice(0, -4))
     await mkdir(folder, { recursive: true })
-    await exec("pdftoppm", ["-r", "100", "-png", pdf, path.join(folder, "page")], { maxBuffer: 1024 * 1024 })
+    await exec("pdftocairo", ["-r", "100", "-png", pdf, path.join(folder, "page")], { maxBuffer: 1024 * 1024 })
     const images = (await readdir(folder)).filter(name => /^page-\d+\.png$/.test(name)).sort((a, b) => Number(a.match(/\d+/)![0]) - Number(b.match(/\d+/)![0]))
     if (images.length !== pages) throw new Error(`Rendered page count differs: ${file}`)
     results.push({ pdf, pages, images: images.map(name => path.join(folder, name)), visualReview: false })

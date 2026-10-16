@@ -89,12 +89,12 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
     const slot = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
     await at("Continuons jusqu'au formulaire."); await activate(page, slot)
     await at("il permet de vérifier son"); await activate(page, page.getByRole("button", { name: /^Continuer/ }))
-    await page.getByLabel("Prénom *", { exact: true }).waitFor()
+    await page.getByRole("textbox", { name: "Prénom", exact: true }).waitFor()
     await at("Lisons le message, revenons au")
     await activate(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
     // Browser constraint validation is genuine; no invalid POST and no actual contact.
     assert(await page.locator(":invalid").count() > 0, "Missing mandatory field must genuinely block submission")
-    await at("Les personnes et adresses utilisées"); await type(page, page.getByLabel("Prénom *", { exact: true }), "Camille")
+    await at("Les personnes et adresses utilisées"); await type(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Camille")
     await evidence("public", { selectedSlot: true, actualFormShown: true, actualMandatoryValidation: true, noSubmission: true })
   })
   await scene("picker", async at => {
@@ -165,7 +165,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
       const list = page.getByRole("listbox"); const bounds = await list.boundingBox()
       assert(bounds && bounds.x >= 0 && bounds.x + bounds.width <= 320, "Dropdown must fit actual simulated viewport")
       await at("Regardons aussi les filtres et"); await page.keyboard.press("End")
-      await at("Si un élément gêne ton"); await page.keyboard.press("Escape")
+      await at("Si un élément gêne votre"); await page.keyboard.press("Escape")
       const widths = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }))
       await evidence("mobile", { simulatedNotPhysicalDevice: true, actualWarnings: true, listFits: true, ...widths })
     } finally { await page.setViewportSize(original) }
@@ -192,7 +192,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
     await go(publicPath)
     await at("La page décrit une évaluation"); await activate(page, page.getByRole("link", { name: "Accessibilité", exact: true }))
     await page.getByRole("heading", { name: /Accessibilité/i }).first().waitFor()
-    await at("Indique la page, le geste"); await page.getByText(/Partiellement conforme/i).first().scrollIntoViewIfNeeded()
+    await at("Indiquez la page, le geste"); await page.getByText(/Partiellement conforme/i).first().scrollIntoViewIfNeeded()
     await at("Un retour précis aide à"); const contact = page.locator('a[href^="mailto:"]').first(); await contact.scrollIntoViewIfNeeded()
     await evidence("limits", { actualStatement: true, contactShownNotSent: true })
   })

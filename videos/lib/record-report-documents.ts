@@ -31,10 +31,17 @@ export async function recordReportDocuments(options: { page: Page; base: string;
     // The complete report renders first and last names in separate cells.
     await at(0.70) /* mid-sentence */; await page.getByText("Léa", { exact: true }).last().scrollIntoViewIfNeeded()
   })
+  // Opening the real popup and navigating can exceed the first spoken sentence.
+  // Prepare Saturday in the transition so both days are visible in spoken order.
+  await open("Planning par jour", "sheets/day")
+  await page.getByText(/Samedi 10 octobre 2026/i).first().scrollIntoViewIfNeeded()
   await scene("day", async at => {
-    await open("Planning par jour", "sheets/day")
-    // The second day is spoken around 5 s, not at the middle of the chapter.
-    await at("Les postes et les créneaux"); await page.getByText(/Dimanche 11 octobre 2026/i).first().scrollIntoViewIfNeeded()
+    // Keep the first day visible for « Voici la première journée », then reveal the next
+    // within that sentence, on « puis la suivante » (no separate pause anchor).
+    await at("Voici la première journée")
+    await page.getByText(/Samedi 10 octobre 2026/i).first().scrollIntoViewIfNeeded()
+    await at(0.20) /* mid-sentence: « puis la suivante » */
+    await page.getByText(/Dimanche 11 octobre 2026/i).first().scrollIntoViewIfNeeded()
     await at("Repérons l'accueil du matin et la buvette")
     const morning = page.getByText("Accueil du matin", { exact: true }).first()
     await morning.scrollIntoViewIfNeeded(); await tap(page, morning)

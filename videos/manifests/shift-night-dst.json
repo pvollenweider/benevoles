@@ -45,7 +45,7 @@
     },
     {
       "id": "autumn",
-      "transcript": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l’engagement d’une personne présente toute la nuit.",
+      "transcript": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures prévues et évite de sous-estimer l’engagement d’une personne présente toute la nuit.",
       "fallbackDurationMs": 26000
     },
     {
@@ -60,7 +60,7 @@
     },
     {
       "id": "result",
-      "transcript": "Pour une permanence de nuit, indique clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.",
+      "transcript": "Pour une permanence de nuit, indiquez clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.",
       "fallbackDurationMs": 21000
     }
   ]

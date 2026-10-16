@@ -20,11 +20,11 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.accessibility.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/events/, { waitUntil: "domcontentloaded" })
     await page.goto("http://localhost:43102/admin/events/video-accessibility-event/registrations")
     await page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }).click()
-    await page.getByLabel("Prénom *", { exact: true }).fill("Aline")
-    await page.getByLabel("Nom *", { exact: true }).fill("Exemple")
+    await page.getByRole("textbox", { name: "Prénom", exact: true }).fill("Aline")
+    await page.getByRole("textbox", { name: "Nom", exact: true }).fill("Exemple")
     await page.getByLabel("Email", { exact: true }).fill("video.accessibility.0@example.org")
     // Main now hides the decorative asterisk from the accessible name;
     // aria-required carries the actual required state instead.

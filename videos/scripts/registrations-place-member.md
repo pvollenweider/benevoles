@@ -35,3 +35,10 @@ Le bandeau de résultat annonce les inscriptions ; seul le formulaire annonce l�
 ## Reprise de la boîte email — batch 13
 
 Narration auditée réutilisée sans régénération. Nettoyage limité aux messages identifiés de la fixture Montvert et suppression des anciennes confirmations en attente pour la personne et cet événement, avant chaque seed/prise. Les autres messages sont conservés. Mailpit est ouvert en suivant le résultat de recherche pour préserver la liste filtrée ; les identifiants des messages réellement affichés sont vérifiés. Le MP4 final (93,840 s) ne montre que la confirmation de cette prise, dont les deux créneaux et le lien personnel. Contrôles complets et revue des frames de 73 à 93 secondes : READY local, non publié.
+
+
+## Révision du 2026-10-16 — lot 22-4
+
+Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées (dont #1021, lot 2, et #1022 pour #1013) : en-tête partagé et onglets, Aperçu centré sur les besoins, Communication pour les messages et rappels, Documents à imprimer, vocabulaire Places / Étiquettes / Modifier / Heures prévues. La page personnelle affiche Mes réponses et S’inscrire à d’autres créneaux ; les responsables peuvent recevoir les changements de réponses liés à leur poste. Les sélecteurs et les ancres suivent les écrans actuels.
+
+Narration textuelle conservée : aucun changement de style. Réutilisation conditionnée à la concordance exacte du texte et des WAV restaurés, contrôlée séparément.

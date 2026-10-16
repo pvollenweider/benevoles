@@ -64,5 +64,6 @@
       "transcript": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
       "fallbackDurationMs": 19000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

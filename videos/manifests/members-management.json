@@ -25,7 +25,7 @@
     },
     {
       "id": "edit",
-      "transcript": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations. Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b. La note peut rappeler un détail pratique utile à l'organisation. Garde-la courte et évite les informations personnelles inutiles. Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+      "transcript": "Avec Modifier, vous pouvez corriger la fiche et ajouter des informations. Les étiquettes, séparées par des virgules, servent à retrouver un groupe, comme accueil ou permis b. La note peut rappeler un détail pratique utile à l'organisation. Gardez-la courte et évitez les informations personnelles inutiles. Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés.",
       "fallbackDurationMs": 35000
     },
     {
@@ -45,12 +45,12 @@
     },
     {
       "id": "filter",
-      "transcript": "Avec le filtre de tags, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Tous les tags. Les en-têtes permettent aussi de trier la liste. Les heures planifiées additionnent les durées des créneaux passés, confirmés et non annulés. Les heures attestées en sont la part avec une présence enregistrée, pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.",
+      "transcript": "Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sans chronométrer le travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.",
       "fallbackDurationMs": 33000
     },
     {
       "id": "deactivate",
-      "transcript": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici, Maya n'a aucune inscription : nous confirmons sa désactivation, puis elle disparaît de la liste habituelle. Avec Inclure inactifs, nous la retrouvons. Dans Éditer, la case Membre actif permet de la réactiver. Après enregistrement, elle revient parmi les membres affichés normalement.",
+      "transcript": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici, Maya n'a aucune inscription : nous confirmons sa désactivation, puis elle disparaît de la liste habituelle. Avec Inclure inactifs, nous la retrouvons. Dans Modifier, la case Membre actif permet de la réactiver. Après enregistrement, elle revient parmi les membres affichés normalement.",
       "fallbackDurationMs": 35000
     },
     {
@@ -60,17 +60,17 @@
     },
     {
       "id": "result",
-      "transcript": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories utiles et des informations que l'on comprend. Mets les fiches à jour quand une personne te signale un changement. Utilise les disponibilités pour dialoguer, pas pour décider à sa place. Et garde seulement les notes nécessaires : l'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.",
+      "transcript": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories utiles et des informations que l'on comprend. Mettez les fiches à jour quand une personne vous signale un changement. Utilisez les disponibilités pour dialoguer, pas pour décider à sa place. Et gardez seulement les notes nécessaires : l'objectif est de faciliter l'organisation, pas de constituer un dossier sur les bénévoles.",
       "fallbackDurationMs": 33000
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous construisez et entretenez la liste des membres de votre association : fiches, recherche, tags, disponibilités et activité.",
+    "summary": "Dans cette vidéo, vous construisez et entretenez la liste des membres de votre association : fiches, recherche, étiquettes, disponibilités et activité.",
     "steps": [
       "Cliquez sur « Nouveau membre », saisissez le prénom, le nom et, si vous les avez, l'email et le téléphone.",
-      "Avec « Éditer », ajoutez des tags séparés par des virgules et, si besoin, une courte note pratique.",
+      "Avec « Modifier », ajoutez des étiquettes séparés par des virgules et, si besoin, une courte note pratique.",
       "Indiquez les disponibilités générales du membre : matin, après-midi, soir et une exception éventuelle.",
-      "Retrouvez une personne avec la recherche par nom, email ou téléphone, puis filtrez par tag ou triez la liste.",
+      "Retrouvez une personne avec la recherche par nom, email ou téléphone, puis filtrez par étiquette ou triez la liste.",
       "Désactivez une fiche pour la mettre de côté, et retrouvez-la avec « Inclure inactifs ».",
       "Ouvrez « Activité » pour consulter l'historique factuel d'une personne."
     ],
@@ -80,5 +80,6 @@
       "Deux personnes du même nom ne sont pas forcément un doublon : vérifiez leurs coordonnées.",
       "Gardez seulement les notes utiles à l'organisation."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

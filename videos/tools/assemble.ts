@@ -101,11 +101,18 @@ async function main() {
   if (manifest.slug === "sector-leaders") {
     const phone = cues.get("mobile")
     if (!phone) throw new Error("Missing phone framing cue")
-    const start = ((phone.startMs + 500) / 1000).toFixed(3)
-    const end = (phone.endMs / 1000).toFixed(3)
-    filters.push("[0:v]split=2[desktop][phoneSource]")
-    filters.push("[phoneSource]crop=390:800:0:0,pad=1280:800:445:0:color=0xf8fafc[phoneFrame]")
-    filters.push(`[desktop][phoneFrame]overlay=0:0:enable='between(t,${start},${end})'[framedVideo]`)
+    const scope = cues.get("scope"), signup = cues.get("new-signup")
+    if (!scope || !signup) throw new Error("Missing desktop restoration framing cues")
+    const start = (phone.startMs / 1000).toFixed(3)
+    const end = (scope.startMs / 1000).toFixed(3)
+    // Chromium's native recording exposes 713 physical rows after a resize.
+    // Crop only that recorder padding, then put the real viewport on the page background.
+    // A navigation repaints the full desktop surface at the start of new-signup.
+    filters.push("[0:v]split=3[desktop][phoneSource][restoredDesktopSource]")
+    filters.push("[phoneSource]crop=390:712:0:0,pad=1280:800:445:0:color=0xf8fafc[phoneFrame]")
+    filters.push(`[desktop][phoneFrame]overlay=0:0:enable='between(t,${start},${end})'[phoneFramedVideo]`)
+    filters.push("[restoredDesktopSource]crop=1280:712:0:0,pad=1280:800:0:0:color=0xf8fafc[restoredDesktopFrame]")
+    filters.push(`[phoneFramedVideo][restoredDesktopFrame]overlay=0:0:enable='between(t,${end},${((signup.startMs + 1000) / 1000).toFixed(3)})'[framedVideo]`)
     videoMap = "[framedVideo]"
   }
   if (timeline.portraitFrames?.length) {
@@ -158,8 +165,21 @@ async function main() {
     for (const caption of readableCaptions(segment.transcript, cue.startMs, generated.durationMs)) vtt.push(`${vttTime(caption.startMs)} --> ${vttTime(caption.endMs)}`, caption.text, "")
     transcript.push(segment.transcript, "")
   }
+  // A measured static gain avoids the gain ramp of single-pass dynamic loudnorm.
+  let normalization = "loudnorm=I=-16:LRA=11:TP=-1.5"
+  let staticGainDb: number | null = null
+  if (manifest.narrationStaticNormalization) {
+    const voiceFilters = manifest.segments.map((segment, index) => `[${index + 1}:a]volume=${segmentGains[segment.id]}dB,adelay=delays=${cues.get(segment.id)!.startMs}:all=1[voice${index}]`)
+    voiceFilters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0:normalize=0,acompressor=${NARRATION_LEVEL.compressor},ebur128[measured]`)
+    const { stderr } = await exec("ffmpeg", ["-hide_banner", "-nostats", ...inputs, "-filter_complex", voiceFilters.join(";"), "-map", "[measured]", "-f", "null", "-"], { maxBuffer: 64 * 1024 * 1024 })
+    const integrated = parseEbur128Integrated(stderr)
+    if (integrated === null) throw new Error("Cannot measure static narration normalization")
+    staticGainDb = -16 - integrated
+    normalization = `volume=${staticGainDb}dB`
+  }
+  const narrationLevel = { ...NARRATION_LEVEL, staticGainDb }
   // Chapters never overlap: no amix normalization, so the compressor sees the levelled voice.
-  filters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0:normalize=0,acompressor=${NARRATION_LEVEL.compressor},loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000[narration]`)
+  filters.push(`${labels.join("")}amix=inputs=${labels.length}:duration=longest:dropout_transition=0:normalize=0,acompressor=${NARRATION_LEVEL.compressor},${normalization},aresample=48000[narration]`)
   const musicInput = manifest.segments.length + 1
   const fadeOut = Math.max(0, captureDuration - 2)
   const copies = musicLoopCopies(captureDuration)
@@ -210,7 +230,7 @@ async function main() {
   await rm(stems, { recursive: true, force: true })
   const levelIssues = musicLevelIssues(windows)
   const videoSha256 = createHash("sha256").update(await readFile(output)).digest("hex")
-  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: musicMix, narration: { ...NARRATION_LEVEL, segmentGainsDb: segmentGains }, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
+  await writeFile(path.join(dir, "audio-levels.json"), `${JSON.stringify({ rule: MUSIC_RULE, loop: MUSIC_LOOP, mix: musicMix, narration: { ...narrationLevel, segmentGainsDb: segmentGains }, videoSha256, summary: musicLevelSummary(windows), issues: levelIssues, windows }, null, 2)}\n`)
 
   await writeFile(path.join(dir, `${manifest.slug}.vtt`), `${vtt.join("\n")}\n`)
   await writeFile(path.join(dir, `${manifest.slug}.txt`), `${transcript.join("\n").trim()}\n`)

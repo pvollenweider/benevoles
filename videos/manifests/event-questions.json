@@ -130,5 +130,6 @@
       "transcript": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions. Cliquons sur Retirer, puis lisons la confirmation : la question disparaît du formulaire, mais ses réponses restent dans les inscriptions et les exports. Confirmons. Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée. Ouvrons enfin un autre créneau public : la question n'est plus proposée, les autres le sont toujours. Un formulaire simple, des réponses utiles et une évolution qui préserve l'historique : c'est le bon équilibre.",
       "fallbackDurationMs": 52000
     }
-  ]
+  ],
+  "musicGainDb": -0.2
 }

@@ -1,7 +1,7 @@
 {
   "id": "ORG_TIMEZONE_CHARTER",
   "slug": "org-timezone-charter",
-  "title": "Régler le fuseau horaire et la Convention des Bénévoles",
+  "title": "Régler le fuseau horaire et la Charte des bénévoles",
   "description": "Configurer les heures de référence et le texte que chaque bénévole accepte avant son inscription.",
   "viewer": {
     "summary": "Dans cette vidéo, vous réglez le fuseau horaire de votre organisation et la Convention des Bénévoles.",
@@ -29,7 +29,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Convention des Bénévoles explique clairement le cadre accepté avant chaque inscription.",
+      "transcript": "Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Charte des bénévoles explique clairement le cadre accepté avant chaque inscription.",
       "fallbackDurationMs": 15000
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "id": "charter",
-      "transcript": "La Convention des Bénévoles présente le cadre de l’engagement. Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "transcript": "La Charte des bénévoles présente le cadre de l’engagement. Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la charte par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
       "fallbackDurationMs": 38000
     },
     {
@@ -67,5 +67,6 @@
       "transcript": "Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.",
       "fallbackDurationMs": 20000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

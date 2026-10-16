@@ -49,9 +49,12 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
     await scene("one", async at => {
       await go(); await at(0.15) /* mid-sentence */; await select(0)
       await at("La marque apparaît sur son inscription"); await apply([find(0).id], true)
+      const aline = page.getByRole("row").filter({ hasText: "video.attendance.0@example.org" })
+      await aline.scrollIntoViewIfNeeded()
       await at("Rechargeons la page"); await page.reload(); await settle(page)
       if (!(await db.registration.findUniqueOrThrow({ where: { id: find(0).id } })).checkedInAt) throw new Error("Presence not persistent")
-      await page.getByRole("row").filter({ hasText: "video.attendance.0@example.org" }).getByText("Présent", { exact: false }).waitFor()
+      await aline.scrollIntoViewIfNeeded()
+      await aline.getByText("Présent", { exact: false }).waitFor()
     })
     await scene("group", async at => {
       await go(); await at(0.15) /* mid-sentence */; await select(1); await select(2)

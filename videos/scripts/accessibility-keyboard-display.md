@@ -128,3 +128,17 @@ preuve que le zoom a effectivement atteint 200 % ou 400 %.
 
 Le montage complet, la capture de zoom, les autres scènes synchronisées et
 la narration continue restent à produire. `captureReady` reste faux.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+WAITING TTS — plafond mensuel connu ; aucun appel. Narration entière à régénérer avec Puck, une seule passe, `continuousPauseTags: false`. Phrases corrigées pour le vouvoiement :
+- Prenez votre temps : ce repère sert à savoir quel bouton ou quel champ va réagir.
+- Si un élément gêne votre usage, décrivez l'écran et le geste dans votre retour.
+- Cette simulation ne remplace pas un essai sur votre appareil.
+- Vous rencontrez une difficulté ?
+- Indiquez la page, le geste tenté, le résultat attendu, le navigateur et, si vous en utilisez un, le lecteur d'écran.
+
+Précontrôles sur le build du lot 22-7 : `verify-accessibility-picker.ts` et `verify-accessibility-current-pages.ts` passent. Onglets actuels, Cumul, Charte des bénévoles, sélection publique au clavier et vrai lien Accessibilité contrôlés ; largeur de document 381 px à 320 px toujours observée. Ces captures ne valident ni le zoom natif ni VoiceOver, et ne sont pas un film final.

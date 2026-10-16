@@ -10,7 +10,7 @@
       "Choisissez le modèle le plus proche de votre événement, par exemple « Fête de village ».",
       "Vérifiez l'aperçu des postes, des créneaux et des places qui seront créés.",
       "Donnez un titre et une date de début, puis cliquez sur « Créer le brouillon ».",
-      "Ajustez chaque poste créé : renommez-le, modifiez ses horaires, sa capacité ou sa couleur selon vos besoins réels.",
+      "Ajustez chaque poste créé : renommez-le, modifiez ses horaires, son nombre de places ou sa couleur selon vos besoins réels.",
       "Poursuivez avec l'aperçu bénévole avant de publier."
     ],
     "remember": [
@@ -31,7 +31,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.",
+      "transcript": "Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des nombres de places déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.",
       "fallbackDurationMs": 19000
     },
     {
@@ -46,18 +46,19 @@
     },
     {
       "id": "create",
-      "transcript": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning. Le statut reste Brouillon. Le modèle n’envoie aucun email et n’ouvre aucune inscription : il fournit seulement une base de travail plus rapide à corriger qu’une page vide.",
+      "transcript": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning. Le bandeau indique Prêt à publier, mais l’événement reste en brouillon. Le modèle n’envoie aucun email et n’ouvre aucune inscription : il fournit seulement une base de travail plus rapide à corriger qu’une page vide.",
       "fallbackDurationMs": 22000
     },
     {
       "id": "adapt",
-      "transcript": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur ; on peut aussi supprimer un créneau inutile et en ajouter d’autres. Ajustons par exemple la capacité de la première Buvette pour coller à la taille réelle de l’équipe.",
+      "transcript": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, son nombre de places, ses conditions ou sa couleur ; on peut aussi supprimer un créneau inutile et en ajouter d’autres. Ajustons par exemple le nombre de places de la première Buvette pour coller à la taille réelle de l’équipe.",
       "fallbackDurationMs": 27000
     },
     {
       "id": "result",
-      "transcript": "Vous avez un brouillon de dix créneaux et la capacité de la première Buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l’aperçu bénévole avant de publier. Le modèle propose une base ; vous adaptez le planning réel.",
+      "transcript": "Vous avez un brouillon de dix créneaux et le nombre de places de la première Buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l’aperçu bénévole avant de publier. Le modèle propose une base ; vous adaptez le planning réel.",
       "fallbackDurationMs": 25000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

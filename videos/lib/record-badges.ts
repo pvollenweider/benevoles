@@ -35,7 +35,7 @@ export async function recordBadges(options: { page: Page; base: string; eventId:
   await go()
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { duration: 2400 })
-    await at("Depuis Rapports, ouvrons les options"); await page.getByRole("button", { name: /^Ouvrir les badges/ }).scrollIntoViewIfNeeded()
+    await at("Depuis Documents, ouvrons les options"); await page.getByRole("button", { name: /^Ouvrir les badges/ }).scrollIntoViewIfNeeded()
   })
   await scene("all", async at => {
     await at("La série comporte un badge"); await open(80)

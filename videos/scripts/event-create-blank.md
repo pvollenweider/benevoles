@@ -28,3 +28,8 @@ jusqu’à sa vérification et sa publication.
 - En création, le formulaire est envoyé explicitement ; l’auto-enregistrement commence ensuite.
 - Le téléphone ne doit être obligatoire que s’il est utile.
 - Aucun événement ne peut être publié sans créneau actif.
+
+
+Revue du 15 octobre 2026 (batch 22-1) : narration conservée ; sélecteurs et parcours contrôlés sur 43c1aae7. Les destinations propres à l’événement utilisent les onglets ; le partage se trouve dans Partage.
+
+Les WAV historiques sont absents de ce checkout : le texte conservé est régénéré entièrement avec la voix du manifeste, sans balises de pause.

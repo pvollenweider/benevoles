@@ -90,7 +90,8 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   }
   await go(admin)
   await scene("welcome", async at => {
-    await at("Ouvrons Questions aux bénévoles pour")
+    await at("Ouvrons Questions aux bénévoles")
+    await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
     await tap(page, page.getByRole("link", { name: "Questions", exact: true }))
     await page.getByRole("heading", { name: "Questions aux bénévoles", exact: true }).waitFor()
     await page.getByText(/Ne demandez que ce qui est nécessaire/).scrollIntoViewIfNeeded()
@@ -110,10 +111,10 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
       await at(timing.open)
       await tap(page, page.getByRole("button", { name: "Ajouter une question", exact: true }))
       const form = questionForm(); await form.waitFor()
-      await write(form.getByLabel("Question posée aux bénévoles *", { exact: true }), question.label)
+      await write(form.getByLabel(/^Question posée aux bénévoles/), question.label)
       await at(0.24) /* shared helper: scene-independent */; await tap(page, form.getByLabel("Type de réponse", { exact: true }))
       await form.getByLabel("Type de réponse", { exact: true }).selectOption(question.type)
-      if (question.options.length) await write(form.getByLabel("Choix proposés *", { exact: true }), question.options.join("\n"))
+      if (question.options.length) await write(form.getByLabel(/^Choix proposés/), question.options.join("\n"))
       await at(timing.required)
       const required = form.getByLabel("Réponse obligatoire", { exact: true })
       assert.equal(await required.isChecked(), false)
@@ -184,7 +185,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await tap(page, slot); await tap(page, page.getByRole("button", { name: /^Continuer/ }))
     if (fillIdentity) {
       await completeVolunteerForm(page)
-      assert.equal(await page.getByLabel("Email *", { exact: true }).inputValue(), email)
+      assert.equal(await page.getByLabel(/^Email/).inputValue(), email)
     }
   }
   const submit = async () => {
@@ -239,10 +240,12 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert.equal(snapshot.answers.length, 4)
     await evidence("volunteer-form", { actualSignup: true, accessLinkOnlyByEmail: true, fourAnswersStored: snapshot.answers.length === 4 })
   })
+  let actualPersonalLink = ""
   await scene("email-proof", async at => {
     await at("Ouvrons le nouveau message réellement")
     const message = await options.showConfirmationEmail(page, email)
     assert.equal(message.recipient, email)
+    actualPersonalLink = message.actualPersonalLink
     const link = new URL(message.actualPersonalLink)
     assert.equal(link.origin, base)
     assert(/^\/my\/[^/]+$/.test(link.pathname), "Actual local personal link required")
@@ -309,7 +312,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert(await form.getByLabel("Type de réponse", { exact: true }).isDisabled())
     await form.getByLabel("Type de réponse", { exact: true }).scrollIntoViewIfNeeded()
     await at("Essayons aussi de retirer L")
-    await write(form.getByLabel("Choix proposés *", { exact: true }), "S\nM\nXL")
+    await write(form.getByLabel(/^Choix proposés/), "S\nM\nXL")
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${(await read()).questions.find(item => item.label === "Taille de t-shirt")!.id}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })), 409)
     await page.getByText(/ces choix ne peuvent pas être retirés/).waitFor()
     await at("La réponse d'Aline reste intacte."); await tap(page, form.getByRole("button", { name: "Annuler", exact: true }))
@@ -320,7 +323,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     await at("Rouvrons la question et ajoutons")
     await tap(page, page.getByRole("button", { name: "Modifier la question « Taille de t-shirt »", exact: true }))
     const form = questionForm()
-    await write(form.getByLabel("Choix proposés *", { exact: true }), "S\nM\nL\nXL\nXXL")
+    await write(form.getByLabel(/^Choix proposés/), "S\nM\nL\nXL\nXXL")
     const questionId = (await read()).questions.find(q => q.label === "Taille de t-shirt")!.id
     await at("Enregistrons.")
     await mutate("PATCH", `/api/admin/events/${eventId}/questions/${questionId}`, () => tap(page, form.getByRole("button", { name: "Enregistrer", exact: true })))

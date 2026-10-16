@@ -19,7 +19,7 @@ test("record-volunteer-hours guards", async () => {
   ] as const
   const fixture = (): HoursScenario => ({
     organizationId: "video-hours", organizationName: "Formation — heures et attestations", organizationSlug: "formation-heures", product: { ...product },
-    members: [["aline", "Aline", 480, 360], ["benoit", "Benoît", 120, 0], ["clara", "Clara", 0, 0]].map(([id, name, planned, attested]) => ({ id: `video-hours-${id}`, firstName: String(name), lastName: ({ aline: "Mercier", benoit: "Favre", clara: "Besson" } as Record<string, string>)[String(id)], email: `video.hours.${id}@example.org`, plannedMinutes: Number(planned), attestedMinutes: Number(attested) })),
+    members: [["aline", "Aline", 720, 360], ["benoit", "Benoît", 120, 0], ["clara", "Clara", 0, 0]].map(([id, name, planned, attested]) => ({ id: `video-hours-${id}`, firstName: String(name), lastName: ({ aline: "Mercier", benoit: "Favre", clara: "Besson" } as Record<string, string>)[String(id)], email: `video.hours.${id}@example.org`, plannedMinutes: Number(planned), attestedMinutes: Number(attested) })),
     rows: rows.map(([id, member, event, date, status, shiftStatus, minutes, checked]) => ({ id: `video-hours-registration-${id}`, volunteerId: `video-hours-${member}`, eventId: `video-hours-event-${event}`, localDate: date, status, shiftStatus, minutes, checkedInAt: checked ? `${date}T08:00:00Z` : null })),
     confirmedSummary: { distinct: 2, firstTime: 1, returning: 1, confirmed: 3, withPresence: 1, plannedMinutes: 360, attestedMinutes: 120 },
   })

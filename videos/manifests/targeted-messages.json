@@ -34,7 +34,7 @@
     },
     {
       "id": "audiences",
-      "transcript": "Commence par le public. Tous les bénévoles inscrits vise les inscriptions confirmées. Pour un poste, choisis par exemple la buvette ; pour un créneau, précise aussi la date et l'horaire. La liste d'attente vise les personnes qui attendent une place, y compris celles qui ont une offre en cours. Enfin, les invités sans créneau confirmé permettent de reprendre contact avec ceux qui n'ont pas encore de confirmation. Regarde le compteur après chaque choix.",
+      "transcript": "Commencez par le public. Tous les bénévoles inscrits vise les inscriptions confirmées. Pour un poste, choisissez par exemple la buvette ; pour un créneau, précisez aussi la date et l'horaire. La liste d'attente vise les personnes qui attendent une place, y compris celles qui ont une offre en cours. Enfin, les invités sans créneau confirmé permettent de reprendre contact avec ceux qui n'ont pas encore de confirmation. Regardez le compteur après chaque choix.",
       "fallbackDurationMs": 45000
     },
     {
@@ -91,7 +91,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous écrivez à un public précis de votre événement, réutilisez un modèle de message avec des variables et vérifiez l'aperçu avant un envoi réel.",
     "steps": [
-      "Depuis l'événement, ouvrez la page des messages et choisissez le public : tous les inscrits, un poste, un créneau, la liste d'attente ou les invités sans créneau.",
+      "Dans Communication, choisissez le public : tous les inscrits, un poste, un créneau, la liste d'attente ou les invités sans créneau.",
       "Vérifiez le compteur de destinataires après chaque choix.",
       "Créez un modèle dans les modèles de messages de l'organisation, avec un nom, un objet et un texte court.",
       "Dans le message, choisissez le modèle puis cliquez sur « Utiliser ce modèle » ; « Rétablir le texte précédent » récupère votre version.",

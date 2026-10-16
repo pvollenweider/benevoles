@@ -32,3 +32,12 @@ Retrouver ses inscriptions sans créer de compte, protéger sa session sur un ap
 ## Observation de capture
 
 Le parcours de démonstration répété sur le serveur de développement a atteint la limite réelle de lecture du lien (10 requêtes par IP et par heure), avec réponse 429 « Trop de tentatives ». Le recorder sépare les parcours récupération et disponibilités en réinitialisant uniquement ce compteur de lecture dans la base vidéo, avant le parcours disponibilités et avant la vue organisateur. Il ne réinitialise pas les compteurs de renvoi : leur limitation est réellement montrée. La vidéo illustre plusieurs usages, pas la preuve qu'on peut enchaîner tous ces allers-retours en production sans rencontrer cette limite. Aucun changement du produit n'a été effectué.
+
+
+## Révision du 2026-10-16 — lot 22-7
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (correction #1013). Les exemples de chevauchement utilisent des postes ordinaires non cumulables. Le formulaire public conserve « convention des bénévoles ». La page personnelle peut aussi afficher « Mes réponses » et « S’inscrire à d’autres créneaux ».
+
+Narration conservée, audio restauré à contrôler par empreintes ou ASR indépendante avant réutilisation.
+
+Le WAV continu restauré correspond au texte. Sa frontière organizer/result coupait « Tes habitudes changent ? » : frontière replacée dans le silence réel 149,802–151,226 s, à 150,5 s. ASR indépendante des deux chapitres redécoupés : texte complet et bon chapitre, aucune nouvelle voix.

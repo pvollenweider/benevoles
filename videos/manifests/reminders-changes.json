@@ -30,12 +30,12 @@
     },
     {
       "id": "manual-message",
-      "transcript": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : retrouve-nous au stand quinze minutes avant ton horaire, et merci pour ton aide. Le texte s'enregistre automatiquement : attendez la confirmation Modifications enregistrées avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
+      "transcript": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : « Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide ! » Le texte s'enregistre automatiquement : attendez la confirmation Modifications enregistrées avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "manual-send",
-      "transcript": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
+      "transcript": "Dans Communication, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
       "fallbackDurationMs": 47000
     },
     {
@@ -73,7 +73,7 @@
     "summary": "Dans cette vidéo, vous préparez le message de rappel d'un événement, réglez les rappels automatiques et voyez ce que reçoivent les bénévoles quand un créneau change ou est annulé.",
     "steps": [
       "Dans les réglages de l'événement, écrivez le message de rappel et attendez la confirmation de l'enregistrement automatique.",
-      "Depuis la page de l'événement, cliquez sur « Envoyer le rappel », puis confirmez l'envoi.",
+      "Dans Communication, cliquez sur « Envoyer le rappel », puis confirmez l'envoi.",
       "Dans Paramètres, puis Emails, choisissez les rappels automatiques de l'organisation et enregistrez.",
       "Modifiez l'horaire d'un créneau : les bénévoles confirmés reçoivent un message avec le nouvel horaire.",
       "Pour annuler un créneau entier, lisez le récapitulatif avant de confirmer."
@@ -84,5 +84,6 @@
       "Fermer un créneau aux nouvelles inscriptions ne l'annule pas.",
       "Envoyé ne veut pas dire lu : gardez un contact direct pour une consigne urgente."
     ]
-  }
+  },
+  "continuousPauseTags": false
 }

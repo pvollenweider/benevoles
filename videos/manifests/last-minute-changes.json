@@ -32,12 +32,12 @@
     },
     {
       "id": "withdrawal",
-      "transcript": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel : le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Ne partage pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
+      "transcript": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel, elle annule son inscription. C'est un retrait individuel : le créneau existe toujours. Revenons dans les inscriptions côté organisation. Son inscription n'est plus une confirmation active. Comme une personne attendait cette place, l'application lui propose de la prendre. Ouvrons le vrai email reçu par Nicolas. On y retrouve le créneau et un délai de réponse. Ne partagez pas le lien personnel d'Aline pour demander à quelqu'un de la remplacer.",
       "fallbackDurationMs": 50000
     },
     {
       "id": "offer",
-      "transcript": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit répondre dans le délai de son offre. Ouvrons son lien et acceptons la place dans cet exemple. Puis vérifions le statut dans les inscriptions. Maintenant seulement, sa participation est confirmée. Si une personne ne répond pas ou refuse, ne pars pas du principe qu'elle sera là. Les états de la liste d'attente permettent de distinguer ce qui est proposé de ce qui est vraiment accepté.",
+      "transcript": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit répondre dans le délai de son offre. Ouvrons son lien et acceptons la place dans cet exemple. Puis vérifions le statut dans les inscriptions. Maintenant seulement, sa participation est confirmée. Si une personne ne répond pas ou refuse, ne partez pas du principe qu'elle sera là. Les états de la liste d'attente permettent de distinguer ce qui est proposé de ce qui est vraiment accepté.",
       "fallbackDurationMs": 48000
     },
     {
@@ -47,7 +47,7 @@
     },
     {
       "id": "availability",
-      "transcript": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau ; il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifie ces conditions et échange avec la personne. Une disponibilité n'est pas un consentement à être déplacée.",
+      "transcript": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque. Ce renseignement aide à lui proposer un créneau ; il ne l'inscrit pas automatiquement et ne garantit pas qu'elle soit libre ce jour-là. Regardons aussi ses inscriptions pour éviter un chevauchement. Si la mission demande un âge ou une compétence particulière, vérifiez ces conditions et échangez avec la personne. Une disponibilité n'est pas un consentement à être déplacée.",
       "fallbackDurationMs": 49000
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "id": "schedule",
-      "transcript": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contacte aussi les personnes directement.",
+      "transcript": "Le matériel arrive plus tard : nous devons décaler un horaire. Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier. Décalons les deux heures, puis enregistrons. L'application prévient les personnes déjà confirmées par un email de changement. Lisons l'ancien et le nouvel horaire dans le message reçu, puis revenons au planning. Un email envoyé ne prouve pas que tout le monde l'a lu. Si le changement est urgent, contactez aussi les personnes directement.",
       "fallbackDurationMs": 52000
     },
     {

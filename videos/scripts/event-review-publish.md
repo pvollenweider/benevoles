@@ -33,3 +33,10 @@ publication et communication.
 
 - Un point obligatoire bloque la publication ; une recommandation facultative ne la bloque pas.
 - Toujours relire la confirmation et l’email simulé.
+
+
+Revue du 15 octobre 2026 (batch 22-1) : narration conservée ; sélecteurs et parcours contrôlés sur 43c1aae7. Les destinations propres à l’événement utilisent les onglets ; le partage se trouve dans Partage.
+
+Les WAV historiques sont absents de ce checkout : le texte conservé est régénéré entièrement avec la voix du manifeste, sans balises de pause.
+
+Correction du 15 octobre 2026 : la phrase « Un point obligatoire manquant bloque » attend maintenant son repère avant de cadrer le bouton Publier ; les recommandations facultatives reviennent à leur propre phrase. Une seule reprise narrée est autorisée pour ce décalage de cadrage. La taille M est réellement cochée (preuve de la première prise : preview-form +14 s) ; un contrôle explicite le vérifie après le clic.

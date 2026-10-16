@@ -31,3 +31,13 @@ les événements publics.
 - Le logo est facultatif et ne remplace jamais le nom écrit. Une copie de document déjà téléchargée n’est pas réécrite après son retrait.
 - Un événement non répertorié reste accessible par son lien direct.
 - Modifier l’identité de l’organisation ne renomme pas automatiquement ses événements.
+
+
+## Révision du 2026-10-16 — lot 22-6
+
+Relecture du produit `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG [Unreleased], PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 (onglets), #1022 (correction #1013). Navigation par onglets, libellés et repères de phrases contrôlés.
+
+Texte de narration conservé ; réutilisation soumise au contrôle des empreintes ou à une reconnaissance indépendante du WAV restauré.
+
+Bilan final du lot 22-6 (2026-10-16) : READY ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Durée 162.24 s, musique 15.5–19.1 LU sous la voix, zéro tutoiement du spectateur dans le VTT final. Voir le rapport et les preuves du rendu local.
+

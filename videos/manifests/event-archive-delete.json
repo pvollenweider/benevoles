@@ -64,5 +64,6 @@
       "transcript": "L’événement disparaît de la liste après validation. Utilisez donc l’archivage comme état normal de fin de vie, et réservez la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
       "fallbackDurationMs": 20000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }
