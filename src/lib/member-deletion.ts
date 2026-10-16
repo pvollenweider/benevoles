@@ -8,7 +8,7 @@
  * cancelled Registration row, kept for history; nothing database-wide is ever named "deleted"
  * registration status in this codebase, but the issue's own wording covers whatever status a row
  * can hold). A merged tombstone (#600, `mergedIntoId` set) is never offered either: it has no
- * registrations of its own (merge reassigns them all) but is purged by retention instead, so
+ * registrations of its own (merge reassigns them all) but is deleted by the daily cleanup once its retention delay has passed instead, so
  * deleting it by hand would race that cron for nothing.
  *
  * Deliberately pure (no Prisma import): used both server-side (the route, via
@@ -17,12 +17,14 @@
  * for every client component that imports this module.
  */
 
+import { RETENTION_DAYS } from "./retention"
+
 export type MemberDeletionEligibility =
   | { eligible: true }
   | { eligible: false; reason: string }
 
 export const MEMBER_DELETION_REASON = {
-  tombstone: "C'est une fiche fusionnée : elle sera supprimée automatiquement par la purge de rétention.",
+  tombstone: `C'est une fiche fusionnée : elle est supprimée automatiquement ${RETENTION_DAYS.mergedMemberTombstone} jours après la fusion.`,
   active: "Cette fiche est encore active. Désactivez-la d'abord.",
   hasRegistrations: "Cette fiche a des inscriptions, quel que soit leur statut : elles doivent rester dans l'historique des événements.",
 } as const

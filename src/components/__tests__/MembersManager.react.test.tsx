@@ -278,3 +278,51 @@ describe("MembersManager — row actions wrap instead of overflowing", () => {
     }
   })
 })
+
+// #1014: absorbed and erased records, behind their own filter, each with one sentence.
+describe("MembersManager — absorbed and erased records", () => {
+  const members = [
+    member({ id: "keep", firstName: "Marie", lastName: "Dupont" }),
+    member({ id: "old", firstName: "Paul", lastName: "Ancien", active: false, deletion: { eligible: true } }),
+    member({ id: "tomb", firstName: "", lastName: "", email: null, active: false, record: { kind: "merged", keptId: "keep", keptName: "Marie Dupont", deletionDay: "2026-11-14" } }),
+    // Eligible for deletion by the rule alone (inactive, no registration): the row still offers no « Supprimer ».
+    member({ id: "erased", firstName: "Bénévole", lastName: "effacé", email: null, active: false, deletion: { eligible: true }, record: { kind: "erased", erasedDay: "2026-03-03" } }),
+  ]
+  const setup = () => render(<MembersManager initialMembers={members} allTags={[]} defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }} />)
+
+  it("are neither listed nor counted by default, and « Inclure inactifs » shows only ordinary inactive members", () => {
+    setup()
+    expect(screen.getByText("2 membres")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Inclure inactifs" }))
+    expect(screen.getByRole("link", { name: "Activité de Paul Ancien" })).toBeInTheDocument()
+    expect(screen.queryByText("Fiche fusionnée")).toBeNull()
+    expect(screen.queryByText(/Données effacées/)).toBeNull()
+  })
+
+  it("their own checkbox, with their number, shows the two row states with their explanation", () => {
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Inclure les fiches fusionnées ou effacées (2)" }))
+    const mergedRow = screen.getByText("Fiche fusionnée").closest("tr")!
+    expect(mergedRow).toHaveTextContent("Fusionnée dans Marie Dupont · supprimée automatiquement à partir du 14 novembre 2026")
+    expect(within(mergedRow).getByRole("link", { name: "Marie Dupont" })).toHaveAttribute("href", "/admin/members/keep")
+    expect(within(mergedRow).getByText("14 novembre 2026").tagName).toBe("TIME")
+    expect(within(mergedRow).getByRole("link", { name: "Activité de la fiche fusionnée dans Marie Dupont" })).toHaveAttribute("href", "/admin/members/tomb")
+
+    const erasedRow = screen.getByText("Bénévole effacé").closest("tr")!
+    expect(erasedRow).toHaveTextContent("Données effacées · gardée pour l'historique (effectifs et heures)")
+    expect(within(erasedRow).getByRole("link", { name: "Activité de la fiche effacée le 3 mars 2026" })).toBeInTheDocument()
+
+    // Neither can be edited, deactivated or deleted: no dead buttons on their rows.
+    for (const row of [mergedRow, erasedRow]) expect(within(row).queryByRole("button")).toBeNull()
+  })
+
+  it("the checkbox is absent when there is no such record", () => {
+    render(<MembersManager initialMembers={[members[0], members[1]]} allTags={[]} defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }} />)
+    expect(screen.queryByRole("checkbox", { name: /fusionnées ou effacées/ })).toBeNull()
+  })
+
+  it("a deep-linked edit never opens for an archived record", () => {
+    render(<MembersManager initialMembers={members} allTags={[]} initialEditId="erased" defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }} />)
+    expect(screen.queryByRole("dialog")).toBeNull()
+  })
+})

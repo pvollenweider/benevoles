@@ -67,7 +67,9 @@ describe("MemberEraseAction (#516)", () => {
     const notice = await screen.findByText(/ont été effacées/)
     expect(notice).toHaveFocus()
     // The API's date, in the organisation's zone: the same text the page shows after its refresh.
-    expect(notice).toHaveTextContent("Effacement du 6 octobre 2026.")
+    expect(notice).toHaveTextContent("ont été effacées le 6 octobre 2026.")
+    // Why the record stays (#1014).
+    expect(notice).toHaveTextContent("Elle reste pour l'historique : ses inscriptions comptent toujours dans les effectifs et les heures, sans nom.")
     expect(screen.queryByRole("alertdialog")).toBeNull()
     expect(screen.queryByRole("button", { name: /Effacer les données/ })).toBeNull()
     expect(refresh).toHaveBeenCalled()
@@ -85,7 +87,7 @@ describe("MemberEraseAction (#516)", () => {
 
   it("an erased record shows the notice with its date, no button", () => {
     render(<MemberEraseAction memberId="vol-1" memberName="Bénévole effacé" erasure={{ kind: "erased", erasedAt: "2026-10-05T10:00:00.000Z" }} timeZone="Europe/Zurich" />)
-    expect(screen.getByText(/ont été effacées\. .*Effacement du 5 octobre 2026\./)).toBeInTheDocument()
+    expect(screen.getByText(/ont été effacées le 5 octobre 2026\. Elle reste pour l\'historique/)).toBeInTheDocument()
     expect(screen.queryByRole("button")).toBeNull()
   })
 

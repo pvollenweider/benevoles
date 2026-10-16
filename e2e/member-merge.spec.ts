@@ -68,4 +68,15 @@ test("merge two same-name members: the preview shows the move, the kept member e
   // member's row still shows this name.
   await page.goto("/admin/members")
   await expect(page.getByRole("row", { name: new RegExp(`Jean ${lastName}`) })).toHaveCount(1)
+
+  // #1014: the absorbed record is behind its own filter, saying where it went and when it goes.
+  const archivedBox = page.getByRole("checkbox", { name: /^Inclure les fiches fusionnées ou effacées \(\d+\)$/ })
+  await waitForHydration(archivedBox)
+  await archivedBox.check()
+  const mergedRow = page.getByRole("row").filter({ has: page.getByRole("link", { name: `Jean ${lastName}`, exact: true }) })
+  await expect(mergedRow).toContainText(new RegExp(`Fusionnée dans Jean ${lastName} · supprimée automatiquement à partir du \\d{1,2} \\S+ \\d{4}`))
+  await expect(mergedRow.getByRole("link", { name: `Jean ${lastName}`, exact: true })).toHaveAttribute("href", `/admin/members/${keep.id}`)
+  await page.goto(`/admin/members/${absorb.id}`)
+  await expect(page.getByRole("heading", { level: 1, name: `Activité de la fiche fusionnée dans Jean ${lastName}` })).toBeVisible()
+  await expect(page.getByText("Elle est gardée 30 jours après la fusion", { exact: false })).toBeVisible()
 })
