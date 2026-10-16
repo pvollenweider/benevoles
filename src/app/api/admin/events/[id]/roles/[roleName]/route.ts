@@ -12,6 +12,8 @@ import { capacityPlan, roleMinimumPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 import { leaderRenamePlan } from "@/lib/sector-leader-rename"
+import { isCivilDate } from "@/lib/civil-date"
+import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -50,7 +52,13 @@ const updateSchema = z.object({
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
   /** « Cumulable avec un autre créneau » (#986): the role's shifts may overlap any other shift of a volunteer. */
   overlapAllowed: z.boolean().optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined, { message: "Rien à modifier." })
+  /** Label copied onto the live shifts, with the places and minimum (#1017). */
+  label: z.string().trim().min(1).max(200).optional(),
+  /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
+  date: z.string().refine(isCivilDate).optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined, { message: "Rien à modifier." })
+  // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -65,7 +73,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -75,13 +83,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
-  // Places and minimum (#398, #949), planned before anything is written: a minimum above a shift's
-  // places refuses the whole request, with its message, rather than half-applying it.
-  const live = shifts.filter((s) => s.status !== "cancelled")
+  // Places, minimum and label (#398, #949, #1017), planned before anything is written: a minimum
+  // above a shift's places refuses the whole request, with its message, rather than half-applying it.
+  // The live shifts of the day given, or of the whole event.
+  const dayOf = (d: Date | string | null | undefined) => (d ? new Date(d).toISOString().slice(0, 10) : "")
+  const live = posteApplyTargets(
+    shifts.map((s) => ({ ...s, roleName: decodedRole, date: dayOf(s.date) })),
+    decodedRole, date === undefined ? "event" : "day", date ?? "",
+  )
+  if (date !== undefined && live.length === 0) return NextResponse.json({ error: "Aucun créneau du poste ce jour." }, { status: 404 })
   const plan = capacity !== undefined
     ? capacityPlan(live.map((s) => ({ id: s.id, capacity: s.capacity, active: s._count.registrations })), capacity)
     : { updates: [] as { id: string; capacity: number }[], keptHigher: [] as string[] }
@@ -199,17 +213,23 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   let keptHigher = 0
   let capacityUpdated = 0
-  if (capacity !== undefined || minVolunteers !== undefined) {
+  if (capacity !== undefined || minVolunteers !== undefined || label !== undefined) {
     keptHigher = plan.keptHigher.length
     capacityUpdated = plan.updates.length
-    // Places and minimum of a shift in one update: the database checks minimum ≤ places per row.
+    // Places, minimum and label of a shift in one update (the database checks minimum ≤ places per
+    // row), every shift in one transaction.
     const minAfter = new Map(minPlan.updates.map((u) => [u.id, u.minVolunteers]))
-    const touched = live.filter((s) => capacityAfter.has(s.id) || minAfter.has(s.id))
+    const labelAfter = new Map(labelUpdates(live, label).map((u) => [u.id, u.label]))
+    const touched = live.filter((s) => capacityAfter.has(s.id) || minAfter.has(s.id) || labelAfter.has(s.id))
     await db.$transaction(async (tx) => {
       for (const s of touched) {
         await tx.shift.update({
           where: { id: s.id },
-          data: { ...(capacityAfter.has(s.id) ? { capacity: capacityAfter.get(s.id) } : {}), ...(minAfter.has(s.id) ? { minVolunteers: minAfter.get(s.id) } : {}) },
+          data: {
+            ...(capacityAfter.has(s.id) ? { capacity: capacityAfter.get(s.id) } : {}),
+            ...(minAfter.has(s.id) ? { minVolunteers: minAfter.get(s.id) } : {}),
+            ...(labelAfter.has(s.id) ? { label: labelAfter.get(s.id) } : {}),
+          },
         })
       }
     })
@@ -219,12 +239,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         changes: {
           ...(capacityAfter.has(s.id) ? { capacity: { from: s.capacity, to: capacityAfter.get(s.id) } } : {}),
           ...(minAfter.has(s.id) ? { minVolunteers: { from: s.minVolunteers, to: minAfter.get(s.id) } } : {}),
+          ...(labelAfter.has(s.id) ? { label: { from: s.label, to: labelAfter.get(s.id) } } : {}),
         },
       })
     }
   }
 
-  return NextResponse.json({ success: true, updated: capacity !== undefined ? capacityUpdated : shifts.length, keptHigher })
+  // The shifts and days the places, minimum and label covered (#1017), for the popover's result.
+  const covered = posteApplyCount(live)
+  return NextResponse.json({ success: true, updated: capacity !== undefined ? capacityUpdated : shifts.length, keptHigher, shifts: covered.shifts, days: covered.days })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {

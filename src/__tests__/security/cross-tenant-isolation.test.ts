@@ -758,6 +758,37 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with a label and a day (#1017) returns 404 for an org-B event, updating nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const db = setupGuard() // event.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { capacity: 4, label: "Bar soir", date: "2026-07-04" }),
+      { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect($transaction).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with a label (#1017) reads only the org's shifts of the event", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const update = vi.fn().mockResolvedValue({})
+    const findMany = vi.fn().mockResolvedValue([{ id: "s1", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), colorKey: null, capacity: 2, minVolunteers: null, status: "open", _count: { registrations: 0 } }])
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { findMany } })
+    Object.assign(db, { $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }) })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { capacity: 3, label: "Bar soir" }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(findMany.mock.calls[0][0].where).toEqual({ eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } })
+    expect(update).toHaveBeenCalledWith({ where: { id: "s1" }, data: { capacity: 3, label: "Bar soir" } })
+  })
+
   it("PATCH /api/admin/events/[id]/roles/[roleName] with overlapAllowed (#986) returns 404 for an org-B event, updating nothing", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const updateMany = vi.fn()
