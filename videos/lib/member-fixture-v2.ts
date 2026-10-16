@@ -34,13 +34,14 @@ export function exactMemberSeedV2(person: Partial<SeedIdentity>) {
   const { createdAt, ...fields } = projection(person)
   return Number.isFinite(new Date((createdAt as Date | string | undefined) ?? "").getTime()) && (equal(fields, expectedMemberV2(index)) || equal(fields, expectedMemberV2(index, true)))
 }
-/** Legacy names are admissible only to authorize migration, never a new capture. */
+/** Exact known no-email seeds may authorize a reset when a tracked receipt is stale.
+ * A new capture still requires a fresh complete 36-member seed proof. */
 export function exactLegacyM2ForMigration(person: Partial<SeedIdentity>) {
   if (person.id !== "video-member-management-2") return false
   const normal = { ...expectedMemberV2(2), lastName: "Morel 3" }
   const invited = { ...expectedMemberV2(2, true), lastName: "Sansmail" }
   const { createdAt, ...fields } = projection(person)
-  return Number.isFinite(new Date(createdAt as string ?? "").getTime()) && (equal(fields, normal) || equal(fields, invited))
+  return Number.isFinite(new Date(createdAt as string ?? "").getTime()) && (equal(fields, normal) || equal(fields, invited) || equal(fields, expectedMemberV2(2)) || equal(fields, expectedMemberV2(2, true)))
 }
 export function createSeedProofV2(members: SeedIdentity[], provenance: SeedProofV2["provenance"], observedAt: string): SeedProofV2 {
   assert(members.length === 36 && new Set(members.map(member => member.id)).size === 36 && members.every(exactMemberSeedV2), "Only all 36 exact natural-name seed identities can be proven")
@@ -50,8 +51,21 @@ export function createSeedProofV2(members: SeedIdentity[], provenance: SeedProof
 }
 export function validateSeedProofV2(proof: SeedProofV2, now = Date.now()) {
   assert(proof?.schemaVersion === 2 && proof.scenario === "natural-member-seeds" && ["actual-seed-write", "exact-v1-migration"].includes(proof.provenance), "Natural-name creation or migration proof required")
-  const expected = createSeedProofV2(proof.members, proof.provenance, proof.observedAt)
-  assert(proof.sha256 === expected.sha256 && Date.parse(proof.observedAt) <= now + 60_000 && Date.parse(proof.observedAt) >= now - 30 * 86_400_000, "Seed proof hash/date invalid")
+  // Read historical receipts for guarded reset after #1039. New receipts and
+  // captures still require the current fixture through createSeedProofV2.
+  const historical = Array.isArray(proof.members) && proof.members.length === 36 && new Set(proof.members.map(member => member.id)).size === 36 && proof.members.every(person => {
+    const match = /^video-member-management-(\d+)$/.exec(person.id)
+    if (!match || Number(match[1]) > 35 || String(Number(match[1])) !== match[1]) return false
+    const index = Number(match[1])
+    const { createdAt, ...fields } = projection(person)
+    return Number.isFinite(new Date(createdAt as string).getTime()) && new Date(createdAt as string).getTime() <= Date.parse(proof.observedAt) && [false, true].some(invitation => {
+      const expected = expectedMemberV2(index, invitation)
+      return equal(fields, { ...expected, lastName: index === 23 ? "Dutoit" : index === 30 ? "Gautier" : expected.lastName, email: index === 2 ? null : `video.membre.${index}@example.org` })
+    })
+  })
+  const { sha256, ...payload } = proof
+  const expected = historical ? { sha256: digest(payload) } : createSeedProofV2(proof.members, proof.provenance, proof.observedAt)
+  assert(sha256 === expected.sha256 && Date.parse(proof.observedAt) <= now + 60_000 && Date.parse(proof.observedAt) >= now - 30 * 86_400_000, "Seed proof hash/date invalid")
   return proof
 }
 export function ownsNaturalMemberSeed(person: Partial<SeedIdentity>, proof: SeedProofV2 | null, now = Date.now()) {

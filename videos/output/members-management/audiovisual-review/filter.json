@@ -1,50 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:42:21.644Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:34:28.087Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "cb819875782dfc5e3535438c031c2f8b2559f75fb319e5107d10f6e5ab320977",
-  "clipSha256": "d979a76b7da375beead7d69114e628f652be78fecec4b742659af78d86755069",
+  "clipSha256": "abe1e115585ffe932b625a53a7222754c87e0f1637b2eb4960ba697e17d32cf9",
   "scene": "filter",
   "review": {
     "heardOpening": "Avec le filtre d'étiquettes",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie",
-        "visibleSeconds": 2.8,
-        "visible": "Sélection de l'étiquette « accueil » qui filtre la liste des membres",
+        "spokenSeconds": 2.2,
+        "spoken": "afficher seulement les personnes d'une catégorie",
+        "visibleSeconds": 3,
+        "visible": "Sélection de l'étiquette 'accueil' dans le filtre et affichage de la liste filtrée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5.4,
         "spoken": "puis revenir à Toutes les étiquettes",
-        "visibleSeconds": 6.3,
-        "visible": "Réinitialisation du filtre sur « Toutes les étiquettes »",
+        "visibleSeconds": 7.5,
+        "visible": "Réinitialisation du menu déroulant sur 'Toutes les étiquettes'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 7.6,
         "spoken": "Les en-têtes permettent aussi de trier la liste",
-        "visibleSeconds": 9.8,
-        "visible": "Clic sur l'en-tête « Prénom » pour trier la liste par ordre alphabétique",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 10.4,
-        "spoken": "Les heures prévues comptent les créneaux confirmés",
-        "visibleSeconds": 11.2,
-        "visible": "Mise en évidence circulaire de la colonne « Heures prévues »",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17.1,
-        "spoken": "Les heures attestées comptent les créneaux passés",
-        "visibleSeconds": 17.5,
-        "visible": "Mise en évidence circulaire de la colonne « Heures attestées »",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur l'en-tête de colonne pour réorganiser la liste alphabétiquement par nom",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse claire, posée et parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix posée, fluide et parfaitement intelligible, calée sur les manipulations de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

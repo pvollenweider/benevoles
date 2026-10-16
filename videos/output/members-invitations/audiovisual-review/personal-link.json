@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:25:47.385Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
-  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
-  "clipSha256": "3c28c6f0954d1267135c827232bf810b5797103f6155846573a61a8414009a7a",
+  "reviewedAt": "2026-10-16T16:46:53.906Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "promptSha256": "325068673acc34a176685482ae957c02709f948ffb19cb7e5d851339021aa2ae",
+  "clipSha256": "77cec8f3625a38eca8794fd488792971e1713a733fd00b60bec8021b3a4ac0cb",
   "scene": "personal-link",
   "review": {
     "heardOpening": "Ouvrons le lien reçu par Aline",
@@ -12,31 +12,31 @@
         "spokenSeconds": 0,
         "spoken": "Ouvrons le lien reçu par Aline.",
         "visibleSeconds": 1,
-        "visible": "Ouverture de la page de la Fête du village de Montvert depuis l'e-mail",
+        "visible": "Ouverture de la page de l'événement Fête du Village de Montvert",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
-        "spoken": "choisir un créneau disponible",
-        "visibleSeconds": 7.5,
-        "visible": "Sélection du créneau Démontage sur la frise et validation avec le bouton Continuer",
+        "spokenSeconds": 6,
+        "spoken": "choisir un créneau disponible.",
+        "visibleSeconds": 6.5,
+        "visible": "Sélection d'un créneau Démontage le dimanche 25 octobre et validation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "compléter les informations demandées",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage des coordonnées préremplies d'Aline et cochage des options/conditions",
+        "spokenSeconds": 8,
+        "spoken": "Elle complète ensuite les informations demandées.",
+        "visibleSeconds": 8,
+        "visible": "Affichage du formulaire d'informations prérempli pour Aline Mercier puis défilement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15,
-        "spoken": "jusqu'à la confirmation",
+        "spokenSeconds": 13.5,
+        "spoken": "jusqu'à la confirmation.",
         "visibleSeconds": 13,
-        "visible": "Écran 'Inscription confirmée !' affiché après clic sur Confirmer mon inscription",
+        "visible": "Page Inscription confirmée affichée à l'écran",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

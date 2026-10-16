@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:25:52.395Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
-  "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
-  "clipSha256": "1ad59d265e0e7b18dc97728a9f069aefd2563901733747dbd50def6fdb69ce76",
+  "reviewedAt": "2026-10-16T16:47:21.079Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "promptSha256": "22f06f085740e585aac7634731c12f2654ebc63acac718bfbba3ea124f3661ad",
+  "clipSha256": "b239b6567c523c65ea73088436c37f1bb0dfdcbdb241758df82a1c61005284ad",
   "scene": "status",
   "review": {
-    "heardOpening": "De retour dans Invitations, Aline a maintenant une participation confirmée.",
+    "heardOpening": "De retour dans Invitations, Aline a maintenant",
     "checkpoints": [
       {
-        "spokenSeconds": 1.1,
-        "spoken": "De retour dans Invitations",
-        "visibleSeconds": 1.1,
-        "visible": "La page Invitations de l'événement est affichée à l'écran",
+        "spokenSeconds": 1,
+        "spoken": "De retour dans Invitations, Aline a maintenant une participation confirmée.",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Invitations affiche la ligne Aline Mercier avec le statut vert Participation confirmée.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "Aline a maintenant une participation confirmée",
-        "visibleSeconds": 3.2,
-        "visible": "La ligne Aline Mercier affiche le statut vert « Participation confirmée »",
+        "spokenSeconds": 5.2,
+        "spoken": "D'autres personnes restent sans créneau confirmé.",
+        "visibleSeconds": 5.2,
+        "visible": "Les lignes Nicolas Renaud et Sébastien Perret affichent le statut Sans réponse.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "D'autres personnes restent sans créneau confirmé",
-        "visibleSeconds": 6.3,
-        "visible": "Les membres Nicolas Renaud et Sébastien Perret sont listés avec le statut « Sans réponse » et le bouton « Relancer les 3 sans créneau » est affiché",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17,
-        "spoken": "Le tableau sert à suivre la participation",
-        "visibleSeconds": 17,
-        "visible": "Le tableau récapitulatif des invités et statuts reste visible",
+        "spokenSeconds": 16.2,
+        "spoken": "Vous utilisez ce tableau pour suivre la participation.",
+        "visibleSeconds": 16.2,
+        "visible": "Le tableau récapitulatif des membres et de leurs statuts de participation reste visible à l'écran.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et bien articulée, avec un fond musical discret."
+      "observation": "Voix off masculine claire, fluide et posée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

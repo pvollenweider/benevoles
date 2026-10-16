@@ -1,185 +1,185 @@
 WEBVTT
 
-00:00:00.136 --> 00:00:05.518
+00:00:00.189 --> 00:00:05.871
 Vous utilisez Benevol pour la première
 fois et vous avez déjà une liste de
 
-00:00:05.518 --> 00:00:10.130
+00:00:05.871 --> 00:00:10.741
 bénévoles ? L'import évite de ressaisir
 chaque personne. Il peut aussi compléter
 
-00:00:10.130 --> 00:00:14.359
+00:00:10.741 --> 00:00:15.205
 une liste existante. Nous allons utiliser
 quarante fiches fictives, vérifier les
 
-00:00:14.359 --> 00:00:18.972
+00:00:15.205 --> 00:00:20.075
 erreurs, puis confirmer seulement quand
 tout est clair. Bien sûr, vous pouvez
 
-00:00:18.972 --> 00:00:22.047
+00:00:20.075 --> 00:00:23.322
 toujours créer les membres manuellement
 avec Nouveau membre.
 
-00:00:22.500 --> 00:00:28.232
+00:00:23.777 --> 00:00:29.489
 Le fichier peut être un CSV ou un Excel.
 La première ligne contient les noms des
 
-00:00:28.232 --> 00:00:33.247
+00:00:29.489 --> 00:00:34.486
 colonnes : prénom, nom, email, téléphone
 et tags. Le prénom et le nom sont
 
-00:00:33.247 --> 00:00:37.903
+00:00:34.486 --> 00:00:39.127
 nécessaires. Une fiche sans email reste
 possible, mais elle ne recevra pas de
 
-00:00:37.903 --> 00:00:42.202
+00:00:39.127 --> 00:00:43.410
 messages par email. Les tags se séparent
 par des virgules. Les disponibilités,
 
-00:00:42.202 --> 00:00:46.859
+00:00:43.410 --> 00:00:48.051
 elles, se renseignent ensuite dans la
 fiche : elles ne sont pas importées.
 
-00:00:47.313 --> 00:00:52.816
+00:00:48.504 --> 00:00:53.769
 Ouvrez Importer des membres et choisissez
 le fichier à vérifier. Si un email existe
 
-00:00:52.816 --> 00:00:57.532
+00:00:53.769 --> 00:00:58.282
 déjà, l'option Ignorer conserve la fiche
 actuelle. Cliquez sur Analyser le fichier.
 
-00:00:57.532 --> 00:01:01.856
+00:00:58.282 --> 00:01:02.419
 Le récapitulatif montre les créations
 prévues, les personnes déjà présentes et
 
-00:01:01.856 --> 00:01:06.572
+00:01:02.419 --> 00:01:06.932
 les lignes en erreur. Les colonnes
-reconnues et les tags sont également
+reconnues et les étiquettes sont également
 
-00:01:06.572 --> 00:01:11.682
-indiqués. Rien n'est encore enregistré :
+00:01:06.932 --> 00:01:11.821
+indiquées. Rien n'est encore enregistré :
 vous pouvez prendre le temps de vérifier.
 
-00:01:12.135 --> 00:01:17.557
+00:01:12.275 --> 00:01:17.417
 Ici, la ligne six n'a pas de prénom, et la
 ligne sept contient une adresse email
 
-00:01:17.557 --> 00:01:22.978
+00:01:17.417 --> 00:01:22.560
 invalide. La ligne neuf reprend l'email de
 la ligne huit : ce doublon dans le fichier
 
-00:01:22.978 --> 00:01:27.045
+00:01:22.560 --> 00:01:26.417
 est également signalé. Ces lignes ne
 seront pas importées. Corrigez le fichier
 
-00:01:27.045 --> 00:01:31.789
+00:01:26.417 --> 00:01:30.917
 d'origine plutôt que de laisser une erreur
 de contact. Deux personnes portant le même
 
-00:01:31.789 --> 00:01:35.516
+00:01:30.917 --> 00:01:34.452
 nom ne sont pas automatiquement fusionnées
 : la comparaison utilise l'email.
 
-00:01:35.969 --> 00:01:40.321
+00:01:34.905 --> 00:01:38.941
 Avec Retour, vous pouvez changer l'option
 puis refaire l'analyse. Mettre à jour
 
-00:01:40.321 --> 00:01:46.123
+00:01:38.941 --> 00:01:44.322
 remplace le prénom, le nom, le téléphone
 et les tags de la fiche portant le même
 
-00:01:46.123 --> 00:01:50.838
+00:01:44.322 --> 00:01:48.694
 email. Cela réactive aussi une fiche
 inactive. Les tags ne sont donc pas
 
-00:01:50.838 --> 00:01:55.552
+00:01:48.694 --> 00:01:53.066
 simplement ajoutés aux anciens : vérifiez
 bien les valeurs du fichier. Ici, Camille
 
-00:01:55.552 --> 00:02:00.992
+00:01:53.066 --> 00:01:58.111
 et Julien passent de Ignorer à Mettre à
 jour, sans créer de nouvelles fiches pour
 
-00:02:00.992 --> 00:02:01.717
+00:01:58.111 --> 00:01:58.784
 ces adresses.
 
-00:02:02.169 --> 00:02:06.506
+00:01:59.236 --> 00:02:03.767
 Nous choisissons maintenant le fichier
 Excel corrigé et relançons l'analyse. Les
 
-00:02:06.506 --> 00:02:11.237
+00:02:03.767 --> 00:02:08.709
 erreurs ont disparu. Les quarante lignes
 sont reconnues, dont les deux adresses
 
-00:02:11.237 --> 00:02:17.150
+00:02:08.709 --> 00:02:14.887
 déjà présentes. René n'a pas d'email : sa
 fiche peut être créée avec son téléphone.
 
-00:02:17.150 --> 00:02:22.275
+00:02:14.887 --> 00:02:20.241
 Vérifiez une dernière fois les noms, les
 catégories et le récapitulatif. Le fichier
 
-00:02:22.275 --> 00:02:26.612
+00:02:20.241 --> 00:02:24.772
 est limité à deux mégaoctets et cinq mille
 lignes par import.
 
-00:02:27.066 --> 00:02:31.390
+00:02:25.226 --> 00:02:29.600
 Quand l'aperçu vous convient, confirmez
 l'import. Cette fois, les fiches sont
 
-00:02:31.390 --> 00:02:36.500
+00:02:29.600 --> 00:02:34.770
 enregistrées. Le résultat indique combien
 ont été créées, mises à jour ou ignorées,
 
-00:02:36.500 --> 00:02:41.216
+00:02:34.770 --> 00:02:39.542
 et signale les éventuelles lignes non
 importées. Fermez la fenêtre et recherchez
 
-00:02:41.216 --> 00:02:46.719
+00:02:39.542 --> 00:02:45.110
 Maya : elle est maintenant dans la liste.
 Ouvrez sa fiche pour vérifier son
 
-00:02:46.719 --> 00:02:51.436
-téléphone et ses tags. Importer une
+00:02:45.110 --> 00:02:49.882
+téléphone et ses étiquettes. Importer une
 personne ne l'inscrit à aucun créneau.
 
-00:02:51.893 --> 00:02:56.265
+00:02:50.339 --> 00:02:54.749
 Si vous analysez de nouveau ce fichier
 avec Ignorer, les emails déjà présents
 
-00:02:56.265 --> 00:03:01.310
+00:02:54.749 --> 00:02:59.837
 sont reconnus. Mais attention aux fiches
 sans email : le système ne peut pas les
 
-00:03:01.310 --> 00:03:06.356
+00:02:59.837 --> 00:03:04.926
 rapprocher par leur adresse, et le même
 nom ne suffit pas. Ne confirmez donc pas
 
-00:03:06.356 --> 00:03:10.055
+00:03:04.926 --> 00:03:08.657
 une seconde fois machinalement. Regardez
 toujours le nombre de créations prévues,
 
-00:03:10.055 --> 00:03:12.746
+00:03:08.657 --> 00:03:11.371
 puis annulez si vous ne souhaitez rien
 ajouter.
 
-00:03:13.210 --> 00:03:18.383
+00:03:12.152 --> 00:03:17.425
 Votre liste est prête à être utilisée pour
 les prochaines invitations. Gardez un
 
-00:03:18.383 --> 00:03:22.363
+00:03:17.425 --> 00:03:21.482
 fichier simple, vérifiez les coordonnées
 et lisez l'aperçu avant chaque
 
-00:03:22.363 --> 00:03:25.944
+00:03:21.482 --> 00:03:25.133
 confirmation. Si quelques personnes
 manquent, ajoutez-les manuellement. Et si
 
-00:03:25.944 --> 00:03:29.526
+00:03:25.133 --> 00:03:28.783
 leurs disponibilités changent, complétez
 leur fiche séparément. L'import fait
 
-00:03:29.526 --> 00:03:35.495
+00:03:28.783 --> 00:03:34.868
 gagner du temps, tout en vous laissant le
 dernier mot sur ce qui sera enregistré.
 

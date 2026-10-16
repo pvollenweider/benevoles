@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:42:45.004Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:33:52.333Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "95d3da6ee32c0191d5bd1ee2715160682f0e65b3796d2de57cf0d3f93c1019ca",
-  "clipSha256": "15291ef4704029174d8ce037dc7db4c2190adbc00427b88bb5b9913a5b8358cb",
+  "clipSha256": "ea40d70bf35811f84402fc57b20aae00de0370d3dfe4fc50f71aa17915da5fdc",
   "scene": "activity",
   "review": {
-    "heardOpening": "Le lien Activité ouvre l'historique",
+    "heardOpening": "Le lien Activité ouvre",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0.6,
         "spoken": "Le lien Activité ouvre l'historique factuel d'une personne",
-        "visibleSeconds": 1.3,
-        "visible": "Clic sur le lien Activité sur la ligne de Camille Rochat",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le lien Activité sur la ligne de Camille Rochat puis affichage de la page Activité de Camille Rochat",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.2,
-        "spoken": "Pour Camille, la page est déjà renseignée",
-        "visibleSeconds": 2,
-        "visible": "Affichage de la page « Activité de Camille Rochat » contenant l'historique",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 6.5,
+        "spokenSeconds": 6.3,
         "spoken": "on peut parcourir les faits enregistrés, leurs dates et l'événement concerné",
-        "visibleSeconds": 3,
-        "visible": "Liste des faits affichée avec statuts d'inscription, horodatages précis et liens vers les événements",
+        "visibleSeconds": 6.5,
+        "visible": "Liste des entrées affichant le statut, la date et l'heure ainsi que l'événement concerné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Cette vue rassemble notamment les inscriptions et les autres actions disponibles",
+        "visibleSeconds": 11.5,
+        "visible": "Historique détaillé visible avec les inscriptions, invitations et liste d'attente",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

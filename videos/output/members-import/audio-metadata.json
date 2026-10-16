@@ -1,52 +1,54 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-14T15:01:41.431Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 21911,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 23133,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "file": {
       "file": "audio/file.wav",
-      "durationMs": 24359,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 24274,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "preview": {
       "file": "audio/preview.wav",
-      "durationMs": 24369,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 23317,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "errors": {
       "file": "audio/errors.wav",
-      "durationMs": 23381,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 22177,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "update": {
       "file": "audio/update.wav",
-      "durationMs": 25748,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 23879,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "corrected": {
       "file": "audio/corrected.wav",
-      "durationMs": 24443,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 25536,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "confirm": {
       "file": "audio/confirm.wav",
-      "durationMs": 24370,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 24656,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "repeat": {
       "file": "audio/repeat.wav",
-      "durationMs": 20853,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 21032,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 22285,
-      "generationSha256": "4014bcabb39de0653ea874c753159ef781694154be30b76bb9342be5b540f9a1"
+      "durationMs": 22716,
+      "generationSha256": "6a875c21256bf53b5e1d02e16266cd2d857fa482d7a525430b53bff847b56573"
     }
-  }
+  },
+  "metadataRecoveredAt": "2026-10-16T15:37:38.144Z",
+  "generatedAt": "2026-10-14T15:02:23.501Z",
+  "recoveryNote": "Existing continuous master, archived identical source manifest, independently re-audited unchanged chapters. Official --resplit rebuilt metadata; exact previously verified chapter PCM restored byte-for-byte, measured durations retained. No generation API call."
 }

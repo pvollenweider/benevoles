@@ -1,18 +1,18 @@
 {
   "slug": "members-import",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-14T16:40:15.882Z",
+  "recordedAt": "2026-10-16T16:26:59.374Z",
   "video": "capture.webm",
   "product": {
-    "commit": "e110bfff7be601ceb18a52e456c4147158782e96",
-    "sourceTree": "739e4e1eec84a564556a00d65e95eb03f88fa39d",
-    "productSourceSha256": "7c9d7a055bb4edbdc86bc21622b46178ac0a390449bf99989fd3bac8454c1d88",
-    "buildId": "ZQDQCQ6Dod5iXimlU7yZf",
-    "snapshot": "/tmp/benevoles-video-production.Batch21",
-    "builtAt": "2026-10-14T16:35:01.795Z"
+    "commit": "50561e134531eb29b3d2898023cb7a7086ec8305",
+    "sourceTree": "f287b4af2584df2c41de10502d9a80fac01c91b5",
+    "productSourceSha256": "6f7a8b08eb71e92ea48a08a0d9fb2126a2e123da655928caf051c220c7b5b129",
+    "buildId": "GzjaqGbiwveYILVuRvQv7",
+    "snapshot": "/tmp/benevoles-video-production.Batch24",
+    "builtAt": "2026-10-16T15:21:43.542Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "MEMBERS_IMPORT",
@@ -26,227 +26,227 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 22970
+      "atMs": 24270
     },
     {
       "kind": "click",
-      "atMs": 45986
+      "atMs": 47218
     },
     {
       "kind": "click",
-      "atMs": 48185
+      "atMs": 49367
     },
     {
       "kind": "click",
-      "atMs": 57135
+      "atMs": 57833
     },
     {
       "kind": "click",
-      "atMs": 96450
+      "atMs": 95399
     },
     {
       "kind": "click",
-      "atMs": 97234
+      "atMs": 96181
     },
     {
       "kind": "click",
-      "atMs": 102866
+      "atMs": 101348
     },
     {
       "kind": "click",
-      "atMs": 122632
+      "atMs": 119698
     },
     {
       "kind": "click",
-      "atMs": 127415
+      "atMs": 125698
     },
     {
       "kind": "click",
-      "atMs": 149148
+      "atMs": 147114
     },
     {
       "kind": "click",
-      "atMs": 161514
+      "atMs": 159497
     },
     {
       "kind": "click",
-      "atMs": 162335
+      "atMs": 160345
     },
     {
       "kind": "click",
-      "atMs": 166164
+      "atMs": 163778
     },
     {
       "kind": "click",
-      "atMs": 168930
+      "atMs": 167411
     },
     {
       "kind": "click",
-      "atMs": 172413
+      "atMs": 170861
     },
     {
       "kind": "key",
-      "atMs": 172721
+      "atMs": 171169
     },
     {
       "kind": "click",
-      "atMs": 174064
+      "atMs": 172545
     },
     {
       "kind": "click",
-      "atMs": 174864
+      "atMs": 173361
     },
     {
       "kind": "click",
-      "atMs": 175663
+      "atMs": 174161
     },
     {
       "kind": "click",
-      "atMs": 188048
+      "atMs": 190595
     },
     {
       "kind": "click",
-      "atMs": 188847
+      "atMs": 191394
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 136,
-      "endMs": 22048
+      "startMs": 189,
+      "endMs": 23325
     },
     {
       "id": "file",
-      "startMs": 22500,
-      "endMs": 46861
+      "startMs": 23777,
+      "endMs": 48052
     },
     {
       "id": "preview",
-      "startMs": 47313,
-      "endMs": 71683
+      "startMs": 48504,
+      "endMs": 71823
     },
     {
       "id": "errors",
-      "startMs": 72135,
-      "endMs": 95517
+      "startMs": 72275,
+      "endMs": 94453
     },
     {
       "id": "update",
-      "startMs": 95969,
-      "endMs": 121717
+      "startMs": 94905,
+      "endMs": 118783
     },
     {
       "id": "corrected",
-      "startMs": 122169,
-      "endMs": 146614
+      "startMs": 119236,
+      "endMs": 144773
     },
     {
       "id": "confirm",
-      "startMs": 147066,
-      "endMs": 171441
+      "startMs": 145226,
+      "endMs": 169884
     },
     {
       "id": "repeat",
-      "startMs": 171893,
-      "endMs": 192758
+      "startMs": 170339,
+      "endMs": 191700
     },
     {
       "id": "result",
-      "startMs": 193210,
-      "endMs": 215496
+      "startMs": 192152,
+      "endMs": 214869
     }
   ],
   "anchors": [
     {
       "segmentId": "file",
       "phrase": "prénom, nom, email, téléphone et",
-      "startMs": 5809,
-      "endMs": 7814,
-      "cueMs": 28311
+      "startMs": 5733,
+      "endMs": 8352,
+      "cueMs": 29514
     },
     {
       "segmentId": "file",
       "phrase": "elles ne sont pas importées",
-      "startMs": 22989,
-      "endMs": 23957,
-      "cueMs": 45490
+      "startMs": 22949,
+      "endMs": 23877,
+      "cueMs": 46734
     },
     {
       "segmentId": "preview",
       "phrase": "Ouvrez Importer des membres",
-      "startMs": 401,
-      "endMs": 3965,
-      "cueMs": 47715
+      "startMs": 397,
+      "endMs": 3464,
+      "cueMs": 48903
     },
     {
       "segmentId": "preview",
       "phrase": "Cliquez sur Analyser le fichier",
-      "startMs": 9351,
-      "endMs": 10075,
-      "cueMs": 56665
+      "startMs": 7226,
+      "endMs": 8358,
+      "cueMs": 55738
     },
     {
       "segmentId": "errors",
       "phrase": "Corrigez le fichier d'origine plutôt",
-      "startMs": 13976,
-      "endMs": 17162,
-      "cueMs": 86112
+      "startMs": 13489,
+      "endMs": 16396,
+      "cueMs": 85765
     },
     {
       "segmentId": "update",
       "phrase": "Ici, Camille et Julien passent",
-      "startMs": 19079,
-      "endMs": 25624,
-      "cueMs": 115049
+      "startMs": 17479,
+      "endMs": 23879,
+      "cueMs": 112385
     },
     {
       "segmentId": "corrected",
       "phrase": "Les erreurs ont disparu.",
-      "startMs": 4757,
-      "endMs": 5794,
-      "cueMs": 126927
+      "startMs": 5971,
+      "endMs": 7200,
+      "cueMs": 125209
     },
     {
       "segmentId": "corrected",
       "phrase": "René n'a pas d'email ",
-      "startMs": 10895,
-      "endMs": 11980,
-      "cueMs": 133066
+      "startMs": 11267,
+      "endMs": 12856,
+      "cueMs": 130505
     },
     {
       "segmentId": "confirm",
       "phrase": "Quand l'aperçu vous convient",
-      "startMs": 412,
-      "endMs": 3183,
-      "cueMs": 147480
+      "startMs": 173,
+      "endMs": 3140,
+      "cueMs": 145434
     },
     {
       "segmentId": "confirm",
       "phrase": "Fermez la fenêtre et recherchez",
-      "startMs": 13962,
-      "endMs": 16313,
-      "cueMs": 161029
+      "startMs": 13773,
+      "endMs": 15043,
+      "cueMs": 159000
     },
     {
       "segmentId": "confirm",
       "phrase": "Ouvrez sa fiche pour vérifier",
-      "startMs": 18636,
-      "endMs": 21079,
-      "cueMs": 165703
+      "startMs": 18076,
+      "endMs": 21339,
+      "cueMs": 163304
     },
     {
       "segmentId": "confirm",
       "phrase": "Importer une personne ne l'inscrit",
-      "startMs": 21386,
-      "endMs": 24106,
-      "cueMs": 168454
+      "startMs": 21718,
+      "endMs": 24465,
+      "cueMs": 166947
     },
     {
       "segmentId": "repeat",
       "phrase": "Regardez toujours le nombre de",
-      "startMs": 15664,
-      "endMs": 20495,
-      "cueMs": 187563
+      "startMs": 15588,
+      "endMs": 20694,
+      "cueMs": 185929
     }
   ]
 }

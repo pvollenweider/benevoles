@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:18:16.708Z",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
+  "reviewedAt": "2026-10-16T16:00:02.244Z",
+  "videoSha256": "2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b",
   "promptSha256": "4b686f754d1873d90d86a7307cf54d5ceda21ac3c3365ff8eb046cce12595d79",
-  "clipSha256": "651437d8a6cceb1f8f367fcc5da6e52e5cae8c8f567dddf6bf11ecc7760dc7c1",
+  "clipSha256": "ba6c338d59a0a5f7c36478d0df2705d2633685c3a13ea867d0a8f486604cc7f3",
   "scene": "waitlist",
   "review": {
-    "heardOpening": "Dans cet aperçu",
+    "heardOpening": "Dans cet aperçu, regardez aussi les personnes",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "regardez aussi les personnes qui sont seulement en liste d'attente",
-        "visibleSeconds": 0,
-        "visible": "Modale Aperçu de l'email ouverte affichant la mention de 2 personnes en liste d'attente",
+        "spoken": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente.",
+        "visibleSeconds": 0.5,
+        "visible": "Fenêtre modale 'Aperçu de l'email' affichée avec la mention 'les invités sans créneau confirmé'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8.8,
         "spoken": "Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande",
-        "visibleSeconds": 9.5,
-        "visible": "Fermeture de l'aperçu et ajout du texte 'Si tu es en attente, ta demande reste enregistrée. Merci !' dans le champ Message",
+        "visibleSeconds": 10,
+        "visible": "Retour au formulaire avec ajout dans le message : 'Si tu es en attente, ta demande reste enregistrée.'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
-        "spoken": "c'est vous qui choisissez le bon moment",
-        "visibleSeconds": 20.5,
-        "visible": "Clic sur 'Voir l'aperçu et envoyer' puis réouverture de la modale avec l'aperçu actualisé",
+        "spokenSeconds": 18,
+        "spoken": "c'est vous qui choisissez le bon moment.",
+        "visibleSeconds": 19.5,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer' et réouverture de la modale d'aperçu avec le texte mis à jour.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les modifications effectuées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

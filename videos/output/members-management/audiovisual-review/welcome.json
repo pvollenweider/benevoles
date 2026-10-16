@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:41:09.994Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:33:01.122Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "cbe2af25a82aee4bc3b0a48812ce16805d6bde9567e3463040c6a5cd7b190547",
-  "clipSha256": "49b7b4b8e27586ca7e452bb828d399138a07f7f3bf7e243a069b76ebeae3f0e2",
+  "clipSha256": "b1978ba2c767638045fd0f12328fe1854d48beb6b7cbe46de929f2001825b5d6",
   "scene": "welcome",
   "review": {
-    "heardOpening": "La liste des membres rassemble les personnes",
+    "heardOpening": "La liste des membres rassemble",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "La liste des membres rassemble les personnes que votre association souhaite retrouver facilement.",
-        "visibleSeconds": 2.8,
-        "visible": "Disparition de l'encart d'introduction pour afficher la liste complète de l'onglet Membres",
+        "spoken": "La liste des membres rassemble les personnes",
+        "visibleSeconds": 0.5,
+        "visible": "Onglet Membres affiché avec bandeau d'introduction au premier plan",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Ici, soixante fiches donnent un aperçu d'une vraie équipe, avec des coordonnées et des catégories variées.",
-        "visibleSeconds": 5.5,
-        "visible": "Tableau présentant plusieurs membres avec prénom, nom, contact et étiquettes de catégories",
+        "spokenSeconds": 5.2,
+        "spoken": "Ici, soixante fiches donnent un aperçu d'une vraie équipe",
+        "visibleSeconds": 5.2,
+        "visible": "Liste des membres visible en arrière-plan sous l'encart de titre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "Ajouter un membre ne l'inscrit pas automatiquement à une fête.",
-        "visibleSeconds": 11.2,
-        "visible": "L'écran reste stable sur la vue des membres avec le bouton '+ Nouveau membre' visible en haut à droite",
+        "spokenSeconds": 18.2,
+        "spoken": "Voyons comment garder cette liste utile et à jour",
+        "visibleSeconds": 18.2,
+        "visible": "Écran d'introduction stable annonçant la suite du module",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, chaleureuse et bien articulée, accompagnée d'un fond musical discret."
+      "observation": "Voix masculine claire, naturelle et parfaitement articulée, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

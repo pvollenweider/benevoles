@@ -1,19 +1,14 @@
 STATUS: READY
-Batch 21 — MEMBERS_IMPORT — 2026-10-14
-Product commit: e110bfff7be601ceb18a52e456c4147158782e96
-BUILD_ID: ZQDQCQ6Dod5iXimlU7yZf
-Final MP4: members-import.mp4 — 215.960 s
-SHA256: e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6
+MEMBERS_IMPORT — Batch 24-2 — 2026-10-16
+Commit 50561e134531eb29b3d2898023cb7a7086ec8305; BUILD_ID GzjaqGbiwveYILVuRvQv7
+Duration 215.320 s; final SHA256 fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481
+Two narrated takes, each after guarded reseed; successful quick rehearsal before filming. Old artifacts and rejected take 1 retained in previous-* directories; unchanged continuous Kore audio reused with exact independent source-audit fingerprints. No TTS generation or sentence mixing for this video.
+Timing resolved on actual final media: first analysis click at 57.833 s, audio cut already starts « Cliqu… »; cancellation Return at 190.595 s, audio cut already includes « puis annulez si vous ne souhaitez rien… ». Source keeps sentence anchors and .38 analysis wait; cancellation wait increased .86 → .94 after reviewing take 1. Evidence review/preview-action-cut.json, repeat-action-cut.json, exact action frames and 13 sentence-anchor frames.
+All nine final audiovisual chapters (32 checkpoints), all 54 chapter frames and exact sentence/action evidence reviewed. No final AV chapter flagged. Source and final chapter ASR pass; entire actual final soundtrack transcribed in all languages, no stray English or stage directions. Final VTT raw tu=0; full ASR and VTT contain no informal viewer address. Real effects: 20 clicks and 1 key, tied to actual input events and final hash. Technical video:validate passes. 1024 video tests and explicit 198-source TypeScript check pass.
+Music: prescribed Mixkit track, 14.1–19.2 LU below voice, no music-rule failure/gap; musicOnlyWindows=0. Posters generated from final MP4 with review/renders-generated.json; videos/renders.json untouched.
+Counts checked against real API receipts and final frames: baseline 26; import 38 created / 2 updated / 0 skipped / 0 errors; 64 final members. Repeat preview 39 skipped / 1 potential no-email creation, then actual cancellation with no second import.
+COUNT OBSERVATION: final take 2 shows « Doublons possibles (1) », rather than take 1's zero or the published old film's 667. Take 2 follows the invitations fixture: its persistent ledger-backed M2 is René Meyer, while the file also creates a no-email René Meyer. A separate read-only visit confirms the sole pair is René Meyer / René Meyer, explicitly marked a possible homonym; nothing was merged, ignored or hidden. Evidence review/actual-duplicate-pair.json and .png, pending-import-receipt.json and review/repeat-action--0.1.jpg (190.495 s, http://localhost:43102/admin/members). This is fixture provenance, not a confirmed product bug. Every narration sentence about duplicates was checked: file duplicate email, matching existing email, no automatic homonym merge and no-email re-creation remain correct; no sentence claims a zero global duplicate counter. CSV/XLSX unchanged from main.
+Source changes: existing fixture/receipt guards and tests retained; .94 cancellation wait under videos/tools/record.ts. No src edit, commit, push or publication. doc-img: unchanged
+Real-time subjective listening unavailable as permitted; audio-only/AV evidence and actual media inspection retained without claiming human listening.
 
-One narrated take after a fresh guarded seed and successful quick rehearsal. No retake.
-Batch 20 artifacts moved to previous-20261014T163344Z/; unchanged audio retained, exact metadata and source audit copied back, ownership receipts retained for guarded reset.
-Batch 20 continuous Kore narration reused byte-for-byte, source audit revalidated without new TTS. Final multilingual MP4 ASR: all nine chapters pass, no added English speech or viewer-directed informal pronouns. VTT viewer-addressed tu/ton/ta/tes/toi/te/t': 0; VTT matches narration manifest.
-video:validate passes; 971 video tests and 192-source TypeScript check pass. Nine fresh audiovisual chapter reviews match the final hash, all unflagged. All checkpoints aligned except file selection described as early within the same opening sentence with severity none; it occurs after the opening anchor and does not precede the instruction.
-Music 15.1–18.9 LU under voice, music-only rule passes. Soft effects match 20 real clicks and one key event. Posters written using review/renders-generated.json; videos/renders.json unchanged.
-54-frame chapter grid and 26 sentence-anchor evidence frames inspected. OCR finds no localhost, org-admin@localhost, Timeline or development overlay. French file control is visible. No guide page is shown; #981 has no impact on this take.
-
-Batch 20 blocker resolved: file-end.png shows the closed dialog; preview-2.png at about 47.913 s remains closed; reopening occurs at the opening sentence anchor 47.715 s, file selection follows; analysis uses its own sentence anchor 56.665 s. Actual final import creates 38 and updates 2. Maya's contact/tags and the repeat preview with cancellation are shown.
-No observed product bug or remaining blocker. No src change.
-Source change: build-main-product.ts keeps exact snapshot-to-main blob verification for every input while permitting audited local videos/ editorial WIP to differ from the product snapshot.
-Real-time subjective listening unavailable; independent source/final ASR and audiovisual checks cover actual final sound.
-No publishing, push, commit or PR. doc-img: unchanged
+Capture server PID 15184 stopped by SIGTERM; port listener absence verified. Evidence review/server-stop-proof.json.

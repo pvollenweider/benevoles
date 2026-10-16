@@ -954,7 +954,7 @@
       ],
       "feature": "Liste des membres",
       "updatedAt": "2026-10-16",
-      "revision": 6,
+      "revision": 7,
       "level": "essentiel"
     },
     {
@@ -1252,7 +1252,7 @@
       ],
       "feature": "Relance des invités",
       "updatedAt": "2026-10-16",
-      "revision": 4,
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -1276,7 +1276,7 @@
       ],
       "feature": "Invitations des membres",
       "updatedAt": "2026-10-16",
-      "revision": 4,
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -1301,7 +1301,7 @@
       ],
       "feature": "Import des membres",
       "updatedAt": "2026-10-16",
-      "revision": 5,
+      "revision": 6,
       "level": "essentiel"
     },
     {

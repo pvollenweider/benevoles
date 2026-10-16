@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "scenario": "members-management",
+  "members": [
+    {
+      "id": "cmvb635fl0000psa5usu0hk60",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-16T16:13:35.185Z",
+      "actualCreatedAt": "2026-10-16T16:13:35.169Z"
+    },
+    {
+      "id": "cmvb6fjkz003ipsa5z1n8uhkl",
+      "organizationId": "default",
+      "firstName": "René",
+      "lastName": "Aubert",
+      "phone": "079 000 90 02",
+      "email": null,
+      "responseStatus": 201,
+      "createdAt": "2026-10-16T16:23:13.394Z",
+      "actualCreatedAt": "2026-10-16T16:23:13.379Z"
+    }
+  ]
+}

@@ -3185,6 +3185,7 @@ async function main() {
         await page.getByRole("heading", { name: /^Message envoyé à/ }).waitFor()
         await at("Nous ouvrons le vrai message")
         await openMail("Un horaire qui te convient")
+        await at(0.38) /* mid-sentence: show the delivered email before the same sentence introduces history */
         // The same sentence announces the email, then the administrative history.
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
         await page.getByText("Un horaire qui te convient", { exact: true }).first().scrollIntoViewIfNeeded()
@@ -3243,6 +3244,7 @@ async function main() {
         await page.goto(adminUrl); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650); await open()
         await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Aline")
         await tap(page, dialog().getByRole("checkbox", { name: "Inviter Aline Mercier", exact: true }))
+        await at("Vous pouvez ajouter un court")
         await typeNaturally(page, dialog().getByLabel("Message (optionnel)", { exact: true }), "Bonjour Aline, nous serions ravis de te retrouver à l'accueil.")
         await at("Vérifiez le destinataire, puis envoyez")
         checks.individual = await send(1)
@@ -3267,7 +3269,7 @@ async function main() {
         await at("Envoyer deux invitations déclenche des")
         checks.group = await send(2)
         nicolasLink = await mail("nicolas.renaud@example.org")
-        await at("La remise à cette boîte")
+        await at("Vous voyez ici la réception")
         await mail("sebastien.perret@example.org")
       })
       await scene("personal-link", async at => {
@@ -3378,6 +3380,7 @@ async function main() {
         await open()
         await form().getByLabel("Choisir un fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-a-verifier.csv"))
         await at("Cliquez sur Analyser le fichier")
+        await at(0.38) /* mid-sentence: retained voice reaches the actual analysis command after the heuristic pause */
         const body = await analyse()
         checks.firstPreview = body.plan.counts
         if (body.plan.counts.skip !== 2 || body.plan.counts.error !== 3) throw new Error("Expected two existing emails and three real file errors")
@@ -3463,6 +3466,7 @@ async function main() {
         if (body.plan.counts.skip !== 39 || body.plan.counts.create !== 1) throw new Error("Repeat preview must expose the no-email recreation risk")
         checks.repeatPreview = body.plan.counts
         await at("Regardez toujours le nombre de")
+        await at(0.94) /* mid-sentence: final-audio cut at 0.86 still ended before « puis annulez »; wait for the actual clause */
         await tap(page, form().getByRole("button", { name: "Retour", exact: true }))
         await tap(page, form().getByRole("button", { name: "Annuler", exact: true }))
       })

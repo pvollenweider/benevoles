@@ -4,7 +4,7 @@ Vous utilisez Benevol pour la première fois et vous avez déjà une liste de b�
 
 Le fichier peut être un CSV ou un Excel. La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags. Le prénom et le nom sont nécessaires. Une fiche sans email reste possible, mais elle ne recevra pas de messages par email. Les tags se séparent par des virgules. Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.
 
-Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.
+Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les étiquettes sont également indiquées. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.
 
 Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrigez le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.
 
@@ -12,7 +12,7 @@ Avec Retour, vous pouvez changer l'option puis refaire l'analyse. Mettre à jour
 
 Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifiez une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.
 
-Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Fermez la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.
+Quand l'aperçu vous convient, confirmez l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Fermez la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes. Importer une personne ne l'inscrit à aucun créneau.
 
 Si vous analysez de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirmez donc pas une seconde fois machinalement. Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.
 

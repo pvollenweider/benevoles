@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:26:00.026Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
-  "promptSha256": "688765ad85350345999f8bf58a5060d13c0fe3221bfe18d3c2fde4c38ae88dd3",
-  "clipSha256": "807edf6596c7978f0432077b5b61cfa80c13cf712db39163a33e93fd078862a8",
+  "reviewedAt": "2026-10-16T16:47:33.671Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "promptSha256": "cc267811a6e83dd2195ea569f119367f00833fb10ce783e8724961221bf9c008",
+  "clipSha256": "36f6ca2badfe652085e7296b885c84cb7c2ffaaa938258af93cf93b688caba3d",
   "scene": "existing",
   "review": {
-    "heardOpening": "La case Cacher déjà invités",
+    "heardOpening": "La case Cacher déjà invités vous aide à",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "La case Cacher déjà invités",
+        "spokenSeconds": 0.5,
+        "spoken": "La case Cacher déjà invités vous aide à éviter un nouvel envoi",
         "visibleSeconds": 1,
-        "visible": "Affichage de la modale 'Inviter des membres' avec la case 'Cacher déjà invités' cochée",
+        "visible": "Ouverture de la fenêtre « Inviter des membres » avec la case « Cacher déjà invités » cochée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "Décochez-la si vous voulez les retrouver",
-        "visibleSeconds": 7,
-        "visible": "La case 'Cacher déjà invités' est décochée par un clic",
+        "spokenSeconds": 5,
+        "spoken": "Décochez-la si vous voulez les retrouver.",
+        "visibleSeconds": 5.2,
+        "visible": "Le curseur décoche la case « Cacher déjà invités »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "Prenez néanmoins le temps de vérifier le groupe avant d'envoyer",
-        "visibleSeconds": 16.5,
-        "visible": "Liste des membres affichée dans la modale avant validation de l'envoi",
+        "spokenSeconds": 15,
+        "spoken": "Vous vérifiez le groupe avant chaque envoi.",
+        "visibleSeconds": 15,
+        "visible": "La liste des membres filtrés reste affichée dans la boîte de dialogue",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, fluide et pédagogique, accompagnée d'une musique de fond discrète."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,299 +1,206 @@
 {
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
+    "commit": "50561e134531eb29b3d2898023cb7a7086ec8305",
+    "sourceTree": "f287b4af2584df2c41de10502d9a80fac01c91b5",
+    "productSourceSha256": "6f7a8b08eb71e92ea48a08a0d9fb2126a2e123da655928caf051c220c7b5b129",
+    "buildId": "GzjaqGbiwveYILVuRvQv7",
+    "snapshot": "/tmp/benevoles-video-production.Batch24",
+    "builtAt": "2026-10-16T15:21:43.542Z"
   },
-  "chapters": [
+  "evidence": [
     {
-      "id": "welcome",
-      "startMs": 0,
-      "endMs": 21205
+      "anchor": {
+        "segmentId": "create",
+        "phrase": "Après la création, Maya apparaît",
+        "startMs": 19498,
+        "endMs": 21796,
+        "cueMs": 41150
+      },
+      "frameSeconds": 42.945,
+      "file": "videos/output/members-management/review/anchor-00.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 41645
+      }
     },
     {
-      "id": "create",
-      "startMs": 21661,
-      "endMs": 43864
+      "anchor": {
+        "segmentId": "edit",
+        "phrase": "Enregistrons, puis rouvrons la fiche",
+        "startMs": 18963,
+        "endMs": 22755,
+        "cueMs": 63272
+      },
+      "frameSeconds": 65.062,
+      "file": "videos/output/members-management/review/anchor-01.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 63762
+      }
     },
     {
-      "id": "edit",
-      "startMs": 44316,
-      "endMs": 67500
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "Ici, Maya est disponible le",
+        "startMs": 14427,
+        "endMs": 17339,
+        "cueMs": 82374
+      },
+      "frameSeconds": 84.142,
+      "file": "videos/output/members-management/review/anchor-02.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 82842
+      }
     },
     {
-      "id": "availability",
-      "startMs": 67952,
-      "endMs": 90158
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "Après enregistrement, cette indication apparaît",
+        "startMs": 17894,
+        "endMs": 21762,
+        "cueMs": 85840
+      },
+      "frameSeconds": 87.61,
+      "file": "videos/output/members-management/review/anchor-03.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 86310
+      }
     },
     {
-      "id": "no-email",
-      "startMs": 90611,
-      "endMs": 108652
+      "anchor": {
+        "segmentId": "search",
+        "phrase": "ici, deux Stéphane Favre ont",
+        "startMs": 10421,
+        "endMs": 13373,
+        "cueMs": 119519
+      },
+      "frameSeconds": 121.324,
+      "file": "videos/output/members-management/review/anchor-04.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 120024
+      }
     },
     {
-      "id": "search",
-      "startMs": 109104,
-      "endMs": 129770
+      "anchor": {
+        "segmentId": "filter",
+        "phrase": "Les en-têtes permettent aussi de",
+        "startMs": 7551,
+        "endMs": 9519,
+        "cueMs": 137770
+      },
+      "frameSeconds": 139.54000000000002,
+      "file": "videos/output/members-management/review/anchor-05.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 138240
+      }
     },
     {
-      "id": "filter",
-      "startMs": 130222,
-      "endMs": 157039
+      "anchor": {
+        "segmentId": "filter",
+        "phrase": "Les heures prévues comptent les",
+        "startMs": 10369,
+        "endMs": 16237,
+        "cueMs": 140588
+      },
+      "frameSeconds": 142.376,
+      "file": "videos/output/members-management/review/anchor-06.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 141076
+      }
     },
     {
-      "id": "deactivate",
-      "startMs": 157491,
-      "endMs": 179105
+      "anchor": {
+        "segmentId": "filter",
+        "phrase": "Les heures prévues comptent les",
+        "startMs": 10369,
+        "endMs": 16237,
+        "cueMs": 141388
+      },
+      "frameSeconds": 143.192,
+      "file": "videos/output/members-management/review/anchor-07.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 141892
+      }
     },
     {
-      "id": "activity",
-      "startMs": 179558,
-      "endMs": 199978
+      "anchor": {
+        "segmentId": "deactivate",
+        "phrase": "nous confirmons sa désactivation, puis",
+        "startMs": 6215,
+        "endMs": 9576,
+        "cueMs": 163705
+      },
+      "frameSeconds": 165.472,
+      "file": "videos/output/members-management/review/anchor-08.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 164172
+      }
     },
     {
-      "id": "result",
-      "startMs": 200430,
-      "endMs": 223530
+      "anchor": {
+        "segmentId": "deactivate",
+        "phrase": "Avec Inclure inactifs, nous la",
+        "startMs": 10358,
+        "endMs": 12926,
+        "cueMs": 167845
+      },
+      "frameSeconds": 169.607,
+      "file": "videos/output/members-management/review/anchor-09.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 168307
+      }
+    },
+    {
+      "anchor": {
+        "segmentId": "deactivate",
+        "phrase": "Dans Modifier, la case Membre",
+        "startMs": 13880,
+        "endMs": 17449,
+        "cueMs": 171369
+      },
+      "frameSeconds": 173.15800000000002,
+      "file": "videos/output/members-management/review/anchor-10.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 171858
+      }
+    },
+    {
+      "anchor": {
+        "segmentId": "deactivate",
+        "phrase": "Après enregistrement, elle revient parmi",
+        "startMs": 18046,
+        "endMs": 21181,
+        "cueMs": 175535
+      },
+      "frameSeconds": 177.324,
+      "file": "videos/output/members-management/review/anchor-11.jpg",
+      "firstInput": {
+        "kind": "click",
+        "atMs": 176024
+      }
+    },
+    {
+      "anchor": {
+        "segmentId": "activity",
+        "phrase": "Cette vue rassemble notamment les",
+        "startMs": 9570,
+        "endMs": 15417,
+        "cueMs": 189127
+      },
+      "frameSeconds": 189.627,
+      "file": "videos/output/members-management/review/anchor-12.jpg",
+      "firstInput": null
     }
   ],
-  "anchors": [
-    {
-      "segmentId": "create",
-      "phrase": "Après la création, Maya apparaît",
-      "startMs": 19498,
-      "endMs": 21796,
-      "cueMs": 41160,
-      "frame": "review/sentence-frames/00-create.png",
-      "frameSeconds": 42.66,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 41626
-        },
-        {
-          "kind": "click",
-          "atMs": 44809
-        },
-        {
-          "kind": "click",
-          "atMs": 45658
-        }
-      ]
-    },
-    {
-      "segmentId": "edit",
-      "phrase": "Enregistrons, puis rouvrons la fiche",
-      "startMs": 18963,
-      "endMs": 22755,
-      "cueMs": 63281,
-      "frame": "review/sentence-frames/01-edit.png",
-      "frameSeconds": 64.781,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 63794
-        },
-        {
-          "kind": "click",
-          "atMs": 65109
-        }
-      ]
-    },
-    {
-      "segmentId": "availability",
-      "phrase": "Ici, Maya est disponible le",
-      "startMs": 14427,
-      "endMs": 17339,
-      "cueMs": 82395,
-      "frame": "review/sentence-frames/02-availability.png",
-      "frameSeconds": 83.895,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 82858
-        },
-        {
-          "kind": "click",
-          "atMs": 83706
-        },
-        {
-          "kind": "key",
-          "atMs": 84018
-        }
-      ]
-    },
-    {
-      "segmentId": "availability",
-      "phrase": "Après enregistrement, cette indication apparaît",
-      "startMs": 17894,
-      "endMs": 21762,
-      "cueMs": 85848,
-      "frame": "review/sentence-frames/03-availability.png",
-      "frameSeconds": 87.348,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 86324
-        }
-      ]
-    },
-    {
-      "segmentId": "search",
-      "phrase": "ici, deux Stéphane Favre ont",
-      "startMs": 10421,
-      "endMs": 13373,
-      "cueMs": 119526,
-      "frame": "review/sentence-frames/04-search.png",
-      "frameSeconds": 121.026,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 120021
-        }
-      ]
-    },
-    {
-      "segmentId": "filter",
-      "phrase": "Les en-têtes permettent aussi de",
-      "startMs": 7551,
-      "endMs": 9519,
-      "cueMs": 137774,
-      "frame": "review/sentence-frames/05-filter.png",
-      "frameSeconds": 139.274,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 138238
-        },
-        {
-          "kind": "click",
-          "atMs": 141089
-        },
-        {
-          "kind": "click",
-          "atMs": 141906
-        }
-      ]
-    },
-    {
-      "segmentId": "filter",
-      "phrase": "Les heures prévues comptent les",
-      "startMs": 10369,
-      "endMs": 16237,
-      "cueMs": 140592,
-      "frame": "review/sentence-frames/06-filter.png",
-      "frameSeconds": 142.092,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 141089
-        },
-        {
-          "kind": "click",
-          "atMs": 141906
-        }
-      ]
-    },
-    {
-      "segmentId": "filter",
-      "phrase": "Les heures prévues comptent les",
-      "startMs": 10369,
-      "endMs": 16237,
-      "cueMs": 141401,
-      "frame": "review/sentence-frames/07-filter.png",
-      "frameSeconds": 142.901,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 141906
-        }
-      ]
-    },
-    {
-      "segmentId": "deactivate",
-      "phrase": "nous confirmons sa désactivation, puis",
-      "startMs": 6215,
-      "endMs": 9576,
-      "cueMs": 163707,
-      "frame": "review/sentence-frames/08-deactivate.png",
-      "frameSeconds": 165.207,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 164171
-        }
-      ]
-    },
-    {
-      "segmentId": "deactivate",
-      "phrase": "Avec Inclure inactifs, nous la",
-      "startMs": 10358,
-      "endMs": 12926,
-      "cueMs": 167850,
-      "frame": "review/sentence-frames/09-deactivate.png",
-      "frameSeconds": 169.35,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 168319
-        },
-        {
-          "kind": "click",
-          "atMs": 171837
-        }
-      ]
-    },
-    {
-      "segmentId": "deactivate",
-      "phrase": "Dans Modifier, la case Membre",
-      "startMs": 13880,
-      "endMs": 17449,
-      "cueMs": 171372,
-      "frame": "review/sentence-frames/10-deactivate.png",
-      "frameSeconds": 172.872,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 171837
-        },
-        {
-          "kind": "click",
-          "atMs": 172620
-        }
-      ]
-    },
-    {
-      "segmentId": "deactivate",
-      "phrase": "Après enregistrement, elle revient parmi",
-      "startMs": 18046,
-      "endMs": 21181,
-      "cueMs": 175537,
-      "frame": "review/sentence-frames/11-deactivate.png",
-      "frameSeconds": 177.037,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 176003
-        },
-        {
-          "kind": "click",
-          "atMs": 177286
-        }
-      ]
-    },
-    {
-      "segmentId": "activity",
-      "phrase": "Cette vue rassemble notamment les",
-      "startMs": 9570,
-      "endMs": 15417,
-      "cueMs": 189129,
-      "frame": "review/sentence-frames/12-activity.png",
-      "frameSeconds": 190.629,
-      "nextActualInputs": []
-    }
-  ]
+  "note": "Actual final frames after each sentence anchor and first real input; assessed alongside chapter audiovisual reports."
 }

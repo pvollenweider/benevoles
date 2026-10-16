@@ -1,34 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:41:34.314Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:33:32.473Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "71b03a894fead55c49cc90ec2e044f8b208bf1f7677a497ae4ae3ee179e2b9d9",
-  "clipSha256": "ceecf1dd34b5f73bdabd0ceb8a5d47d19ece7a719a1fb246926763e90e3fc789",
+  "clipSha256": "3a4cb4dbf35d6c3133b7c06efabefc00b5518b832b97b52fbf2a6bc0030eacc2",
   "scene": "edit",
   "review": {
     "heardOpening": "Avec Modifier, vous pouvez corriger la fiche",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Avec Modifier, vous pouvez corriger la fiche et ajouter des informations",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur le lien Modifier de la ligne de Maya Berger et ouverture de la fenêtre modale",
+        "spokenSeconds": 0,
+        "spoken": "Avec Modifier, vous pouvez corriger la fiche et ajouter des informations.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire modal « Modifier le membre » pour Maya Berger.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "comme accueil ou permis b",
+        "spokenSeconds": 4.8,
+        "spoken": "Les étiquettes, séparées par des virgules, servent à retrouver un groupe, comme accueil ou permis b.",
         "visibleSeconds": 3.5,
-        "visible": "Saisie des étiquettes accueil, permis-b dans le champ correspondant",
+        "visible": "Le champ Étiquettes est rempli avec « accueil, permis-b ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.8,
-        "spoken": "Enregistrons, puis rouvrons la fiche pour vérifier que les changements sont conservés",
+        "spokenSeconds": 11.2,
+        "spoken": "La note peut rappeler un détail pratique utile à l'organisation.",
+        "visibleSeconds": 7,
+        "visible": "Le texte « Préfère le stand d'accueil » est saisi dans le champ Notes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Enregistrons",
         "visibleSeconds": 19.5,
-        "visible": "Clic sur le bouton Enregistrer, fermeture de la fenêtre puis réouverture immédiate avec le bouton Modifier",
+        "visible": "Clic sur le bouton Enregistrer en bas du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "puis rouvrons la fiche pour vérifier que les changements sont conservés.",
+        "visibleSeconds": 21,
+        "visible": "Clic sur Modifier et réouverture de la fiche affichant les étiquettes et la note enregistrées.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine claire, posée et bien articulée, avec un fond musical discret."
+      "observation": "Voix masculine claire, naturelle et parfaitement intelligible, débit fluide."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

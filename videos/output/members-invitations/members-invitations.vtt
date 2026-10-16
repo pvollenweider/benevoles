@@ -1,206 +1,209 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:05.558
+00:00:00.000 --> 00:00:05.477
 Votre fête est prête, et vous souhaitez
 proposer des créneaux aux membres de votre
 
-00:00:05.558 --> 00:00:09.925
+00:00:05.477 --> 00:00:09.781
 association ? Dans Invitations, vous
 pouvez contacter une personne ou un
 
-00:00:09.925 --> 00:00:14.688
+00:00:09.781 --> 00:00:14.475
 groupe. Une invitation n'est pas une
 inscription : chacun choisit ensuite sa
 
-00:00:14.688 --> 00:00:19.055
+00:00:14.475 --> 00:00:18.779
 participation. Les compteurs distinguent
 les personnes invitées et celles qui ont
 
-00:00:19.055 --> 00:00:24.216
+00:00:18.779 --> 00:00:23.865
 un créneau confirmé. Voyons tout le
 parcours, de l'envoi au choix du bénévole.
 
-00:00:24.670 --> 00:00:28.707
+00:00:24.321 --> 00:00:28.205
 Avant de contacter l'équipe, vous pouvez
 tester l'envoi d'email. Indiquez une
 
-00:00:28.707 --> 00:00:33.478
+00:00:28.205 --> 00:00:32.795
 adresse que vous utilisez pour vérifier
 les messages, puis envoyez le test. Nous
 
-00:00:33.478 --> 00:00:38.248
+00:00:32.795 --> 00:00:37.385
 ouvrons ici le message reçu dans notre
 boîte de démonstration. Cela permet de
 
-00:00:38.248 --> 00:00:43.386
+00:00:37.385 --> 00:00:42.329
 regarder la présentation. Un email de test
 n'inscrit personne et ne remplace pas une
 
-00:00:43.386 --> 00:00:45.221
+00:00:42.329 --> 00:00:44.094
 vraie invitation à un membre.
 
-00:00:45.676 --> 00:00:50.130
+00:00:44.548 --> 00:00:49.145
 Cliquez sur Inviter des membres. Pour une
 invitation individuelle, recherchez Aline,
 
-00:00:50.130 --> 00:00:54.180
+00:00:49.145 --> 00:00:53.324
 puis cochez seulement sa fiche. Le
 compteur indique une personne
 
-00:00:54.180 --> 00:00:59.039
+00:00:53.324 --> 00:00:58.339
 sélectionnée. Vous pouvez ajouter un court
 mot d'accompagnement : Bonjour Aline, nous
 
-00:00:59.039 --> 00:01:03.899
+00:00:58.339 --> 00:01:03.354
 serions ravis de te retrouver à l'accueil.
 Vérifiez le destinataire, puis envoyez
 
-00:01:03.899 --> 00:01:08.353
+00:01:03.354 --> 00:01:07.951
 cette invitation. La personne apparaît
 ensuite dans le tableau de l'événement.
 
-00:01:08.807 --> 00:01:13.888
-Pour un groupe, utilisez le filtre de
-tags. Il permet par exemple de retrouver
+00:01:08.406 --> 00:01:13.182
+Pour un groupe, utilisez le filtre
+d’étiquettes. Il permet par exemple de
 
-00:01:13.888 --> 00:01:17.881
-les personnes de l'accueil. Tout
+00:01:13.182 --> 00:01:17.957
+retrouver les personnes de l'accueil. Tout
 sélectionner ajoute les membres visibles à
 
-00:01:17.881 --> 00:01:22.236
+00:01:17.957 --> 00:01:22.733
 votre sélection. Attention : une personne
 déjà cochée peut rester sélectionnée après
 
-00:01:22.236 --> 00:01:26.955
+00:01:22.733 --> 00:01:27.906
 un changement de filtre. Le compteur reste
 votre repère. Avec Effacer, repartez d'une
 
-00:01:26.955 --> 00:01:30.584
+00:01:27.906 --> 00:01:31.886
 sélection vide, puis choisissez
 précisément les personnes que vous voulez
 
-00:01:30.584 --> 00:01:30.947
+00:01:31.886 --> 00:01:32.284
 inviter.
 
-00:01:31.401 --> 00:01:34.741
+00:01:32.737 --> 00:01:36.217
 Nous sélectionnons maintenant deux
 personnes et ajoutons un message commun.
 
-00:01:34.741 --> 00:01:38.415
+00:01:36.217 --> 00:01:40.046
 Envoyer deux invitations déclenche des
 messages individuels. Dans la boîte de
 
-00:01:38.415 --> 00:01:42.424
+00:01:40.046 --> 00:01:44.223
 démonstration, chaque personne reçoit son
 propre email et son propre lien. Les
 
-00:01:42.424 --> 00:01:47.100
+00:01:44.223 --> 00:01:49.095
 coordonnées des autres invités ne sont pas
-affichées dans son message. La remise à
+affichées dans son message. Vous voyez ici
 
-00:01:47.100 --> 00:01:51.776
-cette boîte de test ne prouve évidemment
-pas qu'un bénévole a lu son email.
+00:01:49.095 --> 00:01:54.316
+la réception sur notre serveur de test. La
+lecture du message par le bénévole reste
 
-00:01:52.231 --> 00:01:58.544
+00:01:54.316 --> 00:01:54.664
+inconnue.
+
+00:01:55.114 --> 00:02:00.653
 Ouvrons le lien reçu par Aline. Il mène à
 la fête avec ses coordonnées préremplies.
 
-00:01:58.544 --> 00:02:03.594
-Elle peut regarder les horaires, choisir
-un créneau disponible et compléter les
+00:02:00.653 --> 00:02:05.084
+Elle peut regarder les horaires et choisir
+un créneau disponible. Elle complète
 
-00:02:03.594 --> 00:02:07.381
-informations demandées. Nous faisons une
-vraie inscription de démonstration,
+00:02:05.084 --> 00:02:08.777
+ensuite les informations demandées. Nous
+faisons une vraie inscription de
 
-00:02:07.381 --> 00:02:13.273
-jusqu'à la confirmation. Le lien est
-personnel : il ne faut pas le partager
+00:02:08.777 --> 00:02:13.208
+démonstration, jusqu'à la confirmation. Le
+lien est personnel. Vous devez le garder
 
-00:02:13.273 --> 00:02:16.640
-comme si c'était l'adresse publique de la
-fête.
+00:02:13.208 --> 00:02:18.378
+privé. Pour présenter la fête à tout le
+monde, vous utilisez son adresse publique.
 
-00:02:17.094 --> 00:02:22.794
+00:02:18.831 --> 00:02:23.992
 Une invitation peut aussi donner accès à
-un poste réservé aux membres portant un
+un poste réservé à certains membres. Ici,
 
-00:02:22.794 --> 00:02:28.087
-certain tag. Ici, Nicolas a le tag
-sécurité. Avec son invitation valide, il
+00:02:23.992 --> 00:02:28.785
+Nicolas a le tag sécurité. Avec son
+invitation valide, il peut choisir le
 
-00:02:28.087 --> 00:02:32.158
-peut choisir le poste réservé
-correspondant. Ce n'est pas une
+00:02:28.785 --> 00:02:32.472
+poste réservé correspondant. Les tags
+actuels sont revérifiés à l'inscription.
 
-00:02:32.158 --> 00:02:37.044
-autorisation générale : les tags actuels
-sont revérifiés à l'inscription. Et un
+00:02:32.472 --> 00:02:37.264
+Cet accès concerne seulement les postes
+autorisés par ses tags. Une demande à
 
-00:02:37.044 --> 00:02:41.523
-poste réservé est différent d'une demande
-que l'organisateur doit accepter avant
+00:02:37.264 --> 00:02:42.057
+valider suit une autre règle. Vous devez
+alors accepter la demande avant de
 
-00:02:41.523 --> 00:02:41.930
-confirmation.
+00:02:42.057 --> 00:02:43.163
+confirmer la place.
 
-00:02:42.384 --> 00:02:46.232
+00:02:43.617 --> 00:02:47.333
 De retour dans Invitations, Aline a
 maintenant une participation confirmée.
 
-00:02:46.232 --> 00:02:51.234
+00:02:47.333 --> 00:02:51.791
 D'autres personnes restent sans créneau
-confirmé. Ce statut ne dit pas si elles
+confirmé. La lecture de leur email reste
 
-00:02:51.234 --> 00:02:56.236
-ont ouvert leur email. Il peut aussi
-concerner une personne en liste d'attente
+00:02:51.791 --> 00:02:56.250
+inconnue. Il peut aussi concerner une
+personne en liste d'attente. Une demande
 
-00:02:56.236 --> 00:03:01.238
-ou une demande encore à valider. Le
-tableau sert à suivre la participation,
+00:02:56.250 --> 00:03:01.081
+encore à valider peut donner le même
+statut. Vous utilisez ce tableau pour
 
-00:03:01.238 --> 00:03:03.931
-pas à surveiller la lecture des messages.
+00:03:01.081 --> 00:03:05.911
+suivre la participation. Il ne permet pas
+de suivre la lecture des messages.
 
-00:03:04.387 --> 00:03:08.683
-La case Cacher déjà invités évite de
-sélectionner facilement les mêmes
+00:03:06.363 --> 00:03:11.514
+La case Cacher déjà invités vous aide à
+éviter un nouvel envoi aux mêmes
 
-00:03:08.683 --> 00:03:13.760
-personnes à nouveau. Décochez-la si vous
-voulez les retrouver. Un nouvel envoi à
+00:03:11.514 --> 00:03:16.298
+personnes. Décochez-la si vous voulez les
+retrouver. Un nouvel envoi à une personne
 
-00:03:13.760 --> 00:03:18.836
-une personne déjà invitée réutilise son
-invitation pour cette fête, au lieu d'en
+00:03:16.298 --> 00:03:21.449
+déjà invitée réutilise son invitation pour
+cette fête. Il ne crée pas une seconde
 
-00:03:18.836 --> 00:03:23.523
-créer une seconde. Prenez néanmoins le
-temps de vérifier le groupe avant
+00:03:21.449 --> 00:03:25.128
+invitation. Vous vérifiez le groupe avant
+chaque envoi. Plusieurs messages
 
-00:03:23.523 --> 00:03:27.428
-d'envoyer : recevoir plusieurs messages
-identiques peut vite devenir agaçant.
+00:03:25.128 --> 00:03:26.968
+identiques peuvent vite devenir agaçants.
 
-00:03:28.680 --> 00:03:33.689
-Enfin, une fiche sans email peut être
-sélectionnée, mais aucun message ne peut
+00:03:28.231 --> 00:03:33.548
+Enfin, vous pouvez sélectionner une fiche
+sans email. Sans adresse, aucun message ne
 
-00:03:33.689 --> 00:03:38.313
-partir vers une adresse absente. René
-devra être contacté autrement. Le nombre
+00:03:33.548 --> 00:03:38.456
+peut être envoyé. René devra être contacté
+autrement. Le nombre d'invités ne
 
-00:03:38.313 --> 00:03:42.936
-d'invités ne correspond donc pas forcément
-au nombre d'emails envoyés, encore moins
+00:03:38.456 --> 00:03:43.363
+correspond donc pas forcément au nombre
+d'emails envoyés. Le nombre de messages
 
-00:03:42.936 --> 00:03:47.945
-au nombre de messages lus. Une invitation
-claire, le bon groupe et quelques
+00:03:43.363 --> 00:03:48.680
+lus reste inconnu. Une invitation claire,
+le bon groupe et quelques vérifications :
 
-00:03:47.945 --> 00:03:52.569
-vérifications : c'est tout ce qu'il faut
-pour lancer la participation sereinement.
+00:03:48.680 --> 00:03:52.770
+c'est tout ce qu'il faut pour lancer la
+participation sereinement.
 

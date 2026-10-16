@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:41:58.857Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:34:02.692Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "f0747e17bc88f0ec179e90f82d7275f0d9d782037f306b953887da13304fb50b",
-  "clipSha256": "0584394304c6bcdf63fe789bcacc93ea69ef36d0e2a464ee0032fadce38207ea",
+  "clipSha256": "5cd7b927322683008b83615b5551b1b7deb428652ae9e15e18bf908a217d66b8",
   "scene": "no-email",
   "review": {
     "heardOpening": "Une personne peut avoir une fiche sans adresse email",
     "checkpoints": [
       {
-        "spokenSeconds": 0.2,
-        "spoken": "Une personne peut avoir une fiche sans adresse email",
-        "visibleSeconds": 0.8,
-        "visible": "Affichage de la modale d'ajout d'un Nouveau membre avec ses différents champs",
+        "spokenSeconds": 3,
+        "spoken": "Nous créons René Aubert",
+        "visibleSeconds": 2.8,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Saisie de « René » dans le prénom et « Aubert » dans le nom dans le formulaire Nouveau membre"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Nous créons René Aubert avec son téléphone seulement",
-        "visibleSeconds": 3,
-        "visible": "Saisie de René dans Prénom, Aubert dans Nom et du numéro dans Téléphone en laissant l'e-mail vide",
+        "spokenSeconds": 4.6,
+        "spoken": "avec son téléphone seulement",
+        "visibleSeconds": 5.2,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Le champ Email reste vide et le numéro 079 060 90 02 est saisi dans le champ Téléphone"
       },
       {
-        "spokenSeconds": 10.5,
-        "spoken": "le système ne peut pas lui envoyer un email tant que l'adresse manque",
-        "visibleSeconds": 11.6,
-        "visible": "Clic sur Créer et ajout de la fiche de René Aubert dans la liste des membres sans adresse e-mail",
+        "spokenSeconds": 9.8,
+        "spoken": "En revanche, le système ne peut pas lui envoyer un email",
+        "visibleSeconds": 11.2,
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Validation via le bouton Créer et affichage de René Aubert dans la liste des membres avec son seul numéro"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, naturelle et bien synchronisée avec les manipulations à l'écran."
+      "observation": "Voix masculine calme, posée et parfaitement synchronisée avec la saisie et la validation du formulaire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:25:47.397Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
-  "promptSha256": "7c46c796a76ed473e2e9d3b76729516086eb4077bfebeb0fb2c729159b5fc64d",
-  "clipSha256": "ee62aec3580b8b023b6768ab36fbdf278da36106bc9b73cf67a1fc0a3f02b0a8",
+  "reviewedAt": "2026-10-16T16:47:08.685Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "promptSha256": "e38c03683b4468c84e2c754c62076353e7fc068da5751e53105a8d76cab201a9",
+  "clipSha256": "0503b4488db7ad03d6c21f75ecae2a63a82e9038af1aebdd55849abfdec0c5f2",
   "scene": "reserved",
   "review": {
     "heardOpening": "Une invitation peut aussi donner accès",
     "checkpoints": [
       {
-        "spokenSeconds": 5.6,
-        "spoken": "Ici, Nicolas a le tag sécurité",
-        "visibleSeconds": 7.5,
-        "visible": "La grille affiche une ligne de créneau 'Sécurité' avec mention réservé",
+        "spokenSeconds": 4.2,
+        "spoken": "Ici, Nicolas a le tag sécurité.",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la frise avec la ligne Sécurité et le créneau réservé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
+        "spokenSeconds": 7.5,
         "spoken": "il peut choisir le poste réservé correspondant",
-        "visibleSeconds": 10,
-        "visible": "Sélection du créneau rouge réservé 20h-02h Sécurité puis bouton Continuer",
+        "visibleSeconds": 8,
+        "visible": "Le créneau Sécurité sélectionné s'affiche dans le panneau latéral droit",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15,
-        "spoken": "les tags actuels sont revérifiés à l'inscription",
-        "visibleSeconds": 16,
-        "visible": "Affichage du formulaire d'inscription prérempli au nom de Nicolas Renaud",
+        "spokenSeconds": 11.2,
+        "spoken": "Les tags actuels sont revérifiés à l'inscription",
+        "visibleSeconds": 11,
+        "visible": "Affichage de la page Vos informations au nom de Nicolas Renaud",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix off masculine claire, fluide et posée, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

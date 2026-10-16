@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T16:41:29.244Z",
-  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
+  "reviewedAt": "2026-10-16T16:29:15.904Z",
+  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
   "promptSha256": "70cc41e6a6d03ba0b694544ea0644be9ae3c9119fad6ef22e19de14ff73d9185",
-  "clipSha256": "0c5712918d2de6ded54bae22379958db34d9c981edb1bed3123b440529fc54c1",
+  "clipSha256": "4eef90f00e04225c61a624df3808f847b5e30bb49e1f4bcebe156edcb74551ee",
   "scene": "errors",
   "review": {
     "heardOpening": "Ici, la ligne six n'a pas de prénom",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Ici, la ligne six n'a pas de prénom",
+        "spokenSeconds": 0.9,
+        "spoken": "la ligne six n'a pas de prénom",
         "visibleSeconds": 0,
-        "visible": "Dans l'encadré 'Lignes en erreur, non importées', la ligne 6 affiche 'Prénom manquant'",
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Section 'Lignes en erreur, non importées' affichant la ligne 6 avec la raison 'Prénom manquant'"
       },
       {
         "spokenSeconds": 3,
         "spoken": "et la ligne sept contient une adresse email invalide",
         "visibleSeconds": 0,
-        "visible": "La ligne 7 indique 'Email invalide : adresse-incomplete'",
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Tableau affichant la ligne 7 avec 'Email invalide : adresse incomplète'"
       },
       {
         "spokenSeconds": 6.2,
         "spoken": "La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé",
         "visibleSeconds": 0,
-        "visible": "La ligne 9 indique 'Même email que la ligne 8'",
         "sync": "aligned",
-        "severity": "none"
+        "severity": "none",
+        "visible": "Ligne 9 signalée avec la mention 'Même email que la ligne 8'"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement audible, fidèle au texte affiché."
+      "observation": "Voix off posée, claire et parfaitement audible, débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

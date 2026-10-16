@@ -197,7 +197,7 @@ async function main() {
     } else if (script === "videos/tools/verify-registration-invitation-success.ts") {
       if (rest.length && !(rest.length === 1 && rest[0] === "--finish-readonly")) throw new Error("Only explicit read-only completion accepted")
     } else if (script === "videos/tools/prepare-registration-mailbox.ts") {
-      if (rest.length !== 1 || !["registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(rest[0])) throw new Error("Only identified batch registration fixture mail accepted")
+      if (rest.length !== 1 || !["members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(rest[0])) throw new Error("Only identified batch registration fixture mail accepted")
     } else if (script === "videos/tools/prepare-foundation.ts") {
       if (rest.length !== 1 || !["charter", "identity", "milestones", "pages", "email", "team", "blank", "template", "planning"].includes(rest[0])) throw new Error("Only explicit owned foundation scenario accepted")
     } else if (rest.length) throw new Error("Unexpected tool arguments")

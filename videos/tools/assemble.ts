@@ -46,6 +46,9 @@ async function main() {
   const musicGainDb = manifest.musicGainDb ?? 0
   if (!Number.isFinite(musicGainDb) || Math.abs(musicGainDb) > 3) throw new Error("Music gain must be finite and between -3 and 3 dB; the measured music rule is unchanged")
   const musicMix = { ...MUSIC_MIX, volume: MUSIC_MIX.volume * 10 ** (musicGainDb / 20), gainDb: musicGainDb }
+  if (["MEMBERS_INVITATIONS", "MEMBERS_REMINDERS"].includes(manifest.id)) {
+    await (await import("./focus-mailpit")).focusMailpit(manifest.id)
+  }
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
   const { stdout: targetMain } = await exec("git", ["rev-parse", "origin/main"])
   if (timeline.product?.commit !== targetMain.trim() || !timeline.product?.buildId || !timeline.product?.productSourceSha256) throw new Error("Capture provenance missing or not on target main; recapture, never retroactively stamp an old video")
@@ -147,6 +150,31 @@ async function main() {
       previous = next
     }
     videoMap = `[${previous}]`
+  }
+
+  if (timeline.mailpitFocusFrames?.length) {
+    if (videoMap !== "0:v:0" || manifest.viewport.width !== 1280 || manifest.viewport.height !== 800) throw new Error("Mailpit focus requires an unframed desktop capture")
+    let previousEnd = 0
+    for (const frame of timeline.mailpitFocusFrames) {
+      if (!Number.isFinite(frame.startMs) || !Number.isFinite(frame.endMs) || frame.startMs < previousEnd || frame.endMs <= frame.startMs || frame.endMs > captureDuration * 1000 + 80) throw new Error("Invalid Mailpit focus interval")
+      previousEnd = frame.endMs
+    }
+    const enabled = timeline.mailpitFocusFrames.map(frame => `between(t,${(frame.startMs / 1000).toFixed(3)},${((frame.endMs - 1) / 1000).toFixed(3)})`).join("+")
+    // Keep the real email headers/body at their original scale. Exclude only the
+    // unrelated inbox sidebar; no product state, text or interaction is replaced.
+    filters.push("[0:v]split=2[mailpitBase][mailpitSource]")
+    filters.push("[mailpitSource]crop=960:800:320:0,pad=1280:800:160:0:color=0xf8fafc[mailpitPane]")
+    filters.push(`[mailpitBase][mailpitPane]overlay=0:0:enable='${enabled}'[mailpitFocused]`)
+    videoMap = "[mailpitFocused]"
+  }
+
+  for (const [index, hold] of (timeline.mailpitHolds ?? []).entries()) {
+    if (videoMap === "0:v:0" || !timeline.mailpitFocusFrames?.some(frame => hold.sourceMs >= frame.startMs && hold.sourceMs < frame.endMs) || hold.startMs !== hold.sourceMs || hold.endMs <= hold.startMs || hold.endMs - hold.startMs > 6000 || timeline.inputEvents?.some(event => event.atMs >= hold.startMs && event.atMs < hold.endMs)) throw new Error("Invalid hold of an actual Mailpit frame")
+    const start = (hold.sourceMs / 1000).toFixed(3), end = (hold.endMs / 1000).toFixed(3)
+    const still = `mailpitStill${index}`, output = `mailpitHeld${index}`
+    filters.push(`[0:v]trim=start=${start}:duration=0.04,setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop_duration=${((hold.endMs - hold.startMs) / 1000).toFixed(3)},crop=960:800:320:0,pad=1280:800:160:0:color=0xf8fafc,setpts=PTS+${start}/TB[${still}]`)
+    filters.push(`${videoMap}[${still}]overlay=0:0:enable='between(t,${start},${end})'[${output}]`)
+    videoMap = `[${output}]`
   }
 
   const segmentGains: Record<string, number> = {}

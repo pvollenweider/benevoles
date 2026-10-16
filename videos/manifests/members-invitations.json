@@ -35,32 +35,32 @@
     },
     {
       "id": "send",
-      "transcript": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer deux invitations déclenche des messages individuels. Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien. Les coordonnées des autres invités ne sont pas affichées dans son message. La remise à cette boîte de test ne prouve évidemment pas qu'un bénévole a lu son email.",
+      "transcript": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer deux invitations déclenche des messages individuels. Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien. Les coordonnées des autres invités ne sont pas affichées dans son message. Vous voyez ici la réception sur notre serveur de test. La lecture du message par le bénévole reste inconnue.",
       "fallbackDurationMs": 38000
     },
     {
       "id": "personal-link",
-      "transcript": "Ouvrons le lien reçu par Aline. Il mène à la fête avec ses coordonnées préremplies. Elle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées. Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation. Le lien est personnel : il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
+      "transcript": "Ouvrons le lien reçu par Aline. Il mène à la fête avec ses coordonnées préremplies. Elle peut regarder les horaires et choisir un créneau disponible. Elle complète ensuite les informations demandées. Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation. Le lien est personnel. Vous devez le garder privé. Pour présenter la fête à tout le monde, vous utilisez son adresse publique.",
       "fallbackDurationMs": 41000
     },
     {
       "id": "reserved",
-      "transcript": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Ce n'est pas une autorisation générale : les tags actuels sont revérifiés à l'inscription. Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
+      "transcript": "Une invitation peut aussi donner accès à un poste réservé à certains membres. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Les tags actuels sont revérifiés à l'inscription. Cet accès concerne seulement les postes autorisés par ses tags. Une demande à valider suit une autre règle. Vous devez alors accepter la demande avant de confirmer la place.",
       "fallbackDurationMs": 38000
     },
     {
       "id": "status",
-      "transcript": "De retour dans Invitations, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. Ce statut ne dit pas si elles ont ouvert leur email. Il peut aussi concerner une personne en liste d'attente ou une demande encore à valider. Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
+      "transcript": "De retour dans Invitations, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. La lecture de leur email reste inconnue. Il peut aussi concerner une personne en liste d'attente. Une demande encore à valider peut donner le même statut. Vous utilisez ce tableau pour suivre la participation. Il ne permet pas de suivre la lecture des messages.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "existing",
-      "transcript": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde. Prenez néanmoins le temps de vérifier le groupe avant d'envoyer : recevoir plusieurs messages identiques peut vite devenir agaçant.",
+      "transcript": "La case Cacher déjà invités vous aide à éviter un nouvel envoi aux mêmes personnes. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête. Il ne crée pas une seconde invitation. Vous vérifiez le groupe avant chaque envoi. Plusieurs messages identiques peuvent vite devenir agaçants.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "no-email",
-      "transcript": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente. René devra être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés, encore moins au nombre de messages lus. Une invitation claire, le bon groupe et quelques vérifications : c'est tout ce qu'il faut pour lancer la participation sereinement.",
+      "transcript": "Enfin, vous pouvez sélectionner une fiche sans email. Sans adresse, aucun message ne peut être envoyé. René devra être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés. Le nombre de messages lus reste inconnu. Une invitation claire, le bon groupe et quelques vérifications : c'est tout ce qu'il faut pour lancer la participation sereinement.",
       "fallbackDurationMs": 37000
     }
   ],

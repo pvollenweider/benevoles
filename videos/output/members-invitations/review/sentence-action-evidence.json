@@ -1,1234 +1,229 @@
-[
-  {
-    "chapter": "welcome",
-    "startMs": 0,
-    "endMs": 24217,
-    "sentences": [
-      {
-        "text": "Votre fête est prête, et vous souhaitez proposer des créneaux aux membres de votre association ?",
-        "startMs": 317,
-        "endMs": 5581,
-        "method": "silence",
-        "absoluteStartMs": 317
-      },
-      {
-        "text": "Dans Invitations, vous pouvez contacter une personne ou un groupe.",
-        "startMs": 5716,
-        "endMs": 9106,
-        "method": "silence",
-        "absoluteStartMs": 5716
-      },
-      {
-        "text": "Une invitation n'est pas une inscription :",
-        "startMs": 9916,
-        "endMs": 12087,
-        "method": "silence",
-        "absoluteStartMs": 9916
-      },
-      {
-        "text": "chacun choisit ensuite sa participation.",
-        "startMs": 12233,
-        "endMs": 14160,
-        "method": "silence",
-        "absoluteStartMs": 12233
-      },
-      {
-        "text": "Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé.",
-        "startMs": 15365,
-        "endMs": 19326,
-        "method": "silence",
-        "absoluteStartMs": 15365
-      },
-      {
-        "text": "Voyons tout le parcours, de l'envoi au choix du bénévole.",
-        "startMs": 20356,
-        "endMs": 23556,
-        "method": "silence",
-        "absoluteStartMs": 20356
-      }
-    ],
-    "anchors": [],
-    "interactions": []
+{
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "product": {
+    "commit": "50561e134531eb29b3d2898023cb7a7086ec8305",
+    "sourceTree": "f287b4af2584df2c41de10502d9a80fac01c91b5",
+    "productSourceSha256": "6f7a8b08eb71e92ea48a08a0d9fb2126a2e123da655928caf051c220c7b5b129",
+    "buildId": "GzjaqGbiwveYILVuRvQv7",
+    "snapshot": "/tmp/benevoles-video-production.Batch24",
+    "builtAt": "2026-10-16T15:21:43.542Z"
   },
-  {
-    "chapter": "test",
-    "startMs": 24670,
-    "endMs": 45223,
-    "sentences": [
-      {
-        "text": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'email.",
-        "startMs": 664,
-        "endMs": 3616,
-        "method": "silence",
-        "absoluteStartMs": 25334
-      },
-      {
-        "text": "Indiquez une adresse que vous utilisez pour vérifier les messages, puis envoyez le test.",
-        "startMs": 4584,
-        "endMs": 8822,
-        "method": "silence",
-        "absoluteStartMs": 29254
-      },
-      {
-        "text": "Nous ouvrons ici le message reçu dans notre boîte de démonstration.",
-        "startMs": 9838,
-        "endMs": 12528,
-        "method": "silence",
-        "absoluteStartMs": 34508
-      },
-      {
-        "text": "Cela permet de regarder la présentation.",
-        "startMs": 13310,
-        "endMs": 15035,
-        "method": "silence",
-        "absoluteStartMs": 37980
-      },
-      {
-        "text": "Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
-        "startMs": 16050,
-        "endMs": 20151,
-        "method": "silence",
-        "absoluteStartMs": 40720
-      }
-    ],
-    "anchors": [
-      {
+  "evidence": [
+    {
+      "anchor": {
         "segmentId": "test",
         "phrase": "Nous ouvrons ici le message",
-        "startMs": 9838,
-        "endMs": 12528,
-        "cueMs": 34511
-      }
-    ],
-    "interactions": [
-      {
-        "kind": "click",
-        "atMs": 25169
+        "startMs": 9106,
+        "endMs": 12171,
+        "cueMs": 33429
       },
-      {
-        "kind": "click",
-        "atMs": 25985
-      },
-      {
-        "kind": "key",
-        "atMs": 26293
-      },
-      {
-        "kind": "key",
-        "atMs": 26391
-      },
-      {
-        "kind": "key",
-        "atMs": 26488
-      },
-      {
-        "kind": "key",
-        "atMs": 26588
-      },
-      {
-        "kind": "key",
-        "atMs": 26685
-      },
-      {
-        "kind": "key",
-        "atMs": 26784
-      },
-      {
-        "kind": "key",
-        "atMs": 26882
-      },
-      {
-        "kind": "key",
-        "atMs": 26980
-      },
-      {
-        "kind": "key",
-        "atMs": 27079
-      },
-      {
-        "kind": "key",
-        "atMs": 27178
-      },
-      {
-        "kind": "key",
-        "atMs": 27276
-      },
-      {
-        "kind": "key",
-        "atMs": 27380
-      },
-      {
-        "kind": "key",
-        "atMs": 27482
-      },
-      {
-        "kind": "key",
-        "atMs": 27583
-      },
-      {
-        "kind": "key",
-        "atMs": 27686
-      },
-      {
-        "kind": "key",
-        "atMs": 27788
-      },
-      {
-        "kind": "key",
-        "atMs": 27890
-      },
-      {
-        "kind": "key",
-        "atMs": 27993
-      },
-      {
-        "kind": "key",
-        "atMs": 28096
-      },
-      {
-        "kind": "key",
-        "atMs": 28198
-      },
-      {
-        "kind": "key",
-        "atMs": 28299
-      },
-      {
-        "kind": "key",
-        "atMs": 28401
-      },
-      {
-        "kind": "key",
-        "atMs": 28501
-      },
-      {
-        "kind": "key",
-        "atMs": 28600
-      },
-      {
-        "kind": "key",
-        "atMs": 28701
-      },
-      {
-        "kind": "key",
-        "atMs": 28803
-      },
-      {
-        "kind": "key",
-        "atMs": 28904
-      },
-      {
-        "kind": "click",
-        "atMs": 29653
-      }
-    ]
-  },
-  {
-    "chapter": "individual",
-    "startMs": 45676,
-    "endMs": 68354,
-    "sentences": [
-      {
-        "text": "Cliquez sur Inviter des membres.",
-        "startMs": 399,
-        "endMs": 2012,
-        "method": "silence",
-        "absoluteStartMs": 46075
-      },
-      {
-        "text": "Pour une invitation individuelle, recherchez Aline, puis cochez seulement sa fiche.",
-        "startMs": 2896,
-        "endMs": 6852,
-        "method": "silence",
-        "absoluteStartMs": 48572
-      },
-      {
-        "text": "Le compteur indique une personne sélectionnée.",
-        "startMs": 7581,
-        "endMs": 9551,
-        "method": "silence",
-        "absoluteStartMs": 53257
-      },
-      {
-        "text": "Vous pouvez ajouter un court mot d'accompagnement :",
-        "startMs": 10571,
-        "endMs": 12362,
-        "method": "silence",
-        "absoluteStartMs": 56247
-      },
-      {
-        "text": "Bonjour Aline, nous serions ravis de te retrouver à l'accueil.",
-        "startMs": 13143,
-        "endMs": 15740,
-        "method": "silence",
-        "absoluteStartMs": 58819
-      },
-      {
-        "text": "Vérifiez le destinataire, puis envoyez cette invitation.",
-        "startMs": 16414,
-        "endMs": 19105,
-        "method": "silence",
-        "absoluteStartMs": 62090
-      },
-      {
-        "text": "La personne apparaît ensuite dans le tableau de l'événement.",
-        "startMs": 19976,
-        "endMs": 22184,
-        "method": "silence",
-        "absoluteStartMs": 65652
-      }
-    ],
-    "anchors": [
-      {
+      "firstInput": null,
+      "frameSeconds": 34.079,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-00.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "individual",
-        "phrase": "Vérifiez le destinataire, puis envoyez",
-        "startMs": 16414,
-        "endMs": 19105,
-        "cueMs": 62092
-      }
-    ],
-    "interactions": [
-      {
+        "phrase": "Vous pouvez ajouter un court",
+        "startMs": 10732,
+        "endMs": 13083,
+        "cueMs": 55281
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 47308
+        "atMs": 55781
       },
-      {
+      "frameSeconds": 56.431,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-01.jpg"
+    },
+    {
+      "anchor": {
+        "segmentId": "individual",
+        "phrase": "V\u00e9rifiez le destinataire, puis envoyez",
+        "startMs": 16821,
+        "endMs": 20163,
+        "cueMs": 62389
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 48140
-      },
-      {
-        "kind": "key",
-        "atMs": 48449
-      },
-      {
-        "kind": "key",
-        "atMs": 48548
-      },
-      {
-        "kind": "key",
-        "atMs": 48647
-      },
-      {
-        "kind": "key",
-        "atMs": 48747
-      },
-      {
-        "kind": "key",
-        "atMs": 48845
-      },
-      {
-        "kind": "click",
-        "atMs": 49592
-      },
-      {
-        "kind": "click",
-        "atMs": 50407
-      },
-      {
-        "kind": "key",
-        "atMs": 50716
-      },
-      {
-        "kind": "key",
-        "atMs": 50816
-      },
-      {
-        "kind": "key",
-        "atMs": 50913
-      },
-      {
-        "kind": "key",
-        "atMs": 51011
-      },
-      {
-        "kind": "key",
-        "atMs": 51110
-      },
-      {
-        "kind": "key",
-        "atMs": 51209
-      },
-      {
-        "kind": "key",
-        "atMs": 51307
-      },
-      {
-        "kind": "key",
-        "atMs": 51406
-      },
-      {
-        "kind": "key",
-        "atMs": 51505
-      },
-      {
-        "kind": "key",
-        "atMs": 51603
-      },
-      {
-        "kind": "key",
-        "atMs": 51699
-      },
-      {
-        "kind": "key",
-        "atMs": 51798
-      },
-      {
-        "kind": "key",
-        "atMs": 51897
-      },
-      {
-        "kind": "key",
-        "atMs": 51996
-      },
-      {
-        "kind": "key",
-        "atMs": 52098
-      },
-      {
-        "kind": "key",
-        "atMs": 52198
-      },
-      {
-        "kind": "key",
-        "atMs": 52297
-      },
-      {
-        "kind": "key",
-        "atMs": 52395
-      },
-      {
-        "kind": "key",
-        "atMs": 52494
-      },
-      {
-        "kind": "key",
-        "atMs": 52593
-      },
-      {
-        "kind": "key",
-        "atMs": 52691
-      },
-      {
-        "kind": "key",
-        "atMs": 52793
-      },
-      {
-        "kind": "key",
-        "atMs": 52897
-      },
-      {
-        "kind": "key",
-        "atMs": 52998
-      },
-      {
-        "kind": "key",
-        "atMs": 53101
-      },
-      {
-        "kind": "key",
-        "atMs": 53215
-      },
-      {
-        "kind": "key",
-        "atMs": 53319
-      },
-      {
-        "kind": "key",
-        "atMs": 53416
-      },
-      {
-        "kind": "key",
-        "atMs": 53516
-      },
-      {
-        "kind": "key",
-        "atMs": 53619
-      },
-      {
-        "kind": "key",
-        "atMs": 53719
-      },
-      {
-        "kind": "key",
-        "atMs": 53823
-      },
-      {
-        "kind": "key",
-        "atMs": 53928
-      },
-      {
-        "kind": "key",
-        "atMs": 54030
-      },
-      {
-        "kind": "key",
-        "atMs": 54128
-      },
-      {
-        "kind": "key",
-        "atMs": 54231
-      },
-      {
-        "kind": "key",
-        "atMs": 54334
-      },
-      {
-        "kind": "key",
-        "atMs": 54435
-      },
-      {
-        "kind": "key",
-        "atMs": 54535
-      },
-      {
-        "kind": "key",
-        "atMs": 54635
-      },
-      {
-        "kind": "key",
-        "atMs": 54733
-      },
-      {
-        "kind": "key",
-        "atMs": 54833
-      },
-      {
-        "kind": "key",
-        "atMs": 54932
-      },
-      {
-        "kind": "key",
-        "atMs": 55032
-      },
-      {
-        "kind": "key",
-        "atMs": 55134
-      },
-      {
-        "kind": "key",
-        "atMs": 55238
-      },
-      {
-        "kind": "key",
-        "atMs": 55337
-      },
-      {
-        "kind": "key",
-        "atMs": 55437
-      },
-      {
-        "kind": "key",
-        "atMs": 55540
-      },
-      {
-        "kind": "key",
-        "atMs": 55638
-      },
-      {
-        "kind": "key",
-        "atMs": 55858
-      },
-      {
-        "kind": "key",
-        "atMs": 55955
-      },
-      {
-        "kind": "key",
-        "atMs": 56054
-      },
-      {
-        "kind": "key",
-        "atMs": 56153
-      },
-      {
-        "kind": "key",
-        "atMs": 56251
-      },
-      {
-        "kind": "key",
-        "atMs": 56350
-      },
-      {
-        "kind": "key",
-        "atMs": 56448
-      },
-      {
-        "kind": "key",
-        "atMs": 56546
-      },
-      {
-        "kind": "key",
-        "atMs": 56645
-      },
-      {
-        "kind": "key",
-        "atMs": 56744
-      },
-      {
-        "kind": "key",
-        "atMs": 56842
-      },
-      {
-        "kind": "click",
-        "atMs": 62557
-      }
-    ]
-  },
-  {
-    "chapter": "group",
-    "startMs": 68807,
-    "endMs": 90948,
-    "sentences": [
-      {
-        "text": "Pour un groupe, utilisez le filtre de tags.",
-        "startMs": 500,
-        "endMs": 2566,
-        "method": "silence",
-        "absoluteStartMs": 69307
-      },
-      {
-        "text": "Il permet par exemple de retrouver les personnes de l'accueil.",
-        "startMs": 3242,
-        "endMs": 5626,
-        "method": "silence",
-        "absoluteStartMs": 72049
-      },
-      {
-        "text": "Tout sélectionner ajoute les membres visibles à votre sélection.",
-        "startMs": 6399,
-        "endMs": 9005,
-        "method": "silence",
-        "absoluteStartMs": 75206
-      },
-      {
-        "text": "Attention :",
-        "startMs": 9733,
-        "endMs": 10171,
-        "method": "silence",
-        "absoluteStartMs": 78540
-      },
-      {
-        "text": "une personne déjà cochée peut rester sélectionnée après un changement de filtre.",
-        "startMs": 10467,
-        "endMs": 13569,
-        "method": "silence",
-        "absoluteStartMs": 79274
-      },
-      {
-        "text": "Le compteur reste votre repère.",
-        "startMs": 14146,
-        "endMs": 15609,
-        "method": "silence",
-        "absoluteStartMs": 82953
-      },
-      {
-        "text": "Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
-        "startMs": 16493,
-        "endMs": 21721,
-        "method": "silence",
-        "absoluteStartMs": 85300
-      }
-    ],
-    "anchors": [
-      {
+        "atMs": 62880
+      },
+      "frameSeconds": 63.53,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-02.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "group",
-        "phrase": "Tout sélectionner ajoute les membres",
-        "startMs": 6399,
-        "endMs": 9005,
-        "cueMs": 75207
+        "phrase": "Tout s\u00e9lectionner ajoute les membres",
+        "startMs": 6969,
+        "endMs": 9989,
+        "cueMs": 75377
       },
-      {
+      "firstInput": {
+        "kind": "click",
+        "atMs": 75847
+      },
+      "frameSeconds": 76.497,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-03.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "group",
-        "phrase": "une personne déjà cochée peut",
-        "startMs": 10467,
-        "endMs": 13569,
-        "cueMs": 79275
+        "phrase": "une personne d\u00e9j\u00e0 coch\u00e9e peut",
+        "startMs": 10916,
+        "endMs": 15138,
+        "cueMs": 79322
       },
-      {
+      "firstInput": {
+        "kind": "click",
+        "atMs": 79811
+      },
+      "frameSeconds": 80.46100000000001,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-04.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "group",
         "phrase": "Avec Effacer, repartez",
-        "startMs": 16493,
-        "endMs": 21721,
-        "cueMs": 85303
-      }
-    ],
-    "interactions": [
-      {
+        "startMs": 18032,
+        "endMs": 23587,
+        "cueMs": 86440
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 70410
+        "atMs": 86911
       },
-      {
-        "kind": "click",
-        "atMs": 71209
-      },
-      {
-        "kind": "click",
-        "atMs": 75675
-      },
-      {
-        "kind": "click",
-        "atMs": 79741
-      },
-      {
-        "kind": "click",
-        "atMs": 85773
-      }
-    ]
-  },
-  {
-    "chapter": "send",
-    "startMs": 91401,
-    "endMs": 111778,
-    "sentences": [
-      {
-        "text": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun.",
-        "startMs": 421,
-        "endMs": 3649,
-        "method": "silence",
-        "absoluteStartMs": 91822
-      },
-      {
-        "text": "Envoyer deux invitations déclenche des messages individuels.",
-        "startMs": 4450,
-        "endMs": 6972,
-        "method": "silence",
-        "absoluteStartMs": 95851
-      },
-      {
-        "text": "Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien.",
-        "startMs": 7641,
-        "endMs": 11656,
-        "method": "silence",
-        "absoluteStartMs": 99042
-      },
-      {
-        "text": "Les coordonnées des autres invités ne sont pas affichées dans son message.",
-        "startMs": 12582,
-        "endMs": 15323,
-        "method": "silence",
-        "absoluteStartMs": 103983
-      },
-      {
-        "text": "La remise à cette boîte de test ne prouve évidemment pas qu'un bénévole a lu son email.",
-        "startMs": 16198,
-        "endMs": 20072,
-        "method": "silence",
-        "absoluteStartMs": 107599
-      }
-    ],
-    "anchors": [
-      {
+      "frameSeconds": 87.561,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-05.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "send",
-        "phrase": "Envoyer deux invitations déclenche des",
-        "startMs": 4450,
-        "endMs": 6972,
-        "cueMs": 96132
+        "phrase": "Envoyer deux invitations d\u00e9clenche des",
+        "startMs": 4052,
+        "endMs": 7055,
+        "cueMs": 97462
       },
-      {
+      "firstInput": {
+        "kind": "click",
+        "atMs": 97928
+      },
+      "frameSeconds": 98.578,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-06.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "send",
-        "phrase": "La remise à cette boîte",
-        "startMs": 16198,
-        "endMs": 20072,
-        "cueMs": 107599
-      }
-    ],
-    "interactions": [
-      {
-        "kind": "click",
-        "atMs": 91873
+        "phrase": "Vous voyez ici la r\u00e9ception",
+        "startMs": 16155,
+        "endMs": 18567,
+        "cueMs": 108894
       },
-      {
-        "kind": "click",
-        "atMs": 92658
-      },
-      {
-        "kind": "click",
-        "atMs": 93475
-      },
-      {
-        "kind": "key",
-        "atMs": 93783
-      },
-      {
-        "kind": "key",
-        "atMs": 93881
-      },
-      {
-        "kind": "key",
-        "atMs": 93978
-      },
-      {
-        "kind": "key",
-        "atMs": 94077
-      },
-      {
-        "kind": "key",
-        "atMs": 94177
-      },
-      {
-        "kind": "key",
-        "atMs": 94276
-      },
-      {
-        "kind": "key",
-        "atMs": 94374
-      },
-      {
-        "kind": "key",
-        "atMs": 94473
-      },
-      {
-        "kind": "key",
-        "atMs": 94573
-      },
-      {
-        "kind": "key",
-        "atMs": 94676
-      },
-      {
-        "kind": "key",
-        "atMs": 94777
-      },
-      {
-        "kind": "key",
-        "atMs": 94878
-      },
-      {
-        "kind": "key",
-        "atMs": 94981
-      },
-      {
-        "kind": "key",
-        "atMs": 95080
-      },
-      {
-        "kind": "key",
-        "atMs": 95185
-      },
-      {
-        "kind": "key",
-        "atMs": 95285
-      },
-      {
-        "kind": "key",
-        "atMs": 95398
-      },
-      {
-        "kind": "key",
-        "atMs": 95497
-      },
-      {
-        "kind": "key",
-        "atMs": 95599
-      },
-      {
-        "kind": "key",
-        "atMs": 95704
-      },
-      {
-        "kind": "key",
-        "atMs": 95805
-      },
-      {
-        "kind": "click",
-        "atMs": 96607
-      }
-    ]
-  },
-  {
-    "chapter": "personal-link",
-    "startMs": 112231,
-    "endMs": 136641,
-    "sentences": [
-      {
-        "text": "Ouvrons le lien reçu par Aline.",
-        "startMs": 303,
-        "endMs": 1884,
-        "method": "silence",
-        "absoluteStartMs": 112534
-      },
-      {
-        "text": "Il mène à la fête avec ses coordonnées préremplies.",
-        "startMs": 2306,
-        "endMs": 5340,
-        "method": "silence",
-        "absoluteStartMs": 114537
-      },
-      {
-        "text": "Elle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées.",
-        "startMs": 5881,
-        "endMs": 11905,
-        "method": "silence",
-        "absoluteStartMs": 118112
-      },
-      {
-        "text": "Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation.",
-        "startMs": 12838,
-        "endMs": 16961,
-        "method": "silence",
-        "absoluteStartMs": 125069
-      },
-      {
-        "text": "Le lien est personnel :",
-        "startMs": 17586,
-        "endMs": 19879,
-        "method": "silence",
-        "absoluteStartMs": 129817
-      },
-      {
-        "text": "il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
-        "startMs": 20048,
-        "endMs": 24202,
-        "method": "silence",
-        "absoluteStartMs": 132279
-      }
-    ],
-    "anchors": [
-      {
+      "firstInput": null,
+      "frameSeconds": 109.54400000000001,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-07.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "personal-link",
-        "phrase": "Ouvrons le lien reçu par",
-        "startMs": 303,
-        "endMs": 1884,
-        "cueMs": 113404
+        "phrase": "Ouvrons le lien re\u00e7u par",
+        "startMs": 175,
+        "endMs": 2137,
+        "cueMs": 115895
       },
-      {
+      "firstInput": {
+        "kind": "click",
+        "atMs": 121912
+      },
+      "frameSeconds": 122.56200000000001,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-08.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "personal-link",
         "phrase": "Nous faisons une vraie inscription",
-        "startMs": 12838,
-        "endMs": 16961,
-        "cueMs": 125071
-      }
-    ],
-    "interactions": [
-      {
+        "startMs": 11482,
+        "endMs": 15711,
+        "cueMs": 127232
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 119301
+        "atMs": 127709
       },
-      {
-        "kind": "click",
-        "atMs": 120998
-      },
-      {
-        "kind": "click",
-        "atMs": 122950
-      },
-      {
-        "kind": "click",
-        "atMs": 123732
-      },
-      {
-        "kind": "click",
-        "atMs": 124515
-      },
-      {
-        "kind": "click",
-        "atMs": 125532
-      }
-    ]
-  },
-  {
-    "chapter": "reserved",
-    "startMs": 137094,
-    "endMs": 161931,
-    "sentences": [
-      {
-        "text": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag.",
-        "startMs": 207,
-        "endMs": 6305,
-        "method": "silence",
-        "absoluteStartMs": 137301
-      },
-      {
-        "text": "Ici, Nicolas a le tag sécurité.",
-        "startMs": 6427,
-        "endMs": 8098,
-        "method": "silence",
-        "absoluteStartMs": 143521
-      },
-      {
-        "text": "Avec son invitation valide, il peut choisir le poste réservé correspondant.",
-        "startMs": 8936,
-        "endMs": 12546,
-        "method": "silence",
-        "absoluteStartMs": 146030
-      },
-      {
-        "text": "Ce n'est pas une autorisation générale :",
-        "startMs": 13421,
-        "endMs": 15037,
-        "method": "silence",
-        "absoluteStartMs": 150515
-      },
-      {
-        "text": "les tags actuels sont revérifiés à l'inscription.",
-        "startMs": 15170,
-        "endMs": 17788,
-        "method": "silence",
-        "absoluteStartMs": 152264
-      },
-      {
-        "text": "Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
-        "startMs": 18553,
-        "endMs": 24101,
-        "method": "silence",
-        "absoluteStartMs": 155647
-      }
-    ],
-    "anchors": [
-      {
+      "frameSeconds": 128.359,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-09.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "reserved",
         "phrase": "Avec son invitation valide, il",
-        "startMs": 8936,
-        "endMs": 12546,
-        "cueMs": 146032
+        "startMs": 6905,
+        "endMs": 10439,
+        "cueMs": 145738
       },
-      {
+      "firstInput": {
+        "kind": "click",
+        "atMs": 146928
+      },
+      "frameSeconds": 147.578,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-10.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "reserved",
-        "phrase": "les tags actuels sont revérifiés",
-        "startMs": 15170,
-        "endMs": 17788,
-        "cueMs": 152263
-      }
-    ],
-    "interactions": [
-      {
+        "phrase": "les tags actuels sont rev\u00e9rifi\u00e9s",
+        "startMs": 10918,
+        "endMs": 13720,
+        "cueMs": 149749
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 138761
+        "atMs": 150243
       },
-      {
-        "kind": "click",
-        "atMs": 147614
-      },
-      {
-        "kind": "click",
-        "atMs": 152729
-      }
-    ]
-  },
-  {
-    "chapter": "status",
-    "startMs": 162384,
-    "endMs": 183933,
-    "sentences": [
-      {
-        "text": "De retour dans Invitations, Aline a maintenant une participation confirmée.",
-        "startMs": 748,
-        "endMs": 5226,
-        "method": "silence",
-        "absoluteStartMs": 163132
-      },
-      {
-        "text": "D'autres personnes restent sans créneau confirmé.",
-        "startMs": 6019,
-        "endMs": 8441,
-        "method": "silence",
-        "absoluteStartMs": 168403
-      },
-      {
-        "text": "Ce statut ne dit pas si elles ont ouvert leur email.",
-        "startMs": 9248,
-        "endMs": 11850,
-        "method": "silence",
-        "absoluteStartMs": 171632
-      },
-      {
-        "text": "Il peut aussi concerner une personne en liste d'attente ou une demande encore à valider.",
-        "startMs": 11993,
-        "endMs": 15977,
-        "method": "silence",
-        "absoluteStartMs": 174377
-      },
-      {
-        "text": "Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
-        "startMs": 16721,
-        "endMs": 21009,
-        "method": "silence",
-        "absoluteStartMs": 179105
-      }
-    ],
-    "anchors": [
-      {
+      "frameSeconds": 150.893,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-11.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "status",
         "phrase": "Il peut aussi concerner une",
-        "startMs": 11993,
-        "endMs": 15977,
-        "cueMs": 174379
-      }
-    ],
-    "interactions": []
-  },
-  {
-    "chapter": "existing",
-    "startMs": 184387,
-    "endMs": 207430,
-    "sentences": [
-      {
-        "text": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau.",
-        "startMs": 538,
-        "endMs": 6196,
-        "method": "silence",
-        "absoluteStartMs": 184925
+        "startMs": 10332,
+        "endMs": 12779,
+        "cueMs": 173951
       },
-      {
-        "text": "Décochez-la si vous voulez les retrouver.",
-        "startMs": 7020,
-        "endMs": 8614,
-        "method": "silence",
-        "absoluteStartMs": 191407
-      },
-      {
-        "text": "Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde.",
-        "startMs": 9510,
-        "endMs": 14476,
-        "method": "silence",
-        "absoluteStartMs": 193897
-      },
-      {
-        "text": "Prenez néanmoins le temps de vérifier le groupe avant d'envoyer :",
-        "startMs": 14742,
-        "endMs": 18520,
-        "method": "silence",
-        "absoluteStartMs": 199129
-      },
-      {
-        "text": "recevoir plusieurs messages identiques peut vite devenir agaçant.",
-        "startMs": 18660,
-        "endMs": 22400,
-        "method": "silence",
-        "absoluteStartMs": 203047
-      }
-    ],
-    "anchors": [
-      {
+      "firstInput": null,
+      "frameSeconds": 174.601,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-12.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "existing",
-        "phrase": "Décochez-la si vous voulez",
-        "startMs": 7020,
-        "endMs": 8614,
-        "cueMs": 191410
-      }
-    ],
-    "interactions": [
-      {
-        "kind": "click",
-        "atMs": 184857
+        "phrase": "D\u00e9cochez-la si vous voulez",
+        "startMs": 5048,
+        "endMs": 6892,
+        "cueMs": 191413
       },
-      {
+      "firstInput": {
         "kind": "click",
         "atMs": 191874
       },
-      {
-        "kind": "click",
-        "atMs": 192689
-      },
-      {
-        "kind": "key",
-        "atMs": 192997
-      },
-      {
-        "kind": "key",
-        "atMs": 193097
-      },
-      {
-        "kind": "key",
-        "atMs": 193197
-      },
-      {
-        "kind": "key",
-        "atMs": 193296
-      },
-      {
-        "kind": "key",
-        "atMs": 193395
-      }
-    ]
-  },
-  {
-    "chapter": "no-email",
-    "startMs": 208680,
-    "endMs": 232569,
-    "sentences": [
-      {
-        "text": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente.",
-        "startMs": 644,
-        "endMs": 6804,
-        "method": "silence",
-        "absoluteStartMs": 209324
-      },
-      {
-        "text": "René devra être contacté autrement.",
-        "startMs": 7547,
-        "endMs": 9061,
-        "method": "silence",
-        "absoluteStartMs": 216227
-      },
-      {
-        "text": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés, encore moins au nombre de messages lus.",
-        "startMs": 9736,
-        "endMs": 15590,
-        "method": "silence",
-        "absoluteStartMs": 218416
-      },
-      {
-        "text": "Une invitation claire, le bon groupe et quelques vérifications :",
-        "startMs": 16424,
-        "endMs": 19042,
-        "method": "silence",
-        "absoluteStartMs": 225104
-      },
-      {
-        "text": "c'est tout ce qu'il faut pour lancer la participation sereinement.",
-        "startMs": 19456,
-        "endMs": 23633,
-        "method": "silence",
-        "absoluteStartMs": 228136
-      }
-    ],
-    "anchors": [
-      {
+      "frameSeconds": 192.524,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-13.jpg"
+    },
+    {
+      "anchor": {
         "segmentId": "no-email",
-        "phrase": "Le nombre d'invités ne correspond",
-        "startMs": 9736,
-        "endMs": 15590,
-        "cueMs": 218417
-      }
-    ],
-    "interactions": [
-      {
+        "phrase": "Le nombre d'invit\u00e9s ne correspond",
+        "startMs": 9187,
+        "endMs": 12883,
+        "cueMs": 217417
+      },
+      "firstInput": {
         "kind": "click",
-        "atMs": 209157
+        "atMs": 217890
       },
-      {
-        "kind": "click",
-        "atMs": 209990
-      },
-      {
-        "kind": "key",
-        "atMs": 210298
-      },
-      {
-        "kind": "key",
-        "atMs": 210397
-      },
-      {
-        "kind": "key",
-        "atMs": 210496
-      },
-      {
-        "kind": "key",
-        "atMs": 210595
-      },
-      {
-        "kind": "key",
-        "atMs": 210693
-      },
-      {
-        "kind": "click",
-        "atMs": 211440
-      },
-      {
-        "kind": "click",
-        "atMs": 218888
-      }
-    ]
-  }
-]
+      "frameSeconds": 218.54,
+      "file": "/tmp/codex-video/videos/output/members-invitations/review/anchor-14.jpg"
+    }
+  ]
+}
