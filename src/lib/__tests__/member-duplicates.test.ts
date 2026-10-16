@@ -69,6 +69,35 @@ describe("email closeness", () => {
     expect(emailsAreClose("jean.dupont@gmail.com", "jean.dupon@gmial.com")).toBe(true)
   })
 
+  it("does not treat local parts that differ only in digits as close (#1037)", () => {
+    expect(emailsAreClose("video.membre.6@example.org", "video.membre.21@example.org")).toBe(false)
+    expect(emailsAreClose("benevole1@example.org", "benevole2@example.org")).toBe(false)
+    expect(emailsAreClose("buvette1@example.org", "buvette12@example.org")).toBe(false)
+    expect(emailsAreClose("jean.dupont@example.org", "jean.dupont2@example.org")).toBe(false)
+    // A digit difference plus a real letter typo is still a typo candidate.
+    expect(emailsAreClose("jean.dupont1@example.org", "jean.dupon2@example.org")).toBe(true)
+  })
+
+  it("finds no email pair among 35 numbered addresses (#1037)", () => {
+    const members = Array.from({ length: 35 }, (_, i) =>
+      member({ id: `m${i + 1}`, firstName: `Prénom${String.fromCharCode(65 + (i % 26))}${i}`, lastName: `Nom${i}`, email: `video.membre.${i + 1}@example.org` }),
+    )
+    const pairs = findDuplicatePairs(members)
+    expect(pairs.filter((p) => p.signals.includes("email"))).toHaveLength(0)
+  })
+
+  it("still catches a two-edit typo on a long local part, transpositions included", () => {
+    expect(emailsAreClose("jean.dupont@example.com", "jean.dupnot@example.com")).toBe(true)
+    expect(emailsAreClose("jean.dupont@example.com", "jean.dpont@example.com")).toBe(true)
+  })
+
+  it("allows a single edit only on short local parts (#1037)", () => {
+    expect(emailsAreClose("paul@example.org", "paull@example.org")).toBe(true)
+    expect(emailsAreClose("paul@example.org", "pablo@example.org")).toBe(false)
+    expect(emailsAreClose("marie.d@example.org", "mario.b@example.org")).toBe(false)
+    expect(emailsAreClose("marie.du@example.org", "mario.du@example.org")).toBe(true)
+  })
+
   it("rejects malformed addresses", () => {
     expect(normalizeEmailParts("not-an-email")).toBeNull()
     expect(normalizeEmailParts("@nodomain")).toBeNull()

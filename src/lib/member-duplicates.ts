@@ -109,15 +109,25 @@ function editDistance(a: string, b: string): number {
   return prev[n]
 }
 
+/** Local parts shorter than this tolerate a single edit only: two edits on « paul » already make
+ * another first name (« pablo »), whereas on « jean.dupont » they are a plausible typo (#1037). */
+const SHORT_LOCAL_PART_LENGTH = 8
+
 /** Very close, never identical: same domain (or a known typo of it) and local-part edit distance
- * of at most 2. Two literally identical addresses aren't a "close email" signal on their own. */
+ * of at most 2 (at most 1 when the shorter local part has fewer than SHORT_LOCAL_PART_LENGTH
+ * characters). Two literally identical addresses aren't a "close email" signal on their own, and
+ * neither are local parts that differ only in their digits (« benevole1 » / « benevole2 »,
+ * « video.membre.6 » / « video.membre.21 »): numbered addresses belong to different people far
+ * more often than they hide a typo (#1037). */
 export function emailsAreClose(a: string | null | undefined, b: string | null | undefined): boolean {
   const pa = normalizeEmailParts(a)
   const pb = normalizeEmailParts(b)
   if (!pa || !pb) return false
   if (pa.local === pb.local && pa.domain === pb.domain) return false
   if (canonicalDomain(pa.domain) !== canonicalDomain(pb.domain)) return false
-  return editDistance(pa.local, pb.local) <= 2
+  if (pa.local !== pb.local && pa.local.replace(/\d+/g, "") === pb.local.replace(/\d+/g, "")) return false
+  const maxDistance = Math.min(pa.local.length, pb.local.length) < SHORT_LOCAL_PART_LENGTH ? 1 : 2
+  return editDistance(pa.local, pb.local) <= maxDistance
 }
 
 /** Blocking key: canonical domain + first 3 characters of the local part — coarser than
