@@ -84,3 +84,34 @@ describe("shift times: 00:00 to 23:59, overnight by an earlier end", () => {
     }
   })
 })
+
+describe("PATCH of an overnight shift's start alone (#1024)", () => {
+  const before = { id: "s1", eventId: "evt-a", roleName: "Bar", label: "Bar", startTime: "22:00", endTime: "02:00", capacity: 2, minVolunteers: null, date: new Date("2026-09-25"), event: { id: "evt-a", title: "E", slug: "e", organizationId: "org-a", startDate: new Date("2026-09-25"), endDate: new Date("2026-09-26"), organization: { slug: "o" } }, registrations: [] }
+  let update: ReturnType<typeof vi.fn>
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    update = vi.fn(async ({ data }) => ({ ...before, ...data }))
+    const db = {
+      shift: { findFirst: vi.fn().mockResolvedValue(before), findMany: vi.fn().mockResolvedValue([]), update },
+      $transaction: async (fn: (tx: unknown) => unknown) => fn({ shift: { update } }),
+    }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: { user: { id: "u1", email: "a@b.c" } } })
+  })
+
+  it("keeps the stored next-morning end: only the start is written", async () => {
+    const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
+    const res = await PATCH(patch({ startTime: "23:00" }), { params: Promise.resolve({ id: "s1" }) })
+    expect(res.status).toBe(200)
+    expect(update.mock.calls[0][0].data).toEqual({ startTime: "23:00" })
+  })
+
+  it("refuses a start moved onto the stored end, with a readable message", async () => {
+    const { PATCH } = await import("@/app/api/admin/shifts/[id]/route")
+    const res = await PATCH(patch({ startTime: "02:00" }), { params: Promise.resolve({ id: "s1" }) })
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toMatch(/différente/)
+    expect(update).not.toHaveBeenCalled()
+  })
+})
+

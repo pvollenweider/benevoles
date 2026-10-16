@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes, fmtHours, showSpan } from "../gantt-utils"
+import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes, fmtHours, showSpan, endAfterStartChange } from "../gantt-utils"
 
 describe("resolveNewShiftDisplayOrder", () => {
   it("inherits the existing role's displayOrder instead of a hardcoded 0 (#215 regression)", () => {
@@ -101,5 +101,60 @@ describe("showSpan", () => {
   })
   it("keeps a show starting at 00:00 on the same day", () => {
     expect(showSpan({ startTime: "00:00", endTime: "02:00" })).toEqual({ start: 0, end: 120 })
+  })
+})
+
+describe("endAfterStartChange (#1024)", () => {
+  const night = { start: "22:00", end: "02:00" }
+
+  it("keeps the next-morning end of an overnight shift when its start moves later (regression: became 00:00)", () => {
+    expect(endAfterStartChange(night, "23:00")).toBe("02:00")
+    expect(endAfterStartChange(night, "23:30")).toBe("02:00")
+  })
+
+  it("keeps it when the start moves earlier", () => {
+    expect(endAfterStartChange(night, "21:00")).toBe("02:00")
+    expect(endAfterStartChange(night, "03:00")).toBe("02:00")
+  })
+
+  it("keeps it when the start crosses midnight, still before the end on the clock", () => {
+    expect(endAfterStartChange(night, "00:30")).toBe("02:00")
+    expect(endAfterStartChange(night, "01:45")).toBe("02:00")
+  })
+
+  it("keeps an end at exactly midnight", () => {
+    const toMidnight = { start: "22:00", end: "00:00" }
+    expect(endAfterStartChange(toMidnight, "23:00")).toBe("00:00")
+    expect(endAfterStartChange(toMidnight, "20:00")).toBe("00:00")
+  })
+
+  it("gives one hour when the start lands on or after the end, or a day before it", () => {
+    expect(endAfterStartChange(night, "02:00")).toBe("03:00")
+    expect(endAfterStartChange({ start: "22:00", end: "00:00" }, "00:00")).toBe("01:00")
+    expect(endAfterStartChange({ start: "10:00", end: "11:00" }, "14:00")).toBe("15:00")
+    expect(endAfterStartChange({ start: "10:00", end: "11:00" }, "11:00")).toBe("12:00")
+  })
+
+  it("keeps a daytime end after the new start, as before", () => {
+    expect(endAfterStartChange({ start: "10:00", end: "12:00" }, "09:00")).toBe("12:00")
+    expect(endAfterStartChange({ start: "10:00", end: "12:00" }, "11:30")).toBe("12:00")
+  })
+
+  it("only depends on the anchor, not on the starts typed on the way", () => {
+    // Deleting the hours of 22:00 goes through 2:00: the end is still read against 22:00.
+    expect(endAfterStartChange(night, "2:00")).toBe("03:00")
+    expect(endAfterStartChange(night, "23:00")).toBe("02:00")
+    // A daytime shift whose start is retyped: only its own anchor counts.
+    expect(endAfterStartChange({ start: "10:00", end: "11:00" }, "23:00")).toBe("00:00")
+  })
+
+  it("defaults to one hour after the start without an end", () => {
+    expect(endAfterStartChange({ start: "", end: "" }, "17:00")).toBe("18:00")
+    expect(endAfterStartChange({ start: "", end: "1" }, "23:30")).toBe("00:30")
+  })
+
+  it("reads an end typed before any start on the same day", () => {
+    expect(endAfterStartChange({ start: "", end: "12:00" }, "10:00")).toBe("12:00")
+    expect(endAfterStartChange({ start: "", end: "02:00" }, "22:00")).toBe("23:00")
   })
 })

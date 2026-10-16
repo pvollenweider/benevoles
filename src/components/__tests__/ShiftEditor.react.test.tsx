@@ -198,4 +198,43 @@ describe("ShiftEditor", () => {
     fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
     expect(onCancel).toHaveBeenCalledOnce()
   })
+
+  // Typing a start keystroke by keystroke, as a person does.
+  const typeStart = (value: string) => {
+    const start = screen.getByLabelText("Début *")
+    for (let i = 1; i <= value.length; i++) fireEvent.change(start, { target: { value: value.slice(0, i) } })
+    fireEvent.blur(start)
+  }
+
+  it("keeps the next-morning end of an overnight shift when its start changes (#1024)", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: "s9" }) })
+    setup({ editingId: "s9", initial: { roleName: "Bar", date: "2026-07-04", startTime: "22:00", endTime: "02:00", capacity: 2 } })
+    typeStart("23:00")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("02:00")
+    typeStart("21:30")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("02:00")
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ startTime: "21:30", endTime: "02:00" })
+  })
+
+  it("keeps an end at midnight, and still moves a daytime end the start passed", () => {
+    setup({ editingId: "s9", initial: { roleName: "Bar", date: "2026-07-04", startTime: "22:00", endTime: "00:00", capacity: 2 } })
+    typeStart("20:00")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("00:00")
+    cleanup()
+    setup({ editingId: "s9", initial: { roleName: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "11:00", capacity: 2 } })
+    typeStart("14:00")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("15:00")
+  })
+
+  it("keeps an end the organiser typed past midnight", () => {
+    setup()
+    typeStart("22:00")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("23:00")
+    fireEvent.change(screen.getByLabelText("Fin *"), { target: { value: "02:00" } })
+    fireEvent.blur(screen.getByLabelText("Fin *"))
+    typeStart("23:00")
+    expect(screen.getByLabelText("Fin *")).toHaveValue("02:00")
+  })
 })

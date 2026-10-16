@@ -44,10 +44,11 @@ export function dayRange(items: Timed[]): { dayStart: number; dayEnd: number } {
 /**
  * Snapped minute under a horizontal offset (px from the start of the time area). Shift times are
  * wall-clock times of the date (00:00 to 23:59, end at most midnight): the padding hour around the
- * shifts is display only, so drag never leaves 0..1440.
+ * shifts is display only, so drag never leaves 0..1440. `max` lifts the midnight cap for the end of
+ * a shift that already runs into the next morning (#1024).
  */
-export function offsetToMin(localX: number, dayStart: number, dayEnd: number): number {
-  return snapTo(clamp(dayStart + localX / PX_PER_MIN, Math.max(dayStart, 0), Math.min(dayEnd, 1440)))
+export function offsetToMin(localX: number, dayStart: number, dayEnd: number, max = 1440): number {
+  return snapTo(clamp(dayStart + localX / PX_PER_MIN, Math.max(dayStart, 0), Math.min(dayEnd, max)))
 }
 
 /** Whole hours to draw a tick for. */
@@ -113,9 +114,27 @@ export function draftEnd(startMin: number, cur: number): number {
   return Math.min(1440, Math.max(startMin + SNAP, cur))
 }
 
+/** A snapped minute within lo..hi: the step inside the bounds when the nearest one is outside. */
+function snapWithin(n: number, lo: number, hi: number): number {
+  const s = snapTo(clamp(n, lo, hi))
+  if (s > hi) return Math.floor(hi / SNAP) * SNAP
+  if (s < lo) return Math.ceil(lo / SNAP) * SNAP
+  return s
+}
+
+/**
+ * True when the end of a shift may be dragged past midnight: the shift already ends at or after
+ * midnight (22:00–02:00, 22:00–00:00). A daytime shift keeps its end within the day.
+ */
+export function endMayPassMidnight(orig: Timed): boolean {
+  return toMinEnd(orig.endTime, orig.startTime) >= 1440
+}
+
 /**
  * Times of a shift while one of its edges is dragged to `cur`: the other edge stays, the shift
- * keeps at least MIN_DUR minutes, and stays within the day (and the visible range).
+ * keeps at least MIN_DUR minutes and less than a day, and stays within the visible range. Its start
+ * stays on its date; its end stays within the day, unless the shift already ran into the next
+ * morning (#1024): dragging the end of a 22:00–02:00 shift never pulls it back to 00:00.
  */
 export function resizedTimes(
   orig: Timed,
@@ -126,9 +145,9 @@ export function resizedTimes(
   const startMin = toMin(orig.startTime)
   const endMin   = toMinEnd(orig.endTime, orig.startTime)
   if (side === "right") {
-    const newEnd = snapTo(clamp(cur, startMin + MIN_DUR, Math.min(dayEnd, 1440)))
-    return { startTime: orig.startTime, endTime: fromMin(newEnd) }
+    const max = endMayPassMidnight(orig) ? Math.min(dayEnd, startMin + 1440 - SNAP) : Math.min(dayEnd, 1440)
+    return { startTime: orig.startTime, endTime: fromMin(snapWithin(cur, startMin + MIN_DUR, max)) }
   }
-  const newStart = snapTo(clamp(cur, Math.max(dayStart, 0), Math.min(endMin - MIN_DUR, 1440 - SNAP)))
+  const newStart = snapWithin(cur, Math.max(dayStart, 0, endMin - 1440 + SNAP), Math.min(endMin - MIN_DUR, 1440 - SNAP))
   return { startTime: fromMin(newStart), endTime: orig.endTime }
 }
