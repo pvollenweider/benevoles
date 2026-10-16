@@ -14,7 +14,8 @@ import { getMessageText, waitForMessage } from "./mailpit"
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
-export type ShiftSpec = { label: string; startTime: string; endTime: string; capacity?: number }
+/** `maxPerVolunteer`: the limit of shifts per person of the role (#466), set on the role once its shifts exist. */
+export type ShiftSpec = { label: string; startTime: string; endTime: string; capacity?: number; maxPerVolunteer?: number }
 export type QuestionSpec = { label: string; type: "text" | "yesno" | "single" | "multiple"; options?: string[] }
 export type PublicEvent = { eventId: string; slug: string; date: string; shifts: { id: string; label: string }[]; questions: { id: string; label: string }[] }
 
@@ -49,6 +50,10 @@ export async function createPublicEvent(browser: Browser, title: string, shifts:
       eventId: event.id, roleName: s.label, label: s.label, date, startTime: s.startTime, endTime: s.endTime, capacity: s.capacity ?? 5,
     })
     created.push({ id: shift.id, label: s.label })
+  }
+  for (const [role, max] of new Map(shifts.filter((s) => s.maxPerVolunteer != null).map((s) => [s.label, s.maxPerVolunteer!]))) {
+    const res = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent(role)}`, { data: { maxPerVolunteer: max } })
+    expect(res.ok(), `role limit: ${res.status()} ${await res.text()}`).toBeTruthy()
   }
   const asked: { id: string; label: string }[] = []
   for (const q of questions) {

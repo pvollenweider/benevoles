@@ -28,6 +28,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte : clique pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |
+| Barre colorée, et dessous la mention « Limite atteinte » | Tu as déjà pris le nombre maximum de créneaux de ce poste : ce créneau ne peut pas être ajouté |
 | Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir (sauf poste cumulable, voir plus bas) |
 | Fond violet (🎪) | Plage d'un spectacle, repère visuel uniquement |
 
@@ -47,7 +48,7 @@ Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection
 
 Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
 
-Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà pris le maximum, un message sous le planning du jour le dit et le créneau n'est pas ajouté.
+Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà pris le maximum (en comptant tes inscriptions et ta sélection), les autres créneaux du poste affichent « Limite atteinte » sous leur barre, et la phrase entière dans la vue Liste, avec le nombre fixé par l'organisation (par exemple « Limite de 2 créneaux par personne atteinte »). Si tu cliques quand même, un message sous le planning du jour le rappelle et le créneau n'est pas ajouté. Pour en choisir un autre, retire un créneau du poste de ta sélection, ou annule une de tes inscriptions depuis [ta page personnelle](ma-page-personnelle.md).
 
 Un créneau marqué « Sur validation » se choisit comme les autres, mais ton inscription y sera une demande : voir [Inscriptions sur validation](inscriptions-sur-validation.md).
 

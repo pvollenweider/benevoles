@@ -13,6 +13,9 @@ import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./h
  *
  * #534: a shift the visitor already holds is named « … : inscription confirmée », disabled, and
  * tagged « Ton créneau ».
+ *
+ * #1023: once the role's limit per person is reached, its other bars say so under the bar, in the
+ * words of their name, and in the list view.
  */
 
 let event: PublicEvent
@@ -116,4 +119,28 @@ test("a held shift is named and tagged as the visitor's own, and not offered (#5
   await expect(page.getByText("Ton créneau", { exact: true })).toBeVisible()
   // The other shift is still offered.
   await expect(page.getByRole("button", { name: /^14h–16h \d+\/\d+, Accueil : sélectionner/ })).toBeEnabled()
+})
+
+test("a bar of a role whose limit per person is reached says so under the bar and in the list (#1023)", async ({ page, browser }) => {
+  const limited = await createPublicEvent(browser, `E2E Planning limite ${Date.now()}`, [
+    { label: "Buvette", startTime: "10:00", endTime: "14:00", maxPerVolunteer: 2 },
+    { label: "Buvette", startTime: "14:00", endTime: "18:00", maxPerVolunteer: 2 },
+    { label: "Buvette", startTime: "18:00", endTime: "22:00", maxPerVolunteer: 2 },
+  ])
+  const token = await publicSignUp(page, limited, [limited.shifts[0].id, limited.shifts[1].id])
+  await page.goto(publicUrl(limited))
+  await page.evaluate(([slug, t]) => localStorage.setItem(`benevoles_token_${slug}`, t), [limited.slug, token])
+  await page.goto(publicUrl(limited))
+
+  const third = page.getByRole("button", { name: /^18h–22h \d+\/\d+, Buvette : sélectionner/ })
+  await waitForHydration(third)
+  await expect(third).toHaveAccessibleName("18h–22h 0/5, Buvette : sélectionner (5 places libres sur 5) (limite de 2 créneaux par personne atteinte)")
+  // A 4-hour bar is narrow: the short form under it, the whole sentence in its name.
+  await expect(page.getByText("Limite atteinte", { exact: true })).toBeVisible()
+  // Still clickable on purpose: the click says why it isn't added.
+  await third.click()
+  await expect(page.getByText("Au plus 2 créneaux « Buvette » par personne : ce créneau n'est pas ajouté.").first()).toBeVisible()
+
+  await page.getByRole("button", { name: "Liste", exact: true }).click()
+  await expect(page.getByRole("button", { name: /^18h–22h · Buvette/ })).toContainText("Limite de 2 créneaux par personne atteinte · 5 places libres sur 5")
 })

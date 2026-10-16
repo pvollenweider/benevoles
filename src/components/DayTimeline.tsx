@@ -198,7 +198,7 @@ export default function DayTimeline({
                   // enough room. Skipped once full (the "Complet" / waitlist wording already says
                   // all that matters) and on a held bar (its name and tag say what matters).
                   const spotsText       = unavail || isRegistered ? null : `${shift.registered}/${shift.capacity}`
-                  const { ariaLabel, tag, subLabel } = barText({
+                  const { ariaLabel, tag, tagShort, subLabel } = barText({
                     shift,
                     conflict: isConflict,
                     held: heldKind,
@@ -319,7 +319,14 @@ export default function DayTimeline({
                           style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
                           aria-hidden="true"
                         >
-                          {tag && <span className="font-semibold text-gray-800">{tag}</span>}
+                          {/* A narrow bar (most of them at 390 px) gets the short form of a long
+                              tag, so the details after it stay visible; the name has it whole. */}
+                          {tag && (tagShort ? (
+                            <>
+                              <span className="@min-[260px]:hidden font-semibold text-gray-800">{tagShort}</span>
+                              <span className="hidden @min-[260px]:inline font-semibold text-gray-800">{tag}</span>
+                            </>
+                          ) : <span className="font-semibold text-gray-800">{tag}</span>)}
                           {tag && subLabel && " · "}
                           {subLabel}
                         </span>
