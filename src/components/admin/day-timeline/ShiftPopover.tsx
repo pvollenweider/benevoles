@@ -17,40 +17,62 @@ import { spokenTimeRange } from "@/lib/spoken-time"
 import { popoverPlacement } from "@/lib/popover-placement"
 import { focusLeftContainer } from "@/lib/focus-leave"
 import { isFocusDropped } from "@/lib/focus-return"
+import { applyResultMessage, applySummary, confirmQuestion, labelToApply, type ApplyResult, type ApplyScope, type ApplyValues } from "@/lib/poste-apply"
 import type { AdminShift } from "../AdminDayTimeline"
 
 /**
  * Quick edits of one shift from the timeline (#398): label, capacity and minimum (#949, for this
- * shift or the whole role), times, status, duplicate, delete. Closing (click outside, Escape, ✕)
+ * shift, or with the label onto the poste's shifts of this day or of the whole event, #1017), times,
+ * status, duplicate, delete. Closing (click outside, Escape, ✕)
  * saves the label, capacity and minimum, and so does « Voir les inscriptions » before it leaves the
  * page (#991); the other actions save on their own button.
  */
 export default function ShiftPopover({
-  shift, anchor, eventId, onClose, onPatch, onDelete, onDuplicate, onApplyCapacity, onNotSaved,
+  shift, anchor, eventId, eventCount, onClose, onPatch, onDelete, onDuplicate, onApplyToPoste, onNotSaved,
 }: {
   shift:    AdminShift
   anchor:   { x: number; y: number; w: number }
   eventId:  string
+  /** The poste's live shifts over the whole event (#1017), or null when it has shifts on this day only. */
+  eventCount?: { shifts: number; days: number } | null
   onClose:  () => void
   /** Resolves to `false` when the change was not saved (the parent says why). */
   onPatch:  (id: string, data: Partial<AdminShift>) => Promise<boolean | void> | boolean | void
   onDelete: (id: string) => void
   onDuplicate: (id: string) => Promise<void> | void
-  /** `minVolunteers` (#949): null removes it on the role, absent leaves each shift's own. */
-  onApplyCapacity: (roleName: string, capacity: number, minVolunteers?: number | null) => Promise<boolean | void> | boolean | void
+  /**
+   * « Appliquer au poste » (#1017): `minVolunteers` null removes it, absent leaves each shift's own
+   * (#949); `label` absent leaves each shift's own. Resolves to `false` when nothing was applied
+   * (the parent says why).
+   */
+  onApplyToPoste: (shiftId: string, roleName: string, scope: ApplyScope, values: ApplyValues) => Promise<ApplyResult | false>
   /** Said out loud by the parent once the popover is closed (#949): what closing did not save, and why. */
   onNotSaved?: (message: string) => void
 }) {
   const id = useId()
   const router = useRouter()
   const [label, setLabel]       = useState(shift.label === shift.roleName ? "" : shift.label)
+  // The label as it was at opening (#1017): only a label typed here is copied to the poste.
+  const [openingLabel] = useState(label)
   const [capacity, setCapacity] = useState(shift.capacity)
   // Minimum of people (#949), as typed: "" is none.
   const [minimum, setMinimum]   = useState<string>(shift.minVolunteers != null ? String(shift.minVolunteers) : "")
   const [status, setStatus]     = useState(shift.status)
   const [startTime, setStartTime] = useState(shift.startTime)
   const [endTime, setEndTime]     = useState(shift.endTime)
-  const [busy, setBusy] = useState<"move" | "duplicate" | "capacity" | "navigate" | null>(null)
+  const [busy, setBusy] = useState<"move" | "duplicate" | "apply-day" | "apply-event" | "navigate" | null>(null)
+  // « Tout l'événement » asks first (#1017); focus then goes to the control the step shows.
+  const [confirming, setConfirming] = useState(false)
+  const focusNextRef = useRef<"confirm" | "event" | null>(null)
+  const confirmRef = useRef<HTMLButtonElement>(null)
+  const eventButtonRef = useRef<HTMLButtonElement>(null)
+  // After the render that shows the step, before paint: focus never rests on <body>.
+  useLayoutEffect(() => {
+    const target = focusNextRef.current
+    if (!target) return
+    focusNextRef.current = null
+    ;(target === "confirm" ? confirmRef : eventButtonRef).current?.focus()
+  })
   const [message, setMessageState] = useState<string | null>(null)
   // Once shown, the status box keeps its place: re-announcing does not make the popover jump.
   const [statusShown, setStatusShown] = useState(false)
@@ -167,21 +189,39 @@ export default function ShiftPopover({
     announce("Créneau dupliqué juste après celui-ci.")
   }
 
-  async function applyCapacity() {
-    if (busy || capacityTooLow || minimumError) return
-    setBusy("capacity")
-    // The minimum goes with the places when there is one, or when this shift's is being removed;
-    // an empty field on a shift without one leaves each shift's own minimum as it is.
-    const ok = minimumValue != null || shift.minVolunteers != null
-      ? await onApplyCapacity(shift.roleName, capacity, minimumValue)
-      : await onApplyCapacity(shift.roleName, capacity)
+  // What « Appliquer au poste » copies (#1017). The minimum goes with the places when there is one,
+  // or when this shift's is being removed; an empty field on a shift without one leaves each shift's
+  // own. The label goes only when typed here and not empty.
+  const applyLabel = labelToApply(label, openingLabel, shift.roleName)
+  const applyMinimum = minimumValue != null || shift.minVolunteers != null ? minimumValue : undefined
+  const applyValues: ApplyValues = {
+    capacity,
+    ...(applyMinimum !== undefined ? { minVolunteers: applyMinimum } : {}),
+    ...(applyLabel !== undefined ? { label: applyLabel } : {}),
+  }
+  const applyBlocked = capacityTooLow || !!minimumError
+
+  async function applyToPoste(scope: ApplyScope) {
+    if (busy || applyBlocked) return
+    setBusy(scope === "day" ? "apply-day" : "apply-event")
+    const result = await onApplyToPoste(shift.id, shift.roleName, scope, applyValues)
     setBusy(null)
-    if (ok === false) return
-    announce(minimumValue != null
-      ? `${capacity} places et un minimum de ${minimumValue} appliqués au poste « ${shift.roleName} ».`
-      : `${capacity} place${capacity > 1 ? "s" : ""} appliquée${capacity > 1 ? "s" : ""} au poste « ${shift.roleName} ».`)
+    // On failure the parent says why; focus stays where it is (on « Confirmer » for the event).
+    if (result === false) return
+    if (scope === "event") { focusNextRef.current = "event"; setConfirming(false) }
+    announce(applyResultMessage(shift.roleName, scope, result))
   }
 
+  function cancelConfirm() {
+    if (busy) return
+    focusNextRef.current = "event"
+    setConfirming(false)
+  }
+
+  // An unavailable button says why (3.3.1); else what it applies.
+  const applyDescribedBy = applyBlocked
+    ? [minimumError && `${id}-minimum-hint`, capacityTooLow && `${id}-capacity-hint`].filter(Boolean).join(" ")
+    : `${id}-apply-hint`
   const registrationsHref = `/admin/events/${eventId}/registrations?shift=${shift.id}`
   const capacityInputRef = useRef<HTMLInputElement>(null)
   const minimumInputRef = useRef<HTMLInputElement>(null)
@@ -279,7 +319,7 @@ export default function ShiftPopover({
         <div className="flex items-end gap-2">
           <div className="w-20">
             <label htmlFor={`${id}-capacity`} className="block text-xs font-medium text-gray-700 mb-1">Places</label>
-            <input ref={capacityInputRef} id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={minimumError ? `${id}-capacity-hint ${id}-minimum-hint` : `${id}-capacity-hint`} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
+            <input ref={capacityInputRef} id={`${id}-capacity`} type="number" min={minCapacity} value={capacity} aria-invalid={capacityTooLow ? true : undefined} aria-describedby={[capacityTooLow && `${id}-capacity-hint`, minimumError && `${id}-minimum-hint`].filter(Boolean).join(" ") || undefined} onChange={e => setCapacity(Number(e.target.value))} className={`${field} text-center`} />
           </div>
           <div className="w-24">
             <label htmlFor={`${id}-minimum`} className="block text-xs font-medium text-gray-700 mb-1">Minimum</label>
@@ -289,14 +329,71 @@ export default function ShiftPopover({
         <p id={`${id}-minimum-hint`} className={`text-xs -mt-2 ${minimumError ? "text-red-700" : "text-gray-600"}`}>
           {minimumError ? `${minimumError} Non enregistré.` : "Facultatif : sous ce nombre de personnes, le créneau ne peut pas tourner. Vide : toutes les places."}
         </p>
+        {capacityTooLow && (
+          <p id={`${id}-capacity-hint`} className="text-xs -mt-2 text-red-700">
+            {`Au moins ${minCapacity} : ${shift.registrationCount} personne${shift.registrationCount > 1 ? "s sont déjà inscrites" : " est déjà inscrite"}. Non enregistré en dessous.`}
+          </p>
+        )}
         <div>
-          <button type="button" onClick={applyCapacity} aria-disabled={busy !== null || capacityTooLow || !!minimumError} aria-describedby={minimumError ? `${id}-minimum-hint ${id}-capacity-hint` : `${id}-capacity-hint`} className={`${action} text-blue-700 hover:bg-blue-50 ${busy || capacityTooLow || minimumError ? "opacity-50" : ""}`}>
-            {busy === "capacity" ? "Application…" : "Appliquer à tout le poste"}
-          </button>
-          <p id={`${id}-capacity-hint`} className={`text-xs mt-1 ${capacityTooLow ? "text-red-700" : "text-gray-600"}`}>
-            {capacityTooLow
-              ? `Au moins ${minCapacity} : ${shift.registrationCount} personne${shift.registrationCount > 1 ? "s sont déjà inscrites" : " est déjà inscrite"}. Non enregistré en dessous.`
-              : busy === "capacity" ? "Enregistrement en cours…" : "Places et minimum sur tout le poste, jamais en dessous des inscrits d'un créneau."}
+          {eventCount ? (
+            <>
+              <p id={`${id}-apply-label`} className="text-xs font-medium text-gray-700 mb-1">Appliquer au poste « {shift.roleName} » :</p>
+              {confirming ? (
+                <div
+                  role="group"
+                  aria-labelledby={`${id}-confirm-question`}
+                  className="rounded-lg border border-gray-200 bg-gray-50 p-2 space-y-2"
+                  onKeyDown={e => {
+                    // Escape leaves the question, not the popover.
+                    if (e.key === "Escape") { e.stopPropagation(); cancelConfirm() }
+                  }}
+                >
+                  <p id={`${id}-confirm-question`} className="text-sm text-gray-800">{confirmQuestion(eventCount)}</p>
+                  <div className="flex gap-2">
+                    <button
+                      ref={confirmRef}
+                      type="button"
+                      onClick={() => void applyToPoste("event")}
+                      // A held Enter on « Tout l'événement » must not confirm at once.
+                      onKeyDown={e => { if (e.repeat && (e.key === "Enter" || e.key === " ")) e.preventDefault() }}
+                      aria-disabled={busy !== null || applyBlocked}
+                      aria-describedby={applyDescribedBy}
+                      className={`text-xs font-medium rounded-lg px-3 py-1.5 bg-blue-700 text-white hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${busy || applyBlocked ? "opacity-50" : ""}`}
+                    >
+                      {busy === "apply-event" ? "Application…" : "Confirmer"}
+                    </button>
+                    <button type="button" onClick={cancelConfirm} aria-disabled={busy !== null} className={`${action} text-xs px-3 text-gray-800 hover:bg-gray-100 ${busy ? "opacity-50" : ""}`}>
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div role="group" aria-labelledby={`${id}-apply-label`} className="flex flex-wrap gap-1">
+                  <button type="button" onClick={() => void applyToPoste("day")} aria-disabled={busy !== null || applyBlocked} aria-describedby={applyDescribedBy} className={`${action} px-3 border border-blue-200 text-blue-700 hover:bg-blue-50 ${busy || applyBlocked ? "opacity-50" : ""}`}>
+                    {busy === "apply-day" ? "Application…" : "Ce jour"}
+                  </button>
+                  <button
+                    ref={eventButtonRef}
+                    type="button"
+                    onClick={() => { if (!busy && !applyBlocked) { focusNextRef.current = "confirm"; setConfirming(true) } }}
+                    aria-disabled={busy !== null || applyBlocked}
+                    aria-describedby={applyDescribedBy}
+                    className={`${action} px-3 border border-blue-200 text-blue-700 hover:bg-blue-50 ${busy || applyBlocked ? "opacity-50" : ""}`}
+                  >
+                    Tout l&apos;événement
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <button type="button" onClick={() => void applyToPoste("day")} aria-disabled={busy !== null || applyBlocked} aria-describedby={applyDescribedBy} className={`${action} text-blue-700 hover:bg-blue-50 ${busy || applyBlocked ? "opacity-50" : ""}`}>
+              {busy === "apply-day" ? "Application…" : "Appliquer à tout le poste"}
+            </button>
+          )}
+          <p id={`${id}-apply-hint`} className="text-xs mt-1 text-gray-600">
+            {busy === "apply-day" || busy === "apply-event"
+              ? "Enregistrement en cours…"
+              : applyBlocked ? "Corrigez les places ou le minimum pour appliquer au poste." : applySummary(applyValues)}
           </p>
         </div>
 

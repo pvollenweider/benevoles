@@ -102,7 +102,7 @@ describe("Minimum per shift in the timeline popover", () => {
     const props = {
       shift: { ...shift, ...over }, anchor: { x: 100, y: 100, w: 80 }, eventId: "evt-1",
       onClose: vi.fn(), onPatch: vi.fn().mockResolvedValue(undefined), onDelete: vi.fn(),
-      onDuplicate: vi.fn().mockResolvedValue(undefined), onApplyCapacity: vi.fn().mockResolvedValue(true), onNotSaved: vi.fn(),
+      onDuplicate: vi.fn().mockResolvedValue(undefined), onApplyToPoste: vi.fn().mockResolvedValue({ shifts: 3, days: 1, keptHigher: 0 }), onNotSaved: vi.fn(),
     }
     render(<ShiftPopover {...props} />)
     return props
@@ -126,7 +126,7 @@ describe("Minimum per shift in the timeline popover", () => {
     expect(apply).toHaveAccessibleDescription(/Le minimum \(5\) dépasse les places \(3\)/)
     expect(screen.getByLabelText("Places")).toHaveAccessibleDescription(/Le minimum \(5\) dépasse les places \(3\)/)
     fireEvent.click(apply)
-    expect(p.onApplyCapacity).not.toHaveBeenCalled()
+    expect(p.onApplyToPoste).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole("button", { name: "Fermer et enregistrer" }))
     expect(p.onPatch).toHaveBeenCalledWith("s1", { label: "Bar" })
     // Closing announces what was not saved, through the parent (the field's message is gone).
@@ -137,11 +137,11 @@ describe("Minimum per shift in the timeline popover", () => {
     const p = setup({ minVolunteers: 2 })
     fireEvent.change(screen.getByLabelText("Minimum"), { target: { value: "3" } })
     fireEvent.click(screen.getByRole("button", { name: "Appliquer à tout le poste" }))
-    await waitFor(() => expect(p.onApplyCapacity).toHaveBeenCalledWith("Bar", 4, 3))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("4 places et un minimum de 3 appliqués au poste « Bar »."))
+    await waitFor(() => expect(p.onApplyToPoste).toHaveBeenCalledWith("s1", "Bar", "day", { capacity: 4, minVolunteers: 3 }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Appliqué à 3 créneaux du poste « Bar » ce jour."))
     fireEvent.change(screen.getByLabelText("Minimum"), { target: { value: "" } })
     fireEvent.click(screen.getByRole("button", { name: "Appliquer à tout le poste" }))
-    await waitFor(() => expect(p.onApplyCapacity).toHaveBeenLastCalledWith("Bar", 4, null))
+    await waitFor(() => expect(p.onApplyToPoste).toHaveBeenLastCalledWith("s1", "Bar", "day", { capacity: 4, minVolunteers: null }))
   })
 })
 

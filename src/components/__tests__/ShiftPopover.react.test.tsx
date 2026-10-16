@@ -40,7 +40,7 @@ describe("ShiftPopover", () => {
     const props = {
       shift: { ...shift, ...over }, anchor: { x: 100, y: 100, w: 80 }, eventId: "evt-1",
       onClose: vi.fn(), onPatch: vi.fn().mockResolvedValue(undefined), onDelete: vi.fn(),
-      onDuplicate: vi.fn().mockResolvedValue(undefined), onApplyCapacity: vi.fn().mockResolvedValue(undefined),
+      onDuplicate: vi.fn().mockResolvedValue(undefined), onApplyToPoste: vi.fn().mockResolvedValue({ shifts: 3, days: 1, keptHigher: 0 }),
     }
     render(<ShiftPopover {...props} />)
     return props
@@ -50,7 +50,7 @@ describe("ShiftPopover", () => {
     const vh = window.innerHeight
     const props = {
       shift, eventId: "evt-1", onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(),
-      onDuplicate: vi.fn(), onApplyCapacity: vi.fn(),
+      onDuplicate: vi.fn(), onApplyToPoste: vi.fn(),
     }
     const { unmount } = render(<ShiftPopover {...props} anchor={{ x: 100, y: 100, w: 80 }} />)
     const below = screen.getByRole("dialog")
@@ -66,7 +66,7 @@ describe("ShiftPopover", () => {
   it("is placed again inside the viewport when the window gets shorter", () => {
     const original = window.innerHeight
     try {
-      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 300, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyCapacity={vi.fn()} />)
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 300, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyToPoste={vi.fn()} />)
       Object.defineProperty(window, "innerHeight", { value: 380, configurable: true, writable: true })
       act(() => { window.dispatchEvent(new Event("resize")) })
       const dialog = screen.getByRole("dialog")
@@ -86,7 +86,7 @@ describe("ShiftPopover", () => {
     })
     try {
       const y = vh - 260
-      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyCapacity={vi.fn()} />)
+      render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y, w: 80 }} onClose={vi.fn()} onPatch={vi.fn()} onDelete={vi.fn()} onDuplicate={vi.fn()} onApplyToPoste={vi.fn()} />)
       // Unmeasured, the larger side (above) would be taken; 100 px fit in the 206 px below.
       expect(parseFloat(screen.getByRole("dialog").style.top)).toBe(y + ROW_H + 6)
     } finally {
@@ -100,7 +100,7 @@ describe("ShiftPopover", () => {
     const opener = document.createElement("button")
     document.body.appendChild(opener)
     opener.focus()
-    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyCapacity: vi.fn() }
+    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyToPoste: vi.fn() }
     try {
       render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 100, w: 80 }} {...props} />)
       const heading = screen.getByRole("heading", { name: /Bar/ })
@@ -121,7 +121,7 @@ describe("ShiftPopover", () => {
     const opener = document.createElement("button")
     document.body.appendChild(opener)
     opener.focus()
-    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyCapacity: vi.fn() }
+    const props = { onClose: vi.fn(), onPatch: vi.fn(), onDelete: vi.fn(), onDuplicate: vi.fn(), onApplyToPoste: vi.fn() }
     try {
       render(<ShiftPopover shift={shift} eventId="evt-1" anchor={{ x: 100, y: 100, w: 80 }} {...props} />)
       expect(screen.getByRole("heading", { name: /Bar/ })).toHaveFocus()
@@ -166,8 +166,8 @@ describe("ShiftPopover", () => {
 
     fireEvent.change(screen.getByLabelText("Places"), { target: { value: "5" } })
     fireEvent.click(screen.getByRole("button", { name: "Appliquer à tout le poste" }))
-    await waitFor(() => expect(p.onApplyCapacity).toHaveBeenCalledWith("Bar", 5))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("5 places appliquées au poste « Bar »."))
+    await waitFor(() => expect(p.onApplyToPoste).toHaveBeenCalledWith("s1", "Bar", "day", { capacity: 5 }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Appliqué à 3 créneaux du poste « Bar » ce jour."))
   })
 
   it("refuses a capacity under the confirmed people: flagged, not applied, not saved on close", () => {
@@ -176,7 +176,7 @@ describe("ShiftPopover", () => {
     expect(screen.getByLabelText("Places")).toHaveAttribute("aria-invalid", "true")
     expect(screen.getByText(/Au moins 2 : 2 personnes sont déjà inscrites/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Appliquer à tout le poste" }))
-    expect(p.onApplyCapacity).not.toHaveBeenCalled()
+    expect(p.onApplyToPoste).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole("button", { name: "Fermer et enregistrer" }))
     expect(p.onPatch).toHaveBeenLastCalledWith("s1", { label: "Bar" })
   })

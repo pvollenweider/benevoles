@@ -50,7 +50,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [écr
 
 ## Le départ est décalé d'une heure
 
-Depuis le planning, vous changez les horaires d'un créneau avec **Décaler**, et **Appliquer à tout le poste** met les mêmes places sur tous ses créneaux. Les inscrits reçoivent un email quand l'horaire de leur créneau change ou que le créneau est annulé : vous n'avez pas à les prévenir un par un.
+Depuis le planning, vous changez les horaires d'un créneau avec **Décaler**, et **Appliquer au poste** met les mêmes places et le même libellé sur ses créneaux du jour ou de tout l'événement. Les inscrits reçoivent un email quand l'horaire de leur créneau change ou que le créneau est annulé : vous n'avez pas à les prévenir un par un.
 
 <!-- video: LAST_MINUTE_CHANGES -->
 

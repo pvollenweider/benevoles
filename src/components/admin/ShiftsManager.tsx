@@ -441,6 +441,7 @@ export default function ShiftsManager({
             eventId={eventId}
             date={day}
             shifts={shiftsByDay[day]}
+            eventShifts={shifts}
             shows={showSchedule.filter(s => s.date === day)}
             roleOrder={uniqueRoles}
             onCreated={handleCreated}

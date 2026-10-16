@@ -17,6 +17,7 @@ import {
   AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SHOW_H,
   dayRange, draftEnd, draftStart, hourTicks, layoutRoles, offsetToMin, resizedTimes,
 } from "@/lib/day-timeline"
+import { applyResultMessage, posteApplyCount, posteApplyTargets, posteSpansOtherDays, type ApplyResult, type ApplyScope, type ApplyValues } from "@/lib/poste-apply"
 import ShiftPopover from "./day-timeline/ShiftPopover"
 import Toast from "./day-timeline/Toast"
 
@@ -50,6 +51,8 @@ interface Props {
   eventId:   string
   date:      string
   shifts:    AdminShift[]
+  /** Every shift of the event (#1017): « Appliquer au poste » over the whole event counts and refreshes them. Defaults to `shifts`. */
+  eventShifts?: AdminShift[]
   shows?:    Show[]
   roleOrder?: string[]   // global stable order from parent
   onCreated: (s: AdminShift) => void
@@ -58,7 +61,7 @@ interface Props {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function AdminDayTimeline({ eventId, date, shifts, shows = [], roleOrder, onCreated, onUpdated, onDeleted }: Props) {
+export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = shifts, shows = [], roleOrder, onCreated, onUpdated, onDeleted }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [resizeOverlay, setResizeOverlay] = useState<Record<string, { startTime: string; endTime: string }>>({})
@@ -253,20 +256,31 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   }
 
   // Places and minimum together (#949): the minimum is checked against the places asked.
-  async function handleApplyCapacity(roleName: string, capacity: number, minVolunteers?: number | null): Promise<boolean> {
-    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
+  // « Appliquer au poste » (#1017): places, minimum and label of one shift onto the poste's live
+  // shifts of this day or of the whole event. The popover says the result; when it was closed during
+  // the request, the timeline says it instead.
+  const selectedRef = useRef(selected)
+  selectedRef.current = selected
+  async function handleApplyToPoste(shiftId: string, roleName: string, scope: ApplyScope, values: ApplyValues): Promise<ApplyResult | false> {
+    const outcome = await requestJson<{ shifts?: number; days?: number; keptHigher?: number }>(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(minVolunteers !== undefined ? { capacity, minVolunteers } : { capacity }),
-    }), "Places non appliquées.")
+      body: JSON.stringify({ ...values, ...(scope === "day" ? { date } : {}) }),
+    }), "Rien n'a été appliqué.")
     if (!outcome.ok) { showToast(outcome.error, "error"); return false }
-    for (const s of shifts) {
-      if (s.roleName === roleName && s.status !== "cancelled") {
-        onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount), ...(minVolunteers !== undefined ? { minVolunteers } : {}) })
-      }
+    const targets = posteApplyTargets(eventShifts, roleName, scope, date)
+    for (const s of targets) {
+      onUpdated({
+        ...s,
+        capacity: Math.max(values.capacity, s.registrationCount),
+        ...(values.minVolunteers !== undefined ? { minVolunteers: values.minVolunteers } : {}),
+        ...(values.label !== undefined ? { label: values.label } : {}),
+      })
     }
-    showToast(minVolunteers != null ? "Places et minimum appliqués au poste" : "Places appliquées au poste")
-    return true
+    const counted = posteApplyCount(targets)
+    const result: ApplyResult = { shifts: outcome.data?.shifts ?? counted.shifts, days: outcome.data?.days ?? counted.days, keptHigher: outcome.data?.keptHigher ?? 0 }
+    if (selectedRef.current !== shiftId) showToast(applyResultMessage(roleName, scope, result))
+    return result
   }
 
   // ── Hour ticks ──────────────────────────────────────────────────────────────
@@ -511,7 +525,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
           onPatch={handlePatch}
           onDelete={handleDelete}
           onDuplicate={handleDuplicate}
-          onApplyCapacity={handleApplyCapacity}
+          eventCount={posteSpansOtherDays(eventShifts, selectedShift.roleName, date)
+            ? posteApplyCount(posteApplyTargets(eventShifts, selectedShift.roleName, "event", date))
+            : null}
+          onApplyToPoste={handleApplyToPoste}
           onNotSaved={(message) => showToast(message, "error")}
         />
       )}
