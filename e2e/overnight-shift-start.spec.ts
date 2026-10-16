@@ -63,3 +63,33 @@ test("editing the start of a 22:00–02:00 shift keeps its end at 02:00, in the 
   // Three hours, ending the next morning: not a shift cut at midnight of its first day.
   expect(dtEnd.getTime() - dtStart.getTime()).toBe(3 * 60 * 60 * 1000)
 })
+
+test("on the Frise, the start edge of a 22:00–02:00 shift moves without touching its end, and the end edge passes midnight", async ({ page, browser }) => {
+  const event = await createPublicEvent(browser, `E2E Overnight Frise ${Date.now()}`, [{ label: "Veille", startTime: "22:00", endTime: "02:00" }])
+  await login(page)
+  await page.goto(`/admin/events/${event.eventId}/shifts`)
+  const bar = page.locator(`#shift-bar-${event.shifts[0].id}`)
+  await expect(bar).toContainText("22h–02h")
+
+  // 2.5 px per minute: one hour is 150 px.
+  const edge = async (side: "left" | "right", dx: number) => {
+    const box = (await bar.boundingBox())!
+    const x = side === "left" ? box.x + 3 : box.x + box.width - 3
+    const y = box.y + box.height / 2
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + dx / 2, y, { steps: 4 })
+    await page.mouse.move(x + dx, y, { steps: 4 })
+    await page.mouse.up()
+    await expect(page.getByRole("status").filter({ hasText: "Horaires mis à jour" })).toBeVisible()
+    await page.keyboard.press("Escape")
+  }
+
+  // Half an hour later: the axis keeps its first hour, so the pointer stays on the same minutes.
+  await edge("left", 75)
+  await expect(bar).toContainText("22h30–02h")
+  await edge("right", 150)
+  await expect(bar).toContainText("22h30–03h")
+  await page.reload()
+  await expect(page.locator(`#shift-bar-${event.shifts[0].id}`)).toContainText("22h30–03h")
+})
