@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:42:09.240Z",
-  "videoSha256": "611c3b4aea9db0c57294aa6e1d44d0efc9b6b6b70b35b6d50af243493ca943d4",
+  "reviewedAt": "2026-10-16T15:34:14.725Z",
+  "videoSha256": "564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8",
   "promptSha256": "c5dd1d4fa7ca621f8fe51b627cbd8646ddb67d17868babded37d068e0b5c1644",
-  "clipSha256": "af65da6ee9ddb81b675493040fe8116911bc2e31cbec82f9692fcae7105e7571",
+  "clipSha256": "a2e5c7e6b553c2fa94cc765a2720a9afd78832e14146ca8abe4f8d2ac228b72d",
   "scene": "search",
   "review": {
-    "heardOpening": "La recherche aide à retrouver",
+    "heardOpening": "La recherche aide à retrouver une personne",
     "checkpoints": [
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 5.5,
         "spoken": "Les accents ne doivent pas compliquer la recherche.",
-        "visibleSeconds": 5.4,
-        "visible": "Le terme « Emilie » sans accent est saisi et filtre des membres dont le prénom s'affiche « Émilie »",
+        "visibleSeconds": 1,
+        "visible": "Saisie de « Emilie » sans accent dans le champ de recherche filtrant sur les membres prénommés « Émilie ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.7,
+        "spokenSeconds": 10,
         "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes.",
         "visibleSeconds": 11,
-        "visible": "Recherche de « Stéphane Favre » affichant deux membres homonymes avec des coordonnées distinctes",
+        "visible": "Recherche de « Stéphane Favre » affichant deux profils homonymes aux adresses email et téléphones distincts.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.1,
+        "spokenSeconds": 17,
         "spoken": "Vérifiez le contact et les inscriptions avant de modifier une fiche.",
-        "visibleSeconds": 17.5,
-        "visible": "Les colonnes Contact et Étiquettes des fiches de Stéphane Favre sont visibles à l'écran",
+        "visibleSeconds": 17,
+        "visible": "Vue du tableau des membres permettant de comparer les coordonnées et étiquettes des fiches affichées.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine fluide, claire et bien synchronisée avec les actions affichées."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

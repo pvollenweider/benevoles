@@ -1,21 +1,14 @@
 STATUS: READY
-{
-  "id": "MEMBERS_REMINDERS",
-  "status": "READY",
-  "duration": 202.56,
-  "buildId": "RNDQIXzICnt5M_573dvDi",
-  "music": {
-    "voicedWindows": 185,
-    "musicOnlyWindows": 11,
-    "smallestGapLu": 15.8,
-    "largestGapLu": 18.9,
-    "quietestMusicOnlyLufs": -34.3,
-    "loudestMusicOnlyLufs": -33.1,
-    "medianVoiceLufs": -16.3
-  },
-  "problems": "48 images finales revues ; AV8/8, ASR final8/8, provenance, validate, ancres,VTT,effets,musique passent. Trois relances réelles, lien original conservé, aperçu adapté aux attentes, message et historique alignés. Dates françaises, aucune adresse interdite/overlay. Nit : dates Mailpit anglaises.",
-  "sourceChanges": "Aucune ; narration batch11 acceptée sans régénération, aucun re-film.",
-  "report": "videos/output/members-reminders/review-report.txt",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+MEMBERS_REMINDERS — Batch 24 — 2026-10-16
+Product commit: 50561e134531eb29b3d2898023cb7a7086ec8305
+BUILD_ID: GzjaqGbiwveYILVuRvQv7
+Duration: 199.680 s; SHA256: 2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b
+Two complete narrated takes after separate guarded reseeds; quick rehearsal before filming. Take 1 preserved in take-1/. Second take assembled. Previous artifacts archived under previous-20261016T*/; retained audio unchanged.
+Narration sentences unchanged. Same original voice (Kore), no TTS regeneration or sentence mixing. Independent source narration and final chapter ASR pass; whole final MP4 soundtrack transcribed in all languages, including chapter gaps. Final transcription reviewed against narration; no stray technical/English speech or viewer-directed informal address. Raw final VTT « tu » count: 0. Informal transcription matches needing quotation context: [].
+Final chapter contact sheet and sentence/action evidence frames inspected alongside every audiovisual chapter report. Current labels, identities, counts, real results and French dates checked. No localhost, org-admin@localhost, Timeline or dev overlay observed. All chapter audiovisual reports match final hash and pass. No product bug or blocker observed. Real-time subjective listening unavailable as permitted by batch rules.
+Music: 15.1–19.6 LU below voice; 11 music-only windows, floor -34.3 LUFS. Music rules pass, no music gap; real recorded click/key events receive soft synced effects. Posters generated with review/renders-generated.json; videos/renders.json untouched.
+video:validate passes; videos suite 1024/1024 passes; explicit video TypeScript check passes. Evidence: validation.json, audio-levels.json, audio-mix.json, narration-audit-video.json, review/gemini-full-final-asr.json, review/sentence-action-evidence.json, review-frames/, audiovisual-review/.
+Source changes: guarded historical no-email fixture reset and old hashed-receipt compatibility with tests; exact fixture mailbox cleanup accepts invitations/reminders; batch review helpers. No src/ edits. No commit, push or publication. doc-img: unchanged
+Editorial hold: actual final delivered-email frame at 148.440 s held through 150.931 s, with no real click/key in that interval. Original source capture unchanged; email is genuinely delivered and visible. Message pane focused without unrelated sidebar. History then appears during its description. Final eight audiovisual chapters all unflagged. Source recorder now waits to the same mid-sentence history point. Evidence review/mailpit-focus-proof.json, held-email-final.png, history-final.png.
+
+Capture server stopped by PID 84572; listener absence verified. Evidence review/server-stop-proof.json. Final delivery check: 1024 video tests pass; 198 explicit video TypeScript sources pass; npm run video:validate passes for all four (technical validation does not clear the documented NOT READY findings).

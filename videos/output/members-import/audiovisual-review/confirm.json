@@ -1,26 +1,18 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T16:42:05.896Z",
-  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
-  "promptSha256": "c1ae23974bc24aea4dd7c2fd898ca0d84acc1cb122f542f15a1010ae3f0dc71d",
-  "clipSha256": "adbdc2d2a978e4b34d118f9443db52150468b93bd5af9f6f1cbbb3fea6116b05",
+  "reviewedAt": "2026-10-16T16:29:56.711Z",
+  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "promptSha256": "e832d8d50e254ae30d538b3a35e3f172f3ef97f361199edcad2e58c2c87c4e18",
+  "clipSha256": "c9e62647432d1e410fcf36538dce589b69dcf7531e777907ea1b6fc869d7ebf6",
   "scene": "confirm",
   "review": {
-    "heardOpening": "Quand l'aperçu vous convient, confirmez l'import",
+    "heardOpening": "Quand l'aperçu vous convient",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1.8,
         "spoken": "confirmez l'import",
-        "visibleSeconds": 1.4,
-        "visible": "Clic sur 'Importer 40 membres' et affichage du résultat d'import",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 6.8,
-        "spoken": "Le résultat indique combien ont été créées, mises à jour ou ignorées",
-        "visibleSeconds": 2,
-        "visible": "Modal avec 'Import terminé: 38 créés, 2 mis à jour, 0 ignorés'",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton « Importer 40 membres » et affichage du récapitulatif d'importation",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,15 +20,15 @@
         "spokenSeconds": 13.9,
         "spoken": "Fermez la fenêtre et recherchez Maya",
         "visibleSeconds": 14.5,
-        "visible": "Fermeture de la pop-up puis saisie de 'Maya' dans le champ de recherche",
+        "visible": "Fermeture de la fenêtre modale puis saisie de « Maya » dans le champ de recherche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.2,
-        "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses tags",
-        "visibleSeconds": 19.1,
-        "visible": "Ouverture du formulaire 'Modifier le membre' montrant téléphone et tags",
+        "spokenSeconds": 17.8,
+        "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes",
+        "visibleSeconds": 18.8,
+        "visible": "Ouverture du formulaire « Modifier le membre » affichant les coordonnées et étiquettes de Maya",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, bien articulée, fluide et parfaitement synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:18:14.180Z",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
+  "reviewedAt": "2026-10-16T16:00:06.723Z",
+  "videoSha256": "2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b",
   "promptSha256": "11b8bcac492719e27a00c0c24be260c6fef573343c93c10c5b9bd3715e104acd",
-  "clipSha256": "0d1c34c00b33ab82326b5c34dc4d11ee2bd6098f516a1a98f3d58c6eb7999d32",
+  "clipSha256": "7327e561247df8997bd149b23ffd6b4f594ab9daa7fbac0f6185bb0cb22939bc",
   "scene": "message",
   "review": {
-    "heardOpening": "Pour expliquer davantage",
+    "heardOpening": "Pour expliquer davantage, utilisez Écrire un message",
     "checkpoints": [
       {
-        "spokenSeconds": 1.7,
+        "spokenSeconds": 2.1,
         "spoken": "utilisez Écrire un message aux personnes sans créneau",
-        "visibleSeconds": 1.4,
-        "visible": "Clic sur le lien « Écrire un message aux 3 sans créneau » puis ouverture de la page de rédaction",
-        "sync": "aligned",
+        "visibleSeconds": 0.5,
+        "visible": "Clic sur le lien Écrire un message aux 3 sans créneau et bascule vers l'onglet Communication",
+        "sync": "early",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 5.9,
         "spoken": "Le groupe est déjà choisi dans la page de message",
-        "visibleSeconds": 5.4,
-        "visible": "L'option « Les invités sans créneau confirmé » est cochée par défaut sous Destinataires",
+        "visibleSeconds": 6,
+        "visible": "Option Les invités sans créneau confirmé sélectionnée avec 3 personnes indiquées",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.7,
-        "spoken": "Nous saisissons un objet clair et quelques mots bienveillants",
-        "visibleSeconds": 9.2,
-        "visible": "Saisie de l'objet et du corps du message dans les champs dédiés",
+        "spoken": "Nous saisissons un objet clair",
+        "visibleSeconds": 5,
+        "visible": "Le champ Objet contient Un horaire qui te convient",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "et quelques mots bienveillants : vous pouvez encore choisir un horaire si vous le souhaitez",
+        "visibleSeconds": 11.8,
+        "visible": "Saisie du message Tu peux choisir un horaire si tu le souhaites. Merci !",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.3,
+        "spokenSeconds": 16.8,
         "spoken": "prévisualisez les destinataires et le contenu",
-        "visibleSeconds": 15.6,
-        "visible": "Clic sur « Voir l'aperçu et envoyer » et ouverture de la fenêtre modale « Aperçu de l'email »",
+        "visibleSeconds": 17,
+        "visible": "Affichage de la modale Aperçu de l'email avec le contenu et la mention d'envoi à 3 personnes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix de synthèse claire, posée et chaleureuse, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:18:23.775Z",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
+  "reviewedAt": "2026-10-16T16:00:15.243Z",
+  "videoSha256": "2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b",
   "promptSha256": "709ed43fc1b3db4e357fd03c7fc8e37e3779f322e26c4b63842dde8dacc3c42e",
-  "clipSha256": "2301b5c8612fc4763df6dac918ff2c0d0c83a534c61031e99cae36ce64a44139",
+  "clipSha256": "75b8bb1fa7192f5f583bfde1f737f79314fb6f288486ee43dd704b35f2c86fd0",
   "scene": "result",
   "review": {
     "heardOpening": "De retour dans Invitations",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.5,
         "spoken": "De retour dans Invitations",
         "visibleSeconds": 0,
-        "visible": "L'écran affiche la vue Invitations avec les compteurs (10 invités, 7 inscrits, 0 pas disponible, 3 sans réponse)",
+        "visible": "L'onglet Invitations sous la section Inscriptions de l'événement est affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "les participations n'ont pas changé simplement parce qu'un message est parti",
-        "visibleSeconds": 2.5,
-        "visible": "Le tableau récapitulatif des membres et de leurs statuts reste affiché de manière stable",
+        "visibleSeconds": 0,
+        "visible": "Le tableau récapitulatif des invitations (10 invités, 7 inscrits, 3 sans réponse) reste stable",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
-        "spoken": "Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant",
-        "visibleSeconds": 9.5,
-        "visible": "Écran stable montrant notamment le bouton Relancer les 3 sans créneau",
+        "spokenSeconds": 14.8,
+        "spoken": "respectez sa réponse plutôt que de multiplier les messages",
+        "visibleSeconds": 0,
+        "visible": "Vue d'ensemble stable de la liste des membres et de leurs statuts de participation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et parfaitement intelligible, débit régulier."
+      "observation": "Voix fluide, claire et posée, accompagnant adéquatement la conclusion sur écran fixe."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

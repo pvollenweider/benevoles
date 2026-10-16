@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:25:30.320Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
+  "reviewedAt": "2026-10-16T16:45:49.117Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
   "promptSha256": "39ce652defb685e6ad5cb10709b45ab64e39346715651c8166c679011589a4e3",
-  "clipSha256": "05175e89ca36103ea42090cdc2a91a035b38ba7fcea25ba2c11ecb8ade70c83a",
+  "clipSha256": "cd5198a084e74dc9b8d4a54aa0e90a93d5edcbc3e9b79a3708f1c32323d0c11a",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Votre fête est prête, et vous souhaitez proposer",
+    "heardOpening": "Votre fête est prête",
     "checkpoints": [
       {
         "spokenSeconds": 5.4,
         "spoken": "Dans Invitations, vous pouvez contacter une personne ou un groupe",
-        "visibleSeconds": 3.2,
-        "visible": "Page Invitations affichée avec le bouton « + Inviter des membres »",
+        "visibleSeconds": 5.4,
+        "visible": "L'onglet Inscriptions et le sous-onglet Invitations sont sélectionnés avec le bouton « + Inviter des membres »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
+        "spokenSeconds": 15.3,
         "spoken": "Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé",
-        "visibleSeconds": 15.2,
-        "visible": "Encart de compteurs affichant 9 Invités, 8 Inscrits, 0 Pas disponible et 1 Sans réponse",
+        "visibleSeconds": 15.3,
+        "visible": "Les pavés de compteurs (9 Invités, 8 Disponibles, etc.) et la liste avec le statut « Participation confirmée » sont bien visibles",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,7 @@
         "spokenSeconds": 20.2,
         "spoken": "Voyons tout le parcours, de l'envoi au choix du bénévole",
         "visibleSeconds": 20.2,
-        "visible": "Écran d'introduction stable présentant la liste des invitations en cours",
+        "visible": "Vue d'ensemble sur le tableau des invitations en préparation de la démonstration",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les éléments affichés à l'écran."
+      "observation": "Voix masculine calme, posée et parfaitement audible, exempte de bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

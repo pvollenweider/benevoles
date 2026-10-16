@@ -1,58 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T16:41:18.525Z",
-  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
-  "promptSha256": "76d5f7749b7d647fc4dc4f33983c0de25f54035a66bac1105f43841d3d80d962",
-  "clipSha256": "4bb78d578d79213fef3a0986e543a873dcd89933e390b7b8454a028fb0da645a",
+  "reviewedAt": "2026-10-16T16:29:02.785Z",
+  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "promptSha256": "eec0dc0a8e4fd080f5f44c46184aeb0bafa55be59ac8d519f9ad19a4e1a5d094",
+  "clipSha256": "130a15ceb2fae26c436dcd1c2f73881c12c2afe39c236a0969d20976db19fd08",
   "scene": "preview",
   "review": {
-    "heardOpening": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+    "heardOpening": "Ouvrez Importer des membres et choisissez",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Ouvrez Importer des membres",
-        "visibleSeconds": 0,
-        "visible": "Clic sur Importer CSV/Excel et ouverture de la modale d'importation",
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre modale Importer des membres avec le fichier membres-a-verifier.csv sélectionné.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.1,
-        "spoken": "choisissez le fichier à vérifier",
-        "visibleSeconds": 1,
-        "visible": "Le fichier membres-a-verifier.csv est déjà sélectionné dans la modale",
-        "sync": "early",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 5.3,
-        "spoken": "l'option Ignorer conserve la fiche actuelle",
-        "visibleSeconds": 5.3,
-        "visible": "Option radio 'Ignorer' cochée par défaut sous 'Si un email existe déjà'",
+        "spokenSeconds": 4.5,
+        "spoken": "Si un email existe déjà, l'option Ignorer conserve la fiche actuelle.",
+        "visibleSeconds": 4.5,
+        "visible": "L'option radio Ignorer est bien visible et cochée sous la section Si un email existe déjà.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 8.7,
-        "spoken": "Cliquez sur Analyser le fichier",
+        "spoken": "Cliquez sur Analyser le fichier.",
         "visibleSeconds": 9,
-        "visible": "Clic sur le bouton bleu 'Analyser le fichier'",
+        "visible": "Clic sur le bouton bleu Analyser le fichier et affichage du résultat de l'analyse.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
-        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur",
-        "visibleSeconds": 10,
-        "visible": "Affichage du récapitulatif d'analyse avec les lignes en erreur et les membres du fichier",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 16.9,
-        "spoken": "Les colonnes reconnues et les tags sont également indiqués",
-        "visibleSeconds": 17,
-        "visible": "Sections 'Tags ajoutés' et 'Colonnes reconnues' visibles en haut du récapitulatif",
+        "spokenSeconds": 11.2,
+        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage détaillé des statistiques (créer, ignorés, en erreur) et du tableau des lignes non importées.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et professionnelle, sans bruit parasite."
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec la navigation à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,8 +1,14 @@
 STATUS: READY
-MEMBERS_MANAGEMENT — batch 23-3 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 235.36 s; music 13.3–19.4 LU below voice. Music-only floor and real click/key effects validated.
-Whole narration regenerated in one pass with original voice; boundaries measured and independently audited.
-Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
-Whole Puck narration regenerated in one pass, continuousPauseTags false; first newly generated drifted take archived, retained whole take passes all nine opening/chapter audio-only comparisons before filming. All ten final audiovisual chapters and seven chapter/anchor sheets pass, including result; create, availability, no-email, search, filter, deactivate/reactivate and history verified. Whole final multilingual ASRs have no informal viewer address; ending countercheck confirms no subtitle-credit narration (Whisper music-tail hallucination). No blocking issue.
-No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.
+MEMBERS_MANAGEMENT — Batch 24 — 2026-10-16
+Product commit: 50561e134531eb29b3d2898023cb7a7086ec8305
+BUILD_ID: GzjaqGbiwveYILVuRvQv7
+Duration: 235.360 s; SHA256: 564f7986e6f6a2491ac59836d4761e5d0b03eb8c56a5b84e1248b3f246a439d8
+Two complete narrated takes after separate guarded reseeds; quick rehearsal before filming. Take 1 preserved in take-1/. Second take assembled. Previous artifacts archived under previous-20261016T*/; retained audio unchanged.
+Narration sentences unchanged. Same original voice (Puck), no TTS regeneration or sentence mixing. Independent source narration and final chapter ASR pass; whole final MP4 soundtrack transcribed in all languages, including chapter gaps. Final transcription reviewed against narration; no stray technical/English speech or viewer-directed informal address. Raw final VTT « tu » count: 0. Informal transcription matches needing quotation context: [].
+Final chapter contact sheet and sentence/action evidence frames inspected alongside every audiovisual chapter report. Current labels, identities, counts, real results and French dates checked. No localhost, org-admin@localhost, Timeline or dev overlay observed. All chapter audiovisual reports match final hash and pass. No product bug or blocker observed. Real-time subjective listening unavailable as permitted by batch rules.
+Music: 13.3–19.3 LU below voice; 7 music-only windows, floor -34 LUFS. Music rules pass, no music gap; real recorded click/key events receive soft synced effects. Posters generated with review/renders-generated.json; videos/renders.json untouched.
+video:validate passes; videos suite 1024/1024 passes; explicit video TypeScript check passes. Evidence: validation.json, audio-levels.json, audio-mix.json, narration-audit-video.json, review/gemini-full-final-asr.json, review/sentence-action-evidence.json, review-frames/, audiovisual-review/.
+Source changes: guarded historical no-email fixture reset and old hashed-receipt compatibility with tests; exact fixture mailbox cleanup accepts invitations/reminders; batch review helpers. No src/ edits. No commit, push or publication. doc-img: unchanged
+Verified Doublons possibles (1), both Stéphane Favre addresses and name-only fixture signal.
+
+Capture server stopped by PID 84572; listener absence verified. Evidence review/server-stop-proof.json. Final delivery check: 1024 video tests pass; 198 explicit video TypeScript sources pass; npm run video:validate passes for all four (technical validation does not clear the documented NOT READY findings).

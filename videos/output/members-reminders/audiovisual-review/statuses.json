@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:18:03.954Z",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
+  "reviewedAt": "2026-10-16T15:59:51.320Z",
+  "videoSha256": "2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b",
   "promptSha256": "fde43b2c713e15d88bdbb83c55e87007119d2c919e3698f9a3ef712868882299",
-  "clipSha256": "e32f4f1a7605f4e641e23a04c0c42bb9526bdae5b957db5ae0b5060dad55d252",
+  "clipSha256": "85ef7c93e5c3180e9988b6254c84316b6c3cfb2bfea07adbdb4125b56dc88f4a",
   "scene": "statuses",
   "review": {
-    "heardOpening": "Sans créneau confirmé ne signifie pas",
+    "heardOpening": "Sans créneau confirmé ne signifie pas forcément",
     "checkpoints": [
       {
-        "spokenSeconds": 5.8,
+        "spokenSeconds": 6.1,
         "spoken": "une personne peut être en liste d'attente",
-        "visibleSeconds": 3,
-        "visible": "Filtre sur Anna Bühler affichant le statut Liste d'attente",
-        "sync": "aligned",
+        "visibleSeconds": 2.5,
+        "visible": "Filtrage sur Anna affichant le statut Liste d'attente : position 2",
+        "sync": "early",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.9,
+        "spokenSeconds": 8.7,
         "spoken": "recevoir une offre",
-        "visibleSeconds": 8,
-        "visible": "Filtre sur Tom Roesler avec le statut Place proposée",
+        "visibleSeconds": 8.3,
+        "visible": "Recherche de Tom montrant le statut Place proposée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.1,
-        "spoken": "attendre la validation de l'organisateur",
-        "visibleSeconds": 11.5,
-        "visible": "Filtre sur Lucas Girard indiquant Demande à traiter",
+        "spokenSeconds": 10.5,
+        "spoken": "ou attendre la validation de l'organisateur",
+        "visibleSeconds": 11.2,
+        "visible": "Recherche de Lucas affichant Demande à traiter avec options Accepter et Refuser",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
+        "spokenSeconds": 13.6,
         "spoken": "Une autre a déjà une participation confirmée",
-        "visibleSeconds": 14,
-        "visible": "Filtre sur Camille Rochat affichant plusieurs créneaux confirmés",
+        "visibleSeconds": 14.5,
+        "visible": "Recherche de Camille montrant des inscriptions déjà affectées aux créneaux",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine naturelle, claire et au rythme fluide, parfaitement en phase avec les filtres montrés à l'écran."
+      "observation": "Voix off féminine naturelle, claire et au débit régulier, parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

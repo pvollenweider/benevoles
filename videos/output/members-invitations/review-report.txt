@@ -1,21 +1,13 @@
 STATUS: READY
-{
-  "id": "MEMBERS_INVITATIONS",
-  "status": "READY",
-  "duration": 234.04,
-  "buildId": "RNDQIXzICnt5M_573dvDi",
-  "music": {
-    "voicedWindows": 224,
-    "musicOnlyWindows": 0,
-    "smallestGapLu": 12.4,
-    "largestGapLu": 19.2,
-    "quietestMusicOnlyLufs": null,
-    "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.6
-  },
-  "problems": "60 images finales revues ; AV10/10, ASR final10/10, provenance, validate, ancres,VTT,effets,musique passent. Sélection/tag/Effacer, emails individuels, formulaire Aline puis Nicolas sans contamination de contact, confirmation, absence email René alignés. Frise, dates françaises, aucune adresse interdite/overlay. Nit : dates Mailpit anglaises.",
-  "sourceChanges": "Aucune ; narration batch11 acceptée sans régénération, aucun re-film.",
-  "report": "videos/output/members-invitations/review-report.txt",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de"
-}
-Real-time subjective listening unavailable; status uses objective checks, independently transcribed final audio, measured sentence/action evidence and actual final MP4 frames.
+MEMBERS_INVITATIONS — Batch 24-3 — 2026-10-16
+Pinned origin/main verified by git fetch: 50561e134531eb29b3d2898023cb7a7086ec8305; branch video-batch24. Existing uncommitted work preserved. Product build reused and reverified against 1691 pinned inputs and both BUILD_ID files: GzjaqGbiwveYILVuRvQv7.
+Final duration 234.280 s; MP4 SHA-256 b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae.
+Rewrote the trigger sentence and simplified following chapters through the conclusion, retaining scene ids and fallback durations. record.ts send anchor updated to Vous voyez ici la réception. Manifest and editorial script updated together with dated revision. No src/ change. doc-img: unchanged
+Two complete narration generations in this batch, Puck throughout, one API pass per generation, continuousPauseTags false. Generation 1 rejected BEFORE filming: neutral whole-source audio-only observation found a break around 104 s at Cela ne prouve pas. Retained in previous-20261016T1639-batch243-generation1-rejected. Generation 2 passed neutral WHOLE original source audio-only continuity BEFORE rehearsal/capture; no change observed. No voice fallback needed. No sentence audio mixing.
+Automatic chapter splits were corrected using actual audio onset proposals snapped to measured silences. All ten resulting chapters passed independent ASR before capture. Full local source ASR retained. The original master was not edited.
+Quick rehearsal passed. Guarded reseed and exact fixture mailbox cleanup repeated before the narrated take, preserving 119 unrelated messages. One narrated take used out of two allowed; no retake needed. Real email delivery, recipient identity, personal link, Aline confirmation, Nicolas reserved post and unconfirmed state, and René no-email response verified.
+All ten final audiovisual chapters reviewed: 37 checkpoints, zero flagged. All 60 chapter frames, ten full-size representative images and fifteen sentence-anchor images inspected. Actual first message key is at 56.089 s; exact final audio cut already contains Vous pouvez a; independent AV confirms aligned message entry. Correct French product dates, Frise, current UI labels; no localhost, old admin address or dev overlay seen. Mailpit focus retains original-scale real headers and bodies, excluding only unrelated sidebar. No product bug found.
+Neutral WHOLE final soundtrack audio-only continuity PASSES: homogeneous voice from beginning to end, changes empty. Final chapter ASR, whole final Gemini ASR and independent local multilingual final ASR pass review: no stray English or spoken stage directions. Final VTT raw tu=0; sole informal token te is in the exact volunteer-facing quoted message to Aline, with no informal viewer address. VTT uses the current manifest, independently checked against final audio.
+Music rule passes: 13.0–19.2 LU under voice, no music-rule gaps/failures; musicOnlyWindows=0. Prescribed mixkit-tech-house-vibes-130.mp3. 34 clicks and 124 real keys have synced soft effects tied to final timeline and MP4 hashes. Posters generated from final MP4 with review/renders-generated.json; videos/renders.json unchanged by this batch.
+video:validate passes. Video vitest suite: 1024 passed. Explicit TypeScript check: 198 source files passed. Real-time subjective listening unavailable as permitted; full-source/final audio-only observations and complete chapter audiovisual evidence retained without claiming human listening.
+Capture server PID 30317 stopped by SIGTERM; listener absence verified in review/server-stop-proof.json. No commit, push or publication.

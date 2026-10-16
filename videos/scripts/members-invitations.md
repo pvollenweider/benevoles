@@ -43,3 +43,25 @@ Relecture du produit main `43c1aae776430702dd155711b25f4f0a1331fce5`, CHANGELOG 
 WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narration ENTIÈRE, même voix, une seule passe, `continuousPauseTags: false`. Phrases changées :
 
 - Pour un groupe, utilisez le filtre d’étiquettes.
+
+## Révision du 2026-10-16 — lot 24-3
+
+La phrase qui provoquait une rupture de timbre et les chapitres suivants sont reformulés en phrases courtes, sans changement de sens. Le premier essai est rejeté avant capture ; le deuxième passe le contrôle neutre intégral audio seul, avec Puck en une seule génération et sans balises de pause.
+
+Repère de la scène send : « Vous voyez ici la réception ». Identifiants de scènes et durées de secours conservés. Narration entière à régénérer en une passe, voix Puck, sans balises de pause, puis contrôle neutre intégral audio seul avant toute capture.
+
+Texte retenu pour les chapitres reformulés :
+
+send : Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer deux invitations déclenche des messages individuels. Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien. Les coordonnées des autres invités ne sont pas affichées dans son message. Vous voyez ici la réception sur notre serveur de test. La lecture du message par le bénévole reste inconnue.
+
+personal-link : Ouvrons le lien reçu par Aline. Il mène à la fête avec ses coordonnées préremplies. Elle peut regarder les horaires et choisir un créneau disponible. Elle complète ensuite les informations demandées. Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation. Le lien est personnel. Vous devez le garder privé. Pour présenter la fête à tout le monde, vous utilisez son adresse publique.
+
+reserved : Une invitation peut aussi donner accès à un poste réservé à certains membres. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Les tags actuels sont revérifiés à l'inscription. Cet accès concerne seulement les postes autorisés par ses tags. Une demande à valider suit une autre règle. Vous devez alors accepter la demande avant de confirmer la place.
+
+status : De retour dans Invitations, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. La lecture de leur email reste inconnue. Il peut aussi concerner une personne en liste d'attente. Une demande encore à valider peut donner le même statut. Vous utilisez ce tableau pour suivre la participation. Il ne permet pas de suivre la lecture des messages.
+
+existing : La case Cacher déjà invités vous aide à éviter un nouvel envoi aux mêmes personnes. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête. Il ne crée pas une seconde invitation. Vous vérifiez le groupe avant chaque envoi. Plusieurs messages identiques peuvent vite devenir agaçants.
+
+no-email : Enfin, vous pouvez sélectionner une fiche sans email. Sans adresse, aucun message ne peut être envoyé. René devra être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés. Le nombre de messages lus reste inconnu. Une invitation claire, le bon groupe et quelques vérifications : c'est tout ce qu'il faut pour lancer la participation sereinement.
+
+Validation du lot 24-3 : deuxième génération complète Puck retenue après contrôle neutre intégral audio seul. Frontières recalées sur les silences et ASR indépendante des dix chapitres réussie. Répétition puis une prise narrée, montage de 234,280 s, affiches et revue des dix chapitres réussis. Bande-son finale complète sans rupture signalée ; validation réussie. STATUS: READY. doc-img: unchanged

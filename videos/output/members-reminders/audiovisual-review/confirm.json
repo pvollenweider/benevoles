@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:18:04.979Z",
-  "videoSha256": "816a01d92b6e9f283527b5a52f1c42cf2333dad6945b87555dcfb4731cffd69a",
+  "reviewedAt": "2026-10-16T15:59:51.625Z",
+  "videoSha256": "2d186afc0f6ac966a50ee8a8aac1001d382a64e13b936fc98d29819a554bed2b",
   "promptSha256": "289751b2bc9e154177efb5dfbdd6f03382d4887b7a692b96322485ee10c77e83",
-  "clipSha256": "02c4de6dc463d9cbde79022a3a5cda42e9a6d3f95238d9ba638bc6677d58e1d4",
+  "clipSha256": "c9ec05f846726ab2cf090bcfbb56f5b720f712766bc2134b1d11d9046b2643f7",
   "scene": "confirm",
   "review": {
-    "heardOpening": "Le bouton Relancer les personnes sans créneau",
+    "heardOpening": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif",
-        "visibleSeconds": 2,
-        "visible": "Affichage de la boîte de dialogue récapitulative pour relancer les membres sans créneau",
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif.",
+        "visibleSeconds": 0.8,
+        "visible": "La fenêtre modale récapitulative « Relancer 3 membres invités sans créneau confirmé ? » est affichée.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "Vous pouvez encore annuler",
-        "visibleSeconds": 5.9,
-        "visible": "Fermeture de la modale",
+        "spokenSeconds": 7.5,
+        "spoken": "Pour cette démonstration, nous confirmons l'envoi réel.",
+        "visibleSeconds": 5.8,
+        "visible": "Clic sur le bouton bleu « Relancer » pour valider l'envoi et fermeture de la modale.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "nous confirmons l'envoi réel",
-        "visibleSeconds": 8.2,
-        "visible": "Réouverture de la modale et clic sur le bouton bleu Relancer",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18.2,
-        "spoken": "Le résultat indique le nombre effectivement envoyé",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage de la mention '3 relances envoyées' à côté des boutons d'action",
+        "spokenSeconds": 19,
+        "spoken": "Le résultat indique le nombre effectivement envoyé : lisez-le",
+        "visibleSeconds": 19,
+        "visible": "La mention verte « 3 relances envoyées » est affichée à côté du bouton de relance.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Enregistrement net, voix fluide, naturelle et bien articulée."
+      "observation": "Voix claire, posée et bien articulée, parfaitement conforme au texte."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-14T16:41:03.330Z",
-  "videoSha256": "e8007d5a2d028f1e54d2ba437ab86f25b0ea0d249ab5f2e8f16c260d016937d6",
+  "reviewedAt": "2026-10-16T16:28:34.030Z",
+  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
   "promptSha256": "6e19c1d161c7499ae1618c38b2ba224f29781894ddc9dd7180915fb980f8a331",
-  "clipSha256": "725f81c81f95139f3ef1d80f517c2ed1a75d16c8cb922e0a51045218ad983472",
+  "clipSha256": "8cde6d7fe1e0ee57bb1cd1d4e7404d4a11ccd999aa147547c8cd37fd918c3d11",
   "scene": "welcome",
   "review": {
     "heardOpening": "Vous utilisez Benevol pour la première fois",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
-        "visibleSeconds": 0.5,
-        "visible": "Titre d'introduction affiché en surimpression : « Importer ses membres sans repartir de zéro »",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre 'Importer ses membres sans repartir de zéro' affiché sur la page Membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 12,
         "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
-        "visibleSeconds": 11.2,
-        "visible": "Écran stable sur la liste des membres avec le bouton « Importer CSV/Excel » visible en haut",
+        "visibleSeconds": 12,
+        "visible": "Écran stable de la liste des membres illustrant la présentation générale de la procédure à venir",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.2,
-        "spoken": "créer les membres manuellement avec Nouveau membre",
-        "visibleSeconds": 19.2,
-        "visible": "Bouton bleu « + Nouveau membre » bien visible en haut à droite du tableau",
+        "spokenSeconds": 20.5,
+        "spoken": "avec Nouveau membre",
+        "visibleSeconds": 20.5,
+        "visible": "Bouton bleu '+ Nouveau membre' bien présent en haut à droite du tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off fluide, claire et bien articulée, conforme au script."
+      "observation": "Voix féminine fluide, claire et engageante sur un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T07:25:41.692Z",
-  "videoSha256": "509101e5b5bca1eed085f21ac5856229dab1f455ef39a8a4718a6bd815a7b5de",
-  "promptSha256": "8989cbed4d5978cbbb41f9b21ec12f27eef6505f9533950fa52198738dcc08db",
-  "clipSha256": "d5eabdfcabb22ab3e5b85784f8fdf92752e1f30de7c4a10c5c1509e54aaa9a24",
+  "reviewedAt": "2026-10-16T16:46:41.549Z",
+  "videoSha256": "b1c6a1ed1ea0fa5c45d0aa1ed936ed5904b68159074614a23dd14339e18bb4ae",
+  "promptSha256": "3197af9c5ecb0c67114ba9c5477beb9c56b25c66074ae707a07766b97ca2cd88",
+  "clipSha256": "7dfdd25e073fdacf0eecfda46a921191c274acb8cca5d9ec0e396482a4d3027e",
   "scene": "send",
   "review": {
     "heardOpening": "Nous sélectionnons maintenant deux personnes",
@@ -11,7 +11,7 @@
       {
         "spokenSeconds": 0,
         "spoken": "Nous sélectionnons maintenant deux personnes",
-        "visibleSeconds": 0.8,
+        "visibleSeconds": 0.9,
         "visible": "Deux membres (Nicolas Renaud et Sébastien Perret) sont cochés dans la liste",
         "sync": "aligned",
         "severity": "none"
@@ -20,31 +20,31 @@
         "spokenSeconds": 2.1,
         "spoken": "et ajoutons un message commun",
         "visibleSeconds": 2.5,
-        "visible": "Saisie du message personnalisé 'Merci pour ton aide !' dans le champ dédié",
+        "visible": "Saisie de « Merci pour ton aide ! » dans le champ Message",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.1,
         "spoken": "Envoyer deux invitations déclenche des messages individuels",
-        "visibleSeconds": 6,
-        "visible": "Clic sur le bouton 'Envoyer 2 invitations'",
+        "visibleSeconds": 5.7,
+        "visible": "Clic sur le bouton bleu « Envoyer 2 invitations »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
+        "spokenSeconds": 7.4,
         "spoken": "Dans la boîte de démonstration, chaque personne reçoit son propre email",
-        "visibleSeconds": 7,
-        "visible": "Affichage de la boîte Mailpit avec les emails reçus individuellement",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de l'email adressé à Nicolas Renaud (« Hello Nicolas ! »)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
-        "spoken": "Les coordonnées des autres invités ne sont pas affichées dans son message",
-        "visibleSeconds": 13,
-        "visible": "Détail de l'email adressé à Nicolas, sans mention des autres destinataires, puis bascule sur l'email de Sébastien",
+        "spokenSeconds": 15.6,
+        "spoken": "Vous voyez ici la réception sur notre serveur de test",
+        "visibleSeconds": 15.6,
+        "visible": "Passage à la réception du second email pour Sébastien Perret",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et parfaitement synchronisée avec la démonstration visuelle."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
