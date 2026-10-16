@@ -124,7 +124,8 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     setPendingDelete(null)
     if (editing && gone.has(editing)) setEditing(null)
     setQuestions((prev) => prev.filter((x) => !gone.has(x.id) && !(x.parentId && gone.has(x.parentId))))
-    const also = (outcome.data.followUps ?? []).length > 0 ? ` Sa question de suivi est retirée aussi.` : ""
+    const removedFollowUps = (outcome.data.followUps ?? []).length
+    const also = removedFollowUps > 1 ? ` Ses ${removedFollowUps} questions de suivi sont retirées aussi.` : removedFollowUps === 1 ? " Sa question de suivi est retirée aussi." : ""
     list.setStatus((outcome.data.archived ? `Question « ${q.label} » retirée du formulaire ; ses réponses restent dans les exports.` : `Question « ${q.label} » supprimée.`) + also)
     headingRef.current?.focus()
     router.refresh()
