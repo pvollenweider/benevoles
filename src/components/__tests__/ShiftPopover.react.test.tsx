@@ -159,6 +159,16 @@ describe("ShiftPopover", () => {
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Horaires enregistrés, les inscrits sont prévenus."))
   })
 
+  it("« Décaler » of an overnight shift's start keeps its next-morning end (#1024)", async () => {
+    const p = setup({ startTime: "22:00", endTime: "02:00" })
+    const start = screen.getByLabelText("Début")
+    for (const value of ["2", "23", "23:", "23:0", "23:00"]) fireEvent.change(start, { target: { value } })
+    fireEvent.blur(start)
+    expect(screen.getByLabelText("Fin")).toHaveValue("02:00")
+    fireEvent.click(screen.getByRole("button", { name: "Décaler" }))
+    await waitFor(() => expect(p.onPatch).toHaveBeenCalledWith("s1", { startTime: "23:00", endTime: "02:00" }))
+  })
+
   it("duplicates and applies the capacity to the role", async () => {
     const p = setup()
     fireEvent.click(screen.getByRole("button", { name: "Dupliquer" }))

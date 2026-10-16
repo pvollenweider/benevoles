@@ -85,13 +85,13 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
   const totalW   = LABEL_W + span * PX_PER_MIN
 
   // ── Coordinate conversion ──────────────────────────────────────────────────
-  const xToMin = useCallback((clientX: number) => {
+  const xToMin = useCallback((clientX: number, max = 1440) => {
     const el = containerRef.current
     if (!el) return dayStart
     const rect       = el.getBoundingClientRect()
     const scrollLeft = el.scrollLeft
     const localX     = clientX - rect.left + scrollLeft - LABEL_W
-    return offsetToMin(localX, dayStart, dayEnd)
+    return offsetToMin(localX, dayStart, dayEnd, max)
   }, [dayStart, dayEnd])
 
   const px = (min: number) => (min - dayStart) * PX_PER_MIN
@@ -122,7 +122,9 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
 
   // ── Global mouse move / up ──────────────────────────────────────────────────
   const onMouseMove = useCallback((e: MouseEvent) => {
-    const cur = xToMin(e.clientX)
+    // The end of a shift that already runs into the next morning follows the pointer past
+    // midnight (#1024); every other edge stays within the day.
+    const cur = xToMin(e.clientX, resize?.side === "right" && resize.origEnd >= 1440 ? 2880 : 1440)
     if (draft) {
       setDraft(d => d ? { ...d, endMin: draftEnd(d.startMin, cur) } : null)
     }

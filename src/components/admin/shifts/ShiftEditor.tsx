@@ -3,11 +3,11 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useId, useState } from "react"
+import { useId, useRef, useState } from "react"
 import CoordinatesField from "@/components/admin/CoordinatesField"
 import { requestJson } from "@/lib/use-submit"
 import { matchingPoste, posteKey, posteSuggestions } from "@/lib/poste-suggestions"
-import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
+import { resolveNewShiftDisplayOrder, isCompleteTime, endAfterStartChange } from "@/lib/gantt-utils"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
@@ -84,6 +84,23 @@ export default function ShiftEditor({
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
+  }
+
+  // The start and end the end time was set against (#1024): the saved shift, the end typed, or the
+  // default end once filled. Read on each change of the start, so a 22:00–02:00 shift keeps ending
+  // at 02:00 the next morning whatever the starts typed on the way.
+  const endAnchor = useRef({ start: form.startTime, end: form.endTime })
+
+  function setStart(start: string) {
+    if (!isCompleteTime(start)) { setField("startTime", start); return }
+    const endTime = endAfterStartChange(endAnchor.current, start)
+    if (!isCompleteTime(endAnchor.current.end)) endAnchor.current = { start, end: endTime }
+    setForm(f => ({ ...f, startTime: start, endTime }))
+  }
+
+  function setEnd(end: string) {
+    endAnchor.current = { start: form.startTime, end }
+    setField("endTime", end)
   }
 
   async function handleSave() {
@@ -184,15 +201,8 @@ export default function ShiftEditor({
             type="text" placeholder="HH:MM" value={form.startTime}
             required {...startField.invalidProps}
             className={`input ${startField.border}`}
-            onChange={e => {
-              const start = e.target.value
-              setForm(f => ({
-                ...f,
-                startTime: start,
-                endTime: isCompleteTime(start) && (!f.endTime || f.endTime <= start) ? addMinutes(start, 60) : f.endTime,
-              }))
-            }}
-            onBlur={e => setField("startTime", normalizeTime(e.target.value))}
+            onChange={e => setStart(e.target.value)}
+            onBlur={e => setStart(normalizeTime(e.target.value))}
           />
           {startField.message}
         </div>
@@ -203,8 +213,8 @@ export default function ShiftEditor({
             type="text" placeholder="HH:MM" value={form.endTime}
             required {...endField.invalidProps}
             className={`input ${endField.border}`}
-            onChange={e => setField("endTime", e.target.value)}
-            onBlur={e => setField("endTime", normalizeTime(e.target.value))}
+            onChange={e => setEnd(e.target.value)}
+            onBlur={e => setEnd(normalizeTime(e.target.value))}
           />
           {endField.message}
         </div>

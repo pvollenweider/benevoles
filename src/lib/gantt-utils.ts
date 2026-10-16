@@ -32,6 +32,25 @@ export function toMinEnd(end: string, start: string): number {
 }
 
 /**
+ * The end time to show once the start of a shift is changed to `newStart` (#1024). `anchor` is the
+ * start and end the end was set against: the saved shift, the end the organiser typed, or the
+ * default end once filled. It is not moved on each keystroke of the start, so the result only
+ * depends on where the start lands.
+ *
+ * The end is kept when it is still after the new start on the same day, and also when it already
+ * ran into the next day: a 22:00–02:00 shift still ends at 02:00 when its start moves to 23:00 or
+ * 21:00. An end that would only pass midnight because the start moved past it (10:00–11:00 moved
+ * to 14:00), or that equals the new start, becomes one hour after the start, as for a new shift.
+ */
+export function endAfterStartChange(anchor: { start: string; end: string }, newStart: string): string {
+  if (!isCompleteTime(anchor.end)) return addMinutes(newStart, 60)
+  const end = toMin(anchor.end), start = toMin(newStart)
+  if (end > start) return anchor.end
+  const wasOvernight = isCompleteTime(anchor.start) && toMinEnd(anchor.end, anchor.start) >= 1440
+  return wasOvernight && end !== start ? anchor.end : addMinutes(newStart, 60)
+}
+
+/**
  * Start and end minutes of a show (or any timed item) on its day's axis: an end at or before the
  * start is the next day (« Bal populaire » 21:00–01:00 ends at 1500, not 60), so its band spans
  * the four hours instead of collapsing to a sliver. `toMin(end) - toMin(start)` went negative.

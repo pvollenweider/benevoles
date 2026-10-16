@@ -73,6 +73,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (parsed.data.date && !isDayInPeriod(parsed.data.date, before.event?.startDate, before.event?.endDate)) {
     return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
   }
+  // Start and end as they will be (#1024): a start moved alone keeps the stored end, so it is
+  // refused when it lands on that end rather than saved as a shift of no length.
+  if ((parsed.data.startTime ?? before.startTime) === (parsed.data.endTime ?? before.endTime)) {
+    return NextResponse.json({ error: SAME_TIME_ERROR }, { status: 400 })
+  }
   // The minimum and the places as they will be (#949): lowering the places under the minimum is
   // refused until the minimum is lowered too.
   const minProblem = minVolunteersProblem(

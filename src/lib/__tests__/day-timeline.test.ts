@@ -11,6 +11,7 @@ import {
   layoutRoles,
   offsetToMin,
   resizedTimes,
+  endMayPassMidnight,
   snapTo,
 } from "../day-timeline"
 
@@ -47,6 +48,10 @@ describe("pointer to minutes", () => {
   it("stays within the day even over the padding hours", () => {
     expect(offsetToMin(-100, -60, 5 * 60)).toBe(0)
     expect(offsetToMin(10_000, 20 * 60, 25 * 60)).toBe(1440)
+  })
+
+  it("goes past midnight only when asked, within the visible range (#1024)", () => {
+    expect(offsetToMin(10_000, 20 * 60, 27 * 60, 2880)).toBe(27 * 60)
   })
 })
 
@@ -104,5 +109,39 @@ describe("layoutRoles", () => {
 
   it("is empty without shifts", () => {
     expect(layoutRoles([])).toMatchObject({ roles: [], rowsH: 0 })
+  })
+})
+
+describe("resize of an overnight shift (#1024)", () => {
+  const night = { startTime: "22:00", endTime: "02:00" }
+  const range = { dayStart: 21 * 60, dayEnd: 27 * 60 }
+
+  it("may end past midnight only when it already did", () => {
+    expect(endMayPassMidnight(night)).toBe(true)
+    expect(endMayPassMidnight({ startTime: "22:00", endTime: "00:00" })).toBe(true)
+    expect(endMayPassMidnight({ startTime: "20:00", endTime: "23:00" })).toBe(false)
+  })
+
+  it("keeps the next-morning end when the start edge moves (regression: end became 00:00)", () => {
+    expect(resizedTimes(night, "left", 23 * 60, range)).toEqual({ startTime: "23:00", endTime: "02:00" })
+    expect(resizedTimes(night, "left", 21 * 60 + 8, range)).toEqual({ startTime: "21:15", endTime: "02:00" })
+  })
+
+  it("moves the end edge on the next morning instead of clamping it to midnight", () => {
+    expect(resizedTimes(night, "right", 25 * 60 + 7, range)).toEqual({ startTime: "22:00", endTime: "01:00" })
+    expect(resizedTimes(night, "right", 26 * 60 + 30, range)).toEqual({ startTime: "22:00", endTime: "02:30" })
+    expect(resizedTimes(night, "right", 30 * 60, range)).toEqual({ startTime: "22:00", endTime: "03:00" })
+    expect(resizedTimes({ startTime: "22:00", endTime: "00:00" }, "right", 25 * 60, range).endTime).toBe("01:00")
+  })
+
+  it("keeps a daytime end within the day", () => {
+    expect(resizedTimes({ startTime: "20:00", endTime: "23:00" }, "right", 25 * 60, range).endTime).toBe("00:00")
+  })
+
+  it("never lasts a day or more, and snaps inside the bounds", () => {
+    const wide = { dayStart: 0, dayEnd: 48 * 60 }
+    expect(resizedTimes({ startTime: "22:10", endTime: "02:00" }, "right", 48 * 60, wide).endTime).toBe("21:45")
+    // The start edge of a shift ending 02:00 the next morning stops after 02:00 on its date.
+    expect(resizedTimes(night, "left", 0, wide).startTime).toBe("02:15")
   })
 })
