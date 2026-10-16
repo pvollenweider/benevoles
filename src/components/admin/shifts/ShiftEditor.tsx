@@ -3,15 +3,16 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import CoordinatesField from "@/components/admin/CoordinatesField"
 import { requestJson } from "@/lib/use-submit"
-import { KNOWN_ROLES } from "@/lib/roles"
+import { matchingPoste, posteKey, posteSuggestions } from "@/lib/poste-suggestions"
 import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
+import PosteHint from "./PosteHint"
 import type { RawShift } from "./types"
 
 export const emptyShift = {
@@ -67,6 +68,15 @@ export default function ShiftEditor({
   const startField = fieldError("startTime")
   const endField = fieldError("endTime")
   const capacityField = fieldError("capacity")
+  // Poste field (#1018): the event's postes, then the examples. Typing an existing one (case and
+  // spaces aside) joins it: its stored spelling is sent and the hint says its settings apply. An
+  // edited shift already in that poste gets no hint: nothing changes for it.
+  const listId = useId()
+  const hintId = `roleName-hint-${sfx}`
+  const poste = matchingPoste(existingShifts, form.roleName)
+  const changedPoste = !editingId || posteKey(form.roleName) !== posteKey(initial.roleName ?? "")
+  const hintPoste = changedPoste ? poste : null
+  const roleDescribedBy = [roleField.invalidProps["aria-describedby"], hintPoste ? hintId : undefined].filter(Boolean).join(" ") || undefined
   // Minimum of people (#949): optional, 1 to the places. Checked like the required fields, once
   // a save was attempted, and then live as it is corrected.
   const minimumProblem = minVolunteersProblem(parseMinVolunteers(form.minVolunteers), Number(form.capacity))
@@ -94,17 +104,19 @@ export default function ShiftEditor({
     setSaving(true)
     setError(null)
 
-    const label  = form.label.trim() || form.roleName
+    // An edited shift whose poste is unchanged keeps its own spelling.
+    const roleName = changedPoste ? poste ?? form.roleName : form.roleName
+    const label  = form.label.trim() || roleName
     const url    = editingId ? `/api/admin/shifts/${editingId}` : "/api/admin/shifts"
     const method = editingId ? "PATCH" : "POST"
     const minAge = form.minAge === "" ? null : Number(form.minAge)
     const minVolunteers = parseMinVolunteers(form.minVolunteers)
     const displayOrder = editingId
       ? form.displayOrder
-      : resolveNewShiftDisplayOrder(existingShifts, form.roleName, form.displayOrder)
+      : resolveNewShiftDisplayOrder(existingShifts, roleName, form.displayOrder)
     const body   = editingId
-      ? { ...form, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
-      : { ...form, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
+      ? { ...form, roleName, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
+      : { ...form, roleName, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
 
     const outcome = await requestJson<RawShift & { date?: string }>(() => fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), "Erreur lors de la sauvegarde.")
     setSaving(false)
@@ -125,16 +137,18 @@ export default function ShiftEditor({
           {/* The editor remounts on every open (key): focus lands here each time. */}
           <input
             id={`roleName-${sfx}`}
-            type="text" list="role-options"
+            type="text" list={listId}
             autoFocus required {...roleField.invalidProps}
+            aria-describedby={roleDescribedBy}
             value={form.roleName}
             onChange={e => setField("roleName", e.target.value)}
             placeholder="ex. Billetterie"
             className={`input ${roleField.border}`}
           />
           {roleField.message}
-          <datalist id="role-options">
-            {KNOWN_ROLES.map(r => <option key={r} value={r} />)}
+          <PosteHint id={hintId} poste={hintPoste} />
+          <datalist id={listId}>
+            {posteSuggestions(existingShifts).map(r => <option key={r} value={r} />)}
           </datalist>
         </div>
         <div>
@@ -144,7 +158,7 @@ export default function ShiftEditor({
             type="text"
             value={form.label}
             onChange={e => setField("label", e.target.value)}
-            placeholder={form.roleName || "ex. Entrée principale"}
+            placeholder={hintPoste ?? (form.roleName || "ex. Entrée principale")}
             className="input"
           />
         </div>

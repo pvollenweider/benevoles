@@ -6,7 +6,8 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
-import { KNOWN_ROLES } from "@/lib/roles"
+import { matchingPoste, posteSuggestions } from "@/lib/poste-suggestions"
+import PosteHint from "@/components/admin/shifts/PosteHint"
 import { resolveNewShiftDisplayOrder, toMin, toMinEnd } from "@/lib/gantt-utils"
 import { normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
@@ -52,7 +53,7 @@ type Props = {
   eventStart: string
   eventEnd: string
   defaultHolidays: HolidayCalendar
-  existingShifts: { roleName: string; displayOrder: number }[]
+  existingShifts: { roleName: string; displayOrder: number; status?: string | null }[]
   onCreated: (shifts: AdminShift[], rule: AdminRecurrence) => void
   onClose: () => void
 }
@@ -66,6 +67,11 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const id = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [roleName, setRoleName] = useState("")
+  // Poste field (#1018): typing an existing poste (case and spaces aside) joins it, under its
+  // stored spelling; the hint says its settings apply (#1002).
+  const poste = matchingPoste(existingShifts, roleName)
+  const sentRole = poste ?? roleName.trim()
+  const hintId = `${id}-role-hint`
   const [label, setLabel] = useState("")
   const [from, setFrom] = useState(eventStart)
   const [until, setUntil] = useState(eventEnd)
@@ -155,9 +161,9 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        eventId, roleName: roleName.trim(), label: label.trim() || undefined, from, until, weekdays, everyWeeks,
+        eventId, roleName: sentRole, label: label.trim() || undefined, from, until, weekdays, everyWeeks,
         startTime, endTime, slotMinutes, breakMinutes: 0, capacity: Number(capacity), holidays, closures,
-        waitlistEnabled, requiresApproval, displayOrder: resolveNewShiftDisplayOrder(existingShifts, roleName.trim(), 0),
+        waitlistEnabled, requiresApproval, displayOrder: resolveNewShiftDisplayOrder(existingShifts, sentRole, 0),
       }),
     }), "Erreur lors de la création.")
     setSaving(false)
@@ -206,13 +212,14 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor={fieldId("roleName")} className={labelClass("roleName")}>Poste <span aria-hidden="true">*</span></label>
-          <input id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required aria-invalid={invalid("roleName") || undefined} aria-describedby={describedBy("roleName")} onChange={(e) => setRoleName(e.target.value)} placeholder="ex. Accueil" className={fieldClass("roleName")} />
+          <input id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required aria-invalid={invalid("roleName") || undefined} aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []))} onChange={(e) => setRoleName(e.target.value)} placeholder="ex. Accueil" className={fieldClass("roleName")} />
           {fieldMessage("roleName")}
-          <datalist id={`${id}-roles`}>{KNOWN_ROLES.map((r) => <option key={r} value={r} />)}</datalist>
+          <PosteHint id={hintId} poste={poste} />
+          <datalist id={`${id}-roles`}>{posteSuggestions(existingShifts).map((r) => <option key={r} value={r} />)}</datalist>
         </div>
         <div>
           <label htmlFor={`${id}-label`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
-          <input id={`${id}-label`} type="text" value={label} onChange={(e) => setLabel(e.target.value)} placeholder={roleName || "ex. Permanence du mercredi"} className="input" />
+          <input id={`${id}-label`} type="text" value={label} onChange={(e) => setLabel(e.target.value)} placeholder={poste ?? (roleName || "ex. Permanence du mercredi")} className="input" />
         </div>
       </div>
 

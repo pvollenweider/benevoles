@@ -22,7 +22,7 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 
 | Champ | Description |
 |-------|-------------|
-| Poste (rôle) | Intitulé générique (ex. : `Accueil`). Les créneaux du même rôle sont regroupés sur la même ligne du planning. |
+| Poste (rôle) | Intitulé générique (ex. : `Accueil`). Les créneaux du même rôle sont regroupés sur la même ligne du planning. Le champ propose d'abord les postes déjà créés dans l'événement, tous jours confondus, puis des exemples. Si vous choisissez un poste existant (majuscules et espaces ne comptent pas), le créneau le rejoint et prend ses réglages : une phrase sous le champ le rappelle (voir [Gérer les postes](gerer-les-postes.md)). |
 | Libellé | Intitulé spécifique (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
 | Date | Jour du créneau |
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` (voir [Horaires et créneaux de nuit](horaires-et-nuit.md)) |

@@ -268,4 +268,47 @@ test.describe("role management", () => {
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
     expect(detail.shifts[0].colorKey).toBe("emerald")
   })
+
+  test("on day 2, the poste field suggests a poste created on day 1, and the new shift takes its settings (#1018)", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E Poste Suggest ${stamp}`, startDate: "2030-09-10", endDate: "2030-09-11", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    const day1 = await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Sécurité", label: "Sécurité", date: "2030-09-10", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+    expect(day1.ok()).toBeTruthy()
+    const colour = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Sécurité")}`, { data: { colorKey: "emerald" } })
+    expect(colour.ok()).toBeTruthy()
+
+    await page.goto(`/admin/events/${event.id}/shifts`)
+    await page.getByRole("button", { name: "+ Ajouter un créneau" }).click()
+    const poste = page.getByRole("combobox", { name: "Poste" })
+    await expect(poste).toBeFocused()
+    await page.getByLabel("Date").selectOption("2030-09-11")
+
+    // The native suggestion list itself is drawn by the browser: its options are the source.
+    const listId = await poste.getAttribute("list")
+    const suggestions = await page.locator(`datalist[id="${listId}"] option`).evaluateAll((os) => os.map((o) => o.getAttribute("value")))
+    expect(suggestions[0]).toBe("Sécurité")
+    expect(suggestions).toContain("Billetterie")
+
+    await poste.fill("sécurité")
+    // The visible hint is the field's description; a polite live region says it once typing settles.
+    await expect(poste).toHaveAttribute("aria-describedby", /\S/)
+    const hint = page.locator(`[id="${await poste.getAttribute("aria-describedby")}"]`)
+    await expect(hint).toBeVisible()
+    await expect(hint).toHaveText(/Les réglages du poste\W+Sécurité\W+s'appliquent/)
+    await page.getByLabel("Début").fill("14:00")
+    await page.getByRole("button", { name: "Ajouter", exact: true }).click()
+
+    await expect.poll(async () => {
+      const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+      return detail.shifts.filter((s: { roleName: string }) => s.roleName === "Sécurité").length
+    }).toBe(2)
+    const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    const day2 = detail.shifts.find((s: { date: string }) => s.date.startsWith("2030-09-11"))
+    expect(day2).toMatchObject({ roleName: "Sécurité", colorKey: "emerald" })
+  })
 })
